@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbu_reghelper.hxx"
 #include "dbustrings.hrc"
 #include "UITools.hxx"
@@ -92,6 +91,7 @@ public:
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
 };
+
 DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContext)
@@ -100,31 +100,28 @@ DBContentLoader::DBContentLoader(const Reference< XComponentContext >& _rxContex
     DBG_CTOR(DBContentLoader,NULL);
 
 }
-// -------------------------------------------------------------------------
 
 DBContentLoader::~DBContentLoader()
 {
 
     DBG_DTOR(DBContentLoader,NULL);
 }
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_DBContentLoader()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< DBContentLoader > aAutoRegistration;
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMultiServiceFactory >  & rSMgr )
 {
     return *(new DBContentLoader(comphelper::getComponentContext(rSMgr)));
 }
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
-// -------------------------------------------------------------------------
 
 // XServiceInfo
 sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
@@ -137,13 +134,13 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) 
             return sal_True;
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 // XServiceInfo
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 // ORegistryServiceManager_Static
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
@@ -152,7 +149,7 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) thro
     aSNS.getArray()[1] = OUString("com.sun.star.sdb.ContentLoader");
     return aSNS;
 }
-// -------------------------------------------------------------------------
+
 extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
 {
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
@@ -171,7 +168,6 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
     xNewKey->setAsciiValue( OUString(".component:DB*") );
 }
 
-// -----------------------------------------------------------------------
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
@@ -335,7 +331,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             rListener->loadCancelled( this );
 }
 
-// -----------------------------------------------------------------------
 void DBContentLoader::cancel(void) throw()
 {
 }

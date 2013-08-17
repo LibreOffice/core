@@ -32,7 +32,6 @@ uno::Sequence< uno::Sequence< OUString > >*  OModuleRegistration::s_pSupportedSe
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = NULL;
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = NULL;
 
-//--------------------------------------------------------------------------
 void OModuleRegistration::registerComponent(
     const OUString& _rImplementationName,
     const uno::Sequence< OUString >& _rServiceNames,
@@ -68,7 +67,6 @@ void OModuleRegistration::registerComponent(
     s_pFactoryFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pFactoryFunction);
 }
 
-//--------------------------------------------------------------------------
 void OModuleRegistration::revokeComponent(const OUString& _rImplementationName)
 {
     if (!s_pImplementationNames)
@@ -106,7 +104,6 @@ void OModuleRegistration::revokeComponent(const OUString& _rImplementationName)
     }
 }
 
-//--------------------------------------------------------------------------
 uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     const OUString& _rImplementationName,
     const uno::Reference< lang::XMultiServiceFactory >& _rxServiceManager)
@@ -126,9 +123,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
                 &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
         "OModuleRegistration::getComponentFactory : inconsistent state !");
 
-
     uno::Reference< uno::XInterface > xReturn;
-
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
     const OUString* pImplName = s_pImplementationNames->getConstArray();
@@ -154,6 +149,5 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
 
     return NULL;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,12 +23,9 @@
 #include "dbu_qry.hrc"
 #include "SelectionBrowseBox.hxx"
 
-
 namespace dbaui
 {
-    // ================================================================================================
    // OQueryDesignFieldUndoAct - Basisclass for undo's in the fieldlist of a query design
-
 
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
     {
@@ -51,7 +48,6 @@ namespace dbaui
         }
     };
 
-    // ================================================================================================
     // OTabFieldCellModifiedUndoAct - undo class to change a line of the column description
 
     class OTabFieldCellModifiedUndoAct : public OQueryDesignFieldUndoAct
@@ -72,7 +68,6 @@ namespace dbaui
         virtual void Redo() { Undo(); }
     };
 
-    // ================================================================================================
     // OTabFieldSizedUndoAct - undo class to change the column width
 
     class OTabFieldSizedUndoAct : public OQueryDesignFieldUndoAct
@@ -89,7 +84,6 @@ namespace dbaui
         virtual void Redo() { Undo(); }
     };
 
-    // ================================================================================================
     // OTabFieldUndoAct - base class for undos in the fieldlist of a query design, which are used to change complete field descriptions
 
     class OTabFieldUndoAct : public OQueryDesignFieldUndoAct
@@ -103,7 +97,6 @@ namespace dbaui
         void SetTabFieldDescr(OTableFieldDescRef pDescription) { pDescr = pDescription; }
     };
 
-    // ================================================================================================
     // OTabFieldDelUndoAct - undo class to delete a field
 
     class OTabFieldDelUndoAct : public OTabFieldUndoAct
@@ -116,7 +109,6 @@ namespace dbaui
         OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
     };
 
-    // ================================================================================================
     // OTabFieldDelUndoAct - Undo-Klasse fuer Anlegen eines Feldes
     // OTabFieldDelUndoAct - undo class to create a field
 
@@ -130,7 +122,6 @@ namespace dbaui
         OTabFieldCreateUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDCREATE) { }
     };
 
-    // ================================================================================================
     // OTabFieldMovedUndoAct - Undo class when a field was moved inside the selection
 
     class OTabFieldMovedUndoAct : public OTabFieldUndoAct
@@ -147,7 +138,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

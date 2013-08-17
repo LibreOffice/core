@@ -24,10 +24,8 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     class OFieldDescription;
     class OColumnPeer   :   public VCLXWindow
     {
@@ -45,10 +43,7 @@ namespace dbaui
         virtual void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 #endif //DBAUI_COLUMNPEER_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

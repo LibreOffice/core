@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "databaseobjectview.hxx"
 #include "dbustrings.hrc"
 #include "asyncmodaldialog.hxx"
@@ -41,10 +40,8 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 
-// .........................................................................
 namespace dbaui
 {
-// .........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
@@ -56,9 +53,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::awt;
 
-    //======================================================================
-    //= DatabaseObjectView
-    //======================================================================
+    // DatabaseObjectView
     DatabaseObjectView::DatabaseObjectView( const Reference< XComponentContext >& _rxORB,
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
@@ -73,7 +68,6 @@ namespace dbaui
         OSL_ENSURE( m_xApplication.is(), "DatabaseObjectView::DatabaseObjectView: invalid connection!" );
     }
 
-    //----------------------------------------------------------------------
     Reference< XConnection > DatabaseObjectView::getConnection() const
     {
         Reference< XConnection > xConnection;
@@ -82,20 +76,17 @@ namespace dbaui
         return xConnection;
     }
 
-    //----------------------------------------------------------------------
     Reference< XComponent > DatabaseObjectView::createNew( const Reference< XDataSource >& _xDataSource, const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
         return doCreateView( makeAny( _xDataSource ), OUString(), i_rDispatchArgs );
     }
 
-    //----------------------------------------------------------------------
     Reference< XComponent > DatabaseObjectView::openExisting( const Any& _rDataSource, const OUString& _rName,
             const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
         return doCreateView( _rDataSource, _rName, i_rDispatchArgs );
     }
 
-    //----------------------------------------------------------------------
     Reference< XComponent > DatabaseObjectView::doCreateView( const Any& _rDataSource, const OUString& _rObjectName,
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
@@ -108,7 +99,6 @@ namespace dbaui
         return doDispatch( aDispatchArgs );
     }
 
-    //----------------------------------------------------------------------
     Reference< XComponent > DatabaseObjectView::doDispatch( const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
         Reference< XComponent > xReturn;
@@ -164,7 +154,6 @@ namespace dbaui
         return xReturn;
     }
 
-    //----------------------------------------------------------------------
     void DatabaseObjectView::fillDispatchArgs(
             ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const Any& _aDataSource,
@@ -185,10 +174,7 @@ namespace dbaui
         i_rDispatchArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, getConnection() );
     }
 
-    //======================================================================
-    //= QueryDesigner
-    //======================================================================
-    //----------------------------------------------------------------------
+    // QueryDesigner
     QueryDesigner::QueryDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? OUString(URL_COMPONENT_VIEWDESIGN) : OUString(URL_COMPONENT_QUERYDESIGN) )
@@ -196,7 +182,6 @@ namespace dbaui
     {
     }
 
-    //----------------------------------------------------------------------
     void QueryDesigner::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
         const OUString& _rObjectName )
     {
@@ -219,16 +204,12 @@ namespace dbaui
         }
     }
 
-    //======================================================================
-    //= TableDesigner
-    //======================================================================
-    //----------------------------------------------------------------------
+    // TableDesigner
     TableDesigner::TableDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_TABLEDESIGN ) )
     {
     }
 
-    //----------------------------------------------------------------------
     void TableDesigner::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
         const OUString& _rObjectName )
     {
@@ -240,7 +221,6 @@ namespace dbaui
         }
     }
 
-    //----------------------------------------------------------------------
     Reference< XComponent > TableDesigner::doCreateView( const Any& _rDataSource, const OUString& _rObjectName,
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
@@ -268,7 +248,6 @@ namespace dbaui
         return xDesignerComponent;
     }
 
-    //----------------------------------------------------------------------
     Reference< XInterface > TableDesigner::impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName )
     {
         Reference< XInterface > xDesigner;
@@ -285,10 +264,7 @@ namespace dbaui
         return xDesigner;
     }
 
-    //======================================================================
-    //= ResultSetBrowser
-    //======================================================================
-    //----------------------------------------------------------------------
+    // ResultSetBrowser
     ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             sal_Bool _bTable )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
@@ -296,7 +272,6 @@ namespace dbaui
     {
     }
 
-    //----------------------------------------------------------------------
     void ResultSetBrowser::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
         const OUString& _rQualifiedName)
     {
@@ -320,16 +295,11 @@ namespace dbaui
         }
     }
 
-    //======================================================================
-    //= RelationDesigner
-    //======================================================================
-    //----------------------------------------------------------------------
+    // RelationDesigner
     RelationDesigner::RelationDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
-// .........................................................................
 }   // namespace dbaui
-// .........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

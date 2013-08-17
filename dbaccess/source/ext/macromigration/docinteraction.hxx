@@ -26,14 +26,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
-    //====================================================================
-    //= DocumentErrorHandling
-    //====================================================================
+    // DocumentErrorHandling
     struct InteractionHandler_Data;
     /** wraps common operations with an interaction handler.
     */
@@ -77,9 +73,7 @@ namespace dbmm
         ::std::auto_ptr< InteractionHandler_Data >  m_pData;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_DOCERRORHANDLING_HXX
 

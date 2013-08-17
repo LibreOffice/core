@@ -155,4 +155,5 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

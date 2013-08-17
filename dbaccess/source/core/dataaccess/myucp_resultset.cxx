@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -31,7 +30,6 @@
 #include "myucp_resultset.hxx"
 #include <comphelper/processfactory.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -42,12 +40,7 @@ using namespace ::com::sun::star::container;
 
 using namespace dbaccess;
 
-//=========================================================================
-//
 // DynamicResultSet Implementation.
-//
-//=========================================================================
-
 DynamicResultSet::DynamicResultSet(
                       const Reference< XComponentContext >& rxContext,
                       const rtl::Reference< ODocumentContainer >& rxContent,
@@ -59,11 +52,7 @@ DynamicResultSet::DynamicResultSet(
 {
 }
 
-//=========================================================================
-//
 // Non-interface methods.
-//
-//=========================================================================
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
@@ -84,4 +73,5 @@ void DynamicResultSet::initDynamic()
                                       m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

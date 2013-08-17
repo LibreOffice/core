@@ -66,7 +66,6 @@ namespace dbaui
 
         sal_Bool bSaveOnMove;
         sal_Bool bReadOnly;
-        //------------------------------------------------------------------
         // Hilfsklasse
         class ClipboardInvalidator
         {
@@ -205,7 +204,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_TABLEEDITORCONTROL_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

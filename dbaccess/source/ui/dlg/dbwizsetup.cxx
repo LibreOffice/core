@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbwizsetup.hxx"
 #include "dsmeta.hxx"
 #include "DBSetupConnectionPages.hxx"
@@ -73,8 +72,6 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-
-
 #include <svl/filenotation.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -86,11 +83,8 @@
 
 #include <memory>
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 using namespace dbtools;
 using namespace svt;
 using namespace com::sun::star;
@@ -111,10 +105,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 
 DBG_NAME(ODbTypeWizDialogSetup)
-//=========================================================================
-//= ODbTypeWizDialogSetup
-//=========================================================================
-//-------------------------------------------------------------------------
+// ODbTypeWizDialogSetup
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
@@ -284,14 +275,12 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
     return sRoadmapItem;
 }
 
-//-------------------------------------------------------------------------
 ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 {
     delete m_pOutSet;
     DBG_DTOR(ODbTypeWizDialogSetup,NULL);
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)
 {
     activateDatabasePath();
@@ -312,7 +301,7 @@ void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::co
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const OUString& _sOldURLPrefix,const OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
@@ -330,7 +319,7 @@ void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xCont
     aDS >>= aInfo;
     _xDatasource->setPropertyValue(PROPERTY_INFO,uno::makeAny(aInfo));
 }
-//-------------------------------------------------------------------------
+
 void ODbTypeWizDialogSetup::activateDatabasePath()
 {
     switch ( m_pGeneralPage->GetDatabaseCreationMode() )
@@ -376,7 +365,6 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         // the Next button in such a case. However, not for this patch ...
 }
 
-//-------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::updateTypeDependentStates()
 {
     sal_Bool bDoEnable = sal_False;
@@ -394,14 +382,11 @@ void ODbTypeWizDialogSetup::updateTypeDependentStates()
     enableButtons( WZB_FINISH, bDoEnable);
 }
 
-
-//-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
 {
     return m_pCollection->isConnectionUrlRequired(m_sURL);
 }
 
-//-------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatasource)
 {
     // remove all items which relate to indirect properties from the input set
@@ -418,32 +403,31 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
     // extract all relevant data from the property set of the data source
     m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());
 }
-// -----------------------------------------------------------------------------
+
 const SfxItemSet* ODbTypeWizDialogSetup::getOutputSet() const
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 SfxItemSet* ODbTypeWizDialogSetup::getWriteOutputSet()
 {
     return m_pOutSet;
 }
-// -----------------------------------------------------------------------------
+
 ::std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialogSetup::createConnection()
 {
     return m_pImpl->createConnection();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XComponentContext > ODbTypeWizDialogSetup::getORB() const
 {
     return m_pImpl->getORB();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 {
     return m_pImpl->getDriver();
 }
-
 
 ::dbaccess::DATASOURCE_TYPE ODbTypeWizDialogSetup::VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const
 {
@@ -466,9 +450,6 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
     return LocDatabaseType;
 }
 
-
-
-// -----------------------------------------------------------------------------
 OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
     OUString sRet = m_pImpl->getDatasourceType(_rSet);
@@ -490,13 +471,11 @@ OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
     return sRet;
 }
 
-// -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::clearPassword()
 {
     m_pImpl->clearPassword();
 }
 
-// -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 {
     SfxTabPage* pFirstPage;
@@ -600,7 +579,6 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
     return pPage;
 }
 
-
 IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _pConnectionPageSetup)
 {
     m_bIsConnectable = _pConnectionPageSetup->GetRoadmapStateValue( );
@@ -614,8 +592,6 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
     return sal_True;
 }
 
-
-// -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
 {
     OUString sURLPrefix;
@@ -635,21 +611,18 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     activateDatabasePath();
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
@@ -657,7 +630,6 @@ IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard*, /*
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::enterState(WizardState _nState)
 {
     m_sURL = m_pImpl->getDatasourceType(*m_pOutSet);
@@ -675,7 +647,6 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
     }
 }
 
-//-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
@@ -684,8 +655,6 @@ sal_Bool ODbTypeWizDialogSetup::saveDatasource()
     return sal_True;
 }
 
-
-// -----------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 {
     if (_nState == PAGE_DBSETUPWIZARD_MYSQL_INTRO)
@@ -698,20 +667,17 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
     return pPage && pPage->DeactivatePage(m_pOutSet) != 0;
 }
 
-// -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
 {
     OSL_FAIL( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
 }
 
-//-------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
 {
     (void)_bEnable;
 }
 
-//-------------------------------------------------------------------------
 namespace
 {
     bool lcl_handle( const Reference< XInteractionHandler2 >& _rxHandler, const Any& _rRequest )
@@ -725,7 +691,6 @@ namespace
     }
 }
 
-//-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
     Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
@@ -777,7 +742,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
     return sal_False;
 }
-    // ------------------------------------------------------------------------
+
     sal_Bool ODbTypeWizDialogSetup::IsDatabaseDocumentToBeOpened() const
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
@@ -789,7 +754,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         return sal_True;
     }
 
-    // ------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::IsTableWizardToBeStarted() const
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
@@ -801,7 +765,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         OUString sUrl;
@@ -830,7 +793,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         m_pImpl->saveChanges(*m_pOutSet);
     }
 
-    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -841,8 +803,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
 
-
-    //-------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::callSaveAsDialog()
     {
         sal_Bool bRet = sal_False;
@@ -881,7 +841,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         return bRet;
     }
 
-    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
@@ -899,7 +858,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
     }
 
-    //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
@@ -919,17 +877,14 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     }
-    // -----------------------------------------------------------------------------
     IWizardPageController* ODbTypeWizDialogSetup::getPageController( TabPage* _pCurrentPage ) const
     {
         OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
         return pPage;
     }
 
-    // -----------------------------------------------------------------------------
     namespace
     {
-        // .............................................................................
         typedef ::cppu::WeakImplHelper1 <   XTerminateListener
                                         >   AsyncLoader_Base;
         class AsyncLoader : public AsyncLoader_Base
@@ -956,7 +911,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             DECL_LINK( OnOpenDocument, void* );
         };
 
-        // .............................................................................
         AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL )
             :m_sURL( _rURL )
             ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
@@ -973,7 +927,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
         }
 
-        // .............................................................................
         void AsyncLoader::doLoadAsync()
         {
             OSL_ENSURE( !m_aAsyncCaller.IsRunning(), "AsyncLoader:doLoadAsync: already running!" );
@@ -989,7 +942,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             m_aAsyncCaller.Call( NULL );
         }
 
-        // .............................................................................
         IMPL_LINK( AsyncLoader, OnOpenDocument, void*, /*_pEmptyArg*/ )
         {
             try
@@ -1027,23 +979,19 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             return 0L;
         }
 
-        // .............................................................................
         void SAL_CALL AsyncLoader::queryTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
         {
             throw TerminationVetoException();
         }
 
-        // .............................................................................
         void SAL_CALL AsyncLoader::notifyTermination( const com::sun::star::lang::EventObject& /*Event*/ ) throw (RuntimeException)
         {
         }
-        // .............................................................................
         void SAL_CALL AsyncLoader::disposing( const com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
         {
         }
     }
 
-    // -----------------------------------------------------------------------------
     sal_Bool ODbTypeWizDialogSetup::onFinish()
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
@@ -1082,8 +1030,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

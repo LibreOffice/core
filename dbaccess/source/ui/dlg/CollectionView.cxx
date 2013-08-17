@@ -45,10 +45,8 @@
 #include <osl/thread.h>
 #include <connectivity/dbexception.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -58,7 +56,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::sdbc;
 using namespace comphelper;
-// -----------------------------------------------------------------------------
 DBG_NAME(OCollectionView)
 OCollectionView::OCollectionView( Window * pParent
                                  ,const Reference< XContent>& _xContent
@@ -101,17 +98,17 @@ OCollectionView::OCollectionView( Window * pParent
     m_aNewFolder.SetClickHdl( LINK( this, OCollectionView, NewFolder_Click ) );
     m_aPB_OK.SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
 }
-// -----------------------------------------------------------------------------
+
 OCollectionView::~OCollectionView( )
 {
     DBG_DTOR(OCollectionView,NULL);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XContent> OCollectionView::getSelectedFolder() const
 {
     return m_xContent;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
     OUString sName = m_aName.GetText();
@@ -166,7 +163,6 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     OUString sTemp;
                     InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
 
-
                     Reference<XInteractionHandler2> xHandler(
                         InteractionHandler::createWithParent(m_xContext, VCLUnoHelper::GetInterface( this )));
                     OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aException));
@@ -200,7 +196,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
 {
     try
@@ -219,7 +215,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OCollectionView, Up_Click)
 {
     try
@@ -244,7 +240,7 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
 {
     try
@@ -275,7 +271,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void OCollectionView::initCurrentPath()
 {
     sal_Bool bEnable = sal_False;
@@ -304,15 +300,12 @@ void OCollectionView::initCurrentPath()
     }
     m_aUp.Enable(bEnable);
 }
-// -----------------------------------------------------------------------------
+
 OUString OCollectionView::getName() const
 {
     return m_aName.GetText();
 }
-// -----------------------------------------------------------------------------
-//.........................................................................
-}   // namespace dbaui
-//.........................................................................
 
+}   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

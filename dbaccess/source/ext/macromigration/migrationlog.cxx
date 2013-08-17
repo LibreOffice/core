@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_module.hxx"
 #include "dbmm_global.hrc"
 #include "migrationerror.hxx"
 #include "migrationlog.hxx"
-
 
 #include <comphelper/anytostring.hxx>
 #include <tools/string.hxx>
@@ -32,12 +30,9 @@
 #include <map>
 #include <list>
 
-//........................................................................
 namespace dbmm
 {
-    //====================================================================
-    //= LibraryEntry
-    //====================================================================
+    // LibraryEntry
     struct LibraryEntry
     {
         ScriptType      eType;
@@ -59,9 +54,7 @@ namespace dbmm
         }
     };
 
-    //====================================================================
-    //= DocumentEntry
-    //====================================================================
+    // DocumentEntry
     struct DocumentEntry
     {
         SubDocumentType                 eType;
@@ -82,19 +75,13 @@ namespace dbmm
         }
     };
 
-    //====================================================================
-    //= DocumentLogs
-    //====================================================================
+    // DocumentLogs
     typedef ::std::map< DocumentID, DocumentEntry > DocumentLogs;
 
-    //====================================================================
-    //= ErrorLog
-    //====================================================================
+    // ErrorLog
     typedef ::std::list< MigrationError >   ErrorLog;
 
-    //====================================================================
-    //= MigrationLog_Data
-    //====================================================================
+    // MigrationLog_Data
     struct MigrationLog_Data
     {
         OUString sBackupLocation;
@@ -103,45 +90,36 @@ namespace dbmm
         ErrorLog        aWarnings;
     };
 
-    //====================================================================
-    //= MigrationLog
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MigrationLog
     MigrationLog::MigrationLog()
         :m_pData( new MigrationLog_Data )
     {
     }
 
-    //--------------------------------------------------------------------
     MigrationLog::~MigrationLog()
     {
     }
 
-    //--------------------------------------------------------------------
     void MigrationLog::logFailure( const MigrationError& _rError )
     {
         m_pData->aFailures.push_back( _rError );
     }
 
-    //--------------------------------------------------------------------
     void MigrationLog::logRecoverable( const MigrationError& _rError )
     {
         m_pData->aWarnings.push_back( _rError );
     }
 
-    //--------------------------------------------------------------------
     bool MigrationLog::hadFailure() const
     {
         return !m_pData->aFailures.empty();
     }
 
-    //--------------------------------------------------------------------
     void MigrationLog::backedUpDocument( const OUString& _rNewDocumentLocation )
     {
         m_pData->sBackupLocation = _rNewDocumentLocation;
     }
 
-    //--------------------------------------------------------------------
     DocumentID MigrationLog::startedDocument( const SubDocumentType _eType, const OUString& _rName )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -165,7 +143,6 @@ namespace dbmm
         return nID;
     }
 
-    //--------------------------------------------------------------------
     void MigrationLog::movedLibrary( const DocumentID _nDocID, const ScriptType _eScriptType,
             const OUString& _rOriginalLibName, const OUString& _rNewLibName )
     {
@@ -176,7 +153,6 @@ namespace dbmm
         rDocEntry.aMovedLibraries.push_back( LibraryEntry( _eScriptType, _rOriginalLibName, _rNewLibName ) );
     }
 
-    //--------------------------------------------------------------------
     void MigrationLog::finishedDocument( const DocumentID _nDocID )
     {
         OSL_ENSURE( m_pData->aDocumentLogs.find( _nDocID ) != m_pData->aDocumentLogs.end(),
@@ -187,7 +163,6 @@ namespace dbmm
         // nothing to do here
     }
 
-    //--------------------------------------------------------------------
     const OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
         const OUString& _rOriginalLibName ) const
     {
@@ -216,10 +191,8 @@ namespace dbmm
         return s_sEmptyString;
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
-        //----------------------------------------------------------------
         static void lcl_appendErrorDescription( OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
         {
             const sal_Char* pAsciiErrorDescription( NULL );
@@ -378,7 +351,6 @@ namespace dbmm
             }
         }
 
-        //----------------------------------------------------------------
         void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
@@ -408,7 +380,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MigrationLog::movedAnyLibrary( const DocumentID _nDocID )
     {
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
@@ -420,7 +391,6 @@ namespace dbmm
         return !docPos->second.aMovedLibraries.empty();
     }
 
-    //--------------------------------------------------------------------
     OUString MigrationLog::getCompleteLog() const
     {
         OUStringBuffer aBuffer;
@@ -483,8 +453,6 @@ namespace dbmm
         return aBuffer.makeStringAndClear();
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

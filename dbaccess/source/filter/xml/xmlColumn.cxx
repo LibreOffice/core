@@ -100,14 +100,13 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 OXMLColumn::~OXMLColumn()
 {
 
     DBG_DTOR(OXMLColumn,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OXMLColumn::EndElement()
 {
     Reference<XDataDescriptorFactory> xFac(m_xParentContainer,UNO_QUERY);
@@ -172,13 +171,12 @@ void OXMLColumn::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLColumn::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

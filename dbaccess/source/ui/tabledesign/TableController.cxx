@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FieldDescriptions.hxx"
 #include "TEditControl.hxx"
 #include "TableController.hxx"
@@ -111,7 +110,6 @@ namespace
                 xNameCont->dropByName(_sTableName);
         }
     }
-    //------------------------------------------------------------------------------
     struct OTableRowCompare : public ::std::binary_function<  ::boost::shared_ptr<OTableRow> , OUString, bool>
     {
         bool operator() (const  ::boost::shared_ptr<OTableRow>  lhs, const OUString& rhs) const
@@ -123,37 +121,34 @@ namespace
 
 }
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
 OUString OTableController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("org.openoffice.comp.dbu.OTableDesign");
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = OUString("com.sun.star.sdb.TableDesign");
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMultiServiceFactory >& _rxFactory)
 {
     return *(new OTableController(comphelper::getComponentContext(_rxFactory)));
 }
 
 DBG_NAME(OTableController)
-// -----------------------------------------------------------------------------
 OTableController::OTableController(const Reference< XComponentContext >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_pTypeInfo()
@@ -166,7 +161,7 @@ OTableController::OTableController(const Reference< XComponentContext >& _rM) : 
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
 }
-// -----------------------------------------------------------------------------
+
 OTableController::~OTableController()
 {
     m_aTypeInfoIndex.clear();
@@ -175,7 +170,6 @@ OTableController::~OTableController()
     DBG_DTOR(OTableController,NULL);
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::startTableListening()
 {
     Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
@@ -183,7 +177,6 @@ void OTableController::startTableListening()
         xComponent->addEventListener(static_cast<XModifyListener*>(this));
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::stopTableListening()
 {
     Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
@@ -191,7 +184,6 @@ void OTableController::stopTableListening()
         xComponent->removeEventListener(static_cast<XModifyListener*>(this));
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::disposing()
 {
     OTableController_BASE::disposing();
@@ -199,7 +191,7 @@ void OTableController::disposing()
 
     m_vRowList.clear();
 }
-// -----------------------------------------------------------------------------
+
 FeatureState OTableController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
@@ -261,7 +253,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
     }
     return aReturn;
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
@@ -297,7 +289,6 @@ void OTableController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
     InvalidateFeature(_nId);
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 {
     if (!isConnected())
@@ -464,7 +455,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     return ! (aInfo.isValid() || bError);
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::doEditIndexes()
 {
     // table needs to be saved before editing indexes
@@ -519,7 +509,6 @@ void OTableController::doEditIndexes()
 
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::impl_initialize()
 {
     try
@@ -561,14 +550,14 @@ void OTableController::impl_initialize()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableController::Construct(Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
@@ -631,7 +620,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
 
     return bCheck;
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::describeSupportedFeatures()
 {
     OSingleDocumentController::describeSupportedFeatures();
@@ -645,13 +634,13 @@ void OTableController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBIndexDesign", SID_INDEXDESIGN,        CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:EditDoc",       ID_BROWSER_EDITDOC,     CommandGroup::EDIT );
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::impl_onModifyChanged()
 {
     OSingleDocumentController::impl_onModifyChanged();
     InvalidateFeature( SID_INDEXDESIGN );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException)
 {
     if ( _rSource.Source == m_xTable )
@@ -664,19 +653,18 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
     else
         OTableController_BASE::disposing( _rSource );
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::Save(const Reference< XObjectOutputStream>& _rxOut)
 {
     OStreamSection aSection(_rxOut.get());
 
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
 {
     OStreamSection aSection(_rxIn.get());
 }
 
-// -----------------------------------------------------------------------------
 void OTableController::losingConnection( )
 {
     // let the base class do it's reconnect
@@ -699,12 +687,12 @@ void OTableController::losingConnection( )
     }
     InvalidateAll();
 }
-// -----------------------------------------------------------------------------
+
 TOTypeInfoSP OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
 {
     return queryTypeInfoByType(_nDataType,m_aTypeInfo);
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns)
 {
     try
@@ -765,7 +753,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Bool _bNew)
 {
     if(!_rxSup.is())
@@ -807,16 +795,14 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
             xAppend->appendByDescriptor(xKey);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::loadData()
 {
-    //////////////////////////////////////////////////////////////////////
     // Wenn Datenstruktur bereits vorhanden, Struktur leeren
     m_vRowList.clear();
 
     ::boost::shared_ptr<OTableRow>  pTabEdRow;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
-    //////////////////////////////////////////////////////////////////////
     // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
     if(m_xTable.is() && xMetaData.is())
     {
@@ -824,7 +810,6 @@ void OTableController::loadData()
         OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         OFieldDescription* pActFieldDescr = NULL;
-        //////////////////////////////////////////////////////////////////////
         // ReadOnly-Flag
         // Bei Drop darf keine Zeile editierbar sein.
         // Bei Add duerfen nur die leeren Zeilen editierbar sein.
@@ -893,7 +878,6 @@ void OTableController::loadData()
                 pActFieldDescr->SetHorJustify(dbaui::mapTextJustify(nAlign));
                 pActFieldDescr->SetCurrency(bIsCurrency);
 
-                //////////////////////////////////////////////////////////////////////
                 // Spezielle Daten
                 pActFieldDescr->SetIsNullable(nNullable);
                 pActFieldDescr->SetControlDefault(aControlDefault);
@@ -926,7 +910,6 @@ void OTableController::loadData()
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
     // Leere Zeilen fuellen
 
     OTypeInfoMap::iterator aTypeIter = m_aTypeInfo.find(DataType::VARCHAR);
@@ -943,12 +926,12 @@ void OTableController::loadData()
         m_vRowList.push_back( pTabEdRow);
     }
 }
-// -----------------------------------------------------------------------------
+
 Reference<XNameAccess> OTableController::getKeyColumns() const
 {
     return getPrimaryKeyColumns_throw(m_xTable);
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
 {
     sal_Bool bOk = sal_True;
@@ -1016,7 +999,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
     }
     return bOk;
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::alterColumns()
 {
     Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY_THROW);
@@ -1140,7 +1123,6 @@ void OTableController::alterColumns()
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                 bReload = sal_True;
             }
-
 
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
@@ -1302,7 +1284,6 @@ void OTableController::alterColumns()
         }
     }
 
-
     // check if we have to do something with the primary key
     sal_Bool bNeedDropKey = sal_False;
     sal_Bool bNeedAppendKey = sal_False;
@@ -1351,7 +1332,7 @@ void OTableController::alterColumns()
     if ( bReload )
         reload();
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::dropPrimaryKey()
 {
     SQLExceptionInfo aInfo;
@@ -1398,7 +1379,7 @@ void OTableController::dropPrimaryKey()
 
     showError(aInfo);
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::assignTable()
 {
     // get the table
@@ -1431,7 +1412,7 @@ void OTableController::assignTable()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableController::isAddAllowed() const
 {
     Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
@@ -1452,7 +1433,7 @@ sal_Bool OTableController::isAddAllowed() const
 
     return bAddAllowed;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableController::isDropAllowed() const
 {
     Reference<XColumnsSupplier> xColsSup(m_xTable,UNO_QUERY);
@@ -1468,13 +1449,13 @@ sal_Bool OTableController::isDropAllowed() const
 
     return bDropAllowed;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OTableController::isAlterAllowed() const
 {
     sal_Bool bAllowed(!m_xTable.is() || Reference<XAlterTable>(m_xTable,UNO_QUERY).is());
     return bAllowed;
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::reSyncRows()
 {
     sal_Bool bAlterAllowed  = isAlterAllowed();
@@ -1496,7 +1477,7 @@ void OTableController::reSyncRows()
     ClearUndoManager();
     setModified(sal_False);     // and we are not modified yet
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableController::createUniqueName(const OUString& _rName)
 {
     OUString sName = _rName;
@@ -1517,7 +1498,7 @@ OUString OTableController::createUniqueName(const OUString& _rName)
     }
     return sName;
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableController::getPrivateTitle() const
 {
     OUString sTitle;
@@ -1544,7 +1525,7 @@ OUString OTableController::getPrivateTitle() const
     }
     return sTitle;
 }
-// -----------------------------------------------------------------------------
+
 void OTableController::reload()
 {
     loadData();                 // fill the column information form the table
@@ -1553,7 +1534,7 @@ void OTableController::reload()
     setModified(sal_False);     // and we are not modified yet
     static_cast<OTableDesignView*>(getView())->Invalidate();
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OTableController::getFirstEmptyRowPosition()
 {
     sal_Int32 nRet = -1;
@@ -1577,11 +1558,10 @@ sal_Int32 OTableController::getFirstEmptyRowPosition()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 bool OTableController::isAutoIncrementPrimaryKey() const
 {
     return getSdbMetaData().isAutoIncrementPrimaryKey();
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

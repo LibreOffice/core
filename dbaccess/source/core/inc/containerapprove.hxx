@@ -27,9 +27,7 @@
 namespace dbaccess
 {
 
-    //====================================================================
-    //= IContainerApprove
-    //====================================================================
+    // IContainerApprove
     /** interface for approving elements to be inserted into a container
 
         On the long run, one could imagine that this interface completely encapsulates

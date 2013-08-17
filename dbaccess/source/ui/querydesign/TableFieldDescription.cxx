@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TableFieldDescription.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -32,7 +31,6 @@ using namespace comphelper;
 using namespace dbaui;
 
 DBG_NAME(OTableFieldDesc)
-//==============================================================================
 OTableFieldDesc::OTableFieldDesc()
     :m_pTabWindow(0)
     ,m_eDataType(1000)
@@ -47,7 +45,7 @@ OTableFieldDesc::OTableFieldDesc()
 {
     DBG_CTOR(OTableFieldDesc,NULL);
 }
-//------------------------------------------------------------------------------
+
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::salhelper::SimpleReferenceObject()
 
@@ -56,7 +54,6 @@ OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     *this = rRS;
 }
 
-//------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     :m_pTabWindow(0)
     ,m_eFunctionType( FKT_NONE )
@@ -69,12 +66,11 @@ OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     SetField( rF ); SetTable( rT );
 }
 
-//------------------------------------------------------------------------------
 OTableFieldDesc::~OTableFieldDesc()
 {
     DBG_DTOR(OTableFieldDesc,NULL);
 }
-//------------------------------------------------------------------------------
+
 OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 {
     if (&rRS == this)
@@ -99,7 +95,7 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 
     return *this;
 }
-//------------------------------------------------------------------------------
+
 sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
@@ -116,7 +112,6 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 
 }
 
-//------------------------------------------------------------------------------
 void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
@@ -130,7 +125,6 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
     }
 }
 
-//------------------------------------------------------------------------------
 OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
@@ -141,7 +135,6 @@ OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
     return aRetStr;
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     struct SelectPropertyValueAsString : public ::std::unary_function< PropertyValue, OUString >
@@ -155,7 +148,6 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------------
 void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
@@ -187,7 +179,7 @@ void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSet
         );
     }
 }
-//------------------------------------------------------------------------------
+
 void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
@@ -224,8 +216,5 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
         }
     }
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,13 +24,9 @@
 #include "unoadmin.hxx"
 #endif
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-//=========================================================================
-//= OUserSettingsDialog
-//=========================================================================
+// OUserSettingsDialog
 class OUserSettingsDialog
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< OUserSettingsDialog >
@@ -64,9 +60,7 @@ protected:
     virtual Dialog* createDialog(Window* _pParent);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_USERSETTINGSDLG_HXX
 

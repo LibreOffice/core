@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "datasourcemetadata.hxx"
 
 #include <com/sun/star/lang/NullPointerException.hpp>
 
 #include <connectivity/dbmetadata.hxx>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -35,17 +32,12 @@ namespace sdbtools
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XComponentContext;
 
-    //====================================================================
-    //= DataSourceMetaData_Impl
-    //====================================================================
+    // DataSourceMetaData_Impl
     struct DataSourceMetaData_Impl
     {
     };
 
-    //====================================================================
-    //= DataSourceMetaData
-    //====================================================================
-    //--------------------------------------------------------------------
+    // DataSourceMetaData
     DataSourceMetaData::DataSourceMetaData( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new DataSourceMetaData_Impl )
@@ -55,12 +47,10 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    //--------------------------------------------------------------------
     DataSourceMetaData::~DataSourceMetaData()
     {
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL DataSourceMetaData::supportsQueriesInFrom(  ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -68,8 +58,6 @@ namespace sdbtools
         return aMeta.supportsSubqueriesInFrom();
     }
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

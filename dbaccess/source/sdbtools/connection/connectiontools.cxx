@@ -33,10 +33,8 @@ extern "C" void SAL_CALL createRegistryInfo_ConnectionTools()
     ::sdbtools::OAutoRegistration< ::sdbtools::ConnectionTools > aRegistration;
 }
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -53,41 +51,33 @@ namespace sdbtools
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::XComponentContext;
 
-    //====================================================================
-    //= ConnectionTools
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ConnectionTools
     ConnectionTools::ConnectionTools( const Reference<XComponentContext>& _rContext )
         :ConnectionDependentComponent( _rContext )
     {
     }
 
-    //--------------------------------------------------------------------
     ConnectionTools::~ConnectionTools()
     {
     }
 
-    //--------------------------------------------------------------------
     Reference< XTableName > SAL_CALL ConnectionTools::createTableName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return new TableName( getContext(), getConnection() );
     }
 
-    //--------------------------------------------------------------------
     Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return new ObjectNames( getContext(), getConnection() );
     }
 
-    //--------------------------------------------------------------------
     Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
         return new DataSourceMetaData( getContext(), getConnection() );
     }
-    //--------------------------------------------------------------------
     Reference< container::XNameAccess > SAL_CALL ConnectionTools::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, Reference< lang::XComponent >& keepFieldsAlive ) throw (sdbc::SQLException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -97,7 +87,6 @@ namespace sdbtools
             aErrorInfo.doThrow();
         return xRet;
     }
-    //--------------------------------------------------------------------
     Reference< sdb::XSingleSelectQueryComposer > SAL_CALL ConnectionTools::getComposer( ::sal_Int32 commandType, const OUString& command ) throw (::com::sun::star::uno::RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -106,13 +95,11 @@ namespace sdbtools
         return aComposer.getComposer();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL ConnectionTools::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( getSupportedServiceNames() );
@@ -121,19 +108,16 @@ namespace sdbtools
         return ::std::find( begin, end, _ServiceName ) != end;
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL ConnectionTools::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.dbaccess.ConnectionTools" );
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames_static()
     {
         Sequence< OUString > aSupported( 1 );
@@ -141,13 +125,11 @@ namespace sdbtools
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
         return *( new ConnectionTools( Reference<XComponentContext>( _rxContext ) ) );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ConnectionTools::initialize(const Sequence< Any > & _rArguments) throw (RuntimeException, Exception)
     {
         ::osl::MutexGuard aGuard( getMutex() );
@@ -167,9 +149,6 @@ namespace sdbtools
         setWeakConnection( xConnection );
     }
 
-
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

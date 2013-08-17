@@ -39,11 +39,8 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
 
 const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
-//==================================================================
 // class OTableWindowListBox
-//==================================================================
 DBG_NAME(OTableWindowListBox)
-//------------------------------------------------------------------------------
 OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS | WB_BORDER)
     ,m_aMousePos( Point(0,0) )
@@ -61,7 +58,6 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     SetHighlightRange( );
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::dragFinished( )
 {
     // first show the error msg when existing
@@ -72,7 +68,6 @@ void OTableWindowListBox::dragFinished( )
     m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl));
 }
 
-//------------------------------------------------------------------------------
 OTableWindowListBox::~OTableWindowListBox()
 {
     DBG_DTOR(OTableWindowListBox,NULL);
@@ -85,10 +80,8 @@ OTableWindowListBox::~OTableWindowListBox()
     m_pTabWin = NULL;
 }
 
-//------------------------------------------------------------------------------
 SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 {
-    //////////////////////////////////////////////////////////////////////
     // iterate through the list
     SvTreeList* pTreeList = GetModel();
     SvTreeListEntry* pEntry = pTreeList->First();
@@ -121,13 +114,11 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText
     return NULL;
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::NotifyScrolled()
 {
     m_bReallyScrolled = sal_True;
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::NotifyEndScroll()
 {
     if (m_bReallyScrolled)
@@ -139,7 +130,6 @@ void OTableWindowListBox::NotifyEndScroll()
     m_bReallyScrolled = sal_False;
 }
 
-//------------------------------------------------------------------------------
 long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 {
     sal_Bool bHandled = sal_False;
@@ -172,7 +162,6 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
     return 1L;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
@@ -189,7 +178,6 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
     return 0;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
@@ -206,7 +194,6 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
     return 0;
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     OJoinTableView* pCont = m_pTabWin->getTableView();
@@ -224,7 +211,6 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
@@ -287,16 +273,14 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     }
     return nDND_Action;
 }
-// -----------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, LookForUiHdl, void *, /*EMPTY_ARG*/)
 {
     m_nUiEvent = 0;
     m_pTabWin->getTableView()->lookForUiActivities();
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
 {
     // create the connection
@@ -315,7 +299,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     }
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
@@ -333,7 +317,6 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::LoseFocus()
 {
     if(m_pTabWin)
@@ -341,7 +324,6 @@ void OTableWindowListBox::LoseFocus()
     SvTreeListBox::LoseFocus();
 }
 
-//------------------------------------------------------------------------------
 void OTableWindowListBox::GetFocus()
 {
     if(m_pTabWin)
@@ -361,7 +343,6 @@ void OTableWindowListBox::GetFocus()
     SvTreeListBox::GetFocus();
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // tell my parent
@@ -372,7 +353,7 @@ IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 void OTableWindowListBox::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -386,6 +367,5 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
             SvTreeListBox::Command(rEvt);
     }
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

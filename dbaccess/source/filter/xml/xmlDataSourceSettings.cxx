@@ -44,14 +44,13 @@ OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
     DBG_CTOR(OXMLDataSourceSettings,NULL);
 
 }
-// -----------------------------------------------------------------------------
 
 OXMLDataSourceSettings::~OXMLDataSourceSettings()
 {
 
     DBG_DTOR(OXMLDataSourceSettings,NULL);
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -73,14 +72,12 @@ SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLDataSourceSettings::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "storagestream.hxx"
 
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -46,10 +43,7 @@ namespace dbaccess
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
-    //====================================================================
-    //= StorageOutputStream
-    //====================================================================
-    //--------------------------------------------------------------------
+    // StorageOutputStream
     StorageOutputStream::StorageOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                 const Reference< XStorage >& i_rParentStorage,
                                                 const OUString& i_rStreamName
@@ -63,12 +57,10 @@ namespace dbaccess
         m_xOutputStream.set( xStream->getOutputStream(), UNO_SET_THROW );
     }
 
-    //--------------------------------------------------------------------
     StorageOutputStream::~StorageOutputStream()
     {
     }
 
-    //--------------------------------------------------------------------
     void StorageOutputStream::close()
     {
         ENSURE_OR_RETURN_VOID( m_xOutputStream.is(), "already closed" );
@@ -79,10 +71,7 @@ namespace dbaccess
         // (legitimately) do not call this method here.
     }
 
-    //====================================================================
-    //= StorageInputStream
-    //====================================================================
-    //--------------------------------------------------------------------
+    // StorageInputStream
     StorageInputStream::StorageInputStream( const Reference<XComponentContext>& i_rContext,
                                             const Reference< XStorage >& i_rParentStorage,
                                             const OUString& i_rStreamName
@@ -96,12 +85,10 @@ namespace dbaccess
         m_xInputStream.set( xStream->getInputStream(), UNO_SET_THROW );
     }
 
-    //--------------------------------------------------------------------
     StorageInputStream::~StorageInputStream()
     {
     }
 
-    //--------------------------------------------------------------------
     void StorageInputStream::close()
     {
         ENSURE_OR_RETURN_VOID( m_xInputStream.is(), "already closed" );
@@ -112,8 +99,6 @@ namespace dbaccess
         // (legitimately) do not call this method here.
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

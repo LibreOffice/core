@@ -22,17 +22,13 @@
 #include "dbu_dlg.hrc"
 #include "moduledbu.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-
 
 #define DEF_ROW_HEIGHT  45
 #define DEF_COL_WIDTH   227
 
 DBG_NAME(DlgSize)
-//==================================================================
 DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard )
         :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
         ,m_nPrevValue(nVal)
@@ -63,20 +59,17 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
     FreeResource();
 }
 
-//------------------------------------------------------------------------------
 DlgSize::~DlgSize()
 {
 
     DBG_DTOR(DlgSize,NULL);
 }
 
-//------------------------------------------------------------------------------
 void DlgSize::SetValue( sal_Int32 nVal )
 {
     aMF_VALUE.SetValue(nVal, FUNIT_CM );
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 DlgSize::GetValue()
 {
     if (aCB_STANDARD.IsChecked())
@@ -84,7 +77,6 @@ sal_Int32 DlgSize::GetValue()
     return (sal_Int32)aMF_VALUE.GetValue( FUNIT_CM );
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
 {
 
@@ -104,10 +96,7 @@ IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton )
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
-//.........................................................................
-}   // namespace dbaui
-//.........................................................................
 
+}   // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

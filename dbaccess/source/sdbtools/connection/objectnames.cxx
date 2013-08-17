@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "objectnames.hxx"
 
 #include "module_sdbt.hxx"
@@ -38,10 +37,8 @@
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -63,9 +60,7 @@ namespace sdbtools
     namespace CommandType = ::com::sun::star::sdb::CommandType;
     namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
-    //====================================================================
-    //= INameValidation
-    //====================================================================
+    // INameValidation
     class INameValidation
     {
     public:
@@ -76,9 +71,7 @@ namespace sdbtools
     };
     typedef ::boost::shared_ptr< INameValidation >   PNameValidation;
 
-    //====================================================================
-    //= PlainExistenceCheck
-    //====================================================================
+    // PlainExistenceCheck
     class PlainExistenceCheck : public INameValidation
     {
     private:
@@ -120,9 +113,7 @@ namespace sdbtools
         }
     };
 
-    //====================================================================
-    //= TableValidityCheck
-    //====================================================================
+    // TableValidityCheck
     class TableValidityCheck : public INameValidation
     {
         const Reference<XComponentContext>  m_aContext;
@@ -165,9 +156,7 @@ namespace sdbtools
         }
     };
 
-    //====================================================================
-    //= QueryValidityCheck
-    //====================================================================
+    // QueryValidityCheck
     class QueryValidityCheck : public INameValidation
     {
         const Reference<XComponentContext>    m_aContext;
@@ -215,9 +204,7 @@ namespace sdbtools
         }
     };
 
-    //====================================================================
-    //= CombinedNameCheck
-    //====================================================================
+    // CombinedNameCheck
     class CombinedNameCheck : public INameValidation
     {
     private:
@@ -245,9 +232,7 @@ namespace sdbtools
         }
     };
 
-    //====================================================================
-    //= NameCheckFactory
-    //====================================================================
+    // NameCheckFactory
     class NameCheckFactory
     {
     public:
@@ -304,7 +289,6 @@ namespace sdbtools
         static  void    verifyCommandType( sal_Int32 _nCommandType );
     };
 
-    //--------------------------------------------------------------------
     void NameCheckFactory::verifyCommandType( sal_Int32 _nCommandType )
     {
         if  (   ( _nCommandType != CommandType::TABLE )
@@ -317,7 +301,6 @@ namespace sdbtools
             );
     }
 
-    //--------------------------------------------------------------------
     PNameValidation  NameCheckFactory::createExistenceCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
@@ -354,7 +337,6 @@ namespace sdbtools
         return pReturn;
     }
 
-    //--------------------------------------------------------------------
     PNameValidation  NameCheckFactory::createValidityCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
@@ -378,18 +360,13 @@ namespace sdbtools
         return PNameValidation( new QueryValidityCheck( _rContext, _rxConnection ) );
     }
 
-    //====================================================================
-    //= ObjectNames_Impl
-    //====================================================================
+    // ObjectNames_Impl
     struct ObjectNames_Impl
     {
         SdbtClient  m_aModuleClient;    // keep the module alive as long as this instance lives
     };
 
-    //====================================================================
-    //= ObjectNames
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ObjectNames
     ObjectNames::ObjectNames( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new ObjectNames_Impl )
@@ -399,12 +376,10 @@ namespace sdbtools
         setWeakConnection( _rxConnection );
     }
 
-    //--------------------------------------------------------------------
     ObjectNames::~ObjectNames()
     {
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 _CommandType, const OUString& _BaseName ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -434,7 +409,6 @@ namespace sdbtools
         return sName;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name ) throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -442,7 +416,6 @@ namespace sdbtools
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -451,7 +424,6 @@ namespace sdbtools
         return !pNameCheck->validateName( _Name );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 _CommandType, const OUString& _Name ) throw (IllegalArgumentException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -460,7 +432,6 @@ namespace sdbtools
         return pNameCheck->validateName( _Name );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 _CommandType, const OUString& _Name ) throw (SQLException, RuntimeException)
     {
         EntryGuard aGuard( *this );
@@ -472,8 +443,6 @@ namespace sdbtools
         pNameCheck->validateName_throw( _Name );
     }
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

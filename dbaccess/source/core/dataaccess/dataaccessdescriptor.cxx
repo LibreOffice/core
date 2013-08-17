@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
 
@@ -35,10 +34,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -64,9 +61,7 @@ namespace dbaccess
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
-    //= DataAccessDescriptor
-    //====================================================================
+    // DataAccessDescriptor
     typedef ::comphelper::OMutexAndBroadcastHelper  DataAccessDescriptor_MutexBase;
 
     typedef ::cppu::WeakImplHelper1             <   XServiceInfo
@@ -217,9 +212,7 @@ namespace dbaccess
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    //====================================================================
-    //= DataAccessDescriptorFactory
-    //====================================================================
+    // DataAccessDescriptorFactory
     typedef ::cppu::WeakImplHelper2 <   XServiceInfo
                                     ,   XDataAccessDescriptorFactory
                                     >   DataAccessDescriptorFactory_Base;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "querycontainer.hxx"
 #include "dbastrings.hrc"
 #include "query.hxx"
@@ -58,9 +57,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
-//= OQueryContainer
-//==========================================================================
+// OQueryContainer
 DBG_NAME(OQueryContainer)
 
 OQueryContainer::OQueryContainer(
@@ -408,4 +405,5 @@ Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(Runtime
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

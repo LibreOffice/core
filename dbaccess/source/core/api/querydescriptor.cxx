@@ -42,9 +42,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
-//= OQueryDescriptor
-//==========================================================================
+// OQueryDescriptor
 DBG_NAME(OQueryDescriptor)
 
 OQueryDescriptor::OQueryDescriptor()

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "unoDirectSql.hxx"
 #include "dbu_reghelper.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -30,16 +29,13 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 
-
 extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::ODirectSQLDialog > aAutoRegistration;
 }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -49,11 +45,8 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    //=====================================================================
-    //= ODirectSQLDialog
-    //=====================================================================
+    // ODirectSQLDialog
 DBG_NAME(ODirectSQLDialog)
-//---------------------------------------------------------------------
     ODirectSQLDialog::ODirectSQLDialog(const Reference< XComponentContext >& _rxORB)
         :ODirectSQLDialog_BASE( _rxORB )
     {
@@ -61,17 +54,14 @@ DBG_NAME(ODirectSQLDialog)
 
     }
 
-    //---------------------------------------------------------------------
     ODirectSQLDialog::~ODirectSQLDialog()
     {
 
         DBG_DTOR(ODirectSQLDialog,NULL);
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_IMPLEMENTATION_ID( ODirectSQLDialog )
 
-    //---------------------------------------------------------------------
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(ODirectSQLDialog, SERVICE_SDB_DIRECTSQLDIALOG)
@@ -82,10 +72,8 @@ DBG_NAME(ODirectSQLDialog)
         return static_cast< XServiceInfo* >(new ODirectSQLDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    //---------------------------------------------------------------------
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    //---------------------------------------------------------------------
     Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
     {
         // obtain all the objects needed for the dialog
@@ -109,7 +97,6 @@ DBG_NAME(ODirectSQLDialog)
 
         return new DirectSQLDialog( _pParent, xConnection);
     }
-    //---------------------------------------------------------------------
     void ODirectSQLDialog::implInitialize(const Any& _rValue)
     {
         PropertyValue aProperty;
@@ -129,8 +116,6 @@ DBG_NAME(ODirectSQLDialog)
         }
         ODirectSQLDialog_BASE::implInitialize(_rValue);
     }
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

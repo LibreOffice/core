@@ -40,7 +40,6 @@ using namespace ::svt;
 
 const OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
 
-// ODbaseIndexDialog ----------------------------------------------------------
 DBG_NAME(ODbaseIndexDialog)
 
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
@@ -426,7 +425,6 @@ void ODbaseIndexDialog::SetCtrls()
     checkButtons();
 }
 
-// OTableInfo ------------------------------------------------------------------
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
     // open INF file

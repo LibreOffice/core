@@ -48,11 +48,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
-//========================================================================
 // class OQueryTableWindow
-//========================================================================
 DBG_NAME(OQueryTableWindow)
-//------------------------------------------------------------------------------
 OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
@@ -71,13 +68,11 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
     SetHelpId(HID_CTL_QRYDGNTAB);
 }
 
-//------------------------------------------------------------------------------
 OQueryTableWindow::~OQueryTableWindow()
 {
     DBG_DTOR(OQueryTableWindow,NULL);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::Init()
 {
     sal_Bool bSuccess = OTableWindow::Init();
@@ -105,7 +100,6 @@ sal_Bool OQueryTableWindow::Init()
         sAliasName += OUString('_');
         sAliasName += OUString::number(m_nAliasNum);
     }
-
 
     sAliasName = comphelper::string::remove(sAliasName, '"');
     SetAliasName(sAliasName);
@@ -135,7 +129,7 @@ sal_Bool OQueryTableWindow::Init()
     getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;
 }
-// -----------------------------------------------------------------------------
+
 void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn,bool _bPrimaryKey)
 {
     OTableFieldInfo* pInfo = new OTableFieldInfo();
@@ -144,13 +138,13 @@ void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn
         pInfo->SetDataType(::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
     return pInfo;
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTableWindow::deleteUserData(void*& _pUserData)
 {
     delete static_cast<OTableFieldInfo*>(_pUserData);
     _pUserData = NULL;
 }
-//------------------------------------------------------------------------------
+
 void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 {
     OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry must not be NULL !");
@@ -173,7 +167,6 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
     OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
@@ -215,17 +208,14 @@ sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFiel
     return bExists;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OQueryTableWindow::ExistsAVisitedConn() const
 {
     return static_cast<const OQueryTableView*>(getTableView())->ExistsAVisitedConn(this);
 }
 
-//------------------------------------------------------------------------------
 void OQueryTableWindow::KeyInput( const KeyEvent& rEvt )
 {
     OTableWindow::KeyInput( rEvt );
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

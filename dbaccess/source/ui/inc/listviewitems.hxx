@@ -22,16 +22,12 @@
 
 #include <svtools/svlbitm.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     #define SV_ITEM_ID_BOLDLBSTRING SV_ITEM_ID_LBOXSTRING
 
-    //====================================================================
-    //= OBoldListboxString
-    //====================================================================
+    // OBoldListboxString
     class OBoldListboxString : public SvLBoxString
     {
         sal_Bool    m_bEmphasized;
@@ -53,9 +49,7 @@ namespace dbaui
         void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }
     };
 
-//........................................................................
 }   // namespace dbaui
-//........................................................................
 
 #endif // _DBAUI_LISTVIEWITEMS_HXX_
 

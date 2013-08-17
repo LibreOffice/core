@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "charsets.hxx"
 #include <osl/diagnose.h>
 #include "dbu_misc.hrc"
@@ -25,16 +24,11 @@
 #include <tools/rcid.h>
 #include "localresaccess.hxx"
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::dbtools;
 
-    //=========================================================================
-    //= OCharsetDisplay
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // OCharsetDisplay
     OCharsetDisplay::OCharsetDisplay()
         :OCharsetMap()
         ,SvxTextEncodingTable()
@@ -45,7 +39,6 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool OCharsetDisplay::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
     {
         if ( !OCharsetMap::approveEncoding( _eEncoding, _rInfo ) )
@@ -57,33 +50,28 @@ namespace dbaui
         return !GetTextString(_eEncoding).isEmpty();
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::begin() const
     {
         return const_iterator( this, OCharsetMap::begin() );
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::end() const
     {
         return const_iterator( this, OCharsetMap::end() );
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::findEncoding(const rtl_TextEncoding _eEncoding) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_eEncoding);
         return const_iterator( this, aBaseIter );
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const OUString& _rIanaName) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
         return const_iterator( this, aBaseIter );
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::const_iterator OCharsetDisplay::findDisplayName(const OUString& _rDisplayName) const
     {
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -96,17 +84,13 @@ namespace dbaui
         return const_iterator( this, OCharsetMap::find( eEncoding ) );
     }
 
-    //=========================================================================
-    //= CharsetDisplayDerefHelper
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // CharsetDisplayDerefHelper
     CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource)
         :CharsetDisplayDerefHelper_Base(_rSource)
         ,m_sDisplayName(_rSource.m_sDisplayName)
     {
     }
 
-    //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const OUString& _rDisplayName)
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
@@ -114,10 +98,7 @@ namespace dbaui
         OSL_ENSURE( !m_sDisplayName.isEmpty(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
-    //=========================================================================
-    //= OCharsetDisplay::ExtendedCharsetIterator
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // OCharsetDisplay::ExtendedCharsetIterator
     OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition )
         :m_pContainer(_pContainer)
         ,m_aPosition(_rPosition)
@@ -125,14 +106,12 @@ namespace dbaui
         OSL_ENSURE(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
     }
 
-    //-------------------------------------------------------------------------
     OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator(const ExtendedCharsetIterator& _rSource)
         :m_pContainer( _rSource.m_pContainer )
         ,m_aPosition( _rSource.m_aPosition )
     {
     }
 
-    //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
     {
         OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
@@ -144,7 +123,6 @@ namespace dbaui
         );
     }
 
-    //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
         OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
@@ -153,7 +131,6 @@ namespace dbaui
         return *this;
     }
 
-    //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
     {
         OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
@@ -162,14 +139,11 @@ namespace dbaui
         return *this;
     }
 
-    //-------------------------------------------------------------------------
     bool operator==(const OCharsetDisplay::ExtendedCharsetIterator& lhs, const OCharsetDisplay::ExtendedCharsetIterator& rhs)
     {
         return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_aPosition == rhs.m_aPosition);
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

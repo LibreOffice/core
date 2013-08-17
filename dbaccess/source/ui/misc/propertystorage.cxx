@@ -25,10 +25,8 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -38,20 +36,14 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
 
-    //====================================================================
-    //= PropertyStorage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // PropertyStorage
     PropertyStorage::~PropertyStorage()
     {
     }
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    // helper
     namespace
     {
-        //----------------------------------------------------------------
         #undef UNOTYPE
         template < class ITEMTYPE, class UNOTYPE >
         class ItemAdapter
@@ -87,10 +79,7 @@ namespace dbaui
         };
     }
 
-    //====================================================================
-    //= SetItemPropertyStorage
-    //====================================================================
-    //--------------------------------------------------------------------
+    // SetItemPropertyStorage
     void SetItemPropertyStorage::getPropertyValue( Any& _out_rValue ) const
     {
         const SfxPoolItem& rItem( m_rItemSet.Get( m_nItemID ) );
@@ -104,7 +93,6 @@ namespace dbaui
         OSL_FAIL( "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
     }
 
-    //--------------------------------------------------------------------
     void SetItemPropertyStorage::setPropertyValue( const Any& _rValue )
     {
         // try some known item types
@@ -116,8 +104,6 @@ namespace dbaui
         OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

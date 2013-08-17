@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "storagetextstream.hxx"
 
 #include <com/sun/star/io/TextOutputStream.hpp>
 
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
 namespace dbaccess
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -46,27 +43,21 @@ namespace dbaccess
     using ::com::sun::star::io::XTextOutputStream2;
     using ::com::sun::star::io::XActiveDataSource;
 
-    //==================================================================================================================
-    //= StorageTextOutputStream_Data
-    //==================================================================================================================
+    // StorageTextOutputStream_Data
     struct StorageTextOutputStream_Data
     {
         Reference< XTextOutputStream2 >  xTextOutput;
     };
 
-    //==================================================================================================================
-    //= helper
-    //==================================================================================================================
+    // helper
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
         static const OUString& lcl_getTextStreamEncodingName()
         {
             static const OUString s_sMapStreamEncodingName( "UTF-8" );
             return s_sMapStreamEncodingName;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
         static const OUString& lcl_getLineFeed()
         {
             static const OUString s_sLineFeed( sal_Unicode( '\n' ) );
@@ -74,10 +65,7 @@ namespace dbaccess
         }
     }
 
-    //==================================================================================================================
-    //= StorageTextOutputStream
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // StorageTextOutputStream
     StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                         const Reference< XStorage >& i_rParentStorage,
                                                         const OUString& i_rStreamName
@@ -90,26 +78,21 @@ namespace dbaccess
         m_pData->xTextOutput->setOutputStream( getOutputStream() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     StorageTextOutputStream::~StorageTextOutputStream()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageTextOutputStream::writeLine( const OUString& i_rLine )
     {
         m_pData->xTextOutput->writeString( i_rLine );
         m_pData->xTextOutput->writeString( lcl_getLineFeed() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageTextOutputStream::writeLine()
     {
         m_pData->xTextOutput->writeString( lcl_getLineFeed() );
     }
 
-//......................................................................................................................
 } // namespace dbaccess
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

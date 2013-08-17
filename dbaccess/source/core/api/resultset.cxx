@@ -1098,4 +1098,5 @@ void OResultSet::checkBookmarkable() const
     if ( !m_bIsBookmarkable )
         throwSQLException( "The result set does not have bookmark support.", SQL_GENERAL_ERROR, *const_cast< OResultSet* >( this ) );
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

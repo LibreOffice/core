@@ -68,10 +68,8 @@ namespace comphelper {
     class NamedValueCollection;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 class DocumentEvents;
 class DocumentEventExecutor;
@@ -79,9 +77,7 @@ class DocumentGuard;
 
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   Controllers;
 
-//============================================================
-//= ViewMonitor
-//============================================================
+// ViewMonitor
 /** helper class monitoring the views of a document, and firing appropriate events
     when views are attached / detached
 */
@@ -133,9 +129,7 @@ private:
                             m_xLastConnectedController;
 };
 
-//============================================================
-//= ODatabaseDocument
-//============================================================
+// ODatabaseDocument
 typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
@@ -245,7 +239,6 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> & rMediaDesc,/// output descriptor
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo
     ) const;
-
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
@@ -603,7 +596,6 @@ private:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor,
                 DocumentGuard& _rDocGuard
             ) const;
-
 
     /** impl-version of attachResource
 

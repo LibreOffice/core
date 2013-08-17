@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ComponentDefinition.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
@@ -74,6 +73,7 @@ public:
     }
     void clear() { m_pComponent = NULL; }
 };
+
 DBG_NAME(OComponentDefinition_Impl)
 OComponentDefinition_Impl::OComponentDefinition_Impl()
 {
@@ -84,9 +84,8 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
     DBG_DTOR(OComponentDefinition_Impl,NULL);
 }
-//==========================================================================
-//= OComponentDefinition
-//==========================================================================
+
+// OComponentDefinition
 
 DBG_NAME(OComponentDefinition)
 
@@ -141,7 +140,6 @@ OComponentDefinition::~OComponentDefinition()
 {
     DBG_DTOR(OComponentDefinition, NULL);
 }
-
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
                                        ,const OUString& _rElementName
@@ -302,4 +300,5 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

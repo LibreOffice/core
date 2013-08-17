@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "documentcontainer.hxx"
 #include "dbastrings.hrc"
 #include "documentdefinition.hxx"
@@ -60,9 +59,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
-//= LocalNameApproval
-//==========================================================================
+// LocalNameApproval
 class LocalNameApproval : public IContainerApprove
 {
     ::connectivity::SQLError    m_aErrors;
@@ -89,9 +86,7 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
         );
 }
 
-//==========================================================================
-//= ODocumentContainer
-//==========================================================================
+// ODocumentContainer
 DBG_NAME(ODocumentContainer)
 
 ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xORB
@@ -404,9 +399,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     Any aRet;
     if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
-        //////////////////////////////////////////////////////////////////
         // open command for a folder content
-        //////////////////////////////////////////////////////////////////
         OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
@@ -449,9 +442,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     }
     else if ( aCommand.Name == "insert" )
     {
-        //////////////////////////////////////////////////////////////////
         // insert
-        //////////////////////////////////////////////////////////////////
 
         InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
@@ -468,9 +459,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     }
     else if ( aCommand.Name == "delete" )
     {
-        //////////////////////////////////////////////////////////////////
         // delete
-        //////////////////////////////////////////////////////////////////
         Sequence< OUString> aSeq = getElementNames();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* pEnd   = pIter + aSeq.getLength();
@@ -767,4 +756,5 @@ void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLEx
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

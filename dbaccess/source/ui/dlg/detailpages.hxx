@@ -33,14 +33,9 @@
 
 #include <svtools/dialogcontrolling.hxx>
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-    //=========================================================================
-    //= OCommonBehaviourTabPage
-    //=========================================================================
+    // OCommonBehaviourTabPage
     #define     CBTP_NONE                           0x00000000
     #define     CBTP_USE_CHARSET                    0x00000002
     #define     CBTP_USE_OPTIONS                    0x00000004
@@ -90,9 +85,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     };
 
-    //========================================================================
-    //= ODbaseDetailsPage
-    //========================================================================
+    // ODbaseDetailsPage
     class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -121,9 +114,7 @@ namespace dbaui
         DECL_LINK( OnButtonClicked, Button * );
     };
 
-    //========================================================================
-    //= OAdoDetailsPage
-    //========================================================================
+    // OAdoDetailsPage
     class OAdoDetailsPage : public OCommonBehaviourTabPage
     {
     protected:
@@ -133,9 +124,7 @@ namespace dbaui
         OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
-    //========================================================================
-    //= OOdbcDetailsPage
-    //========================================================================
+    // OOdbcDetailsPage
     class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -151,10 +140,7 @@ namespace dbaui
         CheckBox            m_aUseCatalog;
     };
 
-
-    //========================================================================
-    //= OUserDriverDetailsPage
-    //========================================================================
+    // OUserDriverDetailsPage
     class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -173,18 +159,14 @@ namespace dbaui
         CheckBox            m_aUseCatalog;
     };
 
-    //========================================================================
-    //= OMySQLODBCDetailsPage
-    //========================================================================
+    // OMySQLODBCDetailsPage
     class OMySQLODBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
         OMySQLODBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
-    //========================================================================
-    //= OGeneralSpecialJDBCDetailsPage
-    //========================================================================
+    // OGeneralSpecialJDBCDetailsPage
     class OGeneralSpecialJDBCDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -195,7 +177,6 @@ namespace dbaui
                                         );
 
     protected:
-
 
         virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
@@ -222,9 +203,7 @@ namespace dbaui
         bool                m_bUseClass;
     };
 
-    //========================================================================
-    //= MySQLNativePage
-    //========================================================================
+    // MySQLNativePage
     class MySQLNativePage : public OCommonBehaviourTabPage
     {
     public:
@@ -247,9 +226,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
     };
 
-    //========================================================================
-    //= OOdbcDetailsPage
-    //========================================================================
+    // OOdbcDetailsPage
     class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -275,9 +252,7 @@ namespace dbaui
         DECL_LINK( OnCheckBoxClick, CheckBox * );
     };
 
-    //========================================================================
-    //= OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook
-    //========================================================================
+    // OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook
     class OMozillaDetailsPage : public OCommonBehaviourTabPage
     {
     protected:
@@ -287,9 +262,7 @@ namespace dbaui
         OMozillaDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
-    //========================================================================
-    //= OTextDetailsPage
-    //========================================================================
+    // OTextDetailsPage
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
@@ -314,9 +287,7 @@ namespace dbaui
     private:
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_
 

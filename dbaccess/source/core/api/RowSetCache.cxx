@@ -1752,4 +1752,5 @@ void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_
         }
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

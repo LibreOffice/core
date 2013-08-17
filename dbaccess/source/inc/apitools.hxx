@@ -28,17 +28,13 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 
-//==================================================================================
-//= various typedefs
-//==================================================================================
+// various typedefs
 namespace {
 DECLARE_STL_VECTOR(::com::sun::star::uno::WeakReferenceHelper, OWeakRefArray);
 }
 
-//==================================================================================
-//= OSubComponent - a component which holds a hard ref to it's parent
-//=                 and is been hold itself (by the parent) with a weak ref
-//==================================================================================
+// OSubComponent - a component which holds a hard ref to it's parent
+//                 and is been hold itself (by the parent) with a weak ref
 class OSubComponent : public ::cppu::OComponentHelper
 {
 protected:
@@ -64,10 +60,8 @@ public:
 
 };
 
-//==================================================================================
-//= helper for implementing the XServiceInfo interface
+// helper for implementing the XServiceInfo interface
 
-//----------------------------------------------------------------------------------
 // (internal - not to be used outside - usually)
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
@@ -156,7 +150,6 @@ public:
         return static_cast< XServiceInfo* >(new classname(_rxORB)); \
     }   \
 
-//----------------------------------------------------------------------------------
 // declare service info methods
 #define DECLARE_SERVICE_INFO()  \
     virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
@@ -170,66 +163,54 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >    \
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)    \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO1_STATIC(classname, implasciiname, serviceasciiname)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
     IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO2(classname, implasciiname, serviceasciiname1, serviceasciiname2) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO2_STATIC(classname, implasciiname, serviceasciiname1, serviceasciiname2)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2_STATIC(classname, serviceasciiname1,serviceasciiname2) \
     IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO3(classname, implasciiname, serviceasciiname1, serviceasciiname2, serviceasciiname3)  \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED3(classname, serviceasciiname1, serviceasciiname2, serviceasciiname3)    \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO1_ABSTRACT(classname, serviceasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO2_ABSTRACT(classname, serviceasciiname1, serviceasciiname2)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
 
-//==================================================================================
-//= XTypeProvider helpers
+// XTypeProvider helpers
 
-//--------------------------------------------------------------------------
 #define DECLARE_IMPLEMENTATION_ID( )    \
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);  \
     static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId() \
 
-//--------------------------------------------------------------------------
 #define DECLARE_GETTYPES( ) \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
-//--------------------------------------------------------------------------
 #define DECLARE_TYPEPROVIDER( ) \
     DECLARE_GETTYPES( ) \
     DECLARE_IMPLEMENTATION_ID( )
 
-//--------------------------------------------------------------------------
 #define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
 ::com::sun::star::uno::Sequence< sal_Int8 > classname::getUnoTunnelImplementationId() \
 {   \
@@ -250,7 +231,6 @@ public:
     return classname::getUnoTunnelImplementationId(); \
 }
 
-//--------------------------------------------------------------------------
 #define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
     {   \
@@ -260,7 +240,6 @@ public:
         );  \
     }
 
-//--------------------------------------------------------------------------
 #define IMPLEMENT_GETTYPES3( classname, baseclass1, baseclass2, baseclass3 )    \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
     {   \
@@ -271,25 +250,20 @@ public:
         );  \
     }
 
-//--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER2( classname, baseclass1, baseclass2 )    \
     IMPLEMENT_IMPLEMENTATION_ID( classname) \
     IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )
 
-//--------------------------------------------------------------------------
 #define IMPLEMENT_TYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 )    \
     IMPLEMENT_IMPLEMENTATION_ID( classname) \
     IMPLEMENT_GETTYPES3(classname, baseclass1, baseclass2, baseclass3 )
 
-//==================================================================================
-//= helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
-//----------------------------------------------------------------------------------
+// helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
 #define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException); \
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(); \
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const
 
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname , baseclass1)  \
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)  \
     {   \
@@ -306,73 +280,60 @@ public:
         describeProperties(aProps); \
         return new ::cppu::OPropertyArrayHelper(aProps);    \
     }
-//----------------------------------------------------------------------------------
 #define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2( classname, classname )
 
-//==================================================================================
-//= helper for implementing the createArrayHelper
-//----------------------------------------------------------------------------------
+// helper for implementing the createArrayHelper
 #define BEGIN_PROPERTY_SEQUENCE(count)  \
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aDescriptor(count); \
     ::com::sun::star::beans::Property* pDesc = aDescriptor.getArray();                  \
     sal_Int32 nPos = 0;                                             \
 
-//----------------------------------------------------------------------------------
 #define BEGIN_PROPERTY_HELPER(count)                            \
     BEGIN_PROPERTY_SEQUENCE(count)
 
-//----------------------------------------------------------------------------------
 #define DECL_PROP_IMPL(varname, cpputype) \
     pDesc[nPos++] = ::com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, cpputype,
 
-//----------------------------------------------------------------------------------
 #define DECL_PROP0(varname, type)   \
     DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) 0)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP0_BOOL(varname)    \
     DECL_PROP_IMPL(varname, ::getBooleanCppuType()) 0)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP0_IFACE(varname, iface)    \
     DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) 0)
 
-//----------------------------------------------------------------------------------
 #define DECL_PROP1(varname, type, attrib1)  \
     DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP1_BOOL(varname, attrib1)   \
     DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP1_IFACE(varname, iface, attrib1)   \
     DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
     DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
-//----------------------------------------------------------------------------------
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
     DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP2_BOOL(varname, attrib1, attrib2)  \
     DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
-//----------------------------------------------------------------------------------
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
     DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
-//----------------------------------------------------------------------------------
+
 #define DECL_PROP3_BOOL(varname, attrib1, attrib2, attrib3) \
     DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 
-
-//----------------------------------------------------------------------------------
 #define END_PROPERTY_SEQUENCE()                             \
     OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");    \
 
-//----------------------------------------------------------------------------------
 #define END_PROPERTY_HELPER()                               \
     END_PROPERTY_SEQUENCE() \
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
-
 
 #define NOTIFY_LISTERNERS(_rListeners,T,method)                                   \
     Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \

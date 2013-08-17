@@ -41,23 +41,21 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
-//========================================================================
 // OWizTypeSelectControl
 DBG_NAME(OWizTypeSelectControl)
-//========================================================================
 OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent,rResId,pHelpBar)
 {
     DBG_CTOR(OWizTypeSelectControl,NULL);
 
 }
-// -----------------------------------------------------------------------------
+
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
 
     DBG_DTOR(OWizTypeSelectControl,NULL);
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
 {
     switch(eType )
@@ -71,7 +69,7 @@ void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
             OFieldDescControl::ActivateAggregate( eType );
     }
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 {
     switch(eType )
@@ -85,7 +83,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
             OFieldDescControl::DeactivateAggregate( eType );
     }
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
     OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
@@ -173,52 +171,49 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     }
     saveCurrentFieldDescData();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetLocale();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
-// -----------------------------------------------------------------------------
+
 TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo(_nPos);
 }
-// -----------------------------------------------------------------------------
+
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
     return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xDestConnection->getMetaData();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xDestConnection;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 {
     return ((OWizTypeSelect*)GetParent())->m_bAutoIncrementEnabled;
 }
-// -----------------------------------------------------------------------------
+
 OUString OWizTypeSelectControl::getAutoIncrementValue() const
 {
     return ((OWizTypeSelect*)GetParent())->m_sAutoIncrementValue;
 }
-// -----------------------------------------------------------------------------
 
-//========================================================================
 DBG_NAME(OWizTypeSelect);
 #define IMG_PRIMARY_KEY 1
-//========================================================================
 OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_TYPE_SELECT ))
                ,m_lbColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
@@ -259,23 +254,23 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
 
     FreeResource();
 }
-// -----------------------------------------------------------------------
+
 OWizTypeSelect::~OWizTypeSelect()
 {
     DBG_DTOR(OWizTypeSelect,NULL);
 }
-// -----------------------------------------------------------------------------
+
 String OWizTypeSelect::GetTitle() const
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
     return String(ModuleRes(STR_WIZ_TYPE_SELECT_TITEL));
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelect::Resize()
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
 }
-// -----------------------------------------------------------------------
+
 IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 {
     String aColumnName( m_lbColumnNames.GetSelectEntry() );
@@ -287,7 +282,7 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
     m_aTypeControl.Enable(m_lbColumnNames.GetSelectEntryCount() == 1 );
     return 0;
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelect::Reset()
 {
     // restore original state
@@ -313,7 +308,7 @@ void OWizTypeSelect::Reset()
     }
     m_bFirstTime = sal_False;
 }
-// -----------------------------------------------------------------------
+
 void OWizTypeSelect::ActivatePage( )
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -325,7 +320,7 @@ void OWizTypeSelect::ActivatePage( )
     m_nDisplayRow = 0;
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }
-// -----------------------------------------------------------------------
+
 sal_Bool OWizTypeSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -340,7 +335,7 @@ sal_Bool OWizTypeSelect::LeavePage()
     }
     return !bDuplicateName;
 }
-//------------------------------------------------------------------------------
+
 void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -349,7 +344,7 @@ void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
     m_pbAuto.Show(bEnable);
     m_flAutoType.Show(bEnable);
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -361,7 +356,7 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, /*pButton*/ )
 
     return 0;
 }
-//------------------------------------------------------------------------
+
 sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -376,7 +371,7 @@ sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
     }
     return j == nCount;
 }
-// -----------------------------------------------------------------------------
+
 void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt16 _nPos,sal_Bool _bSet)
 {
     String sColumnName = GetEntry(_nPos);
@@ -391,7 +386,7 @@ void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt1
     }
     SetEntryData(_nPos,_pFieldDescr);
 }
-//------------------------------------------------------------------------
+
 long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
 {
     long nDone = 0;
@@ -447,7 +442,7 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
     }
     return nDone ? nDone : MultiListBox::PreNotify(rEvt);
 }
-// -----------------------------------------------------------------------------
+
 void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
@@ -465,7 +460,5 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
         m_pParserStream->Seek(nTell);
     }
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

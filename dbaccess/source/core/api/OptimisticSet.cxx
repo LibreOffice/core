@@ -503,6 +503,7 @@ void OptimisticSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVecto
         o_aChangedColumns.push_back(aJoinIter->second);
     }
 }
+
 namespace
 {
     struct PositionFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
@@ -684,4 +685,5 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
         }
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

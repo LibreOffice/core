@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "storagexmlstream.hxx"
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -32,10 +31,8 @@
 
 #include <stack>
 
-//......................................................................................................................
 namespace dbaccess
 {
-//......................................................................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -61,9 +58,7 @@ namespace dbaccess
     using ::com::sun::star::xml::sax::XParser;
     using ::com::sun::star::xml::sax::InputSource;
 
-    //==================================================================================================================
-    //= StorageXMLOutputStream_Data
-    //==================================================================================================================
+    // StorageXMLOutputStream_Data
     struct StorageXMLOutputStream_Data
     {
         Reference< XDocumentHandler >           xHandler;
@@ -71,10 +66,7 @@ namespace dbaccess
         ::rtl::Reference< SvXMLAttributeList >  xAttributes;
     };
 
-    //==================================================================================================================
-    //= StorageXMLOutputStream
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // StorageXMLOutputStream
     StorageXMLOutputStream::StorageXMLOutputStream( const Reference<XComponentContext>& i_rContext,
                                                     const Reference< XStorage >& i_rParentStorage,
                                                     const OUString& i_rStreamName )
@@ -90,12 +82,10 @@ namespace dbaccess
         m_pData->xAttributes = new SvXMLAttributeList;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     StorageXMLOutputStream::~StorageXMLOutputStream()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::close()
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "illegal document handler" );
@@ -104,13 +94,11 @@ namespace dbaccess
         // endDocument
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::addAttribute( const OUString& i_rName, const OUString& i_rValue ) const
     {
         m_pData->xAttributes->AddAttribute( i_rName, i_rValue );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::startElement( const OUString& i_rElementName ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
@@ -120,7 +108,6 @@ namespace dbaccess
         m_pData->aElements.push( i_rElementName );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::endElement() const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
@@ -131,7 +118,6 @@ namespace dbaccess
         m_pData->aElements.pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::ignorableWhitespace( const OUString& i_rWhitespace ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
@@ -139,7 +125,6 @@ namespace dbaccess
         m_pData->xHandler->ignorableWhitespace( i_rWhitespace );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLOutputStream::characters( const OUString& i_rCharacters ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
@@ -147,18 +132,13 @@ namespace dbaccess
         m_pData->xHandler->characters( i_rCharacters );
     }
 
-    //==================================================================================================================
-    //= StorageXMLInputStream_Data
-    //==================================================================================================================
+    // StorageXMLInputStream_Data
     struct StorageXMLInputStream_Data
     {
         Reference< XParser >    xParser;
     };
 
-    //==================================================================================================================
-    //= StorageXMLInputStream
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    // StorageXMLInputStream
     StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
                                                   const OUString& i_rStreamName )
@@ -168,7 +148,6 @@ namespace dbaccess
         m_pData->xParser.set( Parser::create(i_rContext) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void StorageXMLInputStream::import( const Reference< XDocumentHandler >& i_rHandler )
     {
         ENSURE_OR_THROW( i_rHandler.is(), "illegal document handler (NULL)" );
@@ -180,13 +159,10 @@ namespace dbaccess
         m_pData->xParser->parseStream( aInputSource );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     StorageXMLInputStream::~StorageXMLInputStream()
     {
     }
 
-//......................................................................................................................
 } // namespace dbaccess
-//......................................................................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

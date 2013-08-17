@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "moduledbu.hxx"
 
 #include <tools/resmgr.hxx>
@@ -28,14 +27,10 @@
     ::osl::MutexGuard aGuard(s_aMutex); \
     ensureImpl()
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
-//=========================================================================
-//= OModuleImpl
-//=========================================================================
+// OModuleImpl
 /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
 */
 class OModuleImpl
@@ -52,7 +47,6 @@ public:
 };
 
 DBG_NAME(OModuleImpl)
-//-------------------------------------------------------------------------
 OModuleImpl::OModuleImpl()
     :m_pResources(NULL)
 {
@@ -60,7 +54,6 @@ OModuleImpl::OModuleImpl()
 
 }
 
-//-------------------------------------------------------------------------
 OModuleImpl::~OModuleImpl()
 {
     if (m_pResources)
@@ -69,7 +62,6 @@ OModuleImpl::~OModuleImpl()
     DBG_DTOR(OModuleImpl,NULL);
 }
 
-//-------------------------------------------------------------------------
 ResMgr* OModuleImpl::getResManager()
 {
     // note that this method is not threadsafe, which counts for the whole class !
@@ -82,27 +74,22 @@ ResMgr* OModuleImpl::getResManager()
     return m_pResources;
 }
 
-//=========================================================================
-//= OModule
-//=========================================================================
+// OModule
 ::osl::Mutex    OModule::s_aMutex;
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = NULL;
-//-------------------------------------------------------------------------
 ResMgr* OModule::getResManager()
 {
     ENTER_MOD_METHOD();
     return s_pImpl->getResManager();
 }
 
-//-------------------------------------------------------------------------
 void OModule::registerClient()
 {
     ::osl::MutexGuard aGuard(s_aMutex);
     ++s_nClients;
 }
 
-//-------------------------------------------------------------------------
 void OModule::revokeClient()
 {
     ::osl::MutexGuard aGuard(s_aMutex);
@@ -113,7 +100,6 @@ void OModule::revokeClient()
     }
 }
 
-//-------------------------------------------------------------------------
 void OModule::ensureImpl()
 {
     if (s_pImpl)
@@ -121,8 +107,6 @@ void OModule::ensureImpl()
     s_pImpl = new OModuleImpl();
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

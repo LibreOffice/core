@@ -19,21 +19,16 @@
 #ifndef DBAUI_SBATTRDLG_HXX
 #define DBAUI_SBATTRDLG_HXX
 
-
 #include "dlgattr.hrc"
 
 #include <sfx2/tabdlg.hxx>
 #include <tools/solar.h>
 
-
-
 class SvxNumberInfoItem;
 class SfxItemSet;
 class SvNumberFormatter;
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     class SbaSbAttrDlg : public SfxTabDialog
     {
@@ -46,9 +41,7 @@ namespace dbaui
 
         virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
     };
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif//DBAUI_SBATTRDLG_HXX
 

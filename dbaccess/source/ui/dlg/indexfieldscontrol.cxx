@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "indexfieldscontrol.hxx"
 #include "dbu_dlg.hrc"
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
 #define BROWSER_STANDARD_FLAGS      BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | \
                                     BROWSER_HIDECURSOR | BROWSER_HIDESELECT | BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL
@@ -37,9 +34,7 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::svt;
 
-    //==================================================================
-    //= DbaMouseDownListBoxController
-    //==================================================================
+    // DbaMouseDownListBoxController
     class DbaMouseDownListBoxController : public ListBoxCellController
     {
     protected:
@@ -63,21 +58,18 @@ namespace dbaui
         DECL_LINK( OnMultiplexModify, void* );
     };
 
-    //------------------------------------------------------------------
     void DbaMouseDownListBoxController::SetAdditionalModifyHdl(const Link& _rHdl)
     {
         m_aAdditionalModifyHdl = _rHdl;
         implCheckLinks();
     }
 
-    //------------------------------------------------------------------
     void DbaMouseDownListBoxController::SetModifyHdl(const Link& _rHdl)
     {
         m_aOriginalModifyHdl = _rHdl;
         implCheckLinks();
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaMouseDownListBoxController, OnMultiplexModify, void*, _pArg )
     {
         if (m_aAdditionalModifyHdl.IsSet())
@@ -87,7 +79,6 @@ namespace dbaui
         return 0L;
     }
 
-    //------------------------------------------------------------------
     void DbaMouseDownListBoxController::implCheckLinks()
     {
         if (m_aAdditionalModifyHdl.IsSet() || m_aOriginalModifyHdl.IsSet())
@@ -96,11 +87,8 @@ namespace dbaui
             ListBoxCellController::SetModifyHdl(Link());
     }
 
-    //==================================================================
-    //= IndexFieldsControl
-    //==================================================================
+    // IndexFieldsControl
 DBG_NAME(IndexFieldsControl)
-//------------------------------------------------------------------
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix)
         :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
@@ -115,7 +103,6 @@ DBG_NAME(IndexFieldsControl)
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
-    //------------------------------------------------------------------
     IndexFieldsControl::~IndexFieldsControl()
     {
         delete m_pSortingCell;
@@ -124,7 +111,6 @@ DBG_NAME(IndexFieldsControl)
         DBG_DTOR(IndexFieldsControl,NULL);
     }
 
-    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::SeekRow(long nRow)
     {
         if (!EditBrowseBox::SeekRow(nRow))
@@ -143,7 +129,6 @@ DBG_NAME(IndexFieldsControl)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     void IndexFieldsControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const
     {
         Point aPos(_rRect.TopLeft());
@@ -174,7 +159,6 @@ DBG_NAME(IndexFieldsControl)
             _rDev.SetClipRegion();
     }
 
-    //------------------------------------------------------------------
     void IndexFieldsControl::initializeFrom(const IndexFields& _rFields)
     {
         // copy the field descriptions
@@ -193,7 +177,6 @@ DBG_NAME(IndexFieldsControl)
         GoToRowColumnId(0, COLUMN_ID_FIELDNAME);
     }
 
-    //------------------------------------------------------------------
     void IndexFieldsControl::commitTo(IndexFields& _rFields)
     {
         // do not just copy the array, we may have empty field names (which should not be copied)
@@ -211,7 +194,6 @@ DBG_NAME(IndexFieldsControl)
         _rFields.resize(aDest - _rFields.begin());
     }
 
-    //------------------------------------------------------------------
     sal_uInt32 IndexFieldsControl::GetTotalCellWidth(long _nRow, sal_uInt16 _nColId)
     {
         if (COLUMN_ID_ORDER == _nColId)
@@ -224,7 +206,6 @@ DBG_NAME(IndexFieldsControl)
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
 
-    //------------------------------------------------------------------
     void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields)
     {
         RemoveColumns();
@@ -277,7 +258,6 @@ DBG_NAME(IndexFieldsControl)
             m_pFieldNameCell->InsertEntry(*pFields);
     }
 
-    //------------------------------------------------------------------
     CellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
     {
         if (!IsEnabled())
@@ -308,7 +288,6 @@ DBG_NAME(IndexFieldsControl)
         return pReturn;
     }
 
-    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::implGetFieldDesc(long _nRow, ConstIndexFieldsIterator& _rPos)
     {
         _rPos = m_aFields.end();
@@ -318,13 +297,11 @@ DBG_NAME(IndexFieldsControl)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::IsModified() const
     {
         return EditBrowseBox::IsModified();
     }
 
-    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::SaveModified()
     {
         if (!IsModified())
@@ -394,7 +371,6 @@ DBG_NAME(IndexFieldsControl)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, long _nRow, sal_uInt16 _nColumnId)
     {
         ConstIndexFieldsIterator aFieldDescription;
@@ -417,7 +393,6 @@ DBG_NAME(IndexFieldsControl)
         }
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( IndexFieldsControl, OnListEntrySelected, ListBox*, _pBox )
     {
         if (!_pBox->IsTravelSelect() && m_aModifyHdl.IsSet())
@@ -453,7 +428,6 @@ DBG_NAME(IndexFieldsControl)
         }
         return 0L;
     }
-    //------------------------------------------------------------------
     OUString IndexFieldsControl::GetCellText(long _nRow,sal_uInt16 nColId) const
     {
         ConstIndexFieldsIterator aRow = m_aFields.end();
@@ -464,7 +438,6 @@ DBG_NAME(IndexFieldsControl)
         }
         return GetRowCellText(aRow,nColId);
     }
-    //------------------------------------------------------------------
     String IndexFieldsControl::GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const
     {
         if (_rRow < m_aFields.end())
@@ -484,15 +457,11 @@ DBG_NAME(IndexFieldsControl)
         }
         return String();
     }
-    //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool /*bForward*/) const
     {
         return sal_False;
     }
-    //------------------------------------------------------------------
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,14 +28,10 @@
 
 #include <memory>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
-    //====================================================================
-    //= TableName
-    //====================================================================
+    // TableName
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdb::tools::XTableName
                                     >   TableName_Base;
     struct TableName_Impl;
@@ -85,9 +81,7 @@ namespace sdbtools
         TableName& operator=( const TableName& );   // never implemented
     };
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 #endif // DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
 

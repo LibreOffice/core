@@ -26,7 +26,6 @@
 #include "QueryDesignFieldUndoAct.hxx"
 #include "QueryTableView.hxx"
 
-
 using namespace dbaui;
 DBG_NAME(OQueryDesignFieldUndoAct)
 OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
@@ -36,23 +35,21 @@ OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwB
 {
     DBG_CTOR(OQueryDesignFieldUndoAct,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 {
     DBG_DTOR(OQueryDesignFieldUndoAct,NULL);
     pOwner = NULL;
 }
-// -----------------------------------------------------------------------------
 
 DBG_NAME(OQueryTabWinUndoAct )
-// ------------------------------------------------------------------------------------------------
 OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pTabWin(NULL)
 {
     DBG_CTOR(OQueryTabWinUndoAct ,NULL);
 }
-//==============================================================================
+
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
     DBG_DTOR(OQueryTabWinUndoAct ,NULL);
@@ -77,7 +74,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         m_vTableConnection.clear();
     }
 }
-//------------------------------------------------------------------------------
+
 void OTabFieldCellModifiedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
@@ -93,7 +90,6 @@ void OTabFieldCellModifiedUndoAct::Undo()
     pOwner->LeaveUndoMode();
 }
 
-//------------------------------------------------------------------------------
 void OTabFieldSizedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
@@ -107,7 +103,7 @@ void OTabFieldSizedUndoAct::Undo()
     }
     pOwner->LeaveUndoMode();
 }
-// -----------------------------------------------------------------------------
+
 void OTabFieldMovedUndoAct::Undo()
 {
     pOwner->EnterUndoMode();
@@ -122,6 +118,5 @@ void OTabFieldMovedUndoAct::Undo()
     }
     pOwner->LeaveUndoMode();
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

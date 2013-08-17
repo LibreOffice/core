@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbmm_global.hrc"
 #include "dbmm_module.hxx"
 #include "dbmm_types.hxx"
@@ -75,10 +74,8 @@
 
 #define DEFAULT_DOC_PROGRESS_RANGE  100000
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -144,9 +141,7 @@ namespace dbmm
 #define PHASE_BASIC         5
 #define PHASE_DIALOGS       6
 
-    //====================================================================
-    //= SubDocument
-    //====================================================================
+    // SubDocument
     struct SubDocument
     {
         Reference< XCommandProcessor >  xCommandProcessor;
@@ -168,22 +163,17 @@ namespace dbmm
 
     typedef ::std::vector< SubDocument >    SubDocuments;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    // helper
     typedef ::utl::SharedUNOComponent< XStorage >   SharedStorage;
 
     namespace
     {
-        //----------------------------------------------------------------
         static const OUString& lcl_getScriptsStorageName()
         {
             static const OUString s_sScriptsStorageName( "Scripts" );
             return s_sScriptsStorageName;
         }
 
-        //----------------------------------------------------------------
         static const OUString& lcl_getScriptsSubStorageName( const ScriptType _eType )
         {
             static const OUString s_sBeanShell ( "beanshell" );
@@ -206,7 +196,6 @@ namespace dbmm
             return s_sEmpty;
         }
 
-        //----------------------------------------------------------------
         static bool lcl_getScriptTypeFromLanguage( const OUString& _rLanguage, ScriptType& _out_rScriptType )
         {
             struct LanguageMapping
@@ -240,7 +229,6 @@ namespace dbmm
             return false;
         }
 
-        //----------------------------------------------------------------
         OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
             OUString sObjectName(
@@ -250,7 +238,6 @@ namespace dbmm
             return sObjectName;
         }
 
-        //----------------------------------------------------------------
         static Any lcl_executeCommand_throw( const Reference< XCommandProcessor >& _rxCommandProc,
             const sal_Char* _pAsciiCommand )
         {
@@ -264,7 +251,6 @@ namespace dbmm
                 aCommand, _rxCommandProc->createCommandIdentifier(), NULL );
         }
 
-        //----------------------------------------------------------------
         OUString lcl_getMimeType_nothrow( const Reference< XCommandProcessor >& _rxContent )
         {
             OUString sMimeType;
@@ -280,7 +266,6 @@ namespace dbmm
             return sMimeType;
         }
 
-        //----------------------------------------------------------------
         enum OpenDocResult
         {
             eOpenedDoc,
@@ -288,7 +273,6 @@ namespace dbmm
             eFailure
         };
 
-        //----------------------------------------------------------------
         static OpenDocResult lcl_loadSubDocument_nothrow( SubDocument& _rDocument,
             const Reference< XStatusIndicator >& _rxProgress, MigrationLog& _rLogger )
         {
@@ -343,7 +327,6 @@ namespace dbmm
             return _rDocument.xDocument.is() ? eOpenedDoc : eFailure;
         }
 
-        //----------------------------------------------------------------
         static bool lcl_unloadSubDocument_nothrow( SubDocument& _rDocument, MigrationLog& _rLogger )
         {
             bool bSuccess = false;
@@ -371,7 +354,6 @@ namespace dbmm
             return bSuccess;
         }
 
-        //----------------------------------------------------------------
         bool lcl_commitStorage_nothrow( const Reference< XStorage >& _rxStorage )
         {
             try
@@ -386,7 +368,6 @@ namespace dbmm
             return true;
         }
 
-        //----------------------------------------------------------------
         bool lcl_commitDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger )
         {
             bool bSuccess = false;
@@ -414,7 +395,6 @@ namespace dbmm
             return bSuccess;
         }
 
-        //----------------------------------------------------------------
         bool lcl_storeDocument_nothrow( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger )
         {
             bool bSuccess = false;
@@ -441,7 +421,6 @@ namespace dbmm
             return bSuccess;
         }
 
-        //----------------------------------------------------------------
         bool lcl_storeEmbeddedDocument_nothrow( const SubDocument& _rDocument )
         {
             try
@@ -457,9 +436,7 @@ namespace dbmm
         }
     }
 
-    //====================================================================
-    //= DrawPageIterator
-    //====================================================================
+    // DrawPageIterator
     class DrawPageIterator
     {
     public:
@@ -511,9 +488,7 @@ namespace dbmm
         sal_Int32                   m_nCurrentPage;
     };
 
-    //====================================================================
-    //= FormComponentScripts
-    //====================================================================
+    // FormComponentScripts
     class FormComponentScripts
     {
     public:
@@ -549,9 +524,7 @@ namespace dbmm
         const sal_Int32                             m_nIndex;
     };
 
-    //====================================================================
-    //= FormComponentIterator
-    //====================================================================
+    // FormComponentIterator
     class FormComponentIterator
     {
     public:
@@ -587,9 +560,7 @@ namespace dbmm
 
     };
 
-    //====================================================================
-    //= ScriptsStorage - declaration
-    //====================================================================
+    // ScriptsStorage - declaration
     /** a helper class which encapsulates access to the storages for Java/Script, BeanShell, and Python scripts,
         i.e. all script types which can be manipulated on storage level.
     */
@@ -646,17 +617,13 @@ namespace dbmm
         SharedStorage   m_xScriptsStorage;
     };
 
-    //====================================================================
-    //= ScriptsStorage - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ScriptsStorage - implementation
     ScriptsStorage::ScriptsStorage( MigrationLog& _rLogger )
         :m_rLogger( _rLogger )
         ,m_xScriptsStorage()
     {
     }
 
-    //--------------------------------------------------------------------
     ScriptsStorage::ScriptsStorage( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger )
         :m_rLogger( _rLogger )
         ,m_xScriptsStorage()
@@ -664,18 +631,15 @@ namespace dbmm
         bind( _rxDocument );
     }
 
-    //--------------------------------------------------------------------
     ScriptsStorage::~ScriptsStorage()
     {
     }
 
-    //--------------------------------------------------------------------
     bool ScriptsStorage::commit()
     {
         return lcl_commitStorage_nothrow( m_xScriptsStorage );
     }
 
-    //--------------------------------------------------------------------
     void ScriptsStorage::bind( const Reference< XModel >& _rxDocument )
     {
         OSL_PRECOND( !isValid(), "ScriptsStorage:bind: did not bother, yet, to check whether this is allowed!" );
@@ -710,7 +674,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool ScriptsStorage::hasScripts( const ScriptType _eType ) const
     {
         OSL_PRECOND( isValid(), "ScriptsStorage::hasScripts: illegal call!" );
@@ -722,7 +685,6 @@ namespace dbmm
             &&  m_xScriptsStorage->isStorageElement( rSubStorageName );
     }
 
-    //--------------------------------------------------------------------
     SharedStorage ScriptsStorage::getScriptsRoot( const ScriptType _eType ) const
     {
         SharedStorage xStorage;
@@ -735,7 +697,6 @@ namespace dbmm
         return xStorage;
     }
 
-    //--------------------------------------------------------------------
     ::std::set< OUString > ScriptsStorage::getElementNames() const
     {
         Sequence< OUString > aElementNames;
@@ -751,7 +712,6 @@ namespace dbmm
         return aNames;
     }
 
-    //--------------------------------------------------------------------
     void ScriptsStorage::removeScriptTypeStorage( const ScriptType _eType ) const
     {
         OUString sSubStorageName( lcl_getScriptsSubStorageName( _eType ) );
@@ -759,7 +719,6 @@ namespace dbmm
             m_xScriptsStorage->removeElement( sSubStorageName );
     }
 
-    //--------------------------------------------------------------------
     bool ScriptsStorage::removeFromDocument( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger )
     {
         try
@@ -780,9 +739,7 @@ namespace dbmm
         return true;
     }
 
-    //====================================================================
-    //= ProgressDelegator
-    //====================================================================
+    // ProgressDelegator
     class ProgressDelegator : public IProgressConsumer
     {
     public:
@@ -819,9 +776,7 @@ namespace dbmm
         OUString     m_sAction;
     };
 
-    //====================================================================
-    //= PhaseGuard
-    //====================================================================
+    // PhaseGuard
     class PhaseGuard
     {
     public:
@@ -850,9 +805,7 @@ namespace dbmm
         ProgressMixer&  m_rMixer;
     };
 
-    //====================================================================
-    //= MigrationEngine_Impl - declaration
-    //====================================================================
+    // MigrationEngine_Impl - declaration
     class MigrationEngine_Impl
     {
     public:
@@ -979,10 +932,7 @@ namespace dbmm
                 ) const;
     };
 
-    //====================================================================
-    //= MigrationEngine_Impl - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MigrationEngine_Impl - implementation
     MigrationEngine_Impl::MigrationEngine_Impl( const Reference<XComponentContext>& _rContext,
             const Reference< XOfficeDatabaseDocument >& _rxDocument, IMigrationProgress& _rProgress, MigrationLog& _rLogger )
         :m_aContext( _rContext )
@@ -998,12 +948,10 @@ namespace dbmm
         OSL_VERIFY( impl_collectSubDocuments_nothrow() );
     }
 
-    //--------------------------------------------------------------------
     MigrationEngine_Impl::~MigrationEngine_Impl()
     {
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::migrateAll()
     {
         if  ( m_aSubDocs.empty() )
@@ -1053,7 +1001,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
         void lcl_collectHierarchicalElementNames_throw(
@@ -1091,7 +1038,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_collectSubDocuments_nothrow()
     {
         OSL_PRECOND( m_xDocument.is(), "MigrationEngine_Impl::impl_collectSubDocuments_nothrow: invalid document!" );
@@ -1119,7 +1065,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_handleDocument_nothrow( const SubDocument& _rDocument ) const
     {
         OSL_ENSURE( m_nCurrentDocumentID == -1,
@@ -1130,7 +1075,6 @@ namespace dbmm
         OUString sObjectName( lcl_getSubDocumentDescription( _rDocument ) );
         m_rProgress.startObject( sObjectName, OUString(), DEFAULT_DOC_PROGRESS_RANGE );
 
-        // -----------------
         // load the document
         Reference< ProgressCapture > pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
         SubDocument aSubDocument( _rDocument );
@@ -1144,7 +1088,6 @@ namespace dbmm
             return ( eResult == eIgnoreDoc );
         }
 
-        // -----------------
         // migrate the libraries
         ProgressDelegator aDelegator(m_rProgress, sObjectName, MacroMigrationResId(STR_MIGRATING_LIBS).toString());
         ProgressMixer aProgressMixer( aDelegator );
@@ -1181,7 +1124,6 @@ namespace dbmm
             impl_adjustFormComponentEvents_nothrow( aSubDocument );
         }
 
-        // -----------------
         // clean up
         // store the sub document, including removal of the (now obsolete) "Scripts" sub folder
         if ( m_rLogger.movedAnyLibrary( m_nCurrentDocumentID ) )
@@ -1206,7 +1148,6 @@ namespace dbmm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
         static OUString lcl_createTargetLibName( const SubDocument& _rDocument,
@@ -1266,7 +1207,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_checkScriptStorageStructure_nothrow( const SubDocument& _rDocument ) const
     {
         OSL_PRECOND( _rDocument.xDocument.is(), "MigrationEngine_Impl::impl_checkScriptStorageStructure_nothrow: invalid document!" );
@@ -1311,7 +1251,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_migrateScriptStorage_nothrow( const SubDocument& _rDocument,
         const ScriptType _eScriptType, ProgressMixer& _rProgress, const PhaseID _nPhaseID ) const
     {
@@ -1441,7 +1380,6 @@ namespace dbmm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_migrateContainerLibraries_nothrow( const SubDocument& _rDocument,
             const ScriptType _eScriptType, ProgressMixer& _rProgress, const PhaseID _nPhaseID ) const
     {
@@ -1603,7 +1541,6 @@ namespace dbmm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( const OUString& _rScriptType,
             OUString& _inout_rScriptCode ) const
     {
@@ -1696,7 +1633,6 @@ namespace dbmm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( ScriptEventDescriptor& _inout_rScriptEvent ) const
     {
         if ( !(_inout_rScriptEvent.ScriptType.isEmpty() || _inout_rScriptEvent.ScriptCode.isEmpty()) )
@@ -1704,7 +1640,6 @@ namespace dbmm
         return false;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( Any& _inout_rScriptDescriptor ) const
     {
         ::comphelper::NamedValueCollection aScriptDesc( _inout_rScriptDescriptor );
@@ -1733,7 +1668,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustDocumentEvents_nothrow( const SubDocument& _rDocument ) const
     {
         try
@@ -1776,7 +1710,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     void MigrationEngine_Impl::impl_adjustDialogElementEvents_throw( const Reference< XInterface >& _rxElement ) const
     {
         Reference< XScriptEventsSupplier > xEventsSupplier( _rxElement, UNO_QUERY_THROW );
@@ -1798,7 +1731,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustDialogEvents_nothrow( Any& _inout_rDialogLibraryElement,
         const OUString& _rDocName, const OUString& _rDialogLibName, const OUString& _rDialogName ) const
     {
@@ -1841,7 +1773,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     void MigrationEngine_Impl::impl_adjustFormComponentEvents_throw( const Reference< XIndexAccess >& _rxComponentContainer ) const
     {
         FormComponentIterator aCompIter( _rxComponentContainer );
@@ -1873,7 +1804,6 @@ namespace dbmm
         }
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustFormComponentEvents_nothrow( const SubDocument& _rDocument ) const
     {
         try
@@ -1898,7 +1828,6 @@ namespace dbmm
         return true;
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_unprotectPasswordLibrary_throw( const Reference< XLibraryContainerPassword >& _rxPasswordManager,
             const ScriptType _eScriptType, const OUString& _rLibraryName ) const
     {
@@ -1927,10 +1856,7 @@ namespace dbmm
 
     }
 
-    //====================================================================
-    //= MigrationEngine
-    //====================================================================
-    //--------------------------------------------------------------------
+    // MigrationEngine
     MigrationEngine::MigrationEngine( const Reference<XComponentContext>& _rContext,
             const Reference< XOfficeDatabaseDocument >& _rxDocument, IMigrationProgress& _rProgress,
             MigrationLog& _rLogger )
@@ -1938,31 +1864,25 @@ namespace dbmm
     {
     }
 
-    //--------------------------------------------------------------------
     MigrationEngine::~MigrationEngine()
     {
     }
 
-    //--------------------------------------------------------------------
     sal_Int32 MigrationEngine::getFormCount() const
     {
         return m_pImpl->getFormCount();
     }
 
-    //--------------------------------------------------------------------
     sal_Int32 MigrationEngine::getReportCount() const
     {
         return m_pImpl->getReportCount();
     }
 
-    //--------------------------------------------------------------------
     bool MigrationEngine::migrateAll()
     {
         return m_pImpl->migrateAll();
     }
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

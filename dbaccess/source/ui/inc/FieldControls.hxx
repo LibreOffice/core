@@ -25,7 +25,6 @@
 #include "SqlNameEdit.hxx"
 #include "moduledbu.hxx"
 
-
 namespace dbaui
 {
     namespace
@@ -39,7 +38,6 @@ namespace dbaui
         }
     }
 
-    //==================================================================
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
         OModuleClient m_aModuleClient;
@@ -69,7 +67,6 @@ namespace dbaui
     {
         m_strHelpText=String(ModuleRes(nHelpId));
     }
-    //==================================================================
     class OPropEditCtrl :   public Edit
     {
         OModuleClient m_aModuleClient;
@@ -105,7 +102,6 @@ namespace dbaui
         m_strHelpText =String(ModuleRes(nHelpId));
     }
 
-    //==================================================================
     class OPropNumericEditCtrl : public NumericField
     {
         short   m_nPos;
@@ -140,7 +136,6 @@ namespace dbaui
         m_strHelpText =String(ModuleRes(nHelpId));
     }
 
-    //==================================================================
     class OPropListBoxCtrl : public ListBox
     {
         short   m_nPos;
@@ -176,7 +171,5 @@ namespace dbaui
     }
 }
 #endif // DBAUI_FIELDCONTROLS_HXX
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

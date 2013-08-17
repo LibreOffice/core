@@ -87,7 +87,6 @@ const static char sFontSize[]       = "font-size: ";
 #define CELL_X                      1437
 
 DBG_NAME(ODatabaseImportExport)
-//======================================================================
 ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -119,7 +118,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     }
     osl_atomic_decrement( &m_refCount );
 }
-// -----------------------------------------------------------------------------
+
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
@@ -146,7 +145,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     {
     }
 }
-//-------------------------------------------------------------------
+
 ODatabaseImportExport::~ODatabaseImportExport()
 {
     DBG_DTOR(ODatabaseImportExport,NULL);
@@ -158,7 +157,7 @@ ODatabaseImportExport::~ODatabaseImportExport()
         m_pReader->release();
     delete m_pRowMarker;
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseImportExport::dispose()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
@@ -181,7 +180,7 @@ void ODatabaseImportExport::dispose()
     m_xRowLocate.clear();
     m_xFormatter.clear();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
@@ -194,14 +193,13 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
         m_bNeedToReInitialize = true;
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseImportExport::initialize( const ODataAccessDescriptor& _aDataDescriptor )
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
     impl_initFromDescriptor( _aDataDescriptor, true );
 }
 
-// -----------------------------------------------------------------------------
 void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor" );
@@ -264,7 +262,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
     {
     }
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseImportExport::initialize()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
@@ -351,7 +349,7 @@ void ODatabaseImportExport::initialize()
 
     m_bInInitialize = sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODatabaseImportExport::Write()
 {
     if ( m_bNeedToReInitialize )
@@ -361,7 +359,7 @@ sal_Bool ODatabaseImportExport::Write()
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ODatabaseImportExport::Read()
 {
     if ( m_bNeedToReInitialize )
@@ -371,7 +369,7 @@ sal_Bool ODatabaseImportExport::Read()
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void ODatabaseImportExport::impl_initializeRowMember_throw()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseImportExport::impl_initializeRowMember_throw" );
@@ -384,7 +382,7 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
         m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
     }
 }
-//======================================================================
+
 sal_Bool ORTFImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Write" );
@@ -466,7 +464,6 @@ sal_Bool ORTFImportExport::Write()
         // column description
         (*m_pStream) << '{' << ODatabaseImportExport::sNewLine;
         (*m_pStream) << aTRRH;
-
 
         OString* pHorzChar = new OString[nCount];
 
@@ -560,7 +557,7 @@ sal_Bool ORTFImportExport::Write()
     (*m_pStream) << (sal_uInt8) 0;
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
-// -----------------------------------------------------------------------------
+
 void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
 {
     if(!m_pRowMarker || m_pRowMarker[kk] == k)
@@ -624,7 +621,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
     }
     ++k;
 }
-//-------------------------------------------------------------------
+
 sal_Bool ORTFImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Read" );
@@ -643,8 +640,7 @@ sal_Bool ORTFImportExport::Read()
 
     return eState != SVPAR_ERROR;
 }
-//-------------------------------------------------------------------
-//===================================================================
+
 const sal_Int16 OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
 {
     HTMLFONTSZ1_DFLT, HTMLFONTSZ2_DFLT, HTMLFONTSZ3_DFLT, HTMLFONTSZ4_DFLT,
@@ -656,16 +652,13 @@ sal_Int16 OHTMLImportExport::nFontSize[SBA_HTML_FONTSIZES] = { 0 };
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
 const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-//========================================================================
 // Macros for HTML-Export
-//========================================================================
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
 #define OUT_LF()            (*m_pStream) << ODatabaseImportExport::sNewLine << GetIndentStr()
 #define TAG_ON_LF( tag )    (TAG_ON( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
 
-//-------------------------------------------------------------------
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
                                      const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -683,7 +676,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
-//-------------------------------------------------------------------
+
 sal_Bool OHTMLImportExport::Write()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::Write" );
@@ -702,7 +695,7 @@ sal_Bool OHTMLImportExport::Write()
     }
     return sal_False;
 }
-//-------------------------------------------------------------------
+
 sal_Bool OHTMLImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::Read" );
@@ -722,7 +715,7 @@ sal_Bool OHTMLImportExport::Read()
 
     return eState != SVPAR_ERROR;
 }
-//-------------------------------------------------------------------
+
 void OHTMLImportExport::WriteHeader()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteHeader" );
@@ -739,7 +732,7 @@ void OHTMLImportExport::WriteHeader()
     OUT_LF();
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
 }
-//-----------------------------------------------------------------------
+
 void OHTMLImportExport::WriteBody()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteBody" );
@@ -775,7 +768,7 @@ void OHTMLImportExport::WriteBody()
 
     TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
 }
-//-----------------------------------------------------------------------
+
 void OHTMLImportExport::WriteTables()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteTables" );
@@ -848,7 +841,6 @@ void OHTMLImportExport::WriteTables()
 
         const char **pHorJustify = new const char*[aNames.getLength()];
         sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
-
 
         sal_Int32 nHeight = 0;
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
@@ -948,7 +940,7 @@ void OHTMLImportExport::WriteTables()
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
     IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 }
-//-----------------------------------------------------------------------
+
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,
                                    const String& rValue,const char* pHtmlTag)
 {
@@ -1013,7 +1005,6 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 
-
     if ( bStrikeout )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_strike );
     if ( bUnderline )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_underline );
     if ( bItalic )      TAG_OFF( OOO_STRING_SVTOOLS_HTML_italic );
@@ -1023,7 +1014,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 
     TAG_OFF_LF( pHtmlTag );
 }
-//-----------------------------------------------------------------------
+
 void OHTMLImportExport::FontOn()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::FontOn" );
@@ -1054,7 +1045,7 @@ void OHTMLImportExport::FontOn()
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
     (*m_pStream) << ">";
 }
-//-----------------------------------------------------------------------
+
 inline void OHTMLImportExport::FontOff()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::FontOff" );
@@ -1064,7 +1055,7 @@ inline void OHTMLImportExport::FontOff()
     m_bCheckFont = sal_False;
 #endif
 }
-//-----------------------------------------------------------------------
+
 void OHTMLImportExport::IncIndent( sal_Int16 nVal )
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::IncIndent" );
@@ -1076,6 +1067,5 @@ void OHTMLImportExport::IncIndent( sal_Int16 nVal )
         m_nIndent = nIndentMax;
     sIndent[m_nIndent] = 0;
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

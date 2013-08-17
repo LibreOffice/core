@@ -29,10 +29,8 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     DECLARE_STL_STDKEY_SET( OUString, StringBag );
     DECLARE_STL_VECTOR( sal_Int8, ByteVector );
@@ -40,9 +38,7 @@ namespace dbaui
 
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_COMMON_TYPES_HXX_
 

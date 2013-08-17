@@ -91,9 +91,7 @@ namespace dbaui
         }
     };
 
-    // ========================================================
     // ICopyTableSourceObject
-    // ========================================================
     /** interface to an object to copy to another DB, using the OCopyTableWizard
 
         when the wizard is used to copy an object to another DB, it usually requires
@@ -142,9 +140,7 @@ namespace dbaui
         virtual ~ICopyTableSourceObject();
     };
 
-    // ========================================================
     // ObjectCopySource
-    // ========================================================
     class ObjectCopySource : public ICopyTableSourceObject
     {
     private:
@@ -175,9 +171,7 @@ namespace dbaui
                                     getPreparedSelectStatement() const;
     };
 
-    // ========================================================
     // NamedTableCopySource
-    // ========================================================
     class NamedTableCopySource : public ICopyTableSourceObject
     {
     private:
@@ -216,9 +210,7 @@ namespace dbaui
                 impl_ensureStatement_throw();
     };
 
-    // ========================================================
     // Wizard Dialog
-    // ========================================================
     class OCopyTableWizard : public WizardDialog
     {
         friend class        OWizColumnSelect;

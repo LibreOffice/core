@@ -31,9 +31,7 @@
 namespace dbaccess
 {
 
-    // ===================================================================
-    // = OPropertyForward
-    // ===================================================================
+    // OPropertyForward
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   OPropertyForward_Base;
     class OPropertyForward  :public ::comphelper::OBaseMutex

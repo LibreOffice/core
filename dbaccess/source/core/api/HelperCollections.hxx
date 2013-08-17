@@ -74,9 +74,7 @@ namespace dbaccess
     };
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
 
-    //==========================================================================
-    //= OPrivateTables
-    //==========================================================================
+    // OPrivateTables
     class OPrivateTables : public OPrivateTables_BASE
     {
         OSQLTables  m_aTables;

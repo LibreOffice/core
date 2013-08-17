@@ -24,17 +24,13 @@
 
 #include <memory>
 
-//........................................................................
 namespace dbmm
 {
-//........................................................................
 
     typedef sal_uInt32  PhaseID;
     typedef sal_uInt32  PhaseWeight;
 
-    //====================================================================
-    //= IProgressConsumer
-    //====================================================================
+    // IProgressConsumer
     class SAL_NO_VTABLE IProgressConsumer
     {
     public:
@@ -46,9 +42,7 @@ namespace dbmm
         ~IProgressConsumer() {}
     };
 
-    //====================================================================
-    //= ProgressMixer
-    //====================================================================
+    // ProgressMixer
     struct ProgressMixer_Data;
     /** a class which mixes (i.e. concatenates) progress values from different
         sources/phases, with different weight
@@ -86,9 +80,7 @@ namespace dbmm
         ::std::auto_ptr< ProgressMixer_Data >   m_pData;
     };
 
-//........................................................................
 } // namespace dbmm
-//........................................................................
 
 #endif // DBACCESS_PROGRESSMIXER_HXX
 

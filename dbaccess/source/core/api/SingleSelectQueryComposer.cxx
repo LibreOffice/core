@@ -114,7 +114,6 @@ namespace
         return pNewSqlParseNode;
     }
 
-    // .....................................................................
     /** checks whether the given parse node describes a valid single select statement, throws
         an error if not
     */
@@ -142,7 +141,6 @@ namespace
         delete pOldNode;
     }
 
-    // .....................................................................
     /** combines parseStatement_throwError and checkForSingleSelect_throwError
     */
     void parseAndCheck_throwError( OSQLParser& _rParser, const OUString& _rStatement,
@@ -153,7 +151,6 @@ namespace
         checkForSingleSelect_throwError( pNode, _rIterator, _rxContext, _rStatement );
     }
 
-    // .....................................................................
     /** transforms a parse node describing a complete statement into a pure select
         statement, without any filter/order/groupby/having clauses
     */
@@ -300,6 +297,7 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
 
     clearCurrentCollections();
 }
+
 IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
 IMPLEMENT_SERVICE_INFO1(OSingleSelectQueryComposer,"org.openoffice.comp.dba.OSingleSelectQueryComposer",SERVICE_NAME_SINGLESELECTQUERYCOMPOSER)
 IMPLEMENT_TYPEPROVIDER3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
@@ -983,7 +981,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
     //OSQLParseTreeIterator::appendColumns it creates some labels using those real names
     //but the evo address book gives them proper labels of First Name, Second Name and City
     //the munge means that here we have e.g. just "City" as a label because it matches
-    //
+
     //This is all a horrible mess
     if (bMissingSomeColumnLabels)
         aNames.clear();
@@ -1065,7 +1063,6 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             PropertyValue aItem;
             OUString aValue;
             OUString aColumnName;
-
 
             pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
             pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
@@ -1868,4 +1865,5 @@ OUString OSingleSelectQueryComposer::getSQLPart( SQLPart _ePart, OSQLParseTreeIt
         sRet = sKeyword + sRet;
     return sRet;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

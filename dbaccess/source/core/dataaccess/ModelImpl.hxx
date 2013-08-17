@@ -78,10 +78,8 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
 typedef std::vector< OWeakConnection > OWeakConnectionArray;
@@ -123,9 +121,7 @@ struct AsciiPropertyValue
 class ODatabaseContext;
 class OSharedConnectionManager;
 
-//============================================================
-//= VosMutexFacade
-//============================================================
+// VosMutexFacade
 /** a class which provides an IMutex interface to an OSL-based mutex
 */
 class VosMutexFacade : public comphelper::SolarMutex
@@ -144,10 +140,7 @@ private:
     ::osl::Mutex&   m_rMutex;
 };
 
-
-//============================================================
-//= ODatabaseModelImpl
-//============================================================
+// ODatabaseModelImpl
 typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedStorage;
 
 class ODatabaseContext;
@@ -621,9 +614,7 @@ public:
     }
 };
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 #endif // _DBA_COREDATAACCESS_DATALINK_HXX_
 

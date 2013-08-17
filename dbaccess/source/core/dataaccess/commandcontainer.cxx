@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "commandcontainer.hxx"
 #include "commanddefinition.hxx"
 
@@ -38,9 +37,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-//==========================================================================
-//= OCommandContainer
-//==========================================================================
+// OCommandContainer
 DBG_NAME(OCommandContainer)
 
 OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::uno::XComponentContext >& _xORB
@@ -93,4 +90,5 @@ OUString OCommandContainer::determineContentType() const
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

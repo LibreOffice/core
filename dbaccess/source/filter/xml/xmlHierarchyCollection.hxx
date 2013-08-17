@@ -24,7 +24,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 namespace dbaxml
 {
     class ODBFilter;
@@ -60,9 +59,7 @@ namespace dbaxml
                     const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     };
-// -----------------------------------------------------------------------------
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 #endif // DBA_XMLHIERARCHYCOLLECTION_HXX
 

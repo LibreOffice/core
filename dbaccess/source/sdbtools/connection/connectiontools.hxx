@@ -31,14 +31,10 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-//........................................................................
 namespace sdbtools
 {
-//........................................................................
 
-    //====================================================================
-    //= ConnectionTools
-    //====================================================================
+    // ConnectionTools
     typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::sdb::tools::XConnectionTools
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XInitialization
@@ -89,9 +85,7 @@ namespace sdbtools
         ConnectionTools& operator=( const ConnectionTools& );   // never implemented
     };
 
-//........................................................................
 } // namespace sdbtools
-//........................................................................
 
 #endif // DBACCESS_CONNECTIONTOOLS_HXX
 

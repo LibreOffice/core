@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "querycontainerwindow.hxx"
 #include "QueryDesignView.hxx"
 #include <tools/debug.hxx>
@@ -32,19 +31,15 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    //=====================================================================
-    //= OQueryContainerWindow
-    //=====================================================================
+    // OQueryContainerWindow
     DBG_NAME(OQueryContainerWindow)
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
         :ODataView( pParent, _rController, _rxContext )
@@ -59,7 +54,6 @@ namespace dbaui
         m_pSplitter->SetSplitHdl( LINK( this, OQueryContainerWindow, SplitHdl ) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
     }
-    // -----------------------------------------------------------------------------
     OQueryContainerWindow::~OQueryContainerWindow()
     {
         DBG_DTOR(OQueryContainerWindow,NULL);
@@ -82,19 +76,16 @@ namespace dbaui
         m_pSplitter = NULL;
 
     }
-    // -----------------------------------------------------------------------------
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {
         return m_pViewSwitch->switchView( _pErrorInfo );
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::forceInitialView()
     {
         return m_pViewSwitch->forceInitialView();
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::resizeAll( const Rectangle& _rPlayground )
     {
         Rectangle aPlayground( _rPlayground );
@@ -127,7 +118,6 @@ namespace dbaui
         ODataView::resizeAll( aPlayground );
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::resizeDocumentView( Rectangle& _rPlayground )
     {
         m_pViewSwitch->SetPosSizePixel( _rPlayground.TopLeft(), Size( _rPlayground.GetWidth(), _rPlayground.GetHeight() ) );
@@ -135,14 +125,12 @@ namespace dbaui
         ODataView::resizeDocumentView( _rPlayground );
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::GetFocus()
     {
         ODataView::GetFocus();
         if(m_pViewSwitch)
             m_pViewSwitch->GrabFocus();
     }
-    // -----------------------------------------------------------------------------
     IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, /*p*/ )
     {
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
@@ -151,13 +139,11 @@ namespace dbaui
         return 0L;
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::Construct()
     {
         m_pViewSwitch->Construct();
     }
 
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::disposingPreview()
     {
         if ( m_pBeamer )
@@ -170,7 +156,6 @@ namespace dbaui
             Resize();
         }
     }
-    // -----------------------------------------------------------------------------
     long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
         sal_Bool bHandled = sal_False;
@@ -187,7 +172,6 @@ namespace dbaui
         }
         return bHandled ? 1L : ODataView::PreNotify(rNEvt);
     }
-    // -----------------------------------------------------------------------------
     void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
     {
         if(!m_pBeamer)
@@ -239,12 +223,7 @@ namespace dbaui
             Resize();
         }
     }
-    // -----------------------------------------------------------------------------
 
-
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

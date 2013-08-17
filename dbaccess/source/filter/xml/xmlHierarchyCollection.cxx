@@ -31,7 +31,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 
-
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -102,7 +101,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const OUString& _sLocalName
@@ -115,14 +114,13 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
 {
     DBG_CTOR(OXMLHierarchyCollection,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OXMLHierarchyCollection::~OXMLHierarchyCollection()
 {
 
     DBG_DTOR(OXMLHierarchyCollection,NULL);
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -152,14 +150,12 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLHierarchyCollection::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

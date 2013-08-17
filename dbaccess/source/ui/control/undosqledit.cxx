@@ -17,21 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "undosqledit.hxx"
 #include "sqledit.hxx"
 
 namespace dbaui
 {
-//------------------------------------------------------------------------------
 void OSqlEditUndoAct::ToggleText()
 {
     String strNext = m_pOwner->GetText();
     m_pOwner->SetText(m_strNextText);
     m_strNextText  =strNext;
 }
-// -----------------------------------------------------------------------------
+
 } // namespace
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

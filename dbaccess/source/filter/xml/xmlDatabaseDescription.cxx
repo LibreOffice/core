@@ -43,14 +43,12 @@ OXMLDatabaseDescription::OXMLDatabaseDescription( ODBFilter& rImport,
 {
     DBG_CTOR(OXMLDatabaseDescription,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OXMLDatabaseDescription::~OXMLDatabaseDescription()
 {
 
     DBG_DTOR(OXMLDatabaseDescription,NULL);
 }
-// -----------------------------------------------------------------------------
 
 SvXMLImportContext* OXMLDatabaseDescription::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -85,14 +83,12 @@ SvXMLImportContext* OXMLDatabaseDescription::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ODBFilter& OXMLDatabaseDescription::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
 } // namespace dbaxml
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

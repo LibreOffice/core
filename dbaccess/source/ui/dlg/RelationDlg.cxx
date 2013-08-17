@@ -47,10 +47,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::dbaui;
 using namespace ::dbtools;
 
-//========================================================================
 // class ORelationDialog
 DBG_NAME(ORelationDialog)
-//========================================================================
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  sal_Bool bAllowTableSelect )
@@ -79,7 +77,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 
     m_xConnection = pParent->getDesignView()->getController().getConnection();
 
-    //////////////////////////////////////////////////////////////////////
     // Connection kopieren
     m_pConnData.reset( static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance()) );
     m_pConnData->CopyFrom( *pConnectionData );
@@ -102,7 +99,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionData)
 {
     ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(_pConnectionData.get());
@@ -147,19 +143,13 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     }
 }
 
-//------------------------------------------------------------------------
 ORelationDialog::~ORelationDialog()
 {
     DBG_DTOR(ORelationDialog,NULL);
 }
 
-//------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------
 IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
-    //////////////////////////////////////////////////////////////////////
     // RadioButtons auslesen
     sal_uInt16 nAttrib = 0;
 
@@ -229,8 +219,6 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     return 0;
 }
 
-
-//------------------------------------------------------------------------
 short ORelationDialog::Execute()
 {
     short nResult = ModalDialog::Execute();
@@ -239,22 +227,20 @@ short ORelationDialog::Execute()
 
     return nResult;
 }
-// -----------------------------------------------------------------------------
+
 TTableConnectionData::value_type ORelationDialog::getConnectionData() const
 {
     return m_pConnData;
 }
-// -----------------------------------------------------------------------------
+
 void ORelationDialog::setValid(sal_Bool _bValid)
 {
     aPB_OK.Enable(_bValid);
 }
-// -----------------------------------------------------------------------------
+
 void ORelationDialog::notifyConnectionChange()
 {
     Init(m_pConnData);
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

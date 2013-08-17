@@ -25,19 +25,15 @@
 #include "ConnectionLineAccess.hxx"
 #include <algorithm>
 
-
 using namespace dbaui;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-//========================================================================
 // class OTableConnection
-//========================================================================
 namespace dbaui
 {
     DBG_NAME(OTableConnection)
-    //------------------------------------------------------------------------
     OTableConnection::OTableConnection( OJoinTableView* _pContainer,const TTableConnectionData::value_type& _pTabConnData )
         :Window(_pContainer)
         ,m_pData( _pTabConnData )
@@ -49,7 +45,6 @@ namespace dbaui
         Show();
     }
 
-    //------------------------------------------------------------------------
     OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
         ,m_pData(_rConn.GetData()->NewInstance())
     {
@@ -57,10 +52,8 @@ namespace dbaui
         *this = _rConn;
     }
 
-    //------------------------------------------------------------------------
     void OTableConnection::Init()
     {
-        //////////////////////////////////////////////////////////////////////
         // initialise linelist with defaults
         OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
         OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
@@ -70,12 +63,10 @@ namespace dbaui
             m_vConnLine.push_back( new OConnectionLine(this, *aIter) );
     }
 
-    //------------------------------------------------------------------------
     OConnectionLine* OTableConnection::CreateConnLine( const OConnectionLine& rConnLine )
     {
         return new OConnectionLine( rConnLine );
     }
-    // -----------------------------------------------------------------------------
     void OTableConnection::clearLineData()
     {
         ::std::vector<OConnectionLine*>::iterator aLineEnd = m_vConnLine.end();
@@ -83,17 +74,14 @@ namespace dbaui
             delete *aLineIter;
         m_vConnLine.clear();
     }
-    //------------------------------------------------------------------------
     void OTableConnection::UpdateLineList()
     {
-        //////////////////////////////////////////////////////////////////////
         // delete linelist
         clearLineData();
 
         Init();
     }
 
-    //------------------------------------------------------------------------
     OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
     {
         if( &rConn == this )
@@ -113,7 +101,6 @@ namespace dbaui
                 m_vConnLine.push_back( CreateConnLine( **aIter ));
         }
 
-
         // as the data are not mine, I also do not delete the old
         m_pData->CopyFrom(*rConn.GetData());
         // CopyFrom is virtual, therefore it is not a problem if m_pData is a derived type of OTableConnectionData
@@ -124,15 +111,12 @@ namespace dbaui
         return *this;
     }
 
-
-    //------------------------------------------------------------------------
     bool OTableConnection::RecalcLines()
     {
         // call RecalcLines on each line
         ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
         return true;
     }
-    //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetSourceWin() const
     {
         TTableWindowData::value_type pRef = GetData()->getReferencingTable();
@@ -143,7 +127,6 @@ namespace dbaui
         }
         return pRet;
     }
-    //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetDestWin() const
     {
         TTableWindowData::value_type pRef = GetData()->getReferencedTable();
@@ -155,24 +138,20 @@ namespace dbaui
         return pRet;
     }
 
-    //------------------------------------------------------------------------
     void OTableConnection::Select()
     {
         m_bSelected = sal_True;
         m_pParent->Invalidate( GetBoundingRect(), INVALIDATE_NOCHILDREN);
     }
 
-    //------------------------------------------------------------------------
     void OTableConnection::Deselect()
     {
         m_bSelected = sal_False;
         InvalidateConnection();
     }
 
-    //------------------------------------------------------------------------
     sal_Bool OTableConnection::CheckHit( const Point& rMousePos ) const
     {
-        //////////////////////////////////////////////////////////////////////
         // check if the point hit our line
         ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(m_vConnLine.begin(),
                                                                          m_vConnLine.end(),
@@ -180,7 +159,6 @@ namespace dbaui
         return aIter != m_vConnLine.end();
     }
 
-    //------------------------------------------------------------------------
     bool OTableConnection::InvalidateConnection()
     {
         Rectangle rcBounding = GetBoundingRect();
@@ -195,10 +173,8 @@ namespace dbaui
         return true;
     }
 
-    //------------------------------------------------------------------------
     Rectangle OTableConnection::GetBoundingRect() const
     {
-        //////////////////////////////////////////////////////////////////////
         // determine all lines of the surrounding rectangle
         Rectangle aBoundingRect( Point(0,0), Point(0,0) );
         Rectangle aTempRect;
@@ -207,7 +183,6 @@ namespace dbaui
         {
             aTempRect = (*aIter)->GetBoundingRect();
 
-            //////////////////////////////////////////////////////////////////////
             // is the BoundingRect of this line valid?
             if( (aTempRect.GetWidth()!=1) && (aTempRect.GetHeight()!=1) )
             {
@@ -221,16 +196,11 @@ namespace dbaui
         return aBoundingRect;
     }
 
-    //------------------------------------------------------------------------
     void OTableConnection::Draw( const Rectangle& /*rRect*/ )
     {
-        //////////////////////////////////////////////////////////////////////
         // Draw line
         ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
     }
-    // -----------------------------------------------------------------------------
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

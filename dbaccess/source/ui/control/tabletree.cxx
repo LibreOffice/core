@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "tabletree.hxx"
 #include "imageprovider.hxx"
 #include "moduledbu.hxx"
@@ -46,10 +45,8 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -66,9 +63,7 @@ using namespace ::comphelper;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-//========================================================================
-//= OTableTreeListBox
-//========================================================================
+// OTableTreeListBox
 OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle, sal_Bool _bVirtualRoot )
     :OMarkableTreeListBox(pParent, nWinStyle)
     ,m_pImageProvider( new ImageProvider )
@@ -77,7 +72,7 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, WinBits nWinStyle, sal_Bo
 {
     implSetDefaultImages();
 }
-//------------------------------------------------------------------------
+
 OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_Bool _bVirtualRoot)
     :OMarkableTreeListBox(pParent, rResId)
     ,m_pImageProvider( new ImageProvider )
@@ -87,12 +82,10 @@ OTableTreeListBox::OTableTreeListBox( Window* pParent, const ResId& rResId, sal_
     implSetDefaultImages();
 }
 
-// -----------------------------------------------------------------------------
 OTableTreeListBox::~OTableTreeListBox()
 {
 }
 
-// -----------------------------------------------------------------------------
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
@@ -100,7 +93,6 @@ void OTableTreeListBox::implSetDefaultImages()
     SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
 }
 
-// -----------------------------------------------------------------------------
 bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry ) const
 {
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
@@ -112,7 +104,6 @@ bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry ) const
     return false;
 }
 
-// -----------------------------------------------------------------------------
 void OTableTreeListBox::notifyHiContrastChanged()
 {
     implSetDefaultImages();
@@ -148,14 +139,12 @@ void OTableTreeListBox::notifyHiContrastChanged()
     }
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rxConnection )
 {
     m_xConnection = _rxConnection;
     m_pImageProvider.reset( new ImageProvider( m_xConnection  ) );
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection ) throw(SQLException)
 {
     Sequence< OUString > sTables, sViews;
@@ -198,7 +187,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 
     UpdateTableList( _rxConnection, sTables, sViews );
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     struct OViewSetter : public ::std::unary_function< OTableTreeListBox::TNames::value_type, bool>
@@ -220,7 +209,7 @@ namespace
     };
 
 }
-// -----------------------------------------------------------------------------
+
 void OTableTreeListBox::UpdateTableList(
                 const Reference< XConnection >& _rxConnection,
                 const Sequence< OUString>& _rTables,
@@ -244,7 +233,6 @@ void OTableTreeListBox::UpdateTableList(
     UpdateTableList( _rxConnection, aTables );
 }
 
-//------------------------------------------------------------------------
 namespace
 {
     ::std::vector< OUString > lcl_getMetaDataStrings_throw( const Reference< XResultSet >& _rxMetaDataResult, sal_Int32 _nColumnIndex )
@@ -263,7 +251,6 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection, const TNames& _rTables )
 {
     implOnNewConnection( _rxConnection );
@@ -343,7 +330,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-//------------------------------------------------------------------------
+
 sal_Bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
 {
     if (_pEntry)
@@ -355,20 +342,17 @@ sal_Bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
     return sal_False;
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
 {
     SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
     checkedButton_noBroadcast(_pEntry);
 }
 
-//------------------------------------------------------------------------
 SvTreeListEntry* OTableTreeListBox::getAllObjectsEntry() const
 {
     return haveVirtualRoot() ? First() : NULL;
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
@@ -382,7 +366,6 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
     implEmphasize(_pEntry, SV_BUTTON_CHECKED == eState);
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
@@ -421,7 +404,6 @@ void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bCheck
     }
 }
 
-//------------------------------------------------------------------------
 void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind)
 {
     OMarkableTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap, _eButtonKind);
@@ -435,7 +417,6 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
     _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
 }
 
-//------------------------------------------------------------------------
 SvTreeListEntry* OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
         const OUString& _rTableName,
@@ -496,7 +477,6 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     return pRet;
 }
 
-//------------------------------------------------------------------------
 NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry )
 {
     NamedDatabaseObject aObject;
@@ -543,7 +523,6 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
     return aObject;
 }
 
-//------------------------------------------------------------------------
 SvTreeListEntry* OTableTreeListBox::addedTable( const OUString& _rName )
 {
     try
@@ -559,7 +538,6 @@ SvTreeListEntry* OTableTreeListBox::addedTable( const OUString& _rName )
     return NULL;
 }
 
-//------------------------------------------------------------------------
 bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData >& _out_rMetaData ) const
 {
     if ( m_xConnection.is() )
@@ -568,7 +546,6 @@ bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData 
     return _out_rMetaData.is();
 }
 
-//------------------------------------------------------------------------
 String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) const
 {
     OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
@@ -614,7 +591,6 @@ String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) cons
     return String();
 }
 
-//------------------------------------------------------------------------
 SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rName )
 {
     try
@@ -652,7 +628,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rN
     }
     return NULL;
 }
-//------------------------------------------------------------------------
+
 void OTableTreeListBox::removedTable( const OUString& _rName )
 {
     try
@@ -667,8 +643,6 @@ void OTableTreeListBox::removedTable( const OUString& _rName )
     }
 }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PropertyForward.hxx"
 #include "dbastrings.hrc"
 
@@ -29,11 +28,8 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -43,7 +39,6 @@ namespace dbaccess
 
     DBG_NAME(OPropertyForward)
 
-    //------------------------------------------------------------------------
     OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
             const OUString& _sName, const ::std::vector< OUString>& _aPropertyList )
         :m_xSource( _xSource, UNO_SET_THROW )
@@ -73,13 +68,11 @@ namespace dbaccess
         osl_atomic_decrement( &m_refCount );
     }
 
-    // -----------------------------------------------------------------------------
     OPropertyForward::~OPropertyForward()
     {
         DBG_DTOR(OPropertyForward,NULL);
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL OPropertyForward::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -122,7 +115,6 @@ namespace dbaccess
         }
     }
 
-    // -----------------------------------------------------------------------------
     void SAL_CALL OPropertyForward::disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -137,7 +129,6 @@ namespace dbaccess
         m_xDest = NULL;
     }
 
-    // -----------------------------------------------------------------------------
     void OPropertyForward::setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,8 +148,6 @@ namespace dbaccess
         }
     }
 
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "definitioncontainer.hxx"
 #include "dbastrings.hrc"
 #include "apitools.hxx"
@@ -38,7 +37,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <o3tl/compat_functional.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -54,9 +52,7 @@ using namespace ::com::sun::star::ucb;
 namespace dbaccess
 {
 
-//==========================================================================
-//= ODefinitionContainer_Impl
-//==========================================================================
+// ODefinitionContainer_Impl
 void ODefinitionContainer_Impl::erase( TContentPtr _pDefinition )
 {
     NamedDefinitions::iterator aPos = find( _pDefinition );
@@ -88,9 +84,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     );
 }
 
-//==========================================================================
-//= ODefinitionContainer
-//==========================================================================
+// ODefinitionContainer
 DBG_NAME(ODefinitionContainer)
 
 ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext >& _xORB
@@ -538,7 +532,6 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
             }
         }
 
-
         m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(_rName,_rxNewObject)).first);
         notifyDataSourceModified();
         // now update our structures
@@ -668,5 +661,6 @@ sal_Bool ODefinitionContainer::checkExistence(const OUString& _rName)
 }
 
 }
+
 // namespace dbaccess
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,9 +31,7 @@ namespace dbaccess
 {
 
     struct DocumentEventExecutor_Data;
-    //====================================================================
-    //= DocumentEventExecutor
-    //====================================================================
+    // DocumentEventExecutor
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::document::XDocumentEventListener
                                     >   DocumentEventExecutor_Base;
     class DocumentEventExecutor : public DocumentEventExecutor_Base

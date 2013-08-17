@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "subcomponentrecovery.hxx"
 
 #include "sdbcoretools.hxx"
@@ -40,10 +39,8 @@
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -80,13 +77,9 @@ namespace dbaccess
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
 
-
-    //====================================================================
-    //= helper
-    //====================================================================
+    // helper
     namespace
     {
-        // .........................................................................
         static const OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
         {
             static const OUString s_sFormBaseName( "form" );
@@ -113,7 +106,6 @@ namespace dbaccess
             return s_sFallback;
         }
 
-        // .........................................................................
         static SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
         {
             switch ( i_nObjectType )
@@ -128,7 +120,6 @@ namespace dbaccess
             return UNKNOWN;
         }
 
-        // .........................................................................
         static bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
         {
             Reference< XModel > xDocument( i_rComponent, UNO_QUERY );
@@ -145,7 +136,6 @@ namespace dbaccess
             return aDocArgs.getOrDefault( "ReadOnly", false );
         }
 
-        // .........................................................................
         static Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XDatabaseDocumentUI >& i_rAppUI,
             const SubComponentType i_eType, const OUString& i_rName )
         {
@@ -188,9 +178,7 @@ namespace dbaccess
         }
     }
 
-    //====================================================================
-    //= SettingsExportContext
-    //====================================================================
+    // SettingsExportContext
     class DBACCESS_DLLPRIVATE SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
     public:
@@ -227,19 +215,16 @@ namespace dbaccess
         const OUStringBuffer             m_aNamespace;
     };
 
-    //--------------------------------------------------------------------
     void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
     {
         m_rDelegator.addAttribute( impl_prefix( i_eName ), i_rValue );
     }
 
-    //--------------------------------------------------------------------
     void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, enum ::xmloff::token::XMLTokenEnum i_eValue )
     {
         m_rDelegator.addAttribute( impl_prefix( i_eName ), ::xmloff::token::GetXMLToken( i_eValue ) );
     }
 
-    //--------------------------------------------------------------------
     void SettingsExportContext::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
@@ -248,7 +233,6 @@ namespace dbaccess
         m_rDelegator.startElement( impl_prefix( i_eName ) );
     }
 
-    //--------------------------------------------------------------------
     void SettingsExportContext::EndElement( const sal_Bool i_bIgnoreWhitespace )
     {
         if ( i_bIgnoreWhitespace )
@@ -256,21 +240,17 @@ namespace dbaccess
         m_rDelegator.endElement();
     }
 
-    //--------------------------------------------------------------------
     void SettingsExportContext::Characters( const OUString& i_rCharacters )
     {
         m_rDelegator.characters( i_rCharacters );
     }
 
-    //--------------------------------------------------------------------
     Reference< com::sun::star::uno::XComponentContext > SettingsExportContext::GetComponentContext() const
     {
         return m_rContext;
     }
 
-    //==================================================================================================================
-    //= SettingsDocumentHandler
-    //==================================================================================================================
+    // SettingsDocumentHandler
     typedef ::cppu::WeakImplHelper1 <   XDocumentHandler
                                     >   SettingsDocumentHandler_Base;
     class DBACCESS_DLLPRIVATE SettingsDocumentHandler : public SettingsDocumentHandler_Base
@@ -303,17 +283,14 @@ namespace dbaccess
         ::comphelper::NamedValueCollection                  m_aSettings;
     };
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::startDocument(  ) throw (SAXException, RuntimeException)
     {
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endDocument(  ) throw (SAXException, RuntimeException)
     {
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
     {
         ::rtl::Reference< SettingsImport >  pNewState;
@@ -345,7 +322,6 @@ namespace dbaccess
         m_aStates.push( pNewState );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::endElement( const OUString& i_Name ) throw (SAXException, RuntimeException)
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
@@ -356,7 +332,6 @@ namespace dbaccess
         m_aStates.pop();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::characters( const OUString& i_Chars ) throw (SAXException, RuntimeException)
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
@@ -365,14 +340,12 @@ namespace dbaccess
         pCurrentState->characters( i_Chars );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException)
     {
         // ignore them - that's why they're called "ignorable"
         (void)aWhitespaces;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString& i_Target, const OUString& i_Data ) throw (SAXException, RuntimeException)
     {
         OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
@@ -380,16 +353,12 @@ namespace dbaccess
         (void)i_Data;
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException)
     {
         (void)i_Locator;
     }
 
-    //====================================================================
-    //= SubComponentRecovery
-    //====================================================================
-    //--------------------------------------------------------------------
+    // SubComponentRecovery
     const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
         static const OUString s_sFormsStorageName( "forms" );
@@ -419,7 +388,6 @@ namespace dbaccess
         return s_sFallback;
     }
 
-    //--------------------------------------------------------------------
     void SubComponentRecovery::saveToRecoveryStorage( const Reference< XStorage >& i_rRecoveryStorage,
         MapCompTypeToCompDescs& io_mapCompDescs )
     {
@@ -466,7 +434,6 @@ namespace dbaccess
         rMapCompDescs[ sStorName ] = m_aCompDesc;
     }
 
-    //--------------------------------------------------------------------
     void SubComponentRecovery::impl_identifyComponent_throw()
     {
         // ask the controller
@@ -518,7 +485,6 @@ namespace dbaccess
             "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the component!" );
     }
 
-    //--------------------------------------------------------------------
     void SubComponentRecovery::impl_saveQueryDesign_throw( const Reference< XStorage >& i_rObjectStorage )
     {
         ENSURE_OR_THROW( m_eType == QUERY, "illegal sub component type" );
@@ -547,7 +513,6 @@ namespace dbaccess
         aDesignOutput.close();
     }
 
-    //--------------------------------------------------------------------
     void SubComponentRecovery::impl_saveSubDocument_throw( const Reference< XStorage >& i_rObjectStorage )
     {
         ENSURE_OR_THROW( ( m_eType == FORM ) || ( m_eType == REPORT ), "illegal sub component type" );
@@ -558,7 +523,6 @@ namespace dbaccess
         xStorageDocument->storeToStorage( i_rObjectStorage, Sequence< PropertyValue >() );
     }
 
-    //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::impl_recoverSubDocument_throw( const Reference< XStorage >& i_rRecoveryStorage,
             const OUString& i_rComponentName, const bool i_bForEditing )
     {
@@ -608,7 +572,6 @@ namespace dbaccess
         return xSubComponent;
     }
 
-    //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::impl_recoverQueryDesign_throw( const Reference< XStorage >& i_rRecoveryStorage,
         const OUString& i_rComponentName,  const bool i_bForEditing )
     {
@@ -662,7 +625,6 @@ namespace dbaccess
         return xSubComponent;
     }
 
-    //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::recoverFromStorage( const Reference< XStorage >& i_rRecoveryStorage,
             const OUString& i_rComponentName, const bool i_bForEditing )
     {
@@ -683,8 +645,6 @@ namespace dbaccess
         return xSubComponent;
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

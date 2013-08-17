@@ -31,9 +31,7 @@
 namespace dbaccess
 {
 
-    //====================================================================
-    //= View
-    //====================================================================
+    // View
     typedef ::connectivity::sdbcx::OView                                View_Base;
     typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XAlterView >  View_IBASE;
     class View :public View_Base

@@ -55,7 +55,6 @@
 #include "dbu_tbl.hrc"
 #include <osl/diagnose.h>
 
-
 using namespace dbaui;
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -63,8 +62,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
-
-//==================================================================
 
 // For the Controls on the OFieldDescGenPage
 #define CONTROL_SPACING_X   18  // 6
@@ -75,7 +72,6 @@ using namespace ::com::sun::star::util;
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - 20 - 5)
 
 #define HSCROLL_STEP        20
-
 
 namespace
 {
@@ -96,13 +92,10 @@ namespace
 
 }
 
-//==================================================================
 // class OFieldDescControl
-//==================================================================
 
 DBG_NAME(OFieldDescControl)
 
-//==================================================================
 OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTableDesignHelpBar* pHelpBar)
     :TabPage( pParent, rResId )
     ,pHelp( pHelpBar )
@@ -150,7 +143,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
 
     Contruct();
 }
-//------------------------------------------------------------------------------
+
 OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
     :TabPage( pParent, WB_3DLOOK | WB_DIALOGCONTROL )
     ,pHelp( pHelpBar )
@@ -197,7 +190,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     DBG_CTOR(OFieldDescControl,NULL);
     Contruct();
 }
-// -----------------------------------------------------------------------------
+
 void OFieldDescControl::Contruct()
 {
     m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
@@ -218,7 +211,6 @@ void OFieldDescControl::Contruct()
     m_nOldVThumb = m_nOldHThumb = 0;
 }
 
-//------------------------------------------------------------------------------
 OFieldDescControl::~OFieldDescControl()
 {
     DBG_DTOR(OFieldDescControl,NULL);
@@ -239,7 +231,6 @@ OFieldDescControl::~OFieldDescControl()
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     pLastFocusWindow = NULL;
 
-    //////////////////////////////////////////////////////////////////////
     // Destroy children
     DeactivateAggregate( tpDefault );
     DeactivateAggregate( tpRequired );
@@ -255,7 +246,6 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpAutoIncrementValue );
 }
 
-//------------------------------------------------------------------------------
 String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
 {
     if (rUIString == aNo)
@@ -265,7 +255,6 @@ String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
     return OUString();
 }
 
-//------------------------------------------------------------------------------
 String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 {
     // Older versions may store a language dependend string as a default
@@ -280,20 +269,18 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     return ModuleRes(STR_VALUE_NONE).toString();
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::Init()
 {
     Reference< ::com::sun::star::util::XNumberFormatter > xFormatter = GetFormatter();
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/)
 {
     ScrollAllAggregates();
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     void getMaxXPosition(Window* _pWindow,long& _rnMaxXPosition)
@@ -305,7 +292,7 @@ namespace
         }
     }
 }
-//------------------------------------------------------------------------------
+
 void OFieldDescControl::CheckScrollBars()
 {
     // Calculate the ScrollBars' new position
@@ -390,14 +377,12 @@ void OFieldDescControl::CheckScrollBars()
     }
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::Resize()
 {
     CheckScrollBars();
     ScrollAllAggregates();
 }
 
-//------------------------------------------------------------------------------
 inline void OFieldDescControl::ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY)
 {
     if  (!pText)
@@ -408,7 +393,6 @@ inline void OFieldDescControl::ScrollAggregate(Control* pText, Control* pInput, 
         pButton->SetPosPixel(pButton->GetPosPixel() + Point(nDeltaX, nDeltaY));
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::ScrollAllAggregates()
 {
     long nDeltaX = 0, nDeltaY = 0;
@@ -447,7 +431,6 @@ void OFieldDescControl::ScrollAllAggregates()
     }
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 OFieldDescControl::CountActiveAggregates() const
 {
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
@@ -457,7 +440,7 @@ sal_uInt16 OFieldDescControl::CountActiveAggregates() const
             ++nVisibleAggregates;
     return nVisibleAggregates;
 }
-//------------------------------------------------------------------------------
+
 sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 {
     Size aHeight;
@@ -474,11 +457,10 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 
     return aHeight.Height();
 }
-//------------------------------------------------------------------------------
+
 void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Enable/disable Controls
     Control* ppAggregates[]     = {   pRequired, pNumType
                                         , pAutoIncrement, pDefault
@@ -504,11 +486,9 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
     }
 }
 
-//------------------------------------------------------------------------------
 String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Read out the Controls' texts
     switch( nControlId )
     {
@@ -562,11 +542,9 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
     return String();
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rText )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Set the Controls' texts
     switch( nControlId )
     {
@@ -591,7 +569,6 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
             if (pRequired)
                 pRequired->SelectEntry(rText);
             break;
-
 
         case FIELD_PROPERTY_TEXTLEN:
             if (pTextLen)
@@ -642,11 +619,9 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
     }
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Create temporary Column, which is used for data exchange with Dialog
     if( !pActFieldDescr )
         return 0;
@@ -681,11 +656,10 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
-// -----------------------------------------------------------------------
 void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
 {
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
@@ -758,7 +732,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
 
     return 0;
 }
-//------------------------------------------------------------------------------
+
 // Rearrange all Controls, such that they are in fixed order and really on top
 // of the DescriptionPage
 void OFieldDescControl::ArrangeAggregates()
@@ -835,11 +809,9 @@ void OFieldDescControl::ArrangeAggregates()
     m_pHorzScroll->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::ActivateAggregate( EControlType eType )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Create Controls
     switch( eType )
     {
@@ -1021,7 +993,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         break;
     }
 }
-// -----------------------------------------------------------------------------
+
 void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
 {
     _pControl->SetHelpId(_sHelpId);
@@ -1032,7 +1004,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHe
     _pControl->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
     _pControl->EnableClipSiblings();
 }
-// -----------------------------------------------------------------------------
+
 FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
     FixedText* pFixedText = new FixedText( this );
@@ -1040,7 +1012,7 @@ FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
     pFixedText->EnableClipSiblings();
     return pFixedText;
 }
-// -----------------------------------------------------------------------------
+
 OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
@@ -1053,12 +1025,11 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpS
 
     return pControl;
 }
-//------------------------------------------------------------------------------
+
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     pLastFocusWindow = NULL;
-    //////////////////////////////////////////////////////////////////////
     // Destroy Controls
     switch( eType )
     {
@@ -1118,12 +1089,10 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     }
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
 
-    //////////////////////////////////////////////////////////////////////
     // Calculate size
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     Size aSize(0,nControlHeight);
@@ -1149,8 +1118,6 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         }
     }
 
-
-    //////////////////////////////////////////////////////////////////////
     // Calculate Position
     Point aPosition;
     switch( nCol )
@@ -1181,14 +1148,13 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
 
-    //////////////////////////////////////////////////////////////////////
     // Display Control
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
     aSize = (*ppControl)->GetSizePixel();
 
     (*ppControl)->Show();
 }
-//------------------------------------------------------------------------------
+
 void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
@@ -1208,7 +1174,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         DeactivateAggregate( tpType );
         DeactivateAggregate( tpAutoIncrementValue );
         m_pPreviousType = TOTypeInfoSP();
-        //////////////////////////////////////////////////////////////////////
         // Reset the saved focus' pointer
         pLastFocusWindow = NULL;
         if ( m_bAdded )
@@ -1233,19 +1198,15 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     ActivateAggregate( tpType );
 
     OSL_ENSURE(pFieldType.get(),"We need a type information here!");
-    //////////////////////////////////////////////////////////////////////
     // If the type has changed, subsitute Controls
     if( m_pPreviousType != pFieldType )
     {
-        //////////////////////////////////////////////////////////////////////
         // Reset the saved focus' pointer
         pLastFocusWindow = NULL;
 
-        //////////////////////////////////////////////////////////////////////
         // Controls, which must NOT be displayed again
         DeactivateAggregate( tpNumType );
 
-        //////////////////////////////////////////////////////////////////////
         // determine which controls we should show and which not
 
         // 1. the required control
@@ -1396,7 +1357,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 DeactivateAggregate( tpRequired );
         }
     }
-    //////////////////////////////////////////////////////////////////////
     // Initialize Controls
     if( pAutoIncrement )
     {
@@ -1514,11 +1474,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         m_pType->SelectEntry(pFieldDescr->getTypeInfo()->aUIName);
     }
 
-
-    //////////////////////////////////////////////////////////////////////
     // Enable/disable Controls
     sal_Bool bRead(IsReadOnly());
-
 
     ArrangeAggregates();
     CheckScrollBars();
@@ -1527,7 +1484,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     SetReadOnly( bRead );
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
 {
     String strHelpText;
@@ -1570,7 +1526,6 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
 {
     if ((pControl == pLength) || (pControl == pTextLen) || (pControl == pScale))
@@ -1605,14 +1560,13 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
 
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     if( !pFieldDescr )
         return;
 
-    //////////////////////////////////////////////////////////////////////
     // Read out Controls
     OUString sDefault;
     if (pDefault)
@@ -1651,18 +1605,15 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         pFieldDescr->SetAutoIncrementValue(m_pAutoIncrementValue->GetText());
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 {
     if ( pFieldDescr && pFormatSample )
         pFormatSample->SetText(getControlDefault(pFieldDescr,sal_False));
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::GetFocus()
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    //////////////////////////////////////////////////////////////////////
     // Set the Focus to the Control that has been active last
     TabPage::GetFocus();
     if( pLastFocusWindow )
@@ -1672,24 +1623,20 @@ void OFieldDescControl::GetFocus()
     }
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
-    //////////////////////////////////////////////////////////////////////
     // Remember the active Control
     if (!pLastFocusWindow)
         pLastFocusWindow = _pWhich;
 
-    //////////////////////////////////////////////////////////////////////
     // Reset HelpText
     if (pHelp && !pHelp->HasChildPathFocus())
         pHelp->SetHelpText( String() );
 }
 
-//------------------------------------------------------------------------------
 void OFieldDescControl::LoseFocus()
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
@@ -1698,7 +1645,7 @@ void OFieldDescControl::LoseFocus()
 
     TabPage::LoseFocus();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFieldDescControl::isCopyAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
@@ -1710,7 +1657,7 @@ sal_Bool OFieldDescControl::isCopyAllowed()
 
     return bAllowed;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFieldDescControl::isCutAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
@@ -1721,7 +1668,7 @@ sal_Bool OFieldDescControl::isCutAllowed()
                         !static_cast<Edit*>(m_pActFocusWindow)->GetSelected().isEmpty();
     return bAllowed;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFieldDescControl::isPasteAllowed()
 {
     sal_Bool bAllowed = (m_pActFocusWindow != NULL) &&
@@ -1736,25 +1683,25 @@ sal_Bool OFieldDescControl::isPasteAllowed()
     }
     return bAllowed;
 }
-// -----------------------------------------------------------------------------
+
 void OFieldDescControl::cut()
 {
     if(isCutAllowed())
         static_cast<Edit*>(m_pActFocusWindow)->Cut();
 }
-// -----------------------------------------------------------------------------
+
 void OFieldDescControl::copy()
 {
     if(isCopyAllowed()) // this only checks if the focus window is valid
         static_cast<Edit*>(m_pActFocusWindow)->Copy();
 }
-// -----------------------------------------------------------------------------
+
 void OFieldDescControl::paste()
 {
     if(m_pActFocusWindow) // this only checks if the focus window is valid
         static_cast<Edit*>(m_pActFocusWindow)->Paste();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const
 {
     _nFormatKey = _pFieldDescr->GetFormatKey();
@@ -1783,7 +1730,7 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
 
     return bTextFormat;
 }
-// -----------------------------------------------------------------------------
+
 String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
 {
     OUString sDefault;
@@ -1817,7 +1764,6 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             else
                 _pFieldDescr->GetControlDefault() >>= nValue;
 
-
             Reference< ::com::sun::star::util::XNumberFormatter> xNumberFormatter = GetFormatter();
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
@@ -1836,8 +1782,6 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
-
-
                 Reference< ::com::sun::star::util::XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
                 OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
                 sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
@@ -1853,6 +1797,5 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
 
     return sDefault;
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

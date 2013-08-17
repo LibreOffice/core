@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "WCPage.hxx"
 #include "WCopyTable.hxx"
 
@@ -51,11 +50,8 @@ using namespace ::com::sun::star::sdbcx;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-//========================================================================
 // Klasse OCopyTable
-//========================================================================
 DBG_NAME(OCopyTable)
-//------------------------------------------------------------------------
 OCopyTable::OCopyTable( Window * pParent )
     :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
     ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
@@ -110,12 +106,11 @@ OCopyTable::OCopyTable( Window * pParent )
     SetText(String(ModuleRes(STR_COPYTABLE_TITLE_COPY)));
 }
 
-//------------------------------------------------------------------------
 OCopyTable::~OCopyTable()
 {
     DBG_DTOR(OCopyTable,NULL);
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -133,7 +128,6 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -154,7 +148,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 
     return 0;
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -162,7 +156,7 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
     m_aFT_KeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
     return 0;
 }
-//------------------------------------------------------------------------
+
 sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -248,7 +242,7 @@ sal_Bool OCopyTable::LeavePage()
 
     return sal_True;
 }
-//------------------------------------------------------------------------
+
 void OCopyTable::ActivatePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -257,13 +251,13 @@ void OCopyTable::ActivatePage()
     m_edTableName.GrabFocus();
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
 }
-//------------------------------------------------------------------------
+
 String OCopyTable::GetTitle() const
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     return String(ModuleRes(STR_WIZ_TABLE_COPY));
 }
-//------------------------------------------------------------------------
+
 void OCopyTable::Reset()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -272,7 +266,7 @@ void OCopyTable::Reset()
     m_edTableName.SetText( m_pParent->m_sName );
     m_edTableName.SaveValue();
 }
-//------------------------------------------------------------------------
+
 sal_Bool OCopyTable::checkAppendData()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
@@ -326,7 +320,7 @@ sal_Bool OCopyTable::checkAppendData()
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
+
 void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
     bool bCreatePK = m_bPKeyAllowed && _bDoCreate;
@@ -337,7 +331,6 @@ void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggest
     m_edKeyName.Enable( bCreatePK );
 }
 
-// -----------------------------------------------------------------------------
 void OCopyTable::setCreateStyleAction()
 {
     // reselect the last action before

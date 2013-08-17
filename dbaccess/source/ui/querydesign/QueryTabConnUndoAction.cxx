@@ -28,7 +28,6 @@
 using namespace dbaui;
 
 DBG_NAME(OQueryTabConnUndoAction)
-// ------------------------------------------------------------------------------------------------
 OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 {
     DBG_DTOR(OQueryTabConnUndoAction,NULL);
@@ -39,7 +38,6 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
     }
 }
 
-// ------------------------------------------------------------------------------------------------
 OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pConnection(NULL)
@@ -47,82 +45,81 @@ OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uI
 {
     DBG_CTOR(OQueryTabConnUndoAction,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OQueryAddTabConnUndoAction::OQueryAddTabConnUndoAction(OQueryTableView* pOwner)
     : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_INSERTCONNECTION)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OQueryAddTabConnUndoAction::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
     SetOwnership(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryAddTabConnUndoAction::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
     SetOwnership(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 OQueryDelTabConnUndoAction::OQueryDelTabConnUndoAction(OQueryTableView* pOwner)
     : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_REMOVECONNECTION)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OQueryDelTabConnUndoAction::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
     SetOwnership(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryDelTabConnUndoAction::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
     SetOwnership(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
  : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW)
 {
 }
-// -----------------------------------------------------------------------------
+
 OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTabWinShowUndoAct::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->HideTabWin(m_pTabWin, this);
     SetOwnership(sal_True);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTabWinShowUndoAct::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin(m_pTabWin, this,sal_True);
     SetOwnership(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
  : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE)
 {
 }
-// -----------------------------------------------------------------------------
+
 OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct()
 {
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTabWinDelUndoAct::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin( m_pTabWin, this,sal_True );
     SetOwnership(sal_False);
 }
-// -----------------------------------------------------------------------------
+
 void OQueryTabWinDelUndoAct::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->HideTabWin( m_pTabWin, this );
     SetOwnership(sal_True);
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

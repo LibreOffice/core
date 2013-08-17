@@ -255,4 +255,5 @@ void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColu
 void ORowSetDataColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

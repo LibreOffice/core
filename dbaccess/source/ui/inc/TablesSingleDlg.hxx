@@ -36,14 +36,10 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
 class ODbDataSourceAdministrationHelper;
-    //========================================================================
-    //= OTableSubscriptionDialog
-    //========================================================================
+    // OTableSubscriptionDialog
     class OTableSubscriptionDialog : public SfxNoLayoutSingleTabDialog, public IItemSetHelper
     {
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
@@ -74,9 +70,7 @@ class ODbDataSourceAdministrationHelper;
         virtual short   Execute();
     };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_TABLESSINGLEDLG_HXX_
 

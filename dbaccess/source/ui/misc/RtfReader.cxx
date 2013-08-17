@@ -56,9 +56,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
 DBG_NAME(ORTFReader)
-// ==========================================================================
 // ORTFReader
-// ==========================================================================
 ORTFReader::ORTFReader( SvStream& rIn,
                         const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -72,7 +70,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
-// ---------------------------------------------------------------------------
+
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
                        const TPositions &_rColumnPositions,
@@ -88,12 +86,12 @@ ORTFReader::ORTFReader(SvStream& rIn,
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
-// ---------------------------------------------------------------------------
+
 ORTFReader::~ORTFReader()
 {
     DBG_DTOR(ORTFReader,NULL);
 }
-// ---------------------------------------------------------------------------
+
 SvParserState ORTFReader::CallParser()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CallParser" );
@@ -104,7 +102,7 @@ SvParserState ORTFReader::CallParser()
     SetColumnTypes(m_pColumnList,m_pInfoMap);
     return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
-// ---------------------------------------------------------------------------
+
 void ORTFReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::NextToken" );
@@ -215,7 +213,6 @@ void ORTFReader::NextToken( int nToken )
                     m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
-                //////////////////////////////////////////////////////////////////////
                 // handling update failure
                 {
                     showErrorDialog(e);
@@ -258,7 +255,7 @@ void ORTFReader::NextToken( int nToken )
         }
     }
 }
-// ---------------------------------------------------------------------------
+
 sal_Bool ORTFReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
@@ -342,7 +339,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     }
     return bOk;
 }
-// -----------------------------------------------------------------------------
+
 void ORTFReader::release()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::release" );
@@ -350,15 +347,11 @@ void ORTFReader::release()
     ReleaseRef();
 }
 
-// -----------------------------------------------------------------------------
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(ORTFReader,NULL);
     return &OWizRTFExtend::Create;
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "opendoccontrols.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,10 +39,8 @@
 #include <osl/diagnose.h>
 #include <vcl/builder.hxx>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     namespace
     {
@@ -155,27 +152,21 @@ namespace dbaui
             return aIcon;
         }
 
-
     }
 
-    //====================================================================
-    //= OpenButton
-    //====================================================================
+    // OpenButton
 
-    //--------------------------------------------------------------------
     OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName )
         :PushButton( _pParent )
     {
         impl_init( _pAsciiModuleName );
     }
 
-    //--------------------------------------------------------------------
     extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentButton( Window *pParent, VclBuilder::stringmap & )
     {
         return new OpenDocumentButton( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
     }
 
-    //--------------------------------------------------------------------
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
@@ -193,24 +184,19 @@ namespace dbaui
         SetStyle( GetStyle() | WB_CENTER );
     }
 
-    //====================================================================
-    //= OpenDocumentListBox
-    //====================================================================
+    // OpenDocumentListBox
 
-    //--------------------------------------------------------------------
     OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName )
         :ListBox( _pParent, WB_BORDER | WB_DROPDOWN )
     {
         impl_init( _pAsciiModuleName );
     }
 
-    //--------------------------------------------------------------------
     extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeOpenDocumentListBox( Window *pParent, VclBuilder::stringmap & )
     {
         return new OpenDocumentListBox( pParent, "com.sun.star.sdb.OfficeDatabaseDocument" );
     }
 
-    //--------------------------------------------------------------------
     void OpenDocumentListBox::impl_init( const sal_Char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
@@ -265,7 +251,6 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
     String OpenDocumentListBox::GetSelectedDocumentURL() const
     {
         String sURL;
@@ -275,7 +260,6 @@ namespace dbaui
         return sURL;
     }
 
-    //--------------------------------------------------------------------
     String OpenDocumentListBox::GetSelectedDocumentFilter() const
     {
         String sFilter;
@@ -285,7 +269,6 @@ namespace dbaui
         return sFilter;
     }
 
-    //--------------------------------------------------------------------
     OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation ) const
     {
         MapIndexToStringPair::const_iterator pos = m_aURLs.find( _nListIndex );
@@ -304,7 +287,6 @@ namespace dbaui
         return aDocumentDescriptor;
     }
 
-    //--------------------------------------------------------------------
     void  OpenDocumentListBox::RequestHelp( const HelpEvent& _rHEvt )
     {
         if( !( _rHEvt.GetMode() & HELPMODE_QUICK ) )
@@ -325,8 +307,6 @@ namespace dbaui
         }
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

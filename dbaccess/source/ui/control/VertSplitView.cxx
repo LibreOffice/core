@@ -26,9 +26,7 @@
 
 using namespace ::dbaui;
 
-//==================================================================
 // class OSplitterView
-//==================================================================
 DBG_NAME(OSplitterView)
 OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pParent,WB_DIALOGCONTROL) // ,WB_BORDER
     ,m_pSplitter( NULL )
@@ -39,13 +37,13 @@ OSplitterView::OSplitterView(Window* _pParent,sal_Bool _bVertical) : Window(_pPa
     DBG_CTOR(OSplitterView,NULL);
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
-// -----------------------------------------------------------------------------
+
 OSplitterView::~OSplitterView()
 {
     DBG_DTOR(OSplitterView,NULL);
     m_pRight = m_pLeft = NULL;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
 {
     OSL_ENSURE(m_pSplitter, "Splitter is NULL!");
@@ -60,7 +58,7 @@ IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
     Resize();
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 void OSplitterView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -90,7 +88,7 @@ void OSplitterView::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
             SetBackground( rStyleSettings.GetFaceColor() );
     }
 }
-// -----------------------------------------------------------------------
+
 void OSplitterView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -102,7 +100,7 @@ void OSplitterView::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSplitterView::GetFocus()
 {
     Window::GetFocus();
@@ -114,7 +112,6 @@ void OSplitterView::GetFocus()
         m_pRight->GrabFocus();
 }
 
-// -------------------------------------------------------------------------
 void OSplitterView::Resize()
 {
     Window::Resize();
@@ -187,13 +184,13 @@ void OSplitterView::Resize()
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void OSplitterView::set(Window* _pRight,Window* _pLeft)
 {
     m_pLeft = _pLeft;
     m_pRight = _pRight;
 }
-// -----------------------------------------------------------------------------
+
 void OSplitterView::setSplitter(Splitter* _pSplitter)
 {
     m_pSplitter = _pSplitter;

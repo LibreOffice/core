@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "commandcontainer.hxx"
 #include "connection.hxx"
 #include "core_resource.hrc"
@@ -87,9 +86,7 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
-//============================================================
-//= VosMutexFacade
-//============================================================
+// VosMutexFacade
 VosMutexFacade::VosMutexFacade( ::osl::Mutex& _rMutex )
     :m_rMutex( _rMutex )
 {
@@ -110,9 +107,7 @@ bool VosMutexFacade::tryToAcquire()
     return m_rMutex.tryToAcquire();
 }
 
-//============================================================
-//= DocumentStorageAccess
-//============================================================
+// DocumentStorageAccess
 DBG_NAME( DocumentStorageAccess )
 class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStorageSupplier
                                                             ,   XTransactionListener >
@@ -397,9 +392,7 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
         }
 }
 
-//============================================================
-//= ODatabaseModelImpl
-//============================================================
+// ODatabaseModelImpl
 DBG_NAME(ODatabaseModelImpl)
 
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
@@ -1397,4 +1390,5 @@ ModelDependentComponent::~ModelDependentComponent()
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

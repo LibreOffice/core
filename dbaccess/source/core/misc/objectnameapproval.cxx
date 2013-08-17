@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "objectnameapproval.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -28,10 +27,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::WeakReference;
@@ -45,19 +42,14 @@ namespace dbaccess
 
     namespace CommandType = com::sun::star::sdb::CommandType;
 
-    //====================================================================
-    //= ObjectNameApproval_Impl
-    //====================================================================
+    // ObjectNameApproval_Impl
     struct ObjectNameApproval_Impl
     {
         WeakReference< XConnection >        aConnection;
         sal_Int32                           nCommandType;
     };
 
-    //====================================================================
-    //= ObjectNameApproval
-    //====================================================================
-    //--------------------------------------------------------------------
+    // ObjectNameApproval
     ObjectNameApproval::ObjectNameApproval( const Reference< XConnection >& _rxConnection, ObjectType _eType )
         :m_pImpl( new ObjectNameApproval_Impl )
     {
@@ -65,12 +57,10 @@ namespace dbaccess
         m_pImpl->nCommandType = _eType == TypeQuery ? CommandType::QUERY : CommandType::TABLE;
     }
 
-    //--------------------------------------------------------------------
     ObjectNameApproval::~ObjectNameApproval()
     {
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL ObjectNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
     {
         Reference< XConnection > xConnection( m_pImpl->aConnection );
@@ -82,8 +72,6 @@ namespace dbaccess
         xObjectNames->checkNameForCreate( m_pImpl->nCommandType, _rName );
     }
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

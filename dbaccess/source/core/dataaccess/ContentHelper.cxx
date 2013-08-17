@@ -35,7 +35,6 @@
 #include "dbastrings.hrc"
 #include <tools/debug.hxx>
 
-
 namespace dbaccess
 {
 using namespace ::com::sun::star::uno;
@@ -160,9 +159,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     Any aRet;
     if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
     {
-        //////////////////////////////////////////////////////////////////
         // getPropertyValues
-        //////////////////////////////////////////////////////////////////
 
         Sequence< Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
@@ -180,9 +177,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     }
     else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
-        //////////////////////////////////////////////////////////////////
         // setPropertyValues
-        //////////////////////////////////////////////////////////////////
 
         Sequence< PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
@@ -213,9 +208,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     }
     else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
     {
-        //////////////////////////////////////////////////////////////////
         // getPropertySetInfo
-        //////////////////////////////////////////////////////////////////
 
         Reference<XPropertySet> xProp(*this,UNO_QUERY);
         if ( xProp.is() )
@@ -224,9 +217,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
         // Unsupported command
-        //////////////////////////////////////////////////////////////////
 
         OSL_FAIL( "Content::execute - unsupported command!" );
 
@@ -417,7 +408,6 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
     return aRet;
 }
 
-//=========================================================================
 // static
 Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >& rProperties)
 {
@@ -639,4 +629,5 @@ void OContentHelper::notifyDataSourceModified()
 }
 
 }   // namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

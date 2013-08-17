@@ -23,11 +23,8 @@
 
 using namespace dbaui;
 
-//========================================================================
 // class OQueryTableConnectionData
-//========================================================================
 DBG_NAME(OQueryTableConnectionData)
-//------------------------------------------------------------------------
 OQueryTableConnectionData::OQueryTableConnectionData()
     :OTableConnectionData()
     ,m_eJoinType (INNER_JOIN)
@@ -36,7 +33,6 @@ OQueryTableConnectionData::OQueryTableConnectionData()
     DBG_CTOR(OQueryTableConnectionData,NULL);
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
 {
@@ -50,7 +46,6 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
     m_bNatural  = rConnData.m_bNatural;
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
                                                     ,const TTableWindowData::value_type& _pReferencedTable
                                                     ,const OUString& rConnName)
@@ -65,13 +60,11 @@ OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::val
     DBG_CTOR(OQueryTableConnectionData,NULL);
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnectionData::~OQueryTableConnectionData()
 {
     DBG_DTOR(OQueryTableConnectionData,NULL);
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
@@ -79,14 +72,12 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj()
     return new OConnectionLineData();
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return new OConnectionLineData( rConnLineData );
 }
 
-//------------------------------------------------------------------------
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
@@ -94,7 +85,6 @@ void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
     *this = (const OQueryTableConnectionData&)rSource;
 }
 
-//------------------------------------------------------------------------
 OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTableConnectionData& rConnData)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
@@ -114,14 +104,12 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
     return *this;
 }
 
-//------------------------------------------------------------------------------
 OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return nWhich == JTCS_FROM ? m_pReferencingTable->GetWinName() : m_pReferencedTable->GetWinName();
 }
 
-//------------------------------------------------------------------------------
 void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
@@ -142,16 +130,15 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
 
     AppendConnLine((OUString)rDragLeft->GetField(),(OUString)rDragRight->GetField());
 }
-// -----------------------------------------------------------------------------
+
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const
 {
     return new OQueryTableConnectionData();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OQueryTableConnectionData::Update()
 {
     return sal_True;
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

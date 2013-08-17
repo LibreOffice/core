@@ -24,17 +24,14 @@
 
 using namespace dbaui;
 using namespace comphelper;
-//==================================================================
 // class OTableConnectionData
-//==================================================================
 DBG_NAME(OTableConnectionData)
-//------------------------------------------------------------------------
 OTableConnectionData::OTableConnectionData()
 {
     DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
-// -----------------------------------------------------------------------------
+
 OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
                                           ,const TTableWindowData::value_type& _pReferencedTable
                                           ,const String& rConnName )
@@ -45,29 +42,27 @@ OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _
     DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
-//------------------------------------------------------------------------
+
 void OTableConnectionData::Init()
 {
-    //////////////////////////////////////////////////////////////////////
     // initialise linedatalist with defaults
     OSL_ENSURE(m_vConnLineData.empty(), "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines();
         // this creates the defaults
 }
-//------------------------------------------------------------------------
+
 OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnData )
 {
     DBG_CTOR(OTableConnectionData,NULL);
     *this = rConnData;
 }
-//------------------------------------------------------------------------
+
 void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     *this = rSource;
     // here I revert to the (non-virtual) operator =, which only copies my members
 }
 
-//------------------------------------------------------------------------
 OTableConnectionData::~OTableConnectionData()
 {
     DBG_DTOR(OTableConnectionData,NULL);
@@ -75,7 +70,6 @@ OTableConnectionData::~OTableConnectionData()
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
 
-//------------------------------------------------------------------------
 OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionData& rConnData )
 {
     if (&rConnData == this)
@@ -99,7 +93,6 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     return *this;
 }
 
-//------------------------------------------------------------------------
 sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName )
 {
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
@@ -119,7 +112,6 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSo
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 sal_Bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
@@ -140,29 +132,26 @@ sal_Bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName,
     return sal_True;
 }
 
-//------------------------------------------------------------------------
 void OTableConnectionData::ResetConnLines()
 {
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef OTableConnectionData::CreateLineDataObj()
 {
     return new OConnectionLineData();
 }
 
-//------------------------------------------------------------------------
 OConnectionLineDataRef OTableConnectionData::CreateLineDataObj( const OConnectionLineData& rConnLineData )
 {
     return new OConnectionLineData( rConnLineData );
 }
-// -----------------------------------------------------------------------------
+
 OTableConnectionData* OTableConnectionData::NewInstance() const
 {
     return new OTableConnectionData();
 }
-// -----------------------------------------------------------------------------
+
 OConnectionLineDataVec::size_type OTableConnectionData::normalizeLines()
 {
     // remove empty lines
@@ -183,9 +172,5 @@ OConnectionLineDataVec::size_type OTableConnectionData::normalizeLines()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -249,4 +249,5 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
         }
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

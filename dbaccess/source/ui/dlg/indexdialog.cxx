@@ -35,10 +35,8 @@
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
-//......................................................................
 namespace dbaui
 {
-//......................................................................
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -47,23 +45,18 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::dbtools;
 
-    //==================================================================
-    //= helper
-    //==================================================================
-    //------------------------------------------------------------------
+    // helper
     sal_Bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return  (_rLHS.sFieldName == _rRHS.sFieldName)
             &&  (_rLHS.bSortAscending == _rRHS.bSortAscending);
     }
 
-    //------------------------------------------------------------------
     sal_Bool operator !=(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }
 
-    //------------------------------------------------------------------
     sal_Bool operator ==(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         if (_rLHS.size() != _rRHS.size())
@@ -81,16 +74,12 @@ namespace dbaui
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     sal_Bool operator !=(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }
 
-    //==================================================================
-    //= DbaIndexList
-    //==================================================================
-    //------------------------------------------------------------------
+    // DbaIndexList
     DbaIndexList::DbaIndexList(Window* _pParent, const ResId& _rId)
         :SvTreeListBox(_pParent, _rId)
         ,m_bSuspendSelectHdl(sal_False)
@@ -98,7 +87,6 @@ namespace dbaui
     }
 
     extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars);
-    //------------------------------------------------------------------
     sal_Bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
     {
         // first check if this is valid SQL92 name
@@ -135,21 +123,18 @@ namespace dbaui
         return sal_False;
     }
 
-    //------------------------------------------------------------------
     void DbaIndexList::enableSelectHandler()
     {
         OSL_ENSURE(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_False;
     }
 
-    //------------------------------------------------------------------
     void DbaIndexList::disableSelectHandler()
     {
         OSL_ENSURE(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_True;
     }
 
-    //------------------------------------------------------------------
     void DbaIndexList::SelectNoHandlerCall( SvTreeListEntry* _pEntry )
     {
         disableSelectHandler();
@@ -157,7 +142,6 @@ namespace dbaui
         enableSelectHandler();
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexList::Select( SvTreeListEntry* pEntry, sal_Bool _bSelect )
     {
         sal_Bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
@@ -168,11 +152,8 @@ namespace dbaui
         return bReturn;
     }
 
-    //==================================================================
-    //= DbaIndexDialog
-    //==================================================================
+    // DbaIndexDialog
 DBG_NAME(DbaIndexDialog)
-//------------------------------------------------------------------
     DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
@@ -272,14 +253,12 @@ DBG_NAME(DbaIndexDialog)
         }
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::updateToolbox()
     {
         m_aActions.EnableItem(ID_INDEX_NEW, !m_aIndexes.IsEditingActive());
 
         SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         sal_Bool bSelectedAnything = NULL != pSelected;
-
 
         if (pSelected)
         {
@@ -298,7 +277,6 @@ DBG_NAME(DbaIndexDialog)
         m_aActions.EnableItem(ID_INDEX_RENAME, bSelectedAnything);
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
         Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
@@ -320,7 +298,6 @@ DBG_NAME(DbaIndexDialog)
         OnIndexSelected(&m_aIndexes);
     }
 
-    //------------------------------------------------------------------
     DbaIndexDialog::~DbaIndexDialog( )
     {
         setToolBox(NULL);
@@ -330,7 +307,6 @@ DBG_NAME(DbaIndexDialog)
         DBG_DTOR(DbaIndexDialog,NULL);
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
     {
         OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
@@ -367,7 +343,6 @@ DBG_NAME(DbaIndexDialog)
         return !aExceptionInfo.isValid();
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::OnNewIndex()
     {
         // commit the current entry, if necessary
@@ -412,7 +387,6 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::OnDropIndex(sal_Bool _bConfirm)
     {
         // the selected index
@@ -438,7 +412,6 @@ DBG_NAME(DbaIndexDialog)
         }
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection)
     {
         // do the drop
@@ -489,7 +462,6 @@ DBG_NAME(DbaIndexDialog)
         return !aExceptionInfo.isValid();
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::OnRenameIndex()
     {
         // the selected index
@@ -505,7 +477,6 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::OnSaveIndex()
     {
         // the selected index
@@ -518,7 +489,6 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::OnResetIndex()
     {
         // the selected index
@@ -551,7 +521,6 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     {
         sal_uInt16 nClicked = m_aActions.GetCurItemId();
@@ -576,7 +545,6 @@ DBG_NAME(DbaIndexDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         if (m_aIndexes.IsEditingActive())
@@ -624,7 +592,6 @@ DBG_NAME(DbaIndexDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
     {
         m_bEditAgain = sal_False;
@@ -632,7 +599,6 @@ DBG_NAME(DbaIndexDialog)
         return 0L;
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
@@ -675,7 +641,6 @@ DBG_NAME(DbaIndexDialog)
         return 1L;
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implSaveModified(sal_Bool _bPlausibility)
     {
         if (m_pPreviousSelection)
@@ -704,7 +669,6 @@ DBG_NAME(DbaIndexDialog)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implCheckPlausibility(const ConstIndexesIterator& _rPos)
     {
         // need at least one field
@@ -739,7 +703,6 @@ DBG_NAME(DbaIndexDialog)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implCommitPreviouslySelected()
     {
         if (m_pPreviousSelection)
@@ -757,7 +720,6 @@ DBG_NAME(DbaIndexDialog)
         return sal_True;
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
     {
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
@@ -769,7 +731,6 @@ DBG_NAME(DbaIndexDialog)
         return 1L;
     }
 
-    //------------------------------------------------------------------
     void DbaIndexDialog::updateControls(const SvTreeListEntry* _pEntry)
     {
         if (_pEntry)
@@ -799,7 +760,6 @@ DBG_NAME(DbaIndexDialog)
         }
     }
 
-    //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnIndexSelected, DbaIndexList*, /*NOTINTERESTEDIN*/ )
     {
         m_aIndexes.EndSelection();
@@ -836,7 +796,6 @@ DBG_NAME(DbaIndexDialog)
         updateToolbox();
         return 0L;
     }
-    // -----------------------------------------------------------------------------
     void DbaIndexDialog::StateChanged( StateChangedType nType )
     {
         ModalDialog::StateChanged( nType );
@@ -854,7 +813,6 @@ DBG_NAME(DbaIndexDialog)
             checkImageList();
         }
     }
-    // -----------------------------------------------------------------------------
     void DbaIndexDialog::DataChanged( const DataChangedEvent& rDCEvt )
     {
         ModalDialog::DataChanged( rDCEvt );
@@ -867,7 +825,6 @@ DBG_NAME(DbaIndexDialog)
             checkImageList();
         }
     }
-    //------------------------------------------------------------------
     ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
@@ -877,7 +834,6 @@ DBG_NAME(DbaIndexDialog)
         }
         return ImageList(ModuleRes(nN));
     }
-    //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
     {
         // we use large images so we must change them
@@ -909,8 +865,6 @@ DBG_NAME(DbaIndexDialog)
         }
     }
 
-//......................................................................
 }   // namespace dbaui
-//......................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

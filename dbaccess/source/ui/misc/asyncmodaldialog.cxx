@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "asyncmodaldialog.hxx"
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -25,19 +24,15 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
 namespace dbaui
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
-    //= AsyncDialogExecutor
-    //====================================================================
+    // AsyncDialogExecutor
     class DialogExecutor_Impl
     {
         Reference< XExecutableDialog >  m_xDialog;
@@ -62,7 +57,6 @@ namespace dbaui
         DECL_LINK( onExecute, void* );
     };
 
-    //--------------------------------------------------------------------
     IMPL_LINK( DialogExecutor_Impl, onExecute, void*, /* _notInterestedIn */ )
     {
         try
@@ -78,23 +72,17 @@ namespace dbaui
         return 0L;
     }
 
-    //====================================================================
-    //= AsyncDialogExecutor
-    //====================================================================
-    //--------------------------------------------------------------------
+    // AsyncDialogExecutor
     void AsyncDialogExecutor::executeModalDialogAsync( const Reference< XExecutableDialog >& _rxDialog )
     {
         if ( !_rxDialog.is() )
             throw IllegalArgumentException();
-
 
         DialogExecutor_Impl* pExecutor = new DialogExecutor_Impl( _rxDialog );
         pExecutor->execute();
         // will delete itself
     }
 
-//........................................................................
 } // namespace dbaui
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

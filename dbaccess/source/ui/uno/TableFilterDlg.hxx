@@ -24,13 +24,9 @@
 #include "unoadmin.hxx"
 #endif
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-//=========================================================================
-//= OTableFilterDialog
-//=========================================================================
+// OTableFilterDialog
 class OTableFilterDialog
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< OTableFilterDialog >
@@ -64,9 +60,7 @@ protected:
     virtual Dialog* createDialog(Window* _pParent);
 };
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 #endif // _DBAUI_TABLEFILTERDLG_HXX
 

@@ -30,7 +30,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             rtl_ModuleCount*
         );
 
-//==========================================================================
 class OModuleRegistration
 {
     static  ::com::sun::star::uno::Sequence< OUString >*
@@ -76,7 +75,6 @@ public:
         );
 };
 
-//==========================================================================
 template <class TYPE>
 class OMultiInstanceAutoRegistration
 {
@@ -112,7 +110,6 @@ OMultiInstanceAutoRegistration<TYPE>::~OMultiInstanceAutoRegistration()
     OModuleRegistration::revokeComponent(TYPE::getImplementationName_Static());
 }
 
-//==========================================================================
 template <class TYPE>
 class OOneInstanceAutoRegistration
 {

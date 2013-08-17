@@ -34,10 +34,8 @@ namespace dbaccess
 #define DBACORE_RESSTRING( id ) DBA_RES( id )
         // (compatibility)
 
-    //==================================================================
-    //= ResourceManager
-    //= handling resources within the DBA-Core library
-    //==================================================================
+    // ResourceManager
+    // handling resources within the DBA-Core library
     class ResourceManager
     {
         friend class OModuleClient;
@@ -98,9 +96,7 @@ namespace dbaccess
         );
     };
 
-    //=========================================================================
-    //= OModuleClient
-    //=========================================================================
+    // OModuleClient
     /** base class for objects which uses any global module-specific resources
     */
     class OModuleClient

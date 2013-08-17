@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dsnItem.hxx"
 #include "generalpage.hxx"
 #include <connectivity/dbexception.hxx>
@@ -44,20 +43,15 @@
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //=========================================================================
-    //= OGeneralPage
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // OGeneralPage
     OGeneralPage::OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
         ,m_pSpecialMessage              ( NULL )
@@ -85,12 +79,10 @@ namespace dbaui
         m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPage, OnEmbeddedDBTypeSelected));
     }
 
-    //-------------------------------------------------------------------------
     OGeneralPage::~OGeneralPage()
     {
     }
 
-    //-------------------------------------------------------------------------
     namespace
     {
         struct DisplayedType
@@ -111,7 +103,6 @@ namespace dbaui
         };
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
     {
         if ( m_bInitTypeList )
@@ -151,7 +142,6 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::initializeEmbeddedDBList()
     {
         if ( m_bInitEmbeddedDBList )
@@ -191,12 +181,10 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::setParentTitle(const OUString&)
     {
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::switchMessage(const OUString& _sURLPrefix)
     {
         SPECIAL_MESSAGE eMessage = smNone;
@@ -204,7 +192,6 @@ namespace dbaui
         {
             eMessage = smUnsupportedType;
         }
-
 
         if ( eMessage != m_eLastMessage )
         {
@@ -220,7 +207,6 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::onTypeSelected(const OUString& _sURLPrefix)
     {
         // the new URL text as indicated by the selection history
@@ -232,7 +218,6 @@ namespace dbaui
             m_aTypeSelectHandler.Call(this);
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         initializeTypeList();
@@ -252,7 +237,6 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
 
-    //-------------------------------------------------------------------------
     OUString OGeneralPage::getEmbeddedDBName( const SfxItemSet& _rSet )
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -301,7 +285,6 @@ namespace dbaui
         return sDisplayName;
     }
 
-    //-------------------------------------------------------------------------
     OUString OGeneralPage::getDatasourceName( const SfxItemSet& _rSet )
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -378,8 +361,6 @@ namespace dbaui
         return _inout_rDisplayName.getLength() > 0;
     }
 
-
-    // -----------------------------------------------------------------------
     void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, String sDisplayName)
     {
         // insert a (temporary) entry
@@ -389,7 +370,6 @@ namespace dbaui
         m_aURLPrefixes[nPos] = _sType;
     }
 
-    // -----------------------------------------------------------------------
     void OGeneralPage::insertEmbeddedDBTypeEntryData(const OUString& _sType, String sDisplayName)
     {
         // insert a (temporary) entry
@@ -399,19 +379,16 @@ namespace dbaui
         m_aEmbeddedURLPrefixes[nPos] = _sType;
     }
 
-    // -----------------------------------------------------------------------
     void OGeneralPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new ODisableWrapper<FixedText>( m_pSpecialMessage ) );
     }
 
-    // -----------------------------------------------------------------------
     void OGeneralPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new OSaveValueWrapper<ListBox>( m_pDatasourceType ) );
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::implSetCurrentType( const OUString& _eType )
     {
         if ( _eType == m_eCurrentSelection )
@@ -420,7 +397,6 @@ namespace dbaui
         m_eCurrentSelection = _eType;
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
         // reset all locale data
@@ -430,7 +406,6 @@ namespace dbaui
         OGenericAdministrationPage::Reset(_rCoreAttrs);
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPage, OnEmbeddedDBTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
@@ -451,7 +426,6 @@ namespace dbaui
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
@@ -472,16 +446,12 @@ namespace dbaui
         return 0L;
     }
 
-    //=========================================================================
-    //= OGeneralPageDialog
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // OGeneralPageDialog
     OGeneralPageDialog::OGeneralPageDialog( Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagedialog.ui", _rItems )
     {
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPageDialog::setParentTitle( const OUString& _sURLPrefix )
     {
         const OUString sName = m_pCollection->getTypeDisplayName( _sURLPrefix );
@@ -492,7 +462,6 @@ namespace dbaui
         }
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPageDialog::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
@@ -504,7 +473,6 @@ namespace dbaui
         m_pDatasourceType->Enable( bValid );
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool OGeneralPageDialog::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bChangedSomething = sal_False;
@@ -521,10 +489,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //=========================================================================
-    //= OGeneralPageWizard
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    // OGeneralPageWizard
     OGeneralPageWizard::OGeneralPageWizard( Window* pParent, const SfxItemSet& _rItems )
         :OGeneralPage( pParent, "dbaccess/ui/generalpagewizard.ui", _rItems )
         ,m_pFT_HeaderText               ( NULL )
@@ -580,7 +545,6 @@ namespace dbaui
         m_pPB_OpenDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
     }
 
-    //-------------------------------------------------------------------------
     OGeneralPageWizard::CreationMode OGeneralPageWizard::GetDatabaseCreationMode() const
     {
         if ( m_pRB_CreateDatabase->IsChecked() )
@@ -590,7 +554,6 @@ namespace dbaui
         return eOpenExisting;
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPageWizard::GetFocus()
     {
         OGeneralPage::GetFocus();
@@ -600,7 +563,6 @@ namespace dbaui
             m_pDatasourceType->GrabFocus();
     }
 
-    //-------------------------------------------------------------------------
     void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
@@ -635,7 +597,6 @@ namespace dbaui
         m_eOriginalCreationMode = GetDatabaseCreationMode();
     }
 
-    //-------------------------------------------------------------------------
     OUString OGeneralPageWizard::getDatasourceName(const SfxItemSet& _rSet)
     {
         // Sets jdbc as the default selected databse on startup.
@@ -645,7 +606,6 @@ namespace dbaui
         return OGeneralPage::getDatasourceName( _rSet );
     }
 
-    //-------------------------------------------------------------------------
     bool OGeneralPageWizard::approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName )
     {
         switch ( eType )
@@ -666,7 +626,6 @@ namespace dbaui
         return OGeneralPage::approveDatasourceType( eType, _inout_rDisplayName );
     }
 
-    //-------------------------------------------------------------------------
     sal_Bool OGeneralPageWizard::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
@@ -706,7 +665,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    //-------------------------------------------------------------------------
     OGeneralPageWizard::DocumentDescriptor OGeneralPageWizard::GetSelectedDocument() const
     {
         DocumentDescriptor aDocument;
@@ -720,7 +678,6 @@ namespace dbaui
         return aDocument;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPageWizard, OnCreateDatabaseModeSelected, RadioButton*, /*_pBox*/ )
     {
         if ( m_aCreationModeHandler.IsSet() )
@@ -729,7 +686,6 @@ namespace dbaui
         return 1L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPageWizard, OnSetupModeSelected, RadioButton*, /*_pBox*/ )
     {
         if ( m_aCreationModeHandler.IsSet() )
@@ -738,14 +694,12 @@ namespace dbaui
         return 1L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPageWizard, OnDocumentSelected, ListBox*, /*_pBox*/ )
     {
         m_aDocumentSelectionHandler.Call( this );
         return 0L;
     }
 
-    //-------------------------------------------------------------------------
     IMPL_LINK( OGeneralPageWizard, OnOpenDocument, PushButton*, /*_pBox*/ )
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -777,8 +731,6 @@ namespace dbaui
         return 0L;
     }
 
-//.........................................................................
 }   // namespace dbaui
-//.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
