@@ -229,13 +229,13 @@ public:
 
 class SwStringMsgPoolItem : public SwMsgPoolItem
 {
-    String sStr;
+    OUString m_sStr;
 public:
 
-    const String& GetString() const { return sStr; }
+    OUString GetString() const { return m_sStr; }
 
-    SwStringMsgPoolItem( sal_uInt16 nId, const String& rStr )
-        : SwMsgPoolItem( nId ), sStr( rStr )
+    SwStringMsgPoolItem( sal_uInt16 nId, const OUString& rStr )
+        : SwMsgPoolItem( nId ), m_sStr( rStr )
     {}
 };
 #endif
