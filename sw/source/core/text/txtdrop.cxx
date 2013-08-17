@@ -273,10 +273,6 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
 
 void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {
-    if ( rInf.OnWin() &&
-        !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()    )
-        rInf.DrawBackground( *this );
-
     OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
 
     const SwDropPortionPart* pCurrPart = GetPart();
@@ -298,6 +294,13 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
         ((SwDropPortion*)this)->Width( pCurrPart->GetWidth() );
         ((SwTxtPaintInfo&)rInf).SetLen( pCurrPart->GetLen() );
         SwFontSave aFontSave( rInf, &pCurrPart->GetFont() );
+
+        if ( rInf.OnWin() &&
+            !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() &&
+            (!pCurrPart->GetFont().GetBackColor() || *pCurrPart->GetFont().GetBackColor() == Color(COL_TRANSPARENT)) )
+        {
+            rInf.DrawBackground( *this );
+        }
 
         SwTxtPortion::Paint( rInf );
 
