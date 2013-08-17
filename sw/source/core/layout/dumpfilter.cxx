@@ -13,9 +13,6 @@
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
-#include <unobaseclass.hxx>
-#include <cppuhelper/weak.hxx>
-#include <vcl/svapp.hxx>
 
 #include <comphelper/mediadescriptor.hxx>
 
