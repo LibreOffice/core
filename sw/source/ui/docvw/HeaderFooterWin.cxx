@@ -284,9 +284,6 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
            aFontSize, GetFont(), false, false );
 
-    Rectangle aTextRect;
-    GetTextBoundRect( aTextRect, String( m_sLabel ) );
-
     FontMetric aFontMetric = GetFontMetric( GetFont() );
     double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;
     Point aTextPos( TEXT_PADDING, nTextOffsetY );
