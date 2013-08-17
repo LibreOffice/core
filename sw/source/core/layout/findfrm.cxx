@@ -19,12 +19,6 @@
 
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "node.hxx"
-#include "doc.hxx"
-#include "frmtool.hxx"
-#include "flyfrm.hxx"
-#include <frmfmt.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 #include <swtable.hxx>
