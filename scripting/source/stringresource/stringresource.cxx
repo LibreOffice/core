@@ -2986,7 +2986,7 @@ const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFi
 // component export operations
 // =============================================================================
 
-static struct ::cppu::ImplementationEntry s_component_entries [] =
+static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     {
         create_StringResourceImpl, getImplementationName_StringResourceImpl,

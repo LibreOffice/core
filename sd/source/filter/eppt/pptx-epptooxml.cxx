@@ -142,7 +142,7 @@ struct PPTXLayoutInfo {
     const char* sType;
 };
 
-static PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] = {
+static const PPTXLayoutInfo aLayoutInfo[LAYOUT_SIZE] = {
     { 20, "Blank Slide", "blank" },
     { 0, "Title Slide", "tx" },
     { 1, "Title, Content", "obj" },
@@ -2158,7 +2158,7 @@ OUString PowerPointExport::implGetImplementationName() const
 
 // UNO component
 
-static struct cppu::ImplementationEntry g_entries[] =
+static const struct cppu::ImplementationEntry g_entries[] =
 {
     {
         oox::core::PowerPointExport_createInstance,

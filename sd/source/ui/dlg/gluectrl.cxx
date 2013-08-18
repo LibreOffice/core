@@ -38,7 +38,7 @@ using namespace ::com::sun::star::frame;
 
 // at the moment, Joe only supports the methods specified below
 #define ESCDIR_COUNT 5
-static sal_uInt16 aEscDirArray[] =
+static const sal_uInt16 aEscDirArray[] =
 {
     SDRESC_SMART,
     SDRESC_LEFT,

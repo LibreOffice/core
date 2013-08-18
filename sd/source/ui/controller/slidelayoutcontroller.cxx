@@ -97,13 +97,13 @@ struct snewfoil_value_info
     AutoLayout maAutoLayout;
 };
 
-static snewfoil_value_info notes[] =
+static const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB, AUTOLAYOUT_NOTES},
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static snewfoil_value_info handout[] =
+static const snewfoil_value_info handout[] =
 {
     {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT1},
     {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB, AUTOLAYOUT_HANDOUT2},
@@ -114,7 +114,7 @@ static snewfoil_value_info handout[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static snewfoil_value_info standard[] =
+static const snewfoil_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 WritingMode_LR_TB, AUTOLAYOUT_NONE         },
     {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                WritingMode_LR_TB, AUTOLAYOUT_TITLE        },
@@ -131,7 +131,7 @@ static snewfoil_value_info standard[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-static snewfoil_value_info v_standard[] =
+static const snewfoil_value_info v_standard[] =
 {
     // vertical
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       },
@@ -143,7 +143,7 @@ static snewfoil_value_info v_standard[] =
 
 // -----------------------------------------------------------------------
 
-static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo )
+static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pInfo )
 {
     Size aLayoutItemSize;
     for( ; pInfo->mnBmpResId; pInfo++ )
@@ -198,7 +198,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
 
-    snewfoil_value_info* pInfo = 0;
+    const snewfoil_value_info* pInfo = 0;
     sal_Int16 nColCount = 4;
     switch( eMode )
     {

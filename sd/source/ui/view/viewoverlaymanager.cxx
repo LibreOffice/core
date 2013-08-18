@@ -65,8 +65,8 @@ class ImageButtonHdl;
 
 // --------------------------------------------------------------------
 
-static sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
+static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
+static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
 // --------------------------------------------------------------------
 

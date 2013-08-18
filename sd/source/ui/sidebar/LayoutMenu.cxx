@@ -77,14 +77,14 @@ struct snewfoil_value_info
     AutoLayout maAutoLayout;
 };
 
-static snewfoil_value_info notes[] =
+static const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static snewfoil_value_info handout[] =
+static const snewfoil_value_info handout[] =
 {
     {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
@@ -101,7 +101,7 @@ static snewfoil_value_info handout[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-static snewfoil_value_info standard[] =
+static const snewfoil_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
     {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
@@ -624,7 +624,7 @@ void LayoutMenu::Fill (void)
     catch (RuntimeException&)
     {}
 
-    snewfoil_value_info* pInfo = NULL;
+    const snewfoil_value_info* pInfo = NULL;
     if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
     {
         pInfo = notes;
