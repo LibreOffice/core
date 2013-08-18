@@ -68,7 +68,7 @@ private:
     // Descriptor-interface
     BaseFrameProperties_Impl*       pProps;
     bool bIsDescriptor;
-    String                          sName;
+    OUString                        m_sName;
 
     SwPaM*                          m_pCopySource;
 

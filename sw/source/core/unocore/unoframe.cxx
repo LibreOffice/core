@@ -898,32 +898,28 @@ SwXFrame::~SwXFrame()
 OUString SwXFrame::getName(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    String sRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
-        sRet = pFmt->GetName();
-    else if(bIsDescriptor)
-        sRet = sName;
-    else
+        return pFmt->GetName();
+    if(!bIsDescriptor)
         throw uno::RuntimeException();
-    return sRet;
+    return m_sName;
 }
 
-void SwXFrame::setName(const :: OUString& rName) throw( uno::RuntimeException )
+void SwXFrame::setName(const OUString& rName) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
-    String sTmpName(rName);
     if(pFmt)
     {
-        pFmt->GetDoc()->SetFlyName((SwFlyFrmFmt&)*pFmt, sTmpName);
-        if(pFmt->GetName() != sTmpName)
+        pFmt->GetDoc()->SetFlyName((SwFlyFrmFmt&)*pFmt, rName);
+        if(pFmt->GetName() != rName)
         {
             throw uno::RuntimeException();
         }
     }
     else if(bIsDescriptor)
-        sName = sTmpName;
+        m_sName = rName;
     else
         throw uno::RuntimeException();
 }
@@ -1110,9 +1106,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
             OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
-            OUString uTemp;
-            aValue >>= uTemp;
-            const String sTitle(uTemp);
+            OUString sTitle;
+            aValue >>= sTitle;
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject( pFlyFmt );
             pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), sTitle );
@@ -1123,9 +1118,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
             OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
-            OUString uTemp;
-            aValue >>= uTemp;
-            const String sDescription(uTemp);
+            OUString sDescription;
+            aValue >>= sDescription;
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject( pFlyFmt );
             pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), sDescription );
@@ -2221,8 +2215,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             if(pFmt)
             {
                 pFmt->Add(this);
-                if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
+                if(!m_sName.isEmpty())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
             }
             //den SwXText wecken
             ((SwXTextFrame*)this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrmFmt()->GetDoc() );
@@ -2265,13 +2259,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 aGraphic = Graphic( xGraphic );
             }
 
-            String sFltName;
+            OUString sFltName;
             const ::uno::Any* pFilter;
             if(pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
             {
-                OUString uTemp;
-                (*pFilter) >>= uTemp;
-                sFltName = String(uTemp);
+                (*pFilter) >>= sFltName;
             }
 
             pFmt =
@@ -2286,8 +2278,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                                             ->GetIndex()+1 ]->GetGrfNode();
                 pGrfNd->SetChgTwipSize( !bSizeFound );
                 pFmt->Add(this);
-                if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
+                if(!m_sName.isEmpty())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
 
             }
             const ::uno::Any* pSurroundContour;
@@ -2390,8 +2382,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                     pFmt2->Add(this);
-                    if(sName.Len())
-                        pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
+                    if(!m_sName.isEmpty())
+                        pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, m_sName);
                 }
             }
             else if( pStreamName )
@@ -2404,8 +2396,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
-                if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);
+                if(!m_sName.isEmpty())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, m_sName);
             }
             else if( pEmbeddedObject || pStreamName )
             {
@@ -2430,8 +2422,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pFrmFmt = pDoc->Insert( aPam, xObj, &aFrmSet, NULL, NULL );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
-                if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);
+                if(!m_sName.isEmpty())
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, m_sName);
             }
         }
         if( pFmt && pDoc->GetDrawModel() )
