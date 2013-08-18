@@ -91,7 +91,7 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
         }
     }
 
-    if(rFamilyData.mpNameList->find(rName) == rFamilyData.mpNameList->end())
+    if (rFamilyData.maNameList.find(rName) == rFamilyData.maNameList.end())
     {
         XMLAutoStylePoolProperties* pProperties =
                 new XMLAutoStylePoolProperties( rFamilyData, rProperties );

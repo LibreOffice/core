@@ -31,20 +31,12 @@ XMLAutoStyleFamily::XMLAutoStyleFamily(
         bool bAsFamily ) :
     mnFamily( nFamily ), maStrFamilyName( rStrName), mxMapper( rMapper ),
     mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), mbAsFamily( bAsFamily )
-
-{
-    mpNameList   = new SvXMLAutoStylePoolNamesP_Impl;
-}
-
-XMLAutoStyleFamily::XMLAutoStyleFamily( sal_Int32 nFamily ) :
-    mnFamily( nFamily ), mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
-    mbAsFamily( false )
 {}
 
-XMLAutoStyleFamily::~XMLAutoStyleFamily()
-{
-    delete mpNameList;
-}
+XMLAutoStyleFamily::XMLAutoStyleFamily( sal_Int32 nFamily ) :
+    mnFamily(nFamily), mnCount(0), mnName(0), mbAsFamily(false) {}
+
+XMLAutoStyleFamily::~XMLAutoStyleFamily() {}
 
 void XMLAutoStyleFamily::ClearEntries()
 {

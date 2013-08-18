@@ -104,7 +104,7 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
     DBG_ASSERT( aFind != maFamilyList.end(),
                 "SvXMLAutoStylePool_Impl::RegisterName: unknown family" );
     if (aFind != maFamilyList.end())
-        aFind->mpNameList->insert(rName);
+        aFind->maNameList.insert(rName);
 }
 
 //
@@ -125,10 +125,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
         XMLAutoStyleFamily &rFamily = *aJ;
 
         // iterate over names
-        SvXMLAutoStylePoolNamesP_Impl* pNames = rFamily.mpNameList;
-        if (!pNames)
-            continue;
-        for (SvXMLAutoStylePoolNamesP_Impl::const_iterator aI = pNames->begin(); aI != pNames->end(); ++aI)
+        for (XMLAutoStyleFamily::NameSetType::const_iterator aI = rFamily.maNameList.begin(); aI != rFamily.maNameList.end(); ++aI)
         {
             aFamilies.push_back( rFamily.mnFamily );
             aNames.push_back( *aI );

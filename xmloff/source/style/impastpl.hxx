@@ -37,7 +37,6 @@
 
 class SvXMLAutoStylePoolP;
 class XMLAutoStylePoolParent;
-typedef std::set<OUString> SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 
@@ -48,13 +47,14 @@ class SvXMLExport;
 struct XMLAutoStyleFamily : boost::noncopyable
 {
     typedef boost::ptr_set<XMLAutoStylePoolParent> ParentsType;
+    typedef std::set<OUString> NameSetType;
 
     sal_uInt32                   mnFamily;
     OUString                     maStrFamilyName;
     UniReference < SvXMLExportPropertyMapper >  mxMapper;
 
     ParentsType maParents;
-    SvXMLAutoStylePoolNamesP_Impl*      mpNameList;
+    NameSetType maNameList;
     sal_uInt32                          mnCount;
     sal_uInt32                          mnName;
     OUString                     maStrPrefix;

@@ -39,7 +39,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         sBuffer.append( OUString::valueOf( (sal_Int32)rFamilyData.mnName ) );
         msName = sBuffer.makeStringAndClear();
     }
-    while( rFamilyData.mpNameList->find(msName) != rFamilyData.mpNameList->end() );
+    while (rFamilyData.maNameList.find(msName) != rFamilyData.maNameList.end());
 }
 
 bool operator<( const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2)
