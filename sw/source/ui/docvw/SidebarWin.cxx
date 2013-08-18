@@ -382,7 +382,7 @@ void SwSidebarWin::CheckMetaText()
     {
         sMeta = SW_RESSTR(STR_NOAUTHOR);
     }
-    else if (sMeta.getLength() > 22)
+    else if (sMeta.getLength() > 23)
     {
         sMeta = sMeta.copy(0, 20) + "...";
     }
