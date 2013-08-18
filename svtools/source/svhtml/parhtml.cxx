@@ -1823,7 +1823,7 @@ int HTMLParser::FilterXMP( int nToken )
             {
                 UnescapeToken();
                 sSaveToken += " ";
-                aToken = " " + aToken;
+                aToken = sSaveToken + aToken;
             }
             else
                 aToken = sSaveToken;
