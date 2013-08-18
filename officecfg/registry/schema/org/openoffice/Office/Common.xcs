@@ -6262,7 +6262,7 @@
           </desc>
           <label>Defines the number of columns that will be shown in a ColorValueSet.</label>
         </info>
-        <value>8</value>
+        <value>12</value>
       </prop>
       <prop oor:name="PreviewUsesCheckeredBackground" oor:type="xs:boolean">
         <info>
