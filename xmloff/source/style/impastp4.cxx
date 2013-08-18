@@ -291,7 +291,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         size_t nProperties = rParent.GetPropertiesList().size();
         for( size_t j = 0; j < nProperties; j++ )
         {
-            const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
+            const XMLAutoStylePoolProperties* pProperties =
                 &rParent.GetPropertiesList()[j];
             sal_uLong nPos = pProperties->GetPos();
             DBG_ASSERT( nPos < nCount,

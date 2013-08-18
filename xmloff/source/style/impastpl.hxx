@@ -74,7 +74,7 @@ struct XMLAutoStyleFamily : boost::noncopyable
 
 // Properties of a pool
 
-class SvXMLAutoStylePoolPropertiesP_Impl
+class XMLAutoStylePoolProperties
 {
     OUString                     msName;
     ::std::vector< XMLPropertyState >   maProperties;
@@ -82,9 +82,9 @@ class SvXMLAutoStylePoolPropertiesP_Impl
 
 public:
 
-    SvXMLAutoStylePoolPropertiesP_Impl( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
+    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
 
-    ~SvXMLAutoStylePoolPropertiesP_Impl()
+    ~XMLAutoStylePoolProperties()
     {
     }
 
@@ -99,7 +99,7 @@ public:
 class XMLAutoStylePoolParent
 {
 public:
-    typedef boost::ptr_vector<SvXMLAutoStylePoolPropertiesP_Impl> PropertiesListType;
+    typedef boost::ptr_vector<XMLAutoStylePoolProperties> PropertiesListType;
 
 private:
     OUString msParent;
@@ -191,7 +191,7 @@ public:
 struct SvXMLAutoStylePoolPExport_Impl
 {
     const OUString                   *mpParent;
-    const SvXMLAutoStylePoolPropertiesP_Impl    *mpProperties;
+    const XMLAutoStylePoolProperties    *mpProperties;
 };
 
 #endif

@@ -25,7 +25,7 @@ using namespace std;
 // Class SvXMLAutoStylePoolProperties_Impl
 // ctor class SvXMLAutoStylePoolProperties_Impl
 
-SvXMLAutoStylePoolPropertiesP_Impl::SvXMLAutoStylePoolPropertiesP_Impl( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties )
+XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties )
 : maProperties( rProperties ),
   mnPos       ( rFamilyData.mnCount )
 {
