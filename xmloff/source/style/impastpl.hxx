@@ -130,14 +130,6 @@ public:
     bool operator< (const XMLAutoStylePoolParent& rOther) const;
 };
 
-struct SvXMLAutoStylePoolParentPCmp_Impl
-{
-    bool operator()( XMLAutoStylePoolParent* const& lhs, XMLAutoStylePoolParent* const& rhs) const
-    {
-        return lhs->GetParent().compareTo( rhs->GetParent() ) < 0;
-    }
-};
-
 // Implementationclass of SvXMLAutoStylePool
 
 class SvXMLAutoStylePoolP_Impl
