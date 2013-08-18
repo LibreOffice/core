@@ -305,6 +305,12 @@ private:
     PushButton*     m_pRejectAll;
     PushButton*     m_pUndo;
 
+    bool bEnableAccept;
+    bool bEnableAcceptAll;
+    bool bEnableReject;
+    bool bEnableRejectAll;
+    bool bEnableUndo;
+
     DECL_LINK( PbClickHdl, PushButton* );
 
 public:
