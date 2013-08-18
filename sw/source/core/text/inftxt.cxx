@@ -748,23 +748,9 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 }
 
 void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
-                               SwRect* pRect, SwRect* pIntersect,
-                               const bool bInsideBorder ) const
+                               SwRect* pRect, SwRect* pIntersect ) const
 {
-    KSHORT nPorHeight = rPor.Height();
-    KSHORT nPorAscent = rPor.GetAscent();
-    KSHORT nPorWidth = rPor.Width();
-    SwTwips nX = X();
-
-    if( bInsideBorder )
-    {
-        nPorAscent -= GetFont()->GetTopBorderWidth();
-        nPorHeight -= GetFont()->GetTopBorderWidth() + GetFont()->GetBottomBorderWidth();
-        nPorWidth -= GetFont()->GetRightBorderWidth() + GetFont()->GetLeftBorderWidth();
-        nX += GetFont()->GetLeftBorderWidth();
-    }
-
-    Size aSize( nPorWidth, nPorHeight );
+    Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
         aSize.Width() = ((SwHangingPortion&)rPor).GetInnerWidth();
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
@@ -784,23 +770,23 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
         aSize.Height() = nTmp;
         if ( 1 == GetDirection() )
         {
-            aPoint.A() = nX - nPorAscent;
+            aPoint.A() = X() - rPor.GetAscent();
             aPoint.B() = Y() - aSize.Height();
         }
         else
         {
-            aPoint.A() = nX - nPorHeight + nPorAscent;
+            aPoint.A() = X() - rPor.Height() + rPor.GetAscent();
             aPoint.B() = Y();
         }
     }
     else
     {
-        aPoint.A() = nX;
+        aPoint.A() = X();
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if ( GetTxtFrm()->IsVertLR() )
-            aPoint.B() = Y() - nPorHeight + nPorAscent;
+            aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
         else
-            aPoint.B() = Y() - nPorAscent;
+            aPoint.B() = Y() - rPor.GetAscent();
     }
 
     // Adjust x coordinate if we are inside a bidi portion
@@ -1138,7 +1124,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect, true );
+    CalcRect( rPor, 0, &aIntersect );
 
     if ( aIntersect.HasArea() )
     {
@@ -1223,7 +1209,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     OSL_ENSURE( m_pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect, true );
+    CalcRect( rPor, 0, &aIntersect );
 
     if ( aIntersect.HasArea() )
     {

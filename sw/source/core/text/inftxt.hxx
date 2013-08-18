@@ -449,7 +449,7 @@ public:
     inline void NotifyURL( const SwLinePortion &rPor ) const
         { if( URLNotify() ) _NotifyURL( rPor ); }
 
-    void CalcRect( const SwLinePortion& rPor, SwRect* pRect, SwRect* pIntersect = 0, const bool bInsideBorder = false ) const;
+    void CalcRect( const SwLinePortion& rPor, SwRect* pRect, SwRect* pIntersect = 0 ) const;
 
     inline SwTwips GetPaintOfst() const;
     inline void SetPaintOfst( const SwTwips nNew );

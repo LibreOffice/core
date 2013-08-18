@@ -396,12 +396,7 @@ public:
     sal_uInt16 GetRightBorderDist() const { return m_nRightBorderDist; }
     sal_uInt16 GetLeftBorderDist() const { return m_nLeftBorderDist; }
 
-    sal_uInt16 GetTopBorderWidth() const;
-    sal_uInt16 GetBottomBorderWidth() const;
-    sal_uInt16 GetRightBorderWidth() const;
-    sal_uInt16 GetLeftBorderWidth() const;
-
-    // Return the border width plus spacing
+    // Return with the border width plus spacing
     sal_uInt16 GetTopBorderSpace() const;
     sal_uInt16 GetBottomBorderSpace() const;
     sal_uInt16 GetRightBorderSpace() const;
@@ -884,26 +879,6 @@ inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
     m_nLeftBorderDist = nLeftDist;
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
-}
-
-inline sal_uInt16 SwFont::GetTopBorderWidth() const
-{
-    return m_aTopBorder ? m_aTopBorder.get().GetScaledWidth() : 0;
-}
-
-inline sal_uInt16 SwFont::GetBottomBorderWidth() const
-{
-    return m_aBottomBorder ? m_aBottomBorder.get().GetScaledWidth() : 0;
-}
-
-inline sal_uInt16 SwFont::GetRightBorderWidth() const
-{
-    return m_aRightBorder ? m_aRightBorder.get().GetScaledWidth() : 0;
-}
-
-inline sal_uInt16 SwFont::GetLeftBorderWidth() const
-{
-    return m_aLeftBorder ? m_aLeftBorder.get().GetScaledWidth() : 0;
 }
 
 inline sal_uInt16 SwFont::GetTopBorderSpace() const
