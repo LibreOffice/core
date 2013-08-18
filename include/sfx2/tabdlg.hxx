@@ -194,6 +194,12 @@ public:
     {
         return m_pTabCtrl->GetCurPageId();
     }
+
+    SfxTabPage* GetCurTabPage() const
+    {
+        return GetTabPage(m_pTabCtrl->GetCurPageId());
+    }
+
     OUString            GetPageText( sal_uInt16 nPageId ) const
     {
         return m_pTabCtrl->GetPageText(nPageId);

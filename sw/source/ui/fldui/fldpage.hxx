@@ -32,7 +32,6 @@ class SwFldPage : public SfxTabPage
     SwFldMgr            m_aMgr;
     SwField             *m_pCurFld;
     SwWrtShell*         m_pWrtShell;
-    sal_uInt16              m_nPageId;
     sal_uInt16              m_nTypeSel;
     sal_uInt16              m_nSelectionSel;
     bool                m_bFldEdit;
@@ -80,7 +79,10 @@ public:
                                     const ResId &rId,
                                     const SfxItemSet &rAttrSet );
 
-                        virtual ~SwFldPage();
+    SwFldPage(Window *pParent, const OString& rID,
+        const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
+
+    virtual ~SwFldPage();
 
     virtual void        ActivatePage();
 

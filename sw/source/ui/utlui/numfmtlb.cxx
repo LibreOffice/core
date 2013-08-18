@@ -70,6 +70,34 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     Init(nFormatType, bUsrFmts);
 }
 
+NumFormatListBox::NumFormatListBox(Window* pWin, WinBits nStyle) :
+    ListBox             ( pWin, nStyle ),
+    nCurrFormatType     (-1),
+    nStdEntry           (0),
+    bOneArea            (sal_False),
+    nDefFormat          (0),
+    pVw                 (0),
+    pOwnFormatter       (0),
+    bShowLanguageControl(sal_False),
+    bUseAutomaticLanguage(sal_True)
+{
+    Init(NUMBERFORMAT_NUMBER, true);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumFormatListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+    else
+        nBits |= WB_BORDER;
+
+    return new NumFormatListBox(pParent, nBits|WB_SIMPLEMODE);
+}
+
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
                                     sal_uLong nDefFmt, sal_Bool bUsrFmts ) :

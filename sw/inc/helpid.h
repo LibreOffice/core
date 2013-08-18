@@ -145,7 +145,6 @@
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 
 #define HID_FLD_DB                                              "SW_HID_FLD_DB"
-#define HID_FLD_DOKINF                                          "SW_HID_FLD_DOKINF"
 #define HID_FLD_VAR                                             "SW_HID_FLD_VAR"
 #define HID_FLD_DOK                                             "SW_HID_FLD_DOK"
 #define HID_FLD_FUNC                                            "SW_HID_FLD_FUNC"
@@ -332,7 +331,6 @@
 #define HID_COND_COLL_TABLIST                                   "SW_HID_COND_COLL_TABLIST"
 
 #define HID_DB_SELECTION_TLB                                    "SW_HID_DB_SELECTION_TLB"
-#define HID_FIELD_DINF_TYPE                                     "SW_HID_FIELD_DINF_TYPE"
 
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 

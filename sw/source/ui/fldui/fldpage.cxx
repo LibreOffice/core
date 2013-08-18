@@ -46,7 +46,6 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     :SfxTabPage     (pParent, rId, rAttrSet),
     m_pCurFld       (0),
     m_pWrtShell     (0),
-    m_nPageId       ( static_cast< sal_uInt16 >(rId.GetId()) ),
     m_nTypeSel      (LISTBOX_ENTRY_NOTFOUND),
     m_nSelectionSel (LISTBOX_ENTRY_NOTFOUND),
     m_bFldEdit      (false),
@@ -56,6 +55,21 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     m_bFirstHTMLInit    (sal_True)
 {
 
+}
+
+SwFldPage::SwFldPage(Window *pParent, const OString& rID,
+    const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+    : SfxTabPage(pParent, rID, rUIXMLDescription, rAttrSet)
+    , m_pCurFld(0)
+    , m_pWrtShell(0)
+    , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)
+    , m_nSelectionSel(LISTBOX_ENTRY_NOTFOUND)
+    , m_bFldEdit(false)
+    , m_bInsert(true)
+    , m_bFldDlgHtmlMode(false)
+    , m_bRefresh(false)
+    , m_bFirstHTMLInit(true)
+{
 }
 
 SwFldPage::~SwFldPage()
@@ -354,7 +368,7 @@ void SwFldPage::EnableInsert(sal_Bool bEnable)
 
     if (pDlg)
     {
-        if (pDlg->GetCurPageId() == m_nPageId)
+        if (pDlg->GetCurTabPage() == this)
             pDlg->EnableInsert(bEnable);
     }
     else

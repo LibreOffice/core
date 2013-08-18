@@ -45,6 +45,8 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     SW_DLLPRIVATE SwView*           GetView();
 
 public:
+    NumFormatListBox(Window* pWin, WinBits nStyle);
+
     NumFormatListBox( Window* pWin, const ResId& rResId,
         short nFormatType = NUMBERFORMAT_NUMBER, sal_uLong nDefFmt = 0,
         sal_Bool bUsrFmts = sal_True );

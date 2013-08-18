@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
@@ -35,18 +36,15 @@ namespace com{namespace sun{ namespace star{ namespace beans{
 
 class SwFldDokInfPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    SvTreeListBox       aTypeTLB;
-    FixedText           aSelectionFT;
-    ListBox             aSelectionLB;
-    FixedText           aFormatFT;
-    NumFormatListBox    aFormatLB;
-    CheckBox            aFixedCB;
+    SvTreeListBox*      m_pTypeTLB;
+    VclContainer*       m_pSelection;
+    ListBox*            m_pSelectionLB;
+    VclContainer*       m_pFormat;
+    NumFormatListBox*   m_pFormatLB;
+    CheckBox*           m_pFixedCB;
 
     SvTreeListEntry*        pSelEntry;
     com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
-
-    String              aInfoStr;
 
     sal_uInt16              nOldSel;
     sal_uLong               nOldFormat;

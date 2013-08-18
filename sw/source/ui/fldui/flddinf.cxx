@@ -48,32 +48,33 @@
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
 
-SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
-    SwFldPage( pWindow, SW_RES( TP_FLD_DOKINF ), rCoreSet ),
-
-    aTypeFT     (this, SW_RES(FT_DOKINFTYPE)),
-    aTypeTLB    (this, SW_RES(TLB_DOKINFTYPE)),
-    aSelectionFT(this, SW_RES(FT_DOKINFSELECTION)),
-    aSelectionLB(this, SW_RES(LB_DOKINFSELECTION)),
-    aFormatFT   (this, SW_RES(FT_DOKINFFORMAT)),
-    aFormatLB   (this, SW_RES(LB_DOKINFFORMAT)),
-    aFixedCB    (this, SW_RES(CB_DOKINFFIXEDCONTENT)),
-
-    pSelEntry   (0),
-    aInfoStr    (SW_RES(STR_DOKINF_INFO))
+SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
+    :  SwFldPage(pParent, "FldDocInfoPage",
+        "modules/swriter/ui/flddocinfopage.ui", rCoreSet)
+    , pSelEntry(0)
 {
-    FreeResource();
+    get(m_pTypeTLB, "type");
+    get(m_pSelection, "selectframe");
+    get(m_pFormat, "formatframe");
+    get(m_pSelectionLB, "select");
+    get(m_pFormatLB, "format");
+    get(m_pFixedCB, "fixed");
 
-    aTypeTLB.SetHelpId(HID_FIELD_DINF_TYPE);
-    aTypeTLB.SetSelectionMode(SINGLE_SELECTION);
-    aTypeTLB.SetStyle(aTypeTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    long nHeight = m_pTypeTLB->GetTextHeight() * 20;
+    m_pTypeTLB->set_height_request(nHeight);
+    m_pSelectionLB->set_height_request(nHeight);
+    m_pFormatLB->set_height_request(nHeight);
+
+    m_pTypeTLB->SetSelectionMode(SINGLE_SELECTION);
+    m_pTypeTLB->SetStyle(m_pTypeTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    m_pTypeTLB->SetIndent(10);
     // Don't set font, so that the control's font is adobted!
     // Otherwise at wrong font bug to OV.
-    aTypeTLB.SetSpaceBetweenEntries(0);
+    m_pTypeTLB->SetSpaceBetweenEntries(0);
 
-    aTypeTLB.SetNodeDefaultImages();
+    m_pTypeTLB->SetNodeDefaultImages();
     //enable 'active' language selection
-    aFormatLB.SetShowLanguageControl(sal_True);
+    m_pFormatLB->SetShowLanguageControl(sal_True);
 
     SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, sal_False );
     if ( pItem )
@@ -89,8 +90,8 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     Init(); // general initialisation
 
     // initialise TypeListBox
-    aTypeTLB.SetUpdateMode(sal_False);
-    aTypeTLB.Clear();
+    m_pTypeTLB->SetUpdateMode(sal_False);
+    m_pTypeTLB->Clear();
     pSelEntry = 0;
 
     // display SubTypes in TypeLB
@@ -108,13 +109,13 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         {
             m_sOldCustomFieldName = static_cast<const SwDocInfoField*>(pCurField)->GetName();
         }
-        aFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
+        m_pFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();
         if(pSh)
         {
             const SvNumberformat* pFormat = pSh->GetNumberFormatter()->GetEntry(pCurField->GetFormat());
             if(pFormat)
-                aFormatLB.SetLanguage(pFormat->GetLanguage());
+                m_pFormatLB->SetLanguage(pFormat->GetLanguage());
         }
     }
 
@@ -141,17 +142,17 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
                     if( rProperties.getLength() )
                     {
-                        pInfo = aTypeTLB.InsertEntry( String(SW_RES( STR_CUSTOM )) );
+                        pInfo = m_pTypeTLB->InsertEntry( String(SW_RES( STR_CUSTOM )) );
                         pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)
                         {
                             OUString sEntry = rProperties[n].Name;
-                            pEntry = aTypeTLB.InsertEntry(sEntry, pInfo);
+                            pEntry = m_pTypeTLB->InsertEntry(sEntry, pInfo);
                             if(m_sOldCustomFieldName.equals( sEntry ))
                             {
                                 pSelEntry = pEntry;
-                                aTypeTLB.Expand( pInfo );
+                                m_pTypeTLB->Expand( pInfo );
                             }
                             pEntry->SetUserData(reinterpret_cast<void*>(i));
                         }
@@ -162,7 +163,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
             {
                 if (!(IsFldDlgHtmlMode() && (i == DI_EDIT || i == DI_THEMA || i == DI_PRINT)))
                 {
-                    pEntry = aTypeTLB.InsertEntry(aLst[i]);
+                    pEntry = m_pTypeTLB->InsertEntry(aLst[i]);
                     pEntry->SetUserData(reinterpret_cast<void*>(i));
                 }
             }
@@ -174,12 +175,12 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     // select old Pos
     if (pSelEntry != 0)
     {
-        aTypeTLB.Select(pSelEntry);
+        m_pTypeTLB->Select(pSelEntry);
         nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
     }
-    else if ( aTypeTLB.GetEntry(0) )
+    else if ( m_pTypeTLB->GetEntry(0) )
     {
-        pSelEntry = aTypeTLB.GetEntry(0);
+        pSelEntry = m_pTypeTLB->GetEntry(0);
         nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
     }
 
@@ -187,18 +188,18 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     if ( pSelEntry )
         TypeHdl();
 
-    aTypeTLB.SetUpdateMode(sal_True);
-    aTypeTLB.SetSelectHdl(LINK(this, SwFldDokInfPage, TypeHdl));
-    aTypeTLB.SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
-    aSelectionLB.SetSelectHdl(LINK(this, SwFldDokInfPage, SubTypeHdl));
-    aSelectionLB.SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
-    aFormatLB.SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
+    m_pTypeTLB->SetUpdateMode(sal_True);
+    m_pTypeTLB->SetSelectHdl(LINK(this, SwFldDokInfPage, TypeHdl));
+    m_pTypeTLB->SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
+    m_pSelectionLB->SetSelectHdl(LINK(this, SwFldDokInfPage, SubTypeHdl));
+    m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
+    m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
 
     if (IsFldEdit())
     {
-        nOldSel = aSelectionLB.GetSelectEntryPos();
+        nOldSel = m_pSelectionLB->GetSelectEntryPos();
         nOldFormat = GetCurField()->GetFormat();
-        aFixedCB.SaveValue();
+        m_pFixedCB->SaveValue();
     }
 }
 
@@ -208,12 +209,12 @@ IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
     SvTreeListEntry* pOldEntry = pSelEntry;
 
     // current ListBoxPos
-    pSelEntry = aTypeTLB.FirstSelected();
+    pSelEntry = m_pTypeTLB->FirstSelected();
 
     if(!pSelEntry)
     {
-        pSelEntry = aTypeTLB.GetEntry(0);
-        aTypeTLB.Select(pSelEntry);
+        pSelEntry = m_pTypeTLB->GetEntry(0);
+        m_pTypeTLB->Select(pSelEntry);
     }
     else if (pOldEntry != pSelEntry)
         FillSelectionLB((sal_uInt16)(sal_uLong)pSelEntry->GetUserData());
@@ -226,7 +227,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
 IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 {
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
-    sal_uInt16 nPos = aSelectionLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
     sal_uInt16 nExtSubType;
     sal_uInt16 nNewType = 0;
 
@@ -234,15 +235,14 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
     {
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
         {
-            if (!aSelectionLB.GetEntryCount())
+            if (!m_pSelectionLB->GetEntryCount())
             {
-                aFormatLB.Clear();
-                aFormatLB.Enable(sal_False);
-                aFormatFT.Enable(sal_False);
+                m_pFormatLB->Clear();
+                m_pFormat->Enable(sal_False);
                 if( nSubType == DI_CUSTOM )
                 {
                     //find out which type the custom field has - for a start set to DATE format
-                    OUString sName = aTypeTLB.GetEntryText(pSelEntry);
+                    OUString sName = m_pTypeTLB->GetEntryText(pSelEntry);
                     try
                     {
                         uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
             nPos = 0;
         }
 
-        nExtSubType = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nPos);
+        nExtSubType = (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
     }
     else
         nExtSubType = DI_SUB_TIME;
@@ -279,8 +279,8 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
     sal_Bool bEnable = sal_False;
     sal_Bool bOneArea = sal_False;
 
-    if (aFormatLB.IsEnabled())
-        nOldType = aFormatLB.GetFormatType();
+    if (m_pFormatLB->IsEnabled())
+        nOldType = m_pFormatLB->GetFormatType();
 
     switch (nExtSubType)
     {
@@ -299,14 +299,14 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
     }
     if (!nNewType)
     {
-        aFormatLB.Clear();
+        m_pFormatLB->Clear();
     }
     else
     {
         if (nOldType != nNewType)
         {
-            aFormatLB.SetFormatType(nNewType);
-            aFormatLB.SetOneArea(bOneArea);
+            m_pFormatLB->SetFormatType(nNewType);
+            m_pFormatLB->SetOneArea(bOneArea);
         }
         bEnable = sal_True;
     }
@@ -317,10 +317,10 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 
     if (IsFldEdit())
     {
-        nPos = aSelectionLB.GetSelectEntryPos();
+        nPos = m_pSelectionLB->GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            nSubType = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nPos);
+            nSubType = (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
 
             nOldSubType &= ~DI_SUB_FIXED;
             if (nOldSubType == nSubType)
@@ -331,28 +331,27 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                     if(pSh)
                     {
                         SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
-                        LanguageType eLang = aFormatLB.GetCurLanguage();
+                        LanguageType eLang = m_pFormatLB->GetCurLanguage();
                         if (nNewType == NUMBERFORMAT_DATE)
                             nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
                         else if (nNewType == NUMBERFORMAT_TIME)
                             nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
                     }
                 }
-                aFormatLB.SetDefFormat(nFormat);
+                m_pFormatLB->SetDefFormat(nFormat);
             }
         }
         else if( (nSubType == DI_CUSTOM)  && (nNewType != 0) )
         {
-            aFormatLB.SetDefFormat(nFormat);
+            m_pFormatLB->SetDefFormat(nFormat);
         }
     }
 
-    aFormatLB.Enable(bEnable);
-    aFormatFT.Enable(bEnable);
+    m_pFormat->Enable(bEnable);
 
-    if (bEnable && aFormatLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+    if (bEnable && m_pFormatLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
     {
-        aFormatLB.SelectEntryPos(0);
+        m_pFormatLB->SelectEntryPos(0);
     }
 
     return 0;
@@ -368,7 +367,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     if (nSubType == USHRT_MAX)  // Info-Text
         nSubType = DI_SUBTYPE_BEGIN;
 
-    aSelectionLB.Clear();
+    m_pSelectionLB->Clear();
 
     sal_uInt16 nSize = 0;
     sal_uInt16 nSelPos = USHRT_MAX;
@@ -376,7 +375,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     if (IsFldEdit())
     {
-        aFixedCB.Check((nExtSubType & DI_SUB_FIXED) != 0);
+        m_pFixedCB->Check((nExtSubType & DI_SUB_FIXED) != 0);
         nExtSubType = ((nExtSubType & ~DI_SUB_FIXED) >> 8) - 1;
     }
 
@@ -389,8 +388,8 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
         nSize = GetFldMgr().GetFormatCount(nTypeId, false, IsFldDlgHtmlMode());
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            sal_uInt16 nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
-            aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId(nTypeId, i)));
+            sal_uInt16 nPos = m_pSelectionLB->InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+            m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId(nTypeId, i)));
             if (IsFldEdit() && i == nExtSubType)
                 nSelPos = nPos;
         }
@@ -400,14 +399,13 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     if (nSize)
     {
-        if (!aSelectionLB.GetSelectEntryCount())
-            aSelectionLB.SelectEntryPos(nSelPos == USHRT_MAX ? 0 : nSelPos);
+        if (!m_pSelectionLB->GetSelectEntryCount())
+            m_pSelectionLB->SelectEntryPos(nSelPos == USHRT_MAX ? 0 : nSelPos);
 
         bEnable = sal_True;
     }
 
-    aSelectionFT.Enable(bEnable);
-    aSelectionLB.Enable(bEnable);
+    m_pSelection->Enable(bEnable);
 
     return nSize;
 }
@@ -422,28 +420,28 @@ sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 
     sal_uLong nFormat = 0;
 
-    sal_uInt16 nPos = aSelectionLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pSelectionLB->GetSelectEntryPos();
 
     OUString aName;
     if (DI_CUSTOM == nSubType)
-        aName = aTypeTLB.GetEntryText(pSelEntry);
+        aName = m_pTypeTLB->GetEntryText(pSelEntry);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
-        nSubType |= (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nPos);
+        nSubType |= (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
 
-    if (aFixedCB.IsChecked())
+    if (m_pFixedCB->IsChecked())
         nSubType |= DI_SUB_FIXED;
 
-    nPos = aFormatLB.GetSelectEntryPos();
+    nPos = m_pFormatLB->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
-        nFormat = aFormatLB.GetFormat();
+        nFormat = m_pFormatLB->GetFormat();
 
-    if (!IsFldEdit() || nOldSel != aSelectionLB.GetSelectEntryPos() ||
-        nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue()
+    if (!IsFldEdit() || nOldSel != m_pSelectionLB->GetSelectEntryPos() ||
+        nOldFormat != nFormat || m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue()
         || (DI_CUSTOM == nSubType && !aName.equals( m_sOldCustomFieldName )))
     {
         InsertFld(nTypeId, nSubType, aName, aEmptyStr, nFormat,
-                ' ', aFormatLB.IsAutomaticLanguage());
+                ' ', m_pFormatLB->IsAutomaticLanguage());
     }
 
     return sal_False;
@@ -464,7 +462,7 @@ void    SwFldDokInfPage::FillUserData()
 {
     String sData(OUString(USER_DATA_VERSION));
     sData += ';';
-    SvTreeListEntry* pEntry = aTypeTLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTypeTLB->FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
     sData += OUString::number( nTypeSel );
     SetUserData(sData);
