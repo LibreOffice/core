@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_cfgsrvbitmapunx,$(SRCDIR)/extras/unx/sou
 
 $(eval $(call gb_Package_set_outdir,extras_cfgsrvbitmapunx,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_cfgsrvbitmapunx,share/config,\
+$(eval $(call gb_Package_add_files,extras_cfgsrvbitmapunx,$(LIBO_SHARE_FOLDER)/config,\
 	psetupl.xpm \
 	psetup.xpm \
 ))

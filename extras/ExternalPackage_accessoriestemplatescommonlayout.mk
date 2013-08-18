@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescomm
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlayout,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlayout,share/template/common/layout,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlayout,$(LIBO_SHARE_FOLDER)/template/common/layout,\
 	templates/common/layout/31407-squares.otp \
 	templates/common/layout/abstract-015_1.jpg.otp \
 	templates/common/layout/abstract-015_2.jpg.otp \

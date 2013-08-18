@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_databasebiblio,$(SRCDIR)/extras/source/d
 
 $(eval $(call gb_Package_set_outdir,extras_databasebiblio,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_databasebiblio,presets/database/biblio,\
+$(eval $(call gb_Package_add_files,extras_databasebiblio,$(LIBO_SHARE_PRESETS_FOLDER)/database/biblio,\
 	biblio.dbf \
 	biblio.dbt \
 ))

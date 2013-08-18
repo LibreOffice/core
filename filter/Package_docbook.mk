@@ -20,7 +20,7 @@ $(eval $(call gb_Package_Package,filter_docbook,$(SRCDIR)/filter/source/docbook)
 
 $(eval $(call gb_Package_set_outdir,filter_docbook,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,filter_docbook,share/xslt/docbook,\
+$(eval $(call gb_Package_add_files,filter_docbook,$(LIBO_SHARE_FOLDER)/xslt/docbook,\
 	DocBookTemplate.stw \
 	docbooktosoffheadings.xsl \
 	sofftodocbookheadings.xsl \

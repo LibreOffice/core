@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicusr,$(SRCDIR)/wizards/source/confi
 
 $(eval $(call gb_Package_set_outdir,wizards_basicusr,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicusr,presets/basic,\
+$(eval $(call gb_Package_add_files,wizards_basicusr,$(LIBO_SHARE_PRESETS_FOLDER)/basic,\
 	dialog.xlc \
 	script.xlc \
 ))

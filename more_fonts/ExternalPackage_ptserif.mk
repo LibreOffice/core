@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_ptserif,font_ptserif))
 
 $(eval $(call gb_ExternalPackage_set_outdir,fonts_ptserif,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_ptserif,share/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_ptserif,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	PT_Serif-Web-BoldItalic.ttf \
 	PT_Serif-Web-Bold.ttf \
 	PT_Serif-Web-Italic.ttf \

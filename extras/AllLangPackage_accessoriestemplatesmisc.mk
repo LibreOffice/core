@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesmisc,$(call g
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesmisc,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesmisc,share/template,misc,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesmisc,$(LIBO_SHARE_FOLDER)/template,misc,\
 	cs/dummy_templates.txt \
 	de/01_event_poster.otg \
 	de/02_event_poster.otg \

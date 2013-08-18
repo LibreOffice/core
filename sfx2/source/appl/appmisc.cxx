@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <vcl/canvastools.hxx>
 #include <vcl/status.hxx>
 #include <vcl/msgbox.hxx>
@@ -166,7 +168,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    OUString uri = OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
+    OUString uri = OUString::createFromAscii( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER ) + aBaseName+aSvg;
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
     SvgData aSvgData(aObj.PathToFileName());

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_folders.h>
+
 #include <comphelper/string.hxx>
 #include <rsc/rscsfx.hxx>
 #include <vcl/msgbox.hxx>
@@ -493,7 +495,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             sTemplate += ".odt";
 
             SvtPathOptions aOpt;
-            aOpt.SetTemplatePath(String("share/template/common"));
+            aOpt.SetTemplatePath(String(LIBO_SHARE_FOLDER "/template/common"));
             // 6.0 (extension .sxw)
             bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 

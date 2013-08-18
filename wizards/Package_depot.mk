@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvdepot,$(SRCDIR)/wizards/source/
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrvdepot,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrvdepot,share/basic/Depot,\
+$(eval $(call gb_Package_add_files,wizards_basicsrvdepot,$(LIBO_SHARE_FOLDER)/basic/Depot,\
 	CommonLang.xba \
 	Currency.xba \
 	Depot.xba \

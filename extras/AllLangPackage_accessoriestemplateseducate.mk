@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateseducate,$(cal
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateseducate,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateseducate,share/template,educate,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateseducate,$(LIBO_SHARE_FOLDER)/template,educate,\
 	cs/dummy_templates.txt \
 	de/Jahres_Schulnoten.ots \
 	de/Klassen-Schulnoten-Verwaltung_Noten_1-6.ots \

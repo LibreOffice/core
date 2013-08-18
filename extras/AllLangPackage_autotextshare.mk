@@ -9,7 +9,7 @@
 
 $(eval $(call gb_AllLangPackage_AllLangPackage,autotextshare,$(SRCDIR)/extras/source/autotext/lang))
 
-$(eval $(call gb_AllLangPackage_add_files,autotextshare,share/autotext,\
+$(eval $(call gb_AllLangPackage_add_files,autotextshare,$(LIBO_SHARE_FOLDER)/autotext,\
 	bg/crdbus50.bau \
 	bg/standard.bau \
 	bg/template.bau \

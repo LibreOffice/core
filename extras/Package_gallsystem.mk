@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/galle
 
 $(eval $(call gb_Package_set_outdir,extras_gallsystem,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_gallsystem,share/gallery,\
+$(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/gallery,\
 	sg1.sdg \
 	sg1.sdv \
 	sg1.thm \

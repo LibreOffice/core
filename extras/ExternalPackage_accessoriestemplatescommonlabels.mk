@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescomm
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlabels,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlabels,share/template/common/labels,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlabels,$(LIBO_SHARE_FOLDER)/template/common/labels,\
 	templates/common/labels/24_port_patch_text.otg \
 	templates/common/labels/arrows-black-base.ott \
 	templates/common/labels/WL-OL1000.ott \

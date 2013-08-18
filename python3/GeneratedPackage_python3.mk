@@ -13,6 +13,6 @@ $(eval $(call gb_GeneratedPackage_use_unpacked,python3,python3))
 
 $(eval $(call gb_GeneratedPackage_use_external_project,python3,python3))
 
-$(eval $(call gb_GeneratedPackage_add_dir,python3,$(gb_Package_PROGRAMDIRNAME)/LibreOfficePython.framework,LibreOfficePython.framework))
+$(eval $(call gb_GeneratedPackage_add_dir,python3,$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),Frameworks,$(gb_Package_PROGRAMDIRNAME))/LibreOfficePython.framework,LibreOfficePython.framework))
 
 # vim: set noet sw=4 ts=4:

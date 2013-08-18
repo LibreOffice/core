@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallerynonfre
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallerynonfree,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerynonfree,share/gallery,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerynonfree,$(LIBO_SHARE_FOLDER)/gallery,\
 	accessories-nonfree/sg600.sdg \
 	accessories-nonfree/sg600.sdv \
 	accessories-nonfree/sg600.thm \

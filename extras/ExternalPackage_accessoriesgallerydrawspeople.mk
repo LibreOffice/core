@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallerydrawsp
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallerydrawspeople,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerydrawspeople,share/gallery/Draws/People,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerydrawspeople,$(LIBO_SHARE_FOLDER)/gallery/Draws/People,\
 	accessories/Draws/People/Baboo1.png \
 	accessories/Draws/People/Jac1.png \
 	accessories/Draws/People/Jac2.png \

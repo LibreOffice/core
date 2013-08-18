@@ -19,8 +19,6 @@
 
 gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
 
-gb_PROGRAMDIRNAME := program
-
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
@@ -397,7 +395,6 @@ gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 # Package class
-gb_Package_PROGRAMDIRNAME := program
 gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class

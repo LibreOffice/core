@@ -11,14 +11,14 @@ $(eval $(call gb_Package_Package,postprocess_registry_install,$(call gb_CustomTa
 
 $(eval $(call gb_Package_set_outdir,postprocess_registry_install,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,postprocess_registry_install,share/registry,\
+$(eval $(call gb_Package_add_files,postprocess_registry_install,$(LIBO_SHARE_FOLDER)/registry,\
 	$(postprocess_XCDS) \
 	$(foreach lang,$(gb_Configuration_LANGS), \
 		Langpack-$(lang).xcd \
 	) \
 ))
 
-$(eval $(call gb_Package_add_files,postprocess_registry_install,share/registry/res,\
+$(eval $(call gb_Package_add_files,postprocess_registry_install,$(LIBO_SHARE_FOLDER)/registry/res,\
 	$(foreach lang,$(gb_Configuration_LANGS), \
 		fcfg_langpack_$(lang).xcd \
 		registry_$(lang).xcd \

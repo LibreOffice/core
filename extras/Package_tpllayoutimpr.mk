@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_tpllayoutimpr,$(SRCDIR)/extras/source/te
 
 $(eval $(call gb_Package_set_outdir,extras_tpllayoutimpr,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_tpllayoutimpr,share/template/common/layout,\
+$(eval $(call gb_Package_add_files,extras_tpllayoutimpr,$(LIBO_SHARE_FOLDER)/template/common/layout,\
 	AbstractGreen.otp \
 	AbstractRed.otp \
 	AbstractYellow.otp \

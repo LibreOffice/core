@@ -167,7 +167,7 @@ endef
 #   of .ui files. This filelist only exists if the UIConfig contains any
 #   .ui files.
 
-gb_UIConfig_INSTDIR := share/config/soffice.cfg
+gb_UIConfig_INSTDIR := $(LIBO_SHARE_FOLDER)/config/soffice.cfg
 # en-US is the default, so there is no translation for it
 gb_UIConfig_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 

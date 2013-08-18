@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscities,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscities,share/gallery/Photos/Cities,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscities,$(LIBO_SHARE_FOLDER)/gallery/Photos/Cities,\
 	accessories/Photos/Cities/ArkSoft0507170040.jpg \
 	accessories/Photos/Cities/ArkSoft0507170041.jpg \
 	accessories/Photos/Cities/ArkSoft0508100003.jpg \

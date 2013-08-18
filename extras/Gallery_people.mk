@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,people,extras/source/gallery/people))
 
-$(eval $(call gb_Gallery_add_files,people,share/gallery/people,\
+$(eval $(call gb_Gallery_add_files,people,$(LIBO_SHARE_FOLDER)/gallery/people,\
 	extras/source/gallery/people/Artist-Female1.png \
 	extras/source/gallery/people/Artist-Female2.png \
 	extras/source/gallery/people/Artist-Male1.png \

@@ -11,6 +11,11 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/graphicfilter))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/graphicfilter,graphicfilter))
 
+$(eval $(call gb_InstallModule_define_if_set,scp2/graphicfilter,\
+	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
+	ENABLE_MACOSX_SANDBOX \
+))
+
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/graphicfilter,\
 	scp2/source/graphicfilter/file_graphicfilter \
 ))

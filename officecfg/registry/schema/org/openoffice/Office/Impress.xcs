@@ -452,7 +452,7 @@
           </desc>
           <label>List of files containing transition effects</label>
         </info>
-        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
+        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/transitions-ogl.xml</value>
       </prop>
       <prop oor:name="EffectFiles" oor:type="oor:string-list" oor:nillable="false">
         <!-- OldPath: -->
@@ -467,7 +467,7 @@
           </desc>
           <label>List of files containing object effects</label>
         </info>
-        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/effects.xml</value>
+        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/effects.xml</value>
       </prop>
       <prop oor:name="PreviewNewEffects" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->

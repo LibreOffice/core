@@ -23,8 +23,14 @@
 /* where read-only resources are in general */
 #undef LIBO_SHARE_FOLDER
 
+/* where help files are */
+#undef LIBO_SHARE_HELP_FOLDER
+
 /* where java jars are */
 #undef LIBO_SHARE_JAVA_FOLDER
+
+/* the presets folder */
+#undef LIBO_SHARE_PRESETS_FOLDER
 
 /* LO's own "resources" */
 #undef LIBO_SHARE_RESOURCE_FOLDER

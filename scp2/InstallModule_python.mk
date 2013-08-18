@@ -27,6 +27,12 @@ $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 endif
 
 else
+
+$(eval $(call gb_InstallModule_define_if_set,scp2/python,\
+	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
+	ENABLE_MACOSX_SANDBOX \
+))
+
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DPYVERSION=$(PYTHON_VERSION) \
 	-DPYMAJMIN=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \

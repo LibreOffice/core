@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,symbols,extras/source/gallery/symbols))
 
-$(eval $(call gb_Gallery_add_files,symbols,share/gallery/symbols,\
+$(eval $(call gb_Gallery_add_files,symbols,$(LIBO_SHARE_FOLDER)/gallery/symbols,\
 	extras/source/gallery/symbols/Book.svg \
 	extras/source/gallery/symbols/Box01.svg \
 	extras/source/gallery/symbols/Box02.svg \

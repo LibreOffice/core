@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesfinance,$(cal
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesfinance,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesfinance,share/template,finance,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesfinance,$(LIBO_SHARE_FOLDER)/template,finance,\
 	cs/podaci_kniha.ots \
 	de/arbeitszeiterfassung.ots \
 	de/az.ots \

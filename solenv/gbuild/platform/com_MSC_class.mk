@@ -19,8 +19,6 @@
 
 gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
 
-gb_PROGRAMDIRNAME := program
-
 # Convert path to file URL.
 define gb_Helper_make_url
 file:///$(strip $(1))
@@ -564,7 +562,6 @@ gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 # Package class
-gb_Package_PROGRAMDIRNAME := program
 gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class

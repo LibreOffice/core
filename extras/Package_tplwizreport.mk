@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_tplwizreport,$(SRCDIR)/extras/source/tem
 
 $(eval $(call gb_Package_set_outdir,extras_tplwizreport,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_tplwizreport,share/template/common/wizard/report,\
+$(eval $(call gb_Package_add_files,extras_tplwizreport,$(LIBO_SHARE_FOLDER)/template/common/wizard/report,\
     cnt-011.ott \
     cnt-012.ott \
     cnt-01.ott \

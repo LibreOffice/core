@@ -20,7 +20,7 @@ $(eval $(call gb_Package_Package,psprint_config_fontunxppds,$(SRCDIR)/psprint_co
 
 $(eval $(call gb_Package_set_outdir,psprint_config_fontunxppds,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,psprint_config_fontunxppds,share/psprint/driver,\
+$(eval $(call gb_Package_add_files,psprint_config_fontunxppds,$(LIBO_SHARE_FOLDER)/psprint/driver,\
 	SGENPRT.PS \
 	SGENT42.PS \
 ))

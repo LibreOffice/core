@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_tplwizdesktop,$(SRCDIR)/extras/source/te
 
 $(eval $(call gb_Package_set_outdir,extras_tplwizdesktop,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_tplwizdesktop,share/template/common/internal,\
+$(eval $(call gb_Package_add_files,extras_tplwizdesktop,$(LIBO_SHARE_FOLDER)/template/common/internal,\
 	html.stw \
 	idxexample.odt \
 ))

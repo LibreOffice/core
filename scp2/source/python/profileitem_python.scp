@@ -38,8 +38,10 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONHOME";
-  #ifdef MACOSX
+  #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Value = "$ORIGIN/../Frameworks/LibreOfficePython.framework";
+  #elif defined MACOSX
+    Value = CONCAT2($ORIGIN,/LibreOfficePython.framework);
   #else
     Value = CONCAT2($ORIGIN/python-core-,PYVERSION);
   #endif

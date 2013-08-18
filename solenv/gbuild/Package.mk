@@ -55,8 +55,9 @@ endef
 
 # Package class
 
+gb_Package_PROGRAMDIRNAME := $(LIBO_BIN_FOLDER)
+
 # defined by platform
-#  gb_Package_PROGRAMDIRNAME
 #  gb_Package_SDKDIRNAME
 
 $(dir $(call gb_Package_get_target,%)).dir :

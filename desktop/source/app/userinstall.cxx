@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include "sal/config.h"
 
@@ -191,7 +192,7 @@ namespace desktop {
 
         // Copy data from shared data directory of base installation:
         rc = copy_recursive(
-            aBasePath + OUString("/presets"),
+            aBasePath + OUString("/" LIBO_SHARE_PRESETS_FOLDER),
             aUserPath + OUString("/user"));
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST))
         {

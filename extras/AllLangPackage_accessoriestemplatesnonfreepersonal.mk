@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreeperson
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreepersonal,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreepersonal,share/template,personal,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreepersonal,$(LIBO_SHARE_FOLDER)/template,personal,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/resume_1.ott \

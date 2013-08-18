@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreeeducat
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreeeducate,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreeeducate,share/template,educate,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreeeducate,$(LIBO_SHARE_FOLDER)/template,educate,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/attendance_sheet.ott \

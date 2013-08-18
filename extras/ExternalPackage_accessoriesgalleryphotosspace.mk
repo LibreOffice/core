@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosspace,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosspace,share/gallery/Photos/Space,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosspace,$(LIBO_SHARE_FOLDER)/gallery/Photos/Space,\
 	accessories/Photos/Space/Wikimedia_Space_120px-Atlantis_taking_off_on_STS-27.jpg \
 	accessories/Photos/Space/Wikimedia_Space_1995-18-b-large_web.jpg \
 	accessories/Photos/Space/Wikimedia_Space_2005-06-b-large_web.jpg \

@@ -135,7 +135,9 @@ Directory gid_Brand_Dir_Program_Shell
 End
 
 Directory gid_Brand_Dir_Readme
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
@@ -485,7 +487,9 @@ End
 
 File gid_Brand_File_Html_Thirdpartylicensereadme
     Name = "LICENSE.html";
-#ifdef MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
@@ -494,7 +498,7 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
-#if defined UNX && !defined ENABLE_MACOSX_SANDBOX
+#if defined UNX && !defined ENABLE_MACOSX_SANDBOX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
 File gid_Brand_File_Gdb_Trace
     TXT_FILE_BODY;
@@ -591,7 +595,7 @@ File gid_Brand_File_Script_Unopkg
 End
 #endif
 
-#if defined MACOSX && !defined ENABLE_MACOSX_SANDBOX
+#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 Unixlink gid_Brand_Unixlink_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -1400,7 +1404,9 @@ End
 
 File gid_License_Txt
   TXT_FILE_BODY;
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
@@ -1416,7 +1422,9 @@ End
 
 File gid_License_Odt
     BIN_FILE_BODY;
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
@@ -1427,7 +1435,9 @@ End
 
 File gid_Credits_Odt
     BIN_FILE_BODY;
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
@@ -1438,7 +1448,9 @@ End
 
 File gid_Apache_Notice
     BIN_FILE_BODY;
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    Dir = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;

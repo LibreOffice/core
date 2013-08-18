@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,sd_web,$(SRCDIR)/sd/res))
 
 $(eval $(call gb_Package_set_outdir,sd_web,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,sd_web,share/config/webcast,\
+$(eval $(call gb_Package_add_files,sd_web,$(LIBO_SHARE_FOLDER)/config/webcast,\
 	webview/common.inc \
 	webview/common.pl \
 	webview/edit.asp \
@@ -29,7 +29,7 @@ $(eval $(call gb_Package_add_files,sd_web,share/config/webcast,\
 	webview/webcast.pl \
 ))
 
-$(eval $(call gb_Package_add_files,sd_web,share/config/wizard/web/buttons,\
+$(eval $(call gb_Package_add_files,sd_web,$(LIBO_SHARE_FOLDER)/config/wizard/web/buttons,\
 	buttons/glas-blue.zip \
 	buttons/glas-green.zip \
 	buttons/glas-red.zip \

@@ -17,8 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_PROGRAMDIRNAME := program
-
 gb_RC := $(WINDRES)
 
 gb_COMPILERDEFS += \
@@ -375,7 +373,6 @@ gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 # Package class
-gb_Package_PROGRAMDIRNAME := program
 gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class

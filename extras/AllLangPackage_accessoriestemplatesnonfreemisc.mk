@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreemisc,$
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreemisc,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreemisc,share/template,misc,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreemisc,$(LIBO_SHARE_FOLDER)/template,misc,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/achievement_1.ott \

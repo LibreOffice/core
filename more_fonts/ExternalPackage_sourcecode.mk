@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcecode,font_sourcecod
 
 $(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcecode,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,share/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	SourceCodePro-Bold.ttf \
 	SourceCodePro-Regular.ttf \
 ))

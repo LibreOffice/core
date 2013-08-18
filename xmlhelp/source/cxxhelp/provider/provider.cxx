@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#include <config_folders.h>
 
 #include <stdio.h>
 #include <osl/file.hxx>
@@ -235,7 +231,7 @@ void ContentProvider::init()
     OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
         // try to determine path from default
-        instPath = OUString( "$(instpath)/help" );
+        instPath = OUString( "$(instpath)/" LIBO_SHARE_HELP_FOLDER );
     // replace anything like $(instpath);
     subst( instPath );
 

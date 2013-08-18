@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalPackage_set_outdir,extras_extra_fonts,$(INSTDIR)))
 
 $(eval $(call gb_ExternalPackage_use_unpacked,extras_extra_fonts,fonts-pack))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_extra_fonts,share/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_extra_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	decorative/BETSY2.ttf \
 	decorative/Berylibi.ttf \
 	decorative/Beryliub.ttf \

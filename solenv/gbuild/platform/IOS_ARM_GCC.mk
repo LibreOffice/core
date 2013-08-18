@@ -19,8 +19,6 @@
 
 gb_CPUDEFS := -DARM32
 
-gb_PROGRAMDIRNAME := program
-
 ifeq ($(CC),)
 $(error You must set CC in the environment. See README.cross for example.)
 endif
@@ -262,7 +260,6 @@ gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 # Package class
-gb_Package_PROGRAMDIRNAME := program
 gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class

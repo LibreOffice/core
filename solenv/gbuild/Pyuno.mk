@@ -46,7 +46,7 @@ endef
 
 # gb_Pyuno_add_file component destination source
 define gb_Pyuno_add_file
-$(call gb_Package_add_file,$(call gb_Pyuno_get_packagename,$(1)),$(gb_PROGRAMDIRNAME)/$(2),$(3))
+$(call gb_Package_add_file,$(call gb_Pyuno_get_packagename,$(1)),$(LIBO_LIB_PYUNO_FOLDER)/$(2),$(3))
 
 endef
 

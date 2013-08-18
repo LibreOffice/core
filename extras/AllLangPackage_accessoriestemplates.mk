@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplates,$(call gb_Un
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplates,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files,accessoriestemplates,share/template,\
+$(eval $(call gb_AllLangPackage_add_files,accessoriestemplates,$(LIBO_SHARE_FOLDER)/template,\
 	cs/dummy_templates.txt \
 	de/dummy_templates.txt \
 	en-US/dummy_templates.txt \

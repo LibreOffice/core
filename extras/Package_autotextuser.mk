@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_autotextuser,$(SRCDIR)/extras/source/aut
 
 $(eval $(call gb_Package_set_outdir,extras_autotextuser,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_autotextuser,presets/autotext,\
+$(eval $(call gb_Package_add_files,extras_autotextuser,$(LIBO_SHARE_PRESETS_FOLDER)/autotext,\
 	mytexts.bau \
 ))
 

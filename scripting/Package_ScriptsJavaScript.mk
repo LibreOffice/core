@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,scripting_ScriptsJavaScript,$(SRCDIR)/scripting
 
 $(eval $(call gb_Package_set_outdir,scripting_ScriptsJavaScript,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsJavaScript,share/Scripts,\
+$(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsJavaScript,$(LIBO_SHARE_FOLDER)/Scripts,\
 	javascript/ExportSheetsToHTML/exportsheetstohtml.js \
 	javascript/ExportSheetsToHTML/parcel-descriptor.xml \
 	javascript/HelloWorld/helloworld.js \

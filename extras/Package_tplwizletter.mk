@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_tplwizletter,$(SRCDIR)/extras/source/tem
 
 $(eval $(call gb_Package_set_outdir,extras_tplwizletter,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_tplwizletter,share/template/common/wizard/letter,\
+$(eval $(call gb_Package_add_files,extras_tplwizletter,$(LIBO_SHARE_FOLDER)/template/common/wizard/letter,\
     bus-elegant_l.ott \
     bus-modern_l.ott \
     bus-office_l.ott \

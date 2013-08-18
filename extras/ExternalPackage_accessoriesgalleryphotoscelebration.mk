@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscelebration,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscelebration,share/gallery/Photos/Celebration,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscelebration,$(LIBO_SHARE_FOLDER)/gallery/Photos/Celebration,\
 	accessories/Photos/Celebration/JS_PDPhO_fireworks_burst.jpg \
 	accessories/Photos/Celebration/JS_PDPhO_new_years_fireworks_explosion.jpg \
 ))

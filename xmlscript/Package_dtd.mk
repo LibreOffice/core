@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,xmlscript_dtd,$(SRCDIR)/xmlscript))
 
 $(eval $(call gb_Package_set_outdir,xmlscript_dtd,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,xmlscript_dtd,share/dtd/officedocument/1_0,\
+$(eval $(call gb_Package_add_files,xmlscript_dtd,$(LIBO_SHARE_FOLDER)/dtd/officedocument/1_0,\
 	dtd/dialog.dtd \
 	dtd/libraries.dtd \
 	dtd/library.dtd \

@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescomm
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonpresent,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonpresent,share/template/common/presnt,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonpresent,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
 	templates/common/presnt/dummy_common_templates.txt \
 ))
 

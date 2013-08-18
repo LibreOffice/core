@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesofficorr,$(ca
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesofficorr,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesofficorr,share/template,officorr,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesofficorr,$(LIBO_SHARE_FOLDER)/template,officorr,\
 	cs/dummy_templates.txt \
 	de/01_business_fax.ott \
 	de/01_business_letter.ott \

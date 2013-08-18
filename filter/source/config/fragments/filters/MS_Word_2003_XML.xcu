@@ -19,7 +19,7 @@
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
-        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter,../share/xslt/import/wordml/wordml2ooo.xsl,../share/xslt/export/wordml/ooo2wordml.xsl</value></prop>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter,../$(share_subdir_name)/xslt/import/wordml/wordml2ooo.xsl,../$(share_subdir_name)/xslt/export/wordml/ooo2wordml.xsl</value></prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_Word_2003_XML</value></prop>
         <prop oor:name="TemplateName"/>

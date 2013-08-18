@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryelemen
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryelementsbullets2,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryelementsbullets2,share/gallery/Elements/Bullets2,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryelementsbullets2,$(LIBO_SHARE_FOLDER)/gallery/Elements/Bullets2,\
 	accessories/Elements/Bullets2/amethyst.arrow.png \
 	accessories/Elements/Bullets2/amethyst.asterisk.png \
 	accessories/Elements/Bullets2/amethyst.circle-light.png \

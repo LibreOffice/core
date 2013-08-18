@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotostravel,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotostravel,share/gallery/Photos/Travel,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotostravel,$(LIBO_SHARE_FOLDER)/gallery/Photos/Travel,\
 	accessories/Photos/Travel/JS_PDPhO_balloons_festival.jpg \
 	accessories/Photos/Travel/JS_PDPhO_cruise_ship.jpg \
 	accessories/Photos/Travel/JS_PDPhO_tall_ship.jpg \

@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,pyuno_python_scripts_install,$(SRCDIR)/pyuno/so
 
 $(eval $(call gb_Package_set_outdir,pyuno_python_scripts_install,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,pyuno_python_scripts_install,$(gb_PROGRAMDIRNAME),\
+$(eval $(call gb_Package_add_files,pyuno_python_scripts_install,$(LIBO_LIB_PYUNO_FOLDER),\
 	loader/pythonloader.py \
 	module/uno.py \
 	module/unohelper.py \

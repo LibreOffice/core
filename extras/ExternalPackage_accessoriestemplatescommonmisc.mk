@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescomm
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonmisc,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonmisc,share/template/common/misc,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonmisc,$(LIBO_SHARE_FOLDER)/template/common/misc,\
 	templates/common/misc/White_Notebook_Paper_legal.ott \
 	templates/common/misc/Yellow_Pad_Legal.ott \
 ))

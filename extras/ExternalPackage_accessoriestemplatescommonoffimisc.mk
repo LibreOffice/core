@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescomm
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonoffimisc,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonoffimisc,share/template/common/offimisc,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonoffimisc,$(LIBO_SHARE_FOLDER)/template/common/offimisc,\
 	templates/common/offimisc/dummy_common_templates.txt \
 ))
 

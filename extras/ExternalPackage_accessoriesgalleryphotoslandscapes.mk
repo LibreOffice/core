@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoslandscapes,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoslandscapes,share/gallery/Photos/Landscapes,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoslandscapes,$(LIBO_SHARE_FOLDER)/gallery/Photos/Landscapes,\
 	accessories/Photos/Landscapes/ArkSoft0405010010.jpg \
 	accessories/Photos/Landscapes/ArkSoft0405010019.jpg \
 	accessories/Photos/Landscapes/ArkSoft0405010050.jpg \

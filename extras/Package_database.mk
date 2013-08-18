@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_database,$(SRCDIR)/extras/source/databas
 
 $(eval $(call gb_Package_set_outdir,extras_database,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_database,presets/database,\
+$(eval $(call gb_Package_add_files,extras_database,$(LIBO_SHARE_PRESETS_FOLDER)/database,\
 	biblio.odb \
 	evolocal.odb \
 ))

@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreefinanc
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreefinance,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreefinance,share/template,finance,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreefinance,$(LIBO_SHARE_FOLDER)/template,finance,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/24_Month_Sales_Forecast.ots \

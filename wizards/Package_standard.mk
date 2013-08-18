@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvstandard,$(SRCDIR)/wizards/sour
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrvstandard,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrvstandard,presets/basic/Standard,\
+$(eval $(call gb_Package_add_files,wizards_basicsrvstandard,$(LIBO_SHARE_PRESETS_FOLDER)/basic/Standard,\
 	dialog.xlb \
 	Module1.xba \
 	script.xlb \

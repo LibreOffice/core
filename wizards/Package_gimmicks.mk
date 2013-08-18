@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvgimmicks,$(SRCDIR)/wizards/sour
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrvgimmicks,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrvgimmicks,share/basic/Gimmicks,\
+$(eval $(call gb_Package_add_files,wizards_basicsrvgimmicks,$(LIBO_SHARE_FOLDER)/basic/Gimmicks,\
 	AutoText.xba \
 	ChangeAllChars.xba \
 	dialog.xlb \

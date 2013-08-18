@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_gallhtmlexpo,$(SRCDIR)/extras/source/gal
 
 $(eval $(call gb_Package_set_outdir,extras_gallhtmlexpo,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_gallhtmlexpo,share/gallery/htmlexpo,\
+$(eval $(call gb_Package_add_files,extras_gallhtmlexpo,$(LIBO_SHARE_FOLDER)/gallery/htmlexpo,\
 	bludown.gif \
 	blufirs_.gif \
 	blufirs.gif \

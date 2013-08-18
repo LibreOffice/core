@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosfoodsanddrinks,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosfoodsanddrinks,share/gallery/Photos/FoodsandDrinks,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosfoodsanddrinks,$(LIBO_SHARE_FOLDER)/gallery/Photos/FoodsandDrinks,\
 	accessories/Photos/FoodsandDrinks/JS_PDPhO_beer.jpg \
 	accessories/Photos/FoodsandDrinks/JS_PDPhO_fish_and_chips.jpg \
 	accessories/Photos/FoodsandDrinks/JS_PDPhO_lasagna.jpg \

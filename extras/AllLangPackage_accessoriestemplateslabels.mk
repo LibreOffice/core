@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateslabels,$(call
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateslabels,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslabels,share/template,labels,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslabels,$(LIBO_SHARE_FOLDER)/template,labels,\
 	cs/dummy_templates.txt \
 	de/dummy_templates.txt \
 	en-US/address12-WL-OL875.ott \

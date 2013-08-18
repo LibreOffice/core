@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_gallbullets,$(SRCDIR)/extras/source/gall
 
 $(eval $(call gb_Package_set_outdir,extras_gallbullets,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_gallbullets,share/gallery/bullets,\
+$(eval $(call gb_Package_add_files,extras_gallbullets,$(LIBO_SHARE_FOLDER)/gallery/bullets,\
 	blkpearl.gif \
 	bluarrow.gif \
 	bluball.gif \

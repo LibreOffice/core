@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,education,extras/source/gallery/education))
 
-$(eval $(call gb_Gallery_add_files,education,share/gallery/education,\
+$(eval $(call gb_Gallery_add_files,education,$(LIBO_SHARE_FOLDER)/gallery/education,\
 	extras/source/gallery/education/Blackboard.png \
 	extras/source/gallery/education/Books.png \
 	extras/source/gallery/education/Chalk.png \

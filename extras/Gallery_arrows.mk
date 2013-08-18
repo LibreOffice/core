@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,arrows,extras/source/gallery/arrows))
 
-$(eval $(call gb_Gallery_add_files,arrows,share/gallery/arrows,\
+$(eval $(call gb_Gallery_add_files,arrows,$(LIBO_SHARE_FOLDER)/gallery/arrows,\
 	extras/source/gallery/arrows/A01-Arrow-Gray-Left.svg \
 	extras/source/gallery/arrows/A02-Arrow-DarkBlue-Right.svg \
 	extras/source/gallery/arrows/A03-Arrow-Gray-Left.svg \

@@ -19,7 +19,6 @@
 #include "macros.inc"
 
 #ifdef UNX
-#ifndef ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 #ifndef SYSTEM_ICU
 
 Shortcut gid_Shortcut_Lib_Icudata
@@ -54,8 +53,6 @@ Shortcut gid_Shortcut_Lib_Icuuc
 #endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
-
-#endif
 
 #endif
 

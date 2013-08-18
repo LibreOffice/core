@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosobjects,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosobjects,share/gallery/Photos/Objects,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosobjects,$(LIBO_SHARE_FOLDER)/gallery/Photos/Objects,\
 	accessories/Photos/Objects/JS_PDPhO_dragon_celebration.jpg \
 	accessories/Photos/Objects/morguefiles_com_pindiyath100_111064504847.jpg \
 	accessories/Photos/Objects/morguefiles_com_pindiyath100_122931551.jpg \

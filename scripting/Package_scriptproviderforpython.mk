@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,scriptproviderforpython,$(SRCDIR)/scripting/sou
 
 $(eval $(call gb_Package_set_outdir,scriptproviderforpython,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,scriptproviderforpython,$(gb_PROGRAMDIRNAME)/services/scriptproviderforpython.rdb,scriptproviderforpython.rdb))
-$(eval $(call gb_Package_add_file,scriptproviderforpython,$(gb_PROGRAMDIRNAME)/pythonscript.py,pythonscript.py))
+$(eval $(call gb_Package_add_file,scriptproviderforpython,$(LIBO_ETC_FOLDER)/services/scriptproviderforpython.rdb,scriptproviderforpython.rdb))
+$(eval $(call gb_Package_add_file,scriptproviderforpython,$(LIBO_LIB_PYUNO_FOLDER)/pythonscript.py,pythonscript.py))
 
 # vim: set noet sw=4 ts=4:

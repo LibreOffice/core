@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,scripting_scriptbindinglib,$(SRCDIR)/scripting/
 
 $(eval $(call gb_Package_set_outdir,scripting_scriptbindinglib,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,scripting_scriptbindinglib,share/basic/ScriptBindingLibrary,\
+$(eval $(call gb_Package_add_files,scripting_scriptbindinglib,$(LIBO_SHARE_FOLDER)/basic/ScriptBindingLibrary,\
 	Highlight.xdl \
 	dialog.xlb \
 	script.xlb \

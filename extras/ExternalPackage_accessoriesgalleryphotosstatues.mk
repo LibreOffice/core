@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosstatues,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosstatues,share/gallery/Photos/Statues,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosstatues,$(LIBO_SHARE_FOLDER)/gallery/Photos/Statues,\
 	accessories/Photos/Statues/ArkSoft0507170027.jpg \
 	accessories/Photos/Statues/ArkSoft0507170032.jpg \
 	accessories/Photos/Statues/ArkSoft0507170033.jpg \

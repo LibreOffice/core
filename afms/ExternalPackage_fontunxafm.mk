@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,afms_fontunxafm,afms))
 
 $(eval $(call gb_ExternalPackage_set_outdir,afms_fontunxafm,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,afms_fontunxafm,share/psprint/fontmetric,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,afms_fontunxafm,$(LIBO_SHARE_FOLDER)/psprint/fontmetric,\
 	Courier-Bold.afm \
 	Courier-BoldOblique.afm \
 	Courier-Oblique.afm \

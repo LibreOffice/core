@@ -11,8 +11,8 @@ $(eval $(call gb_Package_Package,scripting_java_jars,$(OUTDIR)/bin))
 
 $(eval $(call gb_Package_set_outdir,scripting_java_jars,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,scripting_java_jars,share/Scripts/java/HelloWorld/HelloWorld.jar,HelloWorld.jar))
-$(eval $(call gb_Package_add_file,scripting_java_jars,share/Scripts/java/Highlight/Highlight.jar,Highlight.jar))
-$(eval $(call gb_Package_add_file,scripting_java_jars,share/Scripts/java/MemoryUsage/MemoryUsage.jar,MemoryUsage.jar))
+$(eval $(call gb_Package_add_file,scripting_java_jars,$(LIBO_SHARE_FOLDER)/Scripts/java/HelloWorld/HelloWorld.jar,HelloWorld.jar))
+$(eval $(call gb_Package_add_file,scripting_java_jars,$(LIBO_SHARE_FOLDER)/Scripts/java/Highlight/Highlight.jar,Highlight.jar))
+$(eval $(call gb_Package_add_file,scripting_java_jars,$(LIBO_SHARE_FOLDER)/Scripts/java/MemoryUsage/MemoryUsage.jar,MemoryUsage.jar))
 
 # vim: set noet sw=4 ts=4:

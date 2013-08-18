@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatespresent,$(cal
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatespresent,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespresent,share/template,presnt,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespresent,$(LIBO_SHARE_FOLDER)/template,presnt,\
 	cs/dummy_templates.txt \
 	de/compladients.otp \
 	de/praktikumsbericht.otp \

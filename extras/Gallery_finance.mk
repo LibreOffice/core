@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,finance,extras/source/gallery/finance))
 
-$(eval $(call gb_Gallery_add_files,finance,share/gallery/finance,\
+$(eval $(call gb_Gallery_add_files,finance,$(LIBO_SHARE_FOLDER)/gallery/finance,\
 	extras/source/gallery/finance/Agreement.png \
 	extras/source/gallery/finance/ATM01.png \
 	extras/source/gallery/finance/ATM02.png \

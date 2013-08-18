@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_cfgusr,$(SRCDIR)/extras/source/misc_conf
 
 $(eval $(call gb_Package_set_outdir,extras_cfgusr,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_cfgusr,presets/config,\
+$(eval $(call gb_Package_add_files,extras_cfgusr,$(LIBO_SHARE_PRESETS_FOLDER)/config,\
     autotbl.fmt \
 ))
 

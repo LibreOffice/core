@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesforms,$(call 
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesforms,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesforms,share/template,forms,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesforms,$(LIBO_SHARE_FOLDER)/template,forms,\
 	cs/seznam_pohledavek.ots \
 	de/Ausbildungsnachweis2.ott \
 	de/Ausbildungsnachweis.ott \

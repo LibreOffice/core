@@ -41,7 +41,7 @@ gb_Gallery_EXTRA_DEPENCENCIES := \
 	$(foreach component,$(gb_Gallery__UNO_COMPONENTS),$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(foreach api,$(gb_Gallery__UNO_TYPES),$(call gb_UnoApi_get_target,$(api)))
 
-gb_Gallery_INSTDIR := share/gallery
+gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 # BRAND_BASE_DIR is for resource files
 define gb_Gallery__make_env_args

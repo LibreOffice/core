@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_gallmytheme,$(SRCDIR)/extras/source/gall
 
 $(eval $(call gb_Package_set_outdir,extras_gallmytheme,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_gallmytheme,presets/gallery,\
+$(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDER)/gallery,\
 	sg30.sdv \
 	sg30.thm \
 ))

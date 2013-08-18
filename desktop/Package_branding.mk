@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,desktop_branding,$(SRCDIR)/icon-themes/galaxy))
 
 $(eval $(call gb_Package_set_outdir,desktop_branding,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,desktop_branding,$(gb_PROGRAMDIRNAME),\
+$(eval $(call gb_Package_add_files,desktop_branding,$(LIBO_ETC_FOLDER),\
     $(foreach image,$(filter $(BRAND_INTRO_IMAGES),$(DEFAULT_BRAND_IMAGES)),\
 		$(if $(filter intro.png,$(image)),\
 			$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),brand,brand_dev)/$(image),\
@@ -20,7 +20,7 @@ $(eval $(call gb_Package_add_files,desktop_branding,$(gb_PROGRAMDIRNAME),\
 	) \
 ))
 
-$(eval $(call gb_Package_add_files,desktop_branding,$(gb_PROGRAMDIRNAME)/shell,\
+$(eval $(call gb_Package_add_files,desktop_branding,$(LIBO_ETC_FOLDER)/shell,\
     $(addprefix brand/shell/,$(filter-out $(BRAND_INTRO_IMAGES),$(DEFAULT_BRAND_IMAGES))) \
 ))
 

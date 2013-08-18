@@ -11,12 +11,12 @@ $(eval $(call gb_Package_Package,librelogo,$(SRCDIR)/librelogo/source))
 
 $(eval $(call gb_Package_set_outdir,librelogo,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,librelogo,share/Scripts/python/LibreLogo,\
+$(eval $(call gb_Package_add_files,librelogo,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo,\
     LibreLogo/LibreLogo.py \
     pythonpath/LibreLogo_en_US.properties \
 ))
 
-$(eval $(call gb_Package_add_files,librelogo,share/Scripts/python/LibreLogo/icons,\
+$(eval $(call gb_Package_add_files,librelogo,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo/icons,\
     icons/lc_arrowshapes.circular-arrow.png \
     icons/lc_arrowshapes.circular-leftarrow.png \
     icons/lc_arrowshapes.down-arrow.png \

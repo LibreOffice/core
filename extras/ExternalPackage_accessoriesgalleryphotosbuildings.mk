@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotos
 
 $(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosbuildings,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosbuildings,share/gallery/Photos/Buildings,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosbuildings,$(LIBO_SHARE_FOLDER)/gallery/Photos/Buildings,\
 	accessories/Photos/Buildings/ArkSoft0408010009.jpg \
 	accessories/Photos/Buildings/ArkSoft0408010023.jpg \
 	accessories/Photos/Buildings/ArkSoft0408010026.jpg \

@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_cfgsrvnolang,$(SRCDIR)/extras/source/mis
 
 $(eval $(call gb_Package_set_outdir,extras_cfgsrvnolang,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files_with_dir,extras_cfgsrvnolang,share/config,\
+$(eval $(call gb_Package_add_files_with_dir,extras_cfgsrvnolang,$(LIBO_SHARE_FOLDER)/config,\
 	wizard/form/styles/beige.css \
 	wizard/form/styles/bgr.css \
 	wizard/form/styles/dark.css \

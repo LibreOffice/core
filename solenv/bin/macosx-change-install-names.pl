@@ -38,14 +38,14 @@
 # That latter case is useful for libraries from external modules, where the
 # external build process locates them in some sub-directory.
 
+my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'YES';
+
 sub action($$$)
 {
     # The @__VIA_LIBRARY_PATH__ thing has no magic meaning anywhere
     # (here in LO or to the dynamic linker), it is effectively a
     # comment telling that this library is supposed to have been found
     # by the dynamic linker already in DYLD_LIBRARY_PATH.
-
-    my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'YES';
 
     my %action =
         ('app/UREBIN/URELIB' => ($OLD ? '@executable_path/../lib' : '@executable_path/../Frameworks'),

@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplateslayout,$(call
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplateslayout,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslayout,share/template,layout,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplateslayout,$(LIBO_SHARE_FOLDER)/template,layout,\
 	cs/dummy_templates.txt \
 	de/A4-kariert.otp \
 	de/BlueBoxes.otp \

@@ -1,4 +1,4 @@
-PYTHONHOME=$sd_prog/LibreOfficePython.framework
+PYTHONHOME=$sd_prog/%%PYTHON_FRAMEWORK_RELATIVE_PATH%%LibreOfficePython.framework
 export PYTHONHOME
 
 pybasislibdir=$PYTHONHOME/Versions/%%PYVERSION%%/lib/python%%PYVERSION%%

@@ -112,7 +112,9 @@ End
 #endif
 
 Directory gid_Dir_User
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
@@ -357,7 +359,9 @@ Directory gid_Dir_Share_Fingerprint
 End
 
 Directory gid_Dir_Help
-#if defined MACOSX
+#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+#elif defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;

@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Gallery_Gallery,sounds,extras/source/gallery/sounds))
 
-$(eval $(call gb_Gallery_add_files,sounds,share/gallery/sounds,\
+$(eval $(call gb_Gallery_add_files,sounds,$(LIBO_SHARE_FOLDER)/gallery/sounds,\
 	extras/source/gallery/sounds/apert2.wav \
 	extras/source/gallery/sounds/apert.wav \
 	extras/source/gallery/sounds/applause.wav \

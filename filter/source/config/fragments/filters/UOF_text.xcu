@@ -20,7 +20,7 @@
         <prop oor:name="Type"><value>Unified_Office_Format_text</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
         <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter,../share/xslt/import/uof/uof2odf_text.xsl,../share/xslt/export/uof/odf2uof_text.xsl</value></prop>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter,../$(share_subdir_name)/xslt/import/uof/uof2odf_text.xsl,../$(share_subdir_name)/xslt/export/uof/odf2uof_text.xsl</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">

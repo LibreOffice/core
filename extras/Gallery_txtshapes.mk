@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,txtshapes,extras/source/gallery/txtshapes))
 
-$(eval $(call gb_Gallery_add_files,txtshapes,share/gallery/txtshapes,\
+$(eval $(call gb_Gallery_add_files,txtshapes,$(LIBO_SHARE_FOLDER)/gallery/txtshapes,\
 	extras/source/gallery/txtshapes/Circle01-DarkBlue.svg \
 	extras/source/gallery/txtshapes/Circle02-LightBlue.svg \
 	extras/source/gallery/txtshapes/Circle03-Green.svg \

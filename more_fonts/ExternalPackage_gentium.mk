@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_gentium,font_gentium))
 
 $(eval $(call gb_ExternalPackage_set_outdir,fonts_gentium,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_gentium,share/fonts/truetype,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_gentium,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	GenBasB.ttf \
 	GenBasBI.ttf \
 	GenBasI.ttf \

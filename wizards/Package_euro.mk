@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrveuro,$(SRCDIR)/wizards/source/e
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrveuro,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrveuro,share/basic/Euro,\
+$(eval $(call gb_Package_add_files,wizards_basicsrveuro,$(LIBO_SHARE_FOLDER)/basic/Euro,\
 	AutoPilotRun.xba \
 	Common.xba \
 	ConvertRun.xba \

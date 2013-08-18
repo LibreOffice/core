@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatespersonal,$(ca
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatespersonal,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespersonal,share/template,personal,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatespersonal,$(LIBO_SHARE_FOLDER)/template,personal,\
 	cs/dummy_templates.txt \
 	de/faltkarte.otg \
 	de/formalletteraquarius.ott \

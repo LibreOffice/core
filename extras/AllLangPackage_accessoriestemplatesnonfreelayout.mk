@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesnonfreelayout
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesnonfreelayout,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreelayout,share/template,layout,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesnonfreelayout,$(LIBO_SHARE_FOLDER)/template,layout,\
 	cs/dummy_templates-nonfree.txt \
 	de/dummy_templates-nonfree.txt \
 	en-US/dummy_templates-nonfree.txt \

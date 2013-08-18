@@ -18,9 +18,9 @@
 
 #include "macros.inc"
 
-#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-
 #include "AutoInstall/ure"
+
+#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
 Directory gid_Dir_Ure_Bin
 #if defined MACOSX

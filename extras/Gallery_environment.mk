@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,environment,extras/source/gallery/environment))
 
-$(eval $(call gb_Gallery_add_files,environment,share/gallery/environment,\
+$(eval $(call gb_Gallery_add_files,environment,$(LIBO_SHARE_FOLDER)/gallery/environment,\
 	extras/source/gallery/environment/DrippingFaucet.png \
 	extras/source/gallery/environment/Earth.png \
 	extras/source/gallery/environment/EndangeredAnimals1.png \

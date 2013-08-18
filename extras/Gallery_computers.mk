@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,computers,extras/source/gallery/computers))
 
-$(eval $(call gb_Gallery_add_files,computers,share/gallery/computers,\
+$(eval $(call gb_Gallery_add_files,computers,$(LIBO_SHARE_FOLDER)/gallery/computers,\
     extras/source/gallery/computers/Computer-Cloud.png \
     extras/source/gallery/computers/Computer-Desktop.png \
     extras/source/gallery/computers/Computer-Laptop-Black.png \

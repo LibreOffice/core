@@ -19,8 +19,6 @@
 
 gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents
 
-gb_PROGRAMDIRNAME := MacOS
-
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
@@ -313,7 +311,11 @@ endef
 
 # PythonTest class
 
-gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/ure-link/lib:$(gb_DEVINSTALLROOT)/program:$(OUTDIR)/lib
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/$(LIBO_URE_LIB_FOLDER)
+ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
+gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(gb_DEVINSTALLROOT)/$(LIBO_LIB_FOLDER)
+endif
+gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib
 
 # Module class
 
@@ -367,7 +369,6 @@ gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
 # Package class
-gb_Package_PROGRAMDIRNAME := MacOS
 gb_Package_SDKDIRNAME := LibreOffice$(PRODUCTVERSION)_SDK
 
 # UIMenubarTarget class
@@ -387,7 +388,7 @@ endef
 
 # Python
 gb_Python_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/program/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/$(LIBO_LIB_FOLDER)/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 # this is passed to gdb as executable when running tests
 gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE)
 

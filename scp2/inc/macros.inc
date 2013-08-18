@@ -492,7 +492,7 @@ End
 #define URE_EXECUTABLE(id,name) \
     File id \
         BIN_FILE_BODY; \
-        Dir = gid_Dir_Ure_Bin; \
+        Dir = GID_DIR_URE_BIN; \
         Name = name; \
         Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
     End

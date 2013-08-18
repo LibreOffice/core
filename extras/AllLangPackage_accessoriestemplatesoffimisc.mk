@@ -11,7 +11,7 @@ $(eval $(call gb_AllLangPackage_AllLangPackage,accessoriestemplatesoffimisc,$(ca
 
 $(eval $(call gb_AllLangPackage_use_unpacked,accessoriestemplatesoffimisc,templates-pack))
 
-$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesoffimisc,share/template,offimisc,\
+$(eval $(call gb_AllLangPackage_add_files_with_subdir,accessoriestemplatesoffimisc,$(LIBO_SHARE_FOLDER)/template,offimisc,\
 	cs/dummy_templates.txt \
 	de/01_graph_paper.ott \
 	de/01_invoice.ott \

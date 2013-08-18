@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvimport,$(SRCDIR)/wizards/source
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrvimport,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrvimport,share/basic/ImportWizard,\
+$(eval $(call gb_Package_add_files,wizards_basicsrvimport,$(LIBO_SHARE_FOLDER)/basic/ImportWizard,\
 	API.xba \
 	dialog.xlb \
 	DialogModul.xba \

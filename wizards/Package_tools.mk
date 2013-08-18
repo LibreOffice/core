@@ -21,7 +21,7 @@ $(eval $(call gb_Package_Package,wizards_basicsrvtools,$(SRCDIR)/wizards/source/
 
 $(eval $(call gb_Package_set_outdir,wizards_basicsrvtools,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,wizards_basicsrvtools,share/basic/Tools,\
+$(eval $(call gb_Package_add_files,wizards_basicsrvtools,$(LIBO_SHARE_FOLDER)/basic/Tools,\
 	Debug.xba \
 	dialog.xlb \
 	DlgOverwriteAll.xdl \
