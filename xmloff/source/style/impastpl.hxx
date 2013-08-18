@@ -180,12 +180,6 @@ public:
     void ClearEntries();
 };
 
-struct SvXMLAutoStylePoolPExport_Impl
-{
-    const OUString                   *mpParent;
-    const XMLAutoStylePoolProperties    *mpProperties;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

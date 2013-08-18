@@ -246,9 +246,17 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
     return sName;
 }
 
-//
-// export
-//
+namespace {
+
+struct AutoStylePoolExport
+{
+    const OUString* mpParent;
+    const XMLAutoStylePoolProperties* mpProperties;
+
+    AutoStylePoolExport() : mpParent(NULL), mpProperties(NULL) {}
+};
+
+}
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
@@ -273,9 +281,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
     // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
     // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
-    //
-    SvXMLAutoStylePoolPExport_Impl* aExpStyles =
-        new SvXMLAutoStylePoolPExport_Impl[nCount];
+    std::vector<AutoStylePoolExport> aExpStyles(nCount);
 
     sal_uInt32 i;
     for( i=0; i < nCount; i++ )
@@ -390,8 +396,6 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 );
         }
     }
-
-    delete[] aExpStyles;
 }
 
 void SvXMLAutoStylePoolP_Impl::ClearEntries()
