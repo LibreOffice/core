@@ -56,7 +56,7 @@ $(call gb_PythonTest_get_target,%) :
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
-$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(gb_DEVINSTALLROOT)/$(LIBO_LIB_PYUNO_FOLDER)
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(gb_DEVINSTALLROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(gb_DEVINSTALLROOT)/$(LIBO_LIB_FOLDER))
 $(call gb_PythonTest_get_target,$(1)) : MODULES :=
 
 $(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
