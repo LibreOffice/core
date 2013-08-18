@@ -833,6 +833,8 @@ namespace
             eUnit = FUNIT_DEGREE;
         else if ((sUnit == "sec") || (sUnit == "seconds") || (sUnit == "second"))
             eUnit = FUNIT_SECOND;
+        else if ((sUnit == "ms") || (sUnit == "milliseconds") || (sUnit == "millisecond"))
+            eUnit = FUNIT_MILLISECOND;
         else if (sUnit != "0")
             eUnit = FUNIT_CUSTOM;
 

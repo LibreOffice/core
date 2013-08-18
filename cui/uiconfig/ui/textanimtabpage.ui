@@ -6,7 +6,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="FL_EFFECT">
         <property name="visible">True</property>
@@ -23,13 +23,40 @@
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">12</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">18</property>
                 <child>
-                  <object class="GtkLabel" id="FT_EFFECTS">
+                  <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">E_ffect:</property>
-                    <property name="use_underline">True</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="FT_EFFECTS">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">E_ffect:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">LB_EFFECT</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="LB_EFFECT">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="model">liststoreEFFECT</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -38,28 +65,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="LB_EFFECT">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="model">liststoreEFFECT</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox" id="boxDIRECTION">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">True</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="FT_DIRECTION">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Direction:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">grid1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -84,6 +102,11 @@
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">imageUP</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_UP-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Up</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -103,6 +126,11 @@
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">imageRIGHT</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_RIGHT-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Right</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -122,6 +150,11 @@
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">imageLEFT</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_LEFT-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Left</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -129,21 +162,6 @@
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                         <child>
                           <object class="GtkButton" id="BTN_DOWN">
@@ -156,6 +174,11 @@
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
                             <property name="image">imageDOWN</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="BTN_DOWN-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Down</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -163,6 +186,21 @@
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -175,7 +213,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -269,8 +307,9 @@
                   <object class="GtkBox" id="boxCOUNT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">24</property>
-                    <property name="spacing">6</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="spacing">12</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_ENDLESS">
@@ -282,6 +321,9 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="NUM_FLD_COUNT"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -293,7 +335,11 @@
                       <object class="GtkSpinButton" id="NUM_FLD_COUNT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="invisible_char">•</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="TSB_ENDLESS"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -325,8 +371,9 @@
                   <object class="GtkBox" id="boxAMOUNT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">24</property>
-                    <property name="spacing">6</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="spacing">12</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_PIXEL">
@@ -338,6 +385,9 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="MTR_FLD_AMOUNT:0pixels"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -346,10 +396,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_AMOUNT:0Pixels">
+                      <object class="GtkSpinButton" id="MTR_FLD_AMOUNT:0pixels">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="invisible_char">•</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="TSB_PIXEL"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -381,8 +435,9 @@
                   <object class="GtkBox" id="boxDELAY">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">24</property>
-                    <property name="spacing">6</property>
+                    <property name="halign">start</property>
+                    <property name="margin_left">12</property>
+                    <property name="spacing">12</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTO">
@@ -394,6 +449,9 @@
                         <property name="xalign">0</property>
                         <property name="inconsistent">True</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="MTR_FLD_DELAY:0ms"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -402,10 +460,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="MTR_FLD_DELAY:0,00ms">
+                      <object class="GtkSpinButton" id="MTR_FLD_DELAY:0ms">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="invisible_char">•</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="TSB_AUTO"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -507,5 +569,12 @@
         <col id="1">4</col>
       </row>
     </data>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="TSB_ENDLESS"/>
+      <widget name="TSB_PIXEL"/>
+      <widget name="TSB_AUTO"/>
+    </widgets>
   </object>
 </interface>

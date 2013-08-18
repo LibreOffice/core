@@ -1304,11 +1304,12 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
                   eOutUnit == FUNIT_NONE ||
                   eOutUnit == FUNIT_DEGREE ||
                   eOutUnit == FUNIT_SECOND ||
+                  eOutUnit == FUNIT_MILLISECOND ||
                   eOutUnit == FUNIT_PIXEL ||
                   eInUnit  == FUNIT_CUSTOM ||
                   eInUnit  == FUNIT_NONE ||
                   eInUnit  == FUNIT_DEGREE ||
-                  eInUnit  == FUNIT_SECOND ||
+                  eInUnit  == FUNIT_MILLISECOND ||
                   eInUnit  == FUNIT_PIXEL )
              return nValue;
         else
@@ -1400,6 +1401,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
          eInUnit == FUNIT_NONE ||
          eInUnit == FUNIT_DEGREE ||
          eInUnit == FUNIT_SECOND ||
+         eInUnit == FUNIT_MILLISECOND ||
          eInUnit == FUNIT_PIXEL ||
          eOutUnit == MAP_PIXEL ||
          eOutUnit == MAP_SYSFONT ||

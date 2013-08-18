@@ -47,6 +47,7 @@ StringArray SV_FUNIT_STRINGS
         < " pixel" ; FUNIT_PIXEL ; > ;
         < "°" ; FUNIT_DEGREE ; > ;
         < "sec" ; FUNIT_SECOND ; > ;
+        < "ms" ; FUNIT_MILLISECOND ; > ;
     };
 };
 
