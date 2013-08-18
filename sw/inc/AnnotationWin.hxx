@@ -43,7 +43,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual void    Delete();
         virtual void    GotoPos();
 
-        virtual String  GetAuthor();
+        virtual OUString GetAuthor();
         virtual Date    GetDate();
         virtual Time    GetTime();
 

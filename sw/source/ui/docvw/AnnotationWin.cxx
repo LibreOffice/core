@@ -225,17 +225,16 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     SwSidebarWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
-    String aText = String(SW_RES(STR_REPLY));
-        SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, pWin->GetAuthor());
-        aText = aRewriter.Apply(aText);
-        aText.Append(String(OUString(" (") +
-        String(rLocalData.getDate( pWin->GetDate())) + OUString(", ") +
-        String(rLocalData.getTime( pWin->GetTime(),false)) + OUString("): \"")));
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, pWin->GetAuthor());
+    const OUString aText = aRewriter.Apply(SW_RESSTR(STR_REPLY))
+            + " (" + rLocalData.getDate( pWin->GetDate())
+            + ", " + rLocalData.getTime( pWin->GetTime(), false)
+            + "): \"";
     GetOutlinerView()->InsertText(aText,false);
 
     // insert old, selected text or "..."
-    // TOOD: iterate over all paragraphs, not only first one to find out if it is empty
+    // TODO: iterate over all paragraphs, not only first one to find out if it is empty
     if (pText->GetTextObject().GetText(0).Len())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
@@ -299,7 +298,7 @@ bool SwAnnotationWin::IsProtected()
            ( mpFmtFld ? mpFmtFld->IsProtect() : false );
 }
 
-String SwAnnotationWin::GetAuthor()
+OUString SwAnnotationWin::GetAuthor()
 {
     return mpFld->GetPar1();
 }
