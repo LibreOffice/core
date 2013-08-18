@@ -247,7 +247,7 @@ bool SwCursor::GotoRegion( const String& rName )
     for( sal_uInt16 n = rFmts.size(); n; )
     {
         const SwSectionFmt* pFmt = rFmts[ --n ];
-        const SwNodeIndex* pIdx;
+        const SwNodeIndex* pIdx = 0;
         const SwSection* pSect;
         if( 0 != ( pSect = pFmt->GetSection() ) &&
             pSect->GetSectionName() == rName &&
