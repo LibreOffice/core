@@ -28,6 +28,7 @@
 namespace VLC
 {
     class Player;
+    class EventHandler;
 }
 
 namespace avmedia {
@@ -40,8 +41,9 @@ class VLCFrameGrabber : public FrameGrabber_BASE
 {
     VLC::Player& mPlayer;
     const rtl::OUString& mUrl;
+    boost::shared_ptr<VLC::EventHandler> mEventHandler;
 public:
-    SAL_CALL VLCFrameGrabber( VLC::Player& player, const rtl::OUString& url );
+    SAL_CALL VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime );
 

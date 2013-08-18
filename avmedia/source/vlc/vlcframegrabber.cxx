@@ -23,10 +23,11 @@ const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.com
 const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
 const int MSEC_IN_SEC = 1000;
 
-SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, const rtl::OUString& url )
+SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
     , mPlayer( player )
     , mUrl( url )
+    , mEventHandler( eh )
 {
 }
 
@@ -34,39 +35,42 @@ SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, const rtl::OUStr
 {
     osl::Condition condition;
 
-    VLC::EventManager manager( mPlayer );
-    manager.onPaused(boost::bind(&osl::Condition::set, &condition));
-
-    mPlayer.setMute( true );
-
-    if ( !mPlayer.play() )
+    const rtl::OUString& fileName = utl::TempFile::CreateTempName();
     {
-        std::cerr << "Couldn't play" << std::endl;
-    }
+        VLC::EventManager manager( mPlayer, mEventHandler );
+        manager.onPaused(boost::bind(&osl::Condition::set, &condition));
 
-    mPlayer.setTime( ( fMediaTime > 0 ? fMediaTime : 0 ) * MSEC_IN_SEC );
-    mPlayer.pause();
+        mPlayer.setMute( true );
 
-    const TimeValue timeout = {2, 0};
-    condition.wait(&timeout);
+        if ( !mPlayer.play() )
+        {
+            std::cerr << "Couldn't play" << std::endl;
+        }
 
-    if ( mUrl.isEmpty() || !mPlayer.hasVout() )
-    {
-        std::cerr << "Couldn't grab frame" << std::endl;
+        mPlayer.setTime( ( fMediaTime > 0 ? fMediaTime : 0 ) * MSEC_IN_SEC );
+        mPlayer.pause();
+
+        const TimeValue timeout = {2, 0};
+        condition.wait(&timeout);
+
+        if ( mUrl.isEmpty() || !mPlayer.hasVout() )
+        {
+            std::cerr << "Couldn't grab frame" << std::endl;
+            mPlayer.setMute( false );
+
+            manager.onPaused();
+            return ::uno::Reference< css::graphic::XGraphic >();
+        }
+
+
+
+        mPlayer.takeSnapshot( fileName );
+
         mPlayer.setMute( false );
+        mPlayer.stop();
 
         manager.onPaused();
-        return ::uno::Reference< css::graphic::XGraphic >();
     }
-
-    const rtl::OUString& fileName = utl::TempFile::CreateTempName();
-
-    mPlayer.takeSnapshot( fileName );
-
-    mPlayer.setMute( false );
-    mPlayer.stop();
-
-    manager.onPaused();
 
     rtl::OUString url;
     utl::LocalFileHelper::ConvertPhysicalNameToURL( fileName, url );

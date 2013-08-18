@@ -41,6 +41,7 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
+    boost::shared_ptr<VLC::EventHandler> mEventHandler;
     VLC::Instance mInstance;
     VLC::Media mMedia;
     VLC::Player mPlayer;
@@ -48,7 +49,7 @@ class VLCPlayer : public ::cppu::BaseMutex,
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
 public:
-    VLCPlayer( const rtl::OUString& url );
+    VLCPlayer( const rtl::OUString& url, boost::shared_ptr<VLC::EventHandler> eh );
 
     const rtl::OUString& url() const;
 

@@ -19,30 +19,36 @@
 #ifndef _WRAPPER_EVENT_MANAGER_HXX
 #define _WRAPPER_EVENT_MANAGER_HXX
 #include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "Player.hxx"
 
 struct libvlc_event_manager_t;
 struct libvlc_event_t;
+
 namespace VLC
 {
+    class EventHandler;
     class EventManager
     {
         friend void EventManagerEventHandler( const libvlc_event_t *event, void *pData );
     public:
         typedef boost::function<void()> Callback;
 
-        EventManager(VLC::Player& player);
+        EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh );
         virtual ~EventManager();
 
-        void onPaused(const Callback& callback = Callback());
-        void onEndReached(const Callback& callback = Callback());
+        void onPaused( const Callback& callback = Callback() );
+        void onEndReached( const Callback& callback = Callback() );
 
     private:
+        boost::shared_ptr<VLC::EventHandler> mEventHandler;
+        typedef boost::function< void() > TCallback;
         libvlc_event_manager_t *mManager;
-        boost::function<void()> mOnPaused;
-        boost::function<void()> mOnEndReached;
+        TCallback mOnPaused;
+        TCallback mOnEndReached;
 
-        void registerSignal(int signal, const Callback& callback);
+        void registerSignal( int signal, const Callback& callback );
     };
 }
 

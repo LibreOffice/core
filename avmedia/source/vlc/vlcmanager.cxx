@@ -10,8 +10,10 @@ const rtl::OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager
 const ::rtl::OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
-    : mxMgr( rxMgr )
+    : mEventHandler(new VLC::EventHandler( "EventHandler" ) )
+    , mxMgr( rxMgr )
 {
+    mEventHandler->launch();
 }
 
 Manager::~Manager()
@@ -23,7 +25,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
 {
     if ( !rURL.isEmpty() || (mPlayer.is() && dynamic_cast<VLCPlayer*>( mPlayer.get() )->url() != rURL))
     {
-        VLCPlayer* pPlayer( new VLCPlayer( rURL/*, mxMgr */ ) );
+        VLCPlayer* pPlayer( new VLCPlayer( rURL, mEventHandler /*, mxMgr */ ) );
         mPlayer = uno::Reference< media::XPlayer >( pPlayer );
     }
 

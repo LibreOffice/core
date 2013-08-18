@@ -1,9 +1,11 @@
+#include <boost/thread.hpp>
 #include <vlc/libvlc.h>
 #include <vlc/libvlc_media.h>
 #include <vlc/libvlc_events.h>
 
 #include "EventManager.hxx"
 #include "SymbolLoader.hxx"
+#include "EventHandler.hxx"
 
 typedef void ( *libvlc_callback_t ) ( const struct libvlc_event_t *, void * );
 
@@ -35,15 +37,16 @@ void EventManagerEventHandler( const libvlc_event_t *event, void *pData )
     switch ( event->type )
     {
     case libvlc_MediaPlayerPaused:
-        instance->mOnPaused();
+        instance->mEventHandler->mCallbackQueue.push( instance->mOnPaused );
         break;
     case libvlc_MediaPlayerEndReached:
-        instance->mOnEndReached();
+        instance->mEventHandler->mCallbackQueue.push( instance->mOnEndReached );
         break;
     }
 }
 
-EventManager::EventManager(VLC::Player& player)
+EventManager::EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh )
+    : mEventHandler( eh )
 {
     InitApiMap( VLC_EVENT_MANAGER_API );
     mManager = libvlc_media_player_event_manager( player );
@@ -53,24 +56,26 @@ EventManager::~EventManager()
 {
 }
 
-void EventManager::registerSignal(int signal, const Callback& callback)
+void EventManager::registerSignal( int signal, const Callback& callback )
 {
-    if (callback.empty())
+    if ( callback.empty() )
         libvlc_event_detach( mManager, signal, EventManagerEventHandler, this );
     else
         libvlc_event_attach( mManager, signal, EventManagerEventHandler, this );
 }
 
-void EventManager::onPaused(const EventManager::Callback& callback)
+void EventManager::onPaused( const EventManager::Callback& callback )
 {
     mOnPaused = callback;
-    registerSignal(libvlc_MediaPlayerPaused, callback);
+    registerSignal( libvlc_MediaPlayerPaused, callback );
 }
 
-void EventManager::onEndReached(const Callback& callback)
+void EventManager::onEndReached( const Callback& callback )
 {
     mOnEndReached = callback;
-    registerSignal(libvlc_MediaPlayerEndReached, callback);
+    registerSignal( libvlc_MediaPlayerEndReached, callback );
 }
+
+
 
 }

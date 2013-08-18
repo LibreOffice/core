@@ -24,12 +24,13 @@ const char * const VLC_ARGS[] = {
 
 const int MS_IN_SEC = 1000; // Millisec in sec
 
-VLCPlayer::VLCPlayer( const rtl::OUString& url )
+VLCPlayer::VLCPlayer( const rtl::OUString& url, boost::shared_ptr<VLC::EventHandler> eh )
     : VLC_Base(m_aMutex)
+    , mEventHandler( eh )
     , mInstance( VLC_ARGS )
     , mMedia( url, mInstance )
     , mPlayer( mMedia )
-    , mEventManager( mPlayer )
+    , mEventManager( mPlayer, mEventHandler )
     , mUrl( url )
     , mPlaybackLoop( false )
 {
@@ -91,17 +92,16 @@ double SAL_CALL VLCPlayer::getRate()
 
 void VLCPlayer::replay()
 {
-    mPlayer.stop();
-    mPlayer.play();
+    setPlaybackLoop( false );
+    stop();
+    setMediaTime( 0 );
+    start();
 }
 
 void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlaybackLoop = bSet;
-
-    //TODO: Fix it
-    return;
 
     if ( bSet )
         mEventManager.onEndReached(boost::bind(&VLCPlayer::replay, this));
@@ -190,7 +190,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mPlayer, mUrl );
+    VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mPlayer, mEventHandler, mUrl );
     return uno::Reference< css::media::XFrameGrabber >( frameGrabber );
 }
 
