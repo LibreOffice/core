@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 /**
-* The port for use for the main communication between LibO and remote control app.
+* The port used by LO's custom remote server discovery protocol.
 */
 #define PORT_DISCOVERY 1598
 #define BUFFER_SIZE 200
