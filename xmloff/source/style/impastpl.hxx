@@ -36,7 +36,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SvXMLAutoStylePoolP;
-class SvXMLAutoStylePoolParentP_Impl;
+class XMLAutoStylePoolParent;
 typedef std::set<OUString> SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
@@ -47,7 +47,7 @@ class SvXMLExport;
 
 struct XMLAutoStyleFamily : boost::noncopyable
 {
-    typedef boost::ptr_set<SvXMLAutoStylePoolParentP_Impl> ParentsType;
+    typedef boost::ptr_set<XMLAutoStylePoolParent> ParentsType;
 
     sal_uInt32                   mnFamily;
     OUString                     maStrFamilyName;
@@ -96,7 +96,7 @@ public:
 };
 
 // Parents of AutoStylePool's
-class SvXMLAutoStylePoolParentP_Impl
+class XMLAutoStylePoolParent
 {
 public:
     typedef boost::ptr_vector<SvXMLAutoStylePoolPropertiesP_Impl> PropertiesListType;
@@ -107,12 +107,12 @@ private:
 
 public:
 
-    SvXMLAutoStylePoolParentP_Impl( const OUString & rParent ) :
+    XMLAutoStylePoolParent( const OUString & rParent ) :
         msParent( rParent )
     {
     }
 
-    ~SvXMLAutoStylePoolParentP_Impl();
+    ~XMLAutoStylePoolParent();
 
     sal_Bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
 
@@ -127,12 +127,12 @@ public:
         return maPropertiesList;
     }
 
-    bool operator< (const SvXMLAutoStylePoolParentP_Impl& rOther) const;
+    bool operator< (const XMLAutoStylePoolParent& rOther) const;
 };
 
 struct SvXMLAutoStylePoolParentPCmp_Impl
 {
-    bool operator()( SvXMLAutoStylePoolParentP_Impl* const& lhs, SvXMLAutoStylePoolParentP_Impl* const& rhs) const
+    bool operator()( XMLAutoStylePoolParent* const& lhs, XMLAutoStylePoolParent* const& rhs) const
     {
         return lhs->GetParent().compareTo( rhs->GetParent() ) < 0;
     }

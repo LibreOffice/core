@@ -161,16 +161,16 @@ bool SvXMLAutoStylePoolP_Impl::Add(
 
     XMLAutoStyleFamily &rFamily = *aFind;
 
-    SvXMLAutoStylePoolParentP_Impl aTmp(rParentName);
+    XMLAutoStylePoolParent aTmp(rParentName);
     XMLAutoStyleFamily::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
     if (it2 == rFamily.maParents.end())
     {
         std::pair<XMLAutoStyleFamily::ParentsType::iterator,bool> r =
-            rFamily.maParents.insert(new SvXMLAutoStylePoolParentP_Impl(rParentName));
+            rFamily.maParents.insert(new XMLAutoStylePoolParent(rParentName));
         it2 = r.first;
     }
 
-    SvXMLAutoStylePoolParentP_Impl& rParent = *it2;
+    XMLAutoStylePoolParent& rParent = *it2;
 
     bool bRet = false;
     if (rParent.Add(rFamily, rProperties, rName, bDontSeek))
@@ -197,16 +197,16 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 
     XMLAutoStyleFamily &rFamily = *aFind;
 
-    SvXMLAutoStylePoolParentP_Impl aTmp(rParentName);
+    XMLAutoStylePoolParent aTmp(rParentName);
     XMLAutoStyleFamily::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
     if (it2 == rFamily.maParents.end())
     {
         std::pair<XMLAutoStyleFamily::ParentsType::iterator,bool> r =
-            rFamily.maParents.insert(new SvXMLAutoStylePoolParentP_Impl(rParentName));
+            rFamily.maParents.insert(new XMLAutoStylePoolParent(rParentName));
         it2 = r.first;
     }
 
-    SvXMLAutoStylePoolParentP_Impl& rParent = *it2;
+    XMLAutoStylePoolParent& rParent = *it2;
 
     bool bRet = false;
     if (rParent.AddNamed(rFamily, rProperties, rName))
@@ -235,7 +235,7 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
     if (iter != maFamilyList.end())
     {
         XMLAutoStyleFamily const& rFamily = *iter;
-        SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
+        XMLAutoStylePoolParent aTmp( rParent );
         XMLAutoStyleFamily::ParentsType::const_iterator it2 = rFamily.maParents.find(aTmp);
         if (it2 != rFamily.maParents.end())
         {
@@ -287,7 +287,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     XMLAutoStyleFamily::ParentsType::const_iterator it = rFamily.maParents.begin(), itEnd = rFamily.maParents.end();
     for (; it != itEnd; ++it)
     {
-        const SvXMLAutoStylePoolParentP_Impl& rParent = *it;
+        const XMLAutoStylePoolParent& rParent = *it;
         size_t nProperties = rParent.GetPropertiesList().size();
         for( size_t j = 0; j < nProperties; j++ )
         {

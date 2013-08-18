@@ -22,14 +22,14 @@
 
 using namespace std;
 
-SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
+XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 {
 }
 
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
 // if not added, yet.
 
-sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
+sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
     sal_Bool bAdded = sal_False;
     SvXMLAutoStylePoolPropertiesP_Impl *pProperties = 0;
@@ -73,7 +73,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLAutoStyleFamily& rFamilyData, c
 // the same properties exists, a new one is added (like with bDontSeek).
 //
 
-sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
+sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
     sal_Bool bAdded = sal_False;
     sal_Int32 nProperties = rProperties.size();
@@ -110,7 +110,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLAutoStyleFamily& rFamilyDa
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 //
 
-OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
+OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
@@ -135,7 +135,7 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLAutoStyleFamily& rFamily
     return sName;
 }
 
-bool SvXMLAutoStylePoolParentP_Impl::operator< (const SvXMLAutoStylePoolParentP_Impl& rOther) const
+bool XMLAutoStylePoolParent::operator< (const XMLAutoStylePoolParent& rOther) const
 {
     return msParent < rOther.msParent;
 }
