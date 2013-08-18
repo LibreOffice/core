@@ -271,6 +271,8 @@ void SwView::GetState(SfxItemSet &rSet)
                 SwPaM *pCursor = m_pWrtShell->GetCrsr();
                 if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
                     rSet.DisableItem(nWhich);
+                if (GetDocShell()->HasChangeRecordProtection())
+                    rSet.DisableItem(nWhich);
             }
             break;
 
