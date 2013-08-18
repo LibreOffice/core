@@ -170,10 +170,10 @@
     
     if(!moreComing)
     {
-        //        [self.tableView reloadData];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.searchTimeoutTimer invalidate];
         [self.searchLabelTimer invalidate];
+        self.comManager.searchState = WAITING;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -381,6 +381,7 @@
         UIActivityIndicatorView * aiv = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         aiv.center = CGPointMake([sectionHeader.text sizeWithFont: sectionHeader.font].width + 2 * aiv.frame.size.width, sectionHeader.center.y);
         [aiv startAnimating];
+        [aiv setTag:4];
         [view addSubview:aiv];
     }
     return view;
