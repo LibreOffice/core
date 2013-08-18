@@ -45,13 +45,14 @@ static sal_uInt16 pRanges[] =
 SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
-        SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
+        SfxTabDialog        ( pParent
+                              ,"TextDialog"
+                              ,"cui/ui/textdialog.ui"
+                              , pAttr ),
         pView               ( pSdrView )
 {
-    FreeResource();
-
-    AddTabPage( RID_SVXPAGE_TEXTATTR, SvxTextAttrPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_TEXTANIMATION, SvxTextAnimationPage::Create, 0);
+    m_nTextId = AddTabPage( "RID_SVXPAGE_TEXTATTR", SvxTextAttrPage::Create, 0);
+    m_nTextAnimId = AddTabPage( "RID_SVXPAGE_TEXTANIMATION", SvxTextAnimationPage::Create, 0);
 }
 
 /*************************************************************************
@@ -62,21 +63,11 @@ SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
 
 void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    switch( nId )
-    {
-        case RID_SVXPAGE_TEXTATTR:
+    if (nId == m_nTextId)
         {
             ( (SvxTextAttrPage&) rPage ).SetView( pView );
             ( (SvxTextAttrPage&) rPage ).Construct();
         }
-        break;
-
-        case RID_SVXPAGE_TEXTANIMATION:
-        break;
-
-        default:
-        break;
-    }
 }
 
 
