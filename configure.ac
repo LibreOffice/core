@@ -2908,11 +2908,11 @@ elif test $_os = WINNT; then
     LIBO_SHARE_PRESETS_FOLDER=presets
     LIBO_SHARE_RESOURCE_FOLDER=program/resource
     LIBO_SHARE_SHELL_FOLDER=program/shell
-    LIBO_URE_BIN_FOLDER=ure-link/bin
-    LIBO_URE_ETC_FOLDER=ure-link/bin
-    LIBO_URE_LIB_FOLDER=ure-link/bin
-    LIBO_URE_SHARE_FOLDER=ure-link/share
-    LIBO_URE_SHARE_JAVA_FOLDER=ure-link/java
+    LIBO_URE_BIN_FOLDER=URE/bin
+    LIBO_URE_ETC_FOLDER=URE/bin
+    LIBO_URE_LIB_FOLDER=URE/bin
+    LIBO_URE_SHARE_FOLDER=URE
+    LIBO_URE_SHARE_JAVA_FOLDER=URE/java
 else
     LIBO_BIN_FOLDER=program
     LIBO_ETC_FOLDER=program

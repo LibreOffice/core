@@ -220,6 +220,8 @@ ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Java_Dir
     Key = "URE_INTERNAL_JAVA_DIR";
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Value = "${ORIGIN}/../java";
+#elif defined WNT
+    Value = "${ORIGIN}/../java";
 #else
     Value = "${ORIGIN}/../share/java";
 #endif
@@ -240,6 +242,8 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Types
     Key = "UNO_TYPES";
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Value = "${ORIGIN}/types.rdb ${URE_MORE_TYPES}";
+#elif defined WNT
+    Value = "${ORIGIN}/../misc/types.rdb ${URE_MORE_TYPES}";
 #else
     Value = "${ORIGIN}/../share/misc/types.rdb ${URE_MORE_TYPES}";
 #endif
@@ -252,6 +256,8 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
     Key = "UNO_SERVICES";
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Value = "${ORIGIN}/services.rdb ${URE_MORE_SERVICES}";
+#elif defined WNT
+    Value = "${ORIGIN}/../misc/services.rdb ${URE_MORE_SERVICES}";
 #else
     Value = "${ORIGIN}/../share/misc/services.rdb ${URE_MORE_SERVICES}";
 #endif
