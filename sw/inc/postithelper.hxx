@@ -29,7 +29,6 @@
 
 class SwTxtFld;
 class SwRootFrm;
-class String;
 class SwPostItMgr;
 class SwEditWin;
 namespace sw { namespace sidebarwindows {
