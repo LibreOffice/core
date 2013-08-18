@@ -37,13 +37,13 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		) \
 		$(call gb_Package_get_target,odk_docs) \
 		$(call gb_Package_get_target,odk_html) \
-		$(if $(SOLAR_JAVA),$(call gb_Package_get_target,odk_javadoc)) \
+		$(if $(ENABLE_JAVA),$(call gb_Package_get_target,odk_javadoc)) \
 		$(call gb_Package_get_target,odk_lib) \
 		$(if $(filter MACOSX,$(OS)),$(call gb_Package_get_target,odk_macosx)) \
 		$(call gb_Package_get_target,odk_settings) \
 		$(call gb_Package_get_target,odk_settings_generated) \
 		$(call gb_Package_get_target,odk_uno_loader_classes) \
-		$(if $(SOLAR_JAVA),$(call gb_Package_get_target,odk_unowinreg))
+		$(if $(ENABLE_JAVA),$(call gb_Package_get_target,odk_unowinreg))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	$(call gb_Helper_print_on_error,\
 		$(PERL) $< \

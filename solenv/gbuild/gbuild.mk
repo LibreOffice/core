@@ -225,10 +225,6 @@ gb_GLOBALDEFS += -D_DEBUG
 endif
 endif
 
-ifneq ($(strip $(SOLAR_JAVA)),)
-gb_GLOBALDEFS += -DSOLAR_JAVA
-endif
-
 ifeq ($(gb_TIMELOG),1)
 gb_GLOBALDEFS += -DTIMELOG \
 

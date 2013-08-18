@@ -364,7 +364,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(gb_CPUDEFS) \
 	$(gb_OSDEFS) \
 	-DCOMID=gcc3 \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
 endef

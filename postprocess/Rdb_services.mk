@@ -139,7 +139,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
 		vcl/vcl.windows \
-		$(if $(SOLAR_JAVA), \
+		$(if $(ENABLE_JAVA), \
 			accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
 		) \
 	) \
@@ -229,7 +229,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_TDEAB), \
 		connectivity/source/drivers/kab/tdeab1 \
 	) \
-	$(if $(SOLAR_JAVA), \
+	$(if $(ENABLE_JAVA), \
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
 		scripting/java/ScriptProviderForJava \

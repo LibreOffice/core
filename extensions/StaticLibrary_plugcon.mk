@@ -29,12 +29,12 @@ $(eval $(call gb_StaticLibrary_use_api,plugcon,\
 	udkapi \
 ))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
 	-DOJI \
 ))
 
-endif # SOLAR_JAVA=YES
+endif # ENABLE_JAVA=YES
 
 ifeq ($(SYSTEM_MOZILLA),YES)
 $(eval $(call gb_StaticLibrary_add_defs,plugcon,\

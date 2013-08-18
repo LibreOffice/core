@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <stdio.h>
 #include "connectivity/CommonTools.hxx"
@@ -31,7 +32,7 @@
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <rtl/process.h>
@@ -111,7 +112,7 @@ namespace connectivity
         return ( *pStr == 0 ) && ( *pWild == 0 );
     }
     //------------------------------------------------------------------
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
         ::rtl::Reference< jvmaccess::VirtualMachine > aRet;

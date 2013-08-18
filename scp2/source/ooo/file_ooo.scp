@@ -282,7 +282,7 @@ End
 #endif
 
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 
 #ifndef MACOSX
 
@@ -298,7 +298,7 @@ End
 #endif
 
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 STD_JAR_FILE( gid_File_Jar_Report, report )
 STD_JAR_FILE( gid_File_Jar_Smoketest, smoketest )
 STD_JAR_FILE( gid_File_Jar_Table, table )
@@ -308,18 +308,18 @@ STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
 STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 #endif
 
-#if defined SOLAR_JAVA && defined WNT
+#if defined ENABLE_JAVA && defined WNT
 STD_JAR_FILE( gid_File_Jar_Accessbridge, java_uno_accessbridge )
 #endif
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 #ifndef SYSTEM_HSQLDB
 STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
 #endif
 STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 File gid_File_Jar_Commonwizards
     TXT_FILE_BODY;
     Name = JARFILENAME(commonwizards);
@@ -328,12 +328,12 @@ File gid_File_Jar_Commonwizards
 End
 #endif
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
 #endif
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 
 File gid_File_Jar_Unoil
     TXT_FILE_BODY;
@@ -526,7 +526,7 @@ File gid_File_Share_Registry_Ctlseqcheck_Xcd
     Name (th) = "ctlseqcheck.xcd";
 End
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 File gid_File_Scripts_Java
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;

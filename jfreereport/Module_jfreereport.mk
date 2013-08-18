@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,jfreereport))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter JFREEREPORT,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,jfreereport,\
 	ExternalPackage_jfreereport_flow_engine \

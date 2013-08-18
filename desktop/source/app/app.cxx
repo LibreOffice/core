@@ -1689,7 +1689,7 @@ int Desktop::Main()
 
         try
         {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
             // The JavaContext contains an interaction handler which is used when
             // the creation of a Java Virtual Machine fails
             com::sun::star::uno::ContextLayer layer2(

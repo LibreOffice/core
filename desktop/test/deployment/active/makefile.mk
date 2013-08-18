@@ -41,7 +41,7 @@ DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
 
-.IF "$(SOLAR_JAVA)" != ""
+.IF "$(ENABLE_JAVA)" != ""
 
 ALLTAR : $(MISC)/active.oxt
 

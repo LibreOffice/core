@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "moduledbu.hxx"
 #include "TextConnectionHelper.hxx"
 #include "sqlmessage.hxx"
@@ -34,7 +36,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <connectivity/CommonTools.hxx>

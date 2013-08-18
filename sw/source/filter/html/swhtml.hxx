@@ -19,6 +19,8 @@
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
+#include <config_features.h>
+
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/svxenum.hxx>
@@ -705,11 +707,11 @@ private:
     void InsertImage();     // htmlgrin.cxx
     void InsertEmbed();     // htmlplug.cxx
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     void NewObject();   // htmlplug.cxx
 #endif
     void EndObject();       // CommandLine mit Applet verkn. (htmlplug.cxx)
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     void InsertApplet();    // htmlplug.cxx
 #endif
     void EndApplet();       // CommandLine mit Applet verkn. (htmlplug.cxx)

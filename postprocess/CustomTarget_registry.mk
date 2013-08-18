@@ -333,7 +333,7 @@ postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Dr
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
 postprocess_DRIVERS += evoab
 endif
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu

@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include "xmlfilter.hxx"
@@ -105,7 +106,7 @@ namespace dbaxml
         {
             if ( m_eWhat == E_JAVA )
             {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
                 static bool s_bFirstTime = true;
                 if ( s_bFirstTime )
                 {
@@ -190,7 +191,7 @@ namespace dbaxml
 
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
                     pCreatorThread = new FastLoader(m_xContext, FastLoader::E_JAVA);
 #endif
                 }

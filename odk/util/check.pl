@@ -190,7 +190,7 @@ if (-d "$SdkDir") {
 
     #check java docu, it is only a first and simple check
     # improvement required
-    my $solar_java = $ENV{"SOLAR_JAVA"};
+    my $solar_java = $ENV{"ENABLE_JAVA"};
     my $JDK = $ENV{"JDK"};
     if (defined($solar_java) && $solar_java ne "" && (!defined($JDK) || $JDK ne "gcj")) {
     print "check java docu: ";

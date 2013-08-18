@@ -43,7 +43,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Pyuno_commonwizards \
 ))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,wizards,\
 	Jar_commonwizards \
 	Jar_form \

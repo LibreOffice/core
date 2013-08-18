@@ -15,7 +15,7 @@ $(eval $(call gb_Rdb_add_components,uno_services,\
     testtools/source/bridgetest/bridgetest \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Rdb_add_components,uno_services,\
     testtools/source/bridgetest/testComponent \
 ))

@@ -21,7 +21,7 @@ $(eval $(call gb_Module_add_targets,testtools,\
 	Rdb_uno_services \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,testtools,\
 	Jar_testComponent \
 	CustomTarget_bridgetest_javamaker \

@@ -147,7 +147,7 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
             xSet->setPropertyValue("AppletCodeBase", uno::makeAny( sDocBase ) );
     }
 }
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 sal_Bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
 {
     OUString aCode, aName, aCodeBase;
@@ -189,7 +189,7 @@ void SwApplet_Impl::FinishApplet()
     }
 }
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 void SwApplet_Impl::AppendParam( const OUString& rName, const OUString& rValue )
 {
     aCommandList.Append( rName, rValue );

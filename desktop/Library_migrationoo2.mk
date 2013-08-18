@@ -17,7 +17,7 @@ $(eval $(call gb_Library_use_libraries,migrationoo2,\
     cppu \
     cppuhelper \
     i18nlangtag \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         jvmfwk) \
     sal \
     tl \
@@ -30,7 +30,7 @@ $(eval $(call gb_Library_set_componentfile,migrationoo2,desktop/source/migration
 $(eval $(call gb_Library_add_exception_objects,migrationoo2,\
     desktop/source/migration/services/basicmigration \
     desktop/source/migration/services/cexports \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         desktop/source/migration/services/jvmfwk) \
     desktop/source/migration/services/wordbookmigration \
 ))

@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 ))
 endif
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter YESGCC,$(BUILD_UNOWINREG)$(COM)),CustomTarget_unowinreg) \
 	CustomTarget_classes \

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "DBSetupConnectionPages.hxx"
 #include "sqlmessage.hxx"
 #include "dbu_resource.hrc"
@@ -33,7 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <connectivity/CommonTools.hxx>
@@ -554,7 +556,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
 
         sal_Bool bSuccess = sal_False;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         try
         {
             if ( !m_aETDriverClass.GetText().isEmpty() )
@@ -675,7 +677,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         try
         {
             if ( !m_aETDriverClass.GetText().isEmpty() )

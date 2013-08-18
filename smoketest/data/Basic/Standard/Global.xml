@@ -613,7 +613,7 @@ Sub SetDefaultOptions
     bMakeHTMLTest = true
     bMakeMathTest = true
     bMakeChartTest = true
-    if Environ(&quot;SOLAR_JAVA&quot;) = &quot;&quot; then
+    if Environ(&quot;ENABLE_JAVA&quot;) = &quot;&quot; then
         bMakeJavaTest = false
         bMakeDBTest = false
         bMakeExtensionTest = false

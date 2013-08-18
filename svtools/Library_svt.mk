@@ -47,7 +47,7 @@ $(eval $(call gb_Library_use_libraries,svt,\
     cppuhelper \
     i18nlangtag \
     i18nutil \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         jvmfwk) \
     salhelper \
     sal \
@@ -159,7 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/graphic/provider \
     svtools/source/graphic/renderer \
     svtools/source/graphic/transformer \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         svtools/source/java/javacontext \
         svtools/source/java/javainteractionhandler) \
     svtools/source/misc/acceleratorexecute \

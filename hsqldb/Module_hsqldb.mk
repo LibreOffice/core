@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,hsqldb))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,hsqldb,\
 	ExternalPackage_hsqldb \
 	ExternalProject_hsqldb \

@@ -7,6 +7,14 @@
 #ifndef CONFIG_FEATURES_H
 #define CONFIG_FEATURES_H
 
+/* JAVA
+ *
+ * Whether we have support for Java extensions, and use own Java
+ * functionality).
+ */
+
+#define HAVE_FEATURE_JAVA 0
+
 /* DESKTOP - Whether we have a "normal" desktop UI or not.
  *
  * Non-DESKTOP in practice means touch-based mobile devices, Android

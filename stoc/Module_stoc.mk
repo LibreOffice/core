@@ -20,7 +20,7 @@ $(eval $(call gb_Module_add_targets,stoc,\
     Library_stocservices \
 ))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,stoc,\
     Library_javaloader \

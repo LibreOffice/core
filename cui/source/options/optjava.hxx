@@ -19,6 +19,8 @@
 #ifndef _SVX_OPTJAVA_HXX
 #define _SVX_OPTJAVA_HXX
 
+#include <config_features.h>
+
 #include <vector>
 #include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>
@@ -33,7 +35,7 @@
 
 // forward ---------------------------------------------------------------
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 typedef struct _JavaInfo JavaInfo;
 #else
 typedef void* JavaInfo;
@@ -59,7 +61,7 @@ private:
     SvxJavaParameterDlg*    m_pParamDlg;
     SvxJavaClassPathDlg*    m_pPathDlg;
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     JavaInfo**              m_parJavaInfo;
     rtl_uString**           m_parParameters;
     rtl_uString*            m_pClassPath;

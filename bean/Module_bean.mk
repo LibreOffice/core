@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Module_Module,bean))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),ANDROID)

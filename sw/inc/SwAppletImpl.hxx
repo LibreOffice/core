@@ -20,6 +20,8 @@
 #ifndef _SW_APPLET_IMPL_HXX
 #define _SW_APPLET_IMPL_HXX
 
+#include <config_features.h>
+
 #define SWHTML_OPTTYPE_IGNORE 0
 #define SWHTML_OPTTYPE_TAG 1
 #define SWHTML_OPTTYPE_PARAM 2
@@ -55,7 +57,7 @@ public:
     void CreateApplet( const OUString& rCode, const OUString& rName,
                        sal_Bool bMayScript, const OUString& rCodeBase,
                        const OUString& rBaseURL );
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     sal_Bool CreateApplet( const OUString& rBaseURL );
     void AppendParam( const OUString& rName, const OUString& rValue );
 #endif

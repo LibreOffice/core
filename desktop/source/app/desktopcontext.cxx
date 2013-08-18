@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "desktopcontext.hxx"
 
 #include <vcl/svapp.hxx>
@@ -40,7 +42,7 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 
     if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
 #endif
     }

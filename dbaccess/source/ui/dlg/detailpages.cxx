@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "detailpages.hxx"
 #include "sqlmessage.hxx"
@@ -39,7 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <connectivity/CommonTools.hxx>
@@ -624,7 +625,7 @@ namespace dbaui
         OSL_ENSURE(m_bUseClass,"Who called me?");
 
         sal_Bool bSuccess = sal_False;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         try
         {
             if ( !m_aEDDriverClass.GetText().isEmpty() )

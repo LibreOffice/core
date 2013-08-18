@@ -27,7 +27,7 @@ TARGET=com_sun_star_comp_bridge
 
 # ------------------------------------------------------------------
 
-.IF "$(SOLAR_JAVA)" != ""
+.IF "$(ENABLE_JAVA)" != ""
 
 JARFILES 		= ridl.jar jurt.jar juh.jar
 

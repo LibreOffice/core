@@ -6,6 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include <config_features.h>
+
 #include <signal.h>
 #include <unistd.h>
 #include <limits.h>
@@ -636,7 +639,7 @@ exec_pagein (Args *args)
     free (argv[1]);
 }
 
-#if defined SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 
 static void extend_library_path (const char *new_element)
 {
@@ -868,7 +871,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             exec_pagein (args);
 
         /* javaldx */
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         if (!args->bInhibitJavaLdx)
             exec_javaldx (args);
 #endif

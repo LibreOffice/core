@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "cppu/EnvDcp.hxx"
 
@@ -1056,7 +1057,7 @@ static bool loadEnv(OUString const  & cLibStem,
 
     if ( cLibStem == CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" )
         fpInit = CPPU_ENV_uno_initEnvironment;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     else if ( cLibStem == "java_uno" )
         fpInit = java_uno_initEnvironment;
 #endif

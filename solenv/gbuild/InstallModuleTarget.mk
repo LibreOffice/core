@@ -70,6 +70,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-+ -P \
 		$(SCPDEFS) $(SCP_DEFS) -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 		$(SCP_INCLUDE) $(SCP_TEMPLATE_INCLUDE) \
+	    $(if $(ENABLE_JAVA),-DENABLE_JAVA) \
 		$(SCP_SOURCE) > $(1) \
 )
 endef

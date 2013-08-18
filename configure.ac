@@ -2439,35 +2439,29 @@ fi
 AC_SUBST(ENABLE_LTO)
 
 dnl ===================================================================
-dnl Java support enable
+dnl Java support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with Java support])
 if test "$with_java" != "no"; then
     if test "$DISABLE_SCRIPTING" = TRUE; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
-        SOLAR_JAVA=""
+        ENABLE_JAVA=""
         with_java=no
     else
         AC_MSG_RESULT([yes])
-        SOLAR_JAVA="TRUE"
+        ENABLE_JAVA="TRUE"
+        AC_DEFINE(HAVE_FEATURE_JAVA)
     fi
 else
     AC_MSG_RESULT([no])
-    SOLAR_JAVA=""
+    ENABLE_JAVA=""
 fi
 
-AC_SUBST(SOLAR_JAVA)
+AC_SUBST(ENABLE_JAVA)
 
-dnl SOLAR_JAVA="YES" (yes, silly name, should rename) indicates whether we
-dnl want there to be *run-time* (and build-time) support for Java extensions in the
-dnl built LibreOffice.
+dnl ENABLE_JAVA="TRUE" if we want there to be *run-time* (and build-time) support for Java
 
-dnl SOLAR_JAVA="BUILD" is claimed to indicate build-time only support
-dnl (no runtime support). It doesn't seem to ever be set to this
-dnl value, though, and everywhere SOLAR_JAVA is only checked for being
-dnl empty or non-empty.
-
-dnl SOLAR_JAVA="" indicate no java support at all
+dnl ENABLE_JAVA="" indicate no Java support at all
 
 dnl ===================================================================
 dnl  Test the Solaris compiler version
@@ -2770,7 +2764,7 @@ if test $_os = Darwin; then
 
     if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing requires code signing])
-    elif test -n "$SOLAR_JAVA" -a "$enable_macosx_sandbox" = yes; then
+    elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         ENABLE_MACOSX_SANDBOX=YES
@@ -6498,7 +6492,7 @@ AC_SUBST(MERGE_MODULES)
 dnl ===================================================================
 dnl Checks for Java
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
 
     # Windows-specific tests
     if test "$build_os" = "cygwin"; then
@@ -6584,7 +6578,7 @@ dnl ===================================================================
 # JAVA_HOME. Whether all the complexity here actually is needed any
 # more or not, no idea.
 
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
     if test -n "$JAVAINTERPRETER"; then
@@ -6650,7 +6644,7 @@ fi
 dnl ===================================================================
 dnl Set target Java bytecode version
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     _java_target_ver="1.5"
 
     JAVA_SOURCE_VER="$_java_target_ver"
@@ -6660,7 +6654,7 @@ fi
 dnl ===================================================================
 dnl Checks for javac
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     if test "$JDK" = "gcj"; then
         javacompiler=`echo $with_java | $SED -e "s/gij/gcj/g" | $SED -e "s/java/javac/g"`
     else
@@ -6698,7 +6692,7 @@ JAVACISGCJ=""
 dnl ===================================================================
 dnl Checks that javac is gcj
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     if test `$JAVACOMPILER --version 2>&1 | $GREP -c "GCC"` -gt 0; then
         JAVACISGCJ="yes"
     fi
@@ -6708,7 +6702,7 @@ AC_SUBST(JAVACISGCJ)
 dnl ===================================================================
 dnl Checks for javadoc
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     if test -z "$with_jdk_home"; then
         AC_PATH_PROG(JAVADOC, javadoc)
     else
@@ -6737,7 +6731,7 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 AC_SUBST(JAVADOCISGJDOC)
 
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
     if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
@@ -6841,7 +6835,7 @@ fi
 
 AWTLIB=
 
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     AC_MSG_CHECKING([for jawt lib name])
     if test "$JDK" = "gcj"; then
         save_CFLAGS=$CFLAGS
@@ -6891,7 +6885,7 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 
-if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
+if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
 #
 # Determine JAVALIB
 # If your platform follow the common pattern
@@ -7167,7 +7161,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
         test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/$JAVA_TOOLKIT"
         test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/native_thread"
     fi
-elif test -z "$SOLAR_JAVA"; then
+elif test -z "$ENABLE_JAVA"; then
     x_JAVALIB=[\#]
     x_JDKLIB=[\#]
 fi
@@ -11640,7 +11634,7 @@ libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarba
 dnl ===================================================================
 dnl Check for runtime JVM search path
 dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     AC_MSG_CHECKING([whether to use specific JVM search path at runtime])
     if test -n "$with_jvm_path" -a "$with_jvm_path" != "no"; then
         AC_MSG_RESULT([yes])
@@ -11661,7 +11655,7 @@ dnl ===================================================================
 dnl Test for the presence of Ant and that it works
 dnl ===================================================================
 
-if test "$SOLAR_JAVA" != ""; then
+if test "$ENABLE_JAVA" != ""; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
     if test -z "$with_ant_home"; then
@@ -11845,7 +11839,7 @@ EOF
 fi
 
 OOO_JUNIT_JAR=
-if test "$SOLAR_JAVA" != "" -a "$with_junit" != "no"; then
+if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" = "yes"; then
         if test -e /usr/share/java/junit4.jar; then
@@ -12478,7 +12472,7 @@ else
     case "$host_os" in
 
     aix*|dragonfly*|freebsd*|linux-gnu*|*netbsd*|openbsd*)
-        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
             pathmunge "$JAVA_HOME/bin" "after"
         fi
         ;;
@@ -12498,7 +12492,7 @@ else
             pathmunge "$COMPATH/bin" "before"
             pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
         fi
-        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
                 pathmunge "$JAVA_HOME/jre/bin/client" "before"
             fi
@@ -12511,7 +12505,7 @@ else
 
     solaris*)
         pathmunge "/usr/css/bin" "before"
-        if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
+        if test "$ENABLE_JAVA" != "" -a "$JDK"!="gcj"; then
             pathmunge "$JAVA_HOME/bin" "after"
         fi
         ;;

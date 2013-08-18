@@ -202,10 +202,10 @@ namespace rtl_Bootstrap
             {
                 Bootstrap aBootstrap;
                 rtl::OUString suValue;
-                rtl::OUString suValuename ("SOLAR_JAVA");
+                rtl::OUString suValuename ("ENABLE_JAVA");
                 //aBootstrap.getFrom( suValuename, suValue );
                 aBootstrap.getFrom( suValuename, suValue );
-                sal_Char *  pStr = getenv("SOLAR_JAVA");
+                sal_Char *  pStr = getenv("ENABLE_JAVA");
                 //      printUString( suGetname );
                 CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.compareToAscii( pStr ) == 0 );
             }

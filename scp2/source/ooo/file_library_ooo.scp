@@ -26,7 +26,7 @@
  ************************************************************************/
 #include "macros.inc"
 
-#if defined SOLAR_JAVA && defined WNT
+#if defined ENABLE_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
     PACKED_LIB_FILE_BODY;
     Name = "java_uno_accessbridge.dll";
@@ -346,7 +346,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 #ifndef MACOSX
 
 File gid_File_Lib_Officebean

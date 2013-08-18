@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_sdbc2 \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_hsqldb \
 	Configuration_jdbc \

@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gen,\
     cppuhelper \
     i18nlangtag \
     i18nutil \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         jvmaccess) \
     cppu \
     sal \

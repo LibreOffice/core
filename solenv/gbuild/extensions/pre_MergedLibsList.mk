@@ -46,7 +46,7 @@ gb_EXTRAMERGEDLIBS := \
 	fwm \
 	graphicfilter \
 	guesslang \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),hsqldb) \
+	$(if $(ENABLE_JAVA),hsqldb) \
 	hyphen \
 	icd \
 	icg \
@@ -60,7 +60,7 @@ gb_EXTRAMERGEDLIBS := \
 	ira \
 	itg \
 	iti \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),jdbc) \
+	$(if $(ENABLE_JAVA),jdbc) \
 	$(if $(filter-out ANDROID IOS,$(OS)),ldapbe2) \
 	lnth \
 	$(if $(filter-out ANDROID IOS,$(OS)),log) \
@@ -166,8 +166,8 @@ gb_URELIBS := \
 	cppu \
 	cppuhelper \
 	introspection \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmaccess) \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),jvmfwk) \
+	$(if $(ENABLE_JAVA),jvmaccess) \
+	$(if $(ENABLE_JAVA),jvmfwk) \
 	reflection \
 	reg \
 	sal \

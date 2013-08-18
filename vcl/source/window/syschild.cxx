@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
@@ -37,13 +38,13 @@
 #include <salobj.hxx>
 #include <svdata.hxx>
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jni.h>
 #endif
 
 #include <comphelper/processfactory.hxx>
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -176,7 +177,7 @@ void SystemChildWindow::EnableEraseBackground( sal_Bool bEnable )
 
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     JNIEnv*     pJavaEnv = reinterpret_cast< JNIEnv* >( pEnv );
     jthrowable  jtThrowable = pJavaEnv->ExceptionOccurred();
 
@@ -203,7 +204,7 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
     }
 #else
     (void)pEnv;
-#endif // SOLAR_JAVA
+#endif // HAVE_FEATURE_JAVA
 }
 
 void SystemChildWindow::SetForwardKey( sal_Bool bEnable )
@@ -233,7 +234,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
     {
         nRet = (sal_IntPtr) GetSystemData()->aWindow;
     }
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     else
     {
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -313,7 +314,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
             }
         }
     }
-#endif // SOLAR_JAVA
+#endif // HAVE_FEATURE_JAVA
 #endif
 
     return nRet;

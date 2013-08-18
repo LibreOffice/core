@@ -84,7 +84,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 endif
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Library_use_libraries,vcl,\
     jvmaccess \
 ))

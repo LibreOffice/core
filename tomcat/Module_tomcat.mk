@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,tomcat))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter TOMCAT,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,tomcat,\
 	ExternalProject_tomcat \

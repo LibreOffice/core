@@ -25,12 +25,12 @@ $(eval $(call gb_Library_set_include,pl,\
 
 $(eval $(call gb_Library_use_sdk_api,pl))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\
 	-DOJI \
 ))
 
-endif # SOLAR_JAVA=YES
+endif # ENABLE_JAVA=YES
 
 ifeq ($(SYSTEM_MOZILLA),YES)
 $(eval $(call gb_Library_add_defs,pl,\

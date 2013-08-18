@@ -194,14 +194,12 @@ void SAL_CALL CPPU_ENV_uno_ext_getMapping(
     struct _uno_Environment * pTo )
     SAL_THROW_EXTERN_C();
 
-#ifdef SOLAR_JAVA
 /* This is the uno_ext_getMapping function in the Java/UNO bridge */
 void SAL_CALL java_uno_ext_getMapping(
     struct _uno_Mapping ** ppMapping,
     struct _uno_Environment * pFrom,
     struct _uno_Environment * pTo )
     SAL_THROW_EXTERN_C();
-#endif
 
 #endif
 

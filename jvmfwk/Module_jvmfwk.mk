@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,jvmfwk))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
     Library_jvmfwk \

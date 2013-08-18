@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,jvmaccess))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,jvmaccess,\
 ))

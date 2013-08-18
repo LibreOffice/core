@@ -28,7 +28,7 @@ $(eval $(call gb_Rdb_add_components,ure/services,\
     remotebridges/source/unourl_resolver/uuresolver \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Rdb_add_components,ure/services,\
     stoc/source/javaloader/javaloader \
     stoc/source/javavm/javavm \

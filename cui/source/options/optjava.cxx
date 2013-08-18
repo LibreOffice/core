@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "optjava.hxx"
 #include <dialmgr.hxx>
 
@@ -43,7 +45,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmfwk/framework.h>
 #endif
 
@@ -131,7 +133,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", rSet)
     , m_pParamDlg(NULL)
     , m_pPathDlg(NULL)
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     , m_parJavaInfo(NULL)
     , m_parParameters(NULL)
     , m_pClassPath(NULL)
@@ -184,7 +186,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
     EnableHdl_Impl(m_pJavaEnableCB);
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     jfw_lock();
 #else
     get<Window>("javaframe")->Disable();
@@ -199,7 +201,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
     delete m_pParamDlg;
     delete m_pPathDlg;
     ClearJavaInfo();
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     std::vector< JavaInfo* >::iterator pIter;
     for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
     {
@@ -279,7 +281,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     Sequence< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
@@ -328,7 +330,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     String sClassPath;
 
     if ( !m_pPathDlg )
@@ -414,7 +416,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     if ( m_parJavaInfo )
     {
         JavaInfo** parInfo = m_parJavaInfo;
@@ -449,7 +451,7 @@ void SvxJavaOptionsPage::ClearJavaList()
 
 void SvxJavaOptionsPage::LoadJREs()
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     WaitObject aWaitObj(m_pJavaList);
     javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo, &m_nInfoSize );
     if ( JFW_E_NONE == eErr && m_parJavaInfo )
@@ -495,7 +497,7 @@ void SvxJavaOptionsPage::LoadJREs()
 
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     OUStringBuffer sEntry;
     sEntry.append('\t');
     sEntry.append(_pInfo->sVendor);
@@ -539,7 +541,7 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     bool bStartAgain = true;
     JavaInfo* pInfo = NULL;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
@@ -649,7 +651,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     javaFrameworkError eErr = JFW_E_NONE;
     if ( m_pParamDlg )
     {
@@ -745,7 +747,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
     SvtMiscOptions aMiscOpt;
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     sal_Bool bEnabled = sal_False;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )

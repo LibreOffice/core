@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,apache-commons))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter APACHE_COMMONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,apache-commons,\
 	ExternalPackage_apache_commons_logging \

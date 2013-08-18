@@ -46,7 +46,7 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/formats.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         svtools/source/java/javaerror.src) \
     svtools/source/misc/ehdl.src \
     svtools/source/misc/imagemgr.src \

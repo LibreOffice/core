@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "hintids.hxx"
 #include <rtl/strbuf.hxx>
 #include <svl/urihelper.hxx>
@@ -484,7 +486,7 @@ void SwHTMLParser::InsertEmbed()
 }
 
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 void SwHTMLParser::NewObject()
 {
     String aClassID, aName, aStandBy, aId, aStyle, aClass;
@@ -624,7 +626,7 @@ void SwHTMLParser::NewObject()
 
 void SwHTMLParser::EndObject()
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     if( !pAppletImpl )
         return;
     if( pAppletImpl->CreateApplet( sBaseURL ) )
@@ -654,7 +656,7 @@ void SwHTMLParser::EndObject()
 #endif
 }
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 void SwHTMLParser::InsertApplet()
 {
     String aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
@@ -757,7 +759,7 @@ void SwHTMLParser::InsertApplet()
 
 void SwHTMLParser::EndApplet()
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     if( !pAppletImpl )
         return;
 
@@ -787,7 +789,7 @@ void SwHTMLParser::EndApplet()
 
 void SwHTMLParser::InsertParam()
 {
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     if( !pAppletImpl )
         return;
 
@@ -968,7 +970,7 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
     {
         eType = HTML_FRMTYPE_IFRAME;
     }
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     else if( aClass == SvGlobalName( SO3_APPLET_CLASSID ) )
     {
         eType = HTML_FRMTYPE_APPLET;

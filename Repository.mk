@@ -118,7 +118,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
-	$(if $(and $(SOLAR_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
+	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
 	regmerge \
 	regview \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
@@ -282,7 +282,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	ira \
 	itg \
 	iti \
-	$(if $(SOLAR_JAVA),jdbc) \
+	$(if $(ENABLE_JAVA),jdbc) \
 	$(if $(ENABLE_KAB),kab1) \
 	$(if $(ENABLE_KAB),kabdrv1) \
 	ldapbe2 \
@@ -438,16 +438,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno \
-	$(if $(SOLAR_JAVA),java_uno) \
-	$(if $(SOLAR_JAVA),juh) \
-	$(if $(SOLAR_JAVA),juhx) \
-	$(if $(SOLAR_JAVA),jvmaccess) \
-	$(if $(SOLAR_JAVA),jvmfwk) \
+	$(if $(ENABLE_JAVA),java_uno) \
+	$(if $(ENABLE_JAVA),juh) \
+	$(if $(ENABLE_JAVA),juhx) \
+	$(if $(ENABLE_JAVA),jvmaccess) \
+	$(if $(ENABLE_JAVA),jvmfwk) \
 	log_uno \
 	reg \
 	sal_textenc \
 	store \
-	$(if $(SOLAR_JAVA),sunjavaplugin) \
+	$(if $(ENABLE_JAVA),sunjavaplugin) \
 	unoidl \
 	unsafe_uno \
 	$(if $(URELIBS),urelibs) \
@@ -463,8 +463,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,ure, \
 	introspection \
 	invocadapt \
 	invocation \
-	$(if $(SOLAR_JAVA),javaloader) \
-	$(if $(SOLAR_JAVA),javavm) \
+	$(if $(ENABLE_JAVA),javaloader) \
+	$(if $(ENABLE_JAVA),javavm) \
 	namingservice \
 	proxyfac \
 	reflection \
@@ -498,7 +498,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	dict_zh \
 	embobj \
 	fileacc \
-	$(if $(SOLAR_JAVA),hsqldb) \
+	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nlangtag \
 	i18nutil \
 	index_data \

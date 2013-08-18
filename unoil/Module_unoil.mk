@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,unoil,\
     Package_clioootypesversion \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,unoil,\
     CustomTarget_javamaker \
     Jar_unoil \

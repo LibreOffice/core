@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "IdentityMapping.hxx"
 
@@ -327,7 +328,7 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 {
     if (rBridgeName.equalsAscii( CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" ))
         return CPPU_ENV_uno_ext_getMapping;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     if (rBridgeName.equalsAscii( "java" "_uno" ))
         return java_uno_ext_getMapping;
 #endif

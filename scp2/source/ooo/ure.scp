@@ -53,7 +53,7 @@ Directory gid_Dir_Ure_Share
 End
 #endif
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 Directory gid_Dir_Ure_Java
     ParentID = SCP2_URE_SHARE_DIR;
     DosName = "java";
@@ -280,7 +280,7 @@ Unixlink gid_Unixlink_File_Dl_Store
     Target = SCP2_URE_DL_VER("store", "3");
 End
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 
 Unixlink gid_Unixlink_File_Dl_Jvmaccess
     BIN_FILE_BODY;
@@ -312,7 +312,7 @@ File gid_File_Dl_Profile_Jvmfwk3rc
 End
 
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Dl_JrepropertiesClass
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -322,7 +322,7 @@ File gid_File_Dl_JrepropertiesClass
 End
 #endif
 
-#if defined SOLAR_JAVA && defined MACOSX
+#if defined ENABLE_JAVA && defined MACOSX
 Unixlink gid_Unixlink_Dl_JavaUno
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -480,7 +480,7 @@ End
 
 #endif
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Dl_Jpipe
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -490,7 +490,7 @@ File gid_File_Dl_Jpipe
 End
 #endif
 
-#if defined SOLAR_JAVA && defined WNT
+#if defined ENABLE_JAVA && defined WNT
 File gid_File_Dl_Jpipx
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -567,7 +567,7 @@ End
 
 // Public JARs:
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Java_UnoloaderJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
@@ -577,7 +577,7 @@ File gid_File_Java_UnoloaderJar
 End
 #endif
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Java_JuhJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
@@ -587,7 +587,7 @@ File gid_File_Java_JuhJar
 End
 #endif
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Java_JurtJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
@@ -597,7 +597,7 @@ File gid_File_Java_JurtJar
 End
 #endif
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Java_RidlJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
@@ -609,7 +609,7 @@ End
 
 // Private JARs:
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Java_JavaUnoJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
@@ -639,7 +639,7 @@ End
 
 // Private Miscellaneous Files:
 
-#if defined SOLAR_JAVA
+#if defined ENABLE_JAVA
 File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_SHARE_MISC;

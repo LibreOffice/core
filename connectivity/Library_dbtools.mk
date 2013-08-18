@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	cppuhelper \
 	sal \
 	salhelper \
-	$(if $(filter TRUE,$(SOLAR_JAVA)), \
+	$(if $(ENABLE_JAVA), \
 		jvmaccess) \
 	utl \
 	tl \

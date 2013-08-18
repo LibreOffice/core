@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,beanshell))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter BSH,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,beanshell,\
 	ExternalPackage_beanshell \

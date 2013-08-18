@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,xmerge))
 
 $(eval $(call gb_Module_add_targets,xmerge,\
-	$(if $(SOLAR_JAVA), \
+	$(if $(ENABLE_JAVA), \
 		Jar_xmerge \
 		Jar_XMergeBridge \
 	) \

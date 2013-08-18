@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,languagetool))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter LANGUAGETOOL,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,languagetool,\
 	ExternalProject_languagetool \

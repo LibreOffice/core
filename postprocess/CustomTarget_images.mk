@@ -31,7 +31,7 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
-		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(SOLAR_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
+		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
 		$(call gb_Postprocess_get_target,AllResources) \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
@@ -48,7 +48,7 @@ $(packimages_DIR)/%.zip : \
 			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
-			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(SOLAR_JAVA),-l $(SRCDIR)/connectivity/source/drivers/hsqldb)) \
+			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),-l $(SRCDIR)/connectivity/source/drivers/hsqldb)) \
 			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_FIREBIRD_SDBC),-l $(SRCDIR)/connectivity/source/drivers/firebird)) \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))

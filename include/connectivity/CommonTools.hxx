@@ -19,6 +19,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #define _CONNECTIVITY_COMMONTOOLS_HXX_
 
+#include <config_features.h>
+
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -41,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace util {
 }
 }}}
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 namespace jvmaccess { class VirtualMachine; }
 #endif
 
@@ -155,7 +157,7 @@ namespace connectivity
 
     OOO_DLLPUBLIC_DBTOOLS void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
     /** creates a java virtual machine
         @param  _rxContext
             The ORB.

@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,scripting))
 ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,scripting,\
-	$(if $(SOLAR_JAVA),\
+	$(if $(ENABLE_JAVA),\
 		Jar_HelloWorld \
 		Jar_Highlight \
 		Jar_MemoryUsage \

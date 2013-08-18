@@ -361,7 +361,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 	-DSHORTSTDC3=$(gb_SHORTSTDC3) \
 	-DSHORTSTDCPP3=$(gb_SHORTSTDCPP3) \
 	-D_gcc3 \
-	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 
 endef

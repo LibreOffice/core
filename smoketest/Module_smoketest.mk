@@ -19,7 +19,7 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 	Zip_smoketestdoc \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Extension_TestExtension \
 	Jar_TestExtension \
@@ -40,7 +40,7 @@ endif
 
 endif
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Jar_smoketest \
 ))

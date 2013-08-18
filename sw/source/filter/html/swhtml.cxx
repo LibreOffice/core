@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -1374,14 +1376,14 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_OBJECT_ON:
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         NewObject();
         bCallNextToken = pAppletImpl!=0 && pTable!=0;
 #endif
         break;
 
     case HTML_APPLET_ON:
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         InsertApplet();
         bCallNextToken = pAppletImpl!=0 && pTable!=0;
 #endif

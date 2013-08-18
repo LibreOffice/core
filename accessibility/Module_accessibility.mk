@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,accessibility,\
     Library_acc \
 ))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,accessibility,\
     CustomTarget_bridge \

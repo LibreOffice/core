@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Module_Module,nlpsolver))
 
-ifeq ($(SOLAR_JAVA),TRUE)
+ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,nlpsolver,\
 	Jar_EvolutionarySolver \
 	Jar_nlpsolver \

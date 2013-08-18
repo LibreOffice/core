@@ -20,7 +20,7 @@ endif
 $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 	$(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) \
 	$(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) \
-	$(if $(SOLAR_JAVA),\
+	$(if $(ENABLE_JAVA),\
 		$(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) \
 		$(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX))
 

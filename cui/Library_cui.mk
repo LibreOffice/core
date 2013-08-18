@@ -41,7 +41,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     drawinglayer \
     editeng \
     i18nlangtag \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+    $(if $(ENABLE_JAVA), \
         jvmfwk) \
     lng \
     sal \

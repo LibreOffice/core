@@ -20,7 +20,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	cppu \
 	cppuhelper \
 	i18nlangtag \
-	$(if $(filter TRUE,$(SOLAR_JAVA)), \
+	$(if $(ENABLE_JAVA), \
 		jvmaccess \
 		jvmfwk) \
 	sal \

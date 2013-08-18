@@ -160,7 +160,7 @@ File gid_File_Package_odk_html
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-#if defined(SOLAR_JAVA)
+#if defined(ENABLE_JAVA)
 File gid_File_Package_odk_javadoc
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
@@ -199,7 +199,7 @@ File gid_File_Package_odk_settings_generated
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-#if defined(SOLAR_JAVA)
+#if defined(ENABLE_JAVA)
 File gid_File_Package_odk_unowinreg
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
@@ -245,7 +245,7 @@ File gid_File_Zip_Odkheaders
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-#if defined(SOLAR_JAVA)
+#if defined(ENABLE_JAVA)
 File gid_File_Zip_uno_loader_classes
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;

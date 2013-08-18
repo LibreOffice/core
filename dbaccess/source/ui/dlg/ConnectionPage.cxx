@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "ConnectionPage.hxx"
 #include "ConnectionPage.hrc"
 #include "dbu_dlg.hrc"
 #include "dsmeta.hxx"
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>
 #endif
 #include <svl/itemset.hxx>
@@ -317,7 +318,7 @@ namespace dbaui
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
-#ifdef SOLAR_JAVA
+#if HAVE_FEATURE_JAVA
         try
         {
             if ( !m_aJavaDriver.GetText().isEmpty() )

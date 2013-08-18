@@ -60,7 +60,7 @@ End
 
 #ifdef MACOSX
 
-#ifdef SOLAR_JAVA
+#ifdef ENABLE_JAVA
 
 // auto_ooo_lib_hsqldb defined in gbuild ($(WORKDIR)/AutoInstall/ooo)
 Shortcut gid_Shortcut_Lib_Hsqldb_2

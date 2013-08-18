@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,ridljar))
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,ridljar,\
     CustomTarget_javamaker \
     Jar_ridl \

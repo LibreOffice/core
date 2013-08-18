@@ -23,8 +23,8 @@ $(call gb_CustomTarget_get_workdir,odk/html)/%.html : $(SRCDIR)/odk/%.html
 	    -e 's|%DOXYGEN_PREFIX0%|$(if $(DOXYGEN),.,http://api.libreoffice.org)|g' \
 	    -e 's|%DOXYGEN_PREFIX1%|$(if $(DOXYGEN),..,http://api.libreoffice.org)|g' \
 	    -e 's|%DOXYGEN_PREFIX2%|$(if $(DOXYGEN),../..,http://api.libreoffice.org)|g' \
-	    -e 's|%JAVADOC_PREFIX0%|$(if $(SOLAR_JAVA),.,http://api.libreoffice.org)|g' \
-	    -e 's|%JAVADOC_PREFIX1%|$(if $(SOLAR_JAVA),..,http://api.libreoffice.org)|g' \
+	    -e 's|%JAVADOC_PREFIX0%|$(if $(ENABLE_JAVA),.,http://api.libreoffice.org)|g' \
+	    -e 's|%JAVADOC_PREFIX1%|$(if $(ENABLE_JAVA),..,http://api.libreoffice.org)|g' \
 	    < $< > $@
 
 # vim: set noet sw=4 ts=4:

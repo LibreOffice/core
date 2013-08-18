@@ -18,7 +18,7 @@ $(eval $(call gb_Module_add_targets,unotest,\
 ))
 endif
 
-ifneq ($(SOLAR_JAVA),)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,unotest,\
 	Jar_test-tools \
 ))
