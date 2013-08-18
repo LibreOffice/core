@@ -476,6 +476,11 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
 SvxTPView::SvxTPView(Window * pParent)
     : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
+    , bEnableAccept(true)
+    , bEnableAcceptAll(true)
+    , bEnableReject(true)
+    , bEnableRejectAll(true)
+    , bEnableUndo(true)
 {
     Dialog *pTopLevel = GetParentDialog();
     pTopLevel->get(m_pAccept, "accept");
@@ -504,11 +509,11 @@ SvxTPView::SvxTPView(Window * pParent)
 
 void SvxTPView::ActivatePage()
 {
-    m_pAccept->Enable();
-    m_pReject->Enable();
-    m_pAcceptAll->Enable();
-    m_pRejectAll->Enable();
-    m_pUndo->Enable();
+    m_pAccept->Enable(bEnableAccept);
+    m_pReject->Enable(bEnableReject);
+    m_pAcceptAll->Enable(bEnableAcceptAll);
+    m_pRejectAll->Enable(bEnableRejectAll);
+    m_pUndo->Enable(bEnableUndo);
     TabPage::ActivatePage();
 }
 
@@ -559,21 +564,25 @@ void SvxTPView::InsertCalcHeader()
 
 void SvxTPView::EnableAccept(sal_Bool nFlag)
 {
+    bEnableAccept = nFlag;
     m_pAccept->Enable(nFlag);
 }
 
 void SvxTPView::EnableAcceptAll(sal_Bool nFlag)
 {
+    bEnableAcceptAll = nFlag;
     m_pAcceptAll->Enable(nFlag);
 }
 
 void SvxTPView::EnableReject(sal_Bool nFlag)
 {
+    bEnableReject = nFlag;
     m_pReject->Enable(nFlag);
 }
 
 void SvxTPView::EnableRejectAll(sal_Bool nFlag)
 {
+    bEnableRejectAll = nFlag;
     m_pRejectAll->Enable(nFlag);
 }
 
@@ -584,6 +593,7 @@ void SvxTPView::ShowUndo(sal_Bool nFlag)
 
 void SvxTPView::EnableUndo(sal_Bool nFlag)
 {
+    bEnableUndo = nFlag;
     m_pUndo->Enable(nFlag);
 }
 
