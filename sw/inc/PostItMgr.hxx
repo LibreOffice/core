@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _POSTITMGR_HXX
-#define _POSTITMGR_HXX
+#ifndef POSTITMGR_HXX
+#define POSTITMGR_HXX
 
 #include <list>
 #include <vector>
 #include <editeng/outlobj.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
@@ -215,10 +215,10 @@ class SwPostItMgr: public SfxListener
             void CorrectPositions();
 
             void SetLayout() { mbLayout = true; };
-            void Delete(String aAuthor);
+            void Delete(OUString aAuthor);
             void Delete();
 
-            void Hide( const String& rAuthor );
+            void Hide( const OUString& rAuthor );
             void Hide();
             void Show();
 
@@ -282,8 +282,5 @@ class SwPostItMgr: public SfxListener
 };
 
 #endif
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

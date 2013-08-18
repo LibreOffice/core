@@ -1152,7 +1152,7 @@ void SwPostItMgr::RemoveSidebarWin()
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
 // RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
-void SwPostItMgr::Delete(String aAuthor)
+void SwPostItMgr::Delete(OUString aAuthor)
 {
     mpWrtShell->StartAllAction();
     if ( HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor()==aAuthor) )
@@ -1160,9 +1160,7 @@ void SwPostItMgr::Delete(String aAuthor)
         SetActiveSidebarWin(0);
     }
     SwRewriter aRewriter;
-    String aUndoString = SW_RES(STR_DELETE_AUTHOR_NOTES);
-    aUndoString += aAuthor;
-    aRewriter.AddRule(UndoArg1, aUndoString);
+    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + aAuthor);
     mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
 
     std::vector<SwFmtFld*> aTmp;
@@ -1213,7 +1211,7 @@ void SwPostItMgr::Delete()
     CalcRects();
     LayoutPostIts();
 }
-void SwPostItMgr::Hide( const String& rAuthor )
+void SwPostItMgr::Hide( const OUString& rAuthor )
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
     {
