@@ -67,7 +67,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLAutoStyleFamily aTemporary( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTemporary);
     if( aFind != maFamilyList.end() )
     {
@@ -81,7 +81,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 #endif
 
-    XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
+    XMLAutoStyleFamily *pFamily = new XMLAutoStyleFamily( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
     maFamilyList.insert(pFamily);
 }
 
@@ -90,7 +90,7 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
         const UniReference < SvXMLExportPropertyMapper > & rMapper )
 {
 
-    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLAutoStyleFamily aTemporary( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTemporary);
     if (aFind != maFamilyList.end())
         aFind->mxMapper = rMapper;
@@ -99,7 +99,7 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
 // Adds a name to list
 void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
 {
-    XMLFamilyData_Impl aTmp( nFamily );
+    XMLAutoStyleFamily aTmp( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTmp);
     DBG_ASSERT( aFind != maFamilyList.end(),
                 "SvXMLAutoStylePool_Impl::RegisterName: unknown family" );
@@ -122,7 +122,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     // iterate over families
     for (FamilyListType::iterator aJ = maFamilyList.begin(); aJ != maFamilyList.end(); ++aJ)
     {
-        XMLFamilyData_Impl &rFamily = *aJ;
+        XMLAutoStyleFamily &rFamily = *aJ;
 
         // iterate over names
         SvXMLAutoStylePoolNamesP_Impl* pNames = rFamily.mpNameList;
@@ -152,20 +152,20 @@ bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek )
 {
-    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLAutoStyleFamily aTemporary( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTemporary);
     DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Add: unknown family");
 
     if (aFind == maFamilyList.end())
         return false;
 
-    XMLFamilyData_Impl &rFamily = *aFind;
+    XMLAutoStyleFamily &rFamily = *aFind;
 
     SvXMLAutoStylePoolParentP_Impl aTmp(rParentName);
-    XMLFamilyData_Impl::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
+    XMLAutoStyleFamily::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
     if (it2 == rFamily.maParents.end())
     {
-        std::pair<XMLFamilyData_Impl::ParentsType::iterator,bool> r =
+        std::pair<XMLAutoStyleFamily::ParentsType::iterator,bool> r =
             rFamily.maParents.insert(new SvXMLAutoStylePoolParentP_Impl(rParentName));
         it2 = r.first;
     }
@@ -188,20 +188,20 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 {
     // get family and parent the same way as in Add()
 
-    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLAutoStyleFamily aTemporary( nFamily );
     FamilyListType::iterator aFind = maFamilyList.find(aTemporary);
     DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Add: unknown family");
 
     if (aFind == maFamilyList.end())
         return false;
 
-    XMLFamilyData_Impl &rFamily = *aFind;
+    XMLAutoStyleFamily &rFamily = *aFind;
 
     SvXMLAutoStylePoolParentP_Impl aTmp(rParentName);
-    XMLFamilyData_Impl::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
+    XMLAutoStyleFamily::ParentsType::iterator it2 = rFamily.maParents.find(aTmp);
     if (it2 == rFamily.maParents.end())
     {
-        std::pair<XMLFamilyData_Impl::ParentsType::iterator,bool> r =
+        std::pair<XMLAutoStyleFamily::ParentsType::iterator,bool> r =
             rFamily.maParents.insert(new SvXMLAutoStylePoolParentP_Impl(rParentName));
         it2 = r.first;
     }
@@ -228,15 +228,15 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLAutoStyleFamily aTemporary( nFamily );
     FamilyListType::const_iterator const iter = maFamilyList.find(aTemporary);
     OSL_ENSURE(iter != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Find: unknown family");
 
     if (iter != maFamilyList.end())
     {
-        XMLFamilyData_Impl const& rFamily = *iter;
+        XMLAutoStyleFamily const& rFamily = *iter;
         SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
-        XMLFamilyData_Impl::ParentsType::const_iterator it2 = rFamily.maParents.find(aTmp);
+        XMLAutoStyleFamily::ParentsType::const_iterator it2 = rFamily.maParents.find(aTmp);
         if (it2 != rFamily.maParents.end())
         {
             sName = it2->Find(rFamily, rProperties);
@@ -258,14 +258,14 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     // Get list of parents for current family (nFamily)
-    XMLFamilyData_Impl aTmp( nFamily );
+    XMLAutoStyleFamily aTmp( nFamily );
     FamilyListType::const_iterator aFind = maFamilyList.find(aTmp);
     DBG_ASSERT( aFind != maFamilyList.end(),
                 "SvXMLAutoStylePool_Impl::exportXML: unknown family" );
     if (aFind == maFamilyList.end())
         return;
 
-    const XMLFamilyData_Impl &rFamily = *aFind;
+    const XMLAutoStyleFamily &rFamily = *aFind;
     sal_uInt32 nCount = rFamily.mnCount;
 
     if (!nCount)
@@ -284,7 +284,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         aExpStyles[i].mpProperties = 0;
     }
 
-    XMLFamilyData_Impl::ParentsType::const_iterator it = rFamily.maParents.begin(), itEnd = rFamily.maParents.end();
+    XMLAutoStyleFamily::ParentsType::const_iterator it = rFamily.maParents.begin(), itEnd = rFamily.maParents.end();
     for (; it != itEnd; ++it)
     {
         const SvXMLAutoStylePoolParentP_Impl& rParent = *it;

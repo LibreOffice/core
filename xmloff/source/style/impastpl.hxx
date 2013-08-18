@@ -45,7 +45,7 @@ class SvXMLExport;
 
 // Implementationclass for stylefamily-information
 
-struct XMLFamilyData_Impl : boost::noncopyable
+struct XMLAutoStyleFamily : boost::noncopyable
 {
     typedef boost::ptr_set<SvXMLAutoStylePoolParentP_Impl> ParentsType;
 
@@ -60,14 +60,14 @@ struct XMLFamilyData_Impl : boost::noncopyable
     OUString                     maStrPrefix;
     bool                         mbAsFamily;
 
-    XMLFamilyData_Impl( sal_Int32 nFamily, const OUString& rStrName,
+    XMLAutoStyleFamily( sal_Int32 nFamily, const OUString& rStrName,
             const UniReference<SvXMLExportPropertyMapper>& rMapper,
             const OUString& rStrPrefix, bool bAsFamily = true );
 
-    XMLFamilyData_Impl( sal_Int32 nFamily );
-    ~XMLFamilyData_Impl();
+    XMLAutoStyleFamily( sal_Int32 nFamily );
+    ~XMLAutoStyleFamily();
 
-    friend bool operator<(const XMLFamilyData_Impl& r1, const XMLFamilyData_Impl& r2);
+    friend bool operator<(const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2);
 
     void ClearEntries();
 };
@@ -82,7 +82,7 @@ class SvXMLAutoStylePoolPropertiesP_Impl
 
 public:
 
-    SvXMLAutoStylePoolPropertiesP_Impl( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
+    SvXMLAutoStylePoolPropertiesP_Impl( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
 
     ~SvXMLAutoStylePoolPropertiesP_Impl()
     {
@@ -114,11 +114,11 @@ public:
 
     ~SvXMLAutoStylePoolParentP_Impl();
 
-    sal_Bool Add( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
+    sal_Bool Add( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
 
-    sal_Bool AddNamed( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
+    sal_Bool AddNamed( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
 
-    OUString Find( const XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    OUString Find( const XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     const OUString& GetParent() const { return msParent; }
 
@@ -143,7 +143,7 @@ struct SvXMLAutoStylePoolParentPCmp_Impl
 class SvXMLAutoStylePoolP_Impl
 {
     // A set that finds and sorts based only on mnFamily
-    typedef boost::ptr_set<XMLFamilyData_Impl> FamilyListType;
+    typedef boost::ptr_set<XMLAutoStyleFamily> FamilyListType;
 
     SvXMLExport& rExport;
     FamilyListType maFamilyList;

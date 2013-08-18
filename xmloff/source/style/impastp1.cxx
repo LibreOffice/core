@@ -20,10 +20,10 @@
 #include <tools/debug.hxx>
 #include "impastpl.hxx"
 
-// Class XMLFamilyData_Impl
-// ctor/dtor class XMLFamilyData_Impl
+// Class XMLAutoStyleFamily
+// ctor/dtor class XMLAutoStyleFamily
 
-XMLFamilyData_Impl::XMLFamilyData_Impl(
+XMLAutoStyleFamily::XMLAutoStyleFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > &rMapper,
@@ -36,17 +36,17 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl;
 }
 
-XMLFamilyData_Impl::XMLFamilyData_Impl( sal_Int32 nFamily ) :
+XMLAutoStyleFamily::XMLAutoStyleFamily( sal_Int32 nFamily ) :
     mnFamily( nFamily ), mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
     mbAsFamily( false )
 {}
 
-XMLFamilyData_Impl::~XMLFamilyData_Impl()
+XMLAutoStyleFamily::~XMLAutoStyleFamily()
 {
     delete mpNameList;
 }
 
-void XMLFamilyData_Impl::ClearEntries()
+void XMLAutoStyleFamily::ClearEntries()
 {
     maParents.clear();
 }
