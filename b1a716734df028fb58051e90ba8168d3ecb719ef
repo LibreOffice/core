@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8po\u003d",
+        "filename": "dbaccess/source/ext/macromigration/migrationlog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-08-18T14:11:20Z",
+      "side": 1,
+      "message": "There seems to be a missing closing bracket here.\n\ndbaccess/source/ext/macromigration/migrationlog.cxx:434:52: error: expected ‘)’ before ‘;’ token",
+      "revId": "b1a716734df028fb58051e90ba8168d3ecb719ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
