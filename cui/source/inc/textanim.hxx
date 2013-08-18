@@ -92,6 +92,8 @@ public:
 \************************************************************************/
 class SvxTextTabDialog : public SfxTabDialog
 {
+    sal_uInt16          npText;
+    sal_uInt16          npTextAnim;
 private:
     const SdrView*      pView;
 
