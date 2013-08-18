@@ -361,17 +361,16 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
     {
         if (vFields[rNameRow.nFirstField + i]->pEdit == pEdit)
             nField = i;
-	// Since middle names are not supported, clear shortname if it
-	// contains a middle initial
-        if (OUString(rShortName.pEdit->GetText()).getLength() > 2)
-	{
-            rShortName.pEdit->SetText(OUString());
-	}
     }
     // updating the initial
     if (nField < nInits && rShortName.pEdit->IsEnabled())
     {
         OUString sShortName = rShortName.pEdit->GetText();
+        // clear short name if it contains more characters than the number of initials
+        if ((unsigned)sShortName.getLength() > nInits)
+        {
+            rShortName.pEdit->SetText(OUString());
+        }
         while ((unsigned)sShortName.getLength() < nInits)
             sShortName += OUString(' ');
         OUString sName = pEdit->GetText();
