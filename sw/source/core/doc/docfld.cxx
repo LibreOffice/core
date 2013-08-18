@@ -2218,7 +2218,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         // from top to bottom
         std::vector<sal_uLong> aTmpArr;
         SwSectionFmts& rArr = rDoc.GetSections();
-        SwSectionNode* pSectNd;
+        SwSectionNode* pSectNd = 0;
         sal_uInt16 nArrStt = 0;
         sal_uLong nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
