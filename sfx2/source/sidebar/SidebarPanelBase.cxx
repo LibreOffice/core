@@ -111,22 +111,6 @@ void SAL_CALL SidebarPanelBase::disposing (void)
 
 
 
-void SidebarPanelBase::SetControl (::Window* pControl)
-{
-    mpControl = pControl;
-}
-
-
-
-
-::Window* SidebarPanelBase::GetControl (void) const
-{
-    return mpControl;
-}
-
-
-
-
 // XContextChangeEventListener
 void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     const ui::ContextChangeEventObject& rEvent)

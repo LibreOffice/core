@@ -437,11 +437,11 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pPgeExampleWN, "pageexample");
     get(m_pFrmExampleWN, "frameexample");
 
-    connectPercentFieldWrapper(aEd1, "width1mf");
-    connectPercentFieldWrapper(aEd2, "width2mf");
-    connectPercentFieldWrapper(aEd3, "width3mf");
-    connectPercentFieldWrapper(aDistEd1, "spacing1mf");
-    connectPercentFieldWrapper(aDistEd2, "spacing2mf");
+    connectPercentField(aEd1, "width1mf");
+    connectPercentField(aEd2, "width2mf");
+    connectPercentField(aEd3, "width3mf");
+    connectPercentField(aDistEd1, "spacing1mf");
+    connectPercentField(aDistEd2, "spacing2mf");
 
     SetExchangeSupport();
 
@@ -556,12 +556,12 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
     aEd3.SetMax(nNewMaxWidth, FUNIT_TWIP);
 }
 
-void SwColumnPage::connectPercentFieldWrapper(PercentFieldWrap &rWrap, const OString &rName)
+void SwColumnPage::connectPercentField(PercentField &rWrap, const OString &rName)
 {
     MetricField *pFld = get<MetricField>(rName);
     assert(pFld);
     rWrap.set(pFld);
-    m_aPercentFieldWrappersMap[pFld] = &rWrap;
+    m_aPercentFieldsMap[pFld] = &rWrap;
 }
 
 void SwColumnPage::Reset(const SfxItemSet &rSet)
@@ -989,7 +989,7 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
 {
-    PercentFieldWrap *pFld = m_aPercentFieldWrappersMap[pMetricFld];
+    PercentField *pFld = m_aPercentFieldsMap[pMetricFld];
     assert(pFld);
     long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
     if(nCols < 2)
@@ -1062,7 +1062,7 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
 
 IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricFld )
 {
-    PercentFieldWrap *pField = m_aPercentFieldWrappersMap[pMetricFld];
+    PercentField *pField = m_aPercentFieldsMap[pMetricFld];
     assert(pField);
     pModifiedField = pField;
     Timeout();

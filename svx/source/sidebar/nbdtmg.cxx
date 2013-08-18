@@ -1654,20 +1654,6 @@ OutlineTypeMgr::OutlineTypeMgr(const NBOType aType):
     ImplLoad(OUString("standard.syc"));
 }
 
-OutlineTypeMgr::OutlineTypeMgr(const NBOType aType,const SfxItemSet* pArg):
-    NBOTypeMgrBase(aType,pArg)//,
-    //pNumSettingsArrs( new NumSettingsArr_Impl[DEFAULT_NUM_VALUSET_COUNT])
-{
-    Init();
-    for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
-    {
-        pDefaultOutlineSettingsArrs[nItem] = pOutlineSettingsArrs[nItem];
-    }
-    //Initial the first time to store the default value. Then do it again for customized value
-    Init();
-    ImplLoad(OUString("standard.syc"));
-}
-
 OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)//,
     //pNumSettingsArrs( new NumSettingsArr_Impl[DEFAULT_NUM_VALUSET_COUNT])

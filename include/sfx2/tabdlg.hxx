@@ -139,9 +139,6 @@ public:
 
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
                   sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
-    SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
-                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
-                  const String *pUserButtonText = 0 );
     ~SfxTabDialog();
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui

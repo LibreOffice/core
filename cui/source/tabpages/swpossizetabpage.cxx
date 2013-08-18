@@ -547,6 +547,9 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(Window* pParent, const SfxItemSet& rInA
     get(m_pFollowCB, "followtextflow");
     get(m_pExampleWN, "preview");
 
+    setOptimalFrmWidth();
+    setOptimalRelWidth();
+
     FieldUnit eDlgUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( *m_pHoriByMF, eDlgUnit, sal_True );
     SetFieldUnit( *m_pVertByMF, eDlgUnit, sal_True );

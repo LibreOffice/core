@@ -200,8 +200,6 @@ sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()
 sfx2::sidebar::SidebarController::ShowDetailMenu(rtl::OUString const&) const
 sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
-sfx2::sidebar::SidebarPanelBase::GetControl() const
-sfx2::sidebar::SidebarPanelBase::SetControl(Window*)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
@@ -217,7 +215,6 @@ svx::sidebar::NBOutlineTypeMgrFact::NBOutlineTypeMgrFact()
 svx::sidebar::NumberingTypeMgr::GetNumCount() const
 svx::sidebar::NumberingTypeMgr::GetNumSettingByIndex(unsigned short) const
 svx::sidebar::NumberingTypeMgr::NumberingTypeMgr(unsigned short, SfxItemSet const*)
-svx::sidebar::OutlineTypeMgr::OutlineTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
 svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 unoidl::UnoidlProvider::getConstant(unsigned int) const

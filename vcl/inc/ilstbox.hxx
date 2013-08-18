@@ -438,7 +438,6 @@ public:
     virtual Window*     GetPreferredKeyInputWindow();
 
     sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr );
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, const Image& rImage );
     sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage );
     void            RemoveEntry( sal_uInt16 nPos );
     void            SetEntryData( sal_uInt16 nPos, void* pNewData ) { maLBWindow.GetEntryList()->SetEntryData( nPos, pNewData ); }

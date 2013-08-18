@@ -39,7 +39,7 @@ class SwFormatTablePage : public SfxTabPage
 {
     TableNameEdit*  m_pNameED;
     FixedText*      m_pWidthFT;
-    PercentFieldWrap m_aWidthMF;
+    PercentField m_aWidthMF;
     CheckBox*       m_pRelWidthCB;
 
     RadioButton*    m_pFullBtn;
@@ -50,9 +50,9 @@ class SwFormatTablePage : public SfxTabPage
     RadioButton*    m_pFreeBtn;
 
     FixedText*      m_pLeftFT;
-    PercentFieldWrap m_aLeftMF;
+    PercentField m_aLeftMF;
     FixedText*      m_pRightFT;
-    PercentFieldWrap m_aRightMF;
+    PercentField m_aRightMF;
     FixedText*      m_pTopFT;
     MetricField*    m_pTopMF;
     FixedText*      m_pBottomFT;
@@ -103,7 +103,7 @@ class SwTableColumnPage : public SfxTabPage
     PushButton*     m_pDownBtn;
 
     SwTableRep*     pTblData;
-    PercentFieldWrap  m_aFieldArr[MET_FIELDS];
+    PercentField  m_aFieldArr[MET_FIELDS];
     FixedText*      m_pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;

@@ -34,23 +34,6 @@ using namespace ::com::sun::star::text;
 #define FLYINFLY_BORDER 3
 #define DEMOTEXT        "Ij"
 
-SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
-
-    Window(pParent, rResID),
-
-    nHAlign     (HoriOrientation::CENTER),
-    nHRel       (RelOrientation::FRAME),
-    nVAlign     (VertOrientation::TOP),
-    nVRel       (RelOrientation::PRINT_AREA),
-    nWrap       (WrapTextMode_NONE),
-    nAnchor     (TextContentAnchorType_AT_PAGE),
-    bTrans      (sal_False),
-    aRelPos     (Point(0,0))
-{
-    InitColors_Impl();
-    SetMapMode(MAP_PIXEL);
-}
-
 SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nStyle ) :
 
     Window(pParent, nStyle),

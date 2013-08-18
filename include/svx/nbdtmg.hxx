@@ -371,7 +371,6 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         static OutlineTypeMgr*  _instance;
     public:
         OutlineTypeMgr(const NBOType aType);
-        OutlineTypeMgr(const NBOType aType,const SfxItemSet* pArg);
         OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr);
         virtual ~OutlineTypeMgr() {}
         virtual void Init();

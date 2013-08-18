@@ -398,31 +398,6 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 // -----------------------------------------------------------------------
 
 SfxTabDialog::SfxTabDialog
-
-/*  [Description]
-
-    Constructor
-*/
-
-(
-    SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
-    Window* pParent,              // Parent Window
-    const ResId& rResId,            // ResourceId
-    const SfxItemSet* pItemSet,   // Itemset with the data;
-                                  // can be NULL, when Pages are onDemand
-    sal_Bool bEditFmt,                // Flag: templates are processed
-                                  // when yes -> additional Button for standard
-    const String* pUserButtonText // Text for UserButton;
-                                  // if != 0, the UserButton is created
-)
-    : TabDialog(pParent, rResId)
-    , pFrame(pViewFrame)
-    , INI_LIST(pItemSet)
-{
-    Init_Impl( bFmt, pUserButtonText, &rResId );
-}
-
-SfxTabDialog::SfxTabDialog
 (
     SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
     Window* pParent,              // Parent Window

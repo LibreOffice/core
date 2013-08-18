@@ -73,7 +73,6 @@ protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 public:
 
-    SvxSwFrameExample(Window* pParent, const ResId& rResID);
     SvxSwFrameExample(Window* pParent, WinBits nStyle);
     ~SvxSwFrameExample();
 

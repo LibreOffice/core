@@ -149,7 +149,6 @@ public:
     static const Wallpaper GetWallpaper (const ThemeItem eItem);
     static sal_Int32 GetInteger (const ThemeItem eItem);
     static bool GetBoolean (const ThemeItem eItem);
-    static Rectangle GetRectangle (const ThemeItem eItem);
 
     static bool IsHighContrastMode (void);
 

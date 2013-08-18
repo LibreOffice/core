@@ -114,9 +114,6 @@ protected:
     virtual void SAL_CALL disposing (void)
         throw (cssu::RuntimeException);
 
-    void SetControl (::Window* pControl);
-    ::Window* GetControl (void) const;
-
 private:
     Window* mpControl;
     const ::rtl::OUString msResourceURL;

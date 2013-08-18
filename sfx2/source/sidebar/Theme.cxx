@@ -151,18 +151,6 @@ bool Theme::GetBoolean (const ThemeItem eItem)
 
 
 
-Rectangle Theme::GetRectangle (const ThemeItem eItem)
-{
-    const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Rectangle);
-    const sal_Int32 nIndex (GetIndex(eItem, eType));
-    const Theme& rTheme (GetCurrentTheme());
-    return rTheme.maRectangles[nIndex];
-}
-
-
-
-
 bool Theme::IsHighContrastMode (void)
 {
     const Theme& rTheme (GetCurrentTheme());

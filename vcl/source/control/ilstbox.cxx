@@ -2299,16 +2299,6 @@ sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const Image& rImage )
-{
-    ImplEntryType* pNewEntry = new ImplEntryType( rImage );
-    sal_uInt16 nNewPos = maLBWindow.InsertEntry( nPos, pNewEntry );
-    StateChanged( STATE_CHANGE_DATA );
-    return nNewPos;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage )
 {
     ImplEntryType* pNewEntry = new ImplEntryType( rStr, rImage );

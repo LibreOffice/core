@@ -46,13 +46,13 @@ class SwFrmPage: public SfxTabPage
     // size
     FixedText*       m_pWidthFT;
     FixedText*       m_pWidthAutoFT;
-    PercentFieldWrap m_aWidthED;
+    PercentField m_aWidthED;
     CheckBox*        m_pRelWidthCB;
     CheckBox*        m_pAutoWidthCB;
 
     FixedText*       m_pHeightFT;
     FixedText*       m_pHeightAutoFT;
-    PercentFieldWrap m_aHeightED;
+    PercentField m_aHeightED;
     CheckBox*        m_pRelHeightCB;
     CheckBox*        m_pAutoHeightCB;
 

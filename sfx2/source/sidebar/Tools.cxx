@@ -137,18 +137,6 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
 
 
 
-SvBorder Tools::RectangleToSvBorder (const Rectangle aBox)
-{
-    return SvBorder(
-        aBox.Left(),
-        aBox.Top(),
-        aBox.Right(),
-        aBox.Bottom());
-}
-
-
-
-
 util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
 {
     util::URL aURL;

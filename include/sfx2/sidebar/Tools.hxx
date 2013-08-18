@@ -55,8 +55,6 @@ public:
     static css::awt::Gradient VclToAwtGradient (const Gradient aGradient);
     static Gradient AwtToVclGradient (const css::awt::Gradient aGradient);
 
-    static SvBorder RectangleToSvBorder (const Rectangle aBox);
-
     static css::util::URL GetURL (const ::rtl::OUString& rsCommand);
     static cssu::Reference<css::frame::XDispatch> GetDispatch (
         const cssu::Reference<css::frame::XFrame>& rxFrame,

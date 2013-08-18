@@ -98,14 +98,14 @@ class SwColumnPage : public SfxTabPage
 
     PushButton*     m_pBtnBack;
     FixedText*      m_pLbl1;
-    PercentFieldWrap aEd1;
+    PercentField aEd1;
     FixedText*      m_pLbl2;
-    PercentFieldWrap aEd2;
+    PercentField aEd2;
     FixedText*      m_pLbl3;
-    PercentFieldWrap aEd3;
+    PercentField aEd3;
     PushButton*     m_pBtnNext;
-    PercentFieldWrap aDistEd1;
-    PercentFieldWrap aDistEd2;
+    PercentField aDistEd1;
+    PercentField aDistEd2;
     CheckBox*       m_pAutoWidthBox;
 
     FixedText*      m_pLineTypeLbl;
@@ -133,9 +133,9 @@ class SwColumnPage : public SfxTabPage
     long            nColWidth[nMaxCols];
     long            nColDist[nMaxCols];
     sal_uInt16          nMinWidth;
-    PercentFieldWrap*   pModifiedField;
+    PercentField*   pModifiedField;
 
-    std::map<MetricField*, PercentFieldWrap*> m_aPercentFieldWrappersMap;
+    std::map<MetricField*, PercentField*> m_aPercentFieldsMap;
 
     sal_Bool            bFormat;
     sal_Bool            bFrm;
@@ -169,7 +169,7 @@ class SwColumnPage : public SfxTabPage
 
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
 
-    void connectPercentFieldWrapper(PercentFieldWrap &rWrap, const OString &rName);
+    void connectPercentField(PercentField &rWrap, const OString &rName);
 
     bool isLineNotNone() const;
 

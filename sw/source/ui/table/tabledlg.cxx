@@ -945,7 +945,7 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 
 void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
-        PercentFieldWrap *pEdit = NULL;
+        PercentField *pEdit = NULL;
         sal_uInt16 nAktPos;
         sal_uInt16 i;
 
