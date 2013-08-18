@@ -16,6 +16,24 @@
       "revId": "31bd2432db3d5fdcf5b3983b4bf5f4a8f5747dc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8pM\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2013-08-18T19:44:16Z",
+      "side": 1,
+      "message": "its a common pattern, and I tend to do it myself too, to just call end once, especially if the container is a list (like this one is) to rule out some super-dooper end impl of \"walk list to find end\", not that I think any impls are actually like that anymore (if they ever were ?)",
+      "parentUuid": "AAAAXn//8yE\u003d",
+      "revId": "31bd2432db3d5fdcf5b3983b4bf5f4a8f5747dc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
