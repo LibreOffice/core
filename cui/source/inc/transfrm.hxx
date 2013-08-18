@@ -78,35 +78,29 @@ class SvxPositionSizeTabPage : public SvxTabPage
 
 private:
     // position
-    FixedLine           maFlPosition;
-    FixedText           maFtPosX;
-    MetricField         maMtrPosX;
-    FixedText           maFtPosY;
-    MetricField         maMtrPosY;
-    FixedText           maFtPosReference;
-    SvxRectCtl          maCtlPos;
+    VclFrame*            m_pFlPosition;
+    MetricField*         m_pMtrPosX;
+    MetricField*         m_pMtrPosY;
+    SvxRectCtl*          m_pCtlPos;
 
     // size
-    FixedLine           maFlSize;
-    FixedText           maFtWidth;
-    MetricField         maMtrWidth;
-    FixedText           maFtHeight;
-    MetricField         maMtrHeight;
-    CheckBox            maCbxScale;
-    FixedText           maFtSizeReference;
-    SvxRectCtl          maCtlSize;
+    VclFrame*            m_pFlSize;
+    FixedText*           m_pFtWidth;
+    MetricField*         m_pMtrWidth;
+    FixedText*           m_pFtHeight;
+    MetricField*         m_pMtrHeight;
+    CheckBox*            m_pCbxScale;
+    SvxRectCtl*          m_pCtlSize;
 
     // protect
-    FixedLine           maFlProtect;
-    TriStateBox         maTsbPosProtect;
-    TriStateBox         maTsbSizeProtect;
+    VclFrame*            m_pFlProtect;
+    TriStateBox*         m_pTsbPosProtect;
+    TriStateBox*         m_pTsbSizeProtect;
 
     // adjust
-    FixedLine           maFlAdjust;
-    TriStateBox         maTsbAutoGrowWidth;
-    TriStateBox         maTsbAutoGrowHeight;
-
-    FixedLine           maFlDivider;
+    VclFrame*            m_pFlAdjust;
+    TriStateBox*         m_pTsbAutoGrowWidth;
+    TriStateBox*         m_pTsbAutoGrowHeight;
 
 private:
     const SfxItemSet&   mrOutAttrs;
