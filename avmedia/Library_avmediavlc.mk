@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_libraries,avmediavlc,\
     tl \
     vcl \
     utl \
+    salhelper \
     $(gb_UWINAPI) \
 ))
 
@@ -49,6 +50,8 @@ $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
     avmedia/source/vlc/wrapper/Media \
     avmedia/source/vlc/wrapper/Player \
     avmedia/source/vlc/wrapper/EventManager \
+    avmedia/source/vlc/wrapper/EventHandler \
+    avmedia/source/vlc/wrapper/ThreadsafeQueue \
 ))
 
 # vim: set noet sw=4 ts=4:
