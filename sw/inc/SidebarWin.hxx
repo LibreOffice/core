@@ -98,7 +98,7 @@ class SwSidebarWin : public Window
         virtual void    Delete();
         virtual void    GotoPos() = 0;
 
-        virtual String  GetAuthor() = 0;
+        virtual OUString GetAuthor() = 0;
         virtual Date    GetDate() = 0;
         virtual Time    GetTime() = 0;
 

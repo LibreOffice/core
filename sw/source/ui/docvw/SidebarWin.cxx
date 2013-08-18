@@ -78,8 +78,6 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-#define EMPTYSTRING             OUString()
-
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
                             WinBits nBits,
                             SwPostItMgr& aMgr,
@@ -260,8 +258,12 @@ SfxItemSet SwSidebarWin::DefaultItem()
 {
     SfxItemSet aItem( mrView.GetDocShell()->GetPool() );
     aItem.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-    aItem.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-        EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+    aItem.Put(SvxFontItem(FAMILY_SWISS,
+                          GetSettings().GetStyleSettings().GetFieldFont().GetName(),
+                          OUString(),
+                          PITCH_DONTKNOW,
+                          RTL_TEXTENCODING_DONTKNOW,
+                          EE_CHAR_FONTINFO));
     return aItem;
 }
 
@@ -378,11 +380,11 @@ void SwSidebarWin::CheckMetaText()
     OUString sMeta = GetAuthor();
     if (sMeta.isEmpty())
     {
-        sMeta = OUString(SW_RES(STR_NOAUTHOR));
+        sMeta = SW_RESSTR(STR_NOAUTHOR);
     }
     else if (sMeta.getLength() > 22)
     {
-        sMeta = sMeta.copy(0, 20) + OUString("...");
+        sMeta = sMeta.copy(0, 20) + "...";
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -393,11 +395,11 @@ void SwSidebarWin::CheckMetaText()
     Date aDate = GetDate();
     if (aDate==aSysDate)
     {
-        sMeta = String(SW_RES(STR_POSTIT_TODAY));
+        sMeta = SW_RESSTR(STR_POSTIT_TODAY);
     }
     else if (aDate == Date(aSysDate-1))
     {
-        sMeta = String(SW_RES(STR_POSTIT_YESTERDAY));
+        sMeta = SW_RESSTR(STR_POSTIT_YESTERDAY);
     }
     else if (aDate.IsValidAndGregorian() )
     {
@@ -405,11 +407,11 @@ void SwSidebarWin::CheckMetaText()
     }
     else
     {
-        sMeta = String(SW_RES(STR_NODATE));
+        sMeta = SW_RESSTR(STR_NODATE);
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + OUString(" ")  + rLocalData.getTime( GetTime(),false );
+        sMeta += " " + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {
@@ -569,7 +571,7 @@ void SwSidebarWin::DoResize()
     aHeight -= GetMetaHeight();
     mpMetadataAuthor->Show();
     mpMetadataDate->Show();
-    mpSidebarTxtControl->SetQuickHelpText(EMPTYSTRING);
+    mpSidebarTxtControl->SetQuickHelpText(OUString());
 
     if ((aTextHeight > aHeight) && !IsPreview())
     {   // we need vertical scrollbars and have to reduce the width
@@ -866,8 +868,7 @@ void SwSidebarWin::DeactivatePostIt()
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
 
 
-    if ( !IsProtected() &&
-         Engine()->GetEditEngine().GetText()==OUString(EMPTYSTRING) )
+    if ( !IsProtected() && Engine()->GetEditEngine().GetText().isEmpty() )
     {
         mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );
     }
@@ -899,7 +900,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         {
             // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
             // will be created
-            if (Engine()->GetEditEngine().GetText() != OUString(EMPTYSTRING))
+            if (!Engine()->GetEditEngine().GetText().isEmpty())
             {
                 OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
                 mrMgr.RegisterAnswer(pPara);
