@@ -20,12 +20,6 @@
 #include <svx/globlmn.hrc>
 #include "toolbox.hrc"
 #include "helpid.h"
-InfoBox MSG_NO_RULER
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
-};
 String STR_GRFILTER_OPENERROR
 {
         Text [ en-US ] = "Graphics file cannot be opened" ;
@@ -105,12 +99,6 @@ String STR_REDLINE_REJECT_ALL
 String STR_REDLINE_EDIT
 {
         Text [ en-US ] = "Edit Changes";
-};
-QueryBox DLG_IMPORT_DBNAME
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "Use database name as default database for the document?" ;
 };
 String STR_PAGE
 {

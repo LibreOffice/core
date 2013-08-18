@@ -29,7 +29,6 @@
 #define STR_GRFILTER_FILTERERROR   (RC_SHELLS_BEGIN +  5)
 #define STR_GRFILTER_TOOBIG        (RC_SHELLS_BEGIN +  6)
 #define STR_INSERT_GRAPHIC         (RC_SHELLS_BEGIN +  7)
-#define DLG_IMPORT_DBNAME          (RC_SHELLS_BEGIN +  9)
 #define STR_NO_ADDRESSBOOK         (RC_SHELLS_BEGIN + 10)
 #define STR_REDLINE_COMMENT        (RC_SHELLS_BEGIN + 11)
 #define STR_REDLINE_INSERTED       (RC_SHELLS_BEGIN + 12)
@@ -70,7 +69,6 @@
 #define STR_SWBG_PAGE              (RC_SHELLS_BEGIN +  44)
 #define STR_SWBG_HEADER            (RC_SHELLS_BEGIN +  45)
 #define STR_SWBG_FOOTER            (RC_SHELLS_BEGIN +  46)
-#define MSG_NO_RULER               (RC_SHELLS_BEGIN +  47)
 
 #define STR_SHELLNAME_DRAWFORM     (RC_SHELLS_BEGIN +  48)
     // FREE

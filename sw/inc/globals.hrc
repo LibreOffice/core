@@ -84,14 +84,9 @@
 #define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
 #define IL_SECTION_BITMAPS          (RC_GLOBALS_BEGIN + 48)
 
-// DIALOGS -----------------------------------------------------------
-
-#define DLG_SPECIAL                 (RC_GLOBALS_BEGIN + 3)
-
 // INFOBOX ------------------------------------------------------------
 
 #define ERR_CLPBRD_READ             (RC_GLOBALS_BEGIN + 1)
-#define ERR_CLPBRD_WRITE            (RC_GLOBALS_BEGIN + 2)
 #define MSG_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 3)
 
 // ACC ---------------------------------------------------------------

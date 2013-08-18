@@ -106,11 +106,5 @@ String STR_FRMUI_PATTERN
 {
     Text [ en-US ] = "Background" ;
 };
-InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Column spacing exceeds the column width." ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

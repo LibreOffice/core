@@ -33,11 +33,6 @@ String STR_COMCORE_CANT_SHOW
     Text [ en-US ] = "Graphic cannot be displayed." ;
 };
 
-
-InfoBox ERR_CLPBRD_WRITE
-{
-    Message [ en-US ] = "Error while copying to the clipboard." ;
-};
 InfoBox ERR_CLPBRD_READ
 {
     Message [ en-US ] = "Error reading from the clipboard." ;

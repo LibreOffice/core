@@ -42,13 +42,6 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     Message [ en-US ] = "Requested clipboard format is not available." ;
 };
 
-QueryBox MSG_UPDATE_NEW_GLOS_FMT
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
-};
-
 String STR_PRIVATETEXT
 {
     Text [ en-US ] = "%PRODUCTNAME Writer" ;

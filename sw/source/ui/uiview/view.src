@@ -41,12 +41,6 @@ ImageButton BTN_PAGEDOWN
     SmallStyle = TRUE ;
     SYMBOL = IMAGEBUTTON_PAGEDOWN ;
 };
-QueryBox DLG_SPECIAL
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "Do you want check the special regions?" ;
-};
 QueryBox DLG_SPECIAL_FORCED
 {
     BUTTONS = WB_YES_NO ;
@@ -80,10 +74,6 @@ String STR_TEXTOPTIONS
 InfoBox MSG_NOT_FOUND
 {
     Message [ en-US ] = "Search key not found." ;
-};
-InfoBox MSG_INDEX_OVERFLOW
-{
-    Message [ en-US ] = "found." ;
 };
 InfoBox MSG_SCAN_NOSOURCE
 {

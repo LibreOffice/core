@@ -22,14 +22,8 @@
 
 #include "rcid.hrc"
 
-// Should the clipboard for other applications...
-#define MSG_CLPBRD_CLEAR                (RC_APP_BEGIN + 3)
-
 #define STR_CANTCREATE                  (RC_APP_BEGIN + 4)
 #define STR_CANTOPEN                    (RC_APP_BEGIN + 5)
-
-// Messages
-#define MSG_ERROR_SEND_MAIL             ( RC_APP_BEGIN + 6)
 
 // For the interface because the RID_APP_BEGIN is now Desktop.
 #define RID_SW_NAME                     ( RC_APP_BEGIN + 8)

@@ -267,13 +267,6 @@ String STR_READONLY_PATH
     Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
 };
 
-InfoBox MSG_ERROR_SEND_MAIL
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error sending mail." ;
-};
-
 InfoBox MSG_ERROR_PASSWD
 {
     BUTTONS = WB_OK ;
@@ -436,13 +429,6 @@ String STR_NUMRULE_DEFNAME
 String STR_EMPTYPAGE
 {
     Text [ en-US ] = "blank page" ;
-};
-
-QueryBox MSG_CLPBRD_CLEAR
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
 };
 
 String STR_ABSTRACT_TITLE

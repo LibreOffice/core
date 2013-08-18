@@ -51,7 +51,6 @@
 #define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
 #define STR_COLL_HEADER         (STR_FRMDLG_BEGIN + 47)
 
-#define MSG_COLUMN_ERR_BOUNDWIDTH  (STR_FRMDLG_BEGIN + 48)
 #define STR_EDIT_GRF            (STR_FRMDLG_BEGIN + 49)
 
 #define STR_LINE_TOP            (STR_FRMDLG_BEGIN + 50)

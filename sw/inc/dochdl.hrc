@@ -25,7 +25,6 @@
 #define STR_NOGLOS                  (RC_DOCHDL_BEGIN + 1)
 #define MSG_ERR_INSERT_GLOS         (RC_DOCHDL_BEGIN + 3)
 #define MSG_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
-#define MSG_UPDATE_NEW_GLOS_FMT     (RC_DOCHDL_BEGIN + 5)
 
 #define STR_NO_TABLE                (RC_DOCHDL_BEGIN + 7)
 
