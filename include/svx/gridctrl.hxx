@@ -321,7 +321,7 @@ protected:
     virtual sal_Bool SaveModified();
     virtual sal_Bool IsModified() const;
 
-    virtual sal_uInt16 AppendColumn(const String& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
+    virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
     virtual void RemoveColumn(sal_uInt16 nId);
     virtual DbGridColumn* CreateColumn(sal_uInt16 nId) const;
     virtual void ColumnMoved(sal_uInt16 nId);
@@ -557,7 +557,7 @@ protected:
     sal_Int32 AlignSeekCursor();
     sal_Bool SetCurrent(long nNewRow);
 
-    String GetCurrentRowCellText(DbGridColumn* pCol,const DbGridRowRef& _rRow) const;
+    OUString GetCurrentRowCellText(DbGridColumn* pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();
     sal_Bool IsValid(const DbGridRowRef& _xRow) const {return _xRow && _xRow->IsValid();}
 

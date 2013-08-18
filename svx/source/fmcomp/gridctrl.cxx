@@ -466,7 +466,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
     // Controls Groessen und Positionen setzen
     //
-    XubString aText = m_aRecordText.GetText();
+    OUString aText = m_aRecordText.GetText();
     long nTextWidth = m_aRecordText.GetTextWidth(aText);
     m_aRecordText.SetPosPixel(Point(nX,nY));
     m_aRecordText.SetSizePixel(Size(nTextWidth,nH));
@@ -1653,7 +1653,7 @@ DbGridColumn* DbGridControl::CreateColumn(sal_uInt16 nId) const
 }
 
 //------------------------------------------------------------------------------
-sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)
+sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)
 {
     DBG_ASSERT(nId == BROWSER_INVALIDID, "DbGridControl::AppendColumn : I want to set the ID myself ...");
     sal_uInt16 nRealPos = nModelPos;
@@ -2705,10 +2705,10 @@ OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
     return sRet;
 }
 //------------------------------------------------------------------------------
-XubString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGridRowRef& _rRow) const
+OUString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGridRowRef& _rRow) const
 {
     // Ausgabe des Textes fuer eine Zelle
-    XubString aText;
+    OUString aText;
     if ( pColumn && IsValid(_rRow) )
         aText = pColumn->GetCellText(_rRow, m_xFormatter);
     return aText;

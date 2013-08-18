@@ -1145,7 +1145,7 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    sal_uInt16 EditBrowseBox::AppendColumn(const String& rName, sal_uInt16 nWidth, sal_uInt16 nPos, sal_uInt16 nId)
+    sal_uInt16 EditBrowseBox::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nPos, sal_uInt16 nId)
     {
         if (nId == BROWSER_INVALIDID)
         {

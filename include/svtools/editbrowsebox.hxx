@@ -578,7 +578,7 @@ namespace svt
         // inserting columns
         // if you don't set a width, this will be calculated automatically
         // if the id isn't set the smallest unused will do it ...
-        virtual sal_uInt16 AppendColumn(const String& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
+        virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
 
         // called whenever (Shift)Tab or Enter is pressed. If true is returned, these keys
         // result in traveling to the next or to th previous cell
