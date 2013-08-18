@@ -552,10 +552,6 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     return false;
 }
 
-const char UNDO_ARG1[] = "$1";
-const char UNDO_ARG2[] = "$2";
-const char UNDO_ARG3[] = "$3";
-
 static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
                                  xub_StrLen nEnd)
 {
@@ -579,8 +575,7 @@ static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
 
             case CH_TXTATR_INWORD:
             case CH_TXTATR_BREAKWORD:
-                aResult = OUString(UNDO_ARG2);
-
+                aResult = SwRewriter::GetPlaceHolder(UndoArg2);
                 break;
 
             }
@@ -638,7 +633,7 @@ String DenoteSpecialCharacters(const String & rStr)
         aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
     }
     else
-        aResult = OUString(UNDO_ARG2);
+        aResult = SwRewriter::GetPlaceHolder(UndoArg2);
 
     return aResult;
 }
@@ -686,7 +681,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
             else
             {
-                aStr = OUString(UNDO_ARG2);
+                aStr = SwRewriter::GetPlaceHolder(UndoArg2);
             }
         }
 
@@ -1080,31 +1075,6 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
 void SwUndoDelete::SetTableName(const String & rName)
 {
     sTableName = rName;
-}
-
-String SwRewriter::Apply(const String & rStr) const
-{
-    OUString aResult = rStr;
-    std::vector<SwRewriteRule>::const_iterator aIt;
-
-    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
-    {
-        switch (aIt->first)
-        {
-            case UndoArg1:
-            default:
-                aResult = aResult.replaceAll(UNDO_ARG1, aIt->second);
-                break;
-            case UndoArg2:
-                aResult = aResult.replaceAll(UNDO_ARG2, aIt->second);
-                break;
-            case UndoArg3:
-                aResult = aResult.replaceAll(UNDO_ARG3, aIt->second);
-                break;
-        }
-    }
-
-    return aResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

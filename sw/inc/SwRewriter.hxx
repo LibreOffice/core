@@ -21,7 +21,7 @@
 #define _SW_REWRITER_HXX
 
 #include <vector>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <swdllapi.h>
 
 enum SwUndoArg
@@ -31,7 +31,7 @@ enum SwUndoArg
     UndoArg3
 };
 
-typedef std::pair<SwUndoArg, String> SwRewriteRule;
+typedef std::pair<SwUndoArg, OUString> SwRewriteRule;
 
 class SW_DLLPUBLIC SwRewriter
 {
@@ -42,9 +42,11 @@ public:
     SwRewriter(const SwRewriter & rSrc);
     ~SwRewriter();
 
-    void AddRule(SwUndoArg eWhat, const String & rWith);
+    void AddRule(SwUndoArg eWhat, const OUString & rWith);
 
-    String Apply(const String & rStr) const;
+    OUString Apply(const OUString & rStr) const;
+
+    static OUString GetPlaceHolder(SwUndoArg eId);
 };
 
 #endif // _SW_REWRITER_HXX
