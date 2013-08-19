@@ -156,6 +156,7 @@ public:
                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     void ExtendDataArea(ScDocument* pDoc);
+    const OUString& GetCellStyle( const ScAddress& rPos, bool bRowStripe );
 };
 
 class SC_DLLPUBLIC ScDBCollection
