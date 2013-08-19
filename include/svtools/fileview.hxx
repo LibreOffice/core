@@ -83,12 +83,12 @@ public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
     ~SvtFileView();
 
-    const String&           GetViewURL() const;
-    String                  GetURL( SvTreeListEntry* pEntry ) const;
-    String                  GetCurrentURL() const;
+    const OUString&         GetViewURL() const;
+    OUString                GetURL( SvTreeListEntry* pEntry ) const;
+    OUString                GetCurrentURL() const;
 
-    sal_Bool                GetParentURL( String& _rParentURL ) const;
-    void                    CreatedFolder( const String& rUrl, const String& rNewFolder );
+    sal_Bool                GetParentURL( OUString& _rParentURL ) const;
+    void                    CreatedFolder( const OUString& rUrl, const OUString& rNewFolder );
 
     void                    SetHelpId( const OString& rHelpId );
     const OString&     GetHelpId( ) const;
@@ -108,15 +108,15 @@ public:
             action asynchronously.
     */
     FileViewResult          Initialize(
-                                const String& rFolderURL,
-                                const String& rFilter,
+                                const OUString& rFolderURL,
+                                const OUString& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor,
                                 const ::com::sun::star::uno::Sequence< OUString >& rBlackList
                             );
 
     FileViewResult          Initialize(
-                                const String& rFolderURL,
-                                const String& rFilter,
+                                const OUString& rFolderURL,
+                                const OUString& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor );
     /** initialze the view with a sequence of contents, which have already been obtained elsewhere
 
@@ -128,7 +128,7 @@ public:
     /** initializes the view with the content of a folder given by an UCB content
     */
     sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
-                                        const String& rFilter );
+                                        const OUString& rFilter );
 
     /** reads the current content of the current folder again, and applies the given filter to it
 
@@ -145,7 +145,7 @@ public:
             action asynchronously.
     */
     FileViewResult          ExecuteFilter(
-                                const String& rFilter,
+                                const OUString& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor
                             );
 
@@ -188,8 +188,8 @@ public:
                                 // EnableContextMenu( sal_True )/EnableDelete(sal_True) disable name replacing!
 
                             // save and load column size and sort order
-    String                  GetConfigString() const;
-    void                    SetConfigString( const String& rCfgStr );
+    OUString                GetConfigString() const;
+    void                    SetConfigString( const OUString& rCfgStr );
 
     void                    EndInplaceEditing( bool _bCancel );
 
@@ -242,7 +242,7 @@ private:
 public:
 
                             QueryDeleteDlg_Impl( Window* pParent,
-                                                 const String& rName );
+                                                 const OUString& rName );
 
     void                    EnableAllButton() { _aAllButton.Enable( sal_True ); }
     QueryDeleteResult_Impl  GetResult() const { return _eResult; }

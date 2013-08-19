@@ -45,8 +45,8 @@ private:
     Edit            maEdit;
     PushButton      maButton;
 
-    String          maButtonText;
-    sal_Bool            mbOpenDlg;
+    OUString        maButtonText;
+    sal_Bool        mbOpenDlg;
 
     Link            maDialogCreatedHdl;
 

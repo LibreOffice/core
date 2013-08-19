@@ -112,10 +112,10 @@ using namespace svtools;
 
 struct FolderHistory
 {
-    String      m_sURL;
+    OUString        m_sURL;
     sal_uLong       m_nGroup;
 
-    FolderHistory( const String& _rURL, sal_Int32 _nGroup ) :
+    FolderHistory( const OUString& _rURL, sal_Int32 _nGroup ) :
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
 };
 
@@ -546,7 +546,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
     aNewFolderLink.Call( this );
 }
 
-sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
+sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( OUString& rURL ) const
 {
     INetURLObject aViewObj( aFileView.GetViewURL() );
     INetURLObject aRootObj( aCurrentRootURL );
@@ -1027,7 +1027,7 @@ void SvtTemplateWindow::DoAction( sal_uInt16 nAction )
 
         case TI_DOCTEMPLATE_PREV :
         {
-            String aURL;
+            OUString aURL;
             if ( pFileWin->HasPreviousLevel( aURL ) )
                 pFileWin->OpenFolder( aURL );
             break;
@@ -1035,8 +1035,8 @@ void SvtTemplateWindow::DoAction( sal_uInt16 nAction )
 
         case TI_DOCTEMPLATE_PRINT :
         {
-            String sPrintFile( pFileWin->GetSelectedFile() );
-            if ( sPrintFile.Len() > 0 )
+            OUString sPrintFile( pFileWin->GetSelectedFile() );
+            if ( !sPrintFile.isEmpty() )
                 PrintFile( sPrintFile );
             break;
         }

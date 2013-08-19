@@ -146,7 +146,7 @@ public:
 
     String              GetSelectedFile() const;
     void                OpenFolder( const String& rURL );
-    sal_Bool            HasPreviousLevel( String& rURL ) const;
+    sal_Bool            HasPreviousLevel( OUString& rURL ) const;
     String              GetFolderTitle() const;
     void                SetFocus();
 };

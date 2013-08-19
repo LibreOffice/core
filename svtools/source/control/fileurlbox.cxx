@@ -37,7 +37,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void FileURLBox::DisplayURL( const String& _rURL )
+    void FileURLBox::DisplayURL( const OUString& _rURL )
     {
         String sOldText = GetText();
 

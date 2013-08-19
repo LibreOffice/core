@@ -173,9 +173,9 @@ private:
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
-    String                  msAccessibleDescText;
-    String                  msFolder;
-    String                  msFile;
+    OUString                msAccessibleDescText;
+    OUString                msFolder;
+    OUString                msFile;
     sal_uInt32              mnSearchIndex;
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
@@ -320,7 +320,7 @@ protected:
     HashedEntry                 maHashedURL;    // for future purposes when dealing with a set of cached
                                                 //  NameTranslationLists
 private:
-    const String            maTransFileName;
+    const OUString          maTransFileName;
     void                    Init();             // reads the translation file and fills the (internal) list
 
 public:
@@ -338,11 +338,11 @@ public:
 
     inline void                 Update();   // clears list and init
 
-    inline const String&        GetTransTableFileName() const;
+    inline const OUString&      GetTransTableFileName() const;
                                             // returns the name for the file, which contains the translation strings
 };
 
-inline const String& NameTranslationList::GetTransTableFileName() const
+inline const OUString& NameTranslationList::GetTransTableFileName() const
 {
     return maTransFileName;
 }
@@ -361,7 +361,7 @@ void NameTranslationList::Init()
         if( aTestContent.isDocument() )
         {
             // ... also tests the existence of maTransFile by throwing an Exception
-            String          aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
+            OUString        aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
             aConfig.SetGroup( OString(RTL_CONSTASCII_STRINGPARAM("TRANSLATIONNAMES")) );
@@ -429,7 +429,7 @@ public:
     virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
-    const String*           GetTransTableFileName() const;
+    const OUString*         GetTransTableFileName() const;
                                             // returns the name for the file, which contains the translation strings
 };
 
@@ -470,9 +470,9 @@ public:
 
     IntlWrapper             aIntlWrapper;
 
-    String                  maViewURL;
-    String                  maAllFilter;
-    String                  maCurrentFilter;
+    OUString                maViewURL;
+    OUString                maAllFilter;
+    OUString                maCurrentFilter;
     Image                   maFolderImage;
     Link                    maOpenDoneLink;
     Reference< XCommandEnvironment >    mxCmdEnv;
@@ -485,7 +485,7 @@ public:
     void                    Clear();
 
     FileViewResult          GetFolderContent_Impl(
-        const String& rFolder,
+        const OUString& rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
         const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >() );
 
@@ -506,10 +506,10 @@ public:
     void                    EntryRemoved( const OUString& rURL );
     void                    EntryRenamed( OUString& rURL,
                                           const OUString& rName );
-    String                  FolderInserted( const OUString& rURL,
+    OUString                FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
 
-    sal_uLong                   GetEntryPos( const OUString& rURL );
+    sal_uLong               GetEntryPos( const OUString& rURL );
 
     inline void             EnableContextMenu( sal_Bool bEnable );
     inline void             EnableDelete( sal_Bool bEnable );
@@ -902,7 +902,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 {
     svtools::QueryDeleteResult_Impl eResult = svtools::QUERYDELETE_YES;
     SvTreeListEntry* pEntry = FirstSelected();
-    String aURL;
+    OUString aURL;
 
     OString sDialogPosition;
     while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
@@ -913,7 +913,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( pCurEntry->GetUserData() )
             aURL = ( (SvtContentEntry*)pCurEntry->GetUserData() )->maURL;
 
-        if ( !aURL.Len() )
+        if ( aURL.isEmpty() )
             continue;
 
         bool canDelete = true;
@@ -1092,12 +1092,12 @@ OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleB
             SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
             if ( pData )
             {
-                const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-                const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
-                String aText( msAccessibleDescText );
-                aText.SearchAndReplace( sVar1, pData->mbIsFolder ? msFolder : msFile );
-                aText.SearchAndReplace( sVar2, pData->maURL );
-                sRet += OUString( aText );
+                const OUString sVar1( "%1" );
+                const OUString sVar2( "%2" );
+                OUString aText( msAccessibleDescText );
+                aText = aText.replaceAll( sVar1, pData->mbIsFolder ? msFolder : msFile );
+                aText = aText.replaceAll( sVar2, pData->maURL );
+                sRet += aText;
             }
         }
     }
@@ -1191,9 +1191,9 @@ SvtFileView::~SvtFileView()
 
 // -----------------------------------------------------------------------
 
-String SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
+OUString SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
 {
-    String aURL;
+    OUString aURL;
     if ( pEntry && pEntry->GetUserData() )
         aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
     return aURL;
@@ -1201,9 +1201,9 @@ String SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
 
 // -----------------------------------------------------------------------
 
-String SvtFileView::GetCurrentURL() const
+OUString SvtFileView::GetCurrentURL() const
 {
-    String aURL;
+    OUString aURL;
     SvTreeListEntry* pEntry = mpImp->mpView->FirstSelected();
     if ( pEntry && pEntry->GetUserData() )
         aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
@@ -1211,9 +1211,9 @@ String SvtFileView::GetCurrentURL() const
 }
 // -----------------------------------------------------------------------------
 
-void SvtFileView::CreatedFolder( const String& rUrl, const String& rNewFolder )
+void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolder )
 {
-    String sEntry = mpImp->FolderInserted( rUrl, rNewFolder );
+    OUString sEntry = mpImp->FolderInserted( rUrl, rNewFolder );
     SvTreeListEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
     SvtContentEntry* pUserData = new SvtContentEntry( rUrl, sal_True );
     pEntry->SetUserData( pUserData );
@@ -1226,7 +1226,7 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 {
     FileViewResult eResult = eFailure;
 
-    String sParentURL;
+    OUString sParentURL;
     if ( GetParentURL( sParentURL ) )
         eResult = Initialize( sParentURL, mpImp->maCurrentFilter, pAsyncDescriptor, mpBlackList );
 
@@ -1235,7 +1235,7 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
+sal_Bool SvtFileView::GetParentURL( OUString& rParentURL ) const
 {
     sal_Bool bRet = sal_False;
     try
@@ -1248,8 +1248,8 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
             Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
             if ( xParent.is() )
             {
-                rParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-                bRet = ( rParentURL.Len() > 0 && rParentURL != mpImp->maViewURL );
+                rParentURL = xParent->getIdentifier()->getContentIdentifier();
+                bRet = !rParentURL.isEmpty() && rParentURL != mpImp->maViewURL;
             }
         }
     }
@@ -1292,7 +1292,7 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter  )
+sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const OUString& rFilter  )
 {
     WaitObject aWaitCursor( this );
 
@@ -1315,15 +1315,15 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
 
 // -----------------------------------------------------------------------
 FileViewResult SvtFileView::Initialize(
-    const String& rURL,
-    const String& rFilter,
+    const OUString& rURL,
+    const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList  )
 {
     WaitObject aWaitCursor( this );
     mpBlackList = rBlackList;
 
-    String sPushURL( mpImp->maViewURL );
+    OUString sPushURL( mpImp->maViewURL );
 
     mpImp->maViewURL = rURL;
     FileViewResult eResult = ExecuteFilter( rFilter, pAsyncDescriptor );
@@ -1346,8 +1346,8 @@ FileViewResult SvtFileView::Initialize(
 
 // -----------------------------------------------------------------------
 FileViewResult SvtFileView::Initialize(
-    const String& rURL,
-    const String& rFilter,
+    const OUString& rURL,
+    const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor )
 {
     return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< OUString >());
@@ -1360,7 +1360,7 @@ sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
 {
     WaitObject aWaitCursor( this );
 
-    mpImp->maViewURL = String();
+    mpImp->maViewURL = "";
     mpImp->maCurrentFilter = mpImp->maAllFilter;
 
     mpImp->Clear();
@@ -1377,10 +1377,9 @@ sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
 
 // -----------------------------------------------------------------------
 
-FileViewResult SvtFileView::ExecuteFilter( const String& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
+FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
 {
-    mpImp->maCurrentFilter = rFilter;
-    mpImp->maCurrentFilter.ToLowerAscii();
+    mpImp->maCurrentFilter = rFilter.toAsciiLowerCase();
 
     mpImp->Clear();
     FileViewResult eResult = mpImp->GetFolderContent_Impl( mpImp->maViewURL, pAsyncDescriptor, mpBlackList );
@@ -1461,7 +1460,7 @@ void SvtFileView::SetFocus()
 }
 
 // -----------------------------------------------------------------------
-const String& SvtFileView::GetViewURL() const
+const OUString& SvtFileView::GetViewURL() const
 {
     return mpImp->maViewURL;
 }
@@ -1560,28 +1559,28 @@ IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
 }
 
 // -----------------------------------------------------------------------
-String SvtFileView::GetConfigString() const
+OUString SvtFileView::GetConfigString() const
 {
-    String sRet;
+    OUString sRet;
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     // sort order
     sRet += OUString::number( mpImp->mnSortColumn );
-    sRet += ';';
+    sRet += ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    sRet += bUp ? '1' : '0';
-    sRet += ';';
+    sRet += bUp ? "1" : "0";
+    sRet += ";";
 
     sal_uInt16 nCount = pBar->GetItemCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         sal_uInt16 nId = pBar->GetItemId(i);
         sRet += OUString::number( nId );
-        sRet += ';';
+        sRet += ";";
         sRet += OUString::number( pBar->GetItemSize( nId ) );
-        sRet += ';';
+        sRet += ";";
     }
 
     sRet = comphelper::string::stripEnd(sRet, ';');
@@ -1589,14 +1588,14 @@ String SvtFileView::GetConfigString() const
 }
 
 // -----------------------------------------------------------------------
-void SvtFileView::SetConfigString( const String& rCfgStr )
+void SvtFileView::SetConfigString( const OUString& rCfgStr )
 {
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     sal_Int32 nIdx = 0;
-    mpImp->mnSortColumn = (sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
-    sal_Bool bUp = (sal_Bool)(sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
+    mpImp->mnSortColumn = (sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+    sal_Bool bUp = (sal_Bool)(sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
 
     if ( bUp )
@@ -1613,8 +1612,8 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
 
     while ( nIdx != -1 )
     {
-        sal_uInt16 nItemId = (sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
-        pBar->SetItemSize( nItemId, rCfgStr.GetToken( 0, ';', nIdx ).ToInt32() );
+        sal_uInt16 nItemId = (sal_uInt16)rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+        pBar->SetItemSize( nItemId, rCfgStr.getToken( 0, ';', nIdx ).toInt32() );
     }
 
     HeaderSelect_Impl( pBar );
@@ -1677,7 +1676,7 @@ sal_Bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rT
     return bRet;
 }
 
-const String* NameTranslator_Impl::GetTransTableFileName() const
+const OUString* NameTranslator_Impl::GetTransTableFileName() const
 {
     return mpActFolder? &mpActFolder->GetTransTableFileName() : NULL;
 }
@@ -1738,7 +1737,7 @@ void SvtFileView_Impl::Clear()
 
 // -----------------------------------------------------------------------
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
-    const String& rFolder,
+    const OUString& rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
@@ -1861,14 +1860,14 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
     sal_Bool bHideTransFile = mbReplaceNames && mpNameTrans;
 
-    String sHideEntry;
+    OUString sHideEntry;
     if( bHideTransFile )
     {
-        const String* pTransTableFileName = mpNameTrans->GetTransTableFileName();
+        const OUString* pTransTableFileName = mpNameTrans->GetTransTableFileName();
         if( pTransTableFileName )
         {
             sHideEntry = *pTransTableFileName;
-            sHideEntry.ToUpperAscii();
+            sHideEntry = sHideEntry.toAsciiUpperCase();
         }
         else
             bHideTransFile = sal_False;
@@ -1899,7 +1898,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
     // do the filtering
     ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
-    String sCompareString;
+    OUString sCompareString;
     do
     {
         if ( (*aContentLoop)->mbIsFolder )
@@ -2259,7 +2258,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
     // reset the quick search index
     mpView->ResetQuickSearch_Impl( NULL );
 
-    String aEntryURL;
+    OUString aEntryURL;
     SvTreeListEntry* pEntry = mpView->GetCurEntry();
     if ( pEntry && pEntry->GetUserData() )
         aEntryURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
@@ -2436,7 +2435,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 }
 
 // -----------------------------------------------------------------------
-String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
+OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2475,7 +2474,7 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
     pData->maDisplayText = aValue;
     maContent.push_back( pData );
 
-    return String( aValue );
+    return aValue;
 }
 
 // -----------------------------------------------------------------------
@@ -2547,7 +2546,7 @@ namespace svtools {
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 (
     Window* pParent,
-    const String& rName      // entry name
+    const OUString& rName      // entry name
 ) :
 
     ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),

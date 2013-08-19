@@ -34,7 +34,7 @@ namespace svt
     class SVT_DLLPUBLIC FileURLBox : public SvtURLBox
     {
     private:
-        String      m_sPreservedText;
+        OUString      m_sPreservedText;
 
     public:
         FileURLBox( Window* _pParent, WinBits _nStyle );
@@ -56,7 +56,7 @@ namespace svt
 
             @see SvtURLBox::GetURL
         */
-        void    DisplayURL( const String& _rURL );
+        void    DisplayURL( const OUString& _rURL );
     };
 
 //.........................................................................
