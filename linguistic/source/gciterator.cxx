@@ -841,7 +841,7 @@ throw (uno::RuntimeException)
     {
         try
         {
-             uno::Reference< uno::XInterface > xThis( dynamic_cast< XLinguServiceEventBroadcaster * >(this) );
+             uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject * >(this) );
              linguistic2::LinguServiceEvent aEvent( xThis, linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN );
              m_aNotifyListeners.notifyEach(
                     &linguistic2::XLinguServiceEventListener::processLinguServiceEvent,
