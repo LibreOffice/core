@@ -1,0 +1,9 @@
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Code-Review+1: Petr Mladek <pmladek@suse.cz>
+Verified+1: Petr Mladek <pmladek@suse.cz>
+Code-Review+1: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Mon, 19 Aug 2013 17:51:19 +0000
+Reviewed-on: https://gerrit.libreoffice.org/5513
+Project: core
+Branch: refs/heads/libreoffice-4-1-1
