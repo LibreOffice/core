@@ -24,13 +24,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -42,11 +40,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -58,11 +54,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <property name="image_position">top</property>
               </object>
@@ -143,6 +137,7 @@
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Remove characters</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">shorterfld</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -154,11 +149,9 @@
                         <child>
                           <object class="GtkCheckButton" id="relaxbox">
                             <property name="label" translatable="yes">_Combine</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -166,7 +159,7 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
+                            <property name="width">2</property>
                             <property name="height">1</property>
                           </packing>
                         </child>
@@ -214,9 +207,6 @@
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                       <packing>
