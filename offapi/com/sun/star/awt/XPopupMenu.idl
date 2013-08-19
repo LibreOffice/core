@@ -85,7 +85,7 @@ published interface XPopupMenu: XMenu
             the parent window.
 
         @param Position
-            a <type>Rectangle</type> representing the coordinates system
+            a Rectangle representing the coordinates system
             where the popup menu should be executed.
 
         @param Direction
