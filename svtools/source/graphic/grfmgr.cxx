@@ -59,8 +59,8 @@ struct GrfSimpleCacheObj
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
-    mpLink      ( NULL ),
-    mpUserData  ( NULL )
+    maLink      (),
+    maUserData  ()
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -69,8 +69,8 @@ GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
 
 GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
-    mpLink      ( NULL ),
-    mpUserData  ( NULL )
+    maLink      (),
+    maUserData  ()
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -81,8 +81,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
-    mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
-    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL )
+    maLink      ( rGraphicObj.maLink ),
+    maUserData  ( rGraphicObj.maUserData )
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -90,8 +90,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 }
 
 GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
-    mpLink      ( NULL ),
-    mpUserData  ( NULL )
+    maLink      (),
+    maUserData  ()
 {
     ImplConstruct();
 
@@ -116,8 +116,6 @@ GraphicObject::~GraphicObject()
 
     delete mpSwapOutTimer;
     delete mpSwapStreamHdl;
-    delete mpLink;
-    delete mpUserData;
     delete mpSimpleCache;
 }
 
@@ -325,13 +323,11 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 
         delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
         delete mpSimpleCache, mpSimpleCache = NULL;
-        delete mpLink;
-        delete mpUserData;
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
-        mpLink = rGraphicObj.mpLink ? new String( *rGraphicObj.mpLink ) : NULL;
-        mpUserData = rGraphicObj.mpUserData ? new String( *rGraphicObj.mpUserData ) : NULL;
+        maLink = rGraphicObj.maLink;
+        maUserData = rGraphicObj.maUserData;
         ImplAssignGraphicData();
         mbAutoSwapped = sal_False;
         mpMgr = rGraphicObj.mpMgr;
@@ -392,40 +388,22 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
 
 void GraphicObject::SetLink()
 {
-    if( mpLink )
-        delete mpLink, mpLink = NULL;
+    maLink = "";
 }
 
-void GraphicObject::SetLink( const String& rLink )
+void GraphicObject::SetLink( const OUString& rLink )
 {
-    delete mpLink, mpLink = new String( rLink );
-}
-
-String GraphicObject::GetLink() const
-{
-    if( mpLink )
-        return *mpLink;
-    else
-        return String();
+    maLink = rLink;
 }
 
 void GraphicObject::SetUserData()
 {
-    if( mpUserData )
-        delete mpUserData, mpUserData = NULL;
+    maUserData = "";
 }
 
-void GraphicObject::SetUserData( const String& rUserData )
+void GraphicObject::SetUserData( const OUString& rUserData )
 {
-    delete mpUserData, mpUserData = new String( rUserData );
-}
-
-String GraphicObject::GetUserData() const
-{
-    if( mpUserData )
-        return *mpUserData;
-    else
-        return String();
+    maUserData = rUserData;
 }
 
 void GraphicObject::SetSwapStreamHdl()
@@ -744,7 +722,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     maGraphic = rGraphic;
     mbAutoSwapped = sal_False;
     ImplAssignGraphicData();
-    delete mpLink, mpLink = NULL;
+    maLink = "";
     delete mpSimpleCache, mpSimpleCache = NULL;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, 0, pCopyObj);
@@ -753,10 +731,10 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
         mpSwapOutTimer->Start();
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 {
     SetGraphic( rGraphic );
-    mpLink = new String( rLink );
+    maLink = rLink;
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
