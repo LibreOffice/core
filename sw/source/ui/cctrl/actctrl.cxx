@@ -93,6 +93,11 @@ void NoSpaceEdit::Modify()
         GetModifyHdl().Call(this);
 }
 
+ReturnActionEdit::ReturnActionEdit(Window* pParent, const ResId& rResId)
+    : Edit(pParent, rResId)
+{
+}
+
 ReturnActionEdit::~ReturnActionEdit()
 {
 }
@@ -111,16 +116,22 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
         Edit::KeyInput(rEvt);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    TableNameEdit* pTableNameEdit = new TableNameEdit(pParent);
-    pTableNameEdit->SetWidthInChars(25);
-    return pTableNameEdit;
+    VclBuilder::ensureDefaultWidthChars(rMap);
+    return new TableNameEdit(pParent);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNoSpaceEdit(Window *pParent, VclBuilder::stringmap &rMap)
 {
+    VclBuilder::ensureDefaultWidthChars(rMap);
     return new NoSpaceEdit(pParent);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeReturnActionEdit(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    VclBuilder::ensureDefaultWidthChars(rMap);
+    return new ReturnActionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

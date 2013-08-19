@@ -404,10 +404,6 @@
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
-    <glade-widget-class title="Condition Edit" name="swuilo-ConditionEdit"
-                        generic-name="Condition Edit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
-
     <glade-widget-class title="NoSpace Edit" name="swlo-NoSpaceEdit"
                         generic-name="NoSpace Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
@@ -434,6 +430,10 @@
 
     <glade-widget-class title="Condition Edit" name="swlo-ConditionEdit"
                         generic-name="Condition Edit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+
+    <glade-widget-class title="Return Action Edit" name="swlo-ReturnActionEdit"
+                        generic-name="Return Action Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="Text View" name="sclo-ScEditWindow"

@@ -147,7 +147,6 @@
 #define HID_FLD_DB                                              "SW_HID_FLD_DB"
 #define HID_FLD_VAR                                             "SW_HID_FLD_VAR"
 #define HID_FLD_DOK                                             "SW_HID_FLD_DOK"
-#define HID_FLD_FUNC                                            "SW_HID_FLD_FUNC"
 #define HID_FLD_REF                                             "SW_HID_FLD_REF"
 
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"

@@ -43,8 +43,9 @@ ConditionEdit::ConditionEdit(Window* pParent, WinBits nStyle)
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConditionEdit(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeConditionEdit(Window *pParent, VclBuilder::stringmap &rMap)
 {
+    VclBuilder::ensureDefaultWidthChars(rMap);
     return new ConditionEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 

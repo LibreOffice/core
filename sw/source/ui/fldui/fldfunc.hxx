@@ -32,35 +32,36 @@
 
 class SwFldFuncPage : public SwFldPage
 {
-    FixedText       aTypeFT;
-    ListBox         aTypeLB;
-    ListBox         aSelectionLB;
-    FixedText       aFormatFT;
-    ListBox         aFormatLB;
-    FixedText       aNameFT;
-    ConditionEdit   aNameED;
-    FixedText       aValueFT;
-    Edit            aValueED;
-    FixedText       aCond1FT;
-    ConditionEdit   aCond1ED;
-    FixedText       aCond2FT;
-    ConditionEdit   aCond2ED;
-    PushButton      aMacroBT;
+    ListBox*        m_pTypeLB;
+    ListBox*        m_pSelectionLB;
+    VclContainer*   m_pFormat;
+    ListBox*        m_pFormatLB;
+    FixedText*      m_pNameFT;
+    ConditionEdit*  m_pNameED;
+    VclContainer*   m_pValueGroup;
+    FixedText*      m_pValueFT;
+    Edit*           m_pValueED;
+    FixedText*      m_pCond1FT;
+    ConditionEdit*  m_pCond1ED;
+    FixedText*      m_pCond2FT;
+    ConditionEdit*  m_pCond2ED;
+    PushButton*     m_pMacroBT;
 
     //controls of "Input list"
-    FixedText       aListItemFT;
-    ReturnActionEdit aListItemED;
-    PushButton      aListAddPB;
-    FixedText       aListItemsFT;
-    ListBox         aListItemsLB;
-    PushButton      aListRemovePB;
-    PushButton      aListUpPB;
-    PushButton      aListDownPB;
-    FixedText       aListNameFT;
-    Edit            aListNameED;
+    VclContainer*   m_pListGroup;
+    FixedText*      m_pListItemFT;
+    ReturnActionEdit* m_pListItemED;
+    PushButton*     m_pListAddPB;
+    FixedText*      m_pListItemsFT;
+    ListBox*        m_pListItemsLB;
+    PushButton*     m_pListRemovePB;
+    PushButton*     m_pListUpPB;
+    PushButton*     m_pListDownPB;
+    FixedText*      m_pListNameFT;
+    Edit*           m_pListNameED;
 
-    String          sOldValueFT;
-    String          sOldNameFT;
+    OUString        m_sOldValueFT;
+    OUString        m_sOldNameFT;
 
     sal_uLong           nOldFormat;
     bool            bDropDownLBChanged;

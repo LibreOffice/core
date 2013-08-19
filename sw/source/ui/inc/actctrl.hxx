@@ -78,8 +78,9 @@ class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {
     Link    aReturnActionLink;
 public:
-    ReturnActionEdit( Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId){}
+    ReturnActionEdit(Window* pParent, const ResId& rResId);
+    ReturnActionEdit(Window* pParent, WinBits nStyle)
+        : Edit(pParent, nStyle){}
     ~ReturnActionEdit();
     virtual void KeyInput( const KeyEvent& );
 
