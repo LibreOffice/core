@@ -279,15 +279,12 @@ public:
 class ScTPValidationError : public SfxTabPage
 {
 private:
-    TriStateBox     aTsbShow;
-    FixedLine       aFlContent;
-    FixedText       aFtAction;
-    ListBox         aLbAction;
-    PushButton      aBtnSearch;
-    FixedText       aFtTitle;
-    Edit            aEdtTitle;
-    FixedText       aFtError;
-    MultiLineEdit   aEdError;
+    TriStateBox* m_pTsbShow;
+    ListBox* m_pLbAction;
+    PushButton* m_pBtnSearch;
+    Edit* m_pEdtTitle;
+    FixedText* m_pFtError;
+    VclMultiLineEdit* m_pEdError;
 
     void    Init();
 
