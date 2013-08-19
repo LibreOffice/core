@@ -8907,7 +8907,7 @@ dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable HarfBuzz support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
+if test $_os != WINNT -a $_os != Darwin -a $_os != iOS; then
     AC_MSG_RESULT([yes])
     ENABLE_HARFBUZZ="TRUE"
     libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18])
