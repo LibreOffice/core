@@ -189,14 +189,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aCnt = rFmtHead.GetHeaderFmt()->GetCntnt();
 
-            // In case "PROP_FIRST_IS_SHARED" (writefilter) is set and headerFmt has 'cntnt' node,
-            // Already anchored node is original fmt.
-            // But at this part, change startnode(below create new pSttNd).
-            // Because of this, fdo45183.rtf(sw/qa/extras/rtfimport/data/fdo45183.rtf) cannot draw picture.
-            // Compare module is sw/source/core/layout/frmtool.cxx : AppendObjs() function.
-            // In this function, because selected node index and anchored node index aren't equal, don't draw object.
-            // So, If (aCnt.GetCntntIdx() && !bLeft) - use the original headerFmt.
-            if( !aCnt.GetCntntIdx() || !bLeft )
+            if (!aCnt.GetCntntIdx())
             {
                 const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
@@ -215,6 +208,8 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, sal_False );
+                aTmp = *pSttNd;
+                CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtHeader( pFmt ) );
@@ -269,6 +264,8 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, sal_False );
+                aTmp = *pSttNd;
+                CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtFooter( pFmt ) );
