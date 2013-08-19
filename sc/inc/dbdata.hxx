@@ -58,7 +58,6 @@ private:
     bool            bDoSize;
     bool            bKeepFmt;
     bool            bStripData;
-    bool            bHasFormatting;
 
     /// QueryParam
     bool            bIsAdvanced;        ///< true if created by advanced filter
@@ -69,6 +68,7 @@ private:
     sal_uInt16      nIndex;             ///< unique index formulas
     bool            bAutoFilter;        ///< AutoFilter? (not saved)
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
+    bool            bHasFormatting;
 
     using ScRefreshTimer::operator==;
 
