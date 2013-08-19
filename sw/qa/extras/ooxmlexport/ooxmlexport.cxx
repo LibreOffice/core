@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/frame/XStorable.hpp>
+
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
