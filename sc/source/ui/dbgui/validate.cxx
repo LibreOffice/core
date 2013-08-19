@@ -692,6 +692,8 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
     get(pTsbHelp,"tsbhelp");
     get(pEdtTitle,"title");
     get(pEdInputHelp,"inputhelp");
+    pEdInputHelp->set_height_request(pEdInputHelp->GetTextHeight() * 12);
+    pEdInputHelp->set_width_request(pEdInputHelp->approximate_char_width() * 50);
     Init();
 }
 
@@ -773,6 +775,8 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
     get(m_pEdtTitle,"title");
     get(m_pFtError,"errormsg_label");
     get(m_pEdError,"errorMsg");
+    m_pEdError->set_height_request(m_pEdError->GetTextHeight() * 12);
+    m_pEdError->set_width_request(m_pEdError->approximate_char_width() * 50);
     Init();
 }
 

@@ -16,7 +16,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="hexpand">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="inconsistent">True</property>
@@ -89,7 +88,6 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
@@ -97,7 +95,6 @@
                       <object class="GtkTextView" id="errorMsg:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                       </object>
                     </child>
@@ -113,7 +110,6 @@
                   <object class="GtkEntry" id="title">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
                     <property name="invisible_char">●</property>
                     <property name="invisible_char_set">True</property>
                   </object>
@@ -147,7 +143,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -161,6 +156,7 @@
                   <object class="GtkComboBoxText" id="actionCB">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <items>
                       <item translatable="yes">Stop</item>
                       <item translatable="yes">Warning</item>
