@@ -794,11 +794,14 @@ void EditorWindow::HandleCodeCompletition()
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
         {//correct variable name, if autocorrection on
-            TextPaM aStart(nLine, aLine.indexOf(sBaseName) );
-            TextPaM aEnd(nLine, aLine.indexOf(sBaseName) + sBaseName.getLength() );
-            TextSelection sTextSelection(aStart, aEnd);
-            pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName, GetActualSubName(nLine)) );
-            pEditView->SetSelection( aSel );
+            const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
+            if( !sStr.isEmpty() )
+            {
+                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+                pEditEngine->ReplaceText( sTextSelection, sStr );
+                pEditView->SetSelection( aSel );
+            }
         }
 
         UnoTypeCodeCompletetor aTypeCompletor( aVect, sVarType );
