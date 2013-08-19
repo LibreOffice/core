@@ -128,7 +128,7 @@ namespace svt
 
         virtual Control&            GetControl() = 0;
 
-        virtual String              GetText( LineEnd aSeparator ) const = 0;
+        virtual OUString            GetText( LineEnd aSeparator ) const = 0;
         virtual void                SetText( const OUString& _rStr ) = 0;
 
         virtual sal_Bool            IsReadOnly() const = 0;
@@ -140,9 +140,9 @@ namespace svt
         virtual Selection           GetSelection() const = 0;
         virtual void                SetSelection( const Selection& _rSelection ) = 0;
 
-        virtual void                ReplaceSelected( const String& _rStr ) = 0;
+        virtual void                ReplaceSelected( const OUString& _rStr ) = 0;
         virtual void                DeleteSelected() = 0;
-        virtual String              GetSelected( LineEnd aSeparator ) const = 0;
+        virtual OUString            GetSelected( LineEnd aSeparator ) const = 0;
 
         virtual void                SetModified() = 0;
         virtual sal_Bool            IsModified() const = 0;
@@ -164,10 +164,10 @@ namespace svt
 
         virtual Control&            GetControl();
 
-        virtual String              GetText( LineEnd aSeparator ) const;
+        virtual OUString            GetText( LineEnd aSeparator ) const;
         virtual void                SetText( const OUString& _rStr );
 
-        virtual sal_Bool                IsReadOnly() const;
+        virtual sal_Bool            IsReadOnly() const;
         virtual void                SetReadOnly( sal_Bool bReadOnly );
 
         virtual xub_StrLen          GetMaxTextLen() const;
@@ -176,9 +176,9 @@ namespace svt
         virtual Selection           GetSelection() const;
         virtual void                SetSelection( const Selection& _rSelection );
 
-        virtual void                ReplaceSelected( const String& _rStr );
+        virtual void                ReplaceSelected( const OUString& _rStr );
         virtual void                DeleteSelected();
-        virtual String              GetSelected( LineEnd aSeparator ) const;
+        virtual OUString            GetSelected( LineEnd aSeparator ) const;
 
         virtual void                SetModified();
         virtual sal_Bool            IsModified() const;
@@ -225,8 +225,8 @@ namespace svt
         {
         }
 
-        virtual String GetText( LineEnd aSeparator ) const;
-        virtual String GetSelected( LineEnd aSeparator ) const;
+        virtual OUString GetText( LineEnd aSeparator ) const;
+        virtual OUString GetSelected( LineEnd aSeparator ) const;
     };
 
     //==================================================================

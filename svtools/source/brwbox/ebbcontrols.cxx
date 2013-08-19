@@ -372,13 +372,13 @@ namespace svt
     //= MultiLineEditImplementation
     //==================================================================
     //------------------------------------------------------------------
-    String MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetText( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetText( aSeparator );
     }
 
     //------------------------------------------------------------------
-    String MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
+    OUString MultiLineEditImplementation::GetSelected( LineEnd aSeparator ) const
     {
         return const_cast< MultiLineEditImplementation* >( this )->GetEditWindow().GetSelected( aSeparator );
     }
@@ -431,7 +431,7 @@ namespace svt
             case KEY_RIGHT:
             {
                 Selection aSel = m_pEditImplementation->GetSelection();
-                bResult = !aSel && aSel.Max() == m_pEditImplementation->GetText( LINEEND_LF ).Len();
+                bResult = !aSel && aSel.Max() == m_pEditImplementation->GetText( LINEEND_LF ).getLength();
             }   break;
             case KEY_HOME:
             case KEY_LEFT:

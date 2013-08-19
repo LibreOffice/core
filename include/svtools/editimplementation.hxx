@@ -37,7 +37,7 @@ Control& GenericEditImplementation< EDIT >::GetControl()
 
 //----------------------------------------------------------------------
 template <class EDIT>
-String GenericEditImplementation< EDIT >::GetText( LineEnd ) const
+OUString GenericEditImplementation< EDIT >::GetText( LineEnd ) const
 {
     // ignore the line end - this base implementation does not support it
     return m_rEdit.GetText( );
@@ -80,7 +80,7 @@ sal_Bool GenericEditImplementation< EDIT >::IsReadOnly() const
 
 //----------------------------------------------------------------------
 template <class EDIT>
-void GenericEditImplementation< EDIT >::ReplaceSelected( const String& _rStr )
+void GenericEditImplementation< EDIT >::ReplaceSelected( const OUString& _rStr )
 {
     m_rEdit.ReplaceSelected( _rStr );
 }
@@ -94,7 +94,7 @@ void GenericEditImplementation< EDIT >::DeleteSelected()
 
 //----------------------------------------------------------------------
 template <class EDIT>
-String GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
+OUString GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
 {
     return m_rEdit.GetSelected( );
 }
