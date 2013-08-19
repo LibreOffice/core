@@ -230,12 +230,10 @@ class SvxSlantTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlRadius;
-    FixedText           aFtRadius;
-    MetricField         aMtrRadius;
-    FixedLine           aFlAngle;
-    FixedText           aFtAngle;
-    MetricField         aMtrAngle;
+    VclFrame*            m_pFlRadius;
+    MetricField*         m_pMtrRadius;
+    VclFrame*            m_pFlAngle;
+    MetricField*         m_pMtrAngle;
 
     const SfxItemSet&   rOutAttrs;
 
