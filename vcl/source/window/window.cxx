@@ -9083,11 +9083,18 @@ Window* Window::GetAccessibleRelationLabeledBy() const
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
 
-    std::vector<FixedText*> m_aMnemonicLabels(list_mnemonic_labels());
-    if (!m_aMnemonicLabels.empty())
+    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
+    if (!aMnemonicLabels.empty())
     {
-        SAL_WARN_IF(m_aMnemonicLabels.size() != 1, "vcl.a11y", "TODO: multiple LabeledBy not handled yet");
-        return m_aMnemonicLabels[0];
+        //if we have multiple labels, then prefer the first that is visible
+        for (std::vector<FixedText*>::iterator
+            aI = aMnemonicLabels.begin(), aEnd = aMnemonicLabels.end(); aI != aEnd; ++aI)
+        {
+            Window *pCandidate = *aI;
+            if (pCandidate->IsVisible())
+                return pCandidate;
+        }
+        return aMnemonicLabels[0];
     }
 
     if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
