@@ -24,6 +24,7 @@
 #include "starmath.hrc"
 #include "dialog.hrc"
 #include "toolbox.hrc"
+#include "ElementsDockingWindow.hrc"
 #include "smcommands.h"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
@@ -470,6 +471,47 @@ DockingWindow RID_ELEMENTSDOCKINGWINDOW
     };
 
     Text [ en-US ] = "Elements Dock" ;
+
+    String STR_BLACK
+    {
+        Text [ en-US ] = "black" ;
+    };
+    String STR_BLUE
+    {
+        Text [ en-US ] = "blue" ;
+    };
+    String STR_GREEN
+    {
+        Text [ en-US ] = "green" ;
+    };
+    String STR_RED
+    {
+        Text [ en-US ] = "red" ;
+    };
+    String STR_CYAN
+    {
+        Text [ en-US ] = "cyan" ;
+    };
+    String STR_MAGENTA
+    {
+        Text [ en-US ] = "magenta" ;
+    };
+    String STR_YELLOW
+    {
+        Text [ en-US ] = "yellow" ;
+    };
+    String STR_HIDE
+    {
+        Text [ en-US ] = "hide" ;
+    };
+    String STR_SIZE
+    {
+        Text [ en-US ] = "size" ;
+    };
+    String STR_FONT
+    {
+        Text [ en-US ] = "font" ;
+    };
 };
 
 
