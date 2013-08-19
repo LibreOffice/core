@@ -1361,7 +1361,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
     }
 
     ScBaseCell* pDestCell =
-        maItems[nSrcRow].pCell->Clone(
+        maItems[nIndex].pCell->Clone(
             *rDestCol.pDocument, ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
 
     rDestCol.Insert(nDestRow, pDestCell);
