@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8jw\u003d",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-19T18:16:52Z",
+      "side": 1,
+      "message": "What is broken? You MUST call ScGlobal::GetpTransliteration()-\u003eisEqual() to make this work in all locales, an ASCII comparison will not do anyway.",
+      "revId": "5d84c692fbaccb7dedf5d6c68924e116d7d2bef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
