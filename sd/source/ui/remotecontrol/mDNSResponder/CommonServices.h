@@ -474,7 +474,7 @@ typedef int socklen_t;
 // - Windows
 
 #if ( TARGET_LANGUAGE_C_LIKE )
-    #if ( !defined(_SSIZE_T) && ( TARGET_OS_WIN32 || !defined( _BSD_SSIZE_T_DEFINED_ ) ) && !TARGET_OS_FREEBSD && !TARGET_OS_LINUX && !TARGET_OS_VXWORKS && !TARGET_OS_MAC)
+    #if ( !defined(_SSIZE_T) && ( TARGET_OS_WIN32 || !defined( _BSD_SSIZE_T_DEFINED_ ) ) && !TARGET_OS_FREEBSD && !TARGET_OS_LINUX && !TARGET_OS_VXWORKS && !TARGET_OS_MAC && !defined (__MINGW32__))
 typedef int ssize_t;
     #endif
 #endif
@@ -759,7 +759,8 @@ typedef INT32 int32_t;
 typedef UINT32 uint32_t;
 typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
-
+    #elif defined (__MINGW32__)
+    #  include <stdint.h>
     #elif ( TARGET_OS_VXWORKS && ( TORNADO_VERSION < 220 ) )
 typedef long long int64_t;
 typedef unsigned long long uint64_t;
@@ -785,7 +786,7 @@ typedef uint16_t uint_fast16_t;
 typedef uint32_t uint_fast32_t;
 typedef uint64_t uint_fast64_t;
 
-    #if ( !defined( _MSC_VER ) || TARGET_OS_WINDOWS_CE )
+    #if ( !defined( _WIN32 ) || TARGET_OS_WINDOWS_CE )
 typedef long int intptr_t;
 typedef unsigned long int uintptr_t;
     #endif
