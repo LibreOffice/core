@@ -14,43 +14,43 @@
 
 class SC_DLLPUBLIC ScDBDataFormatting
 {
-        OUString maTableStyleName;
-        OUString maFirstRowStripeStyle;
-        OUString maSecondRowStripeStyle;
-        OUString maFirstColStripeStyle;
-        OUString maSecondColStripeStyle;
-        sal_Int32 maFirstRowStripeSize;
-        sal_Int32 maSecondRowStripeSize;
-        sal_Int32 maFirstColStripeSize;
-        sal_Int32 maSecondColStripeSize;
-        bool bBandedRows;
-        bool bBandedColumns;
-    public:
-        ScDBDataFormatting();
-        ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
-        ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData );
-        void SetTableStyleName( const OUString& rTableStyleName );
-        const OUString& GetTableStyleName();
-        void SetBandedRows( bool bBRows );
-        bool GetBandedRows();
-        void SetBandedColumns( bool bBCols );
-        bool GetBandedColumns();
-        const OUString& GetFirstRowStripeStyle() const;
-        const OUString& GetSecondRowStripeStyle() const;
-        const OUString& GetFirstColStripeStyle() const;
-        const OUString& GetSecondColStripeStyle() const;
-        sal_Int32 GetFirstRowStripeSize() const { return maFirstRowStripeSize; }
-        sal_Int32 GetSecondRowStripeSize() const { return maSecondRowStripeSize; }
-        sal_Int32 GetFirstColStripeSize() const { return maFirstColStripeSize; }
-        sal_Int32 GetSecondColStripeSize() const { return maSecondColStripeSize; }
-        void SetFirstRowStripeSize( const sal_Int32 nSize ){ maFirstRowStripeSize = nSize; }
-        void SetSecondRowStripeSize( const sal_Int32 nSize ){ maSecondRowStripeSize = nSize; }
-        void SetFirstColStripeSize( const sal_Int32 nSize ){ maFirstColStripeSize = nSize; }
-        void SetSecondColStripeSize( const sal_Int32 nSize ){ maSecondColStripeSize = nSize; }
-        void SetFirstRowStripeStyle( const OUString& aStyleName );
-        void SetSecondRowStripeStyle( const OUString& aStyleName );
-        void SetFirstColStripeStyle( const OUString& aStyleName );
-        void SetSecondColStripeStyle( const OUString& aStyleName );
+    OUString maTableStyleName;
+    OUString maFirstRowStripeStyle;
+    OUString maSecondRowStripeStyle;
+    OUString maFirstColStripeStyle;
+    OUString maSecondColStripeStyle;
+    sal_Int32 maFirstRowStripeSize;
+    sal_Int32 maSecondRowStripeSize;
+    sal_Int32 maFirstColStripeSize;
+    sal_Int32 maSecondColStripeSize;
+    bool bBandedRows;
+    bool bBandedColumns;
+public:
+    ScDBDataFormatting();
+    ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
+    ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData );
+    void SetTableStyleName( const OUString& rTableStyleName );
+    const OUString& GetTableStyleName();
+    void SetBandedRows( bool bBRows );
+    bool GetBandedRows();
+    void SetBandedColumns( bool bBCols );
+    bool GetBandedColumns();
+    const OUString& GetFirstRowStripeStyle() const;
+    const OUString& GetSecondRowStripeStyle() const;
+    const OUString& GetFirstColStripeStyle() const;
+    const OUString& GetSecondColStripeStyle() const;
+    sal_Int32 GetFirstRowStripeSize() const { return maFirstRowStripeSize; }
+    sal_Int32 GetSecondRowStripeSize() const { return maSecondRowStripeSize; }
+    sal_Int32 GetFirstColStripeSize() const { return maFirstColStripeSize; }
+    sal_Int32 GetSecondColStripeSize() const { return maSecondColStripeSize; }
+    void SetFirstRowStripeSize( const sal_Int32 nSize ){ maFirstRowStripeSize = nSize; }
+    void SetSecondRowStripeSize( const sal_Int32 nSize ){ maSecondRowStripeSize = nSize; }
+    void SetFirstColStripeSize( const sal_Int32 nSize ){ maFirstColStripeSize = nSize; }
+    void SetSecondColStripeSize( const sal_Int32 nSize ){ maSecondColStripeSize = nSize; }
+    void SetFirstRowStripeStyle( const OUString& aStyleName );
+    void SetSecondRowStripeStyle( const OUString& aStyleName );
+    void SetFirstColStripeStyle( const OUString& aStyleName );
+    void SetSecondColStripeStyle( const OUString& aStyleName );
 };
 
 #endif
