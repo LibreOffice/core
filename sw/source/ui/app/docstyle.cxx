@@ -329,11 +329,10 @@ bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
 }
 
 // Add Strings to the list of templates
-void SwPoolFmtList::Append( char cChar, const String& rStr )
+void SwPoolFmtList::Append( char cChar, const OUString& rStr )
 {
-    String aStr = OUString(cChar);
-    aStr += rStr;
-    for(std::vector<String>::const_iterator i = begin(); i != end(); ++i)
+    const OUString aStr = OUString(cChar) + rStr;
+    for(std::vector<OUString>::const_iterator i = begin(); i != end(); ++i)
         if(*i == aStr)
             return;
     push_back(aStr);
