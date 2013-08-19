@@ -35,8 +35,6 @@
     <service name="com.sun.star.lang.ServiceManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.stoc.OServiceManagerWrapper"/>
-  <implementation
-      name="com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"/>
   <implementation name="com.sun.star.comp.stoc.SimpleRegistry">
     <service name="com.sun.star.registry.SimpleRegistry"/>
   </implementation>

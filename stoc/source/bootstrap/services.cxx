@@ -88,12 +88,6 @@ static struct ImplementationEntry g_entries[] =
     loader_getSupportedServiceNames, createSingleComponentFactory,
     0, 0
     },
-    //registry_tdprovider
-    {
-    ProviderImpl_create, rdbtdp_getImplementationName,
-    rdbtdp_getSupportedServiceNames, createSingleComponentFactory,
-    0, 0
-    },
     //end
     { 0, 0, 0, 0, 0, 0 }
 };
