@@ -184,6 +184,8 @@ static void initNSApp()
 
 sal_Bool ImplSVMainHook( int * pnInit )
 {
+    unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
+
     gpnInit = pnInit;
 
     bNoSVMain = false;
