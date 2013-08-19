@@ -44,7 +44,6 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
 
     aTypeFT     (this, SW_RES(FT_FUNCTYPE)),
     aTypeLB     (this, SW_RES(LB_FUNCTYPE)),
-    aSelectionFT(this, SW_RES(FT_FUNCSELECTION)),
     aSelectionLB(this, SW_RES(LB_FUNCSELECTION)),
     aFormatFT   (this, SW_RES(FT_FUNCFORMAT)),
     aFormatLB   (this, SW_RES(LB_FUNCFORMAT)),
@@ -216,7 +215,6 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         }
 
         sal_Bool bValue = sal_False, bName = sal_False, bMacro = sal_False, bInsert = sal_True;
-        sal_Bool bShowSelection = sal_False;
         sal_Bool bFormat = nSize != 0;
 
         // two controls for conditional text
@@ -366,20 +364,9 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                 break;
         }
 
-        if (bShowSelection)
-        {
-            aSelectionLB.Show();
-            aSelectionFT.Show();
-            aFormatLB.Hide();
-            aFormatFT.Hide();
-        }
-        else
-        {
-            aFormatLB.Show();
-            aFormatFT.Show();
-            aSelectionLB.Hide();
-            aSelectionFT.Hide();
-        }
+        aFormatLB.Show();
+        aFormatFT.Show();
+        aSelectionLB.Hide();
 
         aFormatLB.Enable(bFormat);
         aFormatFT.Enable(bFormat);
@@ -498,7 +485,6 @@ void SwFldFuncPage::UpdateSubType()
     sal_Bool bEnable = nCount != 0;
 
     aSelectionLB.Enable( bEnable );
-    aSelectionFT.Enable( bEnable );
 
     if (bEnable)
     {

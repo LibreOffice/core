@@ -34,7 +34,6 @@ class SwFldFuncPage : public SwFldPage
 {
     FixedText       aTypeFT;
     ListBox         aTypeLB;
-    FixedText       aSelectionFT;
     ListBox         aSelectionLB;
     FixedText       aFormatFT;
     ListBox         aFormatLB;
