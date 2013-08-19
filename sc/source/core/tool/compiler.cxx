@@ -3548,8 +3548,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
     bool bAsciiNonAlnum;    // operators, separators, ...
     if ( cSymbol[0] < 128 )
     {
-        bMayBeFuncName = CharClass::isAsciiAlpha( cSymbol[0] );
-        bAsciiNonAlnum = !bMayBeFuncName && !CharClass::isAsciiDigit( cSymbol[0] );
+        bMayBeFuncName = rtl::isAsciiAlpha( cSymbol[0] );
+        bAsciiNonAlnum = !bMayBeFuncName && !rtl::isAsciiDigit( cSymbol[0] );
     }
     else
     {

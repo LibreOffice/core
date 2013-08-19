@@ -107,7 +107,7 @@ sal_Unicode_strtol ( const sal_Unicode*  p,
     else if( *p == '+' )
         p++;
 
-    while (CharClass::isAsciiDigit( *p ))
+    while (rtl::isAsciiDigit( *p ))
     {
         accum = accum * 10 + *p - '0';
         if( accum < prev )
@@ -289,7 +289,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
         while( 1 )
         {
             const sal_Unicode uc = *p;
-            if( CharClass::isAsciiAlpha( uc ) || uc == '_' )
+            if( rtl::isAsciiAlpha( uc ) || uc == '_' )
             {
                 if( only_digits && p != start &&
                    (uc == 'e' || uc == 'E' ) )
@@ -300,7 +300,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 only_digits = false;
                 p++;
             }
-            else if( CharClass::isAsciiDigit( uc ))
+            else if( rtl::isAsciiDigit( uc ))
             {
                 p++;
             }
@@ -808,13 +808,13 @@ lcl_a1_get_col( const sal_Unicode* p, ScAddress* pAddr, sal_uInt16* nFlags )
     if( *p == '$' )
         *nFlags |= SCA_COL_ABSOLUTE, p++;
 
-    if( !CharClass::isAsciiAlpha( *p ) )
+    if( !rtl::isAsciiAlpha( *p ) )
         return NULL;
 
     nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
-    while (nCol <= MAXCOL && CharClass::isAsciiAlpha(*p))
+    while (nCol <= MAXCOL && rtl::isAsciiAlpha(*p))
         nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
-    if( nCol > MAXCOL || CharClass::isAsciiAlpha( *p ) )
+    if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
         return NULL;
 
     *nFlags |= SCA_VALID_COL;
@@ -1089,16 +1089,16 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         if (*p == '$')
             nBits |= SCA_COL_ABSOLUTE, p++;
 
-        if (CharClass::isAsciiAlpha( *p ))
+        if (rtl::isAsciiAlpha( *p ))
         {
             nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
-            while (nCol < MAXCOL && CharClass::isAsciiAlpha(*p))
+            while (nCol < MAXCOL && rtl::isAsciiAlpha(*p))
                 nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
         }
         else
             nBits = 0;
 
-        if( nCol > MAXCOL || CharClass::isAsciiAlpha( *p ) )
+        if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
             nBits = 0;
         nRes |= nBits;
         if( !nBits )
@@ -1111,7 +1111,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         nBits = SCA_VALID_ROW;
         if (*p == '$')
             nBits |= SCA_ROW_ABSOLUTE, p++;
-        if( !CharClass::isAsciiDigit( *p ) )
+        if( !rtl::isAsciiDigit( *p ) )
         {
             nBits = 0;
             nRow = SCROW(-1);
@@ -1120,7 +1120,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         {
             OUString aTmp( p );
             long n = aTmp.toInt32() - 1;
-            while (CharClass::isAsciiDigit( *p ))
+            while (rtl::isAsciiDigit( *p ))
                 p++;
             if( n < 0 || n > MAXROW )
                 nBits = 0;
@@ -2090,7 +2090,7 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr)
     xub_StrLen nPos = 0;
     sal_Unicode c;
     while (nResult <= MAXCOL && nPos < nStop && (c = rStr.GetChar( nPos)) != 0 &&
-            CharClass::isAsciiAlpha(c))
+            rtl::isAsciiAlpha(c))
     {
         if (nPos > 0)
             nResult = (nResult + 1) * 26;
