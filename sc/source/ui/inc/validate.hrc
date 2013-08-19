@@ -31,18 +31,6 @@
 #define FT_MAX                  8
 #define EDT_MAX                 9
 
-#define FL_CONTENT              10
-
-#define FT_TITLE                12
-#define EDT_TITLE               13
-
-#define TSB_SHOW                21
-#define FT_ACTION               22
-#define FT_ERROR                23
-#define LB_ACTION               24
-#define EDT_ERROR               25
-#define BTN_SEARCH              26
-
 #define CB_SHOWLIST             27
 #define CB_SORTLIST             28
 #define EDT_LIST                29

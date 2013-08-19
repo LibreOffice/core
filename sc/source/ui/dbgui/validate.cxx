@@ -764,20 +764,16 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
                                           const SfxItemSet& rArgSet )
 
     :   SfxTabPage      ( pParent,
-                          ScResId( TP_VALIDATION_ERROR ),
-                          rArgSet ),
-        aTsbShow        ( this, ScResId( TSB_SHOW ) ),
-        aFlContent      ( this, ScResId( FL_CONTENT ) ),
-        aFtAction       ( this, ScResId( FT_ACTION ) ),
-        aLbAction       ( this, ScResId( LB_ACTION ) ),
-        aBtnSearch      ( this, ScResId( BTN_SEARCH ) ),
-        aFtTitle        ( this, ScResId( FT_TITLE ) ),
-        aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
-        aFtError        ( this, ScResId( FT_ERROR ) ),
-        aEdError        ( this, ScResId( EDT_ERROR ) )
+                          "ErrorAlertTabPage" , "modules/scalc/ui/erroralerttabpage.ui" ,
+                          rArgSet )
 {
+    get(m_pTsbShow,"tsbshow");
+    get(m_pLbAction,"actionCB");
+    get(m_pBtnSearch,"browseBtn");
+    get(m_pEdtTitle,"title");
+    get(m_pFtError,"errormsg_label");
+    get(m_pEdError,"errorMsg");
     Init();
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
@@ -790,11 +786,11 @@ ScTPValidationError::~ScTPValidationError()
 
 void ScTPValidationError::Init()
 {
-    aLbAction.SetSelectHdl( LINK( this, ScTPValidationError, SelectActionHdl ) );
-    aBtnSearch.SetClickHdl( LINK( this, ScTPValidationError, ClickSearchHdl ) );
+    m_pLbAction->SetSelectHdl( LINK( this, ScTPValidationError, SelectActionHdl ) );
+    m_pBtnSearch->SetClickHdl( LINK( this, ScTPValidationError, ClickSearchHdl ) );
 
-    aLbAction.SelectEntryPos( 0 );
-    aTsbShow.EnableTriState( false );
+    m_pLbAction->SelectEntryPos( 0 );
+    m_pTsbShow->EnableTriState( false );
 
     SelectActionHdl( NULL );
 }
@@ -821,24 +817,24 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, sal_True, &pItem ) == SFX_ITEM_SET )
-        aTsbShow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+        m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbShow.SetState( STATE_CHECK );   // check by default
+        m_pTsbShow->SetState( STATE_CHECK );   // check by default
 
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, sal_True, &pItem ) == SFX_ITEM_SET )
-        aLbAction.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
+        m_pLbAction->SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
     else
-        aLbAction.SelectEntryPos( 0 );
+        m_pLbAction->SelectEntryPos( 0 );
 
     if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
-        aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        m_pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        aEdtTitle.SetText( EMPTY_STRING );
+        m_pEdtTitle->SetText( EMPTY_STRING );
 
     if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
-        aEdError.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        m_pEdError->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        aEdError.SetText( EMPTY_STRING );
+        m_pEdError->SetText( EMPTY_STRING );
 
     SelectActionHdl( NULL );
 }
@@ -847,10 +843,10 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
 sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, aTsbShow.GetState() == STATE_CHECK ) );
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, aLbAction.GetSelectEntryPos() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, aEdtTitle.GetText() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, aEdError.GetText() ) );
+    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == STATE_CHECK ) );
+    rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
+    rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
+    rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
 
     return sal_True;
 }
@@ -859,12 +855,12 @@ sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
-    ScValidErrorStyle eStyle = (ScValidErrorStyle) aLbAction.GetSelectEntryPos();
+    ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectEntryPos();
     sal_Bool bMacro = ( eStyle == SC_VALERR_MACRO );
 
-    aBtnSearch.Enable( bMacro );
-    aFtError.Enable( !bMacro );
-    aEdError.Enable( !bMacro );
+    m_pBtnSearch->Enable( bMacro );
+    m_pFtError->Enable( !bMacro );
+    m_pEdError->Enable( !bMacro );
 
     return( 0L );
 }
@@ -884,7 +880,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 
     if ( aScriptURL != NULL && !aScriptURL.isEmpty() )
     {
-        aEdtTitle.SetText( aScriptURL );
+        m_pEdtTitle->SetText( aScriptURL );
     }
 
     return( 0L );
