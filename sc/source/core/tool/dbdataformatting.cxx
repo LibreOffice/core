@@ -20,16 +20,19 @@
 #include "dbdataformatting.hxx"
 #include "rtl/ustring.hxx"
 
-ScDBDataFormatting::ScDBDataFormatting()
+ScDBDataFormatting::ScDBDataFormatting():
+    maTableStyleName        ( "Default" ),
+    maFirstRowStripeStyle   ( "Default" ),
+    maSecondRowStripeStyle  ( "Default" ),
+    maFirstColStripeStyle   ( "Default" ),
+    maSecondColStripeStyle  ( "Default" ),
+    bBandedRows             ( false ),
+    bBandedColumns          ( false ),
+    maFirstRowStripeSize    ( 1 ),
+    maSecondRowStripeSize   ( 1 ),
+    maFirstColStripeSize    ( 1 ),
+    maSecondColStripeSize   ( 1 )
 {
-    //Avoiding problems caused by uninitialized values
-    maTableStyleName = "Default";
-    maFirstRowStripeStyle = "Default";
-    maSecondRowStripeStyle = "Default";
-    maFirstColStripeStyle = "Default";
-    maSecondColStripeStyle = "Default";
-    bBandedRows = false;
-    bBandedColumns = false;
 }
 
 ScDBDataFormatting::ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols) :
