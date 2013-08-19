@@ -49,7 +49,7 @@ service ModuleUICategoryDescription
         can be used by a UI to display the category name.
         The key to a user interface command category depends on the specific
         implementation. OpenOffice.org uses a pre-defined number of
-        identifiers defined in ::com::sun:star::frame::CommandGroup.
+        identifiers defined in ::com::sun::star::frame::CommandGroup.
         </p>
 
         @see ::com::sun::star::frame::ModuleManager
