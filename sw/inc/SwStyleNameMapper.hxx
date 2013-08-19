@@ -20,7 +20,7 @@
 #define SWSTYLENAMEMAPPER_HXX
 
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <SwGetPoolIdFromName.hxx>
 #include "swdllapi.h"
 
@@ -73,7 +73,6 @@
  * " (user)", we simply remove it.
  */
 
-class String;
 struct SwTableEntry;
 
 typedef ::boost::unordered_map<const OUString, sal_uInt16, OUStringHash>
