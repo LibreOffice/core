@@ -1072,12 +1072,12 @@ FontNameBox::~FontNameBox()
 
 // -------------------------------------------------------------------
 
-void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep ) const
+void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep ) const
 {
     OString aEntries(OUStringToOString(GetMRUEntries(cSep),
         RTL_TEXTENCODING_UTF8));
 
-    if (aEntries.isEmpty() || !aFontMRUEntriesFile.Len())
+    if (aEntries.isEmpty() || aFontMRUEntriesFile.isEmpty())
         return;
 
     SvFileStream aStream;
@@ -1097,9 +1097,9 @@ void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
 
 // -------------------------------------------------------------------
 
-void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep )
+void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep )
 {
-    if( ! aFontMRUEntriesFile.Len() )
+    if( aFontMRUEntriesFile.isEmpty() )
         return;
 
     SvFileStream aStream( aFontMRUEntriesFile, STREAM_READ );
@@ -1126,9 +1126,9 @@ void FontNameBox::InitFontMRUEntriesFile()
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;
-    if( maFontMRUEntriesFile.Len() )
+    if( !maFontMRUEntriesFile.isEmpty() )
     {
-        maFontMRUEntriesFile.AppendAscii( FONTNAMEBOXMRUENTRIESFILE );
+        maFontMRUEntriesFile += FONTNAMEBOXMRUENTRIESFILE;
     }
 }
 

@@ -228,10 +228,10 @@ public:
     sal_uLong                   Count() const { return mnElem; }
     sal_Bool                    IsEmpty() const { return !mnElem; }
 
-    long                    Name2Size( const String& ) const;
-    String                  Size2Name( long ) const;
+    long                    Name2Size( const OUString& ) const;
+    OUString                Size2Name( long ) const;
 
-    String                  GetIndexName( sal_uLong nIndex ) const;
+    OUString                GetIndexName( sal_uLong nIndex ) const;
     long                    GetIndexSize( sal_uLong nIndex ) const;
 };
 

@@ -876,7 +876,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
 
 //------------------------------------------------------------------------
 
-long FontSizeNames::Name2Size( const String& rName ) const
+long FontSizeNames::Name2Size( const OUString& rName ) const
 {
     if ( mnElem )
     {
@@ -894,7 +894,7 @@ long FontSizeNames::Name2Size( const String& rName ) const
 
 //------------------------------------------------------------------------
 
-String FontSizeNames::Size2Name( long nValue ) const
+OUString FontSizeNames::Size2Name( long nValue ) const
 {
     String aStr;
 
@@ -918,7 +918,7 @@ String FontSizeNames::Size2Name( long nValue ) const
 
 //------------------------------------------------------------------------
 
-String FontSizeNames::GetIndexName( sal_uLong nIndex ) const
+OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
     String aStr;
 
