@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8jg\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-08-19T20:11:20Z",
+      "side": 1,
+      "message": "In my understanding, the output should be the type name and not the filter name. Like for instance we output draw_Wordperfect_Graphics and not the filter name in the WPG importer.",
+      "revId": "4be23ba9017764b7d2ad13c4e6c15af00cd336d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
