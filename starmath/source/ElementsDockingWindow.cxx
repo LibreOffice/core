@@ -18,6 +18,7 @@
  */
 
 #include <ElementsDockingWindow.hxx>
+#include <ElementsDockingWindow.hrc>
 
 #include <starmath.hrc>
 #include <smmod.hxx>
@@ -393,29 +394,29 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[], sal_uInt1
             else if (aElementId == RID_BLANK)
                 addElement(OUString("\"~\""), SmResId(aElementId));
             else if (aElementId == RID_PHANTOMX)
-                addElement(OUString("\"hide\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringHide() +"\""), SmResId(aElementId));
             else if (aElementId == RID_BOLDX)
                 addElement(OUString("bold B"), SmResId(aElementId));
             else if (aElementId == RID_ITALX)
                 addElement(OUString("ital I"), SmResId(aElementId));
             else if (aElementId == RID_SIZEXY)
-                addElement(OUString("\"size\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringSize() + "\""), SmResId(aElementId));
             else if (aElementId == RID_FONTXY)
-                addElement(OUString("\"font\""), SmResId(aElementId));
+                addElement(OUString("\"" + stringFont() + "\""), SmResId(aElementId));
             else if (aElementId == RID_COLORX_BLACK)
-                addElement(OUString("color black { \"black\" }"), SmResId(aElementId));
+                addElement(OUString("color black { \"" + colorBlack() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_BLUE)
-                addElement(OUString("color blue { \"blue\" }"), SmResId(aElementId));
+                addElement(OUString("color blue { \"" + colorBlue() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_GREEN)
-                addElement(OUString("color green { \"green\" }"), SmResId(aElementId));
+                addElement(OUString("color green { \"" + colorGreen() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_RED)
-                addElement(OUString("color red { \"red\" }"), SmResId(aElementId));
+                addElement(OUString("color red { \"" + colorRed() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_CYAN)
-                addElement(OUString("color cyan { \"cyan\" }"), SmResId(aElementId));
+                addElement(OUString("color cyan { \"" + colorCyan() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_MAGENTA)
-                addElement(OUString("color magenta { \"magenta\" }"), SmResId(aElementId));
+                addElement(OUString("color magenta { \"" + colorMagenta() + "\" }"), SmResId(aElementId));
             else if (aElementId == RID_COLORX_YELLOW)
-                addElement(OUString("color yellow { \"yellow\" }"), SmResId(aElementId));
+                addElement(OUString("color yellow { \"" + colorYellow() + "\" }"), SmResId(aElementId));
             else
                 addElement(SmResId(aElementId), SmResId(aElementId));
         }
@@ -492,6 +493,17 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     maElementListBox    (this, SmResId(1))
 {
     maElementsControl.SetBorderStyle( WINDOW_BORDER_MONO );
+    maElementsControl.setColorBlack(SmResId(STR_BLACK));
+    maElementsControl.setColorBlue(SmResId(STR_BLUE));
+    maElementsControl.setColorGreen(SmResId(STR_GREEN));
+    maElementsControl.setColorRed(SmResId(STR_RED));
+    maElementsControl.setColorCyan(SmResId(STR_CYAN));
+    maElementsControl.setColorMagenta(SmResId(STR_MAGENTA));
+    maElementsControl.setColorYellow(SmResId(STR_YELLOW));
+
+    maElementsControl.setStringHide(SmResId(STR_HIDE));
+    maElementsControl.setStringSize(SmResId(STR_SIZE));
+    maElementsControl.setStringFont(SmResId(STR_FONT));
 
     maElementListBox.SetDropDownLineCount( 10 );
 
