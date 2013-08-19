@@ -177,19 +177,14 @@ class SvxAngleTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    FixedLine           aFlPosition;
-    FixedText           aFtPosX;
-    MetricField         aMtrPosX;
-    FixedText           aFtPosY;
-    MetricField         aMtrPosY;
-    FixedText           aFtPosPresets;
-    SvxRectCtl          aCtlRect;
+    VclFrame*            m_pFlPosition;
+    MetricField*         m_pMtrPosX;
+    MetricField*         m_pMtrPosY;
+    SvxRectCtl*          m_pCtlRect;
 
-    FixedLine           aFlAngle;
-    FixedText           aFtAngle;
-    NumericField        maNfAngle;
-    FixedText           aFtAnglePresets;
-    svx::DialControl    aCtlAngle;
+    VclFrame*            m_pFlAngle;
+    NumericField*        m_pNfAngle;
+    svx::DialControl*    m_pCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;

@@ -99,6 +99,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/querynoloadedfiledialog \
 	cui/uiconfig/ui/querynosavefiledialog \
 	cui/uiconfig/ui/querysavelistdialog \
+	cui/uiconfig/ui/rotationtabpage \
 	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
