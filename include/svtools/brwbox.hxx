@@ -798,7 +798,7 @@ public:
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
-    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );

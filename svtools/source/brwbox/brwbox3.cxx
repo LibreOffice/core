@@ -526,7 +526,7 @@ OUString BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }

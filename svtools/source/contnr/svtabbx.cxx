@@ -1164,7 +1164,7 @@ void SvHeaderTabListBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------
-sal_Bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+sal_Bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
