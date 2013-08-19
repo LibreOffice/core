@@ -20,6 +20,7 @@
 #define SW_DOCSTYLE_HXX
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
@@ -38,11 +39,11 @@ class SwNumRule;
 /*--------------------------------------------------------------------
     Local helper class.
  --------------------------------------------------------------------*/
-class SwPoolFmtList : public std::vector<String>
+class SwPoolFmtList : public std::vector<OUString>
 {
 public:
     SwPoolFmtList() {}
-    void Append( char cChar, const String& rStr );
+    void Append( char cChar, const OUString& rStr );
     void Erase();
 };
 
