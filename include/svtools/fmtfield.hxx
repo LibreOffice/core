@@ -52,7 +52,7 @@ private:
     };
 
 protected:
-    String      m_sLastValidText;
+    OUString      m_sLastValidText;
         // hat nichts mit dem current value zu tun, ist der letzte Text, der waehrend einer Eingabe als gueltig erkannt
         // wurde (also durch CheckText geprueft, nicht durch den Formatter gejagt)
     Selection   m_aLastSelection;
@@ -84,8 +84,8 @@ protected:
     // ausgibt
     sal_Bool                m_bTreatAsNumber;
     // und mit den folgenden Members koennen wir das Ganze hier auch zur formatierten Text-Ausgabe benutzen ...
-    String              m_sCurrentTextValue;
-    String              m_sDefaultText;
+    OUString            m_sCurrentTextValue;
+    OUString            m_sDefaultText;
 
     // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (nicht dass wir sie beachten wuerden, aber
     // man kann sie von aussen abfragen)
@@ -188,10 +188,10 @@ public:
         (der Text wird einfach nur durch den Formatter gejagt und dann gesetzt)
     */
     void SetTextFormatted(const OUString& rText);
-    String  GetTextValue() const;
+    OUString  GetTextValue() const;
 
-    void    SetDefaultText(const OUString& rDefault) { m_sDefaultText = rDefault; }
-    String  GetDefaultText() const { return m_sDefaultText; }
+    void      SetDefaultText(const OUString& rDefault) { m_sDefaultText = rDefault; }
+    OUString  GetDefaultText() const { return m_sDefaultText; }
 
     // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (Ausgabe-Operationen werden getriggert durch
     // SetValue, SetTextValue, SetTextFormatted, also indirekt eventuell auch durch SetMin-/-MaxValue)
