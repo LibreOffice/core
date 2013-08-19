@@ -107,6 +107,36 @@ public:
     void setVerticalMode(bool bVertical);
 
     void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
+
+    void setColorBlack(const OUString color) { maColorBlack = color; }
+    OUString colorBlack() { return maColorBlack; }
+
+    void setColorBlue(const OUString color) { maColorBlue = color; }
+    OUString colorBlue() { return maColorBlue; }
+
+    void setColorGreen(const OUString color) { maColorGreen = color; }
+    OUString colorGreen() { return maColorGreen; }
+
+    void setColorRed(const OUString color) { maColorRed = color; }
+    OUString colorRed() { return maColorRed; }
+
+    void setColorCyan(const OUString color) { maColorCyan = color; }
+    OUString colorCyan() { return maColorCyan; }
+
+    void setColorMagenta(const OUString color) { maColorMagenta = color; }
+    OUString colorMagenta() { return maColorGreen; }
+
+    void setColorYellow(const OUString color) { maColorYellow = color; }
+    OUString colorYellow() { return maColorYellow; }
+
+private:
+    OUString            maColorBlack;
+    OUString            maColorBlue;
+    OUString            maColorGreen;
+    OUString            maColorRed;
+    OUString            maColorCyan;
+    OUString            maColorMagenta;
+    OUString            maColorYellow;
 };
 
 class SmElementsDockingWindow : public SfxDockingWindow
