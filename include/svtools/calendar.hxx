@@ -168,7 +168,7 @@ private:
     CalendarWrapper maCalendarWrapper;
     Rectangle       maPrevRect;
     Rectangle       maNextRect;
-    String          maDayOfWeekText;
+    OUString        maDayOfWeekText;
     sal_Int32       mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
