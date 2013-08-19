@@ -182,20 +182,20 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
     return OUString(""); //not found
 }
 
-OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName ) const
+OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const
 {
     for( CodeCompleteVarScopes::const_iterator aIt = aVarScopes.begin(); aIt != aVarScopes.end(); ++aIt )
     {
         CodeCompleteVarTypes aTypes = aIt->second;
         for( CodeCompleteVarTypes::const_iterator aOtherIt = aTypes.begin(); aOtherIt != aTypes.end(); ++aOtherIt )
         {
-            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) )
+            if( aOtherIt->first.equalsIgnoreAsciiCase( sVarName ) && aIt->first.equalsIgnoreAsciiCase( sActProcName ) )
             {
                 return aOtherIt->first;
             }
         }
     }
-    //not a local, search global scope
+    // search global scope
     for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
     {
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
