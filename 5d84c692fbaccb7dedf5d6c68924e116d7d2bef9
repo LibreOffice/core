@@ -16,6 +16,24 @@
       "revId": "5d84c692fbaccb7dedf5d6c68924e116d7d2bef9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8jo\u003d",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000098
+      },
+      "writtenOn": "2013-08-19T18:25:55Z",
+      "side": 1,
+      "message": "Sorry my comment is unclear and I totally agree with you (hence my own -1 review): I want to use GetpTransliteration\nNow, in order to use GetpTransliteration I need a OUString (which I expected to get from string_element_block) but I receive a basic_string instead.\nIt looks like a bug to me, but I\u0027m not familiar enough with mdds to understand/fix the problem.\nAny ideas ?",
+      "parentUuid": "AAAAXn//8jw\u003d",
+      "revId": "5d84c692fbaccb7dedf5d6c68924e116d7d2bef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
