@@ -55,7 +55,7 @@ published struct Locale
 
         <p>These codes are the lower-case two-letter codes as defined by
         ISO-639. You can find a full list of these codes at a number of
-        sites, such as: <br>
+        sites, such as: <br/>
         <a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
         <code>http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</code></a>.
         </p>
@@ -69,7 +69,7 @@ published struct Locale
 
         <p>These codes are the upper-case two-letter codes as
         defined by ISO-3166.  You can find a full list of these codes at a
-        number of sites, such as: <br>
+        number of sites, such as: <br/>
         <a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
         <code>http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</code></a>.
         </p>

@@ -55,12 +55,12 @@ published interface XLoaderFactory
     </p>
         <table border=1>
             <tr>
-                <td><b>Types<b></td>
+                <td><b>Types</b></td>
                 <td>[string]</td>
                 <td>file types which loader is registered for</td>
             </tr>
             <tr>
-                <td><b>UIName<b></td>
+                <td><b>UIName</b></td>
                 <td>[string]</td>
                 <td>UI representable and localized name</td>
             </tr>

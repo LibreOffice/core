@@ -28,7 +28,7 @@ module com { module sun { module star { module resource {
     resource files.
 
     <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
-    format, located inside the installation's program/resource directory. The OfficeResoureLoader
+    format, located inside the installation's program/resource directory. The OfficeResourceLoader
     singleton (available at a component context as value with the key
     <code>/singletons/com.sun.star.resource.OfficeResourceLoader</code>), provides access to some
     types of resources within those files.</p>
@@ -44,7 +44,7 @@ module com { module sun { module star { module resource {
 
     <p>Resource keys, as passed to the XResourceBundle::getDirectElement() or
     com::sun::star::container::XNameAccess::getByName(), have the following format:
-    <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt; specifies
+    <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt;</code> specifies
     the type of the requested resource (see below) and <code>&lt;numeric_identifier&gt;</code> is the numeric
     identifier of the resource.</p>
 
