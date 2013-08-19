@@ -23,8 +23,8 @@ class SC_DLLPUBLIC ScDBDataFormatting
     sal_Int32 maSecondRowStripeSize;
     sal_Int32 maFirstColStripeSize;
     sal_Int32 maSecondColStripeSize;
-    bool bBandedRows;
-    bool bBandedColumns;
+    bool mbBandedRows;
+    bool mbBandedColumns;
 public:
     ScDBDataFormatting();
     ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);

@@ -16,12 +16,12 @@ ScDBDataFormatting::ScDBDataFormatting():
     maSecondRowStripeStyle  ( "Default" ),
     maFirstColStripeStyle   ( "Default" ),
     maSecondColStripeStyle  ( "Default" ),
-    bBandedRows             ( false ),
-    bBandedColumns          ( false ),
     maFirstRowStripeSize    ( 1 ),
     maSecondRowStripeSize   ( 1 ),
     maFirstColStripeSize    ( 1 ),
-    maSecondColStripeSize   ( 1 )
+    maSecondColStripeSize   ( 1 ),
+    mbBandedRows            ( false ),
+    mbBandedColumns         ( false )
 {
 }
 
@@ -31,8 +31,8 @@ ScDBDataFormatting::ScDBDataFormatting(const OUString& rTableStyleName, const OU
     maSecondRowStripeStyle  ( rSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rFirstColStripeStyle ),
     maSecondColStripeStyle  ( rSecondColStripeStyle ),
-    bBandedRows             ( bBRows ),
-    bBandedColumns          ( bBCols )
+    mbBandedRows            ( bBRows ),
+    mbBandedColumns         ( bBCols )
 {
 }
 
@@ -42,8 +42,8 @@ ScDBDataFormatting::ScDBDataFormatting( const ScDBDataFormatting& rTableFormatDa
     maSecondRowStripeStyle  ( rTableFormatData.maSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rTableFormatData.maFirstColStripeStyle ),
     maSecondColStripeStyle  ( rTableFormatData.maSecondColStripeStyle ),
-    bBandedRows             ( rTableFormatData.bBandedRows ),
-    bBandedColumns          ( rTableFormatData.bBandedColumns )
+    mbBandedRows            ( rTableFormatData.mbBandedRows ),
+    mbBandedColumns         ( rTableFormatData.mbBandedColumns )
 {
 }
 
@@ -59,22 +59,22 @@ const OUString& ScDBDataFormatting::GetTableStyleName()
 
 void ScDBDataFormatting::SetBandedRows( bool bBRows )
 {
-    bBandedRows = bBRows;
+    mbBandedRows = bBRows;
 }
 
 bool ScDBDataFormatting::GetBandedRows()
 {
-    return bBandedRows;
+    return mbBandedRows;
 }
 
 void ScDBDataFormatting::SetBandedColumns( bool bBCols )
 {
-    bBandedColumns = bBCols;
+    mbBandedColumns = bBCols;
 }
 
 bool ScDBDataFormatting::GetBandedColumns()
 {
-    return bBandedColumns;
+    return mbBandedColumns;
 }
 
 const OUString& ScDBDataFormatting::GetFirstRowStripeStyle() const
