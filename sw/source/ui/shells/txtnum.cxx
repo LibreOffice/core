@@ -201,7 +201,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 pSetRule->UnLinkGraphics();
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
-                                        : GetShell().GetUniqueNumRuleName(),
+                                        : String(GetShell().GetUniqueNumRuleName()),
                                     // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
@@ -343,7 +343,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     aSvxRule.UnLinkGraphics();
                     SwNumRule aSetRule( pCurRule
                                             ? pCurRule->GetName()
-                                            : GetShell().GetUniqueNumRuleName(),
+                                            : String(GetShell().GetUniqueNumRuleName()),
                                         numfunc::GetDefaultPositionAndSpaceMode() );
                     aSetRule.SetSvxRule( aSvxRule, GetShell().GetDoc());
 
@@ -397,7 +397,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
 
                     SwNumRule aSetRule( pCurRule
                                             ? pCurRule->GetName()
-                                            : GetShell().GetUniqueNumRuleName(),
+                                            : String(GetShell().GetUniqueNumRuleName()),
                                         numfunc::GetDefaultPositionAndSpaceMode() );
 
                     aSetRule.SetSvxRule( aSvxRule, GetShell().GetDoc());

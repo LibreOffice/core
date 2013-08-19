@@ -743,7 +743,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
+OUString SwEditShell::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) const
 {
     return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
 }
