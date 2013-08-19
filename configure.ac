@@ -2874,17 +2874,17 @@ if test $_os = Darwin -a "$enable_canonical_installation_tree_structure" = yes; 
     ENABLE_MACOSX_MACLIKE_APP_STRUCTURE=YES
     AC_DEFINE(HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE)
 elif test $_os = Darwin; then
-    LIBO_BIN_FOLDER=program
-    LIBO_ETC_FOLDER=program
-    LIBO_LIBEXEC_FOLDER=program
-    LIBO_LIB_FOLDER=program
-    LIBO_LIB_PYUNO_FOLDER=program
+    LIBO_BIN_FOLDER=MacOS
+    LIBO_ETC_FOLDER=MacOS
+    LIBO_LIBEXEC_FOLDER=MacOS
+    LIBO_LIB_FOLDER=MacOS
+    LIBO_LIB_PYUNO_FOLDER=MacOS
     LIBO_SHARE_FOLDER=share
     LIBO_SHARE_HELP_FOLDER=help
-    LIBO_SHARE_JAVA_FOLDER=program/classes
+    LIBO_SHARE_JAVA_FOLDER=MacOS/classes
     LIBO_SHARE_PRESETS_FOLDER=presets
-    LIBO_SHARE_RESOURCE_FOLDER=program/resource
-    LIBO_SHARE_SHELL_FOLDER=program/shell
+    LIBO_SHARE_RESOURCE_FOLDER=MacOS/resource
+    LIBO_SHARE_SHELL_FOLDER=MacOS/shell
     LIBO_URE_BIN_FOLDER=ure-link/bin
     LIBO_URE_ETC_FOLDER=ure-link/bin
     LIBO_URE_LIB_FOLDER=ure-link/lib
