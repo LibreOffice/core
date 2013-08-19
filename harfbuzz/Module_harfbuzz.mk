@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,harfbuzz))
 
-ifeq ($(ENABLE_HARFBUZZ)-$(SYSTEM_HARFBUZZ),YES-NO)
+ifeq ($(ENABLE_HARFBUZZ)-$(SYSTEM_HARFBUZZ),TRUE-NO)
 
 $(eval $(call gb_Module_add_targets,harfbuzz,\
 	ExternalPackage_harfbuzz \
