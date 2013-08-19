@@ -187,6 +187,7 @@ namespace sw { namespace mark
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
         , m_aRefObj(NULL)
+        , mbInDestruction( false )
     { }
 
     void DdeBookmark::SetRefObject(SwServerObject* pObj)
@@ -204,6 +205,7 @@ namespace sw { namespace mark
 
     DdeBookmark::~DdeBookmark()
     {
+        mbInDestruction = true;
         if( m_aRefObj.Is() )
         {
             if(m_aRefObj->HasDataLinks())

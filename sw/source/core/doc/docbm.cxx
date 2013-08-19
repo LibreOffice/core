@@ -734,9 +734,18 @@ namespace sw { namespace mark
                 break;
         }
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(ppMark->get());
-        if(pDdeBookmark)
+        if ( pDdeBookmark )
+        {
             pDdeBookmark->DeregisterFromDoc(m_pDoc);
-        m_vMarks.erase(m_vMarks.begin() + (ppMark - m_vMarks.begin())); // clumsy const-cast
+        }
+        // keep a temporary instance of the to-be-deleted mark in order to avoid
+        // recursive deletion of the mark triggered via its destructor.
+        // the temporary hold instance assures that the mark is deleted after the
+        // mark container has been updated. Thus, the mark could not be found anymore
+        // in the mark container by other calls trying to recursively delete the mark.
+        iterator_t aToBeDeletedMarkIter = m_vMarks.begin() + (ppMark - m_vMarks.begin());
+        pMark_t pToBeDeletedMark = *aToBeDeletedMarkIter;
+        m_vMarks.erase( aToBeDeletedMarkIter );
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
