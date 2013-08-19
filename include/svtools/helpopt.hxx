@@ -25,8 +25,6 @@
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
 
-typedef std::list< sal_Int32 > IdList;
-
 class SvtHelpOptions_Impl;
 
 class SVT_DLLPUBLIC SvtHelpOptions: public utl::detail::Options
@@ -42,13 +40,13 @@ public:
     void            SetHelpTips( sal_Bool b );
     sal_Bool        IsHelpTips() const;
 
-    const String&   GetHelpStyleSheet()const;
-    void            SetHelpStyleSheet(const String& rStyleSheet);
+    const OUString& GetHelpStyleSheet()const;
+    void            SetHelpStyleSheet(const OUString& rStyleSheet);
 
     void            SetWelcomeScreen( sal_Bool b );
     sal_Bool        IsWelcomeScreen() const;
 
-    String          GetSystem() const;
+    OUString        GetSystem() const;
 };
 
 #endif

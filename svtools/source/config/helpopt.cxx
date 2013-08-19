@@ -49,9 +49,9 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     sal_Bool        bExtendedHelp;
     sal_Bool        bHelpTips;
     sal_Bool        bWelcomeScreen;
-    String          aLocale;
-    String          aSystem;
-    String          sHelpStyleSheet;
+    OUString        aLocale;
+    OUString        aSystem;
+    OUString        sHelpStyleSheet;
 
     DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int );
     MapString2Int   aURLIgnoreCounters;
@@ -73,11 +73,11 @@ public:
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
     sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
-    String          GetLocale() const                       { return aLocale; }
-    String          GetSystem() const                       { return aSystem; }
+    OUString        GetLocale() const                       { return aLocale; }
+    OUString        GetSystem() const                       { return aSystem; }
 
-    const String&   GetHelpStyleSheet()const{return sHelpStyleSheet;}
-    void            SetHelpStyleSheet(const String& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
+    const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
+    void            SetHelpStyleSheet(const OUString& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
 
     static ::osl::Mutex & getInitMutex();
 };
@@ -316,17 +316,17 @@ sal_Bool SvtHelpOptions::IsWelcomeScreen() const
     return pImp->IsWelcomeScreen();
 }
 
-String SvtHelpOptions::GetSystem() const
+OUString SvtHelpOptions::GetSystem() const
 {
     return pImp->GetSystem();
 }
 
-const String&   SvtHelpOptions::GetHelpStyleSheet()const
+const OUString&   SvtHelpOptions::GetHelpStyleSheet()const
 {
     return pImp->GetHelpStyleSheet();
 }
 
-void  SvtHelpOptions::SetHelpStyleSheet(const String& rStyleSheet)
+void  SvtHelpOptions::SetHelpStyleSheet(const OUString& rStyleSheet)
 {
     pImp->SetHelpStyleSheet(rStyleSheet);
 }
