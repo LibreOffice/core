@@ -53,7 +53,6 @@
 #define FT_REFERENCE                37
 #define FT_POSPRESETS               38
 #define FT_ANGLEPRESETS             39
-#define LB_ORIENT                   40
 #define FT_SIZEREFERENCE            41
 #define CTL_SIZERECT                42
 #define FT_POSREFERENCE             43

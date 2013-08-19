@@ -7,7 +7,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="FL_POSITION">
         <property name="visible">True</property>
@@ -124,6 +124,7 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_POSRECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -259,12 +260,9 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
+                        <property name="width">2</property>
                         <property name="height">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -298,6 +296,7 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_SIZERECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -514,9 +513,14 @@
       <widget name="FT_POS_Y"/>
       <widget name="FT_WIDTH"/>
       <widget name="FT_HEIGHT"/>
-      <widget name="CBX_SCALE"/>
-      <widget name="TSB_POSPROTECT"/>
-      <widget name="TSB_SIZEPROTECT"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="MTR_FLD_POS_X:0.00cm"/>
+      <widget name="MTR_FLD_POS_Y:0.00cm"/>
+      <widget name="MTR_FLD_WIDTH:0.00cm"/>
+      <widget name="MTR_FLD_HEIGHT:0.00cm"/>
     </widgets>
   </object>
 </interface>
