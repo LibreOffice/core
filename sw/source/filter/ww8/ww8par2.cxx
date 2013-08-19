@@ -716,8 +716,8 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( pStyles->pStyRule )         // Bullet-Style already present
         return pStyles->pStyRule;
 
-    const String aBaseName(OUString("WW8StyleNum"));
-    const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
+    const OUString aBaseName("WW8StyleNum");
+    const OUString aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
     sal_uInt16 nRul = rDoc.MakeNumRule( aName, 0, false,
@@ -792,7 +792,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
-        String aName(OUString("Outline"));
+        const OUString aName("Outline");
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );

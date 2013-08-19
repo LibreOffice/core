@@ -1513,7 +1513,7 @@ public:
     void AddNumRule(SwNumRule * pRule);
 
     /// add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
-    sal_uInt16 MakeNumRule( const String &rName,
+    sal_uInt16 MakeNumRule( const OUString &rName,
         const SwNumRule* pCpy = 0,
         bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
@@ -1525,7 +1525,7 @@ public:
     bool RenameNumRule(const String & aOldName, const String & aNewName,
                            bool bBroadcast = false);
     bool DelNumRule( const String& rName, bool bBroadCast = false );
-    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
+    OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   /// Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );

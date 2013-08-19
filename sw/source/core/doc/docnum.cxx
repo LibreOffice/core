@@ -2165,7 +2165,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     createListForListStyle( pRule->GetName() );
 }
 
-sal_uInt16 SwDoc::MakeNumRule( const String &rName,
+sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
             const SwNumRule* pCpy,
             bool bBroadcast,
             const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
@@ -2209,19 +2209,19 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
     return nRet;
 }
 
-String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
+OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) const
 {
-    String aName;
+    OUString aName;
     if( bAutoNum )
     {
         static rtlRandomPool s_RandomPool( rtl_random_createPool() );
         sal_Int64 n;
         rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
         aName = OUString::valueOf( (n < 0 ? -n : n) );
-        if( pChkStr && !pChkStr->Len() )
+        if( pChkStr && pChkStr->isEmpty() )
             pChkStr = 0;
     }
-    else if( pChkStr && pChkStr->Len() )
+    else if( pChkStr && !pChkStr->isEmpty() )
         aName = *pChkStr;
     else
     {
@@ -2233,16 +2233,15 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    xub_StrLen nNmLen = aName.Len();
+    sal_Int32 nNmLen = aName.getLength();
     if( !bAutoNum && pChkStr )
     {
-        while( nNmLen-- && '0' <= aName.GetChar( nNmLen ) &&
-                           '9' >= aName.GetChar( nNmLen ) )
+        while( nNmLen-- && '0' <= aName[nNmLen] && aName[nNmLen] <= '9' )
             ; //nop
 
-        if( ++nNmLen < aName.Len() )
+        if( ++nNmLen < aName.getLength() )
         {
-            aName.Erase( nNmLen );
+            aName = aName.copy(0, nNmLen );
             pChkStr = 0;
         }
     }
@@ -2253,15 +2252,15 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
     for( n = 0; n < mpNumRuleTbl->size(); ++n )
         if( 0 != ( pNumRule = (*mpNumRuleTbl)[ n ] ) )
         {
-            const String& rNm = pNumRule->GetName();
-            if( rNm.Match( aName ) == nNmLen )
+            const OUString sNm = pNumRule->GetName();
+            if( sNm.startsWith( aName ) )
             {
                 // Determine Number and set the Flag
-                nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
+                nNum = (sal_uInt16)sNm.copy( nNmLen ).toInt32();
                 if( nNum-- && nNum < mpNumRuleTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
-            if( pChkStr && pChkStr->Equals( rNm ) )
+            if( pChkStr && *pChkStr==sNm )
                 pChkStr = 0;
         }
 
@@ -2281,9 +2280,9 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
 
     }
     delete [] pSetFlags;
-    if( pChkStr && pChkStr->Len() )
+    if( pChkStr && !pChkStr->isEmpty() )
         return *pChkStr;
-    return aName += OUString::number( ++nNum );
+    return aName + OUString::number( ++nNum );
 }
 
 void SwDoc::UpdateNumRule()

@@ -1780,10 +1780,7 @@ void SwDocStyleSheet::Create()
             pNumRule = lcl_FindNumRule( rDoc, aName );
             if( !pNumRule )
             {
-                OUString sTmpNm( aName );
-                if( aName.isEmpty() )
-                    sTmpNm = rDoc.GetUniqueNumRuleName();
-
+                const OUString sTmpNm( aName.isEmpty() ? rDoc.GetUniqueNumRuleName() : aName );
                 SwNumRule* pRule = rDoc.GetNumRuleTbl()[
                     rDoc.MakeNumRule( sTmpNm, 0, false,
                                       // #i89178#

@@ -46,8 +46,7 @@ using namespace sw::util;
 sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
 {
     sal_uInt16 nNumId = USHRT_MAX;
-    String sPrefix(OUString("WW8TempExport"));
-    sPrefix += OUString::number( nUniqueList++ );
+    const OUString sPrefix("WW8TempExport" + OUString::number( nUniqueList++ ));
     SwNumRule* pMyNumRule =
             new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );

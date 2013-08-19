@@ -526,7 +526,7 @@ public:
     sal_Bool SelectionHasNumber() const;
     sal_Bool SelectionHasBullet() const;
 
-    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
+    OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
