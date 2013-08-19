@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//8oI\u003d",
+        "filename": "editeng/source/items/PositionalTabItem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-19T09:44:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//82M\u003d",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//82I\u003d",
         "filename": "editeng/source/items/PositionalTabItem.cxx",
         "patchSetId": 2
@@ -65,6 +83,24 @@
       "writtenOn": "2013-08-15T07:45:27Z",
       "side": 1,
       "message": "Please avoid \"published\" if this API is just added for the sake of the DOCX importer. That way we can change the struct before it being an API change.",
+      "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8oM\u003d",
+        "filename": "offapi/com/sun/star/style/PositionalTab.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-19T09:44:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//810\u003d",
       "revId": "7d9327b3f48ad68f838481b0395a0d160d900506",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
