@@ -266,7 +266,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
+sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 /*  [Beschreibung]
 
@@ -358,12 +358,12 @@ sal_Bool SfxErrorHandler::GetErrorString(
 
     if( bRet )
     {
-        String aErrStr;
+        OUString aErrStr;
         GetClassString(lErrId & ERRCODE_CLASS_MASK,
                        aErrStr);
-        if(aErrStr.Len())
-            aErrStr += OUString(".\n");
-        rStr = rStr.replaceAll(OUString("$(CLASS)"),aErrStr);
+        if(!aErrStr.isEmpty())
+            aErrStr += ".\n";
+        rStr = rStr.replaceAll("$(CLASS)",aErrStr);
     }
 
     return bRet;
@@ -382,7 +382,7 @@ SfxErrorContext::SfxErrorContext(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, const String &aArg1P, Window *pWindow,
+    sal_uInt16 nCtxIdP, const OUString &aArg1P, Window *pWindow,
     sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
     aArg1(aArg1P)

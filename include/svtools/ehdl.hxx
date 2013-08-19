@@ -37,15 +37,15 @@ public:
             sal_uInt16 nCtxIdP, Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
     SfxErrorContext(
-            sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
+            sal_uInt16 nCtxIdP, const OUString &aArg1, Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual bool GetString(sal_uLong nErrId, OUString &rStr);
+    bool GetString(sal_uLong nErrId, OUString &rStr);
 
 private:
     sal_uInt16 nCtxId;
     sal_uInt16 nResId;
     ResMgr *pMgr;
-    String aArg1;
+    OUString aArg1;
 };
 
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
@@ -66,7 +66,7 @@ private:
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
-    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
+    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, OUString &) const;
     virtual bool     CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const;
 };
 
