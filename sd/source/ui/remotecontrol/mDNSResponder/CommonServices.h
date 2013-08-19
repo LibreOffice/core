@@ -264,7 +264,7 @@ extern "C" {
 
     #include    <windows.h>
     #include    <winsock2.h>
-    #include    <Ws2tcpip.h>
+    #include    <ws2tcpip.h>
 
     #if ( defined( _MSC_VER ) )
         #pragma warning( default:4706 )
