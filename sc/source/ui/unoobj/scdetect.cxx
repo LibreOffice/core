@@ -71,6 +71,119 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 
+namespace {
+
+const sal_Char pFilterLotus[]        = "Lotus";
+const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
+const sal_Char pFilterDBase[]        = "dBase";
+const sal_Char pFilterDif[]      = "DIF";
+const sal_Char pFilterSylk[]     = "SYLK";
+
+// Tabelle mit Suchmustern
+// Bedeutung der Sequenzen
+// 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
+// 0x0100: ein Byte ueberlesen (don't care)
+// 0x02nn: ein Byte aus 0xnn Alternativen folgt
+// 0x8000: Erkennung abgeschlossen
+//
+
+#define M_DC        0x0100
+#define M_ALT(ANZ)  (0x0200+(ANZ))
+#define M_ENDE      0x8000
+
+const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
+    { 0x0000, 0x0000, 0x0002, 0x0000,
+    M_ALT(2), 0x0004, 0x0006,
+    0x0004, M_ENDE };
+
+const sal_uInt16 pLotusNew[] =   // Lotus >= 9.7
+    { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
+      M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
+      0x0010, 0x0004, 0x0000, 0x0000,
+      M_ENDE };
+
+const sal_uInt16 pLotus2[] =     // Lotus >3
+    { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
+    M_ALT(2), 0x0000, 0x0002,         // File Revision Code
+    0x0010,
+    0x0004, 0x0000,                   // File Revision Subcode
+    M_ENDE };
+
+const sal_uInt16 pQPro[] =
+       { 0x0000, 0x0000, 0x0002, 0x0000,
+         M_ALT(4), 0x0001, 0x0002, // WB1, WB2
+         0x0006, 0x0007,           // QPro 6/7 (?)
+         0x0010,
+         M_ENDE };
+
+const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
+    {
+    'T', 'A', 'B', 'L', 'E',
+    M_DC, M_DC,
+    '0', ',', '1',
+    M_DC, M_DC,
+    '\"',
+    M_ENDE };
+
+const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
+    {
+    'T', 'A', 'B', 'L', 'E',
+    M_DC,
+    '0', ',', '1',
+    M_DC,
+    '\"',
+    M_ENDE };
+
+const sal_uInt16 pSylk[] =       // Sylk
+    {
+    'I', 'D', ';',
+    M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
+    M_ENDE };
+
+bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
+{
+    sal_uInt8 nByte;
+    rStr.Seek( 0 ); // am Anfang war alles Uebel...
+    rStr >> nByte;
+    bool bSync = true;
+    while( !rStr.IsEof() && bSync )
+    {
+        sal_uInt16 nMuster = *pSearch;
+
+        if( nMuster < 0x0100 )
+        { //                                direkter Byte-Vergleich
+            if( ( sal_uInt8 ) nMuster != nByte )
+                bSync = false;
+        }
+        else if( nMuster & M_DC )
+        { //                                             don't care
+        }
+        else if( nMuster & M_ALT(0) )
+        { //                                      alternative Bytes
+            sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
+            bSync = false;          // zunaechst unsynchron
+            while( nAnzAlt > 0 )
+            {
+                pSearch++;
+                if( ( sal_uInt8 ) *pSearch == nByte )
+                    bSync = true;   // jetzt erst Synchronisierung
+                nAnzAlt--;
+            }
+        }
+        else if( nMuster & M_ENDE )
+        { //                                        Format detected
+            return true;
+        }
+
+        pSearch++;
+        rStr >> nByte;
+    }
+
+    return false;
+}
+
+}
+
 ScFilterDetect::ScFilterDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
 {
 }
@@ -79,27 +192,10 @@ ScFilterDetect::~ScFilterDetect()
 {
 }
 
-static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
-static const sal_Char pFilterSc50Temp[] = "StarCalc 5.0 Vorlage/Template";
-static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
-static const sal_Char pFilterSc40Temp[] = "StarCalc 4.0 Vorlage/Template";
-static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
-static const sal_Char pFilterSc30Temp[] = "StarCalc 3.0 Vorlage/Template";
-static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
-static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
-static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
-static const sal_Char pFilterLotus[]        = "Lotus";
-static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
-static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
-static const sal_Char pFilterExcelXML[] = "MS Excel 2003 XML";
-static const sal_Char pFilterDBase[]        = "dBase";
-static const sal_Char pFilterDif[]      = "DIF";
-static const sal_Char pFilterSylk[]     = "SYLK";
-static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
-static const sal_Char pFilterHtmlWeb[]  = "calc_HTML_WebQuery";
-static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
-
-
+#if 0
+// This method is no longer used, but I do want to keep this for now to see
+// if we could transfer this check to the now centralized ascii detection
+// code in the filter module.
 static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 {
     // ASCII/CSV is considered possible if there are no null bytes, or a Byte
@@ -133,35 +229,7 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 
     return nMask != 0;
 }
-
-static const SfxFilter* lcl_DetectExcelXML( SvStream& rStream, SfxFilterMatcher& rMatcher )
-{
-    const SfxFilter* pFound = NULL;
-    rStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    const size_t nBufSize = 4000;
-    sal_uInt8 aBuffer[ nBufSize ];
-    sal_uLong nBytesRead = rStream.Read( aBuffer, nBufSize );
-    sal_uLong nXMLStart = 0;
-
-    // Skip UTF-8 BOM if present.
-    // No need to handle UTF-16 etc (also rejected in XMLFilterDetect).
-    if ( nBytesRead >= 3 && aBuffer[0] == 0xEF && aBuffer[1] == 0xBB && aBuffer[2] == 0xBF )
-        nXMLStart = 3;
-
-    if ( nBytesRead >= nXMLStart + 5 && memcmp( aBuffer+nXMLStart, "<?xml", 5 ) == 0 )
-    {
-        // Be consistent with XMLFilterDetect service: Check for presence of "Workbook" in XML file.
-
-        OString aTryStr( "Workbook" );
-        OString aFileString(reinterpret_cast<const sal_Char*>(aBuffer), nBytesRead);
-
-        if (aFileString.indexOf(aTryStr) >= 0)
-            pFound = rMatcher.GetFilter4FilterName( OUString(pFilterExcelXML) );
-    }
-
-    return pFound;
-}
+#endif
 
 static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 {
@@ -246,7 +314,6 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
     sal_Int32 nIndexOfDocumentTitle = -1;
-    bool bFakeXLS = false;
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -428,283 +495,72 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             }
             else
             {
+                // Non-storage format.
+
+                if (aTypeName == "calc8_template" ||
+                    aTypeName == "calc8" ||
+                    aTypeName == "calc_StarOffice_XML_Calc" ||
+                    aTypeName == "calc_StarOffice_XML_Calc_Template")
+                    // These types require storage.  Bail out.
+                    return OUString();
+
                 SvStream* pStream = aMedium.GetInStream();
-                const SfxFilter* pPreselectedFilter = pFilter;
-                bool bCsvSelected = (pPreselectedFilter &&
-                        pPreselectedFilter->GetFilterName().equalsAscii(pFilterAscii));
-                bool bExcelSelected = (pPreselectedFilter &&
-                        (pPreselectedFilter->GetName().indexOf("Excel") >= 0));
-                bool bIsXLS = (bExcelSelected || (bCsvSelected && !aPreselectedFilterName.Len()));
-                pFilter = 0;
-                if ( pStream )
+                if (!pStream)
+                    // No stream, no detection.
+                    return OUString();
+
+                pFilter = NULL;
+
+                pStream->Seek( STREAM_SEEK_TO_END);
+                sal_Size nSize = pStream->Tell();
+                pStream->Seek( 0);
+                // Do not attempt to create an SotStorage on a
+                // 0-length stream as that would create the compound
+                // document header on the stream and effectively write to
+                // disk!
+                if (nSize > 0)
                 {
-                    pStream->Seek( STREAM_SEEK_TO_END);
-                    sal_Size nSize = pStream->Tell();
-                    pStream->Seek( 0);
-                    // Do not attempt to create an SotStorage on a
-                    // 0-length stream as that would create the compound
-                    // document header on the stream and effectively write to
-                    // disk!
-                    if (nSize > 0)
+                    const char* pSearchFilterName = NULL;
+                    if (aTypeName == "calc_Lotus")
                     {
-                        SvStream &rStr = *pStream;
+                        if (!detectThisFormat(*pStream, pLotus) && !detectThisFormat(*pStream, pLotusNew) && !detectThisFormat(*pStream, pLotus2))
+                            return OUString();
 
-                        // Tabelle mit Suchmustern
-                        // Bedeutung der Sequenzen
-                        // 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
-                        // 0x0100: ein Byte ueberlesen (don't care)
-                        // 0x02nn: ein Byte aus 0xnn Alternativen folgt
-                        // 0x8000: Erkennung abgeschlossen
-                        //
-
-        #define M_DC        0x0100
-        #define M_ALT(ANZ)  (0x0200+(ANZ))
-        #define M_ENDE      0x8000
-
-                        static const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
-                            { 0x0000, 0x0000, 0x0002, 0x0000,
-                            M_ALT(2), 0x0004, 0x0006,
-                            0x0004, M_ENDE };
-
-                        static const sal_uInt16 pLotusNew[] =   // Lotus >= 9.7
-                            { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
-                              M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
-                              0x0010, 0x0004, 0x0000, 0x0000,
-                              M_ENDE };
-
-                        static const sal_uInt16 pExcel1[] =     // Excel BIFF2, BIFF3, BIFF4
-                            {   0x09,                                   // lobyte of BOF rec ID (0x0009, 0x0209, 0x0409)
-                                M_ALT(3), 0x00, 0x02, 0x04,             // hibyte of BOF rec ID (0x0009, 0x0209, 0x0409)
-                                M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
-                                0x00,                                   // hibyte of BOF rec size (4, 6, 8, 16)
-                                M_DC, M_DC,                             // any version
-                                M_ALT(3), 0x10, 0x20, 0x40,             // lobyte of data type (0x0010, 0x0020, 0x0040)
-                                0x00,                                   // hibyte of data type (0x0010, 0x0020, 0x0040)
-                                M_ENDE };
-
-                        static const sal_uInt16 pExcel2[] =     // Excel BIFF4 Workspace
-                            {   0x09,                                   // lobyte of BOF rec ID (0x0409)
-                                0x04,                                   // hibyte of BOF rec ID (0x0409)
-                                M_ALT(3), 4, 6, 8,                      // lobyte of BOF rec size (4, 6, 8, 16)
-                                0x00,                                   // hibyte of BOF rec size (4, 6, 8, 16)
-                                M_DC, M_DC,                             // any version
-                                0x00,                                   // lobyte of data type (0x0100)
-                                0x01,                                   // hibyte of data type (0x0100)
-                                M_ENDE };
-
-                        static const sal_uInt16 pExcel3[] =     // #i23425# Excel BIFF5, BIFF7, BIFF8 (simple book stream)
-                            {   0x09,                                   // lobyte of BOF rec ID (0x0809)
-                                0x08,                                   // hibyte of BOF rec ID (0x0809)
-                                M_ALT(4), 4, 6, 8, 16,                  // lobyte of BOF rec size
-                                0x00,                                   // hibyte of BOF rec size
-                                M_DC, M_DC,                             // any version
-                                M_ALT(5), 0x05, 0x06, 0x10, 0x20, 0x40, // lobyte of data type
-                                0x00,                                   // hibyte of data type
-                                M_ENDE };
-
-                        static const sal_uInt16 pSc10[] =       // StarCalc 1.0 Dokumente
-                            { 'B', 'l', 'a', 'i', 's', 'e', '-', 'T', 'a', 'b', 'e', 'l', 'l',
-                            'e', 0x000A, 0x000D, 0x0000,    // Sc10CopyRight[16]
-                            M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC, M_DC,
-                            M_DC, M_DC,                   // Sc10CopyRight[29]
-                            M_ALT(2), 0x0065, 0x0066,     // Versionsnummer 101 oder 102
-                            0x0000,
-                            M_ENDE };
-
-                        static const sal_uInt16 pLotus2[] =     // Lotus >3
-                            { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
-                            M_ALT(2), 0x0000, 0x0002,         // File Revision Code
-                            0x0010,
-                            0x0004, 0x0000,                   // File Revision Subcode
-                            M_ENDE };
-
-                        static const sal_uInt16 pQPro[] =
-                               { 0x0000, 0x0000, 0x0002, 0x0000,
-                                 M_ALT(4), 0x0001, 0x0002, // WB1, WB2
-                                 0x0006, 0x0007,           // QPro 6/7 (?)
-                                 0x0010,
-                                 M_ENDE };
-
-                        static const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
-                            {
-                            'T', 'A', 'B', 'L', 'E',
-                            M_DC, M_DC,
-                            '0', ',', '1',
-                            M_DC, M_DC,
-                            '\"',
-                            M_ENDE };
-
-                        static const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
-                            {
-                            'T', 'A', 'B', 'L', 'E',
-                            M_DC,
-                            '0', ',', '1',
-                            M_DC,
-                            '\"',
-                            M_ENDE };
-
-                        static const sal_uInt16 pSylk[] =       // Sylk
-                            {
-                            'I', 'D', ';',
-                            M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
-                            M_ENDE };
-
-                        static const sal_uInt16 *ppFilterPatterns[] =      // Arrays mit Suchmustern
-                            {
-                            pLotus,
-                            pExcel1,
-                            pExcel2,
-                            pExcel3,
-                            pSc10,
-                            pDIF1,
-                            pDIF2,
-                            pSylk,
-                            pLotusNew,
-                            pLotus2,
-                            pQPro
-                            };
-                        const sal_uInt16 nFilterCount = sizeof (ppFilterPatterns) / sizeof (ppFilterPatterns[0]);
-
-                        static const sal_Char* const pFilterName[] =     // zugehoerige Filter
-                            {
-                            pFilterLotus,
-                            pFilterExcel4,
-                            pFilterExcel4,
-                            pFilterExcel4,
-                            pFilterSc10,
-                            pFilterDif,
-                            pFilterDif,
-                            pFilterSylk,
-                            pFilterLotus,
-                            pFilterLotus,
-                            pFilterQPro6
-                            };
-
-                        // suchen Sie jetzt!
-                        // ... realisiert ueber 'Mustererkennung'
-
-                        sal_uInt8            nAkt;
-                        sal_Bool            bSync;          // Datei und Muster stimmen ueberein
-                        sal_uInt16          nFilter;        // Zaehler ueber alle Filter
-                        const sal_uInt16    *pSearch;       // aktuelles Musterwort
-
-                        for ( nFilter = 0 ; nFilter < nFilterCount ; nFilter++ )
-                        {
-                            pSearch = ppFilterPatterns[ nFilter ];
-                            if (bCsvSelected && pSearch == pSylk)
-                                // SYLK 4 characters is really too weak to
-                                // override preselected CSV, already ID;Name
-                                // would trigger that. fdo#48347
-                                continue;
-
-                            rStr.Seek( 0 ); // am Anfang war alles Uebel...
-                            rStr >> nAkt;
-                            bSync = sal_True;
-                            while( !rStr.IsEof() && bSync )
-                            {
-                                sal_uInt16 nMuster = *pSearch;
-
-                                if( nMuster < 0x0100 )
-                                { //                                direkter Byte-Vergleich
-                                    if( ( sal_uInt8 ) nMuster != nAkt )
-                                        bSync = false;
-                                }
-                                else if( nMuster & M_DC )
-                                { //                                             don't care
-                                }
-                                else if( nMuster & M_ALT(0) )
-                                { //                                      alternative Bytes
-                                    sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
-                                    bSync = false;          // zunaechst unsynchron
-                                    while( nAnzAlt > 0 )
-                                    {
-                                        pSearch++;
-                                        if( ( sal_uInt8 ) *pSearch == nAkt )
-                                            bSync = sal_True;   // jetzt erst Synchronisierung
-                                        nAnzAlt--;
-                                    }
-                                }
-                                else if( nMuster & M_ENDE )
-                                { //                                        Format detected
-                                    pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pFilterName[nFilter]));
-                                    bSync = false;              // leave inner loop
-                                    nFilter = nFilterCount;     // leave outer loop
-                                }
-                                else
-                                { //                                         Tabellenfehler
-                                    OSL_FAIL( "-ScApplication::DetectFilter(): Fehler in Mustertabelle");
-                                }
-
-                                pSearch++;
-                                rStr >> nAkt;
-                            }
-                        }
-
-                        if ( pPreselectedFilter && !pFilter )
-                        {
-                            // further checks for filters only if they are preselected: ASCII, HTML, RTF, DBase
-                            // without the preselection other filters (Writer) take precedence
-                            // DBase can't be detected reliably, so it also needs preselection
-
-                            bool bMaybeText = lcl_MayBeAscii( rStr );
-
-                            // get file header
-                            rStr.Seek( 0 );
-                            const sal_Size nTrySize = 80;
-                            OString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
-
-                            bool bMaybeHtml = HTMLParser::IsHTMLFormat( aHeader.getStr());
-
-                            if ( aHeader.copy(0, 5).equalsL("{\\rtf", 5) )
-                            {
-                                // test for RTF
-                                pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterRtf) );
-                            }
-                            else if ( bIsXLS && (bMaybeText && !bMaybeHtml) )
-                            {
-                                aHeader = comphelper::string::stripStart(aHeader, ' ');
-                                // Detect Excel 2003 XML here only if XLS was preselected.
-                                // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
-                                pFilter = lcl_DetectExcelXML( rStr, aMatcher );
-                                if (!pFilter)
-                                    pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterAscii) );
-                                bFakeXLS = true;
-                            }
-                            else if ( pPreselectedFilter->GetName().equalsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
-                                pFilter = pPreselectedFilter;
-                            else if ( bCsvSelected && bMaybeText )
-                                pFilter = pPreselectedFilter;
-                            else if ( bMaybeHtml )
-                            {
-                                // test for HTML
-
-                                // HTMLParser::IsHTMLFormat() is convinced that
-                                // anything containing a valid HTML tag would
-                                // indeed be HTML, which is a rather idiotic
-                                // assumption for us in the case of
-                                // "foo <br> bar" with a preselected CSV
-                                // filter. So keep this detection to the end.
-
-                                if (pPreselectedFilter->GetName().equalsAscii(pFilterHtml))
-                                {
-                                    pFilter = pPreselectedFilter;
-                                }
-                                else
-                                {
-                                    pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterHtmlWeb) );
-                                    if ( bIsXLS )
-                                        bFakeXLS = true;
-                                }
-                            }
-                        }
+                        pSearchFilterName = pFilterLotus;
                     }
-                    else
+                    else if (aTypeName == "calc_QPro")
                     {
-                        // 0-length stream, preselected Text/CSV is ok, user
-                        // may want to write to that file later.
-                        if ( bCsvSelected )
-                            pFilter = pPreselectedFilter;
+                        if (!detectThisFormat(*pStream, pQPro))
+                            return OUString();
+
+                        pSearchFilterName = pFilterQPro6;
                     }
+                    else if (aTypeName == "calc_SYLK")
+                    {
+                        if (!detectThisFormat(*pStream, pSylk))
+                            return OUString();
+
+                        pSearchFilterName = pFilterSylk;
+                    }
+                    else if (aTypeName == "calc_DIF")
+                    {
+                        if (!detectThisFormat(*pStream, pDIF1) && !detectThisFormat(*pStream, pDIF2))
+                            return OUString();
+
+                        pSearchFilterName = pFilterDif;
+                    }
+                    else if (aTypeName == "calc_dBase")
+                    {
+                        if (!lcl_MayBeDBase(*pStream))
+                            return OUString();
+
+                        pSearchFilterName = pFilterDBase;
+                    }
+
+                    if (!pSearchFilterName)
+                        return OUString();
+
+                    pFilter = aMatcher.GetFilter4FilterName(OUString::createFromAscii(pSearchFilterName));
                 }
             }
         }
@@ -778,19 +634,6 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         }
         else
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
-    }
-
-    if ( bFakeXLS )
-    {
-        if ( nIndexOfFilterName == -1 )
-        {
-            lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = "FilterName";
-            lDescriptor[nPropertyCount].Value <<= OUString(pFilter->GetName());
-            nPropertyCount++;
-        }
-        else
-            lDescriptor[nIndexOfFilterName].Value <<= OUString(pFilter->GetName());
     }
 
     if (!pFilter)
