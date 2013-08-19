@@ -11,6 +11,7 @@ namespace VLC
     {
         typedef int64_t libvlc_time_t;
 
+        void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
         libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
         void ( *libvlc_media_player_release ) ( libvlc_media_player_t *p_mi );
         int ( *libvlc_media_player_play ) ( libvlc_media_player_t *p_mi );
@@ -51,7 +52,8 @@ namespace VLC
             SYM_MAP( libvlc_video_take_snapshot ),
             SYM_MAP( libvlc_media_player_set_xwindow ),
             SYM_MAP( libvlc_media_player_has_vout ),
-            SYM_MAP( libvlc_video_set_mouse_input )
+            SYM_MAP( libvlc_video_set_mouse_input ),
+            SYM_MAP( libvlc_media_player_retain )
         };
     }
 
@@ -59,6 +61,19 @@ namespace VLC
     {
         InitApiMap(VLC_PLAYER_API);
         mPlayer = libvlc_media_player_new_from_media( media );
+    }
+
+    Player::Player( const Player& other )
+        : mPlayer( other.mPlayer )
+    {
+        libvlc_media_player_retain( mPlayer );
+    }
+
+    const Player& Player::operator=( const Player& other )
+    {
+        libvlc_media_player_release( mPlayer );
+        mPlayer = other.mPlayer;
+        libvlc_media_player_retain( mPlayer );
     }
 
     Player::~Player()

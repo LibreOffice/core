@@ -33,6 +33,9 @@ namespace VLC
     {
     public:
         Media( const rtl::OUString& url, Instance& instance );
+        Media( const Media& other );
+        const Media& operator=( const Media& other );
+
         virtual ~Media();
 
         inline operator libvlc_media_t*()

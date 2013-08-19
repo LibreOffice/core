@@ -27,6 +27,8 @@ namespace VLC
     {
     public:
         Instance( const char * const argv[] );
+        Instance( const Instance& other );
+        const Instance& operator=( const Instance& other );
         virtual ~Instance();
 
         inline operator libvlc_instance_t*()

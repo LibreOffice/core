@@ -32,7 +32,9 @@ namespace VLC
     class Player
     {
     public:
-        Player(Media& media);
+        Player( Media& media );
+        Player( const Player& other );
+        const Player& operator=( const Player& other );
         virtual ~Player();
 
         bool play();

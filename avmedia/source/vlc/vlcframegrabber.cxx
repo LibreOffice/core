@@ -62,8 +62,6 @@ SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_pt
             return ::uno::Reference< css::graphic::XGraphic >();
         }
 
-
-
         mPlayer.takeSnapshot( fileName );
 
         mPlayer.setMute( false );
