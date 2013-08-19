@@ -11,7 +11,7 @@
 #include "dbdata.hxx"
 #include "dbdataformatting.hxx"
 
-const OUString& ScDBData::GetCellStyle( const ScAddress& rPos, bool bRowStripe )
+OUString ScDBData::GetCellStyle( const ScAddress& rPos, bool bRowStripe )
 {
     //first see if the DB Range has any DB Formatting at all
     if( !HasFormatting() )
