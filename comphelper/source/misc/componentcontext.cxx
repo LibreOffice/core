@@ -108,12 +108,6 @@ namespace comphelper
         return Reference< XInterface >( getContextValueByName( sKey ), UNO_QUERY );
     }
 
-    //------------------------------------------------------------------------
-    Reference< XMultiServiceFactory > ComponentContext::getLegacyServiceFactory() const
-    {
-        return Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY_THROW );
-    }
-
 //........................................................................
 } // namespace comphelper
 //........................................................................

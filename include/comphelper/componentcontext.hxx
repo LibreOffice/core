@@ -199,14 +199,6 @@ namespace comphelper
             return getSingleton( OUString::createFromAscii( _pAsciiInstanceName ) );
         }
 
-        /** returns the ->XMultiServiceFactory interface of ->m_xORB, for passing to
-            older code which does not yet support ->XMultiComponentFactory
-            @throws ::com::sun::star::uno::RuntimeException
-                if our our component factory does not support this interface
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-            getLegacyServiceFactory() const;
-
         /** retrieves a value from our component context
             @param _rName
                 the name of the value to retrieve

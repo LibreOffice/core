@@ -71,7 +71,6 @@ ServerFont::GetGlyphBitmap1(int, RawBitmap&) const
 ServerFont::GetGlyphBitmap8(int, RawBitmap&) const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
-SfxTemplatePanelControl::GetISfxTemplateCommon()
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
 StatusBar::CopyItems(StatusBar const&)
@@ -132,7 +131,6 @@ basegfx::unotools::homMatrixFromMatrix(basegfx::B2DHomMatrix&, com::sun::star::g
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::ComponentContext::ComponentContext(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::ComponentContext::createComponentWithArguments(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&) const
-comphelper::ComponentContext::getLegacyServiceFactory() const
 comphelper::ComponentContext::getSingleton(rtl::OUString const&) const
 comphelper::MediaDescriptor::PROP_DEEPDETECTION()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const

@@ -412,14 +412,6 @@ SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
 
 
 
-ISfxTemplateCommon* SfxTemplatePanelControl::GetISfxTemplateCommon()
-{
-    return pImpl->GetISfxTemplateCommon();
-}
-
-
-
-
 void SfxTemplatePanelControl::SetParagraphFamily()
 {
     // first select the paragraph family

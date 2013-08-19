@@ -94,7 +94,6 @@ public:
     virtual void                StateChanged( StateChangedType nStateChange );
     virtual void                FreeResource (void);
 
-    ISfxTemplateCommon*         GetISfxTemplateCommon();
     void                        SetParagraphFamily();
 
 private:
