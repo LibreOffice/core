@@ -32,6 +32,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "formresid.hrc"
 #include <tools/debug.hxx>
@@ -223,6 +224,24 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & 
     return aReturn;
 }
 
+namespace {
+
+// This comparison functor assumes an underlying set of constants with pairwise
+// unequal values that are all of UNO SHORT or LONG type:
+struct CompareConstants {
+    bool operator ()(
+        css::uno::Reference< css::reflection::XConstantTypeDescription > const &
+            c1,
+        css::uno::Reference< css::reflection::XConstantTypeDescription > const &
+            c2) const
+    {
+        return c1->getConstantValue().get<sal_Int32>()
+            < c2->getConstantValue().get<sal_Int32>();
+    }
+};
+
+}
+
 // lang::XInitialization:
 void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception)
 {
@@ -244,7 +263,11 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
                     uno::UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
-                m_aConstants = m_xTypeDescription->getConstants();
+                comphelper::SequenceAsVector<
+                    uno::Reference< reflection::XConstantTypeDescription > >
+                    cs(m_xTypeDescription->getConstants());
+                std::sort(cs.begin(), cs.end(), CompareConstants());
+                cs >> m_aConstants;
             }
         }
     }
