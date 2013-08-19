@@ -2238,7 +2238,7 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
         if (mems[i]->getMemberName() == member) {
             return css::uno::makeAny<
                 css::uno::Reference< css::reflection::XTypeDescription > >(
-                    mems[i].get());
+                    mems[i]);
         }
     }
     return css::uno::Any();

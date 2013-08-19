@@ -1072,7 +1072,7 @@ void cppuhelper::ServiceManager::addPropertyChangeListener(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     // DefaultContext does not change, so just treat it as an event listener:
-    return addEventListener(xListener.get());
+    return addEventListener(xListener);
 }
 
 void cppuhelper::ServiceManager::removePropertyChangeListener(
@@ -1088,7 +1088,7 @@ void cppuhelper::ServiceManager::removePropertyChangeListener(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     // DefaultContext does not change, so just treat it as an event listener:
-    return removeEventListener(aListener.get());
+    return removeEventListener(aListener);
 }
 
 void cppuhelper::ServiceManager::addVetoableChangeListener(
@@ -1104,7 +1104,7 @@ void cppuhelper::ServiceManager::addVetoableChangeListener(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     // DefaultContext does not change, so just treat it as an event listener:
-    return addEventListener(aListener.get());
+    return addEventListener(aListener);
 }
 
 void cppuhelper::ServiceManager::removeVetoableChangeListener(
@@ -1120,7 +1120,7 @@ void cppuhelper::ServiceManager::removeVetoableChangeListener(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     // DefaultContext does not change, so just treat it as an event listener:
-    return removeEventListener(aListener.get());
+    return removeEventListener(aListener);
 }
 
 css::uno::Sequence< css::beans::Property >
