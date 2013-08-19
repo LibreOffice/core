@@ -900,7 +900,7 @@ void SmParser::NextToken()
                         {
                             cChar = m_aBufferString.GetChar( ++m_nBufferIndex );
                         }
-                        while ( cChar == '.' || CharClass::isAsciiDigit( cChar ) );
+                        while ( cChar == '.' || rtl::isAsciiDigit( cChar ) );
 
                         m_aCurToken.aText = m_aBufferString.Copy( sal::static_int_cast< xub_StrLen >(nTxtStart),
                                                             sal::static_int_cast< xub_StrLen >(m_nBufferIndex - nTxtStart) );
@@ -1963,7 +1963,7 @@ static bool lcl_IsNumber(const OUString& rText)
             else
                 bPoint = true;
         }
-        else if ( !CharClass::isAsciiDigit( cChar ) )
+        else if ( !rtl::isAsciiDigit( cChar ) )
             return false;
     }
     return true;
