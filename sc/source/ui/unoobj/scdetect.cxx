@@ -308,7 +308,6 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -337,10 +336,6 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
-
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
-            nIndexOfFilterName = nProperty;
         }
         else if ( lDescriptor[nProperty].Name == "InputStream" )
             nIndexOfInputStream = nProperty;
