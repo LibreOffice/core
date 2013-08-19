@@ -39,8 +39,7 @@ interface XWebDAVCommandEnvironment : XCommandEnvironment
     The request URI.
 
     @param aMethod
-    The WebDAV/HTTP method ("GET","PUT","MKCOL",...) as defined in
-    <type>WebDAVHTTPMethod</type>.
+    The WebDAV/HTTP method ("GET","PUT","MKCOL",...) as defined in WebDAVHTTPMethod.
 
     @return
         A sequence of header name, header value pairs. The header
