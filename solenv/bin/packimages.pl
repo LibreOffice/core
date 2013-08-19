@@ -456,7 +456,6 @@ sub read_links($$)
 
     my $fname = "$path/links.txt";
     if (!-f "$fname") {
-        print STDERR "no links in $fname\n";
         return;
     }
 
@@ -516,14 +515,6 @@ sub remove_links_from_zip_list($$)
     for my $link (keys %{$links}) {
         if (defined $zip_hash_ref->{$link}) {
             delete $zip_hash_ref->{$link};
-        } else {
-            print STDERR "Note: redundant '$link' -> '" .
-                         $links->{$link} . "' not found in filelist\n";
-        }
-        my $target = $links->{$link};
-        if (!defined $zip_hash_ref->{$target}) {
-            print STDERR "Warning: link '$link' to missing icon '" .
-                         $links->{$link} . "'\n";
         }
     }
 }
