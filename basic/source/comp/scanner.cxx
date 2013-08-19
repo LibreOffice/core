@@ -413,7 +413,9 @@ bool SbiScanner::NextSym()
                 return true;
         }
         bNumber = true;
-        long l = 0;
+        // Hex literals are signed Integers ( as defined by basic
+        // e.g. -2,147,483,648 through 2,147,483,647 (signed)
+        sal_Int32 l = 0;
         int i;
         bool bBufOverflow = false;
         while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
