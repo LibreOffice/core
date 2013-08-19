@@ -67,18 +67,10 @@ private:
 class SvxSearchSimilarityDialog : public ModalDialog
 {
 private:
-    FixedLine           aFixedLine;
-    FixedText           aOtherTxt;
-    NumericField        aOtherFld;
-    FixedText           aLongerTxt;
-    NumericField        aLongerFld;
-    FixedText           aShorterTxt;
-    NumericField        aShorterFld;
-    CheckBox            aRelaxBox;
-
-    OKButton            aOKBtn;
-    CancelButton        aEscBtn;
-    HelpButton          aHelpBtn;
+    NumericField*        m_pOtherFld;
+    NumericField*        m_pLongerFld;
+    NumericField*        m_pShorterFld;
+    CheckBox*            m_pRelaxBox;
 
 public:
     SvxSearchSimilarityDialog(  Window* pParent,
@@ -87,10 +79,10 @@ public:
                                 sal_uInt16 nShorter,
                                 sal_uInt16 nLonger );
 
-    sal_uInt16  GetOther()      { return (sal_uInt16)aOtherFld.GetValue(); }
-    sal_uInt16  GetShorter()    { return (sal_uInt16)aShorterFld.GetValue(); }
-    sal_uInt16  GetLonger()     { return (sal_uInt16)aLongerFld.GetValue(); }
-    sal_Bool    IsRelaxed()     { return aRelaxBox.IsChecked(); }
+    sal_uInt16  GetOther()      { return (sal_uInt16)m_pOtherFld->GetValue(); }
+    sal_uInt16  GetShorter()    { return (sal_uInt16)m_pShorterFld->GetValue(); }
+    sal_uInt16  GetLonger()     { return (sal_uInt16)m_pLongerFld->GetValue(); }
+    sal_Bool    IsRelaxed()     { return m_pRelaxBox->IsChecked(); }
 };
 
 

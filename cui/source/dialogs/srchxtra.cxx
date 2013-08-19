@@ -248,28 +248,17 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
     sal_uInt16 nShorter,
     sal_uInt16 nLonger
 ) :
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
-
-    aFixedLine  ( this, CUI_RES( FL_SIMILARITY ) ),
-    aOtherTxt   ( this, CUI_RES( FT_OTHER ) ),
-    aOtherFld   ( this, CUI_RES( NF_OTHER   ) ),
-    aLongerTxt  ( this, CUI_RES( FT_LONGER ) ),
-    aLongerFld  ( this, CUI_RES( NF_LONGER ) ),
-    aShorterTxt ( this, CUI_RES( FT_SHORTER ) ),
-    aShorterFld ( this, CUI_RES( NF_SHORTER ) ),
-    aRelaxBox   ( this, CUI_RES( CB_RELAX ) ),
-
-    aOKBtn      ( this, CUI_RES( BTN_ATTR_OK ) ),
-    aEscBtn     ( this, CUI_RES( BTN_ATTR_CANCEL ) ),
-    aHelpBtn    ( this, CUI_RES( BTN_ATTR_HELP ) )
-
+    ModalDialog( pParent, "SimilaritySearchDialog", "cui/ui/similaritysearchdialog.ui" )
 {
-    FreeResource();
+    get( m_pOtherFld, "otherfld");
+    get( m_pLongerFld, "longerfld");
+    get( m_pShorterFld, "shorterfld");
+    get( m_pRelaxBox, "relaxbox");
 
-    aOtherFld.SetValue( nOther );
-    aShorterFld.SetValue( nShorter );
-    aLongerFld.SetValue( nLonger );
-    aRelaxBox.Check( bRelax );
+    m_pOtherFld->SetValue( nOther );
+    m_pShorterFld->SetValue( nShorter );
+    m_pLongerFld->SetValue( nLonger );
+    m_pRelaxBox->Check( bRelax );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

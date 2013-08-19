@@ -27,15 +27,6 @@
 #define LB_ATTR             13
 #define FL_ATTR             14
 
-#define CB_RELAX            15
-#define FT_OTHER            16
-#define NF_OTHER            17
-#define FT_SHORTER          18
-#define NF_SHORTER          19
-#define FT_LONGER           20
-#define NF_LONGER           21
-#define FL_SIMILARITY       22
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
