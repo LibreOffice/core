@@ -27,9 +27,10 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using rtl::OUString;
 
 namespace
 {

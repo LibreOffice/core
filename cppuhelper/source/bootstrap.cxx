@@ -44,11 +44,12 @@
 
 #define ARLEN(x) sizeof (x) / sizeof *(x)
 
-
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using rtl::Bootstrap;
+using rtl::OUString;
 
 namespace cppu
 {

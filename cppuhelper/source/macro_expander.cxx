@@ -38,11 +38,12 @@
 #define SERVICE_NAME_B "com.sun.star.lang.BootstrapMacroExpander"
 #define IMPL_NAME "com.sun.star.lang.comp.cppuhelper.BootstrapMacroExpander"
 
-
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using rtl::Bootstrap;
+using rtl::OUString;
 
 namespace cppu
 {

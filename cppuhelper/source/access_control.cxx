@@ -25,11 +25,11 @@
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
 
-
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using rtl::OUString;
 
 namespace
 {

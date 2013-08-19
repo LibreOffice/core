@@ -30,9 +30,12 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
+using rtl::OString;
+using rtl::OUString;
+using rtl::OUStringBuffer;
 
 namespace cppu
 {

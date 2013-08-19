@@ -60,11 +60,13 @@
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
 #define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
 
-
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+
+using rtl::OUString;
+using rtl::OUStringBuffer;
+using rtl::OUStringHash;
 
 namespace cppu
 {
