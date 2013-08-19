@@ -587,11 +587,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
 void EditorWindow::HandleAutoCorrect()
 {
-    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
-    {
-        rModulWindow.UpdateModule();
-        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
-    }
+    rModulWindow.UpdateModule();
+    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
@@ -604,32 +601,29 @@ void EditorWindow::HandleAutoCorrect()
         return;
 
     HighlightPortion& r = aPortions[aPortions.size()-1];
-    if( r.tokenType == TT_KEYWORDS ) // correct the last entered keyword
+    OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+    if( r.tokenType == TT_KEYWORDS && !sStr.isEmpty() ) // correct the last entered keyword
     {
-        OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-        if( !sStr.isEmpty() )
-        {
-            sStr = sStr.toAsciiLowerCase();
-            if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
-            // if it is a keyword, get its correct case
-                sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
-            else
-            {// else capitalize first letter/select the correct one, and replace
-                sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
-            }
-
-            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-            pEditEngine->ReplaceText( sTextSelection, sStr );
-            pEditView->SetSelection( aSel );
+        sStr = sStr.toAsciiLowerCase();
+        if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
+        // if it is a keyword, get its correct case
+            sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
+        else
+        {// else capitalize first letter/select the correct one, and replace
+            sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
         }
+
+        TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+        TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+        pEditEngine->ReplaceText( sTextSelection, sStr );
+        pEditView->SetSelection( aSel );
+        return;
     }
     if( r.tokenType == TT_IDENTIFIER )
-    {// correct uno types
-        const OUString& sVarName = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-        if( !aCodeCompleteCache.GetCorrectCaseVarName( sVarName, sActSubName ).isEmpty() )
+    {// correct variables
+        if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
         {
-            const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sVarName, sActSubName );
+            sStr = aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName );
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
             TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
             pEditEngine->ReplaceText( sTextSelection, sStr );
@@ -641,9 +635,9 @@ void EditorWindow::HandleAutoCorrect()
         SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
         for( sal_uInt32 i=0; i< pArr->Count32(); ++i )
         {
-            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sVarName ) )
+            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
             {
-                const OUString& sStr = pArr->Get32(i)->GetName();
+                sStr = pArr->Get32(i)->GetName(); //get the correct case
                 TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
                 TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
                 pEditEngine->ReplaceText( sTextSelection, sStr );
