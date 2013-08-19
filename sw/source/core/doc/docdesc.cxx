@@ -208,6 +208,8 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, sal_False );
+                aTmp = *pSttNd;
+                CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtHeader( pFmt ) );
@@ -263,6 +265,8 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                             *aRCnt.GetCntntIdx()->GetNode().EndOfSectionNode() );
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, sal_False );
+                aTmp = *pSttNd;
+                CopyFlyInFlyImpl(aRange, 0, aTmp);
 
                 pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
                 rDescFrmFmt.SetFmtAttr( SwFmtFooter( pFmt ) );
