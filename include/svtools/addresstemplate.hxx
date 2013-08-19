@@ -45,7 +45,7 @@ namespace svt
     struct AddressBookSourceDialogData;
     class SVT_DLLPUBLIC AddressBookSourceDialog : public ModalDialog
     {
-    protected:
+    private:
         // Controls
         ComboBox*       m_pDatasource;
         PushButton*     m_pAdministrateDatasources;
@@ -53,7 +53,7 @@ namespace svt
         ScrollBar*      m_pFieldScroller;
 
         // string to display for "no selection"
-        const String    m_sNoFieldSelection;
+        const OUString  m_sNoFieldSelection;
 
         /// the DatabaseContext for selecting data sources
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
@@ -112,7 +112,7 @@ namespace svt
 
         // implementations
         void    implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar);
-        void    implSelectField(ListBox* _pBox, const String& _rText);
+        void    implSelectField(ListBox* _pBox, const OUString& _rText);
 
         void    initalizeListBox(ListBox* _pList);
         void    resetTables();

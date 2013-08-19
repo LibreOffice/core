@@ -1122,9 +1122,9 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    void AddressBookSourceDialog::implSelectField(ListBox* _pBox, const String& _rText)
+    void AddressBookSourceDialog::implSelectField(ListBox* _pBox, const OUString& _rText)
     {
-        if (_rText.Len())
+        if (!_rText.isEmpty())
             // a valid field name
             _pBox->SelectEntry(_rText);
         else
