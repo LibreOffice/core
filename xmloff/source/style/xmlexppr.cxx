@@ -47,6 +47,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
 #define GET_PROP_TYPE( f ) static_cast<sal_uInt16>((f & XML_TYPE_PROP_MASK) >> XML_TYPE_PROP_SHIFT)
+#define ENTRY(t) { GET_PROP_TYPE(XML_TYPE_PROP_##t), XML_##t##_PROPERTIES }
+
+namespace {
 
 struct XMLPropTokens_Impl
 {
@@ -54,12 +57,11 @@ struct XMLPropTokens_Impl
     XMLTokenEnum eToken;
 };
 
-#define ENTRY(t) { GET_PROP_TYPE(XML_TYPE_PROP_##t), XML_##t##_PROPERTIES }
 const sal_uInt16 MAX_PROP_TYPES =
     (XML_TYPE_PROP_END >> XML_TYPE_PROP_SHIFT) -
     (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT);
 
-static  XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
+XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
 {
     ENTRY(CHART),
     ENTRY(GRAPHIC),
@@ -204,24 +206,6 @@ public:
     sal_uInt32 GetPropertyCount() const { return nCount; }
 };
 
-struct SvXMLExportPropertyMapper::Impl
-{
-    typedef boost::unordered_map<PropertySetInfoKey, FilterPropertiesInfo_Impl*, PropertySetInfoHash, PropertySetInfoHash> CacheType;
-    CacheType maCache;
-
-    UniReference<SvXMLExportPropertyMapper> mxNextMapper;
-    UniReference<XMLPropertySetMapper> mxPropMapper;
-
-    OUString maStyleName;
-
-    ~Impl()
-    {
-        CacheType::iterator it = maCache.begin(), itEnd = maCache.end();
-        for (; it != itEnd; ++it)
-            delete it->second;
-    }
-};
-
 FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     nCount(0),
     aPropInfos(),
@@ -248,6 +232,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
         pApiNames = NULL;
     }
 }
+
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
     OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
@@ -530,6 +515,26 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
     }
     aPropStates.FillPropertyStateVector(rPropStates);
 }
+
+}
+
+struct SvXMLExportPropertyMapper::Impl
+{
+    typedef boost::unordered_map<PropertySetInfoKey, FilterPropertiesInfo_Impl*, PropertySetInfoHash, PropertySetInfoHash> CacheType;
+    CacheType maCache;
+
+    UniReference<SvXMLExportPropertyMapper> mxNextMapper;
+    UniReference<XMLPropertySetMapper> mxPropMapper;
+
+    OUString maStyleName;
+
+    ~Impl()
+    {
+        CacheType::iterator it = maCache.begin(), itEnd = maCache.end();
+        for (; it != itEnd; ++it)
+            delete it->second;
+    }
+};
 
 // ctor/dtor , class SvXMLExportPropertyMapper
 
