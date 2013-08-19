@@ -32,23 +32,20 @@
 
 class SwFldDokPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    ListBox             aSelectionLB;
-    FixedText           aValueFT;
-    Edit                aValueED;
-    NumericField        aLevelED;
-    NumericField        aDateOffsetED;
-    FixedText           aFormatFT;
-    ListBox             aFormatLB;
-    NumFormatListBox    aNumFormatLB;
-    CheckBox            aFixedCB;
-
-    String              sDateOffset;
-    String              sTimeOffset;
-    Bitmap              aRootOpened;
-    Bitmap              aRootClosed;
+    ListBox*            m_pTypeLB;
+    VclContainer*       m_pSelection;
+    ListBox*            m_pSelectionLB;
+    FixedText*          m_pValueFT;
+    Edit*               m_pValueED;
+    FixedText*          m_pLevelFT;
+    NumericField*       m_pLevelED;
+    FixedText*          m_pDateFT;
+    FixedText*          m_pTimeFT;
+    NumericField*       m_pDateOffsetED;
+    VclContainer*       m_pFormat;
+    ListBox*            m_pFormatLB;
+    NumFormatListBox*   m_pNumFormatLB;
+    CheckBox*           m_pFixedCB;
 
     sal_uInt16              nOldSel;
     sal_uLong               nOldFormat;
