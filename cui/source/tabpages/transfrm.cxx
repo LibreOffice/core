@@ -463,17 +463,16 @@ void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 \************************************************************************/
 
 SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent, CUI_RES( RID_SVXPAGE_SLANT ), rInAttrs ),
-
-    aFlRadius               ( this, CUI_RES( FL_RADIUS ) ),
-    aFtRadius               ( this, CUI_RES( FT_RADIUS ) ),
-    aMtrRadius              ( this, CUI_RES( MTR_FLD_RADIUS ) ),
-    aFlAngle                ( this, CUI_RES( FL_SLANT ) ),
-    aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
-    aMtrAngle               ( this, CUI_RES( MTR_FLD_ANGLE ) ),
+    SvxTabPage              ( pParent
+                             ,"SlantAndCornerRadius"
+                             ,"cui/ui/slantcornertabpage.ui"
+                             , rInAttrs ),
     rOutAttrs               ( rInAttrs )
 {
-    FreeResource();
+    get(m_pFlRadius, "FL_RADIUS");
+    get(m_pMtrRadius, "MTR_FLD_RADIUS");
+    get(m_pFlAngle, "FL_SLANT");
+    get(m_pMtrAngle, "MTR_FLD_ANGLE");
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -491,7 +490,7 @@ void SvxSlantTabPage::Construct()
     // get the range
     DBG_ASSERT(pView, "no valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(aMtrRadius, eDlgUnit, sal_True);
+    SetFieldUnit(*m_pMtrRadius, eDlgUnit, sal_True);
 
     { // #i75273#
         Rectangle aTempRect(pView->GetAllMarkedRect());
@@ -505,23 +504,23 @@ void SvxSlantTabPage::Construct()
 sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     sal_Bool  bModified = sal_False;
-    String aStr = aMtrRadius.GetText();
+    String aStr = m_pMtrRadius->GetText();
 
-    if( aStr != aMtrRadius.GetSavedValue() )
+    if( aStr != m_pMtrRadius->GetSavedValue() )
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
-        long nTmp = GetCoreValue( aMtrRadius, ePoolUnit );
+        long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
         nTmp = Fraction( nTmp ) * aUIScale;
 
         rAttrs.Put( SdrEckenradiusItem( nTmp ) );
         bModified = sal_True;
     }
 
-    aStr = aMtrAngle.GetText();
+    aStr = m_pMtrAngle->GetText();
 
-    if( aStr != aMtrAngle.GetSavedValue() )
+    if( aStr != m_pMtrAngle->GetSavedValue() )
     {
-        sal_Int32 nValue = static_cast<sal_Int32>(aMtrAngle.GetValue());
+        sal_Int32 nValue = static_cast<sal_Int32>(m_pMtrAngle->GetValue());
         rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = sal_True;
     }
@@ -552,10 +551,8 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
     // corner radius
     if(!pView->IsEdgeRadiusAllowed())
     {
-        aFlRadius.Disable();
-        aFtRadius.Disable();
-        aMtrRadius.Disable();
-        aMtrRadius.SetText( String() );
+        m_pMtrRadius->SetText( "" );
+        m_pFlRadius->Disable();
     }
     else
     {
@@ -565,23 +562,21 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
         {
             const double fUIScale(double(pView->GetModel()->GetUIScale()));
             const double fTmp((double)((const SdrEckenradiusItem*)pItem)->GetValue() / fUIScale);
-            SetMetricValue(aMtrRadius, basegfx::fround(fTmp), ePoolUnit);
+            SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
         {
-            aMtrRadius.SetText( String() );
+            m_pMtrRadius->SetText( "" );
         }
     }
 
-    aMtrRadius.SaveValue();
+    m_pMtrRadius->SaveValue();
 
     // slant: angle
     if( !pView->IsShearAllowed() )
     {
-        aFlAngle.Disable();
-        aFtAngle.Disable();
-        aMtrAngle.Disable();
-        aMtrAngle.SetText( String() );
+        m_pMtrAngle->SetText( "" );
+        m_pFlAngle->Disable();
     }
     else
     {
@@ -589,15 +584,15 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
 
         if( pItem )
         {
-            aMtrAngle.SetValue( ( (const SfxInt32Item*)pItem )->GetValue() );
+            m_pMtrAngle->SetValue( ( (const SfxInt32Item*)pItem )->GetValue() );
         }
         else
         {
-            aMtrAngle.SetText( String() );
+            m_pMtrAngle->SetText( "" );
         }
     }
 
-    aMtrAngle.SaveValue();
+    m_pMtrAngle->SaveValue();
 }
 
 // -----------------------------------------------------------------------
