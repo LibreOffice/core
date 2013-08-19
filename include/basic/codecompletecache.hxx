@@ -93,7 +93,7 @@ public:
     void InsertGlobalVar( const OUString& sVarName, const OUString& sVarType );
     void InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType );
     OUString GetVarType( const OUString& sVarName ) const;
-    OUString GetCorrectCaseVarName( const OUString& sVarName ) const;
+    OUString GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const;
     void print() const; // wrapper for operator<<, prints to std::cerr
     void Clear();
 };

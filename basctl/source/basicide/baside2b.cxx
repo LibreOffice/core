@@ -590,11 +590,12 @@ void EditorWindow::HandleAutoCorrect()
     if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
     {
         rModulWindow.UpdateModule();
-        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);
+        rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     }
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
 
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
@@ -625,14 +626,30 @@ void EditorWindow::HandleAutoCorrect()
     }
     if( r.tokenType == TT_IDENTIFIER )
     {// correct uno types
-        OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-        if( sStr != aCodeCompleteCache.GetCorrectCaseVarName(sStr) )
+        const OUString& sVarName = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+        if( !aCodeCompleteCache.GetCorrectCaseVarName( sVarName, sActSubName ).isEmpty() )
         {
-            sStr = aCodeCompleteCache.GetCorrectCaseVarName(sStr);
+            const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sVarName, sActSubName );
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
             TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
             pEditEngine->ReplaceText( sTextSelection, sStr );
             pEditView->SetSelection( aSel );
+            return;
+        }
+
+        //autocorrect procedures
+        SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
+        for( sal_uInt32 i=0; i< pArr->Count32(); ++i )
+        {
+            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sVarName ) )
+            {
+                const OUString& sStr = pArr->Get32(i)->GetName();
+                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
+                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
+                pEditEngine->ReplaceText( sTextSelection, sStr );
+                pEditView->SetSelection( aSel );
+                return;
+            }
         }
     }
 }
@@ -786,7 +803,7 @@ void EditorWindow::HandleCodeCompletition()
             TextPaM aStart(nLine, aLine.indexOf(sBaseName) );
             TextPaM aEnd(nLine, aLine.indexOf(sBaseName) + sBaseName.getLength() );
             TextSelection sTextSelection(aStart, aEnd);
-            pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName) );
+            pEditEngine->ReplaceText( sTextSelection, aCodeCompleteCache.GetCorrectCaseVarName(sBaseName, GetActualSubName(nLine)) );
             pEditView->SetSelection( aSel );
         }
 
@@ -2638,7 +2655,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             case KEY_RIGHT:
             {
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
-                if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara() )
+                if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara()-1 )
                 {
                     HideAndRestoreFocus();
                 }
