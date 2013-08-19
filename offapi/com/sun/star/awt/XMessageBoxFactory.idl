@@ -42,10 +42,10 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 
             <p>This parameter must not be null.</p>
 
-        @param aType
+        @param eType
             the message box type.
 
-        @param aButtons
+        @param nButtons
             specifies which buttons should be available on the message box.
 
             <p>A combination of com::sun::star::awt::MessageBoxButtons</p>
@@ -53,10 +53,10 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
             ignores this paramter, instead it uses a
             com::sun::star::awt::MessageBoxButtons::BUTTONS_OK.</p>
 
-        @param aTitle
+        @param sTitle
                 specifies the title of the message box.
 
-        @param aMessage
+        @param sMessage
             specifies text which will be shown by the message box.
             Line-breaks must be added using 'CR' or 'CR+LF'.
     */
