@@ -26,7 +26,6 @@
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
-#include "transfrm.hrc"
 #include <editeng/sizeitem.hxx>
 
 #include "transfrm.hxx"
@@ -208,34 +207,27 @@ void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 \************************************************************************/
 
 SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SvxTabPage              ( pParent, CUI_RES( RID_SVXPAGE_ANGLE ), rInAttrs ),
-    aFlPosition             ( this, CUI_RES( FL_POSITION ) ),
-    aFtPosX                 ( this, CUI_RES( FT_POS_X ) ),
-    aMtrPosX                ( this, CUI_RES( MTR_FLD_POS_X ) ),
-    aFtPosY                 ( this, CUI_RES( FT_POS_Y ) ),
-    aMtrPosY                ( this, CUI_RES( MTR_FLD_POS_Y ) ),
-    aFtPosPresets           ( this, CUI_RES(FT_POSPRESETS) ),
-    aCtlRect                ( this, CUI_RES( CTL_RECT ) ),
-
-    aFlAngle                ( this, CUI_RES( FL_ANGLE ) ),
-    aFtAngle                ( this, CUI_RES( FT_ANGLE ) ),
-    maNfAngle               ( this, CUI_RES( NF_ANGLE ) ),
-    aFtAnglePresets         ( this, CUI_RES(FT_ANGLEPRESETS) ),
-    aCtlAngle               ( this, CUI_RES( CTL_ANGLE ) ),
+    SvxTabPage              ( pParent
+                            ,"Rotation"
+                            ,"cui/ui/rotationtabpage.ui"
+                            , rInAttrs ),
     rOutAttrs               ( rInAttrs )
 {
-    FreeResource();
+    get(m_pFlPosition, "FL_POSITION");
+    get(m_pMtrPosX, "MTR_FLD_POS_X");
+    get(m_pMtrPosY, "MTR_FLD_POS_Y");
+    get(m_pCtlRect, "CTL_RECT");
+
+    get(m_pFlAngle, "FL_ANGLE");
+    get(m_pNfAngle, "NF_ANGLE");
+    get(m_pCtlAngle, "CTL_ANGLE");
 
     // calculate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
-    aCtlRect.SetAccessibleRelationLabeledBy(&aFtPosPresets);
-    aCtlRect.SetAccessibleRelationMemberOf(&aFlPosition);
-    aCtlAngle.SetAccessibleRelationLabeledBy(&aFtAnglePresets);
-    aCtlAngle.SetAccessibleRelationMemberOf(&aFlAngle);
-    aCtlAngle.SetLinkedField( &maNfAngle, 2 );
+    m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
 }
 
 // -----------------------------------------------------------------------
@@ -244,13 +236,13 @@ void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(aMtrPosX, eDlgUnit, sal_True);
-    SetFieldUnit(aMtrPosY, eDlgUnit, sal_True);
+    SetFieldUnit(*m_pMtrPosX, eDlgUnit, sal_True);
+    SetFieldUnit(*m_pMtrPosY, eDlgUnit, sal_True);
 
     if(FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
     {
-        aMtrPosX.SetDecimalDigits( 3 );
-        aMtrPosY.SetDecimalDigits( 3 );
+        m_pMtrPosX->SetDecimalDigits( 3 );
+        m_pMtrPosY->SetDecimalDigits( 3 );
     }
 
     { // #i75273#
@@ -278,23 +270,13 @@ void SvxAngleTabPage::Construct()
     lcl_ScaleRect(maRange, aUIScale);
 
     // take UI units into account
-    sal_uInt16 nDigits(aMtrPosX.GetDecimalDigits());
+    sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
     lcl_ConvertRect(maRange, nDigits, (MapUnit)ePoolUnit, eDlgUnit);
 
     if(!pView->IsRotateAllowed())
     {
-        aFlPosition.Disable();
-        aFtPosX.Disable();
-        aMtrPosX.Disable();
-        aFtPosY.Disable();
-        aMtrPosY.Disable();
-        aFtPosPresets.Disable();
-        aCtlRect.Disable();
-        aFlAngle.Disable();
-        aFtAngle.Disable();
-        maNfAngle.Disable();
-        aFtAnglePresets.Disable();
-        aCtlAngle.Disable();
+        m_pFlPosition->Disable();
+        m_pFlAngle->Disable();
     }
 }
 
@@ -302,13 +284,13 @@ sal_Bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 {
     sal_Bool bModified = sal_False;
 
-    if(aCtlAngle.IsValueModified() || aMtrPosX.IsValueModified() || aMtrPosY.IsValueModified())
+    if(m_pCtlAngle->IsValueModified() || m_pMtrPosX->IsValueModified() || m_pMtrPosY->IsValueModified())
     {
         const double fUIScale(double(pView->GetModel()->GetUIScale()));
-        const double fTmpX((GetCoreValue(aMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
-        const double fTmpY((GetCoreValue(aMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
+        const double fTmpX((GetCoreValue(*m_pMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
+        const double fTmpY((GetCoreValue(*m_pMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), aCtlAngle.GetRotation()));
+        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
         rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
@@ -328,34 +310,34 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
     if(pItem)
     {
         const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
-        SetMetricValue(aMtrPosX, basegfx::fround(fTmp), ePoolUnit);
+        SetMetricValue(*m_pMtrPosX, basegfx::fround(fTmp), ePoolUnit);
     }
     else
     {
-        aMtrPosX.SetText( String() );
+        m_pMtrPosX->SetText( String() );
     }
 
     pItem = GetItem(rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
     if(pItem)
     {
         const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
-        SetMetricValue(aMtrPosY, basegfx::fround(fTmp), ePoolUnit);
+        SetMetricValue(*m_pMtrPosY, basegfx::fround(fTmp), ePoolUnit);
     }
     else
     {
-        aMtrPosY.SetText( String() );
+        m_pMtrPosY->SetText( String() );
     }
 
     pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        aCtlAngle.SetRotation(((const SfxInt32Item*)pItem)->GetValue());
+        m_pCtlAngle->SetRotation(((const SfxInt32Item*)pItem)->GetValue());
     }
     else
     {
-        aCtlAngle.SetRotation(0);
+        m_pCtlAngle->SetRotation(0);
     }
-    aCtlAngle.SaveValue();
+    m_pCtlAngle->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -394,62 +376,62 @@ int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 {
-    if(pWindow == &aCtlRect)
+    if(pWindow == m_pCtlRect)
     {
         switch(eRP)
         {
             case RP_LT:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RP_MT:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RP_RT:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
             }
             case RP_LM:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RP_MM:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RP_RM:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
             }
             case RP_LB:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
             case RP_MB:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
             case RP_RB:
             {
-                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
-                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
+                m_pMtrPosX->SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                m_pMtrPosY->SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
             }
         }

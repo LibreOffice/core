@@ -109,7 +109,6 @@
                       <object class="GtkLabel" id="FT_POSREFERENCE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Base point:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">CTL_POSRECT</property>
@@ -124,7 +123,7 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_POSRECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">center</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -281,7 +280,6 @@
                       <object class="GtkLabel" id="FT_SIZEREFERENCE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Base _point:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">CTL_SIZERECT</property>
@@ -296,7 +294,7 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_SIZERECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
+                        <property name="halign">center</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
