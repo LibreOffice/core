@@ -67,12 +67,6 @@ enum SearchState : NSInteger {
     SEARCHING
 };
 
-typedef enum {
-    NotReachable = 0,
-    ReachableViaWiFi,
-    ReachableViaWWAN
-} NetworkStatus;
-
 @interface CommunicationManager : NSObject
 
 - (id) initWithExistingServers;
@@ -82,7 +76,6 @@ typedef enum {
                   AtAddress:(NSString*)addr;
 - (void) removeServerAtIndex:(NSUInteger)index;
 
-- (NetworkStatus) currentReachabilityStatus;
 + (id)fetchSSIDInfo;
 
 @property ConnectionState state;

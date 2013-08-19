@@ -202,25 +202,4 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark -
-//
-//- (NetworkStatus) currentReachabilityStatus
-//{
-//    NSAssert(reachabilityRef != NULL, @"currentNetworkStatus called with NULL reachabilityRef");
-//    NetworkStatus retVal = NotReachable;
-//    SCNetworkReachabilityFlags flags;
-//    if (SCNetworkReachabilityGetFlags(reachabilityRef, &flags))
-//    {
-//        if(localWiFiRef)
-//        {
-//            retVal = [self localWiFiStatusForFlags: flags];
-//        }
-//        else
-//        {
-//            retVal = [self networkStatusForFlags: flags];
-//        }
-//    }
-//    return retVal;
-//}
-
 @end
