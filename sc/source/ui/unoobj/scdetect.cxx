@@ -632,7 +632,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     }
 
     if (!pFilter)
-        aTypeName.Erase();
+        return OUString();
 
     if (nIndexOfFilterName == -1)
     {
