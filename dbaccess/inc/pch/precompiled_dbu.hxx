@@ -388,7 +388,6 @@
 #include <svl/urihelper.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/QueryFolderName.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <svtools/ehdl.hxx>

@@ -27,7 +27,6 @@
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/QueryFolderName.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

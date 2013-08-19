@@ -45,10 +45,10 @@ private:
 
 public:
                     QueryFolderNameDialog(  Window* _pParent,
-                                            const String& rTitle,
-                                            const String& rDefaultText,
-                                            String* pGroupName = NULL );
-    String          GetName() const { return aNameEdit.GetText(); }
+                                            const OUString& rTitle,
+                                            const OUString& rDefaultText,
+                                            OUString* pGroupName = NULL );
+    OUString        GetName() const { return aNameEdit.GetText(); }
 };
 
 }

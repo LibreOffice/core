@@ -3356,9 +3356,9 @@ namespace svtools {
 QueryFolderNameDialog::QueryFolderNameDialog
 (
     Window* _pParent,
-    const String& rTitle,
-    const String& rDefaultText,
-    String* pGroupName
+    const OUString& rTitle,
+    const OUString& rDefaultText,
+    OUString* pGroupName
 ) :
     ModalDialog( _pParent, SvtResId( DLG_FPICKER_QUERYFOLDERNAME ) ),
 
@@ -3371,7 +3371,7 @@ QueryFolderNameDialog::QueryFolderNameDialog
     FreeResource();
     SetText( rTitle );
     aNameEdit.SetText( rDefaultText );
-    aNameEdit.SetSelection( Selection( 0, rDefaultText.Len() ) );
+    aNameEdit.SetSelection( Selection( 0, rDefaultText.getLength() ) );
     aOKBtn.SetClickHdl( LINK( this, QueryFolderNameDialog, OKHdl ) );
     aNameEdit.SetModifyHdl( LINK( this, QueryFolderNameDialog, NameHdl ) );
 
