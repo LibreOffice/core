@@ -47,21 +47,6 @@ $(eval $(call gb_Library_add_exception_objects,bootstrap,\
     stoc/source/implementationregistration/implreg \
     stoc/source/implementationregistration/mergekeys \
     stoc/source/loader/dllcomponentloader \
-    stoc/source/registry_tdprovider/functiondescription \
-    stoc/source/registry_tdprovider/methoddescription \
-    stoc/source/registry_tdprovider/rdbtdp_tdenumeration \
-    stoc/source/registry_tdprovider/structtypedescription \
-    stoc/source/registry_tdprovider/td \
-    stoc/source/registry_tdprovider/tdcomp \
-    stoc/source/registry_tdprovider/tdconsts \
-    stoc/source/registry_tdprovider/tdef \
-    stoc/source/registry_tdprovider/tdenum \
-    stoc/source/registry_tdprovider/tdiface \
-    stoc/source/registry_tdprovider/tdmodule \
-    stoc/source/registry_tdprovider/tdprop \
-    stoc/source/registry_tdprovider/tdprovider \
-    stoc/source/registry_tdprovider/tdservice \
-    stoc/source/registry_tdprovider/tdsingleton \
     stoc/source/security/access_controller \
     stoc/source/security/file_policy \
     stoc/source/security/permissions \
