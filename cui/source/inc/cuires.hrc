@@ -283,9 +283,6 @@
 // split cells
 #define RID_SVX_SPLITCELLDLG                ( RID_SVX_START + 43 )
 
-// searching
-#define RID_SVXDLG_SEARCHSIMILARITY         (RID_SVX_START +  23)
-
 // customize
 #define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
 #define RID_SVXPAGE_MENUS                   (RID_SVX_START + 292)

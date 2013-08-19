@@ -104,6 +104,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
 	cui/uiconfig/ui/shadowtabpage \
+	cui/uiconfig/ui/similaritysearchdialog \
 	cui/uiconfig/ui/slantcornertabpage \
 	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/spellingdialog \
