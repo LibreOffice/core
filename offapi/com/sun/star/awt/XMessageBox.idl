@@ -38,7 +38,7 @@ published interface XMessageBox
     /** shows the message box.
 
         @return
-            one of <type>MessageBoxResults</type>.
+            one of MessageBoxResults.
      */
     short execute();
 };
