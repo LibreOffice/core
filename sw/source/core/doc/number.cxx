@@ -92,7 +92,7 @@ const SwNumFmt* SwNumRule::GetNumFmt( sal_uInt16 i ) const
 }
 
 // #i91400#
-void SwNumRule::SetName( const String & rName,
+void SwNumRule::SetName( const OUString & rName,
                          IDocumentListsAccess& rDocListAccess)
 {
     if ( sName != rName )
@@ -102,7 +102,7 @@ void SwNumRule::SetName( const String & rName,
             pNumRuleMap->erase(sName);
             (*pNumRuleMap)[rName] = this;
 
-            if ( GetDefaultListId().Len() > 0 )
+            if ( !GetDefaultListId().isEmpty() )
             {
                 rDocListAccess.trackChangeOfListStyleName( sName, rName );
             }
@@ -144,7 +144,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
     }
 }
 
-void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHash> *
+void SwNumRule::SetNumRuleMap(boost::unordered_map<OUString, SwNumRule *, OUStringHash> *
                               _pNumRuleMap)
 {
     pNumRuleMap = _pNumRuleMap;
@@ -194,8 +194,8 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
     sal_Int16 eMyVertOrient = rNumFmt.GetVertOrient();
     SetGraphicBrush( rNumFmt.GetBrush(), &rNumFmt.GetGraphicSize(),
                                                 &eMyVertOrient);
-    const String& rCharStyleName = rNumFmt.SvxNumberFormat::GetCharFmtName();
-    if( rCharStyleName.Len() )
+    const OUString rCharStyleName = rNumFmt.SvxNumberFormat::GetCharFmtName();
+    if( !rCharStyleName.isEmpty() )
     {
         SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rCharStyleName );
         if( !pCFmt )
@@ -300,7 +300,7 @@ void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         CheckRegistration( pOld, pNew );
 }
 
-void SwNumFmt::SetCharFmtName(const String& rSet)
+void SwNumFmt::SetCharFmtName(const OUString& rSet)
 {
     SvxNumberFormat::SetCharFmtName(rSet);
 }
@@ -370,7 +370,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-SwNumRule::SwNumRule( const String& rNm,
+SwNumRule::SwNumRule( const OUString& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,
                       sal_Bool bAutoFlg )
@@ -469,7 +469,7 @@ SwNumRule::SwNumRule( const String& rNm,
         }
     }
     memset( aFmts, 0, sizeof( aFmts ));
-    OSL_ENSURE( sName.Len(), "NumRule without a name!" );
+    OSL_ENSURE( !sName.isEmpty(), "NumRule without a name!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
@@ -623,25 +623,23 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFmt* pNumFmt )
         *pOld = *pNumFmt, bInvalidRuleFlag = sal_True;
 }
 
-String SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
+OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
                                 sal_Bool bOnlyArabic ) const
 {
-    String aStr;
-
     if (rNum.IsCounted())
-        aStr = MakeNumString(rNum.GetNumberVector(),
+        return MakeNumString(rNum.GetNumberVector(),
                              bInclStrings, bOnlyArabic, MAXLEVEL);
 
-    return aStr;
+    return OUString();
 }
 
-String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
+OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                                  const sal_Bool bInclStrings,
                                  const sal_Bool bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel,
                                  SwNumRule::Extremities* pExtremities ) const
 {
-    String aStr;
+    OUString aStr;
 
     unsigned int nLevel = rNumVector.size() - 1;
 
@@ -694,8 +692,8 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                         aStr += rNFmt.GetNumStr( rNumVector[ i ] );
                 }
                 else
-                    aStr += '0';        // all 0 level are a 0
-                if( i != nLevel && aStr.Len() )
+                    aStr += "0";        // all 0 level are a 0
+                if( i != nLevel && !aStr.isEmpty() )
                     aStr += aDotStr;
             }
 
@@ -705,15 +703,14 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                 SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
             {
-                String const &rPrefix = rMyNFmt.GetPrefix();
-                String const &rSuffix = rMyNFmt.GetSuffix();
+                const OUString sPrefix = rMyNFmt.GetPrefix();
+                const OUString sSuffix = rMyNFmt.GetSuffix();
 
-                aStr.Insert( rPrefix, 0 );
-                aStr += rSuffix;
+                aStr = sPrefix + aStr + sSuffix;
                 if ( pExtremities )
                 {
-                    pExtremities->nPrefixChars = rPrefix.Len();
-                    pExtremities->nSuffixChars = rSuffix.Len();
+                    pExtremities->nPrefixChars = sPrefix.getLength();
+                    pExtremities->nSuffixChars = sSuffix.getLength();
                 }
             }
         }
@@ -722,11 +719,11 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
     return aStr;
 }
 
-String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
+OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                                     const bool bInclSuperiorNumLabels,
                                     const sal_uInt8 nRestrictInclToThisLevel ) const
 {
-    String aRefNumStr;
+    OUString aRefNumStr;
 
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
@@ -751,23 +748,21 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                    pWorkingNodeNum->GetTxtNode()->HasNumber() ) )
             {
                 Extremities aExtremities;
-                String aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
+                OUString aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
                                                  sal_True, sal_False, MAXLEVEL,
                                                  &aExtremities);
-                int        nStrip = 0;
-                sal_Unicode        c;
-
-
-                while ( nStrip < aExtremities.nPrefixChars &&
-                       ( '\t' == ( c = aPrevStr.GetChar( nStrip ) ) ||
-                         ' ' == c) )
+                sal_Int32 nStrip = 0;
+                while ( nStrip < aExtremities.nPrefixChars )
                 {
-                        ++nStrip;
+                    const sal_Unicode c = aPrevStr[nStrip];
+                    if ( c!='\t' && c!=' ')
+                        break;
+                    ++nStrip;
                 }
 
                 if (nStrip)
                 {
-                    aPrevStr.Erase( 0, nStrip );
+                    aPrevStr = aPrevStr.copy( nStrip );
                     aExtremities.nPrefixChars -= nStrip;
                 }
 
@@ -776,32 +771,32 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                      !aExtremities.nPrefixChars
                    )
                 {
-                    int nStrip2 = aPrevStr.Len();
-                    while (aPrevStr.Len() - nStrip2 < aExtremities.nSuffixChars)
+                    nStrip = aPrevStr.getLength();
+                    while (aPrevStr.getLength() - nStrip < aExtremities.nSuffixChars)
                     {
-                        char const cur = aPrevStr.GetChar(nStrip2);
+                        const sal_Unicode cur = aPrevStr[nStrip];
                         if  (!bFirstIteration && '\t' != cur && ' ' != cur)
                         {
                             break;
                         }
-                        --nStrip2;
+                        --nStrip;
                     }
-                    if (nStrip2 < aPrevStr.Len())
+                    if (nStrip < aPrevStr.getLength())
                     {
-                        aPrevStr.Erase(nStrip2, aPrevStr.Len() - nStrip2);
+                        aPrevStr = aPrevStr.copy(0, nStrip);
                     }
                 }
-                else if (sOldPrefix.getLength())
+                else if (!sOldPrefix.isEmpty())
                 {
-                    aRefNumStr.Insert(sOldPrefix, 0);
+                    aRefNumStr = sOldPrefix + aRefNumStr;
                 }
                 sOldPrefix = OUString();
 
                 bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
 
-                aRefNumStr.Insert( aPrevStr, 0 );
+                aRefNumStr = aPrevStr + aRefNumStr;
             }
-            else if ( aRefNumStr.Len() > 0 )
+            else if ( !aRefNumStr.isEmpty() )
             {
                 sOldPrefix += " ";
                 bOldHadPrefix = true;
@@ -1068,7 +1063,7 @@ namespace numfunc
         public:
             static SwDefBulletConfig& getInstance();
 
-            inline const String& GetFontname() const
+            inline OUString GetFontname() const
             {
                 return msFontname;
             }
@@ -1115,7 +1110,7 @@ namespace numfunc
             virtual void Commit();
 
             // default bullet list configuration data
-            String msFontname;
+            OUString msFontname;
             bool mbUserDefinedFontname;
             FontWeight meFontWeight;
             FontItalic meFontItalic;
@@ -1277,7 +1272,7 @@ namespace numfunc
     {
     }
 
-    const String& GetDefBulletFontname()
+    OUString GetDefBulletFontname()
     {
         return SwDefBulletConfig::getInstance().GetFontname();
     }

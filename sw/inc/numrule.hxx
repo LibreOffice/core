@@ -20,7 +20,7 @@
 #define _NUMRULE_HXX
 
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/numitem.hxx>
 #include "swdllapi.h"
@@ -75,7 +75,7 @@ public:
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
 
-    virtual void            SetCharFmtName(const String& rSet);
+    virtual void            SetCharFmtName(const OUString& rSet);
     virtual OUString        GetCharFmtName()const;
 
     //For i120928,access the cp info of graphic within bullet
@@ -126,9 +126,9 @@ private:
     tParagraphStyleList maParagraphStyleList;
 
     /** boost::unordered_map containing "name->rule" relation */
-    boost::unordered_map<String, SwNumRule *, StringHash> * pNumRuleMap;
+    boost::unordered_map<OUString, SwNumRule *, OUStringHash> * pNumRuleMap;
 
-    String sName;
+    OUString sName;
     SwNumRuleType eRuleType;
     sal_uInt16 nPoolFmtId;      ///< Id-for NumRules created "automatically"
     sal_uInt16 nPoolHelpId;     ///< HelpId for this Pool-style.
@@ -141,11 +141,11 @@ private:
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
-    String msDefaultListId;
+    OUString msDefaultListId;
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
-    SwNumRule( const String& rNm,
+    SwNumRule( const OUString& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE,
                sal_Bool bAutoFlg = sal_True );
@@ -165,16 +165,16 @@ public:
 
     void Set( sal_uInt16 i, const SwNumFmt* );
     void Set( sal_uInt16 i, const SwNumFmt& );
-    String MakeNumString( const SwNodeNum&, sal_Bool bInclStrings = sal_True,
+    OUString MakeNumString( const SwNodeNum&, sal_Bool bInclStrings = sal_True,
                             sal_Bool bOnlyArabic = sal_False ) const;
     /** - add optional parameter <_nRestrictToThisLevel> in order to
          restrict returned string to this level. */
-    String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
+    OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const sal_Bool bInclStrings = sal_True,
                           const sal_Bool bOnlyArabic = sal_False,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
                           Extremities* pExtremities = 0 ) const;
-    String MakeRefNumString( const SwNodeNum& rNodeNum,
+    OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
 
@@ -192,11 +192,11 @@ public:
     void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
     void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
 
-    inline void SetDefaultListId( const String sDefaultListId )
+    inline void SetDefaultListId( const OUString sDefaultListId )
     {
         msDefaultListId = sDefaultListId;
     }
-    inline String GetDefaultListId() const
+    inline OUString GetDefaultListId() const
     {
         return msDefaultListId;
     }
@@ -206,7 +206,7 @@ public:
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                boost::unordered_map<String, SwNumRule *, StringHash>* pNumRuleMap );
+                boost::unordered_map<OUString, SwNumRule *, OUStringHash>* pNumRuleMap );
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
@@ -226,9 +226,9 @@ public:
        and copies them if appropriate. */
     void CheckCharFmts( SwDoc* pDoc );
 
-    const String& GetName() const       { return sName; }
+    OUString GetName() const { return sName; }
 
-    void SetName( const String& rNm,
+    void SetName( const OUString& rNm,
                   IDocumentListsAccess& rDocListAccess );
 
     sal_Bool IsAutoRule() const             { return bAutoRuleFlag; }
@@ -280,7 +280,7 @@ namespace numfunc
 
         @author OD
     */
-    const String& GetDefBulletFontname();
+    OUString GetDefBulletFontname();
 
     /** determine if default bullet font is user defined
 
