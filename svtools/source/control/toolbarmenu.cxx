@@ -80,7 +80,7 @@ void ToolbarMenuEntry::init( int nEntryId, MenuItemBits nBits )
 
 // --------------------------------------------------------------------
 
-ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const String& rText, MenuItemBits nBits )
+ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUString& rText, MenuItemBits nBits )
 : mrMenu( rMenu )
 {
     init( nEntryId, nBits );
@@ -91,7 +91,7 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Stri
 
 // --------------------------------------------------------------------
 
-ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits )
+ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const OUString& rText, MenuItemBits nBits )
 : mrMenu( rMenu )
 {
     init( nEntryId, nBits );
@@ -1476,7 +1476,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     aTmpPos.Y() += nTextOffsetY;
                     sal_uInt16 nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
 
-                    DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.Len(), nStyle, NULL, NULL ); // pVector, pDisplayText );
+                    DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.getLength(), nStyle, NULL, NULL ); // pVector, pDisplayText );
                 }
 
                 if ( pThisOnly && bHighlighted )

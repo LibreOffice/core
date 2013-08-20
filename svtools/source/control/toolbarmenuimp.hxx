@@ -71,7 +71,7 @@ public:
     bool mbChecked;
     bool mbEnabled;
 
-    String maText;
+    OUString maText;
     Image maImage;
     Control* mpControl;
     Rectangle maRect;
@@ -79,8 +79,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccContext;
 
 public:
-    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const String& rText, MenuItemBits nBits );
-    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits );
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const OUString& rText, MenuItemBits nBits );
+    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const OUString& rText, MenuItemBits nBits );
     ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* pControl, MenuItemBits nBits );
     ~ToolbarMenuEntry();
 
