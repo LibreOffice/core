@@ -142,12 +142,12 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 pRedoDoc->InitUndo( pDoc, nTab, nTab );
                 pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL|IDF_NOCAPTIONS, false, pRedoDoc );
 
+                ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
                 ScMarkData aDestMark;
-                aDestMark.SelectOneTable( nTab );
+                aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoPaste(
-                        pDocSh, ScRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab),
-                        aDestMark, pUndoDoc, pRedoDoc, IDF_ALL, NULL));
+                    new ScUndoPaste( pDocSh, aMarkRange, aDestMark,
+                                     pUndoDoc, pRedoDoc, IDF_ALL, NULL));
             }
         }
 
