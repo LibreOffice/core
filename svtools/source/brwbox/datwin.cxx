@@ -58,7 +58,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
         rDev.DrawLine( aRect.BottomRight(), Point( aRect.Left(), aRect.Bottom() ) );
     }
 
-    if ( aText.Len() )
+    if ( !aText.isEmpty() )
     {
         OUString aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
 
@@ -103,7 +103,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 //-------------------------------------------------------------------
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
-                              const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
+                              const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
@@ -139,7 +139,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
     {
         // paint handle column
         ButtonFrame( rPos, Size( Width()-1, rBox.GetDataRowHeight()-1 ),
-                     String(), sal_False, bCurs, false ).Draw( rDev );
+                     "", sal_False, bCurs, false ).Draw( rDev );
         Color aOldLineColor = rDev.GetLineColor();
         rDev.SetLineColor( Color( COL_BLACK ) );
         rDev.DrawLine(
@@ -724,9 +724,9 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     sal_uLong nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
-        String aTip( OUString::number(nPos) );
-        aTip += '/';
-        if ( _pDataWin->GetRealRowCount().Len() )
+        OUString aTip( OUString::number(nPos) );
+        aTip += "/";
+        if ( !_pDataWin->GetRealRowCount().isEmpty() )
             aTip += _pDataWin->GetRealRowCount();
         else
             aTip += OUString::number(GetRangeMax());

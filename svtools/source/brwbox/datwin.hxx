@@ -39,14 +39,14 @@ class ButtonFrame
 {
     Rectangle   aRect;
     Rectangle   aInnerRect;
-    String      aText;
+    OUString    aText;
     sal_Bool        bPressed;
     sal_Bool        bCurs;
     sal_Bool        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
-                            const String &rText,
+                            const OUString &rText,
                             sal_Bool bPress,
                             sal_Bool bCursor,
                             sal_Bool _bDrawDisabled)
@@ -71,21 +71,21 @@ class BrowserColumn
     sal_uLong               _nOriginalWidth;
     sal_uLong               _nWidth;
     Image               _aImage;
-    String              _aTitle;
+    OUString            _aTitle;
     sal_Bool                _bFrozen;
 
 public:
                         BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
-                                        const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
+                                        const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
     virtual            ~BrowserColumn();
 
-    sal_uInt16              GetId() const { return _nId; }
+    sal_uInt16          GetId() const { return _nId; }
 
-    sal_uLong               Width() { return _nWidth; }
+    sal_uLong           Width() { return _nWidth; }
     Image&              GetImage() { return _aImage; }
-    String&             Title() { return _aTitle; }
+    OUString&           Title() { return _aTitle; }
 
-    sal_Bool                IsFrozen() const { return _bFrozen; }
+    sal_Bool            IsFrozen() const { return _bFrozen; }
     void                Freeze( sal_Bool bFreeze = sal_True ) { _bFrozen = bFreeze; }
 
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
@@ -111,7 +111,7 @@ public:
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
     Point           aLastMousePos;  // verhindert pseudo-MouseMoves
 
-    String          aRealRowCount;  // zur Anzeige im VScrollBar
+    OUString        aRealRowCount;  // zur Anzeige im VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
     bool            bInPaint;       // TRUE while in Paint
@@ -163,7 +163,7 @@ public:
     void            Repaint();
     BrowseBox*      GetParent() const
                          { return (BrowseBox*) Window::GetParent(); }
-    const String&   GetRealRowCount() const { return aRealRowCount; }
+    const OUString& GetRealRowCount() const { return aRealRowCount; }
 
     void            SetUpdateMode( sal_Bool bMode );
     bool            GetUpdateMode() const { return bUpdateMode; }
