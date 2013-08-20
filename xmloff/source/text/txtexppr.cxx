@@ -217,25 +217,48 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     if( pFontCharsetState && (pFontCharsetState->maValue >>= nTmp ) )
         eEnc = (rtl_TextEncoding)nTmp;
 
-    OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
-                        sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
-    if( !sName.isEmpty() )
+    //Resolves: fdo#67665 The purpose here appears to be to replace
+    //FontFamilyName and FontStyleName etc with a single FontName property. The
+    //problem is that repeated calls to here will first set
+    //pFontFamilyNameState->mnIndex to -1 to indicate it is disabled, so the
+    //next time pFontFamilyNameState is not passed here at all, which gives an
+    //empty sFamilyName resulting in disabling pFontNameState->mnIndex to -1.
+    //That doesn't seem right to me.
+    //
+    //So assuming that the main purpose is just to convert the properties in
+    //the main when we can, and to leave them alone when we can't. And with a
+    //secondary purpose to filter out empty font properties, then is would
+    //appear to make sense to base attempting the conversion if we have
+    //both of the major facts of the font description
+    //
+    //An alternative solution is to *not* fill the FontAutoStylePool with
+    //every font in the document, but to partition the fonts into the
+    //hard-attribute fonts which go into that pool and the style-attribute
+    //fonts which go into some additional pool which get merged just for
+    //the purposes of writing the embedded fonts but are not queried by
+    //"Find" which restores the original logic.
+    if (pFontFamilyNameState || pFontStyleNameState)
     {
-        pFontNameState->maValue <<= sName;
-        if( pFontFamilyNameState )
-            pFontFamilyNameState->mnIndex = -1;
-        if( pFontStyleNameState )
-            pFontStyleNameState->mnIndex = -1;
-        if( pFontFamilyState )
-            pFontFamilyState->mnIndex = -1;
-        if( pFontPitchState )
-            pFontPitchState->mnIndex = -1;
-        if( pFontCharsetState )
-            pFontCharsetState->mnIndex = -1;
-    }
-    else
-    {
-        pFontNameState->mnIndex = -1;
+        OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
+                            sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
+        if( !sName.isEmpty() )
+        {
+            pFontNameState->maValue <<= sName;
+            if( pFontFamilyNameState )
+                pFontFamilyNameState->mnIndex = -1;
+            if( pFontStyleNameState )
+                pFontStyleNameState->mnIndex = -1;
+            if( pFontFamilyState )
+                pFontFamilyState->mnIndex = -1;
+            if( pFontPitchState )
+                pFontPitchState->mnIndex = -1;
+            if( pFontCharsetState )
+                pFontCharsetState->mnIndex = -1;
+        }
+        else
+        {
+            pFontNameState->mnIndex = -1;
+        }
     }
 
     if( pFontFamilyNameState && sFamilyName.isEmpty() )
