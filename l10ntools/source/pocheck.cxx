@@ -18,7 +18,7 @@ static void checkStyleNames(OString aLanguage)
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
     OString aPoPath = OString(getenv("SRC_ROOT")) +
-                      "/translations/source/"
+                      "/translations/source/" +
                       aLanguage + "/sw/source/ui/utlui.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
@@ -82,8 +82,8 @@ static void checkFunctionNames(OString aLanguage)
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
     OString aPoPath = OString(getenv("SRC_ROOT")) +
-                      "/translations/source/"
-                      aLanguage
+                      "/translations/source/" +
+                      aLanguage +
                       "/formula/source/core/resource.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
@@ -112,8 +112,8 @@ static void checkFunctionNames(OString aLanguage)
     aPoInput.close();
 
     aPoPath = OString(getenv("SRC_ROOT")) +
-        "/translations/source/"
-        aLanguage
+        "/translations/source/" +
+        aLanguage +
         "/scaddins/source/analysis.po";
     aPoInput.open(aPoPath);
     if( !aPoInput.isOpen() )
@@ -141,8 +141,8 @@ static void checkFunctionNames(OString aLanguage)
     aPoInput.close();
 
     aPoPath = OString(getenv("SRC_ROOT")) +
-              "/translations/source/"
-               aLanguage
+              "/translations/source/" +
+               aLanguage +
               "/scaddins/source/datefunc.po";
     aPoInput.open(aPoPath);
     if( !aPoInput.isOpen() )
@@ -170,8 +170,8 @@ static void checkFunctionNames(OString aLanguage)
     aPoInput.close();
 
     aPoPath = OString(getenv("SRC_ROOT")) +
-              "/translations/source/"
-               aLanguage
+              "/translations/source/" +
+               aLanguage +
               "/scaddins/source/pricing.po";
     aPoInput.open(aPoPath);
     if( !aPoInput.isOpen() )
@@ -214,8 +214,8 @@ static void checkFunctionNames(OString aLanguage)
 static void checkVerticalBar(OString aLanguage)
 {
     OString aPoPath = OString(getenv("SRC_ROOT")) +
-                      "/translations/source/"
-                      aLanguage
+                      "/translations/source/" +
+                      aLanguage +
                       "/instsetoo_native/inc_openoffice/windows/msi_languages.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
