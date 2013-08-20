@@ -4807,6 +4807,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStks();
+
     // For i120928,achieve the graphics from the special bookmark with is for graphic bullet
     {
         std::vector<const SwGrfNode*> vecBulletGrf;
@@ -4823,25 +4824,25 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
                 if ( pTxtNode )
                 {
-                    const SwpHints *pHints = pTxtNode->GetpSwpHints();
-                    for(int nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
+                    const SwpHints* pHints = pTxtNode->GetpSwpHints();
+                    for( sal_uInt16 nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
                         const SwTxtAttr *pHt = (*pHints)[nHintPos];
-                        xub_StrLen st = *(pHt->GetStart());
-                        if(pHt && pHt->Which() == RES_TXTATR_FLYCNT && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()))
+                        const xub_StrLen st = *(pHt->GetStart());
+                        if( pHt
+                            && pHt->Which() == RES_TXTATR_FLYCNT
+                            && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()) )
                         {
-                            SwFrmFmt *pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
-                            const SwNodeIndex *pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
-                            if (pNdIdx)
-                            {
-                                const SwNodes &nos = pNdIdx->GetNodes();
-                                const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
-                                if (pGrf)
-                                {
-                                    vecBulletGrf.push_back(pGrf);
-                                    vecFrmFmt.push_back(pFrmFmt);
-                                }
-                            }
+                            SwFrmFmt* pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
+                            vecFrmFmt.push_back(pFrmFmt);
+                            const SwNodeIndex* pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
+                            const SwNodes* pNodesArray = (pNdIdx != NULL)
+                                                         ? &(pNdIdx->GetNodes())
+                                                         : NULL;
+                            const SwGrfNode *pGrf = (pNodesArray != NULL)
+                                                    ? dynamic_cast<const SwGrfNode*>((*pNodesArray)[pNdIdx->GetIndex() + 1])
+                                                    : NULL;
+                            vecBulletGrf.push_back(pGrf);
                         }
                     }
                     // update graphic bullet information
@@ -4852,14 +4853,16 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                         for (int j = 0; j < MAXLEVEL; ++j)
                         {
                             SwNumFmt aNumFmt(pRule->Get(j));
-                            sal_Int16 nType = aNumFmt.GetNumberingType();
-                            sal_uInt16 nGrfBulletCP = aNumFmt.GetGrfBulletCP();
-                            if (nType == SVX_NUM_BITMAP && vecBulletGrf.size() > nGrfBulletCP)
+                            const sal_Int16 nType = aNumFmt.GetNumberingType();
+                            const sal_uInt16 nGrfBulletCP = aNumFmt.GetGrfBulletCP();
+                            if ( nType == SVX_NUM_BITMAP
+                                 && vecBulletGrf.size() > nGrfBulletCP
+                                 && vecBulletGrf[nGrfBulletCP] != NULL )
                             {
                                 Graphic aGraphic = vecBulletGrf[nGrfBulletCP]->GetGrf();
                                 SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
                                 Font aFont = numfunc::GetDefBulletFont();
-                                int nHeight = aFont.GetHeight() * 12;//20;
+                                int nHeight = aFont.GetHeight() * 12;
                                 Size aPrefSize( aGraphic.GetPrefSize());
                                 if (aPrefSize.Height() * aPrefSize.Width() != 0 )
                                 {
