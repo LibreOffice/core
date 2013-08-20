@@ -49,18 +49,19 @@
  *     - use _POSIX_THREAD_PRIORITY_SCHEDULING, not NO_PTHREAD_PRIORITY (?)
  *     - POSIX doesn't require defined prio's for SCHED_OTHER (!)
  *     - use SCHED_RR instead of SCHED_OTHER for defined behaviour (?)
- * (2) 'oslThreadIdentifier' and '{insert|remove|lookup}ThreadId()'
- *     - cannot reliably be applied to 'alien' threads;
- *     - memory leak for 'alien' thread 'HashEntry's;
- *     - use 'PTHREAD_VALUE(pthread_t)' as identifier instead (?)
- *     - if yes, change 'oslThreadIdentifier' to 'intptr_t' or similar
- * (3) 'oslSigAlarmHandler()' (#71232#)
+ * (2) 'oslSigAlarmHandler()' (#71232#)
  *     - [Under Solaris we get SIGALRM in e.g. pthread_join which terminates
  *       the process. So we initialize our signal handling module and do
  *       register a SIGALRM Handler which catches and ignores it]
  *     - should this still happen, 'signal.c' needs to be fixed instead.
  *
  ****************************************************************************/
+
+// On 32 bits Linux with GLIBC or Bionic, pthread_t is defined as a long, use this long as identifier
+// if possible.
+#if defined LINUX && SAL_TYPES_SIZEOFLONG == 4
+#define FAST_THREAD_ID_IMPL
+#endif
 
 /*****************************************************************************/
 /*  Internal data structures and functions */
@@ -76,7 +77,9 @@
 typedef struct osl_thread_impl_st
 {
     pthread_t           m_hThread;
-    sal_uInt16          m_Ident; /* @@@ see TODO @@@ */
+#ifndef FAST_THREAD_ID_IMPL
+    sal_uInt16          m_Ident;
+#endif
     short               m_Flags;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -130,10 +133,13 @@ static void  osl_thread_cleanup_Impl (Thread_Impl * pImpl);
 static oslThread osl_thread_create_Impl (
     oslWorkerFunction pWorker, void * pThreadData, short nFlags);
 
-/* @@@ see TODO @@@ */
+#ifndef FAST_THREAD_ID_IMPL
+
 static sal_uInt16 insertThreadId (pthread_t hThread);
 static sal_uInt16 lookupThreadId (pthread_t hThread);
 static void       removeThreadId (pthread_t hThread);
+
+#endif
 
 /*****************************************************************************/
 /* osl_thread_init_Impl */
@@ -194,8 +200,9 @@ static void osl_thread_cleanup_Impl (Thread_Impl * pImpl)
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
-    /* release oslThreadIdentifier @@@ see TODO @@@ */
+    #ifndef FAST_THREAD_ID_IMPL
     removeThreadId (thread);
+    #endif
 
     if (attached)
     {
@@ -220,8 +227,10 @@ static void* osl_thread_start_Impl (void* pData)
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
+#ifndef FAST_THREAD_ID_IMPL
     /* request oslThreadIdentifier @@@ see TODO @@@ */
     pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
+#endif
 
     /* signal change from STARTUP to ACTIVE state */
     pImpl->m_Flags &= ~THREADIMPL_FLAGS_STARTUP;
@@ -572,9 +581,7 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #endif
 }
 
-/*****************************************************************************/
-/* osl_getThreadIdentifier @@@ see TODO @@@ */
-/*****************************************************************************/
+#ifndef FAST_THREAD_ID_IMPL
 
 #define HASHID(x) ((unsigned int)PTHREAD_VALUE(x) % HashSize)
 
@@ -684,25 +691,45 @@ static void removeThreadId (pthread_t hThread)
     pthread_mutex_unlock(&HashLock);
 }
 
+#else
+
+static oslThreadIdentifier convert_pthread_t(pthread_t thread)
+{
+    return *((oslThreadIdentifier*) &(thread));
+}
+
+#endif
+
+/*****************************************************************************/
+/* osl_getThreadIdentifier */
+/*****************************************************************************/
 oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
 {
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
-    sal_uInt16   Ident;
+    oslThreadIdentifier Ident = 0;
 
     if (pImpl)
+    {
+#ifdef FAST_THREAD_ID_IMPL
+        Ident = convert_pthread_t(pImpl->m_Thread);
+#else
         Ident = pImpl->m_Ident;
+#endif
+    }
     else
     {
-        /* current thread */
         pthread_t current = pthread_self();
-
+#ifdef FAST_THREAD_ID_IMPL
+        Ident = convert_pthread_t(current);
+#else
         Ident = lookupThreadId (current);
         if (Ident == 0)
-            /* @@@ see TODO: alien pthread_self() @@@ */
             Ident = insertThreadId (current);
-    }
 
-    return ((oslThreadIdentifier)(Ident));
+#endif
+    }
+    return Ident;
+
 }
 
 /*****************************************************************************
