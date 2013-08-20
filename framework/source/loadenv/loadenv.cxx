@@ -182,23 +182,23 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                     "Optional list of arguments seem to be corrupted.", xLoader, 4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
-            {
-                OUStringBuffer aMsg;
-                aMsg.appendAscii("Unsupported URL <").append(sURL).append('>');
-
-                if (!ex.m_sMessage.isEmpty())
-                {
-                    aMsg.appendAscii(": \"").
-                        append(OStringToOUString(
-                             ex.m_sMessage, RTL_TEXTENCODING_UTF8)).
-                        appendAscii("\"");
-                }
-
-                throw css::lang::IllegalArgumentException(aMsg.makeStringAndClear(),
+                throw css::lang::IllegalArgumentException(
+                    ("Unsupported URL <" + sURL + ">" + ": \"" + ex.m_sMessage
+                     + "\""),
                     xLoader, 1);
-            }
 
             default:
+                SAL_WARN(
+                    "fwk.loadenv",
+                    "caught LoadEnvException " << +ex.m_nID << " \""
+                        << ex.m_sMessage << "\""
+                        << (ex.m_exOriginal.has<css::uno::Exception>()
+                            ? (", " + ex.m_exOriginal.getValueTypeName() + " \""
+                               + (ex.m_exOriginal.get<css::uno::Exception>().
+                                  Message)
+                               + "\"")
+                            : OUString())
+                        << " while loading <" << sURL << ">");
                 xComponent.clear();
                 break;
         }
@@ -261,7 +261,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
     {
         m_eContentType = LoadEnv::classifyContent(sURL, lMediaDescriptor);
         if (m_eContentType == E_UNSUPPORTED_CONTENT)
-            throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
+            throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::initializeLoading");
     }
 
     // make URL part of the MediaDescriptor
@@ -369,7 +369,7 @@ void LoadEnv::startLoading()
     // content can not be loaded or handled
     // check "classifyContent()" failed before ...
     if (m_eContentType == E_UNSUPPORTED_CONTENT)
-        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
+        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::startLoading");
 
     // <- SAFE
     aReadLock.unlock();
@@ -640,8 +640,9 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // following operations can work on an internal type name only :-(
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XTypeDetection > xDetect(
-         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext),
-         css::uno::UNO_QUERY);
+         xContext->getServiceManager()->createInstanceWithContext(
+             "com.sun.star.document.TypeDetection", xContext),
+         css::uno::UNO_QUERY_THROW);
 
     OUString sType = xDetect->queryTypeByURL(sURL);
 
@@ -807,13 +808,16 @@ void LoadEnv::impl_detectTypeAndFilter()
         return;
     }
 
-    css::uno::Reference< css::document::XTypeDetection > xDetect( xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext), css::uno::UNO_QUERY);
-    if (xDetect.is())
-        sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
+    css::uno::Reference< css::document::XTypeDetection > xDetect(
+        xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.document.TypeDetection", xContext),
+        css::uno::UNO_QUERY_THROW);
+    sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
     if (sType.isEmpty())
-        throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
+        throw LoadEnvException(
+            LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection failed");
 
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
@@ -1681,7 +1685,7 @@ void LoadEnv::impl_reactForLoadingState()
     if (bThrow)
     {
         if  ( aRequest.isExtractableTo( ::cppu::UnoType< css::uno::Exception >::get() ) )
-            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, aRequest );
+            throw LoadEnvException( LoadEnvException::ID_GENERAL_ERROR, "", aRequest );
     }
 
     // <- SAFE ----------------------------------

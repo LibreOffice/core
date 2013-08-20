@@ -574,10 +574,22 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::ucb::ContentCreationException&)
-        { return sal_False; } // TODO error handling
-    catch(const css::uno::Exception&)
-        { return sal_False; } // TODO error handling
+    catch(const css::ucb::ContentCreationException& e)
+        {
+            SAL_WARN(
+                "comphelper",
+                "caught ContentCreationException \"" << e.Message
+                    << "\" while opening <" << sURL << ">");
+            return sal_False; // TODO error handling
+        }
+    catch(const css::uno::Exception& e)
+        {
+            SAL_WARN(
+                "comphelper",
+                "caught Exception \"" << e.Message << "\" while opening <"
+                    << sURL << ">");
+            return sal_False; // TODO error handling
+        }
 
     // try to open the file in read/write mode
     // (if its allowed to do so).
@@ -606,7 +618,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
+        catch(const css::uno::Exception& e)
             {
                 // ignore exception, if reason was problem reasoned on
                 // open it in WRITEABLE mode! Then we try it READONLY
@@ -614,7 +626,13 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
                 // All other errors must be handled as real error an
                 // break this method.
                 if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
+                {
+                    SAL_WARN(
+                        "comphelper",
+                        "caught Exception \"" << e.Message
+                            << "\" while opening <" << sURL << ">");
                     return sal_False;
+                }
                 xStream.clear();
                 xInputStream.clear();
             }
@@ -667,8 +685,14 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
-        catch(const css::uno::Exception&)
-            { return sal_False; }
+        catch(const css::uno::Exception& e)
+            {
+                SAL_WARN(
+                    "comphelper",
+                    "caught Exception \"" << e.Message << "\" while opening <"
+                        << sURL << ">");
+                return sal_False;
+            }
     }
 
     // add streams to the descriptor

@@ -1151,7 +1151,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         xModuleProps->getByName(OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(OUString(FILTER_PROP_TYPE), OUString());

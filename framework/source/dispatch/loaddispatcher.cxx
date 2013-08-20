@@ -122,8 +122,20 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
 
         // TODO thinking about asynchronous operations and listener support
     }
-    catch(const LoadEnvException&)
-        { xComponent.clear(); }
+    catch(const LoadEnvException& e)
+    {
+        SAL_WARN(
+            "fwk.dispatch",
+            "caught LoadEnvException " << +e.m_nID << " \"" << e.m_sMessage
+                << "\""
+                << (e.m_exOriginal.has<css::uno::Exception>()
+                    ? (", " + e.m_exOriginal.getValueTypeName() + " \""
+                       + e.m_exOriginal.get<css::uno::Exception>().Message
+                       + "\"")
+                    : OUString())
+                << " while dispatching <" << rURL.Complete << ">");
+        xComponent.clear();
+    }
 
     if (xListener.is())
     {

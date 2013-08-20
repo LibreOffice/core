@@ -1122,7 +1122,14 @@ Content::getInfo( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
         result = gnome_vfs_get_file_info
             ( aURI.getStr(), &m_info, GNOME_VFS_FILE_INFO_DEFAULT );
         if (result != GNOME_VFS_OK)
+        {
+            SAL_WARN(
+                "ucb.ucp.gvfs",
+                "gnome_vfs_get_file_info for <" << aURI << "> failed with \""
+                    << gnome_vfs_result_to_string(result) << "\" (" << +result
+                    << ")");
             gnome_vfs_file_info_clear( &m_info );
+        }
     } else
         result = GNOME_VFS_OK;
 #if OSL_DEBUG_LEVEL > 1

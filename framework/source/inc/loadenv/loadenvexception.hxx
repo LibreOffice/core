@@ -32,15 +32,10 @@ namespace framework{
 
     @descr  Of course outside code must wrapp it, to transport
             the occurred information to its caller.
-
-    @author as96863
  */
 class LoadEnvException
 {
-
-
     public:
-
         /** @short  Can be used as an ID for an instance of a LoadEnvException.
             @descr  To prevent errors on adding/removing/changing such IDs here,
                     an enum field is used. Its int values are self organized ...
@@ -93,76 +88,17 @@ class LoadEnvException
             ID_GENERAL_ERROR
         };
 
-    //___________________________________________
-    // member
-
-    public:
-
-        /** @short  contains a suitable message, which describes the reason for this
-                    exception. */
-        OString m_sMessage;
-
-        /** @short  An ID, which make this exception unique among others. */
         sal_Int32 m_nID;
-
-        /** @short  Contains the original exception, if any occurred. */
+        OUString m_sMessage;
         css::uno::Any m_exOriginal;
 
-        /** TODO
-             Experimental use! Maybe it can be useful to know if an exception was already
-             catched and handled by an interaction and might be rethrown! */
-        sal_Bool m_bHandled;
+        LoadEnvException(
+            sal_Int32 id, OUString const & message = OUString(),
+            css::uno::Any const & original = css::uno::Any()):
+            m_nID(id), m_sMessage(message), m_exOriginal(original)
+        {}
 
-    //___________________________________________
-    // interface
-
-    public:
-
-        /** @short  initialize a new instance with an ID.
-            @descr  Some other items of this exception
-                    (e.g. a suitable message) will be generated
-                    automaticly.
-
-            @param  nID
-                    One of the defined const IDs of this class.
-         */
-        LoadEnvException(sal_Int32 nID)
-        {
-            m_nID = nID;
-        }
-
-        //_______________________________________
-
-        /** @short  initialize a new instance with an ID
-                    an wrap a detected exception into this one.
-            @descr  Some other items of this exception
-                    (e.g. a suitable message) will be generated
-                    automaticly.
-
-            @param  nID
-                    One of the defined const IDs of this class.
-
-            @param  exUno
-                    the original catched uno exception.
-         */
-        LoadEnvException(      sal_Int32        nID  ,
-                         const css::uno::Any&   exUno)
-        {
-            m_nID        = nID  ;
-            m_exOriginal = exUno;
-        }
-
-        //_______________________________________
-
-        /** @short  destruct an instance of this exception.
-         */
-        ~LoadEnvException()
-        {
-            m_sMessage = OString();
-            m_nID      = 0;
-            m_bHandled = false;
-            m_exOriginal.clear();
-        }
+        ~LoadEnvException() {}
 };
 
 } // namespace framework

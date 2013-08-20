@@ -152,10 +152,11 @@ certain functionality.
 @section framework
 
 @li @c fwk - framework (abbreviation)
+@li @c fwk.accelerators
 @li @c fwk.desktop
 @li @c fwk.dispatch
+@li @c fwk.loadenv
 @li @c fwk.session
-@li @c fwk.accelerators
 @li @c fwk.uielement
 
 @section i18nlangtag
@@ -277,6 +278,7 @@ certain functionality.
 @li @c ucb
 @li @c ucb.ucp
 @li @c ucb.ucp.gio
+@li @c ucb.ucp.gvfs
 @li @c ucb.ucp.webdav
 
 @section unotools

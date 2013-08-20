@@ -445,8 +445,14 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    catch(const css::uno::Exception&)
-        { sType = OUString(); }
+    catch(const css::uno::Exception& e)
+        {
+            SAL_WARN(
+                "filter.config",
+                "caught Exception \"" << e.Message
+                    << "\" while querying type of <" << sURL << ">");
+            sType = OUString();
+        }
 
     //*******************************************
     // adapt media descriptor, so it contains the right values
@@ -1138,7 +1144,9 @@ void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
         bSuccess = rDescriptor.addInputStream();
 
     if ( !bSuccess )
-        throw css::uno::Exception(_FILTER_CONFIG_FROM_ASCII_("Could not open stream."), static_cast< css::document::XTypeDetection* >(this));
+        throw css::uno::Exception(
+            "Could not open stream for <" + sURL + ">",
+            static_cast<OWeakObject *>(this));
 
     if ( !bRequestedReadOnly )
     {
