@@ -618,8 +618,16 @@ void SwXTextDocument::dispose(void) throw( RuntimeException )
   -----------------------------------------------------------------------*/
 void SwXTextDocument::close( sal_Bool bDeliverOwnership ) throw( util::CloseVetoException, RuntimeException )
 {
-    if(IsValid() && m_pHiddenViewFrame)
+    if ( IsValid() && m_pHiddenViewFrame )
+    {
+        ASSERT( false, "<SwXTextDocument::close(..)> - rendering data not cleaned up???" );
         lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
+        m_pHiddenViewFrame = 0;
+        // prevent crash described in #i108805
+        SfxItemSet *pSet = pDocShell->GetMedium()->GetItemSet();
+        pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
+    }
+
     SfxBaseModel::close(bDeliverOwnership);
 }
 /*-- 18.12.98 13:12:25---------------------------------------------------
@@ -3201,8 +3209,6 @@ void SAL_CALL SwXTextDocument::render(
                     else    // normal printing and PDF export
                         pVwSh->PrintOrPDFExport( pOut, rSwPrtOptions, nRenderer );
 
-                    // --> FME 2004-10-08 #i35176#
-                    //
                     // After printing the last page, we take care for the links coming
                     // from the EditEngine. The links are generated during the painting
                     // process, but the destinations are still missing.
@@ -3211,40 +3217,17 @@ void SAL_CALL SwXTextDocument::render(
                     {
                         SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPageRange, bIsSkipEmptyPages,  sal_True );
                     }
-                    // <--
 
                     pVwSh->SetPDFExportOption( sal_False );
-
-                    // last page to be rendered? (not necessarily the last page of the document)
-                    // -> do clean-up of data
-                    if (bLastPage)
-                    {
-                        // #i96167# haggai: delete ViewOptionsAdjust here because it makes use
-                        // of the shell, which might get destroyed in lcl_DisposeView!
-                        if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
-                            m_pRenderData->ViewOptionAdjustStop();
-
-                        if (m_pRenderData && m_pRenderData->HasPostItData())
-                            m_pRenderData->DeletePostItData();
-                        if (m_pHiddenViewFrame)
-                        {
-                            lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
-                            m_pHiddenViewFrame = 0;
-
-                            // prevent crash described in #i108805
-                            SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-                            SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
-                            pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
-                        }
-                    }
                 }
             }
         }
     }
-    if( bLastPage )
+    // last page to be rendered? (not necessarily the last page of the document)
+    // -> do clean-up of data
+    if ( bLastPage )
     {
-        delete m_pRenderData;       m_pRenderData     = NULL;
-        delete m_pPrintUIOptions;   m_pPrintUIOptions = NULL;
+        CleanUpRenderingData();
     }
 }
 /* -----------------------------03.10.04 -------------------------------------
@@ -3505,6 +3488,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 // #121125#, #122868#
 // method to assure clean up of the rendering data to restore view options
 // and to loose hold reference to the ViewShell in SwViewOptionAdjust_Impl.
+// also perform clean up for the still existing hidden frame for PDF export from Page Preview
 void SwXTextDocument::CleanUpRenderingData()
 {
     if( m_pRenderData != NULL )
@@ -3521,6 +3505,14 @@ void SwXTextDocument::CleanUpRenderingData()
     {
         delete m_pPrintUIOptions;
         m_pPrintUIOptions = NULL;
+    }
+
+    if ( IsValid() && m_pHiddenViewFrame )
+    {
+        lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
+        m_pHiddenViewFrame = 0;
+        SfxItemSet *pSet = pDocShell->GetMedium()->GetItemSet();
+        pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
     }
 }
 
