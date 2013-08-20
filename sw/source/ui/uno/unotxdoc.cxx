@@ -2662,23 +2662,40 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
-    if (!bIsSwSrcView && !m_pRenderData)
-        m_pRenderData = new SwRenderData;
-    if (!m_pPrintUIOptions)
-        m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
-    bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    // const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
-
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
-    if (!pDoc || !pView)
+    if ( pDoc == 0 || pView == 0 )
+    {
         return 0;
+    }
+
+    // clean up <RenderData> and <PrintUIOptions>
+    {
+        if ( m_pRenderData )
+        {
+            delete m_pRenderData;
+            m_pRenderData = 0;
+        }
+        if ( m_pPrintUIOptions )
+        {
+            delete m_pPrintUIOptions;
+            m_pPrintUIOptions = 0;
+        }
+    }
+
+    if ( !bIsSwSrcView )
+    {
+        m_pRenderData = new SwRenderData;
+    }
+    // new <PrintUIOptions>
+    m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
+    const bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
 
     // save current UI options from the print dialog for the next call to that dialog
     lcl_SavePrintUIOptionsToDocumentPrintData( *pDoc, *m_pPrintUIOptions, bIsPDFExport );
 
     sal_Int32 nRet = 0;
-    if (bIsSwSrcView)
+    if ( bIsSwSrcView )
     {
         SwSrcView *pSwSrcView = dynamic_cast< SwSrcView * >(pView);
         OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
@@ -2711,7 +2728,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         if (!pViewShell || !pViewShell->GetLayout())
             return 0;
 
-        if (bFormat)
+        if ( bFormat )
         {
             // #i38289
             if( pViewShell->GetViewOptions()->getBrowseMode() )
@@ -2727,7 +2744,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // We don't want that! Thus we disable updating of the view.
             pViewShell->StartAction();
 
-            if (pSwView)
+            if ( pSwView )
             {
                 if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pViewShell ) )
                     m_pRenderData->ViewOptionAdjustStop();
@@ -2739,11 +2756,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
-            if (pSwView)
+            if ( pSwView )
             {
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrintData *pPrtOptions = (bIsPDFExport)
-                    ? NULL : m_pRenderData->GetSwPrtOptions();
+                                                 ? NULL
+                                                 : m_pRenderData->GetSwPrtOptions();
                 m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
@@ -2854,10 +2872,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (!pDoc || !pView)
         return uno::Sequence< beans::PropertyValue >();
 
-    // due to #110067# (document page count changes sometimes during
-    // PDF export/printing) we can not check for the upper bound properly.
-    // Thus instead of throwing the exception we silently return.
-    if (0 > nRenderer)
+    if ( nRenderer < 0 || nRenderer >= SAL_MAX_UINT16 )
         throw IllegalArgumentException();
 
     // TODO/mba: we really need a generic way to get the ViewShell!
@@ -2884,14 +2899,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        // --> TL, OD 2010-09-07 #i114210#
-        // determine the correct page number from the renderer index
-        // --> OD 2010-10-01 #i114875
-        // consider brochure print
-        const sal_uInt16 nPage = bPrintProspect
-                             ? nRenderer + 1
-                             : m_pRenderData->GetPagesToPrint()[ nRenderer ];
-        // <--
+        const sal_Int32 nPage = bPrintProspect
+                                ? nRenderer + 1
+                                : m_pRenderData->GetPagesToPrint()[ nRenderer ];
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
@@ -2928,19 +2938,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 aTmpSize = pPrinter->LogicToLogic( aTmpSize,
                             pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
                 aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
-                #if 0
-                // #i115048# it seems users didn't like getting double the formatted page size
-                // revert to "old" behavior scaling to the current paper size of the printer
-                if (bPrintProspect)
-                {
-                    // we just state what output size we would need
-                    // which may cause vcl to set that page size on the printer
-                    // (if available and not overriden by the user)
-                    aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-                    aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
-                                                     TWIP_TO_MM100( aTmpSize.Height() ));
-                }
-                #else
                 if( bPrintProspect )
                 {
                     // just switch to an appropriate portrait/landscape format
@@ -2953,12 +2950,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                         aPreferredPageSize.Height = aPageSize.Width;
                     }
                 }
-                #endif
             }
         }
         else
         {
-            aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
+            ASSERT( nPage > 0 && nPage <= SAL_MAX_UINT16,
+                    "<SwXTextDocument::getRenderer(..)> - unexpected value for the page number, it does not fit into sal_uInt16." );
+            aTmpSize = pVwSh->GetPageSize( static_cast< sal_uInt16 >(nPage), bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
@@ -2985,7 +2983,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
     }
 
-    // --> OD #i117783#
     if ( bApplyPagePrintSettingsFromXPagePrintable )
     {
         const SwPagePreViewPrtData* pPagePrintSettings =
@@ -3040,7 +3037,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
         bApplyPagePrintSettingsFromXPagePrintable = sal_False;
     }
-    // <--
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
 
@@ -3086,9 +3082,6 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     if (pView)
         rbIsSwSrcView = pSwSrcView != 0;
     return pView;
-//    return pSwView ? dynamic_cast< SfxViewShell * >(pSwView) :
-//            (pSwSrcView ? dynamic_cast< SfxViewShell * >(pSwSrcView) :
-//                          dynamic_cast< SfxViewShell * >(pSwPagePreView) );
 }
 
 
@@ -3112,12 +3105,18 @@ void SAL_CALL SwXTextDocument::render(
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
 
-    DBG_ASSERT( m_pRenderData, "data should have been created already in getRendererCount..." );
-    DBG_ASSERT( m_pPrintUIOptions, "data should have been created already in getRendererCount..." );
-    if (!bIsSwSrcView && !m_pRenderData)
+    // error handling - avoid crash
+    if ( !bIsSwSrcView && m_pRenderData == NULL )
+    {
+        DBG_ASSERT( false, "data should have been created already in getRendererCount..." );
         m_pRenderData = new SwRenderData;
-    if (!m_pPrintUIOptions)
+    }
+    if ( m_pPrintUIOptions == 0 )
+    {
+        DBG_ASSERT( false, "data should have been created already in getRendererCount..." );
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
+    }
+
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect   = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bLastPage        = m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False );
@@ -3236,7 +3235,6 @@ void SAL_CALL SwXTextDocument::render(
                             SwDocShell *pRenderDocShell = pDoc->GetDocShell();
                             SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
                             pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
-
                         }
                     }
                 }
@@ -3504,17 +3502,22 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     return aLanguages;
 }
 
-// #121125# react on ViewShell change; a reference to the ViewShell is
-// held in SwViewOptionAdjust_Impl, thus needs to be cleaned up
-void SwXTextDocument::ReactOnViewShellChange()
+// #121125#, #122868#
+// method to assure clean up of the rendering data to restore view options
+// and to loose hold reference to the ViewShell in SwViewOptionAdjust_Impl.
+void SwXTextDocument::CleanUpRenderingData()
 {
-    if(m_pRenderData)
+    if( m_pRenderData != NULL )
     {
+        if ( m_pRenderData->HasPostItData() )
+        {
+            m_pRenderData->DeletePostItData();
+        }
         delete m_pRenderData;
         m_pRenderData = NULL;
     }
 
-    if(m_pPrintUIOptions)
+    if( m_pPrintUIOptions != NULL )
     {
         delete m_pPrintUIOptions;
         m_pPrintUIOptions = NULL;
