@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8bc\u003d",
+        "filename": "include/osl/thread.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-20T22:13:43Z",
+      "side": 1,
+      "message": "it does not look like sizeof(sal_uInt32) \u003d\u003d sizeif(uintptr_t) on all platforms,\ne.g. glibc has \"typedef unsigned long int\tuintptr_t;\"\nso this would break ABI.",
+      "revId": "5eb620fe56b7abec208da4870b534fa1bb364206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
