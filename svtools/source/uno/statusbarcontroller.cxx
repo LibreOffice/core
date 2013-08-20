@@ -294,7 +294,7 @@ throw ( RuntimeException )
         if ( Event.State >>= aStrValue )
             pStatusBar->SetItemText( m_nID, aStrValue );
         else if ( !Event.State.hasValue() )
-            pStatusBar->SetItemText( m_nID, String() );
+            pStatusBar->SetItemText( m_nID, "" );
     }
 }
 

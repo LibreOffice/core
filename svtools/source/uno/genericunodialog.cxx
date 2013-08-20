@@ -182,7 +182,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
         pParent = pImplementation->GetWindow();
 
     // the title
-    String sTitle = m_sTitle;
+    OUString sTitle = m_sTitle;
 
     Dialog* pDialog = createDialog( pParent );
     OSL_ENSURE( pDialog, "OGenericUnoDialog::impl_ensureDialog_lck: createDialog returned nonsense!" );

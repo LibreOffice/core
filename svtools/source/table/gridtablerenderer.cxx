@@ -250,7 +250,7 @@ namespace svt { namespace table
     {
         _rDevice.Push( PUSH_LINECOLOR);
 
-        String sHeaderText;
+        OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
