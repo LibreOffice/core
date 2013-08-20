@@ -1538,16 +1538,16 @@ public:
     sal_uInt16  fLockRev : 1;       //   when 1, the current revision marking state is locked
     sal_uInt16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
     //    compatability options
-    sal_uInt16 copts_fNoTabForInd : 1;          //    when 1, don�t add automatic tab stops for hanging indent
-    sal_uInt16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don�t add extra space for raised or lowered characters
+    sal_uInt16 copts_fNoTabForInd : 1;          //    when 1, don't add automatic tab stops for hanging indent
+    sal_uInt16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don't add extra space for raised or lowered characters
     sal_uInt16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
     sal_uInt16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
     sal_uInt16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
-    sal_uInt16 copts_fNoColumnBalance : 1;      //    when 1, don�t balance columns for Continuous Section starts
+    sal_uInt16 copts_fNoColumnBalance : 1;      //    when 1, don't balance columns for Continuous Section starts
     sal_uInt16 copts_fConvMailMergeEsc : 1;
     sal_uInt16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
     sal_uInt16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
-    sal_uInt16 copts_fTransparentMetafiles : 1; //    when 1, don�t blank area between metafile pictures
+    sal_uInt16 copts_fTransparentMetafiles : 1; //    when 1, don't blank area between metafile pictures
     sal_uInt16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
     sal_uInt16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
     sal_uInt16 copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
@@ -1566,7 +1566,7 @@ public:
     sal_Int32   cCh;                //      count of characters tallied by last Word Count execution
     sal_Int16   cPg;                //      count of pages tallied by last Word Count execution
     sal_Int32   cParas;             //      count of paragraphs tallied by last Word Count execution
-    sal_uInt16 rncEdn : 2;          //      restart endnote number code: 0 don�t restart endnote numbering, 1 section, 2 page
+    sal_uInt16 rncEdn : 2;          //      restart endnote number code: 0 don't restart endnote numbering, 1 section, 2 page
     sal_uInt16 nEdn : 14;           //      beginning endnote number
     sal_uInt16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
     // sal_uInt16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman

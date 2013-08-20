@@ -674,7 +674,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     const sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
-        case SID_PRINTDOC: // display the printer selection and properties dialogue : File > Print…
+        case SID_PRINTDOC: // display the printer selection and properties dialogue : File > Print...
         case SID_PRINTDOCDIRECT: // Print the document directly, without displaying the dialogue
         {
             SfxObjectShell* pDoc = GetObjectShell();
@@ -769,7 +769,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             rReq.Done();
             break;
         }
-        case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings…
+        case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings...
         case SID_PRINTER_NAME : // only for recorded macros
         {
             // get printer and printer settings from the document

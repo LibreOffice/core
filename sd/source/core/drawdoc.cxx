@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "PageListWatcher.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -453,7 +452,7 @@ SdrModel* SdDrawDocument::AllocModel() const
         pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 
-        // Only necessary for clipboard –
+        // Only necessary for clipboard -
         // for drag & drop this is handled by DragServer
         SdStyleSheetPool* pOldStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
         SdStyleSheetPool* pNewStylePool = (SdStyleSheetPool*) pNewModel->GetStyleSheetPool();
@@ -587,7 +586,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // Create names of the styles in the user's language
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->UpdateStdNames();
 
-        // Create any missing styles – e. g. formerly, there was no Subtitle style
+        // Create any missing styles - eg. formerly, there was no Subtitle style
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->CreatePseudosIfNecessary();
     }
 

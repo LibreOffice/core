@@ -1824,7 +1824,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         case PDFWriter::PDF_1_5: aBuffer.append( "1.5" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
-    aBuffer.append( "\n%äüöß\n" );
+    aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
     if( !writeBuffer( aBuffer.getStr(), aBuffer.getLength() ) )
     {
         osl_closeFile( m_aFile );
@@ -6438,8 +6438,8 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         OStringBuffer aMetadataStream( 8192 );
 
         aMetadataStream.append( "<?xpacket begin=\"" );
-// this lines writes Unicode “zero width non-breaking space character” (U+FEFF) (aka byte-order mark ) used
-// as a byte-order marker.
+// these lines write Unicode "zero width non-breaking space character" (U+FEFF)
+// (aka byte-order mark ) used as a byte-order marker.
         aMetadataStream.append( OUStringToOString( OUString( sal_Unicode( 0xFEFF ) ), RTL_TEXTENCODING_UTF8 ) );
         aMetadataStream.append( "\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" );
         aMetadataStream.append( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" );

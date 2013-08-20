@@ -664,8 +664,8 @@ static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
      *
      * To work around this, we make sure the legacy Tubes channel already
      * exists before we request the channel we actually want. We don't actually
-     * have to wait for this request to succeed—we fire it off and forget about
-     * it.
+     * have to wait for this request to succeed - we fire it off and forget
+     * about it.
      */
     GHashTable* pRequest = tp_asv_new(
             TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_TUBES,

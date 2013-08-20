@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef REPORT_RPTMODEL_HXX
 #define REPORT_RPTMODEL_HXX
 
 #include "dllapi.h"
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XReportDefinition.hpp>
-
 
 class Window;
 namespace dbaui
@@ -79,7 +79,7 @@ public:
     /** returns the page which belongs to a section
     *
     * \param _xSection
-    * \return The page or <NULL/> when t´no page could be found.
+    * \return The page or <NULL/> when no page could be found.
     */
     OReportPage* getPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 

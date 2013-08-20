@@ -161,7 +161,7 @@ class MCD : public TBBase
     sal_Int8 reserved1; //  A signed integer that MUST be 0x56.
     sal_uInt8 reserved2; // MUST be 0.
     sal_uInt16 ibst; // Unsigned integer that specifies the name of the macro. Macro name is specified by MacroName.xstz of the MacroName entry in the MacroNames such that MacroName.ibst equals ibst. MacroNames MUST contain such an entry.
-    sal_uInt16 ibstName; // An unsigned integer that specifies the index into the Command String Table (TcgSttbf.sttbf) where the macro‘s name and arguments are specified.
+    sal_uInt16 ibstName; // An unsigned integer that specifies the index into the Command String Table (TcgSttbf.sttbf) where the macro's name and arguments are specified.
     sal_uInt16 reserved3; // An unsigned integer that MUST be 0xFFFF.
     sal_uInt32 reserved4; //MUST be ignored.
     sal_uInt32 reserved5; //MUST be 0.

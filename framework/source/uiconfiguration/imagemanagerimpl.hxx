@@ -96,7 +96,7 @@ namespace framework
             virtual ::std::vector< OUString >& getImageNames();
             virtual ::std::vector< OUString >& getImageCommandNames();
 
-            // ÍReference
+            // IReference
             virtual oslInterlockedCount SAL_CALL acquire();
             virtual oslInterlockedCount SAL_CALL release();
 

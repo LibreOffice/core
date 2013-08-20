@@ -46,7 +46,7 @@ struct compSwNumberTreeNodeLessThan
    1. kshdkjfs
      1.1. lskjf
    2. sdfjlksaf
-   3. fkaöslk
+   3. fkaoslk
      3.1. lfjlaskf
      3.2. jaslkjflsf
        3.2.1. hkljhkjhk
@@ -55,7 +55,7 @@ struct compSwNumberTreeNodeLessThan
      + 1 kshdkjfs
      | + 1 lskjf
      + 2 sdfjlksaf
-     + 3 fkaöslk
+     + 3 fkaoslk
        + 1 lfjlaskf
        + 2 jaslkjflsf
          + 1 hkljhkjhk

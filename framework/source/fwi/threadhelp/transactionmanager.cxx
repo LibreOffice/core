@@ -141,7 +141,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
                                     // Make member access threadsafe!
                                     ResetableGuard aGuard( m_aMutex );
 
-                                    // Check working mode again .. because anozï¿œther instance could be faster.
+                                    // Check working mode again .. because another instance could be faster.
                                     // (It's possible to set this guard at first of this method too!)
                                     if( m_aTransactionManager.getWorkingMode() == E_INIT )
                                     {

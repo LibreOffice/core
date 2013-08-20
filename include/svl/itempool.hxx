@@ -71,10 +71,10 @@ class SVL_DLLPUBLIC SfxItemPool
     Die von dieser Klasse abgeleiteten Klassen dienen der Bereitstellung von
     Defaults von SfxPoolItems und halten konkrete (konstante) Instanzen, die
     dann von mehreren Stellen (i.d.R. eines Dokuments) referenziert werden
-    k�nnen.
+    k"onnen.
 
     Dadurch ist jeder Wert nur einmalig gespeichert, was zu wenig Konstruktor
-    und Destruktor-Aufrufen f�hrt, Vergleiche zwischen Items eines Dokuments
+    und Destruktor-Aufrufen f"ahrt, Vergleiche zwischen Items eines Dokuments
     beschleunigt und ein einfaches Laden und Speichern von Attributen
     bereitstellt.
 */

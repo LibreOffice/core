@@ -1252,8 +1252,8 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
 
     /* Strangely with gcc 4.6.3 this needs a temporary LanguageTag, otherwise
      * there's
-     * error: request for member ‘getNumThousandSep’ in ‘aLocaleInfo’, which is
-     * of non-class type ‘LocaleDataWrapper(LanguageTag)’ */
+     * error: request for member 'getNumThousandSep' in 'aLocaleInfo', which is
+     * of non-class type 'LocaleDataWrapper(LanguageTag)' */
     LanguageTag aLanguageTag( eLanguage);
     LocaleDataWrapper aLocaleInfo( aLanguageTag );
 

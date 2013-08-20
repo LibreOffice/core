@@ -427,7 +427,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     OSL_ENSURE( xSrc.is(), "Kein XImageProducerSupplier" );
 
     // Als Event-Listener am Shape anmelden, damit wir es beim dispose
-    // loslassen konnen ...
+    // loslassen ko"onnen ...
     uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );

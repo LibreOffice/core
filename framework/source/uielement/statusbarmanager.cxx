@@ -365,7 +365,7 @@ void StatusBarManager::CreateControllers()
 
         uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
-        // 1º) UNO Statusbar controllers, registered in Controllers.xcu
+        // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
              m_xStatusbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
@@ -380,11 +380,11 @@ void StatusBarManager::CreateControllers()
         {
             svt::StatusbarController* pController( 0 );
 
-            // 2º) Old SFX2 Statusbar controllers
+            // 2) Old SFX2 Statusbar controllers
             pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
             if ( !pController )
             {
-                // 3º) Is Add-on? Generic statusbar controller
+                // 3) Is Add-on? Generic statusbar controller
                 if ( pItemData )
                 {
                     pController = new GenericStatusbarController( m_xContext,
@@ -394,7 +394,7 @@ void StatusBarManager::CreateControllers()
                 }
                 else
                 {
-                    // 4º) Default Statusbar controller
+                    // 4) Default Statusbar controller
                     pController = new svt::StatusbarController( m_xContext, m_xFrame, aCommandURL, nId );
                 }
             }

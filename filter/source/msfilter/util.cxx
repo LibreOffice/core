@@ -167,42 +167,42 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
   a proposed resolution to a defect report and is not yet part of ISO 29500-1.
   ...
   For each Unicode character in DrawingML text, the font face can be any of four
-  font “slots”: latin (§21.1.2.3.7), cs (§21.1.2.3.1), ea (§21.1.2.3.3), or sym
-  (§21.1.2.3.10), as specified in the following table. For all ranges not
+  font "slots": latin ($21.1.2.3.7), cs ($21.1.2.3.1), ea ($21.1.2.3.3), or sym
+  ($21.1.2.3.10), as specified in the following table. For all ranges not
   explicitly called out below, the ea font shall be used.
 
-  U+0000–U+007F Use latin font
-  U+0080–U+00A6 Use latin font
-  U+00A9–U+00AF Use latin font
-  U+00B2–U+00B3 Use latin font
-  U+00B5–U+00D6 Use latin font
-  U+00D8–U+00F6 Use latin font
-  U+00F8–U+058F Use latin font
-  U+0590–U+074F Use cs font
-  U+0780–U+07BF Use cs font
-  U+0900–U+109F Use cs font
-  U+10A0–U+10FF Use latin font
-  U+1200–U+137F Use latin font
-  U+13A0–U+177F Use latin font
-  U+1D00–U+1D7F Use latin font
-  U+1E00–U+1FFF Use latin font
-  U+1780–U+18AF Use cs font
-  U+2000–U+200B Use latin font
-  U+200C–U+200F Use cs font
-  U+2010–U+2029 Use latin font Except, for the quote characters in the range
-    2018 – 201E, use ea font if the text has one of the following language
+  U+0000-U+007F Use latin font
+  U+0080-U+00A6 Use latin font
+  U+00A9-U+00AF Use latin font
+  U+00B2-U+00B3 Use latin font
+  U+00B5-U+00D6 Use latin font
+  U+00D8-U+00F6 Use latin font
+  U+00F8-U+058F Use latin font
+  U+0590-U+074F Use cs font
+  U+0780-U+07BF Use cs font
+  U+0900-U+109F Use cs font
+  U+10A0-U+10FF Use latin font
+  U+1200-U+137F Use latin font
+  U+13A0-U+177F Use latin font
+  U+1D00-U+1D7F Use latin font
+  U+1E00-U+1FFF Use latin font
+  U+1780-U+18AF Use cs font
+  U+2000-U+200B Use latin font
+  U+200C-U+200F Use cs font
+  U+2010-U+2029 Use latin font Except, for the quote characters in the range
+    2018 - 201E, use ea font if the text has one of the following language
     identifiers: ii-CN, ja-JP, ko-KR, zh-CN, zh-HK, zh-MO, zh-SG, zh-TW.
-  U+202A–U+202F Use cs font
-  U+2030–U+2046 Use latin font
-  U+204A–U+245F Use latin font
-  U+2670–U+2671 Use cs font
-  U+27C0–U+2BFF Use latin font
-  U+3099–U+309A Use ea font
+  U+202A-U+202F Use cs font
+  U+2030-U+2046 Use latin font
+  U+204A-U+245F Use latin font
+  U+2670-U+2671 Use cs font
+  U+27C0-U+2BFF Use latin font
+  U+3099-U+309A Use ea font
   U+D835 Use latin font
-  U+F000–U+F0FF Symbol, use sym font
-  U+FB00–U+FB17 Use latin font
-  U+FB1D–U+FB4F Use cs font
-  U+FE50–U+FE6F Use latin font
+  U+F000-U+F0FF Symbol, use sym font
+  U+FB00-U+FB17 Use latin font
+  U+FB1D-U+FB4F Use cs font
+  U+FE50-U+FE6F Use latin font
   Otherwise Use ea font
 */
 TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag)

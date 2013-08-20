@@ -171,7 +171,7 @@ public:
     void                EraseVirtualDevice();
 
     // aus dem protected Teil hierher verschoben
-    // F�r 'SvtXECTextCursor' (TL). Mu� ggf nochmal anders gel�st werden.
+    // For 'SvtXECTextCursor' (TL). Must ggf nochmal anders gel?st werden.
     TextPaM             PageUp( const TextPaM& rPaM );
     TextPaM             PageDown( const TextPaM& rPaM );
     TextPaM             CursorUp( const TextPaM& rPaM );

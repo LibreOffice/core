@@ -229,7 +229,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aMgr.GetAttrSet() );
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // At percentage values ​​initialize size
+            // At percentage values initialize size
             SwFmtFrmSize aSizeCopy = (const SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());

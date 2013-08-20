@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "adtabdlg.hxx"
 #include "browserids.hxx"
 #include "dbu_qry.hrc"
@@ -881,9 +880,9 @@ void OQueryController::impl_initialize()
     OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
-    // �����������������������������������������������������������������������������������������������������������������
-    // � reading parameters
-    // �����������������������������������������������������������������������������������������������������������������
+    // .........................................................................
+    // . reading parameters:
+
     // legacy parameters first (later overwritten by regular parameters)
     OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
@@ -953,7 +952,7 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
     }
 
-    // .................................................................................................................
+    // .........................................................................
     // . initial design
     bool bForceInitialDesign = false;
     Sequence< PropertyValue > aCurrentQueryDesignProps;
@@ -983,7 +982,7 @@ void OQueryController::impl_initialize()
         bForceInitialDesign = true;
     }
 
-    // �����������������������������������������������������������������������������������������������������������������
+    // .........................................................................
     if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;

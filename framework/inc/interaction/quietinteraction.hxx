@@ -43,8 +43,6 @@ namespace framework{
                     - InteractiveIOException
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.
-
-    @by         Andreas Schlüns
  */
 class QuietInteraction : private ThreadHelpBase
                        , public  ::cppu::WeakImplHelper1<

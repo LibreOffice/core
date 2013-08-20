@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "BookmarkSet.hxx"
 #include "CRowSetColumn.hxx"
 #include "CRowSetDataColumn.hxx"
@@ -1000,7 +999,7 @@ sal_Bool ORowSetCache::moveWindow()
                              "ORowSetCache::moveWindow opportunistic fetch-after-current-end went badly");
             }
 
-            // À priori, the rows from begin() [inclusive] to (begin() + nNewStartPos - m_nStartPos) [exclusive]
+            // A priori, the rows from begin() [inclusive] to (begin() + nNewStartPos - m_nStartPos) [exclusive]
             // have to be refilled with new to-be-fetched rows.
             // The rows behind this can be reused
             ORowSetMatrix::iterator aIter = m_pMatrix->begin();

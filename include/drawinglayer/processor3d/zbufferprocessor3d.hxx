@@ -70,7 +70,7 @@ namespace drawinglayer
             /// The raster converter for Z-Buffer
             ZBufferRasterConverter3D*                           mpZBufferRasterConverter3D;
 
-            /*  AA value. Defines how many oversámples will be used in X and Y. Values 0, 1
+            /*  AA value. Defines how many oversamples will be used in X and Y. Values 0, 1
                 will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
               */
             sal_uInt16                                          mnAntiAlialize;

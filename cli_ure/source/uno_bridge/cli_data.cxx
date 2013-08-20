@@ -538,7 +538,7 @@ System::String^ mapUnoTypeName(rtl_uString const * typeName)
     The values in the type list
     are uno types and are replaced by cli types, such as System.Char,
     System.Int32, etc.
-    The präfix unoidl is not added.
+    The prefix unoidl is not added.
  */
 inline System::String^ mapUnoPolymorphicName(System::String^ unoName)
 {
@@ -549,7 +549,7 @@ inline System::String^ mapUnoPolymorphicName(System::String^ unoName)
     The values in the type list
     are CLI types and are replaced by uno types, such as char,
     long, etc.
-    The präfix unoidl remains.
+    The prefix unoidl remains.
  */
 inline System::String^ mapCliPolymorphicName(System::String^ unoName)
 {

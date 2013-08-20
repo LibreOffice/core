@@ -554,7 +554,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         else
         {
             //! should at least work with the German words
-            //! B�-c-k-er and Sc-hif-fah-rt
+            //! B-"u-c-k-er and Sc-hif-fah-rt
 
             OUString aLeft, aRight;
             sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );

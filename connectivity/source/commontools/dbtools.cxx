@@ -1069,7 +1069,8 @@ try
                 {
                     Any aVal( xFormat->getPropertyValue(sPropCurrencySymbol) );
                     if (aVal.hasValue() && hasProperty(sPropCurrencySymbol, xNewProps))
-                        // If the source value hasn't been set then don't copy it, so we don´t overwrite the default value
+                        // If the source value hasn't been set then don't copy it
+                        // so we don't overwrite the default value
                         xNewProps->setPropertyValue(sPropCurrencySymbol, aVal);
                 }
                 if (hasProperty(sPropDecimals, xFormat) && hasProperty(sPropDecimals, xNewProps))
