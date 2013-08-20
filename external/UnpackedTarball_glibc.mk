@@ -16,8 +16,4 @@ $(eval $(call gb_UnpackedTarball_add_files,glibc,posix,\
 	external/glibc/readdir_r.c \
 ))
 
-$(eval $(call gb_UnpackedTarball_add_patches,glibc,\
-	external/glibc/glibc-2.1.3.patch \
-))
-
 # vim: set noet sw=4 ts=4:

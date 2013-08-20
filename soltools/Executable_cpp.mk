@@ -21,15 +21,9 @@ $(eval $(call gb_Executable_add_cobjects,cpp,\
     soltools/cpp/_unix \
 ))
 
-ifneq ($(or $(filter AIX MACOSX,$(OS)),$(filter NO,$(HAVE_GETOPT))),)
+ifneq ($(filter AIX MACOSX WNT,$(OS)),)
 $(eval $(call gb_Executable_add_cobjects,cpp,\
     soltools/cpp/_getopt \
-))
-endif
-
-ifeq ($(HAVE_GETOPT),YES)
-$(eval $(call gb_Executable_add_defs,cpp,\
-        -DHAVE_GETOPT \
 ))
 endif
 
