@@ -47,7 +47,7 @@ namespace svt
         typedef ::std::map<
                     WizardTypes::WizardState,
                     ::std::pair<
-                        String,
+                        OUString,
                         RoadmapWizardTypes::RoadmapPageFactory
                     >
                 >                                               StateDescriptions;

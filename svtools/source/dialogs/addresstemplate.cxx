@@ -70,15 +70,15 @@ namespace svt
     using namespace ::comphelper;
     using namespace ::utl;
 
-    DECLARE_STL_VECTOR( String, StringArray );
-    DECLARE_STL_STDKEY_SET( OUString, StringBag );
+    typedef std::vector<OUString> StringArray;
+    typedef std::set<OUString> StringBag;
     DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
 
     namespace
     {
-        String lcl_getSelectedDataSource( const ComboBox& _dataSourceCombo )
+        OUString lcl_getSelectedDataSource( const ComboBox& _dataSourceCombo )
         {
-            String selectedDataSource = _dataSourceCombo.GetText();
+            OUString selectedDataSource = _dataSourceCombo.GetText();
             if ( _dataSourceCombo.GetEntryPos( selectedDataSource ) == LISTBOX_ENTRY_NOTFOUND )
             {
                 // none of the pre-selected entries -> assume a path to a database document
@@ -187,7 +187,7 @@ public:
         const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
         for (;pFields != pFieldsEnd; ++pFields)
         {
-            StringBagIterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
+            StringBag::const_iterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
             if ( aKnownNames.end() != aKnownPos )
             {
                 m_aAliases[ pFields->ProgrammaticName ] = pFields->Alias;
@@ -635,7 +635,7 @@ void AssignmentPersistentData::Commit()
 
         long nLabelWidth = 0;
         long nListBoxWidth = m_pImpl->pFields[0]->approximate_char_width() * 20;
-        for (ConstStringArrayIterator aI = m_pImpl->aFieldLabels.begin(), aEnd = m_pImpl->aFieldLabels.end(); aI != aEnd; ++aI)
+        for (StringArray::const_iterator aI = m_pImpl->aFieldLabels.begin(), aEnd = m_pImpl->aFieldLabels.end(); aI != aEnd; ++aI)
         {
             nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], *aI, 0x7FFFFFFF).Width());
         }
@@ -720,7 +720,7 @@ void AssignmentPersistentData::Commit()
         AliasProgrammaticPair* pPair = _rMapping.getArray();
 
         OUString sCurrent;
-        for (   ConstStringArrayIterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
+        for (   StringArray::const_iterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
                 aProgrammatic != m_pImpl->aLogicalFieldNames.end();
                 ++aProgrammatic
             )
@@ -757,8 +757,8 @@ void AssignmentPersistentData::Commit()
         // AddressBookSourceDialog::loadConfiguration: inconsistence between field names and field assignments!
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
-        ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
-        StringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
+        StringArray::const_iterator aLogical = m_pImpl->aLogicalFieldNames.begin();
+        StringArray::iterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
                 aLogical != m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment
@@ -860,7 +860,7 @@ void AssignmentPersistentData::Commit()
             Reference< XCompletedConnection > xDS;
             if ( m_pImpl->bWorkingPersistent )
             {
-                String sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
+                OUString sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
 
                 // get the data source the user has chosen and let it build a connection
                 INetURLObject aURL( sSelectedDS );
@@ -932,7 +932,7 @@ void AssignmentPersistentData::Commit()
         // no matter what we do here, we handled the currently selected table (no matter if successful or not)
         m_pDatasource->SaveValue();
 
-        String sSelectedTable = m_pTable->GetText();
+        OUString sSelectedTable = m_pTable->GetText();
         Sequence< OUString > aColumnNames;
         try
         {
@@ -959,14 +959,14 @@ void AssignmentPersistentData::Commit()
         const OUString* pEnd = pColumnNames + aColumnNames.getLength();
 
         // for quicker access
-        ::std::set< String > aColumnNameSet;
+        ::std::set< OUString > aColumnNameSet;
         for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
             aColumnNameSet.insert(*pColumnNames);
 
-        std::vector<String>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
+        std::vector<OUString>::iterator aInitialSelection = m_pImpl->aFieldAssignments.begin() + m_pImpl->nFieldScrollPos;
 
         ListBox** pListbox = m_pImpl->pFields;
-        String sSaveSelection;
+        OUString sSaveSelection;
         for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++pListbox, ++aInitialSelection)
         {
             sSaveSelection = (*pListbox)->GetSelectEntry();
@@ -982,7 +982,7 @@ void AssignmentPersistentData::Commit()
             for (pColumnNames = aColumnNames.getConstArray(); pColumnNames != pEnd; ++pColumnNames)
                 (*pListbox)->InsertEntry(*pColumnNames);
 
-            if (aInitialSelection->Len() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
+            if (!aInitialSelection->isEmpty() && (aColumnNameSet.end() != aColumnNameSet.find(*aInitialSelection)))
                 // we can select the entry as specified in our field assignment array
                 (*pListbox)->SelectEntry(*aInitialSelection);
             else
@@ -996,13 +996,13 @@ void AssignmentPersistentData::Commit()
         }
 
         // adjust m_pImpl->aFieldAssignments
-        for (   StringArrayIterator aAdjust = m_pImpl->aFieldAssignments.begin();
+        for (   StringArray::iterator aAdjust = m_pImpl->aFieldAssignments.begin();
                 aAdjust != m_pImpl->aFieldAssignments.end();
                 ++aAdjust
             )
-            if (aAdjust->Len())
+            if (!aAdjust->isEmpty())
                 if (aColumnNameSet.end() == aColumnNameSet.find(*aAdjust))
-                    aAdjust->Erase();
+                    (*aAdjust) = "";
     }
 
     // -------------------------------------------------------------------
@@ -1016,7 +1016,7 @@ void AssignmentPersistentData::Commit()
         // update the array where we remember the field selections
         if (0 == _pListbox->GetSelectEntryPos())
             // it's the "no field selection" entry
-            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = String();
+            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = "";
         else
             // it's a regular field entry
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _pListbox->GetSelectEntry();
@@ -1035,8 +1035,8 @@ void AssignmentPersistentData::Commit()
         // for the new texts
         FixedText** pLeftLabelControl = m_pImpl->pFieldLabels;
         FixedText** pRightLabelControl = pLeftLabelControl + 1;
-        ConstStringArrayIterator pLeftColumnLabel = m_pImpl->aFieldLabels.begin() + 2 * _nPos;
-        ConstStringArrayIterator pRightColumnLabel = pLeftColumnLabel + 1;
+        StringArray::const_iterator pLeftColumnLabel = m_pImpl->aFieldLabels.begin() + 2 * _nPos;
+        StringArray::const_iterator pRightColumnLabel = pLeftColumnLabel + 1;
 
         // for the focus movement and the selection scroll
         ListBox** pLeftListControl = m_pImpl->pFields;
@@ -1047,8 +1047,8 @@ void AssignmentPersistentData::Commit()
         sal_Int32 nOldFocusColumn = 0;
 
         // for the selection scroll
-        ConstStringArrayIterator pLeftAssignment = m_pImpl->aFieldAssignments.begin() + 2 * _nPos;
-        ConstStringArrayIterator pRightAssignment = pLeftAssignment + 1;
+        StringArray::const_iterator pLeftAssignment = m_pImpl->aFieldAssignments.begin() + 2 * _nPos;
+        StringArray::const_iterator pRightAssignment = pLeftAssignment + 1;
 
         m_pImpl->nLastVisibleListIndex = -1;
         // loop
@@ -1075,7 +1075,7 @@ void AssignmentPersistentData::Commit()
             // (If sometimes we support an arbitrary number of field assignments, we would have to care for
             // an invisible left hand side column, too. But right now, the left hand side controls are always
             // visible)
-            sal_Bool bHideRightColumn = (0 == pRightColumnLabel->Len());
+            sal_Bool bHideRightColumn = pRightColumnLabel->isEmpty();
             (*pRightLabelControl)->Show(!bHideRightColumn);
             (*pRightListControl)->Show(!bHideRightColumn);
             // the new selections of the listboxes
@@ -1180,7 +1180,7 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
     {
-        String sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
+        OUString sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
         if ( m_pImpl->bWorkingPersistent )
         {
             m_pImpl->pConfigData->setDatasourceName(sSelectedDS);
@@ -1191,8 +1191,8 @@ void AssignmentPersistentData::Commit()
         assert(m_pImpl->aLogicalFieldNames.size() == m_pImpl->aFieldAssignments.size());
 
         // set the field assignments
-        ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
-        ConstStringArrayIterator aAssignment = m_pImpl->aFieldAssignments.begin();
+        StringArray::const_iterator aLogical = m_pImpl->aLogicalFieldNames.begin();
+        StringArray::const_iterator aAssignment = m_pImpl->aFieldAssignments.begin();
         for (   ;
                 aLogical != m_pImpl->aLogicalFieldNames.end();
                 ++aLogical, ++aAssignment

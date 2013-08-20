@@ -162,7 +162,7 @@ void SvObjectServerList::FillInsertObjects()
                     }
 
                     SvGlobalName aClassName;
-                    if( aClassName.MakeId( String( aClassID )))
+                    if( aClassName.MakeId( aClassID) )
                     {
                         if( !Get( aClassName ) )
                             // noch nicht eingetragen
@@ -175,7 +175,7 @@ void SvObjectServerList::FillInsertObjects()
 
 #ifdef WNT
         SvGlobalName aOleFact( SO3_OUT_CLASSID );
-        String aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
+        OUString aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
         aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
@@ -267,7 +267,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
         { SOT_FORMATSTR_ID_HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT }
     };
 
-    String aUIName;
+    OUString aUIName;
     sal_uInt16 nResId = 0;
 
     for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
