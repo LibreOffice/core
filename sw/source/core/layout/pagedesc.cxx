@@ -349,14 +349,14 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst)
 {
     return (nsUseOnPage::PD_LEFT & eUse)
-            ? (bFirst && !IsFirstShared()) ? &aFirst : &aLeft
+            ? ((bFirst) ? &aFirst : &aLeft)
             : 0;
 }
 
 SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
 {
     return (nsUseOnPage::PD_RIGHT & eUse)
-            ? (bFirst && !IsFirstShared()) ? &aFirst : &aMaster
+            ? ((bFirst) ? &aFirst : &aMaster)
             : 0;
 }
 
