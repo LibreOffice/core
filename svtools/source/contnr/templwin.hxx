@@ -62,14 +62,14 @@ private:
     SvtDummyHeaderBar_Impl  aDummyHeaderBar;    // spaceholder instead of HeaderBar
     SvtIconChoiceCtrl   aIconCtrl;
 
-    String              aNewDocumentRootURL;
-    String              aTemplateRootURL;
-    String              aMyDocumentsRootURL;
-    String              aSamplesFolderRootURL;
+    OUString            aNewDocumentRootURL;
+    OUString            aTemplateRootURL;
+    OUString            aMyDocumentsRootURL;
+    OUString            aSamplesFolderRootURL;
 
     long                nMaxTextLength;
 
-    SvxIconChoiceCtrlEntry* GetEntry( const String& rURL ) const;
+    SvxIconChoiceCtrlEntry* GetEntry( const OUString& rURL ) const;
 
 public:
     SvtIconWindow_Impl( Window* pParent );
@@ -80,24 +80,24 @@ public:
     inline long         GetMaxTextLength() const { return nMaxTextLength; }
     inline void         SetClickHdl( const Link& rLink ) { aIconCtrl.SetClickHdl( rLink ); }
 
-    String              GetSelectedIconURL() const;
-    String              GetCursorPosIconURL() const;
-    String              GetIconText( const String& rURL ) const;
+    OUString            GetSelectedIconURL() const;
+    OUString            GetCursorPosIconURL() const;
+    OUString            GetIconText( const OUString& rURL ) const;
     void                InvalidateIconControl();
     void                SetCursorPos( sal_uLong nPos );
-    sal_uLong               GetCursorPos() const;
-    sal_uLong               GetSelectEntryPos() const;
+    sal_uLong           GetCursorPos() const;
+    sal_uLong           GetSelectEntryPos() const;
     void                SetFocus();
     long                CalcHeight() const;
-    sal_Bool            IsRootURL( const String& rURL ) const;
-    sal_uLong               GetRootPos( const String& rURL ) const;
+    sal_Bool            IsRootURL( const OUString& rURL ) const;
+    sal_uLong           GetRootPos( const OUString& rURL ) const;
     void                UpdateIcons();
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
 
-    inline const String&    GetTemplateRootURL() const      { return aTemplateRootURL; }
-    inline const String&    GetMyDocumentsRootURL() const   { return aMyDocumentsRootURL; }
-    inline const String&    GetSamplesFolderURL() const     { return aSamplesFolderRootURL; }
+    inline const OUString&    GetTemplateRootURL() const      { return aTemplateRootURL; }
+    inline const OUString&    GetMyDocumentsRootURL() const   { return aMyDocumentsRootURL; }
+    inline const OUString&    GetSamplesFolderURL() const     { return aSamplesFolderRootURL; }
 
     void                SelectFolder(sal_Int32 nFolderPos);
 };
@@ -117,10 +117,10 @@ private:
     SvtTemplateWindow&  rParent;
     SvtFileView         aFileView;
     Link                aNewFolderLink;
-    String              aCurrentRootURL;
-    String              aFolderURL;
-    String              aMyDocumentsURL;
-    String              aSamplesFolderURL;
+    OUString            aCurrentRootURL;
+    OUString            aFolderURL;
+    OUString            aMyDocumentsURL;
+    OUString            aSamplesFolderURL;
 
     sal_Bool            bIsTemplateFolder;
 
@@ -137,17 +137,17 @@ public:
     inline void         SetDoubleClickHdl( const Link& rLink ) { aFileView.SetDoubleClickHdl( rLink ); }
     inline void         SetNewFolderHdl( const Link& rLink ) { aNewFolderLink = rLink; }
     inline sal_Bool     IsTemplateFolder() const { return bIsTemplateFolder; }
-    inline String       GetFolderURL() const { return aFolderURL; }
-    inline String       GetRootURL() const { return aCurrentRootURL; }
-    inline void         OpenRoot( const String& rRootURL )
+    inline OUString     GetFolderURL() const { return aFolderURL; }
+    inline OUString     GetRootURL() const { return aCurrentRootURL; }
+    inline void         OpenRoot( const OUString& rRootURL )
                             { aCurrentRootURL = rRootURL; OpenFolder( rRootURL ); }
-    inline void         SetMyDocumentsURL( const String& _rNewURL ) { aMyDocumentsURL = _rNewURL; }
-    inline void         SetSamplesFolderURL( const String& _rNewURL ) { aSamplesFolderURL = _rNewURL; }
+    inline void         SetMyDocumentsURL( const OUString& _rNewURL ) { aMyDocumentsURL = _rNewURL; }
+    inline void         SetSamplesFolderURL( const OUString& _rNewURL ) { aSamplesFolderURL = _rNewURL; }
 
-    String              GetSelectedFile() const;
-    void                OpenFolder( const String& rURL );
+    OUString            GetSelectedFile() const;
+    void                OpenFolder( const OUString& rURL );
     sal_Bool            HasPreviousLevel( OUString& rURL ) const;
-    String              GetFolderTitle() const;
+    OUString            GetFolderTitle() const;
     void                SetFocus();
 };
 
@@ -177,11 +177,11 @@ private:
     Window*                         pEmptyWin;
     ::com::sun::star::lang::Locale  aLocale;
     SvtDocInfoTable_Impl            aInfoTable;
-    String                          aCurrentURL;
+    OUString                        aCurrentURL;
     OUString                 m_aOpenURL;
     sal_Bool                        bDocInfo;
 
-    void                    ShowDocInfo( const String& rURL );
+    void                    ShowDocInfo( const OUString& rURL );
     void                    ViewEditWin();
     void                    ViewTextWin();
     void                    ViewEmptyWin();
@@ -199,7 +199,7 @@ public:
 
     virtual void            Resize();
 
-    void                    OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate );
+    void                    OpenFile( const OUString& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate );
     void                    ToggleView( sal_Bool bDocInfo );
 };
 
@@ -227,7 +227,7 @@ private:
 
     Timer                       aSelectTimer;
 
-    String                      aFolderTitle;
+    OUString                    aFolderTitle;
 
     virtual void        Resize();
 
@@ -239,8 +239,8 @@ private:
     DECL_LINK(          ClickHdl_Impl, ToolBox* );
     DECL_LINK(ResizeHdl_Impl, void *);     // used for split and initial setting of toolbar pos
 
-    void                PrintFile( const String& rURL );
-    void                AppendHistoryURL( const String& rURL, sal_uLong nGroup );
+    void                PrintFile( const OUString& rURL );
+    void                AppendHistoryURL( const OUString& rURL, sal_uLong nGroup );
     void                OpenHistory();
     void                DoAction( sal_uInt16 nAction );
     void                InitToolBoxes();
@@ -265,13 +265,13 @@ public:
     void                ReadViewSettings( );
     void                WriteViewSettings( );
     sal_Bool            IsFileSelected() const;
-    String              GetSelectedFile() const;
+    OUString            GetSelectedFile() const;
     void                OpenFile( sal_Bool bNotAsTemplate );
-    String              GetFolderTitle() const;
-    String              GetFolderURL() const;
+    OUString            GetFolderTitle() const;
+    OUString            GetFolderURL() const;
     void                SetFocus( sal_Bool bIconWin );
     void                OpenTemplateRoot();
-    void                SetPrevLevelButtonState( const String& rURL );  // sets state (enable/disable) for previous level button
+    void                SetPrevLevelButtonState( const OUString& rURL );  // sets state (enable/disable) for previous level button
     void                ClearHistory();
     long                CalcHeight() const;
 
