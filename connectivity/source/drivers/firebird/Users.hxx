@@ -24,9 +24,6 @@ namespace connectivity
          */
         class Users: public ::connectivity::sdbcx::OCollection
         {
-        private:
-            ::osl::Mutex& m_rMutex;
-
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                 m_xMetaData;

@@ -37,7 +37,6 @@ Users::Users(const uno::Reference< XDatabaseMetaData >& rMetaData,
                 sal_True,
                 rMutex,
                 rNames),
-    m_rMutex(rMutex),
     m_xMetaData(rMetaData)
 {
 }
