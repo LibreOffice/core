@@ -324,7 +324,6 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 
     // Take over orientation
     pDesc->SetLandscape( rChged.GetLandscape() );
-    pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     // #i46909# no undo if header or footer changed
     bool bHeaderFooterChanged = false;
@@ -345,6 +344,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, rHead, pDesc, true); // Copy left header
     CopyMasterHeader(rChged, rHead, pDesc, false); // Copy first header
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
+    // there is just one first shared flag for both header and footer?
+    pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     // Synch Footer.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
@@ -355,8 +356,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         const SwFmtFooter &rOldFoot = pDesc->GetMaster().GetFooter();
         bHeaderFooterChanged |=
             ( rFoot.IsActive() != rOldFoot.IsActive() ||
-              rChged.IsFooterShared() != pDesc->IsFooterShared() ||
-              rChged.IsFirstShared() != pDesc->IsFirstShared() );
+              rChged.IsFooterShared() != pDesc->IsFooterShared() );
     }
     pDesc->GetMaster().SetFmtAttr( rFoot );
     CopyMasterFooter(rChged, rFoot, pDesc, true); // Copy left footer
