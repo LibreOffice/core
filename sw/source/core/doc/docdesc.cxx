@@ -194,7 +194,11 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
                 const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
             }
-            else if( (*aRCnt.GetCntntIdx()) == (*aCnt.GetCntntIdx()) )
+            else if ((*aRCnt.GetCntntIdx() == *aCnt.GetCntntIdx()) ||
+                // The CntntIdx is _always_ different when called from
+                // SwDocStyleSheet::SetItemSet, because it deep-copies the
+                // PageDesc.  So check if it was previously shared.
+                 ((bLeft) ? pDesc->IsHeaderShared() : pDesc->IsFirstShared()))
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left header" : "First header"),
                                                 GetDfltFrmFmt() );
@@ -249,7 +253,11 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
                 const SwFrmFmt& rChgedFrmFmt = (bLeft ? rChged.GetLeft() : rChged.GetFirst());
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetFooter() );
             }
-            else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
+            else if ((*aRCnt.GetCntntIdx() == *aLCnt.GetCntntIdx()) ||
+                // The CntntIdx is _always_ different when called from
+                // SwDocStyleSheet::SetItemSet, because it deep-copies the
+                // PageDesc.  So check if it was previously shared.
+                 ((bLeft) ? pDesc->IsHeaderShared() : pDesc->IsFirstShared()))
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left footer" : "First footer"),
                                                 GetDfltFrmFmt() );
@@ -341,8 +349,6 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, rHead, pDesc, true); // Copy left header
     CopyMasterHeader(rChged, rHead, pDesc, false); // Copy first header
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
-    // there is just one first shared flag for both header and footer?
-    pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     // Synch Footer.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
@@ -359,6 +365,8 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     CopyMasterFooter(rChged, rFoot, pDesc, true); // Copy left footer
     CopyMasterFooter(rChged, rFoot, pDesc, false); // Copy first footer
     pDesc->ChgFooterShare( rChged.IsFooterShared() );
+    // there is just one first shared flag for both header and footer?
+    pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     if ( pDesc->GetName() != rChged.GetName() )
         pDesc->SetName( rChged.GetName() );
