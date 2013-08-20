@@ -30,17 +30,10 @@ $(eval $(call gb_Module_add_targets,external,\
 ))
 endif
 
-ifeq ($(HAVE_GETOPT),NO)
-$(eval $(call gb_Module_add_targets,external,\
-	UnpackedTarball_glibc \
-	StaticLibrary_gnu_getopt \
-))
-endif
-
 ifeq ($(HAVE_READDIR_R),NO)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,external,\
-	$(if $(filter YES,$(HAVE_GETOPT)),UnpackedTarball_glibc) \
+	UnpackedTarball_glibc \
 	StaticLibrary_gnu_readdir_r \
 ))
 endif

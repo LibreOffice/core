@@ -9359,22 +9359,19 @@ if test "$_os" = "Linux"; then
 fi
 
 if test "$_os" != "WINNT"; then
-    AC_CHECK_FUNCS(getopt, HAVE_GETOPT=YES, [HAVE_GETOPT=NO])
     AC_CHECK_FUNCS(readdir_r, HAVE_READDIR_R=YES, [HAVE_READDIR_R=NO])
-    if test "$HAVE_GETOPT" = "YES" -a "$HAVE_READDIR_R" = "YES"; then
+    if test "$HAVE_READDIR_R" = "YES"; then
         SYSTEM_LIBC=YES
     fi
 else
-    HAVE_GETOPT=NO
     HAVE_READDIR_R=NO
     SYSTEM_LIBC=YES
 fi
 
-if test "$HAVE_GETOPT" = NO -o "$HAVE_READDIR_R" = NO; then
+if test "$HAVE_READDIR_R" = NO; then
     BUILD_TYPE="$BUILD_TYPE GLIBC"
 fi
 
-AC_SUBST(HAVE_GETOPT)
 AC_SUBST(HAVE_READDIR_R)
 AC_SUBST(SYSTEM_LIBC)
 
