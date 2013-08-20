@@ -587,10 +587,9 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
 void EditorWindow::HandleAutoCorrect()
 {
-    rModulWindow.UpdateModule();
-    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
+    sal_uLong nIndex =  aSel.GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
 
@@ -601,48 +600,63 @@ void EditorWindow::HandleAutoCorrect()
         return;
 
     HighlightPortion& r = aPortions[aPortions.size()-1];
-    OUString sStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
-    if( r.tokenType == TT_KEYWORDS && !sStr.isEmpty() ) // correct the last entered keyword
+    if( nIndex != aPortions.size()-1 )
+    {//cursor is not standing at the end of the line
+        for( size_t i = 0; i < aPortions.size(); i++ )
+        {
+            if( aPortions[i].nEnd == nIndex )
+            {
+                r = aPortions[i];
+                break;
+            }
+        }
+    }
+
+    OUString sStr = aLine.copy( r.nBegin, r.nEnd - r.nBegin );
+    //if WS or empty string: stop, nothing to do
+    if( ( r.tokenType == TT_WHITESPACE ) || sStr.isEmpty() )
+        return;
+    //create the appropriate TextSelection, and update the cache
+    TextPaM aStart( nLine, r.nBegin );
+    TextPaM aEnd( nLine, r.nBegin + sStr.getLength() );
+    TextSelection sTextSelection(aStart, aEnd );
+    rModulWindow.UpdateModule();
+    rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
+    // correct the last entered keyword
+    if( r.tokenType == TT_KEYWORDS )
     {
         sStr = sStr.toAsciiLowerCase();
         if( !rModulWindow.GetSbModule()->GetKeywordCase(sStr).isEmpty() )
         // if it is a keyword, get its correct case
             sStr = rModulWindow.GetSbModule()->GetKeywordCase(sStr);
         else
-        {// else capitalize first letter/select the correct one, and replace
+        // else capitalize first letter/select the correct one, and replace
             sStr = sStr.replaceAt( 0, 1, OUString(sStr[0]).toAsciiUpperCase() );
-        }
 
-        TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-        TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
         pEditEngine->ReplaceText( sTextSelection, sStr );
         pEditView->SetSelection( aSel );
-        return;
     }
     if( r.tokenType == TT_IDENTIFIER )
     {// correct variables
         if( !aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName ).isEmpty() )
         {
             sStr = aCodeCompleteCache.GetCorrectCaseVarName( sStr, sActSubName );
-            TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-            TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
             pEditEngine->ReplaceText( sTextSelection, sStr );
             pEditView->SetSelection( aSel );
-            return;
         }
-
-        //autocorrect procedures
-        SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
-        for( sal_uInt32 i=0; i< pArr->Count32(); ++i )
+        else
         {
-            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
+            //autocorrect procedures
+            SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
+            for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
             {
-                sStr = pArr->Get32(i)->GetName(); //get the correct case
-                TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
-                TextSelection sTextSelection(aStart, TextPaM(nLine, aSel.GetStart().GetIndex()));
-                pEditEngine->ReplaceText( sTextSelection, sStr );
-                pEditView->SetSelection( aSel );
-                return;
+                if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
+                {
+                    sStr = pArr->Get32(i)->GetName(); //if found, get the correct case
+                    pEditEngine->ReplaceText( sTextSelection, sStr );
+                    pEditView->SetSelection( aSel );
+                    return;
+                }
             }
         }
     }
@@ -675,7 +689,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     if( aPortions.size() == 0 )
         return;
 
-    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != 4) )
+    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != TT_STRING) )
     {
         GetEditView()->InsertText(OUString("\""));
         //leave the cursor on it's place: inside the two double quotes
@@ -2654,7 +2668,8 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
                 if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara()-1 )
                 {
-                    HideAndRestoreFocus();
+                    pCodeCompleteWindow->Hide();
+                    pCodeCompleteWindow->pParent->GrabFocus();
                 }
                 break;
             }
