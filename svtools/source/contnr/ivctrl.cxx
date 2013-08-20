@@ -454,7 +454,7 @@ void SvtIconChoiceCtrl::FillLayoutData() const
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( nPos );
 
         Point aPos = _pImp->GetEntryBoundRect( pEntry ).TopLeft();
-        String sEntryText = pEntry->GetDisplayText( );
+        OUString sEntryText = pEntry->GetDisplayText( );
         Rectangle aTextRect = _pImp->CalcTextRect( pEntry, &aPos, sal_False, &sEntryText );
 
         sal_Bool bLargeIconMode = WB_ICON == ( _pImp->GetStyle() & ( VIEWMODE_MASK ) );

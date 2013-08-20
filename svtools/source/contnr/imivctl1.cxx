@@ -1664,11 +1664,11 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
 
 void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
-    OutputDevice* pOut, const String* pStr, ::vcl::ControlLayoutData* _pLayoutData )
+    OutputDevice* pOut, const OUString* pStr, ::vcl::ControlLayoutData* _pLayoutData )
 {
     if( eItem == IcnViewFieldTypeText )
     {
-        String aText;
+        OUString aText;
         if( !pStr )
             aText = pView->GetEntryText( pEntry, sal_False );
         else
@@ -1786,7 +1786,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     }
     */
 
-    String aEntryText( pView->GetEntryText( pEntry, sal_False ) );
+    OUString aEntryText( pView->GetEntryText( pEntry, sal_False ) );
     Rectangle aTextRect( CalcTextRect(pEntry,&rPos,sal_False,&aEntryText));
     Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
 
@@ -2038,9 +2038,9 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pEntry, c
 }
 
 Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* pEntry,
-    const Point* pEntryPos, sal_Bool bEdit, const String* pStr )
+    const Point* pEntryPos, sal_Bool bEdit, const OUString* pStr )
 {
-    String aEntryText;
+    OUString aEntryText;
     if( !pStr )
         aEntryText = pView->GetEntryText( pEntry, bEdit );
     else
@@ -2557,7 +2557,7 @@ Size SvxIconChoiceCtrl_Impl::GetMinGrid() const
     Size aMinSize( aImageSize );
     aMinSize.Width() += 2 * LROFFS_BOUND;
     aMinSize.Height() += TBOFFS_BOUND;  // single offset is enough (FileDlg)
-    String aStrDummy( RTL_CONSTASCII_USTRINGPARAM( "XXX" ) );
+    OUString aStrDummy( "XXX" );
     Size aTextSize( pView->GetTextWidth( aStrDummy ), pView->GetTextHeight() );
     if( nWinBits & WB_ICON )
     {
@@ -3200,7 +3200,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
     SetNoSelection();
 
     pCurEditedEntry = pEntry;
-    String aEntryText( pView->GetEntryText( pEntry, sal_True ) );
+    OUString aEntryText( pView->GetEntryText( pEntry, sal_True ) );
     Rectangle aRect( CalcTextRect( pEntry, 0, sal_True, &aEntryText ) );
     MakeVisible( aRect );
     Point aPos( aRect.TopLeft() );
@@ -3233,7 +3233,7 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
         return 0;
     }
 
-    String aText;
+    OUString aText;
     if ( !pEdit->EditingCanceled() )
         aText = pEdit->GetText();
     else
@@ -3674,10 +3674,10 @@ sal_Bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     if ( !pEntry )
         return sal_False;
 
-    String sQuickHelpText = pEntry->GetQuickHelpText();
-    String aEntryText( pView->GetEntryText( pEntry, sal_False ) );
+    OUString sQuickHelpText = pEntry->GetQuickHelpText();
+    OUString aEntryText( pView->GetEntryText( pEntry, sal_False ) );
     Rectangle aTextRect( CalcTextRect( pEntry, 0, sal_False, &aEntryText ) );
-    if ( ( !aTextRect.IsInside( aPos ) || !aEntryText.Len() ) && !sQuickHelpText.Len() )
+    if ( ( !aTextRect.IsInside( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
         return sal_False;
 
     Rectangle aOptTextRect( aTextRect );
@@ -3685,7 +3685,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
     sal_uInt16 nNewFlags = nCurTextDrawFlags;
     nNewFlags &= ~( TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
     aOptTextRect = pView->GetTextRect( aOptTextRect, aEntryText, nNewFlags );
-    if ( aOptTextRect != aTextRect || sQuickHelpText.Len() > 0 )
+    if ( aOptTextRect != aTextRect || !sQuickHelpText.isEmpty() )
     {
         //aTextRect.Right() = aTextRect.Left() + aRealSize.Width() + 4;
         Point aPt( aOptTextRect.TopLeft() );
@@ -3695,8 +3695,8 @@ sal_Bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
         aPt.Y() -= 1;
         aPt.X() -= 3;
         aOptTextRect.SetPos( aPt );
-        String sHelpText;
-        if ( sQuickHelpText.Len() > 0 )
+        OUString sHelpText;
+        if ( !sQuickHelpText.isEmpty() )
             sHelpText = sQuickHelpText;
         else
             sHelpText = aEntryText;

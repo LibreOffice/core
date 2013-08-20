@@ -411,7 +411,7 @@ public:
                             SvxIconChoiceCtrlEntry*,
                             const Point* pPos = 0,
                             sal_Bool bForInplaceEdit = sal_False,
-                            const String* pStr = 0
+                            const OUString* pStr = 0
                         );
 
     long                CalcBoundingWidth( SvxIconChoiceCtrlEntry* ) const;
@@ -449,7 +449,7 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry,
                             sal_uInt16 nPaintFlags,
                             OutputDevice* pOut,
-                            const String* pStr = 0,
+                            const OUString* pStr = 0,
                             ::vcl::ControlLayoutData* _pLayoutData = NULL
                         );
 
