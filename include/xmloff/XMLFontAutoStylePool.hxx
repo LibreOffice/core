@@ -63,7 +63,6 @@ public:
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc )const;
-    OUString Find( const OUString& rInternalName ) const;
 
     void exportXML();
 };
