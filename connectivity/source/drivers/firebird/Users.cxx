@@ -51,27 +51,7 @@ void Users::impl_refresh()
 
 ObjectType Users::createObject(const OUString& rName)
 {
-    (void) rName;
-    // TODO: set query string
-    OUString sSql;
-    uno::Reference< XResultSet > xUsers = m_xMetaData->getConnection()
-                                            ->createStatement()->executeQuery(sSql);
-
-    if (!xUsers.is())
-        throw RuntimeException();
-
-    uno::Reference< XRow > xRow(xUsers,UNO_QUERY);
-
-    if (!xRow.is() || !xUsers->next())
-        throw RuntimeException();
-
-    ObjectType xRet(new User(m_xMetaData->getConnection(),
-                              xRow->getString(1))); // Name
-
-    if (xUsers->next())
-        throw RuntimeException(); // Only one user should be returned
-
-    return xRet;
+    return new User(m_xMetaData->getConnection(), rName);
 }
 
 uno::Reference< XPropertySet > Users::createDescriptor()
