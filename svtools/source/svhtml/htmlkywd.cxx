@@ -33,7 +33,7 @@ struct HTML_TokenEntry
     union
     {
         const sal_Char *sToken;
-        const String *pUToken;
+        const OUString *pUToken;
     };
     int nToken;
 };
@@ -194,24 +194,22 @@ extern "C"
 
 static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
+    HTML_TokenEntry* pFirstEntry = (HTML_TokenEntry*)pFirst;
+    HTML_TokenEntry* pSecondEntry = (HTML_TokenEntry*)pSecond;
     int nRet = 0;
-    if( -1 == ((HTML_TokenEntry*)pFirst)->nToken )
+    if( -1 == pFirstEntry->nToken )
     {
-        if( -1 == ((HTML_TokenEntry*)pSecond)->nToken )
-            nRet = ((HTML_TokenEntry*)pFirst)->pUToken->CompareTo(
-                            *((HTML_TokenEntry*)pSecond)->pUToken );
+        if( -1 == pSecondEntry->nToken )
+            nRet = pFirstEntry->pUToken->compareTo( *pSecondEntry->pUToken );
         else
-            nRet = ((HTML_TokenEntry*)pFirst)->pUToken->CompareToAscii(
-                            ((HTML_TokenEntry*)pSecond)->sToken );
+            nRet = pFirstEntry->pUToken->compareToAscii( pSecondEntry->sToken );
     }
     else
     {
-        if( -1 == ((HTML_TokenEntry*)pSecond)->nToken )
-            nRet = -1 * ((HTML_TokenEntry*)pSecond)->pUToken->CompareToAscii(
-                            ((HTML_TokenEntry*)pFirst)->sToken );
+        if( -1 == pSecondEntry->nToken )
+            nRet = -1 * pSecondEntry->pUToken->compareToAscii( pFirstEntry->sToken );
         else
-            nRet = strcmp( ((HTML_TokenEntry*)pFirst)->sToken,
-                            ((HTML_TokenEntry*)pSecond)->sToken );
+            nRet = strcmp( pFirstEntry->sToken, pSecondEntry->sToken );
     }
 
     return nRet;
@@ -219,7 +217,7 @@ static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 
 }
 
-int GetHTMLToken( const String& rName )
+int GetHTMLToken( const OUString& rName )
 {
     if( !bSortKeyWords )
     {
@@ -232,7 +230,7 @@ int GetHTMLToken( const String& rName )
 
     int nRet = 0;
 
-    if( !rName.CompareToAscii( OOO_STRING_SVTOOLS_HTML_comment, 3UL) )
+    if( !rName.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3  ) )
         return HTML_COMMENT;
 
     void* pFound;
@@ -240,11 +238,12 @@ int GetHTMLToken( const String& rName )
     aSrch.pUToken = &rName;
     aSrch.nToken = -1;
 
-    if( 0 != ( pFound = bsearch( (sal_Char *) &aSrch,
-                        (void*) aHTMLTokenTab,
-                        sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
-                        sizeof( HTML_TokenEntry ),
-                        HTMLKeyCompare )))
+    pFound = bsearch( (sal_Char *) &aSrch,
+                      (void*) aHTMLTokenTab,
+                      sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
+                      sizeof( HTML_TokenEntry ),
+                      HTMLKeyCompare );
+    if( 0 != pFound )
         nRet = ((HTML_TokenEntry*)pFound)->nToken;
     return nRet;
 }
@@ -254,7 +253,7 @@ struct HTML_CharEntry
     union
     {
         const sal_Char *sName;
-        const String *pUName;
+        const OUString *pUName;
     };
     sal_Unicode cChar;
 };
@@ -540,32 +539,30 @@ extern "C"
 
 static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
 {
+    HTML_CharEntry* pFirstEntry = (HTML_CharEntry*)pFirst;
+    HTML_CharEntry* pSecondEntry = (HTML_CharEntry*)pSecond;
     int nRet = 0;
-    if( USHRT_MAX == ((HTML_CharEntry*)pFirst)->cChar )
+    if( USHRT_MAX == pFirstEntry->cChar )
     {
-        if( USHRT_MAX == ((HTML_CharEntry*)pSecond)->cChar )
-            nRet = ((HTML_CharEntry*)pFirst)->pUName->CompareTo(
-                            *((HTML_CharEntry*)pSecond)->pUName );
+        if( USHRT_MAX == pSecondEntry->cChar )
+            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
         else
-            nRet = ((HTML_CharEntry*)pFirst)->pUName->CompareToAscii(
-                            ((HTML_CharEntry*)pSecond)->sName );
+            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
     }
     else
     {
-        if( USHRT_MAX == ((HTML_CharEntry*)pSecond)->cChar )
-            nRet = -1 * ((HTML_CharEntry*)pSecond)->pUName->CompareToAscii(
-                            ((HTML_CharEntry*)pFirst)->sName );
+        if( USHRT_MAX == pSecondEntry->cChar )
+            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
         else
-            nRet = strcmp( ((HTML_CharEntry*)pFirst)->sName,
-                            ((HTML_CharEntry*)pSecond)->sName );
+            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
     }
 
     return nRet;
 }
 
-}
+} // extern "C"
 
-sal_Unicode GetHTMLCharName( const String& rName )
+sal_Unicode GetHTMLCharName( const OUString& rName )
 {
     if( !bSortCharKeyWords )
     {
@@ -796,7 +793,7 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_units},     HTML_O_UNITS}
 };
 
-int GetHTMLOption( const String& rName )
+int GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
     {
@@ -828,7 +825,7 @@ struct HTML_ColorEntry
     union
     {
         const sal_Char* sName;
-        const String *pUName;
+        const OUString *pUName;
     };
     sal_uInt32 nColor;
 };
@@ -989,32 +986,30 @@ extern "C"
 
 static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
 {
+    HTML_ColorEntry* pFirstEntry = (HTML_ColorEntry*)pFirst;
+    HTML_ColorEntry* pSecondEntry = (HTML_ColorEntry*)pSecond;
     int nRet = 0;
-    if( HTML_NO_COLOR == ((HTML_ColorEntry*)pFirst)->nColor )
+    if( HTML_NO_COLOR == pFirstEntry->nColor )
     {
-        if( HTML_NO_COLOR == ((HTML_ColorEntry*)pSecond)->nColor )
-            nRet = ((HTML_ColorEntry*)pFirst)->pUName->CompareTo(
-                            *((HTML_ColorEntry*)pSecond)->pUName );
+        if( HTML_NO_COLOR == pSecondEntry->nColor )
+            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
         else
-            nRet = ((HTML_ColorEntry*)pFirst)->pUName->CompareToAscii(
-                            ((HTML_ColorEntry*)pSecond)->sName );
+            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
     }
     else
     {
-        if( HTML_NO_COLOR  == ((HTML_ColorEntry*)pSecond)->nColor )
-            nRet = -1 * ((HTML_ColorEntry*)pSecond)->pUName->CompareToAscii(
-                            ((HTML_ColorEntry*)pFirst)->sName );
+        if( HTML_NO_COLOR  == pSecondEntry->nColor )
+            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
         else
-            nRet = strcmp( ((HTML_ColorEntry*)pFirst)->sName,
-                            ((HTML_ColorEntry*)pSecond)->sName );
+            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
     }
 
     return nRet;
 }
 
-}
+} // extern "C"
 
-sal_uInt32 GetHTMLColor( const String& rName )
+sal_uInt32 GetHTMLColor( const OUString& rName )
 {
     if( !bSortColorKeyWords )
     {

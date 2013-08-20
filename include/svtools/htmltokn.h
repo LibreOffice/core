@@ -24,19 +24,21 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
-class String;
+namespace rtl {
+    class OUString;
+};
 
 // suche das Char zu dem CharNamen
-sal_Unicode GetHTMLCharName( const String& rName );
+sal_Unicode GetHTMLCharName( const rtl::OUString& rName );
 
 // suche die TokenID zu dem Token
-SVT_DLLPUBLIC int GetHTMLToken( const String& rName );
+SVT_DLLPUBLIC int GetHTMLToken( const rtl::OUString& rName );
 
 // suche die TokenId zu einemm Attribut-Token
-int GetHTMLOption( const String& rName );
+int GetHTMLOption( const rtl::OUString& rName );
 
 // suche die 24-bit-Farbe zu einem Farbnamen (nicht gefunden = ULONG_MAX)
-SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const String& rName );
+SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const rtl::OUString& rName );
 
 // beginnen immer ab 256, groesser als ein char
 const int HTML_TOKEN_START      = 0x100;
