@@ -1607,8 +1607,8 @@ static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect )
     w = aAreaRect.GetWidth();
     h = aAreaRect.GetHeight();
 
-    gint xthickness = gWidgetData[0].gNotebookWidget->style->xthickness;
-    gint ythickness = gWidgetData[0].gNotebookWidget->style->ythickness;
+    gint xthickness = gWidgetData[nScreen].gNotebookWidget->style->xthickness;
+    gint ythickness = gWidgetData[nScreen].gNotebookWidget->style->ythickness;
 
     x -= xthickness;
     y -= ythickness;
