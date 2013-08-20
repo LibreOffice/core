@@ -200,7 +200,7 @@ void Shape::addShape(
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
-    SAL_INFO("oox", OSL_THIS_FUNC << " id: " << msId);
+    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
 
     try
     {
@@ -238,7 +238,7 @@ bool Shape::getLockedCanvas()
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
-    SAL_INFO("oox", "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
+    SAL_INFO("oox", OSL_THIS_FUNC << "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
 
     if ( rReferencedShape.mpTextBody.get() && bUseText )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
@@ -309,16 +309,16 @@ void Shape::addChildren(
     aChildTransformation.scale(1/(maChSize.Width ? maChSize.Width : 1.0), 1/(maChSize.Height ? maChSize.Height : 1.0));
     aChildTransformation *= aTransformation;
 
-    OSL_TRACE("parent matrix:\n%f %f %f\n%f %f %f\n%f %f %f",
-              aChildTransformation.get(0, 0),
-              aChildTransformation.get(0, 1),
-              aChildTransformation.get(0, 2),
-              aChildTransformation.get(1, 0),
-              aChildTransformation.get(1, 1),
-              aChildTransformation.get(1, 2),
-              aChildTransformation.get(2, 0),
-              aChildTransformation.get(2, 1),
-              aChildTransformation.get(2, 2));
+    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "parent matrix:\n"
+             << aChildTransformation.get(0, 0)
+             << aChildTransformation.get(0, 1)
+             << aChildTransformation.get(0, 2) << "\n"
+             << aChildTransformation.get(1, 0)
+             << aChildTransformation.get(1, 1)
+             << aChildTransformation.get(1, 2)
+             << aChildTransformation.get(2, 0)
+             << aChildTransformation.get(2, 1)
+             << aChildTransformation.get(2, 2));
 
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() ) {
@@ -339,7 +339,7 @@ Reference< XShape > Shape::createAndInsert(
         FillProperties& rShapeOrParentShapeFillProps )
 {
     bool bIsEmbMedia = false;
-    SAL_INFO("oox", OSL_THIS_FUNC << " id: " << msId);
+    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
 
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
@@ -477,7 +477,7 @@ Reference< XShape > Shape::createAndInsert(
 
         if ( mbHidden || mbHiddenMasterShape )
         {
-            SAL_INFO("oox", "invisible shape with id: " << msId);
+            SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "invisible shape with id: " << msId);
             const OUString sVisible( "Visible" );
             xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
@@ -613,7 +613,7 @@ Reference< XShape > Shape::createAndInsert(
                     if( pTheme )
                         if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                             aCharStyleProperties.assignUsed( *pCharProps );
-                    SAL_INFO("oox", "use font color");
+                    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "use font color");
                     aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                 }
 
@@ -649,7 +649,7 @@ void Shape::moveAllToPosition( const awt::Point &rPoint )
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
-    SAL_INFO("oox", "set master text list style to shape id: " << msId);
+    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "set master text list style to shape id: " << msId);
 
     mpMasterTextListStyle = pMasterTextListStyle;
 }
