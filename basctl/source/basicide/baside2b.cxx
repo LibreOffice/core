@@ -2905,7 +2905,7 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
 std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
 {
     std::vector< OUString > aRetVect;
-    if( bCanComplete )
+    if( bCanComplete && ( xClass != NULL ) )
     {
         Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
         if( aMethods.getLength() != 0 )
@@ -2922,7 +2922,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
 std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
 {
     std::vector< OUString > aRetVect;
-    if( bCanComplete )
+    if( bCanComplete && ( xClass != NULL ) )
     {
         Sequence< Reference< reflection::XIdlField > > aFields = xClass->getFields();
         if( aFields.getLength() != 0 )

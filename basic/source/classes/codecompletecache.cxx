@@ -136,6 +136,7 @@ void CodeCompleteDataCache::print() const
 void CodeCompleteDataCache::Clear()
 {
     aVarScopes.clear();
+    aGlobalVars.clear();
 }
 
 void CodeCompleteDataCache::InsertGlobalVar( const OUString& sVarName, const OUString& sVarType )

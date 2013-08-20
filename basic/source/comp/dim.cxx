@@ -407,13 +407,13 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
                 if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
                 {
-                    if(!CodeCompleteOptions::IsCodeCompleteOn())
-                        Error( SbERR_UNDEF_TYPE, aTypeName );
-                    else
+                    if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
                     {
                         if(!IsUnoInterface(aTypeName))
                             Error( SbERR_UNDEF_TYPE, aTypeName );
                     }
+                    else
+                        Error( SbERR_UNDEF_TYPE, aTypeName );
                 }
             }
 
