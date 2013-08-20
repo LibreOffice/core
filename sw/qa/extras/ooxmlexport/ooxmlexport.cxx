@@ -113,6 +113,7 @@ public:
     void testFdo67737();
     void testTransparentShadow();
     void testBnc834035();
+    void testFdo68418();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -202,6 +203,7 @@ void Test::run()
         {"fdo67737.docx", &Test::testFdo67737},
         {"transparent-shadow.docx", &Test::testTransparentShadow},
         {"bnc834035.odt", &Test::testBnc834035},
+        {"fdo68418.docx", &Test::testFdo68418},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1230,6 +1232,22 @@ void Test::testBnc834035()
     xmlDocPtr pXmlDoc = parseExport();
     // This was Figure!1|sequence.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
+}
+
+void Test::testFdo68418()
+{
+    // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'
+    // it checked if it 'IsPlausableSingleWordSection'.
+    // The 'IsPlausableSingleWordSection' compared different aspects of 2 'SwFrmFmt' objects.
+    // One of the checks was 'do both formats have the same distance from the top and bottom ?'
+    // This check is correct if both have headers or both don't have headers.
+    // However - if one has a header, and the other one has an empty header (no header) - it is not correct to compare
+    // between them (same goes for 'footer').
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
+
+    // First page footer is empty, second page footer is 'aaaa'
+    CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), xFooterParagraph->getString());        // I get an error that it expects ''
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

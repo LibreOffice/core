@@ -371,7 +371,7 @@ namespace sw
                 HdFtDistanceGlue aOne(rTitleFmt.GetAttrSet());
                 HdFtDistanceGlue aTwo(rFollowFmt.GetAttrSet());
                 //e.g. #i14509#
-                if (!aOne.EqualTopBottom(aTwo))
+                if (!aOne.StrictEqualTopBottom(aTwo))
                     bPlausableSingleWordSection = false;
             }
             return bPlausableSingleWordSection;
@@ -422,6 +422,30 @@ namespace sw
             const
         {
             return (dyaTop == rOther.dyaTop && dyaBottom == rOther.dyaBottom);
+        }
+
+        bool HdFtDistanceGlue::StrictEqualTopBottom(const HdFtDistanceGlue &rOther)
+            const
+        {
+            // Check top only if both object have a header or if
+            // both object don't have a header
+            if ( (  HasHeader() &&  rOther.HasHeader() ) ||
+                 ( !HasHeader() && !rOther.HasHeader() ) )
+            {
+                if (dyaTop != rOther.dyaTop)
+                    return false;
+            }
+
+            // Check bottom only if both object have a footer or if
+            // both object don't have a footer
+            if ( (  HasFooter() &&  rOther.HasFooter() ) ||
+                 ( !HasFooter() && !rOther.HasFooter() ) )
+            {
+                if (dyaBottom != rOther.dyaBottom)
+                    return false;
+            }
+
+            return true;
         }
 
         ParaStyleMapper::ParaStyleMapper(SwDoc &rDoc)

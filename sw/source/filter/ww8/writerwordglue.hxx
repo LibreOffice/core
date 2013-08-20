@@ -146,6 +146,22 @@ namespace sw
             */
             bool EqualTopBottom(const HdFtDistanceGlue &rOther) const;
 
+            /** Is the top of the page the same in both objects
+                when there are headers\footers present or non-present in both objects
+
+                This test is important, because we would like to ignore cases
+                when there is a header in one object and no header in the second
+                object - because it is wrong to compare between them.
+
+                @param
+                rOther the other HdFtDistanceGlue to compare against
+
+                @return true if the main text areas top and bottom is at the
+                same location, false otherwise (assuming both objects have\don't have
+                a header\footer)
+            */
+            bool StrictEqualTopBottom(const HdFtDistanceGlue &rOther) const;
+
         };
     }
 }
