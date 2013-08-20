@@ -66,7 +66,8 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
     {   // special handling for parameters
-        /* we recusive replace all occurrences of ? in the statement and replace them with name like "æ¬å" */
+        //  we recusive replace all occurrences of ? in the statement and
+        //  replace them with name like "parame" */
         sal_Int32 nParameterCount = 0;
         OUString sDefaultName( "parame" );
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);

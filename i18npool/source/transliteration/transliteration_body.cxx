@@ -276,14 +276,14 @@ static OUString transliterate_titlecase_Impl(
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         CharacterClassificationImpl aCharClassImpl( xContext );
 
-        // because aCharClassImpl.toTitle does not handle ligatures or ß but will raise
+        // because aCharClassImpl.toTitle does not handle ligatures or Beta but will raise
         // an exception we need to handle the first chara manually...
 
         // we don't want to change surrogates by accident, thuse we use proper code point iteration
         sal_Int32 nPos = 0;
         sal_uInt32 cFirstChar = aText.iterateCodePoints( &nPos );
-        OUString aResolvedLigature( &cFirstChar, 1 ); //lcl_ResolveLigature( cFirstChar ) );
-        // toUpper can be used to properly resolve ligatures and characters like ß
+        OUString aResolvedLigature( &cFirstChar, 1 );
+        // toUpper can be used to properly resolve ligatures and characters like Beta
         aResolvedLigature = aCharClassImpl.toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         // since toTitle will leave all-uppercase text unchanged we first need to
         // use toLower to bring possible 2nd and following charas in lowercase

@@ -45,7 +45,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
     // We put the desired size in the core. The attributes of the frame
     // are set to the desired value. This value will be passed on to the
     // InPlaceClient.
-    // The core accepts or formats the adjusted values ​​not necessarily.
+    // The core accepts or formats the adjusted values not necessarily.
     // If the Ole-Frm is formatted, then the CalcAndSetScale() of the WrtShell
     // will be called. There the scaling of the SwOleClient is set if necessary.
 

@@ -29,7 +29,7 @@ namespace o3tl
 
         This template collects data in input type, and updates the
         output type with the given update functor, but only if the
-        output is requested. Usefúl if updating is expensive, or input
+        output is requested. Useful if updating is expensive, or input
         changes frequently, but output is only comparatively seldom
         used.
 

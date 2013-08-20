@@ -68,7 +68,7 @@
     Jeder Record beginnt mit einem Byte, dem sogenannten 'Pre-Tag'.
 
     Ist dieses 'Pre-Tag' == 0x00, dann handelt es sich um einen Extended-
-    Record, dessen Typ durch ein weiteres Byte an Position 5 n�her
+    Record, dessen Typ durch ein weiteres Byte an Position 5 n?her
     beschrieben wird:
 
     0x01:       SfxSingleRecord

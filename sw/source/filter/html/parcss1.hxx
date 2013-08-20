@@ -237,7 +237,7 @@ protected:
     sal_Bool ParseStyleSheet( const OUString& rIn );
 
     // Den Inhalt einer HTML-Style-Option parsen.
-    // F�r jede Deklaration wird DeclarationParsed() aufgerufen.
+    // Fuer jede Deklaration wird DeclarationParsed() aufgerufen.
     sal_Bool ParseStyleOption( const OUString& rIn );
 
     // Diese Methode wird aufgerufen, wenn ein Selektor geparsed wurde

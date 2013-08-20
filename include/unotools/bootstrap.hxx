@@ -52,7 +52,7 @@ namespace utl
         /// reload cached data
         static void reloadData();
 
-    public: // retrieve path information about the installatíon location
+    public: // retrieve path information about the installation location
         enum PathStatus
         {
             PATH_EXISTS,  // Success: Found a path to an existing file or directory

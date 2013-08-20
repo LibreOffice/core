@@ -699,7 +699,7 @@ namespace drawinglayer
                 {
                     case GRAPHIC_GDIMETAFILE:
                     {
-                        // metafiles are potentially transparent, cannot optimize´, not done
+                        // metafiles are potentially transparent, cannot optimize, not done
                         break;
                     }
                     case GRAPHIC_BITMAP:

@@ -203,7 +203,8 @@ void ResizeFrameCols(SwFmtCol& rCol,
     long nNewWishWidth = nWishSum + nWishDiff;
     if(nNewWishWidth > 0xffffl)
     {
-        // If the desired width is getting too large, then all values ​​must be scaled appropriately.
+        // If the desired width is getting too large, then all values
+        // must be scaled appropriately.
         long nScale = (0xffffl << 8)/ nNewWishWidth;
         for(sal_uInt16 i = 0; i < rArr.size(); i++)
         {

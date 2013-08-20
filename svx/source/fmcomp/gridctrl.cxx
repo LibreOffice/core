@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/macros.h>
 #include "fmhelp.hrc"
 #include <svx/gridctrl.hxx>
@@ -554,7 +553,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool
 
         sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1);
 
-        // Wann muß alles invalidiert werden
+        // Wann muss alles invalidiert werden
         bAll = bAll || m_nCurrentPos <= 0;
         bAll = bAll || nCurrentPos <= 0;
         bAll = bAll || m_nCurrentPos >= nAdjustedRowCount;
@@ -1242,7 +1241,7 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
         if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
             SetMode( m_nMode );
 
-        // liefert die Groe�e der Reserved ControlArea
+        // liefert die Groesse der Reserved ControlArea
         Point aPoint = GetControlArea().TopLeft();
         sal_uInt16 nX = (sal_uInt16)aPoint.X();
 
@@ -1274,7 +1273,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     Reference< XPropertySet > xDataSourceSet = m_pDataCursor->getPropertySet();
     if (xDataSourceSet.is())
     {
-        // feststellen welche Updatem�glichkeiten bestehen
+        // feststellen welche Updatem??glichkeiten bestehen
         sal_Int32 nPrivileges = 0;
         xDataSourceSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
         if ((nPrivileges & Privilege::INSERT) == 0)
@@ -1886,8 +1885,8 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         nLimit = nLinesOnScreen;
     }
 
-    // Im folgenden werden die Positionierungen so vorgenommen, da� sichergestellt ist
-    // da� ausreichend Zeilen im DatenCache vorhanden sind
+    // Im folgenden werden die Positionierungen so vorgenommen, dass sichergestellt ist
+    // dass ausreichend Zeilen im DatenCache vorhanden sind
 
     // Fenster geht nach unten, weniger als zwei Fenster Differenz
     // oder Cache angepasst und noch kein Rowcount
@@ -2375,7 +2374,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         // da der letzte Datensatz bereits erreicht wurde!
         if (nRow == m_nCurrentPos)
         {
-            // auf die aktuelle Zeile bewegt, dann muß kein abgleich gemacht werden, wenn
+            // auf die aktuelle Zeile bewegt, dann muss kein abgleich gemacht werden, wenn
             // gerade ein Datensatz eingefuegt wird
             m_nSeekPos = nRow;
         }
@@ -2636,7 +2635,7 @@ void DbGridControl::SetDesignMode(sal_Bool bMode)
 {
     if (IsDesignMode() != bMode)
     {
-        // Enable/Disable f�r den Designmode anpassen damit die Headerbar konfigurierbar bleibt
+        // Enable/Disable f"ur den Designmode anpassen damit die Headerbar konfigurierbar bleibt
         if (bMode)
         {
             if (!IsEnabled())

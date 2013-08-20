@@ -597,7 +597,7 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
       "<!-- all elements here are explicitly in the HTML namespace -->\n"
       "<html:html xmlns:html='http://www.w3.org/TR/REC-html40'>\n"
         "<html:head><html:title>Frobnostication</html:title></html:head>\n"
-        "<html:body><html:p>Moved to ß\n"
+        "<html:body><html:p>Moved to \337\n"
           "<html:a href='http://frob.com'>here.</html:a></html:p></html:body>\n"
       "</html:html>\n";
 

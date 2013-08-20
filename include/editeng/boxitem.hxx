@@ -159,14 +159,14 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     sal_Bool    bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
 
     sal_uInt8   nValidFlags;    // 0000 0000
-                            // ³³³³ ³³³ÀÄ VALID_TOP
-                            // ³³³³ ³³ÀÄÄ VALID_BOTTOM
-                            // ³³³³ ³ÀÄÄÄ VALID_LEFT
-                            // ³³³³ ÀÄÄÄÄ VALID_RIGHT
-                            // ³³³ÀÄÄÄÄÄÄ VALID_HORI
-                            // ³³ÀÄÄÄÄÄÄÄ VALID_VERT
-                            // ³ÀÄÄÄÄÄÄÄÄ VALID_DIST
-                            // ÀÄÄÄÄÄÄÄÄÄ VALID_DISABLE
+                                // 0000 0001 VALID_TOP
+                                // 0000 0010 VALID_BOTTOM
+                                // 0000 0100 VALID_LEFT
+                                // 0000 1000 VALID_RIGHT
+                                // 0001 0000 VALID_HORI
+                                // 0010 0000 VALID_VERT
+                                // 0100 0000 VALID_DIST
+                                // 1000 0000 VALID_DISABLE
 
     sal_uInt16  nDefDist;       // The default or minimum distance.
 

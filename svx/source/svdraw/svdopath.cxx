@@ -1011,8 +1011,8 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         }
 
         // dx=0.00 dy=0.00                -- both sides bezier
-        // dx=0.00 dy=0.00  l=0.00 0.00°  -- one bezier/lever on one side, a start, or an ending
-        // dx=0.00 dy=0.00  l=0.00 0.00° / l=0.00 0.00° -- in between
+        // dx=0.00 dy=0.00  l=0.00 0.00\302\260  -- one bezier/lever on one side, a start, or an ending
+        // dx=0.00 dy=0.00  l=0.00 0.00\302\260 / l=0.00 0.00\302\260 -- in between
         OUString aMetr;
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());

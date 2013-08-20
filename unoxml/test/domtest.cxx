@@ -55,7 +55,7 @@ static const char validTestFile[] =
    <xlink:test/> \
    <office:automatic-styles teststyle=\"test\"/> \
    <moretest/> \
-    some text öäü \
+    some text \303\266\303\244\303\274 \
  </office:document-content> \
 ";
 

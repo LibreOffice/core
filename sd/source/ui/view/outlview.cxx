@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "OutlineView.hxx"
 #include <memory>
 #include <editeng/forbiddencharacterstable.hxx>
@@ -75,7 +74,7 @@ using namespace ::com::sun::star::frame;
 
 namespace sd {
 
-// width: DIN A4, two margins à 1 cm each
+// width: DIN A4, two margins at 1 cm each
 #define OUTLINE_PAPERWIDTH 19000
 
 // a progress bar gets displayed when more than

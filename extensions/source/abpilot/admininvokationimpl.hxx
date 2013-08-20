@@ -34,7 +34,7 @@ namespace abp
     //= OAdminDialogInvokation
     //=====================================================================
     /** outsourced from AdminDialogInvokationPage, 'cause this class here, in opposite to
-        the page, needs exception handlíng to be enabled.
+        the page, needs exception handling to be enabled.
     */
     class OAdminDialogInvokation
     {

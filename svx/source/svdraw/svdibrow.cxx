@@ -935,7 +935,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     XubString aCommentStr;
 
                     INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,String("L I N I E", aTextEncoding));
-                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,String("F L � C H E", aTextEncoding));
+                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,String("F L \357\277\275 C H E", aTextEncoding));
                     INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,String("F O N T W O R K", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,String("S C H A T T E N", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,String("L E G E N D E", aTextEncoding));

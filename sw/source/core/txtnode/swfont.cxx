@@ -961,7 +961,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
                 // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
-                // a single snippet since it�s size may differ, too.
+                // a single snippet since its size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
                 const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
@@ -1080,7 +1080,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
                 // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
-                // a single snippet since it�s size may differ, too.
+                // a single snippet since its size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
                 const XubString aSnippet(rOldStr, nOldIdx, nOldLen);

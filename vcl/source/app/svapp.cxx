@@ -671,7 +671,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             }
 
             // if DPI resolution for screen output was changed set the new resolution for all
-            // screen compatible VirDev´s
+            // screen compatible VirDev's
             pFirstFrame = pSVData->maWinData.mpFirstFrame;
             if ( pFirstFrame )
             {

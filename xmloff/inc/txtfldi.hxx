@@ -133,7 +133,7 @@ protected:
     OUString sServicePrefix;
 
     // data members for use in subclasses
-    sal_Bool bValid;                        /// ist dieses Feld gültig?
+    sal_Bool bValid;                 /// whether this field is valid ?
 
 public:
 

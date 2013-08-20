@@ -142,7 +142,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
         /*-****************************************************************************************************//**
             @short      get count of all current frames in container
             @descr      This is the beginning of full index-access. With a count you can step over all items in container.
-                        Next call shuoöd be getByIndex(). But these mechanism works only, if no lock in container is set!
+                        Next call should be getByIndex(). But these mechanism works only, if no lock in container is set!
 
             @seealso    class FrameContainer
             @seealso    method getByIndex()

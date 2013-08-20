@@ -69,8 +69,8 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 // - Vordefinierte Formate -
 // -------------------------
 
-// Die Reihenfolge und die Werte d�rfen nicht ge�ndert werden,
-// da die Implementation sich darauf verl��t.
+// Die Reihenfolge und die Werte d?rfen nicht ge?ndert werden,
+// da die Implementation sich darauf verl??t.
 // Standard-Formate fuer die es auch Copy/Paste-Methoden gibt
 #define FORMAT_STRING           1
 #define FORMAT_BITMAP           2

@@ -389,7 +389,7 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
         // initialize the result array
         for( int i = 0; i < mnCharCount; ++i)
             pDXArray[i] = 0;
-        // handle each glyph run
+        // handle each glyph run
         CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
         const int nRunCount = CFArrayGetCount( aGlyphRuns );
         typedef std::vector<CGSize> CGSizeVector;

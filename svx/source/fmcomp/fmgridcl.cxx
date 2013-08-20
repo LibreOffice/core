@@ -1557,7 +1557,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         DbGridColumn* pCol = DbGridControl::GetColumns().at( GetModelColumnPos(nId) );
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
-        // Einfuegen muß sich an den Column Positionen orientieren
+        // Einfuegen muss sich an den Column Positionen orientieren
         sal_Int32 i;
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)
@@ -1600,7 +1600,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
 
     SetUpdateMode(sal_False);
 
-    // Einfuegen mu� sich an den Column Positionen orientieren
+    // Einfuegen muss sich an den Column Positionen orientieren
     sal_Int32 i;
     Any aWidth;
     for (i = 0; i < xColumns->getCount(); ++i)

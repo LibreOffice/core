@@ -162,7 +162,7 @@ bInherited:
     TRUE: Wird der Layer/LayerSet nicht gefunden, so wird im Parent-LayerAdmin
           nachgesehen, ob es dort einen entsprechende Definition gibt.
     FALSE: Es wird nur dieser LayerAdmin durchsucht.
-    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, n�mlich den des
+    Jeder LayerAdmin einer Seite hat einen Parent-LayerAdmin, n?mlich den des
     Model. Das Model selbst hat keinen Parent.
 */
 

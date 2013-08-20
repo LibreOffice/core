@@ -1633,7 +1633,7 @@ void SwTxtNode::TransliterateText(
         const sal_Int16 nWordType = WordType::ANYWORD_IGNOREWHITESPACES;
 
         //! In order to have less trouble with changing text size, e.g. because
-        //! of ligatures or � (German small sz) being resolved, we need to process
+        //! of ligatures or German small sz being resolved, we need to process
         //! the text replacements from end to start.
         //! This way the offsets for the yet to be changed words will be
         //! left unchanged by the already replaced text.

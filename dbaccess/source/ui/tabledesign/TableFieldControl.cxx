@@ -55,7 +55,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     sal_Bool bRead(GetCtrl()->IsReadOnly());
     if( !bRead )
     {
-        // Die Spalten einer ::com::sun::star::sdbcx::View können nicht verändert werden
+        // Die Spalten einer ::com::sun::star::sdbcx::View konnen nicht verindert werden
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
         if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == OUString("VIEW"))
             bRead = sal_True;

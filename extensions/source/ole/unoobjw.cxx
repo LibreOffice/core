@@ -1525,7 +1525,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                         }
                     }
 
-                    // update ínformation about this member
+                    // update information about this member
                     if( ret == DISP_E_MEMBERNOTFOUND)
                     {
                         // Remember the name as not existing

@@ -600,7 +600,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             //
             //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx said
             ////"DMPAPER_B4     12  B4 (JIS) 250 x 354"
-            //which is bogus as it's either JIS 257 × 364 or ISO 250 × 353
+            //which is bogus as it's either JIS 257 x 364 or ISO 250 x 353
             //(cmc)
             case( DMPAPER_B4 ):
                 pSetupData->mePaperFormat = PAPER_B4_JIS;

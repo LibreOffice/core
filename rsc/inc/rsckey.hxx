@@ -34,7 +34,7 @@ typedef struct
 class RscNameTable
 {
     bool            bSort;      //soll bei jedem einfuegen sortiert werden?
-    sal_uInt32      nEntries;   //Anzahl der Eintr�ge
+    sal_uInt32      nEntries;   //Anzahl der Eintr"age
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
