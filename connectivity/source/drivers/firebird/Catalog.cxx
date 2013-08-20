@@ -9,6 +9,7 @@
 
 #include "Catalog.hxx"
 #include "Tables.hxx"
+#include "Users.hxx"
 
 using namespace ::connectivity::firebird;
 
@@ -36,6 +37,9 @@ void Catalog::refreshTables()
                                                             "%",
                                                             "%",
                                                             aTypes);
+
+    if (!xTables.is())
+        return;
 
     TStringVector aTableNames;
 
@@ -66,6 +70,28 @@ void Catalog::refreshGroups()
 //----- IRefreshableUsers ----------------------------------------------------
 void Catalog::refreshUsers()
 {
-    // TODO: implement me
+    OUString sSql("SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES");
+
+    uno::Reference< XResultSet > xUsers = m_xMetaData->getConnection()
+                                            ->createStatement()->executeQuery(sSql);
+
+    if (!xUsers.is())
+        return;
+
+    TStringVector aUserNames;
+
+    uno::Reference< XRow > xRow(xUsers,UNO_QUERY);
+    while (xUsers->next())
+    {
+        aUserNames.push_back(xRow->getString(1));
+    }
+
+    if (!m_pUsers)
+        m_pUsers = new Users(m_xConnection->getMetaData(),
+                             *this,
+                             m_aMutex,
+                             aUserNames);
+    else
+        m_pUsers->reFill(aUserNames);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
