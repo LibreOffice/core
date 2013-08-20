@@ -2255,9 +2255,9 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
-        OSL_ENSURE( pRule->GetDefaultListId().Len() != 0,
+        OSL_ENSURE( !pRule->GetDefaultListId().isEmpty(),
                 "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
-        aRet <<= OUString(pRule->GetDefaultListId());
+        aRet <<= pRule->GetDefaultListId();
     }
     else
         throw UnknownPropertyException();

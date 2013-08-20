@@ -959,7 +959,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
 void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     WW8aISet& rListItemSet, WW8aCFmt& rCharFmt, bool& bNewCharFmtCreated,
-    String sPrefix )
+    OUString sPrefix )
 {
     bNewCharFmtCreated = false;
     SfxItemSet* pThisLevelItemSet;
@@ -1010,8 +1010,8 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         if (nMaxLevel == nIdenticalItemSetLevel)
         {
             // Style definieren
-            String aName( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
-            (aName += 'z') += OUString::number( nLevel );
+            const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName())
+                                  + "z" + OUString::number( nLevel ) );
 
             // const Wegcasten
             pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
@@ -1039,11 +1039,11 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         SwCharFmt* pFmt = aNumFmt.GetCharFmt();
         if ( !pFmt)
         {
-            OUString aName = ( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
-                     aName += "z" + OUString::number( nLevel );
+            const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName())
+                                  + "z" + OUString::number( nLevel ) );
 
-                    pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
-                    bNewCharFmtCreated = true;
+            pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
+            bNewCharFmtCreated = true;
             rCharFmt[ nLevel ] = pFmt;
             aNumFmt.SetCharFmt( pFmt );
         }

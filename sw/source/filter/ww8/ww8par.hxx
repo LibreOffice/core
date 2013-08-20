@@ -185,7 +185,7 @@ private:
 
     void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
         WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
-        String aPrefix = aEmptyStr);
+        OUString aPrefix = OUString());
 
     //No copying
     WW8ListManager(const WW8ListManager&);

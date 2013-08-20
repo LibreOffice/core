@@ -63,6 +63,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include "numrule.hxx"
 #include <cstdio>
 // #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -91,14 +92,6 @@ using namespace ::com::sun::star::beans;
 
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
-
-// variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char sBulletFntName[];
-namespace numfunc
-{
-    extern const String& GetDefBulletFontname();
-    extern bool IsDefBulletFontUserDefined();
-}
 
 #ifdef DBG_UTIL
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }

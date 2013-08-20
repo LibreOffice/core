@@ -3870,8 +3870,6 @@ bool SwTxtNode::IsListRestart() const
  */
 bool SwTxtNode::HasVisibleNumberingOrBullet() const
 {
-    bool bRet = false;
-
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule && IsCountedInList())
     {
@@ -3879,14 +3877,11 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
         const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() ));
-        if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
-             pRule->MakeNumString( *(GetNum()) ).Len() > 0 )
-        {
-            bRet = true;
-        }
+        return SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
+               !pRule->MakeNumString( *(GetNum()) ).isEmpty();
     }
 
-    return bRet;
+    return false;
 }
 
 void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
@@ -4835,7 +4830,7 @@ namespace {
                 // If paragraph has no list level attribute set and list style
                 // is the outline style, apply outline level as the list level.
                 if ( !mrTxtNode.HasAttrListLevel() &&
-                     mrTxtNode.GetNumRule()->GetName().EqualsAscii(
+                     mrTxtNode.GetNumRule()->GetName().equalsAscii(
                         SwNumRule::GetOutlineRuleName()) &&
                      mrTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle() )
                 {
