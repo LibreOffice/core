@@ -60,7 +60,7 @@ namespace dbtools
     using namespace connectivity;
     using namespace comphelper;
 
-OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
+OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,const OUString& _sCreatePattern)
 {
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -73,12 +73,11 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     sal_Int32       nScale      = 0;
 
     nDataType = nPrecision = nScale = 0;
-    sal_Bool bIsAutoIncrement = sal_False;
+
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPENAME))           >>= sTypeName;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))               >>= nDataType;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_PRECISION))          >>= nPrecision;
     xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCALE))              >>= nScale;
-    xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
 
     OUStringBuffer aSql;
 
@@ -163,6 +162,31 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         aSql.append(sPostFix);
     } // if ( aDefault.getLength() )
 
+    return aSql.makeStringAndClear();
+}
+
+OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
+{
+    Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
+
+    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+
+    sal_Bool bIsAutoIncrement = sal_False;
+    xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))    >>= bIsAutoIncrement;
+
+    const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
+    OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+
+    // check if the user enter a specific string to create autoincrement values
+    OUString sAutoIncrementValue;
+    Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
+    if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
+        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
+
+    aSql.appendAscii(" ");
+
+    aSql.append(createStandardTypePart(xColProp, _xConnection, _sCreatePattern));
+
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         aSql.append(OUString(" NOT NULL"));
 
@@ -174,22 +198,6 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
 
     if ( _pHelper )
         _pHelper->addComment(xColProp,aSql);
-
-    return aSql.makeStringAndClear();
-}
-
-OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
-{
-    Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
-
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-
-    const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-    OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
-
-    aSql.appendAscii(" ");
-
-    aSql.append(createStandardTypePart(xColProp, _xConnection, _pHelper, _sCreatePattern));
 
     return aSql.makeStringAndClear();
 }
