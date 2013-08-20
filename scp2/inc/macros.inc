@@ -269,10 +269,10 @@ End
     End
 
 #define REGISTRY_ENTRY_APPUSERMODELID(name,modid,doc_type) \
-    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,AppUserModelID) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_AppUserModelID) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        ComponentCondition = "VersionNT >= 601"; \
+        ComponentCondition = STRING(VersionNT >= 601); \
         Subkey = STRING(AppUserModelID); \
         Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
     End
@@ -355,10 +355,10 @@ End
     RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Explorer_KindMap_,name) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
         ModuleID = modid; \
-        ComponentCondition = "VersionNT >= 600"; \
+        ComponentCondition = STRING(VersionNT >= 600); \
         Subkey = STRING(SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = "document"; \
+        Value = STRING(document); \
     End
 
 #define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
