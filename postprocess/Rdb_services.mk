@@ -122,14 +122,12 @@ $(eval $(call gb_Rdb_add_components,services,\
 		$(if $(filter-out X86_64,$(CPUNAME)), \
 			avmedia/source/quicktime/avmediaQuickTime \
 		) \
-		connectivity/source/drivers/macab/macab1 \
 		lingucomponent/source/spellcheck/macosxspell/MacOSXSpell \
 		fpicker/source/aqua/fps_aqua \
 		shell/source/backends/macbe/macbe1 \
 		vcl/vcl.macosx \
 	) \
 	$(if $(filter WNT,$(OS)), \
-		connectivity/source/drivers/ado/ado \
 		dtrans/source/generic/dtrans \
 		dtrans/util/dnd \
 		dtrans/util/ftransl \
@@ -185,9 +183,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \
-	$(if $(ENABLE_EVOAB2), \
-		connectivity/source/drivers/evoab2/evoab \
-	) \
 	$(if $(ENABLE_GCONF), \
 		shell/source/backends/gconfbe/gconfbe1 \
 	) \
@@ -207,9 +202,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_VLC), \
 		avmedia/source/vlc/avmediavlc \
 	) \
-	$(if $(ENABLE_KAB), \
-		connectivity/source/drivers/kab/kab1 \
-	) \
 	$(if $(ENABLE_KDE), \
 		shell/source/backends/kdebe/kdebe1 \
 	) \
@@ -226,83 +218,65 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_TDE), \
 		shell/source/backends/kdebe/tdebe1 \
 	) \
-	$(if $(ENABLE_TDEAB), \
-		connectivity/source/drivers/kab/tdeab1 \
-	) \
 	$(if $(ENABLE_JAVA), \
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
 		scripting/java/ScriptProviderForJava \
 		smoketest/org/libreoffice/smoketest/smoketest \
 		wizards/com/sun/star/wizards/form/form \
-		connectivity/source/drivers/hsqldb/hsqldb \
-		connectivity/source/drivers/jdbc/jdbc \
 		wizards/com/sun/star/wizards/query/query \
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
-	) \
-	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE), \
-		connectivity/source/drivers/firebird/firebird_sdbc \
 	) \
 ))
 
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
 $(eval $(call gb_Rdb_add_components,services,\
-    connectivity/source/drivers/calc/calc \
-    dbaccess/source/ext/macromigration/dbmm \
-    dbaccess/source/filter/xml/dbaxml \
-    dbaccess/util/dba \
-    dbaccess/util/dbu \
-    dbaccess/util/sdbt \
-    forms/util/frm \
-    reportdesign/util/rpt \
-    reportdesign/util/rptui \
-    reportdesign/util/rptxml \
-    connectivity/source/drivers/dbase/dbase \
-    connectivity/source/cpool/dbpool2 \
-    connectivity/source/dbtools/dbtools \
-    connectivity/source/drivers/flat/flat \
-    connectivity/source/drivers/mysql/mysql \
-    connectivity/source/manager/sdbc2 \
-    shell/source/backends/localebe/localebe1 \
+	extensions/source/bibliography/bib \
+	extensions/source/dbpilots/dbp \
+	extensions/source/propctrlr/pcr \
+	connectivity/source/cpool/dbpool2 \
+	connectivity/source/dbtools/dbtools \
+	$(if $(filter WNT,$(OS)), \
+		connectivity/source/drivers/ado/ado \
+	) \
+	connectivity/source/drivers/calc/calc \
+	connectivity/source/drivers/dbase/dbase \
+	$(if $(ENABLE_EVOAB2), \
+		connectivity/source/drivers/evoab2/evoab \
+	) \
+	$(if $(filter $(ENABLE_FIREBIRD_SDBC),TRUE), \
+		connectivity/source/drivers/firebird/firebird_sdbc \
+	) \
+	connectivity/source/drivers/flat/flat \
+	$(if $(ENABLE_KAB), \
+		connectivity/source/drivers/kab/kab1 \
+	) \
+	connectivity/source/drivers/mysql/mysql \
+	$(if $(filter MACOSX,$(OS)), \
+		connectivity/source/drivers/macab/macab1 \
+	) \
+	$(if $(ENABLE_TDEAB), \
+		connectivity/source/drivers/kab/tdeab1 \
+	) \
+	$(if $(SOLAR_JAVA), \
+		connectivity/source/drivers/hsqldb/hsqldb \
+		connectivity/source/drivers/jdbc/jdbc \
+	) \
+	connectivity/source/manager/sdbc2 \
+	dbaccess/source/ext/macromigration/dbmm \
+	dbaccess/source/filter/xml/dbaxml \
+	dbaccess/util/dba \
+	dbaccess/util/dbu \
+	dbaccess/util/sdbt \
+	forms/util/frm \
+	reportdesign/util/rpt \
+	reportdesign/util/rptui \
+	reportdesign/util/rptxml \
+	shell/source/backends/localebe/localebe1 \
 	$(if $(filter-out ANDROID IOS,$(OS)),\
 		connectivity/source/drivers/odbc/odbc \
-	) \
-))
-
-endif # DBCONNECTIVITY
-
-ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
-
-$(eval $(call gb_Rdb_add_components,services,\
-	desktop/source/deployment/gui/deploymentgui \
-	desktop/source/migration/services/migrationoo2 \
-	desktop/source/migration/services/migrationoo3 \
-	desktop/source/offacc/offacc \
-	$(if $(ENABLE_HEADLESS),,desktop/source/splash/spl) \
-	extensions/source/abpilot/abp \
-	extensions/source/bibliography/bib \
-	extensions/source/config/ldap/ldapbe2 \
-	extensions/source/dbpilots/dbp \
-	extensions/source/logging/log \
-	extensions/source/propctrlr/pcr \
-	extensions/source/resource/res \
-	extensions/source/scanner/scn \
-	extensions/source/update/feed/updatefeed \
-	xmlhelp/source/treeview/tvhlp1 \
-	xmlhelp/util/ucpchelp1 \
-	xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows) \
-	$(if $(filter-out WNT,$(OS)),\
-		shell/source/cmdmail/cmdmail \
-		shell/source/unix/exec/syssh \
-	) \
-	$(if $(filter-out MACOSX WNT,$(OS)), \
-		desktop/unx/splash/splash \
-		$(if $(ENABLE_HEADLESS),, \
-			shell/source/backends/desktopbe/desktopbe1 \
-			vcl/vcl.unx \
-		) \
 	) \
 ))
 
@@ -326,6 +300,38 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 
 endif # WNT
+
+endif # DBCONNECTIVITY
+
+ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
+
+$(eval $(call gb_Rdb_add_components,services,\
+	desktop/source/deployment/gui/deploymentgui \
+	desktop/source/migration/services/migrationoo2 \
+	desktop/source/migration/services/migrationoo3 \
+	desktop/source/offacc/offacc \
+	$(if $(ENABLE_HEADLESS),,desktop/source/splash/spl) \
+	extensions/source/abpilot/abp \
+	extensions/source/config/ldap/ldapbe2 \
+	extensions/source/logging/log \
+	extensions/source/resource/res \
+	extensions/source/scanner/scn \
+	extensions/source/update/feed/updatefeed \
+	xmlhelp/source/treeview/tvhlp1 \
+	xmlhelp/util/ucpchelp1 \
+	xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows) \
+	$(if $(filter-out WNT,$(OS)),\
+		shell/source/cmdmail/cmdmail \
+		shell/source/unix/exec/syssh \
+	) \
+	$(if $(filter-out MACOSX WNT,$(OS)), \
+		desktop/unx/splash/splash \
+		$(if $(ENABLE_HEADLESS),, \
+			shell/source/backends/desktopbe/desktopbe1 \
+			vcl/vcl.unx \
+		) \
+	) \
+))
 
 endif # DESKTOP
 

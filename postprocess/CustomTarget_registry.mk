@@ -287,7 +287,7 @@ ifeq ($(WITH_MOZAB4WIN),YES)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 postprocess_DRIVERS += mozab
 endif
-else ifeq (DESKTOP,$(filter DESKTOP,$(BUILD_TYPE)))
+else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
 postprocess_DRIVERS += mork
 endif
