@@ -27,7 +27,7 @@
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {
-    String          aToken;             // gescanntes Token
+    OUString          aToken;             // gescanntes Token
     sal_uLong           nFilePos;           // akt. Position im Stream
     sal_uLong           nlLineNr;           // akt. Zeilen Nummer
     sal_uLong           nlLinePos;          // akt. Spalten Nummer
