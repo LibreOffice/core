@@ -352,8 +352,6 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, rHead, pDesc, true); // Copy left header
     CopyMasterHeader(rChged, rHead, pDesc, false); // Copy first header
     pDesc->ChgHeaderShare( rChged.IsHeaderShared() );
-    // there is just one first shared flag for both header and footer?
-    pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     // Synch Footer.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
