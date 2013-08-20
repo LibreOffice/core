@@ -1548,6 +1548,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
     ::comphelper::NamedValueCollection OutplaceFrameProperties;
     OutplaceFrameProperties.put( "TopWindow", (sal_Bool)sal_True );
+    OutplaceFrameProperties.put( "SupportPersistentWindowState", (sal_Bool)sal_True );
 
     Reference< XFrame > xParentFrame;
     if ( m_pImpl->m_pDataSource )
