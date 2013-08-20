@@ -475,9 +475,9 @@ import com.sun.star.uno.XComponentContext;
                     addPropertySetInfoSubNodes(oUnoPropertyNode);
                 }
                 else{
-                    //TOOD this code is redundant!!!
+                    //TODO this code is redundant!!!
                     if ( oUnoObject.getClass().isArray()){
-                        // TOODO probably we should provid a possibility to insert also non-primitive nodes
+                        // TODO probably we should provid a possibility to insert also non-primitive nodes
                         addPrimitiveValuesToTreeNode(oUnoPropertyNode, oUnoObject);
                     }
                     else{
@@ -526,7 +526,7 @@ import com.sun.star.uno.XComponentContext;
             else if (_oUnoNode.getNodeType() == XUnoNode.nOTHERS){
                 Object oUnoObject = _oUnoNode.getUnoObject();
                 if ( oUnoObject.getClass().isArray()){
-                    // TOODO probably we should provid a possibility to insert also non-primitive nodes
+                    // TODO probably we should provid a possibility to insert also non-primitive nodes
                      addPrimitiveValuesToTreeNode(_oUnoNode, oUnoObject);
                 }
                 else{
