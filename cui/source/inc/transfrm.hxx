@@ -46,10 +46,14 @@ const sal_uInt16 SVX_OBJ_NOPROTECT = 0x0200;
 
 class SvxTransformTabDialog : public SfxTabDialog
 {
+    sal_uInt16         nPosSize;
+    sal_uInt16         nSWPosSize;
+    sal_uInt16         nRotation;
+    sal_uInt16         nSlant;
 private:
     const SdrView*      pView;
 
-    sal_uInt16              nAnchorCtrls;
+    sal_uInt16          nAnchorCtrls;
     Link                aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
