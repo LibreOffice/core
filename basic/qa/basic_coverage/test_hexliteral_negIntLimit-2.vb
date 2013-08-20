@@ -9,8 +9,8 @@
 
 Function doUnitTest as Integer
   Dim lngDecimal as Long
-  lngDecimal = Clng(&HFFFFFFFF)
-  If lngDecimal = -1 Then
+  lngDecimal = Clng(&H80000000)
+  If lngDecimal = -2147483648 Then
      doUnitTest = 1
   Else
      doUnitTest = 0
