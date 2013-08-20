@@ -1129,8 +1129,8 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
 GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
-    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
-    if( aURL.Search( aPrefix ) == 0 )
+    const OUString aURL( rURL ), aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
+    if( aURL.indexOf( aPrefix ) == 0 )
     {
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
@@ -1139,7 +1139,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
     else
     {
         Graphic     aGraphic;
-        if ( aURL.Len() )
+        if ( !aURL.isEmpty() )
         {
             SvStream*   pStream = utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
             if( pStream )

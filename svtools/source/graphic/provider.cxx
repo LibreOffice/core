@@ -151,7 +151,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( co
     if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager url
-        String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
+        OUString aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
         OString aUniqueID(OUStringToOString(aTmpStr,
             RTL_TEXTENCODING_UTF8));
         GraphicObject aGrafObj(aUniqueID);
@@ -194,7 +194,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:graphicrepository" ) ) )
     {
-        String sPathName( rResourceURL.copy( nIndex ) );
+        OUString sPathName( rResourceURL.copy( nIndex ) );
         BitmapEx aBitmap;
         if ( ::vcl::ImageRepository::loadImage( sPathName, aBitmap, false ) )
         {
@@ -427,7 +427,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
-    String                                  aPath;
+    OUString                                aPath;
     SvStream*                               pIStm = NULL;
 
     uno::Reference< io::XInputStream > xIStm;
@@ -487,7 +487,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     {
         pIStm = ::utl::UcbStreamHelper::CreateStream( xIStm );
     }
-    else if( aPath.Len() )
+    else if( !aPath.isEmpty() )
     {
         xRet = implLoadMemory( aPath );
 
@@ -770,7 +770,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SvStream*   pOStm = NULL;
-    String      aPath;
+    OUString    aPath;
     sal_Int32   i;
 
     for( i = 0; ( i < rMediaProperties.getLength() ) && !pOStm; ++i )

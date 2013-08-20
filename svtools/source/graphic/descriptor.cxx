@@ -160,7 +160,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
         if( graphic::GraphicType::EMPTY != cType )
         {
             meType = ( ( graphic::GraphicType::PIXEL == cType ) ? GRAPHIC_BITMAP : GRAPHIC_GDIMETAFILE );
-            maMimeType = String( pMimeType, RTL_TEXTENCODING_ASCII_US );
+            maMimeType = OUString( pMimeType, strlen(pMimeType), RTL_TEXTENCODING_ASCII_US );
             maSizePixel = aDescriptor.GetSizePixel();
             maSize100thMM = aDescriptor.GetSize_100TH_MM();
             mnBitsPerPixel = aDescriptor.GetBitsPerPixel();
