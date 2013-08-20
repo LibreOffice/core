@@ -101,7 +101,7 @@ class ScHTMLExport : public ScExportBase
     String              aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
     boost::scoped_ptr< std::map<String, String> >  pFileNameMap;        // fuer CopyLocalFileToINet
-    String              aNonConvertibleChars;   // collect nonconvertible characters
+    OUString            aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
     SCTAB               nUsedTables;
     short               nIndent;
@@ -158,7 +158,7 @@ public:
                                         sal_Bool bAll, const String& aStreamPath );
     virtual             ~ScHTMLExport();
     sal_uLong               Write();
-    const String&       GetNonConvertibleChars() const
+    const OUString&     GetNonConvertibleChars() const
                             { return aNonConvertibleChars; }
 };
 

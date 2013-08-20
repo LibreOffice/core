@@ -46,12 +46,12 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
                                 const sal_Char *pIndent, const String& rName,
                                 const String& rContent, sal_Bool bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
-                            String *pNonConvertableChars = 0 );
+                                OUString *pNonConvertableChars = 0 );
     SAL_DLLPRIVATE inline static void OutMeta( SvStream& rStrm,
                                 const sal_Char *pIndent, const sal_Char *pName,
                                 const String& rContent, sal_Bool bHTTPEquiv,
                                 rtl_TextEncoding eDestEnc,
-                            String *pNonConvertableChars = 0 );
+                                OUString *pNonConvertableChars = 0 );
 
 public:
     static void Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
@@ -59,21 +59,21 @@ public:
                 ::com::sun::star::document::XDocumentProperties>&,
             const sal_Char *pIndent,
             rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-            String *pNonConvertableChars = 0 );
+            OUString *pNonConvertableChars = 0 );
 
     static void Out_FrameDescriptor(
         SvStream&, const String& rBaseURL, const com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet >& xSet,
         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-        String *pNonConvertableChars = 0 );
+        OUString *pNonConvertableChars = 0 );
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                             const sal_Char *pIndent, const sal_Char *pName,
                             const String& rContent, sal_Bool bHTTPEquiv,
                             rtl_TextEncoding eDestEnc,
-                            String *pNonConvertableChars )
+                            OUString *pNonConvertableChars )
 {
-    String sTmp = OUString::createFromAscii(pName);
+    OUString sTmp = OUString::createFromAscii(pName);
     OutMeta( rStrm, pIndent, sTmp, rContent, bHTTPEquiv, eDestEnc, pNonConvertableChars );
 }
 

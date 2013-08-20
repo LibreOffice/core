@@ -84,7 +84,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
                          rtl_TextEncoding eDestEnc,
-                           String *pNonConvertableChars )
+                         OUString *pNonConvertableChars )
 {
     uno::Reference< container::XChild > xChild( rFormComp, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xParentIfc = xChild->getParent();

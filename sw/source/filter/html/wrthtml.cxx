@@ -436,7 +436,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     for( i=0; i<MAXLEVEL; i++ )
         aBulletGrfs[i].Erase();
 
-    aNonConvertableCharacters.Erase();
+    aNonConvertableCharacters = "";
 
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );

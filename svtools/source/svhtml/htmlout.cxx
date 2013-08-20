@@ -393,7 +393,7 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
 
 static OString lcl_ConvertCharToHTML( sal_Unicode c,
                             HTMLOutContext& rContext,
-                            String *pNonConvertableChars )
+                            OUString *pNonConvertableChars )
 {
     OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
@@ -471,8 +471,8 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
             aDest.append('&').append('#').append(static_cast<sal_Int64>(c))
                  .append(';');
             if( pNonConvertableChars &&
-                STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
-                pNonConvertableChars->Append( c );
+                -1 == pNonConvertableChars->indexOf( c ) )
+                (*pNonConvertableChars) += OUString(c);
         }
     }
     return aDest.makeStringAndClear();
@@ -502,14 +502,14 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
     return aDest.makeStringAndClear();
 }
 
-OString HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
-    rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
+OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
+    rtl_TextEncoding eDestEnc, OUString *pNonConvertableChars )
 {
     HTMLOutContext aContext( eDestEnc );
     OStringBuffer aDest;
-    for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
+    for( sal_Int32 i=0, nLen = rSrc.getLength(); i < nLen; i++ )
         aDest.append(lcl_ConvertCharToHTML(
-            rSrc.GetChar( (xub_StrLen)i ), aContext, pNonConvertableChars));
+            rSrc[i], aContext, pNonConvertableChars));
     aDest.append(lcl_FlushToAscii(aContext));
     return aDest.makeStringAndClear();
 }
@@ -525,7 +525,7 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
 
 SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
                                   HTMLOutContext& rContext,
-                                  String *pNonConvertableChars )
+                                  OUString *pNonConvertableChars )
 {
     OString sOut = lcl_ConvertCharToHTML( c, rContext, pNonConvertableChars );
     rStream << sOut.getStr();
@@ -534,7 +534,7 @@ SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
 
 SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const OUString& rOUStr,
                                     rtl_TextEncoding eDestEnc,
-                                    String *pNonConvertableChars )
+                                    OUString *pNonConvertableChars )
 {
     HTMLOutContext aContext( eDestEnc );
     sal_Int32 nLen = rOUStr.getLength();
@@ -598,23 +598,23 @@ SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor,
 }
 
 SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
-                                      const String& rBaseURL,
+                                      const OUString& rBaseURL,
                                       const ImageMap& rIMap,
-                                      const String& rName,
+                                      const OUString& rName,
                                       const HTMLOutEvent *pEventTable,
                                       sal_Bool bOutStarBasic,
                                       const sal_Char *pDelim,
                                       const sal_Char *pIndentArea,
                                       const sal_Char *pIndentMap,
                                       rtl_TextEncoding eDestEnc,
-                                        String *pNonConvertableChars    )
+                                      OUString *pNonConvertableChars    )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = osl_getThreadTextEncoding();
 
-    const String& rOutName = rName.Len() ? rName : String(rIMap.GetName());
-    DBG_ASSERT( rOutName.Len(), "Kein ImageMap-Name" );
-    if( !rOutName.Len() )
+    const OUString& rOutName = !rName.isEmpty() ? rName : rIMap.GetName();
+    DBG_ASSERT( !rOutName.isEmpty(), "Kein ImageMap-Name" );
+    if( rOutName.isEmpty() )
         return rStream;
 
     OStringBuffer sOut;
@@ -781,15 +781,15 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 }
 
 SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
-                                   const String& rBaseURL,
-                                   const String& rSource,
+                                   const OUString& rBaseURL,
+                                   const OUString& rSource,
                                    const OUString& rLanguage,
                                    ScriptType eScriptType,
-                                   const String& rSrc,
+                                   const OUString& rSrc,
                                    const OUString *pSBLibrary,
                                    const OUString *pSBModule,
                                    rtl_TextEncoding eDestEnc,
-                                   String *pNonConvertableChars )
+                                   OUString *pNonConvertableChars )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = osl_getThreadTextEncoding();
@@ -809,7 +809,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         sOut.append('\"');
     }
 
-    if( rSrc.Len() )
+    if( !rSrc.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src).append("=\"");
         rStrm << sOut.makeStringAndClear().getStr();
@@ -839,7 +839,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     rStrm << sOut.makeStringAndClear().getStr();
 
-    if( rSource.Len() || pSBLibrary || pSBModule )
+    if( !rSource.isEmpty() || pSBLibrary || pSBModule )
     {
         rStrm << sNewLine;
 
@@ -870,7 +870,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             }
         }
 
-        if( rSource.Len() )
+        if( !rSource.isEmpty() )
         {
             // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
             // System-Zeilenumbruechen raus.
@@ -900,7 +900,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                                     const HTMLOutEvent *pEventTable,
                                     sal_Bool bOutStarBasic,
                                     rtl_TextEncoding eDestEnc,
-                                    String *pNonConvertableChars )
+                                    OUString *pNonConvertableChars )
 {
     sal_uInt16 i=0;
     while( pEventTable[i].pBasicName || pEventTable[i].pJavaName )
@@ -933,7 +933,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             sal_Bool bValue,
             double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
-            rtl_TextEncoding eDestEnc, String* pNonConvertableChars)
+            rtl_TextEncoding eDestEnc, OUString* pNonConvertableChars)
 {
     OStringBuffer aStrTD;
 

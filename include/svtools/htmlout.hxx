@@ -28,7 +28,6 @@
 
 class Color;
 class ImageMap;
-class String;
 class SvStream;
 class SvxMacroTableDtor;
 class SvNumberFormatter;
@@ -58,57 +57,57 @@ struct HTMLOutFuncs
     static const sal_Char sNewLine[];   // \015\012
 #endif
 
-    SVT_DLLPUBLIC static OString ConvertStringToHTML( const String& sSrc,
+    SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
                                    sal_Bool bOn = sal_True,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                         HTMLOutContext& rContext,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
-    SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const String&, const ImageMap&, const String&,
+    SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,
                                    const HTMLOutEvent *pEventTable,
                                    sal_Bool bOutStarBasic,
                                    const sal_Char *pDelim = 0,
                                    const sal_Char *pIndentArea = 0,
                                    const sal_Char *pIndentMap = 0,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
     SVT_DLLPUBLIC static SvStream& FlushToAscii( SvStream&, HTMLOutContext& rContext );
 
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
-                                const String& rBaseURL,
-                                const String& rSource,
+                                const OUString& rBaseURL,
+                                const OUString& rSource,
                                 const OUString& rLanguage,
                                 ScriptType eScriptType,
-                                const String& rSrc,
+                                const OUString& rSrc,
                                 const OUString *pSBLibrary = 0,
                                 const OUString *pSBModule = 0,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
 
     // der 3. Parameter ist ein Array von HTMLOutEvents, das mit einem
     // nur aus 0 bestehen Eintrag terminiert ist.
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
                                  const HTMLOutEvent*, sal_Bool bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0 );
+                        OUString *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(
                 sal_Bool bValue, double fVal, sal_uLong nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                String *pNonConvertableChars = 0);
+                OUString *pNonConvertableChars = 0);
 };
 
 #endif

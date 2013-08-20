@@ -306,7 +306,7 @@ public:
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
-                  const String& rStreamPath, String& rNonConvertibleChars );
+                  const String& rStreamPath, OUString& rNonConvertibleChars );
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 
     virtual ScOrcusFilters* GetOrcusFilters();
