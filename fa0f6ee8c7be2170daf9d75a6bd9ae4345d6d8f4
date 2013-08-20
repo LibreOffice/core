@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8ic\u003d",
+        "filename": "dbaccess/source/core/api/FilteredContainer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 1,
+      "message": "Please, remove the \u0027\u003d\u0027 character here as well. It looks ugly. IMHO, it made sense only with the \"//\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\" lines around ;-)\n\nPlease, do this change on all other locations in this patch.",
+      "revId": "fa0f6ee8c7be2170daf9d75a6bd9ae4345d6d8f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

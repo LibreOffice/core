@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8ik\u003d",
+        "filename": "dbaccess/source/core/api/SingleSelectQueryComposer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "This comment is evidently related to the bMissingSomeColumnLabels definition and the wartning. Please, move them before the \"bool bMissingSomeColumnLabels \u003d ...\" definition.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8ig\u003d",
+        "filename": "dbaccess/source/core/api/SingleSelectQueryComposer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "I think that this comment is primary related to the below \"if\" condition. I would leave it here. By other words, I think that the empty line was here for a reason.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8iY\u003d",
+        "filename": "dbaccess/source/core/dataaccess/ComponentDefinition.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Please, leave the \"empty\" line here. It makes the long paragraph better readable.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8iE\u003d",
+        "filename": "dbaccess/source/core/dataaccess/databasedocument.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Same here. Please, leave the emply line. In fact, I would even add an empty line before the \"a,b,c,d,e\" list and emty space before each list item to make the long paragraph better readable.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8iA\u003d",
+        "filename": "dbaccess/source/core/dataaccess/datasource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Again, please leave all the empty lines in this very long comment. IMHO, it is much better readable with them.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8h8\u003d",
+        "filename": "dbaccess/source/core/dataaccess/documentdefinition.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Again, please keep the empty lines here.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8h4\u003d",
+        "filename": "dbaccess/source/core/dataaccess/myucp_datasupplier.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "I would even remove this empty line, so the comment is right before the struct definition.\n\nSame with the few other comments below.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8h0\u003d",
+        "filename": "dbaccess/source/core/dataaccess/myucp_resultset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Same here. I would remove the empty line as well.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8hw\u003d",
+        "filename": "dbaccess/source/core/misc/ContainerMediator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Please, add empty line here. There should be at least one empty space between the method definitons.\n\nPlease, fix this problem in all locations in this patch.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8hs\u003d",
+        "filename": "dbaccess/source/core/misc/DatabaseDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Same here. Please, use empty lines instead of the ugly separators in this file. It is too compact and hard to read after your change.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8ho\u003d",
+        "filename": "dbaccess/source/core/misc/dsntypes.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Again. please add the empty line here.\n\nSigh, this is all over your patch.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8hk\u003d",
+        "filename": "dbaccess/source/sdbtools/connection/objectnames.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Ah, you have removed a real code here. Please, put it back!",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8hY\u003d",
+        "filename": "dbaccess/source/ui/browser/formadapter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "This is one of the files that looks really too compact to me now. I think that it is a good idea to have the empty line between all menthods. As already mentiones, this problem is on more locations in your patch. I did not comment it everywhere.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8hE\u003d",
+        "filename": "dbaccess/source/ui/control/dbtreelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Again, the problem with removed empty lines in too long comment. Please, add them bavk to make it better readable,",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8g8\u003d",
+        "filename": "dbaccess/source/ui/inc/TableConnectionData.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "What was the reason to remove this comment competely, please?",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8g4\u003d",
+        "filename": "dbaccess/source/ui/inc/TokenWriter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "Ugh, you removed real code again. Please, put it back!",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8g0\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "You removed real comment here!\n\nThere are few similar mistakes below in this file.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8gw\u003d",
+        "filename": "dbaccess/source/ui/relationdesign/RelationController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000053
+      },
+      "writtenOn": "2013-08-20T10:28:00Z",
+      "side": 0,
+      "message": "I can\u0027t resist. I saw this type of change more times in your patch and I am not happy with it.\n\nI would suggest to replace the \"//////////////////////////\" with simple empty line. There must be a reason why to split the long piece of code with the better visible separator. The separator is ugly but we should not make it too compact.",
+      "revId": "21bf1cebc676db73ef3bd0e18bba357b4712b202",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
