@@ -531,7 +531,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( *mpImpl->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        rGF.ImportGraphic( *mpImpl->pGraphic, "", *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImpl->mnGraphicVersion++;
 
         if ( mpImpl->pContainer )

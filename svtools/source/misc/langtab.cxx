@@ -41,7 +41,7 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
     const sal_Int32 nLen = rText.getLength();
     if (nLen == 0)
-        return String();
+        return OUString();
 
     const sal_Unicode cLRE_Embedding  = 0x202A;      // the start char of an LRE embedding
     const sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
@@ -103,11 +103,10 @@ SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
         cStart = cRLE_Embedding;            // then use RLE embedding
 
     // add embedding start and end chars to the text if the direction could be determined
-    String aRes( rText );
+    OUString aRes( rText );
     if (bFound)
     {
-        aRes.Insert( cStart, 0 );
-        aRes.Insert( cPopDirectionalFormat );
+        aRes = OUString(cStart) + aRes + OUString(cPopDirectionalFormat);
     }
 
     return aRes;

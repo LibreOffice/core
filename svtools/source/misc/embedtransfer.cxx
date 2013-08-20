@@ -240,7 +240,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
 
     rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
     rDesc.maDragStartPos = Point();
-    rDesc.maDisplayName = String();
+    rDesc.maDisplayName = "";
     rDesc.mbCanLink = sal_False;
 }
 

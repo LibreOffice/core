@@ -123,7 +123,7 @@ namespace svt
 
     private:
         INetURLObject           m_aURL;
-        String                  m_sLocalName;       // redundant - last segment of m_aURL
+        OUString                m_sLocalName;       // redundant - last segment of m_aURL
         util::DateTime          m_aLastModified;    // date of last modification as reported by UCP
         TemplateFolderContent   m_aSubContents;     // sorted (by name) list of the children
 
@@ -141,8 +141,8 @@ namespace svt
         TemplateContent( const INetURLObject& _rURL );
 
         // attribute access
-        inline String                   getName( ) const                            { return m_sLocalName; }
-        inline String                   getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
+        inline OUString                 getName( ) const                            { return m_sLocalName; }
+        inline OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ); }
         inline void                     setModDate( const util::DateTime& _rDate )  { m_aLastModified = _rDate; }
         inline const util::DateTime&    getModDate( ) const                         { return m_aLastModified; }
 
@@ -282,12 +282,12 @@ namespace svt
     //---------------------------------------------------------------------
     /// functor which allows storing a string
     struct StoreString
-            :public ::std::unary_function< String, void >
+            :public ::std::unary_function< OUString, void >
             ,public StorageHelper
     {
         StoreString( SvStream& _rStorage ) : StorageHelper( _rStorage ) { }
 
-        void operator() ( const String& _rString ) const
+        void operator() ( const OUString& _rString ) const
         {
             m_rStorage.WriteUniOrByteString( _rString, m_rStorage.GetStreamCharSet() );
         }
@@ -326,7 +326,7 @@ namespace svt
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             // use the base class operator with the local name of the content
-            String sURL = _rxContent->getURL();
+            OUString sURL = _rxContent->getURL();
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
@@ -414,7 +414,7 @@ namespace svt
             // initialize them with their (local) names
             while ( nChildren-- )
             {
-                String sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
+                OUString sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
                 INetURLObject aChildURL( sURL );
                 rChildren.push_back( new TemplateContent( aChildURL ) );
@@ -473,7 +473,7 @@ namespace svt
         /// read the current state of the dirs
         sal_Bool    readCurrentState();
 
-        String      implParseSmart( const String& _rPath );
+        OUString    implParseSmart( const OUString& _rPath );
 
         sal_Bool    implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
@@ -581,7 +581,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    String TemplateFolderCacheImpl::implParseSmart( const String& _rPath )
+    OUString TemplateFolderCacheImpl::implParseSmart( const OUString& _rPath )
     {
         INetURLObject aParser;
         aParser.SetSmartProtocol( INET_PROT_FILE );
@@ -688,7 +688,7 @@ namespace svt
         sal_Int32 nIndex = 0;
         do
         {
-            String sTemplatePath( aDirs.getToken(0, ';', nIndex) );
+            OUString sTemplatePath( aDirs.getToken(0, ';', nIndex) );
             sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
 
             // Make sure excess ".." path segments (from expanding bootstrap
@@ -742,7 +742,7 @@ namespace svt
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )
         {
-            String sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
+            OUString sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
@@ -772,7 +772,7 @@ namespace svt
         closeCacheStream( );
 
         // get the storage directory
-        String sStorageURL = implParseSmart( SvtPathOptions().GetStoragePath() );
+        OUString sStorageURL = implParseSmart( SvtPathOptions().GetStoragePath() );
         INetURLObject aStorageURL( sStorageURL );
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
         {

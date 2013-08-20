@@ -638,7 +638,7 @@ void ImageMap::ClearImageMap()
         delete maList[ i ];
     maList.clear();
 
-    aName = String();
+    aName = "";
 }
 
 
@@ -940,7 +940,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
 void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapCompat*             pCompat;
-    String                  aImageName( GetName() );
+    OUString                aImageName( GetName() );
     sal_uInt16                  nOldFormat = rOStm.GetNumberFormatInt();
     sal_uInt16                  nCount = (sal_uInt16) GetIMapObjectCount();
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding(); //vomit!

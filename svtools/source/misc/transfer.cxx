@@ -2181,7 +2181,7 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
 
     if( bRet )
     {
-        rxStream = new SotStorageStream( String() );
+        rxStream = new SotStorageStream( "" );
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }

@@ -194,18 +194,18 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 
 //****************************************************************************
 
-static String GetImageExtensionByFactory_Impl( const String& rURL )
+static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 {
     INetURLObject aObj( rURL );
-    String aPath = aObj.GetURLPath( INetURLObject::NO_DECODE );
-    String aExtension;
+    OUString aPath = aObj.GetURLPath( INetURLObject::NO_DECODE );
+    OUString aExtension;
 
-    if ( aPath.Len() )
+    if ( !aPath.isEmpty() )
     {
         sal_uInt16 nIndex = 0;
         while ( Fac2ExtMap_Impl[ nIndex ]._pFactory )
         {
-            if ( aPath.EqualsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
+            if ( aPath.equalsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
             {
                 // extension found
                 aExtension = OUString::createFromAscii(Fac2ExtMap_Impl[ nIndex ]._pExtension);
@@ -242,7 +242,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
                     if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
                     {
                         const OUString* pExtensions = aExtensions.getConstArray();
-                        aExtension = String( pExtensions[0] );
+                        aExtension = OUString( pExtensions[0] );
                         break;
                     }
                 }
@@ -261,17 +261,16 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
     return aExtension;
 }
 
-static sal_uInt16 GetIndexOfExtension_Impl( const String& rExtension )
+static sal_uInt16 GetIndexOfExtension_Impl( const OUString& rExtension )
 {
     sal_uInt16 nRet = NO_INDEX;
-    if ( rExtension.Len() )
+    if ( !rExtension.isEmpty() )
     {
         sal_uInt16 nIndex = 0;
-        String aExt = rExtension;
-        aExt.ToLowerAscii();
+        OUString aExt = rExtension.toAsciiLowerCase();
         while ( ExtensionMap_Impl[ nIndex ]._pExt )
         {
-            if ( aExt.EqualsAscii( ExtensionMap_Impl[ nIndex ]._pExt ) )
+            if ( aExt.equalsAscii( ExtensionMap_Impl[ nIndex ]._pExt ) )
             {
                 nRet = nIndex;
                 break;
@@ -283,10 +282,10 @@ static sal_uInt16 GetIndexOfExtension_Impl( const String& rExtension )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const String& rExtension )
+static sal_uInt16 GetImageId_Impl( const OUString& rExtension )
 {
     sal_uInt16 nImage = IMG_FILE;
-    if ( rExtension.Len()  != NO_INDEX )
+    if ( rExtension.getLength() != NO_INDEX )
     {
         sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
         if ( nIndex != NO_INDEX )
@@ -324,7 +323,7 @@ static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtool
     return bRet;
 }
 
-static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
+static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
 {
     sal_uInt16 nRet = IMG_FOLDER;
     ::svtools::VolumeInfo aVolumeInfo;
@@ -356,28 +355,28 @@ static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
 
 static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
-    String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     sal_uInt16 nImage = IMG_FILE;
 
     if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
     {
-        String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
-        String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-        if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
+        OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
+        OUString aType = aURLPath.getToken( 0, INET_PATH_TOKEN );
+        if ( aType == "factory" )
         {
             // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
-            if ( aExt.Len() > 0 )
+            if ( !aExt.isEmpty() )
                 nImage = GetImageId_Impl( aExt );
             return nImage;
         }
-        else if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("image") ) )
-            nImage = (sal_uInt16)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
+        else if ( aType == "image" )
+            nImage = (sal_uInt16)aURLPath.getToken( 1, INET_PATH_TOKEN ).toInt32();
     }
     else
     {
         aExt = rObject.getExtension();
-        if ( aExt.EqualsAscii( "vor" ) )
+        if ( aExt == "vor" )
         {
             SotStorageRef aStorage = new SotStorage( sURL, STREAM_STD_READ );
             sal_uInt16 nId = IMG_WRITERTEMPLATE;
@@ -399,21 +398,21 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
         }
     }
 
-    if ( nImage == IMG_FILE && sURL.Len() )
+    if ( nImage == IMG_FILE && !sURL.isEmpty() )
     {
         if ( bDetectFolder && CONTENT_HELPER::IsFolder( sURL ) )
             nImage = GetFolderImageId_Impl( sURL );
-        else if ( aExt.Len() > 0 )
+        else if ( !aExt.isEmpty() )
             nImage = GetImageId_Impl( aExt );
     }
     return nImage;
 }
 
-static sal_uInt16 GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
+static sal_uInt16 GetDescriptionId_Impl( const OUString& rExtension, sal_Bool& rbShowExt )
 {
     sal_uInt16 nId = 0;
 
-    if ( rExtension.Len()  != NO_INDEX )
+    if ( rExtension.getLength() != NO_INDEX )
     {
         sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
         if ( nIndex != NO_INDEX )
@@ -426,24 +425,24 @@ static sal_uInt16 GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbS
     return nId;
 }
 
-static String GetDescriptionByFactory_Impl( const String& rFactory )
+static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
 {
     sal_uInt16 nResId = 0;
-    if ( rFactory.EqualsIgnoreCaseAscii( "swriter", 0, 7 ) )
+    if ( rFactory.startsWithIgnoreAsciiCase( "swriter" ) )
         nResId = STR_DESCRIPTION_FACTORY_WRITER;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "scalc", 0, 5 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "scalc" ) )
         nResId = STR_DESCRIPTION_FACTORY_CALC;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "simpress", 0, 8 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "simpress" ) )
         nResId = STR_DESCRIPTION_FACTORY_IMPRESS;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "sdraw", 0, 5 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "sdraw" ) )
         nResId = STR_DESCRIPTION_FACTORY_DRAW;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/web", 0, 11 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "swriter/web" ) )
         nResId = STR_DESCRIPTION_FACTORY_WRITERWEB;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/globaldocument", 0, 22 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "swriter/globaldocument" ) )
         nResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "smath", 0, 5 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "smath" ) )
         nResId = STR_DESCRIPTION_FACTORY_MATH;
-    else if ( rFactory.EqualsIgnoreCaseAscii( "sdatabase", 0, 9 ) )
+    else if ( rFactory.startsWithIgnoreAsciiCase( "sdatabase" ) )
         nResId = STR_DESCRIPTION_FACTORY_DATABASE;
 
     if ( nResId )
@@ -454,7 +453,7 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     return OUString();
 }
 
-static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
+static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
 {
     sal_uInt16 nRet = STR_DESCRIPTION_FOLDER;
     svtools::VolumeInfo aVolumeInfo;
@@ -525,7 +524,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     OUString sExtension(rObject.getExtension());
-    String sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_uInt16 nResId = 0;
     sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
     sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
@@ -535,11 +534,11 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
         {
             if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
             {
-                String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
-                String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-                if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
+                OUString aURLPath = sURL.copy( URL_PREFIX_PRIV_SOFFICE_LEN );
+                OUString aType = aURLPath.getToken( 0, INET_PATH_TOKEN );
+                if ( aType == "factory" )
                 {
-                    sDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
+                    sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( INET_PATH_TOKEN ) + 1 ) );
                     bDetected = sal_True;
                 }
             }
@@ -571,19 +570,19 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
             bShowExt = sal_False;
             sExtension = sExtension.toAsciiUpperCase();
             sDescription = sExtension;
-            sDescription += '-';
+            sDescription += "-";
         }
         SolarMutexGuard aGuard;
         sDescription += SvtResId(nResId).toString();
     }
 
-    DBG_ASSERT( sDescription.Len() > 0, "file without description" );
+    DBG_ASSERT( !sDescription.isEmpty(), "file without description" );
 
     if ( bShowExt )
     {
-        sDescription += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
+        sDescription += " (";
         sDescription += sExtension;
-        sDescription += ')';
+        sDescription += ")";
     }
 
     return sDescription;

@@ -81,12 +81,12 @@ static sal_uInt16 aWndFunc(
             break;
     }
 
-    String aErr(SvtResId(STR_ERR_HDLMESS).toString());
-    String aAction(rAction);
-    if ( aAction.Len() )
-        aAction += OUString(":\n");
-    aErr.SearchAndReplace(OUString("$(ACTION)"), aAction);
-    aErr.SearchAndReplace(OUString("$(ERROR)"), rErr);
+    OUString aErr(SvtResId(STR_ERR_HDLMESS).toString());
+    OUString aAction(rAction);
+    if ( !aAction.isEmpty() )
+        aAction += ":\n";
+    aErr = aErr.replaceAll("$(ACTION)", aAction);
+    aErr = aErr.replaceAll("$(ERROR)", rErr);
 
     MessBox* pBox;
     switch ( nFlags & 0xf000 )
