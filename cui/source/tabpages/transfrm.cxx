@@ -104,28 +104,32 @@ static void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 \************************************************************************/
 
 SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
-                                const SdrView* pSdrView, sal_uInt16 nAnchorTypes ) :
-    SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_TRANSFORM ), pAttr ),
-    pView       ( pSdrView ),
-    nAnchorCtrls(nAnchorTypes)
+                                const SdrView* pSdrView, sal_uInt16 nAnchorTypes )
+    : SfxTabDialog( pParent
+                  ,"PositionAndSizeDialog"
+                  ,"cui/ui/positionsizedialog.ui"
+                  , pAttr )
+    , nPosSize(0)
+    , nSWPosSize(0)
+    , pView(pSdrView)
+    , nAnchorCtrls(nAnchorTypes)
 {
     DBG_ASSERT(pView, "no valid view (!)");
-    FreeResource();
 
     //different positioning page in Writer
     if(nAnchorCtrls & 0x00ff)
     {
-        AddTabPage(RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
-        RemoveTabPage(RID_SVXPAGE_POSITION_SIZE);
+        nSWPosSize = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
+        RemoveTabPage("RID_SVXPAGE_POSITION_SIZE");
     }
     else
     {
-        AddTabPage(RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
-        RemoveTabPage(RID_SVXPAGE_SWPOSSIZE);
+        nPosSize = AddTabPage("RID_SVXPAGE_POSITION_SIZE", SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
+        RemoveTabPage("RID_SVXPAGE_SWPOSSIZE");
     }
 
-    AddTabPage(RID_SVXPAGE_ANGLE, SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
-    AddTabPage(RID_SVXPAGE_SLANT, SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
+    nRotation = AddTabPage("RID_SVXPAGE_ANGLE", SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
+    nSlant = AddTabPage("RID_SVXPAGE_SLANT", SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
 }
 
 // -----------------------------------------------------------------------
@@ -138,9 +142,7 @@ SvxTransformTabDialog::~SvxTransformTabDialog()
 
 void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
-    switch(nId)
-    {
-        case RID_SVXPAGE_POSITION_SIZE:
+    if (nId==nPosSize)
         {
             SvxPositionSizeTabPage& rSvxPos =  static_cast<SvxPositionSizeTabPage&>(rPage);
             rSvxPos.SetView(pView);
@@ -156,40 +158,31 @@ void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
                 rSvxPos.DisableProtect();
                 rSvxPos.UpdateControlStates();
             }
-
-            break;
         }
-        case RID_SVXPAGE_SWPOSSIZE :
+    else if (nId == nSWPosSize)
         {
             SvxSwPosSizeTabPage& rSwPos =  static_cast<SvxSwPosSizeTabPage&>(rPage);
 
             rSwPos.EnableAnchorTypes(nAnchorCtrls);
             rSwPos.SetValidateFramePosLink(aValidateLink);
             rSwPos.SetView(pView);
-
-            break;
         }
 
-        case RID_SVXPAGE_ANGLE:
+    else if( nId == nRotation)
         {
             SvxAngleTabPage& rSvxAng =  static_cast<SvxAngleTabPage&>(rPage);
 
             rSvxAng.SetView( pView );
             rSvxAng.Construct();
-
-            break;
         }
 
-        case RID_SVXPAGE_SLANT:
+    else if (nId == nSlant)
         {
             SvxSlantTabPage& rSvxSlnt =  static_cast<SvxSlantTabPage&>(rPage);
 
             rSvxSlnt.SetView( pView );
             rSvxSlnt.Construct();
-
-            break;
         }
-    }
 }
 
 // -----------------------------------------------------------------------

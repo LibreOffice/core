@@ -1386,14 +1386,14 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( W
         case RID_SCH_TransformTabDLG_SVXPAGE_ANGLE :
             {
             pDlg = new SvxTransformTabDialog( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE);
-            pDlg->RemoveTabPage( RID_SVXPAGE_ANGLE );
-            pDlg->RemoveTabPage( RID_SVXPAGE_SLANT );
+            pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
+            pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;
         case RID_SCH_TransformTabDLG_SVXPAGE_SLANT:
             {
             pDlg = new  SvxTransformTabDialog( pParent, pAttr,pSdrView, bSizeTabPage ? SVX_OBJ_NOPROTECT :  SVX_OBJ_NOPROTECT|SVX_OBJ_NORESIZE);
-            pDlg->RemoveTabPage( RID_SVXPAGE_SLANT );
+            pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
             }
             break;
         default:

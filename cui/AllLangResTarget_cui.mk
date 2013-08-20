@@ -75,7 +75,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/page.src \
     cui/source/tabpages/paragrph.src \
     cui/source/tabpages/strings.src \
-    cui/source/tabpages/transfrm.src \
 ))
 
 # vim: set noet sw=4 ts=4:

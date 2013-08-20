@@ -89,8 +89,6 @@
 #define RID_SVXPAGE_HATCH                   (RID_SVX_START +  57)
 #define RID_SVXPAGE_BITMAP                  (RID_SVX_START +  58)
 #define RID_SVXPAGE_GRADIENT                (RID_SVX_START +  59)
-#define RID_SVXPAGE_ANGLE                   (RID_SVX_START +  48)
-#define RID_SVXPAGE_SLANT                   (RID_SVX_START +  49)
 #define RID_SVXPAGE_DISTRIBUTE              (RID_SVX_START + 236)
 #define RID_SVXPAGE_MACROASSIGN             (RID_SVX_START + 296)
 

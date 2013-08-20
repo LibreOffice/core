@@ -44,7 +44,6 @@
 #define RID_SVX_FORMAT_CELLS_DLG            ( RID_SVX_START + 42 )
 
 // used in "tabpages"
-#define RID_SVXDLG_TRANSFORM                (RID_SVX_START +  45)
 #define RID_SVXDLG_LINE                     (RID_SVX_START +  50)
 #define RID_SVXDLG_BBDLG                    (RID_SVX_START +  40)
 #define RID_SVXDLG_CAPTION                  (RID_SVX_START + 151)

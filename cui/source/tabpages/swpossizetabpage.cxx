@@ -1748,8 +1748,8 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                 // Probably anchor change. So look for a similar relation.
                 switch (nRel)
                 {
-                    case RelOrientation::FRAME:             nRel = RelOrientation::PAGE_FRAME;    break;
-                    case RelOrientation::PRINT_AREA:        nRel = RelOrientation::PAGE_PRINT_AREA;  break;
+                    case RelOrientation::FRAME:           nRel = RelOrientation::PAGE_FRAME;    break;
+                    case RelOrientation::PRINT_AREA:      nRel = RelOrientation::PAGE_PRINT_AREA;  break;
                     case RelOrientation::PAGE_LEFT:       nRel = RelOrientation::FRAME_LEFT;    break;
                     case RelOrientation::PAGE_RIGHT:      nRel = RelOrientation::FRAME_RIGHT;   break;
                     case RelOrientation::FRAME_LEFT:      nRel = RelOrientation::PAGE_LEFT;     break;
