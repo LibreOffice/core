@@ -120,7 +120,7 @@ namespace dbaui
                 if ( !m_xFrameLoader.is() )
                 {
                     Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
-                    Sequence< Any > lArgs(2);
+                    Sequence< Any > lArgs(3);
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
@@ -129,6 +129,10 @@ namespace dbaui
                     lArgs[nArg++] <<= aProp;
 
                     aProp.Name    = OUString("TopWindow");
+                    aProp.Value <<= sal_True;
+                    lArgs[nArg++] <<= aProp;
+
+                    aProp.Name    = OUString("SupportPersistentWindowState");
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 
