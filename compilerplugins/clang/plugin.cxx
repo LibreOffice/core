@@ -199,6 +199,8 @@ bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
 
 bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
     {
+    if( rewriter.getRangeSize( range, opts ) == -1 )
+        return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
@@ -264,6 +266,8 @@ bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, Stri
 
 bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     {
+    if( rewriter.getRangeSize( range ) == -1 )
+        return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
@@ -274,6 +278,8 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
 
 bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange )
     {
+    if( rewriter.getRangeSize( range ) == -1 )
+        return reportEditFailure( range.getBegin());
     if( removals.find( range.getBegin()) != removals.end())
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
     removals.insert( range.getBegin());
