@@ -20,6 +20,8 @@
 #ifndef _OSL_THREAD_H_
 #define _OSL_THREAD_H_
 
+#include <stdint.h>
+
 #include "sal/config.h"
 
 #include "osl/time.h"
@@ -57,7 +59,7 @@ typedef enum
 } oslThreadPriority;
 
 
-typedef sal_uInt32 oslThreadIdentifier;
+typedef uintptr_t oslThreadIdentifier;
 
 typedef void* oslThreadKey;
 
