@@ -97,25 +97,25 @@ private:
 
     OKButton*           mpBtnOK;
 
-    String              msEstimatedSizePix1;
-    String              msEstimatedSizePix2;
-    String              msEstimatedSizeVec;
+    OUString            msEstimatedSizePix1;
+    OUString            msEstimatedSizePix2;
+    OUString            msEstimatedSizeVec;
 
-    String              ms1BitTreshold;
-    String              ms1BitDithered;
-    String              ms4BitGrayscale;
-    String              ms4BitColorPalette;
-    String              ms8BitGrayscale;
-    String              ms8BitColorPalette;
-    String              ms24BitColor;
+    OUString            ms1BitTreshold;
+    OUString            ms1BitDithered;
+    OUString            ms4BitGrayscale;
+    OUString            ms4BitColorPalette;
+    OUString            ms8BitGrayscale;
+    OUString            ms8BitColorPalette;
+    OUString            ms24BitColor;
 
     Size                maDialogSize;
 
     FilterConfigItem*   mpOptionsItem;
     FilterConfigItem*   mpFilterOptionsItem;
 
-    String              maExt;
-    String              maEstimatedSizeText;
+    OUString            maExt;
+    OUString            maEstimatedSizeText;
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 

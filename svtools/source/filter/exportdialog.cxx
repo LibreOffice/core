@@ -509,7 +509,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
     Bitmap aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( sal_False );
-    if ( aFilter.ImportGraphic( aGraphic, String(), rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*>(NULL), NULL ) == GRFILTER_OK )
+    if ( aFilter.ImportGraphic( aGraphic, "", rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*>(NULL), NULL ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
     }
@@ -522,7 +522,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
     if ( mbIsPixelFormat )
     {
         sal_Int32 nBitsPerPixel = 24;
-        String aEntry( mpLbColorDepth->GetSelectEntry() );
+        OUString aEntry( mpLbColorDepth->GetSelectEntry() );
         if ( ms1BitTreshold == aEntry )
             nBitsPerPixel = 1;
         else if ( ms1BitDithered == aEntry )
@@ -629,11 +629,11 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     get(mpBtnOK, "ok");
 
-    maExt.ToUpperAscii();
+    maExt = maExt.toAsciiUpperCase();
 
-    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+    OUString  aFilterConfigPath( "Office.Common/Filter/Graphic/Export/" );
     mpOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
-    aFilterConfigPath.Append( maExt );
+    aFilterConfigPath += maExt;
     mpFilterOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     mnInitialResolutionUnit = mbIsPixelFormat
@@ -643,7 +643,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32(OUString("MaxFilesizeForRealtimePreview"), 0);
     mpFtEstimatedSize->SetText(OUString(" \n "));
 
-    String aTitle(maExt);
+    OUString aTitle(maExt);
     aTitle += GetText();
     SetText(aTitle);
 
@@ -949,15 +949,15 @@ void ExportDialog::updateControls()
     sal_Int64 nRealFileSize( mpTempStream->Tell() );
     if ( mbIsPixelFormat )
     {
-        String aEst( nRealFileSize ? msEstimatedSizePix2 : msEstimatedSizePix1 );
+        OUString aEst( nRealFileSize ? msEstimatedSizePix2 : msEstimatedSizePix1 );
         sal_Int64 nRawFileSize( GetRawFileSize() );
-        xub_StrLen nInd = aEst.Search( '%' );
-        aEst.Replace( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
+        sal_Int32 nInd = aEst.indexOf( "%" );
+        aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
 
         if ( nRealFileSize )
         {
-            nInd = aEst.Search( '%', nInd );
-            aEst.Replace( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+            nInd = aEst.indexOf( "%", nInd );
+            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
         }
         mpFtEstimatedSize->SetText( aEst );
     }
@@ -965,9 +965,9 @@ void ExportDialog::updateControls()
     {
         if ( mnMaxFilesizeForRealtimePreview )
         {
-            String aEst( msEstimatedSizeVec );
-            xub_StrLen nInd = aEst.Search( '%', 0 );
-            aEst.Replace( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+            OUString aEst( msEstimatedSizeVec );
+            sal_Int32 nInd = aEst.indexOf( "%" );
+            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
             mpFtEstimatedSize->SetText( aEst );
         }
     }
