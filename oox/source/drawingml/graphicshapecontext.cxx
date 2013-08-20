@@ -232,13 +232,14 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
                     getFragmentPathFromRelId( msLo ),
                     getFragmentPathFromRelId( msQs ),
                     getFragmentPathFromRelId( msCs ));
-        OSL_TRACE("diagram added shape %s of type %s, size (%d,%d,%d,%d)",
-                  OUSTRING_TO_CSTR( mpShapePtr->getName() ),
-                  OUSTRING_TO_CSTR( mpShapePtr->getServiceName() ),
-                  mpShapePtr->getPosition().X,
-                  mpShapePtr->getPosition().Y,
-                  mpShapePtr->getSize().Width,
-                  mpShapePtr->getSize().Height);
+        SAL_INFO("oox.drawingml", OSL_THIS_FUNC
+                 << "diagram added shape " << mpShapePtr->getName()
+                 << " of type " << mpShapePtr->getServiceName()
+                 << ", size (" << mpShapePtr->getPosition().X
+                 << "," << mpShapePtr->getPosition().Y
+                 << "," << mpShapePtr->getSize().Width
+                 << "," << mpShapePtr->getSize().Height
+                 <<")");
         break;
     }
     default:
