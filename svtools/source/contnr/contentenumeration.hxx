@@ -148,7 +148,7 @@ namespace svt
         ::ucbhelper::Content  aContent;
         /** the URL of a folder. Will be ignored if <member>aContent</member> is not <NULL/>.
         */
-        String          sURL;
+        OUString          sURL;
 
         FolderDescriptor() { }
 
@@ -157,7 +157,7 @@ namespace svt
         {
         }
 
-        FolderDescriptor( const String& _rURL )
+        FolderDescriptor( const OUString& _rURL )
             :sURL( _rURL )
         {
         }

@@ -132,7 +132,7 @@ namespace svt
         m_aFolder = _rFolder;
         m_pResultHandler = _pResultHandler;
 
-        OSL_ENSURE( m_aFolder.aContent.get().is() || m_aFolder.sURL.Len(),
+        OSL_ENSURE( m_aFolder.aContent.get().is() || !m_aFolder.sURL.isEmpty(),
             "FileViewContentEnumerator::enumerateFolderContent: invalid folder descriptor!" );
 
         launch();
