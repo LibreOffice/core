@@ -45,6 +45,7 @@ namespace editeng {
 
 class FieldUpdater;
 class FieldUpdaterImpl;
+struct SectionAttribute;
 
 }
 
@@ -98,6 +99,18 @@ public:
     void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+
+    /**
+     * Get all attributes that are applied to this content, separated by
+     * sections.  If multiple attributes are applied to the same section, the
+     * object representing that section will store multiple attributes.
+     * Sections never overlap each other; if an attribute was applied to [0-6]
+     * and another applied to [3-10], you would get 3 sections that are [0-3],
+     * [3-6] and [6-10].
+     *
+     * <p>Note that this method skips field attributes.</p>
+     */
+    void GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const;
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;

@@ -21,8 +21,14 @@
 #include "editeng/editdoc.hxx"
 #include "editeng/svxacorr.hxx"
 #include "editeng/unofield.hxx"
+#include "editeng/wghtitem.hxx"
+#include "editeng/postitem.hxx"
+#include "editeng/sectionattribute.hxx"
+#include "editeng/editobj.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -48,10 +54,13 @@ public:
      */
     void testAutocorrect();
 
+    void testSectionAttributes();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
+    CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -331,7 +340,91 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
+}
 
+bool hasBold(const editeng::SectionAttribute& rSecAttr)
+{
+    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
+    for (; it != itEnd; ++it)
+    {
+        const SfxPoolItem* p = *it;
+        if (p->Which() != EE_CHAR_WEIGHT)
+            continue;
+
+        if (static_cast<const SvxWeightItem*>(p)->GetWeight() != WEIGHT_BOLD)
+            continue;
+
+        return true;
+    }
+    return false;
+}
+
+bool hasItalic(const editeng::SectionAttribute& rSecAttr)
+{
+    std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
+    for (; it != itEnd; ++it)
+    {
+        const SfxPoolItem* p = *it;
+        if (p->Which() != EE_CHAR_ITALIC)
+            continue;
+
+        if (static_cast<const SvxPostureItem*>(p)->GetPosture() != ITALIC_NORMAL)
+            continue;
+
+        return true;
+    }
+    return false;
+}
+
+void Test::testSectionAttributes()
+{
+    EditEngine aEngine(mpItemPool);
+
+    boost::scoped_ptr<SfxItemSet> pSet(new SfxItemSet(aEngine.GetEmptyItemSet()));
+    SvxWeightItem aBold(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+    SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
+
+    OUString aParaText = "aaabbbccc";
+    aEngine.SetText(aParaText);
+    pSet->Put(aBold);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+    aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
+    pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
+    pSet->Put(aItalic);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+
+    aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
+    boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+    CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+    std::vector<editeng::SectionAttribute> aAttrs;
+    pEditText->GetAllSectionAttributes(aAttrs);
+
+    // Now, we should have a total of 3 sections.
+    CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
+
+    // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
+    const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+    CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
+
+    // Second section should be 3-6, and it should be both bold and italic.
+    pSecAttr = &aAttrs[1];
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnStart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnEnd);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->maAttributes.size());
+    CPPUNIT_ASSERT_MESSAGE("This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr));
+
+    // Third section should be 6-9, and it should be only italic.
+    pSecAttr = &aAttrs[2];
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnStart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pSecAttr->mnEnd);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+    CPPUNIT_ASSERT_MESSAGE("This section must be italic.", hasItalic(*pSecAttr));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

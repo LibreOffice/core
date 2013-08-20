@@ -60,6 +60,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/impedit3 \
     editeng/source/editeng/impedit4 \
     editeng/source/editeng/impedit5 \
+    editeng/source/editeng/sectionattribute \
     editeng/source/editeng/textconv \
     editeng/source/items/borderline \
     editeng/source/items/bulitem \

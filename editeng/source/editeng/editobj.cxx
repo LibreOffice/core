@@ -28,6 +28,7 @@
 
 #include "editeng/fieldupdater.hxx"
 #include "editeng/macros.hxx"
+#include "editeng/sectionattribute.hxx"
 #include <editobj2.hxx>
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
@@ -274,6 +275,11 @@ const SfxItemSet& EditTextObject::GetParaAttribs(sal_Int32 nPara) const
 bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
 {
     return mpImpl->RemoveCharAttribs(nWhich);
+}
+
+void EditTextObject::GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const
+{
+    mpImpl->GetAllSectionAttributes(rAttrs);
 }
 
 void EditTextObject::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const
@@ -822,6 +828,149 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
         ClearPortionInfo();
 
     return bChanged;
+}
+
+namespace {
+
+class FindByParagraph : std::unary_function<editeng::SectionAttribute, bool>
+{
+    size_t mnPara;
+public:
+    FindByParagraph(size_t nPara) : mnPara(nPara) {}
+    bool operator() (const editeng::SectionAttribute& rAttr) const
+    {
+        return rAttr.mnParagraph == mnPara;
+    }
+};
+
+class FindBySectionStart : std::unary_function<editeng::SectionAttribute, bool>
+{
+    size_t mnPara;
+    size_t mnStart;
+public:
+    FindBySectionStart(size_t nPara, size_t nStart) : mnPara(nPara), mnStart(nStart) {}
+    bool operator() (const editeng::SectionAttribute& rAttr) const
+    {
+        return rAttr.mnParagraph == mnPara && rAttr.mnStart == mnStart;
+    }
+};
+
+}
+
+void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const
+{
+    typedef std::vector<size_t> SectionBordersType;
+    typedef std::map<size_t, SectionBordersType> ParagraphsType;
+    ParagraphsType aParaBorders;
+
+    // First pass: determine section borders for each paragraph.
+    for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
+    {
+        const ContentInfo& rC = aContents[nPara];
+        for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
+        {
+            const XEditAttribute& rAttr = rC.aAttribs[nAttr];
+            const SfxPoolItem* pItem = rAttr.GetItem();
+            if (!pItem || pItem->Which() == EE_FEATURE_FIELD)
+                continue;
+
+            ParagraphsType::iterator it = aParaBorders.lower_bound(nPara);
+            SectionBordersType* pBorders = NULL;
+            if (it != aParaBorders.end() && !aParaBorders.key_comp()(nPara, it->first))
+            {
+                // Container for this paragraph already exists.
+                pBorders = &it->second;
+            }
+            else
+            {
+                it = aParaBorders.insert(it, ParagraphsType::value_type(nPara, SectionBordersType()));
+                pBorders = &it->second;
+            }
+
+            pBorders->push_back(rAttr.GetStart());
+            pBorders->push_back(rAttr.GetEnd());
+        }
+    }
+
+    // Sort and remove duplicates for each paragraph.
+    ParagraphsType::iterator it = aParaBorders.begin(), itEnd = aParaBorders.end();
+    for (; it != itEnd; ++it)
+    {
+        SectionBordersType& rBorders = it->second;
+        std::sort(rBorders.begin(), rBorders.end());
+        SectionBordersType::iterator itUniqueEnd = std::unique(rBorders.begin(), rBorders.end());
+        rBorders.erase(itUniqueEnd, rBorders.end());
+    }
+
+    std::vector<editeng::SectionAttribute> aAttrs;
+
+    // Create storage for each section.  Note that this creates storage even
+    // for unformatted sections.  The entries are sorted first by paragraph,
+    // then by section positions.  They don't overlap with each other.
+    it = aParaBorders.begin();
+    for (; it != itEnd; ++it)
+    {
+        size_t nPara = it->first;
+        const SectionBordersType& rBorders = it->second;
+        if (rBorders.empty())
+            continue;
+
+        SectionBordersType::const_iterator itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
+        size_t nPrev = *itBorder;
+        size_t nCur;
+        for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)
+        {
+            nCur = *itBorder;
+            aAttrs.push_back(editeng::SectionAttribute(nPara, nPrev, nCur));
+        }
+    }
+
+    if (aAttrs.empty())
+        return;
+
+    // Go through all formatted paragraphs, and store format items.
+    it = aParaBorders.begin();
+    std::vector<editeng::SectionAttribute>::iterator itAttr = aAttrs.begin();
+    for (; it != itEnd; ++it)
+    {
+        size_t nPara = it->first;
+        const ContentInfo& rC = aContents[nPara];
+        if (itAttr->mnParagraph != nPara)
+            // Find the first container for the current paragraph.
+            itAttr = std::find_if(itAttr, aAttrs.end(), FindByParagraph(nPara));
+
+        if (itAttr == aAttrs.end())
+            // This should never happen. There is a logic error somewhere...
+            return;
+
+        // Remember this position.
+        std::vector<editeng::SectionAttribute>::iterator itAttrHead = itAttr;
+
+        for (size_t i = 0; i < rC.aAttribs.size(); ++i)
+        {
+            const XEditAttribute& rAttr = rC.aAttribs[i];
+            const SfxPoolItem* pItem = rAttr.GetItem();
+            if (!pItem || pItem->Which() == EE_FEATURE_FIELD)
+                continue;
+
+            size_t nStart = rAttr.GetStart(), nEnd = rAttr.GetEnd();
+            itAttr = itAttrHead;
+
+            // Find the container whose start position matches.
+            itAttr = std::find_if(itAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
+            if (itAttr == aAttrs.end())
+                // This should never happen. There is a logic error somewhere...
+                return;
+
+            for (; itAttr != aAttrs.end() && itAttr->mnEnd <= nEnd; ++itAttr)
+            {
+                editeng::SectionAttribute& rSecAttr = *itAttr;
+                rSecAttr.maAttributes.push_back(pItem);
+            }
+        }
+    }
+
+    rAttrs.swap(aAttrs);
 }
 
 void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& rFamily) const

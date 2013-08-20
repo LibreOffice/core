@@ -28,6 +28,12 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
+namespace editeng {
+
+struct SectionAttribute;
+
+}
+
 class XEditAttribute
 {
 private:
@@ -218,6 +224,8 @@ public:
     void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+
+    void GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const;
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
