@@ -15,6 +15,8 @@
 #include <connectivity/TIndexes.hxx>
 #include <connectivity/TKeys.hxx>
 
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
@@ -93,19 +95,20 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     uno::Reference< XPropertySet > xColumn(m_pColumns->getByName(rColName), UNO_QUERY);
 
     // sdbcx::Descriptor
-    bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
+    const bool bNameChanged = xColumn->getPropertyValue("Name") != rDescriptor->getPropertyValue("Name");
     // sdbcx::ColumnDescriptor
-    bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
-    bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
-    bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
-    bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
-    bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
-    bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+    const bool bTypeChanged = xColumn->getPropertyValue("Type") != rDescriptor->getPropertyValue("Type");
+    const bool bTypeNameChanged = xColumn->getPropertyValue("TypeName") != rDescriptor->getPropertyValue("TypeName");
+    const bool bPrecisionChanged = xColumn->getPropertyValue("Precision") != rDescriptor->getPropertyValue("Precision");
+    const bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
+    const bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
+    const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
     // TODO: remainder -- these are all "optional" so have to detect presence and change.
 
     bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
                                      != rDescriptor->getPropertyValue("DefaultValue");
 
+    // TODO: quote identifiers as needed.
     if (bNameChanged)
     {
         OUString sNewTableName;
@@ -125,8 +128,50 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         // possibly we have to wrap things in Util::evaluateStatusVector.
     }
 
-    if (bPrecisionChanged || bScaleChanged
-        || bIsNullableChanged || bIsAutoIncrementChanged)
+    if (bIsNullableChanged)
+    {
+        sal_Int32 nNullabble;
+        rDescriptor->getPropertyValue("IsNullable") >>= nNullabble;
+
+        if (nNullabble != ColumnValue::NULLABLE_UNKNOWN)
+        {
+
+            OUString sSql;
+            // Dirty hack: can't change null directly in sql, we have to fiddle
+            // the system tables manually.
+            if (nNullabble == ColumnValue::NULLABLE)
+            {
+                sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
+                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
+                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+            }
+            else if (nNullabble == ColumnValue::NO_NULLS)
+            {
+                // And if we are making NOT NULL then we have to make sure we have
+                // no nulls left in the column.
+                OUString sFillNulls("UPDATE \"" + getName() + "\" SET \""
+                                    + rColName + "\" = 0 "
+                                    "WHERE \"" + rColName + "\" IS NULL");
+                getConnection()->createStatement()->execute(sFillNulls);
+
+                sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = 1 "
+                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
+                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+            }
+            getConnection()->createStatement()->execute(sSql);
+
+            // This is in essence a DDL statement which requires a commit
+            // to become visible in practice.
+            getConnection()->commit();
+            // TODO: confirm, do we really need this.
+        }
+        else
+        {
+            SAL_WARN("connectivity.firebird", "Attempting to set Nullable to NULLABLE_UNKNOWN");
+        }
+    }
+
+    if (bPrecisionChanged || bScaleChanged || bIsAutoIncrementChanged)
     {
         // TODO: changeType
     }
