@@ -33,46 +33,42 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 
-    FixedLine   m_aSizeFL;
-    FixedText   m_aWidthFT;
-    MetricField m_aWidthMF;
-    FixedText   m_aHeightFT;
-    MetricField m_aHeightMF;
-    CheckBox    m_aKeepRatioCB;
 
-    FixedLine   m_aSeparatorFL;
+    MetricField* m_pWidthMF;
+    MetricField* m_pHeightMF;
+    CheckBox*    m_pKeepRatioCB;
 
-    FixedLine   m_aAnchorFL;
-    RadioButton m_aToPageRB;
-    RadioButton m_aToParaRB;
-    RadioButton m_aToCharRB;
-    RadioButton m_aAsCharRB;
-    RadioButton m_aToFrameRB;
+    RadioButton* m_pToPageRB;
+    RadioButton* m_pToParaRB;
+    RadioButton* m_pToCharRB;
+    RadioButton* m_pAsCharRB;
+    RadioButton* m_pToFrameRB;
 
-    FixedLine   m_aProtectionFL;
-    TriStateBox m_aPositionCB;
-    TriStateBox m_aSizeCB;
+    TriStateBox* m_pPositionCB;
+    TriStateBox* m_pSizeCB;
 
-    FixedLine   m_aPositionFL;
-    FixedText   m_aHoriFT;
-    ListBox     m_aHoriLB;
-    FixedText   m_aHoriByFT;
-    MetricField m_aHoriByMF;
-    FixedText   m_aHoriToFT;
-    ListBox     m_aHoriToLB;
+    VclFrame*    m_pPositionFL;
+//     VclBox*      m_pBoxHor;
+    FixedText*   m_pHoriFT;
+    ListBox*     m_pHoriLB;
+    FixedText*   m_pHoriByFT;
+    MetricField* m_pHoriByMF;
+    FixedText*   m_pHoriToFT;
+    ListBox*     m_pHoriToLB;
 
-    CheckBox    m_aHoriMirrorCB;
+    CheckBox*    m_pHoriMirrorCB;
 
-    FixedText   m_aVertFT;
-    ListBox     m_aVertLB;
-    FixedText   m_aVertByFT;
-    MetricField m_aVertByMF;
-    FixedText   m_aVertToFT;
-    ListBox     m_aVertToLB;
+//     VclBox*      m_pBoxVert;
+    FixedText*   m_pVertFT;
+    ListBox*     m_pVertLB;
+    FixedText*   m_pVertByFT;
+    MetricField* m_pVertByMF;
+    FixedText*   m_pVertToFT;
+    ListBox*     m_pVertToLB;
 
-    CheckBox    m_aFollowCB;
+    CheckBox*    m_pFollowCB;
 
-    SvxSwFrameExample m_aExampleWN;
+    SvxSwFrameExample* m_pExampleWN;
 
     Link        m_aValidateLink;
 

@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public Window
 
     short       nWrap;
     short       nAnchor;
-    sal_Bool        bTrans;
+    sal_Bool    bTrans;
 
     Point       aRelPos;
 
@@ -73,6 +73,7 @@ protected:
 public:
 
     SvxSwFrameExample(Window* pParent, const ResId& rResID);
+    SvxSwFrameExample(Window* pParent, WinBits nBits );
     ~SvxSwFrameExample();
 
     inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
