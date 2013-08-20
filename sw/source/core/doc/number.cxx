@@ -771,19 +771,20 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                      !aExtremities.nPrefixChars
                    )
                 {
-                    nStrip = aPrevStr.getLength();
-                    while (aPrevStr.getLength() - nStrip < aExtremities.nSuffixChars)
+                    nStrip = 0;
+                    const sal_Int32 nLastPos = aPrevStr.getLength() - 1;
+                    while (nStrip < aExtremities.nSuffixChars)
                     {
-                        const sal_Unicode cur = aPrevStr[nStrip];
+                        const sal_Unicode cur = aPrevStr[nLastPos-nStrip];
                         if  (!bFirstIteration && '\t' != cur && ' ' != cur)
                         {
                             break;
                         }
-                        --nStrip;
+                        ++nStrip;
                     }
-                    if (nStrip < aPrevStr.getLength())
+                    if (nStrip)
                     {
-                        aPrevStr = aPrevStr.copy(0, nStrip);
+                        aPrevStr = aPrevStr.copy(0, aPrevStr.getLength()-nStrip);
                     }
                 }
                 else if (!sOldPrefix.isEmpty())
