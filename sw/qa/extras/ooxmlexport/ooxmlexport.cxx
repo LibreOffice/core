@@ -109,6 +109,7 @@ public:
     void testFdo67013();
     void testParaShadow();
     void testTableFloatingMargins();
+    void testFdo68418();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,6 +201,7 @@ void Test::run()
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
+        {"fdo68418.docx", &Test::testFdo68418},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1174,6 +1176,22 @@ void Test::testTableFloatingMargins()
         xmlDocPtr pXmlDoc = parseExport();
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
     }
+}
+
+void Test::testFdo68418()
+{
+    // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'
+    // it checked if it 'IsPlausableSingleWordSection'.
+    // The 'IsPlausableSingleWordSection' compared different aspects of 2 'SwFrmFmt' objects.
+    // One of the checks was 'do both formats have the same distance from the top and bottom ?'
+    // This check is correct if both have headers or both don't have headers.
+    // However - if one has a header, and the other one has an empty header (no header) - it is not correct to compare
+    // between them (same goes for 'footer').
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
+
+    // First page footer is empty, second page footer is 'aaaa'
+    CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), xFooterParagraph->getString());        // I get an error that it expects ''
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
