@@ -210,6 +210,7 @@ friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::ColumnSpanSet;
+friend class sc::EditTextIterator;
 
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,

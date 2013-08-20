@@ -268,6 +268,7 @@ public:
     void testDeleteCol();
     void testAnchoredRotatedShape();
     void testCellTextWidth();
+    void testEditTextIterator();
 
     void testCondFormatINSDEL();
 
@@ -364,6 +365,7 @@ public:
     CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
+    CPPUNIT_TEST(testEditTextIterator);
     CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST_SUITE_END();
 

@@ -56,6 +56,7 @@ namespace sc {
     class ColumnSpanSet;
     struct ColumnBlockPosition;
     struct RefUpdateContext;
+    class EditTextIterator;
 }
 class SvxFontItem;
 
@@ -231,6 +232,7 @@ friend class ScTable;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
 friend class sc::ColumnSpanSet;
+friend class sc::EditTextIterator;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:

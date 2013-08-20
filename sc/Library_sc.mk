@@ -147,6 +147,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/dputil \
 	sc/source/core/data/drawpage \
 	sc/source/core/data/drwlayer \
+	sc/source/core/data/edittextiterator \
 	sc/source/core/data/fillinfo \
 	sc/source/core/data/formulacell \
 	sc/source/core/data/formulaiter \

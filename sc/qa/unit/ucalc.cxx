@@ -49,6 +49,8 @@
 #include "dociter.hxx"
 #include "docsh.hxx"
 #include "queryparam.hxx"
+#include "edittextiterator.hxx"
+#include "editutil.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -4017,6 +4019,98 @@ void Test::testCellTextWidth()
             CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
         }
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+bool checkEditTextIterator(sc::EditTextIterator& rIter, const char** pChecks)
+{
+    const EditTextObject* pText = rIter.first();
+    const char* p = *pChecks;
+
+    for (int i = 0; i < 100; ++i) // cap it to 100 loops.
+    {
+        if (!pText)
+            // No more edit cells. The check string array should end too.
+            return p == NULL;
+
+        if (!p)
+            // More edit cell, but no more check string. Bad.
+            return false;
+
+        if (pText->GetParagraphCount() != 1)
+            // For this test, we don't handle multi-paragraph text.
+            return false;
+
+        if (pText->GetText(0) != OUString::createFromAscii(p))
+            // Text differs from what's expected.
+            return false;
+
+        pText = rIter.next();
+        ++pChecks;
+        p = *pChecks;
+    }
+
+    return false;
+}
+
+void Test::testEditTextIterator()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    {
+        // First, try with an empty sheet.
+        sc::EditTextIterator aIter(*m_pDoc,0);
+        const char* pChecks[] = { NULL };
+        CPPUNIT_ASSERT_MESSAGE("Wrong iterator behavior.", checkEditTextIterator(aIter, pChecks));
+    }
+
+    ScFieldEditEngine& rEditEngine = m_pDoc->GetEditEngine();
+
+    {
+        // Only set one edit cell.
+        rEditEngine.SetText("A2");
+        m_pDoc->SetEditText(ScAddress(0,1,0), rEditEngine.CreateTextObject());
+        sc::EditTextIterator aIter(*m_pDoc,0);
+        const char* pChecks[] = { "A2", NULL };
+        CPPUNIT_ASSERT_MESSAGE("Wrong iterator behavior.", checkEditTextIterator(aIter, pChecks));
+    }
+
+    {
+        // Add a series of edit cells.
+        rEditEngine.SetText("A5");
+        m_pDoc->SetEditText(ScAddress(0,4,0), rEditEngine.CreateTextObject());
+        rEditEngine.SetText("A6");
+        m_pDoc->SetEditText(ScAddress(0,5,0), rEditEngine.CreateTextObject());
+        rEditEngine.SetText("A7");
+        m_pDoc->SetEditText(ScAddress(0,6,0), rEditEngine.CreateTextObject());
+        sc::EditTextIterator aIter(*m_pDoc,0);
+        const char* pChecks[] = { "A2", "A5", "A6", "A7", NULL };
+        CPPUNIT_ASSERT_MESSAGE("Wrong iterator behavior.", checkEditTextIterator(aIter, pChecks));
+    }
+
+    {
+        // Add more edit cells to column C. Skip column B.
+        rEditEngine.SetText("C1");
+        m_pDoc->SetEditText(ScAddress(2,0,0), rEditEngine.CreateTextObject());
+        rEditEngine.SetText("C3");
+        m_pDoc->SetEditText(ScAddress(2,2,0), rEditEngine.CreateTextObject());
+        rEditEngine.SetText("C4");
+        m_pDoc->SetEditText(ScAddress(2,3,0), rEditEngine.CreateTextObject());
+        sc::EditTextIterator aIter(*m_pDoc,0);
+        const char* pChecks[] = { "A2", "A5", "A6", "A7", "C1", "C3", "C4", NULL };
+        CPPUNIT_ASSERT_MESSAGE("Wrong iterator behavior.", checkEditTextIterator(aIter, pChecks));
+    }
+
+    {
+        // Add some numeric, string and formula cells.  This shouldn't affect the outcome.
+        m_pDoc->SetString(ScAddress(0,99,0), "=ROW()");
+        m_pDoc->SetValue(ScAddress(1,3,0), 1.2);
+        m_pDoc->SetString(ScAddress(2,4,0), "Simple string");
+        sc::EditTextIterator aIter(*m_pDoc,0);
+        const char* pChecks[] = { "A2", "A5", "A6", "A7", "C1", "C3", "C4", NULL };
+        CPPUNIT_ASSERT_MESSAGE("Wrong iterator behavior.", checkEditTextIterator(aIter, pChecks));
     }
 
     m_pDoc->DeleteTab(0);

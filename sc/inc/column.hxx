@@ -51,6 +51,7 @@ namespace sc {
     struct RefUpdateInsertTabContext;
     struct RefUpdateDeleteTabContext;
     struct RefUpdateMoveTabContext;
+    class EditTextIterator;
 }
 
 class Fraction;
@@ -132,6 +133,7 @@ friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::SingleColumnSpanSet;
 friend class sc::ColumnSpanSet;
+friend class sc::EditTextIterator;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
