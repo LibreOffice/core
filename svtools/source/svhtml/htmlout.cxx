@@ -718,8 +718,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     .append(aCoords).append("\" ");
                 rStream << sOut.makeStringAndClear().getStr();
 
-                String aURL( pObj->GetURL() );
-                if( aURL.Len() && pObj->IsActive() )
+                OUString aURL( pObj->GetURL() );
+                if( !aURL.isEmpty() && pObj->IsActive() )
                 {
                     aURL = URIHelper::simpleNormalizedMakeRelative(
                         rBaseURL, aURL );
@@ -730,8 +730,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 else
                     rStream << OOO_STRING_SVTOOLS_HTML_O_nohref;
 
-                const String& rObjName = pObj->GetName();
-                if( rObjName.Len() )
+                const OUString& rObjName = pObj->GetName();
+                if( !rObjName.isEmpty() )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                         .append("=\"");
@@ -739,8 +739,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
-                const String& rTarget = pObj->GetTarget();
-                if( rTarget.Len() && pObj->IsActive() )
+                const OUString& rTarget = pObj->GetTarget();
+                if( !rTarget.isEmpty() && pObj->IsActive() )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target)
                         .append("=\"");
@@ -748,11 +748,11 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
-                String rDesc( pObj->GetAltText() );
-                if( rDesc.Len() == 0 )
+                OUString rDesc( pObj->GetAltText() );
+                if( rDesc.isEmpty() )
                     rDesc = pObj->GetDesc();
 
-                if( rDesc.Len() )
+                if( !rDesc.isEmpty() )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt)
                         .append("=\"");

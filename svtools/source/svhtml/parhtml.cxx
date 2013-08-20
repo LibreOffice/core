@@ -144,8 +144,8 @@ sal_uInt32 HTMLOption::GetNumber() const
                  nToken<HTML_OPTION_CONTEXT_END) ||
                 nToken==HTML_O_VALUE,
         "GetNumber: Option not numerical" );
-    String aTmp(comphelper::string::stripStart(aValue, ' '));
-    sal_Int32 nTmp = aTmp.ToInt32();
+    OUString aTmp(comphelper::string::stripStart(aValue, ' '));
+    sal_Int32 nTmp = aTmp.toInt32();
     return nTmp >= 0 ? (sal_uInt32)nTmp : 0;
 }
 
@@ -154,8 +154,8 @@ sal_Int32 HTMLOption::GetSNumber() const
     DBG_ASSERT( (nToken>=HTML_OPTION_NUMBER_START && nToken<HTML_OPTION_NUMBER_END) ||
                 (nToken>=HTML_OPTION_CONTEXT_START && nToken<HTML_OPTION_CONTEXT_END),
         "GetSNumber: Option not numerical" );
-    String aTmp(comphelper::string::stripStart(aValue, ' '));
-    return aTmp.ToInt32();
+    OUString aTmp(comphelper::string::stripStart(aValue, ' '));
+    return aTmp.toInt32();
 }
 
 void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim ) const
@@ -229,10 +229,10 @@ void HTMLOption::GetColor( Color& rColor ) const
     DBG_ASSERT( (nToken>=HTML_OPTION_COLOR_START && nToken<HTML_OPTION_COLOR_END) || nToken==HTML_O_SIZE,
         "GetColor: Option is not a color." );
 
-    String aTmp( aValue );
-    aTmp.ToUpperAscii();
+    OUString aTmp( aValue );
+    aTmp = aTmp.toAsciiUpperCase();
     sal_uInt32 nColor = SAL_MAX_UINT32;
-    if( '#'!=aTmp.GetChar( 0 ) )
+    if( '#' != aTmp[0] )
         nColor = GetHTMLColor( aTmp );
 
     if( SAL_MAX_UINT32 == nColor )
@@ -243,13 +243,12 @@ void HTMLOption::GetColor( Color& rColor ) const
         {
             // Whatever Netscape does to get color values,
             // at maximum three characters < '0' are ignored.
-            sal_Unicode c = nPos<aTmp.Len() ? aTmp.GetChar( nPos++ )
-                                                     : '0';
+            sal_Unicode c = nPos<aTmp.getLength() ? aTmp[ nPos++ ] : '0';
             if( c < '0' )
             {
-                c = nPos<aTmp.Len() ? aTmp.GetChar(nPos++) : '0';
+                c = nPos<aTmp.getLength() ? aTmp[nPos++] : '0';
                 if( c < '0' )
-                    c = nPos<aTmp.Len() ? aTmp.GetChar(nPos++) : '0';
+                    c = nPos<aTmp.getLength() ? aTmp[nPos++] : '0';
             }
             nColor *= 16;
             if( c >= '0' && c <= '9' )
@@ -578,8 +577,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             else
                             {
                                 // If not scanning a tag return token
-                                aToken +=
-                                    String( sTmpBuffer.makeStringAndClear() );
+                                aToken += sTmpBuffer.makeStringAndClear();
                                 if( cChar )
                                 {
                                     if( !aToken.isEmpty() )
@@ -608,8 +606,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                         return HTML_SOFTHYPH;
                                 }
                                 aToken += "&";
-                                aToken +=
-                                    String(sEntityBuffer.makeStringAndClear());
+                                aToken += sEntityBuffer.makeStringAndClear();
                                 break;
                             }
                         }
@@ -636,7 +633,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     // options.
                     sTmpBuffer.append( (sal_Unicode)'\\' );
                     if( MAX_LEN == sTmpBuffer.getLength() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
                 }
                 if( IsParserWorking() )
                 {
@@ -674,7 +671,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 // Innerhalb von Tags kennzeichnen
                 sTmpBuffer.append( (sal_Unicode)'\\' );
                 if( MAX_LEN == sTmpBuffer.getLength() )
-                    aToken += String(sTmpBuffer.makeStringAndClear());
+                    aToken += sTmpBuffer.makeStringAndClear();
             }
             sTmpBuffer.append( (sal_Unicode)'\\' );
             break;
@@ -768,7 +765,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1L )
                         {
                             // Have seen s.th. aside from blanks?
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                             return HTML_TEXTTOKEN;
                         }
                         else
@@ -795,7 +792,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     sTmpBuffer.append( nNextCh );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
                         if( (sal_uLong(aToken.getLength()) + MAX_LEN) >
                                 sal_uLong(STRING_MAXLEN & ~1 ) )
                         {
@@ -808,7 +805,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         !IsParserWorking() )
                     {
                         if( !sTmpBuffer.isEmpty() )
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                         return HTML_TEXTTOKEN;
                     }
                 } while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
@@ -817,14 +814,14 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         }
 
         if( MAX_LEN == sTmpBuffer.getLength() )
-            aToken += String(sTmpBuffer.makeStringAndClear());
+            aToken += sTmpBuffer.makeStringAndClear();
 
         if( bContinue && bNextCh )
             nNextCh = GetNextChar();
     }
 
     if( !sTmpBuffer.isEmpty() )
-        aToken += String(sTmpBuffer.makeStringAndClear());
+        aToken += sTmpBuffer.makeStringAndClear();
 
     return HTML_TEXTTOKEN;
 }
@@ -859,7 +856,7 @@ int HTMLParser::_GetNextRawToken()
                 // Maybe we've reached the end.
 
                 // Save what we have read previously...
-                aToken += String(sTmpBuffer.makeStringAndClear());
+                aToken += sTmpBuffer.makeStringAndClear();
 
                 // and remember position in stream.
                 sal_uLong nStreamPos = rInput.Tell();
@@ -887,15 +884,15 @@ int HTMLParser::_GetNextRawToken()
                     nNextCh = GetNextChar();
                 }
 
-                String aTok( sTmpBuffer.toString() );
-                aTok.ToUpperAscii();
+                OUString aTok( sTmpBuffer.toString() );
+                aTok = aTok.toAsciiUpperCase();
                 bool bDone = false;
                 if( bReadScript || !aEndToken.isEmpty() )
                 {
                     if( !bReadComment )
                     {
-                        if( aTok.CompareToAscii( OOO_STRING_SVTOOLS_HTML_comment, 3 )
-                                == COMPARE_EQUAL )
+                        if( aTok.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3 )
+                                == 0 )
                         {
                             bReadComment = true;
                         }
@@ -904,13 +901,13 @@ int HTMLParser::_GetNextRawToken()
                             // A script has to end with "</SCRIPT>". But
                             // ">" is optional for security reasons
                             bDone = bOffState &&
-                            COMPARE_EQUAL == ( bReadScript
-                                ? aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_script)
-                                : aTok.CompareTo(aEndToken) );
+                            0 == ( bReadScript
+                                ? aTok.compareTo(OOO_STRING_SVTOOLS_HTML_script)
+                                : aTok.compareTo(aEndToken) );
                         }
                     }
-                    if( bReadComment && '>'==nNextCh && aTok.Len() >= 2 &&
-                        aTok.Copy( aTok.Len()-2 ).EqualsAscii( "--" ) )
+                    if( bReadComment && '>'==nNextCh && aTok.getLength() >= 2 &&
+                        aTok.endsWith( "--" ) )
                     {
                         // End of comment of style <!----->
                         bReadComment = false;
@@ -920,13 +917,13 @@ int HTMLParser::_GetNextRawToken()
                 {
                     // Style sheets can be closed by </STYLE>, </HEAD> or <BODY>
                     if( bOffState )
-                        bDone = aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_style)
-                                    == COMPARE_EQUAL ||
-                                aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_head)
-                                    == COMPARE_EQUAL;
+                        bDone = aTok.compareTo(OOO_STRING_SVTOOLS_HTML_style)
+                                    == 0 ||
+                                aTok.compareTo(OOO_STRING_SVTOOLS_HTML_head)
+                                    == 0;
                     else
                         bDone =
-                            aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_body) == COMPARE_EQUAL;
+                            aTok.compareTo(OOO_STRING_SVTOOLS_HTML_body) == 0;
                 }
 
                 if( bDone )
@@ -985,7 +982,7 @@ int HTMLParser::_GetNextRawToken()
                     bTwoMinus = true;
 
                     if( MAX_LEN == sTmpBuffer.getLength() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
                     sTmpBuffer.append( nNextCh );
                     nNextCh = GetNextChar();
                 }
@@ -1037,7 +1034,7 @@ int HTMLParser::_GetNextRawToken()
 
         if( (!bContinue && !sTmpBuffer.isEmpty()) ||
             MAX_LEN == sTmpBuffer.getLength() )
-            aToken += String(sTmpBuffer.makeStringAndClear());
+            aToken += sTmpBuffer.makeStringAndClear();
 
         if( bContinue && bNextCh )
             nNextCh = GetNextChar();
@@ -1113,13 +1110,13 @@ int HTMLParser::_GetNextToken()
                     do {
                         sTmpBuffer.append( nNextCh );
                         if( MAX_LEN == sTmpBuffer.getLength() )
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
                     } while( '>' != nNextCh && '/' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
                              IsParserWorking() && !rInput.IsEof() );
 
                     if( !sTmpBuffer.isEmpty() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
 
                     // Skip blanks
                     while( HTML_ISSPACE( nNextCh ) && IsParserWorking() )
@@ -1459,7 +1456,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
         if( HTML_ISALPHA( aToken[nPos] ) )
         {
             int nToken;
-            String aValue;
+            OUString aValue;
             xub_StrLen nStt = nPos;
             sal_Unicode cChar = 0;
 
@@ -2088,7 +2085,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         const HTMLOptions& aOptions,
         rtl_TextEncoding& o_rEnc )
 {
-    String aName, aContent;
+    OUString aName, aContent;
     sal_uInt16 nAction = HTML_META_NONE;
     bool bHTTPEquiv = false, bChanged = false;
 
@@ -2131,9 +2128,9 @@ bool HTMLParser::ParseMetaOptionsImpl(
     if ( bHTTPEquiv && i_pHTTPHeader )
     {
         // Netscape seems to just ignore a closing ", so we do too
-        if ( aContent.Len() && '"' == aContent.GetChar( aContent.Len()-1 ) )
+        if ( !aContent.isEmpty() && '"' == aContent[ aContent.getLength()-1 ] )
         {
-            aContent.Erase( aContent.Len() - 1 );
+            aContent = aContent.copy( 0, aContent.getLength() - 1 );
         }
         SvKeyValue aKeyValue( aName, aContent );
         i_pHTTPHeader->Append( aKeyValue );
@@ -2175,11 +2172,11 @@ bool HTMLParser::ParseMetaOptionsImpl(
 
         case HTML_META_CREATED:
         case HTML_META_CHANGED:
-            if ( i_xDocProps.is() && aContent.Len() &&
+            if ( i_xDocProps.is() && !aContent.isEmpty() &&
                  comphelper::string::getTokenCount(aContent, ';') == 2 )
             {
-                Date aDate( (sal_uLong)aContent.GetToken(0).ToInt32() );
-                Time aTime( (sal_uLong)aContent.GetToken(1).ToInt32() );
+                Date aDate( (sal_uLong)aContent.getToken(0, ';').toInt32() );
+                Time aTime( (sal_uLong)aContent.getToken(1, ';').toInt32() );
                 DateTime aDateTime( aDate, aTime );
                 ::util::DateTime uDT(aDateTime.GetNanoSec(),
                     aDateTime.GetSec(), aDateTime.GetMin(),
@@ -2200,7 +2197,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
             break;
 
         case HTML_META_CONTENT_TYPE:
-            if ( aContent.Len() )
+            if ( !aContent.isEmpty() )
             {
                 o_rEnc = GetEncodingByMIME( aContent );
             }
