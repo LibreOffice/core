@@ -772,7 +772,16 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         SwStartNode* pSttNd = (SwStartNode*)pBox->GetSttNd();
         if( pShareFmts )
             pShareFmts->RemoveFormat( *rTblBoxes[ nDelPos ]->GetFrmFmt() );
-        delete rTblBoxes[nDelPos];
+
+        sal_uLong nSttIdx = rTblBoxes[ nDelPos ]->GetSttIdx() + 1;
+        sal_uLong nEndIdx = pSttNd->EndOfSectionIndex();
+        for( ; nSttIdx < nEndIdx; ++nSttIdx )
+            if( !pSttNd->GetDoc()->GetNodes()[ nSttIdx ]->IsTxtNode() ||
+                pSttNd->GetDoc()->GetNodes()[ nSttIdx ]->GetTxtNode()->GetTxt().getLength() )
+            {
+                delete rTblBoxes[nDelPos];
+                break;
+            }
         rTblBoxes.erase( rTblBoxes.begin() + nDelPos );
 
         if( pSttNd )
