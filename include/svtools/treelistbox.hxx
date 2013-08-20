@@ -294,9 +294,9 @@ protected:
 
     // In-place editing
     SvInplaceEdit2*  pEdCtrl;
-    void            EditText( const String&, const Rectangle&,const Selection&);
-    void            EditText( const String&, const Rectangle&,const Selection&, sal_Bool bMulti);
-    void            EditTextMultiLine( const String&, const Rectangle&,const Selection&);
+    void            EditText( const OUString&, const Rectangle&,const Selection&);
+    void            EditText( const OUString&, const Rectangle&,const Selection&, sal_Bool bMulti);
+    void            EditTextMultiLine( const OUString&, const Rectangle&,const Selection&);
     void            CancelTextEditing();
     sal_Bool            EditingCanceled() const;
     bool            IsEmptyTextAllowed() const;
@@ -790,14 +790,14 @@ class SvInplaceEdit2
 
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,
-                   const String& rData, const Link& rNotifyEditEnd,
+                   const OUString& rData, const Link& rNotifyEditEnd,
                    const Selection&, sal_Bool bMultiLine = sal_False );
                ~SvInplaceEdit2();
     sal_Bool        KeyInput( const KeyEvent& rKEvt );
     void        LoseFocus();
     sal_Bool        EditingCanceled() const { return bCanceled; }
     OUString    GetText() const;
-    String      GetSavedValue() const;
+    OUString    GetSavedValue() const;
     void        StopEditing( sal_Bool bCancel = sal_False );
     void        Hide();
 };

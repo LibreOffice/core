@@ -118,7 +118,7 @@ SvInplaceEdit2::SvInplaceEdit2
 (
     Window* pParent, const Point& rPos,
     const Size& rSize,
-    const String& rData,
+    const OUString& rData,
     const Link& rNotifyEditEnd,
     const Selection& rSelection,
     sal_Bool bMulti
@@ -171,7 +171,7 @@ SvInplaceEdit2::~SvInplaceEdit2()
     delete pEdit;
 }
 
-String SvInplaceEdit2::GetSavedValue() const
+OUString SvInplaceEdit2::GetSavedValue() const
 {
     return pEdit->GetSavedValue();
 }
@@ -1037,13 +1037,13 @@ void SvTreeListBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWit
 // InplaceEditing
 // ******************************************************************
 
-void SvTreeListBox::EditText( const String& rStr, const Rectangle& rRect,
+void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     const Selection& rSel )
 {
     EditText( rStr, rRect, rSel, sal_False );
 }
 
-void SvTreeListBox::EditText( const String& rStr, const Rectangle& rRect,
+void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
     const Selection& rSel, sal_Bool bMulti )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
