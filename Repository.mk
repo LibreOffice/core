@@ -46,6 +46,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	osl_process_child \
 	pdf2xml \
 	pdfunzip \
+	pocheck \
 	propex \
 	reg2unoidl \
 	regsvrex \
