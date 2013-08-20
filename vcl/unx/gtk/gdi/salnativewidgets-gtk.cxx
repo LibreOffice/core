@@ -1187,7 +1187,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( nType == CTRL_FRAME && nPart == PART_BORDER )
     {
-        int frameWidth = getFrameWidth(m_pWindow);
+        int frameWidth = getFrameWidth(gWidgetData[m_nXScreen].gFrame);
         rNativeBoundingRegion = rControlRegion;
         sal_uInt16 nStyle = aValue.getNumericVal();
         int x1=rControlRegion.Left();
@@ -1308,7 +1308,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKFrame(
             const OUString& )
 {
     GdkRectangle clipRect;
-    int frameWidth=getFrameWidth(m_pWindow);
+    int frameWidth=getFrameWidth(gWidgetData[m_nXScreen].gFrame);
     GtkShadowType shadowType=GTK_SHADOW_IN;
     sal_uInt16 nStyle = aValue.getNumericVal();
     if( nStyle & FRAME_DRAW_IN )
@@ -1355,8 +1355,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKFrame(
                          rControlRectangle.GetHeight());
 
         // Now render the frame
-        gtk_paint_shadow(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,shadowType,&clipRect,
-                         m_pWindow,"base",
+        gtk_paint_shadow(gWidgetData[m_nXScreen].gFrame->style,gdkDrawable,GTK_STATE_NORMAL,shadowType,&clipRect,
+                         gWidgetData[m_nXScreen].gFrame,"base",
                          rControlRectangle.Left(),
                          rControlRectangle.Top(),
                          rControlRectangle.GetWidth(),
