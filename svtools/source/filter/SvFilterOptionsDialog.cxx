@@ -140,7 +140,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    maMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+    maMediaDescriptor[ i ].Name = "FilterData";
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
@@ -178,8 +178,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    String aFilterNameStr( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-    String aInternalFilterName;
+    OUString aFilterNameStr( "FilterName" );
+    OUString aInternalFilterName;
     sal_Int32 j, nCount = maMediaDescriptor.getLength();
     for ( j = 0; j < nCount; j++ )
     {
@@ -188,12 +188,12 @@ sal_Int16 SvFilterOptionsDialog::execute()
             OUString aStr;
             maMediaDescriptor[ j ].Value >>= aStr;
             aInternalFilterName = aStr;
-            aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "draw_" ) ), String(), 0 );
-            aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "impress_" ) ), String(), 0 );
+            aInternalFilterName = aInternalFilterName.replaceAll( "draw_", "" );
+            aInternalFilterName = aInternalFilterName.replaceAll( "impress_", "" );
             break;
        }
     }
-    if ( aInternalFilterName.Len() )
+    if ( !aInternalFilterName.isEmpty() )
     {
         GraphicFilter aGraphicFilter( sal_True );
 
@@ -234,24 +234,24 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
     mxSourceDocument = xDoc;
 
     // try to set the corresponding metric unit
-    String aConfigPath;
+    OUString aConfigPath;
     uno::Reference< lang::XServiceInfo > xServiceInfo
             ( xDoc, uno::UNO_QUERY );
     if ( xServiceInfo.is() )
     {
         if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
-            aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Impress/Layout/Other/MeasureUnit" ) );
+            aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
         else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
-            aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Draw/Layout/Other/MeasureUnit" ) );
-        if ( aConfigPath.Len() )
+            aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
+        if ( !aConfigPath.isEmpty() )
         {
             FilterConfigItem aConfigItem( aConfigPath );
-            String aPropertyName;
+            OUString aPropertyName;
             SvtSysLocale aSysLocale;
             if ( aSysLocale.GetLocaleDataPtr()->getMeasurementSystemEnum() == MEASURE_METRIC )
-                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+                aPropertyName = "Metric";
             else
-                aPropertyName = String( RTL_CONSTASCII_USTRINGPARAM( "NonMetric" ) );
+                aPropertyName = "NonMetric";
             meFieldUnit = (FieldUnit)aConfigItem.ReadInt32( aPropertyName, FUNIT_CM );
         }
     }
