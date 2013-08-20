@@ -20,6 +20,7 @@
 #include <tools/poly.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/builder.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/swframeexample.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -50,8 +51,30 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, const ResId& rResID ) :
     SetMapMode(MAP_PIXEL);
 }
 
+SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nBits ):
+
+Window(pParent, nBits),
+
+nHAlign     (HoriOrientation::CENTER),
+nHRel       (RelOrientation::FRAME),
+nVAlign     (VertOrientation::TOP),
+nVRel       (RelOrientation::PRINT_AREA),
+nWrap       (WrapTextMode_NONE),
+nAnchor     (TextContentAnchorType_AT_PAGE),
+bTrans      (sal_False),
+aRelPos     (Point(0,0))
+{
+    InitColors_Impl();
+    SetMapMode(MAP_PIXEL);
+}
+
 SvxSwFrameExample::~SvxSwFrameExample()
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSwFrameExample(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxSwFrameExample(pParent, WB_SPIN|WB_REPEAT|WB_BORDER|WB_TABSTOP);
 }
 
 void SvxSwFrameExample::InitColors_Impl( void )

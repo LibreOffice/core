@@ -90,6 +90,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/pickoutlinepage \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/possizetabpage \
+	cui/uiconfig/ui/positionsizedialog \
 	cui/uiconfig/ui/querychangelineenddialog \
 	cui/uiconfig/ui/querydeletechartcolordialog \
 	cui/uiconfig/ui/querydeletedictionarydialog \
@@ -109,6 +110,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/spellingdialog \
 	cui/uiconfig/ui/splitcellsdialog \
 	cui/uiconfig/ui/storedwebconnectiondialog \
+	cui/uiconfig/ui/swpossizetabpage \
 	cui/uiconfig/ui/textflowpage \
 	cui/uiconfig/ui/thesaurus \
 	cui/uiconfig/ui/transparencytabpage \
