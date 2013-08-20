@@ -264,10 +264,6 @@ namespace psp
 using namespace psp;
 
 
-#if OSL_DEBUG_LEVEL > 2
-#define BSTRING(x) OUStringToOString( x, osl_getThreadTextEncoding() )
-#endif
-
 namespace
 {
     struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
@@ -486,13 +482,12 @@ void PPDParser::initPPDFiles()
         {
             INetURLObject aDir( aExe );
             aDir.removeSegment();
-#ifdef DEBUG
-            fprintf( stderr, "scanning last chance dir: %s\n", OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
-#endif
+            SAL_INFO("vcl.unx.print", "scanning last chance dir: "
+                    << aDir.GetMainURL(INetURLObject::NO_DECODE));
             scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
-#ifdef DEBUG
-            fprintf( stderr, "SGENPRT %s\n", rPPDCache.pAllPPDFiles->find( OUString( "SGENPRT" ) ) == rPPDCache.pAllPPDFiles->end() ? "not found" : "found" );
-#endif
+            SAL_INFO("vcl.unx.print", "SGENPRT "
+                    << (rPPDCache.pAllPPDFiles->find("SGENPRT") ==
+                        rPPDCache.pAllPPDFiles->end() ? "not found" : "found"));
         }
     }
 }
@@ -629,9 +624,8 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
         aFile = getPPDFile( rFile );
     if( aFile.isEmpty() )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Could not get printer PPD file \"%s\" !\n", OUStringToOString( rFile, osl_getThreadTextEncoding() ).getStr() );
-#endif
+        SAL_INFO("vcl.unx.print", "Could not get printer PPD file \""
+                << rFile << "\" !");
         return NULL;
     }
 
@@ -734,12 +728,13 @@ PPDParser::PPDParser( const OUString& rFile ) :
 
     // now get the Values
     parse( aLines );
-#if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.size(), BSTRING( m_aFile ).getStr() );
+#if OSL_DEBUG_LEVEL > 1
+    SAL_INFO("vcl.unx.print", "acquired " << m_aKeys.size()
+            << " Keys from PPD " << m_aFile << ":");
     for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
     {
         const PPDKey* pKey = it->second;
-        char* pSetupType = "<unknown>";
+        char const* pSetupType = "<unknown>";
         switch( pKey->m_eSetupType )
         {
             case PPDKey::ExitServer:        pSetupType = "ExitServer";break;
@@ -750,18 +745,13 @@ PPDParser::PPDParser( const OUString& rFile ) :
             case PPDKey::AnySetup:          pSetupType = "AnySetup";break;
             default: break;
         };
-        fprintf( stderr, "\t\"%s\" (%d values) OrderDependency: %d %s\n",
-                 BSTRING( pKey->getKey() ).getStr(),
-                 pKey->countValues(),
-                 pKey->m_nOrderDependency,
-                 pSetupType );
+        SAL_INFO("vcl.unx.print", "\t\"" << pKey->getKey() << "\" ("
+                << pKey->countValues() << "values) OrderDependency: "
+                << pKey->m_nOrderDependency << pSetupType );
         for( int j = 0; j < pKey->countValues(); j++ )
         {
-            fprintf( stderr, "\t\t" );
             const PPDValue* pValue = pKey->getValue( j );
-            if( pValue == pKey->m_pDefaultValue )
-                fprintf( stderr, "(Default:) " );
-            char* pVType = "<unknown>";
+            char const* pVType = "<unknown>";
             switch( pValue->m_eType )
             {
                 case eInvocation:       pVType = "invocation";break;
@@ -771,21 +761,22 @@ PPDParser::PPDParser( const OUString& rFile ) :
                 case eNo:               pVType = "no";break;
                 default: break;
             };
-            fprintf( stderr, "option: \"%s\", value: type %s \"%s\"\n",
-                     BSTRING( pValue->m_aOption ).getStr(),
-                     pVType,
-                     BSTRING( pValue->m_aValue ).getStr() );
+            SAL_INFO("vcl.unx.print", "\t\t"
+                << (pValue == pKey->m_pDefaultValue ? "(Default:) " : "")
+                << "option: \"" << pValue->m_aOption
+                << "\", value: type " << pVType << " \""
+                << pValue->m_aValue << "\"");
         }
     }
-    fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.size() );
+    SAL_INFO("vcl.unx.print",
+            "constraints: (" << m_aConstraints.size() << " found)");
     for( std::list< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
     {
-        fprintf( stderr, "*\"%s\" \"%s\" *\"%s\" \"%s\"\n",
-                 BSTRING( cit->m_pKey1->getKey() ).getStr(),
-                 cit->m_pOption1 ? BSTRING( cit->m_pOption1->m_aOption ).getStr() : "<nil>",
-                 BSTRING( cit->m_pKey2->getKey() ).getStr(),
-                 cit->m_pOption2 ? BSTRING( cit->m_pOption2->m_aOption ).getStr() : "<nil>"
-                 );
+        SAL_INFO("vcl.unx.print", "*\"" << cit->m_pKey1->getKey() << "\" \""
+                << (cit->m_pOption1 ? cit->m_pOption1->m_aOption : "<nil>")
+                << "\" *\"" << cit->m_pKey2->getKey() << "\" \""
+                << (cit->m_pOption2 ? cit->m_pOption2->m_aOption : "<nil>")
+                << "\"");
     }
 #endif
 
@@ -1347,9 +1338,8 @@ void PPDParser::parseConstraint( const OString& rLine )
     // there must be two keywords
     if( ! aConstraint.m_pKey1 || ! aConstraint.m_pKey2 || bFailed )
     {
-#ifdef __DEBUG
-        fprintf( stderr, "Warning: constraint \"%s\" is invalid\n", rLine.getStr() );
-#endif
+        SAL_INFO("vcl.unx.print",
+                "Warning: constraint \"" << rLine << "\" is invalid");
     }
     else
         m_aConstraints.push_back( aConstraint );
@@ -1722,13 +1712,12 @@ const PPDValue* PPDContext::setValue( const PPDKey* pKey, const PPDValue* pValue
                 if( it->first != pKey &&
                     ! checkConstraints( it->first, it->second, false ) )
                 {
-#ifdef __DEBUG
-                    fprintf( stderr, "PPDContext::setValue: option %s (%s) is constrained after setting %s to %s\n",
-                             it->first->getKey().GetStr(),
-                             it->second->m_aOption.GetStr(),
-                             pKey->getKey().GetStr(),
-                             pValue->m_aOption.GetStr() );
-#endif
+                    SAL_INFO("vcl.unx.print", "PPDContext::setValue: option "
+                         << it->first->getKey()
+                         << " (" << it->second->m_aOption
+                         << ") is constrained after setting "
+                         << pKey->getKey()
+                         << " to " << pValue->m_aOption);
                     resetValue( it->first, true );
                     it = m_aCurrentValues.begin();
                 }
@@ -1943,9 +1932,11 @@ void PPDContext::rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes )
                 if (aOption != "*nil")
                     pValue = pKey->getValue( aOption );
                 m_aCurrentValues[ pKey ] = pValue;
-#ifdef __DEBUG
-                fprintf( stderr, "PPDContext::rebuildFromStreamBuffer: read PPDKeyValue { %s, %s }\n", pKV->m_pKey->getKey().GetStr(), pKV->m_pCurrentValue ? pKV->m_pCurrentValue->m_aOption.GetStr() : "<nil>" );
-#endif
+                SAL_INFO("vcl.unx.print",
+                    "PPDContext::rebuildFromStreamBuffer: read PPDKeyValue { "
+                    << pKey->getKey() << " , "
+                    << (pValue ? aOption : "<nil>")
+                    << " }");
             }
         }
         nBytes -= aLine.getLength()+1;
