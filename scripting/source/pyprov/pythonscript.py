@@ -109,7 +109,7 @@ class Logger(LogLevel):
                     " [" +
                     logLevel2String( level ) +
                     "] " +
-                    encfile(msg) +
+                    msg +
                     "\n" )
                 self.target.flush()
             except:
