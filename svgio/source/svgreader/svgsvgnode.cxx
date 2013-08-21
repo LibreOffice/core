@@ -600,11 +600,11 @@ namespace svgio
             }
         }
 
-        const basegfx::B2DRange* SvgSvgNode::getCurrentViewPort() const
+        const basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const
         {
             if(getViewBox())
             {
-                return getViewBox();
+                return *(getViewBox());
             }
             else // viewport should be given by x, y, width, and height
             {
@@ -628,7 +628,7 @@ namespace svgio
 
                     if (bXIsAbsolute && bYIsAbsolute && bWidthIsAbsolute && bHeightIsAbsolute)
                     {
-                        return &basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
+                        return basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
                     }
                     else // try to resolve relative values
                     {
@@ -671,7 +671,7 @@ namespace svgio
 
                         if (bXIsAbsolute && bYIsAbsolute && bWidthIsAbsolute && bHeightIsAbsolute)
                         {
-                            return &basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
+                            return basegfx::B2DRange(fX, fY, fX+fW, fY+fH);
                         }
                         else // relative values could not be resolved, there exists no fallback
                         {
@@ -690,7 +690,7 @@ namespace svgio
                     double fH( bHeightIsAbsolute ? getHeight().solveNonPercentage(*this) : 0.0);
                     if (bWidthIsAbsolute && bHeightIsAbsolute)
                     {
-                        return &basegfx::B2DRange(0.0, 0.0, fW, fH);
+                        return basegfx::B2DRange(0.0, 0.0, fW, fH);
                     }
                     else // no fallback exists
                     {

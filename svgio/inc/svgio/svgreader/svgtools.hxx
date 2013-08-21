@@ -66,7 +66,7 @@ namespace svgio
         {
         public:
             virtual ~InfoProvider() {}
-            virtual const basegfx::B2DRange* getCurrentViewPort() const = 0;
+            virtual const basegfx::B2DRange getCurrentViewPort() const = 0;
             /// return font size of node inherited from parents
             virtual double getCurrentFontSizeInherited() const = 0;
             /// return xheight of node inherited from parents

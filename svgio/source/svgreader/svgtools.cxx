@@ -226,40 +226,39 @@ namespace svgio
                     case Unit_percent:
                     {
                         double fRetval(mfNumber * 0.01);
-                        const basegfx::B2DRange* pViewPort = rInfoProvider.getCurrentViewPort();
+                        basegfx::B2DRange aViewPort = rInfoProvider.getCurrentViewPort();
 
-                        if(!pViewPort)
+                        if ( aViewPort.isEmpty() )
                         {
 #ifdef DBG_UTIL
                             myAssert(rtl::OUString::createFromAscii("Design error, this case should have been handled in the caller"));
 #endif
                             // no viewPort, assume a normal page size (A4)
-                            static basegfx::B2DRange aDinA4Range(
+                            aViewPort = basegfx::B2DRange(
                                 0.0,
                                 0.0,
                                 210.0 * F_SVG_PIXEL_PER_INCH / 2.54,
                                 297.0 * F_SVG_PIXEL_PER_INCH / 2.54);
 
-                            pViewPort = &aDinA4Range;
                         }
 
-                        if(pViewPort)
+                        if ( !aViewPort.isEmpty() )
                         {
                             if(xcoordinate == aNumberType)
                             {
                                 // it's a x-coordinate, relative to current width (w)
-                                fRetval *= pViewPort->getWidth();
+                                fRetval *= aViewPort.getWidth();
                             }
                             else if(ycoordinate == aNumberType)
                             {
                                 // it's a y-coordinate, relative to current height (h)
-                                fRetval *= pViewPort->getHeight();
+                                fRetval *= aViewPort.getHeight();
                             }
                             else // length
                             {
                                 // it's a length, relative to sqrt(w*w + h*h)/sqrt(2)
-                                const double fCurrentWidth(pViewPort->getWidth());
-                                const double fCurrentHeight(pViewPort->getHeight());
+                                const double fCurrentWidth(aViewPort.getWidth());
+                                const double fCurrentHeight(aViewPort.getHeight());
                                 const double fCurrentLength(
                                     sqrt(fCurrentWidth * fCurrentWidth + fCurrentHeight * fCurrentHeight)/sqrt(2.0));
 

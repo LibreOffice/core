@@ -62,7 +62,7 @@ namespace svgio
             // The returned 'CurrentViewPort' is the viewport as it is set by this svg element
             // and as it is needed to resolve relative values in childs
             // The method does not check for invalid width and height
-            virtual const basegfx::B2DRange* getCurrentViewPort() const;
+            virtual const basegfx::B2DRange getCurrentViewPort() const;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }

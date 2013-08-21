@@ -74,7 +74,7 @@ namespace svgio
             const drawinglayer::primitive2d::Primitive2DSequence& getPatternPrimitives() const;
 
             /// InfoProvider support for % values
-            virtual const basegfx::B2DRange* getCurrentViewPort() const;
+            virtual const basegfx::B2DRange getCurrentViewPort() const;
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const;
