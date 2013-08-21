@@ -1481,7 +1481,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
     rc = osl::Directory::createPath( aTargetDir );
 
     OUString aFileName = "releasenote" +
-                              OUString::valueOf( (sal_Int32) nNum ) +
+                              OUString::number( nNum ) +
                               ".url";
 
     OUString aFilePath;

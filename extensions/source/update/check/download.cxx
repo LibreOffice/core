@@ -323,7 +323,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
                 else
                 {
                     aMessage += OString( RTL_CONSTASCII_STRINGPARAM( ":error code = " ) );
-                    aMessage += aMessage.valueOf( nError );
+                    aMessage += OString::number( nError );
                     aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " !" ) );
                 }
             }

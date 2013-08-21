@@ -629,7 +629,7 @@ OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBun
                                          sal_Int32 nResourceId ) const
 {
     OUString sString;
-    OUString sKey = "string:" + OUString::valueOf( nResourceId );
+    OUString sKey = "string:" + OUString::number( nResourceId );
 
     try
     {
@@ -651,7 +651,7 @@ OUString UpdateHandler::substVariables( const OUString &rSource ) const
     searchAndReplaceAll( sString, "%NEXTVERSION", msNextVersion );
     searchAndReplaceAll( sString, "%DOWNLOAD_PATH", msDownloadPath );
     searchAndReplaceAll( sString, "%FILE_NAME", msDownloadFile );
-    searchAndReplaceAll( sString, "%PERCENT", OUString::valueOf( mnPercent ) );
+    searchAndReplaceAll( sString, "%PERCENT", OUString::number( mnPercent ) );
 
     return sString;
 }
@@ -738,7 +738,7 @@ void UpdateHandler::loadStrings()
 
     for ( int i=0; i < BUTTON_COUNT; i++ )
     {
-        msButtonIDs[ i ] = "BUTTON_" + OUString::valueOf( (sal_Int32) i );
+        msButtonIDs[ i ] = "BUTTON_" + OUString::number( i );
     }
 }
 
