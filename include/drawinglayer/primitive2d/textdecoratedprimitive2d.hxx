@@ -72,7 +72,7 @@ namespace drawinglayer
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
-                const String& rText,
+                const OUString& rText,
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
@@ -88,7 +88,7 @@ namespace drawinglayer
 
                 /// TextSimplePortionPrimitive2D parameters
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const String& rText,
+                const OUString& rText,
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,

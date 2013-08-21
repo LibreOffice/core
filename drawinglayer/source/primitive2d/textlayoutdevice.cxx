@@ -215,7 +215,7 @@ namespace drawinglayer
         }
 
         double TextLayouterDevice::getTextWidth(
-            const String& rText,
+            const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength) const
         {
@@ -224,14 +224,14 @@ namespace drawinglayer
 
         bool TextLayouterDevice::getTextOutlines(
             basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
-            const String& rText,
+            const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength,
             const ::std::vector< double >& rDXArray) const
         {
             const sal_uInt32 nDXArrayCount(rDXArray.size());
             sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.Len());
+            const sal_uInt32 nStringLength(rText.getLength());
 
             if(nTextLength + nIndex > nStringLength)
             {
@@ -273,12 +273,12 @@ namespace drawinglayer
         }
 
         basegfx::B2DRange TextLayouterDevice::getTextBoundRect(
-            const String& rText,
+            const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength) const
         {
             sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.Len());
+            const sal_uInt32 nStringLength(rText.getLength());
 
             if(nTextLength + nIndex > nStringLength)
             {
@@ -322,7 +322,7 @@ namespace drawinglayer
 
         void TextLayouterDevice::addTextRectActions(
             const Rectangle& rRectangle,
-            const String& rText,
+            const OUString& rText,
             sal_uInt16 nStyle,
             GDIMetaFile& rGDIMetaFile) const
         {
@@ -331,13 +331,13 @@ namespace drawinglayer
         }
 
         ::std::vector< double > TextLayouterDevice::getTextArray(
-            const String& rText,
+            const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength) const
         {
             ::std::vector< double > aRetval;
             sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.Len());
+            const sal_uInt32 nStringLength(rText.getLength());
 
             if(nTextLength + nIndex > nStringLength)
             {

@@ -97,7 +97,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                   maTextTransform;
 
             /// The text, used from maTextPosition up to maTextPosition + maTextLength
-            String                                  maText;
+            OUString                                maText;
 
             /// The index from where on maText is used
             xub_StrLen                              maTextPosition;
@@ -130,7 +130,7 @@ namespace drawinglayer
             /// constructor
             TextSimplePortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const String& rText,
+                const OUString& rText,
                 xub_StrLen aTextPosition,
                 xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
@@ -148,7 +148,7 @@ namespace drawinglayer
 
             /// data read access
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
-            const String& getText() const { return maText; }
+            const OUString& getText() const { return maText; }
             xub_StrLen getTextPosition() const { return maTextPosition; }
             xub_StrLen getTextLength() const { return maTextLength; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }

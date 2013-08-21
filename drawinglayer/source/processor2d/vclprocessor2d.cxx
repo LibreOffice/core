@@ -274,7 +274,7 @@ namespace drawinglayer
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
-                    String aText( rTextCandidate.getText() );
+                    OUString aText( rTextCandidate.getText() );
                     xub_StrLen nPos = rTextCandidate.getTextPosition();
                     xub_StrLen nLen = rTextCandidate.getTextLength();
 
@@ -295,7 +295,7 @@ namespace drawinglayer
                             nChars = nWidthToFill / nWidth;
 
                         OUStringBuffer aFilled;
-                        comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText.GetChar(0));
+                        comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText[0]);
                         aText = aFilled.makeStringAndClear();
                         nPos = 0;
                         nLen = nChars;

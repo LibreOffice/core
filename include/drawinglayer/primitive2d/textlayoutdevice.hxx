@@ -33,7 +33,9 @@
 // predefines
 class VirtualDevice;
 class Font;
-class String;
+namespace rtl {
+   class OUString;
+};
 class OutputDevice;
 class GDIMetaFile;
 
@@ -81,19 +83,19 @@ namespace drawinglayer
             double getStrikeoutOffset() const;
 
             double getTextWidth(
-                const String& rText,
+                const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
 
             bool getTextOutlines(
                 basegfx::B2DPolyPolygonVector&,
-                const String& rText,
+                const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength,
                 const ::std::vector< double >& rDXArray) const;
 
             basegfx::B2DRange getTextBoundRect(
-                const String& rText,
+                const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
 
@@ -102,12 +104,12 @@ namespace drawinglayer
 
             void addTextRectActions(
                 const Rectangle& rRectangle,
-                const String& rText,
+                const rtl::OUString& rText,
                 sal_uInt16 nStyle,
                 GDIMetaFile& rGDIMetaFile) const;
 
             ::std::vector< double > getTextArray(
-                const String& rText,
+                const rtl::OUString& rText,
                 sal_uInt32 nIndex,
                 sal_uInt32 nLength) const;
         };

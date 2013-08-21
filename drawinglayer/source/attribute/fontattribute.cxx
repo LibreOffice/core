@@ -31,8 +31,8 @@ namespace drawinglayer
         {
         public:
             /// core data
-            String                                      maFamilyName;       // Font Family Name
-            String                                      maStyleName;        // Font Style Name
+            OUString                                    maFamilyName;       // Font Family Name
+            OUString                                    maStyleName;        // Font Style Name
             sal_uInt16                                  mnWeight;           // Font weight
 
             /// bitfield
@@ -45,8 +45,8 @@ namespace drawinglayer
             unsigned                                    mbMonospaced : 1;
 
             ImpFontAttribute(
-                const String& rFamilyName,
-                const String& rStyleName,
+                const OUString& rFamilyName,
+                const OUString& rStyleName,
                 sal_uInt16 nWeight,
                 bool bSymbol,
                 bool bVertical,
@@ -83,8 +83,8 @@ namespace drawinglayer
             }
 
             // data read access
-            const String& getFamilyName() const { return maFamilyName; }
-            const String& getStyleName() const { return maStyleName; }
+            const OUString& getFamilyName() const { return maFamilyName; }
+            const OUString& getStyleName() const { return maStyleName; }
             sal_uInt16 getWeight() const { return mnWeight; }
             bool getSymbol() const { return mbSymbol; }
             bool getVertical() const { return mbVertical; }
@@ -116,8 +116,8 @@ namespace drawinglayer
         }
 
         FontAttribute::FontAttribute(
-            const String& rFamilyName,
-            const String& rStyleName,
+            const OUString& rFamilyName,
+            const OUString& rStyleName,
             sal_uInt16 nWeight,
             bool bSymbol,
             bool bVertical,
@@ -161,12 +161,12 @@ namespace drawinglayer
             return rCandidate.mpFontAttribute == mpFontAttribute;
         }
 
-        const String& FontAttribute::getFamilyName() const
+        const OUString& FontAttribute::getFamilyName() const
         {
             return mpFontAttribute->getFamilyName();
         }
 
-        const String& FontAttribute::getStyleName() const
+        const OUString& FontAttribute::getStyleName() const
         {
             return mpFontAttribute->getStyleName();
         }

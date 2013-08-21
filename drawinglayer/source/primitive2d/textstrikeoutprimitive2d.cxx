@@ -89,7 +89,7 @@ namespace drawinglayer
             const double fStrikeCharCount(fabs(getWidth()/fStrikeCharWidth));
             const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.5));
             std::vector<double> aDXArray(nStrikeCharCount);
-            String aStrikeoutString;
+            OUString aStrikeoutString;
 
             for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
             {
@@ -102,7 +102,7 @@ namespace drawinglayer
                     getObjectTransformation(),
                     aStrikeoutString,
                     0,
-                    aStrikeoutString.Len(),
+                    aStrikeoutString.getLength(),
                     aDXArray,
                     getFontAttribute(),
                     getLocale(),

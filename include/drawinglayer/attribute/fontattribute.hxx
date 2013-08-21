@@ -26,7 +26,9 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class String;
+namespace rtl {
+   class OUString;
+}
 
 namespace drawinglayer { namespace attribute {
     class ImpFontAttribute;
@@ -55,8 +57,8 @@ namespace drawinglayer
             /// constructors/assignmentoperator/destructor
             /// TODO: pair kerning and CJK kerning
             FontAttribute(
-                const String& rFamilyName,
-                const String& rStyleName,
+                const rtl::OUString& rFamilyName,
+                const rtl::OUString& rStyleName,
                 sal_uInt16 nWeight,
                 bool bSymbol = false,
                 bool bVertical = false,
@@ -77,8 +79,8 @@ namespace drawinglayer
             bool operator==(const FontAttribute& rCandidate) const;
 
             /// data read access
-            const String& getFamilyName() const;
-            const String& getStyleName() const;
+            const rtl::OUString& getFamilyName() const;
+            const rtl::OUString& getStyleName() const;
             sal_uInt16 getWeight() const;
             bool getSymbol() const;
             bool getVertical() const;

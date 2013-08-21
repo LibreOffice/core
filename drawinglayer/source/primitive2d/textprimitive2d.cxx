@@ -220,7 +220,7 @@ namespace drawinglayer
 
         TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
             const basegfx::B2DHomMatrix& rNewTransform,
-            const String& rText,
+            const OUString& rText,
             xub_StrLen aTextPosition,
             xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
@@ -243,7 +243,7 @@ namespace drawinglayer
             mnWidthToFill(nWidthToFill)
         {
 #if OSL_DEBUG_LEVEL > 0
-            const xub_StrLen aStringLength(getText().Len());
+            const sal_Int32 aStringLength(getText().getLength());
             OSL_ENSURE(aStringLength >= getTextPosition() && aStringLength >= getTextPosition() + getTextLength(),
                 "TextSimplePortionPrimitive2D with text out of range (!)");
 #endif
