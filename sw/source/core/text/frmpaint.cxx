@@ -44,6 +44,7 @@
 #include <redlnitr.hxx> // SwRedlineItr
 #include <swmodule.hxx> // SW_MOD
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
+#include <numrule.hxx>
 #include <SwGrammarMarkUp.hxx>
 
 // #i12836# enhanced pdf export
@@ -51,15 +52,6 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
-
-// variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char sBulletFntName[];
-namespace numfunc
-{
-    extern const String& GetDefBulletFontname();
-    extern bool IsDefBulletFontUserDefined();
-}
-
 
 #define REDLINE_DISTANCE 567/4
 #define REDLINE_MINDIST  567/10
