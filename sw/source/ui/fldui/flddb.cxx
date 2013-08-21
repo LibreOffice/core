@@ -34,35 +34,41 @@
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
-    SwFldPage( pParent, SW_RES( TP_FLD_DB ), rCoreSet ),
-    aTypeFT     (this, SW_RES(FT_DBTYPE)),
-    aTypeLB     (this, SW_RES(LB_DBTYPE)),
-    aSelectionFT(this, SW_RES(FT_DBSELECTION)),
-    aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, sal_False),
-    aAddDBFT(this,      SW_RES(FT_ADDDB)),
-    aAddDBPB(this,      SW_RES(PB_ADDDB)),
-    aConditionFT(this, SW_RES(FT_DBCONDITION)),
-    aConditionED(this, SW_RES(ED_DBCONDITION)),
-    aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
-    aValueED    (this, SW_RES(ED_DBSETNUMBER)),
-    aDBFormatRB (this, SW_RES(RB_DBOWNFORMAT)),
-    aNewFormatRB(this, SW_RES(RB_DBFORMAT)),
-    aNumFormatLB(this, SW_RES(LB_DBNUMFORMAT)),
-    aFormatLB   (this, SW_RES(LB_DBFORMAT)),
-    aFormatFL   (this, SW_RES(FL_DBFORMAT)),
-    aFormatVertFL   (this, SW_RES(FL_DBFORMAT_VERT))
+SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet)
+    : SwFldPage(pParent, "FldDbPage",
+        "modules/swriter/ui/flddbpage.ui", rCoreSet)
 {
-    FreeResource();
+    get(m_pTypeLB, "type");
+    m_pTypeLB->SetStyle(m_pTypeLB->GetStyle() | WB_SORT);
+    get(m_pDatabaseTLB, "select");
+    get(m_pCondition, "condgroup");
+    get(m_pConditionED, "condition");
+    get(m_pValue, "recgroup");
+    get(m_pValueED, "recnumber");
+    get(m_pFormat, "formatframe");
+    get(m_pAddDBPB, "browse");
+    get(m_pDBFormatRB, "fromdatabasecb");
+    get(m_pNewFormatRB, "userdefinedcb");
+    get(m_pNumFormatLB, "numformat");
+    get(m_pFormatLB, "format");
+    m_pFormatLB->SetStyle(m_pFormatLB->GetStyle() | WB_SORT);
 
-    aOldNumSelectHdl = aNumFormatLB.GetSelectHdl();
+    long nHeight = m_pTypeLB->GetTextHeight() * 14;
+    m_pTypeLB->set_height_request(nHeight);
+    m_pDatabaseTLB->set_height_request(nHeight);
 
-    aNumFormatLB.SetSelectHdl(LINK(this, SwFldDBPage, NumSelectHdl));
-    aDatabaseTLB.SetSelectHdl(LINK(this, SwFldDBPage, TreeSelectHdl));
-    aDatabaseTLB.SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
+    long nWidth = m_pTypeLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MAP_APPFONT)).Width();
+    m_pTypeLB->set_width_request(nWidth);
+    m_pDatabaseTLB->set_width_request(nWidth*2);
 
-    aValueED.SetModifyHdl(LINK(this, SwFldDBPage, ModifyHdl));
-    aAddDBPB.SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
+    aOldNumSelectHdl = m_pNumFormatLB->GetSelectHdl();
+
+    m_pNumFormatLB->SetSelectHdl(LINK(this, SwFldDBPage, NumSelectHdl));
+    m_pDatabaseTLB->SetSelectHdl(LINK(this, SwFldDBPage, TreeSelectHdl));
+    m_pDatabaseTLB->SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
+
+    m_pValueED->SetModifyHdl(LINK(this, SwFldDBPage, ModifyHdl));
+    m_pAddDBPB->SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
 }
 
 SwFldDBPage::~SwFldDBPage()
@@ -76,11 +82,11 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
-    aTypeLB.SetUpdateMode(sal_False);
-    sal_uInt16 nOldPos = aTypeLB.GetSelectEntryPos();
-    sOldDBName = aDatabaseTLB.GetDBName(sOldTableName, sOldColumnName);
+    m_pTypeLB->SetUpdateMode(sal_False);
+    sal_uInt16 nOldPos = m_pTypeLB->GetSelectEntryPos();
+    sOldDBName = m_pDatabaseTLB->GetDBName(sOldTableName, sOldColumnName);
 
-    aTypeLB.Clear();
+    m_pTypeLB->Clear();
 
     sal_uInt16 nPos, nTypeId, i;
 
@@ -92,41 +98,41 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         for(i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
-            nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
-            aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
+            nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+            m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
         nTypeId = GetCurField()->GetTypeId();
-        nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
-        aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
+        nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+        m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
     // select old Pos
     if (GetTypeSel() != LISTBOX_ENTRY_NOTFOUND)
-        aTypeLB.SelectEntryPos(GetTypeSel());
+        m_pTypeLB->SelectEntryPos(GetTypeSel());
 
-    aFormatLB.Clear();
+    m_pFormatLB->Clear();
 
     sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, false, IsFldDlgHtmlMode());
     for( i = 0; i < nSize; ++i )
     {
-        sal_uInt16 nEntryPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        sal_uInt16 nEntryPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
         sal_uInt16 nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
-        aFormatLB.SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
+        m_pFormatLB->SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
         if( SVX_NUM_ARABIC == nFmtId )
-            aFormatLB.SelectEntryPos( nEntryPos );
+            m_pFormatLB->SelectEntryPos( nEntryPos );
     }
 
     if (!IsFldEdit())
     {
         if (nOldPos != LISTBOX_ENTRY_NOTFOUND)
-            aTypeLB.SelectEntryPos(nOldPos);
+            m_pTypeLB->SelectEntryPos(nOldPos);
 
         if (sOldDBName.Len())
         {
-            aDatabaseTLB.Select(sOldDBName, sOldTableName, sOldColumnName);
+            m_pDatabaseTLB->Select(sOldDBName, sOldTableName, sOldColumnName);
         }
         else
         {
@@ -136,7 +142,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
             if(pSh)
             {
                 SwDBData aTmp(pSh->GetDBData());
-                aDatabaseTLB.Select(aTmp.sDataSource, aTmp.sCommand, aEmptyStr);
+                m_pDatabaseTLB->Select(aTmp.sDataSource, aTmp.sCommand, aEmptyStr);
             }
         }
     }
@@ -150,10 +156,10 @@ void SwFldDBPage::Reset(const SfxItemSet&)
             sal_uInt16 nVal = (sal_uInt16)sVal.ToInt32();
             if(nVal != USHRT_MAX)
             {
-                for(i = 0; i < aTypeLB.GetEntryCount(); i++)
-                    if(nVal == (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(i))
+                for(i = 0; i < m_pTypeLB->GetEntryCount(); i++)
+                    if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
                     {
-                        aTypeLB.SelectEntryPos(i);
+                        m_pTypeLB->SelectEntryPos(i);
                         break;
                     }
             }
@@ -161,15 +167,15 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
     TypeHdl(0);
 
-    aTypeLB.SetUpdateMode(sal_True);
-    aTypeLB.SetSelectHdl(LINK(this, SwFldDBPage, TypeHdl));
-    aTypeLB.SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
+    m_pTypeLB->SetUpdateMode(sal_True);
+    m_pTypeLB->SetSelectHdl(LINK(this, SwFldDBPage, TypeHdl));
+    m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
 
     if (IsFldEdit())
     {
-        aConditionED.SaveValue();
-        aValueED.SaveValue();
-        sOldDBName = aDatabaseTLB.GetDBName(sOldTableName, sOldColumnName);
+        m_pConditionED->SaveValue();
+        m_pValueED->SaveValue();
+        sOldDBName = m_pDatabaseTLB->GetDBName(sOldTableName, sOldColumnName);
         nOldFormat = GetCurField()->GetFormat();
         nOldSubType = GetCurField()->GetSubType();
     }
@@ -180,7 +186,7 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
     String sTableName, sColumnName;
     SwDBData aData;
     sal_Bool bIsTable;
-    aData.sDataSource = aDatabaseTLB.GetDBName(sTableName, sColumnName, &bIsTable);
+    aData.sDataSource = m_pDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
     aData.sCommand = sTableName;
     aData.nCommandType = bIsTable ? 0 : 1;
     SwWrtShell *pSh = GetWrtShell();
@@ -192,9 +198,9 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
-        String aVal(aValueED.GetText());
-        String aName(aConditionED.GetText());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        String aVal(m_pValueED->GetText());
+        String aName(m_pConditionED->GetText());
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
@@ -214,26 +220,26 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         switch (nTypeId)
         {
         case TYP_DBFLD:
-            nFormat = aNumFormatLB.GetFormat();
-            if (aNewFormatRB.IsEnabled() && aNewFormatRB.IsChecked())
+            nFormat = m_pNumFormatLB->GetFormat();
+            if (m_pNewFormatRB->IsEnabled() && m_pNewFormatRB->IsChecked())
                 nSubType = nsSwExtendedSubType::SUB_OWN_FMT;
             aName = sDBName;
             break;
 
         case TYP_DBSETNUMBERFLD:
-            nFormat = (sal_uInt16)(sal_uLong)aFormatLB.GetEntryData(
-                                aFormatLB.GetSelectEntryPos() );
+            nFormat = (sal_uInt16)(sal_uLong)m_pFormatLB->GetEntryData(
+                                m_pFormatLB->GetSelectEntryPos() );
             break;
         }
 
 
         String sTempDBName, sTempTableName, sTempColumnName;
-        sTempDBName = aDatabaseTLB.GetDBName(sTempTableName, sTempColumnName);
+        sTempDBName = m_pDatabaseTLB->GetDBName(sTempTableName, sTempColumnName);
         sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
-            aConditionED.GetSavedValue() != aConditionED.GetText() ||
-            aValueED.GetSavedValue() != aValueED.GetText() ||
+            m_pConditionED->GetSavedValue() != m_pConditionED->GetText() ||
+            m_pValueED->GetSavedValue() != m_pValueED->GetText() ||
              bDBListBoxChanged ||
              nOldFormat != nFormat || nOldSubType != nSubType)
         {
@@ -261,12 +267,12 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
     const sal_uInt16 nOld = GetTypeSel();
 
     // current ListBoxPos
-    SetTypeSel(aTypeLB.GetSelectEntryPos());
+    SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
         SetTypeSel(0);
-        aTypeLB.SelectEntryPos(0);
+        m_pTypeLB->SelectEntryPos(0);
     }
 
     if (nOld != GetTypeSel())
@@ -275,9 +281,9 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         if(!pSh)
             pSh = ::GetActiveWrtShell();
         sal_Bool bCond = sal_False, bSetNo = sal_False, bFormat = sal_False, bDBFormat = sal_False;
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-        aDatabaseTLB.ShowColumns(nTypeId == TYP_DBFLD);
+        m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
 
         if (IsFldEdit())
         {
@@ -292,7 +298,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             {
                 aData = ((SwDBNameInfField*)GetCurField())->GetDBData(pSh->GetDoc());
             }
-            aDatabaseTLB.Select(aData.sDataSource, aData.sCommand, sColumnName);
+            m_pDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
         }
 
         switch (nTypeId)
@@ -300,21 +306,21 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             case TYP_DBFLD:
                 bFormat = sal_True;
                 bDBFormat = sal_True;
-                aNumFormatLB.Show();
-                aFormatLB.Hide();
+                m_pNumFormatLB->Show();
+                m_pFormatLB->Hide();
 
                 if (pBox)   // type was changed by user
-                    aDBFormatRB.Check();
+                    m_pDBFormatRB->Check();
 
                 if (IsFldEdit())
                 {
                     if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != SAL_MAX_UINT32)
-                        aNumFormatLB.SetDefFormat(GetCurField()->GetFormat());
+                        m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
 
                     if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
-                        aNewFormatRB.Check();
+                        m_pNewFormatRB->Check();
                     else
-                        aDBFormatRB.Check();
+                        m_pDBFormatRB->Check();
                 }
                 break;
 
@@ -325,8 +331,8 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 bCond = sal_True;
                 if (IsFldEdit())
                 {
-                    aConditionED.SetText(GetCurField()->GetPar1());
-                    aValueED.SetText(GetCurField()->GetPar2());
+                    m_pConditionED->SetText(GetCurField()->GetPar1());
+                    m_pValueED->SetText(GetCurField()->GetPar2());
                 }
                 break;
 
@@ -335,42 +341,40 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
             case TYP_DBSETNUMBERFLD:
                 bFormat = sal_True;
-                aNewFormatRB.Check();
-                aNumFormatLB.Hide();
-                aFormatLB.Show();
+                m_pNewFormatRB->Check();
+                m_pNumFormatLB->Hide();
+                m_pFormatLB->Show();
                 if( IsFldEdit() )
                 {
-                    for( sal_uInt16 nI = aFormatLB.GetEntryCount(); nI; )
+                    for( sal_uInt16 nI = m_pFormatLB->GetEntryCount(); nI; )
                         if( GetCurField()->GetFormat() == (sal_uInt16)(sal_uLong)
-                            aFormatLB.GetEntryData( --nI ))
+                            m_pFormatLB->GetEntryData( --nI ))
                         {
-                            aFormatLB.SelectEntryPos( nI );
+                            m_pFormatLB->SelectEntryPos( nI );
                             break;
                         }
                 }
                 break;
         }
 
-        aConditionFT.Enable(bCond);
-        aConditionED.Enable(bCond);
-        aValueFT.Enable(bSetNo);
-        aValueED.Enable(bSetNo);
+        m_pCondition->Enable(bCond);
+        m_pValue->Enable(bSetNo);
         if (nTypeId != TYP_DBFLD)
         {
-            aDBFormatRB.Enable(bDBFormat);
-            aNewFormatRB.Enable(bDBFormat|bFormat);
-            aNumFormatLB.Enable(bDBFormat);
-            aFormatLB.Enable(bFormat);
+            m_pDBFormatRB->Enable(bDBFormat);
+            m_pNewFormatRB->Enable(bDBFormat|bFormat);
+            m_pNumFormatLB->Enable(bDBFormat);
+            m_pFormatLB->Enable(bFormat);
         }
-        aFormatFL.Enable(bDBFormat|bFormat);
+        m_pFormat->Enable(bDBFormat|bFormat);
 
         if (!IsFldEdit())
         {
-            aValueED.SetText(aEmptyStr);
+            m_pValueED->SetText(aEmptyStr);
             if (bCond)
-                aConditionED.SetText(OUString("TRUE"));
+                m_pConditionED->SetText(OUString("TRUE"));
             else
-                aConditionED.SetText(aEmptyStr);
+                m_pConditionED->SetText(aEmptyStr);
         }
 
         CheckInsert();
@@ -381,7 +385,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
 IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 {
-    aNewFormatRB.Check();
+    m_pNewFormatRB->Check();
     aOldNumSelectHdl.Call(pLB);
 
     return 0;
@@ -390,16 +394,16 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 void SwFldDBPage::CheckInsert()
 {
     sal_Bool bInsert = sal_True;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-    SvTreeListEntry* pEntry = aDatabaseTLB.GetCurEntry();
+    SvTreeListEntry* pEntry = m_pDatabaseTLB->GetCurEntry();
 
     if (pEntry)
     {
-        pEntry = aDatabaseTLB.GetParent(pEntry);
+        pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
         if (nTypeId == TYP_DBFLD && pEntry)
-            pEntry = aDatabaseTLB.GetParent(pEntry);
+            pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
         bInsert &= pEntry != 0;
     }
@@ -408,7 +412,7 @@ void SwFldDBPage::CheckInsert()
 
     if (nTypeId == TYP_DBNUMSETFLD)
     {
-        sal_Bool bHasValue = !aValueED.GetText().isEmpty();
+        sal_Bool bHasValue = !m_pValueED->GetText().isEmpty();
 
         bInsert &= bHasValue;
     }
@@ -422,12 +426,12 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     SvTreeListEntry* pEntry = pColEntry = pBox->GetCurEntry();
     if (pEntry)
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-        pEntry = aDatabaseTLB.GetParent(pEntry);
+        pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
         if (nTypeId == TYP_DBFLD && pEntry)
-            pEntry = aDatabaseTLB.GetParent(pEntry);
+            pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
         CheckInsert();
 
@@ -440,19 +444,19 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
                 String sTableName;
                 String sColumnName;
                 sal_Bool bIsTable;
-                String sDBName = aDatabaseTLB.GetDBName(sTableName, sColumnName, &bIsTable);
+                String sDBName = m_pDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
                 bNumFormat = GetFldMgr().IsDBNumeric(sDBName,
                             sTableName,
                             bIsTable,
                             sColumnName);
                 if (!IsFldEdit())
-                    aDBFormatRB.Check();
+                    m_pDBFormatRB->Check();
             }
 
-            aDBFormatRB.Enable(bNumFormat);
-            aNewFormatRB.Enable(bNumFormat);
-            aNumFormatLB.Enable(bNumFormat);
-            aFormatFL.Enable(bNumFormat);
+            m_pDBFormatRB->Enable(bNumFormat);
+            m_pNewFormatRB->Enable(bNumFormat);
+            m_pNumFormatLB->Enable(bNumFormat);
+            m_pFormat->Enable(bNumFormat);
         }
     }
     return 0;
@@ -463,7 +467,7 @@ IMPL_LINK_NOARG(SwFldDBPage, AddDBHdl)
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewDB.Len())
     {
-        aDatabaseTLB.AddDataSource(sNewDB);
+        m_pDatabaseTLB->AddDataSource(sNewDB);
     }
     return 0;
 }
@@ -481,12 +485,12 @@ void    SwFldDBPage::FillUserData()
 {
     String sData(OUString(USER_DATA_VERSION));
     sData += ';';
-    sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
+    sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
 
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData( nTypeSel );
     sData += OUString::number( nTypeSel );
     SetUserData(sData);
 }
@@ -494,15 +498,15 @@ void    SwFldDBPage::FillUserData()
 void SwFldDBPage::ActivateMailMergeAddress()
 {
     sal_uLong nData = TYP_DBFLD;
-    aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos( (const void*) nData ));
-    aTypeLB.GetSelectHdl().Call(&aTypeLB);
+    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( (const void*) nData ));
+    m_pTypeLB->GetSelectHdl().Call(m_pTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
-    aDatabaseTLB.Select(rData.sDataSource, rData.sCommand, aEmptyStr);
+    m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, aEmptyStr);
 }
 
 void SwFldDBPage::SetWrtShell(SwWrtShell& rSh)
 {
-    aDatabaseTLB.SetWrtShell(rSh);
+    m_pDatabaseTLB->SetWrtShell(rSh);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

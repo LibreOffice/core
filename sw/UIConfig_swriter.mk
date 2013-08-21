@@ -90,6 +90,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/envformatpage \
 	sw/uiconfig/swriter/ui/envprinterpage \
 	sw/uiconfig/swriter/ui/exchangedatabases \
+	sw/uiconfig/swriter/ui/flddbpage \
 	sw/uiconfig/swriter/ui/flddocinfopage \
 	sw/uiconfig/swriter/ui/flddocumentpage \
 	sw/uiconfig/swriter/ui/fldfuncpage \

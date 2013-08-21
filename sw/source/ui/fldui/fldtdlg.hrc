@@ -22,34 +22,8 @@
 
 #define FIELD_COLUMN_WIDTH 76
 
-#define RC_FLDTDLG_BEGIN    0
-
-// database field TabPage:
-#define RC_TP_DB_START      (RC_FLDTDLG_BEGIN)
-#define FT_DBTYPE           (RC_TP_DB_START + 1)
-#define LB_DBTYPE           (RC_TP_DB_START + 2)
-#define FL_DBFORMAT                     (RC_TP_DB_START + 3)
-#define FT_DBSELECTION      (RC_TP_DB_START + 4)
-#define TLB_DBLIST          (RC_TP_DB_START + 5)
-#define FT_DBCONDITION      (RC_TP_DB_START + 6)
-#define FT_DBSETNUMBER      (RC_TP_DB_START + 7)
-#define ED_DBCONDITION      (RC_TP_DB_START + 8)
-#define ED_DBSETNUMBER      (RC_TP_DB_START + 9)
-#define LB_DBFORMAT         (RC_TP_DB_START + 10)
-#define LB_DBNUMFORMAT      (RC_TP_DB_START + 11)
-#define RB_DBFORMAT         (RC_TP_DB_START + 12)
-#define RB_DBOWNFORMAT      (RC_TP_DB_START + 13)
-#define RC_TP_DB_END        (RC_TP_DB_START + 14)
-#define FL_DBFORMAT_VERT    (RC_TP_DB_START + 15)
-#define FT_ADDDB            (RC_TP_DB_START + 16)
-#define PB_ADDDB            (RC_TP_DB_START + 17)
-
-#define RC_TP_END           (RC_TP_DB_END)
-
-// Strings ------------------------------------------------------------------
-
-#define STR_FLD_INSERT          (RC_TP_END + 1)
-#define STR_FLD_CLOSE           (RC_TP_END + 2)
+#define STR_FLD_INSERT      1
+#define STR_FLD_CLOSE       2
 
 #endif
 

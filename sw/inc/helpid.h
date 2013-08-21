@@ -141,8 +141,6 @@
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 
-#define HID_FLD_DB                                              "SW_HID_FLD_DB"
-
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
 #define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"
 #define HID_EDIT_FLD_VAR                                        "SW_HID_EDIT_FLD_VAR"

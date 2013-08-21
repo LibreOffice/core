@@ -56,7 +56,7 @@ public:
                     SwWrtShell* pSh,
                     const String& rDefDBName = aEmptyStr,
                     const sal_Bool bShowCol = sal_False );
-    SwDBTreeList(Window* pParent);
+    SwDBTreeList(Window* pParent, WinBits nStyle);
     virtual ~SwDBTreeList();
     virtual Size GetOptimalSize() const;
 

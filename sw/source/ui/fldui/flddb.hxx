@@ -32,24 +32,20 @@
 
 class SwFldDBPage : public SwFldPage
 {
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    SwDBTreeList        aDatabaseTLB;
+    ListBox*            m_pTypeLB;
+    SwDBTreeList*       m_pDatabaseTLB;
 
-    FixedText           aAddDBFT;
-    PushButton          aAddDBPB;
+    PushButton*         m_pAddDBPB;
 
-    FixedText           aConditionFT;
-    ConditionEdit       aConditionED;
-    FixedText           aValueFT;
-    Edit                aValueED;
-    RadioButton         aDBFormatRB;
-    RadioButton         aNewFormatRB;
-    NumFormatListBox    aNumFormatLB;
-    ListBox             aFormatLB;
-    FixedLine           aFormatFL;
-    FixedLine           aFormatVertFL;
+    VclContainer*       m_pCondition;
+    ConditionEdit*      m_pConditionED;
+    VclContainer*       m_pValue;
+    Edit*               m_pValueED;
+    RadioButton*        m_pDBFormatRB;
+    RadioButton*        m_pNewFormatRB;
+    NumFormatListBox*   m_pNumFormatLB;
+    ListBox*            m_pFormatLB;
+    VclContainer*       m_pFormat;
 
     String              sOldDBName;
     String              sOldTableName;

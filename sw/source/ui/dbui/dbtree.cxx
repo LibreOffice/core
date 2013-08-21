@@ -187,8 +187,8 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
         InitTreeList();
 }
 
-SwDBTreeList::SwDBTreeList(Window *pParent)
-    : SvTreeListBox(pParent, WB_TABSTOP)
+SwDBTreeList::SwDBTreeList(Window *pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
     , aImageList(SW_RES(ILIST_DB_DLG))
     , bInitialized(false)
     , bShowColumns(false)
@@ -200,9 +200,13 @@ SwDBTreeList::SwDBTreeList(Window *pParent)
         InitTreeList();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDBTreeList(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwDBTreeList(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new SwDBTreeList(pParent);
+    WinBits nStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nStyle |= WB_BORDER;
+    return new SwDBTreeList(pParent, nStyle);
 }
 
 Size SwDBTreeList::GetOptimalSize() const
