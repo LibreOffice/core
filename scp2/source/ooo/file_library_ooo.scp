@@ -26,13 +26,6 @@
  ************************************************************************/
 #include "macros.inc"
 
-#if defined ENABLE_JAVA && defined WNT
-File gid_File_Lib_Accessbridge
-    PACKED_LIB_FILE_BODY;
-    Name = "java_uno_accessbridge.dll";
-End
-#endif
-
 #ifndef SYSTEM_CLUCENE
 File gid_File_Lib_CLucene
     PACKED_LIB_FILE_BODY;
@@ -117,36 +110,9 @@ End
 
 #endif
 
-#ifdef WNT
-
-File gid_File_Lib_Dnd
-    PACKED_LIB_FILE_BODY;
-    Name = "dnd.dll";
-End
-
-#endif
-
-#ifdef WNT
-
-File gid_File_Lib_Dtrans
-    PACKED_LIB_FILE_BODY;
-    Name = "dtrans.dll";
-End
-
-#endif
-
 /* fdo#60491 always need emboleobj library on non-WNT platforms */
 #if !defined(WNT) || !defined(DISABLE_ATL)
 SPECIAL_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
-#endif
-
-#if defined(WNT) && !defined(DISABLE_ATL)
-
-File gid_File_Lib_Inprocserv
-    PACKED_LIB_FILE_BODY;
-    Name = "inprocserv.dll";
-End
-
 #endif
 
 #ifdef UNX
@@ -164,15 +130,6 @@ End
 #endif  // #ifdef MACOSX
 
 #endif  // #ifdef UNX
-
-#ifdef WNT
-
-File gid_File_Lib_Fps
-    PACKED_LIB_FILE_BODY;
-    Name = "fps.dll";
-End
-
-#endif
 
 #if defined UNX && ! defined MACOSX
 #ifdef ENABLE_TDE
@@ -260,15 +217,6 @@ End
 
 #endif
 
-#ifdef WNT
-
-File gid_File_Lib_Ftransl
-    PACKED_LIB_FILE_BODY;
-    Name = "ftransl.dll";
-End
-
-#endif
-
 #ifndef SYSTEM_ICU
 
 File gid_File_Lib_Icudata
@@ -308,17 +256,6 @@ File gid_File_Lib_Icuuc
     Name = STRING(CONCAT3(icuuc,ICU_MAJOR,.dll));
   #endif // MSVC_PKG_DEBUG_RUNTIME
   #endif
-End
-
-#endif
-
-#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
-
-File gid_File_Lib_sn_tools
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
-    Dir = SCP2_OOO_LIB_DIR;
-    Name = "sn_tools.dll";
 End
 
 #endif
@@ -411,43 +348,7 @@ End
 
 #endif
 
-#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
-
-File gid_File_Lib_Reg4allmsdoc
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "reg4allmsdoc.dll";
-End
-
-File gid_File_Lib_Qslnkmsi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "qslnkmsi.dll";
-End
-
-File gid_File_Lib_Sdqsmsi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "sdqsmsi.dll";
-End
-
-#endif /* WNT && HAVE_WINDOWS_SDK */
-
 STD_LIB_FILE( gid_File_Lib_Oox , oox)
-
-#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
-
-File gid_File_Lib_Instooofiltmsi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "instooofiltmsi.dll";
-End
-
-#endif
 
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 
@@ -678,14 +579,3 @@ File gid_File_Lib_Rdf
   #endif
 End
 #endif // SYSTEM_REDLAND
-
-#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
-
-File gid_File_Lib_sellangmsi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Brand_Dir_Program;
-    Name = "sellangmsi.dll";
-End
-
-#endif

@@ -359,7 +359,21 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xsltfilter \
 	$(if $(filter $(OS),WNT), \
 		ado \
-		$(if $(DISABLE_ATL),,oleautobridge) \
+		dnd \
+		dtrans \
+		fps \
+		ftransl \
+		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
+		$(if $(DISABLE_ATL),,oleautobridge \
+				inprocserv \
+		) \
+		$(if $(WINDOWS_SDK_HOME),instooofiltmsi \
+			qslnkmsi \
+			reg4allmsdoc \
+			sdqsmsi \
+			sellangmsi \
+			sn_tools \
+		) \
 		smplmail \
 		wininetbe1 \
 	) \
@@ -530,7 +544,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	bluez_bluetooth \
 	emboleobj \
-	java_uno_accessbridge \
 	libreoffice \
 	macab1 \
 	macabdrv1 \
@@ -551,28 +564,17 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	dnd \
-	dtrans \
 	fop \
-	fps \
-	ftransl \
-	inprocserv \
-	instooofiltmsi \
 	jfregca \
 	ooofilt \
 	ooofilt_x64 \
 	propertyhdl \
 	propertyhdl_x64 \
-	qslnkmsi \
-	reg4allmsdoc \
 	regactivex \
 	regpatchactivex \
-	sdqsmsi \
-	sellangmsi \
 	shlxthdl \
 	shlxthdl_x64 \
 	shlxtmsi \
-	sn_tools \
 	so_activex \
 	so_activex_x64 \
 	sysdtrans \
