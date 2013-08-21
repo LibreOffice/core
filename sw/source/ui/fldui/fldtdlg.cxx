@@ -42,7 +42,6 @@
 #include <helpid.h>
 #include <fldui.hrc>
 #include <globals.hrc>
-#include <fldtdlg.hrc>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -54,37 +53,32 @@
 
 
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
-    : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
-    m_pChildWin(pCW),
-    m_pBindings(pB),
-    m_bDataBaseMode(sal_False)
+    : SfxTabDialog(pParent, "FieldDialog", "modules/swriter/ui/fielddialog.ui")
+    , m_pChildWin(pCW)
+    , m_pBindings(pB)
+    , m_bDataBaseMode(false)
+    , m_nDokId(0)
+    , m_nVarId(0)
+    , m_nDokInf(0)
+    , m_nRefId(0)
+    , m_nFuncId(0)
+    , m_nDbId(0)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
     m_bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
 
-    RemoveResetButton();
-
-    GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
-    GetOKButton().SetHelpId(HID_FIELD_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // so that generated help text is used
-
-    GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
-    GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
-    GetCancelButton().SetHelpText(aEmptyStr);   // so that generated help text is used
     GetCancelButton().SetClickHdl(LINK(this, SwFldDlg, CancelHdl));
-
-    FreeResource();
 
     GetOKButton().SetClickHdl(LINK(this, SwFldDlg, OKHdl));
 
-    AddTabPage(TP_FLD_DOK, SwFldDokPage::Create, 0);
-    AddTabPage(TP_FLD_VAR, SwFldVarPage::Create, 0);
-    AddTabPage(TP_FLD_DOKINF, SwFldDokInfPage::Create, 0);
+    m_nDokId = AddTabPage("document", SwFldDokPage::Create, 0);
+    m_nVarId = AddTabPage("variables", SwFldVarPage::Create, 0);
+    m_nDokInf = AddTabPage("docinfo", SwFldDokInfPage::Create, 0);
 
     if (!m_bHtmlMode)
     {
-        AddTabPage(TP_FLD_REF, SwFldRefPage::Create, 0);
-        AddTabPage(TP_FLD_FUNC, SwFldFuncPage::Create, 0);
+        m_nRefId = AddTabPage("ref", SwFldRefPage::Create, 0);
+        m_nFuncId = AddTabPage("functions", SwFldFuncPage::Create, 0);
 
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -99,15 +93,15 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
             OUString("DatabaseFields")) >>= bDatabaseFields;
 
         if (bDatabaseFields)
-            AddTabPage(TP_FLD_DB, SwFldDBPage::Create, 0);
+            m_nDbId = AddTabPage("database", SwFldDBPage::Create, 0);
         else
-            RemoveTabPage(TP_FLD_DB);
+            RemoveTabPage("database");
     }
     else
     {
-        RemoveTabPage(TP_FLD_REF);
-        RemoveTabPage(TP_FLD_FUNC);
-        RemoveTabPage(TP_FLD_DB);
+        RemoveTabPage("ref");
+        RemoveTabPage("functions");
+        RemoveTabPage("database");
     }
 }
 
@@ -120,7 +114,7 @@ sal_Bool SwFldDlg::Close()
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
-    return sal_True;
+    return true;
 }
 
 void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
@@ -171,7 +165,7 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
 
 SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 {
-    if ( nID == TP_FLD_DOKINF )
+    if ( nID == m_nDokInf )
     {
         SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
         SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
@@ -237,15 +231,15 @@ void SwFldDlg::ReInitDlg()
     GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                           !rSh.HasReadonlySel() );
 
-    ReInitTabPage(TP_FLD_DOK);
-    ReInitTabPage(TP_FLD_VAR);
-    ReInitTabPage(TP_FLD_DOKINF);
+    ReInitTabPage(m_nDokId);
+    ReInitTabPage(m_nVarId);
+    ReInitTabPage(m_nDokInf);
 
     if (!m_bHtmlMode)
     {
-        ReInitTabPage(TP_FLD_REF);
-        ReInitTabPage(TP_FLD_FUNC);
-        ReInitTabPage(TP_FLD_DB);
+        ReInitTabPage(m_nRefId);
+        ReInitTabPage(m_nFuncId);
+        ReInitTabPage(m_nDbId);
     }
 
     m_pChildWin->SetOldDocShell(pDocSh);
@@ -277,12 +271,12 @@ void SwFldDlg::Activate()
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
 
-        ReInitTabPage( TP_FLD_VAR, sal_True );
+        ReInitTabPage(m_nVarId, true);
 
         if( !bHtmlMode )
         {
-            ReInitTabPage( TP_FLD_REF, sal_True );
-            ReInitTabPage( TP_FLD_FUNC, sal_True );
+            ReInitTabPage(m_nRefId, true);
+            ReInitTabPage(m_nFuncId, true);
         }
     }
 }
@@ -309,23 +303,28 @@ void SwFldDlg::InsertHdl()
 void SwFldDlg::ActivateDatabasePage()
 {
     m_bDataBaseMode = sal_True;
-    ShowPage( TP_FLD_DB );
-    SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
+    ShowPage(m_nDbId);
+    SfxTabPage* pDBPage = GetTabPage(m_nDbId);
     if( pDBPage )
     {
         ((SwFldDBPage*)pDBPage)->ActivateMailMergeAddress();
     }
     //remove all other pages
-    RemoveTabPage(TP_FLD_DOK);
-    RemoveTabPage(TP_FLD_VAR);
-    RemoveTabPage(TP_FLD_DOKINF);
-    RemoveTabPage(TP_FLD_REF);
-    RemoveTabPage(TP_FLD_FUNC);
+    RemoveTabPage("document");
+    RemoveTabPage("variables");
+    RemoveTabPage("docinfo");
+    RemoveTabPage("ref");
+    RemoveTabPage("functions");
+}
+
+void SwFldDlg::ShowReferencePage()
+{
+    ShowPage(m_nRefId);
 }
 
 void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
-    if( TP_FLD_DB == nId)
+    if (nId == m_nDbId)
     {
         SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
         SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;

@@ -22,7 +22,6 @@
 #include <docufld.hxx>
 #include <globals.hrc>
 #include <chpfld.hxx>
-#include <fldtdlg.hrc>
 #include <fldui.hrc>
 #include <flddok.hxx>
 #include <swmodule.hxx>

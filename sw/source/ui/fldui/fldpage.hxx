@@ -22,6 +22,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <fldmgr.hxx>
 
+#define FIELD_COLUMN_WIDTH 76
+
 class ListBox;
 
 const int coLBCount = 3;

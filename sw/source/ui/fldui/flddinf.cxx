@@ -33,7 +33,6 @@
 
 #include <fldui.hrc>
 
-#include <fldtdlg.hrc>
 #include <flddinf.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>

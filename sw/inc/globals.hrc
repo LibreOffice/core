@@ -135,13 +135,6 @@
 
 #define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
 
-#define TP_FLD_DB                   (RC_GLOBALS_BEGIN +  64)
-#define TP_FLD_DOKINF               (RC_GLOBALS_BEGIN +  65)
-#define TP_FLD_VAR                  (RC_GLOBALS_BEGIN +  66)
-#define TP_FLD_DOK                  (RC_GLOBALS_BEGIN +  67)
-#define TP_FLD_FUNC                 (RC_GLOBALS_BEGIN +  68)
-#define TP_FLD_REF                  (RC_GLOBALS_BEGIN +  69)
-
 #define TP_OPTSHDWCRSR              (RC_GLOBALS_BEGIN +  70)
 
 

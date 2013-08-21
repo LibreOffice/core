@@ -27,7 +27,6 @@
 #include <wrtsh.hxx>
 
 #include <fldui.hrc>
-#include <fldtdlg.hrc>
 #include <globals.hrc>
 // #i83479#
 #include <SwNodeNum.hxx>

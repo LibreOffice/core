@@ -21,7 +21,6 @@
 
 #include "rcid.hrc"
 
-#define DLG_FLD_INSERT      (RC_FLDDLG_BEGIN + 11)
 #define DLG_FLD_DROPDOWN    (RC_FLDDLG_BEGIN + 12)
 
 /*--------------------------------------------------------------------

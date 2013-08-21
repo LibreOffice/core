@@ -564,6 +564,8 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
         m_pTabCtrl->set_expand(true);
     }
 
+    pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
+
     m_pActionArea = get_action_area();
     m_bOwnsActionArea = m_pActionArea == NULL;
     if (m_bOwnsActionArea)
@@ -601,13 +603,13 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     m_bOwnsResetBtn = m_pResetBtn == NULL;
     if (m_bOwnsResetBtn)
         m_pResetBtn = new PushButton(m_pActionArea);
+    else
+        pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
     m_pBaseFmtBtn = m_pUIBuilder ? m_pUIBuilder->get<PushButton>("standard") : NULL;
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == NULL;
     if (m_bOwnsBaseFmtBtn)
         m_pBaseFmtBtn = new PushButton(m_pActionArea);
-
-    pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
 
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );

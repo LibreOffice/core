@@ -290,7 +290,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
                 SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
                 if (pWrp)
-                    pWrp->ShowPage();
+                    pWrp->ShowReferencePage();
                 rReq.Ignore();
             }
             break;

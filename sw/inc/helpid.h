@@ -309,9 +309,6 @@
 #define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
 #define HID_PVIEW_TOOLBOX                                       "SW_HID_PVIEW_TOOLBOX"
 
-#define HID_FIELD_INSERT                                        "SW_HID_FIELD_INSERT"
-#define HID_FIELD_CLOSE                                         "SW_HID_FIELD_CLOSE"
-
 #define HID_COND_COLL_TABLIST                                   "SW_HID_COND_COLL_TABLIST"
 
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"

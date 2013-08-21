@@ -29,10 +29,16 @@ class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
-    sal_Bool                m_bHtmlMode;
-    sal_Bool                m_bDataBaseMode;
+    sal_Bool            m_bHtmlMode;
+    sal_Bool            m_bDataBaseMode;
+    sal_uInt16          m_nDokId;
+    sal_uInt16          m_nVarId;
+    sal_uInt16          m_nDokInf;
+    sal_uInt16          m_nRefId;
+    sal_uInt16          m_nFuncId;
+    sal_uInt16          m_nDbId;
 
-    virtual sal_Bool        Close();
+    virtual sal_Bool    Close();
     virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId );
     virtual void        Activate();
     virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
@@ -52,6 +58,7 @@ public:
     void                EnableInsert(sal_Bool bEnable);
     void                InsertHdl();
     void                ActivateDatabasePage();
+    void                ShowReferencePage();
 };
 
 #endif

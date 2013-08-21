@@ -33,7 +33,6 @@
 #include <helpid.h>
 #include <fldui.hrc>
 #include <globals.hrc>
-#include <fldtdlg.hrc>
 #include "swabstdlg.hxx"
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwFldDlgWrapper, FN_INSERT_FIELD)
@@ -87,7 +86,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
@@ -110,9 +109,9 @@ sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-void SwFldDlgWrapper::ShowPage(sal_uInt16 nPage)
+void SwFldDlgWrapper::ShowReferencePage()
 {
-    pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
+    pDlgInterface->ShowReferencePage();
 }
 
 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
@@ -134,7 +133,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
 

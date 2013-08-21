@@ -272,7 +272,7 @@ public:
     virtual void                Initialize(SfxChildWinInfo *pInfo) = 0;
     virtual void                ReInitDlg() = 0;
     virtual void                ActivateDatabasePage() = 0;
-    virtual void                ShowPage( sal_uInt16 nId ) = 0;// this method from SfxTabDialog
+    virtual void                ShowReferencePage() = 0;
     virtual Window *            GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
@@ -383,7 +383,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg(Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) = 0; //add for SwTableTabDlg
 
-    virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ) = 0; //add for SwFldDlg
+    virtual AbstractSwFldDlg * CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent) = 0; //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(Window* pParent, //add for SwRenameXNamedDlg
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,

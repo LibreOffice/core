@@ -371,9 +371,9 @@ Window* AbstractSwFldDlg_Impl::GetWindow()
 {
     return (Window*)pDlg;
 }
-void    AbstractSwFldDlg_Impl::ShowPage( sal_uInt16 nId )
+void AbstractSwFldDlg_Impl::ShowReferencePage()
 {
-    pDlg->ShowPage(nId);
+    pDlg->ShowReferencePage();
 }
 
 void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const String& rSet )
@@ -876,22 +876,10 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(Window* 
     return new AbstractTabDialog_Impl(pDlg);
 }
 
-AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId )
+AbstractSwFldDlg * SwAbstractDialogFactory_Impl::CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
 {
-    SwFldDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_FLD_INSERT :
-            pDlg = new SwFldDlg( pB, pCW,pParent);
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwFldDlg_Impl( pDlg );
-    return 0;
+    SwFldDlg* pDlg = new SwFldDlg(pB, pCW, pParent);
+    return new AbstractSwFldDlg_Impl(pDlg);
 }
 
 SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& rVw, int nResId )

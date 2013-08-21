@@ -25,7 +25,6 @@
 #include <fldtdlg.hxx>
 #include <numrule.hxx>
 
-#include <fldtdlg.hrc>
 #include <fldui.hrc>
 #include <flddb.hxx>
 #include <dbconfig.hxx>

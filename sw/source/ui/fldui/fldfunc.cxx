@@ -31,7 +31,6 @@
 #include <fldfunc.hxx>
 #include <flddropdown.hxx>
 #include <fldui.hrc>
-#include <fldtdlg.hrc>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

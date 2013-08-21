@@ -234,7 +234,7 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg //add for SwFldDlg
     virtual void        SetText( const OUString& rStr );
     virtual OUString    GetText() const;
     virtual void                Start( sal_Bool bShow = sal_True );  //this method from SfxTabDialog
-    virtual void                ShowPage( sal_uInt16 nId );// this method from SfxTabDialog
+    virtual void                ShowReferencePage();
     virtual void                Initialize(SfxChildWinInfo *pInfo);
     virtual void                ReInitDlg();
     virtual void                ActivateDatabasePage();
@@ -482,7 +482,7 @@ public:
     virtual VclAbstractDialog * CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc);
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg(Window* pParent, SfxItemPool& Pool,
         const SfxItemSet* pItemSet, SwWrtShell* pSh); //add for SwTableTabDlg
-    virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ); //add for SwFldDlg
+    virtual AbstractSwFldDlg * CreateSwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent); //add for SwFldDlg
     virtual SfxAbstractDialog*   CreateSwFldEditDlg ( SwView& rVw, int nResId ); //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg(Window* pParent, //add for SwRenameXNamedDlg
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > & xNamed,

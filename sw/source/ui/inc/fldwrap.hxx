@@ -32,7 +32,7 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID(SwFldDlgWrapper);
 
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
-    void            ShowPage(sal_uInt16 nPage = 0);
+    void ShowReferencePage();
 };
 
 /* --------------------------------------------------
