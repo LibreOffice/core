@@ -440,11 +440,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
                 m_xDropTransferable = new X11Transferable( *this, m_nXdndSelection );
                 registerHandler( m_nXdndSelection, *this );
 
-                m_aThread = osl_createSuspendedThread( call_SelectionManager_run, this );
-                if( m_aThread )
-                    osl_resumeThread( m_aThread );
+                m_aThread = osl_createThread( call_SelectionManager_run, this );
 #if OSL_DEBUG_LEVEL > 1
-                else
+                if( !m_aThread)
                     fprintf( stderr, "SelectionManager::initialize: creation of dispatch thread failed !\n" );
 #endif
 
@@ -3393,13 +3391,11 @@ void SelectionManager::startDrag(
     }
 
     m_aDragRunning.set();
-    m_aDragExecuteThread = osl_createSuspendedThread( call_SelectionManager_runDragExecute, this );
-    if( m_aDragExecuteThread )
-        osl_resumeThread( m_aDragExecuteThread );
-    else
+    m_aDragExecuteThread = osl_createThread( call_SelectionManager_runDragExecute, this );
+    if( !m_aDragExecuteThread )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "osl_createSuspendedThread failed for drag execute\n" );
+        fprintf( stderr, "osl_SuspendedThread failed for drag execute\n" );
 #endif
         m_xDragSourceListener.clear();
         m_xDragSourceTransferable.clear();
