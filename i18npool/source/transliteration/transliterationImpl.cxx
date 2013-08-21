@@ -223,7 +223,7 @@ TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew >
                 if (mask == 0)
                     mask = TMlist[i].tm && (TMlist[i].tm&TransliterationModules_IGNORE_MASK) ?
                         TransliterationModules_IGNORE_MASK : TransliterationModules_NON_IGNORE_MASK;
-                else if (mask == TransliterationModules_IGNORE_MASK &&
+                else if (mask == (sal_Int32) TransliterationModules_IGNORE_MASK &&
                         (TMlist[i].tm&TransliterationModules_IGNORE_MASK) == 0)
                     throw ERROR; // could not mess up ignore trans. with non_ignore trans.
                 if (loadModuleByName(OUString::createFromAscii(TMlist[j].implName), bodyCascade[numCascade], rLocale))
