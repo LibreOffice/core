@@ -128,7 +128,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsNullableChanged)
     {
-        sal_Int32 nNullabble;
+        sal_Int32 nNullabble = 0;
         rDescriptor->getPropertyValue("IsNullable") >>= nNullabble;
 
         if (nNullabble != ColumnValue::NULLABLE_UNKNOWN)
