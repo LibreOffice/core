@@ -21,7 +21,6 @@
 #define INCLUDED_SVGIO_SVGREADER_SVGSVGNODE_HXX
 
 #include <svgio/svgreader/svgstyleattributes.hxx>
-#include <boost/scoped_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -37,7 +36,6 @@ namespace svgio
 
             /// variable scan values, dependent of given XAttributeList
             basegfx::B2DRange*      mpViewBox;
-            mutable boost::scoped_ptr<basegfx::B2DRange> xGeneratedBox;
             SvgAspectRatio          maSvgAspectRatio;
             SvgNumber               maX;
             SvgNumber               maY;
