@@ -1534,14 +1534,14 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         // 3. Table Name
         if (xRs->getRow() == 1) // Table name doesn't change, so only retrieve once
         {
-            aCurrentRow[3] = new ORowSetValueDecorator(xRow->getString(1));
+            aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         }
         // 4. Column Name
-        aCurrentRow[4] = new ORowSetValueDecorator(xRow->getString(2));
+        aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2)));
         // 5. KEY_SEQ (which key in the sequence)
         aCurrentRow[5] = new ORowSetValueDecorator(xRow->getShort(3));
         // 6. Primary Key Name
-        aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(4));
+        aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4)));
 
         aResults.push_back(aCurrentRow);
     }
