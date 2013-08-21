@@ -1091,17 +1091,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     while( rs->next() )
     {
         // 3. TABLE_NAME
-        {
-            OUString sTableName = xRow->getString(1);
-            sanitizeIdentifier(sTableName);
-            aCurrentRow[3] = new ORowSetValueDecorator(sTableName);
-        }
+        aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         // 4. COLUMN_NAME
-        {
-            OUString sColumnName = xRow->getString(6);
-            sanitizeIdentifier(sColumnName);
-            aCurrentRow[4] = new ORowSetValueDecorator(sColumnName);
-        }
+        aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(6)));
         aCurrentRow[5] = new ORowSetValueDecorator(xRow->getString(2)); // 5. GRANTOR
         aCurrentRow[6] = new ORowSetValueDecorator(xRow->getString(3)); // 6. GRANTEE
         aCurrentRow[7] = new ORowSetValueDecorator(xRow->getString(4)); // 7. Privilege
@@ -1195,18 +1187,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     while( rs->next() )
     {
         // 3. TABLE_NAME
-        {
-            OUString sTableName = xRow->getString(1);
-            sanitizeIdentifier(sTableName);
-            aCurrentRow[3] = new ORowSetValueDecorator(sTableName);
-        }
+        aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         // 4. Column Name
-        {
-            OUString sColumnName = xRow->getString(2);
-            sanitizeIdentifier(sColumnName);
-            aCurrentRow[4] = new ORowSetValueDecorator(sColumnName);
-        }
-
+        aCurrentRow[4] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2)));
         // 5. Datatype
         short aType = getFBTypeFromBlrType(xRow->getShort(6));
         aCurrentRow[5] = new ORowSetValueDecorator(getColumnTypeFromFBType(aType));
@@ -1402,11 +1385,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     while( rs->next() )
     {
         // 3. TABLE_NAME
-        {
-            OUString sTableName = xRow->getString(1);
-            sanitizeIdentifier(sTableName);
-            aCurrentRow[3] = new ORowSetValueDecorator(sTableName);
-        }
+        aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         // 4. TABLE_TYPE
         {
             // TODO: check this as the docs are a bit unclear.
@@ -1655,11 +1634,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     while( rs->next() )
     {
         // 3. TABLE_NAME
-        {
-            OUString sTableName = xRow->getString(1);
-            sanitizeIdentifier(sTableName);
-            aRow[3] = new ORowSetValueDecorator(sTableName);
-        }
+        aRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
         aRow[4] = new ORowSetValueDecorator(xRow->getString(2)); // 4. GRANTOR
         aRow[5] = new ORowSetValueDecorator(xRow->getString(3)); // 5. GRANTEE
         aRow[6] = new ORowSetValueDecorator(xRow->getString(4)); // 6. Privilege

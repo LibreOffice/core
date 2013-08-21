@@ -19,12 +19,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-OUString& firebird::sanitizeIdentifier(OUString& rIdentifier)
+OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
 {
-    rIdentifier = rIdentifier.trim();
-    assert(rIdentifier.getLength() <= 31); // Firebird identifiers cannot be longer than this.
+    OUString sRet = rIdentifier.trim();
+    assert(sRet.getLength() <= 31); // Firebird identifiers cannot be longer than this.
 
-    return rIdentifier;
+    return sRet;
 }
 
 void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,

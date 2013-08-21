@@ -31,7 +31,7 @@ namespace connectivity
          * for such shorter strings, however any trailing padding makes the gui
          * editing of such names harder, hence we remove all trailing whitespace.
          */
-        ::rtl::OUString& sanitizeIdentifier(::rtl::OUString& rIdentifier);
+        ::rtl::OUString sanitizeIdentifier(const ::rtl::OUString& rIdentifier);
 
         /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
