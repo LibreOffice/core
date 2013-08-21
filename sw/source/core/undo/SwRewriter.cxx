@@ -55,35 +55,13 @@ void SwRewriter::AddRule(SwUndoArg eWhat, const OUString & rWith)
         mRules.push_back(aRule);
 }
 
-namespace
-{
-
-const char UNDO_ARG1[] = "$1";
-const char UNDO_ARG2[] = "$2";
-const char UNDO_ARG3[] = "$3";
-
-}
-
 OUString SwRewriter::Apply(const OUString & rStr) const
 {
     OUString aResult = rStr;
-    std::vector<SwRewriteRule>::const_iterator aIt;
 
-    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
+    for (std::vector<SwRewriteRule>::const_iterator aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
     {
-        switch (aIt->first)
-        {
-            case UndoArg1:
-            default:
-                aResult = aResult.replaceAll(UNDO_ARG1, aIt->second);
-                break;
-            case UndoArg2:
-                aResult = aResult.replaceAll(UNDO_ARG2, aIt->second);
-                break;
-            case UndoArg3:
-                aResult = aResult.replaceAll(UNDO_ARG3, aIt->second);
-                break;
-        }
+        aResult = aResult.replaceAll(GetPlaceHolder(aIt->first), aIt->second);
     }
 
     return aResult;
@@ -94,15 +72,15 @@ OUString SwRewriter::GetPlaceHolder(SwUndoArg eId)
     switch (eId)
     {
         case UndoArg1:
-            return OUString(UNDO_ARG1);
+            return OUString("$1");
         case UndoArg2:
-            return OUString(UNDO_ARG2);
+            return OUString("$2");
         case UndoArg3:
-            return OUString(UNDO_ARG3);
+            return OUString("$3");
         default:
             break;
     }
-    return OUString(UNDO_ARG1);
+    return OUString("$1");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
