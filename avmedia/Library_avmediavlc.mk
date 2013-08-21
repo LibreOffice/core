@@ -28,6 +28,11 @@ $(eval $(call gb_Library_add_defs,avmediavlc,\
 ))
 endif
 
+$(eval $(call gb_Library_use_externals,avmediavlc,\
+	boost_headers \
+	boostsystem \
+))
+
 $(eval $(call gb_Library_use_libraries,avmediavlc,\
     comphelper \
     cppu \
