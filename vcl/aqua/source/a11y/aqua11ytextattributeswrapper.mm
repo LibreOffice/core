@@ -283,10 +283,6 @@ using namespace ::rtl;
     [ pool release ];
 }
 
-+(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
-    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(::com::sun::star::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
-}
-
 +(void)addMarkup:(XAccessibleTextMarkup*)markup withType:(long)type toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
     const long markupCount = markup->getTextMarkupCount(type);
     for (long markupIndex = 0; markupIndex < markupCount; ++markupIndex) {
@@ -303,6 +299,10 @@ using namespace ::rtl;
             }
         }
     }
+}
+
++(void)addMarkup:(XAccessibleTextMarkup*)markup toString:(NSMutableAttributedString*)string inRange:(NSRange)range {
+    [AquaA11yTextAttributesWrapper addMarkup:markup withType:(::com::sun::star::text::TextMarkupType::SPELLCHECK) toString:string inRange:range];
 }
 
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange {
