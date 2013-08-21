@@ -117,8 +117,6 @@ private:
     PushButton*   mpPB_SLIDE_SHOW;
     CheckBox*     mpCB_AUTO_PREVIEW;
 
-    OUString     maSTR_NO_TRANSITION;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >             mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                  mxModel;
 
