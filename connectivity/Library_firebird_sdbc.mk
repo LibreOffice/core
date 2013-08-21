@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/Connection \
     connectivity/source/drivers/firebird/DatabaseMetaData \
     connectivity/source/drivers/firebird/Driver \
+    connectivity/source/drivers/firebird/Keys \
     connectivity/source/drivers/firebird/PreparedStatement \
     connectivity/source/drivers/firebird/ResultSet \
     connectivity/source/drivers/firebird/ResultSetMetaData \

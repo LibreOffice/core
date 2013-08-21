@@ -8,12 +8,12 @@
  */
 
 #include "Columns.hxx"
+#include "Keys.hxx"
 #include "Table.hxx"
 
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/TIndexes.hxx>
-#include <connectivity/TKeys.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
@@ -70,11 +70,9 @@ OCollection* Table::createColumns(const TStringVector& rNames)
 
 OCollection* Table::createKeys(const TStringVector& rNames)
 {
-    // TODO: maybe add a wrapper here in case we the OKeysHelper isn't
-    // fully FB compatible.
-    return new OKeysHelper(this,
-                           m_rMutex,
-                           rNames);
+    return new Keys(this,
+                    m_rMutex,
+                    rNames);
 }
 
 OCollection* Table::createIndexes(const TStringVector& rNames)
