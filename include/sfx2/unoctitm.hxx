@@ -54,7 +54,7 @@ class SfxUnoControllerItem :    public ::cppu::WeakImplHelper1< css::frame::XSta
 
 public:
 
-                                SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const String& );
+                                SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const OUString& );
                                 ~SfxUnoControllerItem();
 
     const ::com::sun::star::util::URL&                  GetCommand() const

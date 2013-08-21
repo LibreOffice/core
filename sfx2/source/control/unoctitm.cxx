@@ -90,7 +90,7 @@ const char* URLTypeNames[URLType_COUNT] =
     "double"
 };
 
-SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBindings& rBind, const String& rCmd )
+SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBindings& rBind, const OUString& rCmd )
     : pCtrlItem( pItem )
     , pBindings( &rBind )
 {
