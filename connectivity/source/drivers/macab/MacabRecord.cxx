@@ -316,7 +316,7 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
                 // Should we check for the wrong type here, e.g., a float?
                 sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
                 if(m_bSuccess != sal_False)
-                    fieldString = OUString::valueOf(nVal);
+                    fieldString = OUString::number(nVal);
             }
             break;
         case kABRealProperty:
@@ -326,7 +326,7 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
                 // Should we check for the wrong type here, e.g., an int?
                 sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
                 if(m_bSuccess != sal_False)
-                    fieldString = OUString::valueOf(nVal);
+                    fieldString = OUString::number(nVal);
             }
             break;
         default:

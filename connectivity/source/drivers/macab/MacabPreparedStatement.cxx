@@ -328,7 +328,7 @@ void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const 
     {
         const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", OUString::valueOf(parameterIndex)
+                "$position$", OUString::number(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

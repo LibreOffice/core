@@ -761,7 +761,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 {
                     arrValue = (CFTypeRef) CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
                     arrType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(arrValue) );
-                    arrLabelString = propertyNameString + OUString::valueOf(i);
+                    arrLabelString = propertyNameString + OUString::number(i);
                     arrLabel = OUStringToCFString(arrLabelString);
                     arrHeaders[i] = createHeaderForProperty(arrType, arrValue, arrLabel);
                     if (!arrHeaders[i])
@@ -836,7 +836,7 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
             // There is probably a better way to do this...
             OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
             CFRelease(_headerNames[i]->value);
-            newName += OUString(" (") + OUString::valueOf(count) + OUString(")");
+            newName += OUString(" (") + OUString::number(count) + OUString(")");
             _headerNames[i]->value = OUStringToCFString(newName);
         }
     }
@@ -957,7 +957,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     {
                         bPlaced = sal_False;
                         i++;
-                        columnName = OUString(_propertyName) + OUString(" (") + OUString::valueOf(i) + OUString(")");
+                        columnName = OUString(_propertyName) + OUString(" (") + OUString::number(i) + OUString(")");
                     }
 
                     // success!
@@ -986,7 +986,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 for(i = 0; i < arrLength; i++)
                 {
                     arrValue = CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
-                    newPropertyName = _propertyName + OUString::valueOf(i);
+                    newPropertyName = _propertyName + OUString::number(i);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, arrValue);
                     CFRelease(arrValue);
                 }
