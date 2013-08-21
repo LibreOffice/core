@@ -28,7 +28,9 @@ namespace
 {
     const char *libNames[] = {
         "libvlc.so.5",
-        "libvlccore.so.5"
+        "libvlccore.so.5",
+        "libvlc.dll",
+        "libvlc.dylib"
     };
 
     template<size_t N>
@@ -37,7 +39,7 @@ namespace
         for (uint i = 0; i < N; ++i)
         {
             SymbolFunc aMethod = ( SymbolFunc )osl_getFunctionSymbol
-                ( aModule, OUString::createFromAscii ( pMap[ i ].symName ).pData );
+                ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData );
             if ( !aMethod )
                 return false;
 
