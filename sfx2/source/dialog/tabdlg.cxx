@@ -225,7 +225,6 @@ SfxTabPage::SfxTabPage( Window *pParent,
 
     pSet                ( &rAttrSet ),
     bHasExchangeSupport ( sal_False ),
-    pTabDlg             ( NULL ),
     pImpl               ( new TabPageImpl )
 
 {
@@ -236,7 +235,6 @@ SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIX
     : TabPage(pParent, rID, rUIXMLDescription)
     , pSet                ( &rAttrSet )
     , bHasExchangeSupport ( sal_False )
-    , pTabDlg             ( NULL )
     , pImpl               ( new TabPageImpl )
 {
 }
@@ -383,6 +381,11 @@ void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
 void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 {
     pImpl->maItemConn.AddConnection( pConnection );
+}
+
+SfxTabDialog* SfxTabPage::GetTabDialog() const
+{
+    return dynamic_cast<SfxTabDialog*>(GetParentDialog());
 }
 
 #define INI_LIST(ItemSetPtr) \
@@ -1332,7 +1335,6 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
 
-        pDataObject->pTabPage->SetTabDialog( this );
         SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );

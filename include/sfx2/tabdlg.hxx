@@ -249,10 +249,8 @@ private:
     const SfxItemSet*   pSet;
     String              aUserString;
     sal_Bool                bHasExchangeSupport;
-    SfxTabDialog*       pTabDlg;
     TabPageImpl*        pImpl;
 
-    SAL_DLLPRIVATE void SetTabDialog( SfxTabDialog* pNew ) { pTabDlg = pNew; }
     SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
 
 protected:
@@ -264,7 +262,7 @@ protected:
     sal_uInt16              GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
     const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
-    SfxTabDialog*       GetTabDialog() const { return pTabDlg; }
+    SfxTabDialog*       GetTabDialog() const;
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
 
