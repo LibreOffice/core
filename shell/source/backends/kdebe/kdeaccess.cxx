@@ -84,7 +84,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
         /* does not make much sense without an accessibility bridge */
         sal_Bool ATToolSupport = sal_False;
         return css::beans::Optional< css::uno::Any >(
-            true, uno::makeAny( OUString::valueOf( ATToolSupport ) ) );
+            true, uno::makeAny( OUString::boolean( ATToolSupport ) ) );
     } else if (id.equalsAsciiL(
                    RTL_CONSTASCII_STRINGPARAM("WorkPathVariable")))
     {

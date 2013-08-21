@@ -546,7 +546,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
     else
     {
         fprintf( stderr, "XIMStatusDataType %s not supported\n",
-            call_data->type == XIMBitmapType ? "XIMBitmapType" : OString::valueOf(static_cast<sal_Int32>(call_data->type)).getStr() );
+            call_data->type == XIMBitmapType ? "XIMBitmapType" : OString::number(call_data->type).getStr() );
     }
 #endif
     return;
