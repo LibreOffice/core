@@ -65,8 +65,7 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame )
         ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
         m_xFrame( rFrame )
 {
-    String aStr; aStr += sal_Unicode('X');
-    Size aXSize( GetTextWidth( aStr ), GetTextHeight() );
+    Size aXSize( GetTextWidth( "X" ), GetTextHeight() );
     SetSizePixel( Size( aXSize.Width() * 12, aXSize.Height() * 10 ) );
     Fill();
     Show();
@@ -102,19 +101,19 @@ void GlueEscDirLB::Select()
  */
 void GlueEscDirLB::Fill()
 {
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_SMART ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_LEFT ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_RIGHT ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_TOP ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_BOTTOM ) ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_SMART ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LEFT ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RIGHT ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_TOP ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_BOTTOM ) );
     /*
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_LO ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_LU ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_RO ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_RU ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_HORZ ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_VERT ) ) );
-    InsertEntry( String( SdResId( STR_GLUE_ESCDIR_ALL ) ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LO ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LU ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RO ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RU ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_HORZ ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_VERT ) );
+    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_ALL ) );
     */
 }
 

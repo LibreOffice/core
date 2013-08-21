@@ -76,7 +76,7 @@ void SdPageListControl::Clear()
     SvTreeListBox::Clear();
 }
 
-SvTreeListEntry* SdPageListControl::InsertPage( const String& rPageName )
+SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -90,10 +90,10 @@ SvTreeListEntry* SdPageListControl::InsertPage( const String& rPageName )
     return pEntry;
 }
 
-void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const String& rTitle )
+void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& rTitle )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) );
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) );
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // otherwise boom!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
     GetModel()->Insert( pEntry,pParent );
@@ -146,8 +146,8 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                         pPara = pOutliner->GetParagraph(nPara);
                         if(pPara && pOutliner->GetDepth( nPara ) == 0 )
                         {
-                            String aParaText = pOutliner->GetText(pPara);
-                            if(aParaText.Len() != 0)
+                            OUString aParaText = pOutliner->GetText(pPara);
+                            if (!aParaText.isEmpty())
                                 InsertTitle( pEntry, aParaText );
                         }
                     }

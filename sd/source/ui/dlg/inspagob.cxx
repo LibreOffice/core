@@ -32,7 +32,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     ::Window* pWindow,
     const SdDrawDocument* pInDoc,
     SfxMedium* pSfxMedium,
-    const String& rFileName )
+    const OUString& rFileName )
     : ModalDialog     ( pWindow, SdResId( DLG_INSERT_PAGES_OBJS ) ),
       aLbTree         ( this, SdResId( LB_TREE ) ),
       aCbxLink        ( this, SdResId( CBX_LINK ) ),
@@ -52,7 +52,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
     // insert text
     if( !pMedium )
-        SetText( String( SdResId( STR_INSERT_TEXT ) ) );
+        SetText( SD_RESSTR( STR_INSERT_TEXT ) );
 
     Reset();
 }

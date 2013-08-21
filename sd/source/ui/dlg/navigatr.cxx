@@ -80,7 +80,7 @@ SdNavigatorWin::SdNavigatorWin(
 
     FreeResource();
 
-    maTlbObjects.SetAccessibleName(String(SdResId(STR_OBJECTS_TREE)));
+    maTlbObjects.SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
 
     mpNavigatorCtrlItem = new SdNavigatorControllerItem( SID_NAVIGATOR_STATE, this, mpBindings, rUpdateRequest);
     mpPageNameCtrlItem = new SdPageNameControllerItem( SID_NAVIGATOR_PAGENAME, this, mpBindings, rUpdateRequest);
@@ -161,7 +161,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
     ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
-    String aDocShName( pDocShell->GetName() );
+    OUString aDocShName( pDocShell->GetName() );
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
     // Restore the 'ShowAllShapes' flag from the last time (in this session)
@@ -182,7 +182,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     if( !maTlbObjects.IsEqualToDoc( pDoc ) )
     {
-        String aDocName = pDocShell->GetMedium()->GetName();
+        OUString aDocName = pDocShell->GetMedium()->GetName();
         maTlbObjects.Clear();
         maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
 
@@ -312,7 +312,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 if( nRId > 0 )
                 {
                     DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
-                    pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
+                    pMenu->InsertItem( nID, SD_RESSTR( nRId ) );
                     pMenu->SetHelpId( nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL] );
                 }
 
@@ -341,10 +341,10 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 
             pMenu->InsertItem(
                 nShowNamedShapesFilter,
-                String(SdResId(STR_NAVIGATOR_SHOW_NAMED_SHAPES)));
+                SD_RESSTR(STR_NAVIGATOR_SHOW_NAMED_SHAPES));
             pMenu->InsertItem(
                 nShowAllShapesFilter,
-                String(SdResId(STR_NAVIGATOR_SHOW_ALL_SHAPES)));
+                SD_RESSTR(STR_NAVIGATOR_SHOW_ALL_SHAPES));
 
             if (maTlbObjects.GetShowAllShapes())
                 pMenu->CheckItem(nShowAllShapesFilter);
@@ -372,9 +372,9 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
         // if it is the active window, we jump to the page
         if( pInfo && pInfo->IsActive() )
         {
-            String aStr( maTlbObjects.GetSelectEntry() );
+            OUString aStr( maTlbObjects.GetSelectEntry() );
 
-            if( aStr.Len() > 0 )
+            if( !aStr.isEmpty() )
             {
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
                 mpBindings->GetDispatcher()->Execute(
@@ -401,7 +401,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
 {
-    String aStrLb = maLbDocs.GetSelectEntry();
+    OUString aStrLb = maLbDocs.GetSelectEntry();
     long   nPos = maLbDocs.GetSelectEntryPos();
     sal_Bool   bFound = sal_False;
     ::sd::DrawDocShell* pDocShell = NULL;
@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
         {
             SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
             ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
-            String aDocName = pNCDocShell->GetMedium()->GetName();
+            OUString aDocName = pNCDocShell->GetMedium()->GetName();
             maTlbObjects.Clear();
             maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
         }
@@ -569,10 +569,9 @@ void SdNavigatorWin::Resize()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
+bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 {
     INetURLObject   aURL( rFileName );
-    sal_Bool            bReturn = sal_True;
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -582,9 +581,9 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
     }
 
     // get adjusted FileName
-    String aFileName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aFileName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    if (!aFileName.Len())
+    if (aFileName.isEmpty())
     {
         // show actual document again
         maDropFileName = aFileName;
@@ -632,22 +631,22 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
             }
             else
             {
-                bReturn = sal_False;
                 delete pMedium;
+                return false;
             }
         }
         else
         {
-            bReturn = sal_False;
+            return false;
         }
     }
 
-    return (bReturn);
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
+void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 {
     sal_uInt16 nPos = 0;
 
@@ -665,7 +664,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
         if( nPos == LISTBOX_ENTRY_NOTFOUND )
             nPos = 0;
 
-        String aStr;
+        OUString aStr;
         if( mbDocImported )
             aStr = maLbDocs.GetEntry( 0 );
 
@@ -690,7 +689,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
 
                 SfxMedium *pMedium = pDocShell->GetMedium();
                 aStr = pMedium ? pMedium->GetName() : OUString();
-                if( aStr.Len() )
+                if( !aStr.isEmpty() )
                     aInfo.SetName();
                 else
                     aInfo.SetName( sal_False );
@@ -957,7 +956,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
         {
             const SfxStringItem* pStateItem = PTR_CAST( SfxStringItem, pItem );
             DBG_ASSERT( pStateItem, "SfxStringItem expected");
-            String aPageName = pStateItem->GetValue();
+            OUString aPageName = pStateItem->GetValue();
 
             if( !pNavigatorWin->maTlbObjects.HasSelectedChildren( aPageName ) )
             {

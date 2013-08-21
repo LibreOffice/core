@@ -97,8 +97,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         if(bOutliner)
         {
             SfxStyleSheetBasePool* pSSPool = pView->GetDocSh()->GetStyleSheetPool();
-            String aStyleName((SdResId(STR_LAYOUT_OUTLINE)));
-            aStyleName.AppendAscii( " 1" );
+            OUString aStyleName(SD_RESSTR(STR_LAYOUT_OUTLINE) + " 1");
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
             if( pFirstStyleSheet )
                 pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);

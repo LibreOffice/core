@@ -38,7 +38,7 @@ using namespace ::com::sun::star::beans;
 
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
-                                  const std::vector<String> &rPageNames, SdCustomShowList* pCSList ) :
+                                  const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) :
                 ModalDialog     ( pWindow, "PresentationDialog", "modules/simpress/ui/presentationdialog.ui" ),
                 pCustomShowList         ( pCSList ),
                 rOutAttrs               ( rInAttrs ),
@@ -88,7 +88,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause->SetFormat( TIMEF_SEC );
 
     // fill Listbox with page names
-    for (std::vector<String>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
+    for (std::vector<OUString>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
         aLbDias->InsertEntry(*pIter);
 
     if( pCustomShowList )
@@ -151,10 +151,10 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     ChangePauseHdl( NULL );
 }
 
-String SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
-                                               DisplayType eType )
+OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
+                                                 DisplayType eType )
 {
-    String aName;
+    OUString aName;
 
     switch ( eType )
     {
@@ -169,8 +169,7 @@ String SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
         aName = msMonitor->GetText();
         break;
     }
-    const String aNumber( OUString::number( nDisplay ) );
-    aName.SearchAndReplace( String("%1"), aNumber );
+    aName = aName.replaceFirst( "%1", OUString::number( nDisplay ) );
 
     return aName;
 }
@@ -214,7 +213,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             sal_Int32 nInsertedEntry;
 
             // Initial entry - the auto-detected external monitor
-            String aName = GetDisplayName( nExternalIndex + 1, EXTERNAL_IS_NUMBER);
+            OUString aName = GetDisplayName( nExternalIndex + 1, EXTERNAL_IS_NUMBER);
             nInsertedEntry = InsertDisplayEntry( aName, 0 );
             if( nDefaultSelectedDisplay == 0)
                 nSelectedIndex = nInsertedEntry;

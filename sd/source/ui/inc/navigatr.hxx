@@ -101,9 +101,9 @@ public:
     virtual void                KeyInput( const KeyEvent& rKEvt );
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
-    void                        RefreshDocumentLB( const String* pDocName = NULL );
+    void                        RefreshDocumentLB( const OUString* pDocName = NULL );
 
-    sal_Bool                        InsertFile(const String& rFileName);
+    bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
     void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
@@ -126,7 +126,7 @@ private:
     Size                        maSize;
     Size                        maMinSize;
     sal_Bool                        mbDocImported;
-    String                      maDropFileName;
+    OUString                    maDropFileName;
     NavigatorDragType           meDragType;
     std::vector<NavDocInfo>     maDocList;
     SfxBindings*                mpBindings;

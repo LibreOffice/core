@@ -52,8 +52,8 @@ public:
                             ~SdOpenSoundFileDialog();
 
     ErrCode                  Execute();
-    String                   GetPath() const;
-    void                     SetPath( const String& rPath );
+    OUString                 GetPath() const;
+    void                     SetPath( const OUString& rPath );
 
     String                   ReqDisplayDirectory() const;
 };

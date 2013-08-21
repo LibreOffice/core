@@ -164,7 +164,7 @@ void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
     else if ( m_pMtrFldX->IsEnabled() )
     {
         nXValue = static_cast<long>(m_pMtrFldX->GetValue());
-        m_pMtrFldX->SetText(String());
+        m_pMtrFldX->SetText(OUString());
         m_pMtrFldX->Disable();
         m_pFtX->Disable();
     }
@@ -178,7 +178,7 @@ void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
     else if ( m_pMtrFldY->IsEnabled() )
     {
         nYValue = static_cast<long>(m_pMtrFldY->GetValue());
-        m_pMtrFldY->SetText(String());
+        m_pMtrFldY->SetText(OUString());
         m_pMtrFldY->Disable();
         m_pFtY->Disable();
     }

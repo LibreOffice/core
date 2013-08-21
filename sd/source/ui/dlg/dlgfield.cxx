@@ -127,7 +127,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             {
                 SvxExtFileField aFileField( *pFileField );
 
-                String aName;
+                OUString aName;
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
@@ -173,8 +173,8 @@ void SdModifyFieldDlg::FillFormatList()
 
         //SVXDATEFORMAT_APPDEFAULT,     // not used
         //SVXDATEFORMAT_SYSTEM,         // not used
-        aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_SMALL ) ) );
-        aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_BIG ) ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_STANDARD_SMALL ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_STANDARD_BIG ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
@@ -199,7 +199,7 @@ void SdModifyFieldDlg::FillFormatList()
 
         //SVXTIMEFORMAT_APPDEFAULT,     // not used
         //SVXTIMEFORMAT_SYSTEM,         // not used
-        aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_NORMAL ) ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_STANDARD_NORMAL ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
@@ -225,10 +225,10 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
         SvxExtFileField aFileField( *pFileField );
 
-        aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_NAME_EXT ) ) );
-        aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_FULLPATH ) ) );
-        aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_PATH ) ) );
-        aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_NAME ) ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_FILEFORMAT_NAME_EXT ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_FILEFORMAT_FULLPATH ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_FILEFORMAT_PATH ) );
+        aLbFormat.InsertEntry( SD_RESSTR( STR_FILEFORMAT_NAME ) );
 
         aLbFormat.SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
     }

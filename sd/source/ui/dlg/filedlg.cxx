@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       String( SdResId( STR_PLAY ) ) );
+                                       SD_RESSTR( STR_PLAY ) );
 
             mbLabelPlaying = sal_False;
         }
@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
                 try
                 {
                     mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                               String( SdResId( STR_STOP ) ) );
+                                               SD_RESSTR( STR_STOP ) );
 
                     mbLabelPlaying = sal_True;
                 }
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       String( SdResId( STR_PLAY ) ) );
+                                       SD_RESSTR( STR_PLAY ) );
             mbLabelPlaying = sal_False;
         }
         catch (const css::lang::IllegalArgumentException&)
@@ -210,11 +210,11 @@ void SdFileDialog_Imp::CheckSelectionState()
 {
     if( mbUsableSelection && mxControlAccess.is() )
     {
-        String  aCurrFilter( GetCurrentFilter() );
+        OUString  aCurrFilter( GetCurrentFilter() );
 
         try
         {
-            if( !aCurrFilter.Len() || ( aCurrFilter == String( SdResId( STR_EXPORT_HTML_NAME ) ) ) )
+            if( aCurrFilter.isEmpty() || ( aCurrFilter == SD_RESSTR( STR_EXPORT_HTML_NAME ) ) )
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, sal_False );
             else
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, sal_True );
@@ -251,7 +251,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             try
             {
                 mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                           String( SdResId( STR_PLAY ) ) );
+                                           SD_RESSTR( STR_PLAY ) );
             }
             catch (const css::lang::IllegalArgumentException&)
             {
@@ -303,26 +303,26 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
         new SdFileDialog_Imp(
             css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, sal_False ) )
 {
-    String aDescr;
-    aDescr = String(SdResId(STR_ALL_FILES));
+    OUString aDescr;
+    aDescr = SD_RESSTR(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, OUString("*.*"));
 
     // setup filter
 #if defined UNX
-    aDescr = String(SdResId(STR_AU_FILE));
+    aDescr = SD_RESSTR(STR_AU_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.au;*.snd" ));
-    aDescr = String(SdResId(STR_VOC_FILE));
+    aDescr = SD_RESSTR(STR_VOC_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.voc" ));
-    aDescr = String(SdResId(STR_WAV_FILE));
+    aDescr = SD_RESSTR(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.wav" ));
-    aDescr = String(SdResId(STR_AIFF_FILE));
+    aDescr = SD_RESSTR(STR_AIFF_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.aiff" ));
-    aDescr = String(SdResId(STR_SVX_FILE));
+    aDescr = SD_RESSTR(STR_SVX_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.svx" ));
 #else
-    aDescr = String(SdResId(STR_WAV_FILE));
+    aDescr = SD_RESSTR(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.wav;*.mp3;*.ogg" ));
-    aDescr = String(SdResId(STR_MIDI_FILE));
+    aDescr = SD_RESSTR(STR_MIDI_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.mid" ));
 #endif
 }
@@ -339,13 +339,13 @@ ErrCode SdOpenSoundFileDialog::Execute()
 }
 
 // ------------------------------------------------------------------------
-String SdOpenSoundFileDialog::GetPath() const
+OUString SdOpenSoundFileDialog::GetPath() const
 {
     return mpImpl->GetPath();
 }
 
 // ------------------------------------------------------------------------
-void SdOpenSoundFileDialog::SetPath( const String& rPath )
+void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );
 }

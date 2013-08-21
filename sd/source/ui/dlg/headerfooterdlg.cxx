@@ -487,11 +487,8 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
         moveY( maPBCancel, deltaY );
         moveY( maPBHelp, deltaY );
 
-        String aPageNumberStr( SdResId( STR_PAGE_NUMBER ) );
-        maCBSlideNumber.SetText( aPageNumberStr );
-
-        String aIncludeOnPageStr( SdResId( STR_INCLUDE_ON_PAGE ) );
-        maFLIncludeOnPage.SetText( aIncludeOnPageStr );
+        maCBSlideNumber.SetText( SD_RESSTR( STR_PAGE_NUMBER ) );
+        maFLIncludeOnPage.SetText( SD_RESSTR( STR_INCLUDE_ON_PAGE ) );
     }
 
     FreeResource();
@@ -568,7 +565,9 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     int nFormat;
     for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
     {
-        String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, nDateTimeFormats[nFormat], *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
+        OUString aStr( SvxDateTimeField::GetFormatted(
+                aDate, aTime, nDateTimeFormats[nFormat],
+                *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
         sal_uInt16 nEntry = maCBDateTimeFormat.InsertEntry( aStr );
         maCBDateTimeFormat.SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )

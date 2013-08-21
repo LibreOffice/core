@@ -40,7 +40,7 @@ private:
 
     SfxMedium*              pMedium;
     const SdDrawDocument*   mpDoc;
-    const String&           rName;
+    const OUString&         rName;
 
     void                    Reset();
     DECL_LINK( SelectObjectHdl, void * );
@@ -49,7 +49,7 @@ public:
                 SdInsertPagesObjsDlg( Window* pParent,
                                 const SdDrawDocument* pDoc,
                                 SfxMedium* pSfxMedium,
-                                const String& rFileName );
+                                const OUString& rFileName );
                 ~SdInsertPagesObjsDlg();
 
     /** returns the list

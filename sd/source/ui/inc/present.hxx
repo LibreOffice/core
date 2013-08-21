@@ -82,12 +82,12 @@ private:
     };
     sal_Int32           InsertDisplayEntry(const rtl::OUString &aName,
                                            sal_Int32            nDisplay);
-    String              GetDisplayName( sal_Int32 nDisplay,
+    OUString            GetDisplayName( sal_Int32 nDisplay,
                                         DisplayType eType );
 public:
                         SdStartPresentationDlg( Window* pWindow,
                                 const SfxItemSet& rInAttrs,
-                                const std::vector<String> &rPageNames,
+                                const std::vector<OUString> &rPageNames,
                                 SdCustomShowList* pCSList );
 
     void                GetAttr( SfxItemSet& rOutAttrs );

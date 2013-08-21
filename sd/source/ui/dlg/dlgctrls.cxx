@@ -47,7 +47,7 @@ void FadeEffectLB::Fill()
 {
     TransitionPresetPtr pPreset;
 
-    InsertEntry( String( SdResId( STR_EFFECT_NONE ) ) );
+    InsertEntry( SD_RESSTR( STR_EFFECT_NONE ) );
     mpImpl->maPresets.push_back( pPreset );
 
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
