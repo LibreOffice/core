@@ -388,7 +388,6 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 
     SwTxtPaintInfo &operator=(const SwTxtPaintInfo&);
     void _NotifyURL( const SwLinePortion &rPor ) const;
-    void _DrawBackBrush( const SwLinePortion &rPor ) const;
 
 protected:
 #ifdef DBG_UTIL
@@ -439,8 +438,7 @@ public:
     void DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) const;
     void DrawBackground( const SwLinePortion &rPor ) const;
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
-    inline void DrawBackBrush( const SwLinePortion &rPor ) const
-    { /* if( pFnt->GetBackColor() ) */ _DrawBackBrush( rPor ); }
+    void DrawBackBrush( const SwLinePortion &rPor ) const;
 
     void DrawBorder( const SwLinePortion &rPor ) const;
 

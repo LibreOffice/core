@@ -1140,7 +1140,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
+void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 {
     {
         SwRect aIntersect;
