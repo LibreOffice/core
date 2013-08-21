@@ -80,7 +80,7 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleTable
  */
 public class ScAccessiblePreviewHeaderCell extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.
