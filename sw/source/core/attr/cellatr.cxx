@@ -27,6 +27,7 @@
 #include <node.hxx>
 #include <rolbck.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustring.hxx>
 #include <switerator.hxx>
 #include <swtable.hxx>
 
@@ -55,7 +56,7 @@ SfxPoolItem* SwTblBoxNumFormat::Clone( SfxItemPool* ) const
 // SwTblBoxFormula
 // -----------------
 
-SwTblBoxFormula::SwTblBoxFormula( const String& rFormula )
+SwTblBoxFormula::SwTblBoxFormula( const OUString& rFormula )
     : SfxPoolItem( RES_BOXATR_FORMULA ),
     SwTableFormula( rFormula ),
     pDefinedIn( 0 )
@@ -186,7 +187,7 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
     {
         // create pointers from box names
         BoxNmToPtr( rCalcPara.pTbl );
-        String sFml( MakeFormula( rCalcPara ));
+        const OUString sFml( MakeFormula( rCalcPara ));
         if( !rCalcPara.rCalc.IsCalcError() )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
