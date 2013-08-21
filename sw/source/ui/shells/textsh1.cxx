@@ -46,7 +46,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
