@@ -158,10 +158,6 @@ public:
           SwDoc* GetDoc()           { return pDoc; }
     const SwDoc* GetDoc() const     { return pDoc; }
 
-    static sal_uInt16* GetVersionMap1() { return pVersionMap1; }
-    static sal_uInt16* GetVersionMap2() { return pVersionMap2; }
-    static sal_uInt16* GetVersionMap3() { return pVersionMap3; }
-    static sal_uInt16* GetVersionMap6() { return pVersionMap4; }
 };
 
 
