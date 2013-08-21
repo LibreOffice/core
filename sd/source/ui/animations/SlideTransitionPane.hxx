@@ -60,7 +60,6 @@ public:
     virtual ~SlideTransitionPane();
 
     // Window
-    virtual void Resize();
     virtual void DataChanged (const DataChangedEvent& rEvent);
 
     void onSelectionChanged();
