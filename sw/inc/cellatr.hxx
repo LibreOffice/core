@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CELLATR_HXX
-#define _CELLATR_HXX
+#ifndef CELLATR_HXX
+#define CELLATR_HXX
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include "swdllapi.h"
 #include "format.hxx"
 #include "cellfml.hxx"
+
+namespace rtl { class OUString; }
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
@@ -54,7 +56,7 @@ class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
                             // can only be TableBoxFormat
 
 public:
-    SwTblBoxFormula( const String& rFormula );
+    SwTblBoxFormula( const OUString& rFormula );
     ~SwTblBoxFormula() {};
 
     // "pure virtual methods" of SfxPoolItem
