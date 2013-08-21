@@ -112,8 +112,6 @@
 #define HID_NAVI_CONTENT                                        "SW_HID_NAVI_CONTENT"
 #define HID_NAVI_GLOBAL                                         "SW_HID_NAVI_GLOBAL"
 #define HID_LTEMPL_NUMBERING                                    "SW_HID_LTEMPL_NUMBERING"
-#define HID_FLDVAR_APPLY                                        "SW_HID_FLDVAR_APPLY"
-#define HID_FLDVAR_DELETE                                       "SW_HID_FLDVAR_DELETE"
 #define HID_FLDEDT_ADDRESS                                      "SW_HID_FLDEDT_ADDRESS"
 #define HID_SORT_ACTION                                         "SW_HID_SORT_ACTION"
 #define HID_SORT_AUTHOR                                         "SW_HID_SORT_AUTHOR"
@@ -144,7 +142,6 @@
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 
 #define HID_FLD_DB                                              "SW_HID_FLD_DB"
-#define HID_FLD_VAR                                             "SW_HID_FLD_VAR"
 
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
 #define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"

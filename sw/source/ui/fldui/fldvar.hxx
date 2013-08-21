@@ -37,10 +37,10 @@ class SelectionListBox : public ListBox
 {
     bool            bCallAddSelection;
 
-    virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual long    PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId );
+    SelectionListBox(Window* pParent, WinBits nStyle);
 
     //  detect selection via Ctrl or Alt and evaluate with SelectHdl
     bool            IsCallAddSelection() const {return bCallAddSelection;}
@@ -51,24 +51,24 @@ class SwFldVarPage : public SwFldPage
 {
     friend class SelectionListBox;
 
-    FixedText           aTypeFT;
-    ListBox             aTypeLB;
-    FixedText           aSelectionFT;
-    SelectionListBox    aSelectionLB;
-    FixedText           aNameFT;
-    Edit                aNameED;
-    FixedText           aValueFT;
-    ConditionEdit       aValueED;
-    FixedText           aFormatFT;
-    NumFormatListBox    aNumFormatLB;
-    ListBox             aFormatLB;
-    FixedText           aChapterHeaderFT;
-    FixedText           aChapterLevelFT;
-    ListBox             aChapterLevelLB;
-    CheckBox            aInvisibleCB;
-    FixedText           aSeparatorFT;
-    Edit                aSeparatorED;
-    ToolBox             aNewDelTBX;
+    ListBox*            m_pTypeLB;
+    VclContainer*       m_pSelection;
+    SelectionListBox*   m_pSelectionLB;
+    FixedText*          m_pNameFT;
+    Edit*               m_pNameED;
+    FixedText*          m_pValueFT;
+    ConditionEdit*      m_pValueED;
+    VclContainer*       m_pFormat;
+    NumFormatListBox*   m_pNumFormatLB;
+    ListBox*            m_pFormatLB;
+    VclContainer*       m_pChapterFrame;
+    ListBox*            m_pChapterLevelLB;
+    CheckBox*           m_pInvisibleCB;
+    FixedText*          m_pSeparatorFT;
+    Edit*               m_pSeparatorED;
+    ToolBox*            m_pNewDelTBX;
+    sal_uInt16          m_nApplyId;
+    sal_uInt16          m_nDeleteId;
 
     String              sOldValueFT;
     String              sOldNameFT;

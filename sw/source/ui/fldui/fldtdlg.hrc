@@ -44,31 +44,7 @@
 #define FT_ADDDB            (RC_TP_DB_START + 16)
 #define PB_ADDDB            (RC_TP_DB_START + 17)
 
-// Variable-TabPage:
-#define RC_TP_VAR_START     (RC_TP_DB_END)
-#define FT_VARTYPE          (RC_TP_VAR_START + 1)
-#define LB_VARTYPE          (RC_TP_VAR_START + 2)
-#define FT_VARSELECTION     (RC_TP_VAR_START + 3)
-#define LB_VARSELECTION     (RC_TP_VAR_START + 4)
-#define FT_VARNAME          (RC_TP_VAR_START + 5)
-#define ED_VARNAME          (RC_TP_VAR_START + 6)
-#define FT_VARVALUE         (RC_TP_VAR_START + 7)
-#define ED_VARVALUE         (RC_TP_VAR_START + 8)
-#define FT_VARFORMAT        (RC_TP_VAR_START + 9)
-#define LB_VARNUMFORMAT     (RC_TP_VAR_START + 10)
-#define LB_VARFORMAT        (RC_TP_VAR_START + 11)
-#define FT_VARCHAPTERHEADER (RC_TP_VAR_START + 12)
-#define FT_VARCHAPTERLEVEL  (RC_TP_VAR_START + 13)
-#define LB_VARCHAPTERLEVEL  (RC_TP_VAR_START + 14)
-#define CB_VARINVISIBLE     (RC_TP_VAR_START + 15)
-#define FT_VARSEPARATOR     (RC_TP_VAR_START + 16)
-#define ED_VARSEPARATOR     (RC_TP_VAR_START + 17)
-#define TBX_VARNEWDEL       (RC_TP_VAR_START + 18)
-#define BT_VARAPPLY         (RC_TP_VAR_START + 19)
-#define BT_VARDELETE        (RC_TP_VAR_START + 20)
-#define RC_TP_VAR_END       (RC_TP_VAR_START + 21)
-
-#define RC_TP_END           (RC_TP_VAR_END)
+#define RC_TP_END           (RC_TP_DB_END)
 
 // Strings ------------------------------------------------------------------
 
