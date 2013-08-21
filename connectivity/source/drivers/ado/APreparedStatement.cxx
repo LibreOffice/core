@@ -217,7 +217,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     if(nCount < (parameterIndex-1))
     {
         OUString sDefaultName( "parame" );
-        sDefaultName += OUString::valueOf(parameterIndex);
+        sDefaultName += OUString::number(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
         {
@@ -433,7 +433,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     {
         const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", OUString::valueOf(parameterIndex)
+                "$position$", OUString::number(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -542,7 +542,7 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
             OSQLParseNode* pNewNode = new OSQLParseNode(OUString(":") ,SQL_NODE_PUNCTUATION,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
             OUString sParameterName = _sDefaultName;
-            sParameterName += OUString::valueOf(++_rParameterCount);
+            sParameterName += OUString::number(++_rParameterCount);
             pChildNode->append(new OSQLParseNode( sParameterName,SQL_NODE_NAME,0));
         }
         else

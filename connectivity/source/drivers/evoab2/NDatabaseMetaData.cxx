@@ -814,14 +814,12 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    OUString aValue = OUString::valueOf((sal_Int32)1);
-    return aValue;
+    return OUString( "1" );
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
-    OUString aValue = OUString::valueOf((sal_Int32)0);
-    return aValue;
+    return OUString( "0" );
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)

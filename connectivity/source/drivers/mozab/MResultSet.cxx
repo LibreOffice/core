@@ -919,7 +919,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         // Determine where '%' character is...
 
-        if ( matchString.equals( OUString::valueOf( WILDCARD ) ) )
+        if ( matchString.equals( OUString( WILDCARD ) ) )
         {
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
@@ -1652,7 +1652,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
     {
         const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COMMIT_ROW,
-                "$position$", OUString::valueOf(nCurrentRow)
+                "$position$", OUString::number(nCurrentRow)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -1784,7 +1784,7 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
     {
         const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_UPDATEABLE,
-                "$position$", OUString::valueOf(columnIndex)
+                "$position$", OUString::number(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     } // if (!::dbtools::implUpdateObject(this, columnIndex, x))
@@ -1797,7 +1797,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
     {
         const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_UPDATEABLE,
-                "$position$", OUString::valueOf(columnIndex)
+                "$position$", OUString::number(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

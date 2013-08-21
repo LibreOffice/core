@@ -63,7 +63,7 @@ namespace connectivity { namespace hsqldb
         {
             OString sLine( _pOp );
             sLine += "( ";
-            sLine += OString::valueOf( _nLongArg );
+            sLine += OString::number( _nLongArg );
             sLine += " )";
             writeString( sLine.getStr(), true );
         }
@@ -71,14 +71,14 @@ namespace connectivity { namespace hsqldb
         void logReturn( jlong _nRetVal )
         {
             OString sLine( " -> " );
-            sLine += OString::valueOf( _nRetVal );
+            sLine += OString::number( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 
         void logReturn( jint _nRetVal )
         {
             OString sLine( " -> " );
-            sLine += OString::valueOf( _nRetVal );
+            sLine += OString::number( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 

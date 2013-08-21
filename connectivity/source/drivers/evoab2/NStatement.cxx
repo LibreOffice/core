@@ -367,7 +367,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         aMatchString = pAtom->getTokenValue();
 
         // Determine where '%' character is...
-        if( aMatchString.equals( OUString::valueOf( WILDCARD ) ) )
+        if( aMatchString.equals( OUString( WILDCARD ) ) )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,

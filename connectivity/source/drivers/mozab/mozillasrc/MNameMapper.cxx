@@ -98,7 +98,7 @@ MNameMapper::add( OUString& str, nsIAbDirectory* abook )
     long count =1;
     while ( mDirMap->find( tempStr ) != mDirMap->end() ) {
 
-        tempStr = str + OUString::valueOf(count);
+        tempStr = str + OUString::number(count);
         count ++;
     }
     str = tempStr;

@@ -272,7 +272,7 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
     {
         const OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", OUString::valueOf(parameterIndex)
+                "$position$", OUString::number(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

@@ -221,8 +221,8 @@ void KabImplModule::impl_throwKdeTooOldException()
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_KDE_VERSION_TOO_OLD,
-            "$major$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
-            "$minor$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
          ) );
     impl_throwGenericSQLException( sError );
 }
@@ -245,8 +245,8 @@ void KabImplModule::impl_throwKdeTooNewException()
     SQLException aError;
     aError.Message = aResources.getResourceStringWithSubstitution(
             STR_KDE_VERSION_TOO_NEW,
-            "$major$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
-            "$minor$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+            "$major$",OUString::number(MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::number(MIN_KDE_VERSION_MINOR)
          );
     aError.SQLState = OUString(  "S1000"  );
     aError.ErrorCode = 0;

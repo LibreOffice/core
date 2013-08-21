@@ -759,7 +759,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const OUStri
     }
     else if (NS_FAILED(rv))
     {
-        m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, OUString::valueOf( sal_Int32(rv), 16 ) );
+        m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, OUString::number( sal_Int32(rv), 16 ) );
     }
     OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()" );
     return( NS_SUCCEEDED(rv) ? sal_True : sal_False );

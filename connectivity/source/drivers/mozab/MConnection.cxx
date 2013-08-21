@@ -281,7 +281,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
         if ( nPortNumber > 0 ) {
             m_sMozillaURI += OUString( ":" );
-            m_sMozillaURI += OUString::valueOf( nPortNumber );
+            m_sMozillaURI += OUString::number( nPortNumber );
         }
 
         if ( !sBaseDN.isEmpty() ) {
