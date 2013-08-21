@@ -442,7 +442,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
                         0, 0, 0,
                         (bCaseSensitive
                             ? 0
-                            : TransliterationModules_IGNORE_CASE) );
+                            : static_cast<int>(TransliterationModules_IGNORE_CASE)) );
 
     rSh.ClearMark();
     sal_Bool bCancel;
