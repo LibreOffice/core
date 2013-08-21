@@ -64,7 +64,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     OSL_ENSURE( nPorHeight, "+SwTxtGuess::Guess: no height" );
 
-    sal_uInt16 nMinSize;
     sal_uInt16 nMaxSizeDiff;
 
     const SwScriptInfo& rSI =
@@ -127,9 +126,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         // call GetTxtSize with maximum compression (for kanas)
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen,
-                         nMaxComp, nMinSize, nMaxSizeDiff );
-
-        nBreakWidth = nMinSize;
+                         nMaxComp, nBreakWidth, nMaxSizeDiff );
 
         if ( ( nBreakWidth <= nLineWidth ) || ( bUnbreakableNumberings && rPor.IsNumberPortion() ) )
         {
@@ -170,6 +167,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 #if OSL_DEBUG_LEVEL > 1
         if ( STRING_LEN != nCutPos )
         {
+            sal_uInt16 nMinSize;
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
                              nMaxComp, nMinSize, nMaxSizeDiff );
             OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
@@ -182,9 +180,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // second check if everything fits to line
         nCutPos = nBreakPos = rInf.GetIdx() + nMaxLen - 1;
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen, nMaxComp,
-                         nMinSize, nMaxSizeDiff );
-
-        nBreakWidth = nMinSize;
+                         nBreakWidth, nMaxSizeDiff );
 
         // The following comparison should always give sal_True, otherwise
         // there likely has been a pixel rounding error in GetTxtBreak
@@ -508,13 +504,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if( nPorLen )
     {
         rInf.GetTxtSize( &rSI, rInf.GetIdx(), nPorLen,
-                         nMaxComp, nMinSize, nMaxSizeDiff );
+                         nMaxComp, nBreakWidth, nMaxSizeDiff );
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
             rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
 
-        nBreakWidth = nItalic + nMinSize;
+        nBreakWidth += nItalic;
     }
     else
         nBreakWidth = 0;
