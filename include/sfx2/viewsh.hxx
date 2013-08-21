@@ -180,7 +180,7 @@ public:
     virtual void                UIActivating( SfxInPlaceClient* pClient );
     virtual void                UIDeactivated( SfxInPlaceClient* pClient );
 
-    virtual void                JumpToMark( const String& rMark );
+    void                        JumpToMark( const OUString& rMark );
     void                        VisAreaChanged(const Rectangle& rRect);
 
     // Misc

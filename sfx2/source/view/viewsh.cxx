@@ -1870,7 +1870,7 @@ SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 
 //------------------------------------------------------------------------
 
-void SfxViewShell::JumpToMark( const String& rMark )
+void SfxViewShell::JumpToMark( const OUString& rMark )
 {
     SfxStringItem aMarkItem( SID_JUMPTOMARK, rMark );
     GetViewFrame()->GetDispatcher()->Execute(
