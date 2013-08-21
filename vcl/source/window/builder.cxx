@@ -585,6 +585,18 @@ namespace
         return bInconsistent;
     }
 
+    OString extractIconName(VclBuilder::stringmap &rMap)
+    {
+        OString sIconName;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("icon-name"));
+        if (aFind != rMap.end())
+        {
+            sIconName = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sIconName;
+    }
+
     OUString getStockText(const OString &rType)
     {
         if (rType == "gtk-ok")
@@ -1452,9 +1464,13 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             }
 
-            OUString sTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
+            OString sTooltip(extractTooltipText(rMap));
             if (!sTooltip.isEmpty())
-                pToolBox->SetQuickHelpText(nItemId, sTooltip);
+                pToolBox->SetQuickHelpText(nItemId, OStringToOUString(sTooltip, RTL_TEXTENCODING_UTF8));
+
+            OString sIconName(extractIconName(rMap));
+            if (!sIconName.isEmpty())
+                pToolBox->SetItemImage(nItemId, FixedImage::loadThemeImage(sIconName));
 
             return NULL; // no widget to be created
         }

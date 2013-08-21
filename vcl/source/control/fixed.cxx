@@ -1213,19 +1213,24 @@ const Image& FixedImage::GetModeImage( ) const
     return maImage;
 }
 
+Image FixedImage::loadThemeImage(const OString &rFileName)
+{
+    static ImplImageTreeSingletonRef aImageTree;
+    OUString sCurrentSymbolsStyle =
+        Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    const OUString sFileName(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    BitmapEx aBitmap;
+    bool bSuccess = aImageTree->loadImage(sFileName, sCurrentSymbolsStyle, aBitmap, true);
+    SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
+        << " from theme " << sCurrentSymbolsStyle);
+    return Image(aBitmap);
+}
+
 bool FixedImage::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "pixbuf")
     {
-        static ImplImageTreeSingletonRef aImageTree;
-        OUString sCurrentSymbolsStyle =
-            Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
-        const OUString sFileName(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-        BitmapEx aBitmap;
-        bool bSuccess = aImageTree->loadImage(sFileName, sCurrentSymbolsStyle, aBitmap, true);
-        SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName
-            << " from theme " << sCurrentSymbolsStyle);
-        SetImage(Image(aBitmap));
+        SetImage(FixedImage::loadThemeImage(rValue));
     }
     else
         return Control::set_property(rKey, rValue);

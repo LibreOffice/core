@@ -201,6 +201,8 @@ public:
     sal_Bool        SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const;
     virtual bool set_property(const OString &rKey, const OString &rValue);
+
+    static Image loadThemeImage(const OString &rFileName);
 };
 
 #endif  // _SV_FIXED_HXX
