@@ -485,7 +485,7 @@ namespace svgio
             }
         }
 
-        const basegfx::B2DRange* SvgNode::getCurrentViewPort() const
+        const basegfx::B2DRange SvgNode::getCurrentViewPort() const
         {
             if(getParent())
             {
@@ -493,7 +493,7 @@ namespace svgio
             }
             else
             {
-                return 0;
+                return basegfx::B2DRange(); // return empty B2DRange
             }
         }
 

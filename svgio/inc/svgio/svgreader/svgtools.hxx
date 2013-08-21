@@ -68,7 +68,7 @@ namespace svgio
         class InfoProvider
         {
         public:
-            virtual const basegfx::B2DRange* getCurrentViewPort() const = 0;
+            virtual const basegfx::B2DRange getCurrentViewPort() const = 0;
             virtual double getCurrentFontSize() const = 0;
             virtual double getCurrentXHeight() const = 0;
         };
