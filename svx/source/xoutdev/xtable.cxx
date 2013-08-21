@@ -120,8 +120,6 @@ XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
 {
 }
 
-// static int count = 0;
-
 XPropertyList::XPropertyList(
     XPropertyListType type,
     const String& rPath

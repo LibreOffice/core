@@ -769,7 +769,6 @@ bool XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 
 bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -871,7 +870,6 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
 
 bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -1335,10 +1333,6 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue() const
 {
-    //if (!IsIndex())
-    //    return maPolyPolygon;
-    //else
-    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
     return maPolyPolygon;
 }
 
@@ -1366,7 +1360,6 @@ SfxItemPresentation XLineStartItem::GetPresentation
 
 bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
@@ -1385,7 +1378,6 @@ bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
 bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
@@ -1699,10 +1691,6 @@ SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue() const
 {
-    //if (!IsIndex())
-    //    return maPolyPolygon;
-    //else
-    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
     return maPolyPolygon;
 }
 
@@ -1951,7 +1939,6 @@ SfxItemPresentation XLineEndItem::GetPresentation
 
 bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
@@ -1969,7 +1956,6 @@ bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemb
 
 bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
@@ -2700,7 +2686,6 @@ SfxItemPresentation XFillGradientItem::GetPresentation
 
 bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    //sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -2777,7 +2762,6 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
 bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -3155,10 +3139,6 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 const XHatch& XFillHatchItem::GetHatchValue() const // GetValue -> GetHatchValue
 {
-    //if (!IsIndex())
-    //    return aHatch;
-    //else
-    //    return pTable->GetHatch(GetIndex())->GetHatch();
     return aHatch;
 }
 
@@ -3197,7 +3177,6 @@ bool XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 
 bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -3258,7 +3237,6 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
 bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
     switch ( nMemberId )
@@ -3406,14 +3384,12 @@ sal_uInt16 XFormTextStyleItem::GetValueCount() const
     return 5;
 }
 
-// #FontWork#
 bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-// #FontWork#
 bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
@@ -3452,14 +3428,12 @@ sal_uInt16 XFormTextAdjustItem::GetValueCount() const
     return 4;
 }
 
-// #FontWork#
 bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-// #FontWork#
 bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;
@@ -3595,14 +3569,12 @@ sal_uInt16 XFormTextShadowItem::GetValueCount() const
     return 3;
 }
 
-// #FontWork#
 bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
 
-// #FontWork#
 bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     sal_Int32 nValue = 0;

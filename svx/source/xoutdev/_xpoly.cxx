@@ -657,11 +657,6 @@ void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 n
 {
     CheckReference();
 
-//  sal_uInt16  nMaxPnt = pImpXPolygon->nPoints - 1;
-
-//  if ( nCenter == nMaxPnt )   nPnt = 1;
-//  else if ( nCenter == 0 )    nPnt = nMaxPnt - 1;
-
     // If nPoint is no control point, i.e. cannot be moved, than
     // move nDrag instead on the line between nCenter and nPnt
     if ( !IsControl(nPnt) )

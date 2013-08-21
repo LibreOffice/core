@@ -499,11 +499,9 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
             const long          nStartX1 = aWorkRect.Left() + 1L;
             const long          nEndX1 = aWorkRect.Right();
             const long          nStartX2 = nEndX1 - 1L;
-//          const long          nEndX2 = nStartX1 - 1L;
             const long          nStartY1 = aWorkRect.Top() + 1L;
             const long          nEndY1 = aWorkRect.Bottom();
             const long          nStartY2 = nEndY1 - 1L;
-//          const long          nEndY2 = nStartY1 - 1L;
             Point*              pPoints1 = NULL;
             Point*              pPoints2 = NULL;
             long                nX, nY;
