@@ -151,7 +151,7 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
     mutable SvxAutocorrWordList_Set  maSet;
     mutable SvxAutocorrWordList_Hash maHash; // key is 'Short'
 
-    bool                   WordMatches(const SvxAutocorrWord *pFnd,
+    const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
                                        const String &rTxt,
                                        xub_StrLen &rStt,
                                        xub_StrLen nEndPos) const;
@@ -159,7 +159,7 @@ public:
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
-    bool                   Insert(SvxAutocorrWord *pWord);
+    bool                   Insert(SvxAutocorrWord *pWord) const;
     SvxAutocorrWord*       FindAndRemove(SvxAutocorrWord *pWord);
     void                   LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt);
     bool                   empty() const;

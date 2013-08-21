@@ -74,6 +74,7 @@ static const int C_NONE             = 0x00;
 static const int C_FULL_STOP        = 0x01;
 static const int C_EXCLAMATION_MARK = 0x02;
 static const int C_QUESTION_MARK    = 0x04;
+static const int C_ASTERISK         = 0x2A;
 
 static const sal_Char pImplAutocorr_ListStr[]      = "DocumentList";
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
@@ -2636,7 +2637,7 @@ void SvxAutocorrWordList::DeleteAndDestroyAll()
 }
 
 // returns true if inserted
-bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord)
+bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord) const
 {
     if ( maSet.empty() ) // use the hash
     {
@@ -2703,7 +2704,7 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     return aContent;
 }
 
-bool SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
+const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
                                       const String &rTxt,
                                       xub_StrLen &rStt,
                                       xub_StrLen nEndPos) const
@@ -2722,11 +2723,31 @@ bool SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
             if( rCmp.isEqual( rChk, sWord ))
             {
                 rStt = nCalcStt;
-                return true;
+                return pFnd;
+            }
+        }
+        // match "word*" pattern
+        if ( rChk.GetChar( rChk.Len() - 1) == C_ASTERISK )
+        {
+            String sTmp( rChk.Copy( 0, rChk.Len() - 1 ) );
+            // search the first occurance with a left word delimitation
+            xub_StrLen nFndPos = -1;
+            do {
+                nFndPos = rTxt.Search( sTmp, nFndPos + 1);
+            } while ( nFndPos != STRING_NOTFOUND && !(!nFndPos || IsWordDelim( rTxt.GetChar( nFndPos - 1 ))));
+            if ( nFndPos != STRING_NOTFOUND )
+            {
+                // store matching pattern and its replacement as a new list item, eg. "wordi" -> "wordy"
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + nFndPos, nEndPos - nFndPos), pFnd->GetLong() + OUString(rTxt.GetBuffer() + nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len()));
+                if( Insert( pNew ) )
+                {
+                    rStt = nFndPos;
+                    return pNew;
+                } else delete pNew;
             }
         }
     }
-    return false;
+    return NULL;
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const String& rTxt, xub_StrLen& rStt,
@@ -2734,14 +2755,14 @@ const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const String& rTxt
 {
     for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
     {
-        if( WordMatches( it->second, rTxt, rStt, nEndPos ) )
-            return it->second;
+        if( const SvxAutocorrWord *aTmp = WordMatches( it->second, rTxt, rStt, nEndPos ) )
+            return aTmp;
     }
 
     for( SvxAutocorrWordList_Set::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2 )
     {
-        if( WordMatches( *it2, rTxt, rStt, nEndPos ) )
-            return *it2;
+        if( const SvxAutocorrWord *aTmp = WordMatches( *it2, rTxt, rStt, nEndPos ) )
+            return aTmp;
     }
     return 0;
 }
