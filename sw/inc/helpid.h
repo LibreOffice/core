@@ -136,7 +136,6 @@
 #define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
 #define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"
-#define HID_REFSELECTION_TOOLTIP                                "SW_HID_REFSELECTION_TOOLTIP"    // #i83479#
 
 
 // TabPage Help-IDs

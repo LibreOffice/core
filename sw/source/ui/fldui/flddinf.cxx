@@ -65,6 +65,11 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pParent, const SfxItemSet& rCoreSet)
     m_pSelectionLB->set_height_request(nHeight);
     m_pFormatLB->set_height_request(nHeight);
 
+    long nWidth = m_pTypeTLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MAP_APPFONT)).Width();
+    m_pTypeTLB->set_width_request(nWidth);
+    m_pFormatLB->set_width_request(nWidth);
+    m_pSelectionLB->set_width_request(nWidth);
+
     m_pTypeTLB->SetSelectionMode(SINGLE_SELECTION);
     m_pTypeTLB->SetStyle(m_pTypeTLB->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     m_pTypeTLB->SetIndent(10);

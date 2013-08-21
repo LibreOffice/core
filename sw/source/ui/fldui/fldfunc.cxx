@@ -73,6 +73,14 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet)
     get(m_pListNameFT, "listnameft");
     get(m_pListNameED, "listname");
 
+    long nHeight = m_pTypeLB->GetTextHeight() * 20;
+    m_pTypeLB->set_height_request(nHeight);
+    m_pFormatLB->set_height_request(nHeight);
+
+    long nWidth = m_pTypeLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MAP_APPFONT)).Width();
+    m_pTypeLB->set_width_request(nWidth);
+    m_pFormatLB->set_width_request(nWidth);
+
     m_pNameED->SetModifyHdl(LINK(this, SwFldFuncPage, ModifyHdl));
 
     m_sOldValueFT = m_pValueFT->GetText();

@@ -20,6 +20,8 @@
 #ifndef _FLDTDLG_HRC
 #define _FLDTDLG_HRC
 
+#define FIELD_COLUMN_WIDTH 76
+
 #define RC_FLDTDLG_BEGIN    0
 
 // database field TabPage:
@@ -66,27 +68,7 @@
 #define BT_VARDELETE        (RC_TP_VAR_START + 20)
 #define RC_TP_VAR_END       (RC_TP_VAR_START + 21)
 
-// Reference-TabPage:
-#define RC_TP_REF_START     (RC_TP_VAR_END)
-#define FT_REFTYPE          (RC_TP_REF_START + 1)
-#define LB_REFTYPE          (RC_TP_REF_START + 2)
-#define FT_REFSELECTION     (RC_TP_REF_START + 3)
-#define LB_REFSELECTION         (RC_TP_REF_START + 4)
-#define LB_REFSELECTION_TOOLTIP (RC_TP_REF_START + 5)
-#define LB_REFFORMAT            (RC_TP_REF_START + 6)
-#define FT_REFFORMAT            (RC_TP_REF_START + 7)
-#define FT_REFNAME              (RC_TP_REF_START + 8)
-#define ED_REFNAME              (RC_TP_REF_START + 9)
-#define FT_REFVALUE             (RC_TP_REF_START + 10)
-#define ED_REFVALUE             (RC_TP_REF_START + 11)
-#define STR_REFBOOKMARK         (RC_TP_REF_START + 12)
-#define STR_REFFOOTNOTE         (RC_TP_REF_START + 13)
-#define STR_REFENDNOTE          (RC_TP_REF_START + 14)
-#define STR_REFHEADING          (RC_TP_REF_START + 15)
-#define STR_REFNUMITEM          (RC_TP_REF_START + 16)
-#define RC_TP_REF_END           (RC_TP_REF_START + 17)
-
-#define RC_TP_END           (RC_TP_REF_END)
+#define RC_TP_END           (RC_TP_VAR_END)
 
 // Strings ------------------------------------------------------------------
 

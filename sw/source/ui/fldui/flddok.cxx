@@ -61,6 +61,11 @@ SwFldDokPage::SwFldDokPage(Window* pParent, const SfxItemSet& rCoreSet )
     m_pSelectionLB->set_height_request(nHeight);
     m_pFormatLB->set_height_request(nHeight);
 
+    long nWidth = m_pTypeLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MAP_APPFONT)).Width();
+    m_pTypeLB->set_width_request(nWidth);
+    m_pSelectionLB->set_width_request(nWidth);
+    m_pFormatLB->set_width_request(nWidth);
+
     m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFldDokPage, InsertHdl));
     m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFldDokPage, InsertHdl));
     m_pNumFormatLB->SetDoubleClickHdl(LINK(this, SwFldDokPage, NumFormatHdl));

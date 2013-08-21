@@ -21,17 +21,21 @@
 #include <FldRefTreeListBox.hxx>
 
 #include <helpid.h>
+#include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 
-SwFldRefTreeListBox::SwFldRefTreeListBox( Window* pParent,
-                                          const ResId& rResId)
-    : SvTreeListBox( pParent, rResId )
+SwFldRefTreeListBox::SwFldRefTreeListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
 {
-    SetHelpId( HID_REFSELECTION_TOOLTIP );
 }
 
-SwFldRefTreeListBox::~SwFldRefTreeListBox()
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwFldRefTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SwFldRefTreeListBox(pParent, nWinStyle);
 }
 
 void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )

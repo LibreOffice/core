@@ -27,10 +27,7 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 public:
-    SwFldRefTreeListBox(Window* pParent, const ResId& rResId);
-    virtual ~SwFldRefTreeListBox();
-
-//  virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    SwFldRefTreeListBox(Window* pParent, WinBits nStyle);
 };
 #endif
 

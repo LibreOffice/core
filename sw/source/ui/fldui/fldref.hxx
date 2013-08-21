@@ -35,24 +35,22 @@ class SwTxtNode;
 
 class SwFldRefPage : public SwFldPage
 {
-    FixedText       aTypeFT;
-    ListBox         aTypeLB;
-    FixedText       aSelectionFT;
-    ListBox         aSelectionLB;
+    ListBox*        m_pTypeLB;
+    VclContainer*   m_pSelection;
+    ListBox*        m_pSelectionLB;
     // #i83479#
-    SwFldRefTreeListBox aSelectionToolTipLB;
-    FixedText       aFormatFT;
-    ListBox         aFormatLB;
-    FixedText       aNameFT;
-    Edit            aNameED;
-    FixedText       aValueFT;
-    Edit            aValueED;
-    const String    sBookmarkTxt;
-    const String    sFootnoteTxt;
-    const String    sEndnoteTxt;
+    SwFldRefTreeListBox* m_pSelectionToolTipLB;
+    VclContainer*   m_pFormat;
+    ListBox*        m_pFormatLB;
+    FixedText*      m_pNameFT;
+    Edit*           m_pNameED;
+    Edit*           m_pValueED;
+    OUString    sBookmarkTxt;
+    OUString    sFootnoteTxt;
+    OUString    sEndnoteTxt;
     // #i83479#
-    const String    sHeadingTxt;
-    const String    sNumItemTxt;
+    OUString    sHeadingTxt;
+    OUString    sNumItemTxt;
 
     IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
     IDocumentListItems::tSortedNodeNumList maNumItems;
