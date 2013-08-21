@@ -403,7 +403,7 @@ void Calendar::ImplFormat()
         for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )
         {
             // Use narrow name.
-            String aDayOfWeek( maCalendarWrapper.getDisplayName(
+            OUString aDayOfWeek( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::DAY, nDay, 2));
             long nOffX = (mnDayWidth-GetTextWidth( aDayOfWeek ))/2;
             if ( mnWinStyle & WB_BOLDTEXT )
@@ -883,9 +883,9 @@ void Calendar::ImplDraw( sal_Bool bPaint )
             // Monat in der Titleleiste ausgeben
             nDeltaX = nX;
             nDeltaY = nY+TITLE_BORDERY;
-            String aMonthText( maCalendarWrapper.getDisplayName(
+            OUString aMonthText( maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 1));
-            aMonthText += ' ';
+            aMonthText += " ";
             aMonthText += OUString::number(nYear);
             long nMonthTextWidth = GetTextWidth( aMonthText );
             long nMonthOffX1 = 0;
@@ -903,7 +903,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 // Abbreviated month name.
                 aMonthText  = maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, nMonth-1, 0);
-                aMonthText += ' ';
+                aMonthText += " ";
                 aMonthText += OUString::number(nYear);
                 nMonthTextWidth = GetTextWidth( aMonthText );
             }

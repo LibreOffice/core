@@ -268,7 +268,7 @@ OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    String              aRet( RTL_CONSTASCII_USTRINGPARAM( "ValueSet" ) );
+    OUString              aRet( "ValueSet" );
 
     return aRet;
 }
@@ -280,12 +280,12 @@ OUString SAL_CALL ValueSetAcc::getAccessibleName()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    String              aRet;
+    OUString              aRet;
 
     if ( mpParent )
         aRet = mpParent->GetAccessibleName();
 
-    if ( !aRet.Len() )
+    if ( aRet.isEmpty() )
     {
         Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
         if ( pLabel && pLabel != mpParent )

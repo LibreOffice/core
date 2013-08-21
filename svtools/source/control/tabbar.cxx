@@ -1157,7 +1157,7 @@ public:
         }
     }
 
-    void drawText(const String& aText)
+    void drawText(const OUString& aText)
     {
         Rectangle aRect = maRect;
         long nTextWidth = mrParent.GetTextWidth(aText);

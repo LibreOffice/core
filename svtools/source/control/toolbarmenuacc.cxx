@@ -736,15 +736,15 @@ OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleDescription() throw (Runtime
 OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName() throw (RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    String              aRet;
+    OUString              aRet;
 
     if( mpParent )
     {
         aRet = mpParent->maText;
 
-        if( !aRet.Len() )
+        if( aRet.isEmpty() )
         {
-            aRet = String( RTL_CONSTASCII_USTRINGPARAM( "Item " ) );
+            aRet = "Item ";
             aRet += OUString::number( mpParent->mnEntryId );
         }
     }

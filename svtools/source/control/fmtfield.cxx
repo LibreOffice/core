@@ -81,10 +81,10 @@ namespace validation
     public:
         NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep );
 
-        sal_Bool isValidNumericFragment( const String& _rText );
+        sal_Bool isValidNumericFragment( const OUString& _rText );
 
     private:
-        sal_Bool implValidateNormalized( const String& _rText );
+        sal_Bool implValidateNormalized( const OUString& _rText );
     };
 
     //--------------------------------------------------------------------------
@@ -219,9 +219,9 @@ namespace validation
     }
 
     //--------------------------------------------------------------------------
-    sal_Bool NumberValidator::implValidateNormalized( const String& _rText )
+    sal_Bool NumberValidator::implValidateNormalized( const OUString& _rText )
     {
-        const sal_Unicode* pCheckPos = _rText.GetBuffer();
+        const sal_Unicode* pCheckPos = _rText.getStr();
         State eCurrentState = START;
 
         while ( END != eCurrentState )
@@ -259,16 +259,16 @@ namespace validation
     }
 
     //--------------------------------------------------------------------------
-    sal_Bool NumberValidator::isValidNumericFragment( const String& _rText )
+    sal_Bool NumberValidator::isValidNumericFragment( const OUString& _rText )
     {
-        if ( !_rText.Len() )
+        if ( _rText.isEmpty() )
             // empty strings are always allowed
             return sal_True;
 
         // normalize the string
-        String sNormalized( RTL_CONSTASCII_USTRINGPARAM("_") );
-        sNormalized.Append( _rText );
-        sNormalized.AppendAscii( "_" );
+        OUString sNormalized( "_" );
+        sNormalized += _rText;
+        sNormalized += "_";
 
         return implValidateNormalized( sNormalized );
     }
@@ -499,7 +499,7 @@ void FormattedField::impl_Modify(bool makeValueDirty)
         return;
     }
 
-    String sCheck = GetText();
+    OUString sCheck = GetText();
     if (CheckText(sCheck))
     {
         m_sLastValidText = sCheck;
@@ -879,8 +879,8 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
                 }
                 else
                 {
-                    String sNew = GetTextValue();
-                    if (sNew.Len())
+                    OUString sNew = GetTextValue();
+                    if (!sNew.isEmpty())
                         SetTextFormatted(sNew);
                     else
                         SetTextFormatted(m_sDefaultText);
@@ -996,8 +996,8 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
         return sal_True;
 
     dNewVal = m_dDefaultValue;
-    String sText(GetText());
-    if (!sText.Len())
+    OUString sText(GetText());
+    if (sText.isEmpty())
         return sal_True;
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
@@ -1022,7 +1022,7 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
             NUMBERFORMAT_NUMBER == m_pFormatter->GetType(nTempFormat))
             // der String entspricht einer Number-Formatierung, hat also nur kein %
             // -> append it
-            sText += '%';
+            sText += "%";
         // (with this, a input of '3' becomes '3%', which then by the formatter is translated
         // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
         // which equals 300 percent.
@@ -1161,13 +1161,13 @@ void DoubleNumericField::ResetConformanceTester()
     {
         LocaleDataWrapper aLocaleInfo( LanguageTag( pFormatEntry->GetLanguage()) );
 
-        String sSeparator = aLocaleInfo.getNumThousandSep();
-        if (sSeparator.Len())
-            cSeparatorThousand = sSeparator.GetBuffer()[0];
+        OUString sSeparator = aLocaleInfo.getNumThousandSep();
+        if (!sSeparator.isEmpty())
+            cSeparatorThousand = sSeparator[0];
 
         sSeparator = aLocaleInfo.getNumDecimalSep();
-        if (sSeparator.Len())
-            cSeparatorDecimal = sSeparator.GetBuffer()[0];
+        if (!sSeparator.isEmpty())
+            cSeparatorDecimal = sSeparator[0];
     }
 
     delete m_pNumberValidator;

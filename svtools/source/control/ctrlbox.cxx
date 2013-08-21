@@ -1810,7 +1810,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
             sal_uLong nCount = aFontSizeNames.Count();
             for( sal_uLong i = 0; i < nCount; i++ )
             {
-                String  aSizeName = aFontSizeNames.GetIndexName( i );
+                OUString    aSizeName = aFontSizeNames.GetIndexName( i );
                 sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
                 ComboBox::InsertEntry( aSizeName, nPos );
                 ComboBox::SetEntryData( nPos, (void*)(-nSize) ); // mark as special
@@ -1823,8 +1823,8 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
             pTempAry = pAry;
             while ( *pTempAry )
             {
-                String aSizeName = aFontSizeNames.Size2Name( *pTempAry );
-                if ( aSizeName.Len() )
+                OUString aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                if ( !aSizeName.isEmpty() )
                 {
                     ComboBox::InsertEntry( aSizeName, nPos );
                     ComboBox::SetEntryData( nPos, (void*)(-(*pTempAry)) ); // mark as special
@@ -1955,8 +1955,8 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
         FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
         // conversion loses precision; however font sizes should
         // never have a problem with that
-        String aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
-        if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
+        OUString aName = aFontSizeNames.Size2Name( static_cast<long>(nTempValue) );
+        if ( !aName.isEmpty() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
         {
             mnLastValue = nTempValue;
             SetText( aName );

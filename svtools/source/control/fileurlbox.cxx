@@ -39,10 +39,10 @@ namespace svt
     //---------------------------------------------------------------------
     void FileURLBox::DisplayURL( const OUString& _rURL )
     {
-        String sOldText = GetText();
+        OUString sOldText = GetText();
 
         OFileNotation aTransformer( _rURL, OFileNotation::N_URL );
-        String sNewText = aTransformer.get( OFileNotation::N_SYSTEM );
+        OUString sNewText = aTransformer.get( OFileNotation::N_SYSTEM );
         SetText( sNewText );
 
         if ( sOldText != sNewText )

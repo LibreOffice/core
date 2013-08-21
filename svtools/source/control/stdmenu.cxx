@@ -186,8 +186,8 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
             sal_uLong nCount = aFontSizeNames.Count();
             for( sal_uLong i = 0; i < nCount; i++ )
             {
-                String  aSizeName = aFontSizeNames.GetIndexName( i );
-                long    nSize = aFontSizeNames.GetIndexSize( i );
+                OUString  aSizeName = aFontSizeNames.GetIndexName( i );
+                long      nSize = aFontSizeNames.GetIndexSize( i );
                 mpHeightAry[nPos] = nSize;
                 nPos++; // Id is nPos+1
                 InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
@@ -199,8 +199,8 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
             pTempAry = pAry;
             while ( *pTempAry )
             {
-                String aSizeName = aFontSizeNames.Size2Name( *pTempAry );
-                if ( aSizeName.Len() )
+                OUString aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                if ( !aSizeName.isEmpty() )
                 {
                     mpHeightAry[nPos] = *pTempAry;
                     nPos++; // Id is nPos+1

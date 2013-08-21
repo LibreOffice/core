@@ -896,7 +896,7 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
 
 OUString FontSizeNames::Size2Name( long nValue ) const
 {
-    String aStr;
+    OUString aStr;
 
     // binary search
     for( long lower = 0, upper = mnElem - 1; lower <= upper; )
@@ -904,7 +904,7 @@ OUString FontSizeNames::Size2Name( long nValue ) const
         long mid = (upper + lower) >> 1;
         if ( nValue == mpArray[mid].mnSize )
         {
-            aStr = String( mpArray[mid].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+            aStr = OUString( mpArray[mid].mszUtf8Name, strlen(mpArray[mid].mszUtf8Name), RTL_TEXTENCODING_UTF8 );
             break;
         }
         else if ( nValue < mpArray[mid].mnSize )
@@ -920,10 +920,10 @@ OUString FontSizeNames::Size2Name( long nValue ) const
 
 OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
-    String aStr;
+    OUString aStr;
 
     if ( nIndex < mnElem )
-        aStr = String( mpArray[nIndex].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+        aStr = OUString( mpArray[nIndex].mszUtf8Name, strlen(mpArray[nIndex].mszUtf8Name), RTL_TEXTENCODING_UTF8 );
 
     return aStr;
 }

@@ -97,8 +97,8 @@ class SvtMatchContext_Impl: public salhelper::Thread
     std::vector<OUString>      aCompletions;
     std::vector<OUString>      aURLs;
     svtools::AsynchronLink          aLink;
-    String                          aBaseURL;
-    String                          aText;
+    OUString                        aBaseURL;
+    OUString                        aText;
     SvtURLBox*                      pBox;
     sal_Bool                            bOnlyDirectories;
     sal_Bool                            bNoSelection;
@@ -113,12 +113,12 @@ class SvtMatchContext_Impl: public salhelper::Thread
     virtual                         ~SvtMatchContext_Impl();
     virtual void                    execute();
     void                            doExecute();
-    void                            Insert( const String& rCompletion, const String& rURL, sal_Bool bForce = sal_False);
-    void                            ReadFolder( const String& rURL, const String& rMatch, sal_Bool bSmart );
+    void                            Insert( const OUString& rCompletion, const OUString& rURL, sal_Bool bForce = sal_False);
+    void                            ReadFolder( const OUString& rURL, const OUString& rMatch, sal_Bool bSmart );
     void                            FillPicklist(std::vector<OUString>& rPickList);
 
 public:
-                                    SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
+                                    SvtMatchContext_Impl( SvtURLBox* pBoxP, const OUString& rText );
     void                            Stop();
 };
 
@@ -129,7 +129,7 @@ namespace
 }
 
 SvtMatchContext_Impl::SvtMatchContext_Impl(
-    SvtURLBox* pBoxP, const String& rText )
+    SvtURLBox* pBoxP, const OUString& rText )
     : Thread( "SvtMatchContext_Impl" )
     , aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
@@ -232,7 +232,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 
     for(std::vector<OUString>::iterator i = pThis->aCompletions.begin(); i != pThis->aCompletions.end(); ++i)
     {
-        String sCompletion(*i);
+        OUString sCompletion(*i);
 
         // convert the file into an URL
         OUString sURL( sCompletion );
@@ -242,8 +242,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 
         if ( !sURL.isEmpty() && ( sURL[sURL.getLength()-1] != '/' ))
         {
-            String sUpperURL( sURL );
-            sUpperURL.ToUpperAscii();
+            OUString sUpperURL( sURL.toAsciiUpperCase() );
 
             ::std::vector< WildCard >::const_iterator aMatchingFilter =
                 ::std::find_if(
@@ -265,9 +264,9 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     if( !pThis->bNoSelection && !pThis->aCompletions.empty() && !bValidCompletionsFiltered )
     {
         // select the first one
-        String aTmp( pBox->GetEntry(0) );
+        OUString aTmp( pBox->GetEntry(0) );
         pBox->SetText( aTmp );
-        pBox->SetSelection( Selection( pThis->aText.Len(), aTmp.Len() ) );
+        pBox->SetSelection( Selection( pThis->aText.getLength(), aTmp.getLength() ) );
     }
 
     // transfer string lists to listbox and forget them
@@ -287,8 +286,8 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 }
 
 //-------------------------------------------------------------------------
-void SvtMatchContext_Impl::Insert( const String& rCompletion,
-                                   const String& rURL,
+void SvtMatchContext_Impl::Insert( const OUString& rCompletion,
+                                   const OUString& rURL,
                                    sal_Bool bForce )
 {
     if( !bForce )
@@ -303,8 +302,8 @@ void SvtMatchContext_Impl::Insert( const String& rCompletion,
 }
 
 //-------------------------------------------------------------------------
-void SvtMatchContext_Impl::ReadFolder( const String& rURL,
-                                       const String& rMatch,
+void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
+                                       const OUString& rMatch,
                                        sal_Bool bSmart )
 {
     // check folder to scan
@@ -313,23 +312,23 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     sal_Bool bPureHomePath = sal_False;
 #ifdef UNX
-    bPureHomePath = aText.Search( '~' ) == 0 && aText.Search( '/' ) == STRING_NOTFOUND;
+    bPureHomePath = aText.indexOf( '~' ) == 0 && aText.indexOf( '/' ) == -1;
 #endif
 
     sal_Bool bExectMatch = bPureHomePath
-                || aText.CompareToAscii( "." ) == COMPARE_EQUAL
-                || (aText.Len() > 1 && aText.Copy( aText.Len() - 2, 2 ).CompareToAscii( "/." ) == COMPARE_EQUAL)
-                || (aText.Len() > 2 && aText.Copy( aText.Len() - 3, 3 ).CompareToAscii( "/.." ) == COMPARE_EQUAL);
+                || aText.compareTo( "." ) == 0
+                || (aText.getLength() > 1 && aText.copy( aText.getLength() - 2, 2 ).compareTo( "/." ) == 0)
+                || (aText.getLength() > 2 && aText.copy( aText.getLength() - 3, 3 ).compareTo( "/.." ) == 0);
 
     // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
     // this is done only for file contents since home paths parsing is useful only for them
-    if ( bPureHomePath && rMatch.Equals( OUString("file:///.") ) )
+    if ( bPureHomePath && rMatch == "file:///." )
     {
         // a home that refers to /
 
-        String aNewText( aText );
-        aNewText += '/';
+        OUString aNewText( aText );
+        aNewText += "/";
         Insert( aNewText, rURL, sal_True );
 
         return;
@@ -337,21 +336,21 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
     // string to match with
     INetURLObject aMatchObj( rMatch );
-    String aMatchName;
+    OUString aMatchName;
 
-    if ( rURL != String(aMatchObj.GetMainURL( INetURLObject::NO_DECODE ) ))
+    if ( rURL != aMatchObj.GetMainURL( INetURLObject::NO_DECODE ) )
     {
         aMatchName = aMatchObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
         // matching is always done case insensitive, but completion will be case sensitive and case preserving
-        aMatchName.ToLowerAscii();
+        aMatchName = aMatchName.toAsciiLowerCase();
 
         // if the matchstring ends with a slash, we must search for this also
-        if ( rMatch.GetChar(rMatch.Len()-1) == '/' )
-            aMatchName += '/';
+        if ( rMatch[ rMatch.getLength()-1 ] == '/' )
+            aMatchName += "/";
     }
 
-    xub_StrLen nMatchLen = aMatchName.Len();
+    xub_StrLen nMatchLen = aMatchName.getLength();
 
     INetURLObject aFolderObj( rURL );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -408,17 +407,17 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
             {
                 while ( schedule() && xResultSet->next() )
                 {
-                    String   aURL      = xContentAccess->queryContentIdentifierString();
-                    String   aTitle    = xRow->getString(1);
-                    sal_Bool bIsFolder = xRow->getBoolean(2);
+                    OUString   aURL      = xContentAccess->queryContentIdentifierString();
+                    OUString   aTitle    = xRow->getString(1);
+                    sal_Bool   bIsFolder = xRow->getBoolean(2);
 
                     // matching is always done case insensitive, but completion will be case sensitive and case preserving
-                    aTitle.ToLowerAscii();
+                    aTitle = aTitle.toAsciiLowerCase();
 
                     if (
                         !nMatchLen ||
-                        (bExectMatch && aMatchName.Equals(aTitle)) ||
-                        (!bExectMatch && aMatchName.CompareTo(aTitle, nMatchLen) == COMPARE_EQUAL)
+                        (bExectMatch && aMatchName == aTitle) ||
+                        (!bExectMatch && aMatchName.compareTo(aTitle, nMatchLen) == 0)
                        )
                     {
                         // all names fit if matchstring is empty
@@ -432,20 +431,20 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
                             aObj.setFinalSlash();
 
                         // get the last name of the URL
-                        String aMatch = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                        String aInput( aText );
+                        OUString aMatch = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                        OUString aInput( aText );
                         if ( nMatchLen )
                         {
-                            if ((aText.Len() && aText.GetChar(aText.Len() - 1) == '.') || bPureHomePath)
+                            if ((aText.getLength() && aText[ aText.getLength() - 1 ] == '.') || bPureHomePath)
                             {
                                 // if a "special folder" URL was typed, don't touch the user input
-                                aMatch.Erase( 0, nMatchLen );
+                                aMatch = aMatch.copy( nMatchLen );
                             }
                             else
                             {
                                 // make the user input case preserving
-                                DBG_ASSERT( aInput.Len() >= nMatchLen, "Suspicious Matching!" );
-                                aInput.Erase( aInput.Len() - nMatchLen );
+                                DBG_ASSERT( aInput.getLength() >= nMatchLen, "Suspicious Matching!" );
+                                aInput = aInput.copy( 0, aInput.getLength() - nMatchLen );
                             }
                         }
 
@@ -453,7 +452,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 
                         // folders should get a final slash automatically
                         if ( bIsFolder )
-                            aInput += aDelimiter;
+                            aInput += OUString(aDelimiter);
 
                         Insert( aInput, aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True );
                     }
@@ -472,7 +471,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
 //-------------------------------------------------------------------------
 OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir )
 {
-    String aMatch;
+    OUString aMatch;
 
     // parse ~ for Unix systems
     // does nothing for Windows
@@ -488,10 +487,10 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
         if( aText.indexOf( '/' ) == 0 )
         {
             // text starting with slashes means absolute file URLs
-            String aTemp = INetURLObject::GetScheme( eBaseProt );
+            OUString aTemp = INetURLObject::GetScheme( eBaseProt );
 
             // file URL must be correctly encoded!
-            String aTextURL = INetURLObject::encode( aText, INetURLObject::PART_FPATH,
+            OUString aTextURL = INetURLObject::encode( aText, INetURLObject::PART_FPATH,
                                                      '%', INetURLObject::ENCODE_ALL );
             aTemp += aTextURL;
 
@@ -512,9 +511,9 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             if( aText.indexOf( '\\' ) == 0 && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
             {
                 // cut to first segment
-                String aTmp = INetURLObject::GetScheme( eBaseProt );
+                OUString aTmp = INetURLObject::GetScheme( eBaseProt );
                 aTmp += '/';
-                aTmp += String(aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET ));
+                aTmp += aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET );
                 aObj.SetURL( aTmp );
 
                 aSmart = aSmart.copy(1);
@@ -571,19 +570,19 @@ void SvtMatchContext_Impl::doExecute()
     aURLs.clear();
 
     // check for input
-    sal_uInt16 nTextLen = aText.Len();
+    sal_uInt16 nTextLen = aText.getLength();
     if ( !nTextLen )
         return;
 
-    if( aText.Search( '*' ) != STRING_NOTFOUND || aText.Search( '?' ) != STRING_NOTFOUND )
+    if( aText.indexOf( '*' ) != -1 || aText.indexOf( '?' ) != -1 )
         // no autocompletion for wildcards
         return;
 
-    String aMatch;
-    String aWorkDir( SvtPathOptions().GetWorkPath() );
+    OUString aMatch;
+    OUString aWorkDir( SvtPathOptions().GetWorkPath() );
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( aText );
     INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
-    if ( !aBaseURL.Len() )
+    if ( aBaseURL.isEmpty() )
         eBaseProt = INetURLObject::CompareProtocolScheme( aWorkDir );
     INetProtocol eSmartProt = pBox->GetSmartProtocol();
 
@@ -599,17 +598,17 @@ void SvtMatchContext_Impl::doExecute()
                 aMatch = SvtURLBox::ParseSmart( aText, aBaseURL, aWorkDir );
             else
                 aMatch = aText;
-            if ( aMatch.Len() )
+            if ( !aMatch.isEmpty() )
             {
                 INetURLObject aURLObject( aMatch );
-                String aMainURL( aURLObject.GetMainURL( INetURLObject::NO_DECODE ) );
+                OUString aMainURL( aURLObject.GetMainURL( INetURLObject::NO_DECODE ) );
                 // Disable autocompletion for anything but the (local) file
                 // system (for which access is hopefully fast), as the logic of
                 // how SvtMatchContext_Impl is used requires this code to run to
                 // completion before further user input is processed, and even
                 // SvtMatchContext_Impl::Stop does not guarantee a speedy
                 // return:
-                if ( aMainURL.Len()
+                if ( !aMainURL.isEmpty()
                      && aURLObject.GetProtocol() == INET_PROT_FILE )
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
@@ -707,7 +706,7 @@ void SvtMatchContext_Impl::doExecute()
     sal_Bool bFull = sal_False;
 
     INetURLObject aCurObj;
-    String aEmpty, aCurString, aCurMainURL;
+    OUString aEmpty, aCurString, aCurMainURL;
     INetURLObject aObj;
     aObj.SetSmartProtocol( eSmartProt == INET_PROT_NOT_VALID ? INET_PROT_HTTP : eSmartProt );
     for( ;; )
@@ -741,8 +740,8 @@ void SvtMatchContext_Impl::doExecute()
                     if( eProt == INET_PROT_NOT_VALID )
                     {
                         // try if text matches the scheme
-                        String aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
-                        if ( aText.CompareIgnoreCaseToAscii( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
+                        OUString aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
+                        if ( aScheme.startsWithIgnoreAsciiCase( aText ) && aText.getLength() < aScheme.getLength() )
                         {
                             if( bFull )
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -758,10 +757,10 @@ void SvtMatchContext_Impl::doExecute()
                         }
 
                         // now try smart matching
-                        aCurString.Erase( 0, aScheme.Len() );
+                        aCurString = aCurString.copy( aScheme.getLength() );
                     }
 
-                    if( aText.CompareIgnoreCaseToAscii( aCurString, aText.Len() )== COMPARE_EQUAL )
+                    if( aCurString.startsWithIgnoreAsciiCase( aText ) )
                     {
                         if( bFull )
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -773,11 +772,11 @@ void SvtMatchContext_Impl::doExecute()
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
                         }
 
-                        String aURL( aMatch );
+                        OUString aURL( aMatch );
                         if( eProt == INET_PROT_NOT_VALID )
-                            aMatch.Erase( 0, sal::static_int_cast< xub_StrLen >(INetURLObject::GetScheme( aCurObj.GetProtocol() ).getLength()) );
+                            aMatch = aMatch.copy( INetURLObject::GetScheme( aCurObj.GetProtocol() ).getLength() );
 
-                        if( aText.Len() < aMatch.Len() )
+                        if( aText.getLength() < aMatch.getLength() )
                             Insert( aMatch, aURL );
 
                         continue;
@@ -789,9 +788,9 @@ void SvtMatchContext_Impl::doExecute()
                     if( bFull )
                         continue;
 
-                    if( aText.CompareTo( aCurMainURL, aText.Len() ) == COMPARE_EQUAL )
+                    if( aText.compareTo( aCurMainURL, aText.getLength() ) == 0 )
                     {
-                        if( aText.Len() < aCurMainURL.Len() )
+                        if( aText.getLength() < aCurMainURL.getLength() )
                             Insert( aCurMainURL, aCurMainURL );
 
                         continue;
@@ -814,13 +813,13 @@ void SvtURLBox::TryAutoComplete()
 {
     if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
 
-    String aCurText = GetText();
+    OUString aCurText = GetText();
     Selection aSelection( GetSelection() );
-    if( aSelection.Max() != aCurText.Len() )
+    if( aSelection.Max() != aCurText.getLength() )
         return;
     sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
-    aCurText.Erase( nLen );
-    if( aCurText.Len() && bIsAutoCompleteEnabled )
+    aCurText = aCurText.copy( 0, nLen );
+    if( !aCurText.isEmpty() && bIsAutoCompleteEnabled )
     {
         if ( pCtx.is() )
         {
@@ -927,8 +926,8 @@ void SvtURLBox::UpdatePickList( )
         pCtx.clear();
     }
 
-    String sText = GetText();
-    if ( sText.Len() && bIsAutoCompleteEnabled )
+    OUString sText = GetText();
+    if ( !sText.isEmpty() && bIsAutoCompleteEnabled )
     {
         pCtx = new SvtMatchContext_Impl( this, sText );
         pCtx->launch();
@@ -975,15 +974,15 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                             break;
                     }
 
-                    String aURL( aCurObj.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                    OUString aURL( aCurObj.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
-                    if ( aURL.Len() )
+                    if ( !aURL.isEmpty() )
                     {
-                        sal_Bool bFound = (aURL.GetChar(aURL.Len()-1) == '/' );
+                        sal_Bool bFound = aURL[aURL.getLength()-1] == '/' ;
                         if ( !bFound )
                         {
-                            String aUpperURL( aURL );
-                            aUpperURL.ToUpperAscii();
+                            OUString aUpperURL( aURL );
+                            aUpperURL = aUpperURL.toAsciiUpperCase();
 
                             bFound
                                 = (::std::find_if(
@@ -1245,11 +1244,10 @@ OUString SvtURLBox::GetURL()
             sal_Bool success = (aAny >>= aFileURL);
             OUString aTitle;
             if(success)
-                aTitle = String(
-                    INetURLObject(aFileURL).getName(
-                        INetURLObject::LAST_SEGMENT,
-                        true,
-                        INetURLObject::DECODE_WITH_CHARSET ));
+                aTitle = INetURLObject(aFileURL).getName(
+                             INetURLObject::LAST_SEGMENT,
+                             true,
+                             INetURLObject::DECODE_WITH_CHARSET );
             else
                 success =
                     UCBContentHelper::GetTitle(aURL,&aTitle);
@@ -1300,7 +1298,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 #ifdef UNX
     if( aText.indexOf( '~' ) == 0 )
     {
-        String aParseTilde;
+        OUString aParseTilde;
         sal_Bool bTrailingSlash = sal_True; // use trailing slash
 
         if( aText.getLength() == 1 || aText[ 1 ] == '/' )
@@ -1352,10 +1350,10 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 
         if( !bTrailingSlash )
         {
-            if( !aParseTilde.Len() || aParseTilde.EqualsAscii( "/" ) )
+            if( aParseTilde.isEmpty() || aParseTilde == "/" )
             {
                 // "/" path should be converted to "/."
-                aParseTilde = OUString("/.");
+                aParseTilde = "/.";
             }
             else
             {
@@ -1365,14 +1363,14 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
         }
         else
         {
-            if( aParseTilde.GetChar( aParseTilde.Len() - 1 ) != '/' )
-                aParseTilde += '/';
+            if( aParseTilde[ aParseTilde.getLength() - 1 ] != '/' )
+                aParseTilde += "/";
             if( aText.getLength() > 2 )
                 aParseTilde += aText.copy( 2 );
         }
 
         aText = aParseTilde;
-        aBaseURL = String(); // tilde provide absolute path
+        aBaseURL = ""; // tilde provide absolute path
     }
 #endif
 
