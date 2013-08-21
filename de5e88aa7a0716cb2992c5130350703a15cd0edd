@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8S0\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-08-21T20:52:31Z",
+      "side": 1,
+      "message": "http://opengrok.libreoffice.org/xref/core/scp2/InstallModule_windows.mk#16 shows that HAVE_WINDOWS_SDK is just local in scp2 and the global variable is WINDOWS_SDK_HOME, so replacing HAVE_WINDOWS_SDK with WINDOWS_SDK_HOME should make this work.\n\nIt also seems that these are the only remaining uses of HAVE_WINDOWS_SDK, so the:\n\n$(eval $(call gb_InstallModule_add_defs,scp2/windows,\\\n\t$(if $(WINDOWS_SDK_HOME),\\\n\t\t-DHAVE_WINDOWS_SDK \\\n\t) \\\n))\n\nin scp2/InstallModule_windows.mk and scp2/InstallModule_ooo.mk might be removed then too.",
+      "revId": "de5e88aa7a0716cb2992c5130350703a15cd0edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
