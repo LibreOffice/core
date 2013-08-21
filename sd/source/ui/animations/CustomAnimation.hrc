@@ -27,7 +27,6 @@
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #define DLG_CUSTOMANIMATIONPANE                         RID_CUSTOMANIMATION_START+0
-#define DLG_SLIDE_TRANSITION_PANE                       RID_CUSTOMANIMATION_START+3
 
 #define RID_EFFECT_CONTEXTMENU                          RID_CUSTOMANIMATION_START+0
 #define RID_CUSTOMANIMATION_ROTATION_POPUP              RID_CUSTOMANIMATION_START+9
