@@ -130,6 +130,7 @@ private:
     void HandleAutoCloseDoubleQuotes();
     void HandleCodeCompletition();
     void HandleProcedureCompletition();
+    TextSelection GetLastHighlightPortionTextSelection();
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -490,7 +491,6 @@ friend class CodeCompleteWindow;
 friend class EditorWindow;
 private:
     OUStringBuffer aFuncBuffer;
-    OUString aPrevStr;
     /* a buffer to build up function name when typing
      * a function name, used for showing/hiding listbox values
      * */

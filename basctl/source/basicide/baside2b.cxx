@@ -619,7 +619,7 @@ void EditorWindow::HandleAutoCorrect()
     //create the appropriate TextSelection, and update the cache
     TextPaM aStart( nLine, r.nBegin );
     TextPaM aEnd( nLine, r.nBegin + sStr.getLength() );
-    TextSelection sTextSelection(aStart, aEnd );
+    TextSelection sTextSelection( aStart, aEnd );
     rModulWindow.UpdateModule();
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse( aCodeCompleteCache );
     // correct the last entered keyword
@@ -660,6 +660,36 @@ void EditorWindow::HandleAutoCorrect()
             }
         }
     }
+}
+
+TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
+{//creates a text selection from the highlight portion on the cursor
+    sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
+    sal_uLong nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
+    OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
+    HighlightPortions aPortions;
+    aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+
+    HighlightPortion& r = aPortions[aPortions.size()-1];
+    if( nIndex != aPortions.size()-1 )
+    {//cursor is not standing at the end of the line
+        for( size_t i = 0; i < aPortions.size(); i++ )
+        {
+            if( aPortions[i].nEnd == nIndex )
+            {
+                r = aPortions[i];
+                break;
+            }
+        }
+    }
+
+    if( aPortions.size() == 0 )
+        return TextSelection();
+
+    OUString sStr = aLine.copy( r.nBegin, r.nEnd - r.nBegin );
+    TextPaM aStart( nLine, r.nBegin );
+    TextPaM aEnd( nLine, r.nBegin + sStr.getLength() );
+    return TextSelection( aStart, aEnd );
 }
 
 void EditorWindow::HandleAutoCloseParen()
@@ -2646,7 +2676,6 @@ void CodeCompleteListBox::SetMatchingEntries()
     }
 }
 
-
 void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 {
     sal_Unicode aChar = rKeyEvt.GetKeyCode().GetCode();
@@ -2685,8 +2714,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
             }
             case KEY_TAB:
             {
-                TextPaM aTextEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
-                TextSelection aTextSelection( pCodeCompleteWindow->GetTextSelection().GetStart(), aTextEnd );
+                TextSelection aTextSelection = pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection();
                 OUString sTypedText = pCodeCompleteWindow->pParent->GetEditEngine()->GetText(aTextSelection);
                 if( !aFuncBuffer.isEmpty() )
                 {
@@ -2710,8 +2738,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                         if( !bFound )
                             SetMatchingEntries();
 
-                        TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
-                        GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+                        GetParentEditView()->SetSelection( aTextSelection );
                         GetParentEditView()->DeleteSelected();
                         GetParentEditView()->InsertText( GetSelectEntry(), sal_False );
                     }
@@ -2757,7 +2784,6 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
 void CodeCompleteListBox::HideAndRestoreFocus()
 {
     pCodeCompleteWindow->Hide();
-    GetParentEditView()->SetSelection( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetStart()) );
     pCodeCompleteWindow->pParent->GrabFocus();
 }
 
