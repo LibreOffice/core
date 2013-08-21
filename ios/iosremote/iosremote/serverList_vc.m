@@ -389,7 +389,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if ([self.comManager.servers count] == 0 && section == 1) {
-        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 60)];
+        UILabel *sectionFooter = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, tableView.frame.size.width - 50, 100)];
         [sectionFooter setLineBreakMode:NSLineBreakByWordWrapping];
         [sectionFooter setNumberOfLines:5];
         sectionFooter.backgroundColor = [UIColor clearColor];

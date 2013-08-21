@@ -1005,7 +1005,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 #endif
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         if ( xContext.is() )
-            bDisableSdremoteForGood |= ! ( officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&
+            bDisableSdremoteForGood |= ! ( /*officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&*/
 
                                            officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) );
 
