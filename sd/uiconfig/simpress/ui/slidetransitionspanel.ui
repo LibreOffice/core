@@ -150,12 +150,10 @@
                 <child>
                   <object class="GtkCheckButton" id="loop_sound">
                     <property name="label" translatable="yes">Loop until next sound</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="margin_left">12</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -205,11 +203,9 @@
                 <child>
                   <object class="GtkRadioButton" id="rb_mouse_click">
                     <property name="label" translatable="yes">On mouse click</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -225,11 +221,9 @@
                 <child>
                   <object class="GtkRadioButton" id="rb_auto_after">
                     <property name="label" translatable="yes">Automatically after</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -243,7 +237,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="auto_after_value:0">
+                  <object class="GtkSpinButton" id="auto_after_value:0sec">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">●</property>
@@ -297,11 +291,9 @@
     <child>
       <object class="GtkButton" id="apply_to_all">
         <property name="label" translatable="yes">Apply to All Slides</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="use_action_appearance">False</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -317,11 +309,9 @@
         <child>
           <object class="GtkButton" id="play">
             <property name="label" translatable="yes">Play</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -332,11 +322,9 @@
         <child>
           <object class="GtkButton" id="slide_show">
             <property name="label" translatable="yes">Slide Show</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="use_action_appearance">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -354,11 +342,9 @@
     <child>
       <object class="GtkCheckButton" id="auto_preview">
         <property name="label" translatable="yes">Automatic preview</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
