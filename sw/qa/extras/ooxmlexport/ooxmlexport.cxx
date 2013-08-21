@@ -1168,12 +1168,9 @@ void Test::testTableFloatingMargins()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 
-    if (m_bImport)
-    {
-        // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
-        xmlDocPtr pXmlDoc = parseExport();
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
-    }
+    // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox/w:txbxContent/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -531,6 +531,14 @@ public:
     virtual void endLevel();
 
     /**
+     * Signal that the next paragraph definitely won't be part of any table.
+     */
+    void endTable()
+    {
+        setRowEnd(false);
+    }
+
+    /**
        Tells whether a table has been started or not
       */
     bool isInTable();
