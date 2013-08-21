@@ -34,6 +34,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -58,6 +59,7 @@ class SfxItemPool;
 class ScAddress;
 class ScXMLCachedRowAttrAccess;
 class ScRangeName;
+class ScXMLEditAttributeMap;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -70,6 +72,7 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xSourceStream;
     sal_Int32                   nSourceStreamPos;
 
+    mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
@@ -149,7 +152,7 @@ class ScXMLExport : public SvXMLExport
     void CloseHeaderColumn();
     void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader);
     void ExportExternalRefCacheStyles();
-    void ExportCellTextAutoStyles(const com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable);
+    void ExportCellTextAutoStyles(sal_Int32 nTable);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
@@ -217,6 +220,8 @@ class ScXMLExport : public SvXMLExport
     void IncrementProgressBar(bool bEditCell, sal_Int32 nInc = 1);
 
     void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
+
+    const ScXMLEditAttributeMap& GetEditAttributeMap() const;
 
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();

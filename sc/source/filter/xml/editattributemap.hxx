@@ -23,19 +23,23 @@ class ScXMLEditAttributeMap
 public:
     struct Entry
     {
+        sal_uInt16 nmXMLNS;
+        const char* mpXMLName;
+        const char* mpAPIName;
         sal_uInt16 mnItemID;
         sal_uInt8 mnFlag;
-
-        Entry(sal_uInt16 nItemID, sal_uInt8 nFlag);
     };
 
     ScXMLEditAttributeMap();
 
-    const Entry* getEntry(const OUString& rXMLName) const;
+    const Entry* getEntryByAPIName(const OUString& rAPIName) const;
+    const Entry* getEntryByItemID(sal_uInt16 nItemID) const;
 
 private:
-    typedef boost::unordered_map<OUString, Entry, OUStringHash> EntriesType;
-    EntriesType maEntries;
+    typedef boost::unordered_map<OUString, const Entry*, OUStringHash> StrToEntriesType;
+    typedef boost::unordered_map<sal_uInt16, const Entry*> IndexToEntriesType;
+    StrToEntriesType maAPIEntries;
+    IndexToEntriesType maItemIDEntries;
 };
 
 #endif

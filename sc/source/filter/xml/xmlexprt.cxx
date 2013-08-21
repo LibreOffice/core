@@ -60,6 +60,8 @@
 #include "conditio.hxx"
 #include "cellvalue.hxx"
 #include "stylehelper.hxx"
+#include "edittextiterator.hxx"
+#include "editattributemap.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -68,7 +70,25 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/txtparae.hxx>
-#include <editeng/xmlcnitm.hxx>
+#include "editeng/autokernitem.hxx"
+#include "editeng/charreliefitem.hxx"
+#include "editeng/charscaleitem.hxx"
+#include "editeng/colritem.hxx"
+#include "editeng/contouritem.hxx"
+#include "editeng/crossedoutitem.hxx"
+#include "editeng/emphasismarkitem.hxx"
+#include "editeng/escapementitem.hxx"
+#include "editeng/fhgtitem.hxx"
+#include "editeng/fontitem.hxx"
+#include "editeng/kernitem.hxx"
+#include "editeng/langitem.hxx"
+#include "editeng/postitem.hxx"
+#include "editeng/sectionattribute.hxx"
+#include "editeng/shdditem.hxx"
+#include "editeng/udlnitem.hxx"
+#include "editeng/wghtitem.hxx"
+#include "editeng/wrlmitem.hxx"
+#include "editeng/xmlcnitm.hxx"
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
@@ -1093,39 +1113,209 @@ void ScXMLExport::ExportExternalRefCacheStyles()
     }
 }
 
-void ScXMLExport::ExportCellTextAutoStyles(const Reference <sheet::XSpreadsheet>& xTable)
+void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
 {
-    Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
-    if (!xCellRangesQuery.is())
+    if (!ValidTab(nTable))
         return;
 
-    Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
-    if (!xSheetCellRanges.is())
-        return;
+    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
+    sal_Int32 nEntryCount = xMapper->GetEntryCount();
+    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
+    const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
 
-    uno::Sequence< table::CellRangeAddress > aCellRangeAddresses (xSheetCellRanges->getRangeAddresses());
-    sal_uInt32 nCount(aCellRangeAddresses.getLength());
-    Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
-    if (!xCellsAccess.is())
-        return;
-
-    GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
-    Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
-    if (!xCells.is())
-        return;
-
-    sal_uInt32 nCount2 = 0;
-    while (xCells->hasMoreElements())
+    sc::EditTextIterator aIter(*pDoc, nTable);
+    sal_Int32 nCellCount = 0;
+    for (const EditTextObject* pEdit = aIter.first(); pEdit; pEdit = aIter.next(), ++nCellCount)
     {
-        Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
-        if (xText.is())
-            GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
-        ++nCount2;
-        IncrementProgressBar(false);
+        std::vector<editeng::SectionAttribute> aAttrs;
+        pEdit->GetAllSectionAttributes(aAttrs);
+        if (aAttrs.empty())
+            continue;
+
+        std::vector<editeng::SectionAttribute>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
+        for (; itSec != itSecEnd; ++itSec)
+        {
+            const std::vector<const SfxPoolItem*>& rSecAttrs = itSec->maAttributes;
+            if (rSecAttrs.empty())
+                // No formats applied to this section. Skip it.
+                continue;
+
+            std::vector<XMLPropertyState> aPropStates;
+            aPropStates.reserve(rSecAttrs.size());
+            std::vector<const SfxPoolItem*>::const_iterator it = rSecAttrs.begin(), itEnd = rSecAttrs.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                const ScXMLEditAttributeMap::Entry* pEntry = rAttrMap.getEntryByItemID(p->Which());
+                if (!pEntry)
+                    continue;
+
+                sal_Int32 nIndex = xMapper->GetEntryIndex(
+                    pEntry->nmXMLNS, OUString::createFromAscii(pEntry->mpXMLName), 0);
+
+                if (nIndex == -1 || nIndex >= nEntryCount)
+                    continue;
+
+                uno::Any aAny;
+                switch (p->Which())
+                {
+                    case EE_CHAR_FONTINFO:
+                    case EE_CHAR_FONTINFO_CJK:
+                    case EE_CHAR_FONTINFO_CTL:
+                    {
+                        if (!static_cast<const SvxFontItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_WEIGHT:
+                    case EE_CHAR_WEIGHT_CJK:
+                    case EE_CHAR_WEIGHT_CTL:
+                    {
+                        if (!static_cast<const SvxWeightItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_FONTHEIGHT:
+                    case EE_CHAR_FONTHEIGHT_CJK:
+                    case EE_CHAR_FONTHEIGHT_CTL:
+                    {
+                        if (!static_cast<const SvxFontHeightItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_ITALIC:
+                    case EE_CHAR_ITALIC_CJK:
+                    case EE_CHAR_ITALIC_CTL:
+                    {
+                        if (!static_cast<const SvxPostureItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_OVERLINE:
+                    {
+                        if (!static_cast<const SvxOverlineItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_COLOR:
+                    {
+                        if (!static_cast<const SvxColorItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_WLM:
+                    {
+                        if (!static_cast<const SvxWordLineModeItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_STRIKEOUT:
+                    {
+                        if (!static_cast<const SvxCrossedOutItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_RELIEF:
+                    {
+                        if (!static_cast<const SvxCharReliefItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_OUTLINE:
+                    {
+                        if (!static_cast<const SvxContourItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_SHADOW:
+                    {
+                        if (!static_cast<const SvxShadowedItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_KERNING:
+                    {
+                        if (!static_cast<const SvxKerningItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_PAIRKERNING:
+                    {
+                        if (!static_cast<const SvxAutoKernItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_FONTWIDTH:
+                    {
+                        if (!static_cast<const SvxCharScaleWidthItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_ESCAPEMENT:
+                    {
+                        if (!static_cast<const SvxEscapementItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_EMPHASISMARK:
+                    {
+                        if (!static_cast<const SvxEmphasisMarkItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    case EE_CHAR_LANGUAGE:
+                    case EE_CHAR_LANGUAGE_CJK:
+                    case EE_CHAR_LANGUAGE_CTL:
+                    {
+                        if (!static_cast<const SvxLanguageItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
+                            continue;
+
+                        aPropStates.push_back(XMLPropertyState(nIndex, aAny));
+                    }
+                    break;
+                    default:
+                        continue;
+                }
+            }
+
+            if (!aPropStates.empty())
+                OUString aName = xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
+        }
     }
 
-    if (nCount2 > nCount)
-        GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
+    GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCellCount);
 }
 
 void ScXMLExport::WriteRowContent()
@@ -1670,6 +1860,13 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
             rNewEnd = (sal_Int32)xDestSeek->getPosition();
         }
     }
+}
+
+const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
+{
+    if (!mpEditAttrMap)
+        mpEditAttrMap.reset(new ScXMLEditAttributeMap);
+    return *mpEditAttrMap;
 }
 
 void ScXMLExport::_ExportContent()
@@ -2456,7 +2653,7 @@ void ScXMLExport::_ExportAutoStyles()
                 }
             }
 
-            ExportCellTextAutoStyles(xTable);
+            ExportCellTextAutoStyles(nTable);
         }
 
         pChangeTrackingExportHelper->CollectAutoStyles();

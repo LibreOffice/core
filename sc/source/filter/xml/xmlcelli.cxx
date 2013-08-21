@@ -419,7 +419,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             continue;
 
         const OUString& rName = xMapper->GetEntryAPIName(it->mnIndex);
-        const ScXMLEditAttributeMap::Entry* pEntry = rEditAttrMap.getEntry(rName);
+        const ScXMLEditAttributeMap::Entry* pEntry = rEditAttrMap.getEntryByAPIName(rName);
         if (!pEntry)
             continue;
 

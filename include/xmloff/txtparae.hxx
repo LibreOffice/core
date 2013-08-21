@@ -196,9 +196,10 @@ protected:
 
     SinglePropertySetInfoCache aCharStyleNamesPropInfoCache;
 
-//  SvXMLExport& GetExport() { return rExport; }
-//  const SvXMLExport& GetExport() const  { return rExport; }
+    SvXMLAutoStylePoolP& GetAutoStylePool() { return rAutoStylePool; }
+    const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
 
+public:
     UniReference < SvXMLExportPropertyMapper > GetParaPropMapper() const
     {
         return xParaPropMapper;
@@ -226,11 +227,6 @@ protected:
         return xRubyPropMapper;
     }
 
-
-    SvXMLAutoStylePoolP& GetAutoStylePool() { return rAutoStylePool; }
-    const SvXMLAutoStylePoolP& GetAutoStylePool() const { return rAutoStylePool; }
-
-public:
     OUString FindTextStyleAndHyperlink(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet > & rPropSet,

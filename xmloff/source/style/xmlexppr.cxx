@@ -366,7 +366,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         Sequence < PropertyState > aStates;
         const PropertyState *pStates = 0;
         Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
-           if( xPropState.is() )
+        if( xPropState.is() )
         {
             aStates = xPropState->getPropertyStates( rApiNames );
             pStates = aStates.getConstArray();
