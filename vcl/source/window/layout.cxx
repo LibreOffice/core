@@ -774,64 +774,80 @@ VclGrid::array_type VclGrid::assembleGrid() const
             if (pChild && pChild->IsVisible())
             {
                 aNonEmptyCols[x] = true;
+                if (get_column_homogeneous())
+                {
+                    for (sal_Int32 nSpanX = 1; nSpanX < rEntry.nSpanWidth; ++nSpanX)
+                        aNonEmptyCols[x+1] = true;
+                }
                 aNonEmptyRows[y] = true;
+                if (get_row_homogeneous())
+                {
+                    for (sal_Int32 nSpanY = 1; nSpanY < rEntry.nSpanHeight; ++nSpanY)
+                        aNonEmptyRows[x+1] = true;
+                }
             }
         }
     }
 
-    //reduce the spans of elements that span empty columns
-    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    if (!get_column_homogeneous())
     {
-        std::set<ExtendedGridEntry*> candidates;
-        for (sal_Int32 y = 0; y < nMaxY; ++y)
-        {
-            if (aNonEmptyCols[x])
-                continue;
-            ExtendedGridEntry &rSpan = A[x][y];
-            //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
-            //just points back to itself if there's no cell spanning
-            if ((rSpan.x == -1) || (rSpan.y == -1))
-            {
-                //there is no entry for this cell, i.e. this is a cell
-                //with no widget in it, or spanned by any other widget
-                continue;
-            }
-            ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
-            candidates.insert(&rEntry);
-        }
-        for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
-            aI != aEnd; ++aI)
-        {
-            ExtendedGridEntry *pEntry = *aI;
-            --pEntry->nSpanWidth;
-        }
-    }
-
-    //reduce the spans of elements that span empty rows
-    for (sal_Int32 y = 0; y < nMaxY; ++y)
-    {
-        std::set<ExtendedGridEntry*> candidates;
+        //reduce the spans of elements that span empty columns
         for (sal_Int32 x = 0; x < nMaxX; ++x)
         {
-            if (aNonEmptyRows[y])
-                continue;
-            ExtendedGridEntry &rSpan = A[x][y];
-            //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
-            //just points back to itself if there's no cell spanning
-            if ((rSpan.x == -1) || (rSpan.y == -1))
+            std::set<ExtendedGridEntry*> candidates;
+            for (sal_Int32 y = 0; y < nMaxY; ++y)
             {
-                //there is no entry for this cell, i.e. this is a cell
-                //with no widget in it, or spanned by any other widget
-                continue;
+                if (aNonEmptyCols[x])
+                    continue;
+                ExtendedGridEntry &rSpan = A[x][y];
+                //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
+                //just points back to itself if there's no cell spanning
+                if ((rSpan.x == -1) || (rSpan.y == -1))
+                {
+                    //there is no entry for this cell, i.e. this is a cell
+                    //with no widget in it, or spanned by any other widget
+                    continue;
+                }
+                ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
+                candidates.insert(&rEntry);
             }
-            ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
-            candidates.insert(&rEntry);
+            for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
+                aI != aEnd; ++aI)
+            {
+                ExtendedGridEntry *pEntry = *aI;
+                --pEntry->nSpanWidth;
+            }
         }
-        for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
-            aI != aEnd; ++aI)
+    }
+
+    if (!get_row_homogeneous())
+    {
+        //reduce the spans of elements that span empty rows
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
-            ExtendedGridEntry *pEntry = *aI;
-            --pEntry->nSpanHeight;
+            std::set<ExtendedGridEntry*> candidates;
+            for (sal_Int32 x = 0; x < nMaxX; ++x)
+            {
+                if (aNonEmptyRows[y])
+                    continue;
+                ExtendedGridEntry &rSpan = A[x][y];
+                //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
+                //just points back to itself if there's no cell spanning
+                if ((rSpan.x == -1) || (rSpan.y == -1))
+                {
+                    //there is no entry for this cell, i.e. this is a cell
+                    //with no widget in it, or spanned by any other widget
+                    continue;
+                }
+                ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
+                candidates.insert(&rEntry);
+            }
+            for (std::set<ExtendedGridEntry*>::iterator aI = candidates.begin(), aEnd = candidates.end();
+                aI != aEnd; ++aI)
+            {
+                ExtendedGridEntry *pEntry = *aI;
+                --pEntry->nSpanHeight;
+            }
         }
     }
 
