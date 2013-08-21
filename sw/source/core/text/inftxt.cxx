@@ -360,52 +360,6 @@ void SwTxtSizeInfo::NoteAnimation() const
             "SwTxtSizeInfo::NoteAnimation() changed m_pOut" );
 }
 
-
-KSHORT SwTxtSizeInfo::GetAscent() const
-{
-    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
-
-    sal_uInt16 nAscent = ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
-
-    if( GetFont()->GetTopBorder() )
-        nAscent += GetFont()->GetTopBorderSpace();
-
-    return nAscent;
-}
-
-KSHORT SwTxtSizeInfo::GetTxtHeight() const
-{
-    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
-
-    sal_uInt16 nHeight = ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
-
-    if( GetFont()->GetTopBorder() )
-        nHeight += GetFont()->GetTopBorderSpace();
-    if( GetFont()->GetBottomBorder() )
-        nHeight += GetFont()->GetBottomBorderSpace();
-
-    return nHeight;
-}
-
-static void lcl_IncreaseSizeWithBorders(SwPosSize& rSize, const SwFont& rFont)
-{
-
-    sal_uInt16 nWidth = rSize.Width();
-    sal_uInt16 nHeight = rSize.Height();
-
-    if( rFont.GetTopBorder() )
-        nHeight += rFont.GetTopBorderSpace();
-    if( rFont.GetBottomBorder() )
-        nHeight += rFont.GetBottomBorderSpace();
-    if( rFont.GetRightBorder() )
-        nWidth += rFont.GetRightBorderSpace();
-    if( rFont.GetLeftBorder() )
-        nWidth += rFont.GetLeftBorderSpace();
-
-    rSize.Height(nHeight);
-    rSize.Width(nWidth);
-}
-
 SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const XubString& rTxt,
@@ -418,9 +372,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
-    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
-    return aSize;
+    return m_pFnt->_GetTxtSize( aDrawInf );
 }
 
 SwPosSize SwTxtSizeInfo::GetTxtSize() const
@@ -441,9 +393,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     aDrawInf.SetFont( m_pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
-    SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
-    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
-    return aSize;
+    return m_pFnt->_GetTxtSize( aDrawInf );
 }
 
 void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex,
@@ -456,7 +406,6 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex
     aDrawInf.SetSnapToGrid( SnapToGrid() );
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = m_pFnt->_GetTxtSize( aDrawInf );
-    lcl_IncreaseSizeWithBorders(aSize,*m_pFnt);
     nMaxSizeDiff = (sal_uInt16)aDrawInf.GetKanaDiff();
     nMinSize = aSize.Width();
 }
@@ -689,8 +638,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
     // Draw text next to the left border
     Point aFontPos(aPos);
-    if( m_pFnt->GetLeftBorder() && rPor.InTxtGrp() &&
-        !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
+    if( !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
@@ -1222,13 +1170,15 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
+void SwTxtPaintInfo::DrawBorder( const SwTxtPortion &rPor ) const
 {
     SwRect aDrawArea;
     CalcRect( rPor, &aDrawArea );
     if ( aDrawArea.HasArea() )
     {
-        PaintCharacterBorder(*m_pFnt, aDrawArea, GetTxtFrm()->IsVertical());
+        PaintCharacterBorder(
+            *m_pFnt, aDrawArea, GetTxtFrm()->IsVertical(),
+            rPor.GetJoinBorderWithPrev(), rPor.GetJoinBorderWithNext());
     }
 }
 

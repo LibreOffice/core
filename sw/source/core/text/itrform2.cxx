@@ -765,6 +765,7 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 
 void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 {
+    bool bCalc = false;
     if ( pPor->InFldGrp() && ((SwFldPortion*)pPor)->GetFont() )
     {
         // Numbering + InterNetFlds can keep an own font, then their size is
@@ -773,6 +774,7 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         SwFontSave aSave( rInf, pFldFnt );
         pPor->Height( rInf.GetTxtHeight() );
         pPor->SetAscent( rInf.GetAscent() );
+        bCalc = true;
     }
     // #i89179#
     // tab portion representing the list tab of a list label gets the
@@ -825,12 +827,22 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         {
             pPor->SetAscent( rInf.GetAscent()  );
             pPor->Height( rInf.GetTxtHeight() );
+            bCalc = true;
         }
         else
         {
             pPor->Height( pLast->Height() );
             pPor->SetAscent( pLast->GetAscent() );
         }
+    }
+
+    if( pPor->InTxtGrp() && bCalc )
+    {
+        pPor->SetAscent(pPor->GetAscent() +
+            rInf.GetFont()->GetTopBorderSpace());
+        pPor->Height(pPor->Height() +
+            rInf.GetFont()->GetTopBorderSpace() +
+            rInf.GetFont()->GetBottomBorderSpace() );
     }
 }
 
@@ -2606,24 +2618,13 @@ void SwTxtFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
     if( rPortion.GetLines() > 1 )
     {
         SwDropPortionPart* pCurrPart = rPortion.GetPart();
-        bool bJoinWithPrev = false;
         while( pCurrPart )
         {
-            const bool bJoinWithNext =
-                pCurrPart->GetFollow() &&
-                ::lcl_HasSameBorder(pCurrPart->GetFont(), pCurrPart->GetFollow()->GetFont());
-
-            if( bJoinWithPrev )
-                pCurrPart->GetFont().SetLeftBorder(0);
-
-            if( bJoinWithNext )
+            if( pCurrPart->GetFollow() &&
+                ::lcl_HasSameBorder(pCurrPart->GetFont(), pCurrPart->GetFollow()->GetFont()) )
             {
-                pCurrPart->GetFont().SetRightBorder(0);
-                bJoinWithPrev = true;
-            }
-            else
-            {
-                bJoinWithPrev = false;
+                pCurrPart->SetJoinBorderWithNext(true);
+                pCurrPart->GetFollow()->SetJoinBorderWithPrev(true);
             }
             pCurrPart = pCurrPart->GetFollow();
         }

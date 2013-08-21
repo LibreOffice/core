@@ -111,11 +111,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nLineWidth < 0 ) nLineWidth = 0;
     }
 
-    // Decrease the line width with the right and left border width
-    if( rInf.GetFont()->GetRightBorder() )
-        nLineWidth -= rInf.GetFont()->GetRightBorderSpace();
-    if( rInf.GetFont()->GetLeftBorder() )
-        nLineWidth -= rInf.GetFont()->GetLeftBorderSpace();
+    const sal_Int32 nLeftRightBorderSpace =
+        (!rPor.GetJoinBorderWithNext() ? rInf.GetFont()->GetRightBorderSpace() : 0) +
+        (!rPor.GetJoinBorderWithPrev() ? rInf.GetFont()->GetLeftBorderSpace() : 0);
+
+    nLineWidth -= nLeftRightBorderSpace;
 
     const bool bUnbreakableNumberings = rInf.GetTxtFrm()->GetTxtNode()->
             getIDocumentSettingAccess()->get(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS);
@@ -142,6 +142,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // save maximum width for later use
             if ( nMaxSizeDiff )
                 rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+
+            nBreakWidth += nLeftRightBorderSpace;
 
             return sal_True;
         }
@@ -192,6 +194,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // save maximum width for later use
             if ( nMaxSizeDiff )
                 rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+
+            nBreakWidth += nLeftRightBorderSpace;
 
             return sal_True;
         }
@@ -464,6 +468,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const xub_StrLen nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
                                                   nHangingLen, 0 );
+            aTmpSize.Width(aTmpSize.Width() + nLeftRightBorderSpace);
             OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
             pHanging->SetLen( nHangingLen );
@@ -510,7 +515,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nMaxSizeDiff )
             rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
 
-        nBreakWidth += nItalic;
+        nBreakWidth += nItalic + nLeftRightBorderSpace;
     }
     else
         nBreakWidth = 0;

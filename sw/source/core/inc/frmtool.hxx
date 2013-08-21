@@ -66,7 +66,9 @@ void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 // Paint character border using frame painting code
-void PaintCharacterBorder( const SwFont& rFont, const SwRect& rPaintArea, const bool bVerticalLayout);
+void PaintCharacterBorder(
+    const SwFont& rFont, const SwRect& rPaintArea, const bool bVerticalLayout,
+    const bool bJoinWithPrev, const bool bJoinWithNext );
 
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx

@@ -294,6 +294,8 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
         ((SwDropPortion*)this)->Width( pCurrPart->GetWidth() );
         ((SwTxtPaintInfo&)rInf).SetLen( pCurrPart->GetLen() );
         SwFontSave aFontSave( rInf, &pCurrPart->GetFont() );
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
 
         if ( rInf.OnWin() &&
             !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() &&
@@ -313,6 +315,8 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     ((SwDropPortion*)this)->Width( nOldWidth );
     ((SwDropPortion*)this)->SetLen( nOldLen );
     ((SwDropPortion*)this)->SetAscent( nOldAscent );
+    const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(false);
+    const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(false);
 }
 
 /*************************************************************************
@@ -444,6 +448,12 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     ((SwTxtSizeInfo&)rInf).SetIdx( nIdx );
     ((SwTxtSizeInfo&)rInf).SetLen( rInf.GetLen() - nIdx );
 
+    if( pCurrPart )
+    {
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
+    }
+
     // robust
     SwFontSave aFontSave( rInf, pCurrPart ? &pCurrPart->GetFont() : 0 );
     SwPosSize aPosSize( SwTxtPortion::GetTxtSize( rInf ) );
@@ -451,6 +461,11 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 
     ((SwTxtSizeInfo&)rInf).SetIdx( nOldIdx );
     ((SwTxtSizeInfo&)rInf).SetLen( nOldLen );
+    if( pCurrPart )
+    {
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(false);
+        const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(false);
+    }
 
     return aPosSize;
 }
@@ -1038,6 +1053,8 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                 SwFont& rFnt = pCurrPart->GetFont();
                 {
                     SwFontSave aFontSave( rInf, &rFnt );
+                    SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
+                    SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
                     bFull = FormatTxt( rInf );
 
                     if ( bFull )
@@ -1057,7 +1074,8 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                 rInf.X( rInf.X() + nTmpWidth );
                 pCurrPart = pCurrPart->GetFollow();
             }
-
+            SetJoinBorderWithNext(false);
+            SetJoinBorderWithPrev(false);
             Width( (sal_uInt16)(rInf.X() - nOldX) );
         }
 

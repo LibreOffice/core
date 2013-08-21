@@ -940,12 +940,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 {
                                     pCurrPart = pCurrPart->GetFollow();
                                 }
-                                if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() && pCurrPart->GetFont().GetRightBorder() )
+                                if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() && !pCurrPart->GetJoinBorderWithNext() )
                                 {
                                     nX -= pCurrPart->GetFont().GetRightBorderSpace();
                                 }
                             }
-                            else if( GetInfo().GetFont()->GetRightBorder() && pPor->InTxtGrp() &&
+                            else if( pPor->InTxtGrp() &&
                                      !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithNext())
                             {
                                 nX -= GetInfo().GetFont()->GetRightBorderSpace();
@@ -1651,11 +1651,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     while( pCurrPart && nSumWidth <= nX - nCurrStart )
                     {
                         nSumWidth += pCurrPart->GetWidth();
-                        if( pCurrPart->GetFont().GetLeftBorder() )
+                        if( !pCurrPart->GetJoinBorderWithPrev() )
                         {
                             nSumBorderWidth += pCurrPart->GetFont().GetLeftBorderSpace();
                         }
-                        if( nSumWidth <= nX - nCurrStart && pCurrPart->GetFont().GetRightBorder() )
+                        if( nSumWidth <= nX - nCurrStart && !pCurrPart->GetJoinBorderWithNext() )
                         {
                             nSumBorderWidth += pCurrPart->GetFont().GetRightBorderSpace();
                         }
@@ -1664,8 +1664,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nX = std::max(0, nX - nSumBorderWidth);
                 }
                 // Shift the offset with the left border width
-                else if ( GetInfo().GetFont()->GetLeftBorder() &&
-                          !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithPrev() )
+                else if( !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithPrev() )
                 {
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }

@@ -543,16 +543,15 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 
 SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
-    const SwFont aOldFont = *rInf.GetFont();
-    if( m_bJoinBorderWithPrev )
-        const_cast<SwTxtSizeInfo&>(rInf).GetFont()->SetLeftBorder(0);
-    if( m_bJoinBorderWithNext )
-        const_cast<SwTxtSizeInfo&>(rInf).GetFont()->SetRightBorder(0);
+    SwPosSize aSize = rInf.GetTxtSize();
+    if( !m_bJoinBorderWithPrev )
+        aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace() );
+    if( !m_bJoinBorderWithNext )
+        aSize.Width(aSize.Width() + rInf.GetFont()->GetRightBorderSpace() );
 
-    const SwPosSize aSize = rInf.GetTxtSize();
-
-    if( m_bJoinBorderWithPrev || m_bJoinBorderWithNext )
-        *const_cast<SwTxtSizeInfo&>(rInf).GetFont() = aOldFont;
+    aSize.Height(aSize.Height() +
+        rInf.GetFont()->GetTopBorderSpace() +
+        rInf.GetFont()->GetBottomBorderSpace() );
 
     return aSize;
 }
@@ -562,12 +561,6 @@ SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *************************************************************************/
 void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    const SwFont aOldFont = *rInf.GetFont();
-    if( m_bJoinBorderWithPrev )
-        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetLeftBorder(0);
-    if( m_bJoinBorderWithNext )
-        const_cast<SwTxtPaintInfo&>(rInf).GetFont()->SetRightBorder(0);
-
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt()[rInf.GetIdx()])
     {
         rInf.DrawBackBrush( *this );
@@ -603,9 +596,6 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
         else
             rInf.DrawText( *this, rInf.GetLen(), sal_False );
     }
-
-    if( m_bJoinBorderWithPrev || m_bJoinBorderWithNext )
-        *const_cast<SwTxtPaintInfo&>(rInf).GetFont() = aOldFont;
 }
 
 /*************************************************************************

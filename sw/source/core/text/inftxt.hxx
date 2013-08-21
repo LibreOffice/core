@@ -440,7 +440,7 @@ public:
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
-    void DrawBorder( const SwLinePortion &rPor ) const;
+    void DrawBorder( const SwTxtPortion &rPor ) const;
 
     void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
 
@@ -778,6 +778,20 @@ public:
 /*************************************************************************
  * Inline implementations of SwTxtSizeInfo
  *************************************************************************/
+inline KSHORT SwTxtSizeInfo::GetAscent() const
+{
+    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
+
+    return ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
+}
+
+inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
+{
+    SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
+
+    return ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
+}
+
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
 {
     return GetTxtSize( m_pOut, 0, rTxt, 0, rTxt.Len(), 0 );

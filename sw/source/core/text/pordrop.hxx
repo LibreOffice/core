@@ -42,10 +42,12 @@ class SwDropPortionPart
     SwFont* pFnt;
     xub_StrLen nLen;
     sal_uInt16 nWidth;
+    bool m_bJoinBorderWithNext;
+    bool m_bJoinBorderWithPrev;
 
 public:
     SwDropPortionPart( SwFont& rFont, const xub_StrLen nL )
-            : pFollow( 0 ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ) {};
+            : pFollow( 0 ), pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
     inline SwDropPortionPart* GetFollow() const { return pFollow; };
@@ -54,6 +56,11 @@ public:
     inline xub_StrLen GetLen() const { return nLen; }
     inline sal_uInt16 GetWidth() const { return nWidth; }
     inline void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
+
+    bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
+    bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
+    void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
+    void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 };
 
 /*************************************************************************

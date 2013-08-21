@@ -348,10 +348,11 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 
             // the height depending on the fields font is set,
             // this is required for SwTxtGuess::Guess
-            Height( rInf.GetTxtHeight() );
+            Height( rInf.GetTxtHeight() + rInf.GetFont()->GetTopBorderSpace() +
+                    rInf.GetFont()->GetBottomBorderSpace() );
             // If a kerning portion is inserted after our field portion,
             // the ascent and height must be known
-            SetAscent( rInf.GetAscent() );
+            SetAscent( rInf.GetAscent() + rInf.GetFont()->GetTopBorderSpace() );
             bFull = SwTxtPortion::Format( rInf );
             rInf.SetNotEOL( false );
             rInf.SetLineStart( nOldLineStart );

@@ -129,7 +129,8 @@ void SwFont::SetLeftBorder( const editeng::SvxBorderLine* pLeftBorder )
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
-const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsTopBorder( const bool bVertLayout ) const
+const boost::optional<editeng::SvxBorderLine>&
+SwFont::GetAbsTopBorder( const bool bVertLayout ) const
 {
     switch( GetOrientation( bVertLayout ) )
     {
@@ -152,7 +153,8 @@ const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsTopBorder( const bo
     }
 }
 
-const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsBottomBorder( const bool bVertLayout ) const
+const boost::optional<editeng::SvxBorderLine>&
+SwFont::GetAbsBottomBorder( const bool bVertLayout ) const
 {
     switch( GetOrientation( bVertLayout ) )
     {
@@ -175,7 +177,8 @@ const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsBottomBorder( const
     }
 }
 
-const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsLeftBorder( const bool bVertLayout ) const
+const boost::optional<editeng::SvxBorderLine>&
+SwFont::GetAbsLeftBorder( const bool bVertLayout ) const
 {
     switch( GetOrientation( bVertLayout ) )
     {
@@ -198,7 +201,8 @@ const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsLeftBorder( const b
     }
 }
 
-const boost::optional<editeng::SvxBorderLine>& SwFont::GetAbsRightBorder( const bool bVertLayout ) const
+const boost::optional<editeng::SvxBorderLine>&
+SwFont::GetAbsRightBorder( const bool bVertLayout ) const
 {
     switch( GetOrientation( bVertLayout ) )
     {

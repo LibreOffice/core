@@ -4748,17 +4748,49 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
 void PaintCharacterBorder(
     const SwFont& rFont,
     const SwRect& rPaintArea,
-    const bool bVerticalLayout )
+    const bool bVerticalLayout,
+    const bool bJoinWithPrev,
+    const bool bJoinWithNext )
 {
-    // Init borders, after this initialization top, bottom, right and left means the
-    // absolute position
-    const boost::optional<editeng::SvxBorderLine>& aTopBorder = rFont.GetAbsTopBorder(bVerticalLayout);
-    const boost::optional<editeng::SvxBorderLine>& aBottomBorder = rFont.GetAbsBottomBorder(bVerticalLayout);
-    const boost::optional<editeng::SvxBorderLine>& aLeftBorder = rFont.GetAbsLeftBorder(bVerticalLayout);
-    const boost::optional<editeng::SvxBorderLine>& aRightBorder = rFont.GetAbsRightBorder(bVerticalLayout);
-
     SwRect aAlignedRect(rPaintArea);
     SwAlignRect(aAlignedRect, pGlobalShell);
+
+    bool bTop = true;
+    bool bBottom = true;
+    bool bLeft = true;
+    bool bRight = true;
+
+    switch( rFont.GetOrientation(bVerticalLayout) )
+    {
+        case 0 :
+            bLeft = !bJoinWithPrev;
+            bRight = !bJoinWithNext;
+            break;
+        case 900 :
+            bBottom = !bJoinWithPrev;
+            bTop = !bJoinWithNext;
+            break;
+        case 1800 :
+            bRight = !bJoinWithPrev;
+            bLeft = !bJoinWithNext;
+            break;
+        case 2700 :
+            bTop = !bJoinWithPrev;
+            bBottom = !bJoinWithNext;
+            break;
+    }
+
+    // Init borders, after this initialization top, bottom, right and left means the
+    // absolute position
+    const boost::optional<editeng::SvxBorderLine> aTopBorder =
+        (bTop ? rFont.GetAbsTopBorder(bVerticalLayout) : boost::none);
+    const boost::optional<editeng::SvxBorderLine> aBottomBorder =
+        (bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout) : boost::none);
+    const boost::optional<editeng::SvxBorderLine> aLeftBorder =
+        (bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout) : boost::none);
+    const boost::optional<editeng::SvxBorderLine> aRightBorder =
+        (bRight ? rFont.GetAbsRightBorder(bVerticalLayout) : boost::none);
+
 
     if( aTopBorder )
     {
