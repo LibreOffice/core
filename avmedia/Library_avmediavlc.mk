@@ -14,9 +14,7 @@ $(eval $(call gb_Library_set_componentfile,avmediavlc,avmedia/source/vlc/avmedia
 $(eval $(call gb_Library_set_include,avmediavlc,\
     $$(INCLUDE) \
     -I$(SRCDIR)/avmedia/source/inc \
-    $(VLC_CFLAGS) \
 ))
-$(eval $(call gb_Library_add_libs,avmediavlc,$(VLC_LIBS)))
 
 $(eval $(call gb_Library_use_external,avmediavlc,boost_headers))
 

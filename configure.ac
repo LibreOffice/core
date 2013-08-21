@@ -10088,18 +10088,14 @@ dnl ===================================================================
 ENABLE_VLC=""
 
 if test "$build_gstreamer" = "yes"; then
-
     AC_MSG_CHECKING([whether to enable the new VLC avmedia backend])
     if test "x$enable_vlc" != "xno"; then
         ENABLE_VLC="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( VLC, libvlc >= 2.0.0 )
     else
         AC_MSG_RESULT([no])
     fi
 fi
-AC_SUBST(VLC_CFLAGS)
-AC_SUBST(VLC_LIBS)
 AC_SUBST(ENABLE_VLC)
 
 dnl ===================================================================
