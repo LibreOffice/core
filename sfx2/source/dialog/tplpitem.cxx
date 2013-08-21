@@ -35,7 +35,7 @@ SfxTemplateItem::SfxTemplateItem() :
 SfxTemplateItem::SfxTemplateItem
 (
     sal_uInt16 nWhichId,      // Slot-ID
-    const String& rStyle, // Name of the current Styles
+    const OUString& rStyle, // Name of the current Styles
     sal_uInt16 nValue         // Flags for the filters of the automatic display
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )

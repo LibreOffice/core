@@ -28,16 +28,16 @@
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {
-    String aStyle;
+    OUString aStyle;
 public:
     TYPEINFO();
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
-                     const String &rStyle,
+                     const OUString &rStyle,
                      sal_uInt16 nMask = SFXSTYLEBIT_ALL );
     SfxTemplateItem( const SfxTemplateItem& );
 
-    const String&           GetStyleName() const { return aStyle; }
+    const OUString&         GetStyleName() const { return aStyle; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
