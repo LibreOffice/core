@@ -420,8 +420,8 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
                 {
                     if ( nCol == 0 )
                     {
-                        String sRet = static_cast<const SvLBoxString*>(pStr)->GetText();
-                        if ( sRet.Len() == 0 )
+                        OUString sRet = static_cast<const SvLBoxString*>(pStr)->GetText();
+                        if ( sRet.isEmpty() )
                             sRet = SVT_RESSTR( STR_SVT_ACC_EMPTY_FIELD );
                         return sRet;
                     }

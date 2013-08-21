@@ -189,7 +189,7 @@ void SvtFontSubstConfig::Apply()
             nFlags |= FONT_SUBSTITUTE_ALWAYS;
         if(pSubs->bReplaceOnScreenOnly)
             nFlags |= FONT_SUBSTITUTE_SCREENONLY;
-        OutputDevice::AddFontSubstitute( String(pSubs->sFont), String(pSubs->sReplaceBy), nFlags );
+        OutputDevice::AddFontSubstitute( pSubs->sFont, pSubs->sReplaceBy, nFlags );
     }
 
     OutputDevice::EndFontSubstitution();

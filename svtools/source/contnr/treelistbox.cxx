@@ -1064,12 +1064,12 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
     if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // avoid nesting
         return 0;
     nImpFlags |= SVLBOX_EDTEND_CALLED;
-    String aStr;
+    OUString aStr;
     if ( !pEdCtrl->EditingCanceled() )
         aStr = pEdCtrl->GetText();
     else
         aStr = pEdCtrl->GetSavedValue();
-    if ( IsEmptyTextAllowed() || aStr.Len() > 0 )
+    if ( IsEmptyTextAllowed() || !aStr.isEmpty() )
         EditedText( aStr );
     // Hide may only be called after the new text was put into the entry, so
     // that we don't call the selection handler in the GetFocus of the listbox
@@ -1781,7 +1781,7 @@ OUString SvTreeListBox::SearchEntryText( SvTreeListEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT( pEntry, "SvTreeListBox::SearchEntryText(): no entry" );
-    String sRet;
+    OUString sRet;
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
     SvLBoxItem* pItem;
@@ -3683,8 +3683,8 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 {
     const SvTreeListEntry* pLeft = pData->pLeft;
     const SvTreeListEntry* pRight = pData->pRight;
-    String aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
-    String aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
+    OUString aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
+    OUString aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     pImp->UpdateStringSorter();
     return pImp->m_pStringSorter->compare(aLeft, aRight);
 }
