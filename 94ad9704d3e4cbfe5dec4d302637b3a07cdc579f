@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8YU\u003d",
+        "filename": "sal/osl/unx/thread.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-08-21T09:53:53Z",
+      "side": 1,
+      "message": "what is that expression supposed to compute?  (did you assume \"^\" is potentiation, to produce the low-order bits of Ident? looks like that)\n\nanyway, there is code that relies on osl_getThreadIdentifier returning different oslThreadIdentifier values for different threads, so any attempt at cramming the value representation of pthread_t (which can be anything btw, even a struct) into sal_uInt32 is futile",
+      "revId": "94ad9704d3e4cbfe5dec4d302637b3a07cdc579f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
