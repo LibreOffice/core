@@ -1085,6 +1085,20 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
         }
     }
+
+    // fdo#68381 paste cell notes on Transpose
+    bool bCloneCaption = true;
+    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
+        {
+            ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+            pTransClip->maNotes.erase(aDestPos);
+            pTransClip->maNotes.insert(aDestPos, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pTransClip->pDocument, aDestPos, bCloneCaption ));
+        }
+    }
 }
 
 
