@@ -1136,33 +1136,27 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         "relfields.RDB$NULL_FLAG "      // 9
         "FROM RDB$RELATION_FIELDS relfields "
         "JOIN RDB$FIELDS fields "
-        "on (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) ");
+        "on (fields.RDB$FIELD_NAME = relfields.RDB$FIELD_SOURCE) "
+        "WHERE (1 = 1) ");
 
-    if (!tableNamePattern.isEmpty() && !columnNamePattern.isEmpty())
-    {
-        queryBuf.append("WHERE ");
-    }
     if (!tableNamePattern.isEmpty())
     {
         OUString sAppend;
         if (tableNamePattern.match("%"))
-            sAppend = "relfields.RDB$RELATION_NAME LIKE '%' ";
+            sAppend = "AND relfields.RDB$RELATION_NAME LIKE '%' ";
         else
-            sAppend = "relfields.RDB$RELATION_NAME = '%' ";
+            sAppend = "AND relfields.RDB$RELATION_NAME = '%' ";
 
         queryBuf.append(sAppend.replaceAll("%", tableNamePattern));
     }
 
     if (!columnNamePattern.isEmpty())
     {
-        if (!tableNamePattern.isEmpty())
-            queryBuf.append("AND ");
-
         OUString sAppend;
         if (columnNamePattern.match("%"))
-            sAppend = "relfields.RDB$FIELD_NAME LIKE '%' ";
+            sAppend = "AND relfields.RDB$FIELD_NAME LIKE '%' ";
         else
-            sAppend = "relfields.RDB$FIELD_NAME = '%' ";
+            sAppend = "AND relfields.RDB$FIELD_NAME = '%' ";
 
         queryBuf.append(sAppend.replaceAll("%", columnNamePattern));
     }
@@ -1339,21 +1333,19 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     }
     else
     {
+        queryBuf.append("( (0 = 1) ");
         for (int i = 0; i < types.getLength(); i++)
         {
-            if (i)
-                queryBuf.append("OR ");
-
             if (types[i] == "SYSTEM TABLE")
-                queryBuf.append("(RDB$SYSTEM_FLAG = 1 AND RDB$VIEW_BLR IS NULL) ");
+                queryBuf.append("OR (RDB$SYSTEM_FLAG = 1 AND RDB$VIEW_BLR IS NULL) ");
             else if (types[i] == "TABLE")
-                queryBuf.append("(RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NULL) ");
+                queryBuf.append("OR (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NULL) ");
             else if (types[i] == "VIEW")
-                queryBuf.append("(RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NOT NULL) ");
+                queryBuf.append("OR (RDB$SYSTEM_FLAG IS NULL OR RDB$SYSTEM_FLAG = 0 AND RDB$VIEW_BLR IS NOT NULL) ");
             else
                 throw SQLException(); // TODO: implement other types, see above.
-
         }
+        queryBuf.append(") ");
     }
 
     if (!tableNamePattern.isEmpty())
@@ -1366,8 +1358,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
         queryBuf.append(sAppend.replaceAll(wld, tableNamePattern));
     }
-
-
 
     queryBuf.append(" ORDER BY RDB$RELATION_TYPE, RDB$RELATION_NAME");
 
