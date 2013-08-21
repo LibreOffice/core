@@ -2487,7 +2487,7 @@ sal_Bool SfxViewFrame::DoClose()
     return GetFrame().DoClose();
 }
 
-String SfxViewFrame::GetActualPresentationURL_Impl() const
+OUString SfxViewFrame::GetActualPresentationURL_Impl() const
 {
     if ( xObjSh.Is() )
         return xObjSh->GetMedium()->GetName();
