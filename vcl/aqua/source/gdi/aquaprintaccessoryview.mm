@@ -383,7 +383,7 @@ class ControllerProperties
         sal_Int32 nPages = mpController->getFilteredPageCount();
         rtl::OUStringBuffer aBuf( 16 );
         aBuf.appendAscii( "/ " );
-        aBuf.append( rtl::OUString::valueOf( nPages ) );
+        aBuf.append( rtl::OUString::number( nPages ) );
     
         NSString* pText = CreateNSString( aBuf.makeStringAndClear() );
         NSRect aTextRect = { { 100, 5 }, { 100, 22 } };
