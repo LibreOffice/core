@@ -104,9 +104,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     mpOutlineRule->SetRuleType( OUTLINE_RULE );
-    mpOutlineRule->SetName( OUString::createFromAscii(
-                                        SwNumRule::GetOutlineRuleName() ),
-                           *this);
+    mpOutlineRule->SetName(SwNumRule::GetOutlineRuleName(), *this);
 
     // assure that the outline numbering rule is an automatic rule
     mpOutlineRule->SetAutoRule( sal_True );
