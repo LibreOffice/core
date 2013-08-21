@@ -458,7 +458,7 @@ SlideTransitionPane::SlideTransitionPane(
     get(mpPB_SLIDE_SHOW, "slide_show");
     get(mpCB_AUTO_PREVIEW, "auto_preview");
 
-    String maSTR_NO_TRANSITION( SdResId(STR_SLIDETRANSITION_NONE) );
+    maSTR_NO_TRANSITION( SD_RESSTR( STR_SLIDETRANSITION_NONE ) );
     mpLB_SLIDE_TRANSITIONS->set_width_request(mpLB_SLIDE_TRANSITIONS->approximate_char_width() * 16);
     mpLB_SLIDE_TRANSITIONS->set_height_request(mpLB_SLIDE_TRANSITIONS->GetTextHeight() * 16);
 
