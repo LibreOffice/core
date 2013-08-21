@@ -38,7 +38,7 @@ XOutdevItemPool::XOutdevItemPool(
 :   SfxItemPool(String("XOutdevItemPool", osl_getThreadTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
     // prepare some defaults
-    const XubString aNullStr;
+    const OUString aNullStr;
     const Graphic aNullGraphic;
     const basegfx::B2DPolyPolygon aNullPol;
     const Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color

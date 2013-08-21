@@ -66,16 +66,15 @@ uno::Reference< container::XNameContainer > XHatchList::createInstance()
 
 bool XHatchList::Create()
 {
-    XubString aStr( SVX_RESSTR( RID_SVXSTR_HATCH ) );
-    xub_StrLen nLen;
+    OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_HATCH));
+    aStr.append(" 1");
 
-    aStr.AppendAscii(" 1");
-    nLen = aStr.Len() - 1;
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLACK),XHATCH_SINGLE,100,  0),aStr));
-    aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_RED  ),XHATCH_DOUBLE, 80,450),aStr));
-    aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr));
+    sal_Int32 nLen = aStr.getLength() - 1;
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLACK),XHATCH_SINGLE,100,  0),aStr.toString()));
+    aStr[nLen] = '2';
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_RED  ),XHATCH_DOUBLE, 80,450),aStr.toString()));
+    aStr[nLen] = '3';
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr.toString()));
 
     return true;
 }

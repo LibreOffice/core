@@ -67,22 +67,20 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
 
 bool XGradientList::Create()
 {
-    XubString aStr( SVX_RESSTR( RID_SVXSTR_GRADIENT ) );
-    xub_StrLen nLen;
-
-    aStr.AppendAscii(" 1");
-    nLen = aStr.Len() - 1;
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),XGRAD_LINEAR    ,    0,10,10, 0,100,100),aStr));
-    aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),XGRAD_AXIAL     ,  300,20,20,10,100,100),aStr));
-    aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL    ,  600,30,30,20,100,100),aStr));
-    aStr.SetChar(nLen, sal_Unicode('4'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr));
-    aStr.SetChar(nLen, sal_Unicode('5'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE    , 1200,50,50,40,100,100),aStr));
-    aStr.SetChar(nLen, sal_Unicode('6'));
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr));
+    rtl::OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_GRADIENT));
+    aStr.append(" 1");
+    sal_Int32 nLen = aStr.getLength() - 1;
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),XGRAD_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));
+    aStr[nLen] = '2';
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),XGRAD_AXIAL     ,  300,20,20,10,100,100),aStr.toString()));
+    aStr[nLen] = '3';
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL    ,  600,30,30,20,100,100),aStr.toString()));
+    aStr[nLen] = '4';
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr.toString()));
+    aStr[nLen] = '5';
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE    , 1200,50,50,40,100,100),aStr.toString()));
+    aStr[nLen] = '6';
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr.toString()));
 
     return true;
 }
