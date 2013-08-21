@@ -52,10 +52,6 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     using SvTreeListBox::Select;
 
 public:
-    SwDBTreeList( Window* pParent, const ResId& rResId,
-                    SwWrtShell* pSh,
-                    const String& rDefDBName = aEmptyStr,
-                    const sal_Bool bShowCol = sal_False );
     SwDBTreeList(Window* pParent, WinBits nStyle);
     virtual ~SwDBTreeList();
     virtual Size GetOptimalSize() const;

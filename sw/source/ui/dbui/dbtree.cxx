@@ -170,21 +170,6 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
     return xRet;
 }
 
-SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
-                        SwWrtShell* pSh,
-                        const String& rDefDBName, const sal_Bool bShowCol):
-
-    SvTreeListBox   (pParent, rResId),
-    aImageList      (SW_RES(ILIST_DB_DLG    )),
-    sDefDBName      (rDefDBName),
-    bInitialized    (false),
-    bShowColumns    (bShowCol),
-    pImpl(new SwDBTreeList_Impl(pSh))
-{
-    if (IsVisible())
-        InitTreeList();
-}
-
 SwDBTreeList::SwDBTreeList(Window *pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
     , aImageList(SW_RES(ILIST_DB_DLG))
