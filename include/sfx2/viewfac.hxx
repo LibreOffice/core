@@ -38,22 +38,22 @@ public:
                     sal_uInt16 nOrdinal, const sal_Char* asciiViewName );
 
     SfxViewShell *CreateInstance(SfxViewFrame *pViewFrame, SfxViewShell *pOldSh);
-    sal_uInt16        GetOrdinal() const { return nOrd; }
+    sal_uInt16    GetOrdinal() const { return nOrd; }
 
     /// returns a legacy view name. This is "view" with an appended ordinal/ID.
-    String        GetLegacyViewName() const;
+    OUString      GetLegacyViewName() const;
 
     /** returns a API-compatible view name.
 
         For details on which view names are specified, see the XModel2.getAvailableViewControllerNames
         documentation.
     */
-    String        GetAPIViewName() const;
+    OUString      GetAPIViewName() const;
 
 private:
-    SfxViewCtor fnCreate;
+    SfxViewCtor     fnCreate;
     sal_uInt16      nOrd;
-    const String    m_sViewName;
+    const OUString  m_sViewName;
 };
 
 #endif

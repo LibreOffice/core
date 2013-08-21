@@ -31,7 +31,7 @@ SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell 
     return (*fnCreate)(pFrame, pOldSh);
 }
 
-String SfxViewFactory::GetLegacyViewName() const
+OUString SfxViewFactory::GetLegacyViewName() const
 {
     OUStringBuffer aViewName;
     aViewName.appendAscii(RTL_CONSTASCII_STRINGPARAM("view"));
@@ -39,9 +39,9 @@ String SfxViewFactory::GetLegacyViewName() const
     return aViewName.makeStringAndClear();
 }
 
-String SfxViewFactory::GetAPIViewName() const
+OUString SfxViewFactory::GetAPIViewName() const
 {
-    if ( m_sViewName.Len() > 0 )
+    if ( !m_sViewName.isEmpty() )
         return m_sViewName;
 
     if ( GetOrdinal() == 0 )

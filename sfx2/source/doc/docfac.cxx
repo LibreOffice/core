@@ -149,7 +149,7 @@ void SfxObjectFactory::RegisterViewFactory
         const String sViewName( rFactory.GetAPIViewName() );
         for ( SfxViewFactoryArr_Impl::const_iterator it = pImpl->aViewFactoryArr.begin(); it != pImpl->aViewFactoryArr.end(); ++it )
         {
-            if ( !(*it)->GetAPIViewName().Equals( sViewName ) )
+            if ( (*it)->GetAPIViewName() != sViewName )
                 continue;
             OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "SfxObjectFactory::RegisterViewFactory: duplicate view name '"));
