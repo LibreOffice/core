@@ -159,11 +159,6 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
                        "AND RDB$RELATION_NAME = '" + getName() + "'";
             }
             getConnection()->createStatement()->execute(sSql);
-
-            // This is in essence a DDL statement which requires a commit
-            // to become visible in practice.
-            getConnection()->commit();
-            // TODO: confirm, do we really need this.
         }
         else
         {
