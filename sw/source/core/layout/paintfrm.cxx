@@ -4762,15 +4762,15 @@ void PaintCharacterBorder(
 
     if( aTopBorder )
     {
-        Point aLeftTop (
+        Point aLeftTop(
             aAlignedRect.Left(),
             aAlignedRect.Top());
-        Point aRightBottom (
+        Point aRightBottom(
             aAlignedRect.Right(),
             aAlignedRect.Top() + aTopBorder.get().GetScaledWidth());
 
         lcl_MakeBorderLine(
-            SwRect( aLeftTop, aRightBottom),
+            SwRect(aLeftTop, aRightBottom),
             false, true, false,
             aTopBorder.get(),
             aLeftBorder.get_ptr(),
@@ -4779,15 +4779,15 @@ void PaintCharacterBorder(
 
     if( aBottomBorder )
     {
-        Point aLeftTop (
+        Point aLeftTop(
             aAlignedRect.Left(),
             aAlignedRect.Bottom() - aBottomBorder.get().GetScaledWidth());
-        Point aRightBottom (
+        Point aRightBottom(
             aAlignedRect.Right(),
             aAlignedRect.Bottom());
 
         lcl_MakeBorderLine(
-            SwRect( aLeftTop, aRightBottom),
+            SwRect(aLeftTop, aRightBottom),
             false, false, false,
             aBottomBorder.get(),
             aLeftBorder.get_ptr(),
@@ -4796,15 +4796,15 @@ void PaintCharacterBorder(
 
     if( aLeftBorder )
     {
-        Point aLeftTop (
+        Point aLeftTop(
             aAlignedRect.Left(),
             aAlignedRect.Top());
-        Point aRightBottom (
+        Point aRightBottom(
             aAlignedRect.Left() + aLeftBorder.get().GetScaledWidth(),
             aAlignedRect.Bottom());
 
         lcl_MakeBorderLine(
-            SwRect( aLeftTop, aRightBottom),
+            SwRect(aLeftTop, aRightBottom),
             true, true, true,
             aLeftBorder.get(),
             aTopBorder.get_ptr(),
@@ -4813,15 +4813,15 @@ void PaintCharacterBorder(
 
     if( aRightBorder )
     {
-        Point aLeftTop (
+        Point aLeftTop(
             aAlignedRect.Right() - aRightBorder.get().GetScaledWidth(),
             aAlignedRect.Top());
-        Point aRightBottom (
+        Point aRightBottom(
             aAlignedRect.Right(),
             aAlignedRect.Bottom());
 
         lcl_MakeBorderLine(
-            SwRect( aLeftTop, aRightBottom),
+            SwRect(aLeftTop, aRightBottom),
             true, false, true,
             aRightBorder.get(),
             aTopBorder.get_ptr(),
