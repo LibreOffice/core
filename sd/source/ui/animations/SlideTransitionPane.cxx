@@ -370,15 +370,15 @@ bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
 
 OUString lcl_getSoundFileURL(
     const ::std::vector< OUString > & rSoundList,
-    const ListBox & rListBox )
+    const ListBox* rListBox )
 {
-    if( rListBox.GetSelectEntryCount() > 0 )
+    if( rListBox->GetSelectEntryCount() > 0 )
     {
-        sal_uInt16 nPos = rListBox.GetSelectEntryPos();
+        sal_uInt16 nPos = rListBox->GetSelectEntryPos();
         // the first three entries are no actual sounds
         if( nPos >= 3 )
         {
-            DBG_ASSERT( (sal_uInt32)(rListBox.GetEntryCount() - 3) == rSoundList.size(),
+            DBG_ASSERT( (sal_uInt32)(rListBox->GetEntryCount() - 3) == rSoundList.size(),
                         "Sound list-box is not synchronized to sound list" );
             nPos -= 3;
             if( rSoundList.size() > nPos )
@@ -391,29 +391,29 @@ OUString lcl_getSoundFileURL(
 
 struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
 {
-    lcl_AppendSoundToListBox( ListBox & rListBox ) :
+    lcl_AppendSoundToListBox( ListBox*  rListBox ) :
             mrListBox( rListBox )
     {}
 
     void operator() ( const OUString & rString ) const
     {
         INetURLObject aURL( rString );
-        mrListBox.InsertEntry( aURL.GetBase(), LISTBOX_APPEND );
+        mrListBox->InsertEntry( aURL.GetBase(), LISTBOX_APPEND );
     }
 
 private:
-    ListBox & mrListBox;
+    ListBox*  mrListBox;
 };
 
 void lcl_FillSoundListBox(
     const ::std::vector< OUString > & rSoundList,
-    ListBox & rOutListBox )
+    ListBox*  rOutListBox )
 {
-    sal_uInt16 nCount = rOutListBox.GetEntryCount();
+    sal_uInt16 nCount = rOutListBox->GetEntryCount();
 
     // keep first three entries
     for( sal_uInt16 i=nCount - 1; i>=3; --i )
-        rOutListBox.RemoveEntry( i );
+        rOutListBox->RemoveEntry( i );
 
     ::std::for_each( rSoundList.begin(), rSoundList.end(),
                      lcl_AppendSoundToListBox( rOutListBox ));
@@ -433,46 +433,35 @@ SlideTransitionPane::SlideTransitionPane(
     ::Window * pParent,
     ViewShellBase & rBase,
     const Size& rMinSize,
-    SdDrawDocument* pDoc ) :
-        Control( pParent, SdResId( DLG_SLIDE_TRANSITION_PANE ) ),
+    SdDrawDocument* pDoc,
+    const cssu::Reference<css::frame::XFrame>& rxFrame ) :
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
 
         mrBase( rBase ),
         mpDrawDoc( pDoc ),
         maMinSize( rMinSize ),
-        maFL_APPLY_TRANSITION( this, SdResId( FL_APPLY_TRANSITION ) ),
-        maLB_SLIDE_TRANSITIONS( this, SdResId( LB_SLIDE_TRANSITIONS ) ),
-        maFL_MODIFY_TRANSITION( this, SdResId( FL_MODIFY_TRANSITION ) ),
-        maFT_SPEED( this, SdResId( FT_SPEED ) ),
-        maLB_SPEED( this, SdResId( LB_SPEED ) ),
-        maFT_SOUND( this, SdResId( FT_SOUND ) ),
-        maLB_SOUND( this, SdResId( LB_SOUND ) ),
-        maCB_LOOP_SOUND( this, SdResId( CB_LOOP_SOUND ) ),
-        maFL_ADVANCE_SLIDE( this, SdResId( FL_ADVANCE_SLIDE ) ),
-        maRB_ADVANCE_ON_MOUSE( this, SdResId( RB_ADVANCE_ON_MOUSE ) ),
-        maRB_ADVANCE_AUTO( this, SdResId( RB_ADVANCE_AUTO ) ),
-        maMF_ADVANCE_AUTO_AFTER( this, SdResId( MF_ADVANCE_AUTO_AFTER ) ),
-        maFL_EMPTY1( this, SdResId( FL_EMPTY1 ) ),
-        maPB_APPLY_TO_ALL( this, SdResId( PB_APPLY_TO_ALL ) ),
-        maPB_PLAY( this, SdResId( PB_PLAY ) ),
-        maPB_SLIDE_SHOW( this, SdResId( PB_SLIDE_SHOW ) ),
-        maFL_EMPTY2( this, SdResId( FL_EMPTY2 ) ),
-        maCB_AUTO_PREVIEW( this, SdResId( CB_AUTO_PREVIEW ) ),
-
-        maSTR_NO_TRANSITION( SD_RESSTR( STR_NO_TRANSITION ) ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
         maLateInitTimer()
 {
-    // use no resource ids from here on
-    FreeResource();
+    get(mpLB_SLIDE_TRANSITIONS, "transitions_list");
+    get(mpFT_SPEED, "speed_label");
+    get(mpLB_SPEED, "speed_list");
+    get(mpFT_SOUND, "sound_label");
+    get(mpLB_SOUND, "sound_list");
+    get(mpCB_LOOP_SOUND, "loop_sound" );
+    get(mpRB_ADVANCE_ON_MOUSE, "rb_mouse_click");
+    get(mpRB_ADVANCE_AUTO, "rb_auto_after");
+    get(mpMF_ADVANCE_AUTO_AFTER, "auto_after_value");
+    get(mpPB_APPLY_TO_ALL, "apply_to_all");
+    get(mpPB_PLAY, "play");
+    get(mpPB_SLIDE_SHOW, "slide_show");
+    get(mpCB_AUTO_PREVIEW, "auto_preview");
 
-    // use bold font for group headings (same font for all fixed lines):
-    Font font( maFL_APPLY_TRANSITION.GetFont() );
-    font.SetWeight( WEIGHT_BOLD );
-    maFL_APPLY_TRANSITION.SetFont( font );
-    maFL_MODIFY_TRANSITION.SetFont( font );
-    maFL_ADVANCE_SLIDE.SetFont( font );
+    String maSTR_NO_TRANSITION( SdResId(STR_SLIDETRANSITION_NONE) );
+    mpLB_SLIDE_TRANSITIONS->set_width_request(mpLB_SLIDE_TRANSITIONS->approximate_char_width() * 16);
+    mpLB_SLIDE_TRANSITIONS->set_height_request(mpLB_SLIDE_TRANSITIONS->GetTextHeight() * 16);
 
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
@@ -481,30 +470,30 @@ SlideTransitionPane::SlideTransitionPane(
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );
 
     // fill list box of slide transitions
-    maLB_SLIDE_TRANSITIONS.InsertEntry( maSTR_NO_TRANSITION );
+    mpLB_SLIDE_TRANSITIONS->InsertEntry( maSTR_NO_TRANSITION );
 
     // set defaults
-    maCB_AUTO_PREVIEW.Check();      // automatic preview on
+    mpCB_AUTO_PREVIEW->Check();      // automatic preview on
 
     // update control states before adding handlers
-    updateLayout();
+    //updateLayout();
     updateControls();
 
     // set handlers
-    maPB_APPLY_TO_ALL.SetClickHdl( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
-    maPB_PLAY.SetClickHdl( LINK( this, SlideTransitionPane, PlayButtonClicked ));
-    maPB_SLIDE_SHOW.SetClickHdl( LINK( this, SlideTransitionPane, SlideShowButtonClicked ));
+    mpPB_APPLY_TO_ALL->SetClickHdl( LINK( this, SlideTransitionPane, ApplyToAllButtonClicked ));
+    mpPB_PLAY->SetClickHdl( LINK( this, SlideTransitionPane, PlayButtonClicked ));
+    mpPB_SLIDE_SHOW->SetClickHdl( LINK( this, SlideTransitionPane, SlideShowButtonClicked ));
 
-    maLB_SLIDE_TRANSITIONS.SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
+    mpLB_SLIDE_TRANSITIONS->SetSelectHdl( LINK( this, SlideTransitionPane, TransitionSelected ));
 
-    maLB_SPEED.SetSelectHdl( LINK( this, SlideTransitionPane, SpeedListBoxSelected ));
-    maLB_SOUND.SetSelectHdl( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
-    maCB_LOOP_SOUND.SetClickHdl( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
+    mpLB_SPEED->SetSelectHdl( LINK( this, SlideTransitionPane, SpeedListBoxSelected ));
+    mpLB_SOUND->SetSelectHdl( LINK( this, SlideTransitionPane, SoundListBoxSelected ));
+    mpCB_LOOP_SOUND->SetClickHdl( LINK( this, SlideTransitionPane, LoopSoundBoxChecked ));
 
-    maRB_ADVANCE_ON_MOUSE.SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
-    maRB_ADVANCE_AUTO.SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
-    maMF_ADVANCE_AUTO_AFTER.SetModifyHdl( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
-    maCB_AUTO_PREVIEW.SetClickHdl( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
+    mpRB_ADVANCE_ON_MOUSE->SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
+    mpRB_ADVANCE_AUTO->SetToggleHdl( LINK( this, SlideTransitionPane, AdvanceSlideRadioButtonToggled ));
+    mpMF_ADVANCE_AUTO_AFTER->SetModifyHdl( LINK( this, SlideTransitionPane, AdvanceTimeModified ));
+    mpCB_AUTO_PREVIEW->SetClickHdl( LINK( this, SlideTransitionPane, AutoPreviewClicked ));
     addListener();
 
     maLateInitTimer.SetTimeout(200);
@@ -522,7 +511,7 @@ SlideTransitionPane::~SlideTransitionPane()
 
 void SlideTransitionPane::Resize()
 {
-    updateLayout();
+    //updateLayout();
 }
 
 
@@ -540,13 +529,8 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
 void SlideTransitionPane::UpdateLook (void)
 {
     SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
-    maFL_APPLY_TRANSITION.SetBackground(Wallpaper());
-    maFL_MODIFY_TRANSITION.SetBackground(Wallpaper());;
-    maFT_SPEED.SetBackground(Wallpaper());
-    maFT_SOUND.SetBackground(Wallpaper());
-    maFL_ADVANCE_SLIDE.SetBackground(Wallpaper());
-    maFL_EMPTY1.SetBackground(Wallpaper());
-    maFL_EMPTY2.SetBackground(Wallpaper());
+    mpFT_SPEED->SetBackground(Wallpaper());
+    mpFT_SOUND->SetBackground(Wallpaper());
 }
 
 
@@ -586,7 +570,7 @@ void SlideTransitionPane::onChangeCurrentPage()
     return pSelection;
 }
 
-void SlideTransitionPane::updateLayout()
+/*void SlideTransitionPane::updateLayout()
 {
     ::Size aPaneSize( GetSizePixel() );
     if( aPaneSize.Width() < maMinSize.Width() )
@@ -609,10 +593,10 @@ void SlideTransitionPane::updateLayout()
     long nMaxWidth = aPaneSize.getWidth() - 2 * nOffsetX;
 
     // auto preview check-box
-    ::Size aCtrlSize = maCB_AUTO_PREVIEW.GetSizePixel();
-    aCtrlSize.setWidth( maCB_AUTO_PREVIEW.CalcMinimumSize( nMaxWidth ).getWidth());
+    ::Size aCtrlSize = mpCB_AUTO_PREVIEW.GetSizePixel();
+    aCtrlSize.setWidth( mpCB_AUTO_PREVIEW.CalcMinimumSize( nMaxWidth ).getWidth());
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
-    maCB_AUTO_PREVIEW.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpCB_AUTO_PREVIEW.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // fixed line above check-box
     aCtrlSize = maFL_EMPTY2.GetSizePixel();
@@ -621,41 +605,41 @@ void SlideTransitionPane::updateLayout()
     maFL_EMPTY2.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // buttons "Play" and "Slide Show"
-    long nPlayButtonWidth = maPB_PLAY.CalcMinimumSize().getWidth() + 2 * nOffsetBtnX;
-    long nSlideShowButtonWidth = maPB_SLIDE_SHOW.CalcMinimumSize().getWidth() + 2 * nOffsetBtnX;
+    long nPlayButtonWidth = mpPB_PLAY.CalcMinimumSize().getWidth() + 2 * nOffsetBtnX;
+    long nSlideShowButtonWidth = mpPB_SLIDE_SHOW.CalcMinimumSize().getWidth() + 2 * nOffsetBtnX;
 
     if( (nPlayButtonWidth + nSlideShowButtonWidth + nOffsetX) <= nMaxWidth )
     {
         // place buttons side by side
-        aCtrlSize = maPB_PLAY.GetSizePixel();
+        aCtrlSize = mpPB_PLAY.GetSizePixel();
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
         aCtrlSize.setWidth( nPlayButtonWidth );
-        maPB_PLAY.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpPB_PLAY.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
         aUpperLeft.setX( aUpperLeft.getX() + nPlayButtonWidth + nOffsetX );
         aCtrlSize.setWidth( nSlideShowButtonWidth );
-        maPB_SLIDE_SHOW.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpPB_SLIDE_SHOW.SetPosSizePixel( aUpperLeft, aCtrlSize );
         aUpperLeft.setX( nOffsetX );
     }
     else
     {
         // place buttons on top of each other
-        aCtrlSize = maPB_SLIDE_SHOW.GetSizePixel();
+        aCtrlSize = mpPB_SLIDE_SHOW.GetSizePixel();
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
         aCtrlSize.setWidth( nSlideShowButtonWidth );
-        maPB_SLIDE_SHOW.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpPB_SLIDE_SHOW.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
-        aCtrlSize = maPB_PLAY.GetSizePixel();
+        aCtrlSize = mpPB_PLAY.GetSizePixel();
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
         aCtrlSize.setWidth( nPlayButtonWidth );
-        maPB_PLAY.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpPB_PLAY.SetPosSizePixel( aUpperLeft, aCtrlSize );
     }
 
     // "Apply to All Slides" button
-    aCtrlSize = maPB_APPLY_TO_ALL.GetSizePixel();
-    aCtrlSize.setWidth( maPB_APPLY_TO_ALL.CalcMinimumSize( nMaxWidth ).getWidth() + 2 * nOffsetBtnX );
+    aCtrlSize = mpPB_APPLY_TO_ALL.GetSizePixel();
+    aCtrlSize.setWidth( mpPB_APPLY_TO_ALL.CalcMinimumSize( nMaxWidth ).getWidth() + 2 * nOffsetBtnX );
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
-    maPB_APPLY_TO_ALL.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpPB_APPLY_TO_ALL.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // fixed line above "Apply to All Slides" button
     aCtrlSize = maFL_EMPTY1.GetSizePixel();
@@ -664,47 +648,47 @@ void SlideTransitionPane::updateLayout()
     maFL_EMPTY1.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // advance automatically after ... seconds
-    long nItemWidth = maRB_ADVANCE_AUTO.CalcMinimumSize().getWidth();
+    long nItemWidth = mpRB_ADVANCE_AUTO.CalcMinimumSize().getWidth();
 
     if( (nItemWidth + nMinCtrlWidth + nOffsetX) <= nMaxWidth )
     {
         long nBase = aUpperLeft.getY();
 
         // place controls side by side
-        aCtrlSize = maRB_ADVANCE_AUTO.GetSizePixel();
+        aCtrlSize = mpRB_ADVANCE_AUTO.GetSizePixel();
         aUpperLeft.setY( nBase - aCtrlSize.getHeight());
         aCtrlSize.setWidth( nItemWidth );
-        maRB_ADVANCE_AUTO.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpRB_ADVANCE_AUTO.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
-        aCtrlSize = maMF_ADVANCE_AUTO_AFTER.GetSizePixel();
+        aCtrlSize = mpMF_ADVANCE_AUTO_AFTER.GetSizePixel();
         aUpperLeft.setY( nBase - aCtrlSize.getHeight() );
         aUpperLeft.setX( aUpperLeft.getX() + nItemWidth + nOffsetX );
         aCtrlSize.setWidth( nMinCtrlWidth );
-        maMF_ADVANCE_AUTO_AFTER.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpMF_ADVANCE_AUTO_AFTER.SetPosSizePixel( aUpperLeft, aCtrlSize );
         aUpperLeft.setX( nOffsetX );
     }
     else
     {
         // place controls on top of each other
-        aCtrlSize = maMF_ADVANCE_AUTO_AFTER.GetSizePixel();
+        aCtrlSize = mpMF_ADVANCE_AUTO_AFTER.GetSizePixel();
         aUpperLeft.setX( nOffsetX + nTextIndent );
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
         aCtrlSize.setWidth( nMinCtrlWidth );
-        maMF_ADVANCE_AUTO_AFTER.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpMF_ADVANCE_AUTO_AFTER.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
-        aCtrlSize = maRB_ADVANCE_AUTO.GetSizePixel();
+        aCtrlSize = mpRB_ADVANCE_AUTO.GetSizePixel();
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
         aUpperLeft.setX( nOffsetX );
         aCtrlSize.setWidth( nItemWidth );
-        maRB_ADVANCE_AUTO.SetPosSizePixel( aUpperLeft, aCtrlSize );
+        mpRB_ADVANCE_AUTO.SetPosSizePixel( aUpperLeft, aCtrlSize );
         aUpperLeft.setX( nOffsetX );
     }
 
     // check box "On mouse click"
-    aCtrlSize = maRB_ADVANCE_ON_MOUSE.GetSizePixel();
+    aCtrlSize = mpRB_ADVANCE_ON_MOUSE.GetSizePixel();
     aCtrlSize.setWidth( nMaxWidth );
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
-    maRB_ADVANCE_ON_MOUSE.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpRB_ADVANCE_ON_MOUSE.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // fixed line "Advance slide"
     aCtrlSize = maFL_ADVANCE_SLIDE.GetSizePixel();
@@ -713,8 +697,8 @@ void SlideTransitionPane::updateLayout()
     maFL_ADVANCE_SLIDE.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // check box "Loop until next sound"
-    long nFTSpeedWidth = maFT_SPEED.CalcMinimumSize().getWidth() + 2 * nOffsetX;
-    long nFTSoundWidth = maFT_SOUND.CalcMinimumSize().getWidth() + 2 * nOffsetX;
+    long nFTSpeedWidth = mpFT_SPEED->CalcMinimumSize().getWidth() + 2 * nOffsetX;
+    long nFTSoundWidth = mpFT_SOUND.CalcMinimumSize().getWidth() + 2 * nOffsetX;
     long nIndent = ::std::max( nFTSoundWidth, nFTSpeedWidth );
 
     bool bStack = ( (nIndent + nMinCtrlWidth + nOffsetX) > nMaxWidth );
@@ -722,38 +706,38 @@ void SlideTransitionPane::updateLayout()
     if( bStack )
         nIndent = nTextIndent;
 
-    aCtrlSize = maCB_LOOP_SOUND.GetSizePixel();
+    aCtrlSize = mpCB_LOOP_SOUND.GetSizePixel();
     aCtrlSize.setWidth( nMaxWidth - nIndent );
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
     aUpperLeft.setX( nIndent );
-    maCB_LOOP_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpCB_LOOP_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
-    aCtrlSize = maLB_SOUND.GetSizePixel();
+    aCtrlSize = mpLB_SOUND.GetSizePixel();
     aCtrlSize.setWidth( ::std::max( nMaxWidth - nIndent, nMinCtrlWidth ) );
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
-    maLB_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
-    maLB_SOUND.SetDropDownLineCount( 8 );
+    mpLB_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpLB_SOUND.SetDropDownLineCount( 8 );
     aUpperLeft.setX( nOffsetX );
 
-    aCtrlSize = maFT_SOUND.GetSizePixel();
+    aCtrlSize = mpFT_SOUND.GetSizePixel();
     if( bStack )
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
     aCtrlSize.setWidth( nFTSoundWidth - 2 * nOffsetX );
-    maFT_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpFT_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     aUpperLeft.setX( nIndent );
-    aCtrlSize = maLB_SPEED.GetSizePixel();
+    aCtrlSize = mpLB_SPEED.GetSizePixel();
     aCtrlSize.setWidth( ::std::max( nMaxWidth - nIndent, nMinCtrlWidth ) );
     aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight() - nOffsetY );
-    maLB_SPEED.SetPosSizePixel( aUpperLeft, aCtrlSize );
-    maLB_SPEED.SetDropDownLineCount( 3 );
+    mpLB_SPEED.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpLB_SPEED.SetDropDownLineCount( 3 );
     aUpperLeft.setX( nOffsetX );
 
-    aCtrlSize = maFT_SPEED.GetSizePixel();
+    aCtrlSize = mpFT_SPEED.GetSizePixel();
     if( bStack )
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
     aCtrlSize.setWidth( nFTSpeedWidth - 2 * nOffsetX );
-    maFT_SPEED.SetPosSizePixel( aUpperLeft, aCtrlSize );
+    mpFT_SPEED.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // fixed line "Modify Transition"
     aCtrlSize = maFL_MODIFY_TRANSITION.GetSizePixel();
@@ -772,8 +756,8 @@ void SlideTransitionPane::updateLayout()
     // list box slide transitions
     aCtrlSize.setWidth( nMaxWidth );
     aCtrlSize.setHeight( aUpperLeft.getY() - aUpperLeftCorner.getY() );
-    maLB_SLIDE_TRANSITIONS.SetPosSizePixel( aUpperLeftCorner, aCtrlSize );
-}
+    mpLB_SLIDE_TRANSITIONS->SetPosSizePixel( aUpperLeftCorner, aCtrlSize );
+}*/
 
 void SlideTransitionPane::updateControls()
 {
@@ -809,40 +793,40 @@ void SlideTransitionPane::updateControls()
 
     // detect current slide effect
     if( aEffect.mbEffectAmbiguous )
-        maLB_SLIDE_TRANSITIONS.SetNoSelection();
+        mpLB_SLIDE_TRANSITIONS->SetNoSelection();
     else
     {
         // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
         if( aEffect.mnType == 0 )
-            maLB_SLIDE_TRANSITIONS.SelectEntryPos( 0 );
+            mpLB_SLIDE_TRANSITIONS->SelectEntryPos( 0 );
         else
         {
             sal_uInt16 nEntry = lcl_getTransitionEffectIndex( mpDrawDoc, aEffect );
             if( nEntry == LISTBOX_ENTRY_NOTFOUND )
-                maLB_SLIDE_TRANSITIONS.SetNoSelection();
+                mpLB_SLIDE_TRANSITIONS->SetNoSelection();
             else
             {
                 // first entry in list is "none", so add 1 after translation
                 if( m_aPresetIndexes.find( nEntry ) != m_aPresetIndexes.end())
-                    maLB_SLIDE_TRANSITIONS.SelectEntryPos( m_aPresetIndexes[ nEntry ] + 1 );
+                    mpLB_SLIDE_TRANSITIONS->SelectEntryPos( m_aPresetIndexes[ nEntry ] + 1 );
                 else
-                    maLB_SLIDE_TRANSITIONS.SetNoSelection();
+                    mpLB_SLIDE_TRANSITIONS->SetNoSelection();
             }
         }
     }
 
     if( aEffect.mbDurationAmbiguous )
-        maLB_SPEED.SetNoSelection();
+        mpLB_SPEED->SetNoSelection();
     else
-        maLB_SPEED.SelectEntryPos(
+        mpLB_SPEED->SelectEntryPos(
             (aEffect.mfDuration > 2.0 )
             ? 0 : (aEffect.mfDuration < 2.0)
             ? 2 : 1 );       // else FADE_SPEED_FAST
 
     if( aEffect.mbSoundAmbiguous )
     {
-        maLB_SOUND.SetNoSelection();
+        mpLB_SOUND->SetNoSelection();
         maCurrentSoundFile = "";
     }
     else
@@ -850,7 +834,7 @@ void SlideTransitionPane::updateControls()
         maCurrentSoundFile = "";
         if( aEffect.mbStopSound )
         {
-            maLB_SOUND.SelectEntryPos( 1 );
+            mpLB_SOUND->SelectEntryPos( 1 );
         }
         else if( aEffect.mbSoundOn && !aEffect.maSound.isEmpty() )
         {
@@ -858,39 +842,39 @@ void SlideTransitionPane::updateControls()
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
             {
                 // skip first three entries
-                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+                mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
         }
         else
         {
-            maLB_SOUND.SelectEntryPos( 0 );
+            mpLB_SOUND->SelectEntryPos( 0 );
         }
     }
 
     if( aEffect.mbLoopSoundAmbiguous )
     {
-        maCB_LOOP_SOUND.SetState( STATE_DONTKNOW );
+        mpCB_LOOP_SOUND->SetState( STATE_DONTKNOW );
     }
     else
     {
-        maCB_LOOP_SOUND.Check( aEffect.mbLoopSound );
+        mpCB_LOOP_SOUND->Check( aEffect.mbLoopSound );
     }
 
     if( aEffect.mbPresChangeAmbiguous )
     {
-        maRB_ADVANCE_ON_MOUSE.Check( sal_False );
-        maRB_ADVANCE_AUTO.Check( sal_False );
+        mpRB_ADVANCE_ON_MOUSE->Check( sal_False );
+        mpRB_ADVANCE_AUTO->Check( sal_False );
     }
     else
     {
-        maRB_ADVANCE_ON_MOUSE.Check( aEffect.mePresChange == PRESCHANGE_MANUAL );
-        maRB_ADVANCE_AUTO.Check( aEffect.mePresChange == PRESCHANGE_AUTO );
-        maMF_ADVANCE_AUTO_AFTER.SetValue( aEffect.mfTime * 100.0);
+        mpRB_ADVANCE_ON_MOUSE->Check( aEffect.mePresChange == PRESCHANGE_MANUAL );
+        mpRB_ADVANCE_AUTO->Check( aEffect.mePresChange == PRESCHANGE_AUTO );
+        mpMF_ADVANCE_AUTO_AFTER->SetValue( aEffect.mfTime * 100.0);
     }
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-    maCB_AUTO_PREVIEW.Check( pOptions->IsPreviewTransitions() == sal_True );
+    mpCB_AUTO_PREVIEW->Check( pOptions->IsPreviewTransitions() == sal_True );
 
     mbUpdatingControls = false;
 
@@ -899,17 +883,17 @@ void SlideTransitionPane::updateControls()
 
 void SlideTransitionPane::updateControlState()
 {
-    maLB_SLIDE_TRANSITIONS.Enable( mbHasSelection );
-    maLB_SPEED.Enable( mbHasSelection );
-    maLB_SOUND.Enable( mbHasSelection );
-    maCB_LOOP_SOUND.Enable( mbHasSelection && (maLB_SOUND.GetSelectEntryPos() > 2));
-    maRB_ADVANCE_ON_MOUSE.Enable( mbHasSelection );
-    maRB_ADVANCE_AUTO.Enable( mbHasSelection );
-    maMF_ADVANCE_AUTO_AFTER.Enable( mbHasSelection && maRB_ADVANCE_AUTO.IsChecked());
+    mpLB_SLIDE_TRANSITIONS->Enable( mbHasSelection );
+    mpLB_SPEED->Enable( mbHasSelection );
+    mpLB_SOUND->Enable( mbHasSelection );
+    mpCB_LOOP_SOUND->Enable( mbHasSelection && (mpLB_SOUND->GetSelectEntryPos() > 2));
+    mpRB_ADVANCE_ON_MOUSE->Enable( mbHasSelection );
+    mpRB_ADVANCE_AUTO->Enable( mbHasSelection );
+    mpMF_ADVANCE_AUTO_AFTER->Enable( mbHasSelection && mpRB_ADVANCE_AUTO->IsChecked());
 
-    maPB_APPLY_TO_ALL.Enable( mbHasSelection );
-    maPB_PLAY.Enable( mbHasSelection );
-    maCB_AUTO_PREVIEW.Enable( mbHasSelection );
+    mpPB_APPLY_TO_ALL->Enable( mbHasSelection );
+    mpPB_PLAY->Enable( mbHasSelection );
+    mpCB_AUTO_PREVIEW->Enable( mbHasSelection );
 }
 
 void SlideTransitionPane::updateSoundList()
@@ -919,18 +903,18 @@ void SlideTransitionPane::updateSoundList()
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, maSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, maSoundList );
 
-    lcl_FillSoundListBox( maSoundList, maLB_SOUND );
+    lcl_FillSoundListBox( maSoundList, mpLB_SOUND );
 }
 
 void SlideTransitionPane::openSoundFileDialog()
 {
-    if( ! maLB_SOUND.IsEnabled())
+    if( ! mpLB_SOUND->IsEnabled())
         return;
 
     SdOpenSoundFileDialog aFileDialog;
 
     OUString aFile;
-    DBG_ASSERT( maLB_SOUND.GetSelectEntryPos() == 2,
+    DBG_ASSERT( mpLB_SOUND->GetSelectEntryPos() == 2,
                 "Dialog should only open when \"Other sound\" is selected" );
     aFile = SvtPathOptions().GetGraphicPath();
 
@@ -975,7 +959,7 @@ void SlideTransitionPane::openSoundFileDialog()
 
         if( bValidSoundFile )
             // skip first three entries in list
-            maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+            mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
     }
 
     if( ! bValidSoundFile )
@@ -984,12 +968,12 @@ void SlideTransitionPane::openSoundFileDialog()
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, maCurrentSoundFile, nPos ))
-                maLB_SOUND.SelectEntryPos( (sal_uInt16)nPos + 3 );
+                mpLB_SOUND->SelectEntryPos( (sal_uInt16)nPos + 3 );
             else
-                maLB_SOUND.SelectEntryPos( 0 );  // NONE
+                mpLB_SOUND->SelectEntryPos( 0 );  // NONE
         }
         else
-            maLB_SOUND.SelectEntryPos( 0 );  // NONE
+            mpLB_SOUND->SelectEntryPos( 0 );  // NONE
     }
 }
 
@@ -999,11 +983,11 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     aResult.setAllAmbiguous();
 
     // check first (aResult might be overwritten)
-    if( maLB_SLIDE_TRANSITIONS.IsEnabled() &&
-        maLB_SLIDE_TRANSITIONS.GetSelectEntryCount() > 0 )
+    if( mpLB_SLIDE_TRANSITIONS->IsEnabled() &&
+        mpLB_SLIDE_TRANSITIONS->GetSelectEntryCount() > 0 )
     {
         TransitionPresetPtr pPreset = lcl_getTransitionPresetByUIName(
-            mpDrawDoc, OUString( maLB_SLIDE_TRANSITIONS.GetSelectEntry()));
+            mpDrawDoc, OUString( mpLB_SLIDE_TRANSITIONS->GetSelectEntry()));
 
         if( pPreset.get())
         {
@@ -1018,10 +1002,10 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // speed
-    if( maLB_SPEED.IsEnabled() &&
-        maLB_SPEED.GetSelectEntryCount() > 0 )
+    if( mpLB_SPEED->IsEnabled() &&
+        mpLB_SPEED->GetSelectEntryCount() > 0 )
     {
-        sal_uInt16 nPos = maLB_SPEED.GetSelectEntryPos();
+        sal_uInt16 nPos = mpLB_SPEED->GetSelectEntryPos();
         aResult.mfDuration = (nPos == 0)
             ? 3.0
             : (nPos == 1)
@@ -1033,17 +1017,17 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // slide-advance mode
-    if( maRB_ADVANCE_ON_MOUSE.IsEnabled() && maRB_ADVANCE_AUTO.IsEnabled() &&
-        (maRB_ADVANCE_ON_MOUSE.IsChecked() || maRB_ADVANCE_AUTO.IsChecked()))
+    if( mpRB_ADVANCE_ON_MOUSE->IsEnabled() && mpRB_ADVANCE_AUTO->IsEnabled() &&
+        (mpRB_ADVANCE_ON_MOUSE->IsChecked() || mpRB_ADVANCE_AUTO->IsChecked()))
     {
-        if( maRB_ADVANCE_ON_MOUSE.IsChecked())
+        if( mpRB_ADVANCE_ON_MOUSE->IsChecked())
             aResult.mePresChange = PRESCHANGE_MANUAL;
         else
         {
             aResult.mePresChange = PRESCHANGE_AUTO;
-            if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
+            if( mpMF_ADVANCE_AUTO_AFTER->IsEnabled())
             {
-                aResult.mfTime = static_cast<double>(maMF_ADVANCE_AUTO_AFTER.GetValue() ) / 100.0 ;
+                aResult.mfTime = static_cast<double>(mpMF_ADVANCE_AUTO_AFTER->GetValue() ) / 100.0 ;
                 aResult.mbTimeAmbiguous = false;
             }
         }
@@ -1052,12 +1036,12 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // sound
-    if( maLB_SOUND.IsEnabled())
+    if( mpLB_SOUND->IsEnabled())
     {
         maCurrentSoundFile = "";
-        if( maLB_SOUND.GetSelectEntryCount() > 0 )
+        if( mpLB_SOUND->GetSelectEntryCount() > 0 )
         {
-            sal_uInt16 nPos = maLB_SOUND.GetSelectEntryPos();
+            sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
             aResult.mbStopSound = nPos == 1;
             aResult.mbSoundOn = nPos > 1;
             if( aResult.mbStopSound )
@@ -1067,7 +1051,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             }
             else
             {
-                aResult.maSound = lcl_getSoundFileURL( maSoundList, maLB_SOUND );
+                aResult.maSound = lcl_getSoundFileURL( maSoundList, mpLB_SOUND );
                 aResult.mbSoundAmbiguous = false;
                 maCurrentSoundFile = aResult.maSound;
             }
@@ -1075,9 +1059,9 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     }
 
     // sound loop
-    if( maCB_LOOP_SOUND.IsEnabled() )
+    if( mpCB_LOOP_SOUND->IsEnabled() )
     {
-        aResult.mbLoopSound = maCB_LOOP_SOUND.IsChecked();
+        aResult.mbLoopSound = mpCB_LOOP_SOUND->IsChecked();
         aResult.mbLoopSoundAmbiguous = false;
     }
 
@@ -1095,8 +1079,8 @@ void SlideTransitionPane::applyToSelectedPages()
             lcl_ApplyToPages( pSelectedPages, getTransitionEffectFromControls() );
             mrBase.GetDocShell()->SetModified();
         }
-        if( maCB_AUTO_PREVIEW.IsEnabled() &&
-            maCB_AUTO_PREVIEW.IsChecked())
+        if( mpCB_AUTO_PREVIEW->IsEnabled() &&
+            mpCB_AUTO_PREVIEW->IsChecked())
         {
             playCurrentEffect();
         }
@@ -1246,9 +1230,9 @@ IMPL_LINK_NOARG(SlideTransitionPane, SpeedListBoxSelected)
 
 IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
 {
-    if( maLB_SOUND.GetSelectEntryCount() )
+    if( mpLB_SOUND->GetSelectEntryCount() )
     {
-        sal_uInt16 nPos = maLB_SOUND.GetSelectEntryPos();
+        sal_uInt16 nPos = mpLB_SOUND->GetSelectEntryPos();
         if( nPos == 2 )
         {
             // other sound ...
@@ -1269,7 +1253,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked)
 IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
-    pOptions->SetPreviewTransitions( maCB_AUTO_PREVIEW.IsChecked() ? sal_True : sal_False );
+    pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() ? sal_True : sal_False );
     return 0;
 }
 
@@ -1286,7 +1270,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
         const OUString aUIName( pPreset->getUIName() );
          if( !aUIName.isEmpty() )
         {
-            maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
+            mpLB_SLIDE_TRANSITIONS->InsertEntry( aUIName );
             m_aPresetIndexes[ nIndex ] = (sal_uInt16)nUIIndex;
             ++nUIIndex;
         }
@@ -1299,7 +1283,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     return 0;
 }
 
-::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase )
+::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
 {
     DialogListBox* pWindow = 0;
 
@@ -1309,7 +1293,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
         pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
 
         Size aMinSize( pWindow->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
-        ::Window* pPaneWindow = new SlideTransitionPane( pWindow, rBase, aMinSize, pDocSh->GetDoc() );
+        ::Window* pPaneWindow = new SlideTransitionPane( pWindow, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
         pWindow->SetChildWindow( pPaneWindow, aMinSize );
         pWindow->SetText( pPaneWindow->GetText() );
     }

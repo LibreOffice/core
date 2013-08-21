@@ -22,7 +22,7 @@
 
 
 namespace sd {
-    extern ::Window* createSlideTransitionPanel (::Window* pParent, ViewShellBase& rBase);
+    extern ::Window* createSlideTransitionPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
     extern sal_Int32 getSlideTransitionPanelMinimumHeight (::Window* pParent);
 }
 
@@ -34,8 +34,11 @@ namespace sd { namespace sidebar {
 
 SlideTransitionPanel::SlideTransitionPanel (
     ::Window* pParentWindow,
-    ViewShellBase& rViewShellBase)
-    : PanelBase(pParentWindow, rViewShellBase)
+    ViewShellBase& rViewShellBase,
+    const cssu::Reference<css::frame::XFrame>& rxFrame
+    )
+    : PanelBase(pParentWindow, rViewShellBase),
+      mxFrame( rxFrame )
 {
 #ifdef DEBUG
     SetText(OUString("sd:SlideTransitionPanel"));
@@ -56,7 +59,7 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
-    return createSlideTransitionPanel(pParentWindow, rViewShellBase);
+    return createSlideTransitionPanel(pParentWindow, rViewShellBase, mxFrame);
 }
 
 

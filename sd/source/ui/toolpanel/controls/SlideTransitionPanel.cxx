@@ -30,7 +30,8 @@ namespace sd
 {
 
     class ViewShellBase;
-    extern ::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase );
+    extern ::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase,
+                                                  const cssu::Reference<css::frame::XFrame>& rxFrame );
 
 namespace toolpanel { namespace controls {
 
@@ -41,7 +42,7 @@ SlideTransitionPanel::SlideTransitionPanel(Window& i_rParentWindow, ToolPanelVie
     ,maPreferredSize( 100, 200 )
     ,m_pPanelViewShell( &i_rToolPanelShell )
 {
-    mpWrappedControl = createSlideTransitionPanel( &i_rParentWindow, i_rToolPanelShell.GetViewShellBase() );
+    mpWrappedControl = createSlideTransitionPanel( &i_rParentWindow, i_rToolPanelShell.GetViewShellBase(), NULL );
     mpWrappedControl->Show();
 }
 

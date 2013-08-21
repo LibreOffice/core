@@ -190,7 +190,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameUsedMasterPages))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideTransitions))
-        pControl = new SlideTransitionPanel(pParentWindow, *pBase);
+        pControl = new SlideTransitionPanel(pParentWindow, *pBase, xFrame);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameTableDesign))
         pControl = createTableDesignPanel(pParentWindow, *pBase);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))

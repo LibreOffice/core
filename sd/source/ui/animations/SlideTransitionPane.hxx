@@ -28,6 +28,8 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/ControlFactory.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -46,14 +48,15 @@ namespace impl
     struct TransitionEffect;
 }
 
-class SlideTransitionPane : public Control
+class SlideTransitionPane : public PanelLayout
 {
 public:
     explicit SlideTransitionPane(
         ::Window * pParent,
         ViewShellBase & rBase,
         const Size& rMinSize,
-        SdDrawDocument* pDoc );
+        SdDrawDocument* pDoc,
+        const cssu::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane();
 
     // Window
@@ -101,24 +104,19 @@ private:
     SdDrawDocument *  mpDrawDoc;
     Size              maMinSize;
 
-    FixedLine    maFL_APPLY_TRANSITION;
-    ListBox      maLB_SLIDE_TRANSITIONS;
-    FixedLine    maFL_MODIFY_TRANSITION;
-    FixedText    maFT_SPEED;
-    ListBox      maLB_SPEED;
-    FixedText    maFT_SOUND;
-    ListBox      maLB_SOUND;
-    CheckBox     maCB_LOOP_SOUND;
-    FixedLine    maFL_ADVANCE_SLIDE;
-    RadioButton  maRB_ADVANCE_ON_MOUSE;
-    RadioButton  maRB_ADVANCE_AUTO;
-    MetricField  maMF_ADVANCE_AUTO_AFTER;
-    FixedLine    maFL_EMPTY1;
-    PushButton   maPB_APPLY_TO_ALL;
-    PushButton   maPB_PLAY;
-    PushButton   maPB_SLIDE_SHOW;
-    FixedLine    maFL_EMPTY2;
-    CheckBox     maCB_AUTO_PREVIEW;
+    ListBox*      mpLB_SLIDE_TRANSITIONS;
+    FixedText*    mpFT_SPEED;
+    ListBox*      mpLB_SPEED;
+    FixedText*    mpFT_SOUND;
+    ListBox*      mpLB_SOUND;
+    CheckBox*     mpCB_LOOP_SOUND;
+    RadioButton*  mpRB_ADVANCE_ON_MOUSE;
+    RadioButton*  mpRB_ADVANCE_AUTO;
+    MetricField*  mpMF_ADVANCE_AUTO_AFTER;
+    PushButton*   mpPB_APPLY_TO_ALL;
+    PushButton*   mpPB_PLAY;
+    PushButton*   mpPB_SLIDE_SHOW;
+    CheckBox*     mpCB_AUTO_PREVIEW;
 
     OUString     maSTR_NO_TRANSITION;
 

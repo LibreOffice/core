@@ -389,6 +389,11 @@ String STR_CUSTOMANIMATION_USERPATH
     Text [ en-US ] = "User paths";
 };
 
+String STR_SLIDETRANSITION_NONE
+{
+    Text [ en-US ] = "No transition";
+};
+
 Image IMG_CUSTOMANIMATION_ON_CLICK
 {
     ImageBitmap = Bitmap { File = "click_16.png" ; };

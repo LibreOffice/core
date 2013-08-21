@@ -19,6 +19,7 @@
 #define SD_SIDEBAR_PANELS_SLIDE_TRANSITION_PANEL_HXX
 
 #include "PanelBase.hxx"
+#include <sfx2/sidebar/ControlFactory.hxx>
 
 namespace sd { namespace sidebar {
 
@@ -28,7 +29,8 @@ class SlideTransitionPanel
 public:
     SlideTransitionPanel (
         ::Window* pParentWindow,
-        ViewShellBase& rViewShellBase);
+        ViewShellBase& rViewShellBase,
+        const cssu::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPanel (void);
 
     // ILayoutableWindow
@@ -38,6 +40,9 @@ protected:
     virtual ::Window* CreateWrappedControl (
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
+
+private:
+    cssu::Reference<css::frame::XFrame> mxFrame;
 };
 
 } } // end of namespace sd::sidebar
