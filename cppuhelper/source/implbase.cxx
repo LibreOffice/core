@@ -21,6 +21,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
+#include <rtl/string.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
