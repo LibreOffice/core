@@ -78,7 +78,7 @@ def getLogTarget():
             userInstallation =  pathSubst.getSubstituteVariableValue( "user" )
             if len( userInstallation ) > 0:
                 systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
-                ret = file( systemPath , "a" )
+                ret = open( systemPath , "a" )
         except:
             print("Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n")
     return ret
