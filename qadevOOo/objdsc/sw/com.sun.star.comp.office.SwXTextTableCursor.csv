@@ -142,6 +142,7 @@
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharRightBorderDistance#optional"
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharBottomBorderDistance#optional"
 "SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharTopBorderDistance#optional"
+"SwXTextTableCursor";"com::sun::star::style::CharacterProperties";"CharShadowFormat#optional"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextTableCursor";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

@@ -43,6 +43,7 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
@@ -113,16 +114,20 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_RSID,                      // 39
     36, // RES_CHRATR_BOX,                       // 40
-    37, // RES_TXTATR_REFMARK,                   // 41
-    38, // RES_TXTATR_TOXMARK,                   // 42
-    39, // RES_TXTATR_META,                      // 43
-    39, // RES_TXTATR_METAFIELD,                 // 44
-     0, // RES_TXTATR_AUTOFMT,                   // 45
-     0, // RES_TXTATR_INETFMT                    // 46
-     0, // RES_TXTATR_CHARFMT,                   // 47
-    40, // RES_TXTATR_CJK_RUBY,                  // 48
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
-     0, // RES_TXTATR_DUMMY5                     // 50
+    37, // RES_CHRATR_SHADOW,                    // 41
+     0, // RES_CHRATR_DUMMY1,                    // 42
+     0, // RES_CHRATR_DUMMY2,                    // 43
+     0, // RES_CHRATR_DUMMY3,                    // 44
+    38, // RES_TXTATR_REFMARK,                   // 45
+    39, // RES_TXTATR_TOXMARK,                   // 46
+    40, // RES_TXTATR_META,                      // 47
+    40, // RES_TXTATR_METAFIELD,                 // 48
+     0, // RES_TXTATR_AUTOFMT,                   // 49
+     0, // RES_TXTATR_INETFMT                    // 50
+     0, // RES_TXTATR_CHARFMT,                   // 51
+    41, // RES_TXTATR_CJK_RUBY,                  // 52
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 53
+     0, // RES_TXTATR_DUMMY5                     // 54
 };
 
 /*************************************************************************
@@ -755,6 +760,14 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             rFnt.SetBottomBorderDist( aBoxItem.GetDistance(BOX_LINE_BOTTOM) );
             rFnt.SetRightBorderDist( aBoxItem.GetDistance(BOX_LINE_RIGHT) );
             rFnt.SetLeftBorderDist( aBoxItem.GetDistance(BOX_LINE_LEFT) );
+            break;
+        }
+        case RES_CHRATR_SHADOW:
+        {
+            const SvxShadowItem& aShadowItem = static_cast<const SvxShadowItem&>(rItem);
+            rFnt.SetShadowColor( aShadowItem.GetColor() );
+            rFnt.SetShadowWidth( aShadowItem.GetWidth() );
+            rFnt.SetShadowLocation( aShadowItem.GetLocation() );
             break;
         }
         case RES_CHRATR_OVERLINE :

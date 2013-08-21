@@ -21,7 +21,7 @@
 
 #include <tools/mempool.hxx>
 
-#define NUM_DEFAULT_VALUES 37
+#define NUM_DEFAULT_VALUES 38
 
 #include "swcache.hxx"
 #include "swfont.hxx"

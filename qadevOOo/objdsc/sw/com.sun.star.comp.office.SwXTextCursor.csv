@@ -165,6 +165,7 @@
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharRightBorderDistance#optional"
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharBottomBorderDistance#optional"
 "SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharTopBorderDistance#optional"
+"SwXTextCursor";"com::sun::star::style::CharacterProperties";"CharShadowFormat#optional"
 "SwXTextCursor";"com::sun::star::document::XDocumentInsertable#optional";"insertDocumentFromURL()"
 "SwXTextCursor";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextCursor";"com::sun::star::beans::XPropertySet";"setPropertyValue()"

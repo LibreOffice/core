@@ -4143,83 +4143,65 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     ((SwTabFrm*)this)->ResetComplete();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::PaintShadow()
-|*
-|*  Description         Paints a shadow if the format requests so.
-|*      The shadow is always painted on the outer edge of the OutRect.
-|*      If needed, the OutRect is shrunk so the painting of the border can be
-|*      done on it.
-|*
-|*************************************************************************/
-/// OD 23.08.2002 #99657#
-///     draw full shadow rectangle for frames with transparent drawn backgrounds.
-void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
-                         const SwBorderAttrs &rAttrs ) const
+/**
+ * Paint border shadow.
+ *
+ * @param[in]       rRect       aligned rect to clip the result
+ * @param[in|out]   rOutRect    full painting area as input
+ *                              painting area reduced by shadow space for border and background as output
+ * @param[in]       rShadow     includes shadow attributes
+ * @param[in]       bDrawFullShadowRectangle    paint full rect of shadow
+ * @param[in]       bTop        paint top part of the shadow
+ * @param[in]       bBottom     paint bottom part of the shadow
+ * @param[in]       bLeft       paint left part of the shadow
+ * @param[in]       bRight      paint right part of the shadow
+**/
+static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
+    const SvxShadowItem& rShadow, const bool bDrawFullShadowRectangle,
+    const bool bTop, const bool bBottom,
+    const bool bLeft, const bool bRight )
 {
-    const SvxShadowItem &rShadow = rAttrs.GetShadow();
     const long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth() );
     const long nHeight = ::lcl_AlignHeight( rShadow.GetWidth() );
 
     SwRects aRegion( 2 );
     SwRect aOut( rOutRect );
 
-    const sal_Bool bCnt    = IsCntntFrm();
-    const bool bTop    = !bCnt || rAttrs.GetTopLine  ( *(this) );
-    const bool bBottom = !bCnt || rAttrs.GetBottomLine( *(this) );
-
-    SvxShadowLocation eLoc = rShadow.GetLocation();
-
-    if( IsVertical() )
-    {
-        switch( eLoc )
-        {
-            case SVX_SHADOW_BOTTOMRIGHT: eLoc = SVX_SHADOW_BOTTOMLEFT;  break;
-            case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
-            case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
-            case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_TOPLEFT;     break;
-            default: break;
-        }
-    }
-
-    /// OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
-    ///     be drawn or only two shadow rectangles beside the frame.
-    ///     draw full shadow rectangle, if frame background is drawn transparent.
-    ///     Status Quo:
-    ///         SwLayoutFrm can have transparent drawn backgrounds. Thus,
-    ///         "asked" their frame format.
-    bool bDrawFullShadowRectangle =
-            ( IsLayoutFrm() &&
-              (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
-            );
-    switch ( eLoc )
+    switch ( rShadow.GetLocation() )
     {
         case SVX_SHADOW_BOTTOMRIGHT:
             {
                 if ( bDrawFullShadowRectangle )
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
-                    aOut.Top( aOut.Top() + nHeight );
-                    aOut.Left( aOut.Left() + nWidth );
+                    aOut.Top( rOutRect.Top() + nHeight );
+                    aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
                 {
-                    aOut.Top ( aOut.Bottom() - nHeight );
-                    aOut.Left( aOut.Left()   + nWidth );
-                    if ( bBottom )
+                    if( bBottom )
+                    {
+                        aOut.Top( rOutRect.Bottom() - nHeight );
+                        if( bLeft )
+                            aOut.Left( rOutRect.Left() + nWidth );
                         aRegion.push_back( aOut );
-                    aOut.Left( aOut.Right()   - nWidth );
-                    aOut.Top ( rOutRect.Top() + nHeight );
-                    if ( bBottom )
-                        aOut.Bottom( aOut.Bottom() - nHeight );
-                    else
-                        aOut.Bottom( aOut.Bottom() + nHeight );
-                    aRegion.push_back( aOut );
+                    }
+                    if( bRight )
+                    {
+                        aOut.Left( rOutRect.Right() - nWidth );
+                        if( bTop )
+                            aOut.Top( rOutRect.Top() + nHeight );
+                        else
+                            aOut.Top( rOutRect.Top() );
+                        if( bBottom )
+                            aOut.Bottom( rOutRect.Bottom() - nHeight );
+                        aRegion.push_back( aOut );
+                    }
                 }
 
-                rOutRect.Right ( rOutRect.Right() - nWidth );
+                if( bRight )
+                    rOutRect.Right( rOutRect.Right() - nWidth );
                 if( bBottom )
                     rOutRect.Bottom( rOutRect.Bottom()- nHeight );
             }
@@ -4229,28 +4211,36 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
-                    aOut.Bottom( aOut.Bottom() - nHeight );
-                    aOut.Right( aOut.Right() - nWidth );
+                    aOut.Bottom( rOutRect.Bottom() - nHeight );
+                    aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
                 {
-                    aOut.Bottom( aOut.Top()   + nHeight );
-                    aOut.Right ( aOut.Right() - nWidth );
-                    if ( bTop )
+                    if( bTop )
+                    {
+                        aOut.Bottom( rOutRect.Top() + nHeight );
+                        if( bRight )
+                            aOut.Right( rOutRect.Right() - nWidth );
                         aRegion.push_back( aOut );
-                    aOut.Right ( aOut.Left() + nWidth );
-                    aOut.Bottom( rOutRect.Bottom() - nHeight );
-                    if ( bTop )
-                        aOut.Top( aOut.Top() + nHeight );
-                    else
-                        aOut.Top( aOut.Top() - nHeight );
-                    aRegion.push_back( aOut );
+                    }
+                    if( bLeft )
+                    {
+                        aOut.Right( rOutRect.Left() + nWidth );
+                        if( bBottom )
+                            aOut.Bottom( rOutRect.Bottom() - nHeight );
+                        else
+                            aOut.Bottom( rOutRect.Bottom() );
+                        if( bTop )
+                            aOut.Top( rOutRect.Top() + nHeight );
+                        aRegion.push_back( aOut );
+                    }
                 }
 
-                rOutRect.Left( rOutRect.Left() + nWidth );
+                if( bLeft )
+                    rOutRect.Left( rOutRect.Left() + nWidth );
                 if( bTop )
-                    rOutRect.Top(  rOutRect.Top() + nHeight );
+                    rOutRect.Top( rOutRect.Top() + nHeight );
             }
             break;
         case SVX_SHADOW_TOPRIGHT:
@@ -4258,26 +4248,34 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
-                    aOut.Bottom( aOut.Bottom() - nHeight);
-                    aOut.Left( aOut.Left() + nWidth );
+                    aOut.Bottom( rOutRect.Bottom() - nHeight);
+                    aOut.Left( rOutRect.Left() + nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
                 {
-                    aOut.Bottom( aOut.Top() + nHeight );
-                    aOut.Left (  aOut.Left()+ nWidth );
-                    if ( bTop )
+                    if( bTop )
+                    {
+                        aOut.Bottom( rOutRect.Top() + nHeight );
+                        if( bLeft )
+                            aOut.Left( rOutRect.Left() + nWidth );
                         aRegion.push_back( aOut );
-                    aOut.Left  ( aOut.Right() - nWidth );
-                    aOut.Bottom( rOutRect.Bottom() - nHeight );
-                    if ( bTop )
-                        aOut.Top( aOut.Top() + nHeight );
-                    else
-                        aOut.Top( aOut.Top() - nHeight );
-                    aRegion.push_back( aOut );
+                    }
+                    if( bRight )
+                    {
+                        aOut.Left( rOutRect.Right() - nWidth );
+                        if( bBottom )
+                            aOut.Bottom( rOutRect.Bottom() - nHeight );
+                        else
+                            aOut.Bottom( rOutRect.Bottom() );
+                        if( bTop )
+                            aOut.Top( rOutRect.Top() + nHeight );
+                        aRegion.push_back( aOut );
+                    }
                 }
 
-                rOutRect.Right( rOutRect.Right() - nWidth );
+                if( bRight )
+                    rOutRect.Right( rOutRect.Right() - nWidth );
                 if( bTop )
                     rOutRect.Top( rOutRect.Top() + nHeight );
             }
@@ -4287,26 +4285,34 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                 if ( bDrawFullShadowRectangle )
                 {
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
-                    aOut.Top( aOut.Top() + nHeight );
-                    aOut.Right( aOut.Right() - nWidth );
+                    aOut.Top( rOutRect.Top() + nHeight );
+                    aOut.Right( rOutRect.Right() - nWidth );
                     aRegion.push_back( aOut );
                 }
                 else
                 {
-                    aOut.Top  ( aOut.Bottom()- nHeight );
-                    aOut.Right( aOut.Right() - nWidth );
-                    if ( bBottom )
+                    if( bBottom )
+                    {
+                        aOut.Top( rOutRect.Bottom()- nHeight );
+                        if( bRight )
+                            aOut.Right( rOutRect.Right() - nWidth );
                         aRegion.push_back( aOut );
-                    aOut.Right( aOut.Left() + nWidth );
-                    aOut.Top( rOutRect.Top() + nHeight );
-                    if ( bBottom )
-                        aOut.Bottom( aOut.Bottom() - nHeight );
-                    else
-                        aOut.Bottom( aOut.Bottom() + nHeight );
-                    aRegion.push_back( aOut );
+                    }
+                    if( bLeft )
+                    {
+                        aOut.Right( rOutRect.Left() + nWidth );
+                        if( bTop )
+                            aOut.Top( rOutRect.Top() + nHeight );
+                        else
+                            aOut.Top( rOutRect.Top() );
+                        if( bBottom )
+                            aOut.Bottom( rOutRect.Bottom() - nHeight );
+                        aRegion.push_back( aOut );
+                    }
                 }
 
-                rOutRect.Left( rOutRect.Left() + nWidth );
+                if( bLeft )
+                    rOutRect.Left( rOutRect.Left() + nWidth );
                 if( bBottom )
                     rOutRect.Bottom( rOutRect.Bottom() - nHeight );
             }
@@ -4334,6 +4340,8 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     if ( pOut->GetFillColor() != aShadowColor )
         pOut->SetFillColor( aShadowColor );
 
+    pOut->SetLineColor();
+
     pOut->SetDrawMode( nOldDrawMode );
 
     for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
@@ -4355,6 +4363,53 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             pOut->DrawRect( aOut.SVRect() );
         }
     }
+}
+
+/*************************************************************************
+|*
+|*  SwFrm::PaintShadow()
+|*
+|*  Description         Paints a shadow if the format requests so.
+|*      The shadow is always painted on the outer edge of the OutRect.
+|*      If needed, the OutRect is shrunk so the painting of the border can be
+|*      done on it.
+|*
+|*************************************************************************/
+/// OD 23.08.2002 #99657#
+///     draw full shadow rectangle for frames with transparent drawn backgrounds.
+void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
+                         const SwBorderAttrs &rAttrs ) const
+{
+    SvxShadowItem rShadow = rAttrs.GetShadow();
+
+    const sal_Bool bCnt    = IsCntntFrm();
+    const bool bTop    = !bCnt || rAttrs.GetTopLine  ( *(this) );
+    const bool bBottom = !bCnt || rAttrs.GetBottomLine( *(this) );
+
+    if( IsVertical() )
+    {
+        switch( rShadow.GetLocation() )
+        {
+            case SVX_SHADOW_BOTTOMRIGHT: rShadow.SetLocation(SVX_SHADOW_BOTTOMLEFT);  break;
+            case SVX_SHADOW_TOPLEFT:     rShadow.SetLocation(SVX_SHADOW_TOPRIGHT);    break;
+            case SVX_SHADOW_TOPRIGHT:    rShadow.SetLocation(SVX_SHADOW_BOTTOMRIGHT); break;
+            case SVX_SHADOW_BOTTOMLEFT:  rShadow.SetLocation(SVX_SHADOW_TOPLEFT);     break;
+            default: break;
+        }
+    }
+
+    /// OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
+    ///     be drawn or only two shadow rectangles beside the frame.
+    ///     draw full shadow rectangle, if frame background is drawn transparent.
+    ///     Status Quo:
+    ///         SwLayoutFrm can have transparent drawn backgrounds. Thus,
+    ///         "asked" their frame format.
+    const bool bDrawFullShadowRectangle =
+            ( IsLayoutFrm() &&
+              (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
+            );
+
+   lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true);
 }
 
 /*************************************************************************
@@ -4780,6 +4835,16 @@ void PaintCharacterBorder(
             break;
     }
 
+    // Paint shadow (reduce painting rect)
+    {
+        const SvxShadowItem aShadow(
+            0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
+            rFont.GetAbsShadowLocation(bVerticalLayout));
+
+        lcl_PaintShadow( SwRect(aAlignedRect), aAlignedRect, aShadow,
+                         false, bTop, bBottom, bLeft, bRight);
+    }
+
     // Init borders, after this initialization top, bottom, right and left means the
     // absolute position
     const boost::optional<editeng::SvxBorderLine> aTopBorder =
@@ -4790,7 +4855,6 @@ void PaintCharacterBorder(
         (bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout) : boost::none);
     const boost::optional<editeng::SvxBorderLine> aRightBorder =
         (bRight ? rFont.GetAbsRightBorder(bVerticalLayout) : boost::none);
-
 
     if( aTopBorder )
     {

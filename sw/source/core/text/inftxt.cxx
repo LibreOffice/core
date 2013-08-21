@@ -30,6 +30,7 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/tstpitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <SwSmartTagMgr.hxx>
@@ -689,7 +690,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 }
 
 void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
-                               SwRect* pRect, SwRect* pIntersect ) const
+                               SwRect* pRect, SwRect* pIntersect,
+                               const bool bInsideBox ) const
 {
     Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
@@ -745,6 +747,19 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     if ( GetTxtFrm()->IsVertical() )
         GetTxtFrm()->SwitchHorizontalToVertical( aRect );
+
+    if( bInsideBox && rPor.InTxtGrp() )
+    {
+        const bool bJoinWithPrev =
+            static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev();
+        const bool bJoinWithNext =
+            static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithNext();
+        const bool bIsVert = GetTxtFrm()->IsVertical();
+        aRect.Top(aRect.Top() + GetFont()->CalcShadowSpace(SHADOW_TOP, bIsVert, bJoinWithPrev, bJoinWithNext ));
+        aRect.Bottom(aRect.Bottom() - GetFont()->CalcShadowSpace(SHADOW_BOTTOM, bIsVert, bJoinWithPrev, bJoinWithNext ));
+        aRect.Left(aRect.Left() + GetFont()->CalcShadowSpace(SHADOW_LEFT, bIsVert, bJoinWithPrev, bJoinWithNext ));
+        aRect.Right(aRect.Right() - GetFont()->CalcShadowSpace(SHADOW_RIGHT, bIsVert, bJoinWithPrev, bJoinWithNext ));
+    }
 
     if ( pRect )
         *pRect = aRect;
@@ -1065,7 +1080,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer pollution ?" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect );
+    CalcRect( rPor, 0, &aIntersect, true );
 
     if ( aIntersect.HasArea() )
     {
@@ -1092,7 +1107,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 {
     {
         SwRect aIntersect;
-        CalcRect( rPor, &aIntersect, 0 );
+        CalcRect( rPor, &aIntersect, 0, true );
         if(aIntersect.HasArea())
         {
             SwTxtNode *pNd = m_pFrm->GetTxtNode();
@@ -1150,7 +1165,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     OSL_ENSURE( m_pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
-    CalcRect( rPor, 0, &aIntersect );
+    CalcRect( rPor, 0, &aIntersect, true );
 
     if ( aIntersect.HasArea() )
     {

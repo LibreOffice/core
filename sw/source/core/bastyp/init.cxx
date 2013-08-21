@@ -289,6 +289,10 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BOX
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_SHADOW
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -419,6 +423,7 @@ sal_uInt16* SwAttrPool::pVersionMap4 = 0;
 // #i18732#
 sal_uInt16* SwAttrPool::pVersionMap5 = 0;
 sal_uInt16* SwAttrPool::pVersionMap6 = 0;
+sal_uInt16* SwAttrPool::pVersionMap7 = 0;
 
 const sal_Char* pMarkToTable    = "table";
 const sal_Char* pMarkToFrame    = "frame";
@@ -498,6 +503,12 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_HIDDEN - POOLATTR_BEGIN ] =        new SvxCharHiddenItem( sal_False, RES_CHRATR_HIDDEN );
     aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] =       new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
     aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
+    aAttrTab[ RES_CHRATR_SHADOW - POOLATTR_BEGIN ] =        new SvxShadowItem( RES_CHRATR_SHADOW );
+
+// CharakterAttr - Dummies
+    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY1 );
+    aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY2 );
+    aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
 
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
     aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( OUString(), OUString() );
@@ -703,6 +714,14 @@ void _InitCore()
     for ( i = 38; i <= 136; ++i )
         SwAttrPool::pVersionMap6[ i-1 ] = i + 3;
 
+    // 7. version:
+    // New character attribute for character box shadow plus 3 dummies
+    SwAttrPool::pVersionMap7 = new sal_uInt16[ 144 ];
+    for( i = 1; i <= 40; ++i )
+        SwAttrPool::pVersionMap7[ i-1 ] = i;
+    for ( i = 41; i <= 144; ++i )
+        SwAttrPool::pVersionMap7[ i-1 ] = i + 4;
+
     SwBreakIt::_Create( ::comphelper::getProcessComponentContext() );
     pCheckIt = NULL;
 
@@ -799,6 +818,7 @@ void _FinitCore()
     // #i18732#
     delete[] SwAttrPool::pVersionMap5;
     delete[] SwAttrPool::pVersionMap6;
+    delete[] SwAttrPool::pVersionMap7;
 
     for ( sal_uInt16 i = 0; i < pGlobalOLEExcludeList->size(); ++i )
         delete (*pGlobalOLEExcludeList)[i];

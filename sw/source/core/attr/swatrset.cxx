@@ -53,6 +53,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     // #i18732# - apply new version map
     SetVersionMap( 5, 1,130, pVersionMap5 );
     SetVersionMap( 6, 1,136, pVersionMap6 );
+    SetVersionMap( 7, 1,144, pVersionMap7 );
 }
 
 SwAttrPool::~SwAttrPool()

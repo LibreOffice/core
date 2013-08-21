@@ -21,7 +21,7 @@
 #define _ATRHNDL_HXX
 
 #define INITIAL_NUM_ATTR 3
-#define NUM_ATTRIBUTE_STACKS 41
+#define NUM_ATTRIBUTE_STACKS 42
 
 #include <txatbase.hxx>
 #include <swfntcch.hxx>

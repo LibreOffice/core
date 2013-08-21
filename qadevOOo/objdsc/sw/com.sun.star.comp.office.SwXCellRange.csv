@@ -143,6 +143,7 @@
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharRightBorderDistance#optional"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharBottomBorderDistance#optional"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharTopBorderDistance#optional"
+"SwXCellRange";"com::sun::star::style::CharacterProperties";"CharShadowFormat#optional"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"getDataArray()"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"setDataArray()"
 "SwXCellRange";"com::sun::star::style::ParagraphPropertiesAsian#optional";"ParaIsHangingPunctuation"

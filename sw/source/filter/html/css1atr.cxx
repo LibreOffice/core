@@ -3640,6 +3640,10 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
 /* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_BOX */                0,
+/* RES_CHRATR_SHADOW */             0,
+/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_DUMMY2 */             0,
+/* RES_CHRATR_DUMMY3 */             0,
 
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,

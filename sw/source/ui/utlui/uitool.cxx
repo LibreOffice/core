@@ -32,6 +32,7 @@
 #include <editeng/pmdlitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/pageitem.hxx>
@@ -133,18 +134,28 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode)
             rSet.ClearItem(RES_BACKGROUND);
     }
 
-    // Border
     if( nMode == CONV_ATTR_STD )
     {
-        const SfxPoolItem *pTmpBox;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpBox ) )
+        // Border
+        const SfxPoolItem *pTmpItem;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BOX, sal_True, &pTmpItem ) )
         {
-            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpItem) );
             aTmpBox.SetWhich( RES_BOX );
             rSet.Put( aTmpBox );
         }
         else
             rSet.ClearItem(RES_BOX);
+
+        // Border shadow
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_SHADOW, sal_False, &pTmpItem ) )
+        {
+            SvxShadowItem aTmpShadow( *((SvxShadowItem*)pTmpItem) );
+            aTmpShadow.SetWhich( RES_SHADOW );
+            rSet.Put( aTmpShadow );
+        }
+        else
+            rSet.ClearItem( RES_SHADOW );
     }
 }
 
@@ -162,17 +173,26 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, sal_uInt8 nMode)
         rSet.ClearItem( RES_BACKGROUND );
     }
 
-    // Border
     if( nMode == CONV_ATTR_STD )
     {
-        const SfxPoolItem *pTmpBox;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, sal_False, &pTmpBox ) )
+        // Border
+        const SfxPoolItem *pTmpItem;
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOX, sal_False, &pTmpItem ) )
         {
-            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpBox) );
+            SvxBoxItem aTmpBox( *((SvxBoxItem*)pTmpItem) );
             aTmpBox.SetWhich( RES_CHRATR_BOX );
             rSet.Put( aTmpBox );
         }
         rSet.ClearItem( RES_BOX );
+
+        // Border shadow
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_SHADOW, sal_False, &pTmpItem ) )
+        {
+            SvxShadowItem aTmpShadow( *((SvxShadowItem*)pTmpItem) );
+            aTmpShadow.SetWhich( RES_CHRATR_SHADOW );
+            rSet.Put( aTmpShadow );
+        }
+        rSet.ClearItem( RES_SHADOW );
     }
 }
 

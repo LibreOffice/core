@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -200,6 +201,13 @@ void Test::testCharacterBorder()
             aFirstParTopBorder, aFirstParTopPadding,
             getProperty<table::BorderLine2>(xSet,"RightBorder"),
             getProperty<sal_Int32>(xSet,"RightBorderDistance"));
+
+        // Shadow
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"ParaShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 0L);
+        CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 0);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 0);
     }
 
     // Character border for first paragraph
@@ -231,6 +239,13 @@ void Test::testCharacterBorder()
             aFirstParCharTopBorder, aFirstParCharTopPadding,
             getProperty<table::BorderLine2>(xSet,"CharRightBorder"),
             getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+
+        // Shadow
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 16724787L);
+        CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 2);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 280);
 
         // Check autostyle
         {
@@ -307,6 +322,13 @@ void Test::testCharacterBorder()
             aBorderArray[3], aDistances[3],
             getProperty<table::BorderLine2>(xSet,"CharRightBorder"),
             getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
+
+        // Shadow
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 0L);
+        CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 3);
+        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 79);
 
         // Check character style
         {

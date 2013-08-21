@@ -447,7 +447,16 @@ public:
     inline void NotifyURL( const SwLinePortion &rPor ) const
         { if( URLNotify() ) _NotifyURL( rPor ); }
 
-    void CalcRect( const SwLinePortion& rPor, SwRect* pRect, SwRect* pIntersect = 0 ) const;
+    /**
+     * Calculate the rectangular area where the portion takes place.
+     * @param[in]   rPor        portion for which the method specify the painting area
+     * @param[out]  pRect       whole area of the portion
+     * @param[out]  pIntersect  part of the portion area clipped by OutputDevice's clip region
+     * @param[in]   bInsideBox  area of portion's content, padding and border, but shadow
+     *                          is excluded (e.g. for background)
+    **/
+    void CalcRect( const SwLinePortion& rPor, SwRect* pRect,
+                   SwRect* pIntersect = 0, const bool bInsideBox = false ) const;
 
     inline SwTwips GetPaintOfst() const;
     inline void SetPaintOfst( const SwTwips nNew );

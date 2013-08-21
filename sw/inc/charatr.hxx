@@ -101,6 +101,8 @@ inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( sal_Bool bInP ) const
     {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
 inline const SvxBoxItem  &SwAttrSet::GetCharBorder( sal_Bool bInP ) const
     {   return (const SvxBoxItem&)Get( RES_CHRATR_BOX, bInP ); }
+inline const SvxShadowItem  &SwAttrSet::GetCharShadow( sal_Bool bInP ) const
+    {   return (const SvxShadowItem&)Get( RES_CHRATR_SHADOW, bInP ); }
 
 // implementation of the character attribute methods of SwFmt
 
@@ -164,6 +166,8 @@ inline const SvxCharHiddenItem      &SwFmt::GetCharHidden( sal_Bool bInP ) const
     {   return aSet.GetCharHidden(bInP); }
 inline const SvxBoxItem     &SwFmt::GetCharBorder( sal_Bool bInP ) const
     {   return aSet.GetCharBorder(bInP); }
+inline const SvxShadowItem  &SwFmt::GetCharShadow( sal_Bool bInP ) const
+    {   return aSet.GetCharShadow(bInP); }
 
 #endif
 

@@ -139,6 +139,7 @@
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharRightBorderDistance#optional"
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharBottomBorderDistance#optional"
 "SwXTextRange";"com::sun::star::style::CharacterProperties";"CharTopBorderDistance#optional"
+"SwXTextRange";"com::sun::star::style::CharacterProperties";"CharShadowFormat#optional"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SwXTextRange";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

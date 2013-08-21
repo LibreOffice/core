@@ -142,6 +142,10 @@ class SwFont
     sal_uInt16 m_nRightBorderDist;
     sal_uInt16 m_nLeftBorderDist;
 
+    Color               m_aShadowColor;
+    sal_uInt16          m_nShadowWidth;
+    SvxShadowLocation   m_aShadowLocation;
+
     sal_uInt8       nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     sal_uInt8       nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
     sal_uInt8        m_nMetaCount;   // count META/METAFIELD
@@ -403,7 +407,40 @@ public:
     sal_uInt16 GetLeftBorderSpace() const;
 
     bool HasBorder() const;
-    void RemoveBorders();
+
+    // Shadow attributes
+    void SetShadowColor( const Color& rColor );
+    void SetShadowWidth( const sal_uInt16 nWidth );
+    void SetShadowLocation( const SvxShadowLocation aLocation );
+
+    const Color& GetShadowColor() const { return m_aShadowColor; }
+    sal_uInt16 GetShadowWidth() const { return m_nShadowWidth; }
+    SvxShadowLocation GetShadowLocation() const { return m_aShadowLocation; }
+
+    /**
+     * Get the absolute shadow location dependant from orientation.
+     *
+     * @param[in]   bVertLayout true, if the container layout is vertical
+     *                          false, otherwise
+     * @return      absolute location
+    **/
+    SvxShadowLocation GetAbsShadowLocation( const bool bVertLayout ) const;
+
+    /**
+     * Calculate the shadow space on the specified side dependant from
+     * the orientation and connection with neightbours.
+     * @see shaditem.hxx for integer constants of sides
+     *
+     * @param[in]   nShadow     specify the side
+     * @param[in]   bVertLayout true, if the container layout is vertical
+     *                          false, otherwise
+     * @param[in]   bSkipLeft   relative left shadow space is skipped
+     * @param[in]   bSkipRight  relative right shadow space is skipped
+     * @return      the shadow space
+    **/
+    sal_uInt16 CalcShadowSpace(
+        const sal_uInt16 nShadow, const bool bVertLayout,
+        const bool bSkipLeft, const bool bSkipRight ) const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )
@@ -883,34 +920,62 @@ inline void SwFont::SetLeftBorderDist( const sal_uInt16 nLeftDist )
 
 inline sal_uInt16 SwFont::GetTopBorderSpace() const
 {
+    sal_uInt16 nRet = 0;
     if( m_aTopBorder )
-        return m_aTopBorder.get().GetScaledWidth() + m_nTopBorderDist;
-    else
-        return 0;
+    {
+        nRet += m_aTopBorder.get().GetScaledWidth() + m_nTopBorderDist;
+    }
+    if( m_aShadowLocation == SVX_SHADOW_TOPLEFT ||
+        m_aShadowLocation == SVX_SHADOW_TOPRIGHT )
+    {
+        nRet += m_nShadowWidth;
+    }
+    return nRet;
 }
 
 inline sal_uInt16 SwFont::GetBottomBorderSpace() const
 {
+    sal_uInt16 nRet = 0;
     if( m_aBottomBorder )
-        return m_aBottomBorder.get().GetScaledWidth() + m_nBottomBorderDist;
-    else
-        return 0;
+    {
+        nRet += m_aBottomBorder.get().GetScaledWidth() + m_nBottomBorderDist;
+    }
+    if( m_aShadowLocation == SVX_SHADOW_BOTTOMLEFT ||
+        m_aShadowLocation == SVX_SHADOW_BOTTOMRIGHT )
+    {
+        nRet += m_nShadowWidth;
+    }
+    return nRet;
 }
 
 inline sal_uInt16 SwFont::GetRightBorderSpace() const
 {
+    sal_uInt16 nRet = 0;
     if( m_aRightBorder )
-        return m_aRightBorder.get().GetScaledWidth() + m_nRightBorderDist;
-    else
-        return 0;
+    {
+        nRet += m_aRightBorder.get().GetScaledWidth() + m_nRightBorderDist;
+    }
+    if( m_aShadowLocation == SVX_SHADOW_TOPRIGHT ||
+        m_aShadowLocation == SVX_SHADOW_BOTTOMRIGHT )
+    {
+        nRet += m_nShadowWidth;
+    }
+    return nRet;
 }
 
 inline sal_uInt16 SwFont::GetLeftBorderSpace() const
 {
+    sal_uInt16 nRet = 0;
     if( m_aLeftBorder )
-        return m_aLeftBorder.get().GetScaledWidth() + m_nLeftBorderDist;
-    else
-        return 0;
+    {
+        nRet += m_aLeftBorder.get().GetScaledWidth() + m_nLeftBorderDist;
+    }
+    if( m_aShadowLocation == SVX_SHADOW_TOPLEFT ||
+        m_aShadowLocation == SVX_SHADOW_BOTTOMLEFT )
+    {
+        nRet += m_nShadowWidth;
+    }
+    return nRet;
 }
 
 inline bool SwFont::HasBorder() const
@@ -918,10 +983,25 @@ inline bool SwFont::HasBorder() const
     return m_aTopBorder || m_aBottomBorder || m_aLeftBorder || m_aRightBorder;
 }
 
-inline void SwFont::RemoveBorders()
+inline void SwFont::SetShadowColor( const Color& rColor )
 {
-    m_aTopBorder = m_aBottomBorder = m_aLeftBorder = m_aRightBorder = boost::none;
-    m_nTopBorderDist = m_nBottomBorderDist = m_nRightBorderDist = m_nLeftBorderDist = 0;
+    m_aShadowColor = rColor;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline void SwFont::SetShadowWidth( const sal_uInt16 nWidth )
+{
+    m_nShadowWidth = nWidth;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
+}
+
+inline void SwFont::SetShadowLocation( const SvxShadowLocation aLocation )
+{
+    m_aShadowLocation = aLocation;
+    bFntChg = sal_True;
+    aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 /*************************************************************************

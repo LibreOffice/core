@@ -146,6 +146,7 @@ class SwAttrPool : public SfxItemPool
     // map for binary filter is necessary (version map 5).
     static sal_uInt16* pVersionMap5;
     static sal_uInt16* pVersionMap6;
+    static sal_uInt16* pVersionMap7;
 
     SwDoc* pDoc;
 
@@ -249,6 +250,7 @@ public:
     inline const SvxCharReliefItem        &GetCharRelief( sal_Bool = sal_True ) const;
     inline const SvxCharHiddenItem      &GetCharHidden( sal_Bool = sal_True ) const;
     inline const SvxBoxItem      &GetCharBorder( sal_Bool = sal_True ) const;
+    inline const SvxShadowItem      &GetCharShadow( sal_Bool = sal_True ) const;
 
     // Frame attributes. Implementation in frmatr.hxx.
     inline const SwFmtFillOrder       &GetFillOrder( sal_Bool = sal_True ) const;

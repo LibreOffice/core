@@ -101,6 +101,7 @@
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharRightBorderDistance#optional"
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharBottomBorderDistance#optional"
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharTopBorderDistance#optional"
+"CharacterStyle";"com::sun::star::style::CharacterProperties";"CharShadowFormat#optional"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

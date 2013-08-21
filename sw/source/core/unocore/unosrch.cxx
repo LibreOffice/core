@@ -169,7 +169,8 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     *pFontSizeCTLItem = 0,
     *pCTLLangItem = 0,
     *pCTLPostureItem = 0,
-    *pCTLWeightItem = 0;
+    *pCTLWeightItem = 0,
+    *pShadowItem  = 0;
 
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     for(sal_uInt32 i = 0; i < nArrLen; i++, ++aIt)
@@ -409,6 +410,11 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
                         pCTLWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
                     pTempItem = pCTLWeightItem;
                 break;
+                case RES_CHRATR_SHADOW:
+                    if(!pShadowItem )
+                        pShadowItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pShadowItem;
+                break;
             }
             if(pTempItem)
             {
@@ -458,6 +464,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     delete pCharColorItem;
     delete pCasemapItem  ;
     delete pBrushItem  ;
+    delete pShadowItem;
 }
 
 sal_Bool    SwSearchProperties_Impl::HasAttributes() const

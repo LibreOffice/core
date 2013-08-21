@@ -49,6 +49,7 @@
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/window.hxx>
 #include <charatr.hxx>
@@ -225,6 +226,148 @@ SwFont::GetAbsRightBorder( const bool bVertLayout ) const
     }
 }
 
+SvxShadowLocation SwFont::GetAbsShadowLocation( const bool bVertLayout ) const
+{
+    SvxShadowLocation aLocation = SVX_SHADOW_NONE;
+    switch( GetOrientation( bVertLayout ) )
+    {
+        case 0:
+            aLocation = m_aShadowLocation;
+            break;
+
+        case 900:
+            switch ( m_aShadowLocation )
+            {
+                case SVX_SHADOW_TOPLEFT:
+                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                    break;
+                case SVX_SHADOW_TOPRIGHT:
+                    aLocation = SVX_SHADOW_TOPLEFT;
+                    break;
+                case SVX_SHADOW_BOTTOMLEFT:
+                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                    break;
+                case SVX_SHADOW_BOTTOMRIGHT:
+                    aLocation = SVX_SHADOW_TOPRIGHT;
+                    break;
+                case SVX_SHADOW_NONE:
+                case SVX_SHADOW_END:
+                    aLocation = m_aShadowLocation;
+                    break;
+            }
+            break;
+
+        case 1800:
+            switch ( m_aShadowLocation )
+            {
+                case SVX_SHADOW_TOPLEFT:
+                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                    break;
+                case SVX_SHADOW_TOPRIGHT:
+                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                    break;
+                case SVX_SHADOW_BOTTOMLEFT:
+                    aLocation = SVX_SHADOW_TOPRIGHT;
+                    break;
+                case SVX_SHADOW_BOTTOMRIGHT:
+                    aLocation = SVX_SHADOW_TOPLEFT;
+                    break;
+                case SVX_SHADOW_NONE:
+                case SVX_SHADOW_END:
+                    aLocation = m_aShadowLocation;
+                    break;
+            }
+            break;
+
+        case 2700:
+            switch ( m_aShadowLocation )
+            {
+                case SVX_SHADOW_TOPLEFT:
+                    aLocation = SVX_SHADOW_TOPRIGHT;
+                    break;
+                case SVX_SHADOW_TOPRIGHT:
+                    aLocation = SVX_SHADOW_BOTTOMRIGHT;
+                    break;
+                case SVX_SHADOW_BOTTOMLEFT:
+                    aLocation = SVX_SHADOW_TOPLEFT;
+                    break;
+                case SVX_SHADOW_BOTTOMRIGHT:
+                    aLocation = SVX_SHADOW_BOTTOMLEFT;
+                    break;
+                case SVX_SHADOW_NONE:
+                case SVX_SHADOW_END:
+                    aLocation = m_aShadowLocation;
+                    break;
+            }
+            break;
+
+        default:
+            assert(false);
+            break;
+    }
+    return aLocation;
+}
+
+sal_uInt16 SwFont::CalcShadowSpace(
+        const sal_uInt16 nShadow, const bool bVertLayout,
+        const bool bSkipLeft, const bool bSkipRight ) const
+{
+    sal_uInt16 nSpace = 0;
+    const sal_uInt16 nOrient = GetOrientation( bVertLayout );
+    const SvxShadowLocation aLoc = GetAbsShadowLocation( bVertLayout );
+    switch( nShadow )
+    {
+        case SHADOW_TOP:
+            if(( aLoc == SVX_SHADOW_TOPLEFT ||
+               aLoc == SVX_SHADOW_TOPRIGHT ) &&
+               ( nOrient == 0 || nOrient == 1800 ||
+               ( nOrient == 900 && !bSkipRight ) ||
+               ( nOrient == 2700 && !bSkipLeft )))
+            {
+                nSpace = m_nShadowWidth;
+            }
+            break;
+
+        case SHADOW_BOTTOM:
+            if(( aLoc == SVX_SHADOW_BOTTOMLEFT ||
+               aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
+               ( nOrient == 0 || nOrient == 1800 ||
+               ( nOrient == 900 && !bSkipLeft ) ||
+               ( nOrient == 2700 && !bSkipRight )))
+            {
+                nSpace = m_nShadowWidth;
+            }
+            break;
+
+        case SHADOW_LEFT:
+            if(( aLoc == SVX_SHADOW_TOPLEFT ||
+               aLoc == SVX_SHADOW_BOTTOMLEFT ) &&
+               ( nOrient == 900 || nOrient == 2700 ||
+               ( nOrient == 0 && !bSkipLeft ) ||
+               ( nOrient == 1800 && !bSkipRight )))
+            {
+                nSpace = m_nShadowWidth;
+            }
+            break;
+
+         case SHADOW_RIGHT:
+            if(( aLoc == SVX_SHADOW_TOPRIGHT ||
+               aLoc == SVX_SHADOW_BOTTOMRIGHT ) &&
+               ( nOrient == 900 || nOrient == 2700 ||
+               ( nOrient == 0 && !bSkipRight ) ||
+               ( nOrient == 1800 && !bSkipLeft )))
+            {
+                nSpace = m_nShadowWidth;
+            }
+            break;
+        default:
+            assert(false);
+            break;
+    }
+
+    return nSpace;
+}
+
 // maps directions for vertical layout
 sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
@@ -352,8 +495,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 {
     delete pBackColor;
     pBackColor = NULL;
-
-    RemoveBorders();
 
     if( pAttrSet )
     {
@@ -546,6 +687,14 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetRightBorderDist(pBoxItem->GetDistance(BOX_LINE_RIGHT));
             SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
         }
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOW,
+            sal_True, &pItem ))
+        {
+            const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
+            SetShadowColor(pShadowItem->GetColor());
+            SetShadowWidth(pShadowItem->GetWidth());
+            SetShadowLocation(pShadowItem->GetLocation());
+        }
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
                 pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pTwoLinesItem ))
@@ -573,6 +722,9 @@ SwFont::SwFont()
     , m_nBottomBorderDist(0)
     , m_nRightBorderDist(0)
     , m_nLeftBorderDist(0)
+    , m_aShadowColor(COL_TRANSPARENT)
+    , m_nShadowWidth(0)
+    , m_aShadowLocation(SVX_SHADOW_NONE)
     , nActual(SW_LATIN)
 {
 }
@@ -592,6 +744,9 @@ SwFont::SwFont( const SwFont &rFont )
     m_nBottomBorderDist = rFont.m_nBottomBorderDist;
     m_nRightBorderDist = rFont.m_nRightBorderDist;
     m_nLeftBorderDist = rFont.m_nLeftBorderDist;
+    m_aShadowColor = rFont.m_aShadowColor;
+    m_nShadowWidth = rFont.m_nShadowWidth;
+    m_aShadowLocation = rFont.m_aShadowLocation;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;
@@ -727,7 +882,31 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetLeftBorderDist(pBoxItem->GetDistance(BOX_LINE_LEFT));
     }
     else
-        RemoveBorders();
+    {
+        SetTopBorder(0);
+        SetBottomBorder(0);
+        SetRightBorder(0);
+        SetLeftBorder(0);
+        SetTopBorderDist(0);
+        SetBottomBorderDist(0);
+        SetRightBorderDist(0);
+        SetLeftBorderDist(0);
+    }
+
+    if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOW,
+        sal_True, &pItem ))
+    {
+        const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
+        SetShadowColor(pShadowItem->GetColor());
+        SetShadowWidth(pShadowItem->GetWidth());
+        SetShadowLocation(pShadowItem->GetLocation());
+    }
+    else
+    {
+        SetShadowColor(COL_TRANSPARENT);
+        SetShadowWidth(0);
+        SetShadowLocation(SVX_SHADOW_NONE);
+    }
 
     const SvxTwoLinesItem& rTwoLinesItem = pAttrSet->Get2Lines();
     if ( ! rTwoLinesItem.GetValue() )
@@ -776,6 +955,9 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     m_nBottomBorderDist = rFont.m_nBottomBorderDist;
     m_nRightBorderDist = rFont.m_nRightBorderDist;
     m_nLeftBorderDist = rFont.m_nLeftBorderDist;
+    m_aShadowColor = rFont.m_aShadowColor;
+    m_nShadowWidth = rFont.m_nShadowWidth;
+    m_aShadowLocation = rFont.m_aShadowLocation;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
     nToxCnt = 0;

@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontSlant.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/table/BorderLine2.idl>
+#include <com/sun/star/table/ShadowFormat.idl>
 
 
  module com {  module sun {  module star {  module style {
@@ -427,6 +428,12 @@ published service CharacterProperties
      *  @since LibreOffice 4.2
     **/
     [property, optional] long CharBottomBorderDistance;
+
+    /** Determines the type, color, and width of the shadow.
+     *
+     *  @since LibreOffice 4.2
+    **/
+    [optional, property] com::sun::star::table::ShadowFormat CharShadowFormat;
 
 };
 

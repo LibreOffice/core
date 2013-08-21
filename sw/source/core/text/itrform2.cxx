@@ -2866,7 +2866,10 @@ namespace {
             rFirst.GetBottomBorderDist() == rSecond.GetBottomBorderDist() &&
             rFirst.GetLeftBorderDist() == rSecond.GetLeftBorderDist() &&
             rFirst.GetRightBorderDist() == rSecond.GetRightBorderDist() &&
-            rFirst.GetOrientation() == rSecond.GetOrientation();
+            rFirst.GetOrientation() == rSecond.GetOrientation() &&
+            rFirst.GetShadowColor() == rSecond.GetShadowColor() &&
+            rFirst.GetShadowWidth() == rSecond.GetShadowWidth() &&
+            rFirst.GetShadowLocation() == rSecond.GetShadowLocation();
     }
 
 } //end unnamed namespace

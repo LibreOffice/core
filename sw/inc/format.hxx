@@ -210,6 +210,7 @@ public:
     inline const SvxCharReliefItem     &GetCharRelief( sal_Bool = sal_True ) const;
     inline const SvxCharHiddenItem   &GetCharHidden( sal_Bool = sal_True ) const;
     inline const SvxBoxItem   &GetCharBorder( sal_Bool = sal_True ) const;
+    inline const SvxShadowItem   &GetCharShadow( sal_Bool = sal_True ) const;
 
     /// Frame-attributes - implemented in frmatr.hxx.
     inline const SwFmtFillOrder           &GetFillOrder( sal_Bool = sal_True ) const;

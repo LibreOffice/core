@@ -140,6 +140,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                         RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
                         RES_BACKGROUND,        RES_BACKGROUND,
                         RES_BOX,               RES_BOX,
+                        RES_SHADOW,            RES_SHADOW,
                         SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                         FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                         SID_HTML_MODE,         SID_HTML_MODE,
