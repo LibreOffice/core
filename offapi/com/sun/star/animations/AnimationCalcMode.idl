@@ -51,8 +51,8 @@ constants AnimationCalcMode
 
     /** Interpolates from one value in the values list to the next according to a
         time function defined by a cubic Bezier spline. The points of the spline are
-        defined in the #KeyTimes attribute, and the control points
-        for each interval are defined in the #KeySplines attribute.
+        defined in the XAnimate::KeyTimes attribute, and the control points
+        for each interval are defined in the XAnimate::TimeFilter attribute.
     */
     const short SPLINE = 3;
 };
