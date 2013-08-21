@@ -33,6 +33,7 @@
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include "osl/thread.h"
+#include "osl/thread.hxx"
 
 #include <algorithm>
 
@@ -207,7 +208,7 @@ extern "C" void SAL_CALL rtl_logfile_longTrace(char const * format, ...) {
     init();
     if (g_buffer != 0) {
         sal_uInt32 time = osl_getGlobalTimer();
-        oslThreadIdentifier threadId = osl_getThreadIdentifier(0);
+        oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
         va_list args;
         va_start(args, format);
         {

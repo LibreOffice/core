@@ -22,7 +22,7 @@
 #include <list>
 
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/process.h>
@@ -42,7 +42,7 @@ using namespace ::cppu;
 static inline void createLocalId( sal_Sequence **ppThreadId )
 {
     rtl_byte_sequence_constructNoDefault( ppThreadId , 4 + 16 );
-    sal_uInt32 id = osl_getThreadIdentifier(0);
+    sal_uInt32 id = osl::Thread::getCurrentIdentifier();
     (*ppThreadId)->elements[0] = id & 0xFF;
     (*ppThreadId)->elements[1] = (id >> 8) & 0xFF;
     (*ppThreadId)->elements[2] = (id >> 16) & 0xFF;

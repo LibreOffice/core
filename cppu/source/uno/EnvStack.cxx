@@ -25,6 +25,7 @@
 #include "rtl/instance.hxx"
 
 #include "osl/thread.h"
+#include "osl/thread.hxx"
 #include "osl/mutex.hxx"
 
 #include <boost/unordered_map.hpp>
@@ -69,7 +70,7 @@ namespace
 
 static void s_setCurrent(uno_Environment * pEnv)
 {
-    oslThreadIdentifier threadId = osl_getThreadIdentifier(NULL);
+    oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
     osl::MutexGuard guard(s_threadMap_mutex::get());
     ThreadMap &rThreadMap = s_threadMap::get();
@@ -89,7 +90,7 @@ static uno_Environment * s_getCurrent(void)
 {
     uno_Environment * pEnv = NULL;
 
-    oslThreadIdentifier threadId = osl_getThreadIdentifier(NULL);
+    oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
     osl::MutexGuard guard(s_threadMap_mutex::get());
     ThreadMap &rThreadMap = s_threadMap::get();

@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <osl/thread.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -73,7 +74,7 @@ MQuery::MQuery( const OColumnAlias& _ca )
     construct();
 
 #if OSL_DEBUG_LEVEL > 0
-    m_oThreadID = osl_getThreadIdentifier(NULL);
+    m_oThreadID = osl::Thread::getCurrentIdentifier();
 #endif
 
     OSL_TRACE( "\tOUT MQuery::MQuery( ca )" );

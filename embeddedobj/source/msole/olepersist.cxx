@@ -41,7 +41,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
-
+#include <osl/thread.hxx>
 
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
@@ -212,7 +212,7 @@ void VerbExecutionController::StartControlExecution()
     if ( !m_bVerbExecutionInProgress && !m_bWasEverActive )
     {
         m_bVerbExecutionInProgress = sal_True;
-        m_nVerbExecutionThreadIdentifier = osl_getThreadIdentifier( NULL );
+        m_nVerbExecutionThreadIdentifier = osl::Thread::getCurrentIdentifier();
         m_bChangedOnVerbExecution = sal_False;
     }
 }
@@ -223,7 +223,7 @@ sal_Bool VerbExecutionController::EndControlExecution_WasModified()
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
 
     sal_Bool bResult = sal_False;
-    if ( m_bVerbExecutionInProgress && m_nVerbExecutionThreadIdentifier == osl_getThreadIdentifier( NULL ) )
+    if ( m_bVerbExecutionInProgress && m_nVerbExecutionThreadIdentifier == osl::Thread::getCurrentIdentifier() )
     {
         bResult = m_bChangedOnVerbExecution;
         m_bVerbExecutionInProgress = sal_False;
@@ -237,7 +237,7 @@ void VerbExecutionController::ModificationNotificationIsDone()
 {
     osl::MutexGuard aGuard( m_aVerbExecutionMutex );
 
-    if ( m_bVerbExecutionInProgress && osl_getThreadIdentifier( NULL ) == m_nVerbExecutionThreadIdentifier )
+    if ( m_bVerbExecutionInProgress && osl::Thread::getCurrentIdentifier() == m_nVerbExecutionThreadIdentifier )
         m_bChangedOnVerbExecution = sal_True;
 }
 #endif

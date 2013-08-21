@@ -19,6 +19,7 @@
 
 #include <sal/types.h>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
@@ -128,7 +129,7 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
         */
 
-        id = osl_getThreadIdentifier (NULL);
+        id = osl::Thread::getCurrentIdentifier();
         id = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(id));
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&id, sizeof(id));
 

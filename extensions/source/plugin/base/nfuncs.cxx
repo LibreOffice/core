@@ -47,6 +47,7 @@
 
 #if OSL_DEBUG_LEVEL > 1
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <stdio.h>
 static FILE * s_file = 0;
 void TRACE( char const * s )
@@ -55,7 +56,7 @@ void TRACE( char const * s )
         s_file = stderr;
     if (s_file)
     {
-        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        oslThreadIdentifier t = osl::Thread::getCurrentIdentifier();
         fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s\n", t, s );
         fflush( s_file );
     }
@@ -66,7 +67,7 @@ void TRACEN( char const * s, long n )
         s_file = stderr;
     if (s_file)
     {
-        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        oslThreadIdentifier t = osl::Thread::getCurrentIdentifier();
         fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s%ld\n", t, s, n );
         fflush( s_file );
     }
@@ -77,7 +78,7 @@ void TRACES( char const* s, char const* s2 )
         s_file = stderr;
     if (s_file)
     {
-        oslThreadIdentifier t = osl_getThreadIdentifier(0);
+        oslThreadIdentifier t = osl::Thread::getCurrentIdentifier();
         fprintf( s_file, "log [t_id=%" SAL_PRIuUINT32 "]: %s %s\n", t, s, s2 );
         fflush( s_file );
     }

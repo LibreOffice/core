@@ -20,6 +20,7 @@
 
 #include "osl/mutex.hxx"
 #include "osl/thread.h"
+#include "osl/thread.hxx"
 #include "uno/dispatcher.h"
 #include "typelib/typedescription.hxx"
 #include "cppu/helper/purpenv/Environment.hxx"
@@ -79,7 +80,7 @@ void LogBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
     ++ m_count;
 
     if (!m_threadId)
-        m_threadId = osl_getThreadIdentifier(NULL);
+        m_threadId = osl::Thread::getCurrentIdentifier();
 }
 
 void LogBridge::v_enter(void)
@@ -89,7 +90,7 @@ void LogBridge::v_enter(void)
     OSL_ASSERT(m_count >= 0);
 
     if (m_count == 0)
-        m_threadId = osl_getThreadIdentifier(NULL);
+        m_threadId = osl::Thread::getCurrentIdentifier();
 
     ++ m_count;
 }
@@ -115,7 +116,7 @@ int LogBridge::v_isValid(rtl::OUString * pReason)
     }
     else
     {
-        result = m_threadId == osl_getThreadIdentifier(NULL);
+        result = m_threadId == osl::Thread::getCurrentIdentifier();
 
         if (!result)
             *pReason = rtl::OUString("wrong thread");

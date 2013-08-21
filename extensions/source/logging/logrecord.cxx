@@ -21,6 +21,7 @@
 
 #include <osl/time.h>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/diagnose.h>
 
 //........................................................................
@@ -45,7 +46,7 @@ namespace logging
         */
         OUString getCurrentThreadID()
         {
-            oslThreadIdentifier nThreadID( osl_getThreadIdentifier( NULL ) );
+            oslThreadIdentifier nThreadID( osl::Thread::getCurrentIdentifier() );
             return OUString::valueOf( (sal_Int64)nThreadID );
         }
     }

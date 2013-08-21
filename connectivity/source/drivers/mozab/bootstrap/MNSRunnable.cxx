@@ -22,6 +22,7 @@
 #include "mozillasrc/MQuery.hxx"
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.hxx>
 
 #include "pre_include_mozilla.h"
 #include <nsIProxyObjectManager.h>
@@ -64,7 +65,7 @@ MNSRunnable::MNSRunnable()
   NS_INIT_ISUPPORTS();
   _ProxiedObject=NULL;
 #if OSL_DEBUG_LEVEL > 0
-  m_oThreadID = osl_getThreadIdentifier(NULL);
+  m_oThreadID = osl::Thread::getCurrentIdentifier();
 #endif
   AddRef();
 }

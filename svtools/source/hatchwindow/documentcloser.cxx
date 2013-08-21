@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <tools/link.hxx>
@@ -58,7 +59,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 {
     if ( pMTRequest )
     {
-        if ( Application::GetMainThreadIdentifier() == osl_getThreadIdentifier( NULL ) )
+        if ( Application::GetMainThreadIdentifier() == osl::Thread::getCurrentIdentifier() )
         {
             // this is the main thread
             worker( NULL, pMTRequest );

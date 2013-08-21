@@ -65,6 +65,7 @@
 #include "tools/rcid.h" // RSC_STRING
 #include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
 #include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 #include "tools/diagnose_ex.h"
 #include "comphelper/documentconstants.hxx" // ODFVER_012_TEXT
 #include "svtools/sfxecode.hxx" // ERRCODE_SFX_*
@@ -175,7 +176,7 @@ UUIInteractionHelper::handleRequest(
         // be aware,it is the same type
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
-        != osl_getThreadIdentifier(NULL)
+        != osl::Thread::getCurrentIdentifier()
         &&
         (pApp = GetpApp())
         != 0
@@ -236,7 +237,7 @@ UUIInteractionHelper::getStringFromRequest(
         // be aware,it is the same type
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
-        != osl_getThreadIdentifier(NULL)
+        != osl::Thread::getCurrentIdentifier()
         &&
         (pApp = GetpApp())
         != 0

@@ -54,7 +54,7 @@
  *
  ************************************************************************/
 #include "lwpglobalmgr.hxx"
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 std::map< sal_uInt32,LwpGlobalMgr* > LwpGlobalMgr::m_ThreadMap;
 LwpGlobalMgr::LwpGlobalMgr(LwpSvStream* pSvStream)
 {
@@ -106,7 +106,7 @@ LwpGlobalMgr::~LwpGlobalMgr()
 
 LwpGlobalMgr* LwpGlobalMgr::GetInstance(LwpSvStream* pSvStream)
 {
-    sal_uInt32 nThreadID = osl_getThreadIdentifier((void*)0);
+    sal_uInt32 nThreadID = osl::Thread::getCurrentIdentifier();
     std::map< sal_uInt32,LwpGlobalMgr* >::iterator iter;
     iter = m_ThreadMap.find(nThreadID);
     if (iter == m_ThreadMap.end())
@@ -121,7 +121,7 @@ LwpGlobalMgr* LwpGlobalMgr::GetInstance(LwpSvStream* pSvStream)
 
 void LwpGlobalMgr::DeleteInstance()
 {
-    sal_uInt32 nThreadID = osl_getThreadIdentifier((void*)0);
+    sal_uInt32 nThreadID = osl::Thread::getCurrentIdentifier();
     std::map< sal_uInt32,LwpGlobalMgr* >::iterator iter;
     iter = m_ThreadMap.find(nThreadID);
     if (iter != m_ThreadMap.end())

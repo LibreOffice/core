@@ -145,7 +145,7 @@ AffineBridge::~AffineBridge(void)
 {
     LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::~AffineBridge(void)", this));
 
-    if (m_pInnerThread && osl_getThreadIdentifier(NULL) != m_innerThreadId)
+    if (m_pInnerThread && osl::Thread::getCurrentIdentifier() != m_innerThreadId)
     {
         m_message = CB_DONE;
         m_innerCondition.set();
@@ -165,7 +165,7 @@ AffineBridge::~AffineBridge(void)
 
 void AffineBridge::outerDispatch(int loop)
 {
-    OSL_ASSERT(m_outerThreadId == osl_getThreadIdentifier(NULL));
+    OSL_ASSERT(m_outerThreadId == osl::Thread::getCurrentIdentifier());
     OSL_ASSERT(m_innerThreadId != m_outerThreadId);
 
     Msg mm;
@@ -204,7 +204,7 @@ void AffineBridge::outerDispatch(int loop)
 
 void AffineBridge::innerDispatch(void)
 {
-    OSL_ASSERT(m_innerThreadId == osl_getThreadIdentifier(NULL));
+    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
     OSL_ASSERT(m_innerThreadId != m_outerThreadId);
 
     Msg mm;
@@ -249,7 +249,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
     bool resetId = false;
     if (!m_outerThreadId)
     {
-        m_outerThreadId = osl_getThreadIdentifier(NULL);
+        m_outerThreadId = osl::Thread::getCurrentIdentifier();
         resetId = true;
     }
 
@@ -299,16 +299,16 @@ void AffineBridge::v_enter(void)
     m_innerMutex.acquire();
 
     if (!m_enterCount)
-        m_innerThreadId = osl_getThreadIdentifier(NULL);
+        m_innerThreadId = osl::Thread::getCurrentIdentifier();
 
-    OSL_ASSERT(m_innerThreadId == osl_getThreadIdentifier(NULL));
+    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
 
     ++ m_enterCount;
 }
 
 void AffineBridge::v_leave(void)
 {
-    OSL_ASSERT(m_innerThreadId == osl_getThreadIdentifier(NULL));
+    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
 
     -- m_enterCount;
     if (!m_enterCount)
@@ -325,7 +325,7 @@ int  AffineBridge::v_isValid(rtl::OUString * pReason)
 
     else
     {
-        result = m_innerThreadId == osl_getThreadIdentifier(NULL);
+        result = m_innerThreadId == osl::Thread::getCurrentIdentifier();
 
         if (!result)
             *pReason = rtl::OUString("wrong thread");

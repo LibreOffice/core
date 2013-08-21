@@ -25,6 +25,7 @@
 #include "MLdapAttributeMap.hxx"
 
 #include <connectivity/dbexception.hxx>
+#include <osl/thread.hxx>
 
 #include "resource/mozab_res.hrc"
 
@@ -95,7 +96,7 @@ MQueryHelper::MQueryHelper()
 {
     m_aResults.clear();
 #if OSL_DEBUG_LEVEL > 0
-    m_oThreadID = osl_getThreadIdentifier(NULL);
+    m_oThreadID = osl::Thread::getCurrentIdentifier();
 #endif
 }
 
