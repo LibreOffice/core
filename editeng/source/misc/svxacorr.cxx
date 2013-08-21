@@ -2726,7 +2726,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 return pFnd;
             }
         }
-        // match "word*" pattern
+        // match "word*" patterns, eg. "i18n*"
         if ( rChk.GetChar( rChk.Len() - 1) == C_ASTERISK )
         {
             String sTmp( rChk.Copy( 0, rChk.Len() - 1 ) );
@@ -2737,7 +2737,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             } while ( nFndPos != STRING_NOTFOUND && !(!nFndPos || IsWordDelim( rTxt.GetChar( nFndPos - 1 ))));
             if ( nFndPos != STRING_NOTFOUND )
             {
-                // store matching pattern and its replacement as a new list item, eg. "wordi" -> "wordy"
+                // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + nFndPos, nEndPos - nFndPos), pFnd->GetLong() + OUString(rTxt.GetBuffer() + nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len()));
                 if( Insert( pNew ) )
                 {
