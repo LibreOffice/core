@@ -181,8 +181,6 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
     bShowColumns    (bShowCol),
     pImpl(new SwDBTreeList_Impl(pSh))
 {
-    SetHelpId(HID_DB_SELECTION_TLB);
-
     if (IsVisible())
         InitTreeList();
 }
@@ -194,8 +192,6 @@ SwDBTreeList::SwDBTreeList(Window *pParent, WinBits nStyle)
     , bShowColumns(false)
     , pImpl(new SwDBTreeList_Impl(NULL))
 {
-    SetHelpId(HID_DB_SELECTION_TLB);
-
     if (IsVisible())
         InitTreeList();
 }

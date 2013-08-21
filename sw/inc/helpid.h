@@ -321,8 +321,6 @@
 
 #define HID_COND_COLL_TABLIST                                   "SW_HID_COND_COLL_TABLIST"
 
-#define HID_DB_SELECTION_TLB                                    "SW_HID_DB_SELECTION_TLB"
-
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 
 #define HID_AP_INSERT_DB_SEL                                    "SW_HID_AP_INSERT_DB_SEL"
