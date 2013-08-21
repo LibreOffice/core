@@ -79,8 +79,6 @@ using namespace ::xmloff::token;
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 
-#undef WANTEXCEPT
-
 ////////////////////////////////////////////////////////////
 
 namespace {

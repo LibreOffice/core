@@ -81,8 +81,6 @@ using namespace ::xmloff::token;
 
 #define EXPORT_SVC_NAME "com.sun.star.xml.XMLExportFilter"
 
-#undef WANTEXCEPT
-
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
 {
     sal_Unicode cRes = cChar;
