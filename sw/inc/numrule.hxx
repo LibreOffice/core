@@ -115,7 +115,6 @@ private:
     /// default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
     static sal_uInt16 nRefCount;
-    static char* pDefOutlineName;
 
     SwNumFmt* aFmts[ MAXLEVEL ];
 
@@ -208,7 +207,7 @@ public:
     void SetNumRuleMap(
                 boost::unordered_map<OUString, SwNumRule *, OUStringHash>* pNumRuleMap );
 
-    static char* GetOutlineRuleName() { return pDefOutlineName; }
+    static OUString GetOutlineRuleName();
 
     static sal_uInt16 GetNumIndent( sal_uInt8 nLvl );
     static sal_uInt16 GetBullIndent( sal_uInt8 nLvl );

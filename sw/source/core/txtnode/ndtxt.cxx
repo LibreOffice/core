@@ -3599,7 +3599,7 @@ namespace {
                     rTxtNode.RemoveFromList();
                     // If new list style is the outline style, apply outline
                     // level as the list level.
-                    if (sNumRule.equalsAscii(SwNumRule::GetOutlineRuleName()))
+                    if (sNumRule==SwNumRule::GetOutlineRuleName())
                     {
                         // #i70748#
                         OSL_ENSURE( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
@@ -4830,8 +4830,7 @@ namespace {
                 // If paragraph has no list level attribute set and list style
                 // is the outline style, apply outline level as the list level.
                 if ( !mrTxtNode.HasAttrListLevel() &&
-                     mrTxtNode.GetNumRule()->GetName().equalsAscii(
-                        SwNumRule::GetOutlineRuleName()) &&
+                     mrTxtNode.GetNumRule()->GetName()==SwNumRule::GetOutlineRuleName() &&
                      mrTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle() )
                 {
                     int nNewListLevel = mrTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();

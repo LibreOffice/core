@@ -59,14 +59,16 @@ SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
 SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-char sOutline[] = "Outline";
-char* SwNumRule::pDefOutlineName = sOutline;
-
 const sal_uInt16 SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
 };
+
+OUString SwNumRule::GetOutlineRuleName()
+{
+    return OUString("Outline");
+}
 
 const SwNumFmt& SwNumRule::Get( sal_uInt16 i ) const
 {

@@ -370,7 +370,7 @@ SwDoc::SwDoc()
     _InitFieldTypes();
 
     // Create a default OutlineNumRule (for Filters)
-    mpOutlineRule = new SwNumRule( OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
+    mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
@@ -843,7 +843,7 @@ void SwDoc::ClearDoc()
     maListStyleLists.clear();
 
     // creation of new outline numbering rule
-    mpOutlineRule = new SwNumRule( OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
+    mpOutlineRule = new SwNumRule( SwNumRule::GetOutlineRuleName(),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
