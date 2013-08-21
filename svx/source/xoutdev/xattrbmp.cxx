@@ -42,12 +42,6 @@
 
 using namespace ::com::sun::star;
 
-/*************************************************************************
-|*
-|*    XOBitmap::XOBitmap( Bitmap aBitmap )
-|*
-*************************************************************************/
-
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBITMAP_IMPORT ),
     aGraphicObject  ( rBmp ),
@@ -55,12 +49,6 @@ XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     bGraphicDirty   ( sal_False )
 {
 }
-
-/*************************************************************************
-|*
-|*    XOBitmap::XOBitmap( const XOBitmap& rXBmp )
-|*
-*************************************************************************/
 
 XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
     pPixelArray ( NULL )
@@ -84,22 +72,10 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
     }
 }
 
-/*************************************************************************
-|*
-|*    XOBitmap::XOBitmap( Bitmap aBitmap )
-|*
-*************************************************************************/
-
 XOBitmap::~XOBitmap()
 {
     delete [] pPixelArray;
 }
-
-/*************************************************************************
-|*
-|*    XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
-|*
-*************************************************************************/
 
 XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 {
@@ -122,12 +98,6 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
     }
     return( *this );
 }
-
-/*************************************************************************
-|*
-|*    int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
-|*
-*************************************************************************/
 
 int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
 {
@@ -153,22 +123,10 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
     return( sal_True );
 }
 
-/*************************************************************************
-|*
-|*    Bitmap XOBitmap::GetBitmap()
-|*
-*************************************************************************/
-
 Bitmap XOBitmap::GetBitmap() const
 {
     return GetGraphicObject().GetGraphic().GetBitmap();
 }
-
-/*************************************************************************
-|*
-|*    Bitmap XOBitmap::GetGraphicObject()
-|*
-*************************************************************************/
 
 const GraphicObject& XOBitmap::GetGraphicObject() const
 {
@@ -178,21 +136,12 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
     return aGraphicObject;
 }
 
-/*************************************************************************
-|*
-|*    void XOBitmap::Bitmap2Array()
-|*
-|*    Beschreibung      Umwandlung der Bitmap in Array, Hinter- u.
-|*                      Vordergrundfarbe
-|*
-*************************************************************************/
-
 void XOBitmap::Bitmap2Array()
 {
     VirtualDevice   aVD;
     bool            bPixelColor = false;
     const Bitmap    aBitmap( GetBitmap() );
-    const sal_uInt16    nLines = 8; // von Type abhaengig
+    const sal_uInt16    nLines = 8; // type dependent
 
     if( !pPixelArray )
         pPixelArray = new sal_uInt16[ nLines * nLines ];
@@ -201,8 +150,7 @@ void XOBitmap::Bitmap2Array()
     aVD.DrawBitmap( Point(), aBitmap );
     aPixelColor = aBckgrColor = aVD.GetPixel( Point() );
 
-    // Aufbau des Arrays und Ermittlung der Vorder-, bzw.
-    // Hintergrundfarbe
+    // create array and determine foreground and background color
     for( sal_uInt16 i = 0; i < nLines; i++ )
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
@@ -222,26 +170,18 @@ void XOBitmap::Bitmap2Array()
     }
 }
 
-/*************************************************************************
-|*
-|*    void XOBitmap::Array2Bitmap()
-|*
-|*    Beschreibung      Umwandlung des Arrays, Hinter- u.
-|*                      Vordergrundfarbe in eine Bitmap
-|*
-*************************************************************************/
-
+/// convert array, fore- and background color into a bitmap
 void XOBitmap::Array2Bitmap()
 {
     VirtualDevice   aVD;
-    sal_uInt16          nLines = 8; // von Type abhaengig
+    sal_uInt16          nLines = 8; // type dependent
 
     if( !pPixelArray )
         return;
 
     aVD.SetOutputSizePixel( Size( nLines, nLines ) );
 
-    // Aufbau der Bitmap
+    // create bitmap
     for( sal_uInt16 i = 0; i < nLines; i++ )
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
@@ -257,12 +197,9 @@ void XOBitmap::Array2Bitmap()
     bGraphicDirty = sal_False;
 }
 
-// -----------------------
 // class XFillBitmapItem
-// -----------------------
-TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
-//////////////////////////////////////////////////////////////////////////////
+TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
 XFillBitmapItem::XFillBitmapItem(const XubString& rName, const GraphicObject& rGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
@@ -270,15 +207,11 @@ XFillBitmapItem::XFillBitmapItem(const XubString& rName, const GraphicObject& rG
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 :   NameOrIndex(rItem),
     maGraphicObject(rItem.maGraphicObject)
 {
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, Color aColorBack)
 {
@@ -313,8 +246,6 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
     return aBitmap;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
 {
     if(!rBitmapEx.IsTransparent())
@@ -346,8 +277,6 @@ bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBa
     return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
 :   NameOrIndex(XATTR_FILLBITMAP, rIn)
 {
@@ -355,7 +284,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
     {
         if(0 == nVer)
         {
-            // Behandlung der alten Bitmaps
+            // work with the old bitmap
             Bitmap aBmp;
 
             ReadDIB(aBmp, rIn, true);
@@ -405,22 +334,16 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 XFillBitmapItem::XFillBitmapItem(SfxItemPool* /*pPool*/, const GraphicObject& rGraphicObject)
 :   NameOrIndex( XATTR_FILLBITMAP, -1),
     maGraphicObject(rGraphicObject)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillBitmapItem(*this);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 {
@@ -428,14 +351,10 @@ int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
         && maGraphicObject == ((const XFillBitmapItem&)rItem).maGraphicObject);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 {
     return new XFillBitmapItem( rIn, nVer );
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
@@ -449,29 +368,20 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
     return rOut;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 const GraphicObject& XFillBitmapItem::GetGraphicObject() const
 {
     return maGraphicObject;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
 {
     maGraphicObject = rGraphicObject;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
-    // version three
     return(2);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 SfxItemPresentation XFillBitmapItem::GetPresentation(
     SfxItemPresentation ePres,
@@ -493,8 +403,6 @@ SfxItemPresentation XFillBitmapItem::GetPresentation(
             return SFX_ITEM_PRESENTATION_NONE;
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId) const
 {
@@ -556,8 +464,6 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 
     return true;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
@@ -629,8 +535,6 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     return (bSetName || bSetURL || bSetBitmap);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 sal_Bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     const GraphicObject& aGraphicObjectA(((XFillBitmapItem*)p1)->GetGraphicObject());
@@ -638,8 +542,6 @@ sal_Bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrI
 
     return aGraphicObjectA == aGraphicObjectB;
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {

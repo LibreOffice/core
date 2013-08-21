@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/XPropertyTable.hxx>
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
@@ -37,7 +36,6 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XColorEntry
 
 XColorEntry::XColorEntry(const Color& rColor, const String& rName)
@@ -52,7 +50,6 @@ aColor(rOther.aColor)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XLineEndEntry
 
 XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
@@ -67,7 +64,6 @@ XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XDashEntry
 
 XDashEntry::XDashEntry(const XDash& rDash, const String& rName)
@@ -82,7 +78,6 @@ aDash(rOther.aDash)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XHatchEntry
 
 XHatchEntry::XHatchEntry(const XHatch& rHatch, const String& rName)
@@ -97,7 +92,6 @@ XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XGradientEntry
 
 XGradientEntry::XGradientEntry(const XGradient& rGradient, const String& rName)
@@ -112,7 +106,6 @@ XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // class XBitmapEntry
 
 XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)

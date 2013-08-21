@@ -58,11 +58,10 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHM
         {
             AnimationBitmap aAnimBmp( aNewAnim.Get( i ) );
 
-            // BitmapEx spiegeln
+            // mirror the BitmapEx
             aAnimBmp.aBmpEx.Mirror( nMirrorFlags );
 
-            // Die Positionen innerhalb der Gesamtbitmap
-            // muessen natuerlich auch angepasst werden
+            // Adjust the positions inside the whole bitmap
             if( bHMirr )
                 aAnimBmp.aPosPix.X() = rGlobalSize.Width() - aAnimBmp.aPosPix.X() -
                                        aAnimBmp.aSizePix.Width();
@@ -482,7 +481,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
     if( ( aWorkRect.GetWidth() > 4 ) && ( aWorkRect.GetHeight() > 4 ) )
     {
-        // falls Flag gesetzt, muessen wir Kanten detektieren
+        // if the flag is set, we need to detect edges
         if( nFlags & XOUTBMP_CONTOUR_EDGEDETECT )
             aWorkBmp = DetectEdges( rBmp, cEdgeDetectThreshold );
         else
@@ -520,7 +519,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                 {
                     nY = nStartY1;
 
-                    // zunaechst Zeile von Links nach Rechts durchlaufen
+                    // scan row from left to right
                     while( nY < nEndY1 )
                     {
                         if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -528,7 +527,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nY = nStartY2;
 
-                            // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
+                            // this loop always breaks eventually as there is at least one pixel
                             while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -557,7 +556,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                 {
                     nX = nStartX1;
 
-                    // zunaechst Zeile von Links nach Rechts durchlaufen
+                    // scan row from left to right
                     while( nX < nEndX1 )
                     {
                         if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -565,7 +564,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nX = nStartX2;
 
-                            // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
+                            // this loop always breaks eventually as there is at least one pixel
                             while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )

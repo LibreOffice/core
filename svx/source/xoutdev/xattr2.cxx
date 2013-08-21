@@ -29,58 +29,29 @@
 #include <svx/xdef.hxx>
 #include <svx/AffineMatrixItem.hxx>
 
-/************************************************************************/
-
-//------------------------------
 // class XLineTransparenceItem
-//------------------------------
-TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
-/*************************************************************************
-|*
-|*    XLineTransparenceItem::XLineTransparenceItem(sal_uInt16)
-|*
-*************************************************************************/
+TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
 {
 }
 
-/*************************************************************************
-|*
-|*    XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn)
-|*
-*************************************************************************/
-
 XLineTransparenceItem::XLineTransparenceItem(SvStream& rIn) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, rIn)
 {
 }
-
-/*************************************************************************
-|*
-|*    XLineTransparenceItem::Clone(SfxItemPool* pPool) const
-|*
-*************************************************************************/
 
 SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineTransparenceItem(*this);
 }
 
-/*************************************************************************
-|*
-|*    SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-|*
-*************************************************************************/
-
 SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XLineTransparenceItem(rIn);
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation XLineTransparenceItem::GetPresentation
 (
@@ -106,34 +77,24 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
     }
 }
 
-//-----------------------
 // class XLineJointItem -
-//-----------------------
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
-
-// -----------------------------------------------------------------------------
 
 XLineJointItem::XLineJointItem( com::sun::star::drawing::LineJoint eLineJoint ) :
     SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XLineJointItem::XLineJointItem( SvStream& rIn ) :
     SfxEnumItem( XATTR_LINEJOINT, rIn )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
-
-// -----------------------------------------------------------------------------
 
 SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
 {
@@ -145,14 +106,10 @@ SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
     return pRet;
 }
 
-// -----------------------------------------------------------------------------
-
 SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineJointItem( *this );
 }
-
-// -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
@@ -205,16 +162,12 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
     }
 }
 
-// -----------------------------------------------------------------------------
-
 bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     const ::com::sun::star::drawing::LineJoint eJoint = GetValue();
     rVal <<= eJoint;
     return true;
 }
-
-// -----------------------------------------------------------------------------
 
 bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
@@ -234,17 +187,13 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt16 XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
 }
 
-//---------------------
 // class AffineMatrixItem
-//---------------------
 
 TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
 
@@ -352,34 +301,24 @@ const com::sun::star::geometry::AffineMatrix2D& AffineMatrixItem::GetAffineMatri
     return maMatrix;
 }
 
-//-----------------------
 // class XLineCapItem -
-//-----------------------
 
 TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
-
-// -----------------------------------------------------------------------------
 
 XLineCapItem::XLineCapItem(com::sun::star::drawing::LineCap eLineCap)
 :   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
 {
 }
 
-// -----------------------------------------------------------------------------
-
 XLineCapItem::XLineCapItem( SvStream& rIn )
 :   SfxEnumItem(XATTR_LINECAP, rIn)
 {
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt16 XLineCapItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
-
-// -----------------------------------------------------------------------------
 
 SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
 {
@@ -391,14 +330,10 @@ SfxPoolItem* XLineCapItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
     return pRet;
 }
 
-// -----------------------------------------------------------------------------
-
 SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XLineCapItem( *this );
 }
-
-// -----------------------------------------------------------------------------
 
 SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
                                                      SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
@@ -439,16 +374,12 @@ SfxItemPresentation XLineCapItem::GetPresentation( SfxItemPresentation ePres, Sf
     }
 }
 
-// -----------------------------------------------------------------------------
-
 bool XLineCapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     const com::sun::star::drawing::LineCap eCap(GetValue());
     rVal <<= eCap;
     return true;
 }
-
-// -----------------------------------------------------------------------------
 
 bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
@@ -476,15 +407,11 @@ bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /
     return true;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt16 XLineCapItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 3;
 }
-
-// -----------------------------------------------------------------------------
 
 com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
 {
@@ -496,56 +423,29 @@ com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
     return eRetval;
 }
 
-//------------------------------
 // class XFillTransparenceItem
-//------------------------------
-TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
-/*************************************************************************
-|*
-|*    XFillTransparenceItem::XFillTransparenceItem(sal_uInt16)
-|*
-*************************************************************************/
+TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
 XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
 {
 }
 
-/*************************************************************************
-|*
-|*    XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn)
-|*
-*************************************************************************/
-
 XFillTransparenceItem::XFillTransparenceItem(SvStream& rIn) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, rIn)
 {
 }
-
-/*************************************************************************
-|*
-|*    XFillTransparenceItem::Clone(SfxItemPool* pPool) const
-|*
-*************************************************************************/
 
 SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFillTransparenceItem(*this);
 }
 
-/*************************************************************************
-|*
-|*    SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-|*
-*************************************************************************/
-
 SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillTransparenceItem(rIn);
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation XFillTransparenceItem::GetPresentation
 (
@@ -571,106 +471,53 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
     }
 }
 
-//------------------------------
 // class XFormTextShadowTranspItem
-//------------------------------
-TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
-/*************************************************************************
-|*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16)
-|*
-*************************************************************************/
+TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
 XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
 {
 }
 
-/*************************************************************************
-|*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn)
-|*
-*************************************************************************/
-
 XFormTextShadowTranspItem::XFormTextShadowTranspItem(SvStream& rIn) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, rIn)
 {
 }
-
-/*************************************************************************
-|*
-|*    XFormTextShadowTranspItem::Clone(SfxItemPool* pPool) const
-|*
-*************************************************************************/
 
 SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new XFormTextShadowTranspItem(*this);
 }
 
-/*************************************************************************
-|*
-|*    SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-|*
-*************************************************************************/
-
 SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFormTextShadowTranspItem(rIn);
 }
 
-
-//------------------------------
 // class XFillGradientStepCountItem
-//------------------------------
-TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
-/*************************************************************************
-|*
-|*    XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 )
-|*
-*************************************************************************/
+TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
 XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
 {
 }
 
-/*************************************************************************
-|*
-|*    XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn )
-|*
-*************************************************************************/
-
 XGradientStepCountItem::XGradientStepCountItem( SvStream& rIn ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, rIn )
 {
 }
-
-/*************************************************************************
-|*
-|*    XGradientStepCountItem::Clone( SfxItemPool* pPool ) const
-|*
-*************************************************************************/
 
 SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XGradientStepCountItem( *this );
 }
 
-/*************************************************************************
-|*
-|*    SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-|*
-*************************************************************************/
-
 SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XGradientStepCountItem( rIn );
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation XGradientStepCountItem::GetPresentation
 (
@@ -696,10 +543,8 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTileItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 
 XFillBmpTileItem::XFillBmpTileItem( sal_Bool bTile ) :
@@ -744,10 +589,8 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTilePosItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 
 XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
@@ -797,10 +640,8 @@ sal_uInt16 XFillBmpPosItem::GetValueCount() const
     return 9;
 }
 
-
-//------------------------------
 // class XFillBmpTileSizeXItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
 
 XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
@@ -850,10 +691,8 @@ bool XFillBmpSizeXItem::HasMetrics() const
     return GetValue() > 0L;
 }
 
-
-//------------------------------
 // class XFillBmpTileSizeYItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
 
 XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
@@ -903,10 +742,8 @@ bool XFillBmpSizeYItem::HasMetrics() const
     return GetValue() > 0L;
 }
 
-
-//------------------------------
 // class XFillBmpTileLogItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 
 XFillBmpSizeLogItem::XFillBmpSizeLogItem( sal_Bool bLog ) :
@@ -951,10 +788,8 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTileOffXItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
 
 XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
@@ -999,10 +834,8 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTileOffYItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
 
 XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
@@ -1047,10 +880,8 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpStretchItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 
 XFillBmpStretchItem::XFillBmpStretchItem( sal_Bool bStretch ) :
@@ -1095,10 +926,8 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTileOffPosXItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
 
 XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
@@ -1143,10 +972,8 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
     }
 }
 
-
-//------------------------------
 // class XFillBmpTileOffPosYItem
-//------------------------------
+
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
 
 XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
@@ -1191,56 +1018,29 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
     }
 }
 
-//--------------------------
 // class XFillBackgroundItem
-//--------------------------
-TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
-/*************************************************************************
-|*
-|*    XFillBackgroundItem::XFillBackgroundItem( sal_Bool )
-|*
-*************************************************************************/
+TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
 XFillBackgroundItem::XFillBackgroundItem( sal_Bool bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )
 {
 }
 
-/*************************************************************************
-|*
-|*    XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn )
-|*
-*************************************************************************/
-
 XFillBackgroundItem::XFillBackgroundItem( SvStream& rIn ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, rIn )
 {
 }
-
-/*************************************************************************
-|*
-|*    XFillBackgroundItem::Clone( SfxItemPool* pPool ) const
-|*
-*************************************************************************/
 
 SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 {
     return new XFillBackgroundItem( *this );
 }
 
-/*************************************************************************
-|*
-|*    SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-|*
-*************************************************************************/
-
 SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBackgroundItem( rIn );
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/,
                                                           SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
@@ -1259,7 +1059,5 @@ SfxItemPresentation XFillBackgroundItem::GetPresentation( SfxItemPresentation eP
             return SFX_ITEM_PRESENTATION_NONE;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

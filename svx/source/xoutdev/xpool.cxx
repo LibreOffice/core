@@ -24,12 +24,6 @@
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
-
 XOutdevItemPool::XOutdevItemPool(
     SfxItemPool* _pMaster,
     sal_uInt16 nAttrStart,
@@ -170,13 +164,7 @@ XOutdevItemPool::XOutdevItemPool(
     }
 }
 
-/*************************************************************************
-|*
-|* copy ctor, sorgt dafuer, dass die static defaults gecloned werden
-|*            (Parameter 2 = sal_True)
-|*
-\************************************************************************/
-
+// copy ctor, clones all static defaults
 XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 :   SfxItemPool(rPool, sal_True),
     mppLocalPoolDefaults(0L),
@@ -184,22 +172,10 @@ XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
 {
 }
 
-/*************************************************************************
-|*
-|* Clone()
-|*
-\************************************************************************/
-
 SfxItemPool* XOutdevItemPool::Clone() const
 {
     return new XOutdevItemPool(*this);
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 XOutdevItemPool::~XOutdevItemPool()
 {
@@ -211,7 +187,7 @@ XOutdevItemPool::~XOutdevItemPool()
         SfxPoolItem** ppDefaultItem = mppLocalPoolDefaults;
         for(sal_uInt16 i(GetLastWhich() - GetFirstWhich() + 1); i; --i, ++ppDefaultItem)
         {
-            if ( *ppDefaultItem ) //Teile schon von abgel. Klasse abgeraeumt!
+            if ( *ppDefaultItem ) // these parts might be already cleaned up from a derived class
             {
                 SetRefCount( **ppDefaultItem, 0 );
                 delete *ppDefaultItem;

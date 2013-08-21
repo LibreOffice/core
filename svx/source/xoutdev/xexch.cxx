@@ -30,47 +30,25 @@
 
 TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
 
-
-/*************************************************************************
-|*
-|* Default-Ctor (Fuer Assign())
-|*
-*************************************************************************/
+/// default CTOR, for Assign()
 XFillExchangeData::XFillExchangeData() :
     pXFillAttrSetItem( NULL ),
     pPool( NULL )
 {
 }
 
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-*************************************************************************/
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem rXFillAttrSetItem ) :
     pXFillAttrSetItem( (XFillAttrSetItem*) rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ),
     pPool( rXFillAttrSetItem.GetItemSet().GetPool() )
 {
 }
 
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-*************************************************************************/
 XFillExchangeData::~XFillExchangeData()
 {
     delete pXFillAttrSetItem;
 }
 
-/******************************************************************************
-|*
-|*  Binaer-Export (z.Z. ohne Versionsverwaltung, da nicht persistent!)
-|*
-\******************************************************************************/
-
+/// binary export (currently w/o version control because it is not persistent)
 SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 {
     if( rData.pXFillAttrSetItem )
@@ -108,13 +86,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
     return rOStm;
 }
 
-
-/******************************************************************************
-|*
-|*  Binaer-Import (z.Z. ohne Versionsverwaltung, da nicht persistent!)
-|*
-\******************************************************************************/
-
+/// binary export (currently w/o version control because it is not persistent)
 SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 {
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
@@ -153,12 +125,6 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
 
     return rIStm;
 }
-
-/*************************************************************************
-|*
-|*    XBitmap& XBitmap::operator=( const XBitmap& rXBmp )
-|*
-*************************************************************************/
 
 XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData )
 {
