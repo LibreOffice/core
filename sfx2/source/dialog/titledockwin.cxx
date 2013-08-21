@@ -81,7 +81,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TitledDockingWindow::SetTitle( const String& i_rTitle )
+    void TitledDockingWindow::SetTitle( const OUString& i_rTitle )
     {
         m_sTitle = i_rTitle;
         Invalidate();
@@ -220,7 +220,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String TitledDockingWindow::impl_getTitle() const
+    OUString TitledDockingWindow::impl_getTitle() const
     {
         return !m_sTitle.isEmpty() ? m_sTitle : GetText();
     }
@@ -237,7 +237,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
+    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
         const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );

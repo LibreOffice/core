@@ -50,7 +50,7 @@ namespace sfx2
 
         /** sets a title to be displayed in the docking window
         */
-        void        SetTitle( const String& i_rTitle );
+        void        SetTitle( const OUString& i_rTitle );
 
         /** adds a drop down item to the toolbox. Usually, this is used to add some kind of menu to the toolbox.
 
@@ -63,7 +63,7 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        sal_uInt16  AddDropDownToolBoxItem( const String& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
+        sal_uInt16  AddDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
@@ -113,13 +113,13 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        sal_uInt16  impl_addDropDownToolBoxItem( const String& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback );
+        sal_uInt16  impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback );
 
         /** returns the current title.
 
             If no title has been set via SetTitle, then the window text (Window::GetText) is returned.
         */
-        String  impl_getTitle() const;
+        OUString  impl_getTitle() const;
 
     private:
         DECL_LINK( OnToolboxItemSelected, ToolBox* );
