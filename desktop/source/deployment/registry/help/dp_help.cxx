@@ -542,7 +542,7 @@ void BackendImpl::implProcessHelp(
                                     if( aErrorInfo.m_nXMLParsingLine != -1 )
                                     {
                                         aErrStr += OUString(", line " );
-                                        aErrStr += OUString::valueOf( aErrorInfo.m_nXMLParsingLine );
+                                        aErrStr += OUString::number( aErrorInfo.m_nXMLParsingLine );
                                     }
                                 }
                             }

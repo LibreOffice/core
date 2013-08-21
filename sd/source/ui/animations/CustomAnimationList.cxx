@@ -134,7 +134,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
     }
 
     aDescription += " ";
-    aDescription += OUString::valueOf( getShapeIndex( xShape ) );
+    aDescription += OUString::number( getShapeIndex( xShape ) );
 
     if( bWithText )
     {

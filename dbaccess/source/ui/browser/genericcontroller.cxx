@@ -602,7 +602,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
             if ( m_aSupportedFeatures.end() == aFeaturePos )
             {
                 OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
-                sMessage += OString::valueOf( aNextFeature.nId );
+                sMessage += OString::number( aNextFeature.nId );
                 sMessage += OString( " has been invalidated, but is not supported!" );
                 SAL_WARN("dbaccess.ui", sMessage.getStr() );
             }

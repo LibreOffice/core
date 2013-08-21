@@ -201,7 +201,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             uno::Reference< chart::XChartDataArray> xChartData( m_xInternal, uno::UNO_QUERY_THROW );
             xChartData->setData( uno::Sequence< uno::Sequence< double > >() );
             xChartData->setColumnDescriptions( uno::Sequence< OUString >() );
-            if ( m_xInternal->hasDataByRangeRepresentation( OUString::valueOf( sal_Int32(0) ) ) )
+            if ( m_xInternal->hasDataByRangeRepresentation( OUString::number( 0 ) ) )
                 m_xInternal->deleteSequence(0);
         }
         catch( const uno::Exception& )
@@ -754,7 +754,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= col->nDataType );
 
         const sal_Int32 columnIndex = col - aColumns.begin();
-        const OUString sRangeName = OUString::valueOf( columnIndex );
+        const OUString sRangeName = OUString::number( columnIndex );
         m_aNumberFormats.insert( ::std::map< OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
     }
 
@@ -803,7 +803,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
               4.30, 9.02, 6.20 };
         for(sal_Int32 h = 0,k = 0; h < nRowCount; ++h,++k )
         {
-            aRowLabels.push_back(OUString::valueOf(h+1));
+            aRowLabels.push_back(OUString::number(h+1));
             ::std::vector< double > aRow;
             const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)

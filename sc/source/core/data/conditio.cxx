@@ -1069,26 +1069,26 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
         case SC_COND_BEGINS_WITH:
             if(aStrVal1.isEmpty())
             {
-                OUString aStr = OUString::valueOf(nVal1);
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr = OUString::number(nVal1);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.indexOf(aStr) == 0;
             }
             else
             {
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.indexOf(aStrVal1) == 0;
             }
             break;
         case SC_COND_ENDS_WITH:
             if(aStrVal1.isEmpty())
             {
-                OUString aStr = OUString::valueOf(nVal1);
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr = OUString::number(nVal1);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.endsWith(aStr) == 0;
             }
             else
             {
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.endsWith(aStrVal1) == 0;
             }
             break;
@@ -1096,13 +1096,13 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
         case SC_COND_NOT_CONTAINS_TEXT:
             if(aStrVal1.isEmpty())
             {
-                OUString aStr = OUString::valueOf(nVal1);
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr = OUString::number(nVal1);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.indexOf(aStr) != -1;
             }
             else
             {
-                OUString aStr2 = OUString::valueOf(nArg);
+                OUString aStr2 = OUString::number(nArg);
                 bValid = aStr2.indexOf(aStrVal1) != -1;
             }
 

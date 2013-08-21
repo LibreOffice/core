@@ -475,7 +475,7 @@ namespace xmloff
         {
             // assemble the new name (suggestion)
             sReturn = sUnnamedName;
-            sReturn += OUString::valueOf(i);
+            sReturn += OUString::number(i);
             // check the existence (this is the bad performance part ....)
             for (pNames = aNames.getConstArray(); pNames<pNamesEnd; ++pNames)
             {

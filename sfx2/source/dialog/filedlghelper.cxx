@@ -1834,9 +1834,9 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
     sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":module="));
     sQuery.append(rFactory); // use long name here !
     sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":iflags="));
-    sQuery.append(OUString::valueOf((sal_Int32)m_nMustFlags));
+    sQuery.append(OUString::number(m_nMustFlags));
     sQuery.appendAscii(RTL_CONSTASCII_STRINGPARAM(":eflags="));
-    sQuery.append(OUString::valueOf((sal_Int32)m_nDontFlags));
+    sQuery.append(OUString::number(m_nDontFlags));
 
     uno::Reference< XEnumeration > xResult;
     try

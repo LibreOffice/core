@@ -99,7 +99,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_preview\n" );
 
-    aBuffer.append( OString::valueOf( sal_Int32( aSlideNumber ) ).getStr() );
+    aBuffer.append( OString::number( aSlideNumber ).getStr() );
     aBuffer.append( "\n" );
 
     aBuffer.append( aEncodedShortString.getStr() );
@@ -190,7 +190,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_notes\n" );
 
-    aBuffer.append( OString::valueOf( sal_Int32( aSlideNumber ) ).getStr() );
+    aBuffer.append( OString::number( aSlideNumber ).getStr() );
     aBuffer.append( "\n" );
 
     aBuffer.append( "<html><body>" );

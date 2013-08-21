@@ -215,7 +215,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
 
     // Tagestexte anlegen
     for (sal_Int32 i = 0; i < 31; ++i)
-        maDayTexts[i] = OUString::valueOf(i+1);
+        maDayTexts[i] = OUString::number(i+1);
 
     maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
     maDragScrollTimer.SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
@@ -957,7 +957,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 for ( sal_uInt16 nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
                 {
                     sal_Int32 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                    OUString aWeekText(OUString::valueOf(nWeek));
+                    OUString aWeekText(OUString::number(nWeek));
                     long    nOffX = (mnWeekWidth-WEEKNUMBER_OFFX)-GetTextWidth( aWeekText );
                     long    nOffY = (mnDayHeight-GetTextHeight())/2;
                     DrawText( Point( nDayX+nOffX, nDayY+nOffY ), aWeekText );
@@ -1281,7 +1281,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
             pYearPopupMenus[i]->InsertItem( nYearIdCount+j,
                     maCalendarWrapper.getDisplayName(
                         i18n::CalendarDisplayIndex::MONTH, j-1, 1));
-        aPopupMenu.InsertItem( 10+i, OUString::valueOf( static_cast<sal_Int32>(nYear+i) ) );
+        aPopupMenu.InsertItem( 10+i, OUString::number( nYear+i ) );
         aPopupMenu.SetPopupMenu( 10+i, pYearPopupMenus[i] );
         nYearIdCount += 1000;
     }

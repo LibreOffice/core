@@ -263,7 +263,7 @@ namespace dbp
         for (::svt::WizardTypes::WizardState i=0; i<m_aExistingRadios.GetEntryCount(); ++i)
         {
             rSettings.aLabels.push_back(m_aExistingRadios.GetEntry(i));
-            rSettings.aValues.push_back(OUString::valueOf((sal_Int32)(i + 1)));
+            rSettings.aValues.push_back(OUString::number((i + 1)));
         }
 
         return sal_True;

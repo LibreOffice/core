@@ -1630,7 +1630,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 sal_Int64 nRepeat = static_cast< sal_Int64 >( nHiddenIndex - nNextIndex );
                 if(nRepeat>1)
                     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                                   OUString::valueOf( nRepeat ));
+                                   OUString::number( nRepeat ));
                 SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
             }
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_VISIBILITY, GetXMLToken( XML_COLLAPSE ) );
@@ -1644,7 +1644,7 @@ void SchXMLExportHelper_Impl::exportTable()
             sal_Int64 nRepeat = static_cast< sal_Int64 >( nEndIndex - nNextIndex + 1 );
             if(nRepeat>1)
                 mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,
-                               OUString::valueOf( nRepeat ));
+                               OUString::number( nRepeat ));
             SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMN, sal_True, sal_True );
         }
     }
@@ -3413,7 +3413,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
                     if( aLastPoint.mnRepeat > 1 )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
-                                            OUString::valueOf( (sal_Int64)( aLastPoint.mnRepeat ) ));
+                                            OUString::number( ( aLastPoint.mnRepeat ) ));
 
                     SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
                 }
@@ -3427,7 +3427,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
 
                 if( aLastPoint.mnRepeat > 1 )
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_REPEATED,
-                                        OUString::valueOf( (sal_Int64)( aLastPoint.mnRepeat ) ));
+                                        OUString::number( ( aLastPoint.mnRepeat ) ));
 
                 SvXMLElementExport aPointElem( mrExport, XML_NAMESPACE_CHART, XML_DATA_POINT, sal_True, sal_True );
             }

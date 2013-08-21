@@ -58,7 +58,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
     if( nIndex != -1 )
     {
         aTipHelp = aTipHelp.replaceAt(nIndex, aReplacementStr.getLength(),
-            OUString::valueOf( nLightNumber ) );
+            OUString::number( nLightNumber ) );
     }
     this->SetQuickHelpText( String( aTipHelp ) );
 }
@@ -143,13 +143,13 @@ namespace
     OUString lcl_makeColorName( Color rColor )
     {
         OUString aStr = SVX_RESSTR(RID_SVXFLOAT3D_FIX_R) +
-                        OUString::valueOf((sal_Int32)rColor.GetRed()) +
+                        OUString::number(rColor.GetRed()) +
                         " " +
                         SVX_RESSTR(RID_SVXFLOAT3D_FIX_G) +
-                        OUString::valueOf((sal_Int32)rColor.GetGreen()) +
+                        OUString::number(rColor.GetGreen()) +
                         " " +
                         SVX_RESSTR(RID_SVXFLOAT3D_FIX_B) +
-                        OUString::valueOf((sal_Int32)rColor.GetBlue());
+                        OUString::number(rColor.GetBlue());
         return aStr;
     }
     void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
@@ -173,7 +173,7 @@ namespace
             OUString aColorPropertyPrefix("D3DSceneLightColor");
             OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
             OUString aEnabledPropertyPrefix("D3DSceneLightOn");
-            OUString aIndex( OUString::valueOf( nIndex + 1 ));
+            OUString aIndex( OUString::number( nIndex + 1 ));
 
             try
             {
@@ -201,7 +201,7 @@ namespace
             OUString aColorPropertyPrefix("D3DSceneLightColor");
             OUString aDirectionPropertyPrefix("D3DSceneLightDirection");
             OUString aEnabledPropertyPrefix("D3DSceneLightOn");
-            OUString aIndex( OUString::valueOf( nIndex + 1 ));
+            OUString aIndex( OUString::number( nIndex + 1 ));
 
             try
             {

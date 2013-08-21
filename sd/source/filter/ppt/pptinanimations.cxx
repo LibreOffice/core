@@ -229,7 +229,7 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
 #ifdef DBG_ANIM_LOG
     static int ppt_anim_debug_stream_number = 1;
     OUString ppt_anim_debug_filename("ppt-animation-import-debug-output-");
-    ppt_anim_debug_filename += OUString::valueOf(ppt_anim_debug_stream_number++);
+    ppt_anim_debug_filename += OUString::number(ppt_anim_debug_stream_number++);
     ppt_anim_debug_filename += OUString(".xml");
     mpFile = fopen( OUStringToOString( ppt_anim_debug_filename, RTL_TEXTENCODING_UTF8).getStr() , "w+" );
 #endif
@@ -1101,7 +1101,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
     if( pStr )
         return OUString::createFromAscii( pStr );
     else
-        return OUString::valueOf( nPresetSubType );
+        return OUString::number( nPresetSubType );
 }
 
 // --------------------------------------------------------------------

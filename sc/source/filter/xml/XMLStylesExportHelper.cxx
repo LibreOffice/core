@@ -162,7 +162,7 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             else
             {
                 sal_Int32 nNameIndex(nCount + 1);
-                OUString sCount(OUString::valueOf(nNameIndex));
+                OUString sCount(OUString::number(nNameIndex));
                 OUString sPrefix("val");
                 aValidation.sName += sPrefix;
                 aValidation.sName += sCount;

@@ -589,7 +589,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 
     OUString sAuthor( getInitials( mxAnnotation->getAuthor() ) );
     sAuthor += OUString( sal_Unicode( ' ' ) );
-    sAuthor += OUString::valueOf( (sal_Int32)mnIndex );
+    sAuthor += OUString::number( mnIndex );
 
     aVDev.SetFont( mrFont );
 

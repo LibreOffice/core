@@ -80,12 +80,12 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     if ( nNo < 9 )
     {
         aPickEntry.append('~');
-        aPickEntry.append(OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
+        aPickEntry.append(OUString::number(nNo + 1));
     }
     else if ( nNo == 9 )
         aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM("1~0"));
     else
-        aPickEntry.append(OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
+        aPickEntry.append(OUString::number(nNo + 1));
     aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM(": "));
 
     INetURLObject   aURL( aURLString );

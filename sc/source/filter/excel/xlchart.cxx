@@ -645,7 +645,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
         // create new unused identifier
         do
         {
-            aObjName = maObjNameBase + OUString::valueOf( ++mnIndex );
+            aObjName = maObjNameBase + OUString::number( ++mnIndex );
         }
         while( mxContainer->hasByName( aObjName ) );
 

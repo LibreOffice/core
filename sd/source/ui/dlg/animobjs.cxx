@@ -581,8 +581,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     aCtlDisplay.Invalidate();
     aCtlDisplay.Update();
 
-    aFiCount.SetText(OUString::valueOf(
-                static_cast<sal_Int64>(m_FrameList.size())));
+    aFiCount.SetText(OUString::number(
+                m_FrameList.size()));
 
     if (!m_FrameList.empty() && !bMovie)
     {
@@ -887,7 +887,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             if( !nLoopCount ) // endless
                                 aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
                             else
-                                aLbLoopCount.SelectEntry(OUString::valueOf( nLoopCount ) );
+                                aLbLoopCount.SelectEntry(OUString::number( nLoopCount ) );
                         }
 
                         long nTime = rAnimBmp.nWait;

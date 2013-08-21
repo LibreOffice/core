@@ -287,7 +287,7 @@ Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNa
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
         sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
-        return aNatNum.getNativeNumberString(OUString::valueOf(value), aLocale, nNativeNumberMode );
+        return aNatNum.getNativeNumberString(OUString::number(value), aLocale, nNativeNumberMode );
     }
     else
         return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode );

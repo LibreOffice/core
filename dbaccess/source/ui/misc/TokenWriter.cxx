@@ -810,11 +810,11 @@ void OHTMLImportExport::WriteTables()
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cellspacing;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OString::valueOf((sal_Int32)nCellSpacing);
+    aStrOut = aStrOut + OString::number(nCellSpacing);
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cols;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + OString::valueOf(aNames.getLength());
+    aStrOut = aStrOut + OString::number(aNames.getLength());
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_border;
     aStrOut = aStrOut + "=1";
@@ -964,12 +964,12 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
     aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + OString::valueOf((sal_Int32)nWidthPixel);
+    aStrTD = aStrTD + OString::number(nWidthPixel);
     // line height
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
     aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + OString::valueOf((sal_Int32)nHeightPixel);
+    aStrTD = aStrTD + OString::number(nHeightPixel);
 
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_align;

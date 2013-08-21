@@ -451,7 +451,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
             OUString aURL("private:resource/sfx/bitmapex/");
-            aURL += OUString::valueOf( nResID );
+            aURL += OUString::number( nResID );
 
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
             aMediaProps[0].Name = "URL";

@@ -565,7 +565,7 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
         Reference<XComponentContext>(mxContextWeak),
         PresenterHelper::msFullScreenPaneURL
                 + "?FullScreen=true&ScreenNumber="
-                + OUString::valueOf(nScreen));
+                + OUString::number(nScreen));
 }
 
 void PresenterScreen::RequestShutdownPresenterScreen (void)

@@ -554,7 +554,7 @@ namespace pcr
                         sal_Int32 nNumber = 1;
                         do
                         {
-                            sNewName = sBaseName + OUString::valueOf( nNumber++ );
+                            sNewName = sBaseName + OUString::number( nNumber++ );
                         }
                         while ( xBindingNames->hasByName( sNewName ) );
                         Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );

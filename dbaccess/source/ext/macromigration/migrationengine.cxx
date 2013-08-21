@@ -1018,7 +1018,7 @@ namespace dbmm
         sal_Int32 nOverallRange( m_aSubDocs.size() );
         OUString sProgressSkeleton(
             MacroMigrationResId( STR_OVERALL_PROGRESS).toString().
-            replaceFirst("$overall$", OUString::valueOf(nOverallRange)));
+            replaceFirst("$overall$", OUString::number(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
 
@@ -1031,7 +1031,7 @@ namespace dbmm
             // update overall progress text
             OUString sOverallProgress(
                 sProgressSkeleton.replaceFirst("$current$",
-                    OUString::valueOf(nOverallProgressValue)));
+                    OUString::number(nOverallProgressValue)));
             m_rProgress.setOverallProgressText( sOverallProgress );
 
             // migrate document
@@ -1262,7 +1262,7 @@ namespace dbmm
             // (The latter is valid, since there can be multiple sub documents with the same base name,
             // in different levels in the hierarchy.)
             // In this case, just use the umambiguous sub document number.
-            return sPrefix + OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) + "_" + _rSourceLibName;
+            return sPrefix + OUString::number( _rDocument.nNumber ) + "_" + _rSourceLibName;
         }
     }
 

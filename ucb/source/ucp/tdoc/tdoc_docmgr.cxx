@@ -167,7 +167,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         // different IDs
         uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
         sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
-        aId = OUString::valueOf( nId );
+        aId = OUString::number( nId );
     }
 
     OSL_ENSURE( !aId.isEmpty(), "getDocumentId - Empty id!" );

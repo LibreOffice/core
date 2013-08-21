@@ -47,7 +47,7 @@ namespace logging
         OUString getCurrentThreadID()
         {
             oslThreadIdentifier nThreadID( osl::Thread::getCurrentIdentifier() );
-            return OUString::valueOf( (sal_Int64)nThreadID );
+            return OUString::number( (sal_Int64)nThreadID );
         }
     }
 

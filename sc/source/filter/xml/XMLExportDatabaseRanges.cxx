@@ -339,7 +339,7 @@ private:
         {
             // Convert field value from absolute to relative.
             SCCOLROW nField = aParam.maKeyState[i].nField - nFieldStart;
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nField));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nField));
 
             if (!aParam.maKeyState[i].bAscending)
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
@@ -431,7 +431,7 @@ private:
 
     void writeCondition(const ScQueryEntry& rEntry, SCCOLROW nFieldStart, bool bCaseSens, bool bRegExp)
     {
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(rEntry.nField - nFieldStart));
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(rEntry.nField - nFieldStart));
         if (bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
@@ -653,7 +653,7 @@ private:
                 break;
 
             sal_Int32 nFieldCol = static_cast<sal_Int32>(aParam.nField[i]);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, OUString::valueOf(nFieldCol));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, OUString::number(nFieldCol));
             SvXMLElementExport aElemSTR(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, true, true);
 
             for (SCCOL j = 0, n = aParam.nSubTotals[i]; j < n; ++j)
@@ -661,7 +661,7 @@ private:
                 sal_Int32 nCol = static_cast<sal_Int32>(aParam.pSubTotals[i][j]);
                 ScSubTotalFunc eFunc = aParam.pFunctions[i][j];
 
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(nCol));
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nCol));
                 OUString aFuncStr;
                 ScXMLConverter::GetStringFromFunction(aFuncStr, eFunc);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, aFuncStr);

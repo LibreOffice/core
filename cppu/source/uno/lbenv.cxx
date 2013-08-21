@@ -951,7 +951,7 @@ inline void EnvironmentsData::getEnvironment(
     }
 
     OUString aKey(
-        OUString::valueOf( reinterpret_cast< sal_IntPtr >(pContext) ) );
+        OUString::number( reinterpret_cast< sal_IntPtr >(pContext) ) );
     aKey += rEnvDcp;
 
     // try to find registered mapping
@@ -971,7 +971,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     uno_Environment * pEnv =  *ppEnv;
 
     OUString aKey(
-        OUString::valueOf( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) );
+        OUString::number( reinterpret_cast< sal_IntPtr >(pEnv->pContext) ) );
     aKey += pEnv->pTypeName;
 
     // try to find registered environment

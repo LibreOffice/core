@@ -689,7 +689,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         {
             // either value or error code
             rsType = "n";
-            rsValue = OUString::valueOf( rCell.GetValue() );
+            rsValue = OUString::number( rCell.GetValue() );
         }
         break;
 
@@ -957,7 +957,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
     lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
     lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
-    lcl_WriteValue( pStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
+    lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
     if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
                 // OOXTODO: XML_auto,       bool
@@ -967,8 +967,8 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
                 // OOXTODO: XML_tint,       double
                 FSEND );
     lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
-    lcl_WriteValue( pStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
-    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
+    lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
+    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : NULL );
 
     return pStream;
 }

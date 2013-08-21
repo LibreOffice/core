@@ -858,7 +858,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
     {
         // create the custom shape geometry
         Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
-        xDefaulter->createCustomShapeDefaults( OUString::valueOf( getShapeType() ) );
+        xDefaulter->createCustomShapeDefaults( OUString::number( getShapeType() ) );
         // convert common properties
         convertShapeProperties( xShape );
     }

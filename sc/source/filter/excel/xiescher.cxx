@@ -2320,10 +2320,10 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
             if ( xCtrlModel.is() )
             {
                 ScfPropertySet aProps( xCtrlModel );
-                OUString sGroupName = OUString::valueOf( static_cast< sal_Int32 >( pLeader->GetDffShapeId() ) );
+                OUString sGroupName = OUString::number( pLeader->GetDffShapeId() );
 
                 aProps.SetStringProperty( "GroupName", sGroupName );
-                aProps.SetStringProperty( "RefValue", OUString::valueOf( nRefVal++ ) );
+                aProps.SetStringProperty( "RefValue", OUString::number( nRefVal++ ) );
                 if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
                 {
                     // propagate cell link info

@@ -3379,7 +3379,7 @@ OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, S
     sal_uInt32 nBreak = 0;
     for (sal_uInt32 i = 0; i < nSize; i++)
     {
-        OString sNo = OString::valueOf(sal_Int32(pData[i]), 16);
+        OString sNo = OString::number(pData[i], 16);
         if (sNo.getLength() < 2)
         {
             if (pStream)

@@ -103,7 +103,7 @@ INetURLObject HostDetailsContainer::getUrl( )
     {
         sUrl = m_sScheme + "://" + sHost;
         if ( nPort != m_nDefaultPort )
-            sUrl += ":" + OUString::valueOf( nPort );
+            sUrl += ":" + OUString::number( nPort );
         if ( !sPath.isEmpty( ) )
             if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";

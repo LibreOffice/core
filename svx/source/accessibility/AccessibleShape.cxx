@@ -369,7 +369,7 @@ uno::Reference<XAccessible> SAL_CALL
     else
         throw lang::IndexOutOfBoundsException (
             OUString("shape has no child with index ")
-            + OUString::valueOf(nIndex),
+            + OUString::number(nIndex),
             static_cast<uno::XWeak*>(this));
 
     return xChild;
@@ -1003,7 +1003,7 @@ OUString
 
     // Put a space between name and index because of Gnopernicus othewise
     // spells the name.
-    sName += " " + OUString::valueOf (nIndex);
+    sName += " " + OUString::number (nIndex);
 
     return sName;
 }

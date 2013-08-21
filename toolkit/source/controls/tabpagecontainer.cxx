@@ -162,7 +162,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= aElement;
-        aEvent.Accessor <<= OUString::valueOf(nIndex);
+        aEvent.Accessor <<= OUString::number(nIndex);
         maContainerListeners.elementInserted( aEvent );
     }
     else

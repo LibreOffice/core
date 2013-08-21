@@ -680,7 +680,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
             {
                 sal_Int16 nVal = 0;
                 pParam[i].Value >>= nVal;
-                sContent = OUString::valueOf((sal_Int32)nVal);
+                sContent = OUString::number(nVal);
             }
             else
                 pParam[i].Value >>= sContent;

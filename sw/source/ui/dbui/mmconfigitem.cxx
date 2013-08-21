@@ -368,7 +368,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
     {
         bFound = false;
         sNewName = "_";
-        sNewName += OUString::valueOf(nStart);
+        sNewName += OUString::number(nStart);
         //search if the name exists
         for(sal_Int32 nAssign = 0; nAssign < rAssignments.getLength(); ++nAssign)
         {

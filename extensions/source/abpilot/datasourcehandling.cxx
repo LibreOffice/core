@@ -219,7 +219,7 @@ namespace abp
         while ( ( m_pImpl->aDataSourceNames.end() != aPos ) && ( nPostFix < 65535 ) )
         {   // there already is a data source with this name
             sCheck = _rDataSourceName;
-            sCheck += OUString::valueOf( nPostFix++ );
+            sCheck += OUString::number( nPostFix++ );
 
             aPos = m_pImpl->aDataSourceNames.find( sCheck );
         }

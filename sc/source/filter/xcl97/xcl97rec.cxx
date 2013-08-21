@@ -1120,7 +1120,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,
             XML_name,               XclXmlUtils::ToOString( sUnicodeName ).getStr(),
-            XML_sheetId,            OString::valueOf( (sal_Int32)( nTab+1 ) ).getStr(),
+            XML_sheetId,            OString::number( ( nTab+1 ) ).getStr(),
             XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
             FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
             FSEND );
@@ -1317,7 +1317,7 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
             XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
             XML_locked,     XclXmlUtils::ToPsz( nProtected ),
             // OOXTODO: XML_hidden,
-            XML_count,      OString::valueOf( (sal_Int32) aCells.size() ).getStr(),
+            XML_count,      OString::number(  aCells.size() ).getStr(),
             XML_user,       XESTRING_TO_PSZ( sUserName ),
             XML_comment,    XESTRING_TO_PSZ( sComment ),
             FSEND );
@@ -1384,8 +1384,8 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenarios,
-            XML_current,    OString::valueOf( (sal_Int32)nActive ).getStr(),
-            XML_show,       OString::valueOf( (sal_Int32)nActive ).getStr(),
+            XML_current,    OString::number( nActive ).getStr(),
+            XML_show,       OString::number( nActive ).getStr(),
             // OOXTODO: XML_sqref,
             FSEND );
 
@@ -1504,7 +1504,7 @@ sal_Size XclCalccount::GetLen() const
 void XclCalccount::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.WriteAttributes(
-            XML_iterateCount, OString::valueOf( (sal_Int32)nCount ).getStr(),
+            XML_iterateCount, OString::number( nCount ).getStr(),
             FSEND );
 }
 
@@ -1573,7 +1573,7 @@ sal_Size XclDelta::GetLen() const
 void XclDelta::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.WriteAttributes(
-            XML_iterateDelta, OString::valueOf( fDelta ).getStr(),
+            XML_iterateDelta, OString::number( fDelta ).getStr(),
             FSEND );
 }
 

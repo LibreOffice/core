@@ -882,7 +882,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
         // copy the models
         ::std::copy( aGroupPos->begin(), aGroupPos->end(), _rGroup.getArray() );
         // give the group a name
-        _rName = OUString::valueOf( _nGroup );
+        _rName = OUString::number( _nGroup );
     }
 }
 

@@ -20,9 +20,9 @@
 #ifndef _OOX_EXPORT_UTILS_HXX_
 #define _OOX_EXPORT_UTILS_HXX_
 
-#define I32S(x) OString::valueOf( (sal_Int32) x ).getStr()
-#define I64S(x) OString::valueOf( (sal_Int64) x ).getStr()
-#define IS(x) OString::valueOf( x ).getStr()
+#define I32S(x) OString::number( (sal_Int32) x ).getStr()
+#define I64S(x) OString::number( (sal_Int64) x ).getStr()
+#define IS(x) OString::number( x ).getStr()
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
 #ifndef DBG

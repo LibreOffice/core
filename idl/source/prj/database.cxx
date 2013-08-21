@@ -716,8 +716,7 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
             SvStringHashEntry* pEntry = aList[ i ];
             rOutStm << "#define " << pEntry->GetName().getStr()
                     << '\t'
-                    << OString::valueOf(static_cast<sal_Int64>(
-                        pEntry->GetValue())).getStr()
+                    << OString::number(pEntry->GetValue()).getStr()
                     << endl;
         }
     }

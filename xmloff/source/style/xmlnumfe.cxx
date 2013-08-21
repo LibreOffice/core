@@ -505,7 +505,7 @@ void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
     FinishTextElement_Impl();
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FILL_CHARACTER,
                                   sal_True, sal_False );
-    rExport.Characters( OUString::valueOf( nChar ) );
+    rExport.Characters( OUString( nChar ) );
 }
 
 void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDecimals )
@@ -516,7 +516,7 @@ void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDe
     if ( nDecimals > 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,
-                              OUString::valueOf( (sal_Int32) nDecimals ) );
+                              OUString::number(  nDecimals ) );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_SECONDS,
@@ -545,14 +545,14 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     if ( nDecimals >= 0 )   // negative = automatic
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,
-                              OUString::valueOf( nDecimals ) );
+                              OUString::number( nDecimals ) );
     }
 
     //  integer digits
     if ( nInteger >= 0 )    // negative = automatic
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::valueOf( nInteger ) );
+                              OUString::number( nInteger ) );
     }
 
     //  decimal replacement (dashes) or variable decimals (#)
@@ -592,7 +592,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
         //  position attribute
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
-                                OUString::valueOf( pObj->nFormatPos ) );
+                                OUString::number( pObj->nFormatPos ) );
         SvXMLElementExport aChildElem( rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
                                           sal_True, sal_False );
 
@@ -620,14 +620,14 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     if ( nDecimals >= 0 )   // negative = automatic
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,
-                              OUString::valueOf( nDecimals ) );
+                              OUString::number( nDecimals ) );
     }
 
     //  integer digits
     if ( nInteger >= 0 )    // negative = automatic
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::valueOf( nInteger ) );
+                              OUString::number( nInteger ) );
     }
 
     //  (automatic) grouping separator
@@ -640,7 +640,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     if ( nExp >= 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,
-                              OUString::valueOf( nExp ) );
+                              OUString::number( nExp ) );
     }
 
     SvXMLElementExport aElem( rExport,
@@ -658,7 +658,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ( nInteger >= 0 )        // negative = default (no integer part)
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
-                              OUString::valueOf( nInteger ) );
+                              OUString::number( nInteger ) );
     }
 
     //  (automatic) grouping separator
@@ -671,20 +671,20 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     if ( nNumeratorDigits >= 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,
-                                 OUString::valueOf( nNumeratorDigits ) );
+                                 OUString::number( nNumeratorDigits ) );
     }
 
     if ( nDenominator )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,
-                              OUString::valueOf( nDenominator) );
+                              OUString::number( nDenominator) );
     }
     //  I guess it's not necessary to export nDenominatorDigits
     //  if we have a forced denominator ( remove ? )
     if ( nDenominatorDigits >= 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,
-                              OUString::valueOf( nDenominatorDigits ) );
+                              OUString::number( nDenominatorDigits ) );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FRACTION,

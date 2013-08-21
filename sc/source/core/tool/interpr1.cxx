@@ -2635,7 +2635,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(pToken->GetString());
             break;
             case svDouble:
-                PushString(OUString::valueOf(pToken->GetDouble()));
+                PushString(OUString::number(pToken->GetDouble()));
             break;
             case svError:
                 PushString(ScGlobal::GetErrorString(pToken->GetError()));

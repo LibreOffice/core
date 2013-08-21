@@ -108,7 +108,7 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             if( nTemp )
             {
                 OUString aSlotURL( "slot:" );
-                aSlotURL += OUString::valueOf( sal_Int32( nTemp ));
+                aSlotURL += OUString::number( nTemp);
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages()

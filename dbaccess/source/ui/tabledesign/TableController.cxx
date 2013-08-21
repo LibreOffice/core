@@ -1511,7 +1511,7 @@ OUString OTableController::createUniqueName(const OUString& _rName)
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
         if (pFieldDesc && !pFieldDesc->GetName().isEmpty() && bCase(sName,pFieldDesc->GetName()))
         { // found a second name of _rName so we need another
-            sName = _rName + OUString::valueOf(++i);
+            sName = _rName + OUString::number(++i);
             aIter = m_vRowList.begin(); // and retry
         }
     }
@@ -1535,7 +1535,7 @@ OUString OTableController::getPrivateTitle() const
         {
             String aName = String(ModuleRes(STR_TBL_TITLE));
             sTitle = aName.GetToken(0,' ');
-            sTitle += OUString::valueOf(getCurrentStartNumber());
+            sTitle += OUString::number(getCurrentStartNumber());
         }
     }
     catch( const Exception& )

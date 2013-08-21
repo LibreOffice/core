@@ -1566,7 +1566,7 @@ int Desktop::Main()
                 osl::File::remove( pidfileURL );
                 if ( (rc = pidfile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) ) == osl::File::E_None )
                 {
-                    OString pid( OString::valueOf( static_cast<sal_Int32>( GETPID() ) ) );
+                    OString pid( OString::number( GETPID() ) );
                     sal_uInt64 written = 0;
                     if ( pidfile.write(pid.getStr(), pid.getLength(), written) != osl::File::E_None )
                     {

@@ -1212,14 +1212,14 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                     {
                         OUString aPosStr;
                         if ( i == PROPERTY_POS )
-                            aPosStr = OUString::valueOf( rWinStateInfo.aPos.X );
+                            aPosStr = OUString::number( rWinStateInfo.aPos.X );
                         else
-                            aPosStr = OUString::valueOf( rWinStateInfo.aDockPos.X );
+                            aPosStr = OUString::number( rWinStateInfo.aDockPos.X );
                         aPosStr += aDelim;
                         if ( i == PROPERTY_POS )
-                            aPosStr += OUString::valueOf( rWinStateInfo.aPos.Y );
+                            aPosStr += OUString::number( rWinStateInfo.aPos.Y );
                         else
-                            aPosStr += OUString::valueOf( rWinStateInfo.aDockPos.Y );
+                            aPosStr += OUString::number( rWinStateInfo.aDockPos.Y );
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( aPosStr ) );
                         break;
                     }
@@ -1228,14 +1228,14 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                     {
                         OUString aSizeStr;
                         if ( i == PROPERTY_SIZE )
-                            aSizeStr = ( OUString::valueOf( rWinStateInfo.aSize.Width ));
+                            aSizeStr = ( OUString::number( rWinStateInfo.aSize.Width ));
                         else
-                            aSizeStr = ( OUString::valueOf( rWinStateInfo.aDockSize.Width ));
+                            aSizeStr = ( OUString::number( rWinStateInfo.aDockSize.Width ));
                         aSizeStr += aDelim;
                         if ( i == PROPERTY_SIZE )
-                            aSizeStr += OUString::valueOf( rWinStateInfo.aSize.Height );
+                            aSizeStr += OUString::number( rWinStateInfo.aSize.Height );
                         else
-                            aSizeStr += OUString::valueOf( rWinStateInfo.aDockSize.Height );
+                            aSizeStr += OUString::number( rWinStateInfo.aDockSize.Height );
                         xPropSet->setPropertyValue( m_aPropArray[i], makeAny( aSizeStr ) );
                         break;
                     }

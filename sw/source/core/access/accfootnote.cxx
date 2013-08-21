@@ -54,7 +54,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
 
     sal_uInt16 nResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
-    OUString sArg( OUString::valueOf( nFootEndNote ) );
+    OUString sArg( OUString::number( nFootEndNote ) );
     SetName( GetResource( nResId, &sArg ) );
 }
 

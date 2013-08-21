@@ -448,7 +448,7 @@ LwpFormulaConst::LwpFormulaConst(double dVal)
 
 OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 {
-    return OUString::valueOf(m_dVal);
+    return OUString::number(m_dVal);
 }
 
 /**

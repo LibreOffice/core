@@ -90,7 +90,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
                 // use VCL popup menu pointer to set vital information that are not part of the awt implementation
 
                 OUString aCommand( aVerbCommand );
-                aCommand += OUString::valueOf( rVerb.VerbID );
+                aCommand += OUString::number( rVerb.VerbID );
                 pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
             }
         }

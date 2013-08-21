@@ -1485,12 +1485,12 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
 
             OUString sName(sAlias);
             sal_Int32 nPos = 1;
-            sName += OUString::valueOf(nPos);
+            sName += OUString::number(nPos);
 
             while(_rCmpFunctor(sName))
             {
                 sName = sAlias;
-                sName += OUString::valueOf(++nPos);
+                sName += OUString::number(++nPos);
             }
             sAlias = sName;
             // we have to check again, it could happen that the name is already to long
@@ -1634,7 +1634,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
             while(m_vSourceColumns.find(sName) != m_vSourceColumns.end())
             {
                 sName = _sName;
-                sName += OUString::valueOf(++nPos);
+                sName += OUString::number(++nPos);
             }
         }
     }

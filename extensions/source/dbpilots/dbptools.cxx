@@ -41,7 +41,7 @@ namespace dbp
             for (sal_Int32 i=1; i<0x7FFFFFFF; ++i)
             {
                 _rElementsName = sBase;
-                _rElementsName += OUString::valueOf((sal_Int32)i);
+                _rElementsName += OUString::number(i);
                 if (!_rxContainer->hasByName(_rElementsName))
                     return;
             }

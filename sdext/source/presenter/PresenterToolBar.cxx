@@ -1812,15 +1812,15 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     const sal_Int32 nSeconds(sal::static_int_cast<sal_Int32>(rTime.Seconds));
     // Hours
     if (mbIs24HourFormat)
-        sText.append(OUString::valueOf(nHours));
+        sText.append(OUString::number(nHours));
     else
-        sText.append(OUString::valueOf(
+        sText.append(OUString::number(
             sal::static_int_cast<sal_Int32>(nHours>12 ? nHours-12 : nHours)));
 
     sText.append(":");
 
     // Minutes
-    const OUString sMinutes (OUString::valueOf(nMinutes));
+    const OUString sMinutes (OUString::number(nMinutes));
     if (sMinutes.getLength() == 1)
         sText.append("0");
     sText.append(sMinutes);
@@ -1829,7 +1829,7 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     if (mbIsShowSeconds)
     {
         sText.append(":");
-        const OUString sSeconds (OUString::valueOf(nSeconds));
+        const OUString sSeconds (OUString::number(nSeconds));
         if (sSeconds.getLength() == 1)
             sText.append("0");
         sText.append(sSeconds);

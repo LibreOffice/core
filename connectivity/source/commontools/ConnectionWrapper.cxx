@@ -225,7 +225,7 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
         {
             sal_Int32 nValue = 0;
             if ( pBegin->Value >>= nValue )
-                sValue = OUString::valueOf(nValue);
+                sValue = OUString::number(nValue);
             else
             {
                 Sequence< OUString> aSeq;

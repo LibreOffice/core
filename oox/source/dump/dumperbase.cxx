@@ -246,7 +246,7 @@ void StringHelper::appendDec( OUStringBuffer& rStr, sal_uInt32 nData, sal_Int32 
 
 void StringHelper::appendDec( OUStringBuffer& rStr, sal_Int32 nData, sal_Int32 nWidth, sal_Unicode cFill )
 {
-    appendString( rStr, OUString::valueOf( nData ), nWidth, cFill );
+    appendString( rStr, OUString::number( nData ), nWidth, cFill );
 }
 
 void StringHelper::appendDec( OUStringBuffer& rStr, sal_uInt64 nData, sal_Int32 nWidth, sal_Unicode cFill )
@@ -256,14 +256,14 @@ void StringHelper::appendDec( OUStringBuffer& rStr, sal_uInt64 nData, sal_Int32 
         will be written separately. */
     OUStringBuffer aBuffer;
     if( nData > 9 )
-        aBuffer.append( OUString::valueOf( static_cast< sal_Int64 >( nData / 10 ) ) );
+        aBuffer.append( OUString::number( nData / 10 ) );
     aBuffer.append( static_cast< sal_Unicode >( '0' + (nData % 10) ) );
     appendString( rStr, aBuffer.makeStringAndClear(), nWidth, cFill );
 }
 
 void StringHelper::appendDec( OUStringBuffer& rStr, sal_Int64 nData, sal_Int32 nWidth, sal_Unicode cFill )
 {
-    appendString( rStr, OUString::valueOf( nData ), nWidth, cFill );
+    appendString( rStr, OUString::number( nData ), nWidth, cFill );
 }
 
 void StringHelper::appendDec( OUStringBuffer& rStr, double fData, sal_Int32 nWidth, sal_Unicode cFill )

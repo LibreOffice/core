@@ -467,7 +467,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             {
                 aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel );
                 aRet.appendAscii(":CS=");
-                aRet.append( OUString::valueOf( nCooSysIndex ) );
+                aRet.append( OUString::number( nCooSysIndex ) );
                 break;
             }
         }
@@ -482,9 +482,9 @@ OUString ObjectIdentifier::createParticleForAxis(
 {
     OUStringBuffer aRet("Axis=");
 
-    aRet.append( OUString::valueOf( nDimensionIndex ) );
+    aRet.append( OUString::number( nDimensionIndex ) );
     aRet.appendAscii(",");
-    aRet.append( OUString::valueOf( nAxisIndex ) );
+    aRet.append( OUString::number( nAxisIndex ) );
 
     return aRet.makeStringAndClear();
 }
@@ -494,9 +494,9 @@ OUString ObjectIdentifier::createParticleForGrid(
           , sal_Int32 nAxisIndex )
 {
     OUStringBuffer aRet("Axis=");
-    aRet.append( OUString::valueOf( nDimensionIndex ) );
+    aRet.append( OUString::number( nDimensionIndex ) );
     aRet.appendAscii(",");
-    aRet.append( OUString::valueOf( nAxisIndex ) );
+    aRet.append( OUString::number( nAxisIndex ) );
     aRet.append( ":Grid=0" );
 
     return aRet.makeStringAndClear();
@@ -527,15 +527,15 @@ OUString ObjectIdentifier::createParticleForSeries(
     OUStringBuffer aRet;
 
     aRet.appendAscii("D=");
-    aRet.append( OUString::valueOf( nDiagramIndex ) );
+    aRet.append( OUString::number( nDiagramIndex ) );
     aRet.appendAscii(":CS=");
-    aRet.append( OUString::valueOf( nCooSysIndex ) );
+    aRet.append( OUString::number( nCooSysIndex ) );
     aRet.appendAscii(":CT=");
-    aRet.append( OUString::valueOf( nChartTypeIndex ) );
+    aRet.append( OUString::number( nChartTypeIndex ) );
     aRet.appendAscii(":");
     aRet.append(getStringForType( OBJECTTYPE_DATA_SERIES ));
     aRet.appendAscii("=");
-    aRet.append( OUString::valueOf( nSeriesIndex ) );
+    aRet.append( OUString::number( nSeriesIndex ) );
 
     return aRet.makeStringAndClear();
 }
@@ -601,15 +601,15 @@ OUString ObjectIdentifier::createPieSegmentDragParameterString(
         , const awt::Point& rMinimumPosition
         , const awt::Point& rMaximumPosition )
 {
-    OUStringBuffer aRet( OUString::valueOf( nOffsetPercent ) );
+    OUStringBuffer aRet( OUString::number( nOffsetPercent ) );
     aRet.append( sal_Unicode( ',' ));
-    aRet.append( OUString::valueOf( rMinimumPosition.X ) );
+    aRet.append( OUString::number( rMinimumPosition.X ) );
     aRet.append( sal_Unicode( ',' ));
-    aRet.append( OUString::valueOf( rMinimumPosition.Y ) );
+    aRet.append( OUString::number( rMinimumPosition.Y ) );
     aRet.append( sal_Unicode( ',' ));
-    aRet.append( OUString::valueOf( rMaximumPosition.X ) );
+    aRet.append( OUString::number( rMaximumPosition.X ) );
     aRet.append( sal_Unicode( ',' ));
-    aRet.append( OUString::valueOf( rMaximumPosition.Y ) );
+    aRet.append( OUString::number( rMaximumPosition.Y ) );
     return aRet.makeStringAndClear();
 }
 
@@ -984,7 +984,7 @@ OUString ObjectIdentifier::createDataCurveCID(
                                 , sal_Int32 nCurveIndex
                                 , bool bAverageLine )
 {
-    OUString aParticleID( OUString::valueOf( nCurveIndex ) );
+    OUString aParticleID( OUString::number( nCurveIndex ) );
     ObjectType eType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
     return createClassifiedIdentifierWithParent( eType, aParticleID, rSeriesParticle );
 }
@@ -993,7 +993,7 @@ OUString ObjectIdentifier::createDataCurveEquationCID(
                                 const OUString& rSeriesParticle
                                 , sal_Int32 nCurveIndex )
 {
-    OUString aParticleID( OUString::valueOf( nCurveIndex ) );
+    OUString aParticleID( OUString::number( nCurveIndex ) );
     return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
@@ -1015,7 +1015,7 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
     if( !aRet.isEmpty() )
     {
         aRet.appendAscii("=");
-        aRet.append(OUString::valueOf(nIndex));
+        aRet.append(OUString::number(nIndex));
     }
     return aRet.makeStringAndClear();
 }
@@ -1045,7 +1045,7 @@ OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
 OUString ObjectIdentifier::createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  )
 {
     OUString aRet(rPointCID_Stub);
-    return aRet+=OUString::valueOf( nIndex );
+    return aRet+=OUString::number( nIndex );
 }
 
 OUString ObjectIdentifier::getParticleID( const OUString& rCID )

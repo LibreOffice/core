@@ -375,12 +375,12 @@ void OWriteAccelatorDocumentHandler::WriteAcceleratorItem(
     pAcceleratorAttributes->addAttribute(
         OUString( ATTRIBUTE_KEYCODE ),
         m_aAttributeType,
-        OUString::valueOf( aAcceleratorItem.nCode ));
+        OUString( aAcceleratorItem.nCode ));
 
     pAcceleratorAttributes->addAttribute(
         OUString( ATTRIBUTE_MODIFIER ),
         m_aAttributeType,
-        OUString::valueOf( aAcceleratorItem.nModifier ));
+        OUString( aAcceleratorItem.nModifier ));
 
     pAcceleratorAttributes->addAttribute(
         OUString( ATTRIBUTE_URL ),

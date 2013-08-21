@@ -505,7 +505,7 @@ void OptimizerDialog::UpdateControlStatesPage2()
     else if ( getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI3 ).toInt32() == nImageResolution )
         aResolutionText = aResolutionItemList[ 3 ];
     if ( aResolutionText.isEmpty() )
-        aResolutionText = OUString::valueOf( nImageResolution );
+        aResolutionText = OUString::number( nImageResolution );
 
     setControlProperty( TKGet( TK_RadioButton0Pg1 ), TKGet( TK_State ), Any( (sal_Int16)( bJPEGCompression != sal_True ) ) );
     setControlProperty( TKGet( TK_RadioButton1Pg1 ), TKGet( TK_State ), Any( (sal_Int16)( bJPEGCompression != sal_False ) ) );
@@ -590,7 +590,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 20 );
     fVal += 0.05;
-    OUStringBuffer aVal( OUString::valueOf( fVal ) );
+    OUStringBuffer aVal( OUString::number( fVal ) );
     sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
     if ( nX >= 0 )
     {
@@ -737,7 +737,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
         OUString aPlaceholder( "%SLIDES"  );
         sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
         if ( i >= 0 )
-            aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::valueOf( nDeletedSlides ) );
+            aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nDeletedSlides ) );
         aSummaryStrings.push_back( aStr );
     }
 
@@ -757,15 +757,15 @@ void OptimizerDialog::UpdateControlStatesPage4()
         OUString aResolutionPlaceholder( "%RESOLUTION"  );
         sal_Int32 i = aStr.indexOf( aImagePlaceholder, 0 );
         if ( i >= 0 )
-            aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::valueOf( nGraphics ) );
+            aStr = aStr.replaceAt( i, aImagePlaceholder.getLength(), OUString::number( nGraphics ) );
 
         sal_Int32 j = aStr.indexOf( aQualityPlaceholder, 0 );
         if ( j >= 0 )
-            aStr = aStr.replaceAt( j, aQualityPlaceholder.getLength(), OUString::valueOf( nJPEGQuality ) );
+            aStr = aStr.replaceAt( j, aQualityPlaceholder.getLength(), OUString::number( nJPEGQuality ) );
 
         sal_Int32 k = aStr.indexOf( aResolutionPlaceholder, 0 );
         if ( k >= 0 )
-            aStr = aStr.replaceAt( k, aResolutionPlaceholder.getLength(), OUString::valueOf( nImageResolution ) );
+            aStr = aStr.replaceAt( k, aResolutionPlaceholder.getLength(), OUString::number( nImageResolution ) );
 
         aSummaryStrings.push_back( aStr );
     }
@@ -792,7 +792,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             OUString aPlaceholder( "%OLE"  );
             sal_Int32 i = aStr.indexOf( aPlaceholder, 0 );
             if ( i >= 0 )
-                aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::valueOf( nOLEReplacements ) );
+                aStr = aStr.replaceAt( i, aPlaceholder.getLength(), OUString::number( nOLEReplacements ) );
             aSummaryStrings.push_back( aStr );
         }
     }
@@ -899,7 +899,7 @@ void OptimizerDialog::InitPage4()
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     do
     {
-        OUString aTemp( aDefault.concat( OUString::valueOf( nSession++ ) ) );
+        OUString aTemp( aDefault.concat( OUString::number( nSession++ ) ) );
         for ( i = 1; i < rList.size(); i++ )
         {
             if ( rList[ i ].maName == aTemp )

@@ -185,7 +185,7 @@ OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xText
         static sal_Int32 nObjectCount = 100;
         uno::Reference< container::XNameAccess > xNA( xEmbeddedResolver, uno::UNO_QUERY_THROW );
         OUString aURL("Obj");
-        aURL += OUString::valueOf( nObjectCount++ );
+        aURL += OUString::number( nObjectCount++ );
         uno::Reference < io::XOutputStream > xOLEStream;
         if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
         {

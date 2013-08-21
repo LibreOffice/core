@@ -456,7 +456,7 @@ namespace svt
             {
                 OSL_FAIL(
                     (   OString( "OCommonPicker::initialize: unknown argument type at position " )
-                    +=  OString::valueOf( (sal_Int32)( pArguments - _rArguments.getConstArray() ) )
+                    +=  OString::number( pArguments - _rArguments.getConstArray() )
                     ).getStr()
                 );
                 continue;

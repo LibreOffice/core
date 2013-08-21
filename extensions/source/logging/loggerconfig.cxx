@@ -130,7 +130,7 @@ namespace logging
             info.Size = sizeof (oslProcessInfo);
             if ( osl_getProcessInfo ( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
                 aProcessId = info.Ident;
-            rtl::OUString aPID = rtl::OUString::valueOf( sal_Int64( aProcessId ) );
+            rtl::OUString aPID = OUString::number( aProcessId );
 
             Variable aVariables[] =
             {

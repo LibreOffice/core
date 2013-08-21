@@ -436,7 +436,7 @@ ScVbaShapes::createName( OUString sName )
 {
     sal_Int32 nActNumber = 1 + m_nNewShapeCount;
     m_nNewShapeCount++;
-    sName += OUString::valueOf( nActNumber );
+    sName += OUString::number( nActNumber );
     return sName;
 }
 

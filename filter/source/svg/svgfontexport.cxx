@@ -187,7 +187,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
             {
                 SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
                 OUString     aCurIdStr( aEmbeddedFontStr );
-                OUString     aUnitsPerEM( OUString::valueOf( nFontEM ) );
+                OUString     aUnitsPerEM( OUString::number( nFontEM ) );
                 VirtualDevice       aVDev;
                 Font                aFont( rFont );
 
@@ -197,7 +197,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                 aVDev.SetMapMode( MAP_100TH_MM );
                 aVDev.SetFont( aFont );
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::valueOf( ++mnCurFontId ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::number( ++mnCurFontId ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
                 {
@@ -222,14 +222,14 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-weight", aFontWeight );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-style", aFontStyle );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", OUString::valueOf( aVDev.GetFontMetric().GetAscent() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::valueOf( aVDev.GetFontMetric().GetDescent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", OUString::number( aVDev.GetFontMetric().GetAscent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::number( aVDev.GetFontMetric().GetDescent() ) );
 
                     {
                         SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", sal_True, sal_True );
                     }
 
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::valueOf( aSize.Width() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::number( aSize.Width() ) );
 
                     {
                         const Point         aPos;
@@ -274,7 +274,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr
         if( rCellStr[ 0 ] == nSpace && rCellStr.getLength() == 1 )
             aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( OUString(' ') ), 0 ) );
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::valueOf( aBoundRect.GetWidth() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::number( aBoundRect.GetWidth() ) );
 
         const OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
         if( !aPathString.isEmpty() )

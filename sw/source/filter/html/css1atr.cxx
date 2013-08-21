@@ -2928,8 +2928,7 @@ static Writer& OutCSS1_SvxWidows( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    OString aStr(OString::valueOf(static_cast<sal_Int32>(
-        ((const SvxWidowsItem&)rHt).GetValue())));
+    OString aStr(OString::number(((const SvxWidowsItem&)rHt).GetValue()));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_widows, aStr );
 
     return rWrt;
@@ -2939,8 +2938,7 @@ static Writer& OutCSS1_SvxOrphans( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    OString aStr(OString::valueOf(static_cast<sal_Int32>(
-       ((const SvxOrphansItem&)rHt).GetValue())));
+    OString aStr(OString::number(((const SvxOrphansItem&)rHt).GetValue()));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_orphans, aStr );
 
     return rWrt;

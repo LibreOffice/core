@@ -315,7 +315,7 @@ namespace
     {
         OUString operator()( sal_Int32 _rIntValue ) const
         {
-            return OUString::valueOf( (sal_Int32)_rIntValue );
+            return OUString::number( _rIntValue );
         }
         sal_Int32 operator()( const OUString& _rStringValue ) const
         {

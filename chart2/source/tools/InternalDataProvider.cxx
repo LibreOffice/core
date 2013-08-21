@@ -125,7 +125,7 @@ struct lcl_internalizeSeries : public ::std::unary_function< Reference< chart2::
             for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
             {
                 sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );
-                OUString aIdentifier( OUString::valueOf( nNewIndex ));
+                OUString aIdentifier( OUString::number( nNewIndex ));
                 //@todo: deal also with genericXDataSequence
                 Reference< chart2::data::XNumericalDataSequence > xValues( aOldSeriesData[i]->getValues(), uno::UNO_QUERY );
                 Reference< chart2::data::XTextualDataSequence > xLabel( aOldSeriesData[i]->getLabel(), uno::UNO_QUERY );
@@ -468,10 +468,10 @@ void InternalDataProvider::lcl_increaseMapReferences(
 {
     for( sal_Int32 nIndex = nEnd - 1; nIndex >= nBegin; --nIndex )
     {
-        lcl_adaptMapReferences( OUString::valueOf( nIndex ),
-                            OUString::valueOf( nIndex + 1 ));
-        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ),
-                            lcl_aLabelRangePrefix + OUString::valueOf( nIndex + 1 ));
+        lcl_adaptMapReferences( OUString::number( nIndex ),
+                            OUString::number( nIndex + 1 ));
+        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
+                            lcl_aLabelRangePrefix + OUString::number( nIndex + 1 ));
     }
 }
 
@@ -480,10 +480,10 @@ void InternalDataProvider::lcl_decreaseMapReferences(
 {
     for( sal_Int32 nIndex = nBegin; nIndex < nEnd; ++nIndex )
     {
-        lcl_adaptMapReferences( OUString::valueOf( nIndex ),
-                            OUString::valueOf( nIndex - 1 ));
-        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ),
-                            lcl_aLabelRangePrefix + OUString::valueOf( nIndex - 1 ));
+        lcl_adaptMapReferences( OUString::number( nIndex ),
+                            OUString::number( nIndex - 1 ));
+        lcl_adaptMapReferences( lcl_aLabelRangePrefix + OUString::number( nIndex ),
+                            lcl_aLabelRangePrefix + OUString::number( nIndex - 1 ));
     }
 }
 
@@ -548,7 +548,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
         {
             m_aInternalData.insertColumn( n );
             m_aInternalData.setColumnValues( n, aNewData );
-            aRangeRepresentation = OUString::valueOf( n );
+            aRangeRepresentation = OUString::number( n );
         }
         else if( nCategories > 1 )
         {
@@ -556,7 +556,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
         }
         else
         {
-            aRangeRepresentation = lcl_aLabelRangePrefix+OUString::valueOf( n );
+            aRangeRepresentation = lcl_aLabelRangePrefix+OUString::number( n );
         }
     }
 
@@ -629,7 +629,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
             for( sal_Int32 nL=0; nL<nLevelCount; nL++ )
                 aComplexCategories.push_back( new LabeledDataSequence(
                     new UncachedDataSequence( this
-                        , lcl_aCategoriesLevelRangeNamePrefix + OUString::valueOf( nL )
+                        , lcl_aCategoriesLevelRangeNamePrefix + OUString::number( nL )
                         , lcl_aCategoriesRoleName ) ) );
         }
         else
@@ -638,7 +638,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
             for( sal_Int32 nP=0; nP<nPointCount; nP++ )
                 aComplexCategories.push_back( new LabeledDataSequence(
                     new UncachedDataSequence( this
-                        , lcl_aCategoriesPointRangeNamePrefix + OUString::valueOf( nP )
+                        , lcl_aCategoriesPointRangeNamePrefix + OUString::number( nP )
                         , lcl_aCategoriesRoleName ) ) );
         }
         //don't add the created sequences to the map as they are used temporarily only ...
@@ -661,8 +661,8 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     {
         aDataVec.push_back(
             new LabeledDataSequence(
-                lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIdx )),
-                lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::valueOf( nIdx ))));
+                lcl_createDataSequenceAndAddToMap( OUString::number( nIdx )),
+                lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIdx ))));
     }
 
     // attention: this data provider has the limitation that it stores
@@ -745,14 +745,14 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     {
         // label
         sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
-        return lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ));
+        return lcl_createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIndex ));
     }
     else if ( aRangeRepresentation == "last" )
     {
         sal_Int32 nIndex = (m_bDataInColumns
                             ? m_aInternalData.getColumnCount()
                             : m_aInternalData.getRowCount()) - 1;
-        return lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
+        return lcl_createDataSequenceAndAddToMap( OUString::number( nIndex ));
     }
     else if( !aRangeRepresentation.isEmpty())
     {
@@ -836,7 +836,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         if( nLevelCount == 1 )
         {
             sal_Int32 nL=0;
-            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::valueOf( nL ) );
+            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::number( nL ) );
         }
         else
         {
@@ -953,8 +953,8 @@ void SAL_CALL InternalDataProvider::insertSequence( ::sal_Int32 nAfterIndex )
 void SAL_CALL InternalDataProvider::deleteSequence( ::sal_Int32 nAtIndex )
     throw (uno::RuntimeException)
 {
-    lcl_deleteMapReferences( OUString::valueOf( nAtIndex ));
-    lcl_deleteMapReferences( lcl_aLabelRangePrefix + OUString::valueOf( nAtIndex ));
+    lcl_deleteMapReferences( OUString::number( nAtIndex ));
+    lcl_deleteMapReferences( lcl_aLabelRangePrefix + OUString::number( nAtIndex ));
     if( m_bDataInColumns )
     {
         lcl_decreaseMapReferences( nAtIndex + 1, m_aInternalData.getColumnCount());
@@ -1028,7 +1028,7 @@ void SAL_CALL InternalDataProvider::insertDataPointForAllSequences( ::sal_Int32 
 
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
-    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
+    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
@@ -1052,7 +1052,7 @@ void SAL_CALL InternalDataProvider::deleteDataPointForAllSequences( ::sal_Int32 
 
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
-    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
+    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
@@ -1072,7 +1072,7 @@ void SAL_CALL InternalDataProvider::swapDataPointWithNextOneForAllSequences( ::s
 
     // notify change to all affected ranges
     tSequenceMap::const_iterator aBegin( m_aSequenceMap.lower_bound( "0"));
-    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::valueOf( nMaxRep )));
+    tSequenceMap::const_iterator aEnd( m_aSequenceMap.upper_bound( OUString::number( nMaxRep )));
     ::std::for_each( aBegin, aEnd, lcl_setModified());
 
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( lcl_aCategoriesRangeName ));
@@ -1193,18 +1193,18 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
         if( aRange.aUpperLeft.nColumn == 0 )
             return lcl_aCategoriesRangeName;
         if( aRange.aUpperLeft.nRow == 0 )
-            return lcl_aLabelRangePrefix + OUString::valueOf( aRange.aUpperLeft.nColumn - 1 );
+            return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nColumn - 1 );
 
-        return OUString::valueOf( aRange.aUpperLeft.nColumn - 1 );
+        return OUString::number( aRange.aUpperLeft.nColumn - 1 );
     }
 
     // data in rows
     if( aRange.aUpperLeft.nRow == 0 )
         return lcl_aCategoriesRangeName;
     if( aRange.aUpperLeft.nColumn == 0 )
-        return lcl_aLabelRangePrefix + OUString::valueOf( aRange.aUpperLeft.nRow - 1 );
+        return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nRow - 1 );
 
-    return OUString::valueOf( aRange.aUpperLeft.nRow - 1 );
+    return OUString::number( aRange.aUpperLeft.nRow - 1 );
 }
 
 namespace

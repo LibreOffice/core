@@ -1111,7 +1111,7 @@ sal_Bool ConfigItem::getUniqueSetElementName( const OUString& _rSetNode, OUStrin
                 for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
                 {
                     OUString sThisRoundTrial = _rName;
-                    sThisRoundTrial += OUString::valueOf((sal_Int32)nFieldElement);
+                    sThisRoundTrial += OUString::number(nFieldElement);
 
                     if (!xSetNode->hasByName(sThisRoundTrial))
                     {

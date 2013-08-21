@@ -403,7 +403,7 @@ template< typename T >
     {
         sal_Int32 n;
         rtl_random_getBytes(s_Pool, & n, sizeof(n));
-        id = prefix + OUString::valueOf(static_cast<sal_Int32>(abs(n)));
+        id = prefix + OUString::number(abs(n));
         iter = i_rXmlIdMap.find(id);
     }
     while (iter != i_rXmlIdMap.end());

@@ -214,8 +214,8 @@ public:
         @return newly created ID.
      */
     inline sal_Int32 GetUniqueId() { return mnMaxDocId++; }
-    inline OString GetUniqueIdOString() { return OString::valueOf( mnMaxDocId++ ); }
-    inline OUString GetUniqueIdOUString() { return OUString::valueOf( mnMaxDocId++ ); }
+    inline OString GetUniqueIdOString() { return OString::number( mnMaxDocId++ ); }
+    inline OUString GetUniqueIdOUString() { return OUString::number( mnMaxDocId++ ); }
 
     /** Write the document properties into into the current OPC package.
 

@@ -743,7 +743,7 @@ void SlideSorterView::CompleteRedraw (
     mrSlideSorter.GetContentWindow()->SetTextColor(COL_WHITE);
     mrSlideSorter.GetContentWindow()->DrawText(
         gFrameTimeBox,
-        OUString::valueOf(1 / (gFrameTimeSum / gFrameTimeCount)),
+        OUString::number(1 / (gFrameTimeSum / gFrameTimeCount)),
         TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
     //    mrSlideSorter.GetContentWindow()->Invalidate(gFrameTimeBox);
 #endif

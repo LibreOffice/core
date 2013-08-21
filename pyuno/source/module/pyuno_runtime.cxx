@@ -217,7 +217,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
                 osl_getSystemPathFromFileURL( str.pData, &str.pData);
                 OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
                 o += ".";
-                o += OString::valueOf( (sal_Int32)data.Ident );
+                o += OString::number( data.Ident );
 
                 *ppFile = fopen( o.getStr() , "w" );
                 if ( *ppFile )

@@ -69,7 +69,7 @@ void ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
             nLastSlotId = pItem->GetValue();
             sal_uInt16 nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
             OUString aSlotURL( "slot:" );
-            aSlotURL += OUString::valueOf( sal_Int32( nImageId ));
+            aSlotURL += OUString::number( nImageId);
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
                                      hasBigImages()

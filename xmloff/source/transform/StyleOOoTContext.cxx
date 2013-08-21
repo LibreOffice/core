@@ -341,7 +341,7 @@ XMLTypedPropertiesOOoTContext_Impl
             GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
         aTmp += OString( rPrefix.getStr(), rPrefix.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
-        aTmp += OString::valueOf( ':' );
+        aTmp += OString( ':' );
         aTmp += OString( rLocalName.getStr(), rLocalName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += OString(", assuming <style:");
@@ -349,7 +349,7 @@ XMLTypedPropertiesOOoTContext_Impl
             ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] );
         aTmp += OString( rName.getStr(), rName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
-        aTmp += OString::valueOf( '>' );
+        aTmp += OString( '>' );
 
         OSL_FAIL(aTmp.getStr());
     }
@@ -667,7 +667,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_STYLE,
                                 GetXMLToken( XML_TEXT_LINE_THROUGH_TEXT ) ),
-                            OUString::valueOf( c ) );
+                            OUString( c ) );
             }
             break;
         case XML_PTACTION_SPLINES:
@@ -990,7 +990,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rPosition ) )
         {
             if( !aProtectAttrValue.isEmpty() )
-                aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
+                aProtectAttrValue += OUString( sal_Unicode( ' ' ) );
             aProtectAttrValue += rPosition;
         }
 
@@ -998,7 +998,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         if( bSizeProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
         {
             if( !aProtectAttrValue.isEmpty() )
-                aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
+                aProtectAttrValue += OUString( sal_Unicode( ' ' ) );
             aProtectAttrValue += rSize;
         }
 

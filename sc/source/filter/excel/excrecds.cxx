@@ -514,7 +514,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         {
             nHash = ((aHash[0] << 8) & 0xFFFF);
             nHash |= (aHash[1] & 0xFF);
-            sHash = OString::valueOf( static_cast<sal_Int32>(nHash), 16 );
+            sHash = OString::number( nHash, 16 );
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
@@ -646,8 +646,8 @@ static OString lcl_GetValue( sal_uInt8 nType, double fVal, XclExpString* pStr )
     switch( nType )
     {
         case EXC_AFTYPE_STRING:     return XclXmlUtils::ToOString( *pStr );
-        case EXC_AFTYPE_DOUBLE:     return OString::valueOf( fVal );
-        case EXC_AFTYPE_BOOLERR:    return OString::valueOf( (sal_Int32) ( fVal != 0 ? 1 : 0 ) );
+        case EXC_AFTYPE_DOUBLE:     return OString::number( fVal );
+        case EXC_AFTYPE_BOOLERR:    return OString::number(  ( fVal != 0 ? 1 : 0 ) );
         default:                    return OString();
     }
 }
@@ -852,7 +852,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rWorksheet->startElement( XML_filterColumn,
-            XML_colId,          OString::valueOf( (sal_Int32) nCol ).getStr(),
+            XML_colId,          OString::number(  nCol ).getStr(),
             // OOXTODO: XML_hiddenButton,   AutoFilter12 fHideArrow?
             // OOXTODO: XML_showButton,
             FSEND );
@@ -866,7 +866,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                 rWorksheet->singleElement( XML_top10,
                         XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
                         XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
-                        XML_val,        OString::valueOf( (sal_Int32) (nFlags >> 7 ) ).getStr(),
+                        XML_val,        OString::number(  (nFlags >> 7 ) ).getStr(),
                         // OOXTODO: XML_filterVal,
                         FSEND );
             }

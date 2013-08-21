@@ -578,9 +578,9 @@ void    SdTpOptionsMisc::SetDrawMode()
 
 String SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
-    String aScale( OUString::valueOf( nX ) );
+    String aScale( OUString::number( nX ) );
     aScale.Append( TOKEN );
-    aScale.Append( OUString::valueOf( nY ) );
+    aScale.Append( OUString::number( nY ) );
 
     return( aScale );
 }

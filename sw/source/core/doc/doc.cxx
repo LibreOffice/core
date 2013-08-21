@@ -1351,9 +1351,9 @@ void SwDoc::CalculatePagesForPrinting(
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
-        aPageRange = OUString::valueOf( (sal_Int32)1 );
-        aPageRange += OUString::valueOf( (sal_Unicode)'-');
-        aPageRange += OUString::valueOf( nDocPageCount );
+        aPageRange = OUString::number( 1 );
+        aPageRange += OUString( (sal_Unicode)'-');
+        aPageRange += OUString::number( nDocPageCount );
     }
     rData.SetPageRange( aPageRange );
 
@@ -1523,9 +1523,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
-        aPageRange = OUString::valueOf( (sal_Int32)1 );
-        aPageRange += OUString::valueOf( (sal_Unicode)'-');
-        aPageRange += OUString::valueOf( nDocPageCount );
+        aPageRange = OUString::number( 1 );
+        aPageRange += OUString( (sal_Unicode)'-');
+        aPageRange += OUString::number( nDocPageCount );
     }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 

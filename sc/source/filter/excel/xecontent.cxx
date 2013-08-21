@@ -213,8 +213,8 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
 
     pSst->startElement( XML_sst,
             XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            XML_count, OString::valueOf( (sal_Int32) mnTotal ).getStr(),
-            XML_uniqueCount, OString::valueOf( (sal_Int32) mnSize ).getStr(),
+            XML_count, OString::number(  mnTotal ).getStr(),
+            XML_uniqueCount, OString::number(  mnSize ).getStr(),
             FSEND );
 
     for( XclExpStringList::const_iterator aIt = maStringList.begin(), aEnd = maStringList.end(); aIt != aEnd; ++aIt )
@@ -312,7 +312,7 @@ void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_mergeCells,
-            XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
+            XML_count,  OString::number(  nCount ).getStr(),
             FSEND );
     for( size_t i = 0; i < nCount; ++i )
     {
@@ -923,15 +923,15 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_cfRule,
             XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
-            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_priority, OString::number( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
-            XML_aboveAverage, OString::valueOf( nAboveAverage ).getStr(),
-            XML_equalAverage, OString::valueOf( nEqualAverage ).getStr(),
-            XML_bottom, OString::valueOf( nBottom ).getStr(),
-            XML_percent, OString::valueOf( nPercent ).getStr(),
+            XML_aboveAverage, OString::number( nAboveAverage ).getStr(),
+            XML_equalAverage, OString::number( nEqualAverage ).getStr(),
+            XML_bottom, OString::number( nBottom ).getStr(),
+            XML_percent, OString::number( nPercent ).getStr(),
             XML_rank, aRank.getStr(),
             XML_text, aText.getStr(),
-            XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
+            XML_dxfId, OString::number( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
     if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
@@ -1030,9 +1030,9 @@ void XclExpDateFormat::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_cfRule,
             XML_type, "timePeriod",
-            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_priority, OString::number( mnPriority + 1 ).getStr(),
             XML_timePeriod, sTimePeriod,
-            XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyleName() ) ).getStr(),
+            XML_dxfId, OString::number( GetDxfs().GetDxfId( mrFormatEntry.GetStyleName() ) ).getStr(),
             FSEND );
     rWorksheet->endElement( XML_cfRule);
 }
@@ -1089,7 +1089,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     }
     else
     {
-        aValue = OString::valueOf( mrEntry.GetValue() );
+        aValue = OString::number( mrEntry.GetValue() );
     }
 
     rWorksheet->startElement( XML_cfvo,
@@ -1222,7 +1222,7 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_cfRule,
             XML_type, "colorScale",
-            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_priority, OString::number( mnPriority + 1 ).getStr(),
             FSEND );
 
     rWorksheet->startElement( XML_colorScale, FSEND );
@@ -1239,7 +1239,7 @@ namespace {
 
 OString createHexStringFromDigit(sal_uInt8 nDigit)
 {
-    OString aString = OString::valueOf( static_cast<sal_Int32>(nDigit), 16 );
+    OString aString = OString::number( nDigit, 16 );
     if(aString.getLength() == 1)
         aString = aString + OString::number(0);
     return aString;
@@ -1296,7 +1296,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_cfRule,
             XML_type, "dataBar",
-            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_priority, OString::number( mnPriority + 1 ).getStr(),
             FSEND );
 
     rWorksheet->startElement( XML_dataBar, FSEND );
@@ -1364,7 +1364,7 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_cfRule,
             XML_type, "iconSet",
-            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            XML_priority, OString::number( mnPriority + 1 ).getStr(),
             FSEND );
 
     const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
@@ -1732,7 +1732,7 @@ void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_dataValidations,
-            XML_count, OString::valueOf( (sal_Int32) maDVList.GetSize() ).getStr(),
+            XML_count, OString::number(  maDVList.GetSize() ).getStr(),
             // OOXTODO: XML_disablePrompts,
             // OOXTODO: XML_xWindow,
             // OOXTODO: XML_yWindow,

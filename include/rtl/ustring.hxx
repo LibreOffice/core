@@ -2113,7 +2113,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use boolean()
     */
-    SAL_DEPRECATED_INTERNAL("use boolean()") static OUString valueOf( sal_Bool b ) SAL_THROW(())
+    SAL_DEPRECATED("use boolean()") static OUString valueOf( sal_Bool b ) SAL_THROW(())
     {
         return boolean(b);
     }
@@ -2144,7 +2144,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use operator, function or constructor taking char or sal_Unicode argument
     */
-    SAL_DEPRECATED_INTERNAL("convert to OUString or use directly") static OUString valueOf( sal_Unicode c ) SAL_THROW(())
+    SAL_DEPRECATED("convert to OUString or use directly") static OUString valueOf( sal_Unicode c ) SAL_THROW(())
     {
         return OUString( &c, 1 );
     }
@@ -2159,7 +2159,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         return number( i, radix );
     }
@@ -2174,7 +2174,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OUString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
     {
         return number( ll, radix );
     }
@@ -2188,7 +2188,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( float f ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OUString valueOf( float f ) SAL_THROW(())
     {
         return number(f);
     }
@@ -2202,7 +2202,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED_INTERNAL("use number()") static OUString valueOf( double d ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OUString valueOf( double d ) SAL_THROW(())
     {
         return number(d);
     }

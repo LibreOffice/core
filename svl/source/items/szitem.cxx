@@ -71,7 +71,7 @@ SfxItemPresentation SfxSizeItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
-    rText = OUString::valueOf(aVal.Width()) + ", " + OUString::valueOf(aVal.Height()) + ", ";
+    rText = OUString::number(aVal.Width()) + ", " + OUString::number(aVal.Height()) + ", ";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

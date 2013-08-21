@@ -450,7 +450,7 @@ namespace frm
             }
             else if ( _nFeatureId == FormFeature::MoveAbsolute )
             {
-                pNavBar->setFeatureText( _nFeatureId, OUString::valueOf(getIntegerState(_nFeatureId)) );
+                pNavBar->setFeatureText( _nFeatureId, OUString::number(getIntegerState(_nFeatureId)) );
             }
         }
 

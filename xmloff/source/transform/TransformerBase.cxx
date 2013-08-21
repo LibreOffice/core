@@ -1376,7 +1376,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
 
         if( bPackage && bSupportPackage )
         {
-            OUString sTmp( OUString::valueOf( sal_Unicode( '#' ) ) );
+            OUString sTmp( OUString( sal_Unicode( '#' ) ) );
             if( rURI.startsWith( "./" ) )
                 rURI = rURI.copy( 2 );
             sTmp += rURI;

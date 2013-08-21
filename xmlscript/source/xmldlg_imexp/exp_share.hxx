@@ -124,8 +124,7 @@ public:
         OUString const & rPropName, OUString const & rAttrName )
         { read<sal_Int32>( rPropName, rAttrName ); }
     inline void readBoolAttr(
-        OUString const & rPropName, OUString const & rAttrName )
-        { read<sal_Bool>( rPropName, rAttrName ); }
+        OUString const & rPropName, OUString const & rAttrName );
 
     void readAlignAttr(
         OUString const & rPropName, OUString const & rAttrName );
@@ -157,7 +156,7 @@ public:
         OUString const & rAttrName );
     inline void addBoolAttr(
         OUString const & rAttrName, sal_Bool bValue )
-        { addAttribute( rAttrName, OUString::valueOf(bValue) ); }
+        { addAttribute( rAttrName, OUString::boolean(bValue) ); }
     void addNumberFormatAttr(
         css::uno::Reference< css::beans::XPropertySet >
         const & xFormatProperties );
@@ -231,10 +230,34 @@ inline void ElementDescriptor::read(
         css::uno::Any a( _xProps->getPropertyValue( propName ) );
         T v = T();
         if (a >>= v)
-            addAttribute( attrName, OUString::valueOf(v) );
+            addAttribute( attrName, OUString::number(v) );
         else
             OSL_FAIL( "### unexpected property type!" );
     }
+}
+
+template<>
+inline void ElementDescriptor::read<sal_Bool>(
+    OUString const & propName, OUString const & attrName,
+    bool forceAttribute )
+{
+    if (forceAttribute ||
+        css::beans::PropertyState_DEFAULT_VALUE !=
+        _xPropState->getPropertyState( propName ))
+    {
+        css::uno::Any a( _xProps->getPropertyValue( propName ) );
+        sal_Bool v = sal_Bool();
+        if (a >>= v)
+            addAttribute( attrName, OUString::boolean(v) );
+        else
+            OSL_FAIL( "### unexpected property type!" );
+    }
+}
+
+inline void ElementDescriptor::readBoolAttr(
+    OUString const & rPropName, OUString const & rAttrName )
+{
+    read<sal_Bool>( rPropName, rAttrName );
 }
 
 template<typename T>

@@ -677,10 +677,10 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
              sTemp += " ";
              sTemp += CUI_RESSTR( STR_PPI );
-             OUString sPPI = OUString::valueOf(ax);
+             OUString sPPI = OUString::number(ax);
              if (abs(ax - ay) > 1) {
                 sPPI += OUString( sal_Unicode (0x00D7) );
-                sPPI += OUString::valueOf(ay);
+                sPPI += OUString::number(ay);
              }
              sTemp = sTemp.replaceAll("%1", sPPI);
         }

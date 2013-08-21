@@ -213,12 +213,12 @@ SfxItemPresentation SwFmtDrop::GetPresentation
             {
                 if ( GetChars() > 1 )
                 {
-                    rText = OUString::valueOf( GetChars() ) + " ";
+                    rText = OUString::boolean( GetChars() ) + " ";
                 }
                 rText = rText +
                         OUString( SW_RESSTR( STR_DROP_OVER ) ) +
                         " " +
-                        OUString::valueOf( GetLines() ) +
+                        OUString::boolean( GetLines() ) +
                         " " +
                         OUString( SW_RESSTR( STR_DROP_LINES ) );
             }
@@ -336,7 +336,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
             if ( GetWidthPercent() )
             {
-                rText = rText + OUString::valueOf(GetWidthPercent()) + "%";
+                rText = rText + OUString::boolean(GetWidthPercent()) + "%";
             }
             else
             {
@@ -349,7 +349,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
                 rText = rText + ", " + SW_RESSTR( nId ) + " ";
                 if ( GetHeightPercent() )
                 {
-                    rText = rText + OUString::valueOf(GetHeightPercent()) + "%";
+                    rText = rText + OUString::boolean(GetHeightPercent()) + "%";
                 }
                 else
                 {
@@ -685,7 +685,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
             sal_uInt16 nCnt = GetNumCols();
             if ( nCnt > 1 )
             {
-                rText = OUString::valueOf(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
+                rText = OUString(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
                 if ( COLADJ_NONE != GetLineAdj() )
                 {
                     sal_uInt16 nWdth = sal_uInt16(GetLineWidth());

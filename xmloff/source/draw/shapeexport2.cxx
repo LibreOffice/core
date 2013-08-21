@@ -1362,7 +1362,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         {
             if( nGluePointId != -1 )
             {
-                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_GLUE_POINT, OUString::valueOf( nGluePointId ));
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_GLUE_POINT, OUString::number( nGluePointId ));
             }
         }
     }
@@ -1380,7 +1380,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         {
             if( nGluePointId != -1 )
             {
-                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_GLUE_POINT, OUString::valueOf( nGluePointId ));
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_GLUE_POINT, OUString::number( nGluePointId ));
             }
         }
     }
@@ -1724,7 +1724,7 @@ void XMLShapeExport::ImpExportPageShape(
             sal_Int32 nPageNumber = 0;
             xPropSet->getPropertyValue(aPageNumberStr) >>= nPageNumber;
             if( nPageNumber )
-                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_PAGE_NUMBER, OUString::valueOf(nPageNumber));
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_PAGE_NUMBER, OUString::number(nPageNumber));
         }
 
         // a presentation page shape, normally used on notes pages only. If

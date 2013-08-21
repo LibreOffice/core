@@ -300,7 +300,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             css::uno::Reference<css::registry::XRegistryKey> ftpProxy_port = xRegistryRootKey->openKey("Settings/ooInetFTPProxyPort");
             if(ftpProxy_port.is() && ftpProxy_port->getLongValue()) {
                 OUString ftpPort = OUString("ftp.proxyPort=");
-                ftpPort += OUString::valueOf(ftpProxy_port->getLongValue());
+                ftpPort += OUString::number(ftpProxy_port->getLongValue());
 
                 pjvm->pushProp(ftpHost);
                 pjvm->pushProp(ftpPort);
@@ -317,7 +317,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPProxyPort");
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
                 OUString httpPort = OUString("http.proxyPort=");
-                httpPort += OUString::valueOf(httpProxy_port->getLongValue());
+                httpPort += OUString::number(httpProxy_port->getLongValue());
 
                 pjvm->pushProp(httpHost);
                 pjvm->pushProp(httpPort);
@@ -334,7 +334,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey("Settings/ooInetHTTPSProxyPort");
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
                 OUString httpsPort = OUString("https.proxyPort=");
-                httpsPort += OUString::valueOf(httpsProxy_port->getLongValue());
+                httpsPort += OUString::number(httpsProxy_port->getLongValue());
 
                 pjvm->pushProp(httpsHost);
                 pjvm->pushProp(httpsPort);
@@ -1088,7 +1088,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         aPropertyName = OUString("http.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
-        aPropertyValue = OUString::valueOf(n);
+        aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
@@ -1100,7 +1100,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         aPropertyName = OUString("https.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
-        aPropertyValue = OUString::valueOf(n);
+        aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetFTPProxyName" )
     {
@@ -1112,7 +1112,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         aPropertyName = OUString("ftp.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
-        aPropertyValue = OUString::valueOf(n);
+        aPropertyValue = OUString::number(n);
     }
     else if ( aAccessor == "ooInetNoProxy" )
     {

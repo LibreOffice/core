@@ -365,9 +365,9 @@ OUString ScDPItemData::GetString() const
             return *mpString;
         case Value:
         case RangeStart:
-            return OUString::valueOf(mfValue);
+            return OUString::number(mfValue);
         case GroupValue:
-            return OUString::valueOf(maGroupValue.mnValue);
+            return OUString::number(maGroupValue.mnValue);
         case Empty:
         default:
             ;

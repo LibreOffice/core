@@ -158,12 +158,12 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-height %numeric; #IMPLIED
         if (def_descr.Height != _descr.Height)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-height", OUString::valueOf( (sal_Int32)_descr.Height ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-height", OUString::number( _descr.Height ) );
         }
         // dialog:font-width %numeric; #IMPLIED
         if (def_descr.Width != _descr.Width)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-width", OUString::valueOf( (sal_Int32)_descr.Width ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-width", OUString::number( _descr.Width ) );
         }
         // dialog:font-stylename CDATA #IMPLIED
         if (def_descr.StyleName != _descr.StyleName)
@@ -257,12 +257,12 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-charwidth CDATA #IMPLIED
         if (def_descr.CharacterWidth != _descr.CharacterWidth)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charwidth", OUString::valueOf( (float)_descr.CharacterWidth ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charwidth", OUString::number( (float)_descr.CharacterWidth ) );
         }
         // dialog:font-weight CDATA #IMPLIED
         if (def_descr.Weight != _descr.Weight)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-weight", OUString::valueOf( (float)_descr.Weight ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-weight", OUString::number( (float)_descr.Weight ) );
         }
         // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
         if (def_descr.Slant != _descr.Slant)
@@ -375,7 +375,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-orientation CDATA #IMPLIED
         if (def_descr.Orientation != _descr.Orientation)
         {
-            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::valueOf( (float)_descr.Orientation ) );
+            pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::number( (float)_descr.Orientation ) );
         }
         // dialog:font-kerning %boolean; #IMPLIED
         if ((def_descr.Kerning != sal_False) != (_descr.Kerning != sal_False))
@@ -587,7 +587,7 @@ void ElementDescriptor::readDateAttr( OUString const & rPropName, OUString const
             if (a >>= aUDate)
             {
                 ::Date aTDate(aUDate);
-                addAttribute( rAttrName, OUString::valueOf( static_cast<sal_Int32>(aTDate.GetDate()) ) );
+                addAttribute( rAttrName, OUString::number( aTDate.GetDate() ) );
             }
             else
                 OSL_FAIL( "### internal error" );
@@ -608,7 +608,7 @@ void ElementDescriptor::readTimeAttr( OUString const & rPropName, OUString const
             if (a >>= aUTime)
             {
                 ::Time aTTime(aUTime);
-                addAttribute( rAttrName, OUString::valueOf( aTTime.GetTime() / ::Time::nanoPerCenti ) );
+                addAttribute( rAttrName, OUString::number( aTTime.GetTime() / ::Time::nanoPerCenti ) );
             }
             else
                 OSL_FAIL( "### internal error" );
@@ -1071,22 +1071,22 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     a = _xProps->getPropertyValue( "PositionX" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":left", OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":left", OUString::number( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( "PositionY" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":top", OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":top", OUString::number( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( "Width" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":width", OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":width", OUString::number( *(sal_Int32 const *)a.getValue() ) );
     }
     a = _xProps->getPropertyValue( "Height" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":height", OUString::valueOf( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":height", OUString::number( *(sal_Int32 const *)a.getValue() ) );
     }
 
     if (supportPrintable)
@@ -1303,7 +1303,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
 
     // no appr style found, append new
     Style * pStyle = new Style( rStyle );
-    pStyle->_id = OUString::valueOf( (sal_Int32)_styles.size() );
+    pStyle->_id = OUString::number( _styles.size() );
     _styles.push_back( pStyle );
     return pStyle->_id;
 }

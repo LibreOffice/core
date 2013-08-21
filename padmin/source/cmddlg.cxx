@@ -123,7 +123,7 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
     ::std::list< String >::const_iterator it;
     while( nKeys-- )
     {
-        OUString aCommand( rConfig.ReadKey(OString::valueOf(nKeys), RTL_TEXTENCODING_UTF8 ) );
+        OUString aCommand( rConfig.ReadKey(OString::number(nKeys), RTL_TEXTENCODING_UTF8 ) );
         if( !aCommand.isEmpty() )
         {
             for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
@@ -166,7 +166,7 @@ void CommandStore::setCommands(
         nWritten--;
     }
     for( nWritten = 0, it = aWriteList.begin(); it != aWriteList.end(); ++it, ++nWritten )
-        rConfig.WriteKey( OString::valueOf(nWritten), OUStringToOString(*it, RTL_TEXTENCODING_UTF8) );
+        rConfig.WriteKey( OString::number(nWritten), OUStringToOString(*it, RTL_TEXTENCODING_UTF8) );
 }
 
 

@@ -622,7 +622,7 @@ namespace
             Sequence< OUString > aNames(1);
             OUString &rNodeName = aNames.getArray()[0];
             rNodeName = rLastFoundList;
-            rNodeName += OUString::valueOf( (sal_Unicode)'/' );
+            rNodeName += OUString( (sal_Unicode)'/' );
             rNodeName += aCfgLocaleStr;
             Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
             if (aValues.getLength())
@@ -802,7 +802,7 @@ void LngSvcMgr::UpdateAll()
             while (aIt != rCurMap.end())
             {
                 OUString aCfgEntryName( aSubNodeName );
-                aCfgEntryName += OUString::valueOf( (sal_Unicode) '/' );
+                aCfgEntryName += OUString( (sal_Unicode) '/' );
                 aCfgEntryName += (*aIt).first;
 
                 pNewValue->Name  = aCfgEntryName;
@@ -870,7 +870,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             if (lcl_SeqHasString( aSpellCheckerListEntries, aKeyText ))
             {
                 OUString aPropName( aNode );
-                aPropName += OUString::valueOf( (sal_Unicode) '/' );
+                aPropName += OUString( (sal_Unicode) '/' );
                 aPropName += aKeyText;
                 pNames[0] = aPropName;
                 aValues = /*aCfg.*/GetProperties( aNames );
@@ -895,7 +895,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             if (lcl_SeqHasString( aGrammarCheckerListEntries, aKeyText ))
             {
                 OUString aPropName( aNode );
-                aPropName += OUString::valueOf( (sal_Unicode) '/' );
+                aPropName += OUString( (sal_Unicode) '/' );
                 aPropName += aKeyText;
                 pNames[0] = aPropName;
                 aValues = /*aCfg.*/GetProperties( aNames );
@@ -923,7 +923,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             if (lcl_SeqHasString( aHyphenatorListEntries, aKeyText ))
             {
                 OUString aPropName( aNode );
-                aPropName += OUString::valueOf( (sal_Unicode) '/' );
+                aPropName += OUString( (sal_Unicode) '/' );
                 aPropName += aKeyText;
                 pNames[0] = aPropName;
                 aValues = /*aCfg.*/GetProperties( aNames );
@@ -948,7 +948,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             if (lcl_SeqHasString( aThesaurusListEntries, aKeyText ))
             {
                 OUString aPropName( aNode );
-                aPropName += OUString::valueOf( (sal_Unicode) '/' );
+                aPropName += OUString( (sal_Unicode) '/' );
                 aPropName += aKeyText;
                 pNames[0] = aPropName;
                 aValues = /*aCfg.*/GetProperties( aNames );
@@ -1819,7 +1819,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             OUString aCfgLocaleStr( (LanguageTag(pLocale[i])).getBcp47() );
             pValue->Value = aCfgAny;
             pValue->Name  = aNodeName;
-            pValue->Name += OUString::valueOf( (sal_Unicode) '/' );
+            pValue->Name += OUString( (sal_Unicode) '/' );
             pValue->Name += aCfgLocaleStr;
             pValue++;
         }
@@ -1916,7 +1916,7 @@ uno::Sequence< OUString > SAL_CALL
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             OUString aPropName( aNode );
-            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += OUString( (sal_Unicode) '/' );
             aPropName += aCfgLocale;
             pNames[0] = aPropName;
             aValues = /*aCfg.*/GetProperties( aNames );
@@ -1931,7 +1931,7 @@ uno::Sequence< OUString > SAL_CALL
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             OUString aPropName( aNode );
-            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += OUString( (sal_Unicode) '/' );
             aPropName += aCfgLocale;
             pNames[0] = aPropName;
             aValues = /*aCfg.*/GetProperties( aNames );
@@ -1946,7 +1946,7 @@ uno::Sequence< OUString > SAL_CALL
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             OUString aPropName( aNode );
-            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += OUString( (sal_Unicode) '/' );
             aPropName += aCfgLocale;
             pNames[0] = aPropName;
             aValues = /*aCfg.*/GetProperties( aNames );
@@ -1961,7 +1961,7 @@ uno::Sequence< OUString > SAL_CALL
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             OUString aPropName( aNode );
-            aPropName += OUString::valueOf( (sal_Unicode) '/' );
+            aPropName += OUString( (sal_Unicode) '/' );
             aPropName += aCfgLocale;
             pNames[0] = aPropName;
             aValues = /*aCfg.*/GetProperties( aNames );

@@ -61,12 +61,12 @@ static OUString createIndex( vector< OUString > lines )
         {
             if (comphelper::string::isalnumAscii(*pLine))
             {
-                aResult += OString::valueOf( *pLine );
+                aResult += OString( *pLine );
             }
             else
             {
                 aResult += OString("_");
-                aResult += OString::valueOf( (sal_Int32) *pLine, 16 );
+                aResult += OString::number(  *pLine, 16 );
             }
 
             pLine++;
@@ -95,7 +95,7 @@ static vector< OUString > getInfoFromInd( OUString aInd )
         while( *pLine && !( pLine[0] == '_' && pLine[1] == '_' ))
             if( *pLine != '_' )
             {
-                newItem += OUString::valueOf( (sal_Unicode) *pLine );
+                newItem += OUString( (sal_Unicode) *pLine );
                 pLine++;
             }
             else
@@ -112,10 +112,10 @@ static vector< OUString > getInfoFromInd( OUString aInd )
                         return aResult;
                     }
 
-                    aNum += OUString::valueOf( (sal_Unicode) pLine[i] );
+                    aNum += OUString( (sal_Unicode) pLine[i] );
                 }
 
-                newItem += OUString::valueOf( (sal_Unicode) aNum.toUInt32( 16 ) );
+                newItem += OUString( (sal_Unicode) aNum.toUInt32( 16 ) );
                 pLine += 3;
             }
 

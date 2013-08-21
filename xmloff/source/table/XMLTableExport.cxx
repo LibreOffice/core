@@ -418,11 +418,11 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
     // table:number-columns-spanned
     if( nColSpan > 1 )
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, OUString::valueOf( nColSpan ) );
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, OUString::number( nColSpan ) );
 
     // table:number-rows-spanned
     if( nRowSpan > 1 )
-        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::valueOf( nRowSpan ) );
+        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::number( nRowSpan ) );
 
      // <table:table-cell> or <table:covered-table-cell>
     SvXMLElementExport tableCellElement( mrExport, XML_NAMESPACE_TABLE, bIsMerged ? XML_COVERED_TABLE_CELL : XML_TABLE_CELL, sal_True, sal_True );

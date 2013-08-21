@@ -1106,7 +1106,7 @@ OUString OQueryController::getPrivateTitle( ) const
             ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
-            sName += OUString::valueOf(getCurrentStartNumber());
+            sName += OUString::number(getCurrentStartNumber());
         }
     }
     return sName;
@@ -1243,7 +1243,7 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
             aFieldData.clear();
             (*field)->Save( aFieldData, i_includingCriteria );
 
-            const OUString sFieldSettingName = "Field" + OUString::valueOf( i );
+            const OUString sFieldSettingName = "Field" + OUString::number( i );
             aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
         }
     }

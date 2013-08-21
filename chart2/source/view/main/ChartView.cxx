@@ -2451,7 +2451,7 @@ void ChartView::createShapes()
 
         //create the group shape for diagram and axes first to have title and legends on top of it
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
-        OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::valueOf( sal_Int32(0) ) ) );//todo: other index if more than one diagram is possible
+        OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
         uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,aDiagramCID) );
 
         uno::Reference< drawing::XShape > xDiagram_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(

@@ -379,8 +379,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     {
         WriteTab( rOutStm, nTab );
         rOutStm << "helpcontext("
-                << OString::valueOf(static_cast<sal_Int64>(
-                    GetHelpContext().GetValue())).getStr()
+                << OString::number(GetHelpContext().GetValue()).getStr()
                 << ")," << endl;
     }
 }

@@ -60,7 +60,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
         OUString sValue;
 
         if ( !( aValue >>= sValue ) && ( aValue >>= nValue ) )
-            sValue = OUString::valueOf( nValue );
+            sValue = OUString::number( nValue );
 
         SAL_INFO("writerfilter", "Property " << aProps[i].Name << ": " << sValue);
     }
@@ -524,7 +524,7 @@ ListDef::~ListDef( )
 OUString ListDef::GetStyleName( sal_Int32 nId )
 {
     OUString sStyleName( "WWNum" );
-    sStyleName += OUString::valueOf( nId );
+    sStyleName += OUString::number( nId );
 
     return sStyleName;
 }
@@ -852,13 +852,13 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         {
 #if OSL_DEBUG_LEVEL > 0
             OString sMessage( "ListTable::attribute() - Id: ");
-            sMessage += OString::valueOf( sal_Int32( nName ), 10 );
+            sMessage += OString::number( nName, 10 );
             sMessage += " / 0x";
-            sMessage += OString::valueOf( sal_Int32( nName ), 16 );
+            sMessage += OString::number( nName, 16 );
             sMessage += " value: ";
-            sMessage += OString::valueOf( sal_Int32( nIntValue ), 10 );
+            sMessage += OString::number( nIntValue, 10 );
             sMessage += " / 0x";
-            sMessage += OString::valueOf( sal_Int32( nIntValue ), 16 );
+            sMessage += OString::number( nIntValue, 16 );
             SAL_WARN("writerfilter", sMessage.getStr());
 #endif
         }

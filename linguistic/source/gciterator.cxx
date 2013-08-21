@@ -292,7 +292,7 @@ OUString GrammarCheckingIterator::GetOrCreateDocId(
         else // add new entry
         {
             sal_Int32 nRes = NextDocId();
-            aRes = OUString::valueOf( nRes );
+            aRes = OUString::number( nRes );
             m_aDocIdMap[ xComponent.get() ] = aRes;
             xComponent->addEventListener( this );
         }

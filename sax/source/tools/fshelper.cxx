@@ -118,17 +118,17 @@ FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int32 value)
 {
-    return write(OUString::valueOf(value));
+    return write(OUString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int64 value)
 {
-    return write(OUString::valueOf(value));
+    return write(OUString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(double value)
 {
-    return write(OUString::valueOf(value));
+    return write(OUString::number(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)

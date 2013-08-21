@@ -252,7 +252,7 @@ OUString BufferNode::printChildren() const
     for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
         rc += OUString( "BufID=" );
-        rc += OUString::valueOf((*ii)->getBufferId());
+        rc += OUString::number((*ii)->getBufferId());
 
         if (((ElementCollector*)(*ii))->getModify())
         {
@@ -276,7 +276,7 @@ OUString BufferNode::printChildren() const
 
         rc += OUString( "(" );
         rc += OUString( "SecID=" );
-        rc += OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
+        rc += OUString::number(((ElementCollector*)(*ii))->getSecurityId());
         rc += OUString( ")" );
         rc += OUString( " " );
     }

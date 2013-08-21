@@ -361,7 +361,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != NULL );
 
     /// get user ID;
-    strUserID = ::rtl::OUString::valueOf( ( sal_Int32 )getuid( ) );
+    strUserID = OUString::number( getuid( ) );
 
     /// get user Name;
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );

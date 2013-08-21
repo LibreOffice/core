@@ -714,7 +714,7 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
 
 //      case ARABIC:    ist jetzt default
         default:
-            aTmpStr = OUString::valueOf(nNo);
+            aTmpStr = OUString::number(nNo);
             break;
         }
 

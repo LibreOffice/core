@@ -566,8 +566,8 @@ Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i
         i < 0 ||
         static_cast< ChildListVectorType::size_type >( i ) >= m_aChildList.size() )
     {
-        OUString aBuf = "Index " + OUString::valueOf( i ) + " is invalid for range [ 0, " +
-                        OUString::valueOf( static_cast< sal_Int32 >( m_aChildList.size() - 1 ) ) +
+        OUString aBuf = "Index " + OUString::number( i ) + " is invalid for range [ 0, " +
+                        OUString::number( m_aChildList.size() - 1 ) +
                         " ]";
         lang::IndexOutOfBoundsException aEx( aBuf,
                                              const_cast< ::cppu::OWeakObject * >(

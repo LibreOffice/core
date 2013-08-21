@@ -1133,7 +1133,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
         {
             // export only user defined glue points
 
-            const OUString sId( OUString::valueOf( nIdentifier ) );
+            const OUString sId( OUString::number( nIdentifier ) );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
 
             mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,

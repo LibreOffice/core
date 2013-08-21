@@ -233,7 +233,7 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const OUString&
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_LONG );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    OUString sValue(OUString::valueOf(nValue));
+    OUString sValue(OUString::number(nValue));
     m_rContext.Characters( sValue );
     m_rContext.EndElement( sal_False );
 }

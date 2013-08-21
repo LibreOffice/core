@@ -1150,7 +1150,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
             ParseResult aResult = m_xCharClass->parsePredefinedToken(KParseType::ANY_NUMBER,_rValue,0,m_pData->aLocale,0,OUString(),KParseType::ANY_NUMBER,OUString());
             if((aResult.TokenType & KParseType::IDENTNAME) && aResult.EndPos == _rValue.getLength())
             {
-                aValue = OUString::valueOf(aResult.Value);
+                aValue = OUString::number(aResult.Value);
                 sal_Int32 nPos = aValue.lastIndexOf('.');
                 if((nPos+_nScale) < aValue.getLength())
                     aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,OUString());

@@ -580,7 +580,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     if (bCustom && xShape.is())
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
-        xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
+        xDefaulter->createCustomShapeDefaults(OUString::number(nType));
     }
 
     // Creating Path property

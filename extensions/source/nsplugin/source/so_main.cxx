@@ -309,7 +309,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             return Reference< lang::XMultiServiceFactory >(NULL);
         }
 
-        aPluginPipeName = OUString::valueOf( aPath.hashCode() );
+        aPluginPipeName = OUString::number( aPath.hashCode() );
 
         // accept string
         OSL_ASSERT( buf.isEmpty() );

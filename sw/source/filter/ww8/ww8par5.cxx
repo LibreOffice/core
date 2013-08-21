@@ -742,7 +742,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     {
                         const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
                         pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
-                        OUString sFieldId = OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
+                        OUString sFieldId = OUString::number( maFieldStack.back().mnFieldId );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< OUString, uno::Any > (
                                     ODF_ID_PARAM,

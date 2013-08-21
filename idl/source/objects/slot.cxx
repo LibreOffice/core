@@ -1154,8 +1154,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     rOutStm << "// Slot Nr. "
         << OString::number(nListPos).getStr()
         << " : ";
-    OString aSlotIdValue(OString::valueOf(static_cast<sal_Int32>(
-        GetSlotId().GetValue())));
+    OString aSlotIdValue(OString::number(GetSlotId().GetValue()));
     rOutStm << aSlotIdValue.getStr() << endl;
     WriteTab( rOutStm, 1 );
     if( bIsEnumSlot )
@@ -1181,11 +1180,11 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     if( bIsEnumSlot )
     {
         rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::valueOf(static_cast<sal_Int32>(pLinkedSlot->GetListPos())).getStr()
+            << OString::number(pLinkedSlot->GetListPos()).getStr()
             << "] /*Offset Master*/, " << endl;
         WriteTab( rOutStm, 4 );
         rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::valueOf(static_cast<sal_Int32>(pNextSlot->GetListPos())).getStr()
+            << OString::number(pNextSlot->GetListPos()).getStr()
             << "] /*Offset Next*/, " << endl;
 
         WriteTab( rOutStm, 4 );
@@ -1240,13 +1239,13 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         else
         {
             rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-                << OString::valueOf(static_cast<sal_Int32>(pLinkedSlot->GetListPos())).getStr()
+                << OString::number(pLinkedSlot->GetListPos()).getStr()
                 << "] /*Offset Linked*/, " << endl;
             WriteTab( rOutStm, 4 );
         }
 
         rOutStm << "&a" << rShellName.getStr() << "Slots_Impl["
-            << OString::valueOf(static_cast<sal_Int32>(pNextSlot->GetListPos())).getStr()
+            << OString::number(pNextSlot->GetListPos()).getStr()
             << "] /*Offset Next*/, " << endl;
 
         WriteTab( rOutStm, 4 );
@@ -1377,8 +1376,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
                 pType = GetType();
             sal_uLong nSCount = pType->GetAttrCount();
             rOutStm
-                << OString::valueOf(static_cast<sal_Int32>(
-                    nSCount)).getStr()
+                << OString::number(nSCount).getStr()
                 << "/*Count*/";
         }
         else
@@ -1529,8 +1527,8 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                 rTable[ nSId2 ] = this;
 
                 rOutStm << "#define " << aSId.getStr() << '\t'
-                    << OString::valueOf(
-                        static_cast<sal_Int32>(nSId2)).getStr()
+                    << OString::number(
+                        nSId2).getStr()
                     << endl;
             }
         }
@@ -1550,8 +1548,8 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     rStrm << "PROJECT,";
     rStrm << GetSlotId().getString().getStr() << ',';
     rStrm
-        << OString::valueOf(
-            static_cast<sal_Int32>(GetSlotId().GetValue())).getStr()
+        << OString::number(
+            GetSlotId().GetValue()).getStr()
         << ',';
 
     if ( !GetPseudoPrefix().isEmpty() )

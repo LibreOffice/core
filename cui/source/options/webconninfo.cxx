@@ -173,7 +173,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 for ( sal_Int32 nUserInd = 0; nUserInd < aURLEntries[nURLInd].UserList.getLength(); nUserInd++ )
                 {
                     OUString aUIEntry( aURLEntries[nURLInd].Url );
-                    aUIEntry += OUString::valueOf( (sal_Unicode)'\t' );
+                    aUIEntry += OUString( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                     pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
@@ -189,7 +189,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             {
                 OUString aUIEntry( aUrls[ nURLIdx ] );
-                aUIEntry += OUString::valueOf( (sal_Unicode)'\t' );
+                aUIEntry += OUString( (sal_Unicode)'\t' );
                 aUIEntry += OUString( "*" );
                 SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );

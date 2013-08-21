@@ -497,7 +497,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     OUString* pListSourceArr = aListSource.getArray();
                     //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                     for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
-                        pListSourceArr[i] = OUString::valueOf(i);
+                        pListSourceArr[i] = OUString::number(i);
                     aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<OUString>*)0));
 
                     xPropSet->setPropertyValue("ListSource", aAny);

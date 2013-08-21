@@ -68,7 +68,7 @@ XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& 
         maValue = OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else
-        maValue = OString::valueOf(rEntry.GetValue());
+        maValue = OString::number(rEntry.GetValue());
 }
 
 namespace {

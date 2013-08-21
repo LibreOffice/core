@@ -307,7 +307,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     // adding a second copy to sc (see ScTbxInsertCtrl::StateChanged)
 
     OUString aSlotURL( "slot:" );
-    aSlotURL += OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
+    aSlotURL += OUString::number( SID_DEL_ROWS );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
     Image aDelNm = ::GetImage( xFrame, aSlotURL, false );
 

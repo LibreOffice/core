@@ -210,7 +210,7 @@ namespace {
             if (nContent == 2 && // selection
                 nCurrentPageIndex >= 0)
             {
-                return OUString::valueOf(nCurrentPageIndex + 1);
+                return OUString::number(nCurrentPageIndex + 1);
             }
 
             return OUString();
@@ -640,7 +640,7 @@ namespace {
             vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit", "PageRange",
-                                OUString::valueOf(mnCurPage + 1), aPageRangeOpt));
+                                OUString::number(mnCurPage + 1), aPageRangeOpt));
 
             FreeResource();
         }

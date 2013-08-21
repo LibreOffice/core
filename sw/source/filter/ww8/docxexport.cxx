@@ -284,7 +284,7 @@ void DocxExport::DoComboBox(const OUString& rName,
     }
 
     m_pDocumentFS->singleElementNS( XML_w, XML_result,
-            FSNS( XML_w, XML_val ), OString::valueOf( nId ).getStr( ),
+            FSNS( XML_w, XML_val ), OString::number( nId ).getStr( ),
             FSEND );
 
     // Loop over the entries
@@ -308,12 +308,12 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 
 OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
 {
-    OUString aFileName = "charts/chart" + OUString::valueOf(nCount) + ".xml";
+    OUString aFileName = "charts/chart" + OUString::number(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
                     aFileName );
 
-    aFileName = "word/charts/chart" + OUString::valueOf(nCount) + ".xml";
+    aFileName = "word/charts/chart" + OUString::number(nCount) + ".xml";
     ::sax_fastparser::FSHelperPtr pChartFS =
         m_pFilter->openFragmentStreamWithSerializer( aFileName,
             "application/vnd.openxmlformats-officedocument.drawingml.chart" );
@@ -696,7 +696,7 @@ void DocxExport::WriteSettings()
             FSEND );
 
     // Zoom
-    OString aZoom(OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
+    OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
     // Display Background Shape
@@ -721,7 +721,7 @@ void DocxExport::WriteSettings()
     // Default Tab Stop
     if( settings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
-            OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );
+            OString::number( settings.defaultTabStop).getStr(), FSEND );
 
     // Even and Odd Headers
     if( settings.evenAndOddHeaders )

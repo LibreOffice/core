@@ -191,7 +191,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
-    rProps[ "draw:z-index" ] = OUString::valueOf( rElem.ZOrder );
+    rProps[ "draw:z-index" ] = OUString::number( rElem.ZOrder );
     rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
     rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
     rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
@@ -791,7 +791,7 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
             aVec.setX ( convPx2mmPrec2( aVec.getX() )*100.0 );
             aVec.setY ( convPx2mmPrec2( aVec.getY() )*100.0 );
 
-            aGCProps[ "svg:stroke-width" ] = OUString::valueOf( aVec.getLength() );
+            aGCProps[ "svg:stroke-width" ] = OUString::number( aVec.getLength() );
         }
     }
     else

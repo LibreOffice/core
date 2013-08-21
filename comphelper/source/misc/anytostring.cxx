@@ -42,7 +42,7 @@ inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
     if (c < ' ' || c > '~') {
         buf.append( "\\X" );
         OUString const s(
-            OUString::valueOf( static_cast< sal_Int32 >(c), 16 ) );
+            OUString::number( static_cast< sal_Int32 >(c), 16 ) );
         for ( sal_Int32 f = 4 - s.getLength(); f > 0; --f )
             buf.append( static_cast< sal_Unicode >('0') );
         buf.append( s );

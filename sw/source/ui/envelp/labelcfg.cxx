@@ -231,16 +231,16 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             {
                 rMeasure = "";
                 rMeasure += rRec.bCont ? OUString( "C" ) : OUString( "S" );      rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lHDist ) );   rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lVDist ) );   rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lWidth ) );   rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lHeight ) );  rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lLeft ) );    rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lUpper ) );   rMeasure += sColon;
-                rMeasure += OUString::valueOf( rRec.nCols );                     rMeasure += sColon;
-                rMeasure += OUString::valueOf( rRec.nRows );                     rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lPWidth ) );  rMeasure += sColon;
-                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lPHeight ) );
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lHDist ) );   rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lVDist ) );   rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lWidth ) );   rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lHeight ) );  rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lLeft ) );    rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lUpper ) );   rMeasure += sColon;
+                rMeasure += OUString::number( rRec.nCols );                     rMeasure += sColon;
+                rMeasure += OUString::number( rRec.nRows );                     rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lPWidth ) );  rMeasure += sColon;
+                rMeasure += OUString::number( TWIP_TO_MM100( rRec.lPHeight ) );
                 pValues[nProp].Value <<= rMeasure;
             }
             break;
@@ -304,11 +304,11 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         sal_Int32 nIndex = aLabels.getLength();
         OUString sPrefix( "Label" );
         sFoundNode = sPrefix;
-        sFoundNode += OUString::valueOf( nIndex );
+        sFoundNode += OUString::number( nIndex );
         while ( lcl_Exists( sFoundNode, aLabels ) )
         {
             sFoundNode = sPrefix;
-            sFoundNode += OUString::valueOf(nIndex++);
+            sFoundNode += OUString::number(nIndex++);
         }
     }
     else

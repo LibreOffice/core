@@ -121,7 +121,7 @@ RDFaExportHelper::LookupBlankNode(
         m_BlankNodeMap[ i_xBlankNode->getStringValue() ] );
     if (rEntry.isEmpty())
     {
-        rEntry = "_:b" + OUString::valueOf(++m_Counter);
+        rEntry = "_:b" + OUString::number(++m_Counter);
     }
     return rEntry;
 }

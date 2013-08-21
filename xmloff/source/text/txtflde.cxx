@@ -2560,7 +2560,7 @@ void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
         return;
 
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName,
-                             OUString::valueOf(nNum));
+                             OUString::number(nNum));
 }
 
 /// export an integer attribute, omit if default

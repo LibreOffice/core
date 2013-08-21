@@ -555,9 +555,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 if ( !(nTick % nTick3) )
                 {
                     if ( ( mnUnitIndex == RULER_UNIT_CHAR ) || ( mnUnitIndex == RULER_UNIT_LINE ) )
-                        aNumStr = OUString::valueOf( static_cast<sal_Int64>( nTick / nTickUnit ) );
+                        aNumStr = OUString::number( nTick / nTickUnit );
                     else
-                        aNumStr = OUString::valueOf( static_cast<sal_Int64>( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit ) );
+                        aNumStr = OUString::number( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
 
                     ImplVDrawText( nStart + n, nCenter, aNumStr, nMin, nMax );
                     ImplVDrawText( nStart - n, nCenter, aNumStr, nMin, nMax );

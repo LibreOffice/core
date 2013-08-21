@@ -103,7 +103,7 @@ sal_Bool OQueryTableWindow::Init()
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
         sAliasName += OUString('_');
-        sAliasName += OUString::valueOf(m_nAliasNum);
+        sAliasName += OUString::number(m_nAliasNum);
     }
 
 

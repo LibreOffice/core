@@ -1147,7 +1147,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
             {
                 sal_Int32 nValue = 0;
                 if( rValue >>= nValue )
-                    sValue = OUString::valueOf( nValue );
+                    sValue = OUString::number( nValue );
                 break;
             }
         case TypeClass_BYTE:
@@ -1156,21 +1156,21 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
             {
                 sal_uInt32 nValue = 0;
                 if( rValue >>= nValue )
-                    sValue = OUString::valueOf( (sal_Int64)nValue );
+                    sValue = OUString::number( nValue );
                 break;
             }
         case TypeClass_HYPER:
             {
                 sal_Int64 nValue = 0;
                 if( rValue >>= nValue )
-                    sValue = OUString::valueOf( nValue );
+                    sValue = OUString::number( nValue );
                 break;
             }
         case TypeClass_UNSIGNED_HYPER:
             {
                 sal_uInt64 nValue = 0;
                 if( rValue >>= nValue )
-                    sValue = OUString::valueOf( (sal_Int64)nValue );
+                    sValue = OUString::number( nValue );
                 break;
             }
         case TypeClass_FLOAT:
@@ -1178,7 +1178,7 @@ OUString TreeControlPeer::getEntryString( const Any& rValue )
             {
                 double fValue = 0.0;
                 if( rValue >>= fValue )
-                    sValue = OUString::valueOf( fValue );
+                    sValue = OUString::number( fValue );
                 break;
             }
         case TypeClass_STRING:

@@ -207,7 +207,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
 
     for ( sal_Int32 nInd = 0; nInd < 32000 && !xResult.is(); nInd++ )
     {
-        OUString aName = OUString::valueOf( nInd );
+        OUString aName = OUString::number( nInd );
         aName += OUString( "TMPSTOR" );
         aName += m_aEntryName;
         if ( !m_xParentStorage->hasByName( aName ) )
@@ -232,7 +232,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     OUString aResult;
     for ( sal_Int32 nInd = 0; nInd < 32000 && aResult.isEmpty(); nInd++ )
     {
-        OUString aName = OUString::valueOf( nInd );
+        OUString aName = OUString::number( nInd );
         aName += OUString( "TMPSTREAM" );
         aName += m_aEntryName;
         if ( !m_xParentStorage->hasByName( aName ) )

@@ -405,7 +405,7 @@ bool getJavaProps(const OUString & exePath,
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
 
     // Only add the fourth param if the bootstrap parameter is set.
-    if (sValue.equals(OUString::valueOf((sal_Int32) 1)))
+    if (sValue.equals(OUString::number( 1)))
     {
         args[3] = arg4.pData;
         cArgs = 4;
@@ -1215,7 +1215,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ")
                                    + "Could not read directory "
                                    + usDir2 + ". Osl file error: "
-                                   + OUString::valueOf((sal_Int32) openErr));
+                                   + OUString::number(openErr));
                         continue;
                     }
 
@@ -1228,7 +1228,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
                             JFW_TRACE2(excMessage + "getFileStatus failed with error "
-                                + OUString::valueOf((sal_Int32) errStatus));
+                                + OUString::number(errStatus));
                             continue;
                         }
                         JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ") +
@@ -1242,7 +1242,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                                 OUString("[Java framework] sunjavaplugin: ")
                                 + "Error while iterating over contens of "
                                 + usDir2 + ". Osl file error: "
-                                + OUString::valueOf((sal_Int32) openErr));
+                                + OUString::number(openErr));
                 }
                 else
                 {

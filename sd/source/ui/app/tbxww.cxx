@@ -149,7 +149,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
             else
             {
                 OUString aSlotURL( "slot:" );
-                aSlotURL += OUString::valueOf( sal_Int32( nImage ));
+                aSlotURL += OUString::number( nImage);
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages()

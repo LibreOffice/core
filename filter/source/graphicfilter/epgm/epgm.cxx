@@ -203,7 +203,7 @@ void PGMWriter::ImplWriteBody()
 // write a decimal number in ascii format into the stream
 void PGMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
-    const OString aNum(OString::valueOf(nNumber));
+    const OString aNum(OString::number(nNumber));
     m_rOStm << aNum.getStr();
 }
 

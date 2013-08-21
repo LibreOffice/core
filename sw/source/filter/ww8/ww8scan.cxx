@@ -4119,7 +4119,7 @@ OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
             sal_Int32 p = len - 1;
             while (p > 0 && aRet[p] >= '0' && aRet[p] <= '9')
                 --p;
-            aRet = aRet.copy(0, p+1) + OUString::valueOf(nBookmarkId++);
+            aRet = aRet.copy(0, p+1) + OUString::number(nBookmarkId++);
             i = 0; // start search from beginning
         }
         else

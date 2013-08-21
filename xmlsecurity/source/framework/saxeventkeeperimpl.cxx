@@ -379,9 +379,9 @@ OUString SAXEventKeeperImpl::printBufferNode(
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != NULL)
     {
-        rc += OUString::valueOf( pBlocker->getBufferId() );
+        rc += OUString::number( pBlocker->getBufferId() );
         rc += OUString( "(SecId=" );
-        rc += OUString::valueOf( pBlocker->getSecurityId() );
+        rc += OUString::number( pBlocker->getSecurityId() );
         rc += OUString( ")" );
         rc += OUString( " " );
     }
@@ -1057,7 +1057,7 @@ OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
     OUString rc;
 
     rc += OUString( "ElementMarkBuffers: size = " );
-    rc += OUString::valueOf((sal_Int32)m_vElementMarkBuffers.size());
+    rc += OUString::number(m_vElementMarkBuffers.size());
     rc += OUString( "\nCurrentBufferNode: " );
     rc += m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement());
     rc += OUString( "\n" );

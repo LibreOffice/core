@@ -188,14 +188,14 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             sal_Int32 nNum = 1;
             if( nStrPos < 0 )
             {
-                aStr = aStr + " ("  + aStrCopy + OUString::valueOf( nNum ) + ")";
+                aStr = aStr + " ("  + aStrCopy + OUString::number( nNum ) + ")";
                 nStrPos = aStr.indexOf( aStrCopy );
             }
             nStrPos = nStrPos + aStrCopy.getLength();
             // that we do not access into the nirvana (--> endless loop)
             if( nStrPos >= aStr.getLength() )
             {
-                aStr = aStr + " " + OUString::valueOf( nNum );
+                aStr = aStr + " " + OUString::number( nNum );
             }
 
             // check name...
@@ -218,7 +218,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                     const CharClass* pCharClass = rDoc.GetCharClass();
                     while( pCharClass->isDigit( aStr, nStrPos ) )
                         aStr = aStr.replaceAt( nStrPos, 1, "" );
-                    aStr = aStr.copy( 0, nStrPos) + OUString::valueOf( ++nNum ) + aStr.copy( nStrPos);
+                    aStr = aStr.copy( 0, nStrPos) + OUString::number( ++nNum ) + aStr.copy( nStrPos);
                 }
 
             }

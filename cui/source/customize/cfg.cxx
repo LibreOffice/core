@@ -231,8 +231,8 @@ OUString
 replaceSixteen( const OUString& str, sal_Int32 nReplacement )
 {
     OUString result( str );
-    OUString sixteen = OUString::valueOf( (sal_Int32)16 );
-    OUString expected = OUString::valueOf( nReplacement );
+    OUString sixteen = OUString::number( 16 );
+    OUString expected = OUString::number( nReplacement );
 
     sal_Int32 len = sixteen.getLength();
     sal_Int32 index = result.indexOf( sixteen );
@@ -261,12 +261,12 @@ generateCustomName(
     if ( pos != -1 )
     {
         name = prefix.replaceAt(
-            pos, placeholder.getLength(), OUString::valueOf( suffix ) );
+            pos, placeholder.getLength(), OUString::number( suffix ) );
     }
     else
     {
         // no placeholder found so just append the suffix
-        name = prefix + OUString::valueOf( suffix );
+        name = prefix + OUString::number( suffix );
     }
 
     // now check is there is an already existing entry with this name
@@ -307,7 +307,7 @@ generateCustomURL(
     url += OUString(CUSTOM_TOOLBAR_STR );
 
     // use a random number to minimize possible clash with existing custom toolbars
-    url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
+    url += OUString::number( generateRandomValue(), 16 );
 
     // now check is there is an already existing entry with this url
     SvxEntries::const_iterator iter = entries->begin();
@@ -339,7 +339,7 @@ generateCustomMenuURL(
     sal_Int32 suffix = 1 )
 {
     OUString url(CUSTOM_MENU_STR );
-    url += OUString::valueOf( suffix );
+    url += OUString::number( suffix );
 
     // now check is there is an already existing entry with this url
     SvxEntries::const_iterator iter = entries->begin();

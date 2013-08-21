@@ -78,7 +78,7 @@ void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
 {
     ToolBox& rTbx = GetToolBox();
     OUString aSlotURL( "slot:" );
-    aSlotURL += OUString::valueOf( sal_Int32( nLastSlotId ));
+    aSlotURL += OUString::number( nLastSlotId);
     Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
 
     rTbx.SetItemImage(GetId(), aImage);
@@ -104,7 +104,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
                 nId = nLastSlotId;
 
             OUString aSlotURL( "slot:" );
-            aSlotURL += OUString::valueOf( sal_Int32( nId ));
+            aSlotURL += OUString::number( nId);
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);

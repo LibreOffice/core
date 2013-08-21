@@ -127,7 +127,7 @@ namespace cmis
                 INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
         OUString sProxy = rProxy.aName;
         if ( rProxy.nPort > 0 )
-            sProxy += ":" + OUString::valueOf( rProxy.nPort );
+            sProxy += ":" + OUString::number( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
 
         if ( m_aRepositories.empty() )

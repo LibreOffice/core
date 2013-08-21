@@ -773,7 +773,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         if( i_rControl.getType() == PDFWriter::RadioButton )
         {
             aPartialName  = "RadioGroup";
-            aPartialName += OString::valueOf( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
+            aPartialName += OString::number( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
         }
         else
             aPartialName = OString( "Widget" );
@@ -6634,7 +6634,7 @@ bool PDFWriterImpl::emitTrailer()
     for( sal_Int32 i = 0; i < nObjects; i++ )
     {
         aLine.setLength( 0 );
-        OString aOffset = OString::valueOf( (sal_Int64)m_aObjects[i] );
+        OString aOffset = OString::number( m_aObjects[i] );
         for( sal_Int32 j = 0; j < (10-aOffset.getLength()); j++ )
             aLine.append( '0' );
         aLine.append( aOffset );
@@ -11649,7 +11649,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
             {
                 int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
                 PDFWidget& rKid = m_aWidgets[nKidIndex];
-                rKid.m_aOnValue = OUString::valueOf( sal_Int32(nKid+1) );
+                rKid.m_aOnValue = OUString::number( nKid+1 );
                 if( rKid.m_aValue != "Off" )
                     rKid.m_aValue = rKid.m_aOnValue;
             }
@@ -11895,7 +11895,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_aRect = Rectangle(0, 0, 0, 0);
 
         m_nSignatureObject = createObject();
-        rNewWidget.m_aValue = OUString::valueOf( m_nSignatureObject );
+        rNewWidget.m_aValue = OUString::number( m_nSignatureObject );
         rNewWidget.m_aValue += " 0 R";
         //createDefaultSignatureAppearance( rNewWidget, rSig );
         // let's add a fake appearance

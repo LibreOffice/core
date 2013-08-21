@@ -389,7 +389,7 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
     {
         const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", OUString::valueOf(parameterIndex)
+                "$position$", OUString::number(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

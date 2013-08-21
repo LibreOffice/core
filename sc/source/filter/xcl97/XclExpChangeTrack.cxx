@@ -576,12 +576,12 @@ void XclExpChTrTabId::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 
     sax_fastparser::FSHelperPtr pHeader = rRevisionLogStrm.GetCurrentStream();
     pHeader->startElement( XML_sheetIdMap,
-            XML_count,  OString::valueOf( sal_Int32( nTabCount ) ).getStr(),
+            XML_count,  OString::number( nTabCount ).getStr(),
             FSEND );
     for( int i = 0; i < nTabCount; ++i )
     {
         pHeader->singleElement( XML_sheetId,
-                XML_val,    OString::valueOf( sal_Int32( pBuffer[ i ] ) ).getStr(),
+                XML_val,    OString::number( pBuffer[ i ] ).getStr(),
                 FSEND );
     }
     pHeader->endElement( XML_sheetIdMap );
@@ -1006,10 +1006,10 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 {
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
     pStream->startElement( XML_rcc,
-            XML_rId,                    OString::valueOf( (sal_Int32) GetActionNumber() ).getStr(),
+            XML_rId,                    OString::number(  GetActionNumber() ).getStr(),
             XML_ua,                     XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,                     NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
-            XML_sId,                    OString::valueOf( (sal_Int32) GetTabId( aPosition.Tab() ) ).getStr(),
+            XML_sId,                    OString::number(  GetTabId( aPosition.Tab() ) ).getStr(),
             XML_odxf,                   NULL,       // OOXTODO: not supported
             XML_xfDxf,                  NULL,       // OOXTODO: not supported
             XML_s,                      NULL,       // OOXTODO: not supported
@@ -1122,10 +1122,10 @@ void XclExpChTrInsert::SaveXml( XclExpXmlStream& rRevisionLogStrm )
 {
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
     pStream->startElement( XML_rrc,
-            XML_rId,    OString::valueOf( (sal_Int32) GetActionNumber() ).getStr(),
+            XML_rId,    OString::number(  GetActionNumber() ).getStr(),
             XML_ua,     XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,     NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
-            XML_sId,    OString::valueOf( (sal_Int32) GetTabId( aRange.aStart.Tab() ) ).getStr(),
+            XML_sId,    OString::number(  GetTabId( aRange.aStart.Tab() ) ).getStr(),
             XML_eol,    NULL,       // OOXTODO: not supported?
             XML_ref,    XclXmlUtils::ToOString( aRange ).getStr(),
             XML_action, lcl_GetAction( nOpCode ),
@@ -1182,12 +1182,12 @@ void XclExpChTrInsertTab::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
     pStream->singleElement( XML_ris,
-            XML_rId,            OString::valueOf( (sal_Int32) GetActionNumber() ).getStr(),
+            XML_rId,            OString::number(  GetActionNumber() ).getStr(),
             XML_ua,             XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,             NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
-            XML_sheetId,        OString::valueOf( (sal_Int32) GetTabId( nTab ) ).getStr(),
+            XML_sheetId,        OString::number(  GetTabId( nTab ) ).getStr(),
             XML_name,           XclXmlUtils::ToOString( GetTabInfo().GetScTabName( nTab ) ).getStr(),
-            XML_sheetPosition,  OString::valueOf( (sal_Int32) nTab ).getStr(),
+            XML_sheetPosition,  OString::number(  nTab ).getStr(),
             FSEND );
 }
 
@@ -1252,13 +1252,13 @@ void XclExpChTrMoveRange::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     sax_fastparser::FSHelperPtr pStream = rRevisionLogStrm.GetCurrentStream();
 
     pStream->startElement( XML_rm,
-            XML_rId,            OString::valueOf( (sal_Int32) GetActionNumber() ).getStr(),
+            XML_rId,            OString::number(  GetActionNumber() ).getStr(),
             XML_ua,             XclXmlUtils::ToPsz( GetAccepted () ),   // OOXTODO? bAccepted == ua or ra; not sure.
             XML_ra,             NULL,       // OOXTODO: RRD.fUndoAction?  Or RRD.fAccepted?
-            XML_sheetId,        OString::valueOf( (sal_Int32) GetTabId( aDestRange.aStart.Tab() ) ).getStr(),
+            XML_sheetId,        OString::number(  GetTabId( aDestRange.aStart.Tab() ) ).getStr(),
             XML_source,         XclXmlUtils::ToOString( aSourceRange ).getStr(),
             XML_destination,    XclXmlUtils::ToOString( aDestRange ).getStr(),
-            XML_sourceSheetId,  OString::valueOf( (sal_Int32) GetTabId( aSourceRange.aStart.Tab() ) ).getStr(),
+            XML_sourceSheetId,  OString::number(  GetTabId( aSourceRange.aStart.Tab() ) ).getStr(),
             FSEND );
     // OOXTODO: does this handle XML_rfmt, XML_undo?
     XclExpChTrAction* pAction = GetAddAction();
@@ -1306,7 +1306,7 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
 
     pStream->startElement( XML_rfmt,
-            XML_sheetId,    OString::valueOf( (sal_Int32) GetTabId( aRange.aStart.Tab() ) ).getStr(),
+            XML_sheetId,    OString::number(  GetTabId( aRange.aStart.Tab() ) ).getStr(),
             XML_xfDxf,      NULL,   // OOXTODO: not supported
             XML_s,          NULL,   // OOXTODO: style
             XML_sqref,      XclXmlUtils::ToOString( aRange ).getStr(),

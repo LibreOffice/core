@@ -6281,7 +6281,7 @@ inline ::rtl::OUString getCurrentPID(  )
 #else
     nPID = getpid();
 #endif
-    return ( ::rtl::OUString::valueOf( ( long )nPID ) );
+    return ( OUString::number( nPID ) );
 }
 
 

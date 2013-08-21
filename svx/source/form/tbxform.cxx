@@ -192,7 +192,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
             case SID_FM_SPINBUTTON:
             {   // set a new image, matching to this slot
                 OUString aSlotURL( "slot:" );
-                aSlotURL += OUString::valueOf( sal_Int32( nSlot ));
+                aSlotURL += OUString::number( nSlot);
                 Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;

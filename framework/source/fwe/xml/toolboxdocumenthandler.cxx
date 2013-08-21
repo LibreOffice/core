@@ -838,7 +838,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_WIDTH ),
                              m_aAttributeType,
-                             OUString::valueOf( sal_Int32( nWidth )) );
+                             OUString::number( nWidth) );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

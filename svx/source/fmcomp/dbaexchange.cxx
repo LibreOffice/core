@@ -562,7 +562,7 @@ namespace svx
             sal_Int32 nSelectedRow( 0 );
             OSL_VERIFY( *pSelRows >>= nSelectedRow );
 
-            m_sCompatibleObjectDescription += OUString::valueOf((sal_Int32)nSelectedRow);
+            m_sCompatibleObjectDescription += OUString::number(nSelectedRow);
             m_sCompatibleObjectDescription += sSeparator;
         }
     }

@@ -71,7 +71,7 @@ OUString Int32ToOUString(sal_Int32 num)
     sstrm<<(int)num;
     return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return OUString::valueOf(num);
+    return OUString::number(num);
 }
 
 OUString Int16ToOUString(sal_Int16 num)
@@ -82,7 +82,7 @@ OUString Int16ToOUString(sal_Int16 num)
     return OUString::createFromAscii(sstrm.str().c_str());
     */
     sal_Int32 nNum = static_cast<sal_Int32>(num);
-    return OUString::valueOf(nNum);
+    return OUString::number(nNum);
 }
 
 OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
@@ -94,7 +94,7 @@ OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
     sstrm<<num;
     return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return OUString::valueOf(num);
+    return OUString::number(num);
 }
 
 OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
@@ -106,7 +106,7 @@ OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
     sstrm<<num;
     return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return OUString::valueOf(num);
+    return OUString::number(num);
 }
 
 OUString   DateTimeToOUString(XFDateTime& dt)

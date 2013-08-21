@@ -480,7 +480,7 @@ namespace xmloff
             OUString sControlId = sControlIdBase;
 
             size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
-            sControlId += OUString::valueOf( (sal_Int32)nKnownControlCount + 1 );
+            sControlId += OUString::number( (sal_Int32)nKnownControlCount + 1 );
 
         #ifdef DBG_UTIL
             // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries

@@ -932,8 +932,8 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,
-            "$pos$", OUString::valueOf(_parameterIndex),
-            "$count$", OUString::valueOf((sal_Int32)numParams)
+            "$pos$", OUString::number(_parameterIndex),
+            "$count$", OUString::number(numParams)
             ));
         SQLException aNext(sError,*this, OUString(),0,Any());
 

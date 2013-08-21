@@ -234,7 +234,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     n += Date( Date::SYSTEM ).GetDate();
     n += rand();
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    sTmpStr += OUString::valueOf( n );
+    sTmpStr += OUString::number( n );
 
     OUString sNewListId( sTmpStr );
     if ( mpProcessedLists != 0 )
@@ -244,7 +244,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
         {
             ++nHitCount;
             sNewListId = sTmpStr;
-            sNewListId += OUString::valueOf( nHitCount );
+            sNewListId += OUString::number( nHitCount );
         }
     }
 

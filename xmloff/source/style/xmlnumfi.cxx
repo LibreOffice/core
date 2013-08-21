@@ -1203,7 +1203,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 rParent.AddToCode( (sal_Unicode)'/' );
                 if ( aNumInfo.nFracDenominator > 0 )
                 {
-                    rParent.AddToCode(  OUString::valueOf( aNumInfo.nFracDenominator ) );
+                    rParent.AddToCode(  OUString::number( aNumInfo.nFracDenominator ) );
                 }
                 else
                 {
@@ -1394,7 +1394,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             {
                 aFormatCode.append( "][$-" );
                 // language code in upper hex:
-                aFormatCode.append(OUString::valueOf(sal_Int32(eLang), 16).toAsciiUpperCase());
+                aFormatCode.append(OUString::number(eLang, 16).toAsciiUpperCase());
             }
             aFormatCode.append( sal_Unicode(']') );
         }

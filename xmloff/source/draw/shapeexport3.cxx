@@ -437,7 +437,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
     sal_Bool bLightOnOff = false;
     for(sal_Int32 nLamp = 1; nLamp <= 8; nLamp++)
     {
-        aIndexStr = OUString::valueOf( nLamp );
+        aIndexStr = OUString::number( nLamp );
 
         // lightcolor
         aPropName = aColorPropName;

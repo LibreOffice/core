@@ -536,7 +536,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
     {
         OUString aStreamName( "\002OlePres00" );
-        aStreamName += OUString::valueOf( (sal_Int32)nInd );
+        aStreamName += OUString::number( nInd );
         if ( xNameContainer->hasByName( aStreamName ) )
             xNameContainer->removeByName( aStreamName );
     }
@@ -604,7 +604,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                     for ( sal_uInt8 nInd = 0; nInd < 10 && !bExists; nInd++ )
                     {
                         OUString aStreamName( "\002OlePres00" );
-                        aStreamName += OUString::valueOf( (sal_Int32)nInd );
+                        aStreamName += OUString::number( nInd );
                         try
                         {
                             bExists = xNameContainer->hasByName( aStreamName );
@@ -654,7 +654,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
             for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
             {
                 OUString aStreamName( "\002OlePres00" );
-                aStreamName += OUString::valueOf( (sal_Int32)nInd );
+                aStreamName += OUString::number( nInd );
                 uno::Reference< io::XStream > xCachedCopyStream;
                 try
                 {

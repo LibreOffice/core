@@ -471,12 +471,12 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
         {
             if( rSrc.equalsIgnoreAsciiCase("true") )
             {
-                aNewString = OUString::valueOf( (sal_Int32)SbxTRUE );
+                aNewString = OUString::number( SbxTRUE );
                 bChanged = true;
             }
             else if( rSrc.equalsIgnoreAsciiCase("false") )
             {
-                aNewString = OUString::valueOf( (sal_Int32)SbxFALSE );
+                aNewString = OUString::number( SbxFALSE );
                 bChanged = true;
             }
             break;
@@ -825,13 +825,13 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 }
                 else
                 {
-                    rRes = OUString::valueOf(nMin);
+                    rRes = OUString::number(nMin);
                 }
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_W ))
             {
                 sal_Int32 nWeekDay = implGetWeekDay( nNumber );
-                rRes = OUString::valueOf(nWeekDay);
+                rRes = OUString::number(nWeekDay);
             }
             else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_Y ))
             {
@@ -839,7 +839,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 double dBaseDate;
                 implDateSerial( nYear, 1, 1, dBaseDate );
                 sal_Int32 nYear32 = 1 + sal_Int32( nNumber - dBaseDate );
-                rRes = OUString::valueOf(nYear32);
+                rRes = OUString::number(nYear32);
             }
             else
             {

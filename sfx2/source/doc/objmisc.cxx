@@ -871,7 +871,7 @@ String SfxObjectShell::GetTitle
         if (pImp->bIsNamedVisible)
         {
             // Append number
-            aNoName += OUString::valueOf(static_cast<sal_Int32>(pImp->nVisualDocumentNumber));
+            aNoName += OUString::number(pImp->nVisualDocumentNumber);
         }
 
         // Document called "noname" for the time being

@@ -772,12 +772,12 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Command", OUStringToOString(it->second.m_aInfo.m_aCommand, RTL_TEXTENCODING_UTF8) );
             pConfig->WriteKey( "QuickCommand", OUStringToOString(it->second.m_aInfo.m_aQuickCommand, RTL_TEXTENCODING_UTF8) );
             pConfig->WriteKey( "Features", OUStringToOString(it->second.m_aInfo.m_aFeatures, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey("Copies", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nCopies)));
+            pConfig->WriteKey("Copies", OString::number(it->second.m_aInfo.m_nCopies));
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
-            pConfig->WriteKey("PSLevel", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPSLevel)));
-            pConfig->WriteKey("PDFDevice", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPDFDevice)));
-            pConfig->WriteKey("ColorDevice", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDevice)));
-            pConfig->WriteKey("ColorDepth", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDepth)));
+            pConfig->WriteKey("PSLevel", OString::number(it->second.m_aInfo.m_nPSLevel));
+            pConfig->WriteKey("PDFDevice", OString::number(it->second.m_aInfo.m_nPDFDevice));
+            pConfig->WriteKey("ColorDevice", OString::number(it->second.m_aInfo.m_nColorDevice));
+            pConfig->WriteKey("ColorDepth", OString::number(it->second.m_aInfo.m_nColorDepth));
             aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nLeftMarginAdjust));
             aValue.append(',');
             aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nRightMarginAdjust));

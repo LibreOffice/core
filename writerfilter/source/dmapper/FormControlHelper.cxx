@@ -99,7 +99,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
             {
                 ++nUnique;
                 sFormName = sDOCXForm;
-                sFormName += OUString::valueOf(nUnique);
+                sFormName += OUString(nUnique);
             }
 
             uno::Reference<uno::XInterface> xForm(getServiceFactory()->createInstance("com.sun.star.form.component.Form"));
@@ -280,7 +280,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     do
     {
         OUString sTmp(sControl);
-        sTmp += OUString::valueOf(nControl);
+        sTmp += OUString::number(nControl);
 
         nControl++;
         if (! xFormCompsByName->hasByName(sTmp))

@@ -342,7 +342,7 @@ void lcl_formatChars( const sal_Unicode table[], int tableSize, int n, OUString&
 
      if( n>=tableSize ) lcl_formatChars( table, tableSize, (n-tableSize)/tableSize, s );
 
-     s += OUString::valueOf( table[ n % tableSize ] );
+     s += OUString( table[ n % tableSize ] );
 }
 
 static
@@ -355,7 +355,7 @@ void lcl_formatChars1( const sal_Unicode table[], int tableSize, int n, OUString
      int repeat_count = n / tableSize + 1;
 
      for( int i=0; i<repeat_count; i++ )
-         s += OUString::valueOf( table[ n%tableSize ] );
+         s += OUString( table[ n%tableSize ] );
 }
 
 static
@@ -367,9 +367,9 @@ void lcl_formatChars2( const sal_Unicode table_capital[], const sal_Unicode tabl
      if( n>=tableSize )
      {
           lcl_formatChars2( table_capital, table_small, tableSize, (n-tableSize)/tableSize, s );
-          s += OUString::valueOf( table_small[ n % tableSize ] );
+          s += OUString( table_small[ n % tableSize ] );
      } else
-          s += OUString::valueOf( table_capital[ n % tableSize ] );
+          s += OUString( table_capital[ n % tableSize ] );
 }
 
 static
@@ -379,10 +379,10 @@ void lcl_formatChars3( const sal_Unicode table_capital[], const sal_Unicode tabl
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>Aa, 27=>Bb, ...
 
      int repeat_count = n / tableSize + 1;
-     s += OUString::valueOf( table_capital[ n%tableSize ] );
+     s += OUString( table_capital[ n%tableSize ] );
 
      for( int i=1; i<repeat_count; i++ )
-         s += OUString::valueOf( table_small[ n%tableSize ] );
+         s += OUString( table_small[ n%tableSize ] );
 }
 
 
@@ -624,7 +624,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                result += toRoman( number ).toAsciiLowerCase();
                break;
           case ARABIC:
-               result += OUString::valueOf( number );
+               result += OUString::number( number );
                break;
           case NUMBER_NONE:
                return OUString(""); // ignore prefix and suffix
@@ -643,7 +643,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TRANSLITERATION:
                try {
-                    const OUString &tmp = OUString::valueOf( number );
+                    const OUString &tmp = OUString::number( number );
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
                     impl_loadTranslit();
@@ -651,7 +651,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {
                     // When translteration property is missing, return default number (bug #101141#)
-                    result += OUString::valueOf( number );
+                    result += OUString::number( number );
                     // OSL_ASSERT(0);
                     // throw IllegalArgumentException();
                }
@@ -856,10 +856,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
         if (natNum) {
             NativeNumberSupplier sNatNum;
-            result += sNatNum.getNativeNumberString(OUString::valueOf( number ), locale, natNum);
+            result += sNatNum.getNativeNumberString(OUString::number( number ), locale, natNum);
         } else if (tableSize) {
             if ( number > tableSize && !recycleSymbol)
-                result += OUString::valueOf( number);
+                result += OUString::number( number);
             else
                 result += OUString(&table[--number % tableSize], 1);
         }

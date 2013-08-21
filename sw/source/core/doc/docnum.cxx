@@ -2215,7 +2215,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         static rtlRandomPool s_RandomPool( rtl_random_createPool() );
         sal_Int64 n;
         rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-        aName = OUString::valueOf( (n < 0 ? -n : n) );
+        aName = OUString::number( (n < 0 ? -n : n) );
         if( pChkStr && pChkStr->isEmpty() )
             pChkStr = 0;
     }
@@ -2602,7 +2602,7 @@ namespace listfunc
         static rtlRandomPool s_RandomPool( rtl_random_createPool() );
         sal_Int64 n;
         rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-        aNewListId += OUString::valueOf( (n < 0 ? -n : n) );
+        aNewListId += OUString::number( (n < 0 ? -n : n) );
 
         return MakeListIdUnique( rDoc, aNewListId );
     }

@@ -45,7 +45,7 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
     else
     {
         OUString aId( "id" );
-        aId += OUString::valueOf( mnNextId++ );
+        aId += OUString::number( mnNextId++ );
         return (*maEntries.insert( IdMap_t::value_type( aId, xRef ) ).first).first;
     }
 }

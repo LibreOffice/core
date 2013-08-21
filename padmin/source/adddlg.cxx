@@ -1068,7 +1068,7 @@ OUString AddPrinterDialog::uniquePrinterName( const OUString& rBase )
     {
         aResult = rBase;
         aResult +=  "_"  ;
-        aResult += OUString::valueOf(nVersion++);
+        aResult += OUString::number(nVersion++);
     }
 
     return aResult;

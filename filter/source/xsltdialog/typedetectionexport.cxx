@@ -133,7 +133,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sComma;
                 sValue += pFilter->maExtension;
                 sValue += sComma;
-                sValue += OUString::valueOf( pFilter->mnDocumentIconID );
+                sValue += OUString::number( pFilter->mnDocumentIconID );
                 sValue += sComma;
 
                 addProperty( xHandler, sData, sValue );
@@ -174,11 +174,11 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sComma,
                 sValue += sFilterAdaptorService;
                 sValue += sComma,
-                sValue += OUString::valueOf( pFilter->maFlags );
+                sValue += OUString::number( pFilter->maFlags );
                 sValue += sComma;
                 sValue += sXSLTFilterService;
                 sValue += sDelim;
-                sValue += OUString::valueOf( pFilter->mbNeedsXSLT2 );
+                sValue += OUString::boolean( pFilter->mbNeedsXSLT2 );
                 sValue += sDelim;
 
                 const application_info_impl* pAppInfo = getApplicationInfo( pFilter->maExportService );

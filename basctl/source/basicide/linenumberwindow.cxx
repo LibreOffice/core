@@ -73,7 +73,7 @@ void LineNumberWindow::Paint( const Rectangle& )
 
     sal_Int64 y = (nStartLine - 1) * (sal_Int64)nLineHeight;
     for(sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
-        DrawText(Point(0, y - m_nCurYOffset), OUString::valueOf(n));
+        DrawText(Point(0, y - m_nCurYOffset), OUString::number(n));
 }
 
 void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)

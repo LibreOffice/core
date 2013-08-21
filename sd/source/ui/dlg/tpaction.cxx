@@ -826,7 +826,7 @@ String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
             {
                 const sal_uInt16 nPos = aLbOLEAction.GetSelectEntryPos();
                 if( nPos < aVerbVector.size() )
-                    aStr = OUString::valueOf( aVerbVector[ nPos ] );
+                    aStr = OUString::number( aVerbVector[ nPos ] );
                 return aStr;
             }
         case presentation::ClickAction_DOCUMENT:

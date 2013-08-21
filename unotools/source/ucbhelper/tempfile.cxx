@@ -193,7 +193,7 @@ void CreateTempName_Impl( OUString& rName, bool bKeep, bool bDir = true )
     {
         u %= nMax;
         OUString aTmp( aName );
-        aTmp += OUString::valueOf(static_cast<sal_Int64>(u), nRadix);
+        aTmp += OUString::number(u, nRadix);
         aTmp += ".tmp" ;
 
         if ( bDir )

@@ -312,7 +312,7 @@ void ODBExport::exportDataSource()
                 break;
                 case TypeClass_DOUBLE:
                     // let the unit converter format is as string
-                    sValue = OUString::valueOf( getDouble( aValue ) );
+                    sValue = OUString::number( getDouble( aValue ) );
                     break;
                 case TypeClass_BOOLEAN:
                     sValue = ::xmloff::token::GetXMLToken( getBOOL( aValue ) ? XML_TRUE : XML_FALSE );
@@ -321,7 +321,7 @@ void ODBExport::exportDataSource()
                 case TypeClass_SHORT:
                 case TypeClass_LONG:
                     // let the unit converter format is as string
-                    sValue = OUString::valueOf( getINT32( aValue ) );
+                    sValue = OUString::number( getINT32( aValue ) );
                     break;
                 default:
                     break;
@@ -607,7 +607,7 @@ void ODBExport::exportConnectionData()
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
                     AddAttribute(XML_NAMESPACE_DB,XML_HOSTNAME,sHostName);
                     if ( nPort != -1 )
-                        AddAttribute(XML_NAMESPACE_DB,XML_PORT,OUString::valueOf(nPort));
+                        AddAttribute(XML_NAMESPACE_DB,XML_PORT,OUString::number(nPort));
                     if ( sDatabaseName.getLength() )
                         AddAttribute(XML_NAMESPACE_DB,XML_DATABASE_NAME,sDatabaseName);
 

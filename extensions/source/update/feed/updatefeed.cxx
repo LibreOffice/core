@@ -244,7 +244,7 @@ public:
         OSL_ASSERT( m_xUpdateInformationProvider.is() );
 
         if( !(m_nCount < m_nNodes ) )
-            throw container::NoSuchElementException(OUString::valueOf(m_nCount), *this);
+            throw container::NoSuchElementException(OUString::number(m_nCount), *this);
 
         try
         {
@@ -301,7 +301,7 @@ public:
     uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if( m_nCount > 0 )
-            throw container::NoSuchElementException(OUString::valueOf(m_nCount), *this);
+            throw container::NoSuchElementException(OUString::boolean(m_nCount), *this);
 
         ++m_nCount;
         return uno::makeAny(m_aEntry);

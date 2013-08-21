@@ -308,7 +308,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
                 aReadSeq[0] == '.'
                )
             {
-                aFileSuffix += OUString::valueOf( (sal_Unicode) aReadSeq[0] );
+                aFileSuffix += OUString( (sal_Unicode) aReadSeq[0] );
             }
 
         } while( aReadSeq[0] );

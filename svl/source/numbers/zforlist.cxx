@@ -975,7 +975,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes.append(OUString::valueOf( i ));
+                            aDupes.append(OUString::number( i ));
                             aDupes.append("(");
                             aDupes.append(xSeq[i].formatKey);
                             aDupes.append( ") ");
@@ -985,9 +985,9 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                     {
                         OUStringBuffer aMsg(aDupes.getLength() + xSeq[j].formatKey.getLength() + 100);
                         aMsg.append("XML locale data FormatElement formatindex dupe: ");
-                        aMsg.append(OUString::valueOf((sal_Int32)nIdx));
+                        aMsg.append(OUString::number(nIdx));
                         aMsg.append("\nFormatElements: ");
-                        aMsg.append(OUString::valueOf( j ));
+                        aMsg.append(OUString::number( j ));
                         aMsg.append("(");
                         aMsg.append( xSeq[j].formatKey );
                         aMsg.append( ") ");
@@ -1801,7 +1801,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
                     rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
                 OUString aMsg(OUString("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ") +
-                              OUString::valueOf( sal_Int32(rCode.Index)) +
+                              OUString::number( rCode.Index) +
                               OUString(":\n") +
                               rCode.Code);
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1821,7 +1821,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
         if (LocaleDataWrapper::areChecksEnabled())
         {
             OUString aMsg( OUString("SvNumberFormatter::ImpInsertFormat: bad format code, index " ) +
-                           OUString::valueOf( sal_Int32(rCode.Index) ) +
+                           OUString::number( rCode.Index ) +
                            OUString("\n") +
                            rCode.Code);
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1851,7 +1851,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
                 default:
                 {
                     OUString aMsg("SvNumberFormatter::ImpInsertFormat: dup format code, index ");
-                    aMsg += OUString::valueOf( sal_Int32(rCode.Index) );
+                    aMsg += OUString::number( rCode.Index );
                     aMsg += "\n";
                     aMsg += rCode.Code;
                     LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1866,7 +1866,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
             if (LocaleDataWrapper::areChecksEnabled())
             {
                 OUString aMsg( "SvNumberFormatter::ImpInsertFormat: too many format codes, index ");
-                aMsg += OUString::valueOf( sal_Int32(rCode.Index) );
+                aMsg += OUString::number( rCode.Index );
                 aMsg += "\n";
                 aMsg +=  rCode.Code;
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1880,9 +1880,9 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
         if (LocaleDataWrapper::areChecksEnabled())
         {
             OUString aMsg( "ImpInsertFormat: can't insert number format key pos: ");
-            aMsg += OUString::valueOf( sal_Int32( nPos ) );
+            aMsg += OUString::number( nPos );
             aMsg += ", code index ";
-            aMsg += OUString::valueOf( sal_Int32(rCode.Index) );
+            aMsg += OUString::number( rCode.Index );
             aMsg += "\n";
             aMsg += rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -2027,7 +2027,7 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
                 || nTabOff == NF_CURRENCY_1000DEC2_CCC))
     {   // currency entries with decimals might not exist, e.g. Italian Lira
         OUString aMsg( "SvNumberFormatter::ImpGetFormatCodeIndex: not found: " );
-        aMsg += OUString::valueOf( sal_Int32( nTabOff ) );
+        aMsg += OUString::number( nTabOff );
         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(aMsg));
     }
     if ( nLen )
@@ -3966,7 +3966,7 @@ OUString NfCurrencyEntry::BuildSymbolString(bool bBank,
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
             sal_Int32 nLang = static_cast<sal_Int32>(eLanguage);
-            aBuf.append('-').append( OUString::valueOf(nLang, 16).toAsciiUpperCase());
+            aBuf.append('-').append( OUString::number(nLang, 16).toAsciiUpperCase());
         }
     }
     aBuf.append(']');

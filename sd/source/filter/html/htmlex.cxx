@@ -1994,7 +1994,7 @@ bool HtmlExport::CreateNotesPages()
         aStr.AppendAscii( "</body>\r\n</html>" );
 
         OUString aFileName( "note" );
-        aFileName += OUString::valueOf(nSdPage);
+        aFileName += OUString(nSdPage);
         bOk = WriteHtml( aFileName, true, aStr );
 
 
@@ -2062,7 +2062,7 @@ bool HtmlExport::CreateOutlinePages()
         aStr.AppendAscii( "</body>\r\n</html>" );
 
         OUString aFileName( "outline" );
-        aFileName += OUString::valueOf(nPage);
+        aFileName += OUString::number(nPage);
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)

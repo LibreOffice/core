@@ -152,7 +152,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
                 if( aMaxIt != aNumbers.end())
                     nIndex = (*aMaxIt) + 1;
 
-                aUniqueName = rPrefix + OUString::valueOf( nIndex );
+                aUniqueName = rPrefix + OUString::number( nIndex );
             }
 
             OSL_ASSERT( !aUniqueName.isEmpty());

@@ -164,7 +164,7 @@ namespace io_acceptor {
     {
         // make it unique
         m_sDescription += ",uniqueValue=" ;
-        m_sDescription += OUString::valueOf(
+        m_sDescription += OUString::number(
             sal::static_int_cast< sal_Int64 >(
                 reinterpret_cast< sal_IntPtr >(&m_socket)),
             10 );

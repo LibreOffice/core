@@ -2900,7 +2900,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName
              nNum = 1;
         }
         while( xLib->hasByName( genModuleName ) )
-            genModuleName = OUString( "Sheet") + OUString::valueOf( ++nNum );
+            genModuleName = OUString( "Sheet") + OUString::number( ++nNum );
 
         uno::Any aSourceAny;
         OUString sTmpSource = sSource;

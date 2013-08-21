@@ -152,7 +152,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
 
     // create a resource URL from the nId provided by the sfx2
     OUString aResourceURL( aDockWindowResourceURL );
-    aResourceURL += OUString::valueOf(sal_Int32(nId));
+    aResourceURL += OUString::number(nId);
     aPropValue.Value = uno::makeAny( aResourceURL );
     aArgs[1] <<= aPropValue;
 

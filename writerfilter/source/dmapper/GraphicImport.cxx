@@ -1293,9 +1293,9 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         default:
 #if OSL_DEBUG_LEVEL > 0
             OString sMessage( "GraphicImport::sprm() - Id: ");
-            sMessage += OString::valueOf( sal_Int32( nSprmId ), 10 );
+            sMessage += OString::number( nSprmId, 10 );
             sMessage += " / 0x";
-            sMessage += OString::valueOf( sal_Int32( nSprmId ), 16 );
+            sMessage += OString::number( nSprmId, 16 );
             SAL_WARN("writerfilter", sMessage.getStr());
 #endif
             ;

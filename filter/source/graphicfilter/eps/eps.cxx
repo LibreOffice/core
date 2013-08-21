@@ -2483,7 +2483,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
 void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
-    const OString aNumber(OString::valueOf(nNumber));
+    const OString aNumber(OString::number(nNumber));
     mnCursorPos += aNumber.getLength();
     *mpPS << aNumber.getStr();
     ImplExecMode(nMode);
@@ -2499,7 +2499,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
 
-    const OString aNumber1(OString::valueOf(nPTemp));
+    const OString aNumber1(OString::number(nPTemp));
     *mpPS << aNumber1.getStr();
     mnCursorPos += aNumber1.getLength();
 
@@ -2508,7 +2508,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
         int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
-        const OString aNumber2(OString::valueOf(nATemp));
+        const OString aNumber2(OString::number(nATemp));
 
         sal_Int16 n, nLen = aNumber2.getLength();
         if ( nLen < 8 )
@@ -2545,7 +2545,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         nNumber = -nNumber;
         mnCursorPos++;
     }
-    const OString aScaleFactor(OString::valueOf(nNumber));
+    const OString aScaleFactor(OString::number(nNumber));
     sal_uLong nLen = aScaleFactor.getLength();
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )

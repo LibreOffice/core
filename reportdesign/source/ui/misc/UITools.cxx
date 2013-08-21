@@ -162,14 +162,14 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
     if ( _xGroup->getHeaderOn() && _xGroup->getHeader()->getName().isEmpty() )
     {
         OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
-        sName += OUString::valueOf(_nPos);
+        sName += OUString::number(_nPos);
         _xGroup->getHeader()->setName(sName);
     }
 
     if ( _xGroup->getFooterOn() && _xGroup->getFooter()->getName().isEmpty() )
     {
         OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
-        sName += OUString::valueOf(_nPos);
+        sName += OUString::number(_nPos);
         _xGroup->getFooter()->setName(sName);
     }
 }

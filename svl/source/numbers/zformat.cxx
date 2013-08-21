@@ -884,7 +884,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         sStr = "NatNum";
                         //! eSymbolType is negative
                         sal_uInt8 nNum = (sal_uInt8)(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
-                        sStr += OUString::valueOf( (sal_Int32)nNum );
+                        sStr += OUString::number( nNum );
                         NumFor[nIndex].SetNatNumNum( nNum, false );
                     }
                     break;
@@ -1035,7 +1035,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         // e.g. Thai T speciality
                         if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
                         {
-                            sStr = "[NatNum"  + OUString::valueOf( sal_Int32(pSc->GetNatNumModifier())) + "]" + sStr;
+                            sStr = "[NatNum"  + OUString::number( pSc->GetNatNumModifier()) + "]" + sStr;
                             NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), false );
                         }
                         // #i53826# #i42727# For the Thai T speciality we need
@@ -1055,7 +1055,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             ((eLanguage = MsLangId::getRealLanguage( eLan)) == LANGUAGE_THAI) &&
                             NumFor[nIndex].GetNatNum().GetLang() == LANGUAGE_DONTKNOW)
                         {
-                            sStr = "[$-" + OUString::valueOf( sal_Int32(eLanguage), 16 ).toAsciiUpperCase() + "]" + sStr;
+                            sStr = "[$-" + OUString::number( eLanguage, 16 ).toAsciiUpperCase() + "]" + sStr;
                             NumFor[nIndex].SetNatNumLang( eLanguage);
                         }
                         sBuff.remove(nPosOld, nPos - nPosOld);
@@ -2691,7 +2691,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             {
                 nExpSign = 1;
             }
-            ExpStr = OUString::valueOf( nExp );
+            ExpStr = OUString::number( nExp );
         }
     }
 
@@ -5278,12 +5278,12 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
             }
             else
             {
-                aStr = OUString::valueOf( nVal );
+                aStr = OUString::number( nVal );
             }
         }
         else
         {
-            OUString aValStr( OUString::valueOf( nVal ) );
+            OUString aValStr( OUString::number( nVal ) );
             if ( aValStr.getLength() >= nMinDigits )
             {
                 aStr = aValStr;
@@ -5302,7 +5302,7 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
     }
     else
     {
-        aStr = OUString::valueOf( nVal );
+        aStr = OUString::number( nVal );
     }
     return impTransliterate(aStr, rNum);
 }

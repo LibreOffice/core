@@ -563,7 +563,7 @@ long ClientBox::PointToPos( const Point& rPos )
 
 OUString ClientBox::getPin()
 {
-    return OUString::valueOf( m_aPinBox.GetValue() );
+    return OUString::number( m_aPinBox.GetValue() );
 }
 
 //------------------------------------------------------------------------------

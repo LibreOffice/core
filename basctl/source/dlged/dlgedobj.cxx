@@ -804,7 +804,7 @@ OUString DlgEdObj::GetUniqueName() const
 
         do
         {
-            aUniqueName = aDefaultName + OUString::valueOf(++n);
+            aUniqueName = aDefaultName + OUString::number(++n);
         }   while (xNameAcc->hasByName(aUniqueName));
     }
 

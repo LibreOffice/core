@@ -146,7 +146,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
-                sTxt = OStringToOUString(OString::valueOf(
+                sTxt = OStringToOUString(OString::number(
                             ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()),
                             osl_getThreadTextEncoding());
             }

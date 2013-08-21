@@ -37,7 +37,7 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
 #endif
 
-    OUString aAbsStr = OUString::valueOf( absVal );
+    OUString aAbsStr = OUString::number( absVal );
     OUStringBuffer aBuf;
 
     sal_Int32 initialLen = aAbsStr.getLength();

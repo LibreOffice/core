@@ -99,7 +99,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
             {
                 rStrBuffer.append( (sal_Unicode)'$' );
-                rStrBuffer.append( OUString::valueOf( nValue ) );
+                rStrBuffer.append( OUString::number( nValue ) );
             }
             break;
 
@@ -128,7 +128,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing:
             case com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT :
                 rStrBuffer.append( GetXMLToken( XML_LOGHEIGHT ) ); break;
             default :
-                rStrBuffer.append( OUString::valueOf( nValue ) );
+                rStrBuffer.append( OUString::number( nValue ) );
         }
     }
 }
@@ -139,7 +139,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& 
     for ( i = 0; i < rEquations.getLength(); i++ )
     {
         OUString aStr(static_cast<sal_Unicode>('f'));
-        aStr += OUString::valueOf( i );
+        aStr += OUString::number( i );
         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStr );
 
         aStr = rEquations[ i ];
@@ -619,7 +619,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     {
                                         sal_Int32 nExtrusionNumberOfLineSegments = 0;
                                         if ( rProp.Value >>= nExtrusionNumberOfLineSegments )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_NUMBER_OF_LINE_SEGMENTS, OUString::valueOf( nExtrusionNumberOfLineSegments ) );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_NUMBER_OF_LINE_SEGMENTS, OUString::number( nExtrusionNumberOfLineSegments ) );
                                     }
                                     break;
                                     case EAS_LightFace :
@@ -1020,14 +1020,14 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     {
                                         sal_Int32 nStretchPoint = 0;
                                         if ( rProp.Value >>= nStretchPoint )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_X, OUString::valueOf( nStretchPoint ) );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_X, OUString::number( nStretchPoint ) );
                                     }
                                     break;
                                     case EAS_StretchY :
                                     {
                                         sal_Int32 nStretchPoint = 0;
                                         if ( rProp.Value >>= nStretchPoint )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_Y, OUString::valueOf( nStretchPoint ) );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_PATH_STRETCHPOINT_Y, OUString::number( nStretchPoint ) );
                                     }
                                     break;
                                     case EAS_TextFrames :
@@ -1251,7 +1251,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
                     do
                     {
                         sPictureName = sPrefix;
-                        sPictureName += OUString::valueOf( ++nIndex );
+                        sPictureName += OUString::number( ++nIndex );
                         sPictureName += sSuffix;
                     }
                     while( xPictureStorage->hasByName( sPictureName ) );

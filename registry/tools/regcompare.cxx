@@ -554,10 +554,10 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
                         stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
                         index1,
                         OUStringToOString(
-                            OUString::valueOf(constValue1.m_value.aHyper),
+                            OUString::number(constValue1.m_value.aHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr(),
                         OUStringToOString(
-                            OUString::valueOf(constValue2.m_value.aHyper),
+                            OUString::number(constValue2.m_value.aHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 return 1;
@@ -573,14 +573,12 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
                         stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
                         index1,
                         OUStringToOString(
-                            OUString::valueOf(
-                                static_cast< sal_Int64 >(
-                                    constValue1.m_value.aUHyper)),
+                            OUString::number(
+                                constValue1.m_value.aUHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr(),
                         OUStringToOString(
-                            OUString::valueOf(
-                                static_cast< sal_Int64 >(
-                                    constValue2.m_value.aUHyper)),
+                            OUString::number(
+                                constValue2.m_value.aUHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr());
                         // printing the unsigned values as signed should be
                         // acceptable...

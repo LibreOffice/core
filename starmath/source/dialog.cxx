@@ -1824,7 +1824,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
     UpdateButtons();
 
     // display Unicode position as symbol name while iterating over characters
-    const OUString aHex(OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
+    const OUString aHex(OUString::number(cChar, 16 ).toAsciiUpperCase());
     const OUString aPattern( (aHex.getLength() > 4) ? OUString("Ux000000") : OUString("Ux0000") );
     OUString aUnicodePos( aPattern.copy( 0, aPattern.getLength() - aHex.getLength() ) );
     aUnicodePos += aHex;

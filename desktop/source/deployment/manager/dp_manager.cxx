@@ -1399,7 +1399,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     //could have declined the license. Then the next time the
                     //extension folder is investigated we do not want to
                     //try to install the extension again.
-                    dbData.failedPrerequisites = OUString::valueOf(failedPrereq);
+                    dbData.failedPrerequisites = OUString::number(failedPrereq);
                     insertToActivationLayerDB(id, dbData);
                     bModified |= true;
                 }
@@ -1524,7 +1524,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
 
             sal_Int32 failedPrereq = extension->checkPrerequisites(
                 xAbortChannel, _xCmdEnv, false);
-            dbData.failedPrerequisites = OUString::valueOf(failedPrereq);
+            dbData.failedPrerequisites = OUString::number(failedPrereq);
             insertToActivationLayerDB(id, dbData);
         }
         else

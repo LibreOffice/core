@@ -348,7 +348,7 @@ namespace {
 
 OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
 {
-    return OUString::valueOf( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
+    return OUString::number( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
 
 // class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.

@@ -800,9 +800,9 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
                 {
                     mpAutoLayoutInfoList->push_back( pNew );
                     OUString sNewName = "AL";
-                    sNewName += OUString::valueOf(sal_Int32( mpAutoLayoutInfoList->size() - 1 ));
+                    sNewName += OUString::number(mpAutoLayoutInfoList->size() - 1);
                     sNewName += "T";
-                    sNewName += OUString::valueOf(sal_Int32(nType));
+                    sNewName += OUString::number(nType);
                     pNew->SetLayoutName(sNewName);
                 }
 
@@ -1334,7 +1334,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
             // create name
             OUString sNewName("PM");
 
-            sNewName += OUString::valueOf((sal_Int32)nCnt);
+            sNewName += OUString::number(nCnt);
             pInfo->SetName(sNewName);
 
             // prepare page-master attributes
@@ -1450,7 +1450,7 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
     // create a reference string with pPrefix and the index of the
     // found or created rText
     OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::valueOf( nIndex );
+    aStr += OUString::number( nIndex );
     return aStr;
 }
 
@@ -1481,7 +1481,7 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     // create a reference string with pPrefix and the index of the
     // found or created DateTimeDeclImpl
     OUString aStr( OUString::createFromAscii( pPrefix ) );
-    aStr += OUString::valueOf( nIndex );
+    aStr += OUString::number( nIndex );
     return aStr;
 
 }

@@ -99,7 +99,7 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
     else
-        sTxt += OUString::valueOf(mnIntValue);
+        sTxt += OUString::number(mnIntValue);
     rDev.SetFont( aFont );
     rDev.DrawText( aNewPos, sTxt );
 

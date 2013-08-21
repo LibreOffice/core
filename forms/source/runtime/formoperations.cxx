@@ -400,7 +400,7 @@ namespace frm
                 if ( bIsNew )
                     ++nCount;
 
-                OUString sValue = OUString::valueOf( sal_Int32( nCount ) );
+                OUString sValue = OUString::number( nCount );
                 if ( !bFinalCount )
                     sValue += OUString(" *");
 

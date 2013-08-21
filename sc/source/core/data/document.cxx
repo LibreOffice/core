@@ -156,7 +156,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
         const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
         OUString aString = rOpt.GetInitTabPrefix();
 
-        aString += OUString::valueOf(static_cast<sal_Int32>(nTab+1));
+        aString += OUString::number(nTab+1);
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))

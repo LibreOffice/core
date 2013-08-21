@@ -1039,7 +1039,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
             if( pMenu->IsItemEnabled( nId ) )
             {
                 OUString sSlotURL( "slot:" );
-                sSlotURL += OUString::valueOf( sal_Int32( nId ));
+                sSlotURL += OUString::number( nId);
 
                 Image aImage( GetImage( xFrame, sSlotURL, false ) );
                 if( !!aImage )

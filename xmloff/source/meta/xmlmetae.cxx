@@ -155,8 +155,8 @@ void SvXMLMetaExport::_MExport()
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_CYCLES,
                                   sal_True, sal_False );
-        mrExport.Characters( OUString::valueOf(
-            static_cast<sal_Int32>(mxDocProps->getEditingCycles()) ) );
+        mrExport.Characters( OUString::number(
+            mxDocProps->getEditingCycles() ) );
     }
 
     //  editing duration
@@ -259,7 +259,7 @@ void SvXMLMetaExport::_MExport()
             sal_Int32 nValue = 0;
             if ( aDocStatistic[nInd].Value >>= nValue )
             {
-                OUString aValue = OUString::valueOf( nValue );
+                OUString aValue = OUString::number( nValue );
                 if ( aDocStatistic[nInd].Name == "TableCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );

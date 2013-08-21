@@ -737,7 +737,7 @@ void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
     rStrm << "Variable( "
-          << OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr() << "=="
+          << OString::number(reinterpret_cast<sal_Int64>(this)).getStr() << "=="
           << aBNameStr.getStr();
     OString aBParentNameStr(OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )

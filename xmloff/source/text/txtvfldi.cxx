@@ -395,7 +395,7 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
 
         sPropertyNumberFormat(sAPI_number_format),
         sPropertySequenceValue(sAPI_sequence_value),
-        sNumFormat(OUString::valueOf(sal_Unicode('1'))),
+        sNumFormat(OUString(sal_Unicode('1'))),
         sNumFormatSync(GetXMLToken(XML_FALSE)),
         bRefNameOK(sal_False)
 {

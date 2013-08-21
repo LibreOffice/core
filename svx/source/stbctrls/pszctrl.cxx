@@ -71,7 +71,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += '-';
-    sMetric += OUString::valueOf(nConvVal / 100);
+    sMetric += OUString::number(nConvVal / 100);
 
     if( FUNIT_NONE != eOutUnit )
     {
@@ -82,7 +82,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
             nFract *= -1;
         if ( nFract < 10 )
             sMetric += '0';
-        sMetric += OUString::valueOf(nFract);
+        sMetric += OUString::number(nFract);
     }
 
     return sMetric;

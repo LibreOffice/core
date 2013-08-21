@@ -842,7 +842,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_UNKNOWN_COLUMN_TYPE,
-                "$position$", OUString::valueOf(columnIndex)
+                "$position$", OUString::number(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

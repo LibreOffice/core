@@ -531,7 +531,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 AxCheckBoxModel& rAxModel = aControl.createModel< AxCheckBoxModel >();
                 convertControlText( rAxModel.maFontData, rAxModel.mnTextColor, rAxModel.maCaption, pTextBox, pClientData->mnTextHAlign );
                 convertControlBackground( rAxModel, rShape );
-                rAxModel.maValue = OUString::valueOf( pClientData->mnChecked );
+                rAxModel.maValue = OUString::number( pClientData->mnChecked );
                 rAxModel.mnSpecialEffect = pClientData->mbNo3D ? AX_SPECIALEFFECT_FLAT : AX_SPECIALEFFECT_SUNKEN;
                 rAxModel.mnVerticalAlign = pClientData->mnTextVAlign;
                 bool bTriState = (pClientData->mnChecked != ::oox::vml::VML_CLIENTDATA_UNCHECKED) && (pClientData->mnChecked != ::oox::vml::VML_CLIENTDATA_CHECKED);
@@ -544,7 +544,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 AxOptionButtonModel& rAxModel = aControl.createModel< AxOptionButtonModel >();
                 convertControlText( rAxModel.maFontData, rAxModel.mnTextColor, rAxModel.maCaption, pTextBox, pClientData->mnTextHAlign );
                 convertControlBackground( rAxModel, rShape );
-                rAxModel.maValue = OUString::valueOf( pClientData->mnChecked );
+                rAxModel.maValue = OUString::number( pClientData->mnChecked );
                 rAxModel.mnSpecialEffect = pClientData->mbNo3D ? AX_SPECIALEFFECT_FLAT : AX_SPECIALEFFECT_SUNKEN;
                 rAxModel.mnVerticalAlign = pClientData->mnTextVAlign;
             }

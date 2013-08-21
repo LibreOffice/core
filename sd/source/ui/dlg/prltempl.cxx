@@ -203,7 +203,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         case PO_OUTLINE_8:
         case PO_OUTLINE_9:
             aTitle = OUString(SdResId( STR_PSEUDOSHEET_OUTLINE )) + " " +
-                OUString::valueOf( static_cast<sal_Int32>( ePO - PO_OUTLINE_1 + 1 ) );
+                OUString::number( ePO - PO_OUTLINE_1 + 1 );
         break;
 
         case PO_NOTES:

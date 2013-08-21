@@ -461,7 +461,7 @@ static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 {
     pDoc->startElement( nXmlElement, FSEND );
-    pDoc->write( OUString::valueOf( nValue ) );
+    pDoc->write( OUString::number( nValue ) );
     pDoc->endElement( nXmlElement );
 }
 

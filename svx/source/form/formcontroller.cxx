@@ -4041,7 +4041,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     if ( nLength > 1 )
     {
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
-        sTitle.SearchAndReplace( OUString('#'), OUString::valueOf(nLength) );
+        sTitle.SearchAndReplace( OUString('#'), OUString::number(nLength) );
     }
     else
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );

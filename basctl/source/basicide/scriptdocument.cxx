@@ -1296,7 +1296,7 @@ namespace basctl
         while ( !bValid )
         {
             aObjectName = aBaseName;
-            aObjectName += OUString::valueOf( i );
+            aObjectName += OUString::number( i );
 
             if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
                 bValid = true;

@@ -144,7 +144,7 @@ void SvxNumberPreview::Paint( const Rectangle& )
 
     if ( mnPos != STRING_NOTFOUND )
     {
-        long nCharWidth = GetTextWidth( OUString::valueOf( mnChar ) );
+        long nCharWidth = GetTextWidth( OUString( mnChar ) );
 
         int nNumCharsToInsert = 0;
         if (nCharWidth > 0) nNumCharsToInsert = nLeadSpace / nCharWidth;

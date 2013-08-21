@@ -741,7 +741,7 @@ namespace xforms
     {
         double fValue( 0 );
         normalizeValue( _rValue, fValue );
-        return OUString::valueOf( fValue );
+        return OUString::number( fValue );
     }
 
     //--------------------------------------------------------------------
@@ -959,7 +959,7 @@ namespace xforms
     {
         sal_Int16 nValue( 0 );
         OSL_VERIFY( _rValue >>= nValue );
-        return OUString::valueOf( (sal_Int32)nValue );
+        return OUString::number( nValue );
     }
 
     //--------------------------------------------------------------------

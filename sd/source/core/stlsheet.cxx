@@ -723,7 +723,7 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
     sal_Int32 nIndex = 1;
     do
     {
-        aName = aPrefix + OUString::valueOf( nIndex++ );
+        aName = aPrefix + OUString::number( nIndex++ );
     }
     while( rPool.Find( aName, eFamily ) != 0 );
 

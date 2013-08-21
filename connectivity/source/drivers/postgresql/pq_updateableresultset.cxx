@@ -462,7 +462,7 @@ void UpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw
 //     buf.append( "'" );
 //     buf.append( (sal_Int64) x );
 //     buf.append( "'" );
-    m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
+    m_updateableField[columnIndex-1].value <<= OUString::number( x );
 }
 
 void UpdateableResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw (SQLException, RuntimeException)
@@ -472,7 +472,7 @@ void UpdateableResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw (S
     checkClosed();
     checkUpdate( columnIndex );
 
-    m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
+    m_updateableField[columnIndex-1].value <<= OUString::number( x );
 }
 
 void UpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw (SQLException, RuntimeException)
@@ -481,7 +481,7 @@ void UpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw 
     checkClosed();
     checkUpdate( columnIndex );
 
-    m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
+    m_updateableField[columnIndex-1].value <<= OUString::number( x );
 }
 
 void UpdateableResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw (SQLException, RuntimeException)

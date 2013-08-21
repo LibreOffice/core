@@ -1635,12 +1635,12 @@ static void columnMetaData2DatabaseTypeDescription(
             // row[9] RADIX TODO
             if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getInt( 12 )) )
             {
-                row[10] <<= OUString::valueOf(com::sun::star::sdbc::ColumnValue::NO_NULLS);
+                row[10] <<= OUString::number(com::sun::star::sdbc::ColumnValue::NO_NULLS);
                 row[17] <<= statics.NO;
             }
             else
             {
-                row[10] <<= OUString::valueOf(com::sun::star::sdbc::ColumnValue::NULLABLE);
+                row[10] <<= OUString::number(com::sun::star::sdbc::ColumnValue::NULLABLE);
                 row[17] <<= statics.YES;
             }
 
@@ -1865,7 +1865,7 @@ static void columnMetaData2DatabaseTypeDescription(
             if( tableOid != lastTableOid )
                 index = 1;
             lastTableOid = tableOid;
-            row[4] <<= OUString::valueOf( index );
+            row[4] <<= OUString::number( index );
             index ++;
         }
         {
@@ -2305,14 +2305,14 @@ static void pgTypeInfo2ResultSet(
         }
 
         row[TYPE_NAME] <<= xRow->getString(1);
-        row[DATA_TYPE] <<= OUString::valueOf(dataType);
-        row[PRECISION] <<= OUString::valueOf( precision );
+        row[DATA_TYPE] <<= OUString::number(dataType);
+        row[PRECISION] <<= OUString::number( precision );
         sal_Int32 nullable = xRow->getBoolean(4) ?
             com::sun::star::sdbc::ColumnValue::NO_NULLS :
             com::sun::star::sdbc::ColumnValue::NULLABLE;
-        row[NULLABLE] <<= OUString::valueOf(nullable);
-        row[CASE_SENSITIVE] <<= OUString::valueOf((sal_Int32)1);
-        row[SEARCHABLE] <<= OUString::valueOf( calcSearchable( dataType ) );
+        row[NULLABLE] <<= OUString::number(nullable);
+        row[CASE_SENSITIVE] <<= OUString::number(1);
+        row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
         row[UNSIGNED_ATTRIBUTE] <<= OUString("0"); //
         if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
             com::sun::star::sdbc::DataType::BIGINT == dataType )
@@ -2320,7 +2320,7 @@ static void pgTypeInfo2ResultSet(
         else
             row[AUTO_INCREMENT] <<= OUString("0");     // TODO
         row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
-        row[MAXIMUM_SCALE] <<= OUString::valueOf( getMaxScale( dataType ) );
+        row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
         row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
         (void)FIXED_PREC_SCALE;
         vec.push_back( row );

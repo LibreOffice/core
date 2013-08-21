@@ -419,7 +419,7 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
             {
                 WriteTab( rOutStm, nTab );
                 rOutStm << "id("
-                    << OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase,bVar))).getStr()
+                    << OString::number(MakeSlotValue(rBase,bVar)).getStr()
                     << ")," << endl;
             }
             if( bVar && (bReadonly || IsMethod()) )
@@ -461,7 +461,7 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
     }
     rOutStm << "pODKCallFunction( "
-        << OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase, IsVariable()))).getStr();
+        << OString::number(MakeSlotValue(rBase, IsVariable())).getStr();
     rOutStm << ',' << endl;
     WriteTab( rOutStm, 3 );
     rOutStm << " h" << rBase.aIFaceName.getStr() << " , ";

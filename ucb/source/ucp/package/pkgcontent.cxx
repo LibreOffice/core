@@ -1671,7 +1671,7 @@ void Content::insert(
                 {
                     OUString aNew = aNewUri.getUri();
                     aNew += OUString("_");
-                    aNew += OUString::valueOf( ++nTry );
+                    aNew += OUString::number( ++nTry );
                     aNewUri.setUri( aNew );
                 }
                 while ( hasData( aNewUri ) && ( nTry < 1000 ) );
@@ -1690,7 +1690,7 @@ void Content::insert(
                 else
                 {
                     m_aProps.aTitle += OUString("_");
-                    m_aProps.aTitle += OUString::valueOf( nTry );
+                    m_aProps.aTitle += OUString::number( nTry );
                 }
             }
             break;

@@ -459,7 +459,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
                 }
 
                 sal_Int32 gid = gids[i];
-                OUString idx = OUString::valueOf( gid );
+                OUString idx = OUString::number( gid );
                 OUString group = idx;
                 try
                 {

@@ -866,7 +866,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
     if(nMul_ != nDiv_)
         nVal = BigMulDiv(nVal, nMul_, nDiv_);
 
-    OUStringBuffer aStr = OUString::valueOf(nVal);
+    OUStringBuffer aStr = OUString::number(nVal);
 
     if(nC > 0 && aStr.getLength() <= nC )
     {

@@ -951,7 +951,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         }
         else
         {
-            sLID = OString::valueOf(static_cast<sal_Int64>(i + 1));
+            sLID = OString::number(i + 1);
             sText = StripList( sText );
             if( sText == "\\\"" )
                 sText = "\"";

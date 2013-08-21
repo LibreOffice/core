@@ -660,7 +660,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 if (xSubmitButtonComponent == xComponentSet)
                 {
                     // <name>.x=<pos.X>&<name>.y=<pos.Y>
-                    OUString aRhs = OUString::valueOf( MouseEvt.X );
+                    OUString aRhs = OUString::number( MouseEvt.X );
 
                     // Only if a name is available we have a name.x
                     OUStringBuffer aLhs(aName);
@@ -671,7 +671,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
 
                     aLhs.append(aName);
-                    aRhs = OUString::valueOf( MouseEvt.Y );
+                    aRhs = OUString::number( MouseEvt.Y );
                     if (!aName.isEmpty())
                         aLhs.append(".y");
                     else

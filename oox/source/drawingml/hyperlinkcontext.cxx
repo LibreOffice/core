@@ -126,9 +126,9 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
                         const OUString sNotesSlide( "notesSlide" );
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
                         if ( aSlideType.match( sSlide ) )
-                            sURL = OUString( "#Slide " ).concat( OUString::valueOf( nPageNumber ) );
+                            sURL = OUString( "#Slide " ).concat( OUString::number( nPageNumber ) );
                         else if ( aSlideType.match( sNotesSlide ) )
-                            sURL = OUString( "#Notes " ).concat( OUString::valueOf( nPageNumber ) );
+                            sURL = OUString( "#Notes " ).concat( OUString::number( nPageNumber ) );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
                     }
                 }

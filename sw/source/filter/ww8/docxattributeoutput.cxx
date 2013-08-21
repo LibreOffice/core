@@ -266,7 +266,7 @@ void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
     if (aShadowItem.GetLocation() == SVX_SHADOW_NONE)
         return;
 
-    OString aShadowWidth( OString::valueOf( double( aShadowItem.GetWidth() ) / 20) + "pt");
+    OString aShadowWidth( OString::number( double( aShadowItem.GetWidth() ) / 20) + "pt");
     OString aOffset;
     switch (aShadowItem.GetLocation())
     {
@@ -680,13 +680,13 @@ void DocxAttributeOutput::WriteCommentRanges()
     if (m_bPostitStart)
     {
         m_bPostitStart = false;
-        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        OString idstr = OString::number( m_postitFieldsMaxId);
         m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
     }
     if (m_bPostitEnd)
     {
         m_bPostitEnd = false;
-        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        OString idstr = OString::number( m_postitFieldsMaxId);
         m_pSerializer->singleElementNS( XML_w, XML_commentRangeEnd, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
     }
 }
@@ -703,7 +703,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         sal_uInt16 nId = m_nNextMarkId++;
         m_rOpenedMarksIds[rName] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
-            FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
+            FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
             FSNS( XML_w, XML_name ), rName.getStr(),
             FSEND );
     }
@@ -721,7 +721,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         {
             sal_uInt16 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-                FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
                 FSEND );
             m_rOpenedMarksIds.erase( rName );
         }
@@ -890,7 +890,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
-               FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( m_nNextMarkId ) ).getStr( ),
+               FSNS( XML_w, XML_id ), OString::number( m_nNextMarkId ).getStr( ),
                FSNS( XML_w, XML_name ), OUStringToOString( aBkmName, RTL_TEXTENCODING_UTF8 ).getStr( ),
                FSEND );
     }
@@ -912,7 +912,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( !aBkmName.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-               FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( m_nNextMarkId ) ).getStr( ),
+               FSNS( XML_w, XML_id ), OString::number( m_nNextMarkId ).getStr( ),
                FSEND );
 
         m_nNextMarkId++;
@@ -1240,7 +1240,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     aAttrIt.OutAttr( nPos, true );
     sal_uInt16 nStyle = m_rExport.GetId( *rRuby.GetTxtRuby()->GetCharFmt() );
     OString aStyleId( "style" );
-    aStyleId += OString::valueOf( sal_Int32( nStyle ) );
+    aStyleId += OString::number( nStyle );
     m_pSerializer->singleElementNS( XML_w, XML_rStyle,
             FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
     EndRunProperties( NULL );
@@ -1354,7 +1354,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
     if ( !pRedline )
         return;
 
-    OString aId( OString::valueOf( sal_Int32(pRedline->GetSeqNo()) ) );
+    OString aId( OString::number( pRedline->GetSeqNo() ) );
     const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
     OString aDate( msfilter::util::DateTimeToOString( pRedline->GetTimeStamp() ) );
@@ -1413,7 +1413,7 @@ void DocxAttributeOutput::StartRedline()
 
     // FIXME check if it's necessary to travel over the Next()'s in pRedlineData
 
-    OString aId( OString::valueOf( m_nRedlineId++ ) );
+    OString aId( OString::number( m_nRedlineId++ ) );
 
     const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
@@ -1478,7 +1478,7 @@ void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDro
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
     OString aStyleId( "style" );
-    aStyleId += OString::valueOf( sal_Int32( nStyle ) );
+    aStyleId += OString::number( nStyle );
 
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -1569,10 +1569,10 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
         else if ( nWidth < nMinWidth )
             nWidth = nMinWidth;
 
-        pAttr->add( FSNS( XML_w, XML_sz ), OString::valueOf( sal_Int32( nWidth ) ) );
+        pAttr->add( FSNS( XML_w, XML_sz ), OString::number( nWidth ) );
 
         // Get the distance (in pt)
-        pAttr->add( FSNS( XML_w, XML_space ), OString::valueOf( sal_Int32( nDist / 20 ) ) );
+        pAttr->add( FSNS( XML_w, XML_space ), OString::number( nDist / 20 ) );
 
         // Get the color code as an RRGGBB hex value
         OString sColor( msfilter::util::ConvertColor( pBorderLine->GetColor( ) ) );
@@ -1789,7 +1789,7 @@ static void impl_cellMargins( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
             tagWritten = true;
         }
         pSerializer->singleElementNS( XML_w, aXmlElements[i],
-               FSNS( XML_w, XML_w ), OString::valueOf( nDist ).getStr( ),
+               FSNS( XML_w, XML_w ), OString::number( nDist ).getStr( ),
                FSNS( XML_w, XML_type ), "dxa",
                FSEND );
     }
@@ -1811,7 +1811,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     if ( pTableTextNodeInfoInner->getCell() )
         nWidth = nWidth - GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() - 1 );
     m_pSerializer->singleElementNS( XML_w, XML_tcW,
-           FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
+           FSNS( XML_w, XML_w ), OString::number( nWidth ).getStr( ),
            FSNS( XML_w, XML_type ), "dxa",
            FSEND );
 
@@ -1823,7 +1823,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     sal_uInt16 nColSpan = pCell->GetColSpan();
     if ( nColSpan > 1 )
         m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
-                FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nColSpan ) ).getStr(),
+                FSNS( XML_w, XML_val ), OString::number( nColSpan ).getStr(),
                 FSEND );
 
     // Vertical merges
@@ -2006,7 +2006,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Output the table prefered width
     if ( nPageSize != 0 )
         m_pSerializer->singleElementNS( XML_w, XML_tblW,
-                FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nPageSize ) ).getStr( ),
+                FSNS( XML_w, XML_w ), OString::number( nPageSize ).getStr( ),
                 FSNS( XML_w, XML_type ), "dxa",
                 FSEND );
 
@@ -2062,7 +2062,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // Table indent (need to get written even if == 0)
     m_pSerializer->singleElementNS( XML_w, XML_tblInd,
-            FSNS( XML_w, XML_w ), OString::valueOf( nIndent ).getStr( ),
+            FSNS( XML_w, XML_w ), OString::number( nIndent ).getStr( ),
             FSNS( XML_w, XML_type ), "dxa",
             FSEND );
 
@@ -2079,7 +2079,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     {
         sal_Int32 nWidth  =  sal_Int32( *it ) - nPrv;
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,
-               FSNS( XML_w, XML_w ), OString::valueOf( nWidth ).getStr( ),
+               FSNS( XML_w, XML_w ), OString::number( nWidth ).getStr( ),
                FSEND );
         nPrv = sal_Int32( *it );
     }
@@ -2148,7 +2148,7 @@ void DocxAttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTa
 
         if ( pRule )
             m_pSerializer->singleElementNS( XML_w, XML_trHeight,
-                    FSNS( XML_w, XML_val ), OString::valueOf( nHeight ).getStr( ),
+                    FSNS( XML_w, XML_val ), OString::number( nHeight ).getStr( ),
                     FSNS( XML_w, XML_hRule ), pRule,
                     FSEND );
     }
@@ -2347,16 +2347,16 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     {
         ::sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
         attrList->add( XML_behindDoc, pFrmFmt->GetOpaque().GetValue() ? "0" : "1" );
-        attrList->add( XML_distT, OString::valueOf( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ) );
-        attrList->add( XML_distB, OString::valueOf( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ) );
-        attrList->add( XML_distL, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ) );
-        attrList->add( XML_distR, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ) );
+        attrList->add( XML_distT, OString::number( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ) );
+        attrList->add( XML_distB, OString::number( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ) );
+        attrList->add( XML_distL, OString::number( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ) );
+        attrList->add( XML_distR, OString::number( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ) );
         attrList->add( XML_simplePos, "0" );
         attrList->add( XML_locked, "0" );
         attrList->add( XML_layoutInCell, "1" );
         attrList->add( XML_allowOverlap, "1" ); // TODO
         if( const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
-            attrList->add( XML_relativeHeight, OString::valueOf( sal_Int32( pObj->GetOrdNum())));
+            attrList->add( XML_relativeHeight, OString::number( pObj->GetOrdNum()));
         m_pSerializer->startElementNS( XML_wp, XML_anchor, XFastAttributeListRef( attrList ));
         m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
@@ -2473,16 +2473,16 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     else
     {
         m_pSerializer->startElementNS( XML_wp, XML_inline,
-                XML_distT, OString::valueOf( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ),
-                XML_distB, OString::valueOf( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ),
-                XML_distL, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ),
-                XML_distR, OString::valueOf( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ),
+                XML_distT, OString::number( TwipsToEMU( pULSpaceItem.GetUpper() ) ).getStr( ),
+                XML_distB, OString::number( TwipsToEMU( pULSpaceItem.GetLower() ) ).getStr( ),
+                XML_distL, OString::number( TwipsToEMU( pLRSpaceItem.GetLeft() ) ).getStr( ),
+                XML_distR, OString::number( TwipsToEMU( pLRSpaceItem.GetRight() ) ).getStr( ),
                 FSEND );
     }
     // now the common parts
     // extent of the image
-    OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
-    OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
+    OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
+    OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
     m_pSerializer->singleElementNS( XML_wp, XML_extent,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
@@ -2493,7 +2493,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OString aLeftExt("0"), aRightExt("0"), aTopExt("0"), aBottomExt("0");
     if ( aShadowItem.GetLocation() != SVX_SHADOW_NONE )
     {
-        OString aShadowWidth( OString::valueOf( TwipsToEMU( aShadowItem.GetWidth() ) ) );
+        OString aShadowWidth( OString::number( TwipsToEMU( aShadowItem.GetWidth() ) ) );
         switch ( aShadowItem.GetLocation() )
         {
             case SVX_SHADOW_TOPLEFT:
@@ -2541,7 +2541,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     }
     // picture description (used for pic:cNvPr later too)
     ::sax_fastparser::FastAttributeList* docPrattrList = m_pSerializer->createAttrList();
-    docPrattrList->add( XML_id, OString::valueOf( sal_Int32( m_anchorId++ )).getStr());
+    docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
     docPrattrList->add( XML_name, "Picture" );
     docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrmFmt->GetObjDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
@@ -2651,7 +2651,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     {
         // Distance is measured diagonally from corner
         double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
-        OString aShadowDist( OString::valueOf( TwipsToEMU( nShadowDist ) ) );
+        OString aShadowDist( OString::number( TwipsToEMU( nShadowDist ) ) );
         OString aShadowColor = msfilter::util::ConvertColor( aShadowItem.GetColor() );
         sal_uInt32 nShadowDir = 0;
         switch ( aShadowItem.GetLocation() )
@@ -2664,7 +2664,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             case SVX_SHADOW_END:
                 break;
         }
-        OString aShadowDir( OString::valueOf( long(nShadowDir) ) );
+        OString aShadowDir( OString::number( nShadowDir ) );
 
         m_pSerializer->startElementNS( XML_a, XML_effectLst, FSEND );
         m_pSerializer->startElementNS( XML_a, XML_outerShdw,
@@ -2717,8 +2717,8 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
             XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
             FSEND );
 
-        OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
-        OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
+        OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
+        OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
         m_pSerializer->singleElementNS( XML_wp, XML_extent,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
@@ -2957,7 +2957,7 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
 
     m_pSerializer->startElementNS( XML_w, XML_style,
             FSNS( XML_w, XML_type ), bPapFmt? "paragraph": "character", // FIXME is this correct?
-            FSNS( XML_w, XML_styleId ), OString( aStyle + OString::valueOf( sal_Int32( nId ) ) ).getStr(),
+            FSNS( XML_w, XML_styleId ), OString( aStyle + OString::number( nId ) ).getStr(),
             FSEND );
 
     m_pSerializer->singleElementNS( XML_w, XML_name,
@@ -2967,12 +2967,12 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
     if ( nBase != 0x0FFF )
     {
         m_pSerializer->singleElementNS( XML_w, XML_basedOn,
-                FSNS( XML_w, XML_val ), OString( aStyle + OString::valueOf( sal_Int32( nBase ) ) ).getStr(),
+                FSNS( XML_w, XML_val ), OString( aStyle + OString::number( nBase ) ).getStr(),
                 FSEND );
     }
 
     m_pSerializer->singleElementNS( XML_w, XML_next,
-            FSNS( XML_w, XML_val ), OString( aStyle + OString::valueOf( sal_Int32( nNext ) ) ).getStr(),
+            FSNS( XML_w, XML_val ), OString( aStyle + OString::number( nNext ) ).getStr(),
             FSEND );
 
     if ( bAutoUpdate )
@@ -3018,7 +3018,7 @@ void DocxAttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt& /*rN
         nLvl = WW8ListManager::nMaxLevel - 1;
 
     m_pSerializer->singleElementNS( XML_w, XML_outlineLvl,
-            FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nLvl ) ).getStr( ),
+            FSNS( XML_w, XML_val ), OString::number( nLvl ).getStr( ),
             FSEND );
 }
 
@@ -3152,7 +3152,7 @@ void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLi
     if( rLnNumInfo.GetPosFromLeft())
         pAttr->add( FSNS( XML_w, XML_distance ), OString::number(rLnNumInfo.GetPosFromLeft()).getStr());
     if( nRestartNo )
-        pAttr->add( FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo )).getStr());
+        pAttr->add( FSNS( XML_w, XML_start ), OString::number( nRestartNo).getStr());
     XFastAttributeListRef xAttrs( pAttr );
     m_pSerializer->singleElementNS( XML_w, XML_lnNumType, xAttrs );
 }
@@ -3236,7 +3236,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 
 
     // 0 means no restart: then don't output that attribute if 0
     if ( nPageRestartNumber > 0 )
-       pAttr->add( FSNS( XML_w, XML_start ), OString::valueOf( sal_Int32( nPageRestartNumber ) ) );
+       pAttr->add( FSNS( XML_w, XML_start ), OString::number( nPageRestartNumber ) );
 
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions
     OString aFmt( impl_NumberingType( nNumType ) );
@@ -3294,7 +3294,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
 {
     FastAttributeList* pAttr = m_pSerializer->createAttrList();
 
-    OString aCharSet( OString::valueOf( sal_Int32( nCharSet ), 16 ) );
+    OString aCharSet( OString::number( nCharSet, 16 ) );
     if ( aCharSet.getLength() == 1 )
         aCharSet = OString( "0" ) + aCharSet;
     pAttr->add( FSNS( XML_w, XML_val ), aCharSet.getStr());
@@ -3443,7 +3443,7 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
     // nId is the same both for abstract numbering definition as well as the
     // numbering definition itself
     // TODO check that this is actually true & fix if not ;-)
-    OString aId( OString::valueOf( sal_Int32( nId ) ) );
+    OString aId( OString::number( nId ) );
 
     m_pSerializer->startElementNS( XML_w, XML_num,
             FSNS( XML_w, XML_numId ), aId.getStr(),
@@ -3467,7 +3467,7 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
     m_pSerializer->startElementNS( XML_w, XML_abstractNum,
-            FSNS( XML_w, XML_abstractNumId ), OString::valueOf( sal_Int32( nId ) ).getStr(),
+            FSNS( XML_w, XML_abstractNumId ), OString::number( nId ).getStr(),
             FSEND );
 }
 
@@ -3491,12 +3491,12 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         const SvxBrushItem* pBrush)
 {
     m_pSerializer->startElementNS( XML_w, XML_lvl,
-            FSNS( XML_w, XML_ilvl ), OString::valueOf( sal_Int32( nLevel ) ).getStr(),
+            FSNS( XML_w, XML_ilvl ), OString::number( nLevel ).getStr(),
             FSEND );
 
     // start with the nStart value
     m_pSerializer->singleElementNS( XML_w, XML_start,
-            FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nStart ) ).getStr(),
+            FSNS( XML_w, XML_val ), OString::number( nStart ).getStr(),
             FSEND );
 
     // format
@@ -3535,7 +3535,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         {
             aBuffer.append( pPrev, pIt - pPrev );
             aBuffer.append( '%' );
-            aBuffer.append( OUString::valueOf( sal_Int32( *pIt ) + 1 ) );
+            aBuffer.append( OUString::number( sal_Int32( *pIt ) + 1 ) );
 
             pPrev = pIt + 1;
         }
@@ -3593,8 +3593,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 
     sal_Int32 nToken = ecmaDialect ? XML_left : XML_start;
     m_pSerializer->singleElementNS( XML_w, XML_ind,
-            FSNS( XML_w, nToken ), OString::valueOf( sal_Int32( nIndentAt ) ).getStr(),
-            FSNS( XML_w, XML_hanging ), OString::valueOf( sal_Int32( -nFirstLineIndex ) ).getStr(),
+            FSNS( XML_w, nToken ), OString::number( nIndentAt ).getStr(),
+            FSNS( XML_w, XML_hanging ), OString::number( -nFirstLineIndex ).getStr(),
             FSEND );
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
@@ -3703,13 +3703,13 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     {
         long nHeight = ((SvxFontHeightItem&)m_rExport.GetItem(
                                     RES_CHRATR_FONTSIZE )).GetHeight();
-        OString sPos = OString::valueOf( ( nHeight * nEsc + 500 ) / 1000 );
+        OString sPos = OString::number( ( nHeight * nEsc + 500 ) / 1000 );
         m_pSerializer->singleElementNS( XML_w, XML_position,
                 FSNS( XML_w, XML_val ), sPos.getStr( ), FSEND );
 
         if( 100 != nProp || sIss.match( OString( "baseline" ) ) )
         {
-            OString sSize = OString::valueOf( ( nHeight * nProp + 500 ) / 1000 );
+            OString sSize = OString::number( ( nHeight * nProp + 500 ) / 1000 );
                 m_pSerializer->singleElementNS( XML_w, XML_sz,
                     FSNS( XML_w, XML_val ), sSize.getStr( ), FSEND );
         }
@@ -3729,7 +3729,7 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
 {
-    OString fontSize = OString::valueOf( sal_Int32( ( rFontSize.GetHeight() + 5 ) / 10 ) );
+    OString fontSize = OString::number( ( rFontSize.GetHeight() + 5 ) / 10 );
 
     switch ( rFontSize.Which() )
     {
@@ -3745,7 +3745,7 @@ void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
 
 void DocxAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 {
-    OString aKerning = OString::valueOf( ( sal_Int32 ) rKerning.GetValue() );
+    OString aKerning = OString::number(  rKerning.GetValue() );
     m_pSerializer->singleElementNS( XML_w, XML_spacing, FSNS(XML_w, XML_val), aKerning.getStr(), FSEND );
 }
 
@@ -3989,7 +3989,7 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 void DocxAttributeOutput::CharScaleWidth( const SvxCharScaleWidthItem& rScaleWidth )
 {
     m_pSerializer->singleElementNS( XML_w, XML_w,
-            FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( rScaleWidth.GetValue() ) ).getStr(), FSEND );
+            FSNS( XML_w, XML_val ), OString::number( rScaleWidth.GetValue() ).getStr(), FSEND );
 }
 
 void DocxAttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
@@ -4023,7 +4023,7 @@ void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )
     const SwCharFmt* pCharFmt = pINetFmt->GetCharFmt();
 
     OString aStyleId( "style" );
-    aStyleId += OString::valueOf( sal_Int32( m_rExport.GetId( *pCharFmt ) ) );
+    aStyleId += OString::number( m_rExport.GetId( *pCharFmt ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -4031,7 +4031,7 @@ void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )
 void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 {
     OString aStyleId( "style" );
-    aStyleId += OString::valueOf( sal_Int32( m_rExport.GetId( *rCharFmt.GetCharFmt() ) ) );
+    aStyleId += OString::number( m_rExport.GetId( *rCharFmt.GetCharFmt() ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -4067,7 +4067,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 {
     while( m_postitFieldsMaxId < m_postitFields.size())
     {
-        OString idstr = OString::valueOf( sal_Int32( m_postitFieldsMaxId ));
+        OString idstr = OString::number( m_postitFieldsMaxId);
         m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
         ++m_postitFieldsMaxId;
     }
@@ -4089,7 +4089,7 @@ void DocxAttributeOutput::WritePostitFields()
          i < m_postitFields.size();
          ++i )
     {
-        OString idstr = OString::valueOf( sal_Int32( i ));
+        OString idstr = OString::number( i);
         const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -4221,7 +4221,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
     const SwCharFmt* pCharFmt = rInfo.GetAnchorCharFmt( *m_rExport.pDoc );
 
     OString aStyleId( "style" );
-    aStyleId += OString::valueOf( sal_Int32( m_rExport.GetId( *pCharFmt ) ) );
+    aStyleId += OString::number( m_rExport.GetId( *pCharFmt ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 
@@ -4253,7 +4253,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
     {
         // autonumbered
         m_pSerializer->singleElementNS( XML_w, nToken,
-                FSNS( XML_w, XML_id ), OString::valueOf( nId ).getStr(),
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(),
                 FSEND );
     }
     else
@@ -4261,7 +4261,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
         // not autonumbered
         m_pSerializer->singleElementNS( XML_w, nToken,
                 FSNS( XML_w, XML_customMarkFollows ), "1",
-                FSNS( XML_w, XML_id ), OString::valueOf( nId ).getStr(),
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(),
                 FSEND );
 
         RunText( pFootnote->GetNumStr() );
@@ -4284,7 +4284,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
     // separator
     m_pSerializer->startElementNS( XML_w, nItem,
-            FSNS( XML_w, XML_id ), OString::valueOf( nIndex++ ).getStr(),
+            FSNS( XML_w, XML_id ), OString::number( nIndex++ ).getStr(),
             FSNS( XML_w, XML_type ), "separator",
             FSEND );
     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
@@ -4296,7 +4296,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
     // separator
     m_pSerializer->startElementNS( XML_w, nItem,
-            FSNS( XML_w, XML_id ), OString::valueOf( nIndex++ ).getStr(),
+            FSNS( XML_w, XML_id ), OString::number( nIndex++ ).getStr(),
             FSNS( XML_w, XML_type ), "continuationSeparator",
             FSEND );
     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
@@ -4312,7 +4312,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     for ( FootnotesVector::const_iterator i = rVector.begin(); i != rVector.end(); ++i, ++nIndex )
     {
         m_pSerializer->startElementNS( XML_w, nItem,
-                FSNS( XML_w, XML_id ), OString::valueOf( nIndex ).getStr(),
+                FSNS( XML_w, XML_id ), OString::number( nIndex ).getStr(),
                 FSEND );
 
         const SwNodeIndex* pIndex = (*i)->GetTxtFtn()->GetStartNode();
@@ -4369,7 +4369,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
     if( info.nFtnOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-            OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
+            OString::number( info.nFtnOffset + 1).getStr(), FSEND );
     if( listtag != 0 ) // we are writing to settings.xml, write also special footnote/endnote list
     { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
@@ -4394,17 +4394,17 @@ void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
     if ( nSpace < 0 )
     {
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "exact" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( -nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( -nSpace ) );
     }
     else if( nMulti )
     {
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( nSpace ) );
     }
     else if ( nSpace > 0 )
     {
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "atLeast" );
-        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::number( nSpace ) );
     }
     else
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
@@ -4504,7 +4504,7 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
 
     // Because GetTabPos already includes indent, we don't need to add nCurrentLeft (CurrentLeft is indentation information)
     //pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos() + nCurrentLeft ) );
-    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos()                ) );
+    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::number( rTab.GetTabPos()                ) );
 
     sal_Unicode cFillChar = rTab.GetFill();
 
@@ -4563,8 +4563,8 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTxtNode* /*pTxtNd*/, sal_Int
     if ( USHRT_MAX != nNumId && 0 != nNumId )
     {
         m_pSerializer->startElementNS( XML_w, XML_numPr, FSEND );
-        m_pSerializer->singleElementNS( XML_w, XML_ilvl, FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nLvl )).getStr(), FSEND );
-        m_pSerializer->singleElementNS( XML_w, XML_numId, FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nNumId )).getStr(), FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_ilvl, FSNS( XML_w, XML_val ), OString::number( nLvl).getStr(), FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_numId, FSNS( XML_w, XML_val ), OString::number( nNumId).getStr(), FSEND );
         m_pSerializer->endElementNS( XML_w, XML_numPr );
     }
 }
@@ -4642,7 +4642,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
         if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE )
         {
-            m_pFlyAttrList->add( FSNS( XML_w, XML_w ), OString::valueOf( rSize.GetWidth( ) ) );
+            m_pFlyAttrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
         }
 
         if ( rSize.GetHeight() )
@@ -4651,7 +4651,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
             if ( rSize.GetHeightSizeType() == ATT_MIN_SIZE )
                 sRule = OString( "atLeast" );
             m_pFlyAttrList->add( FSNS( XML_w, XML_hRule ), sRule );
-            m_pFlyAttrList->add( FSNS( XML_w, XML_h ), OString::valueOf( rSize.GetHeight( ) ) );
+            m_pFlyAttrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
         }
     }
     else if ( m_rExport.bOutPageDescs )
@@ -4660,8 +4660,8 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
         if ( m_rExport.pAktPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
-        attrList->add( FSNS( XML_w, XML_w ), OString::valueOf( rSize.GetWidth( ) ) );
-        attrList->add( FSNS( XML_w, XML_h ), OString::valueOf( rSize.GetHeight( ) ) );
+        attrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
+        attrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
 
         XFastAttributeListRef xAttrList( attrList );
         attrList = NULL;
@@ -4690,8 +4690,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             m_pFlyAttrList = m_pSerializer->createAttrList();
 
         m_pFlyAttrList->add( FSNS( XML_w, XML_hSpace ),
-                OString::valueOf(
-                    sal_Int32( ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ) ) );
+                OString::number(
+                    ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ) );
     }
     else if ( m_rExport.bOutPageDescs )
     {
@@ -4713,21 +4713,21 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginLeft + (sal_uInt16)rLRSpace.GetLeft();
         m_pageMargins.nPageMarginRight = m_pageMargins.nPageMarginRight + (sal_uInt16)rLRSpace.GetRight();
 
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( m_pageMargins.nPageMarginLeft ) ) );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( m_pageMargins.nPageMarginRight ) ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::number( m_pageMargins.nPageMarginLeft ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::number( m_pageMargins.nPageMarginRight ) );
     }
     else
     {
         FastAttributeList *pLRSpaceAttrList = m_pSerializer->createAttrList();
 
-        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::valueOf( (sal_Int32) rLRSpace.GetTxtLeft() ) );
-        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::valueOf( (sal_Int32) rLRSpace.GetRight() ) );
+        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTxtLeft() ) );
+        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
 
         sal_Int32 nFirstLineAdjustment = rLRSpace.GetTxtFirstLineOfst();
         if (nFirstLineAdjustment > 0)
-            pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::valueOf( nFirstLineAdjustment ) );
+            pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
         else
-            pLRSpaceAttrList->add( FSNS( XML_w, XML_hanging ), OString::valueOf( - nFirstLineAdjustment ) );
+            pLRSpaceAttrList->add( FSNS( XML_w, XML_hanging ), OString::number( - nFirstLineAdjustment ) );
         m_pSerializer->singleElementNS( XML_w, XML_ind, pLRSpaceAttrList );
     }
 }
@@ -4746,8 +4746,8 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             m_pFlyAttrList = m_pSerializer->createAttrList();
 
         m_pFlyAttrList->add( FSNS( XML_w, XML_vSpace ),
-                OString::valueOf(
-                    sal_Int32( ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ) ) );
+                OString::number(
+                    ( rULSpace.GetLower() + rULSpace.GetUpper() ) / 2 ) );
     }
     else if (m_rExport.bOutPageDescs )
     {
@@ -4763,35 +4763,35 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::valueOf( nHeader ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::number( nHeader ) );
 
         // Page top
         m_pageMargins.nPageMarginTop = aDistances.dyaTop;
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_top ),
-                OString::valueOf( sal_Int32( m_pageMargins.nPageMarginTop ) ) );
+                OString::number( m_pageMargins.nPageMarginTop ) );
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
-        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::valueOf( nFooter ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::number( nFooter ) );
 
         // Page Bottom
         m_pageMargins.nPageMarginBottom = aDistances.dyaBottom;
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
-                OString::valueOf( sal_Int32( m_pageMargins.nPageMarginBottom ) ) );
+                OString::number( m_pageMargins.nPageMarginBottom ) );
 
         // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
         m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
-                OString::valueOf( sal_Int32( 0 ) ) );
+                OString::number( 0 ) );
     }
     else
     {
         if ( !m_pParagraphSpacingAttrList )
             m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
-                OString::valueOf( (sal_Int32)rULSpace.GetUpper() ) );
+                OString::number( rULSpace.GetUpper() ) );
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
-                OString::valueOf( (sal_Int32)rULSpace.GetLower() ) );
+                OString::number( rULSpace.GetLower() ) );
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
         else
@@ -4899,7 +4899,7 @@ void DocxAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert
             m_pFlyAttrList->add( FSNS( XML_w, XML_yAlign ), sAlign );
         else
             m_pFlyAttrList->add( FSNS( XML_w, XML_y ),
-                OString::valueOf( sal_Int32( rFlyVert.GetPos() ) ) );
+                OString::number( rFlyVert.GetPos() ) );
 
         OString sVAnchor( "page" );
         switch ( rFlyVert.GetRelationOrient( ) )
@@ -4959,7 +4959,7 @@ void DocxAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHor
             m_pFlyAttrList->add( FSNS( XML_w, XML_xAlign ), sAlign );
         else
             m_pFlyAttrList->add( FSNS( XML_w, XML_x ),
-                OString::valueOf( sal_Int32( rFlyHori.GetPos() ) ) );
+                OString::number( rFlyHori.GetPos() ) );
 
         OString sHAnchor( "page" );
         switch ( rFlyHori.GetRelationOrient( ) )
@@ -5009,7 +5009,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             // Calculate opacity value
             // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
             double fOpacity = (double)nAlpha * 65535 / ::oox::drawingml::MAX_PERCENT;
-            OUString sOpacity = OUString::valueOf(fOpacity);
+            OUString sOpacity = OUString::number(fOpacity);
 
             if ( !m_pFlyFillAttrList )
                 m_pFlyFillAttrList = m_pSerializer->createAttrList();
@@ -5089,7 +5089,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 
                 double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
                 sal_Int32 nWidth = sal_Int32(fConverted / 20);
-                m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
+                m_pFlyAttrList->add(XML_strokeweight, OString::number(nWidth) + "pt");
             }
         }
 
@@ -5172,14 +5172,14 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& 
     FastAttributeList *pColsAttrList = m_pSerializer->createAttrList();
 
     pColsAttrList->add( FSNS( XML_w, XML_num ),
-            OString::valueOf( sal_Int32( nCols ) ). getStr( ) );
+            OString::number( nCols ). getStr( ) );
 
     const char* pEquals = "false";
     if ( bEven )
     {
         sal_uInt16 nWidth = rCol.GetGutterWidth( true );
         pColsAttrList->add( FSNS( XML_w, XML_space ),
-               OString::valueOf( sal_Int32( nWidth ) ).getStr( ) );
+               OString::number( nWidth ).getStr( ) );
 
         pEquals = "true";
     }
@@ -5201,13 +5201,13 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& 
             FastAttributeList *pColAttrList = m_pSerializer->createAttrList();
             sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, ( sal_uInt16 ) nPageSize );
             pColAttrList->add( FSNS( XML_w, XML_w ),
-                    OString::valueOf( sal_Int32( nWidth ) ).getStr( ) );
+                    OString::number( nWidth ).getStr( ) );
 
             if ( n + 1 != nCols )
             {
                 sal_uInt16 nSpacing = rColumns[n].GetRight( ) + rColumns[n + 1].GetLeft( );
                 pColAttrList->add( FSNS( XML_w, XML_space ),
-                    OString::valueOf( sal_Int32( nSpacing ) ).getStr( ) );
+                    OString::number( nSpacing ).getStr( ) );
             }
 
             m_pSerializer->singleElementNS( XML_w, XML_col, pColAttrList );
@@ -5247,10 +5247,10 @@ void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
 
     sal_uInt16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
     pGridAttrList->add( FSNS( XML_w, XML_linePitch ),
-            OString::valueOf( sal_Int32( nHeight ) ).getStr( ) );
+            OString::number( nHeight ).getStr( ) );
 
     pGridAttrList->add( FSNS( XML_w, XML_charSpace ),
-            OString::valueOf( sal_Int32( GridCharacterPitch( rGrid ) ) ).getStr( ) );
+            OString::number( GridCharacterPitch( rGrid ) ).getStr( ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_docGrid, pGridAttrList );
 }

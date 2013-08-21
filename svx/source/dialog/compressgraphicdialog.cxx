@@ -160,8 +160,8 @@ void CompressGraphicsDialog::Update()
     OUString aHeightString = GetUnitString( aOriginalSize100mm.Height(), eFieldUnit, cSeparator );
     aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH)",  aWidthString);
     aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT)", aHeightString);
-    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH_IN_PX)",  OUString::valueOf(aPixelSize.Width()));
-    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT_IN_PX)", OUString::valueOf(aPixelSize.Height()));
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH_IN_PX)",  OUString::number(aPixelSize.Width()));
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT_IN_PX)", OUString::number(aPixelSize.Height()));
     m_pFixedText2->SetText(aBitmapSizeString);
 
     int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
@@ -182,7 +182,7 @@ void CompressGraphicsDialog::Update()
     sal_Int32 aNativeSize = aMemStream.Tell();
 
     OUString aNativeSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
-    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::valueOf(aNativeSize / 1024));
+    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
     m_pFixedText5->SetText(aNativeSizeString);
 
     m_pFixedText6->SetText(String("??"));
@@ -202,7 +202,7 @@ void CompressGraphicsDialog::UpdateNewHeightMF()
 
 void CompressGraphicsDialog::UpdateResolutionLB()
 {
-    m_pResolutionLB->SetText( OUString::valueOf( (sal_Int32) m_dResolution ) );
+    m_pResolutionLB->SetText( OUString::number( (sal_Int32) m_dResolution ) );
 }
 
 double CompressGraphicsDialog::GetViewWidthInch()
@@ -326,7 +326,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
 
     if ( aSize > 0 )
     {
-        OUString aSizeAsString = OUString::valueOf(aSize / 1024);
+        OUString aSizeAsString = OUString::number(aSize / 1024);
 
         OUString aNewSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);

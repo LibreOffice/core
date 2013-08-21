@@ -270,7 +270,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
         {
             // Create new child.
             OUString sKey ("index_");
-            sKey += OUString::valueOf(nIndex);
+            sKey += OUString::number(nIndex);
             Reference<container::XNameReplace> xChild(
                 xChildFactory->createInstance(), UNO_QUERY);
             if (xChild.is())

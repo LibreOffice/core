@@ -143,7 +143,7 @@ OUString PlaceWareTempFile::createTempFileURL()
         OUString aTmp( aTempDirURL );
         if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
             aTmp += "/";
-        aTmp += OUString::valueOf( (sal_Int32) (unsigned) u, nRadix );
+        aTmp += OUString::number(  (unsigned) u, nRadix );
         aTmp += ".tmp";
 
         osl::File aFile( aTmp );

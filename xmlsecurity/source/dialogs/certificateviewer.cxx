@@ -267,7 +267,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = OUString( "V" );
-    aLBEntry += OUString::valueOf( sal_Int32( xCert->getVersion() + 1 ) );
+    aLBEntry += OUString::number( xCert->getVersion() + 1 );
     InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );

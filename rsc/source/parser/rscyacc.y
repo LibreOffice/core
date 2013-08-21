@@ -112,7 +112,7 @@ RscId MakeRscId( RscExpType aExpType )
         if( lValue < 1 || lValue > (sal_Int32)0x7FFF )
         {
             pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
-                             rtl::OString::valueOf(lValue).getStr() );
+                             rtl::OString::number(lValue).getStr() );
         }
 
         if( aExpType.IsDefinition() )

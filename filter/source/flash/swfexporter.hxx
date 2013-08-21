@@ -46,7 +46,7 @@ inline OUString STR(const sal_Char * in)
 
 inline OUString VAL(sal_Int32 in)
 {
-    return OUString::valueOf(in);
+    return OUString::number(in);
 }
 
 namespace swf {

@@ -325,7 +325,7 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
     aFont.SetSize( Size( 0, 24 ) );
     SetFont( aFont );
-    Size aSampleTextSize( GetTextWidth( OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
+    Size aSampleTextSize( GetTextWidth( OUString::number( nPages+1 ) ), GetTextHeight() );
 
     Size aOutSize( GetOutputSizePixel() );
     Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
@@ -341,7 +341,7 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     long nTextHeight = GetTextHeight();
     for( int i = 0; i < nPages; i++ )
     {
-        OUString aPageText( OUString::valueOf( sal_Int32(i+1) ) );
+        OUString aPageText( OUString::number( i+1 ) );
         int nX = 0, nY = 0;
         switch( mnOrderMode )
         {
@@ -1269,7 +1269,7 @@ void PrintDialog::updatePrinterText()
 
 void PrintDialog::setPreviewText( sal_Int32 )
 {
-    OUString aNewText( searchAndReplace( maPageStr, "%n", 2, OUString::valueOf( mnCachedPages )  ) );
+    OUString aNewText( searchAndReplace( maPageStr, "%n", 2, OUString::number( mnCachedPages )  ) );
     mpNumPagesText->SetText( aNewText );
 }
 
@@ -1904,8 +1904,8 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     if( mnMax < 1 )
         mnMax = 1;
 
-    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::valueOf( mnCur ) ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::valueOf( mnMax ) );
+    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnCur ) ) );
+    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax ) );
     maText.SetText( aNewText );
 
     // update progress

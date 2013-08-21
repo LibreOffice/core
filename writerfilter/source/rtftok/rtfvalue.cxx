@@ -148,7 +148,7 @@ OUString RTFValue::getString() const
     if (!m_sValue.isEmpty() || m_bForceString)
         return m_sValue;
     else
-        return OUString::valueOf(sal_Int32(m_nValue));
+        return OUString::number(m_nValue);
 }
 
 void RTFValue::setString(OUString sValue)

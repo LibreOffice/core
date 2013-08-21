@@ -894,7 +894,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if (bFolderExists == sal_True)
             {
                 i++;
-                pURL->setName(sLastSegmentName.concat(OUString::valueOf(i)));
+                pURL->setName(sLastSegmentName.concat(OUString::number(i)));
             }
         }
     }
@@ -913,7 +913,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::NO_DECODE ) );
             if ( bElementExists )
             {
-                aExistenceCheck.setBase( BaseName.concat( OUString::valueOf( i ) ) );
+                aExistenceCheck.setBase( BaseName.concat( OUString::number( i ) ) );
                 ++i;
             }
         }

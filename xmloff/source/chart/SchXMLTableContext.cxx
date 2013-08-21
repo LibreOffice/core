@@ -130,7 +130,7 @@ void lcl_fillRangeMapping(
                     }
                     else
                     {
-                        OUString aColNumStr = OUString::valueOf( static_cast< sal_Int32 >( nCol - nColOffset ));
+                        OUString aColNumStr = OUString::number( nCol - nColOffset);
                         if( nRow == 0 && rTable.bHasHeaderRow )
                             rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
                                                      aRangeId, lcl_aLabelPrefix + aColNumStr ));
@@ -149,7 +149,7 @@ void lcl_fillRangeMapping(
                     }
                     else
                     {
-                        OUString aRowNumStr = OUString::valueOf( static_cast< sal_Int32 >( nRow - nRowOffset ));
+                        OUString aRowNumStr = OUString::number( nRow - nRowOffset);
                         if( nCol == 0 && rTable.bHasHeaderColumn )
                             rOutRangeMap.insert( lcl_tOriginalRangeToInternalRangeMap::value_type(
                                                      aRangeId, lcl_aLabelPrefix + aRowNumStr ));
@@ -935,7 +935,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         else
                         {
                             Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
-                            OUString aRep( OUString::valueOf( aLSeqIt->first.first ));
+                            OUString aRep( OUString::number( aLSeqIt->first.first ));
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation( aRep ));
                             SchXMLTools::copyProperties(
@@ -967,7 +967,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                 else if( ! lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                 {
                     OUString aRep("label ");
-                    aRep += OUString::valueOf( aLSeqIt->first.first );
+                    aRep += OUString::number( aLSeqIt->first.first );
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));

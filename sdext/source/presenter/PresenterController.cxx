@@ -334,10 +334,10 @@ void PresenterController::UpdatePaneTitles (void)
     OUString sSlideCount ("---");
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
     if (xIndexAccess.is())
-        sSlideCount = OUString::valueOf(xIndexAccess->getCount());
+        sSlideCount = OUString::number(xIndexAccess->getCount());
 
     // Get string for current slide index.
-    OUString sCurrentSlideNumber (OUString::valueOf(mnCurrentSlideIndex + 1));
+    OUString sCurrentSlideNumber (OUString::number(mnCurrentSlideIndex + 1));
 
     // Get name of the current slide.
     OUString sCurrentSlideName;
@@ -1184,7 +1184,7 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
     if ( ! pFont->mxFont.is())
         return;
 
-    const OUString sText (OUString::valueOf(mnPendingSlideNumber));
+    const OUString sText (OUString::number(mnPendingSlideNumber));
     rendering::StringContext aContext (sText, 0, sText.getLength());
     Reference<rendering::XTextLayout> xLayout (
         pFont->mxFont->createTextLayout(

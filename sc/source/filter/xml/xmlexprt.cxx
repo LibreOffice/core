@@ -3346,7 +3346,7 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
     if (nEqualCellCount > 0)
     {
         sal_Int32 nTemp(nEqualCellCount + 1);
-        OUString sOUEqualCellCount(OUString::valueOf(nTemp));
+        OUString sOUEqualCellCount(OUString::number(nTemp));
         AddAttribute(sAttrColumnsRepeated, sOUEqualCellCount);
         if (bIncProgress)
             IncrementProgressBar(sal_False, nEqualCellCount);
@@ -4024,7 +4024,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                             }
                             else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::valueOf(it->GetValue()));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
 
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
                             OUStringBuffer aBuffer;
@@ -4085,7 +4085,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                             }
                             else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpLowerLimit->GetValue()));
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit, true));
                             SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
@@ -4097,7 +4097,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                             }
                             else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(pFormatData->mpUpperLimit->GetValue()));
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit, false));
                             SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
@@ -4119,7 +4119,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                             }
                             else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::valueOf(it->GetValue()));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
 
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);

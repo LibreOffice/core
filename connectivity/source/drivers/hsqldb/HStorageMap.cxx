@@ -110,7 +110,7 @@ namespace connectivity
         OUString lcl_getNextCount()
         {
             static sal_Int32 s_nCount = 0;
-            return OUString::valueOf(s_nCount++);
+            return OUString::number(s_nCount++);
         }
         // -----------------------------------------------------------------------------
         OUString StorageContainer::removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL)
@@ -295,7 +295,7 @@ namespace connectivity
                             sMessage += "\nMode: 0x";
                             if ( _nMode < 16 )
                                 sMessage += "0";
-                            sMessage += OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
+                            sMessage += OString::number( _nMode, 16 ).toAsciiUpperCase();
                             OSL_FAIL( sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);

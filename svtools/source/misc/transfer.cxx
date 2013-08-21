@@ -193,19 +193,19 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
     aParams += aChar;
 
     aParams += OUString( ";width=\"" );
-    aParams += OUString::valueOf( rObjDesc.maSize.Width() );
+    aParams += OUString::number( rObjDesc.maSize.Width() );
     aParams += aChar;
 
     aParams += OUString( ";height=\"" );
-    aParams += OUString::valueOf( rObjDesc.maSize.Height() );
+    aParams += OUString::number( rObjDesc.maSize.Height() );
     aParams += aChar;
 
     aParams += OUString( ";posx=\"" );
-    aParams += OUString::valueOf( rObjDesc.maDragStartPos.X() );
+    aParams += OUString::number( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
     aParams += OUString( ";posy=\"" );
-    aParams += OUString::valueOf( rObjDesc.maDragStartPos.X() );
+    aParams += OUString::number( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
     return aParams;

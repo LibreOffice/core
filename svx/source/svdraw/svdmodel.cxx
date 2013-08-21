@@ -1409,7 +1409,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPer
     nMul += nDiv/2;
     nMul /= nDiv;
 
-    rStr = OUString::valueOf(nMul);
+    rStr = OUString::number(nMul);
 
     if(bNeg)
         rStr.Insert(sal_Unicode('-'), 0);

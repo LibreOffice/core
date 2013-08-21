@@ -463,7 +463,7 @@ namespace svx
             {
                 OString sMessage( "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name!\n" );
                 sMessage += "(slot id: ";
-                sMessage += OString::valueOf( (sal_Int32)_nSlotId );
+                sMessage += OString::number( _nSlotId );
                 sMessage += ")";
                 OSL_FAIL( sMessage.getStr() );
             }
@@ -743,8 +743,8 @@ namespace svx
                     else
                     {
                         OString sError( "FmTextControShell::executeAttributeDialog: Could not handle the following item:" );
-                        sError += "\n  SlotID: "; sError += OString::valueOf( (sal_Int32)nSlotForItemSet );
-                        sError += "\n  WhichID: "; sError += OString::valueOf( (sal_Int32)nWhich );
+                        sError += "\n  SlotID: "; sError += OString::number( nSlotForItemSet );
+                        sError += "\n  WhichID: "; sError += OString::number( nWhich );
                         sError += "\n  UNO name: ";
 
                         OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
@@ -1065,7 +1065,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formActivated: 0x" );
-        sTrace += OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
+        sTrace += OString::number( (sal_IntPtr)_rxController.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1093,7 +1093,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
-        sTrace += OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
+        sTrace += OString::number( (sal_IntPtr)_rxController.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
         (void)_rxController;
@@ -1346,7 +1346,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::focusGained: 0x" );
-        sTrace += OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
+        sTrace += OString::number( (sal_IntPtr)xControl.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1362,7 +1362,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::focusLost: 0x" );
-        sTrace += OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
+        sTrace += OString::number( (sal_IntPtr)xControl.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 

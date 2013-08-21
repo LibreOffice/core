@@ -1932,7 +1932,7 @@ OUString SAL_CALL
     IsObjectValid();
     OUString sName = String(ScResId(STR_ACC_DOC_NAME));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
-    sName += OUString::valueOf(nNumber);
+    sName += OUString::number(nNumber);
     return sName;
 }
 

@@ -2323,7 +2323,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (sName.isEmpty())
                         {   // name attribute is mandatory, so have to pull a
                             // rabbit out of the hat here
-                            sName = sFieldMarkName + OUString::valueOf(
+                            sName = sFieldMarkName + OUString::number(
                                     m_pImpl->AddFieldMarkStart(xFormField));
                         }
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
@@ -2382,7 +2382,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (sName.isEmpty())
                         {   // name attribute is mandatory, so have to pull a
                             // rabbit out of the hat here
-                            sName = sFieldMarkName + OUString::valueOf(
+                            sName = sFieldMarkName + OUString::number(
                                 m_pImpl->GetFieldMarkIndex(xFormField));
                         }
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,

@@ -280,7 +280,7 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     // character token?
     if( t < FIRSTKWD )
     {
-        aSym = OUString::valueOf(sal::static_int_cast<sal_Unicode>(t));
+        aSym = OUString(sal::static_int_cast<sal_Unicode>(t));
         return aSym;
     }
     switch( t )

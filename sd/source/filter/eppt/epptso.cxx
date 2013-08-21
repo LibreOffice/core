@@ -1229,7 +1229,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 if ( pIter != maSlideNameList.end() )
                                 {
                                     nPageIndex = pIter - maSlideNameList.begin();
-                                    aPageUrl = OUString::valueOf(static_cast<sal_Int32>(256 + nPageIndex));
+                                    aPageUrl = OUString::number(256 + nPageIndex);
                                     aPageUrl.Append( OUString( "," ) );
                                     aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
                                     aPageUrl.Append( OUString( ",Slide " ) );
@@ -2070,7 +2070,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                         nHyperLinkType = 7;
 
                         String aEmpty;
-                        String aHyperString = OUString::valueOf(static_cast<sal_Int32>(256 + nIndex));
+                        String aHyperString = OUString::number(256 + nIndex);
                         aHyperString.Append( OUString( "," ) );
                         aHyperString.Append( OUString::number( nIndex + 1 ) );
                         aHyperString.Append( OUString( ",Slide " ) );

@@ -906,9 +906,9 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
-    OUString sPages(OUString::valueOf( rStartInfo.nStartPageInTarget ));
+    OUString sPages(OUString::number( rStartInfo.nStartPageInTarget ));
     sPages += OUString(" - ");
-    sPages += OUString::valueOf(  rEndInfo.nEndPageInTarget );
+    sPages += OUString::number(  rEndInfo.nEndPageInTarget );
 
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);

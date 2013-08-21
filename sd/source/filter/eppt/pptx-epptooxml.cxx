@@ -95,7 +95,7 @@ using ::sax_fastparser::FSHelperPtr;
 
 void dump_pset(Reference< XPropertySet > rXPropSet);
 
-#define IDS(x) OString(OStringLiteral(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
+#define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
 namespace oox {
     using namespace drawingml;
@@ -1526,7 +1526,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
                                    .makeStringAndClear() );
 
     mPresentationFS->singleElementNS( XML_p, XML_sldMasterId,
-                                      XML_id, OString::valueOf( (sal_Int64) GetNewSlideMasterId() ).getStr(),
+                                      XML_id, OString::number(  GetNewSlideMasterId() ).getStr(),
                                       FSNS( XML_r, XML_id ), USS( sRelId ),
                                       FSEND );
 

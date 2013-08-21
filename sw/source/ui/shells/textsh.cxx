@@ -405,7 +405,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
                     aRangeString = pTblFmt->GetName();
-                    aRangeString += OUString::valueOf( sal_Unicode('.') );
+                    aRangeString += OUString( sal_Unicode('.') );
                     aRangeString += GetShell().GetBoxNms();
 
                     // get table data provider

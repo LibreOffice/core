@@ -270,7 +270,7 @@ void InsertionIndicatorOverlay::PaintPageCount (
     ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
     if (pFont)
     {
-        OUString sNumber (OUString::valueOf(nSelectionCount));
+        OUString sNumber (OUString::number(nSelectionCount));
 
         // Determine the size of the (painted) text and create a bounding
         // box that centers the text on the first preview.

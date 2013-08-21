@@ -886,7 +886,7 @@ RTLFUNC(Hex)
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
-        OUString aStr(OUString::valueOf( sal_Int64(nVal), 16 ));
+        OUString aStr(OUString::number( nVal, 16 ));
         aStr = aStr.toAsciiUpperCase();
         rPar.Get(0)->PutString( aStr );
     }
@@ -4649,8 +4649,8 @@ RTLFUNC(Partition)
     // will be handled properly during any subsequent sort operation.
 
     // calculate the  maximun number of characters before lowervalue and uppervalue
-    OUString aBeforeStart = OUString::valueOf( nStart - 1 );
-    OUString aAfterStop = OUString::valueOf( nStop + 1 );
+    OUString aBeforeStart = OUString::number( nStart - 1 );
+    OUString aAfterStop = OUString::number( nStop + 1 );
     sal_Int32 nLen1 = aBeforeStart.getLength();
     sal_Int32 nLen2 = aAfterStop.getLength();
     sal_Int32 nLen = nLen1 >= nLen2 ? nLen1:nLen2;
@@ -4675,8 +4675,8 @@ RTLFUNC(Partition)
             nLowerValue = ((( nNumber - nStart ) / nInterval ) * nInterval ) + nStart;
             nUpperValue = nLowerValue + nInterval - 1;
         }
-        aLowerValue = OUString::valueOf( nLowerValue );
-        aUpperValue = OUString::valueOf( nUpperValue );
+        aLowerValue = OUString::number( nLowerValue );
+        aUpperValue = OUString::number( nUpperValue );
     }
 
     nLen1 = aLowerValue.getLength();

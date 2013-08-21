@@ -127,13 +127,13 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         {
             PageElement* pPage = dynamic_cast<PageElement*>(pAnchor);
             rProps[ "text:anchor-type" ] = "page";
-            rProps[ "text:anchor-page-number" ] = OUString::valueOf(pPage->PageNumber);
+            rProps[ "text:anchor-page-number" ] = OUString::number(pPage->PageNumber);
         }
         rel_x -= pAnchor->x;
         rel_y -= pAnchor->y;
     }
 
-    rProps[ "draw:z-index" ] = OUString::valueOf( rElem.ZOrder );
+    rProps[ "draw:z-index" ] = OUString::number( rElem.ZOrder );
     rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
     rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
     rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
@@ -856,7 +856,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
             aVec.setX ( convPx2mmPrec2( aVec.getX() )*100.0 );
             aVec.setY ( convPx2mmPrec2( aVec.getY() )*100.0 );
 
-            aGCProps[ "svg:stroke-width" ] = OUString::valueOf( aVec.getLength() );
+            aGCProps[ "svg:stroke-width" ] = OUString::number( aVec.getLength() );
         }
     }
     else

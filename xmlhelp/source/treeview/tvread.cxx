@@ -591,7 +591,7 @@ TVChildTarget::getElementNames( )
 {
     Sequence< OUString > seq( Elements.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
-        seq[i] = OUString::valueOf( sal_Int32( 1+i ) );
+        seq[i] = OUString::number( 1+i );
 
     return seq;
 }

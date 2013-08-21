@@ -82,9 +82,9 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 
     cssu::Sequence<cssu::Any> args(5);
-    args[0] = cssu::makeAny(OUString::valueOf(nSecurityId));
+    args[0] = cssu::makeAny(OUString::number(nSecurityId));
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
-    args[2] = cssu::makeAny(OUString::valueOf(nIdOfSignatureElementCollector));
+    args[2] = cssu::makeAny(OUString::number(nIdOfSignatureElementCollector));
 
     //i39448 : for nss, the internal module is used for signing, which needs to be improved later
     sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;

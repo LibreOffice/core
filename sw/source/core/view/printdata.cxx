@@ -315,7 +315,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     m_aUIProperties[nIdx++].Value = setEditControlOpt("pagerange", OUString(),
                                                       ".HelpID:vcl:PrintDialog:PageRange:Edit",
                                                       "PageRange",
-                                                      OUString::valueOf( sal_Int32( nCurrentPage ) ) /* set text box to current page number */,
+                                                      OUString::number( nCurrentPage ) /* set text box to current page number */,
                                                       aPageRangeOpt);
     // print content selection
     vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;

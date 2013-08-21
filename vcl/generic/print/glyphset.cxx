@@ -395,7 +395,7 @@ GlyphSet::GetGlyphSetEncodingName (rtl_TextEncoding nEnc, const OString &rFontNa
     {
         return  rFontName
                 + OString("Enc")
-                + OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
+                + OString::number ((nEnc - RTL_TEXTENCODING_USER_START));
     }
     else
     {
@@ -448,7 +448,7 @@ GlyphSet::GetReencodedFontName (rtl_TextEncoding nEnc, const OString &rFontName)
     {
         return rFontName
                + OString("-enc")
-               + OString::valueOf ((sal_Int32)(nEnc - RTL_TEXTENCODING_USER_START));
+               + OString::number ((nEnc - RTL_TEXTENCODING_USER_START));
     }
     else
     {

@@ -626,7 +626,7 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
         {
             OUString aLevel = rStyleName.copy(nNextChar);
             sal_Int32 nLevel = aLevel.toInt32();
-            if (OUString::valueOf(nLevel) == aLevel && nLevel > 0 && nLevel <= EXC_STYLE_LEVELCOUNT)
+            if (OUString::number(nLevel) == aLevel && nLevel > 0 && nLevel <= EXC_STYLE_LEVELCOUNT)
             {
                 rnStyleId = nStyleId;
                 rnLevel = static_cast< sal_uInt8 >( nLevel - 1 );

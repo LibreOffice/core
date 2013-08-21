@@ -155,7 +155,7 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const OUString &rFixed)
     if (mbIsDisabled || rFixed.isEmpty())
         return;
 
-    pFrmFmt->SetName(msSeed+OUString::valueOf(++mnImportedGraphicsCount) + ": " + rFixed);
+    pFrmFmt->SetName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);
 }
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker

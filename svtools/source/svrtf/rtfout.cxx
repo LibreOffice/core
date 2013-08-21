@@ -131,11 +131,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                             // #i47831# add an additional whitespace, so that
                             // "document whitespaces" are not ignored.;
                             rStream << "\\uc"
-                                << OString::valueOf(nLen).getStr() << " ";
+                                << OString::number(nLen).getStr() << " ";
                             *pUCMode = nLen;
                         }
                         rStream << "\\u"
-                            << OString::valueOf(
+                            << OString::number(
                                 static_cast<sal_Int32>(c)).getStr();
                     }
 

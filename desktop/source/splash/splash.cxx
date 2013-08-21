@@ -475,9 +475,9 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
         aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
         aStrBuf.append( "_" );
     }
-    aResBuf.append( OString::valueOf( nWidth ));
+    aResBuf.append( OString::number( nWidth ));
     aResBuf.append( "x" );
-    aResBuf.append( OString::valueOf( nHeight ));
+    aResBuf.append( OString::number( nHeight ));
 
     aStrBuf.append( aResBuf.getStr() );
     if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))

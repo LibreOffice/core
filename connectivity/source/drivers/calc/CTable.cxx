@@ -434,7 +434,7 @@ static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
     //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnStr" );
     if ( nColumn < 26 )
-        return OUString::valueOf( (sal_Unicode) ( 'A' + nColumn ) );
+        return OUString( (sal_Unicode) ( 'A' + nColumn ) );
     else
     {
         OUStringBuffer aBuffer(2);
@@ -504,7 +504,7 @@ void OCalcTable::fillColumns()
         sal_Int32 nExprCnt = 0;
         while(aFind != m_aColumns->get().end())
         {
-            (aAlias = aColumnName) += OUString::valueOf((sal_Int32)++nExprCnt);
+            (aAlias = aColumnName) += OUString::number(++nExprCnt);
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 

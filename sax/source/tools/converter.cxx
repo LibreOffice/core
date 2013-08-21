@@ -756,7 +756,7 @@ bool Converter::convertDuration(double& rfTime,
                 }
                 else
                 {
-                    sDoubleStr += OUString::valueOf(c);
+                    sDoubleStr += OUString(c);
                 }
             }
         }

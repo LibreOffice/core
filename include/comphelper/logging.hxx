@@ -51,13 +51,13 @@ namespace comphelper
             return OUString::createFromAscii( _pAsciiValue );
         }
 
-        inline OUString convertLogArgToString( double      _nValue ) { return OUString::valueOf( _nValue ); }
-        inline OUString convertLogArgToString( float       _nValue ) { return OUString::valueOf( _nValue ); }
-        inline OUString convertLogArgToString( sal_Int64   _nValue ) { return OUString::valueOf( _nValue ); }
-        inline OUString convertLogArgToString( sal_Int32   _nValue ) { return OUString::valueOf( _nValue ); }
-        inline OUString convertLogArgToString( sal_Int16   _nValue ) { return OUString::valueOf( (sal_Int32)_nValue ); }
-        inline OUString convertLogArgToString( sal_Unicode _nValue ) { return OUString::valueOf( _nValue ); }
-        inline OUString convertLogArgToString( sal_Bool    _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( double      _nValue ) { return OUString::number( _nValue ); }
+        inline OUString convertLogArgToString( float       _nValue ) { return OUString::number( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int64   _nValue ) { return OUString::number( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int32   _nValue ) { return OUString::number( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int16   _nValue ) { return OUString::number( _nValue ); }
+        inline OUString convertLogArgToString( sal_Unicode _nValue ) { return OUString( _nValue ); }
+        inline OUString convertLogArgToString( sal_Bool    _nValue ) { return OUString::boolean( _nValue ); }
 
     } } // namespace log::convert
 

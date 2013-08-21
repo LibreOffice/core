@@ -1283,7 +1283,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
             if ( rDesc.ppDefArgNames[nArg]->isEmpty() )
             {
                 OUString aDefName("arg");
-                aDefName += OUString::valueOf( nArg+1 );
+                aDefName += OUString::number( nArg+1 );
                 *rDesc.ppDefArgNames[nArg] = aDefName;
             }
 

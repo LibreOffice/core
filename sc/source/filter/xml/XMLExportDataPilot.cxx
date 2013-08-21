@@ -108,7 +108,7 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions)
 {
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(sal_Int32(aQueryEntry.nField)));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(aQueryEntry.nField));
     if (bIsCaseSensitive)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     const ScQueryEntry::Item& rItem = aQueryEntry.GetQueryItem();

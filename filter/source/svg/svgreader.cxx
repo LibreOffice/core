@@ -299,7 +299,7 @@ struct AnnotatingVisitor
 
     OUString getStyleName( const char* sPrefix, sal_Int32 nId )
     {
-        return OUString::createFromAscii(sPrefix)+OUString::valueOf(nId);
+        return OUString::createFromAscii(sPrefix)+OUString::number(nId);
     }
 
     bool hasGradientOpacity( const Gradient& rGradient )
@@ -500,7 +500,7 @@ struct AnnotatingVisitor
             double rRotate, rShearX;
             if( rState.maFillGradient.maTransform.decompose(rScale, rTranslate, rRotate, rShearX) )
                 xAttrs->AddAttribute( "draw:angle",
-                                      OUString::valueOf(rRotate*1800.0/M_PI ) );
+                                      OUString::number(rRotate*1800.0/M_PI ) );
             xAttrs->AddAttribute( "draw:start-color",
                                   getOdfColor(
                                       maGradientStopVector[
@@ -531,12 +531,12 @@ struct AnnotatingVisitor
 
                 // modulate gradient opacity with overall fill opacity
                 xAttrs->AddAttribute( "draw:end",
-                                      OUString::valueOf(
+                                      OUString::number(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[0]].maStopColor.a*
                                           maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
                 xAttrs->AddAttribute( "draw:start",
-                                      OUString::valueOf(
+                                      OUString::number(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[1]].maStopColor.a*
                                           maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
@@ -572,11 +572,11 @@ struct AnnotatingVisitor
             xAttrs->Clear();
             xAttrs->AddAttribute( "fo:font-family", rState.maFontFamily);
             xAttrs->AddAttribute( "fo:font-size",
-                                  OUString::valueOf(pt2mm(rState.mnFontSize))+"mm");
+                                  OUString::number(pt2mm(rState.mnFontSize))+"mm");
             xAttrs->AddAttribute( "fo:font-style", rState.maFontStyle);
             xAttrs->AddAttribute( "fo:font-variant", rState.maFontVariant);
             xAttrs->AddAttribute( "fo:font-weight",
-                                  OUString::valueOf(rState.mnFontWeight));
+                                  OUString::number(rState.mnFontWeight));
             xAttrs->AddAttribute( "fo:color", getOdfColor(rState.maFillColor));
 
             mxDocumentHandler->startElement( "style:text-properties", xUnoAttrs );
@@ -627,7 +627,7 @@ struct AnnotatingVisitor
                     }
                     else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( "draw:opacity",
-                                              OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
+                                              OUString::number(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
                 else
                 {
@@ -635,7 +635,7 @@ struct AnnotatingVisitor
                     xAttrs->AddAttribute( "draw:fill-color", getOdfColor(rState.maFillColor));
                     if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( "draw:opacity",
-                                              OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
+                                              OUString::number(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
             }
             else
@@ -649,7 +649,7 @@ struct AnnotatingVisitor
             else if( rState.meStrokeType == DASH )
             {
                 xAttrs->AddAttribute( "draw:stroke", "dash");
-                xAttrs->AddAttribute( "draw:stroke-dash", "dash"+OUString::valueOf(mnCurrStateId));
+                xAttrs->AddAttribute( "draw:stroke-dash", "dash"+OUString::number(mnCurrStateId));
                 xAttrs->AddAttribute( "svg:stroke-color", getOdfColor(rState.maStrokeColor));
             }
             else
@@ -659,7 +659,7 @@ struct AnnotatingVisitor
             {
                 ::basegfx::B2DVector aVec(maCurrState.mnStrokeWidth,0);
                 aVec *= maCurrState.maCTM;
-                xAttrs->AddAttribute( "svg:stroke-width", OUString::valueOf( pt2mm(aVec.getLength()) )+"mm");
+                xAttrs->AddAttribute( "svg:stroke-width", OUString::number( pt2mm(aVec.getLength()) )+"mm");
             }
             if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_MITER )
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "miter");
@@ -669,7 +669,7 @@ struct AnnotatingVisitor
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "bevel");
             if( maCurrState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                 xAttrs->AddAttribute( "svg:stroke-opacity",
-                                      OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+"%");
+                                      OUString::number(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+"%");
         }
 
         mxDocumentHandler->startElement( "style:graphic-properties", xUnoAttrs );
@@ -690,7 +690,7 @@ struct AnnotatingVisitor
             nStyleId = mrStates.find(maCurrState)->mnStyleId;
 
         xElem->setAttribute("internal-style-ref",
-                            OUString::valueOf(
+                            OUString::number(
                                 nStyleId)
                             +"$0");
     }
@@ -1240,9 +1240,9 @@ struct ShapeWritingVisitor
                 }
 
                 if ( x1 != x2 || y1 != y2 ) {
-                    OUString sLinePath = "M"+OUString::valueOf(x1)+","
-                        +OUString::valueOf(y1)+"L"+OUString::valueOf(x2)+","
-                        +OUString::valueOf(y2);
+                    OUString sLinePath = "M"+OUString::number(x1)+","
+                        +OUString::number(y1)+"L"+OUString::number(x2)+","
+                        +OUString::number(y2);
                     basegfx::B2DPolyPolygon aPoly;
                     basegfx::tools::importFromSvgD(aPoly, sLinePath);
 
@@ -1515,8 +1515,8 @@ struct ShapeWritingVisitor
                     y -= 2.0*maCurrState.mnFontSize/3.0;
                 }
 
-                xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(x))+"mm");
-                xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(y))+"mm");
+                xAttrs->AddAttribute( "svg:x", OUString::number(pt2mm(x))+"mm");
+                xAttrs->AddAttribute( "svg:y", OUString::number(pt2mm(y))+"mm");
                 xAttrs->AddAttribute( "draw:style-name", "svggraphicstyle"+sStyleId );
 
                 mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
@@ -1554,10 +1554,10 @@ struct ShapeWritingVisitor
                         const std::string&                              data)
     {
         xAttrs->Clear();
-        xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
-        xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
-        xAttrs->AddAttribute( "svg:width", OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
-        xAttrs->AddAttribute( "svg:height", OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
+        xAttrs->AddAttribute( "svg:x", OUString::number(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", OUString::number(pt2mm(rShapeBounds.getMinY()))+"mm");
+        xAttrs->AddAttribute( "svg:width", OUString::number(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", OUString::number(pt2mm(rShapeBounds.getHeight()))+"mm");
 
         mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
 
@@ -1584,16 +1584,16 @@ struct ShapeWritingVisitor
         if (!rMatrix.decompose(rScale, rTranslate, rRotate, rShearX))
             return;
         if (rScale.getX() != 1.0 || rScale.getY() != 1.0)
-            sTransformValue += "scale("+OUString::valueOf(rScale.getX())+" "
-                 +OUString::valueOf(rScale.getY())+") ";
+            sTransformValue += "scale("+OUString::number(rScale.getX())+" "
+                 +OUString::number(rScale.getY())+") ";
         if (rTranslate.getX() != 0.0f || rTranslate.getY() != 0.0f)
-            sTransformValue += "translate("+OUString::valueOf(rTranslate.getX()/100.0f)+"mm "
-                 +OUString::valueOf(rTranslate.getY()/100.0f)+"mm) ";
+            sTransformValue += "translate("+OUString::number(rTranslate.getX()/100.0f)+"mm "
+                 +OUString::number(rTranslate.getY()/100.0f)+"mm) ";
         if (rRotate != 0.0f)
-            sTransformValue += "rotate("+OUString::valueOf(rRotate)+") ";
+            sTransformValue += "rotate("+OUString::number(rRotate)+") ";
 
         if (rShearX != 0.0f)
-            sTransformValue += "skewX("+OUString::valueOf(rShearX)+") ";
+            sTransformValue += "skewX("+OUString::number(rShearX)+") ";
         if (sTransformValue.isEmpty())
             return;
         xAttrs->AddAttribute( "draw:transform", sTransformValue);
@@ -1679,25 +1679,25 @@ struct ShapeWritingVisitor
                               const basegfx::B2DRange&                  rShapeBounds,
                               const OUString&                      rStyleName )
     {
-        xAttrs->AddAttribute( "draw:z-index", OUString::valueOf( mnShapeNum++ ));
+        xAttrs->AddAttribute( "draw:z-index", OUString::number( mnShapeNum++ ));
         xAttrs->AddAttribute( "draw:style-name", rStyleName);
-        xAttrs->AddAttribute( "svg:width", OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
-        xAttrs->AddAttribute( "svg:height", OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
+        xAttrs->AddAttribute( "svg:width", OUString::number(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", OUString::number(pt2mm(rShapeBounds.getHeight()))+"mm");
 
         // OOo expects the viewbox to be in 100th of mm
         xAttrs->AddAttribute( "svg:viewBox",
             "0 0 "
-            + OUString::valueOf(
+            + OUString::number(
                 basegfx::fround(pt100thmm(rShapeBounds.getWidth())) )
             + " "
-            + OUString::valueOf(
+            + OUString::number(
                 basegfx::fround(pt100thmm(rShapeBounds.getHeight())) ));
 
         // TODO(F1): decompose transformation in calling code, and use
         // transform attribute here
         // writeTranslate(maCurrState.maCTM, xAttrs);
-        xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
-        xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
+        xAttrs->AddAttribute( "svg:x", OUString::number(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", OUString::number(pt2mm(rShapeBounds.getMinY()))+"mm");
     }
 
     State                                      maCurrState;
@@ -1757,13 +1757,13 @@ struct OfficeStylesWritingVisitor
             xAttrs->AddAttribute( "draw:display-name", "dash"+sStyleId );
             xAttrs->AddAttribute( "draw:style", "rect" );
             if ( dots1>0 ) {
-                xAttrs->AddAttribute( "draw:dots1", OUString::valueOf(dots1) );
-                xAttrs->AddAttribute( "draw:dots1-length", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dots1_length), maCurrState, 'h' )))+"mm" );
+                xAttrs->AddAttribute( "draw:dots1", OUString::number(dots1) );
+                xAttrs->AddAttribute( "draw:dots1-length", OUString::number(pt2mm(convLength( OUString::number(dots1_length), maCurrState, 'h' )))+"mm" );
             }
-            xAttrs->AddAttribute( "draw:distance", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dash_distance), maCurrState, 'h' )))+"mm" );
+            xAttrs->AddAttribute( "draw:distance", OUString::number(pt2mm(convLength( OUString::number(dash_distance), maCurrState, 'h' )))+"mm" );
             if ( dots2>0 ) {
-                xAttrs->AddAttribute( "draw:dots2", OUString::valueOf(dots2) );
-                xAttrs->AddAttribute( "draw:dots2-length", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dots2_length), maCurrState, 'h' )))+"mm" );
+                xAttrs->AddAttribute( "draw:dots2", OUString::number(dots2) );
+                xAttrs->AddAttribute( "draw:dots2-length", OUString::number(pt2mm(convLength( OUString::number(dots2_length), maCurrState, 'h' )))+"mm" );
             }
 
             mxDocumentHandler->startElement( "draw:stroke-dash", xUnoAttrs);
@@ -1977,7 +1977,7 @@ sal_Bool SVGReader::parseAndConvert()
     m_xDocumentHandler->startElement( "config:config-item" , xUnoAttrs);
 
     sal_Int64 iWidth = sal_Int64(fViewPortWidth);
-    m_xDocumentHandler->characters( OUString::valueOf(iWidth) );
+    m_xDocumentHandler->characters( OUString::number(iWidth) );
 
     m_xDocumentHandler->endElement( "config:config-item" );
 
@@ -1988,7 +1988,7 @@ sal_Bool SVGReader::parseAndConvert()
     m_xDocumentHandler->startElement( "config:config-item", xUnoAttrs);
 
     sal_Int64 iHeight = sal_Int64(fViewPortHeight);
-    m_xDocumentHandler->characters( OUString::valueOf(iHeight) );
+    m_xDocumentHandler->characters( OUString::number(iHeight) );
 
     m_xDocumentHandler->endElement( "config:config-item" );
 
@@ -2012,8 +2012,8 @@ sal_Bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "fo:margin-bottom", "0mm");
     xAttrs->AddAttribute( "fo:margin-left", "0mm");
     xAttrs->AddAttribute( "fo:margin-right", "0mm");
-    xAttrs->AddAttribute( "fo:page-width", OUString::valueOf(fViewPortWidth)+"mm");
-    xAttrs->AddAttribute( "fo:page-height", OUString::valueOf(fViewPortHeight)+"mm");
+    xAttrs->AddAttribute( "fo:page-width", OUString::number(fViewPortWidth)+"mm");
+    xAttrs->AddAttribute( "fo:page-height", OUString::number(fViewPortHeight)+"mm");
     xAttrs->AddAttribute( "style:print-orientation",
         fViewPortWidth > fViewPortHeight ? OUString("landscape") : OUString("portrait") );
     m_xDocumentHandler->startElement( "style:page-layout-properties", xUnoAttrs );

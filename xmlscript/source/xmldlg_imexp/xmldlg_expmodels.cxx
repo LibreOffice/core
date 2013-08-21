@@ -893,7 +893,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     switch (a.getValueTypeClass())
     {
     case TypeClass_DOUBLE:
-        addAttribute( XMLNS_DIALOGS_PREFIX ":value-default", OUString::valueOf( *(double const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":value-default", OUString::number( *(double const *)a.getValue() ) );
         break;
     case TypeClass_STRING:
         addAttribute( XMLNS_DIALOGS_PREFIX ":value-default", *(OUString const *)a.getValue() );

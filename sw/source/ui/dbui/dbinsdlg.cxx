@@ -1507,7 +1507,7 @@ static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
     OUString sRet;
     while(true)
     {
-        sRet = sTest; sRet += OUString::valueOf(nIdx++);
+        sRet = sTest; sRet += OUString::number(nIdx++);
         bool bFound = false;
         for(sal_Int32 i = 0; i < aNames.getLength(); i++)
         {

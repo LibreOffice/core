@@ -44,7 +44,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
 {
     SolarMutexGuard aGuard;
 
-    OUString sArg( OUString::valueOf( (sal_Int32)pHdFrm->GetPhyPageNum() ) );
+    OUString sArg( OUString::number( pHdFrm->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_HEADER_NAME, &sArg ) );
 }
 
@@ -55,7 +55,7 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
 {
     SolarMutexGuard aGuard;
 
-    OUString sArg( OUString::valueOf( (sal_Int32)pFtFrm->GetPhyPageNum() ) );
+    OUString sArg( OUString::number( pFtFrm->GetPhyPageNum() ) );
     SetName( GetResource( STR_ACCESS_FOOTER_NAME, &sArg ) );
 }
 

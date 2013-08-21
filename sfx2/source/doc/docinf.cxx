@@ -230,7 +230,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     rGlobSect.SetFileTimeValue( PROPID_EDITTIME, aEditTime );
 
     rGlobSect.SetStringValue( PROPID_REVNUMBER,
-                OUString::valueOf( static_cast<sal_Int32>(i_xDocProps->getEditingCycles()) ) );
+                OUString::number( i_xDocProps->getEditingCycles() ) );
     if ( i_pThumb && i_pThumb->getLength() )
         rGlobSect.SetThumbnailValue( PROPID_THUMBNAIL, *i_pThumb );
 

@@ -53,7 +53,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
     if(pEntry->GetType() == COLORSCALE_FORMULA)
         aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
     else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
-        aEdit.SetText(OUString::valueOf(pEntry->GetValue()));
+        aEdit.SetText(OUString::number(pEntry->GetValue()));
     else
         aEdit.Disable();
 }

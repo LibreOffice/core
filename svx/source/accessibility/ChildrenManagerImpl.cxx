@@ -121,7 +121,7 @@ uno::Reference<XAccessible>
     // Check whether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + OUString::valueOf(nIndex),
+            "no accessible child with index " + OUString::number(nIndex),
             mxParent);
 
     return GetChild (maVisibleChildren[nIndex],nIndex);

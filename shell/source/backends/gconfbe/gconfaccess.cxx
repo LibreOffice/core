@@ -312,7 +312,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
             sal_Bool bBooleanValue = false;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= bBooleanValue;
-            return uno::makeAny( OUString::valueOf( (sal_Bool) bBooleanValue ) );
+            return uno::makeAny( OUString::boolean( (sal_Bool) bBooleanValue ) );
         }
 
         case SETTING_WORK_DIRECTORY:

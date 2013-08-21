@@ -147,7 +147,7 @@ namespace svxform
 
         OSL_FAIL(
             (   OString( "lcl_implMapIntValue: could not convert the integer value " )
-            +=  OString::valueOf( (sal_Int32)_nValue )
+            +=  OString::number( _nValue )
             +=  OString( " !" )
             ).getStr()
         );

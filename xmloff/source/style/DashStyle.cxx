@@ -254,7 +254,7 @@ sal_Bool XMLDashStyleExport::exportXML(
             // dots
             if( aLineDash.Dots )
             {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::valueOf( (sal_Int32)aLineDash.Dots ) );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::number( aLineDash.Dots ) );
 
                 if( aLineDash.DotLen )
                 {
@@ -276,7 +276,7 @@ sal_Bool XMLDashStyleExport::exportXML(
             // dashes
             if( aLineDash.Dashes )
             {
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::valueOf( (sal_Int32)aLineDash.Dashes ) );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::number( aLineDash.Dashes ) );
 
                 if( aLineDash.DashLen )
                 {

@@ -507,7 +507,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             sal_Int32 nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
-                aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::valueOf(nPointIndex+1) );
+                aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), OUString::number(nPointIndex+1) );
             }
 
             //replace data series index
@@ -526,7 +526,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                     }
                 }
 
-                OUString aReplacement( OUString::valueOf(nSeriesIndex+1) );
+                OUString aReplacement( OUString::number(nSeriesIndex+1) );
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), aReplacement );
             }
 
@@ -673,7 +673,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
 
             // replace data point index
-            replaceParamterInString( aRet, "%POINTNUMBER", OUString::valueOf( nPointIndex + 1 ));
+            replaceParamterInString( aRet, "%POINTNUMBER", OUString::number( nPointIndex + 1 ));
 
             // replace data series index
             {
@@ -685,7 +685,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
                     if( aSeriesVector[nSeriesIndex] == xSeries )
                         break;
                 }
-                replaceParamterInString( aRet, "%SERIESNUMBER", OUString::valueOf( nSeriesIndex + 1 ) );
+                replaceParamterInString( aRet, "%SERIESNUMBER", OUString::number( nSeriesIndex + 1 ) );
             }
 
             // replace point value
@@ -743,7 +743,7 @@ OUString ObjectNameProvider::getNameForCID(
                     aRet += getName( OBJECTTYPE_DATA_POINT  );
                     sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
                     aRet += " ";
-                    aRet += OUString::valueOf(nPointIndex+1);
+                    aRet += OUString::number(nPointIndex+1);
 
                     if( eType == OBJECTTYPE_DATA_LABEL )
                     {

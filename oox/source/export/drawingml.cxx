@@ -147,7 +147,7 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Refere
 
 void DrawingML::WriteColor( sal_uInt32 nColor )
 {
-    OString sColor = OString::valueOf( ( sal_Int64 ) nColor, 16 );
+    OString sColor = OString::number(  nColor, 16 );
     if( sColor.getLength() < 6 ) {
         OStringBuffer sBuf( "0" );
         int remains = 5 - sColor.getLength();
@@ -1371,8 +1371,8 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
         for( sal_Int32 i=0; i < nLength; i++ )
             if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
                 mpFS->singleElementNS( XML_a, XML_gd,
-                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : (nLength > 1 ? OString( "adj" + OString::valueOf( i + 1 ) ).getStr() : "adj"),
-                                       XML_fmla, OString("val " + OString::valueOf( nValue )).getStr(),
+                                       XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : (nLength > 1 ? OString( "adj" + OString::number( i + 1 ) ).getStr() : "adj"),
+                                       XML_fmla, OString("val " + OString::number( nValue )).getStr(),
                                        FSEND );
     }
 

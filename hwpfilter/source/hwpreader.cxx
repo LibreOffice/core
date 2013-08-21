@@ -46,7 +46,7 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
 #define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(0)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
-#define Double2Str(x)   OUString::valueOf((double)(x))
+#define Double2Str(x)   OUString::number((double)(x))
 #define WTI(x)          ((double)(x) / 1800.)     // unit => inch
 #define WTMM(x)     ((double)(x) / 1800. * 25.4)  // unit => mm
 #define WTSM(x)     ((int)((x) / 1800. * 2540))   // unit ==> 1/100 mm

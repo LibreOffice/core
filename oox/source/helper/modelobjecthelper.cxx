@@ -62,7 +62,7 @@ OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rOb
     if( mxContainer.is() )
     {
         if( bInsertByUnusedName )
-            return ContainerHelper::insertByUnusedName( mxContainer, rObjName + OUString::valueOf( ++mnIndex ), ' ', rObj );
+            return ContainerHelper::insertByUnusedName( mxContainer, rObjName + OUString::number( ++mnIndex ), ' ', rObj );
         if( ContainerHelper::insertByName( mxContainer, rObjName, rObj ) )
             return rObjName;
     }

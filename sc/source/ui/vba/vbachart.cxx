@@ -633,7 +633,7 @@ ScVbaChart::getDefaultSeriesDescriptions( sal_Int32 _nCount )
     sal_Int32 nLen = sDescriptions.getLength();
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        sDescriptions[i] = DEFAULTSERIESPREFIX + OUString::valueOf(i+1);
+        sDescriptions[i] = DEFAULTSERIESPREFIX + OUString::number(i+1);
     }
     return sDescriptions;
 }

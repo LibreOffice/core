@@ -967,13 +967,13 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
                 // write 20 char entry of form
                 // 0000offset 00gen n\r\n
                 aBuf.setLength( 0 );
-                OString aOffset( OString::valueOf( sal_Int64(section_begin->second.second ) ) );
+                OString aOffset( OString::number( section_begin->second.second ) );
                 int nPad = 10 - aOffset.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
                 aBuf.append( aOffset );
                 aBuf.append( ' ' );
-                OString aGeneration( OString::valueOf( sal_Int32(section_begin->second.first ) ) );
+                OString aGeneration( OString::number( section_begin->second.first ) );
                 nPad = 5 - aGeneration.getLength();
                 for( int i = 0; i < nPad; i++ )
                     aBuf.append( '0' );
@@ -991,7 +991,7 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
         return false;
     if( ! rWriteContext.write( "startxref\n", 10 ) )
         return false;
-    OString aOffset( OString::valueOf( sal_Int32(nXRefPos) ) );
+    OString aOffset( OString::number( nXRefPos ) );
     if( ! rWriteContext.write( aOffset.getStr(), aOffset.getLength() ) )
         return false;
     return rWriteContext.write( "\n%%EOF\n", 7 );

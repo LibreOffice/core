@@ -373,7 +373,7 @@ OUString lcl_FindUnusedPageStyleName(const uno::Sequence< OUString >& rPageStyle
         }
     }
     OUString sRet( sDefaultStyle );
-    sRet += OUString::valueOf( nMaxIndex + 1);
+    sRet += OUString::number( nMaxIndex + 1);
     return sRet;
 }
 
@@ -997,7 +997,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(OUString::valueOf(static_cast<sal_Int32>(0), 16));
+        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(OUString::number(0, 16));
         if( pEntry.get( ) )
         {
             PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN ));

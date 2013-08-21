@@ -712,16 +712,16 @@ sal_Bool SVGFilter::implExportDocument()
     #ifdef _SVG_WRITE_EXTENTS
     if( mbSinglePage )
     {
-        aAttr = OUString::valueOf( nDocWidth * 0.01 ) + "mm";
+        aAttr = OUString::number( nDocWidth * 0.01 ) + "mm";
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
 
-        aAttr = OUString::valueOf( nDocHeight * 0.01 ) + "mm";
+        aAttr = OUString::number( nDocHeight * 0.01 ) + "mm";
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
     }
     #endif
 
 
-    aAttr = "0 0 " + OUString::valueOf( nDocWidth ) + " " + OUString::valueOf( nDocHeight );
+    aAttr = "0 0 " + OUString::number( nDocWidth ) + " " + OUString::number( nDocHeight );
 
     msClipPathId = "presentation_clip_path";
     OUString sClipPathAttrValue = "url(#" + msClipPathId + ")";
@@ -732,7 +732,7 @@ sal_Bool SVGFilter::implExportDocument()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clip-path", sClipPathAttrValue );
 
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::valueOf( 28.222 ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::number( 28.222 ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", "round" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", "http://www.w3.org/2000/svg" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", "http://xml.openoffice.org/svg/export" );
@@ -750,10 +750,10 @@ sal_Bool SVGFilter::implExportDocument()
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
             SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", sal_True, sal_True );
             {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::valueOf( sal_Int32(0) ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::valueOf( sal_Int32(0) ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::valueOf( nDocWidth ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::valueOf( nDocHeight ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( 0 ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( 0 ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight ) );
                 SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", sal_True, sal_True );
             }
         }
@@ -838,13 +838,13 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
         }
     }
     OUString sFieldId( sOOOElemField );
-    sFieldId += OUString::valueOf( sal_Unicode('_') );
+    sFieldId += OUString( sal_Unicode('_') );
     if( !bFound )
     {
         aFieldSet.push_back( new TextFieldType( aField ) );
     }
     aFieldSet[i]->insertMasterPage( xMasterPage );
-    sFieldId += OUString::valueOf( i );
+    sFieldId += OUString::number( i );
     return sFieldId;
 }
 
@@ -860,8 +860,8 @@ sal_Bool SVGFilter::implGenerateMetaData()
         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
 
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aOOOElemMetaSlides );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::valueOf( nCount ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrStartSlideNumber, OUString::valueOf( mnVisiblePage ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::number( nCount ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrStartSlideNumber, OUString::number( mnVisiblePage ) );
 
         /*
          *  Add a (global) Page Numbering Type attribute for the document
@@ -920,8 +920,8 @@ sal_Bool SVGFilter::implGenerateMetaData()
                 Reference< XMasterPageTarget >    xMasterPageTarget( xDrawPage, UNO_QUERY );
                 Reference< XDrawPage >            xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
                 OUString                          aSlideId( aId );
-                aSlideId += OUString::valueOf( sal_Unicode('_') );
-                aSlideId += OUString::valueOf( i );
+                aSlideId += OUString( sal_Unicode('_') );
+                aSlideId += OUString::number( i );
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, implGetValidIDFromInterface( xDrawPage ) );
@@ -1194,7 +1194,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
     double fFactor = 1.0 / 2048;
-    OUString sFactor = OUString::valueOf( fFactor );
+    OUString sFactor = OUString::number( fFactor );
     OUString sTransform = "scale(" + sFactor + ",-" + sFactor + ")";
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "transform", sTransform );
 
@@ -1230,7 +1230,7 @@ sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
             if( pAction )
             {
                 sal_uLong nId = GetBitmapChecksum( pAction );
-                sId = "bitmap(" + OUString::valueOf( (sal_Int64)nId ) + ")";
+                sId = "bitmap(" + OUString::number( nId ) + ")";
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
                 const Reference< XShape >& rxShape = (const Reference< XShape >&)( it->GetObject() );
@@ -2200,7 +2200,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                         UCharSet::const_iterator aChar = pCharSet->begin();
                         for( ; aChar != pCharSet->end(); ++aChar )
                         {
-                            aRepresentation += OUString::valueOf( *aChar );
+                            aRepresentation += OUString( *aChar );
                         }
                     }
                     pInfo->SetRepresentation( aRepresentation );
@@ -2235,10 +2235,10 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                     switch( mVisiblePagePropSet.nPageNumberingType )
                     {
                         case SVX_CHARS_UPPER_LETTER:
-                            aRepresentation += OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'A' ) );
+                            aRepresentation += OUString( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'A' ) );
                             break;
                         case SVX_CHARS_LOWER_LETTER:
-                            aRepresentation += OUString::valueOf( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'a' ) );
+                            aRepresentation += OUString( (sal_Unicode)(char)( ( nPageNumber - 1 ) % 26 + 'a' ) );
                             break;
                         case SVX_ROMAN_UPPER:
                             aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, true /* upper */ );
@@ -2250,7 +2250,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                         case SVX_ARABIC: ;
                         // in case the numbering type is not handled we fall back on arabic numbering
                         default:
-                            aRepresentation += OUString::valueOf( sal_Int32(nPageNumber) );
+                            aRepresentation += OUString::number( nPageNumber );
                             break;
                     }
                 }
@@ -2280,18 +2280,18 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     if( xExtDocHandler.is() )
         xExtDocHandler->unknown( SVG_DTD_STRING );
 
-    aAttr = rtl::OUString::valueOf( aSize.Width() );
+    aAttr = OUString::number( aSize.Width() );
     aAttr += "mm";
     AddAttribute( XML_NAMESPACE_NONE, "width", aAttr );
 
-    aAttr = rtl::OUString::valueOf( aSize.Height() );
+    aAttr = OUString::number( aSize.Height() );
     aAttr += "mm";
     AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
 
     aAttr = "0 0 ";
-    aAttr += rtl::OUString::valueOf( aSize.Width() * 100L );
+    aAttr += OUString::number( aSize.Width() * 100L );
     aAttr += " ";
-    aAttr += rtl::OUString::valueOf( aSize.Height() * 100L );
+    aAttr += OUString::number( aSize.Height() * 100L );
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 
     {

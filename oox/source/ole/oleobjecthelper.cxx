@@ -95,7 +95,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
         // embedded OLE object - import the embedded data
         if( rOleObject.maEmbeddedData.hasElements() && mxResolver.is() ) try
         {
-            OUString aObjectId = "Obj" + OUString::valueOf( mnObjectId++ );
+            OUString aObjectId = "Obj" + OUString::number( mnObjectId++ );
 
             Reference< XNameAccess > xResolverNA( mxResolver, UNO_QUERY_THROW );
             Reference< XOutputStream > xOutStrm( xResolverNA->getByName( aObjectId ), UNO_QUERY_THROW );

@@ -1275,7 +1275,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
             const SwSetExpField* pSeqField = dynamic_cast< const SwSetExpField* >( pFmtFld->GetFld() );
             OUString sName = GetSequenceName();
             sName += OUString( cSequenceMarkSeparator );
-            sName += OUString::valueOf( sal_Int32( pSeqField->GetSeqNumber() ) );
+            sName += OUString::number( pSeqField->GetSeqNumber() );
             SwTOXPara * pNew = new SwTOXPara( rTxtNode, nsSwTOXElement::TOX_SEQUENCE, 1, sName );
             // set indexes if the number or the reference text are to be displayed
             if( GetCaptionDisplay() == CAPTION_TEXT )

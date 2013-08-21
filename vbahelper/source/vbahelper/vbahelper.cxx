@@ -362,9 +362,9 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     if (( nFrom || nTo ) )
     {
         if ( nFrom )
-            sRange = ( OUString::valueOf( nFrom ) + sRange );
+            sRange = ( OUString::number( nFrom ) + sRange );
         if ( nTo )
-            sRange += OUString::valueOf( nTo );
+            sRange += OUString::number( nTo );
     }
 
     if (  PrToFileName.getValue() )
@@ -479,17 +479,17 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw
         case uno::TypeClass_BOOLEAN:
             return bUppercaseBool ?
                 (rAny.get< bool >() ? OUString(  "TRUE"  ) : OUString(  "FALSE"  )) :
-                OUString::valueOf( (sal_Bool)rAny.get< bool >() );
+                OUString::boolean( (sal_Bool)rAny.get< bool >() );
         case uno::TypeClass_FLOAT:
-            return OUString::valueOf( rAny.get< float >() );
+            return OUString::number( rAny.get< float >() );
         case uno::TypeClass_DOUBLE:
-            return OUString::valueOf( rAny.get< double >() );
+            return OUString::number( rAny.get< double >() );
         case uno::TypeClass_BYTE:
         case uno::TypeClass_SHORT:
         case uno::TypeClass_LONG:
-            return OUString::valueOf( rAny.get< sal_Int32 >() );
+            return OUString::number( rAny.get< sal_Int32 >() );
         case uno::TypeClass_HYPER:
-            return OUString::valueOf( rAny.get< sal_Int64 >() );
+            return OUString::number( rAny.get< sal_Int64 >() );
         default:;
     }
     throw uno::RuntimeException( "Invalid type, cannot convert to string." , 0 );
@@ -531,7 +531,7 @@ ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, cons
                 return scompname;
             }
         }
-        scompname = _sElementName + _sSuffixSeparator + OUString::valueOf( a++ );
+        scompname = _sElementName + _sSuffixSeparator + OUString::number( a++ );
     }
     return OUString();
 }

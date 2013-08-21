@@ -1187,7 +1187,7 @@ shell::move( sal_Int32 CommandId,
                     newDstUnqPath = dstUnqPath;
 
                     OUString aPostFix( "_" );
-                    aPostFix += OUString::valueOf( ++nTry );
+                    aPostFix += OUString::number( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
@@ -1414,7 +1414,7 @@ shell::copy(
                     newDstUnqPath = dstUnqPath;
 
                     OUString aPostFix( "_" );
-                    aPostFix += OUString::valueOf( ++nTry );
+                    aPostFix += OUString::number( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 

@@ -1540,7 +1540,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
                         sFunction = OUString("LEFT");
-                        sPrefix = OUString(";") + OUString::valueOf(xGroup->getGroupInterval());
+                        sPrefix = OUString(";") + OUString::number(xGroup->getGroupInterval());
                         break;
                     case report::GroupOn::YEAR:
                         sFunction = OUString("YEAR");
@@ -1577,7 +1577,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
                             // so we need to expand the the formula of sCountName
-                            sPrefix = OUString(" + 1) / ") + OUString::valueOf(xGroup->getGroupInterval());
+                            sPrefix = OUString(" + 1) / ") + OUString::number(xGroup->getGroupInterval());
                             sFunctionName = sFunction + OUString("_") + sExpression;
                             sFunction = sFunction + OUString("(");
                             sInitialFormula = OUString("rpt:0");

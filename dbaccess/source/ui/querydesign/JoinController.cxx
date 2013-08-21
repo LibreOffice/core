@@ -440,7 +440,7 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
             aWindowData.put( "WindowHeight", static_cast<sal_Int32>((*aIter)->GetSize().Height()) );
             aWindowData.put( "ShowAll", (*aIter)->IsShowAll() );
 
-            const OUString sTableName( OUString( "Table" ) + OUString::valueOf( i ) );
+            const OUString sTableName( OUString( "Table" ) + OUString::number( i ) );
             aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
         }
 

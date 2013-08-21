@@ -294,7 +294,7 @@ sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno:
     if( (rValue >>= nValue) &&
         (awt::FontStrikeout::SLASH == nValue || awt::FontStrikeout::X == nValue) )
     {
-        rStrExpValue = OUString::valueOf(
+        rStrExpValue = OUString(
             static_cast< sal_Unicode>( awt::FontStrikeout::SLASH == nValue ? '/'
                                                                       : 'X' ) );
         bRet = sal_True;

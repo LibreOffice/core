@@ -955,7 +955,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
         SharedResources aResources;
         OUString sMessage = aResources.getResourceStringWithSubstitution( STR_STRING_LENGTH_EXCEEDED,
             "$string$", _rSource,
-            "$maxlen$", OUString::valueOf( _nMaxLen ),
+            "$maxlen$", OUString::number( _nMaxLen ),
             "$charset$", lcl_getEncodingName( _eEncoding )
         );
 

@@ -1083,10 +1083,10 @@ XMLFile *SimpleXMLParser::Execute( const OUString &rFileName, XMLFile* pXMLFileI
             aErrorInformation.sMessage += pXMLFile->GetName();
         else
             aErrorInformation.sMessage += OUString( "XML-File (");
-        aErrorInformation.sMessage += OUString::valueOf(
+        aErrorInformation.sMessage += OUString::number(
             sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine));
         aErrorInformation.sMessage += OUString( ",");
-        aErrorInformation.sMessage += OUString::valueOf(
+        aErrorInformation.sMessage += OUString::number(
             sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn));
         aErrorInformation.sMessage += OUString( "): ");
 

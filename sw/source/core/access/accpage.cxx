@@ -121,9 +121,8 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
 
     SolarMutexGuard aGuard;
 
-    OUString sPage = OUString::valueOf(
-        static_cast<sal_Int32>(
-            static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() ) );
+    OUString sPage = OUString::number(
+        static_cast<const SwPageFrm*>( GetFrm() )->GetPhyPageNum() );
     SetName( GetResource( STR_ACCESS_PAGE_NAME, &sPage ) );
 }
 

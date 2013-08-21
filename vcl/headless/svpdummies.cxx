@@ -66,7 +66,7 @@ Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 
 OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
-   return "VirtualScreen " + OUString::valueOf(sal_Int32(nScreen));
+   return "VirtualScreen " + OUString::number(nScreen);
 }
 
 int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,

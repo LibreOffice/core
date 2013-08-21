@@ -1454,12 +1454,12 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
     OUString sName( _rBaseName );
     sal_Int32 nPos = 1;
     if ( _bStartWithNumber )
-        sName += OUString::valueOf( nPos );
+        sName += OUString::number( nPos );
 
     while ( aUsedNames.find( sName ) != aUsedNames.end() )
     {
         sName = _rBaseName;
-        sName += OUString::valueOf( ++nPos );
+        sName += OUString::number( ++nPos );
     }
     return sName;
 }
@@ -1976,7 +1976,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                     ::connectivity::SharedResources aResources;
                     const OUString sError( aResources.getResourceStringWithSubstitution(
                             STR_UNKNOWN_PARA_TYPE,
-                            "$position$", OUString::valueOf(parameterIndex)
+                            "$position$", OUString::number(parameterIndex)
                          ) );
                     ::dbtools::throwGenericSQLException(sError,NULL);
                 }

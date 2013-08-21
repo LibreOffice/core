@@ -604,7 +604,7 @@ UUIInteractionHelper::handleRequest_impl(
             sal_Int32 nMedium = 0;
             aWrongMediumException.Medium >>= nMedium;
             std::vector< OUString > aArguments;
-            aArguments.push_back(OUString::valueOf(nMedium + 1));
+            aArguments.push_back(OUString::number(nMedium + 1));
             handleErrorHandlerRequest(aWrongMediumException.Classification,
                                       ERRCODE_UUI_WRONGMEDIUM,
                                       aArguments,

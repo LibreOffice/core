@@ -157,7 +157,7 @@ void RscDefine::DefineToNumber()
     if( pExp )
         delete pExp;
     pExp = NULL;
-    SetName(OString::valueOf(lId));
+    SetName(OString::number(lId));
 }
 
 bool RscDefine::Evaluate()
@@ -179,7 +179,7 @@ OString RscDefine::GetMacro()
 {
     if( pExp )
         return pExp->GetMacro();
-    return OString::valueOf(lId);
+    return OString::number(lId);
 }
 
 RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,

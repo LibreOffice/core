@@ -190,7 +190,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                     // Create dispatchable .uno command and set it
-                    aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
+                    aCommand = aFontHeightCommand + OUString::number( fPoint );
                     pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                 }
             }
@@ -209,7 +209,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                         fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                         // Create dispatchable .uno command and set it
-                        aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
+                        aCommand = aFontHeightCommand + OUString::number( fPoint );
                         pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                     }
                     pTempAry++;
@@ -228,7 +228,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
             // Create dispatchable .uno command and set it
-            aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
+            aCommand = aFontHeightCommand + OUString::number( fPoint );
             pVCLPopupMenu->SetItemCommand( nPos, aCommand );
 
             pTempAry++;

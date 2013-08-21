@@ -166,7 +166,7 @@ MenuManager::MenuManager(
                         // Set item command for popup menu to enable it for GetImageFromURL
                         const static OUString aSlotString( "slot:" );
                         aItemCommand = aSlotString;
-                        aItemCommand += OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
+                        aItemCommand += OUString::number( ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
                         AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
@@ -570,7 +570,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 }
                 else
                 {
-                    aMenuShortCut = OUString::valueOf((sal_Int32)( i + 1 ));
+                    aMenuShortCut = OUString::number(( i + 1 ));
                     aMenuShortCut += ": ";
                 }
 
@@ -796,7 +796,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             {
                                 const static OUString aSlotString( "slot:" );
                                 aItemCommand = aSlotString;
-                                aItemCommand += OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
+                                aItemCommand += OUString::number( pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
 
@@ -946,7 +946,7 @@ sal_uInt16 MenuManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sa
     {
         const static OUString aSlotString( "slot:" );
         _rItemCommand = aSlotString;
-        _rItemCommand += OUString::valueOf( (sal_Int32)nItemId );
+        _rItemCommand += OUString::number( nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
     }
     return nItemId;

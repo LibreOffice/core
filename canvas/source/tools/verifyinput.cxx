@@ -227,7 +227,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): AffineMatrix2D contains infinite or NAN value(s) at the following positions (m00-m12): " +
-                    OUString::valueOf(nBinaryState),
+                    OUString::number(nBinaryState),
                     xIf, nArgPos );
             }
 #else
@@ -262,7 +262,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): Matrix2D contains infinite or NAN value(s) at the following positions (m00-m11): " +
-                    OUString::valueOf(nBinaryState),
+                    OUString::number(nBinaryState),
                     xIf, nArgPos );
             }
 #else
@@ -300,9 +300,9 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): render state's device color has too few components (" +
-                    OUString::valueOf(nMinColorComponents) +
+                    OUString::number(nMinColorComponents) +
                     " expected, " +
-                    OUString::valueOf(renderState.DeviceColor.getLength()) +
+                    OUString::number(renderState.DeviceColor.getLength()) +
                     " provided)",
                     xIf, nArgPos );
 #else
@@ -317,7 +317,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): render state's CompositeOperation value out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -342,7 +342,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): textures' alpha value out of range (is " +
-                    OUString::valueOf(texture.Alpha) + ")",
+                    OUString::number(texture.Alpha) + ")",
                     xIf, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
@@ -368,7 +368,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): textures' RepeatModeX value is out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeX)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeX)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -383,7 +383,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): textures' RepeatModeY value is out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -413,7 +413,7 @@ namespace canvas
                         throw lang::IllegalArgumentException(
                             OUString::createFromAscii(mpStr) +
                             ": verifyInput(): one of stroke attributes' DashArray value out of range (is " +
-                            OUString::valueOf(rVal) + ")",
+                            OUString::number(rVal) + ")",
                             mrIf, mnArgPos );
 #else
                         throw lang::IllegalArgumentException();
@@ -439,7 +439,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' StrokeWidth value out of range (is " +
-                    OUString::valueOf(strokeAttributes.StrokeWidth) +
+                    OUString::number(strokeAttributes.StrokeWidth) +
                     ")",
                     xIf, nArgPos );
 #else
@@ -454,7 +454,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' MiterLimit value out of range (is " +
-                    OUString::valueOf(strokeAttributes.MiterLimit) + ")",
+                    OUString::number(strokeAttributes.MiterLimit) + ")",
                     xIf, nArgPos );
 #else
                 throw lang::IllegalArgumentException();
@@ -476,7 +476,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' StartCapType value is out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.StartCapType)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.StartCapType)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -491,7 +491,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' StartCapType value is out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.EndCapType)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.EndCapType)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -506,7 +506,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyInput(): stroke attributes' JoinType value is out of range (" +
-                    OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
+                    OUString::number(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
                     " not known)",
                     xIf, nArgPos );
 #else
@@ -578,7 +578,7 @@ namespace canvas
                     throw lang::IllegalArgumentException(
                         OUString::createFromAscii(pStr) +
                         ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" +
-                        OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
+                        OUString::number(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
                         " not known)",
                         xIf, nArgPos );
 #else
@@ -683,7 +683,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyBitmapSize(): size has 0 or negative width (value: " +
-                    OUString::valueOf(size.Width) + ")",
+                    OUString::number(size.Width) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();
@@ -696,7 +696,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifyBitmapSize(): size has 0 or negative height (value: " +
-                    OUString::valueOf(size.Height) +
+                    OUString::number(size.Height) +
                     ")",
                     xIf, 0 );
 #else
@@ -717,7 +717,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifySpriteSize(): size has 0 or negative width (value: " +
-                    OUString::valueOf(size.Width) + ")",
+                    OUString::number(size.Width) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();
@@ -730,7 +730,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii(pStr) +
                     ": verifySpriteSize(): size has 0 or negative height (value: " +
-                    OUString::valueOf(size.Height) + ")",
+                    OUString::number(size.Height) + ")",
                     xIf, 0 );
 #else
                 throw lang::IllegalArgumentException();

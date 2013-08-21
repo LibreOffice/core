@@ -143,16 +143,16 @@ static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
 static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
 {
     rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
-    rComments->writeEscaped( OUString::valueOf( aRect.Left() ) );
+    rComments->writeEscaped( OUString::number( aRect.Left() ) );
     rComments->endElement( FSNS( XML_xdr, XML_col ) );
     rComments->startElement( FSNS( XML_xdr, XML_colOff ), FSEND );
-    rComments->writeEscaped( OUString::valueOf( aRect.Top() ) );
+    rComments->writeEscaped( OUString::number( aRect.Top() ) );
     rComments->endElement( FSNS( XML_xdr, XML_colOff ) );
     rComments->startElement( FSNS( XML_xdr, XML_row ), FSEND );
-    rComments->writeEscaped( OUString::valueOf( aRect.Right() ) );
+    rComments->writeEscaped( OUString::number( aRect.Right() ) );
     rComments->endElement( FSNS( XML_xdr, XML_row ) );
     rComments->startElement( FSNS( XML_xdr, XML_rowOff ), FSEND );
-    rComments->writeEscaped( OUString::valueOf( aRect.Bottom() ) );
+    rComments->writeEscaped( OUString::number( aRect.Bottom() ) );
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
 #endif
@@ -1334,7 +1334,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
 
     rComments->startElement( XML_comment,
             XML_ref,        XclXmlUtils::ToOString( maScPos ).getStr(),
-            XML_authorId,   OString::valueOf( nAuthorId ).getStr(),
+            XML_authorId,   OString::number( nAuthorId ).getStr(),
             // OOXTODO: XML_guid,
             FSEND );
     rComments->startElement( XML_text, FSEND );

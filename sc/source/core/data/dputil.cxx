@@ -92,7 +92,7 @@ OUString ScDPUtil::getDateGroupName(
     switch ( nDatePart )
     {
         case sheet::DataPilotFieldGroupBy::YEARS:
-            return OUString::valueOf(nValue);
+            return OUString::number(nValue);
         case sheet::DataPilotFieldGroupBy::QUARTERS:
             return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
         case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:

@@ -720,13 +720,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // Always show the slide/page number.
         OUString aOUString = SD_RESSTR(STR_SD_PAGE);
         aOUString += " ";
-        aOUString += OUString::valueOf( sal_Int32(maTabControl.GetCurPageId()) );
+        aOUString += OUString::number( maTabControl.GetCurPageId() );
         aOUString += " / " ;
-        aOUString += OUString::valueOf( nPageCount );
+        aOUString += OUString::number( nPageCount );
         if (nPageCount != nActivePageCount)
         {
             aOUString += " (";
-            aOUString += OUString::valueOf( nActivePageCount );
+            aOUString += OUString::number( nActivePageCount );
             aOUString += ")";
         }
 

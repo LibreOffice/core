@@ -222,7 +222,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             const static OUString sBaseName("Obj");
 
             sPersistentName = sBaseName;
-            sPersistentName += OUString::valueOf(sal_Int32(rDefinitions.size() + 1));
+            sPersistentName += OUString::number(rDefinitions.size() + 1);
             Reference<XNameAccess> xElements(getContainerStorage(),UNO_QUERY);
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);

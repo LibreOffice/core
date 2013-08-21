@@ -176,15 +176,15 @@ void writeValueContent(oslFileHandle handle, sal_Int16 value) {
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int32 value) {
-    writeData(handle, OString::valueOf(value));
+    writeData(handle, OString::number(value));
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int64 value) {
-    writeData(handle, OString::valueOf(value));
+    writeData(handle, OString::number(value));
 }
 
 void writeValueContent(oslFileHandle handle, double value) {
-    writeData(handle, OString::valueOf(value));
+    writeData(handle, OString::number(value));
 }
 
 void writeValueContent(oslFileHandle handle, OUString const & value) {

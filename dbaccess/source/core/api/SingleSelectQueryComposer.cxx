@@ -953,7 +953,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 sal_Int32 j = 0;
                 while ( aFindName != aNames.end() )
                 {
-                    sColumnName += OUString::valueOf(++j);
+                    sColumnName += OUString::number(++j);
                     aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
                 }
 

@@ -1163,7 +1163,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                     if ( eTranslateMode & TRANSLATE_NUMBER_TO_STRING )
                     {
                         Any aAny;
-                        OUString aNumber( OUString::valueOf( fVal ) );
+                        OUString aNumber( OUString::number( fVal ) );
                         aAny <<= aNumber;
                         exportAnimPropertyString( rStrm, nPropertyId, aNumber, eTranslateMode );
                     }
@@ -1423,7 +1423,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
     {
         double fNumber = 0.0;
         if ( rSourceValue >>= fNumber )
-            aDest += OUString::valueOf( fNumber );
+            aDest += OUString::number( fNumber );
     }
     else if ( rAttributeName == "Color"
             || rAttributeName == "FillColor"     // "Fillcolor" or "FillColor" ?
@@ -1437,21 +1437,21 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         if ( rSourceValue >>= aHSL )
         {
             aDest += "hsl(";
-            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
+            aDest += OUString::number( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
             aDest += aP;
-            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
+            aDest += OUString::number( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
             aDest += aP;
-            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
+            aDest += OUString::number( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
             aDest += ")";
         }
         else if ( rSourceValue >>= nColor )
         {
             aDest += "rgb(";
-            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)nColor ) );
+            aDest += OUString::number( ( (sal_Int8)nColor ) );
             aDest += aP;
-            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 8 ) ) );
+            aDest += OUString::number( ( (sal_Int8)( nColor >> 8 ) ) );
             aDest += aP;
-            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 16 ) ) );
+            aDest += OUString::number( ( (sal_Int8)( nColor >> 16 ) ) );
             aDest += ")";
         }
     }

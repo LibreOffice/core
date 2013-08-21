@@ -36,7 +36,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
     {
         rFamilyData.mnName++;
         sBuffer.append( rFamilyData.maStrPrefix );
-        sBuffer.append( OUString::valueOf( (sal_Int32)rFamilyData.mnName ) );
+        sBuffer.append( OUString::number( rFamilyData.mnName ) );
         msName = sBuffer.makeStringAndClear();
     }
     while (rFamilyData.maNameList.find(msName) != rFamilyData.maNameList.end());

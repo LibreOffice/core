@@ -1119,7 +1119,7 @@ void handleNameClashRename(
         nTry++;
 
         OUString aNewTitle = aOldTitlePre;
-        aNewTitle += OUString::valueOf( nTry );
+        aNewTitle += OUString::number( nTry );
         aNewTitle += aOldTitlePost;
 
         // Set new title

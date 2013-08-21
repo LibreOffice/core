@@ -976,13 +976,13 @@ OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, Runti
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDriverVersion" );
-    return OUString::valueOf((sal_Int32)1);
+    return OUString::number(1);
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ODatabaseMetaData::getDatabaseProductVersion" );
-    return OUString::valueOf((sal_Int32)0);
+    return OUString::number(0);
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)

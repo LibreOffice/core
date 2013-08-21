@@ -396,9 +396,9 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     if (( nFrom || nTo ) )
     {
         if ( nFrom )
-            sRange = OUString::valueOf( nFrom ) + sRange;
+            sRange = OUString::number( nFrom ) + sRange;
         if ( nTo )
-            sRange += OUString::valueOf( nTo );
+            sRange += OUString::number( nTo );
     }
 
     if (  PrToFileName.getValue() )
@@ -479,7 +479,7 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
         {
             sal_Bool bBool = false;
             pvargItem >>= bBool;
-            sString = OUString::valueOf( bBool );
+            sString = OUString::boolean( bBool );
             break;
         }
         case uno::TypeClass_STRING:
@@ -489,14 +489,14 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
             {
                 float aFloat = 0;
                 pvargItem >>= aFloat;
-                sString = OUString::valueOf( aFloat );
+                sString = OUString::number( aFloat );
                 break;
             }
         case uno::TypeClass_DOUBLE:
             {
                 double aDouble = 0;
                 pvargItem >>= aDouble;
-                sString = OUString::valueOf( aDouble );
+                sString = OUString::number( aDouble );
                 break;
             }
         case uno::TypeClass_SHORT:
@@ -505,7 +505,7 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
             {
                 sal_Int32 aNum = 0;
                 pvargItem >>= aNum;
-                sString = OUString::valueOf( aNum );
+                sString = OUString::number( aNum );
                 break;
             }
 
@@ -513,7 +513,7 @@ OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeExcepti
             {
                 sal_Int64 aHyper = 0;
                 pvargItem >>= aHyper;
-                sString = OUString::valueOf( aHyper );
+                sString = OUString::number( aHyper );
                 break;
             }
         default:
@@ -548,7 +548,7 @@ ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, cons
                 return scompname;
             }
         }
-        scompname = _sElementName + _sSuffixSeparator + OUString::valueOf( a++ );
+        scompname = _sElementName + _sSuffixSeparator + OUString::number( a++ );
     }
     return OUString();
 }

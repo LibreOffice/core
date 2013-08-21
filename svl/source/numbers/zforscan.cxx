@@ -1669,7 +1669,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                         sDiv += sStrArray[j++];
                     }
-                    if (OUString::valueOf(sDiv.toInt32()) == sDiv)
+                    if (OUString::number(sDiv.toInt32()) == sDiv)
                     {
                         // Found a Divisor
                         while (i < j)

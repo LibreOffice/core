@@ -885,7 +885,7 @@ static OUString ImpValueOfInKB( const sal_Int64& rVal )
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 10 );
     fVal += 0.05;
-    OUStringBuffer aVal( OUString::valueOf( fVal ) );
+    OUStringBuffer aVal( OUString::number( fVal ) );
     sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
     if ( nX > 0 )
         aVal.setLength( nX + 2 );

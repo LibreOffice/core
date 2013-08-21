@@ -717,7 +717,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
         sal_Int64       nValue = pImageList->aMaskColor.GetRGBColor();
 
         aColorStrBuffer.appendAscii( "#" );
-        aColorStrBuffer.append( OUString::valueOf( nValue, 16 ));
+        aColorStrBuffer.append( OUString::number( nValue, 16 ));
 
         pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKCOLOR ),
                              m_aAttributeType,
@@ -757,7 +757,7 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
 
     pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_BITMAPINDEX ),
                          m_aAttributeType,
-                         OUString::valueOf( (sal_Int32)pImage->nIndex ) );
+                         OUString::number( pImage->nIndex ) );
 
     pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
                          m_aAttributeType,

@@ -382,7 +382,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
-            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = OUString::number(nIntValue, 16);
         break;
         case NS_rtf::LN_STI:
         {
@@ -400,11 +400,11 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_rtf::LN_ISTDBASE:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = OUString::number(nIntValue, 16);
         break;
         case NS_rtf::LN_ISTDNEXT:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = OUString::number(nIntValue, 16);
         break;
         case NS_rtf::LN_FSCRATCH:
         case NS_rtf::LN_FINVALHEIGHT:
@@ -1275,7 +1275,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         }
     }
     sListLabel = OUString::createFromAscii( cListLabel );
-    sListLabel += OUString::valueOf( ++nStyleFound );
+    sListLabel += OUString::number( ++nStyleFound );
     //create a new one otherwise
     uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();

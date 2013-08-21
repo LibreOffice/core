@@ -1521,7 +1521,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 //---> i53420
             if (bLevelOK)
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
-                                     OUString::valueOf((sal_Int32)nLevel));
+                                     OUString::number(nLevel));
         }
 
 //--->i53420
@@ -1534,7 +1534,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
             if (bLevelOK)
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
-                                     OUString::valueOf((sal_Int32)nLevel));
+                                     OUString::number(nLevel));
         }
         // export template
         SvXMLElementExport aTemplateElement(GetExport(), XML_NAMESPACE_TEXT,

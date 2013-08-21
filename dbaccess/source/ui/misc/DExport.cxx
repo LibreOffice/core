@@ -656,12 +656,12 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
         while(m_aDestColumns.find(sName) != m_aDestColumns.end())
         {
             sName = aAlias;
-            sName += OUString::valueOf(++nPos);
+            sName += OUString::number(++nPos);
             if(nMaxNameLen && sName.getLength() > nMaxNameLen)
             {
                 aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-nCount, aAlias.getLength() ));
                 sName = aAlias;
-                sName += OUString::valueOf(nPos);
+                sName += OUString::number(nPos);
                 ++nCount;
             }
         }

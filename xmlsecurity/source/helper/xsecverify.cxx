@@ -68,9 +68,9 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 
     cssu::Sequence<cssu::Any> args(5);
-    args[0] = cssu::makeAny(OUString::valueOf(nSecurityId));
+    args[0] = cssu::makeAny(OUString::number(nSecurityId));
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
-    args[2] = cssu::makeAny(OUString::valueOf(nIdOfSignatureElementCollector));
+    args[2] = cssu::makeAny(OUString::number(nIdOfSignatureElementCollector));
     args[3] = cssu::makeAny(m_xSecurityContext);
     args[4] = cssu::makeAny(m_xXMLSignature);
     xInitialization->initialize(args);

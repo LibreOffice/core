@@ -312,7 +312,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
         OUString aDockWinCommand( ".uno:" );
         OUString aDockWinArgName( aDockWinPrefixCommand );
 
-        aDockWinArgName += OUString::valueOf( nIndex );
+        aDockWinArgName += OUString::number( nIndex );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
         aArgs[0].Name  = aDockWinArgName;

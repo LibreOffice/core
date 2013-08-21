@@ -237,7 +237,7 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
     do
     {
         aStr = aPersistName;
-        aStr += OUString::valueOf( i++ );
+        aStr += OUString::number( i++ );
     }
     while( HasEmbeddedObject( aStr ) );
     // TODO/LATER: should we consider deleted objects?

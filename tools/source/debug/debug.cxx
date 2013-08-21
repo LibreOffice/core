@@ -1624,7 +1624,7 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const c
             if ( caught >>= specialized )
             {
                 sMessage += "\ndetails: ";
-                sMessage += OString::valueOf( specialized.ErrCode );
+                sMessage += OString::number( specialized.ErrCode );
             }
         }
         sMessage += "\n";

@@ -586,7 +586,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
 
-    OUString aPageNo = OUString::valueOf ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
+    OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
     OUString aExt    = aPageNo + OUString(".ps");
 
     osl::File* pPageHeader = CreateSpoolFile ( OUString("psp_pghead"), aExt);
@@ -862,7 +862,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     {
         // note: this discards patch files not adhering to the "int" scheme
         // as there won't be a value for them
-        writeFeature( pFile, pKey, pKey->getValue( OUString::valueOf( patch_order.front() ) ), false );
+        writeFeature( pFile, pKey, pKey->getValue( OUString::number( patch_order.front() ) ), false );
         patch_order.pop_front();
     }
 }

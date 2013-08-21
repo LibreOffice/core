@@ -996,8 +996,8 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the features element
-    OUString sFeatures = OUString::valueOf(
-        (sal_Int64)nFeatures, 16);
+    OUString sFeatures = OUString::number(
+        nFeatures, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "features",
                     CXmlCharPtr(sFeatures));
     //add a new line for better readability
@@ -1006,8 +1006,8 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 
     //Create the requirements element
-    OUString sRequirements = OUString::valueOf(
-        (sal_Int64) nRequirements, 16);
+    OUString sRequirements = OUString::number(
+         nRequirements, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "requirements",
                     CXmlCharPtr(sRequirements));
     //add a new line for better readability

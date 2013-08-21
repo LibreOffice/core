@@ -241,7 +241,7 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
             for (sal_uInt32 i=nLength-1; i>=nSize; --i)
             {
                 OUString sTmp;
-                const OUString sRemove = OUString::valueOf((sal_Int32)i);
+                const OUString sRemove = OUString::number(i);
                 xOrderList->getByName(sRemove) >>= xSet;
                 xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sTmp;
                 xItemList->removeByName(sTmp);
@@ -379,7 +379,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                 try
                 {
                     OUString sUrl;
-                    xOrderList->getByName(OUString::valueOf(nItem)) >>= xSet;
+                    xOrderList->getByName(OUString::number(nItem)) >>= xSet;
                     xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sUrl;
 
                     xItemList->getByName(sUrl) >>= xSet;
@@ -473,26 +473,26 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             for (sal_Int32 i=0; i<nLength; ++i)
             {
                 OUString sTmp;
-                xOrderList->getByName(OUString::valueOf(i)) >>= xSet;
+                xOrderList->getByName(OUString::number(i)) >>= xSet;
                 xSet->getPropertyValue(sHistoryItemRef) >>= sTmp;
 
                 if(sURL == sTmp)
                 {
                     OUString sFind;
-                    xOrderList->getByName( OUString::valueOf(i) ) >>= xSet;
+                    xOrderList->getByName( OUString::number(i) ) >>= xSet;
                     xSet->getPropertyValue(sHistoryItemRef) >>= sFind;
                     for (sal_Int32 j=i-1; j>=0; --j)
                     {
                         css::uno::Reference< css::beans::XPropertySet > xPrevSet;
                         css::uno::Reference< css::beans::XPropertySet > xNextSet;
-                        xOrderList->getByName( OUString::valueOf(j+1) )   >>= xPrevSet;
-                        xOrderList->getByName( OUString::valueOf(j) )     >>= xNextSet;
+                        xOrderList->getByName( OUString::number(j+1) )   >>= xPrevSet;
+                        xOrderList->getByName( OUString::number(j) )     >>= xNextSet;
 
                         OUString sTemp;
                         xNextSet->getPropertyValue(sHistoryItemRef) >>= sTemp;
                         xPrevSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sTemp));
                     }
-                    xOrderList->getByName( OUString::valueOf((sal_Int32)0) ) >>= xSet;
+                    xOrderList->getByName( OUString::number(0) ) >>= xSet;
                     xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sFind));
 
                     ::comphelper::ConfigurationHelper::flush(m_xCfg);
@@ -513,7 +513,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             if ( nLength == nMaxSize )
             {
                 OUString sRemove;
-                xOrderList->getByName(OUString::valueOf(nLength-1)) >>= xSet;
+                xOrderList->getByName(OUString::number(nLength-1)) >>= xSet;
                 xSet->getPropertyValue(sHistoryItemRef) >>= sRemove;
                 try
                 {
@@ -537,18 +537,18 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             {
                 xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xOrderList, css::uno::UNO_QUERY);
                 xInst = xFac->createInstance();
-                OUString sPush = OUString::valueOf(nLength++);
+                OUString sPush = OUString::number(nLength++);
                 xOrderList->insertByName(sPush, css::uno::makeAny(xInst));
             }
             for (sal_Int32 j=nLength-1; j>0; --j)
             {
-                xOrderList->getByName( OUString::valueOf(j) )   >>= xPrevSet;
-                xOrderList->getByName( OUString::valueOf(j-1) ) >>= xNextSet;
+                xOrderList->getByName( OUString::number(j) )   >>= xPrevSet;
+                xOrderList->getByName( OUString::number(j-1) ) >>= xNextSet;
                 OUString sTemp;
                 xNextSet->getPropertyValue(sHistoryItemRef) >>= sTemp;
                 xPrevSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sTemp));
             }
-            xOrderList->getByName( OUString::valueOf((sal_Int32)0) ) >>= xSet;
+            xOrderList->getByName( OUString::number(0) ) >>= xSet;
             xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sURL));
 
             // Append the item to ItemList.

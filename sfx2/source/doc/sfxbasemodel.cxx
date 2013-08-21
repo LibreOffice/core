@@ -237,7 +237,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
         // increase global instance counter.
         ++g_nInstanceCounter;
         // set own Runtime UID
-        m_sRuntimeUID = OUString::valueOf( g_nInstanceCounter );
+        m_sRuntimeUID = OUString::number( g_nInstanceCounter );
     }
 
     virtual ~IMPL_SfxBaseModel_DataContainer()
@@ -3578,8 +3578,8 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                     OUString aTitle( "Toolbar " );
                     for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
                     {
-                        OUString aCustomTbxName = aNum + OUString::valueOf( i + 1 );
-                        OUString aCustomTbxTitle = aTitle + OUString::valueOf( i + 1 );
+                        OUString aCustomTbxName = aNum + OUString::number( i + 1 );
+                        OUString aCustomTbxTitle = aTitle + OUString::number( i + 1 );
 
                         Reference< container::XIndexContainer > xToolbar = rToolbars[i];
                         ConvertSlotsToCommands( pObjShell, xToolbar );

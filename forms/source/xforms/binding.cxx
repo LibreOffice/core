@@ -1022,7 +1022,7 @@ void Binding::_checkBindingID()
             do
             {
                 nNumber++;
-                sName = sIDPrefix + OUString::valueOf( nNumber );
+                sName = sIDPrefix + OUString::number( nNumber );
             }
             while( xBindings->hasByName( sName ) );
             setBindingID( sName );

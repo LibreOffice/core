@@ -2467,7 +2467,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     if (nOctets < 4)
                     {
                         aTheCanonic.append(
-                            OUString::valueOf(sal_Int32(nNumber)));
+                            OUString::number(nNumber));
                         aTheCanonic.append(sal_Unicode('.'));
                         ++nOctets;
                         eState = STATE_IP4_DOT;
@@ -2566,13 +2566,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == ']')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     eState = STATE_IP6_DONE;
                 }
                 else if (*p == ':')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
@@ -2611,13 +2611,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == ']')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     eState = STATE_IP6_DONE;
                 }
                 else if (*p == ':')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ1_COLON;
                 }
@@ -2626,7 +2626,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
                                   + (nNumber & 15);
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber)));
+                        OUString::number(nNumber));
                     aTheCanonic.append(sal_Unicode('.'));
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
@@ -2650,13 +2650,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == ']')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     eState = STATE_IP6_DONE;
                 }
                 else if (*p == ':')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
@@ -2690,13 +2690,13 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 if (*p == ']')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     eState = STATE_IP6_DONE;
                 }
                 else if (*p == ':')
                 {
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber), 16));
+                        OUString::number(nNumber, 16));
                     aTheCanonic.append(sal_Unicode(':'));
                     eState = STATE_IP6_HEXSEQ2_COLON;
                 }
@@ -2705,7 +2705,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     nNumber = 100 * (nNumber >> 8) + 10 * (nNumber >> 4 & 15)
                                   + (nNumber & 15);
                     aTheCanonic.append(
-                        OUString::valueOf(sal_Int32(nNumber)));
+                        OUString::number(nNumber));
                     aTheCanonic.append(sal_Unicode('.'));
                     nOctets = 2;
                     eState = STATE_IP6_IP4_DOT;
@@ -2730,7 +2730,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     if (nOctets == 4)
                     {
                         aTheCanonic.append(
-                            OUString::valueOf(sal_Int32(nNumber)));
+                            OUString::number(nNumber));
                         eState = STATE_IP6_DONE;
                     }
                     else
@@ -2739,7 +2739,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                     if (nOctets < 4)
                     {
                         aTheCanonic.append(
-                            OUString::valueOf(sal_Int32(nNumber)));
+                            OUString::number(nNumber));
                         aTheCanonic.append(sal_Unicode('.'));
                         ++nOctets;
                         eState = STATE_IP6_IP4_DOT;
@@ -2785,7 +2785,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             if (nOctets == 4)
             {
                 aTheCanonic.append(
-                    OUString::valueOf(sal_Int32(nNumber)));
+                    OUString::number(nNumber));
                 rBegin = p;
                 rCanonic = aTheCanonic.makeStringAndClear();
                 return true;
@@ -4118,7 +4118,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 {
                     m_aAbsURIRef.append(sal_Unicode(':'));
                     m_aPort.set(m_aAbsURIRef,
-                                OUString::valueOf(sal_Int64(nThePort)),
+                                OUString::number(nThePort),
                                 m_aAbsURIRef.getLength());
                 }
                 else
@@ -4241,7 +4241,7 @@ bool INetURLObject::SetPort(sal_uInt32 nThePort)
 {
     if (getSchemeInfo().m_bPort && m_aHost.isPresent())
     {
-        OUString aNewPort(OUString::valueOf(sal_Int64(nThePort)));
+        OUString aNewPort(OUString::number(nThePort));
         sal_Int32 nDelta;
         if (m_aPort.isPresent())
             nDelta = m_aPort.set(m_aAbsURIRef, aNewPort);

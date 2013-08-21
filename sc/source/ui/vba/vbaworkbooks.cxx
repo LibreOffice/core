@@ -342,7 +342,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
 
         getCurrentDelim() = nDelim; //set new current
 
-        sFormat = OUString::valueOf( (sal_Int32)nDelim ) + sRestOfFormat;
+        sFormat = OUString::number( nDelim ) + sRestOfFormat;
         sProps[ nIndex++ ].Value <<= sFormat;
         sProps[ nIndex ].Name = OUString("FilterName");
         sProps[ nIndex++ ].Value <<= OUString( "Text - txt - csv (StarCalc)" );

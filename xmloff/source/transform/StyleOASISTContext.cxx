@@ -322,7 +322,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_CHART,
                                 GetXMLToken( XML_SPLINES )),
-                            OUString::valueOf( nSplineType ));
+                            OUString::number( nSplineType ));
                     }
                     break;
                 case XML_OPTACTION_INTERVAL_MAJOR:
@@ -350,7 +350,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                                 GetTransformer().GetNamespaceMap().GetQNameByKey(
                                     XML_NAMESPACE_CHART,
                                     GetXMLToken( XML_SYMBOL )),
-                                OUString::valueOf( nSymbolType ));
+                                OUString::number( nSymbolType ));
                     }
                     break;
                 case XML_OPTACTION_SYMBOL_NAME:
@@ -394,7 +394,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                                 GetTransformer().GetNamespaceMap().GetQNameByKey(
                                     XML_NAMESPACE_CHART,
                                     GetXMLToken( XML_SYMBOL )),
-                                OUString::valueOf( nSymbolType ));
+                                OUString::number( nSymbolType ));
                     }
                     break;
                 // #i25616#
@@ -532,7 +532,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         sal_Int32 nValue;
                         ::sax::Converter::convertPercent( nValue, rAttrValue );
                         const double fValue = ((double)nValue) / 100.0;
-                        pAttrList->AddAttribute( rAttrName, OUString::valueOf( fValue ) );
+                        pAttrList->AddAttribute( rAttrName, OUString::number( fValue ) );
                     }
                     break;
                 case XML_ATACTION_OPACITY_FIX:

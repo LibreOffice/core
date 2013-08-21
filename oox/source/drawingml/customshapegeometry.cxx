@@ -99,13 +99,13 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
             {
                 double fValue = 0.0;
                 if ( rParameter.Value >>= fValue )
-                    aRet = OUString::valueOf( fValue );
+                    aRet = OUString::number( fValue );
             }
             else
             {
                 sal_Int32 nValue = 0;
                 if ( rParameter.Value >>= nValue )
-                    aRet = OUString::valueOf( nValue );
+                    aRet = OUString::number( nValue );
             }
         }
         break;
@@ -117,7 +117,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
                 if ( rParameter.Value >>= nFormulaIndex )
                 {
                     aRet = "?"
-                        + OUString::valueOf( nFormulaIndex )
+                        + OUString::number( nFormulaIndex )
                             + " ";
                 }
             }
@@ -135,7 +135,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
                 if ( rParameter.Value >>= nAdjustmentIndex )
                 {
                     aRet = "$"
-                        + OUString::valueOf( nAdjustmentIndex )
+                        + OUString::number( nAdjustmentIndex )
                             + " ";
                 }
             }
@@ -281,7 +281,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = "logheight/" + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "logheight/" + OUString::number( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -332,7 +332,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = "min(logwidth,logheight)/" + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "min(logwidth,logheight)/" + OUString::number( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -379,7 +379,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = "logwidth/" + OUString::valueOf( nIntVal );
+                aGuide.maFormula = "logwidth/" + OUString::number( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -1086,7 +1086,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
 
             // start angle
-            aGuide.maName = "arctosa" + OUString::valueOf( nArcNum );
+            aGuide.maName = "arctosa" + OUString::number( nArcNum );
             aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_stAng ).get() ) )
                 + ")/60000.0";
@@ -1094,7 +1094,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
 
             // swing angle
-            aGuide.maName = "arctosw" + OUString::valueOf( nArcNum );
+            aGuide.maName = "arctosw" + OUString::number( nArcNum );
             aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_swAng ).get() ) )
                 + ")/60000.0";

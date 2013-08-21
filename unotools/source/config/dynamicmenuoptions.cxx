@@ -120,7 +120,7 @@ class SvtDynMenu
               )
             {
                 rEntry.sName  = PATHPREFIX_USER;
-                rEntry.sName += OUString::valueOf( (sal_Int32)impl_getNextUserEntryNr() );
+                rEntry.sName += OUString::number( impl_getNextUserEntryNr() );
                 lUserEntries.push_back( rEntry );
             }
         }

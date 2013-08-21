@@ -1329,7 +1329,7 @@ OUString GetErrorMessage(
         }
         if ( eScriptError.lineNum != -1 )
         {
-            line = OUString::valueOf( eScriptError.lineNum );
+            line = OUString::number( eScriptError.lineNum );
             unformatted = CUI_RES( RID_SVXSTR_ERROR_AT_LINE );
         }
         else
@@ -1369,7 +1369,7 @@ OUString GetErrorMessage(
 
     if ( eScriptException.lineNum != -1 )
     {
-        line = OUString::valueOf( eScriptException.lineNum );
+        line = OUString::number( eScriptException.lineNum );
         unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE );
     }
     else

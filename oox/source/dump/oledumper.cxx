@@ -59,13 +59,13 @@ sal_Int32 OleInputObjectBase::dumpStdClipboardFormat( const String& rName )
 OUString OleInputObjectBase::dumpAnsiString32OrStdClip( const String& rName )
 {
     sal_Int32 nLen = mxStrm->readInt32();
-    return (nLen < 0) ? OUString::valueOf( dumpStdClipboardFormat( rName ) ) : dumpCharArray( rName, nLen, RTL_TEXTENCODING_MS_1252 );
+    return (nLen < 0) ? OUString::number( dumpStdClipboardFormat( rName ) ) : dumpCharArray( rName, nLen, RTL_TEXTENCODING_MS_1252 );
 }
 
 OUString OleInputObjectBase::dumpUniString32OrStdClip( const String& rName )
 {
     sal_Int32 nLen = mxStrm->readInt32();
-    return (nLen < 0) ? OUString::valueOf( dumpStdClipboardFormat( rName ) ) : dumpUnicodeArray( rName, nLen );
+    return (nLen < 0) ? OUString::number( dumpStdClipboardFormat( rName ) ) : dumpUnicodeArray( rName, nLen );
 }
 
 void OleInputObjectBase::writeOleColorItem( const String& rName, sal_uInt32 nColor )
@@ -1944,7 +1944,7 @@ bool VbaContainerStorageObject::isFormStorage( const OUString& rStrgPath ) const
         if( (aId.getLength() == 2) && (aId[ 0 ] == '0') )
             aId = aId.copy( 1 );
         sal_Int32 nId = aId.toInt32();
-        if( (nId > 0) && (OUString::valueOf( nId ) == aId) )
+        if( (nId > 0) && (OUString::number( nId ) == aId) )
             for( VbaFormSiteInfoVector::const_iterator aIt = maFormData.maSiteInfos.begin(), aEnd = maFormData.maSiteInfos.end(); aIt != aEnd; ++aIt )
                 if( aIt->mnId == nId )
                     return true;

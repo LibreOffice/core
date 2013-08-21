@@ -867,22 +867,22 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             break;
 
         case TypeClass_BYTE:
-            aRet <<= OUString::valueOf( (sal_Int32)*(sal_Int8 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_Int8 const *)rVal.getValue() );
             break;
         case TypeClass_SHORT:
-            aRet <<= OUString::valueOf( (sal_Int32)*(sal_Int16 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_Int16 const *)rVal.getValue() );
             break;
         case TypeClass_UNSIGNED_SHORT:
-            aRet <<= OUString::valueOf( (sal_Int32)*(sal_uInt16 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_uInt16 const *)rVal.getValue() );
             break;
         case TypeClass_LONG:
-            aRet <<= OUString::valueOf( *(sal_Int32 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_Int32 const *)rVal.getValue() );
             break;
         case TypeClass_UNSIGNED_LONG:
-            aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt32 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_uInt32 const *)rVal.getValue() );
             break;
         case TypeClass_HYPER:
-            aRet <<= OUString::valueOf( *(sal_Int64 const *)rVal.getValue() );
+            aRet <<= OUString::number( *(sal_Int64 const *)rVal.getValue() );
             break;
 //      case TypeClass_UNSIGNED_HYPER:
 //             aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt64 const *)rVal.getValue() );
@@ -890,7 +890,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             // handle unsigned hyper like double
 
         default:
-            aRet <<= OUString::valueOf( toDouble( rVal ) );
+            aRet <<= OUString::number( toDouble( rVal ) );
         }
         break;
 

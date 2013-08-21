@@ -310,7 +310,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsEx
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (Index < 0 || Index >= m_pElements->size() )
-        throw IndexOutOfBoundsException(OUString::valueOf(Index),static_cast<XTypeProvider*>(this));
+        throw IndexOutOfBoundsException(OUString::number(Index),static_cast<XTypeProvider*>(this));
 
     return makeAny(getObject(Index));
 }
@@ -413,7 +413,7 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if(index <0 || index >= getCount())
-        throw IndexOutOfBoundsException(OUString::valueOf(index),static_cast<XTypeProvider*>(this));
+        throw IndexOutOfBoundsException(OUString::number(index),static_cast<XTypeProvider*>(this));
 
     dropImpl(index);
 }

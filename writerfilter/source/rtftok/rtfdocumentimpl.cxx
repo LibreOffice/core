@@ -2610,7 +2610,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     if (nType)
                     {
                             uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
-                            xDefaulter->createCustomShapeDefaults(OUString::valueOf(nType));
+                            xDefaulter->createCustomShapeDefaults(OUString::number(nType));
                     }
                     m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;

@@ -451,7 +451,7 @@ void SfxConfigGroupListBox_Impl::InitModule()
         for (i1=0; i1<c1; ++i1)
         {
             sal_Int16&      rGroupID   = lGroups[i1];
-            OUString sGroupID   = OUString::valueOf((sal_Int32)rGroupID);
+            OUString sGroupID   = OUString::number(rGroupID);
             OUString sGroupName ;
 
             try

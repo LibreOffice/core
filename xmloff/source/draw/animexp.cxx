@@ -496,7 +496,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
                 if( rEffect.mnPathShapeId != -1 )
                 {
-                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PATH_ID, OUString::valueOf( rEffect.mnPathShapeId ) );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PATH_ID, OUString::number( rEffect.mnPathShapeId ) );
                 }
 
                 enum XMLTokenEnum eLocalName;

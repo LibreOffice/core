@@ -356,8 +356,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aStep = bFloat ? OUString::valueOf( fValue ) :
-                                     OUString::valueOf( nValue );
+                    aStep = bFloat ? OUString::number( fValue ) :
+                                     OUString::number( nValue );
                 break;
             }
         }
@@ -374,7 +374,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
 
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                 {
-                    aValue = bFloat ? OUString::valueOf( fValue ) : OUString::valueOf( nValue );
+                    aValue = bFloat ? OUString::number( fValue ) : OUString::number( nValue );
                     bFloatValue = bFloat;
                 }
                 break;
@@ -394,18 +394,18 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             {
                 if ( aName.equalsAsciiL( "Value", 5 ))
                 {
-                    aValue = bFloat ? OUString::valueOf( fValue ) : OUString::valueOf( nValue );
+                    aValue = bFloat ? OUString::number( fValue ) : OUString::number( nValue );
                     bFloatValue = bFloat;
                 }
                 else if ( aName.equalsAsciiL( "Step", 4 ))
-                    aStep = bFloat ? OUString::valueOf( fValue ) :
-                                     OUString::valueOf( nValue );
+                    aStep = bFloat ? OUString::number( fValue ) :
+                                     OUString::number( nValue );
                 else if ( aName.equalsAsciiL( "LowerLimit", 10 ))
-                    aMin = bFloat ? OUString::valueOf( fValue ) :
-                                    OUString::valueOf( nValue );
+                    aMin = bFloat ? OUString::number( fValue ) :
+                                    OUString::number( nValue );
                 else if ( aName.equalsAsciiL( "UpperLimit", 10 ))
-                    aMax = bFloat ? OUString::valueOf( fValue ) :
-                                    OUString::valueOf( nValue );
+                    aMax = bFloat ? OUString::number( fValue ) :
+                                    OUString::number( nValue );
             }
             else if ( aName.equalsAsciiL( "OutputFormat", 12 ))
                 rControlCommand.Arguments[i].Value >>= m_aOutFormat;
@@ -421,8 +421,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aMin = bFloat ? OUString::valueOf( fValue ) :
-                                    OUString::valueOf( nValue );
+                    aMin = bFloat ? OUString::number( fValue ) :
+                                    OUString::number( nValue );
                 break;
             }
         }
@@ -437,8 +437,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aMax = bFloat ? OUString::valueOf( fValue ) :
-                                    OUString::valueOf( nValue );
+                    aMax = bFloat ? OUString::number( fValue ) :
+                                    OUString::number( nValue );
                 break;
             }
         }
@@ -507,9 +507,9 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
     if ( m_aOutFormat.isEmpty() )
     {
         if ( m_bFloat )
-            return OUString::valueOf( fValue );
+            return OUString::number( fValue );
         else
-            return OUString::valueOf( sal_Int32( fValue ));
+            return OUString::number( sal_Int32( fValue ));
     }
     else
     {

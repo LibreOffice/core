@@ -1585,7 +1585,7 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
                 xSlideProperties->getPropertyValue("LinkDisplayName") >>= msText;
 
             if (msText.isEmpty())
-                msText = "Slide " + OUString::valueOf(nSlideIndex + 1);
+                msText = "Slide " + OUString::number(nSlideIndex + 1);
         }
     }
     else

@@ -89,18 +89,18 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     if( rStrm.getVersion() != oox::core::ISOIEC_29500_2008 ||
         mrData.mnStrictPaperSize != EXC_PAPERSIZE_USER )
     {
-        pAttrList->add( XML_paperSize,           OString::valueOf( (sal_Int32) mrData.mnPaperSize ).getStr() );
+        pAttrList->add( XML_paperSize,           OString::number(  mrData.mnPaperSize ).getStr() );
     }
     else
     {
-        pAttrList->add( XML_paperWidth,          OString::valueOf( (sal_Int32) mrData.mnPaperWidth ).concat(OString("mm")).getStr() );
-        pAttrList->add( XML_paperHeight,         OString::valueOf( (sal_Int32) mrData.mnPaperHeight ).concat(OString("mm")).getStr() );
+        pAttrList->add( XML_paperWidth,          OString::number(  mrData.mnPaperWidth ).concat(OString("mm")).getStr() );
+        pAttrList->add( XML_paperHeight,         OString::number(  mrData.mnPaperHeight ).concat(OString("mm")).getStr() );
         // pAttrList->add( XML_paperUnits,          "mm" );
     }
-    pAttrList->add( XML_scale,              OString::valueOf( (sal_Int32) mrData.mnScaling ).getStr() );
-    pAttrList->add( XML_firstPageNumber,    OString::valueOf( (sal_Int32) mrData.mnStartPage ).getStr() );
-    pAttrList->add( XML_fitToWidth,         OString::valueOf( (sal_Int32) mrData.mnFitToWidth ).getStr() );
-    pAttrList->add( XML_fitToHeight,        OString::valueOf( (sal_Int32) mrData.mnFitToHeight ).getStr() );
+    pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ).getStr() );
+    pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ).getStr() );
+    pAttrList->add( XML_fitToWidth,         OString::number(  mrData.mnFitToWidth ).getStr() );
+    pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ).getStr() );
     pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
     pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   // OOXTODO: "default"?
     pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ) );
@@ -109,9 +109,9 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
     pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
     // OOXTODO: XML_errors, // == displayed|blank|dash|NA
-    pAttrList->add( XML_horizontalDpi,      OString::valueOf( (sal_Int32) mrData.mnHorPrintRes ).getStr() );
-    pAttrList->add( XML_verticalDpi,        OString::valueOf( (sal_Int32) mrData.mnVerPrintRes ).getStr() );
-    pAttrList->add( XML_copies,             OString::valueOf( (sal_Int32) mrData.mnCopies ).getStr() );
+    pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
+    pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );
+    pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ).getStr() );
     // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > aAttrs(pAttrList);
@@ -185,7 +185,7 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
 
     sal_Int32 nElement = GetRecId() == EXC_ID_HORPAGEBREAKS ? XML_rowBreaks : XML_colBreaks;
     sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
-    OString sNumPageBreaks = OString::valueOf( (sal_Int32) mrPageBreaks.size() );
+    OString sNumPageBreaks = OString::number(  mrPageBreaks.size() );
     pWorksheet->startElement( nElement,
             XML_count,              sNumPageBreaks.getStr(),
             XML_manualBreakCount,   sNumPageBreaks.getStr(),
@@ -193,9 +193,9 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
     for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
     {
         pWorksheet->singleElement( XML_brk,
-                XML_id,     OString::valueOf( (sal_Int32) *aIt ).getStr(),
+                XML_id,     OString::number(  *aIt ).getStr(),
                 XML_man,    "true",
-                XML_max,    OString::valueOf( (sal_Int32) mnMaxPos ).getStr(),
+                XML_max,    OString::number(  mnMaxPos ).getStr(),
                 XML_min,    "0",
                 // OOXTODO: XML_pt, "",
                 FSEND );

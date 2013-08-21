@@ -807,7 +807,7 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString&
         {
             OUString aTryName = aPrefix;
             if ( nInd )
-                aTryName += OUString::valueOf( nInd );
+                aTryName += OUString::number( nInd );
 
             try
             {
@@ -870,7 +870,7 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
             sal_Bool bCreated = sal_False;
             OUString aTryName = aPrefix;
             if ( nInd )
-                aTryName += OUString::valueOf( nInd );
+                aTryName += OUString::number( nInd );
             if ( aExt.toChar() != '.' )
                 aTryName += OUString( "."  );
             aTryName += aExt;

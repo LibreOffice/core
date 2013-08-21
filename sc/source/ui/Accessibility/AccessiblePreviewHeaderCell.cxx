@@ -387,7 +387,7 @@ OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(un
     else
     {
         // name of row header
-        sName += OUString::valueOf( (sal_Int32) ( maCellPos.Row() + 1 ) );
+        sName += OUString::number(  ( maCellPos.Row() + 1 ) );
     }
 
     return sName;

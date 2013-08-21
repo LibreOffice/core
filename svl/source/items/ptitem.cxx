@@ -75,7 +75,7 @@ SfxItemPresentation SfxPointItem::GetPresentation
 )   const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
-    rText = OUString::valueOf(aVal.X()) + ", " + OUString::valueOf(aVal.Y()) + ", ";
+    rText = OUString::number(aVal.X()) + ", " + OUString::number(aVal.Y()) + ", ";
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 

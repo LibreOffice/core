@@ -954,7 +954,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 {
                     sal_Int32 nGroupId = 0;
                     if( pValue->Value >>= nGroupId )
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::valueOf( nGroupId ) );
+                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_GROUP_ID, OUString::number( nGroupId ) );
                 }
                 else
                 {

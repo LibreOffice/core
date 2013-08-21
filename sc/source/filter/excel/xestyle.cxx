@@ -1129,7 +1129,7 @@ void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_fonts,
-            XML_count,  OString::valueOf( (sal_Int32) maFontList.GetSize() ).getStr(),
+            XML_count,  OString::number(  maFontList.GetSize() ).getStr(),
             FSEND );
 
     maFontList.SaveXml( rStrm );
@@ -1279,7 +1279,7 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_numFmts,
-            XML_count,  OString::valueOf( (sal_Int32) maFormatMap.size() ).getStr(),
+            XML_count,  OString::number(  maFormatMap.size() ).getStr(),
             FSEND );
     for( XclExpNumFmtVec::iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
     {
@@ -1531,9 +1531,9 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
     rStrm.GetCurrentStream()->singleElement( XML_alignment,
             XML_horizontal,         ToHorizontalAlignment( mnHorAlign ),
             XML_vertical,           ToVerticalAlignment( mnVerAlign ),
-            XML_textRotation,       OString::valueOf( (sal_Int32) mnRotation ).getStr(),
+            XML_textRotation,       OString::number(  mnRotation ).getStr(),
             XML_wrapText,           XclXmlUtils::ToPsz( mbLineBreak ),
-            XML_indent,             OString::valueOf( (sal_Int32) mnIndent ).getStr(),
+            XML_indent,             OString::number(  mnIndent ).getStr(),
             // OOXTODO: XML_relativeIndent,     mnIndent?
             // OOXTODO: XML_justifyLastLine,
             XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink ),
@@ -2110,11 +2110,11 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     }
 
     rStyleSheet->startElement( XML_xf,
-            XML_numFmtId,           OString::valueOf( (sal_Int32) mnXclNumFmt ).getStr(),
-            XML_fontId,             OString::valueOf( (sal_Int32) mnXclFont ).getStr(),
-            XML_fillId,             OString::valueOf( (sal_Int32) mnFillId ).getStr(),
-            XML_borderId,           OString::valueOf( (sal_Int32) mnBorderId ).getStr(),
-            XML_xfId,               IsStyleXF() ? NULL : OString::valueOf( nXfId ).getStr(),
+            XML_numFmtId,           OString::number(  mnXclNumFmt ).getStr(),
+            XML_fontId,             OString::number(  mnXclFont ).getStr(),
+            XML_fillId,             OString::number(  mnFillId ).getStr(),
+            XML_borderId,           OString::number(  mnBorderId ).getStr(),
+            XML_xfId,               IsStyleXF() ? NULL : OString::number( nXfId ).getStr(),
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
@@ -2231,11 +2231,11 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     nXFId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( nXFId );
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
             XML_name,           sName.getStr(),
-            XML_xfId,           OString::valueOf( nXFId ).getStr(),
+            XML_xfId,           OString::number( nXFId ).getStr(),
 /* mso-excel 2007 complains when it finds builtinId >= 55, it is not
  * bothered by multiple 54 values. */
 #define CELL_STYLE_MAX_BUILTIN_ID 55
-                                             XML_builtinId, OString::valueOf( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
+                                             XML_builtinId, OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
             XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
@@ -2519,7 +2519,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
 
     rStyleSheet->startElement( XML_fills,
-            XML_count,  OString::valueOf( (sal_Int32) maFills.size() ).getStr(),
+            XML_count,  OString::number(  maFills.size() ).getStr(),
             FSEND );
     for( XclExpFillList::iterator aIt = maFills.begin(), aEnd = maFills.end();
             aIt != aEnd; ++aIt )
@@ -2529,7 +2529,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_fills );
 
     rStyleSheet->startElement( XML_borders,
-            XML_count,  OString::valueOf( (sal_Int32) maBorders.size() ).getStr(),
+            XML_count,  OString::number(  maBorders.size() ).getStr(),
             FSEND );
     for( XclExpBorderList::iterator aIt = maBorders.begin(), aEnd = maBorders.end();
             aIt != aEnd; ++aIt )
@@ -2545,7 +2545,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     if( nStyles > 0 )
     {
         rStyleSheet->startElement( XML_cellStyleXfs,
-                XML_count,  OString::valueOf( nStyles ).getStr(),
+                XML_count,  OString::number( nStyles ).getStr(),
                 FSEND );
         size_t nXFCount = maSortedXFList.GetSize();
         for( size_t i = 0; i < nXFCount; ++i )
@@ -2561,7 +2561,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     if( nCells > 0 )
     {
         rStyleSheet->startElement( XML_cellXfs,
-                XML_count,  OString::valueOf( nCells ).getStr(),
+                XML_count,  OString::number( nCells ).getStr(),
                 FSEND );
         size_t nXFCount = maSortedXFList.GetSize();
         for( size_t i = 0; i < nXFCount; ++i )
@@ -2576,7 +2576,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     // save all STYLE records
     rStyleSheet->startElement( XML_cellStyles,
-            XML_count,  OString::valueOf( (sal_Int32) maStyleList.GetSize() ).getStr(),
+            XML_count,  OString::number(  maStyleList.GetSize() ).getStr(),
             FSEND );
     maStyleList.SaveXml( rStrm );
     rStyleSheet->endElement( XML_cellStyles );

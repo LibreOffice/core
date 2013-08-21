@@ -1321,7 +1321,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     for (sal_Int32 i = 0;  i < nSortedRanges;  ++i)
     {
         if (!aSortedCellRanges.isEmpty())
-            aSortedCellRanges += OUString::valueOf( (sal_Unicode) ';');
+            aSortedCellRanges += OUString( (sal_Unicode) ';');
         aSortedCellRanges += pSortedRanges[i];
     }
 
@@ -1854,13 +1854,13 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
             throw lang::IllegalArgumentException();
 
         OUString aTmp( aCellRange.aTableName );
-        aTmp += OUString::valueOf((sal_Unicode) '.');
+        aTmp += OUString((sal_Unicode) '.');
         aTmp += sw_GetCellName( aCellRange.aUpperLeft.nColumn,
                                  aCellRange.aUpperLeft.nRow );
         // does cell range consist of more than a single cell?
         if (!aCellRange.aLowerRight.bIsEmpty)
         {
-            aTmp += OUString::valueOf((sal_Unicode) ':');
+            aTmp += OUString((sal_Unicode) ':');
             aTmp += sw_GetCellName( aCellRange.aLowerRight.nColumn,
                                      aCellRange.aLowerRight.nRow );
         }

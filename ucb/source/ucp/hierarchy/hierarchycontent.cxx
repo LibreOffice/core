@@ -1450,7 +1450,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 {
                     OUString aNewId = xId->getContentIdentifier();
                     aNewId += OUString("_");
-                    aNewId += OUString::valueOf( ++nTry );
+                    aNewId += OUString::number( ++nTry );
                     xId = new ::ucbhelper::ContentIdentifier( aNewId );
                 }
                 while ( hasData( xId ) && ( nTry < 1000 ) );
@@ -1470,7 +1470,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 {
                     OUString aNewTitle( m_aProps.getTitle() );
                     aNewTitle += OUString("_");
-                    aNewTitle += OUString::valueOf( nTry );
+                    aNewTitle += OUString::number( nTry );
                     m_aProps.setTitle( aNewTitle );
                 }
             }

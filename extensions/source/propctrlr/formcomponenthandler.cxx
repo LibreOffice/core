@@ -397,7 +397,7 @@ namespace pcr
                         for ( i = 0; i < nNewCount; ++i )
                         {
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::valueOf( nUniqueId );
+                            OUString aPureIdStr = OUString::number( nUniqueId );
                             aPureIdStr += aIdStrBase;
                             pNewPureIds[i] = aPureIdStr;
                             // Force usage of next Unique Id

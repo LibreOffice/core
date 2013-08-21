@@ -1829,7 +1829,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sal_uInt32 nTagBkmk = SVBT32ToUInt32(pDescri->ITagBkmk);
         if (nTagBkmk != 0xFFFFFFFF)
         {
-            sName = OUString::valueOf(sal_Int32(nTagBkmk));
+            sName = OUString::number(nTagBkmk);
             int nAtnIndex = GetAnnotationIndex(nTagBkmk);
             if (nAtnIndex != -1)
             {
@@ -5860,7 +5860,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     if( bRet )
     {
         rStorageName = OUString('_');
-        rStorageName += OUString::valueOf(nPictureId);
+        rStorageName += OUString::number(nPictureId);
         rSrcStorage = rReader.pStg->OpenSotStorage(OUString(
             SL::aObjectPool));
         if (!rReader.mpDocShell)

@@ -350,7 +350,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     {
         const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", OUString::valueOf(parameterIndex)
+                "$position$", OUString::number(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

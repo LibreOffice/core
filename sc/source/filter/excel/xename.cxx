@@ -319,7 +319,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_functionGroupId, "",
             // OOXTODO: XML_help, "",
             XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
-            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::valueOf( (sal_Int32)mnScTab ).getStr(),
+            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
             XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",

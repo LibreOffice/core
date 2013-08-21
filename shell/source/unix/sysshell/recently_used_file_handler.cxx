@@ -122,7 +122,7 @@ namespace /* private */ {
             write_xml_tag(TAG_URI, uri_, file);
             write_xml_tag(TAG_MIME_TYPE, mime_type_, file);
 
-            OString ts = OString::valueOf((sal_sSize)timestamp_);
+            OString ts = OString::number(timestamp_);
             write_xml_tag(TAG_TIMESTAMP, ts.getStr(), file);
 
             if (is_private_)

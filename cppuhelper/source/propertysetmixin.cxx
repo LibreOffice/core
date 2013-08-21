@@ -513,7 +513,7 @@ rtl::OUString PropertySetMixinImpl::Impl::translateHandle(
     if (handle < 0 || handle >= handleMap.getLength()) {
         throw css::beans::UnknownPropertyException(
             (rtl::OUString("bad handle ")
-             + rtl::OUString::valueOf(handle)),
+             + rtl::OUString::number(handle)),
             object);
     }
     return handleMap[handle];
@@ -1362,7 +1362,7 @@ void PropertySetMixinImpl::setPropertyValues(
                     (rtl::OUString("name ")
                      + props[i].Name
                      + rtl::OUString(" does not match handle ")
-                     + rtl::OUString::valueOf(props[i].Handle)),
+                     + rtl::OUString::number(props[i].Handle)),
                     static_cast< css::beans::XPropertySet * >(this));
             }
             m_impl->setProperty(

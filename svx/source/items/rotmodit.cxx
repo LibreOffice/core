@@ -80,7 +80,7 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
 //          break; // DURCHFALLEN!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += OUString::valueOf( GetValue() );
+            rText += OUString( GetValue() );
             break;
         default: ;//prevent warning
     }

@@ -172,31 +172,31 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                 }
                 break;
             case ESCHER_Prop_fillColor:
-                m_aShapeProps.insert(std::pair<OString,OString>("fillColor", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("fillColor", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fillBackColor:
-                m_aShapeProps.insert(std::pair<OString,OString>("fillBackColor", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("fillBackColor", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_AnchorText:
-                m_aShapeProps.insert(std::pair<OString,OString>("anchorText", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("anchorText", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fNoFillHitTest:
                 if (it->nPropValue)
-                    m_aShapeProps.insert(std::pair<OString,OString>("fNoFillHitTest", OString::valueOf(sal_Int32(1))));
+                    m_aShapeProps.insert(std::pair<OString,OString>("fNoFillHitTest", OString::number(1)));
                 break;
             case ESCHER_Prop_fNoLineDrawDash:
                 // for some reason the value is set to 0x90000 if lines are switched off
                 if( it->nPropValue == 0x90000 )
-                    m_aShapeProps.insert(std::pair<OString,OString>("fLine", OString::valueOf(sal_Int32(0))));
+                    m_aShapeProps.insert(std::pair<OString,OString>("fLine", OString::number(0)));
                 break;
             case ESCHER_Prop_lineColor:
-                m_aShapeProps.insert(std::pair<OString,OString>("lineColor", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("lineColor", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_lineBackColor:
-                m_aShapeProps.insert(std::pair<OString,OString>("lineBackColor", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("lineBackColor", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_lineJoinStyle:
-                m_aShapeProps.insert(std::pair<OString,OString>("lineJoinStyle", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("lineJoinStyle", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fshadowObscured:
                 if (it->nPropValue)
@@ -219,9 +219,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                     }
 
                     m_aShapeProps.insert(std::pair<OString,OString>("geoLeft",
-                                OString::valueOf(sal_Int32(sal_Int32( nLeft )))));
+                                OString::number(sal_Int32( nLeft ))));
                     m_aShapeProps.insert(std::pair<OString,OString>("geoTop",
-                                OString::valueOf(sal_Int32(sal_Int32( nTop )))));
+                                OString::number(sal_Int32( nTop ))));
                 }
                 break;
 
@@ -244,9 +244,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                     }
 
                     m_aShapeProps.insert(std::pair<OString,OString>("geoRight",
-                                OString::valueOf(sal_Int32(sal_Int32( nRight ) - sal_Int32( nLeft )))));
+                                OString::number(sal_Int32( nRight ) - sal_Int32( nLeft ))));
                     m_aShapeProps.insert(std::pair<OString,OString>("geoBottom",
-                                OString::valueOf(sal_Int32(sal_Int32( nBottom ) - sal_Int32( nTop )))));
+                                OString::number(sal_Int32( nBottom ) - sal_Int32( nTop ))));
                 }
                 break;
             case ESCHER_Prop_pVertices:
@@ -341,31 +341,31 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                     m_aShapeProps.insert(std::pair<OString,OString>("fFillOK", "0"));
                 break;
             case ESCHER_Prop_dxTextLeft:
-                m_aShapeProps.insert(std::pair<OString,OString>("dxTextLeft", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("dxTextLeft", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_dyTextTop:
-                m_aShapeProps.insert(std::pair<OString,OString>("dyTextTop", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("dyTextTop", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_dxTextRight:
-                m_aShapeProps.insert(std::pair<OString,OString>("dxTextRight", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("dxTextRight", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_dyTextBottom:
-                m_aShapeProps.insert(std::pair<OString,OString>("dyTextBottom", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("dyTextBottom", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_FitTextToShape:
                 // Size text to fit shape size: not supported by RTF
                 break;
             case ESCHER_Prop_adjustValue:
-                m_aShapeProps.insert(std::pair<OString,OString>("adjustValue", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("adjustValue", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_txflTextFlow:
-                m_aShapeProps.insert(std::pair<OString,OString>("txflTextFlow", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("txflTextFlow", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fillType:
-                m_aShapeProps.insert(std::pair<OString,OString>("fillType", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("fillType", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fillOpacity:
-                m_aShapeProps.insert(std::pair<OString,OString>("fillOpacity", OString::valueOf(sal_Int32(it->nPropValue))));
+                m_aShapeProps.insert(std::pair<OString,OString>("fillOpacity", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_fillBlip:
                 {
@@ -472,7 +472,7 @@ sal_Int32 RtfSdrExport::StartShape()
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
         return -1;
 
-    m_aShapeProps.insert(std::pair<OString,OString>("shapeType", OString::valueOf(sal_Int32(m_nShapeType))));
+    m_aShapeProps.insert(std::pair<OString,OString>("shapeType", OString::number(m_nShapeType)));
     if (ESCHER_ShpInst_PictureFrame == m_nShapeType)
         impl_writeGraphic();
 

@@ -158,7 +158,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 while( (sal_uInt16)-1 != nCurPos )
                 {
                     sShortcut.Erase( nLen ) +=
-                        OUString::valueOf(++nStart);    // add an Number to it
+                        OUString::number(++nStart);    // add an Number to it
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
 

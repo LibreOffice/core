@@ -382,7 +382,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                                 // values
                                 Reference< chart2::data::XDataSequence > xNewSeq(
                                     xDataProvider->createDataSequenceByRangeRepresentation(
-                                        OUString::valueOf( nIndex )));
+                                        OUString::number( nIndex )));
                                 lcl_copyDataSequenceProperties(
                                     aLSequences[nSeqIdx]->getValues(), xNewSeq );
                                 aLSequences[nSeqIdx]->setValues( xNewSeq );
@@ -391,7 +391,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                                 Reference< chart2::data::XDataSequence > xNewLabelSeq(
                                     xDataProvider->createDataSequenceByRangeRepresentation(
                                         "label " +
-                                        OUString::valueOf( nIndex )));
+                                        OUString::number( nIndex )));
                                 lcl_copyDataSequenceProperties(
                                     aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
                                 aLSequences[nSeqIdx]->setLabel( xNewLabelSeq );

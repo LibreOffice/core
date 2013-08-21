@@ -171,7 +171,7 @@ OUString implCreatePureResourceId
       Reference< XStringResourceManager > xStringResourceManager )
 {
     sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-    OUString aPureIdStr = OUString::valueOf( nUniqueId );
+    OUString aPureIdStr = OUString::number( nUniqueId );
     aPureIdStr += aDot;
     aPureIdStr += aDialogName;
     aPureIdStr += aDot;
@@ -433,7 +433,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             }
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::valueOf( nUniqueId );
+                            OUString aPureIdStr = OUString::number( nUniqueId );
                             aPureIdStr += aIdStrBase;
 
                             // Set Id for all locales
@@ -527,7 +527,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::valueOf( nUniqueId );
+                            OUString aPureIdStr = OUString::number( nUniqueId );
                             aPureIdStr += aIdStrBase;
 
                             // Set Id for all locales
@@ -576,7 +576,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
-                            OUString aPureIdStr = OUString::valueOf( nUniqueId );
+                            OUString aPureIdStr = OUString::number( nUniqueId );
                             aPureIdStr += aIdStrBase;
 
                             // Set Id for all locales

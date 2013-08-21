@@ -207,7 +207,7 @@ void XPMWriter::ImplWriteBody()
 
 void XPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
-    const OString aNum(OString::valueOf(nNumber));
+    const OString aNum(OString::number(nNumber));
     m_rOStm << aNum.getStr();
 }
 

@@ -253,7 +253,7 @@ void    BibConfig::Commit()
         const Mapping* pMapping = &(*pMappingsArr)[i];
         OUString sPrefix(cDataSourceHistory);
         sPrefix += "/_";
-        sPrefix += OUString::valueOf(i);
+        sPrefix += OUString::number(i);
         sPrefix += "/";
         pNodeValues[nIndex].Name    = sPrefix;
         pNodeValues[nIndex].Name    += sName;
@@ -277,7 +277,7 @@ void    BibConfig::Commit()
         {
             OUString sSubPrefix(sPrefix);
             sSubPrefix += "/_";
-            sSubPrefix += OUString::valueOf(nFieldAssignment);
+            sSubPrefix += OUString::number(nFieldAssignment);
             Sequence< PropertyValue > aAssignmentValues(2);
             PropertyValue* pAssignmentValues = aAssignmentValues.getArray();
             pAssignmentValues[0].Name   = sSubPrefix;

@@ -458,7 +458,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         long nNumber = ImplGetNumber( &pDest, nCount );
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
-            aString += " LanguageLevel:" + OUString::valueOf( nNumber );
+            aString += " LanguageLevel:" + OUString::number( nNumber );
         }
     }
     aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );

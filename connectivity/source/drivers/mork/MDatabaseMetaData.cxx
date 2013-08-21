@@ -654,13 +654,13 @@ OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, Runti
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    OUString aValue = OUString::valueOf((sal_Int32)1);
+    OUString aValue = OUString::number(1);
     return aValue;
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
-    OUString aValue = OUString::valueOf((sal_Int32)0);
+    OUString aValue = OUString::number(0);
     return aValue;
 }
 // -------------------------------------------------------------------------

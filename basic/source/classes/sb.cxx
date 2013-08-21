@@ -1734,7 +1734,7 @@ sal_Bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sa
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
-            OUString aTmp = "\'" + OUString::valueOf(SbxErrObject::getUnoErrObject()->getNumber()) +
+            OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
                             "\'\n" + OUString(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
             code = (sal_uIntPtr)*new StringErrorInfo( code, aTmp );
         }

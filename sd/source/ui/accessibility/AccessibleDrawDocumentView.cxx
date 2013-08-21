@@ -239,7 +239,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + OUString::valueOf(nIndex),
+            "no accessible child with index " + OUString::number(nIndex),
             static_cast<uno::XWeak*>(this));
 }
 
@@ -683,7 +683,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
                 sal_Int16 nPageNumber (0);
                 if (xProperties->getPropertyValue("Number") >>= nPageNumber)
                 {
-                    sNewName += OUString::valueOf(sal_Int32(nPageNumber));
+                    sNewName += OUString::number(nPageNumber);
                 }
             }
             catch (beans::UnknownPropertyException&)
@@ -699,7 +699,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
         if (xPages.is())
         {
             sNewName += " / ";
-            sNewName += OUString::valueOf(xPages->getCount());
+            sNewName += OUString::number(xPages->getCount());
         }
     }
 

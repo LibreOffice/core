@@ -66,7 +66,7 @@ void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
 {
     mnIndex = nIndex;
     OUStringBuffer aBuffer(maStrCondition);
-    aBuffer.append(OUString::valueOf(nIndex));
+    aBuffer.append(OUString::number(nIndex));
     maFtCondNr.SetText(aBuffer.makeStringAndClear());
 }
 

@@ -113,7 +113,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                     nFound = pCurWin->StartSearchAndReplace(rSearchItem);
 
                 OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
-                aReplStr = aReplStr.replaceAll("XX", OUString::valueOf(nFound));
+                aReplStr = aReplStr.replaceAll("XX", OUString::number(nFound));
                 InfoBox( pCurWin, aReplStr ).Execute();
             }
             else

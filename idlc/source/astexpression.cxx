@@ -1145,23 +1145,23 @@ OString AstExpression::toString()
         switch (m_exprValue->et)
         {
             case ET_short:
-                return OString::valueOf((sal_Int32)m_exprValue->u.sval);
+                return OString::number(m_exprValue->u.sval);
             case ET_ushort:
-                return OString::valueOf((sal_Int32)m_exprValue->u.usval);
+                return OString::number(m_exprValue->u.usval);
             case ET_long:
-                return OString::valueOf(m_exprValue->u.lval);
+                return OString::number(m_exprValue->u.lval);
             case ET_ulong:
-                return OString::valueOf((sal_Int32)m_exprValue->u.ulval);
+                return OString::number(m_exprValue->u.ulval);
             case ET_hyper:
-                return OString::valueOf(m_exprValue->u.hval);
+                return OString::number(m_exprValue->u.hval);
             case ET_uhyper:
-                return OString::valueOf((sal_Int64)m_exprValue->u.uhval);
+                return OString::number(m_exprValue->u.uhval);
             case ET_float:
-                return OString::valueOf(m_exprValue->u.fval);
+                return OString::number(m_exprValue->u.fval);
             case ET_double:
-                return OString::valueOf(m_exprValue->u.dval);
+                return OString::number(m_exprValue->u.dval);
             case ET_byte:
-                return OString::valueOf((sal_Int32)m_exprValue->u.byval);
+                return OString::number(m_exprValue->u.byval);
             case ET_boolean:
                 if ( m_exprValue->u.lval == 0)
                     return OString("FALSE");

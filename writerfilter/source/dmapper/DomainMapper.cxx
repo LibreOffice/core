@@ -300,13 +300,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //as CharStyleName or ParaStyleName
             //if the style is a user defined style then it must have an ISTD - built-in styles might not have it
             StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
-            OUString sValue = OUString::valueOf(nIntValue, 16);
+            OUString sValue = OUString::number(nIntValue, 16);
             const StyleSheetEntryPtr pEntry = pStyleSheets->FindStyleSheetByISTD(sValue);
             if( pEntry.get( ) )
             {
                 bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);
                 if(bParaStyle)
-                    m_pImpl->SetCurrentParaStyleId(OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16));
+                    m_pImpl->SetCurrentParaStyleId(OUString::number(nIntValue, 16));
                 if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
                     m_pImpl->GetTopContext()->Insert(
                                                  bParaStyle ?
@@ -1464,13 +1464,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
 #if OSL_DEBUG_LEVEL > 0
             OString sMessage("DomainMapper::attribute() - Id: ");
-            sMessage += OString::valueOf( sal_Int32( nName ), 10 );
+            sMessage += OString::number( nName, 10 );
             sMessage += " / 0x";
-            sMessage += OString::valueOf( sal_Int32( nName ), 16 );
+            sMessage += OString::number( nName, 16 );
             sMessage += " value: ";
-            sMessage += OString::valueOf( sal_Int32( nIntValue ), 10 );
+            sMessage += OString::number( nIntValue, 10 );
             sMessage += " / 0x";
-            sMessage += OString::valueOf( sal_Int32( nIntValue ), 16 );
+            sMessage += OString::number( nIntValue, 16 );
             SAL_WARN("writerfilter", sMessage.getStr());
 #endif
             }

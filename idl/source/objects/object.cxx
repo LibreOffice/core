@@ -344,8 +344,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
             if( nId1 == nId2 && nId1 != 0 )
             {
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
-                OSL_FAIL(OString::valueOf(static_cast<sal_Int32>(
-                    pS->GetSlotId().GetValue())).getStr());
+                OSL_FAIL(OString::number(pS->GetSlotId().GetValue()).getStr());
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 

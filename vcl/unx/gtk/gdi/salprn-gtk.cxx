@@ -635,7 +635,7 @@ GtkPrintDialog::impl_initCustomTab()
                     GtkWidget* const pRow = gtk_hbox_new(FALSE, 12);
                     gtk_box_pack_start(GTK_BOX(pVbox), pRow, FALSE, FALSE, 0);
                     gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
-                    aPropertyToDependencyRowMap[aPropertyName + OUString::valueOf(m)] = pRow;
+                    aPropertyToDependencyRowMap[aPropertyName + OUString::number(m)] = pRow;
                     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), m == nSelectVal);
                     gtk_widget_set_sensitive(pWidget,
                         m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
@@ -722,7 +722,7 @@ GtkPrintDialog::impl_initCustomTab()
             {
                 if (bUseDependencyRow && !aDependsOnName.isEmpty())
                 {
-                    pRow = aPropertyToDependencyRowMap[aDependsOnName + OUString::valueOf(nDependsOnValue)];
+                    pRow = aPropertyToDependencyRowMap[aDependsOnName + OUString::number(nDependsOnValue)];
                     if (!pRow)
                     {
                         gtk_widget_destroy(pWidget);
@@ -738,7 +738,7 @@ GtkPrintDialog::impl_initCustomTab()
                     gtk_box_pack_start(GTK_BOX(pCurParent), pRow, FALSE, FALSE, 0);
                 }
                 if (!pGroup)
-                    aPropertyToDependencyRowMap[aPropertyName + OUString::valueOf(sal_Int32(0))] = pRow;
+                    aPropertyToDependencyRowMap[aPropertyName + OUString::number(0)] = pRow;
                 gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
             }
         }
@@ -1153,7 +1153,7 @@ const
     const OUString aPrintDialogStr("PrintDialog");
     pItem->setValue(aPrintDialogStr,
             OUString("CopyCount"),
-            OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));
+            OUString::number(m_pWrapper->print_settings_get_n_copies(pSettings)));
     pItem->setValue(aPrintDialogStr,
             OUString("Collate"),
             m_pWrapper->print_settings_get_collate(pSettings)

@@ -202,7 +202,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                         sal_Int32 nVal = 0;
                         if(aProp >>= nVal)
                         {
-                            OUString aNumber( OUString::valueOf( nVal ) );
+                            OUString aNumber( OUString::number( nVal ) );
                             sValue = aNumber;
                         }
                     }
@@ -213,7 +213,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                         sal_Bool bVal = sal_False;
                         if(aProp >>= bVal  )
                         {
-                            OUString sBoolean( OUString::valueOf( bVal ) );
+                            OUString sBoolean( OUString::boolean( bVal ) );
                             sValue = sBoolean;
                         }
                     }
@@ -242,7 +242,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                             {
                                 for(sal_Int16 nInd=0;  nInd < seqLong.getLength(); ++nInd)
                                 {
-                                    OUString sNumber( OUString::valueOf(seqLong[nInd]) );
+                                    OUString sNumber( OUString::number(seqLong[nInd]) );
                                     sValue += sNumber;
                                     sValue += OUString(",");
                                 }

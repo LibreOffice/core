@@ -1051,9 +1051,9 @@ void VclBuilder::cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindo
 {
     //remove the redundant scrolling parent
     sal_Int32 nWidthReq = pScrollParent->get_width_request();
-    rMap[OString("width-request")] = OString::valueOf(nWidthReq);
+    rMap[OString("width-request")] = OString::number(nWidthReq);
     sal_Int32 nHeightReq = pScrollParent->get_height_request();
-    rMap[OString("height-request")] = OString::valueOf(nHeightReq);
+    rMap[OString("height-request")] = OString::number(nHeightReq);
 
     m_pParserState->m_aRedundantParentWidgets[pScrollParent] = pWindow;
 }
@@ -2000,7 +2000,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
                     }
                     else if (nId == 0 && name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
-                        sValue = getTranslation(rID, OString::valueOf(nRowIndex));
+                        sValue = getTranslation(rID, OString::number(nRowIndex));
                         bTranslated = !sValue.isEmpty();
                     }
                 }
@@ -2140,7 +2140,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
                 {
                     if (name.equals("translatable") && reader.getAttributeValue(false).equals("yes"))
                     {
-                        sValue = getTranslation(rID, OString::valueOf(nItemIndex));
+                        sValue = getTranslation(rID, OString::number(nItemIndex));
                         bTranslated = !sValue.isEmpty();
                     }
                 }

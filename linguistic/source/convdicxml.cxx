@@ -366,7 +366,7 @@ void ConvDicXMLExport::_ExportContent()
             DBG_ASSERT( nPropertyType, "property-type not found" );
             if (nPropertyType == -1)
                 nPropertyType = ConversionPropertyType::NOT_DEFINED;
-            AddAttribute( XML_NAMESPACE_TCD, "property-type", OUString::valueOf( (sal_Int32) nPropertyType ) );
+            AddAttribute( XML_NAMESPACE_TCD, "property-type", OUString::number(  nPropertyType ) );
         }
         SvXMLElementExport aEntryMain( *this, XML_NAMESPACE_TCD,
                 "entry" , sal_True, sal_True );

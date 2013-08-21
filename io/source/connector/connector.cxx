@@ -100,7 +100,7 @@ namespace stoc_connector
                     OUString sMessage("Connector : couldn't connect to pipe ");
                     sMessage += aName;
                     sMessage += "(";
-                    sMessage += OUString::valueOf( (sal_Int32 ) pConn->m_pipe.getError() );
+                    sMessage += OUString::number(  pConn->m_pipe.getError() );
                     sMessage += ")";
                     delete pConn;
                     throw NoConnectException( sMessage ,Reference< XInterface > () );

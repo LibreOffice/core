@@ -3166,11 +3166,11 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     }
     else if( What >>= nWhat )
     {
-        sWhat = OUString::valueOf( nWhat );
+        sWhat = OUString::number( nWhat );
     }
     else if( What >>= fWhat )
     {
-        sWhat = OUString::valueOf( fWhat );
+        sWhat = OUString::number( fWhat );
     }
     else
         throw uno::RuntimeException("Range::Find, missing params", uno::Reference< uno::XInterface >() );

@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             outputFile = (options.getOption("-O"));
             if ('/' != outputFile.getStr()[outputFile.getLength()-1]) {
-                outputFile += OString::valueOf('/');
+                outputFile += OString('/');
             }
             outputFile += strippedFileName.replaceAt(
                     strippedFileName.getLength() -3 , 3, "urd");
@@ -127,7 +127,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (options.isValid("-M")) {
             depFileUrl = convertToFileUrl(options.getOption("-M"));
             if ('/' != depFileUrl.getStr()[depFileUrl.getLength()-1]) {
-                depFileUrl += OString::valueOf('/');
+                depFileUrl += OString('/');
             }
             depFileUrl += strippedFileName.replaceAt(
                     strippedFileName.getLength() -3 , 3, "d");

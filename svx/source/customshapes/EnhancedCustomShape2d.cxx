@@ -328,7 +328,7 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString
         if ( nPara & 0x400 )
         {
             rParameter += "?";
-            rParameter += OUString::valueOf( (sal_Int32)( nPara & 0xff ) );
+            rParameter += OUString::number( ( nPara & 0xff ) );
             rParameter += " ";
         }
         else
@@ -347,7 +347,7 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString
                 case DFF_Prop_adjust10Value :
                 {
                     rParameter += "$";
-                    rParameter += OUString::valueOf( (sal_Int32)( nPara - DFF_Prop_adjustValue ) );
+                    rParameter += OUString::number( ( nPara - DFF_Prop_adjustValue ) );
                     rParameter += " ";
                 }
                 break;
@@ -376,7 +376,7 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString
     }
     else
     {
-        rParameter += OUString::valueOf( (sal_Int32)( nPara ) );
+        rParameter += OUString::number( ( nPara ) );
     }
 }
 

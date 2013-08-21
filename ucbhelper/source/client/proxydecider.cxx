@@ -441,7 +441,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
     }
 
     aBuffer.append( sal_Unicode( ':' ) );
-    aBuffer.append( OUString::valueOf( nPort ) );
+    aBuffer.append( OUString::number( nPort ) );
     const OUString aHostAndPort( aBuffer.makeStringAndClear() );
 
     std::vector< NoProxyListEntry >::const_iterator it

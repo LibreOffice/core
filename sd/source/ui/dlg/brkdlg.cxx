@@ -111,9 +111,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
 
     // which object is shown at the moment?
-    OUString info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurObj() ) )
+    OUString info = OUString::number( pProgrInfo->GetCurObj() )
             + "/"
-            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetObjCount() ) );
+            + OUString::number( pProgrInfo->GetObjCount() );
     aFiObjInfo.SetText(info);
 
     // how many actions are started?
@@ -123,9 +123,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
     else
     {
-        info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurAction() ) )
+        info = OUString::number( pProgrInfo->GetCurAction() )
             + "/"
-            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetActionCount() ) );
+            + OUString::number( pProgrInfo->GetActionCount() );
         aFiActInfo.SetText(info);
     }
 
@@ -136,9 +136,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
     else
     {
-        info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurInsert() ) )
+        info = OUString::number( pProgrInfo->GetCurInsert() )
             + "/"
-            + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetInsertCount() ) );
+            + OUString::number( pProgrInfo->GetInsertCount() );
         aFiInsInfo.SetText(info);
     }
 

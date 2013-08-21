@@ -414,7 +414,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
     {
         const SwTableBox *pRelLastBox = lcl_RelToBox( rTbl, pBox, *pLastBox );
         if ( pRelLastBox )
-            rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelLastBox));
+            rNewStr += OUString::number((sal_PtrDiff)pRelLastBox);
         else
             rNewStr += "0";
         rNewStr += ":";
@@ -423,7 +423,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
 
     const SwTableBox *pRelFirstBox = lcl_RelToBox( rTbl, pBox, rFirstBox );
     if ( pRelFirstBox )
-        rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelFirstBox));
+        rNewStr += OUString::number((sal_PtrDiff)pRelFirstBox);
     else
         rNewStr += "0";
 
@@ -509,13 +509,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
     if( pLastBox )
     {
         pBox = rTbl.GetTblBox( *pLastBox );
-        rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox))
+        rNewStr += OUString::number((sal_PtrDiff)pBox)
                 +  ":";
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
     pBox = rTbl.GetTblBox( rFirstBox );
-    rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox))
+    rNewStr += OUString::number((sal_PtrDiff)pBox)
             +  OUString(rFirstBox[ rFirstBox.getLength()-1 ]); // get label for the box
 }
 
@@ -1169,9 +1169,9 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
     }
 
     if( pLastBox )
-        rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pEndBox)) + ":";
+        rNewStr += OUString::number((sal_PtrDiff)pEndBox) + ":";
 
-    rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pSttBox))
+    rNewStr += OUString::number((sal_PtrDiff)pSttBox)
             +  OUString(rFirstBox[ rFirstBox.getLength()-1] );
 }
 

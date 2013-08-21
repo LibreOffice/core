@@ -668,7 +668,7 @@ void PreparedStatement::setObjectWithInfo(
         OUString myString;
         if( x >>= myDouble )
         {
-            myString = OUString::valueOf( myDouble );
+            myString = OUString::number( myDouble );
         }
         else
         {

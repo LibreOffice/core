@@ -358,7 +358,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
     if( pStr )
         return OUString::createFromAscii( pStr );
     else
-        return OUString::valueOf( nPresetSubType );
+        return OUString::number( nPresetSubType );
 }
 
 // END

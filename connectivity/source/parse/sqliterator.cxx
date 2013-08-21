@@ -1141,7 +1141,7 @@ namespace
         {
             if ( _rParentNode.getChild(i) == &_rParamNode )
             {
-                sColumnName += OUString::valueOf( i+1 );
+                sColumnName += OUString::number( i+1 );
                 break;
             }
         }
@@ -1854,7 +1854,7 @@ OUString OSQLParseTreeIterator::getUniqueColumnName(const OUString & rColumnName
     sal_Int32 i=1;
     while(aIter != m_aSelectColumns->get().end())
     {
-        (aAlias = rColumnName) += OUString::valueOf(i++);
+        (aAlias = rColumnName) += OUString::number(i++);
         aIter = find(
             m_aSelectColumns->get().begin(),
             m_aSelectColumns->get().end(),

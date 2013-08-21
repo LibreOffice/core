@@ -135,7 +135,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
 
     mrStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
-    mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << OString::valueOf(nRowHeight).getStr();
+    mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << OString::number(nRowHeight).getStr();
 
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -145,7 +145,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         if( !xCell.is() )
             continue;
 
-        mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::valueOf(aColumnStart[nCol]).getStr();
+        mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::number(aColumnStart[nCol]).getStr();
         if ( (nCol & 0x0F) == 0x0F )
             mrStrm << RTFOutFuncs::sNewLine;        // Zeilen nicht zu lang werden lassen
     }

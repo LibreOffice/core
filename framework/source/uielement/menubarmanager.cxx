@@ -908,7 +908,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             if ( aItemCommand.isEmpty() )
                             {
                                 aItemCommand = OUString( "slot:" );
-                                aItemCommand += OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
+                                aItemCommand += OUString::number( pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
 
@@ -1343,7 +1343,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         // Set item command for popup menu to enable it for GetImageFromURL
                         const OUString aSlotString( "slot:" );
                         OUString aNewItemCommand( aSlotString );
-                        aNewItemCommand += OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
+                        aNewItemCommand += OUString::number( ITEMID_ADDONLIST );
                         pPopup->SetItemCommand( ITEMID_ADDONLIST, aNewItemCommand );
                     }
                     else
@@ -1960,7 +1960,7 @@ sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu
     {
         const static OUString aSlotString( "slot:" );
         _rItemCommand = aSlotString;
-        _rItemCommand += OUString::valueOf( (sal_Int32)nItemId );
+        _rItemCommand += OUString::number( nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
     }
     return nItemId;

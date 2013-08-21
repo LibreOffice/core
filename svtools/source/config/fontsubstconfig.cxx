@@ -127,7 +127,7 @@ void SvtFontSubstConfig::Commit()
         {
             OUString sPrefix(sNode);
             sPrefix += "/_";
-            sPrefix += OUString::valueOf((sal_Int32)i);
+            sPrefix += OUString::number(i);
             sPrefix += "/";
 
             SubstitutionStruct& pSubst = pImpl->aSubstArr[i];

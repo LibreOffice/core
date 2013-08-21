@@ -322,7 +322,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 
     for (sal_Int32 i = 1; ; i++)
     {
-        OUString sName = OUString(UNO_JAVA_JFW_PARAMETER) + OUString::valueOf(i);
+        OUString sName = OUString(UNO_JAVA_JFW_PARAMETER) + OUString::number(i);
         OUString sValue;
         if (Bootstrap::get()->getFrom(sName, sValue) == sal_True)
         {
@@ -528,7 +528,7 @@ JFW_MODE getMode()
                     {
                         OUString sParams = OUString(
                             UNO_JAVA_JFW_PARAMETER) +
-                            OUString::valueOf((sal_Int32)1);
+                            OUString::number(1);
                         if (aBoot->getFrom(sParams, sValue) == sal_False)
                         {
                             bDirectMode = false;

@@ -526,7 +526,7 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
             break;
         case FIELD_PROPERTY_TEXTLEN:
             if (pTextLen)
-                return OUString::valueOf(static_cast<sal_Int64>(pTextLen->GetValue()));
+                return OUString::number(pTextLen->GetValue());
         case FIELD_PROPERTY_NUMTYPE:
             if (pNumType)
                 return pNumType->GetSelectEntry();

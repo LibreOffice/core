@@ -1928,7 +1928,7 @@ void AccessibleNotes::SetTextView (
                 new PresenterAccessible::AccessibleParagraph(
                     css::lang::Locale(),
                     AccessibleRole::PARAGRAPH,
-                    "Paragraph"+OUString::valueOf(nIndex),
+                    "Paragraph"+OUString::number(nIndex),
                     rpTextView->GetParagraph(nIndex),
                     nIndex));
             pParagraph->LateInitialization();

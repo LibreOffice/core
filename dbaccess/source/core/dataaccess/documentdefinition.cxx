@@ -2113,7 +2113,7 @@ void ODocumentDefinition::updateDocumentTitle()
                 sName = DBACORE_RESSTRING( RID_STR_REPORT );
             Reference< XUntitledNumbers > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate(), UNO_QUERY      );
             if ( xUntitledProvider.is() )
-                sName += OUString::valueOf( xUntitledProvider->leaseNumber(getComponent()) );
+                sName += OUString::number( xUntitledProvider->leaseNumber(getComponent()) );
         }
 
         Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);

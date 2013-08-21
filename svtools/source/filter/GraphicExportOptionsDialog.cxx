@@ -107,7 +107,7 @@ void GraphicExportOptionsDialog::updateHeight()
 
 void GraphicExportOptionsDialog::updateResolution()
 {
-    mpResolution->SetText( OUString::valueOf( (sal_Int32) mResolution ) );
+    mpResolution->SetText( OUString::number( (sal_Int32) mResolution ) );
 }
 
 Sequence<PropertyValue> GraphicExportOptionsDialog::getFilterData()

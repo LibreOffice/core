@@ -394,7 +394,7 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
         OUString                                aURL( "private:memorygraphic/" );
 
         aLoadProps[ 0 ].Name = OUString( "URL" );
-        aLoadProps[ 0 ].Value <<= ( aURL += OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
+        aLoadProps[ 0 ].Value <<= ( aURL += OUString::number( reinterpret_cast< sal_Int64 >( this ) ) );
 
         xRet = xProv->queryGraphic( aLoadProps );
     }

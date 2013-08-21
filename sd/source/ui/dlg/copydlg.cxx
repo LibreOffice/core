@@ -107,10 +107,10 @@ CopyDlg::~CopyDlg()
     rStr += OUString::number(m_pMtrFldHeight->GetValue());
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf( (long)m_pLbStartColor->GetSelectEntryColor().GetColor() );
+    rStr += OUString::number( m_pLbStartColor->GetSelectEntryColor().GetColor() );
     rStr.Append( TOKEN );
 
-    rStr += OUString::valueOf( (long)m_pLbEndColor->GetSelectEntryColor().GetColor() );
+    rStr += OUString::number( m_pLbEndColor->GetSelectEntryColor().GetColor() );
 }
 
 /**

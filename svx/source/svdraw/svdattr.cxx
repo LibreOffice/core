@@ -667,11 +667,11 @@ SfxItemPresentation SdrFractionItem::GetPresentation(
     if(nValue.IsValid())
     {
         sal_Int32 nDiv = nValue.GetDenominator();
-        rText = OUString::valueOf(nValue.GetNumerator());
+        rText = OUString::number(nValue.GetNumerator());
 
         if(nDiv != 1)
         {
-            rText = rText + "/" + OUString::valueOf(nDiv);
+            rText = rText + "/" + OUString::number(nDiv);
         }
     }
     else
@@ -721,7 +721,7 @@ SfxItemPresentation SdrScaleItem::GetPresentation(
     {
         sal_Int32 nDiv = GetValue().GetDenominator();
 
-        rText = OUString::valueOf(GetValue().GetNumerator()) + ":" + OUString::valueOf(nDiv);
+        rText = OUString::number(GetValue().GetNumerator()) + ":" + OUString::number(nDiv);
     }
     else
     {
@@ -876,7 +876,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
     if(bNeg)
         nValue = -nValue;
 
-    OUStringBuffer aText = OUString::valueOf(nValue);
+    OUStringBuffer aText = OUString::number(nValue);
 
     if(nValue)
     {
@@ -1360,7 +1360,7 @@ SfxItemPresentation SdrTextAniAmountItem::GetPresentation(
 
     if(nValue < 0)
     {
-        rText = OUString::valueOf(-nValue) + "pixel";
+        rText = OUString::number(-nValue) + "pixel";
     }
     else
     {

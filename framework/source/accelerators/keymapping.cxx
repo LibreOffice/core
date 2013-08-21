@@ -189,7 +189,7 @@ OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
         return pIt->second;
 
     // If we have no well known identifier - use the pure code value!
-    return OUString::valueOf((sal_Int32)nCode);
+    return OUString::number(nCode);
 }
 
 //-----------------------------------------------

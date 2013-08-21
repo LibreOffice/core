@@ -333,7 +333,7 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
     {
         aFilterName = rFilterName;
         aFilterName += aSpace;
-        aFilterName += OUString::valueOf( nId++ );
+        aFilterName += OUString::number( nId++ );
     }
 
     return aFilterName;
@@ -354,7 +354,7 @@ OUString XMLFilterSettingsDialog::createUniqueTypeName( const OUString& rTypeNam
     {
         aTypeName = rTypeName;
         aTypeName += aSpace;
-        aTypeName += OUString::valueOf( nId++ );
+        aTypeName += OUString::number( nId++ );
     }
 
     return aTypeName;
@@ -1605,7 +1605,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     Sequence< OUString > aUserData(8);
 
     aUserData[0] = OUString( "com.sun.star.documentconversion.XSLTFilter" );
-    aUserData[1] = OUString::valueOf( mbNeedsXSLT2 );
+    aUserData[1] = OUString::boolean( mbNeedsXSLT2 );
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;

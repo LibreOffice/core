@@ -1422,7 +1422,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
                             XML_NAMESPACE_STYLE,
                             ::xmloff::token::GetXMLToken( XML_LEADER_CHAR ) ) );
             pMutableAttrList->AddAttribute( aNewAttrQName,
-                                    OUString::valueOf( cStyleLeaderChar ) );
+                                    OUString( cStyleLeaderChar ) );
         }
     }
     else
@@ -1521,7 +1521,7 @@ void XMLConfigItemTContext_Impl::Characters( const OUString& rChars )
         else if (m_bIsCursorY && nPos > 31999)
             nPos = 31999;
 
-        sChars = OUString::valueOf(nPos);
+        sChars = OUString::number(nPos);
     }
 
     XMLTransformerContext::Characters( sChars );

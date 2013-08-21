@@ -598,7 +598,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
         while( xElement->hasAttribute( sUniqueName ) )
         {
             nCount++;
-            sUniqueName = sName + OUString::valueOf( nCount );
+            sUniqueName = sName + OUString::number( nCount );
         }
 
         // TODO: implement proper namespace handling

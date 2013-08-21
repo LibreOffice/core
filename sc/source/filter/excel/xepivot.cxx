@@ -752,7 +752,7 @@ void XclExpPivotCache::SaveXml( XclExpXmlStream&
         .append( rStrm.GetUniqueIdOUString() )
         .makeStringAndClear();
     rWorkbook->startElement( XML_pivotCache,
-            XML_cacheId, OString::valueOf( (sal_Int32)maPCInfo.mnStrmId ).getStr(),
+            XML_cacheId, OString::number( maPCInfo.mnStrmId ).getStr(),
             FSNS( XML_r, XML_id ), XclXmlUtils::ToOString( sId ).getStr(),
             FSEND );
     // SXIDSTM
@@ -1362,10 +1362,10 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     aPivotTableDefinition->startElement( XML_pivotTableDefinition,
             XML_xmlns,                      "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
             XML_name,                       XclXmlUtils::ToOString( maPTInfo.maTableName ).getStr(),
-            XML_cacheId,                    OString::valueOf( (sal_Int32) maPTInfo.mnCacheIdx ).getStr(),
+            XML_cacheId,                    OString::number(  maPTInfo.mnCacheIdx ).getStr(),
             XML_dataOnRows,                 XclXmlUtils::ToPsz( maPTInfo.mnDataAxis == EXC_SXVD_AXIS_COL ),
-            XML_dataPosition,               OString::valueOf( (sal_Int32) maPTInfo.mnDataPos ).getStr(),
-            XML_autoFormatId,               OString::valueOf( (sal_Int32) maPTInfo.mnAutoFmtIdx ).getStr(),
+            XML_dataPosition,               OString::number(  maPTInfo.mnDataPos ).getStr(),
+            XML_autoFormatId,               OString::number(  maPTInfo.mnAutoFmtIdx ).getStr(),
             // OOXTODO: XML_applyNumberFormats,         [ SXVIEW fAtrNum (maPTInfo.mnFlags) ]
             // OOXTODO: XML_applyBorderFormats,         [ SXVIEW fAtrBdr (maPTInfo.mnFlags) ]
             // OOXTODO: XML_applyFontFormats,           [ SXVIEW fAtrFnt (maPTInfo.mnFlags) ]
@@ -1432,11 +1432,11 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
 
     aPivotTableDefinition->singleElement( XML_location,
             XML_ref,            XclXmlUtils::ToOString( maPTInfo.maOutXclRange ).getStr(),
-            XML_firstHeaderRow, OString::valueOf( (sal_Int32) maPTInfo.mnFirstHeadRow ).getStr(),
-            XML_firstDataRow,   OString::valueOf( (sal_Int32) maPTInfo.maDataXclPos.mnRow ).getStr(),
-            XML_firstDataCol,   OString::valueOf( (sal_Int32) maPTInfo.maDataXclPos.mnCol ).getStr(),
-            XML_rowPageCount,   OString::valueOf( (sal_Int32) maPTInfo.mnDataRows ).getStr(),   // OOXTODO?
-            XML_colPageCount,   OString::valueOf( (sal_Int32) maPTInfo.mnDataCols ).getStr(),   // OOXTODO?
+            XML_firstHeaderRow, OString::number(  maPTInfo.mnFirstHeadRow ).getStr(),
+            XML_firstDataRow,   OString::number(  maPTInfo.maDataXclPos.mnRow ).getStr(),
+            XML_firstDataCol,   OString::number(  maPTInfo.maDataXclPos.mnCol ).getStr(),
+            XML_rowPageCount,   OString::number(  maPTInfo.mnDataRows ).getStr(),   // OOXTODO?
+            XML_colPageCount,   OString::number(  maPTInfo.mnDataCols ).getStr(),   // OOXTODO?
             FSEND );
 
     // OOXTODO: XML_pivotFields
@@ -1445,7 +1445,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     if( maPTInfo.mnRowFields )
     {
         aPivotTableDefinition->startElement( XML_rowFields,
-                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnRowFields ).getStr(),
+                XML_count,  OString::number(  maPTInfo.mnRowFields ).getStr(),
                 FSEND );
         aPivotTableDefinition->endElement( XML_rowFields );
     }
@@ -1455,7 +1455,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     if( maPTInfo.mnColFields )
     {
         aPivotTableDefinition->startElement( XML_colFields,
-                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnColFields ).getStr(),
+                XML_count,  OString::number(  maPTInfo.mnColFields ).getStr(),
                 FSEND );
         aPivotTableDefinition->endElement( XML_colFields );
     }
@@ -1465,7 +1465,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     if( maPTInfo.mnPageFields )
     {
         aPivotTableDefinition->startElement( XML_pageFields,
-                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnPageFields ).getStr(),
+                XML_count,  OString::number(  maPTInfo.mnPageFields ).getStr(),
                 FSEND );
         aPivotTableDefinition->endElement( XML_pageFields );
     }
@@ -1473,7 +1473,7 @@ void XclExpPivotTable::SaveXml( XclExpXmlStream& rStrm )
     if( maPTInfo.mnDataFields )
     {
         aPivotTableDefinition->startElement( XML_dataFields,
-                XML_count,  OString::valueOf( (sal_Int32) maPTInfo.mnDataFields ).getStr(),
+                XML_count,  OString::number(  maPTInfo.mnDataFields ).getStr(),
                 FSEND );
         aPivotTableDefinition->endElement( XML_dataFields );
     }

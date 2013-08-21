@@ -650,7 +650,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_WIDTH ),
                              m_aAttributeType,
-                             OUString::valueOf( (sal_Int32)nWidth ) );
+                             OUString::number( nWidth ) );
     }
 
     // offset (default STATUSBAR_OFFSET)
@@ -658,7 +658,7 @@ throw ( SAXException, RuntimeException )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OFFSET ),
                              m_aAttributeType,
-                             OUString::valueOf( (sal_Int32)nOffset ) );
+                             OUString::number( nOffset ) );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );

@@ -206,7 +206,7 @@ void NeonUri::calculateURI ()
     if ( bAppendPort )
     {
         aBuf.appendAscii( ":" );
-        aBuf.append( OUString::valueOf( mPort ) );
+        aBuf.append( OUString::number( mPort ) );
     }
     aBuf.append( mPath );
 
@@ -300,7 +300,7 @@ OUString NeonUri::makeConnectionEndPointString(
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
         aBuf.appendAscii( ":" );
-        aBuf.append( OUString::valueOf( sal_Int32( nPort ) ) );
+        aBuf.append( OUString::number( nPort ) );
     }
     return aBuf.makeStringAndClear();
 }

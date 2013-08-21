@@ -543,7 +543,7 @@ start:
             if( !p->pOUString )
                 p->pOUString = new OUString;
 
-            ::OString  aOStr  = ::OString::valueOf( n );
+            ::OString  aOStr  = OString::number( n );
                (*p->pOUString) = ::OStringToOUString
                 ( aOStr, RTL_TEXTENCODING_ASCII_US );
             break;
@@ -821,7 +821,7 @@ start:
                 SbxBase::SetError( SbxERR_CONVERSION );
             else
             {
-                ::OString  aOStr  = ::OString::valueOf( (sal_Int64)n );
+                ::OString  aOStr  = OString::number( n );
                    (*p->pOUString) = ::OStringToOUString
                     ( aOStr, RTL_TEXTENCODING_ASCII_US );
             }

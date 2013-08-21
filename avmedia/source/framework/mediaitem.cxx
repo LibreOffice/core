@@ -406,7 +406,7 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         do
         {
             ++count;
-            filename = basename + OUString::valueOf(count) + suffix;
+            filename = basename + OUString::number(count) + suffix;
         }
         while (xStorage->hasByName(filename));
     }

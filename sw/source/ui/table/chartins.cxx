@@ -158,7 +158,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         {
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
             aRangeString = pTblFmt->GetName();
-            aRangeString += OUString::valueOf( sal_Unicode('.') );
+            aRangeString += OUString( sal_Unicode('.') );
             aRangeString += rWrtShell.GetBoxNms();
 
             // get table data provider

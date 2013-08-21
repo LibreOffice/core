@@ -577,7 +577,7 @@ XclExpNumberCell::XclExpNumberCell(
 
 static OString lcl_GetStyleId( XclExpXmlStream& rStrm, sal_uInt32 nXFIndex )
 {
-    return OString::valueOf( rStrm.GetRoot().GetXFBuffer()
+    return OString::number( rStrm.GetRoot().GetXFBuffer()
             .GetXmlCellIndex( nXFIndex ) );
 }
 
@@ -1567,12 +1567,12 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
             // OOXTODO: XML_customWidth,
             XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
-            XML_max,            OString::valueOf( (sal_Int32) (nLastXclCol+1) ).getStr(),
-            XML_min,            OString::valueOf( (sal_Int32) (mnFirstXclCol+1) ).getStr(),
+            XML_max,            OString::number(  (nLastXclCol+1) ).getStr(),
+            XML_min,            OString::number(  (mnFirstXclCol+1) ).getStr(),
             // OOXTODO: XML_outlineLevel,
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
-            XML_width,          OString::valueOf( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
+            XML_width,          OString::number( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
             FSEND );
 }
 
@@ -1990,14 +1990,14 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
     for ( sal_uInt32 i=0; i<mnXclRowRpt; ++i )
     {
         rWorksheet->startElement( XML_row,
-                XML_r,              OString::valueOf( (sal_Int32) (mnCurrentRow++) ).getStr(),
+                XML_r,              OString::number(  (mnCurrentRow++) ).getStr(),
                 // OOXTODO: XML_spans,          optional
                 XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : NULL,
                 XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
-                XML_ht,             OString::valueOf( (double) mnHeight / 20.0 ).getStr(),
+                XML_ht,             OString::number( (double) mnHeight / 20.0 ).getStr(),
                 XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
                 XML_customHeight,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
-                XML_outlineLevel,   OString::valueOf( (sal_Int32) mnOutlineLevel ).getStr(),
+                XML_outlineLevel,   OString::number(  mnOutlineLevel ).getStr(),
                 XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
                 // OOXTODO: XML_thickTop,       bool
                 // OOXTODO: XML_thickBot,       bool
@@ -2498,7 +2498,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     XclExpDefaultRowData& rDefData = mxDefrowheight->GetDefaultData();
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetFormatPr,
-        XML_defaultRowHeight, OString::valueOf( (double) rDefData.mnHeight / 20.0 ).getStr(), FSEND );
+        XML_defaultRowHeight, OString::number( (double) rDefData.mnHeight / 20.0 ).getStr(), FSEND );
     rWorksheet->endElement( XML_sheetFormatPr );
 
     maColInfoBfr.SaveXml( rStrm );

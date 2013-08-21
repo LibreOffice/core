@@ -676,7 +676,7 @@ private:
         {
             return ImpGetNatNumString( rNum, nVal, nMinDigits );
         }
-        return OUString::valueOf(nVal);
+        return OUString::number(nVal);
     }
 
     // transliterate according to NativeNumber

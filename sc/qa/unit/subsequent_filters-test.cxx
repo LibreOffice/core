@@ -980,7 +980,7 @@ void checkMergedCells( ScDocument* pDoc, const ScAddress& rStartAddress,
     SCROW nActualEndRow = rStartAddress.Row();
     pDoc->ExtendMerge( rStartAddress.Col(), rStartAddress.Row(),
                        nActualEndCol, nActualEndRow, rStartAddress.Tab(), false );
-    OString sTab = OString::valueOf( static_cast<sal_Int32>(rStartAddress.Tab() + 1) );
+    OString sTab = OString::number( rStartAddress.Tab() + 1 );
     OString msg = "Merged cells are not correctly imported on sheet" + sTab;
     OString msgCol = msg + "; end col";
     OString msgRow = msg + "; end row";

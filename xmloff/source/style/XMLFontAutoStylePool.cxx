@@ -174,17 +174,17 @@ OUString XMLFontAutoStylePool::Add(
         }
 
         if( sName.isEmpty() )
-            sName = OUString::valueOf( sal_Unicode( 'F' ) );
+            sName = OUString( sal_Unicode( 'F' ) );
 
         if( m_aNames.find(sName) != m_aNames.end() )
         {
             sal_Int32 nCount = 1;
             OUString sPrefix( sName );
-            sName += OUString::valueOf( nCount );
+            sName += OUString::number( nCount );
             while( m_aNames.find(sName) != m_aNames.end() )
             {
                 sName = sPrefix;
-                sName += OUString::valueOf( ++nCount );
+                sName += OUString::number( ++nCount );
             }
         }
 

@@ -133,7 +133,7 @@ void SlideShowRestarter::StartPresentation (void)
         {
             Sequence<css::beans::PropertyValue> aProperties (1);
             aProperties[0].Name = "FirstPage";
-            aProperties[0].Value <<= "page" + OUString::valueOf(mnCurrentSlideNumber+1);
+            aProperties[0].Value <<= "page" + OUString::number(mnCurrentSlideNumber+1);
             mpSlideShow->startWithArguments(aProperties);
         }
         mpSelf.reset();

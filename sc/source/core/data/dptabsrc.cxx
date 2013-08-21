@@ -2559,7 +2559,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                         ;
                 }
                 if (aName.isEmpty())
-                    aName = OUString::valueOf(nVal);
+                    aName = OUString::number(nVal);
 
                 ScDPItemData aData(nGroupBy, nVal);
                 SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);

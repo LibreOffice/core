@@ -731,7 +731,7 @@ OUString getErrorMessage( XML_Error xmlE, OUString sSystemId , sal_Int32 nLine )
     OUString str("[");
     str += sSystemId;
     str += " line ";
-    str += OUString::valueOf( nLine );
+    str += OUString::number( nLine );
     str += "]: ";
     str += Message;
     str += "error";

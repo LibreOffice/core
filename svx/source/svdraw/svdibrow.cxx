@@ -317,7 +317,7 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
                 switch (_nColId)
                 {
                     case ITEMBROWSER_WHICHCOL_ID:
-                        sRet = OUString::valueOf( static_cast<sal_Int32>(pEntry->nWhichId) ); break;
+                        sRet = OUString::number( pEntry->nWhichId ); break;
                     case ITEMBROWSER_STATECOL_ID:
                     {
                         switch (pEntry->eState)
@@ -514,9 +514,9 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         aNeuNam += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
             aNeuNam.AppendAscii(": ");
-            aNeuNam += OUString::valueOf(pEntry->nMin);
+            aNeuNam += OUString::number(pEntry->nMin);
             aNeuNam.AppendAscii("..");
-            aNeuNam += OUString::valueOf(pEntry->nMax);
+            aNeuNam += OUString::number(pEntry->nMax);
         }
         aNeuNam.AppendAscii(" - Type 'del' to reset to default.");
         pParent->SetText(aNeuNam);

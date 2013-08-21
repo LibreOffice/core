@@ -985,12 +985,12 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             // SWG:
             if ( nEsc )
             {
-                rOutput << "{\\*\\updnprop" << OString::valueOf(
-                    static_cast<sal_Int32>(nProp100)).getStr() << '}';
+                rOutput << "{\\*\\updnprop" << OString::number(
+                    nProp100).getStr() << '}';
             }
             long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
-            OString aUpDown = OString::valueOf(
-                static_cast<sal_Int32>(nUpDown));
+            OString aUpDown = OString::number(
+                nUpDown);
             if ( nEsc < 0 )
                 rOutput << OOO_STRING_SVTOOLS_RTF_DN << aUpDown.getStr();
             else if ( nEsc > 0 )

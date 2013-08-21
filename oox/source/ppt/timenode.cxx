@@ -595,7 +595,7 @@ namespace oox { namespace ppt {
 
     void    TimeNode::setId( sal_Int32 nId )
     {
-        msId = OUString::valueOf(nId);
+        msId = OUString::number(nId);
     }
 
     void TimeNode::setTo( const Any & aTo )

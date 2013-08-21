@@ -816,17 +816,17 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
     if ( mnGroupLevel == 1 )
     {
         const OString aPt( "pt" );
-        aLeft = OString::valueOf( double( rRectangle.Left() ) / 20 ) + aPt;
-        aTop = OString::valueOf( double( rRectangle.Top() ) / 20 ) + aPt;
-        aRight = OString::valueOf( double( rRectangle.Right() ) / 20 ) + aPt;
-        aBottom = OString::valueOf( double( rRectangle.Bottom() ) / 20 ) + aPt;
+        aLeft = OString::number( double( rRectangle.Left() ) / 20 ) + aPt;
+        aTop = OString::number( double( rRectangle.Top() ) / 20 ) + aPt;
+        aRight = OString::number( double( rRectangle.Right() ) / 20 ) + aPt;
+        aBottom = OString::number( double( rRectangle.Bottom() ) / 20 ) + aPt;
     }
     else
     {
-        aLeft = OString::valueOf( rRectangle.Left() );
-        aTop = OString::valueOf( rRectangle.Top() );
-        aRight = OString::valueOf( rRectangle.Right() );
-        aBottom = OString::valueOf( rRectangle.Bottom() );
+        aLeft = OString::number( rRectangle.Left() );
+        aTop = OString::number( rRectangle.Top() );
+        aRight = OString::number( rRectangle.Right() );
+        aBottom = OString::number( rRectangle.Bottom() );
     }
 
     m_pShapeAttrList->add( XML_from,

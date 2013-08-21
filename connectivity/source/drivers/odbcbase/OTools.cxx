@@ -209,7 +209,7 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
                 {
-                    OString aString = OString::valueOf(*(double*)_pValue);
+                    OString aString = OString::number(*(double*)_pValue);
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
                     *((OString*)_pData) = aString;

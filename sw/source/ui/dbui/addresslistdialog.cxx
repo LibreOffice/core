@@ -363,7 +363,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             while(m_xDBContext->hasByName(sFind))
             {
                 sFind = sNewName;
-                sFind += OUString::valueOf(++nIndex);
+                sFind += OUString::number(++nIndex);
             }
             uno::Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
 

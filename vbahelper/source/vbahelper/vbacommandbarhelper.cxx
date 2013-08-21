@@ -263,7 +263,7 @@ OUString VbaCommandBarHelper::generateCustomURL()
 
     // use a random number to minimize possible clash with existing custom toolbars
     srand( unsigned( time( NULL ) ));
-    url += OUString::valueOf( sal_Int64( rand() ), 16 );
+    url += OUString::number( rand(), 16 );
     return url;
 }
 
