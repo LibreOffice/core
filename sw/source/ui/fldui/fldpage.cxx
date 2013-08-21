@@ -351,7 +351,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
     }
     else
     {
-        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParent();
+        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParentDialog();
         pEditDlg->InsertHdl();
     }
 
@@ -373,7 +373,7 @@ void SwFldPage::EnableInsert(sal_Bool bEnable)
     }
     else
     {
-        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParent();
+        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParentDialog();
         pEditDlg->EnableInsert(bEnable);
     }
 

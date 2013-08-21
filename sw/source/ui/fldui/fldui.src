@@ -24,13 +24,6 @@
 /*--------------------------------------------------------------------
     Description: strings for the types
  --------------------------------------------------------------------*/
-String STR_FLD_EDIT_DLG
-{
-    Text [ en-US ] = "Edit Fields" ;
-};
-/*--------------------------------------------------------------------
-    Description: strings for the types
- --------------------------------------------------------------------*/
  //
  // range document
  //
@@ -637,31 +630,6 @@ String STR_URLPROMPT
 String STR_ALL_DATABASE
 {
     Text [ en-US ] = "<All>" ;
-};
-ImageButton BTN_FLDEDT_PREV
-{
-    Pos = MAP_APPFONT ( 263 , 115 ) ;
-    Size = MAP_APPFONT ( 24 , 14 ) ;
-    TabStop = TRUE ;
-    SYMBOL = IMAGEBUTTON_PREV ;
-    Helpid = HID_DLG_FLDEDT_PREV ;
-};
-ImageButton BTN_FLDEDT_NEXT
-{
-    Pos = MAP_APPFONT ( 294 , 115 ) ;
-    Size = MAP_APPFONT ( 24 , 14 ) ;
-    TabStop = TRUE ;
-    SYMBOL = IMAGEBUTTON_NEXT ;
-    Helpid = HID_DLG_FLDEDT_NEXT ;
-};
-PushButton PB_FLDEDT_ADDRESS
-{
-    Pos = MAP_APPFONT ( 294 , 100 ) ;
-    Size = MAP_APPFONT ( 24 , 14 ) ;
-    TabStop = TRUE ;
-    Hide = TRUE ;
-    Text [ en-US ] = "Edit" ;
-    Helpid = HID_DLG_FLDEDT_ADDRESS ;
 };
 String STR_CUSTOM
 {

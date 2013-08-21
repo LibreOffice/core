@@ -181,8 +181,10 @@ typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 class SFX2_DLLPUBLIC SfxSingleTabDialogBase : public SfxModalDialog
 {
 public:
-    //layout ctor
+    //layout ctors
     SfxSingleTabDialogBase(Window *pParent, const SfxItemSet& rOptionsSet,
+        const OString& rID, const OUString& rUIXMLDescription);
+    SfxSingleTabDialogBase(Window *pParent, const SfxItemSet* pInSet,
         const OString& rID, const OUString& rUIXMLDescription);
 
     //non-layout ctors
@@ -215,6 +217,12 @@ public:
         const OString& rID = OString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"))
         : SfxSingleTabDialogBase(pParent, rOptionsSet, rID, rUIXMLDescription)
+    {
+    }
+    SfxSingleTabDialog(Window *pParent, const SfxItemSet* pInSet = 0,
+        const OString& rID = OString("SingleTabDialog"),
+        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"))
+        : SfxSingleTabDialogBase(pParent, pInSet, rID, rUIXMLDescription)
     {
     }
     void setTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0, sal_uInt32 nSettingsId = 0);

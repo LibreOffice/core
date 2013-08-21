@@ -240,14 +240,6 @@
 #define STR_EXTRA               (STR_FLDUI + 2)
 
 /*--------------------------------------------------------------------
-    Buttons for Field-Edit-Dlg
- --------------------------------------------------------------------*/
-
-#define BTN_FLDEDT_PREV         STR_EXTRA
-#define BTN_FLDEDT_NEXT         (STR_EXTRA  + 1)
-#define PB_FLDEDT_ADDRESS       (STR_EXTRA  + 2)
-
-/*--------------------------------------------------------------------
     Additional Strings
  --------------------------------------------------------------------*/
 
@@ -265,7 +257,6 @@
 #define STR_URLPROMPT           (STR_EXTRA  + 11)
 #define STR_FORMULA             (STR_EXTRA  + 12)
 #define STR_ALL_DATABASE        (STR_EXTRA  + 13)
-#define STR_FLD_EDIT_DLG        (STR_EXTRA  + 14)
 
 
 

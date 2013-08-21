@@ -52,13 +52,15 @@ namespace swui
     SwAbstractDialogFactory * GetFactory();
 }
 
-SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
-    SfxNoLayoutSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
-    pSh         (rVw.GetWrtShellPtr()),
-    aPrevBT     (this, SW_RES(BTN_FLDEDT_PREV)),
-    aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT)),
-    aAddressBT  (this, SW_RES(PB_FLDEDT_ADDRESS))
+SwFldEditDlg::SwFldEditDlg(SwView& rVw)
+    : SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0,
+        "EditFieldDialog", "modules/swriter/ui/editfielddialog.ui")
+    , pSh(rVw.GetWrtShellPtr())
 {
+    get(m_pPrevBT, "prev");
+    get(m_pNextBT, "next");
+    get(m_pAddressBT, "edit");
+
     SwFldMgr aMgr(pSh);
 
     SwField *pCurFld = aMgr.GetCurFld();
@@ -70,38 +72,20 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     /* #108536# Only create selection if there is none
         already. Normalize PaM instead of swapping. */
     if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, sal_True, 1, sal_False );
+        pSh->Right(CRSR_SKIP_CHARS, true, 1, false);
 
     pSh->NormalizePam();
 
-    sal_uInt16 nGroup = aMgr.GetGroup(sal_False, pCurFld->GetTypeId(), pCurFld->GetSubType());
+    sal_uInt16 nGroup = aMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     CreatePage(nGroup);
 
     GetOKButton()->SetClickHdl(LINK(this, SwFldEditDlg, OKHdl));
 
-    // position buttons ourselves because otherwise when font sizes are
-    // varying, they are in the woods, and because PB uses fixed pixel sizes
-    // for its buttons and dialog width in SingleTabDlg.
-    aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
-    sal_uInt16 nWidth = static_cast< sal_uInt16 >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
-    Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
-    aPrevBT.SetSizePixel(aNewSize);
+    m_pPrevBT->SetClickHdl(LINK(this, SwFldEditDlg, NextPrevHdl));
+    m_pNextBT->SetClickHdl(LINK(this, SwFldEditDlg, NextPrevHdl));
 
-    aNextBT.SetSizePixel(aPrevBT.GetSizePixel());
-
-    long nXPos = GetOKButton()->GetPosPixel().X() + GetOKButton()->GetSizePixel().Width()
-                    - aNextBT.GetSizePixel().Width() - 1;
-    aNextBT.SetPosPixel(Point(nXPos, aNextBT.GetPosPixel().Y()));
-
-    aAddressBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aAddressBT.GetPosPixel().Y()));
-    aAddressBT.SetSizePixel(GetOKButton()->GetSizePixel());
-
-    aPrevBT.SetClickHdl(LINK(this, SwFldEditDlg, NextPrevHdl));
-    aNextBT.SetClickHdl(LINK(this, SwFldEditDlg, NextPrevHdl));
-
-    aAddressBT.SetClickHdl(LINK(this, SwFldEditDlg, AddressHdl));
-    aAddressBT.SetHelpId(HID_FLDEDT_ADDRESS);
+    m_pAddressBT->SetClickHdl(LINK(this, SwFldEditDlg, AddressHdl));
 
     Init();
 }
@@ -129,14 +113,14 @@ void SwFldEditDlg::Init()
         sal_Bool bMove = rMgr.GoNext();
         if( bMove )
             rMgr.GoPrev();
-        aNextBT.Enable(bMove);
+        m_pNextBT->Enable(bMove);
 
         if( 0 != ( bMove = rMgr.GoPrev() ) )
             rMgr.GoNext();
-        aPrevBT.Enable( bMove );
+        m_pPrevBT->Enable( bMove );
 
         if (pCurFld->GetTypeId() == TYP_EXTUSERFLD)
-            aAddressBT.Show();
+            m_pAddressBT->Show();
 
         pSh->DestroyCrsr();
         pSh->EndAction();
@@ -150,21 +134,17 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
     // create TabPage
     SfxTabPage* pTabPage = 0;
-    const char* pHelpId = 0;
 
     switch (nGroup)
     {
         case GRP_DOC:
-            pTabPage = SwFldDokPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_DOK;
+            pTabPage = SwFldDokPage::Create(get_content_area(), *(SfxItemSet*)0);
             break;
         case GRP_FKT:
-            pTabPage = SwFldFuncPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_FUNC;
+            pTabPage = SwFldFuncPage::Create(get_content_area(), *(SfxItemSet*)0);
             break;
         case GRP_REF:
-            pTabPage = SwFldRefPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_REF;
+            pTabPage = SwFldRefPage::Create(get_content_area(), *(SfxItemSet*)0);
             break;
         case GRP_REG:
             {
@@ -179,31 +159,22 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
-                pTabPage = SwFldDokInfPage::Create(this, *pSet);
-                pHelpId = HID_EDIT_FLD_DOKINF;
+                pTabPage = SwFldDokInfPage::Create(get_content_area(), *pSet);
                 break;
             }
         case GRP_DB:
-            pTabPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldDBPage::Create(get_content_area(), *(SfxItemSet*)0);
             static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
-            pHelpId = HID_EDIT_FLD_DB;
             break;
         case GRP_VAR:
-            pTabPage = SwFldVarPage::Create(this, *(SfxItemSet*)0);
-            pHelpId = HID_EDIT_FLD_VAR;
+            pTabPage = SwFldVarPage::Create(get_content_area(), *(SfxItemSet*)0);
             break;
 
     }
 
-    pTabPage->SetHelpId(pHelpId);
     static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
 
-    SetTabPage(pTabPage);
-
-    String sTitle(GetText());
-    sTitle.Insert(OUString(": "), 0);
-    sTitle.Insert(SW_RESSTR(STR_FLD_EDIT_DLG), 0);
-    SetText(sTitle);
+    setTabPage(pTabPage);
 
     return pTabPage;
 }
@@ -256,7 +227,7 @@ short SwFldEditDlg::Execute()
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
-    sal_Bool bNext = pButton == &aNextBT;
+    bool bNext = pButton == m_pNextBT;
 
     pSh->EnterStdMode();
 

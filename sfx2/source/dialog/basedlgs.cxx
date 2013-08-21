@@ -761,6 +761,18 @@ SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window *pParent, const SfxItemSet
     SetInputSet( &rSet );
 }
 
+SfxSingleTabDialogBase::SfxSingleTabDialogBase(Window* pParent, const SfxItemSet* pInSet,
+    const OString& rID, const OUString& rUIXMLDescription)
+    : SfxModalDialog(pParent, rID, rUIXMLDescription)
+    , pImpl(new SingleTabDlgImpl)
+{
+    get(pOKBtn, "ok");
+    pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialogBase, OKHdl_Impl ) );
+    get(pCancelBtn, "cancel");
+    get(pHelpBtn, "help");
+    SetInputSet( pInSet );
+}
+
 // -----------------------------------------------------------------------
 
 SfxSingleTabDialogBase::~SfxSingleTabDialogBase()

@@ -24,15 +24,15 @@
 class SwView;
 class SwWrtShell;
 
-class SwFldEditDlg : public SfxNoLayoutSingleTabDialog
+class SwFldEditDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
-    ImageButton aPrevBT;
-    ImageButton aNextBT;
-    PushButton  aAddressBT;
+    PushButton* m_pPrevBT;
+    PushButton* m_pNextBT;
+    PushButton* m_pAddressBT;
 
     DECL_LINK(AddressHdl, void *);
-    DECL_LINK( NextPrevHdl, Button *pBt = 0 );
+    DECL_LINK(NextPrevHdl, Button *pBt = 0);
 
     void            Init();
     SfxTabPage*     CreatePage(sal_uInt16 nGroup);

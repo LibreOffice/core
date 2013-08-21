@@ -83,6 +83,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/dropcapspage \
 	sw/uiconfig/swriter/ui/dropdownfielddialog \
 	sw/uiconfig/swriter/ui/editcategories \
+	sw/uiconfig/swriter/ui/editfielddialog \
 	sw/uiconfig/swriter/ui/editsectiondialog \
 	sw/uiconfig/swriter/ui/endnotepage \
 	sw/uiconfig/swriter/ui/envaddresspage \
