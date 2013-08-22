@@ -63,7 +63,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
 {
     Window* pWindow = NULL;
     OUString aServiceName( pDescriptor->WindowServiceName );
-    if ( aServiceName.equalsIgnoreAsciiCaseAscii( "MultiLineEdit" ) )
+    if ( aServiceName.equalsIgnoreAsciiCase( "MultiLineEdit" ) )
     {
         if ( pParent )
         {
@@ -77,7 +77,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "FileControl" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCase( "FileControl" ) )
     {
         if ( pParent )
         {
@@ -90,22 +90,22 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if (aServiceName.equalsIgnoreAsciiCaseAscii("FormattedField") )
+    else if (aServiceName.equalsIgnoreAsciiCase("FormattedField") )
     {
         pWindow = new FormattedField( pParent, nWinBits );
         *ppNewComp = new SVTXFormattedField;
     }
-    else if (aServiceName.equalsIgnoreAsciiCaseAscii("NumericField") )
+    else if (aServiceName.equalsIgnoreAsciiCase("NumericField") )
     {
         pWindow = new DoubleNumericField( pParent, nWinBits );
         *ppNewComp = new SVTXNumericField;
     }
-    else if (aServiceName.equalsIgnoreAsciiCaseAscii("LongCurrencyField") )
+    else if (aServiceName.equalsIgnoreAsciiCase("LongCurrencyField") )
     {
         pWindow = new DoubleCurrencyField( pParent, nWinBits );
         *ppNewComp = new SVTXCurrencyField;
     }
-    else if (aServiceName.equalsIgnoreAsciiCaseAscii("datefield") )
+    else if (aServiceName.equalsIgnoreAsciiCase("datefield") )
     {
         pWindow = new CalendarField( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
@@ -114,12 +114,12 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
-    else if (aServiceName.equalsIgnoreAsciiCaseAscii("roadmap") )
+    else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
         pWindow = new ::svt::ORoadmap( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
-    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "ProgressBar" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCase( "ProgressBar" ) )
     {
         if ( pParent )
         {
@@ -132,13 +132,13 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "Tree" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCase( "Tree" ) )
     {
         TreeControlPeer* pPeer = new TreeControlPeer;
         *ppNewComp = pPeer;
         pWindow = pPeer->createVclControl( pParent, nWinBits );
     }
-    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "FixedHyperlink" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCase( "FixedHyperlink" ) )
     {
         if ( pParent )
         {
@@ -151,7 +151,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "Grid" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCase( "Grid" ) )
     {
         if ( pParent )
         {
