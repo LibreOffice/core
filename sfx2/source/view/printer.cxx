@@ -131,7 +131,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 //--------------------------------------------------------------------
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
-                        const String& rPrinterName ) :
+                        const OUString& rPrinterName ) :
 
     Printer         ( rPrinterName ),
     pOptions        ( pTheOptions ),

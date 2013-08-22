@@ -46,11 +46,11 @@ private:
 public:
                             SfxPrinter( SfxItemSet *pTheOptions );
                             SfxPrinter( SfxItemSet *pTheOptions,
-                                        const String &rPrinterName );
+                                        const OUString &rPrinterName );
                             SfxPrinter( SfxItemSet *pTheOptions,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( SfxItemSet *pTheOptions,
-                                        const String &rPrinterName,
+                                        const OUString &rPrinterName,
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
                             ~SfxPrinter();
