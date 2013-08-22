@@ -24,6 +24,7 @@
 #include <boost/unordered_map.hpp>
 #include <set>
 #include <algorithm>
+#include <cassert>
 
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -571,7 +572,9 @@ void SAL_CALL uno_getMapping(
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( ppMapping && pFrom && pTo, "### null ptr!" );
+    assert(ppMapping != 0);
+    assert(pFrom != 0);
+    assert(pTo != 0);
     if (*ppMapping)
     {
         (*(*ppMapping)->release)( *ppMapping );
