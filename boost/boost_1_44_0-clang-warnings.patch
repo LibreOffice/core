@@ -9,17 +9,6 @@
         {
            return 1;
         }
---- misc/boost_1_44_0/boost/token_functions.hpp	2010-06-12 14:06:28.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/token_functions.hpp	2012-06-06 23:12:27.000000000 +0200
-@@ -285,7 +285,7 @@
-   template <>
-   struct assign_or_plus_equal<std::input_iterator_tag> {
-     template<class Iterator, class Token>
--    static void assign(Iterator b, Iterator e, Token &t) { }
-+    static void assign(Iterator, Iterator, Token &) { }
-     template<class Token, class Value> 
-     static void plus_equal(Token &t, const Value &v) {
-       t += v;
 --- misc/boost_1_44_0/boost/random/lagged_fibonacci.hpp
 +++ misc/build/boost_1_44_0/boost/random/lagged_fibonacci.hpp
 @@ -16,6 +16,10 @@
@@ -59,23 +48,3 @@
  #include <boost/config/no_tr1/cmath.hpp>         // std::pow
  #include <iostream>
  #include <algorithm>     // std::equal
---- misc/boost_1_44_0/boost/smart_ptr/detail/make_array_helper.hpp
-+++ misc/build/boost_1_44_0/boost/smart_ptr/detail/make_array_helper.hpp
-@@ -72,7 +72,7 @@
-                 memory->~Y();
-             }
-             template<typename U>
--            bool operator==(const make_array_helper<T[], U>& other) const {
-+            bool operator==(const make_array_helper<T[], U>&) const {
-                 return true;
-             }
-             template<typename U>
-@@ -138,7 +138,7 @@
-                 memory->~Y();
-             }
-             template<typename U>
--            bool operator==(const make_array_helper<T[N], U>& other) const {
-+            bool operator==(const make_array_helper<T[N], U>&) const {
-                 return true;
-             }
-             template<typename U>

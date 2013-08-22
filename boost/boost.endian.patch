@@ -1,22 +1,13 @@
 --- foo/foo/foo/boost/detail/endian.hpp
 +++ foo/foo/foo/boost/detail/endian.hpp
-@@ -28,16 +28,16 @@
- #ifndef BOOST_DETAIL_ENDIAN_HPP
- #define BOOST_DETAIL_ENDIAN_HPP
- 
+@@ -28,8 +28,8 @@
+ //
+ // Special cases come first:
+ //
+-#if defined (__GLIBC__)
 -// GNU libc offers the helpful header <endian.h> which defines
++#if defined (__GLIBC__) || defined(__ANDROID__)
 +// GNU libc and Android's bionic offer the helpful header <endian.h> which defines
  // __BYTE_ORDER
- 
--#if defined (__GLIBC__)
-+#if defined (__GLIBC__) || defined(__ANDROID__)
  # include <endian.h>
  # if (__BYTE_ORDER == __LITTLE_ENDIAN)
- #  define BOOST_LITTLE_ENDIAN
- # elif (__BYTE_ORDER == __BIG_ENDIAN)
- #  define BOOST_BIG_ENDIAN
--# elif (__BYTE_ORDER == __PDP_ENDIAN)
-+# elif defined(__PDP_ENDIAN) && (__BYTE_ORDER == __PDP_ENDIAN)
- #  define BOOST_PDP_ENDIAN
- # else
- #  error Unknown machine endianness detected.

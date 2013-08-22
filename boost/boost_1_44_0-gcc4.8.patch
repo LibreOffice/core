@@ -1,49 +1,5 @@
 
 
---- a/b/boost/boost/math/special_functions/gamma.hpp	2013-05-31 18:09:38.509792503 +0200
-+++ a/b/boost/boost/math/special_functions/gamma.hpp	2013-05-31 18:09:41.438795355 +0200
-@@ -1360,7 +1360,6 @@
-    BOOST_FPU_EXCEPTION_GUARD
-    typedef typename tools::promote_args<T1, T2>::type result_type;
-    typedef typename policies::evaluation<result_type, Policy>::type value_type;
--   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
-    typedef typename policies::normalise<
-       Policy, 
-       policies::promote_float<false>, 
-@@ -1489,7 +1488,6 @@
-    BOOST_FPU_EXCEPTION_GUARD
-    typedef typename tools::promote_args<T1, T2>::type result_type;
-    typedef typename policies::evaluation<result_type, Policy>::type value_type;
--   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
-    typedef typename policies::normalise<
-       Policy, 
-       policies::promote_float<false>, 
-@@ -1520,7 +1518,6 @@
-    BOOST_FPU_EXCEPTION_GUARD
-    typedef typename tools::promote_args<T1, T2>::type result_type;
-    typedef typename policies::evaluation<result_type, Policy>::type value_type;
--   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
-    typedef typename policies::normalise<
-       Policy, 
-       policies::promote_float<false>, 
-@@ -1551,7 +1548,6 @@
-    BOOST_FPU_EXCEPTION_GUARD
-    typedef typename tools::promote_args<T1, T2>::type result_type;
-    typedef typename policies::evaluation<result_type, Policy>::type value_type;
--   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
-    typedef typename policies::normalise<
-       Policy, 
-       policies::promote_float<false>, 
---- a/b/boost/boost/math/special_functions/detail/igamma_inverse.hpp	2013-05-31 18:11:23.420936359 +0200
-+++ a/b/boost/boost/math/special_functions/detail/igamma_inverse.hpp	2013-05-31 18:11:24.772938706 +0200
-@@ -341,7 +341,6 @@
-       // flag is set, then Q(x) - q and it's derivatives.
-       //
-       typedef typename policies::evaluation<T, Policy>::type value_type;
--      typedef typename lanczos::lanczos<T, Policy>::type evaluation_type;
-       typedef typename policies::normalise<
-          Policy, 
-          policies::promote_float<false>, 
 --- a/b/boost/boost/math/special_functions/beta.hpp	2013-05-31 18:12:02.036007347 +0200
 +++ a/b/boost/boost/math/special_functions/beta.hpp	2013-05-31 18:11:56.260996218 +0200
 @@ -1331,7 +1331,6 @@
@@ -82,44 +38,8 @@
          result_type numerator = static_cast<T>(eng() - (eng.min)());
          result_type divisor = static_cast<T>((eng.max)() - (eng.min)());
          BOOST_ASSERT(divisor > 0);
---- a/b/boost/boost/lexical_cast.hpp	2013-05-31 13:52:39.758500819 +0200
-+++ a/b/boost/boost/lexical_cast.hpp	2013-05-31 13:52:43.927514850 +0200
-@@ -865,7 +865,6 @@
- #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
- #endif
--            typedef typename Traits::int_type int_type;
-             CharT const czero = lcast_char_constants<CharT>::zero;
-             --end;
-             value = 0;
---- a/b/boost/boost/math/special_functions/sign.hpp	2013-05-31 13:53:52.518746080 +0200
-+++ a/b/boost/boost/math/special_functions/sign.hpp	2013-05-31 13:59:08.053810037 +0200
-@@ -110,7 +110,6 @@
- { 
-    typedef typename detail::fp_traits<T>::type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
-    return detail::signbit_impl(x, method());
- }
- 
-@@ -124,7 +123,6 @@
- { //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
-    typedef typename detail::fp_traits<T>::sign_change_type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
- 
-    return detail::changesign_impl(x, method());
- }
 --- a/b/boost/boost/math/special_functions/fpclassify.hpp	2013-05-31 14:02:13.660436127 +0200
 +++ a/b/boost/boost/math/special_functions/fpclassify.hpp	2013-05-31 14:01:17.372246240 +0200
-@@ -328,7 +328,6 @@
- { //!< \brief return true if floating-point type t is finite.
-    typedef typename detail::fp_traits<T>::type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
-    typedef typename tools::promote_args<T>::type value_type;
-    return detail::isfinite_impl(static_cast<value_type>(x), method());
- }
 @@ -339,7 +338,6 @@
  { //!< \brief return true if floating-point type t is finite.
     typedef detail::fp_traits<long double>::type traits;
@@ -127,14 +47,6 @@
 -   typedef boost::is_floating_point<long double>::type fp_tag;
     typedef long double value_type;
     return detail::isfinite_impl(static_cast<value_type>(x), method());
- }
-@@ -399,7 +397,6 @@
- {
-    typedef typename detail::fp_traits<T>::type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
-    typedef typename tools::promote_args<T>::type value_type;
-    return detail::isnormal_impl(static_cast<value_type>(x), method());
  }
 @@ -410,7 +407,6 @@
  {
@@ -144,14 +56,6 @@
     typedef long double value_type;
     return detail::isnormal_impl(static_cast<value_type>(x), method());
  }
-@@ -488,7 +484,6 @@
- {
-    typedef typename detail::fp_traits<T>::type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
-    typedef typename tools::promote_args<T>::type value_type;
-    return detail::isinf_impl(static_cast<value_type>(x), method());
- }
 @@ -499,7 +494,6 @@
  {
     typedef detail::fp_traits<long double>::type traits;
@@ -160,14 +64,6 @@
     typedef long double value_type;
     return detail::isinf_impl(static_cast<value_type>(x), method());
  }
-@@ -571,7 +565,6 @@
- { //!< \brief return true if floating-point type t is NaN (Not A Number).
-    typedef typename detail::fp_traits<T>::type traits;
-    typedef typename traits::method method;
--   typedef typename boost::is_floating_point<T>::type fp_tag;
-    return detail::isnan_impl(x, method());
- }
- 
 @@ -585,7 +578,6 @@
  { //!< \brief return true if floating-point type t is NaN (Not A Number).
     typedef detail::fp_traits<long double>::type traits;

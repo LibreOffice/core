@@ -1,3 +1,25 @@
+--- foo/foo/foo/boost/detail/endian.hpp
++++ foo/foo/foo/boost/detail/endian.hpp
+@@ -47,7 +47,7 @@
+ # define BOOST_BYTE_ORDER __BYTE_ORDER
+ 
+ #elif defined(__NetBSD__) || defined(__FreeBSD__) || \
+-    defined(__OpenBSD__) || (__DragonFly__)
++    defined(__OpenBSD__) || (defined(__DragonFly__) && (__DragonFly__))
+ //
+ // BSD has endian.h, see https://svn.boost.org/trac/boost/ticket/6013
+ #  if defined(__OpenBSD__)
+--- foo/foo/foo/boost/lexical_cast.hpp
++++ foo/foo/foo/boost/lexical_cast.hpp
+@@ -69,7 +69,7 @@
+     throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)))
+ #endif
+ 
+-#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
++#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || (defined(GCC_VERSION) && GCC_VERSION > 40700)
+ #define BOOST_LCAST_HAS_INT128
+ #endif
+ 
 --- foo/foo/foo/boost/multi_array/base.hpp
 +++ foo/foo/foo/boost/multi_array/base.hpp
 @@ -65,7 +65,7 @@

@@ -1,13 +1,3 @@
---- foo/foo/foo/boost/math/special_functions/fpclassify.hpp
-+++ foo/foo/foo/boost/math/special_functions/fpclassify.hpp
-@@ -100,6 +100,7 @@
- #ifdef isnan
-    return isnan(t);
- #elif defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY) || !defined(BOOST_HAS_FPCLASSIFY)
-+   (void) t;
-    return false;
- #else // BOOST_HAS_FPCLASSIFY
-    return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
 --- foo/foo/foo/boost/multi_array/base.hpp
 +++ foo/foo/foo/boost/multi_array/base.hpp
 @@ -501,6 +501,7 @@
