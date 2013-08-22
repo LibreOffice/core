@@ -242,6 +242,38 @@ static void checkVerticalBar(OString aLanguage)
     aPoInput.close();
 }
 
+// In starmath/source.po Math symbol names (from symbol.src)
+// must not contain spaces
+static void checkMathSymbolNames(OString aLanguage)
+{
+    OString aPoPath = OString(getenv("SRC_ROOT")) +
+                      "/translations/source/" +
+                      aLanguage +
+                      "/starmath/source.po";
+    PoIfstream aPoInput;
+    aPoInput.open(aPoPath);
+    if( !aPoInput.isOpen() )
+        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+
+    for(;;)
+    {
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
+        if( aPoInput.eof() )
+            break;
+        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_UI_SYMBOL_NAMES" &&
+            !aPoEntry.getMsgStr().isEmpty() && (aPoEntry.getMsgStr().indexOf(" ") != -1) )
+        {
+            std::cout << "ERROR: Math symbol names must not contain spaces.\n" <<
+                "File: " << aPoPath << std::endl <<
+                "Language: " << aLanguage << std::endl <<
+                "English:   " << aPoEntry.getMsgId() << std::endl <<
+                "Localized: " << aPoEntry.getMsgStr() << std::endl << std::endl;
+        }
+    }
+    aPoInput.close();
+}
+
 int main()
 {
     OString aLanguages(getenv("ALL_LANGS"));
@@ -260,6 +292,7 @@ int main()
          checkStyleNames(aLanguage);
          checkFunctionNames(aLanguage);
          checkVerticalBar(aLanguage);
+         checkMathSymbolNames(aLanguage);
     }
     return 0;
 }
