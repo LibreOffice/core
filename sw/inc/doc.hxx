@@ -1162,8 +1162,7 @@ public:
     void SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName );
     const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
 
-    void GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
-                    String* pFltName ) const;
+    void GetGrfNms( const SwFlyFrmFmt& rFmt, OUString* pGrfName, OUString* pFltName ) const;
 
     /// Set a valid name for all Flys that have none (Called by Readers after reading).
     void SetAllUniqueFlyNames();

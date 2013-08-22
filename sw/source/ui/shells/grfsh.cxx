@@ -115,7 +115,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             const Graphic *pGraphic;
             if(0 != (pGraphic = rSh.GetGraphic()))
             {
-                String sGrfNm, sFilterNm;
+                OUString sGrfNm;
+                OUString sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
                 GraphicHelper::ExportGraphic( *pGraphic, sGrfNm );
             }
@@ -249,9 +250,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
             }
 
-            String sGrfNm, sFilterNm;
+            OUString sGrfNm;
+            OUString sFilterNm;
             rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-            if( sGrfNm.Len() )
+            if( !sGrfNm.isEmpty() )
             {
                 aSet.Put( SvxBrushItem( INetURLObject::decode( sGrfNm,
                                         INET_HEX_ESCAPE,
@@ -270,7 +272,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                             SID_ATTR_GRAF_GRAPHIC ) );
                 }
             }
-            aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() > 0 ) );
+            aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, !sGrfNm.isEmpty() ) );
 
             // get Mirror and Crop
             {
@@ -368,14 +370,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( ((SvxBrushItem*)pItem)->GetGraphicLink() )
                         sGrfNm = *((SvxBrushItem*)pItem)->GetGraphicLink();
                     else
-                        sGrfNm.Erase();
+                        sGrfNm = OUString();
 
                     if( ((SvxBrushItem*)pItem)->GetGraphicFilter() )
                         sFilterNm = *((SvxBrushItem*)pItem)->GetGraphicFilter();
                     else
-                        sFilterNm.Erase();
+                        sFilterNm = OUString();
 
-                    if( sGrfNm.Len() )
+                    if( !sGrfNm.isEmpty() )
                     {
                         SwDocShell* pDocSh = GetView().GetDocShell();
                         SwWait aWait( *pDocSh, sal_True );

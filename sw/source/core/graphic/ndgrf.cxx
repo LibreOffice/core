@@ -571,7 +571,7 @@ short SwGrfNode::SwapOut()
     return 1;
 }
 
-bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
+bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
 {
     bool bRet = false;
     if( refLink.Is() && refLink->GetLinkManager() )
@@ -582,14 +582,16 @@ bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
                     refLink, 0, pFileNm, 0, pFilterNm );
         else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
         {
-            String sApp, sTopic, sItem;
+            OUString sApp;
+            OUString sTopic;
+            OUString sItem;
             if( refLink->GetLinkManager()->GetDisplayNames(
                     refLink, &sApp, &sTopic, &sItem ) )
             {
-                ( *pFileNm = sApp ) += sfx2::cTokenSeparator;
-                ( *pFileNm += sTopic ) += sfx2::cTokenSeparator;
-                *pFileNm += sItem;
-                pFilterNm->AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
+                *pFileNm = sApp + OUString(sfx2::cTokenSeparator)
+                         + sTopic + OUString(sfx2::cTokenSeparator)
+                         + sItem;
+                *pFilterNm = "DDE";
                 bRet = true;
             }
         }

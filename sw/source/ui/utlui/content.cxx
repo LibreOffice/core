@@ -560,7 +560,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 SwContent* pCnt;
                 if(CONTENT_TYPE_GRAPHIC == nContentType)
                 {
-                    String sLink;
+                    OUString sLink;
                     pWrtShell->GetGrfNms( &sLink, 0, (SwFlyFrmFmt*) pFrmFmt);
                     pCnt = new SwGraphicContent(this, sFrmName,
                                 INetURLObject::decode( sLink, INET_HEX_ESCAPE,

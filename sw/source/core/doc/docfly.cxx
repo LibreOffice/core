@@ -583,8 +583,8 @@ bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     return bChgAnchor;
 }
 
-void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
-                        String* pFltName ) const
+void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, OUString* pGrfName,
+                       OUString* pFltName ) const
 {
     SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
     const SwGrfNode* pGrfNd = aIdx.GetNode().GetGrfNode();

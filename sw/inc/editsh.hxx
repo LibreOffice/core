@@ -622,7 +622,7 @@ public:
     /** @return name and filter of a graphic if the cursor is in a graphic,
      else give a rap on the knuckles!
      If a string-ptr != 0 return the respective name. */
-    void GetGrfNms( String* pGrfName, String* pFltName,
+    void GetGrfNms( OUString* pGrfName, OUString* pFltName,
                     const SwFlyFrmFmt* = 0 ) const;
 
     /// Re-read if graphic is not ok. Current graphic is replaced by the new one.

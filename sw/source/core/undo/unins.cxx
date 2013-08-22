@@ -438,7 +438,8 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
     case ND_GRFNODE:
         {
             SwGrfNode* pGrfNd = (SwGrfNode*)pCNd;
-            String sFile, sFilter;
+            OUString sFile;
+            OUString sFilter;
             if( pGrfNd->IsGrfLink() )
                 pGrfNd->GetFileFilterNms( &sFile, &sFilter );
 
@@ -838,14 +839,14 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 
     // cache the old values
     Graphic* pOldGrf = pGrf;
-    String* pOldNm = pNm;
-    String* pOldFltr = pFltr;
+    OUString* pOldNm = pNm;
+    OUString* pOldFltr = pFltr;
     sal_uInt16 nOldMirr = nMirr;
 
     SaveGraphicData( *pGrfNd );
     if( pOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : aEmptyStr, 0, 0, sal_True );
+        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString(), 0, 0, sal_True );
         delete pOldNm;
         delete pOldFltr;
     }
@@ -878,8 +879,8 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 {
     if( rGrfNd.IsGrfLink() )
     {
-        pNm = new String;
-        pFltr = new String;
+        pNm = new OUString;
+        pFltr = new OUString;
         rGrfNd.GetFileFilterNms( pNm, pFltr );
         pGrf = 0;
     }

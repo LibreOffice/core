@@ -310,7 +310,7 @@ void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
 
 /// Returns the name and the filter name of a graphic if the pointer is on a graphic.
 /// If a String-pointer is != 0 then return corresponding name.
-void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
+void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
                             const SwFlyFrmFmt* pFmt ) const
 {
     OSL_ENSURE( pGrfName || pFltName, "No parameters" );

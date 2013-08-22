@@ -178,12 +178,12 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
     bool bRet = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType;
     if( bRet )
     {
-        String aGrfName;
+        OUString aGrfName;
         if ( nSel & nsSelectionType::SEL_GRF )
             rSh.GetGrfNms( &aGrfName, 0 );
 
         SvxContourDlg *pDlg = SWCONTOURDLG(rSh.GetView());
-        pDlg->Update( aGraf, aGrfName.Len() > 0,
+        pDlg->Update( aGraf, !aGrfName.isEmpty(),
                   rSh.GetGraphicPolygon(), rSh.GetIMapInventor() );
     }
     return bRet;

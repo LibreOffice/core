@@ -1618,7 +1618,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
 }
 
 const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
-                                       String &rName, sal_Bool &rbLink ) const
+                                       OUString &rName, sal_Bool &rbLink ) const
 {
     if( !Imp()->HasDrawView() )
         return 0;
@@ -1645,7 +1645,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
                 }
 
                 pNd->GetFileFilterNms( &rName, 0 );
-                if ( !rName.Len() )
+                if ( rName.isEmpty() )
                     rName = pFly->GetFmt()->GetName();
                 pNd->SwapIn( sal_True );
                 return &pNd->GetGrf();

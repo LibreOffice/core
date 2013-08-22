@@ -779,7 +779,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
     if(!pWrtShell)
         return 0;
 
-    String sGrfNm;
+    OUString sGrfNm;
     const int nSelection = pWrtShell->GetSelectionType();
     if( nSelection == nsSelectionType::SEL_GRF )
     {
@@ -1546,15 +1546,15 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
             if( pPt )
             {
                 bIMap = 0 != rSh.GetFmtFromObj( *pPt )->GetURL().GetMap();
-                String aDummy;
+                OUString aDummy;
                 rSh.GetGrfAtPos( *pPt, aDummy, bLink );
             }
             else
             {
                 bIMap = 0 != rSh.GetFlyFrmFmt()->GetURL().GetMap();
-                String aDummy;
+                OUString aDummy;
                 rSh.GetGrfNms( &aDummy, 0 );
-                bLink = 0 != aDummy.Len();
+                bLink = !aDummy.isEmpty();
             }
 
             if( bLink && bIMap )
@@ -2939,7 +2939,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
 {
     if(!pWrtShell)
         return;
-    String sGrfNm;
+    OUString sGrfNm;
     const int nSelection = pWrtShell->GetSelectionType();
     if( nsSelectionType::SEL_GRF == nSelection)
     {
@@ -3263,7 +3263,8 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         TRNSFR_GRAPHIC == eBufferType )
     {
         // ReRead the graphic
-        String sGrfNm, sFltNm;
+        OUString sGrfNm;
+        OUString sFltNm;
         rSrcSh.GetGrfNms( &sGrfNm, &sFltNm );
         rSh.ReRead( sGrfNm, sFltNm, rSrcSh.GetGraphic() );
         return 1;

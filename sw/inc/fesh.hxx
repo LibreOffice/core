@@ -336,7 +336,7 @@ public:
     /** Deliver graphic in rName besides graphic name. If graphic is
      linked give name with path. rbLink is TRUE if graphic is linked. */
     const Graphic *GetGrfAtPos( const Point &rDocPos,
-                                String &rName, sal_Bool &rbLink ) const;
+                                OUString &rName, sal_Bool &rbLink ) const;
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle );
