@@ -1199,6 +1199,37 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
                         aPropStates.push_back(XMLPropertyState(nIndex, aAny));
                     }
                     break;
+                    case EE_CHAR_UNDERLINE:
+                    {
+                        // Underline attribute needs to export multiple entries.
+                        sal_Int32 nIndexStyle = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-style", 0);
+                        if (nIndexStyle == -1 || nIndexStyle > nEntryCount)
+                            break;
+
+                        sal_Int32 nIndexWidth = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "text-underline-width", 0);
+                        if (nIndexWidth == -1 || nIndexWidth > nEntryCount)
+                            break;
+
+                        sal_Int32 nIndexColor = xMapper->FindEntryIndex("CharUnderlineColor", XML_NAMESPACE_STYLE, "text-underline-color");
+                        if (nIndexColor == -1 || nIndexColor > nEntryCount)
+                            break;
+
+                        sal_Int32 nIndexHasColor = xMapper->FindEntryIndex("CharUnderlineHasColor", XML_NAMESPACE_STYLE, "text-underline-color");
+                        if (nIndexHasColor == -1 || nIndexHasColor > nEntryCount)
+                            break;
+
+                        const SvxUnderlineItem* pUL = static_cast<const SvxUnderlineItem*>(p);
+                        pUL->QueryValue(aAny, MID_TL_STYLE);
+                        aPropStates.push_back(XMLPropertyState(nIndexStyle, aAny));
+                        aPropStates.push_back(XMLPropertyState(nIndexWidth, aAny));
+
+                        pUL->QueryValue(aAny, MID_TL_COLOR);
+                        aPropStates.push_back(XMLPropertyState(nIndexColor, aAny));
+
+                        pUL->QueryValue(aAny, MID_TL_HASCOLOR);
+                        aPropStates.push_back(XMLPropertyState(nIndexHasColor, aAny));
+                    }
+                    break;
                     case EE_CHAR_OVERLINE:
                     {
                         if (!static_cast<const SvxOverlineItem*>(p)->QueryValue(aAny, pEntry->mnFlag))
