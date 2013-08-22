@@ -288,7 +288,7 @@ void Test::testCharacterBorder()
 
         table::BorderLine2 aBorderArray[4] =
         {
-            table::BorderLine2(16724787,26,2,4,13,35),     // Top
+            table::BorderLine2(16724787,0,37,0,14,37),     // Top (fine dashed line)
             table::BorderLine2(10092390,26,26,53,11,106),  // Bottom
             table::BorderLine2(6711039,9,26,9,12,71),      // Left
             table::BorderLine2(0,0,0,0,0,0)                // Right

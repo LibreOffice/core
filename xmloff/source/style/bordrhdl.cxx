@@ -42,6 +42,7 @@ const sal_uInt16 API_LINE_EMBOSSED  = 10;
 const sal_uInt16 API_LINE_ENGRAVED  = 11;
 const sal_uInt16 API_LINE_OUTSET  = 12;
 const sal_uInt16 API_LINE_INSET  = 13;
+const sal_uInt16 API_LINE_FINE_DASHED  = 14;
 const sal_uInt16 API_LINE_NONE = USHRT_MAX;
 
 #define DEF_LINE_WIDTH_0        1
@@ -64,6 +65,7 @@ SvXMLEnumMapEntry pXML_BorderStyles[] =
     { XML_RIDGE,                API_LINE_EMBOSSED },
     { XML_INSET,                API_LINE_INSET  },
     { XML_OUTSET,               API_LINE_OUTSET },
+    { XML_FINE_DASHED,          API_LINE_FINE_DASHED },
     { XML_TOKEN_INVALID,        0 }
 };
 
@@ -333,6 +335,9 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
                 break;
             case API_LINE_INSET:
                 eStyleToken = XML_INSET;
+                break;
+            case API_LINE_FINE_DASHED:
+                eStyleToken = XML_FINE_DASHED;
                 break;
             case API_LINE_SOLID:
             default:

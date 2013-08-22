@@ -767,6 +767,7 @@ namespace xmloff { namespace token {
         TOKEN( "filter-options",                  XML_FILTER_OPTIONS ),
         TOKEN( "filter-or",                       XML_FILTER_OR ),
         TOKEN( "filter-set-item",                 XML_FILTER_SET_ITEM ),
+        TOKEN( "fine-dashed",                     XML_FINE_DASHED ),
         TOKEN( "first-date-time",                 XML_FIRST_DATE_TIME ),
         TOKEN( "first-page",                      XML_FIRST_PAGE ),
         TOKEN( "first-page-number",               XML_FIRST_PAGE_NUMBER ),
