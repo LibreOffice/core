@@ -24,3 +24,6 @@ en-US  = "The same version of this product is already installed."
 
 [OOO_CUSTOMACTION_3]
 en-US = "An older version of [ProductName] was found. To install a newer version, the older version needs to be removed first."
+
+[OOO_CUSTOMACTION_4]
+en-US = "[ProductName] cannot be installed on this Windows version. Windows XP or newer is required."

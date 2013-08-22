@@ -19,13 +19,13 @@ PatchWelcome	Installed And PATCH And Not IS_MAJOR_UPGRADE	625
 ResolveSource	Not Installed And Not PATCH	525
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	300
 SameProductFound	SAMEPRODUCTS	170
-setAllUsersProfile2K	VersionNT >= 500	512
-SetAllUsersProfileNT	VersionNT = 400	511
+setAllUsersProfile		512
 SetupCompleteError		-3
 SetupCompleteSuccess		-1
 SetupInitialization		100
 SetupInterrupted		-2
 SetupProgress		800
 SetupResume	Installed And (RESUME Or Preselected) And Not PATCH	700
-setUserProfileNT	VersionNT	510
+setUserProfile		510
 ValidateProductID		350
+WrongWindowsVersion	VersionNT < 501	10
