@@ -2003,9 +2003,13 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             pTableNd->DelFrms();
             getIDocumentContentOperations().DeleteSection( pTableNd );
         }
+
+        SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(),
+                                            rTable );
+
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
-        return true;
+        return sal_True;
     }
 
     SwUndoTableNdsChg* pUndo = 0;
@@ -2034,6 +2038,9 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, true, true );
         if (bRet)
         {
+            SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(),
+                                            rTable );
+
             getIDocumentState().SetModified();
             getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
         }
