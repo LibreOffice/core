@@ -83,6 +83,7 @@ namespace VLC
         libvlc_media_player_release( mPlayer );
         mPlayer = other.mPlayer;
         libvlc_media_player_retain( mPlayer );
+        return *this;
     }
 
     Player::~Player()

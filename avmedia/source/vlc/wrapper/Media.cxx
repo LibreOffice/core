@@ -57,6 +57,7 @@ const Media& Media::operator=( const Media& other )
     mMedia = other.mMedia;
 
     libvlc_media_retain( mMedia );
+    return *this;
 }
 
 Media::~Media()
