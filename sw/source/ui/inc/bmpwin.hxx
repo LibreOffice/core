@@ -38,18 +38,17 @@ private:
     sal_Bool        bGraphic : 1;
     bool        bLeftAlign : 1;
 
-    void Paint(const Rectangle& rRect);
+    virtual void Paint(const Rectangle& rRect);
+
+    virtual Size GetOptimalSize() const;
 
 public:
-    BmpWindow(Window* pPar, sal_uInt16 nId,
-                const Graphic& rGraphic, const BitmapEx& rBmp);
-    BmpWindow(Window* pParent, const ResId rResId) :
-        Window(pParent, rResId),
-        bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(true) {}
+    BmpWindow(Window* pPar, WinBits nStyle);
     ~BmpWindow();
     void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
+    void SetBitmapEx(const BitmapEx& rGrf);
 };
 
 #endif

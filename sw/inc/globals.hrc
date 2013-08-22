@@ -127,8 +127,6 @@
 #define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)
 #define TP_OPTPRINT_PAGE            (RC_GLOBALS_BEGIN +  26)
 
-#define TP_GRF_EXT                  (RC_GLOBALS_BEGIN +  35)
-
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
 #define TP_CONDCOLL                 (RC_GLOBALS_BEGIN +  48)

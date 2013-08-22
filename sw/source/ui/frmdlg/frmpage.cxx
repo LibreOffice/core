@@ -59,7 +59,6 @@
 #include <fmtfollowtextflow.hxx>
 
 #include <frmui.hrc>
-#include <frmpage.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -2336,29 +2335,26 @@ void SwFrmPage::EnableVerticalPositioning( bool bEnable )
 }
 
 
-SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
-    SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
-    aMirrorFL       (this, SW_RES( FL_MIRROR )),
-    aMirrorVertBox  (this, SW_RES( CB_VERT )),
-    aMirrorHorzBox  (this, SW_RES( CB_HOR )),
-    aAllPagesRB     (this, SW_RES( RB_MIRROR_ALL_PAGES )),
-    aLeftPagesRB    (this, SW_RES( RB_MIRROR_LEFT_PAGES )),
-    aRightPagesRB   (this, SW_RES( RB_MIRROR_RIGHT_PAGES )),
-    aBmpWin         (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE))),
-    aConnectFL      (this, SW_RES( FL_CONNECT )),
-    aConnectFT      (this, SW_RES( FT_CONNECT )),
-    aConnectED      (this, SW_RES( ED_CONNECT )),
-    aBrowseBT       (this, SW_RES( PB_BROWSE )),
-    pGrfDlg         ( 0 )
+SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "PicturePage",
+        "modules/swriter/ui/picturepage.ui", rSet)
+    , pGrfDlg(0)
 {
-    FreeResource();
-
-    aBrowseBT.SetAccessibleRelationMemberOf(&aConnectFL);
+    get(m_pMirror, "flipframe");
+    get(m_pMirrorVertBox, "vert");
+    get(m_pMirrorHorzBox, "hori");
+    get(m_pAllPagesRB, "allpages");
+    get(m_pLeftPagesRB, "leftpages");
+    get(m_pRightPagesRB, "rightpages");
+    get(m_pConnectED, "entry");
+    get(m_pBrowseBT, "browse");
+    get(m_pBmpWin, "preview");
+    m_pBmpWin->SetBitmapEx(get<FixedImage>("fallback")->GetImage().GetBitmapEx());
 
     SetExchangeSupport();
-    aMirrorHorzBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
-    aMirrorVertBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
-    aBrowseBT.SetClickHdl    ( LINK(this, SwGrfExtPage, BrowseHdl));
+    m_pMirrorHorzBox->SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
+    m_pMirrorVertBox->SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
+    m_pBrowseBT->SetClickHdl    ( LINK(this, SwGrfExtPage, BrowseHdl));
 }
 
 SwGrfExtPage::~SwGrfExtPage()
@@ -2380,8 +2376,8 @@ void SwGrfExtPage::Reset(const SfxItemSet &rSet)
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, sal_True, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
-        aBrowseBT.Enable();
-        aConnectED.SetReadOnly(sal_False);
+        m_pBrowseBT->Enable();
+        m_pConnectED->SetReadOnly(sal_False);
     }
 
     ActivatePage(rSet);
@@ -2408,10 +2404,10 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         switch( eMirror )
         {
         case RES_MIRROR_GRAPH_DONT: break;
-        case RES_MIRROR_GRAPH_VERT: aMirrorHorzBox.Check(sal_True); break;
-        case RES_MIRROR_GRAPH_HOR:  aMirrorVertBox.Check(sal_True); break;
-        case RES_MIRROR_GRAPH_BOTH: aMirrorHorzBox.Check(sal_True);
-                                    aMirrorVertBox.Check(sal_True);
+        case RES_MIRROR_GRAPH_VERT: m_pMirrorHorzBox->Check(sal_True); break;
+        case RES_MIRROR_GRAPH_HOR:  m_pMirrorVertBox->Check(sal_True); break;
+        case RES_MIRROR_GRAPH_BOTH: m_pMirrorHorzBox->Check(sal_True);
+                                    m_pMirrorVertBox->Check(sal_True);
                                     break;
         default:
             ;
@@ -2426,17 +2422,17 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         switch (nPos)
         {
             case 1: // mirror at left / even pages
-                aLeftPagesRB.Check();
-                aMirrorHorzBox.Check(sal_True);
+                m_pLeftPagesRB->Check();
+                m_pMirrorHorzBox->Check(sal_True);
                 break;
             case 2: // mirror on all pages
-                aAllPagesRB.Check();
+                m_pAllPagesRB->Check();
                 break;
             case 3: // mirror on right / odd pages
-                aRightPagesRB.Check();
+                m_pRightPagesRB->Check();
                 break;
             default:
-                aAllPagesRB.Check();
+                m_pAllPagesRB->Check();
                 break;
         }
     }
@@ -2447,64 +2443,62 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         if( rBrush.GetGraphicLink() )
         {
             aGrfName = aNewGrfName = *rBrush.GetGraphicLink();
-            aConnectED.SetText( aNewGrfName );
+            m_pConnectED->SetText( aNewGrfName );
         }
         const Graphic* pGrf = rBrush.GetGraphic();
         if( pGrf )
-            aBmpWin.SetGraphic( *pGrf );
+            m_pBmpWin->SetGraphic( *pGrf );
     }
 
-    aAllPagesRB .Enable(bEnableMirrorRB);
-    aLeftPagesRB.Enable(bEnableMirrorRB);
-    aRightPagesRB.Enable(bEnableMirrorRB);
-    aMirrorHorzBox.Enable(bEnable);
-    aMirrorVertBox.Enable(bEnable);
-    aMirrorFL.Enable(bEnable);
+    m_pAllPagesRB->Enable(bEnableMirrorRB);
+    m_pLeftPagesRB->Enable(bEnableMirrorRB);
+    m_pRightPagesRB->Enable(bEnableMirrorRB);
+    m_pMirror->Enable(bEnable);
 
-    aAllPagesRB .SaveValue();
-    aLeftPagesRB.SaveValue();
-    aRightPagesRB.SaveValue();
-    aMirrorHorzBox.SaveValue();
-    aMirrorVertBox.SaveValue();
+    m_pAllPagesRB->SaveValue();
+    m_pLeftPagesRB->SaveValue();
+    m_pRightPagesRB->SaveValue();
+    m_pMirrorHorzBox->SaveValue();
+    m_pMirrorVertBox->SaveValue();
 
-    aBmpWin.MirrorHorz( aMirrorVertBox.IsChecked() );
-    aBmpWin.MirrorVert( aMirrorHorzBox.IsChecked() );
-    aBmpWin.Invalidate();
+    m_pBmpWin->MirrorHorz( m_pMirrorVertBox->IsChecked() );
+    m_pBmpWin->MirrorVert( m_pMirrorHorzBox->IsChecked() );
+    m_pBmpWin->Invalidate();
 }
 
 sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
     sal_Bool bModified = sal_False;
-    if ( aMirrorHorzBox.GetSavedValue() != aMirrorHorzBox.IsChecked() ||
-         aMirrorVertBox.GetSavedValue() != aMirrorVertBox.IsChecked() ||
-         aAllPagesRB .GetSavedValue() != aAllPagesRB .IsChecked() ||
-         aLeftPagesRB.GetSavedValue() != aLeftPagesRB.IsChecked() ||
-         aRightPagesRB.GetSavedValue() != aRightPagesRB.IsChecked())
+    if ( m_pMirrorHorzBox->GetSavedValue() != m_pMirrorHorzBox->IsChecked() ||
+         m_pMirrorVertBox->GetSavedValue() != m_pMirrorVertBox->IsChecked() ||
+         m_pAllPagesRB->GetSavedValue() != m_pAllPagesRB->IsChecked() ||
+         m_pLeftPagesRB->GetSavedValue() != m_pLeftPagesRB->IsChecked() ||
+         m_pRightPagesRB->GetSavedValue() != m_pRightPagesRB->IsChecked())
     {
         bModified = sal_True;
 
         bool bHori = false;
 
-        if (aMirrorHorzBox.IsChecked() &&
-                !aLeftPagesRB.IsChecked())
+        if (m_pMirrorHorzBox->IsChecked() &&
+                !m_pLeftPagesRB->IsChecked())
             bHori = true;
 
         MirrorGraph eMirror;
-        eMirror = aMirrorVertBox.IsChecked() && bHori ?
+        eMirror = m_pMirrorVertBox->IsChecked() && bHori ?
                     RES_MIRROR_GRAPH_BOTH : bHori ?
-                    RES_MIRROR_GRAPH_VERT : aMirrorVertBox.IsChecked() ?
+                    RES_MIRROR_GRAPH_VERT : m_pMirrorVertBox->IsChecked() ?
                     RES_MIRROR_GRAPH_HOR  : RES_MIRROR_GRAPH_DONT;
 
-        sal_Bool bMirror = !aAllPagesRB.IsChecked();
+        sal_Bool bMirror = !m_pAllPagesRB->IsChecked();
         SwMirrorGrf aMirror( eMirror );
         aMirror.SetGrfToggle(bMirror );
         rSet.Put( aMirror );
     }
 
-    if( aGrfName != aNewGrfName || aConnectED.IsModified() )
+    if( aGrfName != aNewGrfName || m_pConnectED->IsModified() )
     {
         bModified = sal_True;
-        aGrfName = aConnectED.GetText();
+        aGrfName = m_pConnectED->GetText();
         rSet.Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
@@ -2525,9 +2519,9 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
         pGrfDlg = new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
                 SFXWB_GRAPHIC );
-        pGrfDlg->SetTitle(SW_RESSTR(STR_EDIT_GRF ));
+        pGrfDlg->SetTitle(get<VclFrame>("linkframe")->get_label());
     }
-    pGrfDlg->SetDisplayDirectory( aConnectED.GetText() );
+    pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
     uno::Reference < ui::dialogs::XFilePicker > xFP = pGrfDlg->GetFilePicker();
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
     sal_Bool bTrue = sal_True;
@@ -2541,46 +2535,46 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
-        aConnectED.SetModifyFlag();
-        aConnectED.SetText( aNewGrfName );
+        m_pConnectED->SetModifyFlag();
+        m_pConnectED->SetText( aNewGrfName );
         //reset mirrors because maybe a Bitmap was swapped with
         //another type of graphic that cannot be mirrored.
-        aMirrorVertBox.Check(sal_False);
-        aMirrorHorzBox.Check(sal_False);
-        aAllPagesRB .Enable(sal_False);
-        aLeftPagesRB.Enable(sal_False);
-        aRightPagesRB.Enable(sal_False);
-        aBmpWin.MirrorHorz(sal_False);
-        aBmpWin.MirrorVert(sal_False);
+        m_pMirrorVertBox->Check(sal_False);
+        m_pMirrorHorzBox->Check(sal_False);
+        m_pAllPagesRB->Enable(sal_False);
+        m_pLeftPagesRB->Enable(sal_False);
+        m_pRightPagesRB->Enable(sal_False);
+        m_pBmpWin->MirrorHorz(sal_False);
+        m_pBmpWin->MirrorVert(sal_False);
 
         Graphic aGraphic;
         GraphicFilter::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
-        aBmpWin.SetGraphic(aGraphic);
+        m_pBmpWin->SetGraphic(aGraphic);
 
         sal_Bool bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
                             GRAPHIC_GDIMETAFILE == aGraphic.GetType();
-        aMirrorVertBox.Enable(bEnable);
-        aMirrorHorzBox.Enable(bEnable);
-        aAllPagesRB .Enable(bEnable);
-        aLeftPagesRB.Enable(bEnable);
-        aRightPagesRB.Enable(bEnable);
+        m_pMirrorVertBox->Enable(bEnable);
+        m_pMirrorHorzBox->Enable(bEnable);
+        m_pAllPagesRB->Enable(bEnable);
+        m_pLeftPagesRB->Enable(bEnable);
+        m_pRightPagesRB->Enable(bEnable);
     }
     return 0;
 }
 
 IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl)
 {
-    sal_Bool bEnable = aMirrorHorzBox.IsChecked();
+    sal_Bool bEnable = m_pMirrorHorzBox->IsChecked();
 
-    aBmpWin.MirrorHorz( aMirrorVertBox.IsChecked() );
-    aBmpWin.MirrorVert( bEnable );
+    m_pBmpWin->MirrorHorz( m_pMirrorVertBox->IsChecked() );
+    m_pBmpWin->MirrorVert( bEnable );
 
-    aAllPagesRB .Enable(bEnable);
-    aLeftPagesRB.Enable(bEnable);
-    aRightPagesRB.Enable(bEnable);
+    m_pAllPagesRB->Enable(bEnable);
+    m_pLeftPagesRB->Enable(bEnable);
+    m_pRightPagesRB->Enable(bEnable);
 
-    if (!aAllPagesRB.IsChecked() && !aLeftPagesRB.IsChecked() && !aRightPagesRB.IsChecked())
-        aAllPagesRB.Check();
+    if (!m_pAllPagesRB->IsChecked() && !m_pLeftPagesRB->IsChecked() && !m_pRightPagesRB->IsChecked())
+        m_pAllPagesRB->Check();
 
     return 0;
 }
@@ -2588,18 +2582,25 @@ IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl)
 /*--------------------------------------------------------------------
     Description: example window
  --------------------------------------------------------------------*/
-BmpWindow::BmpWindow( Window* pPar, sal_uInt16 nId,
-                        const Graphic& rGraphic, const BitmapEx& rBmp ) :
-    Window(pPar, SW_RES(nId)),
-    aGraphic(rGraphic),
-    aBmp(rBmp),
-    bHorz(sal_False),
-    bVert(sal_False),
-    bGraphic(sal_False),
-    bLeftAlign(false)
+BmpWindow::BmpWindow(Window* pPar, WinBits nStyle)
+    : Window(pPar, nStyle)
+    , bHorz(false)
+    , bVert(false)
+    , bGraphic(false)
+    , bLeftAlign(false)
 {
     // #i119307# use background, the graphic might have transparency
     SetBackground(Wallpaper(Color(COL_WHITE)));
+}
+
+Size BmpWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(127 , 66), MapMode(MAP_APPFONT));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBmpWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new BmpWindow(pParent, 0);
 }
 
 void BmpWindow::Paint( const Rectangle& )
@@ -2666,6 +2667,12 @@ void BmpWindow::SetGraphic(const Graphic& rGrf)
     aGraphic = rGrf;
     Size aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
     bGraphic = aGrfSize.Width() && aGrfSize.Height();
+    Invalidate();
+}
+
+void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
+{
+    aBmp = rBmp;
     Invalidate();
 }
 

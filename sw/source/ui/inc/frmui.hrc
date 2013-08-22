@@ -51,8 +51,6 @@
 #define STR_OLE_EDIT            (STR_FRMDLG_BEGIN + 46)
 #define STR_COLL_HEADER         (STR_FRMDLG_BEGIN + 47)
 
-#define STR_EDIT_GRF            (STR_FRMDLG_BEGIN + 49)
-
 #define STR_LINE_TOP            (STR_FRMDLG_BEGIN + 50)
 #define STR_LINE_BOTTOM         (STR_FRMDLG_BEGIN + 51)
 #define STR_LINE_CENTER         (STR_FRMDLG_BEGIN + 52)

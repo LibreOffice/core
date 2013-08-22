@@ -202,18 +202,16 @@ public:
 class SwGrfExtPage: public SfxTabPage
 {
     // mirror
-    FixedLine       aMirrorFL;
-    CheckBox        aMirrorVertBox;
-    CheckBox        aMirrorHorzBox;
-    RadioButton     aAllPagesRB;
-    RadioButton     aLeftPagesRB;
-    RadioButton     aRightPagesRB;
-    BmpWindow       aBmpWin;
+    VclContainer*   m_pMirror;
+    CheckBox*       m_pMirrorVertBox;
+    CheckBox*       m_pMirrorHorzBox;
+    RadioButton*    m_pAllPagesRB;
+    RadioButton*    m_pLeftPagesRB;
+    RadioButton*    m_pRightPagesRB;
+    BmpWindow*      m_pBmpWin;
 
-    FixedLine       aConnectFL;
-    FixedText       aConnectFT;
-    Edit            aConnectED;
-    PushButton      aBrowseBT;
+    Edit*           m_pConnectED;
+    PushButton*     m_pBrowseBT;
 
     String          aFilterName;
     String          aGrfName, aNewGrfName;

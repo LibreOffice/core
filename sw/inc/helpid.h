@@ -136,7 +136,6 @@
 
 // TabPage Help-IDs
 
-#define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
 #define HID_COND_COLL                                           "SW_HID_COND_COLL"
 
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
