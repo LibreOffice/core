@@ -63,7 +63,6 @@ private:
     sal_uInt16              nDataType;
     // Data taken from the TIFF tags:
     sal_Bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
-    sal_uInt8               nByte1;                     // 'I', if the format is LittleEndian
 
     sal_uLong               nNewSubFile;                //
     sal_uLong               nSubFile;                   //
@@ -126,12 +125,7 @@ private:
     bool HasAlphaChannel() const;
 public:
 
-    TIFFReader()
-        : pAlphaMask(0)
-        , pMaskAcc(0)
-        , nByte1(0)
-    {
-    }
+    TIFFReader() : pAlphaMask(0), pMaskAcc(0) {}
     ~TIFFReader()
     {
         delete pAlphaMask;
@@ -1021,8 +1015,6 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
         {
             sal_uLong nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
             sal_uInt8*  pt = pMap[ 0 ];
-            if ( nByte1 == 'I' )
-                pt++;
             for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
                 pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt - nMinSampleValue) * nMinMax) );
@@ -1089,17 +1081,17 @@ void TIFFReader::MakePalCol( void )
 
 void TIFFReader::ReadHeader()
 {
-    sal_uInt8 nbyte2(0);
-    sal_uInt16 nushort(0);
+    sal_uInt8 nbyte1, nbyte2;
+    sal_uInt16 nushort;
 
-    *pTIFF >> nByte1;
-    if ( nByte1 == 'I' )
+    *pTIFF >> nbyte1;
+    if ( nbyte1 == 'I' )
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     else
         pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
     *pTIFF >> nbyte2 >> nushort;
-    if ( nByte1 != nbyte2 || ( nByte1 != 'I' && nByte1 != 'M' ) || nushort != 0x002a )
+    if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
         bStatus = sal_False;
 }
 
