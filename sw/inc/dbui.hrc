@@ -86,8 +86,6 @@
 #define FT_PRINTER          7
 #define FT_PRINTINFO        8
 #define PB_CANCELPRNMON     9
-#define FT_SENDING          10
-#define STR_EMAILMON        11
 #define FT_STATUS           12
 #define FT_CREATEDOCUMENTS  13
 #define FT_PROGRESS         14

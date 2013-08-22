@@ -20,7 +20,6 @@
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>
 
-#define HID_MERGE_PRINTMONITOR                                  "SW_HID_MERGE_PRINTMONITOR"
 #define HID_DOCINFO_EDT                                         "SW_HID_DOCINFO_EDT"
 #define HID_PASSWD                                              "SW_HID_PASSWD"
 #define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"

@@ -31,7 +31,6 @@ public:
     enum PrintMonitorType
     {
         MONITOR_TYPE_PRINT,
-        MONITOR_TYPE_MAIL,
         MONITOR_TYPE_SAVE
     };
     FixedText       aDocName;

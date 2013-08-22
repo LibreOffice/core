@@ -27,8 +27,7 @@ PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
 :   ModelessDialog( pParent, SW_RES(DLG_PRINTMONITOR) ),
     aDocName    (this, SW_RES( FT_DOCNAME )),
     aPrinting   (this, SW_RES(
-        eType == MONITOR_TYPE_MAIL ?
-            FT_SENDING : eType == MONITOR_TYPE_SAVE ? FT_SAVING : FT_PRINTING )),
+        eType == MONITOR_TYPE_SAVE ? FT_SAVING : FT_PRINTING )),
     aPrinter    (this, SW_RES( FT_PRINTER       )),
     aPrintInfo  (this, SW_RES( FT_PRINTINFO     )),
     aCancel     (this, SW_RES( PB_CANCELPRNMON  ))
@@ -36,7 +35,6 @@ PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
     switch (eType)
     {
         case MONITOR_TYPE_SAVE: SetText(SW_RES(STR_SAVEMON)); break;
-        case MONITOR_TYPE_MAIL: SetText(SW_RES(STR_EMAILMON)); break;
         case MONITOR_TYPE_PRINT: break;
     }
     FreeResource();

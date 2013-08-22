@@ -23,7 +23,6 @@
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
 {
-    HelpID = HID_MERGE_PRINTMONITOR  ;
     SVLOOK = TRUE ;
     HIDE = TRUE ;
     OUTPUTSIZE = TRUE ;
@@ -42,13 +41,6 @@ ModelessDialog DLG_PRINTMONITOR
         Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
         Text [ en-US ] = "is being prepared for printing on" ;
-    };
-    FixedText FT_SENDING
-    {
-        Pos = MAP_APPFONT ( 6, 17 ) ;
-        Size = MAP_APPFONT (  100, 8 ) ;
-        CENTER = TRUE ;
-        Text [ en-US ] = "is being sent to";
     };
     FixedText FT_SAVING
     {
@@ -74,10 +66,6 @@ ModelessDialog DLG_PRINTMONITOR
         Pos = MAP_APPFONT ( 31, 52 ) ;
         Size = MAP_APPFONT (  50, 14 ) ;
         TABSTOP = TRUE ;
-    };
-    String STR_EMAILMON
-    {
-        Text [ en-US ] = "Send-Monitor";
     };
     String STR_SAVEMON
     {
@@ -159,7 +147,6 @@ String STR_FILTER_ACCDB
  // DLG_MM_CREATIONMONITOR ------------------------------------------------------
 ModelessDialog DLG_MM_CREATIONMONITOR
 {
-    HelpID = HID_MERGE_PRINTMONITOR  ;
     SVLOOK = TRUE ;
     HIDE = TRUE ;
     OUTPUTSIZE = TRUE ;
