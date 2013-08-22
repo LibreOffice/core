@@ -897,9 +897,15 @@ Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     }
 
     Font aBulletFont;
+    const Font *pSourceFont = 0;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
     {
-        aBulletFont = *pFmt->GetBulletFont();
+        pSourceFont = pFmt->GetBulletFont();
+    }
+
+    if (pSourceFont)
+    {
+        aBulletFont = *pSourceFont;
     }
     else
     {
