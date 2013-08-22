@@ -1570,7 +1570,7 @@ OUString SvtFileView::GetConfigString() const
     sRet += ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    sRet += bUp ? "1" : "0";
+    sRet += OUString( bUp ? "1" : "0" );
     sRet += ";";
 
     sal_uInt16 nCount = pBar->GetItemCount();

@@ -512,7 +512,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             {
                 // cut to first segment
                 OUString aTmp = INetURLObject::GetScheme( eBaseProt );
-                aTmp += '/';
+                aTmp += "/";
                 aTmp += aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET );
                 aObj.SetURL( aTmp );
 
