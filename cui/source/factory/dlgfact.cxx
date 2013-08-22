@@ -396,12 +396,12 @@ sal_Bool AbstractInsertObjectDialog_Impl::IsCreateNew()
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
 
-void AbstractPasteDialog_Impl::Insert( SotFormatStringId nFormat, const String & rFormatName )
+void AbstractPasteDialog_Impl::Insert( SotFormatStringId nFormat, const OUString & rFormatName )
 {
     pDlg->Insert( nFormat, rFormatName );
 }
 
-void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const String & rObjName )
+void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const OUString & rObjName )
 {
     pDlg->SetObjName( rClass, rObjName );
 }
@@ -1051,17 +1051,17 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParen
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     Window* pParent, const Reference< frame::XFrame >& rxFrame,
-    sal_uInt32 nResId, const String& rParameter )
+    sal_uInt32 nResId, const OUString& rParameter )
 {
     Dialog* pDlg = NULL;
     if ( SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId )
     {
         // only activate last page if we dont want to activate a special page
-        bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.Len() == 0 );
+        bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
         OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, rxFrame, bActivateLastSelection );
         if ( nResId == SID_OPTIONS_DATABASES )
             pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
-        else if ( rParameter.Len() > 0 )
+        else if ( !rParameter.isEmpty() )
             pOptDlg->ActivatePage( rParameter );
         pDlg = pOptDlg;
     }
@@ -1078,7 +1078,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 const SfxItemSet* pAttrSet,
                                                 SfxViewFrame* ,
                                                 bool /*bEditFmt*/,
-                                                const String * )
+                                                const OUString * )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nResId )
@@ -1103,7 +1103,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
                                                 const SfxItemSet* pAttrSet,
                                                 const Reference< frame::XFrame >& xViewFrame,
                                                 bool /*bEditFmt*/,
-                                                const String * )
+                                                const OUString * )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nResId )
@@ -1234,11 +1234,11 @@ AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
     return new AbstractScriptSelectorDialog_Impl(pDlg);
 }
 
-String AbstractScriptSelectorDialog_Impl::GetScriptURL() const
+OUString AbstractScriptSelectorDialog_Impl::GetScriptURL() const
 {
     if (pDlg)
         return pDlg->GetScriptURL();
-    return String();
+    return OUString();
 }
 
 void AbstractScriptSelectorDialog_Impl::SetRunLabel()
@@ -1249,7 +1249,7 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 }
 
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,  //add for SvxScriptOrgDialog
-                                            const String& rLanguage)
+                                            const OUString& rLanguage)
 {
     Dialog* pDlg=NULL;
 

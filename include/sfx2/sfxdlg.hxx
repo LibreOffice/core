@@ -38,7 +38,9 @@ class SfxBindings;
 class SfxItemSet;
 class ResId;
 class Window;
-class String;
+namespace rtl {
+   class OUString;
+};
 class SfxItemPool;
 class SvObjectServerList;
 class TransferableDataHelper;
@@ -91,8 +93,8 @@ public:
 class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 {
 public:
-    virtual void Insert( SotFormatStringId nFormat, const String & rFormatName ) = 0;
-    virtual void SetObjName( const SvGlobalName & rClass, const String & rObjName ) = 0;
+    virtual void Insert( SotFormatStringId nFormat, const rtl::OUString & rFormatName ) = 0;
+    virtual void SetObjName( const SvGlobalName & rClass, const rtl::OUString & rObjName ) = 0;
     virtual sal_uIntPtr GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 ) = 0;
@@ -105,7 +107,7 @@ class SfxAbstractLinksDialog : virtual public VclAbstractDialog
 class AbstractScriptSelectorDialog : virtual public VclAbstractDialog
 {
 public:
-    virtual String              GetScriptURL() const = 0;
+    virtual rtl::OUString       GetScriptURL() const = 0;
     virtual void                SetRunLabel() = 0;
 };
 
@@ -117,19 +119,19 @@ public:
                                         virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
-    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const String& rParameter ) = 0;
+    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SfxViewFrame* pViewFrame,
                                             bool bEditFmt=false,
-                                            const String *pUserButtonText=0 ) = 0;
+                                            const rtl::OUString *pUserButtonText=0 ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             bool bEditFmt=false,
-                                            const String *pUserButtonText=0 ) = 0;
+                                            const rtl::OUString *pUserButtonText=0 ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const OUString& rCommand,
@@ -139,7 +141,7 @@ public:
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
     virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML=sal_False, sfx2::SvBaseLink* p=0 )=0;
-    virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( Window* pParent,  const String& rLanguage ) = 0;
+    virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( Window* pParent,  const rtl::OUString& rLanguage ) = 0;
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(

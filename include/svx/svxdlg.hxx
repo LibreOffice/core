@@ -461,7 +461,7 @@ public:
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent, //add for SvxPostItDialog
                                                                         const SfxItemSet& rCoreSet,
                                                                         sal_Bool bPrevNext = sal_False) = 0;
-    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage ) = 0;
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) = 0;
 
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0; //  add for SvxDistributePage
     virtual DialogGetRanges             GetDialogGetRangesFunc() = 0; //add for SvxPostItDialog
