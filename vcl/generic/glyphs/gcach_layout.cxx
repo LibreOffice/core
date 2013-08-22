@@ -137,6 +137,9 @@ std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
     return s;
 }
 
+static hb_font_funcs_t* pHbFontFuncs = NULL;
+static hb_unicode_funcs_t* pHbUnicodeFuncs = NULL;
+
 static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
@@ -368,8 +371,11 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     SAL_INFO("vcl.harfbuzz", "layout(" << this << ",rArgs=" << rArgs << ")");
 
+    if (pHbFontFuncs == NULL)
+        pHbFontFuncs = getFontFuncs();
+
     hb_font_t *pHbFont = hb_font_create(mpHbFace);
-    hb_font_set_funcs(pHbFont, getFontFuncs(), &rFont, NULL);
+    hb_font_set_funcs(pHbFont, pHbFontFuncs, &rFont, NULL);
     hb_font_set_scale(pHbFont,
             ((uint64_t) aFtFace->size->metrics.x_scale * (uint64_t) fUnitsPerEM) >> 16,
             ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) fUnitsPerEM) >> 16);
@@ -414,8 +420,11 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         LanguageTag aLangTag(rArgs.meLanguage);
         OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
+        if (pHbUnicodeFuncs == NULL)
+            pHbUnicodeFuncs = getUnicodeFuncs();
+
         hb_buffer_t *pHbBuffer = hb_buffer_create();
-        hb_buffer_set_unicode_funcs(pHbBuffer, getUnicodeFuncs());
+        hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
         hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
         hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
         hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
