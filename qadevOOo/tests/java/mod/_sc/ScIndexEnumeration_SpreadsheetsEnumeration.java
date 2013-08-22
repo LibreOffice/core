@@ -35,7 +35,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_SpreadsheetsEnumeration extends TestCase {
-    private static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

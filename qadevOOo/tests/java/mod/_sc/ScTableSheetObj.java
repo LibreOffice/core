@@ -121,7 +121,7 @@ import util.ValueComparer;
 * @see ifc.table._XColumnRowRange
 */
 public class ScTableSheetObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

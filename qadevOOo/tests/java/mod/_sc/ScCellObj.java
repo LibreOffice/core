@@ -80,7 +80,7 @@ import ifc.sheet._XCellRangesQuery;
 * @see ifc.sheet._XCellAddressable
 */
 public class ScCellObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
 
     /**

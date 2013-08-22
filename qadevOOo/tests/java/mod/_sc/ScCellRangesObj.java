@@ -83,7 +83,7 @@ import ifc.sheet._XCellRangesQuery;
 * @see ifc.container._XNameAccess
 */
 public class ScCellRangesObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

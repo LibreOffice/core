@@ -39,7 +39,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_CellAreaLinksEnumeration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

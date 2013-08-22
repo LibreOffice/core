@@ -59,7 +59,7 @@ import com.sun.star.uno.XInterface;
 * @see com.sun.star.sheet.CellAreaLinks
 */
 public class ScAreaLinksObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

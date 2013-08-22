@@ -45,7 +45,7 @@ import com.sun.star.util.XSortable;
  */
 public class ScSortDescriptorBase extends TestCase {
 
-    static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
      * in general this method creates a testdocument

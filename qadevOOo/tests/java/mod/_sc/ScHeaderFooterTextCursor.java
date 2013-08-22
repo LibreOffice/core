@@ -91,7 +91,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.style._CharacterPropertiesAsian
 */
 public class ScHeaderFooterTextCursor extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

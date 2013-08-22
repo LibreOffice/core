@@ -64,7 +64,7 @@ import com.sun.star.uno.UnoRuntime;
 * @see ifc.table._XTableCharts
 */
 public class ScChartsObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

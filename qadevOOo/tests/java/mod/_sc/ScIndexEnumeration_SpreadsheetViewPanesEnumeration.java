@@ -39,7 +39,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_SpreadsheetViewPanesEnumeration extends TestCase {
-    private static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
     private static SOfficeFactory SOF;
     private static XInterface oObj;
 

@@ -59,7 +59,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.beans._XPropertySet
 */
 public class ScSubTotalDescriptorBase extends TestCase {
-    public static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

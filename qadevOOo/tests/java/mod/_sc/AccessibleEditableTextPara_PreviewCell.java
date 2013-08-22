@@ -52,7 +52,7 @@ import com.sun.star.util.XURLTransformer;
 
 
 public class AccessibleEditableTextPara_PreviewCell extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.

@@ -60,7 +60,7 @@ import com.sun.star.util.XSearchable;
 * @see ifc.util._XReplaceDescriptor
 */
 public class ScCellSearchObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

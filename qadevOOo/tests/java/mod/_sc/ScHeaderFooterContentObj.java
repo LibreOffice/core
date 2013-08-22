@@ -52,7 +52,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XHeaderFooterContent
 */
 public class ScHeaderFooterContentObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

@@ -59,7 +59,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.container._XNameContainer
 */
 public class ScAutoFormatsObj extends TestCase{
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
     static SOfficeFactory SOF = null;
 
     /**

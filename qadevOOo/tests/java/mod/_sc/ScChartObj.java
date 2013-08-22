@@ -63,7 +63,7 @@ import com.sun.star.uno.UnoRuntime;
 * @see ifc.document._XEmbeddedObjectSupplier
 */
 public class ScChartObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

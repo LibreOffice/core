@@ -80,7 +80,7 @@ import com.sun.star.uno.XInterface;
 */
 public class ScHeaderFooterTextObj extends TestCase {
 
-    static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

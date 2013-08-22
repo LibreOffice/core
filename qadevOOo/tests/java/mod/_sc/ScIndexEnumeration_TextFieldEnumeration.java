@@ -54,7 +54,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.container._XEnumeration
  */
 public class ScIndexEnumeration_TextFieldEnumeration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

@@ -98,7 +98,7 @@ import ifc.sheet._XCellRangesQuery;
 * @see ifc.table._XColumnRowRange
 */
 public class ScCellCursorObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

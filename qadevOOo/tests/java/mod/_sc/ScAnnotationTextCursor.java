@@ -60,7 +60,7 @@ import com.sun.star.uno.XInterface;
  */
 public class ScAnnotationTextCursor extends TestCase {
 
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );

@@ -79,7 +79,7 @@ import util.PropertyName;
  * @see ifc.accessibility._XAccessibleTable
  */
 public class ScAccessiblePreviewTable extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.

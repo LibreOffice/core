@@ -64,7 +64,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.style._XStyle
 */
 public class ScStyleObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

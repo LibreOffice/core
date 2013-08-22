@@ -66,7 +66,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.text._TextContent
 */
 public class ScHeaderFieldObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

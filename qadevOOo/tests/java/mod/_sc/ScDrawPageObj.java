@@ -43,7 +43,7 @@ import com.sun.star.uno.XInterface;
 
 public class ScDrawPageObj extends TestCase {
 
-    static XSpreadsheetDocument xDoc = null;
+    private XSpreadsheetDocument xDoc = null;
 
     /**
      * Creates a new Draw document.

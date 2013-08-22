@@ -62,7 +62,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.xml.sax._XDocumentHandler
  */
 public class XMLStylesImporter extends TestCase {
-    static XSpreadsheetDocument xSheetDoc;
+    private XSpreadsheetDocument xSheetDoc;
     static XComponent comp ;
 
     /**

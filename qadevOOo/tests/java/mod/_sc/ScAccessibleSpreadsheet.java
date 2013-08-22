@@ -67,7 +67,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleTable
  */
 public class ScAccessibleSpreadsheet extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.

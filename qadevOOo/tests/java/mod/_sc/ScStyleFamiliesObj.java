@@ -51,7 +51,7 @@ import com.sun.star.uno.UnoRuntime;
 * @see ifc.container._XIndexAccess
 */
 public class ScStyleFamiliesObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

@@ -75,8 +75,8 @@ import util.utils;
 * @see ifc.beans._XPropertySet
 */
 public class ScModelObj extends TestCase {
-    public static XSpreadsheetDocument xSpreadsheetDoc;
-    public static XSpreadsheetDocument xSecondsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSecondsheetDoc;
 
     /**
     * Disposes Spreadsheet documents.
