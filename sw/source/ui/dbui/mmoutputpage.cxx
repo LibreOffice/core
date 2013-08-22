@@ -745,11 +745,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
         SwView* pSourceView = rConfigItem.GetSourceView();
         PrintMonitor aSaveMonitor(this, PrintMonitor::MONITOR_TYPE_SAVE);
-        aSaveMonitor.aDocName.SetText(pSourceView->GetDocShell()->GetTitle(22));
-        aSaveMonitor.aCancel.SetClickHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
-        aSaveMonitor.aPrinter.SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
-        aSaveMonitor.ResizeControls();
-
+        aSaveMonitor.m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
+        aSaveMonitor.m_pCancel->SetClickHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
+        aSaveMonitor.m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
         m_bCancelSaving = false;
         aSaveMonitor.Show();
         m_pWizard->enableButtons(WZB_CANCEL, sal_False);
@@ -768,7 +766,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sStat(SW_RES(STR_STATSTR_LETTER));
             sStat += ' ';
             sStat += OUString::number( nDoc );
-            aSaveMonitor.aPrintInfo.SetText(sStat);
+            aSaveMonitor.m_pPrintInfo->SetText(sStat);
 
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here

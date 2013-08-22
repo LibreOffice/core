@@ -23,61 +23,25 @@
 #include "dbui.hrc"
 #include "dbui.hxx"
 
-PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
-:   ModelessDialog( pParent, SW_RES(DLG_PRINTMONITOR) ),
-    aDocName    (this, SW_RES( FT_DOCNAME )),
-    aPrinting   (this, SW_RES(
-        eType == MONITOR_TYPE_SAVE ? FT_SAVING : FT_PRINTING )),
-    aPrinter    (this, SW_RES( FT_PRINTER       )),
-    aPrintInfo  (this, SW_RES( FT_PRINTINFO     )),
-    aCancel     (this, SW_RES( PB_CANCELPRNMON  ))
+PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
+    : ModelessDialog(pParent, "PrintMonitorDialog",
+        "modules/swriter/ui/printmonitordialog.ui")
 {
+    get(m_pCancel, "cancel");
+    get(m_pDocName, "docname");
+    get(m_pPrinter, "printer");
+    get(m_pPrintInfo, "printinfo");
     switch (eType)
     {
-        case MONITOR_TYPE_SAVE: SetText(SW_RES(STR_SAVEMON)); break;
-        case MONITOR_TYPE_PRINT: break;
+        case MONITOR_TYPE_SAVE:
+            SetText(get<FixedText>("alttitle")->GetText());
+            get(m_pPrinting, "saving");
+            break;
+        case MONITOR_TYPE_PRINT:
+            get(m_pPrinting, "printing");
+            break;
     }
-    FreeResource();
-}
-
-static void lcl_ResizeControl( Window* pWin, long nDiff )
-{
-    Size aSize( pWin->GetSizePixel() );
-    aSize.Width() += nDiff;
-    pWin->SetSizePixel( aSize );
-}
-static void lcl_RePosControl( Window* pWin, long nDiff )
-{
-    Point aPos( pWin->GetPosPixel() );
-    aPos.X()  += nDiff;
-    pWin->SetPosPixel( aPos );
-}
-
-void PrintMonitor::ResizeControls()
-{
-    Size aDlgSize( GetSizePixel() );
-    Size aPrinterSize( aPrinter.GetSizePixel() );
-    long nPrinterTextWidth = aPrinter.GetTextWidth( aPrinter.GetText() );
-    if( nPrinterTextWidth > aPrinterSize.Width() )
-    {
-        //increase control and dialog width if printer text is too long
-        //do not increase dialog width more than three times
-        long nDiff = nPrinterTextWidth - aPrinterSize.Width();
-        if( nDiff > 2 * aDlgSize.Width() )
-        {
-            aPrinter.SetStyle( WB_RIGHT | aPrinter.GetStyle() );
-            nDiff = 2 * aDlgSize.Width();
-        }
-        aDlgSize.Width() += nDiff;
-        SetSizePixel(aDlgSize);
-        lcl_ResizeControl( &aPrinter, nDiff );
-
-        nDiff /= 2;
-        lcl_RePosControl( &aDocName, nDiff );
-        lcl_RePosControl( &aPrinting, nDiff );
-        lcl_RePosControl( &aPrintInfo, nDiff );
-        lcl_RePosControl( &aCancel, nDiff );
-    }
+    m_pPrinting->Show();
 }
 
 // Progress Indicator for Creation of personalized Mail Merge documents:

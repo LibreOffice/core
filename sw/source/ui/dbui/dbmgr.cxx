@@ -949,9 +949,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             }
 
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin(), PrintMonitor::MONITOR_TYPE_PRINT);
-            aPrtMonDlg.aDocName.SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
+            aPrtMonDlg.m_pDocName->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
 
-            aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
+            aPrtMonDlg.m_pCancel->SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
@@ -1016,11 +1016,11 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     else
                     {
                         INetURLObject aTempFileURL(aTempFile->GetURL());
-                        aPrtMonDlg.aPrinter.SetText( aTempFileURL.GetBase() );
+                        aPrtMonDlg.m_pPrinter->SetText( aTempFileURL.GetBase() );
                         String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                         sStat += ' ';
                         sStat += OUString::number( nDocNo );
-                        aPrtMonDlg.aPrintInfo.SetText(sStat);
+                        aPrtMonDlg.m_pPrintInfo->SetText(sStat);
 
                         // computation time for Save-Monitor:
                         for (sal_uInt16 i = 0; i < 25; i++)

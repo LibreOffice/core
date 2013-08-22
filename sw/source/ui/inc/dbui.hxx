@@ -33,15 +33,13 @@ public:
         MONITOR_TYPE_PRINT,
         MONITOR_TYPE_SAVE
     };
-    FixedText       aDocName;
-    FixedText       aPrinting;
-    FixedText       aPrinter;
-    FixedText       aPrintInfo;
-    CancelButton    aCancel;
+    FixedText* m_pDocName;
+    FixedText* m_pPrinting;
+    FixedText* m_pPrinter;
+    FixedText* m_pPrintInfo;
+    CancelButton* m_pCancel;
 
     PrintMonitor( Window *pParent, PrintMonitorType eType );
-
-    void ResizeControls();
 };
 
 class CreateMonitor : public ModelessDialog

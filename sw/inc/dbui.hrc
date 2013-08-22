@@ -24,7 +24,6 @@
 
 // Dialoge --------------------------------------------------------------------
 
-#define DLG_PRINTMONITOR        (RC_DBUI_BEGIN + 1)
 #define DLG_AP_INSERT_DB_SEL    (RC_DBUI_BEGIN + 2)
 
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
@@ -57,7 +56,6 @@
 #define DLG_MM_CREATIONMONITOR        (RC_DBUI_BEGIN + 30)
 // Strings ------------------------------------------------------------------
 
-#define STR_DB_EMAIL            (RC_DBUI_BEGIN)
 #define SA_ADDRESS_HEADER       (RC_DBUI_BEGIN + 1)
 #define STR_NOTASSIGNED         (RC_DBUI_BEGIN + 2)
 #define STR_FILTER_ALL          (RC_DBUI_BEGIN + 3)
@@ -71,27 +69,17 @@
 #define STR_FILTER_MDB          (RC_DBUI_BEGIN + 11)
 #define STR_FILTER_ACCDB        (RC_DBUI_BEGIN + 12)
 
-// Bitmaps ------------------------------------------------------------------
-
-
 // Elements -----------------------------------------------------------------
 
-#define TLB_DBLIST          1
 #define BTN_OK              2
 #define BTN_CANCEL          3
 #define BTN_HELP            4
 
-#define FT_DOCNAME          5
-#define FT_PRINTING         6
-#define FT_PRINTER          7
-#define FT_PRINTINFO        8
 #define PB_CANCELPRNMON     9
 #define FT_STATUS           12
 #define FT_CREATEDOCUMENTS  13
 #define FT_PROGRESS         14
 #define FT_COUNTING         15
-#define STR_SAVEMON         16
-#define FT_SAVING           17
 
 #define MM_PART_TITLE                   0
 #define MM_PART_FIRSTNAME               1

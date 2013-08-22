@@ -20,65 +20,6 @@
 #include "dbui.hrc"
 #include "helpid.h"
 
- // DLG_PRINTMONITOR ------------------------------------------------------
-ModelessDialog DLG_PRINTMONITOR
-{
-    SVLOOK = TRUE ;
-    HIDE = TRUE ;
-    OUTPUTSIZE = TRUE ;
-    Size = MAP_APPFONT ( 118, 72 ) ;
-    MOVEABLE = TRUE ;
-    APP = FALSE ;
-    FixedText FT_DOCNAME
-    {
-        Pos = MAP_APPFONT ( 6,6 ) ;
-        Size = MAP_APPFONT ( 100, 8 ) ;
-        CENTER = TRUE ;
-    };
-    FixedText FT_PRINTING
-    {
-        Pos = MAP_APPFONT ( 6, 17 ) ;
-        Size = MAP_APPFONT (  100, 8 ) ;
-        CENTER = TRUE ;
-        Text [ en-US ] = "is being prepared for printing on" ;
-    };
-    FixedText FT_SAVING
-    {
-        Pos = MAP_APPFONT ( 6, 17 ) ;
-        Size = MAP_APPFONT (  100, 8 ) ;
-        CENTER = TRUE ;
-        Text [ en-US ] = "is being saved to" ;
-    };
-    FixedText FT_PRINTER
-    {
-        Pos = MAP_APPFONT ( 6, 28 ) ;
-        Size = MAP_APPFONT (  100, 8 ) ;
-        CENTER = TRUE ;
-    };
-    FixedText FT_PRINTINFO
-    {
-        Pos = MAP_APPFONT ( 6, 39 ) ;
-        Size = MAP_APPFONT (  100, 8 ) ;
-        CENTER = TRUE ;
-    };
-    CancelButton PB_CANCELPRNMON
-    {
-        Pos = MAP_APPFONT ( 31, 52 ) ;
-        Size = MAP_APPFONT (  50, 14 ) ;
-        TABSTOP = TRUE ;
-    };
-    String STR_SAVEMON
-    {
-        Text [ en-US ] = "Save-Monitor";
-    };
-    Text [ en-US ] = "Print monitor" ;
-};
-
-String STR_DB_EMAIL
-{
-    Text [ en-US ] = "E-mail" ;
-};
-
 StringArray SA_ADDRESS_HEADER
 {
     ItemList [en-US]=
