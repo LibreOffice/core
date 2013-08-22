@@ -224,8 +224,11 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             extensions = extMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<css_ucb::XCommandEnvironment>());
-        } catch (lang::IllegalArgumentException& ) {
-            OSL_ASSERT(0);
+        } catch (lang::IllegalArgumentException& e) {
+            SAL_WARN(
+                "desktop.deployment",
+                "ignoring IllegalArgumentException \"" << e.Message << "\"");
+            continue;
         }
         OSL_ASSERT(extensions.getLength() == 3);
         if (extensions[0].is() )
