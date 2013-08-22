@@ -848,6 +848,7 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
     }
 
     clStatus = clGetCommandQueueInfo( gpuInfo->mpCmdQueue, CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "GetCommandQueueInfo" );
     // Check device extensions for double type
     size_t aDevExtInfoSize = 0;
 

@@ -636,11 +636,10 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
-        // found the Sub-Menu in question?
-        bool bFound = false;
         sal_uInt16 nSID = pSVMenu->GetItemId(nPos);
         SfxMenuControl &rCtrl = pItems[nPos];
-        bFound = pSVMenu->GetPopupMenu(nSID) == pMenu;
+        // found the Sub-Menu in question?
+        bool bFound = pSVMenu->GetPopupMenu(nSID) == pMenu;
         SfxVirtualMenu *pSubMenu = rCtrl.GetPopupMenu();
 
         if ( bFound )

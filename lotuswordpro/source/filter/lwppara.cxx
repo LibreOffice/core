@@ -316,8 +316,7 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
     //if pagelayout is modified, register the pagelayout
     if(pStory && pStory->IsPMModified())
     {
-        sal_Bool bNewSection = sal_False;
-        bNewSection = pStory->IsNeedSection();
+        sal_Bool bNewSection = pStory->IsNeedSection();
         LwpPageLayout* pLayout = pStory->GetCurrentLayout();
         if(bNewSection)
         {

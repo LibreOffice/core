@@ -919,8 +919,6 @@ Locale SAL_CALL T602ImportFilterDialog::getLocale()
 
 sal_Bool T602ImportFilterDialog::OptionsDlg()
 {
-    sal_Bool ret = sal_False;
-
     Any any;
 #define _propInt(_prop,_nam,_val) \
     any <<= (sal_Int32)_val;\
@@ -1079,7 +1077,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     dialog->setVisible( false );
     dialog->createPeer( xToolkit, NULL );
 
-    ret = ( dialog->execute() != 0 );
+    sal_Bool ret = ( dialog->execute() != 0 );
     if ( ret ) {
 
         sal_Int16 tt = 0;
