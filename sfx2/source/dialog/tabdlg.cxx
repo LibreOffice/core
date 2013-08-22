@@ -754,14 +754,6 @@ void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, sal_B
     AddTabPage( nId, rRiderText, 0, 0, bItemsOnDemand, nPos );
 }
 
-#ifdef SV_HAS_RIDERBITMAPS
-
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, const Bitmap &rRiderBitmap, sal_Bool bItemsOnDemand, sal_uInt16 nPos )
-{
-    AddTabPage( nId, rRiderBitmap, 0, 0, bItemsOnDemand, nPos );
-}
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -852,34 +844,6 @@ void SfxTabDialog::AddTabPage
     pImpl->aData.push_back(
         new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
 }
-
-// -----------------------------------------------------------------------
-#ifdef SV_HAS_RIDERBITMAPS
-
-void SfxTabDialog::AddTabPage
-
-/*  [Description]
-
-    Add a page to the dialog. The riders bitmap is passed on, the page has no
-    counterpart in the TabControl in the resource of the dialogue.
-*/
-
-(
-    sal_uInt16 nId,
-    const Bitmap &rRiderBitmap,
-    CreateTabPage pCreateFunc,
-    GetTabPageRanges pRangesFunc,
-    sal_Bool bItemsOnDemand,
-    sal_uInt16 nPos
-)
-{
-    DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
-                "Duplicate Page-Ids in the Tabpage" );
-    m_pTabCtrl->InsertPage( nId, rRiderBitmap, nPos );
-    pImpl->aData.push_back(
-        new Data_Impl( nId, pCreateFunc, pRangesFunc, bItemsOnDemand ) );
-}
-#endif
 
 // -----------------------------------------------------------------------
 
