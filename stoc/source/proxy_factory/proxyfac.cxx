@@ -481,7 +481,7 @@ static Reference< XInterface > SAL_CALL proxyfac_create(
     return xRet;
 }
 
-static ::cppu::ImplementationEntry g_entries [] =
+static const ::cppu::ImplementationEntry g_entries [] =
 {
     {
         proxyfac_create, proxyfac_getImplementationName,

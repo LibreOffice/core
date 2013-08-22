@@ -416,7 +416,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
 
 using namespace stoc_javaloader;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         JavaComponentLoader_CreateInstance, loader_getImplementationName,

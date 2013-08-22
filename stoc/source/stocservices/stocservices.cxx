@@ -32,7 +32,7 @@ using namespace cppu;
 using namespace osl;
 using namespace stoc_services;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     // typeconv
     {

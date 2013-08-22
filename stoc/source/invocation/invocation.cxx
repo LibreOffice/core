@@ -1177,7 +1177,7 @@ Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference
 }
 
 using namespace stoc_inv;
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         InvocationService_CreateInstance, inv_getImplementationName,

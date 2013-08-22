@@ -71,7 +71,7 @@ const double D_EPS = 1.0E-2;
 const double _D_MAX_D_BY_100  = 1.7E306;
 const double _D_MIN_M_BY_1000 = 2.3E-305;
 
-static sal_uInt8 cCharWidths[ 128-32 ] = {
+static const sal_uInt8 cCharWidths[ 128-32 ] = {
     1,1,1,2,2,3,2,1,1,1,1,2,1,1,1,1,
     2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,
     3,2,2,2,2,2,2,3,2,1,2,2,2,3,3,3,

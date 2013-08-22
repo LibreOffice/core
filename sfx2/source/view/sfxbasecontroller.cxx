@@ -112,7 +112,7 @@ struct GroupIDToCommandGroup
 const sal_Int16 MAX_COMMANDGROUP = frame::CommandGroup::CONTROLS;
 
 static bool                 bGroupIDMapInitialized = false;
-static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
+static const GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
 {
     { GID_INTERN        ,   frame::CommandGroup::INTERNAL       },
     { GID_APPLICATION   ,   frame::CommandGroup::APPLICATION    },

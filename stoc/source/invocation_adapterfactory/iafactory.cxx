@@ -937,7 +937,7 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 //##############################################################################
 //##############################################################################
 
-static struct ::cppu::ImplementationEntry g_entries[] =
+static const struct ::cppu::ImplementationEntry g_entries[] =
 {
     {
         ::stoc_invadp::FactoryImpl_create,

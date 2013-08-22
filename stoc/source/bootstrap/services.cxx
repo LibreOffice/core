@@ -35,7 +35,7 @@ using namespace osl;
 
 using namespace stoc_bootstrap;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     //servicemanager
     {

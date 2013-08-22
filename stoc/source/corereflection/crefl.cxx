@@ -445,7 +445,7 @@ Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
 
 using namespace stoc_corefl;
 
-static struct ImplementationEntry g_entries[] =
+static const struct ImplementationEntry g_entries[] =
 {
     {
         IdlReflectionServiceImpl_create, core_getImplementationName,
