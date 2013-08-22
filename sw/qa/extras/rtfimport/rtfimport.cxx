@@ -150,6 +150,7 @@ public:
     void testFdo62977();
     void testFdo64671();
     void testFdo62044();
+    void testFdo68076();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -270,6 +271,7 @@ void Test::run()
         {"fdo62977.rtf", &Test::testFdo62977},
         {"fdo64671.rtf", &Test::testFdo64671},
         {"fdo62044.rtf", &Test::testFdo62044},
+        {"fdo68076.rtf", &Test::testFdo68076},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1242,6 +1244,13 @@ void Test::testFdo62044()
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
+}
+
+void Test::testFdo68076()
+{
+    // Encoding of the last char was wrong (more 'o' than 'y').
+    OUString aExpected("\xD0\x9E\xD0\xB1\xD1\x8A\xD0\xB5\xD0\xBA\xD1\x82 \xE2\x80\x93 \xD1\x83", 19, RTL_TEXTENCODING_UTF8);
+    getParagraph(1, aExpected);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
