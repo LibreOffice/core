@@ -649,6 +649,8 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)GetFrmFmt()->GetRegisteredIn(), *this );
+
     return true;
 }
 
