@@ -735,7 +735,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python /Users/me/Documents/Coding/libreoffice/core/ios/iosremote/localize.py --mainIdiom=en --mainStoryboard=/Users/me/Documents/Coding/libreoffice/core/ios/iosremote/iosremote/en.lproj/iPhone_autoSize.storyboard fr zh-Hans\n\npython /Users/me/Documents/Coding/libreoffice/core/ios/iosremote/localize.py --mainIdiom=en --mainStoryboard=/Users/me/Documents/Coding/libreoffice/core/ios/iosremote/en.lproj/iPad_autosize.storyboard fr zh-Hans";
+			shellScript = "python ${PROJECT_DIR}/localize.py --mainIdiom=en --mainStoryboard=${PROJECT_DIR}/iosremote/en.lproj/iPhone_autoSize.storyboard fr zh-Hans\n\npython ${PROJECT_DIR}/localize.py --mainIdiom=en --mainStoryboard=${PROJECT_DIR}/en.lproj/iPad_autosize.storyboard fr zh-Hans";
 		};
 /* End PBXShellScriptBuildPhase section */
 
