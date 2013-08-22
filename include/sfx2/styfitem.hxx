@@ -30,7 +30,7 @@
 #include <vector>
 
 struct SfxFilterTupel {
-    String aName;
+    OUString aName;
     sal_uInt16 nFlags;
 };
 typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
@@ -41,9 +41,9 @@ class SfxStyleFamilyItem: public Resource
 {
     Image           aImage;
     Bitmap          aBitmap;
-    String          aText;
-    String          aHelpText;
-    sal_uInt16          nFamily;
+    OUString        aText;
+    OUString        aHelpText;
+    sal_uInt16      nFamily;
     SfxStyleFilter  aFilterList;
 
 public:
@@ -51,8 +51,8 @@ public:
                     ~SfxStyleFamilyItem();
 
     const Bitmap&   GetBitmap() const { return aBitmap; }
-    const String&   GetText() const { return aText; }
-    const String&   GetHelpText() const { return aHelpText; }
+    const OUString& GetText() const { return aText; }
+    const OUString& GetHelpText() const { return aHelpText; }
     SfxStyleFamily  GetFamily() const { return (SfxStyleFamily)nFamily; }
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
     const Image&    GetImage() const { return aImage; }
