@@ -630,12 +630,11 @@ Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
     return Any();
 }
 
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ::dbtools::throwFunctionNotSupportedException("refreshRow not supported in firebird",
+                                                  *this,
+                                                  Any());
 }
 // -------------------------------------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
