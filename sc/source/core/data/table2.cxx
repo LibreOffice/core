@@ -1164,7 +1164,8 @@ void ScTable::CopyToTable(
         pDestTab->CopyConditionalFormat(nCol1, nRow1, nCol2, nRow2, 0, 0, this);
     }
 
-    pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
+    if(nFlags & IDF_OUTLINE) // also only when bColRowFlags
+        pDestTab->SetOutlineTable( pOutlineTable );
 }
 
 

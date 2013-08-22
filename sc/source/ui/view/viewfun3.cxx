@@ -1161,7 +1161,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         SCTAB nTabCount = pDoc->GetTableCount();
         pDoc->CopyToDocument( nStartCol, nStartRow, 0, nUndoEndCol, nUndoEndRow, nTabCount-1,
-                                nUndoFlags, false, pUndoDoc );
+                              nUndoFlags, false, pUndoDoc );
 
         if ( bCutMode )
         {
