@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="MailMergeDialog">
+  <object class="GtkDialog" id="MergeConnectDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Mail Merge</property>
+    <property name="title" translatable="yes">Data Source Connection</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -89,8 +89,8 @@
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="GtkRadioButton" id="document">
-                        <property name="label" translatable="yes">From this _document</property>
+                      <object class="GtkRadioButton" id="existing">
+                        <property name="label" translatable="yes">_Use existing</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">template</property>
+                        <property name="group">new</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -108,19 +108,36 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="template">
-                        <property name="label" translatable="yes">From a _template</property>
+                      <object class="GtkRadioButton" id="new">
+                        <property name="label" translatable="yes">_Create new connection</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">document</property>
+                        <property name="group">existing</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.</property>
+                        <property name="wrap">True</property>
+                        <property name="max_width_chars">52</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -133,7 +150,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Create</property>
+                <property name="label" translatable="yes">Connect</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -817,24 +817,13 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent)
         "modules/swriter/ui/mailmergedialog.ui")
 {
     get(m_pThisDocRB, "document");
-    get(m_pUseTemplateRB, "template");
 }
 
-SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) :
-    ModalDialog(pParent, SW_RES(DLG_MERGE_FIELD_CONNECTIONS)),
-    aConnectionsFL( this, SW_RES( FL_CONNECTIONS  )),
-    aUseExistingRB( this, SW_RES( RB_USEEXISTING )),
-    aCreateNewRB(   this, SW_RES( RB_CREATENEW    )),
-    aInfoFI(        this, SW_RES( FT_INFO        )),
-    aOK(            this, SW_RES( BT_OK          )),
-    aCancel(        this, SW_RES( BT_CANCEL      )),
-    aHelp(          this, SW_RES( BT_HELP        ))
+SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent)
+    : ModalDialog(pParent, "MergeConnectDialog",
+        "modules/swriter/ui/mergeconnectdialog.ui")
 {
-    FreeResource();
-}
-
-SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
-{
+    get(m_pUseExistingRB, "existing");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

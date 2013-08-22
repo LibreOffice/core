@@ -68,11 +68,6 @@
 #define BT_OK           4
 #define BT_CANCEL       5
 #define BT_HELP         6
-#define FL_CONNECTIONS  7
-#define RB_USEEXISTING  8
-#define RB_CREATENEW    9
-#define FT_INFO         10
-
 
 #endif
 

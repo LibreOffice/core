@@ -1020,21 +1020,10 @@ AbstractMailMergeCreateFromDlg * SwAbstractDialogFactory_Impl::CreateMailMergeCr
     return new AbstractMailMergeCreateFromDlg_Impl(pDlg);
 }
 
-AbstractMailMergeFieldConnectionsDlg * SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg( int nResId,
-                                                            Window* pParent ) //add for SwMailMergeFieldConnectionsDlg
+AbstractMailMergeFieldConnectionsDlg * SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg(Window* pParent) //add for SwMailMergeFieldConnectionsDlg
 {
-    SwMailMergeFieldConnectionsDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MERGE_FIELD_CONNECTIONS :
-            pDlg = new SwMailMergeFieldConnectionsDlg( pParent );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractMailMergeFieldConnectionsDlg_Impl( pDlg );
-    return 0;
+    SwMailMergeFieldConnectionsDlg* pDlg = new SwMailMergeFieldConnectionsDlg( pParent );
+    return new AbstractMailMergeFieldConnectionsDlg_Impl( pDlg );
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg( int nResId,

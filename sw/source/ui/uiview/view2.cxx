@@ -2302,9 +2302,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
                 //take an existing data source or create a new one?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
-                                                    DLG_MERGE_FIELD_CONNECTIONS,
-                                                    &GetViewFrame()->GetWindow());
+                AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(&GetViewFrame()->GetWindow());
                 OSL_ENSURE(pConnectionsDlg, "Dialogdiet fail!");
                 if(RET_OK == pConnectionsDlg->Execute())
                     bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();

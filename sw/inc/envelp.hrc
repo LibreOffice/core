@@ -52,8 +52,6 @@
 #define STR_DATABASE_NOT_OPENED  (RC_ENVLOP_BEGIN + 63)
 #define STR_NO_DRIVERS           (RC_ENVLOP_BEGIN + 64)
 
-#define DLG_MERGE_FIELD_CONNECTIONS (RC_ENVLOP_BEGIN + 66)
-
 #define STR_BTN_NEWDOC           (RC_ENVLOP_BEGIN + 68)
 #define STR_SENDER_TOKENS        (RC_ENVLOP_BEGIN + 69)
 // Ueberlaufpruefung ----------------------------------------------------------

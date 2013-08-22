@@ -153,7 +153,6 @@ public:
 class SwMailMergeCreateFromDlg : public ModalDialog
 {
     RadioButton* m_pThisDocRB;
-    RadioButton* m_pUseTemplateRB;
 public:
     SwMailMergeCreateFromDlg(Window* pParent);
     bool IsThisDocument() const
@@ -164,20 +163,13 @@ public:
 
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
 {
-    FixedLine       aConnectionsFL;
-    RadioButton     aUseExistingRB;
-    RadioButton     aCreateNewRB;
-
-    FixedInfo       aInfoFI;
-
-    OKButton        aOK;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
+    RadioButton* m_pUseExistingRB;
 public:
     SwMailMergeFieldConnectionsDlg(Window* pParent);
-    ~SwMailMergeFieldConnectionsDlg();
-
-    sal_Bool    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
+    bool IsUseExistingConnections() const
+    {
+        return m_pUseExistingRB->IsChecked();
+    }
 };
 
 #endif
