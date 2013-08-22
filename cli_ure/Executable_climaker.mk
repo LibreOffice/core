@@ -44,4 +44,7 @@ $(eval $(call gb_Executable_add_exception_objects,climaker,\
 	cli_ure/source/climaker/climaker_emit \
 ))
 
+$(call gb_Executable_get_headers_target,climaker) : \
+    $(call gb_CliLibrary_get_target,cli_basetypes)
+
 # vim: set noet sw=4 ts=4:
