@@ -32,7 +32,7 @@
       </node>
       <node oor:name=".uno:FontworkGalleryFloater" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fontwork Gallery</value>
+          <value xml:lang="en-US">Fontwork Gallery...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>

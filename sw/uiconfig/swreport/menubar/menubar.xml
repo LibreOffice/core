@@ -220,6 +220,7 @@
               <menu:menuitem menu:id=".uno:TwainTransfer"/>
             </menu:menupopup>
           </menu:menu>
+          <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertAVMedia"/>

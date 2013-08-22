@@ -211,6 +211,7 @@
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertGraphic"/>
+                    <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
