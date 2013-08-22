@@ -440,7 +440,7 @@ SfxTabDialog::SfxTabDialog
                                   // can be NULL, when Pages are onDemand
     sal_Bool bEditFmt,                // Flag: templates are processed
                                   // when yes -> additional Button for standard
-    const String* pUserButtonText // Text for UserButton;
+    const OUString* pUserButtonText // Text for UserButton;
                                   // if != 0, the UserButton is created
 )
     : TabDialog(pParent, rResId)
@@ -539,7 +539,7 @@ SfxTabDialog::~SfxTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId *pResId )
+void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText, const ResId *pResId )
 
 /*  [Description]
 
@@ -749,7 +749,7 @@ void SfxTabDialog::AddTabPage( sal_uInt16 nId, sal_Bool bItemsOnDemand )
     AddTabPage( nId, 0, 0, bItemsOnDemand );
 }
 
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, const String &rRiderText, sal_Bool bItemsOnDemand, sal_uInt16 nPos )
+void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, sal_Bool bItemsOnDemand, sal_uInt16 nPos )
 {
     AddTabPage( nId, rRiderText, 0, 0, bItemsOnDemand, nPos );
 }
@@ -839,7 +839,7 @@ void SfxTabDialog::AddTabPage
 
 (
     sal_uInt16 nId,
-    const String& rRiderText,
+    const OUString& rRiderText,
     CreateTabPage pCreateFunc,
     GetTabPageRanges pRangesFunc,
     sal_Bool bItemsOnDemand,

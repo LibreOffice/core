@@ -103,7 +103,7 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
     DECL_DLLPRIVATE_LINK(UserHdl, void *);
     DECL_DLLPRIVATE_LINK(CancelHdl, void *);
-    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, const ResId* pResId );
+    SAL_DLLPRIVATE void Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText, const ResId* pResId );
 
 protected:
     virtual short               Ok();
@@ -138,7 +138,7 @@ public:
 
 
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
-                  sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
+                  sal_Bool bEditFmt = sal_False, const OUString *pUserButtonText = 0 );
     ~SfxTabDialog();
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
@@ -156,7 +156,7 @@ public:
 
 
     void                AddTabPage( sal_uInt16 nId,
-                                    const String &rRiderText,
+                                    const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
                                     sal_Bool bItemsOnDemand = sal_False,
@@ -171,7 +171,7 @@ public:
     void                AddTabPage( sal_uInt16 nId,
                                     sal_Bool bItemsOnDemand = sal_False);
     void                AddTabPage( sal_uInt16 nId,
-                                    const String &rRiderText,
+                                    const OUString &rRiderText,
                                     sal_Bool bItemsOnDemand = sal_False,
                                     sal_uInt16 nPos = TAB_APPEND);
     void                AddTabPage( sal_uInt16 nId,
@@ -247,8 +247,8 @@ friend class SfxTabDialog;
 
 private:
     const SfxItemSet*   pSet;
-    String              aUserString;
-    sal_Bool                bHasExchangeSupport;
+    OUString            aUserString;
+    sal_Bool            bHasExchangeSupport;
     TabPageImpl*        pImpl;
 
     SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
@@ -292,10 +292,10 @@ public:
         using TabPage::DeactivatePage;
     virtual void            ActivatePage( const SfxItemSet& );
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
-    void                    SetUserData(const String& rString)
-                            { aUserString = rString; }
-    String              GetUserData() { return aUserString; }
-    virtual void        FillUserData();
+    void                    SetUserData(const OUString& rString)
+                              { aUserString = rString; }
+    OUString                GetUserData() { return aUserString; }
+    virtual void            FillUserData();
     virtual sal_Bool        IsReadOnly() const;
     virtual void PageCreated (SfxAllItemSet aSet);
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
