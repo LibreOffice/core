@@ -95,7 +95,7 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl()
 }
 
 
-SvxOpenGraphicDialog::SvxOpenGraphicDialog( const String& rTitle ) :
+SvxOpenGraphicDialog::SvxOpenGraphicDialog( const OUString& rTitle ) :
     mpImpl( new SvxOpenGrf_Impl )
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
@@ -115,7 +115,7 @@ short SvxOpenGraphicDialog::Execute()
     while( bQuitLoop == sal_False &&
            mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
-        if( GetPath().Len() )
+        if( !GetPath().isEmpty() )
         {
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject aObj( GetPath() );
@@ -181,12 +181,12 @@ short SvxOpenGraphicDialog::Execute()
 }
 
 
-void SvxOpenGraphicDialog::SetPath( const String& rPath )
+void SvxOpenGraphicDialog::SetPath( const OUString& rPath )
 {
     mpImpl->aFileDlg.SetDisplayDirectory(rPath);
 }
 
-void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
+void SvxOpenGraphicDialog::SetPath( const OUString& rPath, sal_Bool bLinkState )
 {
     SetPath(rPath);
     AsLink(bLinkState);
@@ -258,19 +258,19 @@ int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 }
 
 
-String SvxOpenGraphicDialog::GetPath() const
+OUString SvxOpenGraphicDialog::GetPath() const
 {
     return mpImpl->aFileDlg.GetPath();
 }
 
 
-String SvxOpenGraphicDialog::GetCurrentFilter() const
+OUString SvxOpenGraphicDialog::GetCurrentFilter() const
 {
     return mpImpl->aFileDlg.GetCurrentFilter();
 }
 
 
-void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
+void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
 {
     mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }

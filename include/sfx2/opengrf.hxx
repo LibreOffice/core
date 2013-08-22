@@ -28,14 +28,14 @@ struct  SvxOpenGrf_Impl;
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
-    SvxOpenGraphicDialog    ( const String& rTitle );
+    SvxOpenGraphicDialog    ( const OUString& rTitle );
     ~SvxOpenGraphicDialog   ();
 
     short                   Execute();
 
-    void                    SetPath( const String& rPath );
-    void                    SetPath( const String& rPath, sal_Bool bLinkState );
-    String                  GetPath() const;
+    void                    SetPath( const OUString& rPath );
+    void                    SetPath( const OUString& rPath, sal_Bool bLinkState );
+    OUString                GetPath() const;
 
     int                     GetGraphic(Graphic&) const;
 
@@ -43,8 +43,8 @@ public:
     void                    AsLink(sal_Bool);
     sal_Bool                IsAsLink() const;
 
-    String                  GetCurrentFilter() const;
-    void                    SetCurrentFilter(const String&);
+    OUString                GetCurrentFilter() const;
+    void                    SetCurrentFilter(const OUString&);
 private:
     // disable copy and assignment
     SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
