@@ -288,8 +288,10 @@ postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Dr
 postprocess_DRIVERS += mozab
 endif
 else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
 postprocess_DRIVERS += mork
+endif
 endif
 endif
 ifeq (MACOSX,$(OS))
