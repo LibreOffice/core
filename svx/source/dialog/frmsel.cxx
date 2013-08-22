@@ -268,6 +268,8 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     maVer.SetKeyboardNeighbors(    FRAMEBORDER_TLBR, FRAMEBORDER_BLTR,  FRAMEBORDER_TOP,  FRAMEBORDER_BOTTOM );
     maTLBR.SetKeyboardNeighbors(   FRAMEBORDER_LEFT, FRAMEBORDER_VER,   FRAMEBORDER_TOP,  FRAMEBORDER_HOR );
     maBLTR.SetKeyboardNeighbors(   FRAMEBORDER_VER,  FRAMEBORDER_RIGHT, FRAMEBORDER_HOR,  FRAMEBORDER_BOTTOM );
+
+    Initialize(mnFlags);
 }
 
 FrameSelectorImpl::~FrameSelectorImpl()
