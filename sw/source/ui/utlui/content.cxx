@@ -2963,8 +2963,9 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case CONTENT_TYPE_INDEX:
         {
-            if (!pActiveShell->GotoNextTOXBase(&pCnt->GetName()))
-                pActiveShell->GotoPrevTOXBase(&pCnt->GetName());
+            const OUString sName(pCnt->GetName());
+            if (!pActiveShell->GotoNextTOXBase(&sName))
+                pActiveShell->GotoPrevTOXBase(&sName);
         }
         break;
         case CONTENT_TYPE_POSTIT:

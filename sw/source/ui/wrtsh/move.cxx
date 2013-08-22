@@ -650,7 +650,7 @@ sal_Bool SwWrtShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoNextTOXBase( const String* pName )
+sal_Bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoNextTOXBase(pName);

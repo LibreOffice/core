@@ -21,6 +21,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 
+#include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
@@ -665,8 +666,8 @@ public:
     // in a headerframe otherwise in a footerframe
     bool IsInHeaderFooter( sal_Bool* pbInHeader = 0 ) const;
 
-    sal_Bool GotoNextTOXBase( const String* = 0 );
-    sal_Bool GotoPrevTOXBase( const String* = 0 );
+    sal_Bool GotoNextTOXBase( const OUString* = 0 );
+    sal_Bool GotoPrevTOXBase( const OUString* = 0 );
     sal_Bool GotoTOXMarkBase();
     // jump to the next or previous index entry
     sal_Bool GotoNxtPrvTOXMark( sal_Bool bNext = sal_True );

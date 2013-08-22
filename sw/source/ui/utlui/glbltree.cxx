@@ -1013,7 +1013,7 @@ void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
         break;
         case GLBLDOC_TOXBASE:
         {
-            String sName = pCont->GetTOX()->GetTOXName();
+            const OUString sName = pCont->GetTOX()->GetTOXName();
             if (!pActiveShell->GotoNextTOXBase(&sName))
                 pActiveShell->GotoPrevTOXBase(&sName);
         }

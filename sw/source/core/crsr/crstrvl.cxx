@@ -284,7 +284,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
 }
 
 /// jump to the next index
-sal_Bool SwCrsrShell::GotoNextTOXBase( const String* pName )
+sal_Bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
 {
     sal_Bool bRet = sal_False;
 
@@ -335,7 +335,7 @@ sal_Bool SwCrsrShell::GotoNextTOXBase( const String* pName )
 }
 
 /// jump to previous index
-sal_Bool SwCrsrShell::GotoPrevTOXBase( const String* pName )
+sal_Bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
 {
     sal_Bool bRet = sal_False;
 
