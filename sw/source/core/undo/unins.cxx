@@ -842,8 +842,9 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     OUString* pOldNm = pNm;
     OUString* pOldFltr = pFltr;
     sal_uInt16 nOldMirr = nMirr;
-
+    // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );
+
     if( pOldNm )
     {
         pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString(), 0, 0, sal_True );
