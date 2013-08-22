@@ -403,24 +403,20 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
         long            nLineWidthAry[100];
         sal_uInt16          nLinePosAry[101];
 
+        long nTotalWidth = nOffsetX;
+        for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+             it != mpTabCtrlData->maItemList.end(); ++it )
+        {
+            nTotalWidth += ImplGetItemSize( &(*it), nMaxWidth ).Width();
+        }
+        long nWrapWidth = nWidth / ceil((double)nTotalWidth / nWidth);
+
         nLineWidthAry[0] = 0;
         nLinePosAry[0] = 0;
         for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
              it != mpTabCtrlData->maItemList.end(); ++it )
         {
             aSize = ImplGetItemSize( &(*it), nMaxWidth );
-
-            if ( ((nX+aSize.Width()) > nWidth - 2) && (nWidth > 2+nOffsetX) )
-            {
-                if ( nLines == 99 )
-                    break;
-
-                nX  = nOffsetX;
-                nY += aSize.Height();
-                nLines++;
-                nLineWidthAry[nLines] = 0;
-                nLinePosAry[nLines] = nPos;
-            }
 
             Rectangle aNewRect( Point( nX, nY ), aSize );
             if ( mbSmallInvalidate && (it->maRect != aNewRect) )
@@ -436,6 +432,23 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
                 nCurLine = nLines;
 
             nPos++;
+
+            if ( (nX > nWrapWidth - 2) && (nWidth > 2+nOffsetX) )
+            {
+                if ( nLines == 99 )
+                    break;
+
+                nX  = nOffsetX;
+                nY += aSize.Height();
+                nLines++;
+                nLineWidthAry[nLines] = 0;
+                nLinePosAry[nLines] = nPos;
+            }
+        }
+
+        if ( nX == nOffsetX )
+        {
+            nLines--;
         }
 
         if ( nLines && !mpTabCtrlData->maItemList.empty() )
