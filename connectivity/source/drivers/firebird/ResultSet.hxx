@@ -25,7 +25,7 @@
 #include <ibase.h>
 
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase10.hxx>
 
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
@@ -47,13 +47,11 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,
                                                         ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbc::XResultSetUpdate,
-                                                        ::com::sun::star::sdbc::XRowUpdate,
                                                         ::com::sun::star::sdbcx::XRowLocate,
                                                         ::com::sun::star::sdbcx::XDeleteRows,
                                                         ::com::sun::star::sdbc::XCloseable,
@@ -194,96 +192,6 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            // XResultSetUpdate - UNSUPPORTED
-            virtual void SAL_CALL insertRow()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateRow()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deleteRow()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL cancelRowUpdates()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL moveToInsertRow()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL moveToCurrentRow()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-
-            // XRowUpdate - UNSUPPORTED
-            virtual void SAL_CALL updateNull(sal_Int32 columnIndex)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBoolean(sal_Int32 columnIndex,
-                                                sal_Bool x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateByte(sal_Int32 columnIndex,
-                                             sal_Int8 x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateShort(sal_Int32 columnIndex,
-                                              sal_Int16 x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateInt(sal_Int32 columnIndex,
-                                            sal_Int32 x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateLong(sal_Int32 columnIndex,
-                                             sal_Int64 x )
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateFloat(sal_Int32 columnIndex,
-                                              float x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateDouble(sal_Int32 columnIndex,
-                                               double x )
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateString(sal_Int32 columnIndex,
-                                               const ::rtl::OUString& x )
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBytes(sal_Int32 columnIndex,
-                                              const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateDate(sal_Int32 columnIndex,
-                                             const ::com::sun::star::util::Date& x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateTime(sal_Int32 columnIndex,
-                                             const ::com::sun::star::util::Time& x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateTimestamp(sal_Int32 columnIndex,
-                                                  const ::com::sun::star::util::DateTime& x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBinaryStream(sal_Int32 columnIndex,
-                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,
-                                                     sal_Int32 length)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateCharacterStream(sal_Int32 columnIndex,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,
-                                                        sal_Int32 length)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateObject(sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateNumericObject(sal_Int32 columnIndex,
-                                                      const ::com::sun::star::uno::Any& x,
-                                                      sal_Int32 scale )
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
 
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn(const ::rtl::OUString& columnName)
