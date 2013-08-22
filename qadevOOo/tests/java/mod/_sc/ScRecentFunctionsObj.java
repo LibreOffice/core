@@ -45,7 +45,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XRecentFunctions
 */
 public class ScRecentFunctionsObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

@@ -34,7 +34,7 @@ import util.SOfficeFactory;
 
 
 public class ScDocumentConfiguration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object

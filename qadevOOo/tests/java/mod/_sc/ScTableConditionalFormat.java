@@ -64,7 +64,7 @@ import com.sun.star.uno.XInterface;
 */
 public class ScTableConditionalFormat extends TestCase {
 
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

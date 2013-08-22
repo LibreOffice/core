@@ -54,7 +54,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XSubTotalField
 */
 public class ScSubTotalFieldObj extends TestCase {
-    public static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

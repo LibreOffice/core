@@ -59,7 +59,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XScenarios
 */
 public class ScScenariosObj extends TestCase {
-    public static XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.

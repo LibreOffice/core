@@ -70,7 +70,7 @@ import util.SOfficeFactory;
 * @see ifc.sheet._XCellRangeReferrer
 */
 public class ScDatabaseRangeObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

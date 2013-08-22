@@ -64,7 +64,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.text._TextContent
 */
 public class ScCellFieldObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

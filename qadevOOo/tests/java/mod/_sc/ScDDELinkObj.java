@@ -60,7 +60,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XDDELink
 */
 public class ScDDELinkObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
     static XComponent oDoc = null;
 
     /**

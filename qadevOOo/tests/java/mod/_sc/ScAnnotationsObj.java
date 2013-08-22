@@ -64,7 +64,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XSheetAnnotations
 */
 public class ScAnnotationsObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

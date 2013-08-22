@@ -34,7 +34,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
     static SOfficeFactory SOF = null;
 
     /**

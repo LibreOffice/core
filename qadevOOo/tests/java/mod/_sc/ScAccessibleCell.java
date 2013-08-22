@@ -72,7 +72,7 @@ import com.sun.star.uno.XInterface;
  */
 public class ScAccessibleCell extends TestCase {
 
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Called to create an instance of <code>TestEnvironment</code>

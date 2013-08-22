@@ -41,7 +41,7 @@ import util.SOfficeFactory;
 
 
 public class ScUniqueCellFormatsEnumeration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
     static XSpreadsheet oSheet = null;
 
     /**

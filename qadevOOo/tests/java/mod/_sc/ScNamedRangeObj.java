@@ -56,7 +56,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XCellRangeReferrer
 */
 public class ScNamedRangeObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

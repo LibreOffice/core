@@ -55,7 +55,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XSheetCondition
 */
 public class ScTableValidationObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

@@ -84,8 +84,8 @@ import com.sun.star.uno.XInterface;
  * @see ifc.view._XSelectionSupplier
  */
 public class ScTabViewObj extends TestCase {
-    public static XSpreadsheetDocument xSpreadsheetDoc;
-    public static XSpreadsheetDocument xSpreadsheetDoc2;
+    private XSpreadsheetDocument xSpreadsheetDoc;
+    private XSpreadsheetDocument xSpreadsheetDoc2;
 
     /**
      * Creates Spreadsheet document.

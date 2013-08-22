@@ -51,7 +51,7 @@ import util.SOfficeFactory;
 
 public class ScDataPilotFieldGroupItemObj extends TestCase
 {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * A field is filled some values. This integer determines the size of the

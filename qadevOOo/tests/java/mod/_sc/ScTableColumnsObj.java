@@ -61,7 +61,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.table._XTableColumns
 */
 public class ScTableColumnsObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

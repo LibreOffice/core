@@ -51,7 +51,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.container._XEnumeration
 */
 public class ScCellFormatsEnumeration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

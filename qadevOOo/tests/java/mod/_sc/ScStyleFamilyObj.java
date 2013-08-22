@@ -62,7 +62,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.container._XNameReplace
 */
 public class ScStyleFamilyObj extends TestCase {
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

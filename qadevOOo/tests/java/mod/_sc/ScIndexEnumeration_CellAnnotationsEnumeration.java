@@ -42,7 +42,7 @@ import com.sun.star.uno.XInterface;
 
 
 public class ScIndexEnumeration_CellAnnotationsEnumeration extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.

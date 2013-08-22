@@ -69,7 +69,7 @@ import util.InstCreator;
 * @see ifc.sheet._XSheetAnnotation
 */
 public class ScAnnotationShapeObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates a spreadsheet document.

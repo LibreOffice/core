@@ -70,7 +70,7 @@ import com.sun.star.util.XURLTransformer;
  */
 public class ScAccessiblePageHeaderArea extends TestCase {
 
-    static XSpreadsheetDocument xSpreadsheetDoc = null;
+    private XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
      * Called to create an instance of <code>TestEnvironment</code>

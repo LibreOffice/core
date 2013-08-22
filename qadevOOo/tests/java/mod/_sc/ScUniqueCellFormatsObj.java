@@ -40,7 +40,7 @@ import util.SOfficeFactory;
 
 
 public class ScUniqueCellFormatsObj extends TestCase {
-    static XSpreadsheetDocument xSheetDoc = null;
+    private XSpreadsheetDocument xSheetDoc = null;
     static XSpreadsheet oSheet = null;
 
     /**
