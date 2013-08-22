@@ -1111,7 +1111,8 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (bFlagChange)
         pDestTab->InvalidatePageBreaks();
 
-    pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
+    if(nFlags & IDF_OUTLINE) // also only when bColRowFlags
+        pDestTab->SetOutlineTable( pOutlineTable );
 }
 
 
