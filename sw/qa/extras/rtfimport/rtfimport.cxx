@@ -165,6 +165,7 @@ public:
     void testFdo63428();
     void testGroupshapeRotation();
     void testFdo44715();
+    void testFdo68076();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -314,6 +315,7 @@ void Test::run()
         {"hello.rtf", &Test::testFdo63428},
         {"groupshape-rotation.rtf", &Test::testGroupshapeRotation},
         {"fdo44715.rtf", &Test::testFdo44715},
+        {"fdo68076.rtf", &Test::testFdo68076},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1538,6 +1540,13 @@ void Test::testFdo44715()
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // Style information wasn't reset, which caused character height to be 16.
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraphOfText(2, xCell->getText()), "CharHeight"));
+}
+
+void Test::testFdo68076()
+{
+    // Encoding of the last char was wrong (more 'o' than 'y').
+    OUString aExpected("\xD0\x9E\xD0\xB1\xD1\x8A\xD0\xB5\xD0\xBA\xD1\x82 \xE2\x80\x93 \xD1\x83", 19, RTL_TEXTENCODING_UTF8);
+    getParagraph(1, aExpected);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

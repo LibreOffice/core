@@ -382,9 +382,10 @@ void RTFDocumentImpl::checkFirstRun()
             Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
 
-        // set the requested default font
+        // set the requested default font, if there are none
         RTFValue::Pointer_t pFont = m_aDefaultState.aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
-        if (pFont.get())
+        RTFValue::Pointer_t pCurrentFont = m_aStates.top().aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
+        if (pFont && !pCurrentFont)
             dispatchValue(RTF_F, pFont->getInt());
         m_bFirstRun = false;
     }
