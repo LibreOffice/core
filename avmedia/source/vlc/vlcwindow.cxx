@@ -18,7 +18,7 @@ void SAL_CALL VLCWindow::update()
 {
 }
 
-::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel ZoomLevel )
+::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel )
 {
     return false;
 }
@@ -28,7 +28,7 @@ css::media::ZoomLevel SAL_CALL VLCWindow::getZoomLevel()
     return css::media::ZoomLevel_NOT_AVAILABLE;
 }
 
-void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 SystemPointerType )
+void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 )
 {
 }
 
@@ -53,17 +53,17 @@ void SAL_CALL VLCWindow::dispose() throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void SAL_CALL VLCWindow::addEventListener( const uno::Reference< lang::XEventListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void SAL_CALL VLCWindow::removeEventListener( const uno::Reference< lang::XEventListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL VLCWindow::setPosSize( sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16 )
     throw (uno::RuntimeException)
 {
 }
@@ -74,12 +74,12 @@ awt::Rectangle SAL_CALL VLCWindow::getPosSize()
     return awt::Rectangle();
 }
 
-void SAL_CALL VLCWindow::setVisible( sal_Bool Visible )
+void SAL_CALL VLCWindow::setVisible( sal_Bool )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::setEnable( sal_Bool Enable )
+void SAL_CALL VLCWindow::setEnable( sal_Bool )
     throw (uno::RuntimeException)
 {
 }
@@ -89,62 +89,62 @@ void SAL_CALL VLCWindow::setFocus()
 {
 }
 
-void SAL_CALL VLCWindow::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void SAL_CALL VLCWindow::addWindowListener( const uno::Reference< awt::XWindowListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void SAL_CALL VLCWindow::removeWindowListener( const uno::Reference< awt::XWindowListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void SAL_CALL VLCWindow::addFocusListener( const uno::Reference< awt::XFocusListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void SAL_CALL VLCWindow::removeFocusListener( const uno::Reference< awt::XFocusListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void SAL_CALL VLCWindow::addKeyListener( const uno::Reference< awt::XKeyListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void SAL_CALL VLCWindow::removeKeyListener( const uno::Reference< awt::XKeyListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void SAL_CALL VLCWindow::addMouseListener( const uno::Reference< awt::XMouseListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void SAL_CALL VLCWindow::removeMouseListener( const uno::Reference< awt::XMouseListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void SAL_CALL VLCWindow::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void SAL_CALL VLCWindow::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void SAL_CALL VLCWindow::addPaintListener( const uno::Reference< awt::XPaintListener >& )
     throw (uno::RuntimeException)
 {
 }
 
-void SAL_CALL VLCWindow::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void SAL_CALL VLCWindow::removePaintListener( const uno::Reference< awt::XPaintListener >& )
     throw (uno::RuntimeException)
 {
 }

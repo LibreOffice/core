@@ -53,26 +53,27 @@ public:
 
     const rtl::OUString& url() const;
 
-    void SAL_CALL start();
-    void SAL_CALL stop();
-    ::sal_Bool SAL_CALL isPlaying();
-    double SAL_CALL getDuration();
-    void SAL_CALL setMediaTime( double fTime );
-    double SAL_CALL getMediaTime();
-    double SAL_CALL getRate();
-    void SAL_CALL setPlaybackLoop( ::sal_Bool bSet );
-    ::sal_Bool SAL_CALL isPlaybackLoop();
-    void SAL_CALL setVolumeDB( ::sal_Int16 nDB );
-    ::sal_Int16 SAL_CALL getVolumeDB();
-    void SAL_CALL setMute( ::sal_Bool bSet );
-    ::sal_Bool SAL_CALL isMute();
-    css::awt::Size SAL_CALL getPreferredPlayerWindowSize();
-    ::com::sun::star::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
-    ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber();
+    void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL isPlaying() throw ( ::com::sun::star::uno::RuntimeException );
+    double SAL_CALL getDuration() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException );
+    double SAL_CALL getMediaTime() throw ( ::com::sun::star::uno::RuntimeException );
+    double SAL_CALL getRate() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Int16 SAL_CALL getVolumeDB() throw ( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL setMute( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL isMute() throw ( ::com::sun::star::uno::RuntimeException );
+    css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+            throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber() throw ( ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getImplementationName();
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );;
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw ( ::com::sun::star::uno::RuntimeException );;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( ::com::sun::star::uno::RuntimeException );;
 
 private:
     void replay();

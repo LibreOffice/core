@@ -45,11 +45,11 @@ class VLCFrameGrabber : public FrameGrabber_BASE
 public:
     SAL_CALL VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url );
 
-    ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime );
+    ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw ( ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getImplementationName();
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 }

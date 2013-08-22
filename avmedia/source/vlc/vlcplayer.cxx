@@ -45,31 +45,31 @@ const rtl::OUString& VLCPlayer::url() const
     return mUrl;
 }
 
-void SAL_CALL VLCPlayer::start()
+void SAL_CALL VLCPlayer::start() throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.play();
 }
 
-void SAL_CALL VLCPlayer::stop()
+void SAL_CALL VLCPlayer::stop() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.pause();
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isPlaying()
+::sal_Bool SAL_CALL VLCPlayer::isPlaying() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlayer.isPlaying();
 }
 
-double SAL_CALL VLCPlayer::getDuration()
+double SAL_CALL VLCPlayer::getDuration() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return static_cast<double>( mPlayer.getLength() ) / MS_IN_SEC;
 }
 
-void SAL_CALL VLCPlayer::setMediaTime( double fTime )
+void SAL_CALL VLCPlayer::setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -81,13 +81,13 @@ void SAL_CALL VLCPlayer::setMediaTime( double fTime )
     mPlayer.setTime( fTime * MS_IN_SEC );
 }
 
-double SAL_CALL VLCPlayer::getMediaTime()
+double SAL_CALL VLCPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return static_cast<double>( mPlayer.getTime() ) / MS_IN_SEC;
 }
 
-double SAL_CALL VLCPlayer::getRate()
+double SAL_CALL VLCPlayer::getRate() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlayer.getRate();
@@ -101,7 +101,7 @@ void VLCPlayer::replay()
     start();
 }
 
-void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
+void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlaybackLoop = bSet;
@@ -112,37 +112,37 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
         mEventManager.onEndReached();
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop()
+::sal_Bool SAL_CALL VLCPlayer::isPlaybackLoop() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlaybackLoop;
 }
 
-void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )
+void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.setVolume( static_cast<sal_Int16>( ( nDB + 40 ) * 10.0  / 4 ) );
 }
 
-::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB()
+::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return static_cast<sal_Int16>( mPlayer.getVolume() / 10.0 * 4 - 40 );
 }
 
-void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
+void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.setMute( bSet );
 }
 
-::sal_Bool SAL_CALL VLCPlayer::isMute()
+::sal_Bool SAL_CALL VLCPlayer::isMute() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return mPlayer.getMute();
 }
 
-css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
+css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize() throw ( ::com::sun::star::uno::RuntimeException )
 {
     return css::awt::Size( 480, 360 );
 }
@@ -175,6 +175,7 @@ namespace
 }
 
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
+     throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -191,6 +192,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 }
 
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
+     throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mPlayer, mEventHandler, mUrl );
@@ -198,16 +200,19 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
 }
 
 ::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
+     throw ( ::com::sun::star::uno::RuntimeException )
 {
     return AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME;
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
+     throw ( ::com::sun::star::uno::RuntimeException )
 {
     return serviceName == AVMEDIA_VLC_PLAYER_SERVICENAME;
 }
 
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
+     throw ( ::com::sun::star::uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(1);
     aRet[0] = AVMEDIA_VLC_PLAYER_SERVICENAME;
