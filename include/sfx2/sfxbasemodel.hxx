@@ -1442,7 +1442,7 @@ private:
 
     SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 
-    SAL_DLLPRIVATE String getEventName_Impl( long nID );
+    SAL_DLLPRIVATE OUString getEventName_Impl( long nID );
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );
 
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
