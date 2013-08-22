@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
 #include "acceptor.hxx"
 #include <com/sun/star/bridge/BridgeFactory.hpp>
@@ -26,7 +27,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::osl;
 using namespace css::bridge;
 using namespace css::connection;
 using namespace css::container;
@@ -41,15 +41,10 @@ extern "C" void offacc_workerfunc (void * acc)
     ((Acceptor*)acc)->run();
 }
 
-Mutex Acceptor::m_aMutex;
-
 Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )
     : m_thread(NULL)
     , m_rContext(rxContext)
-    , m_aAcceptString()
-    , m_aConnectString()
-    , m_aProtocol()
-    , m_bInit(sal_False)
+    , m_bInit(false)
     , m_bDying(false)
 {
     m_rAcceptor = css::connection::Acceptor::create(m_rContext);
@@ -76,30 +71,29 @@ Acceptor::~Acceptor()
         osl::MutexGuard g(m_aMutex);
     }
     for (;;) {
-        com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > b(
-            m_bridges.remove());
+        css::uno::Reference< css::bridge::XBridge > b(m_bridges.remove());
         if (!b.is()) {
             break;
         }
-        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >(
-            b, com::sun::star::uno::UNO_QUERY_THROW)->dispose();
+        css::uno::Reference< css::lang::XComponent >(
+            b, css::uno::UNO_QUERY_THROW)->dispose();
     }
 }
 
-void SAL_CALL Acceptor::run()
+void Acceptor::run()
 {
-    while ( m_rAcceptor.is() )
+    SAL_INFO( "desktop.offacc", "Acceptor::run" );
+    for (;;)
     {
-        SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::run" );
         try
         {
             // wait until we get enabled
-            SAL_INFO( "desktop.offacc", "desktop (lo119109)"\
+            SAL_INFO( "desktop.offacc",
                 "Acceptor::run waiting for office to come up");
             m_cEnable.wait();
             if (m_bDying) //see destructor
                 break;
-            SAL_INFO( "desktop.offacc", "desktop (lo119109)"\
+            SAL_INFO( "desktop.offacc",
                 "Acceptor::run now enabled and continuing");
 
             // accept connection
@@ -108,16 +102,16 @@ void SAL_CALL Acceptor::run()
             // is destructed so we break out of the run method terminating the thread
             if (! rConnection.is()) break;
             OUString aDescription = rConnection->getDescription();
-            SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::run connection " << aDescription );
+            SAL_INFO( "desktop.offacc", "Acceptor::run connection " << aDescription );
 
             // create instanceprovider for this connection
             Reference< XInstanceProvider > rInstanceProvider(
-                (XInstanceProvider*)new AccInstanceProvider(m_rContext, rConnection));
+                new AccInstanceProvider(m_rContext, rConnection));
             // create the bridge. The remote end will have a reference to this bridge
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
             Reference< XBridge > rBridge = m_rBridgeFactory->createBridge(
-                OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
+                "", m_aProtocol, rConnection, rInstanceProvider);
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
         } catch (const Exception& e) {
@@ -130,14 +124,14 @@ void SAL_CALL Acceptor::run()
 }
 
 // XInitialize
-void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
+void Acceptor::initialize( const Sequence<Any>& aArguments )
     throw( Exception )
 {
     // prevent multiple initialization
-    ClearableMutexGuard aGuard( m_aMutex );
-    SAL_INFO( "desktop.offacc", "destop (lo119109) Acceptor::initialize()" );
+    osl::ClearableMutexGuard aGuard( m_aMutex );
+    SAL_INFO( "desktop.offacc", "Acceptor::initialize()" );
 
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
     // arg count
     int nArgs = aArguments.getLength();
@@ -145,33 +139,33 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     // not yet initialized and acceptstring
     if (!m_bInit && nArgs > 0 && (aArguments[0] >>= m_aAcceptString))
     {
-        SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::initialize string=" << m_aAcceptString );
+        SAL_INFO( "desktop.offacc", "Acceptor::initialize string=" << m_aAcceptString );
 
         // get connect string and protocol from accept string
         // "<connectString>;<protocol>"
-        sal_Int32 nIndex1 = m_aAcceptString.indexOf( (sal_Unicode) ';' );
+        sal_Int32 nIndex1 = m_aAcceptString.indexOf( ';' );
         if (nIndex1 < 0) throw IllegalArgumentException(
             OUString("Invalid accept-string format"), m_rContext, 1);
         m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
         nIndex1++;
-        sal_Int32 nIndex2 = m_aAcceptString.indexOf( (sal_Unicode) ';' , nIndex1 );
+        sal_Int32 nIndex2 = m_aAcceptString.indexOf( ';' , nIndex1 );
         if (nIndex2 < 0) nIndex2 = m_aAcceptString.getLength();
         m_aProtocol = m_aAcceptString.copy( nIndex1, nIndex2 - nIndex1 );
 
         // start accepting in new thread...
         m_thread = osl_createThread(offacc_workerfunc, this);
-        m_bInit = sal_True;
-        bOk = sal_True;
+        m_bInit = true;
+        bOk = true;
     }
 
     // do we want to enable accepting?
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
     if (((nArgs == 1 && (aArguments[0] >>= bEnable)) ||
          (nArgs == 2 && (aArguments[1] >>= bEnable))) &&
         bEnable )
     {
         m_cEnable.set();
-        bOk = sal_True;
+        bOk = true;
     }
 
     if (!bOk)
@@ -182,28 +176,22 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
 }
 
 // XServiceInfo
-const sal_Char *Acceptor::serviceName = "com.sun.star.office.Acceptor";
-const sal_Char *Acceptor::implementationName = "com.sun.star.office.comp.Acceptor";
-const sal_Char *Acceptor::supportedServiceNames[] = {"com.sun.star.office.Acceptor", NULL};
 OUString Acceptor::impl_getImplementationName()
 {
-    return OUString::createFromAscii( implementationName );
+    return OUString("com.sun.star.office.comp.Acceptor");
 }
-OUString SAL_CALL Acceptor::getImplementationName()
+OUString Acceptor::getImplementationName()
     throw (RuntimeException)
 {
     return Acceptor::impl_getImplementationName();
 }
 Sequence<OUString> Acceptor::impl_getSupportedServiceNames()
 {
-    Sequence<OUString> aSequence;
-    for (int i=0; supportedServiceNames[i]!=NULL; i++) {
-        aSequence.realloc(i+1);
-        aSequence[i]=(OUString::createFromAscii(supportedServiceNames[i]));
-    }
+    Sequence<OUString> aSequence(1);
+    aSequence[0] = "com.sun.star.office.Acceptor";
     return aSequence;
 }
-Sequence<OUString> SAL_CALL Acceptor::getSupportedServiceNames()
+Sequence<OUString> Acceptor::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return Acceptor::impl_getSupportedServiceNames();
@@ -236,7 +224,7 @@ AccInstanceProvider::~AccInstanceProvider()
 {
 }
 
-Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString& aName )
+Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
         throw ( NoSuchElementException )
 {
 
@@ -275,7 +263,7 @@ extern "C"
 {
 using namespace desktop;
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pImplementationName, void *pServiceManager, void *)
 {
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )

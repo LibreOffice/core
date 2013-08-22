@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -43,11 +45,7 @@ class  Acceptor
     : public ::cppu::WeakImplHelper2<css::lang::XServiceInfo, css::lang::XInitialization>
 {
 private:
-    static const sal_Char *serviceName;
-    static const sal_Char *implementationName;
-    static const sal_Char *supportedServiceNames[];
-
-    static ::osl::Mutex m_aMutex;
+    osl::Mutex m_aMutex;
 
     oslThread m_thread;
     comphelper::WeakBag< com::sun::star::bridge::XBridge > m_bridges;
@@ -62,14 +60,14 @@ private:
     OUString m_aConnectString;
     OUString m_aProtocol;
 
-    sal_Bool m_bInit;
+    bool m_bInit;
     bool m_bDying;
 
 public:
     Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~Acceptor();
 
-    void SAL_CALL run();
+    void run();
 
     // XService info
     static OUString impl_getImplementationName();
