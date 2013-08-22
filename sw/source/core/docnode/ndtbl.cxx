@@ -1986,6 +1986,10 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             pTblNd->DelFrms();
             DeleteSection( pTblNd );
         }
+
+        SwTableFmt::AssignFormatParents( (SwTableFmt*)rTable.GetFrmFmt()->GetRegisteredIn(),
+                                            rTable );
+
         SetModified();
         SetFieldsDirty( true, NULL, 0 );
         return sal_True;
@@ -2017,6 +2021,9 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, true, true );
         if (bRet)
         {
+            SwTableFmt::AssignFormatParents( (SwTableFmt*)rTable.GetFrmFmt()->GetRegisteredIn(),
+                                            rTable );
+
             SetModified();
             SetFieldsDirty( true, NULL, 0 );
         }
