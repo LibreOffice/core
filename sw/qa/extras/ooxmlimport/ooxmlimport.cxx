@@ -128,7 +128,6 @@ public:
     void testFdo66474();
     void testGroupshapeRotation();
     void testBnc780044Spacing();
-    void testTableFloating();
     void testTableFloatingMargins();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -223,7 +222,6 @@ void Test::run()
         {"fdo66474.docx", &Test::testFdo66474},
         {"groupshape-rotation.docx", &Test::testGroupshapeRotation},
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
-        {"table-floating.docx", &Test::testTableFloating},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
     };
     header();
@@ -1552,23 +1550,6 @@ void Test::testBnc780044Spacing()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
-}
-
-void Test::testTableFloating()
-{
-    // Both the size and the position of the table was incorrect.
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    // Second table was too wide: 16249, i.e. as wide as the first table.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11248), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
-
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    // This was 0, should be the the opposite of (left margin + half of the border width).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
-    // Was 0 as well, should be the right margin.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
 void Test::testTableFloatingMargins()

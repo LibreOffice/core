@@ -107,6 +107,7 @@ public:
     void testFdo64350();
     void testFdo67013();
     void testParaShadow();
+    void testTableFloating();
     void testTableFloatingMargins();
     void testFdo44689_start_page_7();
 
@@ -192,6 +193,7 @@ void Test::run()
         {"fdo64350.docx", &Test::testFdo64350},
         {"fdo67013.docx", &Test::testFdo67013},
         {"para-shadow.docx", &Test::testParaShadow},
+        {"table-floating.docx", &Test::testTableFloating},
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
         {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
     };
@@ -1149,6 +1151,23 @@ void Test::testParaShadow()
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(24/8*20)), aShadow.ShadowWidth);
+}
+
+void Test::testTableFloating()
+{
+    // Both the size and the position of the table was incorrect.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Second table was too wide: 16249, i.e. as wide as the first table.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11248), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // This was 0, should be the the opposite of (left margin + half of the border width).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    // Was 0 as well, should be the right margin.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
 void Test::testTableFloatingMargins()
