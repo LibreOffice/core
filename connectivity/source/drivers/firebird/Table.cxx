@@ -11,11 +11,14 @@
 #include "Keys.hxx"
 #include "Table.hxx"
 
+#include <TConnection.hxx>
+
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/TIndexes.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
 
 using namespace ::connectivity;
 using namespace ::connectivity::firebird;
@@ -28,6 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
 Table::Table(Tables* pTables,
@@ -36,9 +40,10 @@ Table::Table(Tables* pTables,
     OTableHelper(pTables,
                  rConnection,
                  sal_True),
-    m_rMutex(rMutex)
+    m_rMutex(rMutex),
+    m_nPrivileges(0)
 {
-    OTableHelper::construct();
+    construct();
 }
 
 Table::Table(Tables* pTables,
@@ -55,11 +60,34 @@ Table::Table(Tables* pTables,
                  rDescription,
                  "",
                  ""),
-    m_rMutex(rMutex)
+    m_rMutex(rMutex),
+    m_nPrivileges(0)
 {
-    OTableHelper::construct();
+    construct();
 }
 
+void Table::construct()
+{
+    OTableHelper::construct();
+    if (!isNew())
+    {
+        // TODO: get privileges when in non-embedded mode.
+        m_nPrivileges = Privilege::DROP         |
+                        Privilege::REFERENCE    |
+                        Privilege::ALTER        |
+                        Privilege::CREATE       |
+                        Privilege::READ         |
+                        Privilege::DELETE       |
+                        Privilege::UPDATE       |
+                        Privilege::INSERT       |
+                        Privilege::SELECT;
+        registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),
+                         PROPERTY_ID_PRIVILEGES,
+                         PropertyAttribute::READONLY,
+                         &m_nPrivileges,
+                         ::getCppuType(&m_nPrivileges));
+    }
+}
 //----- OTableHelper ---------------------------------------------------------
 OCollection* Table::createColumns(const TStringVector& rNames)
 {
@@ -228,4 +256,5 @@ OUString Table::getAlterTableColumn(const OUString& rColumn)
 {
     return ("ALTER TABLE \"" + getName() + "\" ALTER COLUMN \"" + rColumn + "\" ");
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

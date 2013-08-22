@@ -27,12 +27,16 @@ namespace connectivity
         {
         private:
             ::osl::Mutex& m_rMutex;
+            sal_Int32 m_nPrivileges;
 
             /**
              * Get the ALTER TABLE [TABLE] ALTER [COLUMN] String.
              * Includes a trailing space.
              */
             ::rtl::OUString getAlterTableColumn(const ::rtl::OUString& rColumn);
+
+        protected:
+            void construct();
 
         public:
             Table(Tables* pTables,
@@ -80,7 +84,6 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
                     SAL_CALL getTypes()
                 throw(::com::sun::star::uno::RuntimeException);
-
 
         };
 
