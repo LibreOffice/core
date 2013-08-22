@@ -273,7 +273,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         ComponentCondition = STRING(VersionNT >= 601); \
-        Subkey = STRING(AppUserModelID); \
+        Subkey = STRING(CONCAT3(LibreOffice.,name,\AppUserModelID)); \
         Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
     End
 
