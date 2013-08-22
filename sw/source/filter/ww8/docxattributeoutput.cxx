@@ -2318,14 +2318,14 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     if ( pGrfNode && pGrfNode->IsLinkedFile() )
     {
         // linked image, just create the relation
-        String aFileName;
+        OUString aFileName;
         pGrfNode->GetFileFilterNms( &aFileName, 0 );
 
         // TODO Convert the file name to relative for better interoperability
 
         aRelId = m_rExport.AddRelation(
                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
-                    OUString( aFileName ) );
+                    aFileName );
 
         nImageType = XML_link;
     }

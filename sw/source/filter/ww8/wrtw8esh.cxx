@@ -1411,7 +1411,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
 
     if (pGrfNd->IsLinkedFile())
     {
-        String sURL;
+        OUString sURL;
         pGrfNd->GetFileFilterNms( &sURL, 0 );
 
         ww::bytes aBuf;

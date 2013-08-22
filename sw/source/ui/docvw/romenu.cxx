@@ -122,10 +122,10 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )
-                pTargetURL = new INetImage( bLink ? sGrfName : aEmptyStr,
+                pTargetURL = new INetImage( bLink ? sGrfName : OUString(),
                                             rURL.GetURL(),
                                             rURL.GetTargetFrameName(),
-                                            aEmptyStr, Size() );
+                                            OUString(), Size() );
         }
     }
 

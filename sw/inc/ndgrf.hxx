@@ -194,7 +194,7 @@ public:
     inline bool IsLinkedFile() const;
     inline bool IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
-    bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
+    bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
     void ReleaseLink();
 
     /** Scale an image-map: the image-map becomes zoomed in / out by

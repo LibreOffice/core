@@ -129,7 +129,8 @@ private:
 class SwUndoReRead : public SwUndo
 {
     Graphic *pGrf;
-    String *pNm, *pFltr;
+    OUString *pNm;
+    OUString *pFltr;
     sal_uLong nPos;
     sal_uInt16 nMirr;
 

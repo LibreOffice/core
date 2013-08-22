@@ -411,7 +411,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         {
             if ( pGrfNd )
             {
-                String aFileURL;
+                OUString aFileURL;
                 pGrfNd->GetFileFilterNms( &aFileURL, 0 );
                 sStr += aFileURL;
             }
@@ -701,14 +701,14 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
 {
     if (rGrfNd.IsLinkedFile())     // Linked File
     {
-        String aFileN;
+        OUString aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
             sal_uInt16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
-        rStrm << (sal_uInt8)aFileN.Len();    // write Pascal-String
+        rStrm << (sal_uInt8)aFileN.getLength();    // write Pascal-String
         SwWW8Writer::WriteString8(rStrm, aFileN, false,
             RTL_TEXTENCODING_MS_1252);
     }

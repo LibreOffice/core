@@ -77,7 +77,7 @@ using namespace com::sun::star;
 
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
-inline bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
+inline bool GetRealURL( const SwGrfNode& rNd, OUString& rTxt )
 {
     bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
     if( bRet )
@@ -205,10 +205,10 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
-            String aTxt( pNd->GetTitle() );
-            if ( !aTxt.Len() && pNd->IsGrfNode() )
+            OUString aTxt( pNd->GetTitle() );
+            if ( aTxt.isEmpty() && pNd->IsGrfNode() )
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
-            if( !aTxt.Len() )
+            if( aTxt.isEmpty() )
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
             lcl_PaintReplacement( Frm(), aTxt, *pSh, this, false );
         }
@@ -851,8 +851,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 {
                     pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }
-                String aTxt( pGrfNd->GetTitle() );
-                if ( !aTxt.Len() )
+                OUString aTxt( pGrfNd->GetTitle() );
+                if ( aTxt.isEmpty() )
                     GetRealURL( *pGrfNd, aTxt );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, false );
                 bContinue = false;
@@ -976,10 +976,10 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                         nResId = STR_COMCORE_CANT_SHOW;
                 }
                 ((SwNoTxtFrm*)this)->nWeight = -1;
-                String aText;
+                OUString aText;
                 if ( !nResId &&
-                     !(aText = pGrfNd->GetTitle()).Len() &&
-                     (!GetRealURL( *pGrfNd, aText ) || !aText.Len()))
+                     (aText = pGrfNd->GetTitle()).isEmpty() &&
+                     (!GetRealURL( *pGrfNd, aText ) || aText.isEmpty()))
                 {
                     nResId = STR_COMCORE_READERROR;
                 }

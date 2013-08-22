@@ -37,8 +37,8 @@ class SwReadOnlyPopup : public PopupMenu
                 Graphic aGraphic;
     String      sURL,
                 sTargetFrameName,
-                sDescription,
-                sGrfName;
+                sDescription;
+    OUString    sGrfName;
     std::vector<String> aThemeList;
     sal_Bool        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;

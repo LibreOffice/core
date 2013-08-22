@@ -284,7 +284,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
             {
                 sal_Bool bLink,
                     bIMap = 0 != rSh.GetFmtFromObj( aDocPt )->GetURL().GetMap();
-                String aDummy;
+                OUString aDummy;
                 rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
                 if ( bLink && bIMap )
                     nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP;
