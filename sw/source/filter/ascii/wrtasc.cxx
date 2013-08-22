@@ -74,7 +74,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                 break;
 
     default:
-        if( rFltNm.copy( 4 )=="_DLG" )
+        if( rFltNm.getLength() >= 4 && rFltNm.copy( 4 )=="_DLG" )
         {
             // use the options
             aNewOpts = GetAsciiOptions();
