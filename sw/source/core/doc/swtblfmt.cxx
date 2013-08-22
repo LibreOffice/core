@@ -302,7 +302,7 @@ void SwTableFormat::AssignLineParents( SwTableFormat* pSrcFormat, SwTable &rTabl
     sal_uInt16 nLines = rTable.GetTabLines().size();
     for( sal_uInt16 n = 0; n < nLines; ++n )
     {
-        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rTable.GetTabLines()[ n ]->GetFrameFormat();
+        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rTable.GetTabLines()[ n ]->ClaimFrameFormat();
         SwTableLineFormat* pFormat = 0;
 
         if( pSrcFormat )
@@ -339,7 +339,7 @@ void SwTableFormat::AssignBoxParents( SwTableLineFormat* pSrcLineFormat, SwTable
     sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nBoxes; ++n )
     {
-        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->GetFrameFormat();
+        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->ClaimFrameFormat();
         SwTableBoxFormat* pFormat = 0;
 
         if( pSrcLineFormat )
@@ -377,7 +377,7 @@ void SwTableFormat::AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat
     sal_uInt16 nLines = rBox.GetTabLines().size();
     for( sal_uInt16 n = 0; n < nLines; ++n )
     {
-        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rBox.GetTabLines()[ n ]->GetFrameFormat();
+        SwTableLineFormat* pLineFormat = (SwTableLineFormat*)rBox.GetTabLines()[ n ]->ClaimFrameFormat();
 
         if( pSrcLineFormat )
         {
@@ -401,7 +401,7 @@ void SwTableFormat::AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat,
     sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nBoxes; ++n )
     {
-        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->GetFrameFormat();
+        SwTableBoxFormat* pBoxFormat = (SwTableBoxFormat*)rLine.GetTabBoxes()[ n ]->ClaimFrameFormat();
 
         if( pSrcBoxFormat )
         {

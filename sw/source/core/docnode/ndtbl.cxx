@@ -171,7 +171,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
 
         (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
     }
-    rBox.ChgFrameFormat( new SwTableBoxFormat( *pNewTableBoxFormat) );
+    rBox.ChgFrameFormat( pNewTableBoxFormat );
 }
 
 static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
@@ -458,7 +458,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     SwTableLines& rLines = rNdTable.GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
-        SwTableLine* pLine = new SwTableLine( new SwTableLineFormat( *pLineFormat ), nCols, 0 );
+        SwTableLine* pLine = new SwTableLine( pLineFormat, nCols, 0 );
         rLines.insert( rLines.begin() + n, pLine );
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
@@ -467,10 +467,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = new SwTableBoxFormat( *::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId, pTAFormat == 0) );
+                pBoxF = ::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId, pTAFormat == 0);
             }
             else
-                pBoxF = new SwTableBoxFormat( *pBoxFormat );
+                pBoxF = pBoxFormat;
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -737,7 +737,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                     ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId, pTAFormat == 0 );
                 else
                 {
-                    pBoxF = new SwTableBoxFormat ( *::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId, pTAFormat == 0 ) );
+                    pBoxF = ::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId, pTAFormat == 0 );
                     pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
