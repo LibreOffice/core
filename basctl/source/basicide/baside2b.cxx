@@ -512,7 +512,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         pCodeCompleteWnd->GetListBox()->KeyInput(rKEvt);
         if( rKEvt.GetKeyCode().GetCode() == KEY_UP
             || rKEvt.GetKeyCode().GetCode() == KEY_DOWN
-            || rKEvt.GetKeyCode().GetCode() == KEY_TAB )
+            || rKEvt.GetKeyCode().GetCode() == KEY_TAB
+            || rKEvt.GetKeyCode().GetCode() == KEY_POINT)
             return;
     }
 
@@ -834,6 +835,8 @@ void EditorWindow::HandleCodeCompletition()
                 aVect.insert( aVect.begin(), aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
         }
 
+        if( aVect.size() == 0 )//nothing to do
+            return;
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
@@ -877,7 +880,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     }
     // show it
     pCodeCompleteWnd->Show();
-    pCodeCompleteWnd->ResizeListBox( aSel );
+    pCodeCompleteWnd->ResizeListBox();
     pCodeCompleteWnd->SelectFirstEntry();
     // correct text selection, and set it
     aSel.GetStart().GetIndex() += 1;
@@ -2644,8 +2647,9 @@ void CodeCompleteListBox::InsertSelectedEntry()
     if( !aFuncBuffer.toString().isEmpty() )
     {
         // if the user typed in something: remove, and insert
-        TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
-        GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+        //TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
+        //GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
+        GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
@@ -2824,12 +2828,12 @@ const TextSelection& CodeCompleteWindow::GetTextSelection() const
     return aTextSelection;
 }
 
-void CodeCompleteWindow::ResizeListBox( const TextSelection& aSel )
+void CodeCompleteWindow::ResizeListBox()
 {
     if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
         // calculate basic position: under the current line
-        Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( aSel.GetEnd() , false );
+        Rectangle aRect = ( (TextEngine*) pParent->GetEditEngine() )->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() , false );
         long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
         Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
         aPos.Y() = (aPos.Y() - nViewYOffset) + nBasePad;
@@ -2845,24 +2849,24 @@ void CodeCompleteWindow::ResizeListBox( const TextSelection& aSel )
         const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
         const Font& aFont = pListBox->GetFont();// listbox's font: height is needed
 
-        Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
+        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
         Size aSize = pListBox->GetOptimalSize();// this sets the correct width
         aSize.setHeight( pListBox->CalcSize( nColumns, nLines ).getHeight() );// correct height
 
-        Point aBottomPoint = aVisArea.BottomRight();
-        Point aTopPoint = aVisArea.TopRight();
-        long nYDiff = std::abs( (aBottomPoint.Y() - aTopPoint.Y()) - GetPosPixel().Y() );
+        const Point& aBottomPoint = aVisArea.BottomRight();
+        const Point& aTopPoint = aVisArea.TopRight();
 
+        const long& nYDiff = aBottomPoint.Y() - aTopPoint.Y() - aPos.Y();
         if( (nYDiff + aFont.GetHeight()) < aSize.Height() )
         {//bottom part is clipped, fix the visibility by placing it over the line (not under)
             const Font& aParFont = pParent->GetEditEngine()->GetFont();//parent's font (in the IDE): needed for height
             aPos.Y() -= aSize.Height() + aParFont.GetHeight() + nCursorPad;
         }
 
-        long nXDiff = std::abs( aTopPoint.X() - GetPosPixel().X() );
+        const long& nXDiff = aBottomPoint.X() - aPos.X();
         if( nXDiff < aSize.Width() )
         {//clipped at the right side, move it a bit left
-            aPos.X() -= aSize.Width() + nXDiff;
+            aPos.X() -= aSize.Width();
         }
 
         pListBox->SetSizePixel( aSize );
@@ -2884,13 +2888,8 @@ void CodeCompleteWindow::SelectFirstEntry()
 
 void CodeCompleteWindow::ClearAndHide()
 {
-    TextPaM aEnd(aTextSelection.GetEnd().GetPara(), GetTextSelection().GetEnd().GetIndex() + pListBox->aFuncBuffer.getLength());
-    TextPaM aStart(aTextSelection.GetEnd().GetPara(), GetTextSelection().GetEnd().GetIndex() );
-    pParent->GetEditView()->SetSelection(TextSelection(aStart, aEnd));
-    pParent->GetEditView()->DeleteSelected();
-    Hide();
     ClearListBox();
-    pParent->GrabFocus();
+    pListBox->HideAndRestoreFocus();
 }
 
 UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& aVect, const OUString& sVarType )
