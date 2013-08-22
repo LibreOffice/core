@@ -313,6 +313,22 @@ static hb_font_funcs_t* getFontFuncs(void)
     return funcs;
 }
 
+// Disabled Unicode compatibility decomposition, see fdo#66715
+static unsigned int unicodeDecomposeCompatibility(hb_unicode_funcs_t* /*ufuncs*/,
+                                                  hb_codepoint_t      /*u*/,
+                                                  hb_codepoint_t*     /*decomposed*/,
+                                                  void*               /*user_data*/)
+{
+    return 0;
+}
+
+static hb_unicode_funcs_t* getUnicodeFuncs(void)
+{
+    static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
+    hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, NULL, NULL);
+    return ufuncs;
+}
+
 class HbLayoutEngine : public ServerFontLayoutEngine
 {
 private:
@@ -399,6 +415,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
         hb_buffer_t *pHbBuffer = hb_buffer_create();
+        hb_buffer_set_unicode_funcs(pHbBuffer, getUnicodeFuncs());
         hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
         hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
         hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
