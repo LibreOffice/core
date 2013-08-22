@@ -167,7 +167,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
 
         (*pMap)[pBoxFrmFmt] = pNewTableBoxFmt;
     }
-    rBox.ChgFrmFmt( new SwTableBoxFmt( *pNewTableBoxFmt) );
+    rBox.ChgFrmFmt( pNewTableBoxFmt );
 }
 
 static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
@@ -455,7 +455,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     SwTableLines& rLines = pNdTbl->GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
-        SwTableLine* pLine = new SwTableLine( new SwTableLineFmt( *pLineFmt ), nCols, 0 );
+        SwTableLine* pLine = new SwTableLine( pLineFmt, nCols, 0 );
         rLines.insert( rLines.begin() + n, pLine );
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
@@ -464,10 +464,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = new SwTableBoxFmt( *::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId, pTAFmt == 0) );
+                pBoxF = ::lcl_CreateDfltBoxFmt( *this, aBoxFmtArr, nCols, nBoxId, pTAFmt == 0);
             }
             else
-                pBoxF = new SwTableBoxFmt( *pBoxFmt );
+                pBoxF = pBoxFmt;
 
             // For AutoFormat on input: the columns are set when inserting the Table
             // The Array contains the columns positions and not their widths!
@@ -736,7 +736,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                     ::lcl_SetDfltBoxAttr( *pBox, *aBoxFmtArr1, nId, pTAFmt == 0 );
                 else
                 {
-                    pBoxF = new SwTableBoxFmt ( *::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2, USHRT_MAX, nId, pTAFmt == 0 ) );
+                    pBoxF = ::lcl_CreateDfltBoxFmt( *this, *aBoxFmtArr2, USHRT_MAX, nId, pTAFmt == 0 );
                     pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
                     pBox->ChgFrmFmt( pBoxF );
                 }

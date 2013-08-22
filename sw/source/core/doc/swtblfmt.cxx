@@ -299,7 +299,7 @@ void SwTableFmt::AssignLineParents( SwTableFmt* pSrcFmt, SwTable &rTable )
     sal_uInt16 nLines = rTable.GetTabLines().size();
     for( sal_uInt16 n = 0; n < nLines; ++n )
     {
-        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rTable.GetTabLines()[ n ]->GetFrmFmt();
+        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rTable.GetTabLines()[ n ]->ClaimFrmFmt();
         SwTableLineFmt* pFmt = 0;
 
         if( pSrcFmt )
@@ -336,7 +336,7 @@ void SwTableFmt::AssignBoxParents( SwTableLineFmt* pSrcLineFmt, SwTableLine &rLi
     sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nBoxes; ++n )
     {
-        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->GetFrmFmt();
+        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->ClaimFrmFmt();
         SwTableBoxFmt* pFmt = 0;
 
         if( pSrcLineFmt )
@@ -374,7 +374,7 @@ void SwTableFmt::AssignLineParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTable
     sal_uInt16 nLines = rBox.GetTabLines().size();
     for( sal_uInt16 n = 0; n < nLines; ++n )
     {
-        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rBox.GetTabLines()[ n ]->GetFrmFmt();
+        SwTableLineFmt* pLineFmt = (SwTableLineFmt*)rBox.GetTabLines()[ n ]->ClaimFrmFmt();
 
         if( pSrcLineFmt )
         {
@@ -398,7 +398,7 @@ void SwTableFmt::AssignBoxParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableB
     sal_uInt16 nBoxes = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nBoxes; ++n )
     {
-        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->GetFrmFmt();
+        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rLine.GetTabBoxes()[ n ]->ClaimFrmFmt();
 
         if( pSrcBoxFmt )
         {
