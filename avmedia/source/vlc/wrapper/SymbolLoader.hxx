@@ -28,7 +28,6 @@ namespace
 {
     const char *libNames[] = {
         "libvlc.so.5",
-        "libvlccore.so.5",
         "libvlc.dll",
         "libvlc.dylib"
     };
@@ -41,7 +40,11 @@ namespace
             SymbolFunc aMethod = ( SymbolFunc )osl_getFunctionSymbol
                 ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData );
             if ( !aMethod )
+            {
+                std::cerr << "Cannot load method " << pMap[ i ].symName << std::endl;
+                *pMap[ i ].refValue = NULL;
                 return false;
+            }
 
             *pMap[ i ].refValue = aMethod;
         }
@@ -64,11 +67,16 @@ bool InitApiMap( const ApiMap ( &pMap )[N]  )
         if( aModule == NULL)
             continue;
 
-        tryLink( aModule, pMap );
+        if (tryLink( aModule, pMap ))
+        {
+            osl_unloadModule( aModule );
+            return true;
+        }
 
         osl_unloadModule( aModule );
     }
 
+    std::cerr << "Cannot load libvlc" << std::endl;
     return false;
 }
 
