@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EXTINPUT_HXX
-#define _EXTINPUT_HXX
+#ifndef EXTINPUT_HXX
+#define EXTINPUT_HXX
 
 #include <pam.hxx>
 #include <i18nlangtag/lang.h>
@@ -28,7 +28,7 @@ class CommandExtTextInputData;
 class SwExtTextInput : public SwPaM
 {
     std::vector<sal_uInt16> aAttrs;
-    String sOverwriteText;
+    OUString sOverwriteText;
     sal_Bool bInsText : 1;
     sal_Bool bIsOverwriteCursor : 1;
     LanguageType eInputLanguage;
@@ -44,6 +44,6 @@ public:
     void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 
-#endif  //_EXTINPUT_HXX
+#endif  //EXTINPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <editeng/langitem.hxx>
@@ -59,7 +61,7 @@ SwExtTextInput::~SwExtTextInput()
         {
             if( nEndCnt < nSttCnt )
             {
-                xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
+                std::swap(nSttCnt, nEndCnt);
             }
 
             // In order to get Undo/Redlining etc. working correctly,
@@ -83,34 +85,29 @@ SwExtTextInput::~SwExtTextInput()
                 }
             }
             rIdx = nSttCnt;
-            String sTxt( pTNd->GetTxt().copy(nSttCnt, nEndCnt - nSttCnt));
-            if( bIsOverwriteCursor && sOverwriteText.Len() )
+            const OUString sTxt( pTNd->GetTxt().copy(nSttCnt, nEndCnt - nSttCnt));
+            if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
             {
-                xub_StrLen nLen = sTxt.Len();
-                if( nLen > sOverwriteText.Len() )
+                const sal_Int32 nLen = sTxt.getLength();
+                const sal_Int32 nOWLen = sOverwriteText.getLength();
+                if( nLen > nOWLen )
                 {
-                    rIdx += sOverwriteText.Len();
-                    pTNd->EraseText( rIdx, nLen - sOverwriteText.Len() );
+                    rIdx += nOWLen;
+                    pTNd->EraseText( rIdx, nLen - nOWLen );
                     rIdx = nSttCnt;
-                    pTNd->ReplaceText( rIdx, sOverwriteText.Len(),
-                                            sOverwriteText );
+                    pTNd->ReplaceText( rIdx, nOWLen, sOverwriteText );
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->GetIDocumentUndoRedo().StartUndo(
-                                UNDO_OVERWRITE, NULL );
-                        pDoc->Overwrite( *this, sTxt.Copy( 0,
-                                                    sOverwriteText.Len() ));
-                        pDoc->InsertString( *this,
-                            sTxt.Copy( sOverwriteText.Len() ) );
-                        pDoc->GetIDocumentUndoRedo().EndUndo(
-                                UNDO_OVERWRITE, NULL );
+                        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
+                        pDoc->Overwrite( *this, sTxt.copy( 0, nOWLen ) );
+                        pDoc->InsertString( *this, sTxt.copy( nOWLen ) );
+                        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
                 else
                 {
-                    pTNd->ReplaceText( rIdx, nLen,
-                            sOverwriteText.Copy( 0, nLen ));
+                    pTNd->ReplaceText( rIdx, nLen, sOverwriteText.copy( 0, nLen ));
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
@@ -140,35 +137,41 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
                     nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt < nSttCnt )
         {
-            xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
+            std::swap(nSttCnt, nEndCnt);
         }
 
         SwIndex aIdx( pTNd, nSttCnt );
-        const String& rNewStr = rData.GetText();
+        const OUString rNewStr = rData.GetText();
 
-        if( bIsOverwriteCursor && sOverwriteText.Len() )
+        if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
         {
-            xub_StrLen nReplace = nEndCnt - nSttCnt;
-            if( rNewStr.Len() < nReplace )
+            sal_Int32 nReplace = nEndCnt - nSttCnt;
+            const sal_Int32 nNewLen = rNewStr.getLength();
+            if( nNewLen < nReplace )
             {
                 // We have to insert some characters from the saved original text
-                nReplace = nReplace - rNewStr.Len();
-                aIdx += rNewStr.Len();
+                nReplace -= nNewLen;
+                aIdx += nNewLen;
                 pTNd->ReplaceText( aIdx, nReplace,
-                            sOverwriteText.Copy( rNewStr.Len(), nReplace ));
+                            sOverwriteText.copy( nNewLen, nReplace ));
                 aIdx = nSttCnt;
-                nReplace = rNewStr.Len();
+                nReplace = nNewLen;
             }
-            else if( sOverwriteText.Len() < nReplace )
+            else
             {
-                nReplace = nReplace - sOverwriteText.Len();
-                aIdx += sOverwriteText.Len();
-                pTNd->EraseText( aIdx, nReplace );
-                aIdx = nSttCnt;
-                nReplace = sOverwriteText.Len();
+                const sal_Int32 nOWLen = sOverwriteText.getLength();
+                if( nOWLen < nReplace )
+                {
+                    aIdx += nOWLen;
+                    pTNd->EraseText( aIdx, nReplace-nOWLen );
+                    aIdx = nSttCnt;
+                    nReplace = nOWLen;
+                }
+                else
+                {
+                    nReplace = std::min(nOWLen, nNewLen);
+                }
             }
-            else if( (nReplace = sOverwriteText.Len()) > rNewStr.Len() )
-                nReplace = rNewStr.Len();
 
             pTNd->ReplaceText( aIdx, nReplace, rNewStr );
             if( !HasMark() )
@@ -202,23 +205,30 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
 void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
 {
     bIsOverwriteCursor = bFlag;
+    if (!bIsOverwriteCursor)
+        return;
 
-    SwTxtNode* pTNd;
-    if( bIsOverwriteCursor &&
-        0 != (pTNd = GetPoint()->nNode.GetNode().GetTxtNode()) )
+    const SwTxtNode *const pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
+    if (pTNd)
     {
         xub_StrLen nSttCnt = GetPoint()->nContent.GetIndex(),
                     nEndCnt = GetMark()->nContent.GetIndex();
-        sOverwriteText = pTNd->GetTxt().copy( nEndCnt < nSttCnt ? nEndCnt
-                                                                : nSttCnt );
-        if( sOverwriteText.Len() )
+        sOverwriteText = pTNd->GetTxt().copy( std::min(nSttCnt, nEndCnt) );
+        if( !sOverwriteText.isEmpty() )
         {
-            xub_StrLen nInWrdAttrPos = sOverwriteText.Search( CH_TXTATR_INWORD ),
-                    nWrdAttrPos = sOverwriteText.Search( CH_TXTATR_BREAKWORD );
-            if( nWrdAttrPos < nInWrdAttrPos )
-                nInWrdAttrPos = nWrdAttrPos;
-            if( STRING_NOTFOUND != nInWrdAttrPos )
-                sOverwriteText.Erase( nInWrdAttrPos );
+            const sal_Int32 nInPos = sOverwriteText.indexOf( CH_TXTATR_INWORD );
+            const sal_Int32 nBrkPos = sOverwriteText.indexOf( CH_TXTATR_BREAKWORD );
+
+            // Find the first attr found, if any.
+            sal_Int32 nPos = std::min(nInPos, nBrkPos);
+            if (nPos<0)
+            {
+                nPos = std::max(nInPos, nBrkPos);
+            }
+            if (nPos>=0)
+            {
+                sOverwriteText = sOverwriteText.copy( 0, nPos );
+            }
         }
     }
 }
