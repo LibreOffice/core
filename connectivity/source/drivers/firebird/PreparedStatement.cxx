@@ -199,9 +199,8 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
                                             const OUString& x)
     throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectivity.firebird", "setString(). "
-             "parameterIndex: " << nParameterIndex << " , "
-             "x: " << x);
+    SAL_INFO("connectivity.firebird",
+             "setString(" << nParameterIndex << " , " << x << ")");
 
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -570,7 +569,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
     throw(SQLException)
 {
     ensurePrepared();
-    if ((nParameterIndex == 0) || (nParameterIndex > m_pOutSqlda->sqld))
+    if ((nParameterIndex == 0) || (nParameterIndex > m_pInSqlda->sqld))
         throw SQLException();
     // TODO: sane error message here.
 }
