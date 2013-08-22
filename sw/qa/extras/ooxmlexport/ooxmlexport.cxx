@@ -1172,10 +1172,12 @@ void Test::testTableFloating()
 
 void Test::testTableFloatingMargins()
 {
+    // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    // These were 0, due to lack of import/export.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-499), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    // These were 0 as well, due to lack of import.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 

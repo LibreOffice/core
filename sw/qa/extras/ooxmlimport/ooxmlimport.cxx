@@ -128,7 +128,6 @@ public:
     void testFdo66474();
     void testGroupshapeRotation();
     void testBnc780044Spacing();
-    void testTableFloatingMargins();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -222,7 +221,6 @@ void Test::run()
         {"fdo66474.docx", &Test::testFdo66474},
         {"groupshape-rotation.docx", &Test::testGroupshapeRotation},
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
-        {"table-floating-margins.docx", &Test::testTableFloatingMargins},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1550,18 +1548,6 @@ void Test::testBnc780044Spacing()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
-}
-
-void Test::testTableFloatingMargins()
-{
-    // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-499), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
-    // These were 0 as well, due to lack of import.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
