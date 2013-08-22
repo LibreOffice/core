@@ -1541,28 +1541,27 @@ bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     return bRet;
 }
 
-sal_Bool SwCalc::IsValidVarName( const String& rStr, String* pValidName )
+sal_Bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
 {
     sal_Bool bRet = sal_False;
     using namespace ::com::sun::star::i18n;
     {
         // Parse any token.
         ParseResult aRes = GetAppCharClass().parseAnyToken( rStr, 0,
-                                                    coStartFlags, aEmptyStr,
-                                                     coContFlags, aEmptyStr );
+                                                    coStartFlags, OUString(),
+                                                     coContFlags, OUString() );
 
         if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            bRet = aRes.EndPos == rStr.Len();
+            bRet = aRes.EndPos == rStr.getLength();
             if( pValidName )
             {
-                xub_StrLen nRealStt = (xub_StrLen)aRes.LeadingWhiteSpace;
-                *pValidName = rStr.Copy( nRealStt,
-                                  static_cast<xub_StrLen>(aRes.EndPos) - nRealStt );
+                *pValidName = rStr.copy( aRes.LeadingWhiteSpace,
+                                         aRes.EndPos - aRes.LeadingWhiteSpace );
             }
         }
         else if( pValidName )
-            pValidName->Erase();
+            *pValidName = OUString();
     }
     return bRet;
 }
