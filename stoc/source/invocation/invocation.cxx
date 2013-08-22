@@ -876,7 +876,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
         return _xDirect2->getInfoForName( aName, bExact );
     }
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     OUString aExactName = aName;
     InvocationInfo aRetInfo;
 
@@ -889,7 +889,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
             Reference<XIdlMethod> xMethod = _xIntrospectionAccess->getMethod
                 ( aExactName, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
             fillInfoForMethod( aRetInfo, xMethod );
-            bFound = sal_True;
+            bFound = true;
         }
         else
         {
@@ -899,13 +899,13 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
                  Property aProp = _xIntrospectionAccess->getProperty
                     ( aExactName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
                 fillInfoForProperty( aRetInfo, aProp );
-                bFound = sal_True;
+                bFound = true;
             }
             // NameAccess
             else if( _xNameAccess.is() && _xNameAccess->hasByName( aExactName ) )
             {
                 fillInfoForNameAccess( aRetInfo, aExactName );
-                bFound = sal_True;
+                bFound = true;
             }
         }
     }

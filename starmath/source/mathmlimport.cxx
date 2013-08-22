@@ -106,7 +106,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
-    sal_Bool bEmbedded = sal_False;
+    bool bEmbedded = false;
     uno::Reference <lang::XUnoTunnel> xTunnel;
     xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
     SmModel *pModel = reinterpret_cast<SmModel *>
@@ -129,7 +129,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
         }
 
         if ( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
-            bEmbedded = sal_True;
+            bEmbedded = true;
     }
 
     comphelper::PropertyMapEntry aInfoMap[] =
@@ -191,7 +191,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
             }
         }
 
-        sal_Bool bOASIS = ( SotStorage::GetVersion( rMedium.GetStorage() ) > SOFFICE_FILEFORMAT_60 );
+        bool bOASIS = ( SotStorage::GetVersion( rMedium.GetStorage() ) > SOFFICE_FILEFORMAT_60 );
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
@@ -305,7 +305,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         // sax parser sends wrapped exceptions,
         // try to find the original one
         xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
-        sal_Bool bTryChild = sal_True;
+        bool bTryChild = true;
 
         while( bTryChild )
         {
@@ -313,7 +313,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
             if ( aSaxEx.WrappedException >>= aTmp )
                 aSaxEx = aTmp;
             else
-                bTryChild = sal_False;
+                bTryChild = false;
         }
 
         packages::zip::ZipIOException aBrokenPackage;
@@ -635,7 +635,7 @@ struct SmXMLContext_Helper
     sal_Int8 nIsBold;
     sal_Int8 nIsItalic;
     double nFontSize;
-    sal_Bool bFontNodeNeeded;
+    bool bFontNodeNeeded;
     OUString sFontFamily;
     OUString sColor;
 
@@ -702,9 +702,9 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
     if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
         (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
         || !sColor.isEmpty())
-        bFontNodeNeeded=sal_True;
+        bFontNodeNeeded=true;
     else
-        bFontNodeNeeded=sal_False;
+        bFontNodeNeeded=false;
 }
 
 void SmXMLContext_Helper::ApplyAttrs()
@@ -1152,12 +1152,12 @@ void SmXMLNumberContext_Impl::EndElement()
 
 class SmXMLAnnotationContext_Impl : public SmXMLImportContext
 {
-    sal_Bool bIsStarMath;
+    bool bIsStarMath;
 
 public:
     SmXMLAnnotationContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(sal_False) {}
+        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(false) {}
 
     virtual void Characters(const OUString &rChars);
 
@@ -1320,9 +1320,9 @@ void SmXMLIdentifierContext_Impl::EndElement()
     if ((-1!=aStyleHelper.nIsBold) || (0.0!=aStyleHelper.nFontSize) ||
         (!aStyleHelper.sFontFamily.isEmpty()) ||
         !aStyleHelper.sColor.isEmpty())
-        aStyleHelper.bFontNodeNeeded=sal_True;
+        aStyleHelper.bFontNodeNeeded=true;
     else
-        aStyleHelper.bFontNodeNeeded=sal_False;
+        aStyleHelper.bFontNodeNeeded=false;
     if (aStyleHelper.bFontNodeNeeded)
         aStyleHelper.ApplyAttrs();
     GetSmImport().GetNodeStack().push(pNode);
@@ -1337,7 +1337,7 @@ void SmXMLIdentifierContext_Impl::TCharacters(const OUString &rChars)
 
 class SmXMLOperatorContext_Impl : public SmXMLImportContext
 {
-    sal_Bool bIsStretchy;
+    bool bIsStretchy;
 
 protected:
     SmToken aToken;
@@ -1345,7 +1345,7 @@ protected:
 public:
     SmXMLOperatorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(sal_False)
+        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(false)
     {
         aToken.eType = TSPECIAL;
         aToken.nLevel = 5;

@@ -229,7 +229,7 @@ static inline void constructRuntimeException(
 }
 
 //------------------------------------------------------------------------------
-static inline sal_Bool type_equals(
+static inline bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
     SAL_THROW(())

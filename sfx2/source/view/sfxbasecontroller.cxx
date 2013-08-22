@@ -111,7 +111,7 @@ struct GroupIDToCommandGroup
 // Please update when a new command group is added
 const sal_Int16 MAX_COMMANDGROUP = frame::CommandGroup::CONTROLS;
 
-static sal_Bool                 bGroupIDMapInitialized = sal_False;
+static bool                 bGroupIDMapInitialized = false;
 static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
 {
     { GID_INTERN        ,   frame::CommandGroup::INTERNAL       },
@@ -160,7 +160,7 @@ sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
                 GroupIDCommandGroupMap[i].nCommandGroup ));
             ++i;
         }
-        bGroupIDMapInitialized = sal_True;
+        bGroupIDMapInitialized = true;
     }
 
     GroupHashMap::const_iterator pIter = mHashMap.find( nGroupID );
@@ -281,7 +281,7 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(RuntimeExce
         if ( xProgress.is() )
             xProgress->setValue( nValue );
 
-        sal_Bool bReschedule = (( Get10ThSec() - _nStartTime ) > TIMEOUT_START_RESCHEDULE );
+        bool bReschedule = (( Get10ThSec() - _nStartTime ) > TIMEOUT_START_RESCHEDULE );
         if ( bReschedule )
             reschedule();
     }
@@ -400,7 +400,7 @@ struct IMPL_SfxBaseController_DataContainer
     Reference< XStatusIndicator >           m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
-    sal_Bool                                m_bDisposing            ;
+    bool                                    m_bDisposing            ;
     sal_Bool                                m_bSuspendState         ;
     Reference< XTitle >                     m_xTitleHelper          ;
     Sequence< PropertyValue >               m_aCreationArgs         ;
@@ -415,7 +415,7 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_aInterceptorContainer         ( aMutex                                                )
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
-            ,   m_bDisposing            ( sal_False                                             )
+            ,   m_bDisposing            ( false                                                 )
             ,   m_bSuspendState                 ( sal_False                                              )
     {
     }
@@ -631,7 +631,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
 
         // More Views on the same document?
         SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
-        sal_Bool        bOther      =   sal_False                               ;
+        bool            bOther      =   false                                   ;
 
         for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
             bOther = (pFrame != pActFrame);
@@ -974,7 +974,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
     Reference< XController > xTmp( this );
-    m_pData->m_bDisposing = sal_True ;
+    m_pData->m_bDisposing = true ;
 
     lang::EventObject aEventObject;
     aEventObject.Source = *this ;
