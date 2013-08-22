@@ -1554,14 +1554,14 @@ private:
         AutoLayout eLayout = AUTOLAYOUT_HANDOUT6;
         switch (nSlidesPerHandout)
         {
-            case 0: eLayout = AUTOLAYOUT_NONE; break; // AUTOLAYOUT_HANDOUT1; break;
             case 1: eLayout = AUTOLAYOUT_HANDOUT1; break;
             case 2: eLayout = AUTOLAYOUT_HANDOUT2; break;
             case 3: eLayout = AUTOLAYOUT_HANDOUT3; break;
             case 4: eLayout = AUTOLAYOUT_HANDOUT4; break;
-            default:
-            case 6: eLayout = AUTOLAYOUT_HANDOUT6; break;
             case 9: eLayout = AUTOLAYOUT_HANDOUT9; break;
+            default:
+            case 0:
+            case 6: break; // use the default
         }
 
         if( !mrBase.GetDocument() )
