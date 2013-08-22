@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <stdio.h>
 
@@ -167,7 +168,7 @@ static void initNSApp()
                                           selector: @selector(scrollbarSettingsChanged:)
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
-
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     // Initialize Apple Remote
     GetSalData()->mpMainController = [[MainController alloc] init];
 
@@ -180,6 +181,7 @@ static void initNSApp()
                                            selector: @selector(applicationWillResignActive:)
                                            name: @"AppleRemoteWillResignActive"
                                            object: nil ];
+#endif
 }
 
 sal_Bool ImplSVMainHook( int * pnInit )

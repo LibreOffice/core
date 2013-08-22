@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "sal/config.h"
 
 #include <vector>
@@ -439,8 +441,7 @@
 
 // for Apple Remote implementation
 
-#pragma mark -
-#pragma mark NSApplication Delegates
+#if !HAVE_FEATURE_MACOSX_SANDBOX
 - (void)applicationWillBecomeActive:(NSNotification *)pNotification
 {
     (void)pNotification;
@@ -490,6 +491,7 @@
         [(*it)->mpWindow setLevel: NSNormalWindowLevel];
     }
 }
+#endif
 
 - (BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL) bWinVisible
 {

@@ -20,6 +20,8 @@
 #ifndef _VCL_VCLNSAPP_H
 #define _VCL_VCLNSAPP_H
 
+#include <config_features.h>
+
 #include "premac.h"
 #include "Cocoa/Cocoa.h"
 #include "postmac.h"
@@ -51,8 +53,10 @@ class AquaSalFrame;
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
+#if !HAVE_FEATURE_MACOSX_SANDBOX
 -(void)applicationWillBecomeActive: (NSNotification *)pNotification;
 -(void)applicationWillResignActive: (NSNotification *)pNotification;
+#endif
 -(BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL)bWinVisible;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
 -(void)cycleFrameForward: (AquaSalFrame*)pCurFrame;
