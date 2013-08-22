@@ -638,67 +638,6 @@ void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 
 }
 // -------------------------------------------------------------------------
-// XRowLocate
-Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
-{
-     MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    // if you don't want to support bookmark you must remove the XRowLocate interface
-
-     return Any();
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
-{
-    (void) bookmark;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
-{
-    (void) bookmark;
-    (void) rows;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::compareBookmarks( const  Any& aFirst, const  Any& aSecond ) throw( SQLException,  RuntimeException)
-{
-    (void) aFirst;
-    (void) aSecond;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    return CompareBookmark::NOT_EQUAL;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
-{
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
-{
-    (void) bookmark;
-    throw SQLException();
-}
-// -------------------------------------------------------------------------
-// XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& rows ) throw( SQLException,  RuntimeException)
-{
-    (void) rows;
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    return Sequence< sal_Int32 >();
-}
-// -------------------------------------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 {
     Sequence< Property > aProps(6);

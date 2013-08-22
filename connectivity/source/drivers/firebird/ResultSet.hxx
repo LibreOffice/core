@@ -25,7 +25,7 @@
 #include <ibase.h>
 
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase8.hxx>
 
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
@@ -33,12 +33,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-
 
 namespace connectivity
 {
@@ -47,13 +42,11 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper8<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,
                                                         ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbcx::XRowLocate,
-                                                        ::com::sun::star::sdbcx::XDeleteRows,
                                                         ::com::sun::star::sdbc::XCloseable,
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
@@ -198,15 +191,6 @@ namespace connectivity
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::uno::RuntimeException);
 
-            // XRowLocate
-            virtual ::com::sun::star::uno::Any SAL_CALL getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XDeleteRows
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
         // Specialisations have to be in the namespace and can't be within the class.
