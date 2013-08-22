@@ -42,7 +42,6 @@ static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
 static NS_DEFINE_CID(kPrefCID, NS_PREF_CID);
 
 static NS_DEFINE_CID(kEventQueueServiceCID, NS_EVENTQUEUESERVICE_CID);
-static oslThread m_Mozilla_UI_Thread;
 static PRBool aLive=1;
 static ::osl::Condition    m_aUI_Thread_Condition;
 
@@ -286,9 +285,7 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
     args->bProfileExists = &aProfileExists;
 
     m_aUI_Thread_Condition.reset();
-    m_Mozilla_UI_Thread=osl_createThread(MNS_Mozilla_UI_Thread,
-                                    (void*)args);
-    if (!m_Mozilla_UI_Thread)
+    if (osl_createThread(MNS_Mozilla_UI_Thread, (void*)args) == 0)
     {
         return sal_False;
     }
