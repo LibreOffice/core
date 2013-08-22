@@ -154,7 +154,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
-			codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
+			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		otool -l $(1) | grep -A 5 LC_ID_DYLIB > $(1).exports.tmp && \
 		$(NM) -g -P $(1) | cut -d' ' -f1-2 | grep -v U$$ \
