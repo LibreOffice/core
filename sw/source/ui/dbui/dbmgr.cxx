@@ -1023,7 +1023,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
 
                         // computation time for Save-Monitor:
-                        for (sal_uInt16 i = 0; i < 10; i++)
+                        for (sal_uInt16 i = 0; i < 25; i++)
                             Application::Reschedule();
 
                         // Create and save new document
