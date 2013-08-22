@@ -1342,7 +1342,7 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
             }
 
             if (!aPropStates.empty())
-                OUString aName = xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
+                xStylePool->Add(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates, false);
         }
     }
 
