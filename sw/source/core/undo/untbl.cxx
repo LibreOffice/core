@@ -1805,6 +1805,10 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     if( IsDelBox() )
         nSttNode = pTableNd->GetIndex();
     ClearFEShellTabCols();
+
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)pTableNd->GetTable().GetFrameFormat()->GetRegisteredIn(),
+                                     pTableNd->GetTable() );
+
     CHECK_TABLE( pTableNd->GetTable() )
 }
 
@@ -1917,6 +1921,10 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
         ;
     }
     ClearFEShellTabCols();
+
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)pTableNd->GetTable().GetFrameFormat()->GetRegisteredIn(),
+                                     pTableNd->GetTable() );
+
     CHECK_TABLE( pTableNd->GetTable() )
 }
 
