@@ -43,7 +43,7 @@
 
 // globals *******************************************************************
 
-#define NO_INDEX        ((sal_uInt16)0xFFFF)
+#define NO_INDEX        (-1)
 #define CONTENT_HELPER  ::utl::UCBContentHelper
 
 struct SvtExtensionResIdMapping_Impl
@@ -261,12 +261,12 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     return aExtension;
 }
 
-static sal_uInt16 GetIndexOfExtension_Impl( const OUString& rExtension )
+static sal_Int32 GetIndexOfExtension_Impl( const OUString& rExtension )
 {
-    sal_uInt16 nRet = NO_INDEX;
+    sal_Int32 nRet = NO_INDEX;
     if ( !rExtension.isEmpty() )
     {
-        sal_uInt16 nIndex = 0;
+        sal_Int32 nIndex = 0;
         OUString aExt = rExtension.toAsciiLowerCase();
         while ( ExtensionMap_Impl[ nIndex ]._pExt )
         {
@@ -285,15 +285,12 @@ static sal_uInt16 GetIndexOfExtension_Impl( const OUString& rExtension )
 static sal_uInt16 GetImageId_Impl( const OUString& rExtension )
 {
     sal_uInt16 nImage = IMG_FILE;
-    if ( rExtension.getLength() != NO_INDEX )
+    sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
+    if ( nIndex != NO_INDEX )
     {
-        sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
-        if ( nIndex != NO_INDEX )
-        {
-            nImage = ExtensionMap_Impl[ nIndex ]._nImgId;
-            if ( !nImage )
-                nImage = IMG_FILE;
-        }
+        nImage = ExtensionMap_Impl[ nIndex ]._nImgId;
+        if ( !nImage )
+            nImage = IMG_FILE;
     }
 
     return nImage;
@@ -411,15 +408,11 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
 static sal_uInt16 GetDescriptionId_Impl( const OUString& rExtension, sal_Bool& rbShowExt )
 {
     sal_uInt16 nId = 0;
-
-    if ( rExtension.getLength() != NO_INDEX )
+    sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
+    if ( nIndex != NO_INDEX )
     {
-        sal_uInt16 nIndex = GetIndexOfExtension_Impl( rExtension );
-        if ( nIndex != NO_INDEX )
-        {
-            nId = ExtensionMap_Impl[ nIndex ]._nStrId;
-            rbShowExt = ExtensionMap_Impl[ nIndex ]._bExt;
-        }
+        nId = ExtensionMap_Impl[ nIndex ]._nStrId;
+        rbShowExt = ExtensionMap_Impl[ nIndex ]._bExt;
     }
 
     return nId;
