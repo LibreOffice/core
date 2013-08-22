@@ -70,7 +70,7 @@ using namespace com::sun::star;
 //=========================================================================
 struct SfxShell_Impl: public SfxBroadcaster
 {
-    String                   aObjectName;   // Name of Sbx-Objects
+    OUString                 aObjectName;   // Name of Sbx-Objects
     SfxItemPtrMap            aItems;        // Data exchange on Item level
     SfxViewShell*            pViewSh;       // SfxViewShell if Shell is
                                             // ViewFrame/ViewShell/SubShell list
@@ -172,7 +172,7 @@ SfxShell::~SfxShell()
 
 //--------------------------------------------------------------------
 
-void SfxShell::SetName( const String &rName )
+void SfxShell::SetName( const OUString &rName )
 
 /*  [Description]
 
@@ -186,7 +186,7 @@ void SfxShell::SetName( const String &rName )
 
 //--------------------------------------------------------------------
 
-const String& SfxShell::GetName() const
+const OUString& SfxShell::GetName() const
 
 /*  [Description]
 

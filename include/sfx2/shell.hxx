@@ -174,8 +174,8 @@ public:
     virtual SfxInterface*       GetInterface() const;
     static SfxInterface*        GetStaticInterface() { return 0; }
 
-    void                        SetName( const String &rName );
-    const String&               GetName() const;
+    void                        SetName( const OUString &rName );
+    const OUString&             GetName() const;
 
     SfxViewShell*               GetViewShell() const;
 

@@ -2751,7 +2751,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         // #i17355# update the Basic IDE
         for ( SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell; pViewShell = SfxViewShell::GetNext( *pViewShell ) )
         {
-            if ( pViewShell->GetName().EqualsAscii( "BasicIDE" ) )
+            if ( pViewShell->GetName() == "BasicIDE" )
             {
                 SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
                 SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
