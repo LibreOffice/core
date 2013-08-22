@@ -26,7 +26,9 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
-class String;
+namespace rtl {
+    class OUString;
+};
 class SfxObjectShell;
 struct SfxProgress_Impl;
 struct PlugInLoadStatus;
@@ -42,13 +44,13 @@ class SFX2_DLLPUBLIC SfxProgress
 
 public:
                             SfxProgress( SfxObjectShell* pObjSh,
-                                         const String& rText,
+                                         const rtl::OUString& rText,
                                          sal_uIntPtr nRange, sal_Bool bAllDocs = sal_False,
                                          sal_Bool bWait = sal_True );
     virtual                 ~SfxProgress();
 
     virtual void            SetText( const OUString& rText );
-    sal_Bool                    SetStateText( sal_uIntPtr nVal, const String &rVal, sal_uIntPtr nNewRange = 0 );
+    sal_Bool                    SetStateText( sal_uIntPtr nVal, const rtl::OUString &rVal, sal_uIntPtr nNewRange = 0 );
     virtual sal_Bool            SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
     sal_uIntPtr                 GetState() const { return nVal; }
 

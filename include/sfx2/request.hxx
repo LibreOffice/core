@@ -35,7 +35,6 @@ class SfxItemSet;
 class SfxItemPool;
 class SfxShell;
 class SfxSlot;
-class String;
 class SfxViewFrame;
 struct SfxRequest_Impl;
 

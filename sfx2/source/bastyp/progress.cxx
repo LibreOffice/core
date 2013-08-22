@@ -116,13 +116,13 @@ SfxProgress::SfxProgress
                                     When it is then the application will be
                                     used */
 
-    const String&       rText,  /* Text, which appears before the Statusmonitor
+    const OUString&     rText,  /* Text, which appears before the Statusmonitor
                                   in the status line */
 
-    sal_uIntPtr               nRange, /* Max value for range  */
+    sal_uIntPtr         nRange, /* Max value for range  */
 
-    sal_Bool                bAll,    /* Disable all documents or only the document of the ViewFram */
-    sal_Bool                bWait    /* Activate the wait-Pointer initially (TRUE) */
+    sal_Bool            bAll,    /* Disable all documents or only the document of the ViewFram */
+    sal_Bool            bWait    /* Activate the wait-Pointer initially (TRUE) */
 )
 
 /*  [Description]
@@ -249,9 +249,9 @@ long TimeOut_Impl( void*, void* pArgV )
 
 sal_Bool SfxProgress::SetStateText
 (
-    sal_uLong      nNewVal,     /* New value for the progress-bar */
-    const String&  rNewVal,     /* Status as Text */
-    sal_uLong      nNewRange    /* new maximum value, 0 for retaining the old */
+    sal_uLong       nNewVal,     /* New value for the progress-bar */
+    const OUString& rNewVal,     /* Status as Text */
+    sal_uLong       nNewRange    /* new maximum value, 0 for retaining the old */
 )
 
 {
