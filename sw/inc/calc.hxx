@@ -226,8 +226,8 @@ public:
     static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
-    SW_DLLPUBLIC static sal_Bool IsValidVarName( const String& rStr,
-                                    String* pValidName = 0 );
+    SW_DLLPUBLIC static sal_Bool IsValidVarName( const OUString& rStr,
+                                    OUString* pValidName = 0 );
 };
 
 #endif

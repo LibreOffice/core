@@ -804,8 +804,8 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     bool bInsert = false, bApply = false, bDelete = false;
 
-    String sName( m_pNameED->GetText() );
-    xub_StrLen nLen = sName.Len();
+    OUString sName( m_pNameED->GetText() );
+    sal_Int32 nLen = sName.getLength();
 
     switch( nTypeId )
     {
@@ -814,9 +814,9 @@ IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
     case TYP_SETFLD:
     case TYP_SEQFLD:
         SwCalc::IsValidVarName( sName, &sName );
-        if( sName.Len() != nLen )
+        if ( sName.getLength() != nLen )
         {
-            nLen = sName.Len();
+            nLen = sName.getLength();
             Selection aSel(m_pNameED->GetSelection());
             m_pNameED->SetText( sName );
             m_pNameED->SetSelection( aSel );   // restore Cursorpos

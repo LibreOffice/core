@@ -508,13 +508,14 @@ long CategoryBox::PreNotify( NotifyEvent& rNEvt )
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
         {
-            OUString sKey( pEvent->GetCharCode() );
-            String sName( GetText() );
+            const OUString sText( GetText() );
             Selection aSel( GetSelection() );
             aSel.Justify();
-            if( aSel.Len() )
-                sName.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-            sName.Insert( sKey, (xub_StrLen)aSel.Min() );
+
+            const OUString sName = sText.copy(0, aSel.Min())
+                + OUString( pEvent->GetCharCode() )
+                + sText.copy(aSel.Max());
+
             if( !SwCalc::IsValidVarName( sName ))
                 nHandled = 1;
         }
