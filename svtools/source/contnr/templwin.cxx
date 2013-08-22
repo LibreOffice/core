@@ -186,7 +186,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     OUString aEntryStr = SVT_RESSTR(STR_SVT_NEWDOC);
     SvxIconChoiceCtrlEntry* pEntry =
         aIconCtrl.InsertEntry( aEntryStr, aImage, ICON_POS_NEWDOC );
-    pEntry->SetUserData( &aNewDocumentRootURL );
+    pEntry->SetUserData( new OUString(aNewDocumentRootURL) );
     pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_NEWDOC_HELP) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     long nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -199,7 +199,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
         aEntryStr = SVT_RESSTR(STR_SVT_TEMPLATES);
         pEntry = aIconCtrl.InsertEntry(
             aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
-        pEntry->SetUserData( &aTemplateRootURL );
+        pEntry->SetUserData( new OUString(aTemplateRootURL) );
         pEntry->SetQuickHelpText(SVT_RESSTR(STR_SVT_TEMPLATES_HELP));
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
         nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -211,7 +211,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aEntryStr = SVT_RESSTR(STR_SVT_MYDOCS);
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
-    pEntry->SetUserData( &aMyDocumentsRootURL );
+    pEntry->SetUserData( new OUString(aMyDocumentsRootURL) );
     pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_MYDOCS_HELP) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -222,7 +222,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aEntryStr = SVT_RESSTR(STR_SVT_SAMPLES);
     pEntry = aIconCtrl.InsertEntry(
         aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
-    pEntry->SetUserData( &aSamplesFolderRootURL );
+    pEntry->SetUserData( new OUString(aSamplesFolderRootURL) );
     pEntry->SetQuickHelpText( SVT_RESSTR(STR_SVT_SAMPLES_HELP));
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -247,8 +247,8 @@ SvxIconChoiceCtrlEntry* SvtIconWindow_Impl::GetEntry( const OUString& rURL ) con
     for ( sal_uLong i = 0; i < aIconCtrl.GetEntryCount(); ++i )
     {
         SvxIconChoiceCtrlEntry* pTemp = aIconCtrl.GetEntry( i );
-        OUString aURL( *( (OUString*)pTemp->GetUserData() ) );
-        if ( aURL == rURL )
+        OUString *pURL = (OUString*)pTemp->GetUserData();
+        if ( (*pURL) == rURL )
         {
             pEntry = pTemp;
             break;
