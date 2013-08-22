@@ -226,9 +226,9 @@ int OpenclDevice::BinaryGenerated( const char * clFileName, FILE ** fhandle )
                               &numDevices);
     for ( i = 0; i < numDevices; i++ )
     {
-        char fileName[256] = { 0 }, cl_name[128] = { 0 };
         if ( gpuEnv.mpArryDevsID[i] != 0 )
         {
+            char fileName[256] = { 0 }, cl_name[128] = { 0 };
             char deviceName[1024];
             clStatus = clGetDeviceInfo( gpuEnv.mpArryDevsID[i], CL_DEVICE_NAME, sizeof(deviceName), deviceName, NULL );
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
@@ -329,10 +329,9 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
     /* dump out each binary into its own separate file. */
     for ( i = 0; i < numDevices; i++ )
     {
-        char fileName[256] = { 0 }, cl_name[128] = { 0 };
-
         if ( binarySizes[i] != 0 )
         {
+            char fileName[256] = { 0 }, cl_name[128] = { 0 };
             char deviceName[1024];
             clStatus = clGetDeviceInfo(mpArryDevsID[i], CL_DEVICE_NAME,
                            sizeof(deviceName), deviceName, NULL);
@@ -480,13 +479,12 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 {
     cl_int clStatus = 0;
     size_t length;
-    char *buildLog = NULL, *binary;
+    char *binary;
     const char *source;
     size_t source_size[1];
-    int b_error, binary_status, binaryExisted, idx;
+    int binary_status, binaryExisted, idx;
     cl_uint numDevices;
-    cl_device_id *mpArryDevsID;
-    FILE *fd, *fd1;
+    FILE *fd;
     const char* filename = "kernel.cl";
     fprintf(stderr, "CompileKernelFile ... \n");
     if ( CachedOfKernerPrg(gpuInfo, filename) == 1 )
@@ -506,13 +504,13 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
                        sizeof(numDevices), &numDevices, NULL );
         CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
-        mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
+        cl_device_id *mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
         if ( mpArryDevsID == NULL )
         {
             return 0;
         }
 
-        b_error = 0;
+        int b_error = 0;
         length = 0;
         b_error |= fseek( fd, 0, SEEK_END ) < 0;
         b_error |= ( length = ftell(fd) ) <= 0;
@@ -602,7 +600,7 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
             printf("opencl create build log fail\n");
             return 0;
         }
-        buildLog = (char*) malloc( length );
+        char* buildLog = (char*) malloc( length );
         if ( buildLog == (char*) NULL )
         {
             return 0;
@@ -620,10 +618,11 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         if ( clStatus != CL_SUCCESS )
         {
             printf("opencl program build info fail\n");
+            free(buildLog);
             return 0;
         }
 
-        fd1 = fopen( "kernel-build.log", "w+" );
+        FILE *fd1 = fopen( "kernel-build.log", "w+" );
         if ( fd1 != NULL )
         {
             fwrite( buildLog, sizeof(char), length, fd1 );
@@ -683,7 +682,6 @@ int OpenclDevice::RunKernel( const char *kernelName, void **userdata)
 
 int OpenclDevice::InitOpenclRunEnv( int argc )
 {
-    int status = 0;
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
         return 1;
@@ -695,7 +693,7 @@ int OpenclDevice::InitOpenclRunEnv( int argc )
     {
         RegistOpenclKernel();
         //initialize devices, context, comand_queue
-        status = InitOpenclRunEnv( &gpuEnv );
+        int status = InitOpenclRunEnv( &gpuEnv );
         if ( status )
         {
             printf("init_opencl_env failed.\n");
@@ -741,8 +739,6 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
     cl_uint numPlatforms, numDevices;
     cl_platform_id *platforms;
     cl_context_properties cps[3];
-    char platformName[256];
-    unsigned int i;
 
     // Have a look at the available platforms.
 
@@ -769,7 +765,8 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
                 return 1;
             }
 
-            for ( i = 0; i < numPlatforms; i++ )
+            char platformName[256];
+            for ( size_t i = 0; i < numPlatforms; i++ )
             {
                 clStatus = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR,
                     sizeof( platformName ), platformName, NULL );
