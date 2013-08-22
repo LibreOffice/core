@@ -103,7 +103,7 @@ static short lcl_GetPassword(
     aPasswdDlg.SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-    if (RET_OK == aPasswdDlg.Execute() && aPasswdDlg.GetPassword().Len() > 0)
+    if (RET_OK == aPasswdDlg.Execute() && !aPasswdDlg.GetPassword().isEmpty())
     {
         rPassword = aPasswdDlg.GetPassword();
         bRes = true;

@@ -312,7 +312,7 @@ throw (RuntimeException)
             aPasswdDlg.SetMinLen(0);
             if(!aPasswdDlg.Execute())
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
-            msPassword = aPasswdDlg.GetPassword().GetBuffer();
+            msPassword = aPasswdDlg.GetPassword().getStr();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
             if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;

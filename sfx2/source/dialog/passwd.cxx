@@ -134,7 +134,7 @@ void SfxPasswordDialog::SetPasswdText( )
     else
     {
         maMainPwdStr = maMinLenPwdStr;
-        maMainPwdStr.SearchAndReplace( OUString("$(MINLEN)"), OUString::number((sal_Int32) mnMinLen ), 0);
+        maMainPwdStr = maMainPwdStr.replaceAll( "$(MINLEN)", OUString::number((sal_Int32) mnMinLen ) );
         mpMinLengthFT->SetText(maMainPwdStr);
     }
 }

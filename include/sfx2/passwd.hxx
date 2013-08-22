@@ -60,9 +60,9 @@ private:
 
     OKButton*       mpOKBtn;
 
-    String          maMinLenPwdStr;
-    String          maEmptyPwdStr;
-    String          maMainPwdStr;
+    OUString        maMinLenPwdStr;
+    OUString        maEmptyPwdStr;
+    OUString        maMainPwdStr;
     sal_uInt16      mnMinLen;
     sal_uInt16      mnExtras;
 
@@ -75,27 +75,27 @@ private:
 public:
     SfxPasswordDialog(Window* pParent, const OUString* pGroupText = NULL);
 
-    String GetUser() const
+    OUString GetUser() const
     {
         return mpUserED->GetText();
     }
-    String GetPassword() const
+    OUString GetPassword() const
     {
         return mpPassword1ED->GetText();
     }
-    String GetConfirm() const
+    OUString GetConfirm() const
     {
         return mpConfirm1ED->GetText();
     }
-    String GetPassword2() const
+    OUString GetPassword2() const
     {
         return mpPassword2ED->GetText();
     }
-    String GetConfirm2() const
+    OUString GetConfirm2() const
     {
         return mpConfirm2ED->GetText();
     }
-    void SetGroup2Text(const String& i_rText)
+    void SetGroup2Text(const OUString& i_rText)
     {
         mpPassword2Box->set_label(i_rText);
     }
