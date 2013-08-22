@@ -547,6 +547,8 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)GetFrmFmt()->GetRegisteredIn(), *this );
+
     return bRes;
 }
 
