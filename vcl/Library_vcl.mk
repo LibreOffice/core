@@ -443,9 +443,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/window/salmenu \
     vcl/aqua/source/window/salobj \
 ))
-$(eval $(call gb_Library_use_libraries,vcl,\
-    AppleRemote \
-))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     $(if $(filter X86_64,$(CPUNAME)),,QuickTime) \
     Cocoa \
@@ -453,9 +450,12 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     CoreFoundation \
 ))
 
+ifneq ($(ENABLE_MACOSX_SANDBOX),YES)
 $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))
+endif
+
 endif
 
 vcl_really_generic_code= \

@@ -20,6 +20,8 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
+#include <config_features.h>
+
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -89,8 +91,9 @@ public:
     static oslThreadKey                           s_aAutoReleaseKey;
 
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     MainController*                               mpMainController;         // Apple Remote
-
+#endif
     NSObject*                                     mpDockIconClickHandler;
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "aqua/saldata.hxx"
 #include "aqua/salnsmenu.h"
@@ -47,7 +48,9 @@ SalData::SalData()
     mxP50Pattern( NULL ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     mpMainController( NULL ),
+#endif
     mpDockIconClickHandler( nil ),
     mnDPIX( 0 ),
     mnDPIY( 0 )
@@ -82,8 +85,10 @@ SalData::~SalData()
         osl_destroyThreadKey( s_aAutoReleaseKey );
         s_aAutoReleaseKey = 0;
     }
+#if !HAVE_FEATURE_MACOSX_SANDBOX
     if ( mpMainController )
         [mpMainController release];
+#endif
 }
 
 void SalData::ensureThreadAutoreleasePool()
