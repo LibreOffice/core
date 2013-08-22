@@ -34,7 +34,7 @@ class SfxObjectShell;
 
 class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 {
-    String                  aScriptType;
+    OUString                aScriptType;
 
     SfxMedium*              pMedium;
     SfxMedium *pDLMedium;   // Medium for Download Files
@@ -56,18 +56,18 @@ public:
     static bool ParseMapOptions(ImageMap* pImageMap, const HTMLOptions& rOptions);
     bool ParseMapOptions(ImageMap * pImageMap)
     { return ParseMapOptions(pImageMap, GetOptions()); }
-    static bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+    static bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                  const HTMLOptions& rOptions,
                                  sal_uInt16 nEventMouseOver = 0,
                                  sal_uInt16 nEventMouseOut = 0 );
-    inline sal_Bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+    inline sal_Bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                  sal_uInt16 nEventMouseOver = 0,
                                  sal_uInt16 nEventMouseOut = 0);
 
     // <TD SDVAL="..." SDNUM="...">
     static double GetTableDataOptionsValNum( sal_uInt32& nNumForm,
-            LanguageType& eNumLang, const String& aValStr,
-            const String& aNumStr, SvNumberFormatter& rFormatter );
+            LanguageType& eNumLang, const OUString& aValStr,
+            const OUString& aNumStr, SvNumberFormatter& rFormatter );
 
 protected:
     // Start a file download. This is done asynchronously or synchronously.
@@ -95,10 +95,10 @@ protected:
 
     // Default (without iterator) is JavaScript
     ScriptType GetScriptType( SvKeyValueIterator* ) const;
-    const String& GetScriptTypeString( SvKeyValueIterator* ) const;
+    const OUString& GetScriptTypeString( SvKeyValueIterator* ) const;
 };
 
-inline sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+inline sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                             sal_uInt16 nEventMouseOver,
                                             sal_uInt16 nEventMouseOut)
 {

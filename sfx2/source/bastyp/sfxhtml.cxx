@@ -107,7 +107,7 @@ bool SfxHTMLParser::ParseMapOptions(
     return aName.Len() > 0;
 }
 
-bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                      const HTMLOptions& rOptions,
                                      sal_uInt16 nEventMouseOver,
                                      sal_uInt16 nEventMouseOut )
@@ -313,35 +313,35 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
 
 ScriptType SfxHTMLParser::GetScriptType( SvKeyValueIterator *pHTTPHeader ) const
 {
-    if( !aScriptType.Len() )
+    if( aScriptType.isEmpty() )
         ((SfxHTMLParser *)this)->GetScriptType_Impl( pHTTPHeader );
 
     return eScriptType;
 }
 
-const String& SfxHTMLParser::GetScriptTypeString(
+const OUString& SfxHTMLParser::GetScriptTypeString(
                                     SvKeyValueIterator *pHTTPHeader ) const
 {
-    if( !aScriptType.Len() )
+    if( aScriptType.isEmpty() )
         ((SfxHTMLParser *)this)->GetScriptType_Impl( pHTTPHeader );
 
     return aScriptType;
 }
 
 double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
-        LanguageType& eNumLang, const String& aValStr, const String& aNumStr,
+        LanguageType& eNumLang, const OUString& aValStr, const OUString& aNumStr,
         SvNumberFormatter& rFormatter )
 {
-    LanguageType eParseLang = (LanguageType )aNumStr.ToInt32();
+    LanguageType eParseLang = (LanguageType )aNumStr.toInt32();
     sal_uInt32 nParseForm = rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     rFormatter.IsNumberFormat( aValStr, nParseForm, fVal );
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
-        eNumLang = (LanguageType)aNumStr.GetToken( 1, ';' ).ToInt32();
-        xub_StrLen nPos = aNumStr.Search( ';' );
-        nPos = aNumStr.Search( ';', nPos + 1 );
-        OUString aFormat( aNumStr.Copy( nPos + 1 ) );
+        eNumLang = (LanguageType)aNumStr.getToken( 1, ';' ).toInt32();
+        sal_Int32 nPos = aNumStr.indexOf( ';' );
+        nPos = aNumStr.indexOf( ';', nPos + 1 );
+        OUString aFormat( aNumStr.copy( nPos + 1 ) );
         sal_Int32 nCheckPos;
         short nType;
         if ( eNumLang != LANGUAGE_SYSTEM )
