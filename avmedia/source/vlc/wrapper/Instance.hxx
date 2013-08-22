@@ -14,10 +14,12 @@ struct libvlc_instance_t;
 
 namespace VLC
 {
+
+
     class Instance
     {
     public:
-        Instance( const char * const argv[] );
+        Instance( int argc, const char * const argv[] );
         Instance( const Instance& other );
         const Instance& operator=( const Instance& other );
         virtual ~Instance();

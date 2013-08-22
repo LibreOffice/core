@@ -12,26 +12,29 @@ using namespace ::com::sun::star;
 namespace avmedia {
 namespace vlc {
 
-const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
-const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
+namespace
+{
+    const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
+    const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
-const char * const VLC_ARGS[] = {
-    "-Vdummy",
-    "--snapshot-format=png",
-    "--ffmpeg-threads",
-    "--verbose=2"
-};
+    const int MS_IN_SEC = 1000; // Millisec in sec
 
-const int MS_IN_SEC = 1000; // Millisec in sec
+    const char * const VLC_ARGS[] = {
+        "-Vdummy",
+        "--snapshot-format=png",
+        "--ffmpeg-threads",
+        "--verbose=2"
+    };
+}
 
-VLCPlayer::VLCPlayer( const rtl::OUString& url, boost::shared_ptr<VLC::EventHandler> eh )
+VLCPlayer::VLCPlayer( const rtl::OUString& iurl, boost::shared_ptr<VLC::EventHandler> eh )
     : VLC_Base(m_aMutex)
     , mEventHandler( eh )
-    , mInstance( VLC_ARGS )
-    , mMedia( url, mInstance )
+    , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
+    , mMedia( iurl, mInstance )
     , mPlayer( mMedia )
     , mEventManager( mPlayer, mEventHandler )
-    , mUrl( url )
+    , mUrl( iurl )
     , mPlaybackLoop( false )
 {
     mPlayer.setMouseHandling(false);

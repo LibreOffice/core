@@ -26,15 +26,18 @@ namespace VLC
         };
     }
 
-    Instance::Instance( const char * const argv[] )
+    Instance::Instance( int argc, const char * const argv[] )
     {
         InitApiMap( VLC_INSTANCE_API );
 
-        mInstance = libvlc_new( sizeof( argv ) / sizeof( argv[0] ), argv );
+        mInstance = libvlc_new( argc, argv );
     }
 
     Instance::Instance( const Instance& other )
     {
+        libvlc_release( mInstance );
+        mInstance = other.mInstance;
+        libvlc_retain( mInstance );
     }
 
     const Instance& Instance::operator=( const Instance& other )
@@ -42,6 +45,7 @@ namespace VLC
         libvlc_release( mInstance );
         mInstance = other.mInstance;
         libvlc_retain( mInstance );
+        return *this;
     }
 
     Instance::~Instance()
