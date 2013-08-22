@@ -464,7 +464,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     bool GotoRegion( const String& rName );
     sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0 );
-    sal_Bool GotoNextTOXBase( const String* pName = 0);
+    sal_Bool GotoNextTOXBase( const OUString* pName = 0);
     bool GotoTable( const String& rName );
     sal_Bool GotoFld( const SwFmtFld& rFld );
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
