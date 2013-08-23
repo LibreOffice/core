@@ -151,8 +151,8 @@ class SfxNewFileDialog_Impl
     HelpButton aHelpBt;
     MoreButton* pMoreBt;
     Timer aPrevTimer;
-    String aNone;
-    String sLoadTemplate;
+    OUString aNone;
+    OUString sLoadTemplate;
 
     sal_uInt16 nFlags;
     SfxDocumentTemplates aTemplates;
@@ -180,7 +180,7 @@ public:
         // Template name can only be obtained if IsTemplate() is TRUE
         // erfragt werden
     sal_Bool IsTemplate() const;
-    String GetTemplateFileName() const;
+    OUString GetTemplateFileName() const;
 
     sal_uInt16  GetTemplateFlags()const;
     void    SetTemplateFlags(sal_uInt16 nSet);
@@ -191,7 +191,7 @@ public:
 
 void SfxNewFileDialog_Impl::ClearInfo()
 {
-    const String aNo;
+    const OUString aNo;
     aTitleEd.SetText(aNo);
     aThemaEd.SetText(aNo);
     aKeywordsEd.SetText(aNo);
@@ -393,10 +393,10 @@ sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 
 //-------------------------------------------------------------------------
 
-String SfxNewFileDialog_Impl::GetTemplateFileName() const
+OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
 {
     if(!IsTemplate() || !aTemplates.GetRegionCount())
-        return String();
+        return OUString();
     return aTemplates.GetPath(aRegionLb.GetSelectEntryPos(),
                               GetSelectedTemplatePos()-1);
 }
@@ -582,7 +582,7 @@ sal_Bool SfxNewFileDialog::IsTemplate() const
     return pImpl->IsTemplate();
 }
 //-------------------------------------------------------------------------
-String SfxNewFileDialog::GetTemplateFileName() const
+OUString SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();
 }
