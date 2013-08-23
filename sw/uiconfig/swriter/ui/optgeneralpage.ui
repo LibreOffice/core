@@ -111,7 +111,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">Update links when loading</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>
@@ -185,7 +185,7 @@
                     <property name="can_focus">False</property>
                     <property name="label">Automatically Update</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>
@@ -330,7 +330,7 @@
                 <property name="can_focus">False</property>
                 <property name="label">Settings</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
@@ -403,7 +403,7 @@
                 <property name="can_focus">False</property>
                 <property name="label">Word Count</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>

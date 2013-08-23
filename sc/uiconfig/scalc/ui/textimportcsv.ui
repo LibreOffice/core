@@ -198,7 +198,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Import</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>
@@ -506,7 +506,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Separator options</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>
@@ -578,7 +578,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Other options</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>
@@ -681,7 +681,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Fields</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>

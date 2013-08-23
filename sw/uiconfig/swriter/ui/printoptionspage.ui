@@ -252,7 +252,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Pages</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
@@ -363,7 +363,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Comments</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>

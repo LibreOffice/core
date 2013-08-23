@@ -148,7 +148,7 @@
                     <property name="label" translatable="yes">_Title</property>
                     <property name="use_underline">True</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>

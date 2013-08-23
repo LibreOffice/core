@@ -212,7 +212,7 @@
             <property name="can_focus">False</property>
             <property name="label">Addressee</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -431,7 +431,7 @@
             <property name="can_focus">False</property>
             <property name="label">Sender</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -601,7 +601,7 @@
             <property name="can_focus">False</property>
             <property name="label">Size</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>

@@ -81,7 +81,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Text objects</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -138,7 +138,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">New document</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -343,7 +343,7 @@
             <property name="margin_bottom">3</property>
             <property name="label" translatable="yes">Settings</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -438,7 +438,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Presentation</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -649,7 +649,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Scale</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -723,7 +723,7 @@
             <property name="yalign">0.49000000953674316</property>
             <property name="label" translatable="yes">Compatibility</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>

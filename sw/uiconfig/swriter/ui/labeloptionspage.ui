@@ -196,7 +196,7 @@
             <property name="can_focus">False</property>
             <property name="label">Distribute</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -269,7 +269,7 @@
             <property name="can_focus">False</property>
             <property name="label">Printer</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>

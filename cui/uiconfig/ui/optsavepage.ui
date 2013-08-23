@@ -70,7 +70,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Load</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -255,7 +255,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Save</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -475,7 +475,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Default file format and ODF settings</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
