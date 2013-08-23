@@ -127,7 +127,7 @@ void Shell::SetMDITitle()
     if ( pViewFrame )
     {
         SfxObjectShell* pShell = pViewFrame->GetObjectShell();
-        if ( pShell && !pShell->GetTitle( SFX_TITLE_CAPTION ).Equals(aTitle) )
+        if ( pShell && pShell->GetTitle( SFX_TITLE_CAPTION ) != aTitle )
         {
             pShell->SetTitle( aTitle );
             pShell->SetModified(false);

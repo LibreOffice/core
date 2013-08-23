@@ -297,7 +297,7 @@ public:
     virtual bool    IsChangeRecording() const;
     virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate );
-    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
 

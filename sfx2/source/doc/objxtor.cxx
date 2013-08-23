@@ -979,7 +979,7 @@ Reference< XInterface > SfxObjectShell::GetCurrentComponent()
 }
 
 
-String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
+OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
 {
     //! Remove everything behind name!
     String aFact( rFact );
@@ -1051,15 +1051,15 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     return aServiceName;
 }
 
-SfxObjectShell* SfxObjectShell::CreateObjectByFactoryName( const String& rFact, SfxObjectCreateMode eMode )
+SfxObjectShell* SfxObjectShell::CreateObjectByFactoryName( const OUString& rFact, SfxObjectCreateMode eMode )
 {
     return CreateObject( GetServiceNameFromFactory( rFact ), eMode );
 }
 
 
-SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode eCreateMode )
+SfxObjectShell* SfxObjectShell::CreateObject( const OUString& rServiceName, SfxObjectCreateMode eCreateMode )
 {
-    if ( rServiceName.Len() )
+    if ( !rServiceName.isEmpty() )
     {
         uno::Reference < frame::XModel > xDoc( ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
         if ( xDoc.is() )
@@ -1169,7 +1169,7 @@ void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 }
 
 
-bool SfxObjectShell::SetProtectionPassword( const String & /*rPassword*/ )
+bool SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     DBG_ASSERT( 0, "function not implemented" );

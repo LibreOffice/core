@@ -261,7 +261,7 @@ public:
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
     sal_Bool                    HasName() const { return bHasName; }
-    virtual String              GetAPIName() const;
+    virtual OUString            GetAPIName() const;
     void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
@@ -361,11 +361,11 @@ public:
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
 
-    ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
+    ErrCode                     CallBasic( const OUString& rMacro, const OUString& rBasicName,
                                     SbxArray* pArgs = 0, SbxValue* pRet = 0 );
 
     ErrCode     CallXScript(
-        const String& rScriptURL,
+        const OUString& rScriptURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
@@ -391,7 +391,7 @@ public:
         @return
             whether macros from this document should be executed
     */
-    bool                        AdjustMacroMode( const String& rScriptType, bool _bSuppressUI = false );
+    bool                        AdjustMacroMode( const OUString& rScriptType, bool _bSuppressUI = false );
 
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
@@ -399,15 +399,15 @@ public:
 
     sal_Bool                    IsTemplate() const;
 
-    sal_Bool                                  IsQueryLoadTemplate() const;
-    sal_Bool                                        IsUseUserData() const;
-    sal_Bool                                        IsLoadReadonly() const;
-    sal_Bool                                        IsSaveVersionOnClose() const;
-    void                                              SetQueryLoadTemplate( sal_Bool b );
-    void                                              SetUseUserData( sal_Bool bNew );
-    void                                            SetLoadReadonly( sal_Bool _bReadonly );
-    void                                            SetSaveVersionOnClose( sal_Bool bSet );
-    void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
+    sal_Bool                    IsQueryLoadTemplate() const;
+    sal_Bool                    IsUseUserData() const;
+    sal_Bool                    IsLoadReadonly() const;
+    sal_Bool                    IsSaveVersionOnClose() const;
+    void                        SetQueryLoadTemplate( sal_Bool b );
+    void                        SetUseUserData( sal_Bool bNew );
+    void                        SetLoadReadonly( sal_Bool _bReadonly );
+    void                        SetSaveVersionOnClose( sal_Bool bSet );
+    void                        ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName );
 
     // TODO/LATER: the following two methods should be replaced by Get/SetModifPasswordInfo in future
     sal_uInt32                  GetModifyPasswordHash() const;
@@ -466,8 +466,8 @@ public:
     void                        SetWaitCursor( sal_Bool bSet ) const;
 
     // Naming Interface
-    void                        SetTitle( const String& rTitle );
-    String                      GetTitle( sal_uInt16 nMaxLen = 0 ) const;
+    void                        SetTitle( const OUString& rTitle );
+    OUString                    GetTitle( sal_uInt16 nMaxLen = 0 ) const;
     void                        InvalidateName();  // Re-set to unnamed
 
     // DDE-Interface
@@ -528,12 +528,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
-    static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
-    static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
+    static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
+    static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );
-    static String               GetServiceNameFromFactory( const String& rFact );
+    static OUString             GetServiceNameFromFactory( const OUString& rFact );
     sal_Bool                        IsInPlaceActive();
     sal_Bool                        IsUIActive();
     virtual void                InPlaceActivate( sal_Bool );
@@ -613,7 +613,7 @@ public:
     virtual bool    IsChangeRecording() const;
     virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate );
-    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     // =================================
@@ -682,9 +682,9 @@ public:
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
     SAL_DLLPRIVATE sal_Bool DoSave_Impl( const SfxItemSet* pSet=0 );
     SAL_DLLPRIVATE sal_Bool Save_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE sal_Bool PreDoSaveAs_Impl(const String &rFileName, const String &rFiltName, SfxItemSet *);
-    SAL_DLLPRIVATE sal_Bool APISaveAs_Impl ( const String& aFileName, SfxItemSet* aParams );
-    SAL_DLLPRIVATE sal_Bool CommonSaveAs_Impl ( const INetURLObject& aURL, const String& aFilterName, SfxItemSet* aParams );
+    SAL_DLLPRIVATE sal_Bool PreDoSaveAs_Impl(const OUString &rFileName, const OUString &rFiltName, SfxItemSet *);
+    SAL_DLLPRIVATE sal_Bool APISaveAs_Impl ( const OUString& aFileName, SfxItemSet* aParams );
+    SAL_DLLPRIVATE sal_Bool CommonSaveAs_Impl ( const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet* aParams );
     SAL_DLLPRIVATE sal_Bool GeneralInit_Impl(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     sal_Bool bTypeMustBeSetAlready );
@@ -750,11 +750,11 @@ SV_IMPL_REF(SfxObjectShell)
 //--------------------------------------------------------------------
 class AutoReloadTimer_Impl : public Timer
 {
-    String          aUrl;
+    OUString          aUrl;
     SfxObjectShell*   pObjSh;
 
 public:
-    AutoReloadTimer_Impl( const String& rURL, sal_uInt32 nTime,
+    AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
                           SfxObjectShell* pSh );
     virtual void Timeout();
 };

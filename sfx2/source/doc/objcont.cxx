@@ -511,7 +511,7 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
     return (pFilter && pFilter->GetFilterName() == "writer_web_HTML_help");
 }
 
-void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
+void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName )
 {
     // only care about reseting this data for openoffice formats otherwise
     if ( IsOwnStorageFormat_Impl( *GetMedium())  )

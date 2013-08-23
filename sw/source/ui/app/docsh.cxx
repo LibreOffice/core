@@ -1235,7 +1235,7 @@ void SwDocShell::SetChangeRecording( bool bActivate )
 }
 
 
-bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
+bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
     const SfxAllItemSet aSet( GetPool() );
     const SfxItemSet*   pArgs = &aSet;
@@ -1249,7 +1249,7 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
 
     bool bRes = false;
 
-    if (rNewPassword.Len())
+    if (!rNewPassword.isEmpty())
     {
         // when password protection is applied change tracking must always be active
         SetChangeRecording( true );

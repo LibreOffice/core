@@ -285,7 +285,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 
 sal_Bool SfxObjectShell::APISaveAs_Impl
 (
-    const String& aFileName,
+    const OUString& aFileName,
     SfxItemSet*   aParams
 )
 {

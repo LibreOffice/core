@@ -702,7 +702,7 @@ IndexBitSet& SfxObjectShell::GetNoSet_Impl()
 
 void SfxObjectShell::SetTitle
 (
-    const String& rTitle                // the new Document Title
+    const OUString& rTitle                // the new Document Title
 )
 
 /*  [Description]
@@ -756,7 +756,7 @@ String X(const String &rRet)
 #endif
 
 //--------------------------------------------------------------------
-String SfxObjectShell::GetTitle
+OUString SfxObjectShell::GetTitle
 (
     sal_uInt16  nMaxLength      /*  0 (default)
                                 the title itself, as it is
@@ -1437,7 +1437,7 @@ void SfxObjectShell::CancelTransfers()
 //-------------------------------------------------------------------------
 
 AutoReloadTimer_Impl::AutoReloadTimer_Impl(
-    const String& rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
+    const OUString& rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
     : aUrl( rURL ), pObjSh( pSh )
 {
     SetTimeout( nTime );
@@ -1461,7 +1461,7 @@ void AutoReloadTimer_Impl::Timeout()
 
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
         aSet.Put( SfxBoolItem( SID_AUTOLOAD, sal_True ) );
-        if ( aUrl.Len() )
+        if ( !aUrl.isEmpty() )
             aSet.Put(  SfxStringItem( SID_FILE_NAME, aUrl ) );
         SfxRequest aReq( SID_RELOAD, 0, aSet );
         pObjSh->Get_Impl()->pReloadTimer = 0;
@@ -1479,8 +1479,8 @@ SfxModule* SfxObjectShell::GetModule() const
     return GetFactory().GetModule();
 }
 
-ErrCode SfxObjectShell::CallBasic( const String& rMacro,
-    const String& rBasic, SbxArray* pArgs,
+ErrCode SfxObjectShell::CallBasic( const OUString& rMacro,
+    const OUString& rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
     SfxApplication* pApp = SFX_APP();
@@ -1591,13 +1591,13 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
 // perhaps rename to CallScript once we get rid of the existing CallScript
 // and Call, CallBasic, CallStarBasic methods
-ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
-            aParams,
-        ::com::sun::star::uno::Any& aRet,
-        ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
-            aOutParam, bool bRaiseError, const ::com::sun::star::uno::Any* pCaller )
+ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
+        const css::uno::Sequence< css::uno::Any >& aParams,
+        css::uno::Any& aRet,
+        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        css::uno::Sequence< css::uno::Any >& aOutParam,
+        bool bRaiseError,
+        const css::uno::Any* pCaller )
 {
     return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError, pCaller );
 }
@@ -1730,7 +1730,7 @@ void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const
     }
 }
 
-String SfxObjectShell::GetAPIName() const
+OUString SfxObjectShell::GetAPIName() const
 {
     INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
     String aName( aURL.GetBase() );
@@ -1747,7 +1747,7 @@ void SfxObjectShell::Invalidate( sal_uInt16 nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-bool SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/, bool bSuppressUI )
+bool SfxObjectShell::AdjustMacroMode( const OUString& /*rScriptType*/, bool bSuppressUI )
 {
     uno::Reference< task::XInteractionHandler > xInteraction;
     if ( pMedium && !bSuppressUI )

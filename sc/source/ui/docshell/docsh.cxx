@@ -3108,7 +3108,7 @@ void ScDocShell::SetChangeRecording( bool bActivate )
 }
 
 
-bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
+bool ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
     bool bRes = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
@@ -3116,7 +3116,7 @@ bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
     {
         bool bProtected = pChangeTrack->IsProtected();
 
-        if (rNewPassword.Len())
+        if (!rNewPassword.isEmpty())
         {
             // when password protection is applied change tracking must always be active
             SetChangeRecording( true );

@@ -2587,7 +2587,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 sal_Bool SfxObjectShell::CommonSaveAs_Impl
 (
     const INetURLObject&   aURL,
-    const String&   aFilterName,
+    const OUString&   aFilterName,
     SfxItemSet*     aParams
 )
 {
@@ -2732,9 +2732,9 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
 sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 (
-    const String&   rFileName,
-    const String&   aFilterName,
-    SfxItemSet*     pParams
+    const OUString&   rFileName,
+    const OUString&   aFilterName,
+    SfxItemSet*       pParams
 )
 {
     // copy all items stored in the itemset of the current medium
@@ -2779,7 +2779,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, 0, pParams );
 
     // set filter; if no filter is given, take the default filter of the factory
-    if ( aFilterName.Len() )
+    if ( !aFilterName.isEmpty() )
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
     else
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) );
