@@ -247,8 +247,8 @@ void SwGlossaryList::Update()
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
-    const std::vector<String> & rPathArr = pGlossaries->GetPathArray();
-    String sExt( SwGlossaries::GetExtension() );
+    const std::vector<OUString> & rPathArr = pGlossaries->GetPathArray();
+    const OUString sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
         sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
@@ -278,21 +278,20 @@ void SwGlossaryList::Update()
         for( size_t nPath = 0; nPath < rPathArr.size(); nPath++ )
         {
             std::vector<String> aFoundGroupNames;
-            std::vector<String*> aFiles;
+            std::vector<OUString*> aFiles;
             std::vector<DateTime*> aDateTimeArr;
 
             SWUnoHelper::UCB_GetFileListOfFolder( rPathArr[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
             for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {
-                String* pTitle = aFiles[ nFiles ];
+                const OUString* pTitle = aFiles[ nFiles ];
                 ::DateTime* pDT = (::DateTime*) aDateTimeArr[ static_cast<sal_uInt16>(nFiles) ];
 
-                OUString sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
+                OUString sName( pTitle->copy( 0, pTitle->getLength() - sExt.getLength() ));
 
                 aFoundGroupNames.push_back(sName);
-                sName += OUString(GLOS_DELIM);
-                sName += OUString::number( static_cast<sal_uInt16>(nPath) );
+                sName += OUString(GLOS_DELIM) + OUString::number( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
                 {

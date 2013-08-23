@@ -880,7 +880,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if(!GetParent(pEntry))
             {
                 GroupUserData* pData = (GroupUserData*)pEntry->GetUserData();
-                const std::vector<String> & rPathArr = ::GetGlossaries()->GetPathArray();
+                const std::vector<OUString> & rPathArr = ::GetGlossaries()->GetPathArray();
                 if( !rPathArr.empty() )
                 {
                     sMsg = rPathArr[pData->nPathIdx];

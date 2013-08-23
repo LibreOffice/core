@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
+#include "rtl/ustring.hxx"
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
@@ -186,9 +187,9 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a std::vector<String*> -->
     //                       !! objects must be deleted from the caller!!
-bool UCB_GetFileListOfFolder( const String& rURL,
-                                std::vector<String*>& rList,
-                                const String* pExtension,
+bool UCB_GetFileListOfFolder( const OUString& rURL,
+                                std::vector<OUString*>& rList,
+                                const OUString* pExtension,
                                 std::vector< ::DateTime* >* pDateTimeList )
 {
     bool bOk = false;
@@ -216,19 +217,18 @@ bool UCB_GetFileListOfFolder( const String& rURL,
         if( xResultSet.is() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
-            xub_StrLen nExtLen = pExtension ? pExtension->Len() : 0;
+            const sal_Int32 nExtLen = pExtension ? pExtension->getLength() : 0;
             try
             {
                 if( xResultSet->first() )
                 {
                     do {
-                        String sTitle( xRow->getString( 1 ) );
+                        const OUString sTitle( xRow->getString( 1 ) );
                         if( !nExtLen ||
-                            ( sTitle.Len() > nExtLen &&
-                              sTitle.Equals( *pExtension,
-                                          sTitle.Len() - nExtLen, nExtLen )) )
+                            ( sTitle.getLength() > nExtLen &&
+                              sTitle.endsWith( *pExtension )) )
                         {
-                            rList.push_back( new String(sTitle) );
+                            rList.push_back( new OUString(sTitle) );
 
                             if( pDateTimeList )
                             {
