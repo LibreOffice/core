@@ -59,12 +59,12 @@ public:
     static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=NULL );
 
     sal_uInt16              GetGroupCount();
-    String              SeekGroup( sal_uInt16 nNo );
+    OUString            SeekGroup( sal_uInt16 nNo );
     const SfxSlot*      FirstSlot();
     const SfxSlot*      NextSlot();
     const SfxSlot*      GetSlot( sal_uInt16 nId );
     const SfxSlot*      GetUnoSlot( sal_uInt16 nId );
-    const SfxSlot*      GetUnoSlot( const String& rUnoName );
+    const SfxSlot*      GetUnoSlot( const OUString& rUnoName );
     TypeId              GetSlotType( sal_uInt16 nSlotId ) const;
 };
 

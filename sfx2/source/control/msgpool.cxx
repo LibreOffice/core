@@ -140,7 +140,7 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 
 // skips to the next group
 
-String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
+OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 {
     DBG_ASSERT( _pInterfaces != NULL, "no Interfaces registered" );
 
@@ -291,7 +291,7 @@ SfxInterface* SfxSlotPool::FirstInterface()
 
 //--------------------------------------------------------------------
 
-const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
+const SfxSlot* SfxSlotPool::GetUnoSlot( const OUString& rName )
 {
     const SfxSlot *pSlot = NULL;
     for ( sal_uInt16 nInterface=0; nInterface<_pInterfaces->size(); ++nInterface )
