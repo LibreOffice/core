@@ -660,11 +660,10 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
     sal_uInt16 nWhich = GetWhich( nSlot );
     SvxBrushItem* pTemp = 0;
-    const CntWallpaperItem* pItem = 0;
 
     if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
     {
-        pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
+        const CntWallpaperItem* pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
         pTemp = new SvxBrushItem( *pItem, nWhich );
         pBgdAttr = pTemp;
     }
@@ -697,8 +696,6 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     bLinkOnly = sal_True;
     m_pBtnLink->Check( sal_True );
     m_pBtnLink->Show( sal_False );
-//  if( !pItem || !pItem->GetWallpaper(sal_False).IsBitmap() )
-//      m_pBtnLink->Check();
 
     delete pTemp;
 }
