@@ -243,8 +243,8 @@ public:
                 LanguageType nLang, bool bResolveSystem );
 
         /** Used by convertLanguageToLocale(LanguageType,bool) */
-        I18NLANGTAG_DLLPRIVATE static void convertLanguageToIsoNames(
-                LanguageType nLang, OUString& rLangStr, OUString& rCountry );
+        I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocaleImpl(
+                LanguageType nLang, ::com::sun::star::lang::Locale & rLocale );
 
 
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(

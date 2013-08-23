@@ -155,7 +155,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
         // but not LANGUAGE_SYSTEM or others.
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
-        convertLanguageToIsoNames( nLang, aLocale.Language, aLocale.Country);
+        convertLanguageToLocaleImpl( nLang, aLocale);
         /* FIXME: this x-... is temporary until conversion will be moved up to
          * LanguageTag. Also handle the nasty "*" joker as privateuse. */
         if (aLocale.Language.startsWith( "x-") || (aLocale.Language == "*"))

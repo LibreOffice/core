@@ -656,8 +656,8 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 // =======================================================================
 
 // static
-void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
-        OUString& rLangStr, OUString& rCountry )
+void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
+        ::com::sun::star::lang::Locale & rLocale )
 {
     if ( nLang == LANGUAGE_SYSTEM )
         nLang = MsLangId::getSystemLanguage();
@@ -668,8 +668,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pEntry->mnLang == nLang )
         {
-            rLangStr = OUString::createFromAscii( pEntry->maLangStr );
-            rCountry = OUString::createFromAscii( pEntry->maCountry );
+            rLocale.Language = OUString::createFromAscii( pEntry->maLangStr );
+            rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
             return;
         }
         ++pEntry;
@@ -684,8 +684,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pNoneStdEntry->mnLang == nLang )
         {
-            rLangStr = OUString::createFromAscii( pNoneStdEntry->maLangStr );
-            rCountry = OUString::createFromAscii( pNoneStdEntry->maCountry );
+            rLocale.Language = OUString::createFromAscii( pNoneStdEntry->maLangStr );
+            rLocale.Country  = OUString::createFromAscii( pNoneStdEntry->maCountry );
             return;
         }
         ++pNoneStdEntry;
@@ -698,8 +698,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     {
         if ( pPrivateEntry->mnLang == nLang )
         {
-            rLangStr = OUString::createFromAscii( pPrivateEntry->mpLangStr );
-            rCountry = OUString();
+            rLocale.Language = OUString::createFromAscii( pPrivateEntry->mpLangStr );
+            rLocale.Country  = OUString();
             return;
         }
         ++pPrivateEntry;
@@ -707,8 +707,8 @@ void MsLangId::Conversion::convertLanguageToIsoNames( LanguageType nLang,
     while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // not found
-    rLangStr = OUString();
-    rCountry = OUString();
+    rLocale.Language = OUString();
+    rLocale.Country  = OUString();
 }
 
 // -----------------------------------------------------------------------
