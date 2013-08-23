@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 
 namespace basegfx
 {
@@ -127,6 +128,8 @@ namespace slideshow
                 transformation.
             */
             virtual basegfx::B2DHomMatrix getTransformation() const = 0;
+
+            virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const = 0;
 
             /** Get the overall view transformation.
 

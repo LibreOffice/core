@@ -636,6 +636,11 @@ namespace slideshow
                     OSL_FAIL( "BitmapView::setPriority(): This method is not supposed to be called!" );
                 }
 
+                virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const
+                {
+                    return geometry::IntegerSize2D(0,0);
+                }
+
                 virtual ::basegfx::B2DHomMatrix getTransformation() const
                 {
                     return mpCanvas->getTransformation();

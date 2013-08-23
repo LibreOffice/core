@@ -489,6 +489,25 @@ public:
         }
     }
 
+    virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const
+    {
+        std::cerr << "slideshow/source/engine/slideview.cxx:522" << std::endl;
+        basegfx::B2DRectangle aTmpRect;
+        canvas::tools::calcTransformedRectBounds( aTmpRect,
+                                                  maLayerBounds,
+                                                  maTransformation );
+        geometry::IntegerSize2D offset(0, 0);
+
+        // Add translation according to the origin of aTmpRect.  Ignore the
+        // translation when aTmpRect was not properly initialized.
+        if ( ! aTmpRect.isEmpty())
+        {
+            offset.Width  = basegfx::fround(aTmpRect.getMinX());
+            offset.Height = basegfx::fround(aTmpRect.getMinY());
+        }
+        return offset;
+    }
+
 private:
     // ViewLayer interface
     // ----------------------------------------------
@@ -700,6 +719,7 @@ private:
     virtual cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
                                                            double                    nPriority ) const;
     virtual void setPriority( const basegfx::B1DRange& rRange );
+    virtual geometry::IntegerSize2D getTranslationOffset() const;
     virtual ::basegfx::B2DHomMatrix getTransformation() const;
     virtual basegfx::B2DHomMatrix getSpriteTransformation() const;
     virtual void setClip( const ::basegfx::B2DPolyPolygon& rClip );
@@ -958,6 +978,11 @@ basegfx::B2DHomMatrix SlideView::getTransformation() const
     aMatrix.scale( 1.0/maUserSize.getX(), 1.0/maUserSize.getY() );
 
     return maViewTransform * aMatrix;
+}
+
+geometry::IntegerSize2D SlideView::getTranslationOffset() const
+{
+    return mxView->getTranslationOffset();
 }
 
 basegfx::B2DHomMatrix SlideView::getSpriteTransformation() const
