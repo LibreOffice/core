@@ -491,7 +491,6 @@ public:
 
     virtual ::com::sun::star::geometry::IntegerSize2D getTranslationOffset() const
     {
-        std::cerr << "slideshow/source/engine/slideview.cxx:522" << std::endl;
         basegfx::B2DRectangle aTmpRect;
         canvas::tools::calcTransformedRectBounds( aTmpRect,
                                                   maLayerBounds,
