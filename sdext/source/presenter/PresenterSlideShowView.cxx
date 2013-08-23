@@ -378,6 +378,13 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (voi
     }
 }
 
+geometry::IntegerSize2D SAL_CALL PresenterSlideShowView::getTranslationOffset(void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    return geometry::IntegerSize2D(0,0);
+}
+
 void SAL_CALL PresenterSlideShowView::addTransformationChangedListener(
     const Reference<util::XModifyListener>& rxListener)
     throw (RuntimeException)

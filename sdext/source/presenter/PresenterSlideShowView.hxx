@@ -90,6 +90,9 @@ public:
     virtual css::geometry::AffineMatrix2D SAL_CALL getTransformation (void)
         throw (css::uno::RuntimeException);
 
+    virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getTranslationOffset(void)
+        throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL addTransformationChangedListener(
         const css::uno::Reference<
             css::util::XModifyListener >& xListener)
