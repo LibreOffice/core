@@ -2220,43 +2220,42 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
 
     pNewLine->m_aName->SetText( sName );
 
-    SvtSysLocale aSysLocale;
-    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     OUString sValue;
     if ( sType == CMIS_TYPE_INTEGER )
     {
-        sal_Int64 nTmpValue = 0;
+        Sequence< sal_Int64 > nTmpValue;
         rAny >>= nTmpValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        m_aNumberFormatter.GetInputLineString( nTmpValue, nIndex, sValue );
+        m_aNumberFormatter.GetInputLineString( nTmpValue[0], nIndex, sValue );
     }
     else if ( sType == CMIS_TYPE_DECIMAL )
     {
-        double dTmpValue = 0.0;
+        Sequence< double > dTmpValue;
         rAny >>= dTmpValue;
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
-        m_aNumberFormatter.GetInputLineString( dTmpValue, nIndex, sValue );
+        m_aNumberFormatter.GetInputLineString( dTmpValue[0], nIndex, sValue );
     }
     else if ( sType == CMIS_TYPE_BOOL )
     {
-        bool bTmpValue = false;
+        Sequence< bool > bTmpValue;
         rAny >>= bTmpValue;
-        sValue = ( bTmpValue ? rLocaleWrapper.getTrueWord() : rLocaleWrapper.getFalseWord() );
-        if ( bTmpValue )
+        if ( bTmpValue[0] )
             pNewLine->m_aYesButton->Check();
         else
             pNewLine->m_aNoButton->Check();
     }
     else if ( sType == CMIS_TYPE_STRING )
     {
-        rAny >>= sValue;
+        Sequence< OUString > seqValue;
+        rAny >>= seqValue;
+        sValue = seqValue[0];
     }
     else if ( sType == CMIS_TYPE_DATETIME )
     {
-        util::DateTime aTmpDateTime;
+        Sequence< util::DateTime > aTmpDateTime;
         rAny >>= aTmpDateTime;
-        pNewLine->m_aDateField->SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
-        pNewLine->m_aTimeField->SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
+        pNewLine->m_aDateField->SetDate( Date( aTmpDateTime[0].Day, aTmpDateTime[0].Month, aTmpDateTime[0].Year ) );
+        pNewLine->m_aTimeField->SetTime( Time( aTmpDateTime[0].Hours, aTmpDateTime[0].Minutes, aTmpDateTime[0].Seconds, aTmpDateTime[0].NanoSeconds ) );
 
     }
 

@@ -82,114 +82,78 @@ namespace
     uno::Any lcl_cmisPropertyToUno( libcmis::PropertyPtr pProperty )
     {
         uno::Any aValue;
-        bool bMultiValued = pProperty->getPropertyType( )->isMultiValued( );
         switch ( pProperty->getPropertyType( )->getType( ) )
         {
             default:
             case libcmis::PropertyType::String:
                 {
                     vector< string > aCmisStrings = pProperty->getStrings( );
-                    if ( bMultiValued )
+                    uno::Sequence< OUString > aStrings( aCmisStrings.size( ) );
+                    OUString* aStringsArr = aStrings.getArray( );
+                    sal_Int32 i = 0;
+                    for ( vector< string >::iterator it = aCmisStrings.begin( );
+                            it != aCmisStrings.end( ); ++it, ++i )
                     {
-                        uno::Sequence< OUString > aStrings( aCmisStrings.size( ) );
-                        OUString* aStringsArr = aStrings.getArray( );
-                        sal_Int32 i = 0;
-                        for ( vector< string >::iterator it = aCmisStrings.begin( );
-                                it != aCmisStrings.end( ); ++it, ++i )
-                        {
-                            string str = *it;
-                            aStringsArr[i] = STD_TO_OUSTR( str );
-                        }
-                        aValue <<= aStrings;
+                        string str = *it;
+                        aStringsArr[i] = STD_TO_OUSTR( str );
                     }
-                    else if ( !aCmisStrings.empty( ) )
-                    {
-                        aValue <<= STD_TO_OUSTR( aCmisStrings.front( ) );
-                    }
+                    aValue <<= aStrings;
                 }
                 break;
             case libcmis::PropertyType::Integer:
                 {
                     vector< long > aCmisLongs = pProperty->getLongs( );
-                    if ( bMultiValued )
+                    uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
+                    sal_Int64* aLongsArr = aLongs.getArray( );
+                    sal_Int32 i = 0;
+                    for ( vector< long >::iterator it = aCmisLongs.begin( );
+                            it != aCmisLongs.end( ); ++it, ++i )
                     {
-                        uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
-                        sal_Int64* aLongsArr = aLongs.getArray( );
-                        sal_Int32 i = 0;
-                        for ( vector< long >::iterator it = aCmisLongs.begin( );
-                                it != aCmisLongs.end( ); ++it, ++i )
-                        {
-                            aLongsArr[i] = *it;
-                        }
-                        aValue <<= aLongs;
+                        aLongsArr[i] = *it;
                     }
-                    else if ( !aCmisLongs.empty( ) )
-                    {
-                        aValue <<= aCmisLongs.front( );
-                    }
+                    aValue <<= aLongs;
                 }
                 break;
             case libcmis::PropertyType::Decimal:
                 {
                     vector< double > aCmisDoubles = pProperty->getDoubles( );
-                    if ( bMultiValued )
+                    uno::Sequence< double > aDoubles( aCmisDoubles.size( ) );
+                    double* aDoublesArr = aDoubles.getArray( );
+                    sal_Int32 i = 0;
+                    for ( vector< double >::iterator it = aCmisDoubles.begin( );
+                            it != aCmisDoubles.end( ); ++it, ++i )
                     {
-                        uno::Sequence< double > aDoubles( aCmisDoubles.size( ) );
-                        double* aDoublesArr = aDoubles.getArray( );
-                        sal_Int32 i = 0;
-                        for ( vector< double >::iterator it = aCmisDoubles.begin( );
-                                it != aCmisDoubles.end( ); ++it, ++i )
-                        {
-                            aDoublesArr[i] = *it;
-                        }
-                        aValue <<= aDoubles;
+                        aDoublesArr[i] = *it;
                     }
-                    else if ( !aCmisDoubles.empty( ) )
-                    {
-                        aValue <<= aCmisDoubles.front( );
-                    }
+                    aValue <<= aDoubles;
                 }
                 break;
             case libcmis::PropertyType::Bool:
                 {
                     vector< bool > aCmisBools = pProperty->getBools( );
-                    if ( bMultiValued )
+                    uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
+                    sal_Bool* aBoolsArr = aBools.getArray( );
+                    sal_Int32 i = 0;
+                    for ( vector< bool >::iterator it = aCmisBools.begin( );
+                            it != aCmisBools.end( ); ++it, ++i )
                     {
-                        uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
-                        sal_Bool* aBoolsArr = aBools.getArray( );
-                        sal_Int32 i = 0;
-                        for ( vector< bool >::iterator it = aCmisBools.begin( );
-                                it != aCmisBools.end( ); ++it, ++i )
-                        {
-                            aBoolsArr[i] = *it;
-                        }
-                        aValue <<= aBools;
+                        aBoolsArr[i] = *it;
                     }
-                    else if ( !aCmisBools.empty( ) )
-                    {
-                        aValue <<= sal_Bool( aCmisBools.front( ) );
-                    }
+                    aValue <<= aBools;
                 }
                 break;
             case libcmis::PropertyType::DateTime:
                 {
                     vector< boost::posix_time::ptime > aCmisTimes = pProperty->getDateTimes( );
-                    if ( bMultiValued )
+                    uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
+                    util::DateTime* aTimesArr = aTimes.getArray( );
+                    sal_Int32 i = 0;
+                    for ( vector< boost::posix_time::ptime >::iterator it = aCmisTimes.begin( );
+                            it != aCmisTimes.end( ); ++it, ++i )
                     {
-                        uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
-                        util::DateTime* aTimesArr = aTimes.getArray( );
-                        sal_Int32 i = 0;
-                        for ( vector< boost::posix_time::ptime >::iterator it = aCmisTimes.begin( );
-                                it != aCmisTimes.end( ); ++it, ++i )
-                        {
-                            aTimesArr[i] = lcl_boostToUnoTime( *it );
-                        }
-                        aValue <<= aTimes;
+                        aTimesArr[i] = lcl_boostToUnoTime( *it );
                     }
-                    else if ( !aCmisTimes.empty( ) )
-                    {
-                        aValue <<= lcl_boostToUnoTime( aCmisTimes.front( ) );
-                    }
+                    aValue <<= aTimes;
                 }
                 break;
         }
@@ -212,11 +176,11 @@ namespace
             type = libcmis::PropertyType::String;
         else if ( prop.Type == CMIS_TYPE_BOOL )
             type = libcmis::PropertyType::Bool;
-       else if ( prop.Type == CMIS_TYPE_INTEGER )
+        else if ( prop.Type == CMIS_TYPE_INTEGER )
             type = libcmis::PropertyType::Integer;
-       else if ( prop.Type == CMIS_TYPE_DECIMAL )
+        else if ( prop.Type == CMIS_TYPE_DECIMAL )
             type = libcmis::PropertyType::Decimal;
-       else if ( prop.Type == CMIS_TYPE_DATETIME )
+        else if ( prop.Type == CMIS_TYPE_DATETIME )
             type = libcmis::PropertyType::DateTime;
 
         propertyType->setId( OUSTR_TO_STDSTR( id ));
@@ -230,23 +194,13 @@ namespace
         std::vector< std::string > values;
 
         // convert UNO value to string vector
-        if ( bMultiValued )
+        uno::Sequence< OUString > aStrings;
+        value >>= aStrings;
+        sal_Int32 len = aStrings.getLength( );
+        for ( sal_Int32 i = 0; i < len; i++ )
         {
-            uno::Sequence< OUString > aStrings;
-            value >>= aStrings;
-            sal_Int32 len = aStrings.getLength( );
-            for ( sal_Int32 i = 0; i < len; i++ )
-            {
-                string str = OUSTR_TO_STDSTR( aStrings[i] );
-                values.push_back( str );
-            }
-        }
-        else
-        {
-            OUString val;
-            value >>= val;
-            std::string str = OUSTR_TO_STDSTR( val );
-            values.push_back( str);
+            string str = OUSTR_TO_STDSTR( aStrings[i] );
+            values.push_back( str );
         }
 
         libcmis::PropertyPtr property( new libcmis::Property( propertyType, values ) );
