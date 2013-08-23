@@ -531,7 +531,6 @@ struct CmisPropertyLine : public VclBuilderContainer
     CmisPropertyLine( Window* pParent );
 };
 
-typedef boost::ptr_vector<CmisPropertyLine> CmisPropertiesLines;
 // class CmisPropertiesWindow ------------------------------------------
 
 class CmisPropertiesWindow
@@ -539,11 +538,8 @@ class CmisPropertiesWindow
 private:
     VclBox*                             m_pBox;
     sal_Int32                           m_nItemHeight;
-    SvtSysLocale                        m_aSysLocale;
     SvNumberFormatter                   m_aNumberFormatter;
-    Timer                               m_aEditLoseFocusTimer;
-    Timer                               m_aBoxLoseFocusTimer;
-    CmisPropertiesLines                 m_aCmisPropertiesLines;
+    std::vector< CmisPropertyLine* >    m_aCmisPropertiesLines;
 public:
     CmisPropertiesWindow(SfxTabPage* pParent);
     ~CmisPropertiesWindow();
