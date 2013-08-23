@@ -660,9 +660,6 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
-    if ( nLang == LANGUAGE_SYSTEM )
-        nLang = MsLangId::getSystemLanguage();
-
     // Search for LangID (in this table we find only defined ISO combinations)
     const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
