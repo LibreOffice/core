@@ -954,44 +954,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvTreeListEntry*  pTarget,
                                     sal_uLong&        /*rNewChildPos*/
                                 )
 {
-    pDragEntry = 0;
-    if(!pTarget) // move to the beginning
-    {
-        pTarget = GetEntry(0);
-    }
-    // 1. move to different groups?
-    // 2. allowed to write in both groups?
-    SvTreeListEntry* pSrcParent = GetParent(pEntry);
-    SvTreeListEntry* pDestParent =
-        GetParent(pTarget) ? GetParent(pTarget) : pTarget;
-    sal_Bool bRet = sal_False;
-    if(pDestParent != pSrcParent)
-    {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
-        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
-
-        GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
-        OUString sSourceGroup = pGroupData->sGroupName
-            + OUString(GLOS_DELIM)
-            + OUString::number(pGroupData->nPathIdx);
-        pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
-        OUString sTitle(GetEntryText(pEntry));
-        OUString sShortName(*(String*)pEntry->GetUserData());
-
-        GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
-        OUString sDestName = pDestData->sGroupName
-            + OUString(GLOS_DELIM)
-            + OUString::number(pDestData->nPathIdx);
-        bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
-                        sDestName, sTitle, sal_True );
-        if(bRet)
-        {
-            SvTreeListEntry* pChild = InsertEntry(sTitle, pDestParent);
-            pChild->SetUserData(new String(sShortName));
-            GetModel()->Remove(pEntry);
-        }
-    }
-    return sal_False; // otherwise the entry is being set automatically
+    return NotifyCopyingOrMoving(pTarget, pEntry, true);
 }
 
 sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
@@ -999,6 +962,14 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*& /*rpNewParent*/,
                                     sal_uLong&        /*rNewChildPos*/
                                 )
+{
+    return NotifyCopyingOrMoving(pTarget, pEntry, false);
+}
+
+sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
+    SvTreeListEntry*  pTarget,
+    SvTreeListEntry*  pEntry,
+    bool              bIsMove)
 {
     pDragEntry = 0;
     // 1. move in different groups?
@@ -1031,11 +1002,15 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvTreeListEntry*  pTarget,
             + OUString::number(pDestData->nPathIdx);
 
         bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
-                        sDestName, sTitle, sal_False );
+                        sDestName, sTitle, bIsMove );
         if(bRet)
         {
             SvTreeListEntry* pChild = InsertEntry(sTitle, pDestParent);
             pChild->SetUserData(new String(sShortName));
+            if (bIsMove)
+            {
+                GetModel()->Remove(pEntry);
+            }
         }
     }
     return sal_False; // otherwise the entry is being set automatically
