@@ -464,12 +464,11 @@ void ScTable::UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchIte
 bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                       const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
-    bool bFound = false;
     SCCOL nCol = rCol;
     SCROW nRow = rRow;
 
     UpdateSearchItemAddressForReplace( rSearchItem, nCol, nRow );
-    bFound = Search(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
+    bool bFound = Search(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
     if (bFound)
     {
         rCol = nCol;
