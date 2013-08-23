@@ -25,7 +25,6 @@
 
 TabPage TP_OPTCOMPATIBILITY_PAGE
 {
-    HelpID = HID_OPTCOMPATIBILITY_PAGE ;
     Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedLine FL_MAIN

@@ -21,6 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
 #include <svx/checklbx.hxx>
@@ -33,13 +34,10 @@ class SwCompatibilityOptPage : public SfxTabPage
 {
 private:
     // controls
-    FixedLine               m_aMainFL;
-    FixedText               m_aFormattingFT;
-    ListBox                 m_aFormattingLB;
-    FixedText               m_aOptionsFT;
-    SvxCheckListBox         m_aOptionsLB;
-    PushButton              m_aResetPB;
-    PushButton              m_aDefaultPB;
+    VclFrame*               m_pMain;
+    ListBox*                m_pFormattingLB;
+    SvxCheckListBox*        m_pOptionsLB;
+    PushButton*             m_pDefaultPB;
     // config item
     SvtCompatibilityOptions m_aConfigItem;
     // text of the user entry

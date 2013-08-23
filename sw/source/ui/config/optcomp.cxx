@@ -43,7 +43,6 @@ using namespace ::std;
 
 #define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
 #define USER_ENTRY          "_user"
-#define BUTTON_BORDER       2
 
 // struct CompatibilityItem ----------------------------------------------
 
@@ -100,67 +99,44 @@ struct SwCompatibilityOptPage_Impl
 
 // class SwCompatibilityOptPage ------------------------------------------
 
-SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxTabPage( pParent, SW_RES( TP_OPTCOMPATIBILITY_PAGE ), rSet ),
-
-    m_aMainFL           ( this, SW_RES( FL_MAIN ) ),
-    m_aFormattingFT     ( this, SW_RES( FT_FORMATTING ) ),
-    m_aFormattingLB     ( this, SW_RES( LB_FORMATTING ) ),
-    m_aOptionsFT        ( this, SW_RES( FT_OPTIONS ) ),
-    m_aOptionsLB        ( this, SW_RES( LB_OPTIONS ) ),
-    m_aResetPB          ( this, SW_RES( PB_RESET ) ),
-    m_aDefaultPB        ( this, SW_RES( PB_DEFAULT ) ),
-    m_sUserEntry        (       SW_RES( STR_USERENTRY ) ),
-    m_pWrtShell         ( NULL ),
-    m_pImpl             ( new SwCompatibilityOptPage_Impl ),
-    m_nSavedOptions     ( 0 )
-
+SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptCompatPage",
+        "modules/swriter/ui/optcompatpage.ui", rSet)
+    , m_pWrtShell(NULL)
+    , m_pImpl(new SwCompatibilityOptPage_Impl)
+    , m_nSavedOptions(0)
 {
-    // init options strings with local resource ids -> so do it before FreeResource()
-    for ( sal_uInt16 nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
+    get(m_pMain, "compatframe");
+    get(m_pFormattingLB, "format");
+    get(m_pOptionsLB, "options");
+    get(m_pDefaultPB, "default");
+
+    for (sal_uInt16 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
-        String sEntry = String( SW_RES( nResId ) );
-        if ( STR_TAB_ALIGNMENT == nResId ||
-             STR_LINE_SPACING == nResId ||
-             STR_USE_OBJPOSITIONING == nResId ||
-             STR_USE_OURTEXTWRAPPING == nResId )
+        String sEntry = m_pFormattingLB->GetEntry(nId);
+        if ( STR_TAB_ALIGNMENT == nId ||
+             STR_LINE_SPACING == nId ||
+             STR_USE_OBJPOSITIONING == nId ||
+             STR_USE_OURTEXTWRAPPING == nId )
             ReplaceFormatName( sEntry );
-        SvTreeListEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( sEntry );
+        SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
-            m_aOptionsLB.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
-            pEntry->SetUserData( (void*)(sal_uLong)nResId );
+            m_pOptionsLB->SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );
         }
     }
-    m_aOptionsLB.SetStyle( m_aOptionsLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
-    m_aOptionsLB.SetHighlightRange();
+    m_sUserEntry = m_pFormattingLB->GetEntry(m_pFormattingLB->GetEntryCount()-1);
 
-    FreeResource();
+    m_pFormattingLB->Clear();
+
+    m_pOptionsLB->SetStyle( m_pOptionsLB->GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_pOptionsLB->SetHighlightRange();
 
     InitControls( rSet );
 
     // set handler
-    m_aFormattingLB.SetSelectHdl( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
-    m_aDefaultPB.SetClickHdl( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
-
-    // hide some controls, will be implemented later!!!
-    m_aFormattingFT.Hide();
-    m_aFormattingLB.Hide();
-    m_aResetPB.Hide();
-    // so move and resize the other controls
-    Point aMovePnt = m_aFormattingFT.GetPosPixel();
-    Point aNewPnt = m_aOptionsFT.GetPosPixel();
-    aNewPnt.Y() = aMovePnt.Y();
-    m_aOptionsFT.SetPosPixel( aNewPnt );
-    aMovePnt = m_aFormattingLB.GetPosPixel();
-    aNewPnt = m_aOptionsLB.GetPosPixel();
-    long nDelta = aNewPnt.Y() - aMovePnt.Y();
-    aNewPnt.Y() = aMovePnt.Y();
-    m_aOptionsLB.SetPosPixel( aNewPnt );
-    Size aNewSz = m_aOptionsLB.GetSizePixel();
-    aNewSz.Height() += nDelta;
-    m_aOptionsLB.SetSizePixel( aNewSz );
+    m_pFormattingLB->SetSelectHdl( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
+    m_pDefaultPB->SetClickHdl( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
 }
 
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
@@ -254,17 +230,10 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     }
     else
     {
-        m_aMainFL.Disable();
-        m_aFormattingFT.Disable();
-        m_aFormattingLB.Disable();
-        m_aOptionsFT.Disable();
-        m_aOptionsLB.Disable();
-        m_aResetPB.Disable();
-        m_aDefaultPB.Disable();
+        m_pMain->Disable();
     }
-    String sText = m_aMainFL.GetText();
-    sText.SearchAndReplace( OUString("%DOCNAME"), sDocTitle );
-    m_aMainFL.SetText( sText );
+    const OUString& rText = m_pMain->get_label();
+    m_pMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
 
     // loading file formats
     Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
@@ -342,38 +311,22 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         if ( sNewEntry.Len() == 0 )
             sNewEntry = sName;
 
-        sal_uInt16 nPos = m_aFormattingLB.InsertEntry( sNewEntry );
+        sal_uInt16 nPos = m_pFormattingLB->InsertEntry( sNewEntry );
         sal_uLong nOptions = convertBools2Ulong_Impl(
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
             bConsiderWrappingStyle, bExpandWordSpace );
-        m_aFormattingLB.SetEntryData( nPos, (void*)(sal_IntPtr)nOptions );
+        m_pFormattingLB->SetEntryData( nPos, (void*)(sal_IntPtr)nOptions );
     }
 
-    m_aFormattingLB.SetDropDownLineCount( m_aFormattingLB.GetEntryCount() );
-
-    // check if the default button text is not too wide otherwise we have to stretch the button
-    // and move its position and the position of the reset button
-    long nTxtWidth = m_aDefaultPB.GetTextWidth( m_aDefaultPB.GetText() );
-    Size aBtnSz = m_aDefaultPB.GetSizePixel();
-    if ( nTxtWidth > aBtnSz.Width() )
-    {
-        long nDelta = nTxtWidth - aBtnSz.Width() + 2 * BUTTON_BORDER;
-        aBtnSz.Width() += nDelta;
-        Point aBtnPnt = m_aDefaultPB.GetPosPixel();
-        aBtnPnt.X() -= nDelta;
-        m_aDefaultPB.SetPosSizePixel( aBtnPnt, aBtnSz );
-        aBtnPnt = m_aResetPB.GetPosPixel();
-        aBtnPnt.X() -= 2 * nDelta;
-        m_aResetPB.SetPosSizePixel( aBtnPnt, aBtnSz );
-    }
+    m_pFormattingLB->SetDropDownLineCount( m_pFormattingLB->GetEntryCount() );
 }
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 {
-    sal_uInt16 nPos = m_aFormattingLB.GetSelectEntryPos();
-    sal_uLong nOptions = (sal_uLong)(void*)m_aFormattingLB.GetEntryData( nPos );
+    sal_uInt16 nPos = m_pFormattingLB->GetSelectEntryPos();
+    sal_uLong nOptions = (sal_uLong)(void*)m_pFormattingLB->GetEntryData( nPos );
     SetCurrentOptions( nOptions );
 
     return 0;
@@ -390,10 +343,10 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
         {
             if ( pItem->m_bIsDefault )
             {
-                sal_uInt16 nCount = static_cast< sal_uInt16 >( m_aOptionsLB.GetEntryCount() );
+                sal_uInt16 nCount = static_cast< sal_uInt16 >( m_pOptionsLB->GetEntryCount() );
                 for ( sal_uInt16 i = 0; i < nCount; ++i )
                 {
-                    bool bChecked = ( m_aOptionsLB.IsChecked(i) != sal_False );
+                    bool bChecked = ( m_pOptionsLB->IsChecked(i) != sal_False );
                     CompatibilityOptions eOption = static_cast< CompatibilityOptions >(i);
                     switch ( eOption )
                     {
@@ -426,12 +379,12 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 
 void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
 {
-    sal_uLong nCount = m_aOptionsLB.GetEntryCount();
+    sal_uLong nCount = m_pOptionsLB->GetEntryCount();
     OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         sal_Bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
-        m_aOptionsLB.CheckEntryPos( i, bChecked );
+        m_pOptionsLB->CheckEntryPos( i, bChecked );
         nOptions = nOptions >> 1;
     }
 }
@@ -483,7 +436,7 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
     if ( m_pWrtShell )
     {
         sal_uLong nSavedOptions = m_nSavedOptions;
-        sal_uLong nCount = m_aOptionsLB.GetEntryCount();
+        sal_uLong nCount = m_pOptionsLB->GetEntryCount();
         OSL_ENSURE( nCount <= 32, "SwCompatibilityOptPage::Reset(): entry overflow" );
 
         bool bSetParaSpaceMax = false;
@@ -491,7 +444,7 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             CompatibilityOptions nOption = static_cast< CompatibilityOptions >(i);
-            sal_Bool bChecked = m_aOptionsLB.IsChecked(i);
+            sal_Bool bChecked = m_pOptionsLB->IsChecked(i);
             sal_Bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
             if ( bChecked != bSavedChecked )
             {
@@ -549,8 +502,8 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
         if ( bSetParaSpaceMax )
         {
-            m_pWrtShell->SetParaSpaceMax( m_aOptionsLB.IsChecked( (sal_uInt16)COPT_ADD_SPACING ) );
-            m_pWrtShell->SetParaSpaceMaxAtPages( m_aOptionsLB.IsChecked( (sal_uInt16)COPT_ADD_SPACING_AT_PAGES ) );
+            m_pWrtShell->SetParaSpaceMax( m_pOptionsLB->IsChecked( (sal_uInt16)COPT_ADD_SPACING ) );
+            m_pWrtShell->SetParaSpaceMaxAtPages( m_pOptionsLB->IsChecked( (sal_uInt16)COPT_ADD_SPACING_AT_PAGES ) );
             bModified = sal_True;
         }
     }
@@ -563,7 +516,7 @@ sal_Bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 
 void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {
-    m_aOptionsLB.SelectEntryPos( 0 );
+    m_pOptionsLB->SelectEntryPos( 0 );
 
     sal_uLong nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );

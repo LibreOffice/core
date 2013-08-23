@@ -144,7 +144,6 @@
 #define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"
 #define HID_OLE_CHECKLB                                         "SW_HID_OLE_CHECKLB"
 
-#define HID_OPTCOMPATIBILITY_PAGE                               "SW_HID_OPTCOMPATIBILITY_PAGE"
 #define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"
 
 #define HID_PROPERTYPANEL_WRAP_SECTION          "SW_HID_PROPERTYPANEL_WRAP_SECTION"
