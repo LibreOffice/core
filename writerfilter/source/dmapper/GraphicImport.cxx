@@ -1364,11 +1364,13 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             {
                 // Shadow width is approximated by average of X and Y
                 table::ShadowFormat aShadow;
-                sal_Int32 nShadowColor = m_pImpl->nShadowColor;
+                sal_uInt32 nShadowColor = m_pImpl->nShadowColor & 0x00FFFFFF; // The shadow color we get is RGB only.
                 sal_Int32 nShadowWidth = (abs(m_pImpl->nShadowXDistance)
                                           + abs(m_pImpl->nShadowYDistance)) / 2;
 
                 aShadow.ShadowWidth = nShadowWidth;
+                sal_uInt8 nShadowTransparence = float(m_pImpl->nShadowTransparence) * 2.55;
+                nShadowColor |= (nShadowTransparence << 24); // Add transparence to the color.
                 aShadow.Color = nShadowColor;
                 // Distances -ve for top and right, +ve for bottom and left
                 if (m_pImpl->nShadowXDistance > 0)
