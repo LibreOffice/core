@@ -49,11 +49,11 @@ using namespace util;
 
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
-static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen& rEnd,
-                      std::vector<sal_uLong> &rArr, String& rRet,
-                      bool bRemoveSoftHyphen )
+static OUString
+lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
+             std::vector<sal_uLong> &rArr, bool const bRemoveSoftHyphen)
 {
-    rRet = rNd.GetTxt();
+    OUStringBuffer buf(rNd.GetTxt());
     rArr.clear();
 
     const SwpHints *pHts = rNd.GetpSwpHints();
@@ -140,13 +140,13 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
                            {
                             rArr.push_back( nAkt );
                             --rEnd;
-                            rRet.Erase( nAkt, 1 );
+                            buf.remove(nAkt, 1);
                            }
                         else
                            {
                             if ( bEmpty )
                                 aReplaced.push_back( nAkt );
-                            rRet.SetChar( nAkt, '\x7f' );
+                            buf[nAkt] = '\x7f';
                            }
                        }
                        break;
@@ -162,7 +162,7 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
         {
             rArr.push_back( nAkt );
             --rEnd;
-            rRet.Erase( nAkt, 1 );
+            buf.remove(nAkt, 1);
             ++nSoftHyphen;
         }
     }
@@ -171,15 +171,15 @@ static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen
     for( sal_uInt16 i = aReplaced.size(); i; )
     {
         const xub_StrLen nTmp = aReplaced[ --i ];
-        if( nTmp == rRet.Len() - 1 )
+        if (nTmp == buf.getLength() - 1)
         {
-            rRet.Erase( nTmp );
+            buf.truncate(nTmp);
             rArr.push_back( nTmp );
             --rEnd;
         }
     }
 
-    return rRet;
+    return buf.makeStringAndClear();
 }
 
 // skip all non SwPostIts inside the array
@@ -412,7 +412,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     bool bFound = false;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     const SwNode* pSttNd = &rNdIdx.GetNode();
-    String sCleanStr;
+    OUString sCleanStr;
     std::vector<sal_uLong> aFltArr;
     LanguageType eLastLang = 0;
     // if the search string contains a soft hypen,
@@ -432,11 +432,11 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     if( bSrchForward )
-        lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnd,
-                        aFltArr, sCleanStr, bRemoveSoftHyphens );
+        sCleanStr = lcl_CleanStr(*static_cast<SwTxtNode*>(pNode), nStart, nEnd,
+                        aFltArr, bRemoveSoftHyphens);
     else
-        lcl_CleanStr( *(SwTxtNode*)pNode, nEnd, nStart,
-                        aFltArr, sCleanStr, bRemoveSoftHyphens );
+        sCleanStr = lcl_CleanStr(*static_cast<SwTxtNode*>(pNode), nEnd, nStart,
+                        aFltArr, bRemoveSoftHyphens);
 
     SwScriptIterator* pScriptIter = 0;
     sal_uInt16 nSearchScript = 0;

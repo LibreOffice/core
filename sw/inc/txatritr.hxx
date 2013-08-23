@@ -24,8 +24,8 @@
 #include <editeng/langitem.hxx>
 #include <hintids.hxx>
 #include <deque>
+#include <tools/string.hxx>
 
-class String;
 class SwTxtNode;
 class SwTxtAttr;
 class SfxPoolItem;
@@ -33,20 +33,20 @@ class SfxPoolItem;
 
 class SwScriptIterator
 {
-    const String& rText;
-    xub_StrLen nChgPos;
+    const OUString& m_rText;
+    sal_Int32 m_nChgPos;
     sal_uInt16 nCurScript;
     bool bForward;
 
 public:
-    SwScriptIterator( const String& rStr, xub_StrLen nStart = 0,
+    SwScriptIterator( const OUString& rStr, xub_StrLen nStart = 0,
                       bool bFrwrd = true );
 
     bool Next();
 
     sal_uInt16 GetCurrScript() const        { return nCurScript; }
-    xub_StrLen GetScriptChgPos() const      { return nChgPos; }
-    const String& GetText() const           { return rText; }
+    xub_StrLen GetScriptChgPos() const      { return (m_nChgPos == -1) ? STRING_LEN : m_nChgPos; }
+    const OUString& GetText() const         { return m_rText; }
 };
 
 

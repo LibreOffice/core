@@ -30,11 +30,12 @@
 using namespace ::com::sun::star;
 
 
-SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bFrwrd )
-    : rText( rStr ),
-      nChgPos( rStr.Len() ),
-      nCurScript( i18n::ScriptType::WEAK ),
-      bForward( bFrwrd )
+SwScriptIterator::SwScriptIterator(
+            const OUString& rStr, xub_StrLen nStt, bool const bFrwrd)
+    : m_rText(rStr)
+    , m_nChgPos(rStr.getLength())
+    , nCurScript(i18n::ScriptType::WEAK)
+    , bForward(bFrwrd)
 {
     if( g_pBreakIt->GetBreakIter().is() )
     {
@@ -42,24 +43,27 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bF
             --nStt;
 
         xub_StrLen nPos = nStt;
-        nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
+        nCurScript = g_pBreakIt->GetBreakIter()->getScriptType(m_rText, nPos);
         if( i18n::ScriptType::WEAK == nCurScript )
         {
             if( nPos )
             {
                 nPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript(
-                                                rText, nPos, nCurScript );
-                if( nPos && nPos < rText.Len() )
+                                                m_rText, nPos, nCurScript);
+                if (nPos && nPos < m_rText.getLength())
                 {
                     nStt = --nPos;
-                    nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText,nPos);
+                    nCurScript =
+                        g_pBreakIt->GetBreakIter()->getScriptType(m_rText,nPos);
                 }
             }
         }
 
-        nChgPos = bForward ?
-                  (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rText, nStt, nCurScript ) :
-                  (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript( rText, nStt, nCurScript );
+        m_nChgPos = (bForward)
+            ?  g_pBreakIt->GetBreakIter()->endOfScript(
+                    m_rText, nStt, nCurScript)
+            :  g_pBreakIt->GetBreakIter()->beginOfScript(
+                    m_rText, nStt, nCurScript);
     }
 }
 
@@ -68,24 +72,26 @@ bool SwScriptIterator::Next()
     bool bRet = false;
     if( g_pBreakIt->GetBreakIter().is() )
     {
-        if ( bForward && nChgPos < rText.Len() )
+        if (bForward && (m_nChgPos != -1) && (m_nChgPos < m_rText.getLength()))
         {
-            nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript(
-                                                rText, nChgPos, nCurScript );
+            nCurScript =
+                g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
+            m_nChgPos = g_pBreakIt->GetBreakIter()->endOfScript(
+                                            m_rText, m_nChgPos, nCurScript);
             bRet = true;
         }
-        else if ( ! bForward && nChgPos )
+        else if (!bForward && m_nChgPos > 0)
         {
-            --nChgPos;
-            nCurScript = g_pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)g_pBreakIt->GetBreakIter()->beginOfScript(
-                                                rText, nChgPos, nCurScript );
+            --m_nChgPos;
+            nCurScript =
+                g_pBreakIt->GetBreakIter()->getScriptType(m_rText, m_nChgPos);
+            m_nChgPos = g_pBreakIt->GetBreakIter()->beginOfScript(
+                                                m_rText, m_nChgPos, nCurScript);
             bRet = true;
         }
     }
     else
-        nChgPos = rText.Len();
+        m_nChgPos = m_rText.getLength();
     return bRet;
 }
 
@@ -104,7 +110,7 @@ SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
 bool SwTxtAttrIterator::Next()
 {
     bool bRet = false;
-    if( nChgPos < aSIter.GetText().Len() )
+    if (nChgPos < aSIter.GetText().getLength())
     {
         bRet = true;
         if( !aStack.empty() )
