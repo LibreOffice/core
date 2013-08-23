@@ -31,7 +31,9 @@
 class _SfxMacroTabPage;
 class SvTabListBox;
 class Edit;
-class String;
+namespace rtl {
+    class OUString;
+}
 class SfxObjectShell;
 
 class SfxConfigFunctionListBox_Impl;
@@ -62,18 +64,18 @@ protected:
     void                        InitAndSetHandler();
     void                        FillEvents();
     void                        FillMacroList();
-    void                        EnableButtons( const String& rLanguage );
+    void                        EnableButtons( const rtl::OUString& rLanguage );
 
 public:
 
     virtual                     ~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
+    void                        AddEvent( const rtl::OUString & rEventName, sal_uInt16 nEventId );
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
 
-    virtual void                ScriptChanged( const String& rLanguage );
+    virtual void                ScriptChanged( const rtl::OUString& rLanguage );
 
     // --------- Erben aus der Basis -------------
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
@@ -81,7 +83,7 @@ public:
 
     void                        SetReadOnly( sal_Bool bSet );
     sal_Bool                        IsReadOnly() const;
-    void                        SelectEvent( const String& rEventName, sal_uInt16 nEventId );
+    void                        SelectEvent( const rtl::OUString& rEventName, sal_uInt16 nEventId );
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
