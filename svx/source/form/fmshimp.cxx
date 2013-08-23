@@ -1914,8 +1914,8 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
         xOldForm = getInternalForm(xOldForm);
         xNewForm = getInternalForm(xNewForm);
 
-        sal_Bool bDifferentForm = ( xOldForm.get() != xNewForm.get() );
-        sal_Bool bNeedSave = bDifferentForm && !_bNoSaveOldContent;
+        bool bDifferentForm = ( xOldForm.get() != xNewForm.get() );
+        bool bNeedSave = bDifferentForm && !_bNoSaveOldContent;
             // we save the content of the old form if we move to a new form, and saving old content is allowed
 
         if ( m_xActiveController.is() && bNeedSave )
@@ -2777,23 +2777,23 @@ class FmXFormShell::SuspendPropertyTracking
 {
 private:
     FmXFormShell&   m_rShell;
-    sal_Bool        m_bEnabled;
+    bool            m_bEnabled;
 
 public:
     SuspendPropertyTracking( FmXFormShell& _rShell )
         :m_rShell( _rShell )
-        ,m_bEnabled( sal_False )
+        ,m_bEnabled( false )
     {
         if ( m_rShell.IsTrackPropertiesEnabled() )
         {
             m_rShell.EnableTrackProperties( sal_False );
-            m_bEnabled = sal_True;
+            m_bEnabled = true;
         }
     }
 
     ~SuspendPropertyTracking( )
     {
-        if ( m_bEnabled )   // note that ( sal_False != m_bEnabled ) implies ( NULL != m_pShell )
+        if ( m_bEnabled )   // note that ( false != m_bEnabled ) implies ( NULL != m_pShell )
             m_rShell.EnableTrackProperties( sal_True );
     }
 };
@@ -3187,7 +3187,7 @@ void FmXFormShell::CreateExternalView()
     {
         FmXBoundFormFieldIterator aModelIterator(xCurrentNavController->getModel());
         Reference< XPropertySet> xCurrentModelSet;
-        sal_Bool bHaveUsableControls = sal_False;
+        bool bHaveUsableControls = false;
         while ((xCurrentModelSet = Reference< XPropertySet>(aModelIterator.Next(), UNO_QUERY)).is())
         {
             // the FmXBoundFormFieldIterator only supplies controls with a valid control source
@@ -3199,7 +3199,7 @@ void FmXFormShell::CreateExternalView()
                 case FormComponentType::CONTROL:
                     continue;
             }
-            bHaveUsableControls = sal_True;
+            bHaveUsableControls = true;
             break;
         }
 
@@ -3840,38 +3840,38 @@ IMPL_LINK( FmXFormShell, OnLoadForms, FmFormPage*, /*_pPage*/ )
 //------------------------------------------------------------------------------
 namespace
 {
-    sal_Bool lcl_isLoadable( const Reference< XInterface >& _rxLoadable )
+    bool lcl_isLoadable( const Reference< XInterface >& _rxLoadable )
     {
         // determines whether a form should be loaded or not
         // if there is no datasource or connection there is no reason to load a form
         Reference< XPropertySet > xSet( _rxLoadable, UNO_QUERY );
         if ( !xSet.is() )
-            return sal_False;
+            return false;
         try
         {
             Reference< XConnection > xConn;
             if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
-                return sal_True;
+                return true;
 
             // is there already a active connection
             xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
             if ( xConn.is() )
-                return sal_True;
+                return true;
 
             OUString sPropertyValue;
             OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
             if ( !sPropertyValue.isEmpty() )
-                return sal_True;
+                return true;
 
             OSL_VERIFY( xSet->getPropertyValue( FM_PROP_URL ) >>= sPropertyValue );
             if ( !sPropertyValue.isEmpty() )
-                return sal_True;
+                return true;
         }
         catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return sal_False;
+        return false;
     }
 }
 
@@ -3908,11 +3908,11 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
         if ( xForms.is() )
         {
             Reference< XLoadable >  xForm;
-            sal_Bool                bFormWasLoaded = sal_False;
+            bool                    bFormWasLoaded = false;
             for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
             {
                 xForms->getByIndex( j ) >>= xForm;
-                bFormWasLoaded = sal_False;
+                bFormWasLoaded = false;
                 // a database form must be loaded for
                 try
                 {
@@ -3925,7 +3925,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                     {
                         if ( xForm->isLoaded() )
                         {
-                            bFormWasLoaded = sal_True;
+                            bFormWasLoaded = true;
                             xForm->unload();
                         }
                     }

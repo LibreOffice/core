@@ -130,7 +130,7 @@ class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
     ::comphelper::OPropertyChangeMultiplexer*   m_pRealListener;
     sal_uInt16                          m_nId;
     sal_Int16                           m_nSuspended;
-    sal_Bool                            m_bDisposed : 1;
+    bool                                m_bDisposed : 1;
 
 public:
     GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& xField, sal_uInt16 _nId);
@@ -150,7 +150,7 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
     ,m_pRealListener(NULL)
     ,m_nId(_nId)
     ,m_nSuspended(0)
-    ,m_bDisposed(sal_False)
+    ,m_bDisposed(false)
 {
     DBG_CTOR(GridFieldValueListener, NULL);
     if (_rField.is())
@@ -192,7 +192,7 @@ void GridFieldValueListener::dispose()
         m_pRealListener = NULL;
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
     m_rParent.FieldListenerDisposing(m_nId);
 }
 
@@ -1312,7 +1312,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     // _after_ setting the mode because this results in an ActivateCell
     DeactivateCell();
 
-    sal_Bool bInsertChanged = (nOpt & OPT_INSERT) != (m_nOptions & OPT_INSERT);
+    bool bInsertChanged = (nOpt & OPT_INSERT) != (m_nOptions & OPT_INSERT);
     m_nOptions = nOpt;
         // we need to set this before the code below because it indirectly uses m_nOptions
 
@@ -1858,7 +1858,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     }
 
     // ignore any updates implicit made
-    sal_Bool bDisablePaint = !bUpdateCursor && IsPaintEnabled();
+    bool bDisablePaint = !bUpdateCursor && IsPaintEnabled();
     if (bDisablePaint)
         EnablePaint(sal_False);
 
@@ -1866,7 +1866,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     Reference< XPropertySet > xSet = m_pSeekCursor->getPropertySet();
     sal_Int32 nCacheSize = 0;
     xSet->getPropertyValue(FM_PROP_FETCHSIZE) >>= nCacheSize;
-    sal_Bool bCacheAligned   = sal_False;
+    bool bCacheAligned   = false;
     // Nach der Initialisierung (m_nSeekPos < 0) keine Cursorbewegung, da bereits auf den ersten
     // Satz positioniert
     long nDelta = nNewTopRow - GetTopRow();
@@ -1881,7 +1881,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         xSet->setPropertyValue(FM_PROP_FETCHSIZE, aCacheSize);
         // jetzt auf alle Faelle den Cursor anpassen
         bUpdateCursor = sal_True;
-        bCacheAligned = sal_True;
+        bCacheAligned = true;
         nLimit = nLinesOnScreen;
     }
 
@@ -2103,7 +2103,7 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
             }
             else
             {
-                sal_Bool bNewRowInserted = sal_False;
+                bool bNewRowInserted = false;
                 // Should we go to the insertrow ?
                 if (IsInsertionRow(nNewRow))
                 {
@@ -2116,7 +2116,7 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
                         Reference< XResultSetUpdate > xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
-                    bNewRowInserted = sal_True;
+                    bNewRowInserted = true;
                 }
                 else
                 {
@@ -3261,7 +3261,7 @@ sal_Bool DbGridControl::SaveRow()
 
     BeginCursorAction();
     sal_Bool bAppending = m_xCurrentRow->IsNew();
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
     try
     {
         Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
@@ -3269,7 +3269,7 @@ sal_Bool DbGridControl::SaveRow()
             xUpdateCursor->insertRow();
         else
             xUpdateCursor->updateRow();
-        bSuccess = sal_True;
+        bSuccess = true;
     }
     catch(SQLException&)
     {
