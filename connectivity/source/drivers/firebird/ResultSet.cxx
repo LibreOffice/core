@@ -106,11 +106,12 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
     else if (fetchStat == 100L) // END OF DATASET
     {
         // TODO: shut the statement
+        m_bIsAfterLastRow = true;
         return sal_False;
     }
     else
     {
-        SAL_WARN("connectivity.firebird", "Error when populating data");
+        SAL_WARN("connectivity.firebird", "Error when fetching data");
         // Throws sql exception as appropriate
         evaluateStatusVector(m_statusVector, "isc_dsql_fetch", *this);
         return sal_False;
