@@ -28,6 +28,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include "com/sun/star/uno/Reference.hxx"
 
 #include "pointersymbol.hxx"
@@ -106,6 +107,7 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos( UnoViewSharedPtr const & rView )
     const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
                                                       uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
+
     return basegfx::B2DPoint(
         // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
         std::min<sal_Int32>( 0, LEFT_BORDER_SPACE ),
@@ -120,12 +122,13 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(
                                                       uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
 
-    basegfx::B2DPoint newPos(
-        // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
-        realSize.Width * pos.X,
-        realSize.Height * pos.Y);
+    const geometry::IntegerSize2D realTranslationOffset ( rView->getTranslationOffset() );
 
-    // std::cerr << "calcSpritePos : (" << newPos.getX() << ","<<newPos.getY() << ")" << std::endl;
+
+    basegfx::B2DPoint newPos(
+        realTranslationOffset.Width + (realSize.Width - 2 * realTranslationOffset.Width) * pos.X,
+        realTranslationOffset.Height + (realSize.Height - 2 * realTranslationOffset.Height) * pos.Y);
+
 
     return newPos;
 }
