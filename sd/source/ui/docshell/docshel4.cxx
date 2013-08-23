@@ -243,9 +243,7 @@ void DrawDocShell::UpdateRefDevice()
  */
 sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    sal_Bool bRet = sal_False;
-
-    bRet = SfxObjectShell::InitNew( xStorage );
+    sal_Bool bRet = SfxObjectShell::InitNew( xStorage );
 
     Rectangle aVisArea( Point(0, 0), Size(14100, 10000) );
     SetVisArea(aVisArea);
@@ -350,15 +348,13 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
     if( mpViewShell )
         pWait = new WaitObject( (Window*) mpViewShell->GetActiveWindow() );
 
-    sal_Bool bRet = sal_False;
+    mpDoc->NewOrLoadCompleted( NEW_DOC );
+    mpDoc->CreateFirstPages();
+    mpDoc->StopWorkStartupDelay();
 
-        mpDoc->NewOrLoadCompleted( NEW_DOC );
-        mpDoc->CreateFirstPages();
-        mpDoc->StopWorkStartupDelay();
-
-        // TODO/LATER: nobody is interested in the error code?!
-        ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+    // TODO/LATER: nobody is interested in the error code?!
+    ErrCode nError = ERRCODE_NONE;
+    sal_Bool bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
 
     // tell SFX to change viewshell when in preview mode
