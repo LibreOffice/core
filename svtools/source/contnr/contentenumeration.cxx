@@ -198,7 +198,6 @@ namespace svt
             {
             }
 
-            bool bCancelled = false;
             if ( xResultSet.is() )
             {
                 Reference< XRow > xRow( xResultSet, UNO_QUERY );
@@ -209,6 +208,7 @@ namespace svt
                     SortingData_Impl* pData;
                     DateTime aDT;
 
+                    bool bCancelled = false;
                     while ( !bCancelled && xResultSet->next() )
                     {
                         sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
