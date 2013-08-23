@@ -420,7 +420,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     }
 }
 
-SvxRTFStyleType* EditRTFParser::FindStyleSheet( const XubString& rName )
+SvxRTFStyleType* EditRTFParser::FindStyleSheet( const OUString& rName )
 {
     SvxRTFStyleTbl& rTable = GetStyleTbl();
     for ( SvxRTFStyleTbl::iterator it = rTable.begin(); it != rTable.end(); ++it )

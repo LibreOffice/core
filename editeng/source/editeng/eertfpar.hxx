@@ -90,7 +90,7 @@ protected:
     virtual void        CalcValue();
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
-    SvxRTFStyleType*    FindStyleSheet( const String& rName );
+    SvxRTFStyleType*    FindStyleSheet( const OUString& rName );
     void                AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd );
     void                ReadField();
     void                SkipGroup();

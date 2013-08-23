@@ -89,7 +89,7 @@ typedef std::deque< SvxRTFItemStackType* > SvxRTFItemStack;
 struct SvxRTFStyleType
 {
     SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
-    String sName;
+    OUString sName;
     sal_uInt16 nBasedOn, nNext;
     sal_Bool bBasedOnIsSet;
     sal_uInt8 nOutlineNo;
