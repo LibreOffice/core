@@ -1412,14 +1412,14 @@ int Desktop::Main()
 
     SetSplashScreenProgress(10);
 
-    UserInstall::UserInstallStatus inst_fin = UserInstall::finalize();
-    if (inst_fin != UserInstall::Ok && inst_fin != UserInstall::Created)
+    userinstall::Status inst_fin = userinstall::finalize();
+    if (inst_fin != userinstall::EXISTED && inst_fin != userinstall::CREATED)
     {
         SAL_WARN( "desktop.app", "userinstall failed");
-        if ( inst_fin == UserInstall::E_NoDiskSpace )
+        if ( inst_fin == userinstall::ERROR_NO_SPACE )
             HandleBootstrapErrors(
                 BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
-        else if ( inst_fin == UserInstall::E_NoWriteAccess )
+        else if ( inst_fin == userinstall::ERROR_CANT_WRITE )
             HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS, OUString() );
         else
             HandleBootstrapErrors( BE_USERINSTALL_FAILED, OUString() );
@@ -1529,7 +1529,7 @@ int Desktop::Main()
         if ( bAbort )
             return EXIT_FAILURE;
 
-        if (inst_fin == UserInstall::Created)
+        if (inst_fin == userinstall::CREATED)
         {
             Migration::migrateSettingsIfNecessary();
         }

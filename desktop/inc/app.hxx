@@ -49,8 +49,6 @@ class AcceptorMap : public std::map< OUString, css::uno::Reference<css::lang::XI
 struct ConvertData;
 class Desktop : public Application
 {
-    friend class UserInstall;
-
     int doShutdown();
 
     public:

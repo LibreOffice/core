@@ -17,31 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
+#define INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
+#include "sal/config.h"
 
-namespace desktop
-{
+namespace desktop { namespace userinstall {
 
-class UserInstall
-{
-public:
-    enum UserInstallStatus {
-        Ok,                     // no error, existing user installation found
-        Created,                // no error, new user installation created
-        E_Creation,             // error while creating user install
-        E_InvalidBaseinstall,   // corrupt base installation
-        E_SetupFailed,          // external setup did not run correctly
-        E_Configuration,        // error while accessing configuration
-        E_License,              // License not accepted
-        E_NoDiskSpace,          // not enough disk space
-        E_NoWriteAccess,        // no write access
-        E_Unknown               // unknown error
-    };
-
-    static UserInstallStatus finalize();
+enum Status {
+    EXISTED,
+    CREATED,
+    ERROR_NO_SPACE,
+    ERROR_CANT_WRITE,
+    ERROR_OTHER
 };
-}
+
+Status finalize();
+
+} }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
