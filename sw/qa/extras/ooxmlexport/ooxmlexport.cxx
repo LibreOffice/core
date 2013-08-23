@@ -111,6 +111,7 @@ public:
     void testTableFloatingMargins();
     void testFdo44689_start_page_7();
     void testFdo67737();
+    void testTransparentShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -198,6 +199,7 @@ void Test::run()
         {"table-floating-margins.docx", &Test::testTableFloatingMargins},
         {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
         {"fdo67737.docx", &Test::testFdo67737},
+        {"transparent-shadow.docx", &Test::testTransparentShadow},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1220,6 +1222,15 @@ void Test::testFdo67737()
 
     // Shouldn't reach here
     CPPUNIT_FAIL("Did not find MirroredY=true property");
+}
+
+void Test::testTransparentShadow()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xPicture(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xPicture, "ShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7f808080), aShadow.Color);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

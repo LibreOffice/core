@@ -2294,6 +2294,18 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 #endif
 }
 
+// Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
+OString lcl_ConvertTransparency(const Color& rColor)
+{
+    if (rColor.GetTransparency() > 0)
+    {
+        sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
+        return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
+    }
+    else
+        return OString("");
+}
+
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode )
 {
     OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode ) - some stuff still missing" );
@@ -2653,6 +2665,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         double nShadowDist = sqrt((aShadowItem.GetWidth()*aShadowItem.GetWidth())*2.0);
         OString aShadowDist( OString::number( TwipsToEMU( nShadowDist ) ) );
         OString aShadowColor = msfilter::util::ConvertColor( aShadowItem.GetColor() );
+        OString aShadowAlpha = lcl_ConvertTransparency(aShadowItem.GetColor());
         sal_uInt32 nShadowDir = 0;
         switch ( aShadowItem.GetLocation() )
         {
@@ -2670,8 +2683,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         m_pSerializer->startElementNS( XML_a, XML_outerShdw,
                                        XML_dist, aShadowDist.getStr(),
                                        XML_dir, aShadowDir.getStr(), FSEND );
-        m_pSerializer->singleElementNS( XML_a, XML_srgbClr,
-                                        XML_val, aShadowColor.getStr(), FSEND );
+        if (aShadowAlpha.isEmpty())
+            m_pSerializer->singleElementNS( XML_a, XML_srgbClr,
+                                            XML_val, aShadowColor.getStr(), FSEND );
+        else
+        {
+            m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr(), FSEND);
+            m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr(), FSEND);
+            m_pSerializer->endElementNS(XML_a, XML_srgbClr);
+        }
         m_pSerializer->endElementNS( XML_a, XML_outerShdw );
         m_pSerializer->endElementNS( XML_a, XML_effectLst );
     }
