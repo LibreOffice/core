@@ -40,67 +40,11 @@ String STR_FILE_NOT_FOUND
     Text [ en-US ] = "The file, \"%1\" in the \"%2\" path could not be found.";
 };
 
-TabDialog DLG_MULTI_TOX
+String STR_USER_DEFINED_INDEX
 {
-    HelpID = HID_MULTI_TOX_DLG;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-
-    Moveable = TRUE ;
-
-    TabControl 1
-    {
-        OutputSize = TRUE ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier =  TP_TOX_SELECT;
-                PageResID = TP_TOX_SELECT;
-                Text [ en-US ] = "Index/Table";
-            };
-            PageItem
-            {
-                Identifier =  TP_TOX_ENTRY;
-                PageResID = TP_TOX_ENTRY;
-                Text [ en-US ] = "Entries";
-            };
-            PageItem
-            {
-                Identifier =  TP_TOX_STYLES;
-                PageResID = TP_TOX_STYLES;
-                Text [ en-US ] = "Styles";
-            };
-            PageItem
-            {
-                Identifier = TP_COLUMN ;
-                PageResID = TP_COLUMN ;
-                Text [ en-US ] = "Columns" ;
-            };
-            PageItem
-            {
-                Identifier = TP_BACKGROUND ;
-                PageResID = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-            };
-        };
-    };
-    Window WIN_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 0 , 12 ) ;
-        Size = MAP_APPFONT (  150, 188 ) ;
-    };
-    String ST_USERDEFINEDINDEX
-    {
-        Text [ en-US ] = "User-Defined Index";
-    };
-    CheckBox CB_SHOWEXAMPLE
-    {
-        Size = MAP_APPFONT ( 45, 10 ) ;
-        Text [ en-US ] = "Preview";
-    };
-    Text [ en-US ] = "Insert Index/Table";
+    Text [ en-US ] = "User-Defined Index";
 };
+
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
 {

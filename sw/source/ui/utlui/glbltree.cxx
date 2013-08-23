@@ -875,7 +875,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( DLG_MULTI_TOX,
+                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,

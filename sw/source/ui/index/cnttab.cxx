@@ -224,22 +224,25 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
                     SwTOXBase* pCurTOX,
-                    sal_uInt16 nToxType, sal_Bool bGlobal) :
-        SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
-        aExampleContainerWIN(this, SW_RES(WIN_EXAMPLE)),
-        aShowExampleCB( this, SW_RES(CB_SHOWEXAMPLE)),
-        pMgr( new SwTOXMgr( &rShell ) ),
-        rSh(rShell),
-        pExampleFrame(0),
-        pParamTOXBase(pCurTOX),
-        sUserDefinedIndex(SW_RES(ST_USERDEFINEDINDEX)),
-        nInitialTOXType(nToxType),
-
-        bEditTOX(sal_False),
-        bExampleCreated(sal_False),
-        bGlobalFlag(bGlobal)
+                    sal_uInt16 nToxType, sal_Bool bGlobal)
+    : SfxTabDialog(pParent, "TocDialog",
+        "modules/swriter/ui/tocdialog.ui", &rSet)
+    , pMgr( new SwTOXMgr( &rShell ) )
+    , rSh(rShell)
+    , pExampleFrame(0)
+    , pParamTOXBase(pCurTOX)
+    , sUserDefinedIndex(SW_RESSTR(STR_USER_DEFINED_INDEX))
+    , nInitialTOXType(nToxType)
+    , bEditTOX(false)
+    , bExampleCreated(false)
+    , bGlobalFlag(bGlobal)
 {
-    FreeResource();
+    get(m_pShowExampleCB, "showexample");
+    get(m_pExampleContainerWIN, "example");
+    Size aWinSize(LogicToPixel(Size(150, 188), MapMode(MAP_APPFONT)));
+    m_pExampleContainerWIN->set_width_request(aWinSize.Width());
+    m_pExampleContainerWIN->set_height_request(aWinSize.Height());
+    m_pExampleContainerWIN->SetSizePixel(aWinSize);
 
     eCurrentTOXType.eType = TOX_CONTENT;
     eCurrentTOXType.nIndex = 0;
@@ -303,36 +306,31 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AddTabPage(TP_TOX_SELECT, SwTOXSelectTabPage::Create, 0);
-    AddTabPage(TP_TOX_STYLES, SwTOXStylesTabPage::Create, 0);
-    AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ),  0 );
-    AddTabPage(TP_TOX_ENTRY, SwTOXEntryTabPage::Create,     0);
+    m_nSelectId = AddTabPage("index", SwTOXSelectTabPage::Create, 0);
+    m_nStylesId = AddTabPage("styles", SwTOXStylesTabPage::Create, 0);
+    m_nColumnId = AddTabPage("columns", SwColumnPage::Create, 0);
+    m_nBackGroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
+    m_nEntriesId = AddTabPage("entries", SwTOXEntryTabPage::Create, 0);
     if(!pCurTOX)
-        SetCurPageId(TP_TOX_SELECT);
+        SetCurPageId(m_nSelectId);
 
-    aShowExampleCB.SetClickHdl(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
+    m_pShowExampleCB->SetClickHdl(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
 
-    aShowExampleCB.Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
+    m_pShowExampleCB->Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
 
-    aExampleContainerWIN.SetAccessibleName(aShowExampleCB.GetText());
+    m_pExampleContainerWIN->SetAccessibleName(m_pShowExampleCB->GetText());
     SetViewAlign( WINDOWALIGN_LEFT );
     // SetViewWindow does not work if the dialog is visible!
 
-    if(!aShowExampleCB.IsChecked())
-        SetViewWindow( &aExampleContainerWIN );
+    if(!m_pShowExampleCB->IsChecked())
+        SetViewWindow(m_pExampleContainerWIN);
 
-    Point aOldPos = GetPosPixel();
     ShowPreviewHdl(0);
-     Point aNewPos = GetPosPixel();
-    //72040: initial position may be left of the view - that has to be corrected
-    if(aNewPos.X() < 0)
-        SetPosPixel(aOldPos);
 }
 
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
-    SW_MOD()->GetModuleConfig()->SetShowIndexPreview(aShowExampleCB.IsChecked());
+    SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_pShowExampleCB->IsChecked());
 
     // fdo#38515 Avoid setting focus on deleted controls in the destructors
     EnableInput( sal_False );
@@ -353,21 +351,21 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 
 void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    if( TP_BACKGROUND == nId  )
+    if (nId == m_nBackGroundId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
         rPage.PageCreated(aSet);
     }
-    else if(TP_COLUMN == nId )
+    else if(nId == m_nColumnId)
     {
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
 
         ((SwColumnPage&)rPage).SetPageWidth(rSize.GetWidth());
     }
-    else if(TP_TOX_ENTRY == nId)
+    else if (nId == m_nEntriesId)
         ((SwTOXEntryTabPage&)rPage).SetWrtShell(rSh);
-    if(TP_TOX_SELECT == nId)
+    else if (nId == m_nSelectId)
     {
         ((SwTOXSelectTabPage&)rPage).SetWrtShell(rSh);
         if(USHRT_MAX != nInitialTOXType)
@@ -482,9 +480,9 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     return pDesc;
 }
 
-IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
+IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
 {
-    if(aShowExampleCB.IsChecked())
+    if(m_pShowExampleCB->IsChecked())
     {
         if(!pExampleFrame && !bExampleCreated)
         {
@@ -527,33 +525,23 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 String sTemp(sTemplate);
                 pExampleFrame = new SwOneExampleFrame(
-                        aExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemp);
+                        *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemp);
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {
                     pExampleFrame->CreateErrorMessage(0);
                 }
             }
-            aShowExampleCB.Show(pExampleFrame && pExampleFrame->IsServiceAvailable());
+            m_pShowExampleCB->Show(pExampleFrame && pExampleFrame->IsServiceAvailable());
         }
     }
-    sal_Bool bSetViewWindow = aShowExampleCB.IsChecked()
+    sal_Bool bSetViewWindow = m_pShowExampleCB->IsChecked()
         && pExampleFrame && pExampleFrame->IsServiceAvailable();
 
-    aExampleContainerWIN.Show( bSetViewWindow );
-    SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : 0 );
+    m_pExampleContainerWIN->Show( bSetViewWindow );
+    SetViewWindow( bSetViewWindow ? m_pExampleContainerWIN : 0 );
 
-    Window *pTopmostParent = this;
-    while(pTopmostParent->GetParent())
-        pTopmostParent = pTopmostParent->GetParent();
-    ::Rectangle aRect(GetClientWindowExtentsRelative(pTopmostParent));
-    ::Point aPos = aRect.TopLeft();
-    Size aSize = GetSizePixel();
-    if(pBox)
-        AdjustLayout();
-    long nDiffWidth = GetSizePixel().Width() - aSize.Width();
-    aPos.X() -= nDiffWidth;
-    SetPosPixel(aPos);
+    setOptimalLayoutSize();
 
     return 0;
 }

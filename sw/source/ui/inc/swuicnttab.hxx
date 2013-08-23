@@ -61,10 +61,16 @@ struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
-    Window                  aExampleContainerWIN;
-    CheckBox                aShowExampleCB;
+    Window*                 m_pExampleContainerWIN;
+    CheckBox*               m_pShowExampleCB;
     SwTOXMgr*               pMgr;
     SwWrtShell&             rSh;
+
+    sal_uInt16              m_nSelectId;
+    sal_uInt16              m_nStylesId;
+    sal_uInt16              m_nColumnId;
+    sal_uInt16              m_nBackGroundId;
+    sal_uInt16              m_nEntriesId;
 
     SwOneExampleFrame*      pExampleFrame;
 
@@ -76,19 +82,19 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 
     CurTOXType              eCurrentTOXType;
 
-    String                  sUserDefinedIndex;
-    sal_uInt16                  nTypeCount;
-    sal_uInt16                  nInitialTOXType;
+    OUString                sUserDefinedIndex;
+    sal_uInt16              nTypeCount;
+    sal_uInt16              nInitialTOXType;
 
-    sal_Bool                    bEditTOX;
-    sal_Bool                    bExampleCreated;
-    sal_Bool                    bGlobalFlag;
+    sal_Bool                bEditTOX;
+    sal_Bool                bExampleCreated;
+    sal_Bool                bGlobalFlag;
 
     virtual short       Ok();
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
-    DECL_LINK(CreateExample_Hdl, void* );
-    DECL_LINK(ShowPreviewHdl, CheckBox*);
+    DECL_LINK(CreateExample_Hdl, void*);
+    DECL_LINK(ShowPreviewHdl, void*);
 
 public:
     SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,

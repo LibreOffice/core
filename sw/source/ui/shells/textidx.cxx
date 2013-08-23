@@ -142,7 +142,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( DLG_MULTI_TOX,
+            AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
                                                         USHRT_MAX, bGlobal);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");

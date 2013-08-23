@@ -195,9 +195,7 @@
 //TabDialog
 #define WIN_EXAMPLE         1
 
-#define ST_USERDEFINEDINDEX 13
 #define CB_SHOWEXAMPLE      14
-
 
 //ButtonMenu
 #define MN_AUTOMARK_OPEN    1

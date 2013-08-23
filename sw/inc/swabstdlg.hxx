@@ -435,7 +435,7 @@ public:
                                                 Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0; //add for SwSvxNumBulletTabDialog, SwOutlineTabDialog
-    virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog( int nResId,
+    virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog(
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,

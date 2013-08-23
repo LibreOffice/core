@@ -1066,24 +1066,14 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResI
     return 0;
 }
 
-AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog( int nResId,
+AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, sal_uInt16 nToxType,
-                                                sal_Bool bGlobal ) //add for SwMultiTOXTabDialog
+                                                sal_Bool bGlobal) //add for SwMultiTOXTabDialog
 {
-    SwMultiTOXTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MULTI_TOX :
-            pDlg = new SwMultiTOXTabDialog( pParent, rSet, rShell, pCurTOX, nToxType, bGlobal );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractMultiTOXTabDialog_Impl( pDlg );
-    return 0;
+    SwMultiTOXTabDialog* pDlg = new SwMultiTOXTabDialog( pParent, rSet, rShell, pCurTOX, nToxType, bGlobal );
+    return new AbstractMultiTOXTabDialog_Impl( pDlg );
 }
 
 AbstractEditRegionDlg * SwAbstractDialogFactory_Impl::CreateEditRegionDlg(Window* pParent, SwWrtShell& rWrtSh) //add for SwEditRegionDlg
@@ -1164,7 +1154,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     CreateTabPage pRet = 0;
     switch ( nId )
     {
-        case TP_OPTCOMPATIBILITY_PAGE :
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE :
             pRet = SwCompatibilityOptPage::Create;
             break;
@@ -1174,12 +1163,10 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         case TP_OPTCAPTION_PAGE:
         case RID_SW_TP_OPTCAPTION_PAGE:
             return SwCaptionOptPage::Create;
-        case TP_CONTENT_OPT :
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
             pRet = SwContentOptPage::Create;
             break;
-        case TP_OPTSHDWCRSR :
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
             pRet = SwShdwCrsrOptionsTabPage::Create;
@@ -1188,7 +1175,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             pRet = SwRedlineOptionsTabPage::Create;
             break;
         case RID_SW_TP_OPTTEST_PAGE :
-        case TP_OPTTEST_PAGE :
 #ifdef DBG_UTIL
             pRet = SwTestTabPage::Create;
 #endif
@@ -1198,7 +1184,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         case RID_SW_TP_OPTPRINT_PAGE:
             pRet = SwAddPrinterTabPage::Create;
             break;
-        case TP_STD_FONT :
         case RID_SW_TP_STD_FONT:
         case RID_SW_TP_STD_FONT_CJK:
         case RID_SW_TP_STD_FONT_CTL:

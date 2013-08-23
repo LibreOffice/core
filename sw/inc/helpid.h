@@ -129,7 +129,6 @@
 #define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
 #define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
 
-#define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
 #define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"
 
