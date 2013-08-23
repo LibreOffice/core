@@ -204,10 +204,10 @@ void Test::testCharacterBorder()
 
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"ParaShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 0L);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, sal_Int32(0));
         CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 0);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 0);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Location, table::ShadowLocation(0));
+        CPPUNIT_ASSERT_EQUAL(aShadow.ShadowWidth, sal_Int16(0));
     }
 
     // Character border for first paragraph
@@ -242,10 +242,10 @@ void Test::testCharacterBorder()
 
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 16724787L);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, sal_Int32(16724787));
         CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 2);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 280);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Location, table::ShadowLocation(2));
+        CPPUNIT_ASSERT_EQUAL(aShadow.ShadowWidth, sal_Int16(280));
 
         // Check autostyle
         {
@@ -325,10 +325,10 @@ void Test::testCharacterBorder()
 
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(aShadow.Color, 0L);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Color, sal_Int32(0));
         CPPUNIT_ASSERT_EQUAL((bool)aShadow.IsTransparent, false);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.Location, 3);
-        CPPUNIT_ASSERT_EQUAL((int)aShadow.ShadowWidth, 79);
+        CPPUNIT_ASSERT_EQUAL(aShadow.Location, table::ShadowLocation(3));
+        CPPUNIT_ASSERT_EQUAL(aShadow.ShadowWidth, sal_Int16(79));
 
         // Check character style
         {
