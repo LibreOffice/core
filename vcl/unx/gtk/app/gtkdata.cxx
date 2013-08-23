@@ -513,12 +513,11 @@ XIOErrorHandler aOrigXIOErrorHandler = NULL;
 
 int XIOErrorHdl(Display *pDisplay)
 {
-    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
-    {
-        pthread_exit(NULL);
-        return 0;
-    }
-    return aOrigXIOErrorHandler ? aOrigXIOErrorHandler(pDisplay) : 0;
+    if (aOrigXIOErrorHandler)
+        aOrigXIOErrorHandler(pDisplay);
+    _exit(1);
+        // avoid crashes in unrelated threads that still run while atexit
+        // handlers are in progress
 }
 
 GtkData::~GtkData()
