@@ -2341,6 +2341,8 @@ void CmisPropertiesControl::setScrollRange()
 {
     sal_Int32 nScrollOffset = m_pPropertiesWin.GetItemHeight();
     sal_Int32 nVisibleItems = m_rScrolledWindow.getVisibleChildSize().Height() / nScrollOffset;
+    if ( !nVisibleItems )
+        nVisibleItems =  m_pPropertiesWin.GetLineCount() / 2;
     m_rVertScroll.SetPageSize( nVisibleItems - 1 );
     m_rVertScroll.SetVisibleSize( nVisibleItems );
     m_rVertScroll.Scroll();
@@ -2437,6 +2439,7 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet& rItemSet )
                                    aCmisProps[i].Choices,
                                    aCmisProps[i].Value );
     }
+    m_pPropertiesCtrl.setScrollRange();
 }
 
 int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
