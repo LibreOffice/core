@@ -23,6 +23,7 @@
 #include <rtl/strbuf.hxx>
 
 #include "i18nlangtag/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
 
 // =======================================================================
 
@@ -670,6 +671,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         {
             rLocale.Language = OUString::createFromAscii( pEntry->maLangStr );
             rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
+            rLocale.Variant  = OUString();
             return;
         }
         ++pEntry;
@@ -686,6 +688,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         {
             rLocale.Language = OUString::createFromAscii( pNoneStdEntry->maLangStr );
             rLocale.Country  = OUString::createFromAscii( pNoneStdEntry->maCountry );
+            rLocale.Variant  = OUString();
             return;
         }
         ++pNoneStdEntry;
@@ -698,17 +701,19 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     {
         if ( pPrivateEntry->mnLang == nLang )
         {
-            rLocale.Language = OUString::createFromAscii( pPrivateEntry->mpLangStr );
+            rLocale.Language = I18NLANGTAG_QLT;
             rLocale.Country  = OUString();
+            rLocale.Variant  = OUString::createFromAscii( pPrivateEntry->mpLangStr );
             return;
         }
         ++pPrivateEntry;
     }
     while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
-    // not found
+    // Not found. The effective result is the empty SYSTEM locale.
     rLocale.Language = OUString();
     rLocale.Country  = OUString();
+    rLocale.Variant  = OUString();
 }
 
 // -----------------------------------------------------------------------
