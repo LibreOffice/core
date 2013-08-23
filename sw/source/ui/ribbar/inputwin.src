@@ -269,24 +269,5 @@ String STR_TBL_FORMULA
 {
     Text [ en-US ] = "Text formula" ;
 };
-#define TB_INPUT  \
-    ToolBoxItem\
-    {\
-        Identifier = FN_FORMULA_CALC ; \
-        HelpID = HID_TBX_FORMULA_CALC ; \
-        Text [ en-US ] = "Formula" ; \
-    };\
-    ToolBoxItem\
-    {\
-        Identifier = FN_FORMULA_CANCEL ; \
-        HelpId = HID_TBX_FORMULA_CANCEL ; \
-        Text [ en-US ] = "Cancel" ; \
-    };\
-    ToolBoxItem\
-    {\
-        Identifier = FN_FORMULA_APPLY ; \
-        HelpID = HID_TBX_FORMULA_APPLY ; \
-        Text [ en-US ] = "Apply" ; \
-    };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
