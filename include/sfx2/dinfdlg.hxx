@@ -514,6 +514,29 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
+struct CmisValue : public VclBuilderContainer
+{
+    Edit*   m_aValueEdit;
+
+    CmisValue( Window* pParent, const OUString& aStr );
+};
+
+struct CmisDateTime : public VclBuilderContainer
+{
+    DateField*  m_aDateField;
+    TimeField*  m_aTimeField;
+
+    CmisDateTime( Window* pParent, const ::com::sun::star::util::DateTime& aDateTime );
+};
+
+struct CmisYesNo : public VclBuilderContainer
+{
+    RadioButton* m_aYesButton;
+    RadioButton* m_aNoButton;
+
+    CmisYesNo( Window* pParent, bool bValue);
+};
+
 // struct CmisPropertyLine ---------------------------------------------
 
 struct CmisPropertyLine : public VclBuilderContainer
@@ -527,14 +550,13 @@ struct CmisPropertyLine : public VclBuilderContainer
     bool                          m_bOpenChoice;
     FixedText*                    m_aName;
     FixedText*                    m_aType;
-    Edit*                         m_aValueEdit;
-    DateField*                    m_aDateField;
-    TimeField*                    m_aTimeField;
-    RadioButton*                  m_aYesButton;
-    RadioButton*                  m_aNoButton;
-
+    std::vector< CmisValue* >     m_aValues;
+    std::vector< CmisDateTime* >  m_aDateTimes;
+    std::vector< CmisYesNo* >     m_aYesNos;
+    sal_Int32                     m_nNumValue;
     long getItemHeight() const;
     CmisPropertyLine( Window* pParent );
+    ~CmisPropertyLine();
 };
 
 // class CmisPropertiesWindow ------------------------------------------
