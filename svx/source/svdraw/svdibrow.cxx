@@ -105,41 +105,39 @@ public:
         bCanNum(false)
     {}
 
-    XubString GetItemTypeStr() const;
+    OUString GetItemTypeStr() const;
     bool operator==(const ImpItemListRow& rEntry) const;
     bool operator!=(const ImpItemListRow& rEntry) const { return !operator==(rEntry); }
 };
 
-XubString ImpItemListRow::GetItemTypeStr() const
+OUString ImpItemListRow::GetItemTypeStr() const
 {
-    XubString aStr;
-
     switch(eItemType)
     {
-        case ITEM_BYTE      : aStr.AppendAscii("Byte");     break;
-        case ITEM_INT16     : aStr.AppendAscii("Int16");    break;
-        case ITEM_UINT16    : aStr.AppendAscii("UInt16");   break;
-        case ITEM_INT32     : aStr.AppendAscii("Int32");    break;
-        case ITEM_UINT32    : aStr.AppendAscii("UInt32");   break;
-        case ITEM_ENUM      : aStr.AppendAscii("Enum");     break;
-        case ITEM_BOOL      : aStr.AppendAscii("Bool");     break;
-        case ITEM_FLAG      : aStr.AppendAscii("Flag");     break;
-        case ITEM_STRING    : aStr.AppendAscii("String");   break;
-        case ITEM_POINT     : aStr.AppendAscii("Point");    break;
-        case ITEM_RECT      : aStr.AppendAscii("Rectangle");break;
-        case ITEM_RANGE     : aStr.AppendAscii("Range");    break;
-        case ITEM_LRANGE    : aStr.AppendAscii("LRange");   break;
-        case ITEM_FRACTION  : aStr.AppendAscii("Fraction"); break;
-        case ITEM_XCOLOR    : aStr.AppendAscii("XColor");   break;
-        case ITEM_COLOR     : aStr.AppendAscii("Color");    break;
-        case ITEM_FONT      : aStr.AppendAscii("Font");     break;
-        case ITEM_FONTHEIGHT:aStr.AppendAscii("FontHeight");break;
-        case ITEM_FONTWIDTH :aStr.AppendAscii("FontWidth"); break;
-        case ITEM_FIELD     :aStr.AppendAscii("Field");     break;
+        case ITEM_BYTE      : return OUString("Byte");     break;
+        case ITEM_INT16     : return OUString("Int16");    break;
+        case ITEM_UINT16    : return OUString("UInt16");   break;
+        case ITEM_INT32     : return OUString("Int32");    break;
+        case ITEM_UINT32    : return OUString("UInt32");   break;
+        case ITEM_ENUM      : return OUString("Enum");     break;
+        case ITEM_BOOL      : return OUString("Bool");     break;
+        case ITEM_FLAG      : return OUString("Flag");     break;
+        case ITEM_STRING    : return OUString("String");   break;
+        case ITEM_POINT     : return OUString("Point");    break;
+        case ITEM_RECT      : return OUString("Rectangle");break;
+        case ITEM_RANGE     : return OUString("Range");    break;
+        case ITEM_LRANGE    : return OUString("LRange");   break;
+        case ITEM_FRACTION  : return OUString("Fraction"); break;
+        case ITEM_XCOLOR    : return OUString("XColor");   break;
+        case ITEM_COLOR     : return OUString("Color");    break;
+        case ITEM_FONT      : return OUString("Font");     break;
+        case ITEM_FONTHEIGHT: return OUString("FontHeight");break;
+        case ITEM_FONTWIDTH : return OUString("FontWidth"); break;
+        case ITEM_FIELD     : return OUString("Field");     break;
         default: break;
     }
 
-    return aStr;
+    return OUString();
 }
 
 bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
@@ -240,29 +238,27 @@ void _SdrItemBrowserControl::ImpCtor()
     bShowWhichIds = sal_True;   // not implemented yet
     bShowRealValues = sal_True; // not implemented yet
 
-    rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
-
     InsertDataColumn(
         ITEMBROWSER_WHICHCOL_ID,
-        String("Which", aTextEncoding),
-        GetTextWidth(String(" Which ", aTextEncoding)) + 2);
+        OUString("Which"),
+        GetTextWidth(OUString(" Which ")) + 2);
     InsertDataColumn(
         ITEMBROWSER_STATECOL_ID,
-        String("State", aTextEncoding),
-        std::max(GetTextWidth(String(" State ", aTextEncoding)) + 2 ,
-            GetTextWidth(String("DontCare", aTextEncoding)) + 2));
+        OUString("State"),
+        std::max(GetTextWidth(OUString(" State ")) + 2 ,
+            GetTextWidth(OUString("DontCare")) + 2));
     InsertDataColumn(
         ITEMBROWSER_TYPECOL_ID ,
-        String("Type", aTextEncoding),
-        GetTextWidth(String(" Type_ ", aTextEncoding)) + 2);
+        OUString("Type"),
+        GetTextWidth(OUString(" Type_ ")) + 2);
     InsertDataColumn(
         ITEMBROWSER_NAMECOL_ID ,
-        String("Name", aTextEncoding),
+        OUString("Name"),
         150);
     InsertDataColumn(
         ITEMBROWSER_VALUECOL_ID,
-        String("Value", aTextEncoding),
-        GetTextWidth(String("12345678901234567890", aTextEncoding)));
+        OUString("Value"),
+        GetTextWidth(OUString("12345678901234567890")));
     SetDataRowHeight(
         GetTextHeight());
 
@@ -509,16 +505,16 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         pEditControl->SetSelection(Selection(SELECTION_MIN,SELECTION_MAX));
         Window* pParent=GetParent();
         aWNamMerk=pParent->GetText();
-        XubString aNeuNam(aWNamMerk);
-        aNeuNam += sal_Unicode(' ');
+        OUString aNeuNam(aWNamMerk);
+        aNeuNam += " ";
         aNeuNam += pEntry->GetItemTypeStr();
         if (pEntry->bCanNum) {
-            aNeuNam.AppendAscii(": ");
+            aNeuNam += ": ";
             aNeuNam += OUString::number(pEntry->nMin);
-            aNeuNam.AppendAscii("..");
+            aNeuNam += "..";
             aNeuNam += OUString::number(pEntry->nMax);
         }
-        aNeuNam.AppendAscii(" - Type 'del' to reset to default.");
+        aNeuNam += " - Type 'del' to reset to default.";
         pParent->SetText(aNeuNam);
         pAktChangeEntry=new ImpItemListRow(*pEntry);
         bRet = true;
@@ -911,7 +907,6 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 {
     SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
     if (pSet!=NULL) {
-        rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
         sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);
         const SfxItemPool* pPool=pSet->GetPool();
@@ -932,26 +927,26 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
                 sal_uInt16 nIndent=0;
                 if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
-                    XubString aCommentStr;
+                    OUString aCommentStr;
 
-                    INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,String("L I N I E", aTextEncoding));
-                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,String("F L \357\277\275 C H E", aTextEncoding));
-                    INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,String("F O N T W O R K", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,String("S C H A T T E N", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,String("L E G E N D E", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST,String("V E R S C H I E D E N E S", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST,String("V E R B I N D E R", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST,String("B E M A S S U N G", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST,String("K R E I S", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_NOTPERSIST_FIRST,SDRATTR_NOTPERSIST_LAST,String("N O T P E R S I S T", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_MOVEX,SDRATTR_VERTSHEARONE,String("Transformationen auf alle Objekte einzeln", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_RESIZEXALL,SDRATTR_VERTSHEARALL,String("Transformationen auf alle Objekte gemeinsam", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_TRANSFORMREF1X,SDRATTR_TRANSFORMREF2Y,String("View-Referenzpunkte", aTextEncoding));
-                    INSERTCOMMENT(SDRATTR_GRAF_FIRST,SDRATTR_GRAF_LAST,String("G R A F I K", aTextEncoding));
-                    INSERTCOMMENT(EE_ITEMS_START,EE_ITEMS_END,String("E D I T  E N G I N E", aTextEncoding));
-                    INSERTCOMMENT(EE_ITEMS_END+1,EE_ITEMS_END+1,String("... by Joe Merten, JME Engineering Berlin ...", aTextEncoding));
+                    INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,OUString("L I N E"));
+                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,OUString("F I L L"));
+                    INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,OUString("F O N T W O R K"));
+                    INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,OUString("S H A D O W"));
+                    INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,OUString("C A P T I O N"));
+                    INSERTCOMMENT(SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST,OUString("M I S C E L L A N E O U S"));
+                    INSERTCOMMENT(SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST,OUString("C O N N E C T O R"));
+                    INSERTCOMMENT(SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST,OUString("D I M E N S I O N"));
+                    INSERTCOMMENT(SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST,OUString("C I R C U L A R"));
+                    INSERTCOMMENT(SDRATTR_NOTPERSIST_FIRST,SDRATTR_NOTPERSIST_LAST,OUString("N O T P E R S I S T"));
+                    INSERTCOMMENT(SDRATTR_MOVEX,SDRATTR_VERTSHEARONE,OUString("Transformation of all object individually"));
+                    INSERTCOMMENT(SDRATTR_RESIZEXALL,SDRATTR_VERTSHEARALL,OUString("Transformation of all objects together"));
+                    INSERTCOMMENT(SDRATTR_TRANSFORMREF1X,SDRATTR_TRANSFORMREF2Y,OUString("V I E W R E F E R E N C E P O I N T S"));
+                    INSERTCOMMENT(SDRATTR_GRAF_FIRST,SDRATTR_GRAF_LAST,OUString("G R A P H I C"));
+                    INSERTCOMMENT(EE_ITEMS_START,EE_ITEMS_END,OUString("E D I T  E N G I N E"));
+                    INSERTCOMMENT(EE_ITEMS_END+1,EE_ITEMS_END+1,OUString("... by Joe Merten, JME Engineering Berlin ..."));
 
-                    if(aCommentStr.Len())
+                    if (!aCommentStr.isEmpty())
                     {
                         ImpItemListRow aEntry;
                         aEntry.bComment = true;
@@ -1021,7 +1016,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     }
                     else
                     {
-                        aEntry.aValue = String("InvalidItem", aTextEncoding);
+                        aEntry.aValue = OUString("InvalidItem");
                     }
                     ImpSetEntry(aEntry,nEntryNum);
                     nEntryNum++;
@@ -1052,7 +1047,7 @@ _SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
     aBrowse(this)
 {
     SetOutputSizePixel(aBrowse.GetSizePixel());
-    SetText(String("Joe's ItemBrowser", osl_getThreadTextEncoding()));
+    SetText(OUString("Joe's ItemBrowser"));
     aBrowse.Show();
 }
 
@@ -1227,7 +1222,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_FONT: {
                     ((SvxFontItem*)pNewItem)->SetFamily( FAMILY_DONTKNOW );
                     ((SvxFontItem*)pNewItem)->SetFamilyName(aNewText);
-                    ((SvxFontItem*)pNewItem)->SetStyleName( String() );
+                    ((SvxFontItem*)pNewItem)->SetStyleName(OUString());
                 } break;
                 case ITEM_FONTHEIGHT: {
                     sal_uIntPtr nHgt=0;
