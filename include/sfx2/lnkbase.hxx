@@ -71,7 +71,7 @@ private:
     friend class SvLinkSource;
 
     SvLinkSourceRef         xObj;
-    String                  aLinkName;
+    OUString                aLinkName;
     BaseLink_Impl*          pImpl;
     sal_uInt16                  nObjType;
     sal_Bool                    bVisible : 1;
@@ -79,15 +79,15 @@ private:
     sal_Bool                    bUseCache : 1;  // for Graphics Links!
     sal_Bool                    bWasLastEditOK : 1;
 
-    DECL_LINK( EndEditHdl, String* );
+    DECL_LINK( EndEditHdl, OUString* );
 
-    bool                    ExecuteEdit( const String& _rNewName );
+    bool                    ExecuteEdit( const OUString& _rNewName );
 
 protected:
     void            SetObjType( sal_uInt16 );
 
     // Set LinkSourceName without action
-    void            SetName( const String & rLn );
+    void            SetName( const OUString & rLn );
 
     ImplBaseLinkData* pImplData;
 
@@ -112,7 +112,7 @@ public:
                     TYPEINFO();
 
     virtual void    Closed();
-                    SvBaseLink( const String& rNm, sal_uInt16 nObjectType,
+                    SvBaseLink( const OUString& rNm, sal_uInt16 nObjectType,
                                  SvLinkSource* );
 
     sal_uInt16          GetObjType() const { return nObjType; }
@@ -120,8 +120,8 @@ public:
     void            SetObj( SvLinkSource * pObj );
     SvLinkSource*   GetObj() const  { return xObj; }
 
-    void            SetLinkSourceName( const String & rName );
-    String          GetLinkSourceName() const;
+    void            SetLinkSourceName( const OUString & rName );
+    OUString        GetLinkSourceName() const;
 
     enum UpdateResult {
         SUCCESS = 0,
@@ -129,7 +129,7 @@ public:
     };
 
     virtual UpdateResult DataChanged(
-        const String & rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString & rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     void            SetUpdateMode( sal_uInt16 );
     sal_uInt16          GetUpdateMode() const;
@@ -165,7 +165,7 @@ public:
     void            clearStreamToLoadFrom();
 
     inline sal_Bool         WasLastEditOK() const       { return bWasLastEditOK; }
-    FileDialogHelper & GetInsertFileDialog(const String& rFactory) const;
+    FileDialogHelper & GetInsertFileDialog(const OUString& rFactory) const;
 };
 
 SV_DECL_IMPL_REF(SvBaseLink);

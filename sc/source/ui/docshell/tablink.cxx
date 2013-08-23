@@ -123,7 +123,7 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 }
 
 ::sfx2::SvBaseLink::UpdateResult ScTableLink::DataChanged(
-    const String&, const ::com::sun::star::uno::Any& )
+    const OUString&, const ::com::sun::star::uno::Any& )
 {
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)

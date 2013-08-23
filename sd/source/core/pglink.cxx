@@ -59,7 +59,7 @@ SdPageLink::~SdPageLink()
 \************************************************************************/
 
 ::sfx2::SvBaseLink::UpdateResult SdPageLink::DataChanged(
-    const String&, const ::com::sun::star::uno::Any& )
+    const OUString&, const ::com::sun::star::uno::Any& )
 {
     SdDrawDocument* pDoc = (SdDrawDocument*) pPage->GetModel();
     sfx2::LinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;

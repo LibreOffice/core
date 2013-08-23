@@ -60,7 +60,7 @@ public:
 
                     // overloaded by SvBaseLink:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
                     // overloaded by SvtBroadcaster:
     virtual void    ListenersGone();

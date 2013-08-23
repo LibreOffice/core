@@ -401,7 +401,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
     {
         sal_uInt16 nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
-        if ( pLink && (pLink->GetLinkSourceName().Len() != 0) )
+        if ( pLink && !pLink->GetLinkSourceName().isEmpty() )
             pLink->Edit( this, LINK( this, SvBaseLinksDlg, EndEditHdl ) );
     }
     return 0;

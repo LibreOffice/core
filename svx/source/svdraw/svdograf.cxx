@@ -111,7 +111,7 @@ public:
     virtual void        Closed();
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
     void                DataChanged( const Graphic& rGraphic );
 
     bool                Connect() { return 0 != GetRealObject(); }
@@ -209,7 +209,7 @@ void SdrGraphicLink::RemoveGraphicUpdater()
 }
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
-    const String& rMimeType, const ::com::sun::star::uno::Any & rValue )
+    const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
     SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;

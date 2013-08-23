@@ -150,7 +150,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
 
 //--------------------------------------------------------------------------
 
-SvBaseLink::SvBaseLink( const String& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
+SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
     : pImpl(0)
 {
     bVisible = bSynchron = bUseCache = sal_True;
@@ -204,7 +204,7 @@ SvBaseLink::~SvBaseLink()
     delete pImpl;
 }
 
-IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
+IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
 {
     String sNewName;
     if ( _pNewName )
@@ -229,7 +229,7 @@ void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 
 //--------------------------------------------------------------------------
 
-void SvBaseLink::SetName( const String & rNm )
+void SvBaseLink::SetName( const OUString & rNm )
 {
     aLinkName = rNm;
 }
@@ -247,7 +247,7 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
 
 //--------------------------------------------------------------------------
 
-void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
+void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 {
     if( aLinkName == rLnkNm )
         return;
@@ -265,7 +265,7 @@ void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
 
 //--------------------------------------------------------------------------
 
-String  SvBaseLink::GetLinkSourceName() const
+OUString  SvBaseLink::GetLinkSourceName() const
 {
     return aLinkName;
 }
@@ -424,7 +424,7 @@ void SvBaseLink::Disconnect()
     }
 }
 
-SvBaseLink::UpdateResult SvBaseLink::DataChanged( const String &, const ::com::sun::star::uno::Any & )
+SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com::sun::star::uno::Any & )
 {
     switch( nObjType )
     {
@@ -474,9 +474,9 @@ void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
     }
 }
 
-bool SvBaseLink::ExecuteEdit( const String& _rNewName )
+bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
 {
-    if( _rNewName.Len() != 0 )
+    if( !_rNewName.isEmpty() )
     {
         SetLinkSourceName( _rNewName );
         if( !Update() )
@@ -519,7 +519,7 @@ void SvBaseLink::Closed()
         xObj->RemoveAllDataAdvise( this );
 }
 
-FileDialogHelper & SvBaseLink::GetInsertFileDialog(const String& rFactory) const
+FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) const
 {
     if ( pImpl->m_pFileDlg )
         delete pImpl->m_pFileDlg;

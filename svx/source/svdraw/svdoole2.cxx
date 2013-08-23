@@ -603,7 +603,7 @@ public:
 
     virtual void        Closed();
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     bool                Connect() { return GetRealObject() != NULL; }
 };
@@ -626,7 +626,7 @@ SdrEmbedObjectLink::~SdrEmbedObjectLink()
 // -----------------------------------------------------------------------------
 
 ::sfx2::SvBaseLink::UpdateResult SdrEmbedObjectLink::DataChanged(
-    const String& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
+    const OUString& /*rMimeType*/, const ::com::sun::star::uno::Any & /*rValue*/ )
 {
     if ( !pObj->UpdateLinkURL_Impl() )
     {

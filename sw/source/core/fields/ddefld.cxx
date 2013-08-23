@@ -45,14 +45,14 @@ public:
 
     virtual void Closed();
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 };
 
-::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const String& rMimeType,
+::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const OUString& rMimeType,
                                 const uno::Any & rValue )
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )

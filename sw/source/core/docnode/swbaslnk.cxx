@@ -84,7 +84,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
 
 ::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
-    const String& rMimeType, const uno::Any & rValue )
+    const OUString& rMimeType, const uno::Any & rValue )
 {
     if( !pCntntNode )
     {

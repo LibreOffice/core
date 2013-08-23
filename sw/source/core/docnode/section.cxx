@@ -75,7 +75,7 @@ public:
 
     virtual void Closed();
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
@@ -1190,7 +1190,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlSectRefLink::DataChanged(
-    const String& rMimeType, const uno::Any & rValue )
+    const OUString& rMimeType, const uno::Any & rValue )
 {
     SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
     SwDoc* pDoc = rSectFmt.GetDoc();

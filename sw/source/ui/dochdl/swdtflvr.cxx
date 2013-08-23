@@ -164,7 +164,7 @@ public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
+        const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
     virtual void Closed();
 
     sal_Bool WriteData( SvStream& rStrm );
@@ -3588,7 +3588,7 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
         Disconnect( sal_True );
 }
 
-::sfx2::SvBaseLink::UpdateResult SwTrnsfrDdeLink::DataChanged( const String& ,
+::sfx2::SvBaseLink::UpdateResult SwTrnsfrDdeLink::DataChanged( const OUString& ,
                                     const uno::Any& )
 {
     // well, that's it with the link

@@ -1220,7 +1220,7 @@ void ScExternalRefLink::Closed()
     pMgr->breakLink(mnFileId);
 }
 
-::sfx2::SvBaseLink::UpdateResult ScExternalRefLink::DataChanged(const String& /*rMimeType*/, const Any& /*rValue*/)
+::sfx2::SvBaseLink::UpdateResult ScExternalRefLink::DataChanged(const OUString& /*rMimeType*/, const Any& /*rValue*/)
 {
     if (!mbDoRefresh)
         return SUCCESS;

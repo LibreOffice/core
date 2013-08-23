@@ -123,7 +123,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 }
 
 sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
-    const String& rMimeType, const ::com::sun::star::uno::Any & rValue )
+    const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
     //  wir koennen nur Strings...
     if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
