@@ -1714,8 +1714,10 @@ KEYINPUT_CHECKTABLE:
                 case KEY_UP | KEY_SHIFT:
                 case KEY_DOWN | KEY_SHIFT:
                 {
-                    if ( pFlyFmt
-                         || ( (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))
+                    const int nSelectionType = rSh.GetSelectionType();
+                    if ( ( pFlyFmt
+                           && ( nSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) ) )
+                         || ( ( nSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) )
                               && rSh.GetDrawView()->AreObjectsMarked() ) )
                     {
                         eKeyState = pFlyFmt ? KS_Fly_Change : KS_Draw_Change;
