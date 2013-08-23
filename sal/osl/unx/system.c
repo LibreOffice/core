@@ -145,16 +145,16 @@ int macxp_resolveAlias(char *path, int buflen)
 #if HAVE_FEATURE_MACOSX_SANDBOX
   /* Avoid unnecessary messages in the system.log:
    *
-   * kernel[0]: Sandbox: soffice(57342) deny file-read-data /Users
-   * kernel[0]: Sandbox: soffice(57342) deny file-read-data /Users/tml
+   * soffice(57342) deny file-read-data /Users/tml/Documents/b.odt/..namedfork/rsrc
+   * etc.
    *
-   * etc. It is quite unlikely anyway, I hope, that anything except
-   * the last component of a path name would be a bookmark.
+   * Just don't bother with resolving aliases. I doubt its usefulness anyway.
    */
-  char *unprocessedPath = path + strlen(path) - 1;
+  (void) path;
+  (void) buflen;
+  return 0;
 #else
   char *unprocessedPath = path;
-#endif
 
   if ( *unprocessedPath == '/' )
       unprocessedPath++;
@@ -230,6 +230,7 @@ int macxp_resolveAlias(char *path, int buflen)
   }
 
   return nRet;
+#endif
 }
 
 #endif  /* defined MACOSX */
