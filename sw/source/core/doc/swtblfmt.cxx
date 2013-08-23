@@ -279,6 +279,9 @@ void SwTableFormat::AssignFormatParents( SwTableFormat* pSrcFormat, SwTable &rTa
     if( !pHardFormat )
         return;
 
+    if( pSrcFormat && pSrcFormat->IsDefault() )
+        return;
+
     if( pSrcFormat )
         pHardFormat->GetAttrSet().SetParent( &pSrcFormat->GetAttrSet() );
     else
