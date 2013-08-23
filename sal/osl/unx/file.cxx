@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -43,8 +43,7 @@
 #include <sys/mount.h>
 #define HAVE_O_EXLOCK
 
-// add MACOSX Time Value
-#include <CoreFoundation/CoreFoundation.h>
+#include <Foundation/Foundation.h>
 
 #endif /* MACOSX */
 
@@ -843,6 +842,17 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+
+static NSUserDefaults *userDefaults = NULL;
+
+static void get_user_defaults()
+{
+    userDefaults = [NSUserDefaults standardUserDefaults];
+}
+
+#endif
+
 oslFileError
 SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
@@ -906,8 +916,42 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         flags = osl_file_adjustLockFlags (cpFilePath, flags);
     }
 
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+    static pthread_once_t once = PTHREAD_ONCE_INIT;
+    pthread_once(&once, &get_user_defaults);
+    NSURL *fileURL = NULL;
+    NSData *data = NULL;
+    NSURL *scopeURL = NULL;
+    BOOL stale;
+
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+    if (userDefaults != NULL)
+        fileURL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpFilePath]];
+
+    if (fileURL != NULL)
+        data = [userDefaults dataForKey:[@"bookmarkFor:" stringByAppendingString:[fileURL absoluteString]]];
+
+    if (data != NULL)
+        scopeURL = [NSURL URLByResolvingBookmarkData:data
+                                             options:NSURLBookmarkResolutionWithSecurityScope
+                                       relativeToURL:nil
+                                 bookmarkDataIsStale:&stale
+                                               error:nil];
+    if (scopeURL != NULL)
+        [scopeURL startAccessingSecurityScopedResource];
+#endif
+
     /* open the file */
     int fd = open( cpFilePath, flags, mode );
+
+
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+    if (scopeURL != NULL)
+        [scopeURL stopAccessingSecurityScopedResource];
+    [pool release];
+#endif
+
 #ifdef IOS
     /* Horrible hack: If opening for RDWR and getting EPERM, just try
      * again for RDONLY. Quicker this way than to figure out why
