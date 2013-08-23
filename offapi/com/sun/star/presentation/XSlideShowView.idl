@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XMouseListener.idl>
 #include <com/sun/star/awt/XMouseMotionListener.idl>
 #include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/geometry/IntegerSize2D.idl>
 
 module com {  module sun {  module star {  module presentation {
 
@@ -72,6 +73,19 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
         (otherwise, the slides will be scaled anisotropically).
      */
     ::com::sun::star::geometry::AffineMatrix2D getTransformation();
+
+    /** Query the current translation offset used to fill the physical screen while keeping aspect ratio.<p>
+
+        This method returns the traslation offset of the view of the
+        view.<p>
+
+        @return the slideshowview will be transformed in order to fill
+        the physical screen while keeping the aspect ratio.
+        In order to do so, we need to add a black border on the side. This method
+        return an IntegerSize2D which represent (x, y) translation.
+        x represents the width of the border on the left, for example.
+     */
+    ::com::sun::star::geometry::IntegerSize2D getTranslationOffset();
 
     /** Add a listener to get notified when the transformation matrix changes.<p>
 
