@@ -75,6 +75,7 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,sal,\
 	Carbon \
 	CoreFoundation \
+	Foundation \
 ))
 endif
 
@@ -122,7 +123,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
-ifeq ($(OS),IOS)
+ifneq (,$(filter IOS MACOSX,$(OS)))
 $(eval $(call gb_Library_add_cxxflags,sal,\
     $(gb_OBJCXXFLAGS) \
 ))

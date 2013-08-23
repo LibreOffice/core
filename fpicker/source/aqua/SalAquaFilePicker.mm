@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <config_features.h>
 
 #include "sal/config.h"
 
@@ -300,6 +302,17 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 
     SolarMutexGuard aGuard;
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+    static NSUserDefaults *userDefaults;
+    static bool triedUserDefaults = false;
+
+    if (!triedUserDefaults)
+    {
+        userDefaults = [NSUserDefaults standardUserDefaults];
+        triedUserDefaults = true;
+    }
+#endif
+
     // OSL_TRACE("starting work");
     /*
      * If more than one file is selected in an OpenDialog, then the first result
@@ -322,6 +335,23 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
     for(int nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+        if (userDefaults != NULL &&
+            [url respondsToSelector:@selector(bookmarkDataWithOptions:includingResourceValuesForKeys:relativeToURL:error:)])
+        {
+            NSData *data = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
+                         includingResourceValuesForKeys:nil
+                                          relativeToURL:nil
+                                                  error:nil];
+            if (data != NULL)
+            {
+                [userDefaults setObject:data
+                                 forKey:[@"bookmarkFor:" stringByAppendingString:[url absoluteString]]];
+            }
+        }
+#endif
+
         OSL_TRACE("handling %s", [[url description] UTF8String]);
         InfoType info = FULLPATH;
         if (nFiles > 1) {
