@@ -675,23 +675,6 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     }
     while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
-    // Search for LangID if we didn't find a specific ISO combination.
-    // All entries in this table are allowed for mime specifications,
-    // but not defined ISO combinations.
-    const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
-    do
-    {
-        if ( pNoneStdEntry->mnLang == nLang )
-        {
-            rLocale.Language = OUString::createFromAscii( pNoneStdEntry->maLangStr );
-            rLocale.Country  = OUString::createFromAscii( pNoneStdEntry->maCountry );
-            rLocale.Variant  = OUString();
-            return;
-        }
-        ++pNoneStdEntry;
-    }
-    while ( pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW );
-
     // Look for privateuse definitions.
     const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
     do
