@@ -202,12 +202,13 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
-    sal_uInt16 nNewPath = (sal_uInt16)rGroupName.getToken(1, GLOS_DELIM).toInt32();
+    const OUString sNewPath(rGroupName.getToken(1, GLOS_DELIM));
+    sal_uInt16 nNewPath = (sal_uInt16)sNewPath.toInt32();
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return sal_False;
     const OUString sNewFilePath(m_PathArr[nNewPath]);
     const OUString sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.getToken(0, GLOS_DELIM))
-        + OUString(GLOS_DELIM) + rGroupName.getToken(1, GLOS_DELIM);
+        + OUString(GLOS_DELIM) + sNewPath;
     SwTextBlocks *pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
     {
@@ -399,28 +400,32 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 
         m_PathArr.clear();
 
-        sal_uInt16 nTokenCount = comphelper::string::getTokenCount(m_aPath, SVT_SEARCHPATH_DELIMITER);
         std::vector<OUString> aDirArr;
         std::vector<rtl::OUString> aInvalidPaths;
-        for( sal_uInt16 i = 0; i < nTokenCount; i++ )
+        if (!m_aPath.isEmpty())
         {
-            const OUString sPth = URIHelper::SmartRel2Abs(
-                INetURLObject(),
-                m_aPath.getToken(i, SVT_SEARCHPATH_DELIMITER),
-                URIHelper::GetMaybeFileHdl());
-
-            if(i && std::find(aDirArr.begin(), aDirArr.end(), sPth) != aDirArr.end())
+            sal_Int32 nIndex = 0;
+            do
             {
-                continue;
+                const OUString sPth = URIHelper::SmartRel2Abs(
+                    INetURLObject(),
+                    m_aPath.getToken(0, SVT_SEARCHPATH_DELIMITER, nIndex),
+                    URIHelper::GetMaybeFileHdl());
+                if (aDirArr.size() &&
+                    std::find(aDirArr.begin(), aDirArr.end(), sPth) != aDirArr.end())
+                {
+                    continue;
+                }
+                aDirArr.push_back(sPth);
+                if( !FStatHelper::IsFolder( sPth ) )
+                    aInvalidPaths.push_back(sPth);
+                else
+                    m_PathArr.push_back(sPth);
             }
-            aDirArr.push_back(sPth);
-            if( !FStatHelper::IsFolder( sPth ) )
-                aInvalidPaths.push_back(sPth);
-            else
-                m_PathArr.push_back(sPth);
+            while (nIndex>=0);
         }
 
-        if(!nTokenCount || !aInvalidPaths.empty())
+        if (m_aPath.isEmpty() || !aInvalidPaths.empty())
         {
             std::sort(aInvalidPaths.begin(), aInvalidPaths.end());
             aInvalidPaths.erase(std::unique(aInvalidPaths.begin(), aInvalidPaths.end()), aInvalidPaths.end());
@@ -521,16 +526,23 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
 
 OUString SwGlossaries::GetCompleteGroupName( const OUString& rGroupName )
 {
-    sal_uInt16 nCount = GetGroupCnt();
+    const sal_uInt16 nCount = GetGroupCnt();
     // when the group name was created internally the path is here as well
-    const OUString sGroupName(rGroupName.getToken(0, GLOS_DELIM));
-    const bool bPathLen = !rGroupName.getToken(1, GLOS_DELIM).isEmpty();
+    sal_Int32 nIndex = 0;
+    const OUString sGroupName(rGroupName.getToken(0, GLOS_DELIM, nIndex));
+    const bool bPathLen = !rGroupName.getToken(0, GLOS_DELIM, nIndex).isEmpty();
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         const OUString sGrpName = GetGroupName(i);
-        if(bPathLen ? rGroupName == sGrpName : sGroupName == sGrpName.getToken(0, GLOS_DELIM))
+        if (bPathLen)
         {
-            return sGrpName;
+            if (rGroupName == sGrpName)
+                return sGrpName;
+        }
+        else
+        {
+            if (sGroupName == sGrpName.getToken(0, GLOS_DELIM))
+                return sGrpName;
         }
     }
     return OUString();
