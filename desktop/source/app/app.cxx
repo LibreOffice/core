@@ -954,6 +954,15 @@ static void installBundledExtensionBlobs()
         {}
         catch( css::deployment::DeploymentException&)
         {}
+        catch ( css::ucb::CommandFailedException& )
+        {
+        }
+        catch ( css::ucb::CommandAbortedException& )
+        {
+        }
+        catch ( css::lang::IllegalArgumentException& )
+        {
+        }
     }
 }
 
