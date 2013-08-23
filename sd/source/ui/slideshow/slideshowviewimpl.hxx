@@ -211,6 +211,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL clear(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::geometry::AffineMatrix2D SAL_CALL getTransformation(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getTranslationOffset( ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addTransformationChangedListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTransformationChangedListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -265,6 +266,7 @@ private:
     bool                                    mbFirstPaint;
     bool                                    mbFullScreen;
     bool                                    mbMousePressedEaten;
+    ::com::sun::star::geometry::IntegerSize2D mTranslationOffset;
 };
 
 

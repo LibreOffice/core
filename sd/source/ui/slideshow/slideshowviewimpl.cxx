@@ -218,6 +218,9 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mbMousePressedEaten( false )
 {
     init();
+
+    mTranslationOffset.Width = 0;
+    mTranslationOffset.Height = 0;
 }
 
 /// Dispose all internal references
@@ -329,6 +332,11 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
     }
 }
 
+geometry::IntegerSize2D SAL_CALL SlideShowView::getTranslationOffset( ) throw (RuntimeException)
+{
+        return mTranslationOffset;
+}
+
 geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -373,6 +381,10 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     // (when shapes of page size have visible border lines)
     aOutputSize.Width() --;
     aOutputSize.Height() --;
+
+    // Record mTranslationOffset
+    mTranslationOffset.Height = aOutputOffset.Y();
+    mTranslationOffset.Width = aOutputOffset.X();
 
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );
