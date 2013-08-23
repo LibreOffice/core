@@ -141,22 +141,6 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
     return nLang;
 }
 
-// static
-void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
-        ::com::sun::star::lang::Locale & rLocale )
-{
-    if (!rLocale.Variant.isEmpty())
-        rLocale.Variant = OUString();
-    convertLanguageToIsoNames( nLang, rLocale.Language, rLocale.Country);
-    /* FIXME: this x-... is temporary until conversion will be moved up to
-     * LanguageTag. Also handle the nasty "*" joker as privateuse. */
-    if (rLocale.Language.startsWith( "x-") || (rLocale.Language == "*"))
-    {
-        rLocale.Variant = rLocale.Language;
-        rLocale.Language = "qlt";
-    }
-}
-
 
 // static
 ::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocale(
@@ -171,7 +155,14 @@ void MsLangId::Conversion::convertLanguageToLocale( LanguageType nLang,
         // but not LANGUAGE_SYSTEM or others.
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
-        convertLanguageToLocale( nLang, aLocale);
+        convertLanguageToIsoNames( nLang, aLocale.Language, aLocale.Country);
+        /* FIXME: this x-... is temporary until conversion will be moved up to
+         * LanguageTag. Also handle the nasty "*" joker as privateuse. */
+        if (aLocale.Language.startsWith( "x-") || (aLocale.Language == "*"))
+        {
+            aLocale.Variant = aLocale.Language;
+            aLocale.Language = "qlt";
+        }
     }
     return aLocale;
 }

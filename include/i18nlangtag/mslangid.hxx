@@ -242,14 +242,7 @@ public:
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
                 LanguageType nLang, bool bResolveSystem );
 
-        /** Convert a LanguageType to a Locale, resolving LANGUAGE_SYSTEM.
-
-            Used by convertLanguageToLocale(LanguageType,bool)
-          */
-        I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocale(
-                LanguageType nLang, ::com::sun::star::lang::Locale & rLocale );
-
-        /** Used by convertLanguageToLocale(LanguageType,Locale) */
+        /** Used by convertLanguageToLocale(LanguageType,bool) */
         I18NLANGTAG_DLLPRIVATE static void convertLanguageToIsoNames(
                 LanguageType nLang, OUString& rLangStr, OUString& rCountry );
 
