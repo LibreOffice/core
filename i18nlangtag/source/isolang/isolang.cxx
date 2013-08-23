@@ -710,10 +710,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     }
     while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
-    // Not found. The effective result is the empty SYSTEM locale.
-    rLocale.Language = OUString();
-    rLocale.Country  = OUString();
-    rLocale.Variant  = OUString();
+    // Not found. Passed rLocale argument remains unchanged.
 }
 
 // -----------------------------------------------------------------------

@@ -242,7 +242,12 @@ public:
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
                 LanguageType nLang, bool bResolveSystem );
 
-        /** Used by convertLanguageToLocale(LanguageType,bool) */
+        /** Used by convertLanguageToLocale(LanguageType,bool)
+
+            @return rLocale set to mapped values, unchanged if no mapping was
+                    found. E.g. pass empty Locale to obtain empty SYSTEM locale
+                    for that case.
+         */
         I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocaleImpl(
                 LanguageType nLang, ::com::sun::star::lang::Locale & rLocale );
 
