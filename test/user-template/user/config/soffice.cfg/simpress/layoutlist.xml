@@ -62,12 +62,12 @@
     </layout>
     <layout type="AUTOLAYOUT_VTITLE_VCONTENT">
         <presobj kind="PRESOBJ_TITLE" relative-height="4.6354" relative-width="0.139167" relative-posX="6.1856" relative-posY="0"/>
-        <presobj kind="PRESOBJ_OUTLINE1" relative-height="1.3347" relative-width="0.777778" relative-posX="0" relative-posY="-0.2508"/>
+        <presobj kind="PRESOBJ_OUTLINE1" relative-height="1.3347" relative-width="0.777778" relative-posX="0" relative-posY="-0.25078974"/>
     </layout>
     <layout type="AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT">
         <presobj kind="PRESOBJ_TITLE" relative-height="4.6354" relative-width="0.139167" relative-posX="6.1856" relative-posY="0"/>
-        <presobj kind="PRESOBJ_OUTLINE1" relative-height="0.628" relative-width="0.777778" relative-posX="0" relative-posY="-0.5337"/>
-        <presobj kind="PRESOBJ_OUTLINE2" relative-height="0.628" relative-width="0.777778" relative-posX="0" relative-posY="0.594"/>
+        <presobj kind="PRESOBJ_OUTLINE1" relative-height="0.6272578" relative-width="0.777778" relative-posX="0" relative-posY="-0.53363874"/>
+        <presobj kind="PRESOBJ_OUTLINE2" relative-height="0.6272578" relative-width="0.777778" relative-posX="0" relative-posY="0.5939791"/>
     </layout>
     <layout type="AUTOLAYOUT_TITLE_VCONTENT">
         <presobj kind="PRESOBJ_TITLE" relative-height="1" relative-width="1" relative-posX="0" relative-posY="0"/>
