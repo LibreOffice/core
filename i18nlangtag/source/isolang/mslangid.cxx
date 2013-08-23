@@ -195,9 +195,9 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
-        return Conversion::lookupFallbackLocale( MsLangId::getRealLanguage( LANGUAGE_SYSTEM));
-
-    return Conversion::lookupFallbackLocale( rLocale);
+        return Conversion::lookupFallbackLocale( Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true));
+    else
+        return Conversion::lookupFallbackLocale( rLocale);
 }
 
 // static
