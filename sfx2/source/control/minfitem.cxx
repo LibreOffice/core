@@ -28,10 +28,10 @@ TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 SfxMacroInfoItem::SfxMacroInfoItem(
     sal_uInt16 nWhichId,        // Slot-ID
     const BasicManager* pMgr,
-    const String &rLibName,
-    const String &rModuleName,
-    const String &rMethodName,
-    const String &rComment) :
+    const OUString &rLibName,
+    const OUString &rModuleName,
+    const OUString &rMethodName,
+    const OUString &rComment) :
     SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
     aLibName(rLibName),
@@ -78,12 +78,12 @@ SfxPoolItem *SfxMacroInfoItem::Clone( SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-String SfxMacroInfoItem::GetQualifiedName() const
+OUString SfxMacroInfoItem::GetQualifiedName() const
 {
-    String aMacroName = aLibName;
-    aMacroName += '.';
+    OUString aMacroName = aLibName;
+    aMacroName += ".";
     aMacroName += aModuleName;
-    aMacroName += '.';
+    aMacroName += ".";
     aMacroName += aMethodName;
     return aMacroName;
 }

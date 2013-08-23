@@ -306,7 +306,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 SbModule* pModule = pBasic->FindModule( rInfo.GetModule() );
                 if ( !pModule )
                 {
-                    if ( rInfo.GetModule().Len() || !pBasic->GetModules()->Count() )
+                    if ( !rInfo.GetModule().isEmpty() || !pBasic->GetModules()->Count() )
                     {
                         OUString aModName = rInfo.GetModule();
 

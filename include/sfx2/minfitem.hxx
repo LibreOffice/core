@@ -28,43 +28,43 @@ class BasicManager;
 class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
 {
     const BasicManager*     pBasicManager;
-    String                  aLibName;
-    String                  aModuleName;
-    String                  aMethodName;
-    String                  aCommentText;
+    OUString                aLibName;
+    OUString                aModuleName;
+    OUString                aMethodName;
+    OUString                aCommentText;
 
 public:
     TYPEINFO();
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
-                    const String &rLibName,
-                    const String &rModuleName,
-                    const String &rMethodName,
-                    const String &rComment);
+                    const OUString &rLibName,
+                    const OUString &rModuleName,
+                    const OUString &rMethodName,
+                    const OUString &rComment);
 
     SfxMacroInfoItem( const SfxMacroInfoItem& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    String                  GetComment() const
+    OUString                  GetComment() const
                                 { return aCommentText; }
-    void                    SetComment( const String& r )
+    void                    SetComment( const OUString& r )
                                 { aCommentText = r; }
-    String                  GetMethod() const
+    OUString                GetMethod() const
                                 { return aMethodName; }
-    void                    SetMethod( const String& r )
+    void                    SetMethod( const OUString& r )
                                 { aMethodName = r; }
-    String                  GetModule() const
+    OUString                GetModule() const
                                 { return aModuleName; }
-    void                    SetModule( const String& r )
+    void                    SetModule( const OUString& r )
                                 { aModuleName = r; }
-    String                  GetLib() const
+    OUString                GetLib() const
                                 { return aLibName; }
-    void                    SetLib( const String& r )
+    void                    SetLib( const OUString& r )
                                 { aLibName = r; }
     const BasicManager*     GetBasicManager() const
                             { return pBasicManager; }
-    String                  GetQualifiedName() const;
+    OUString                GetQualifiedName() const;
 };
 
 #endif
