@@ -520,14 +520,19 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     convertShapeProperties( xShape );
 
     // Handle left/right/top/bottom wrap distance.
+    // Default value of mso-wrap-distance-left/right is supposed to be 0 (see
+    // 19.1.2.19 of the VML spec), but Word implements a non-zero value.
+    // [MS-ODRAW] says the below default value in 2.3.4.9.
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-    sal_Int32 nWrapDistanceLeft = 0;
+    OUString aWrapDistanceLeft = OUString::number(0x0001BE7C);
     if (!maTypeModel.maWrapDistanceLeft.isEmpty())
-        nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceLeft, 0, true, true);
+        aWrapDistanceLeft = maTypeModel.maWrapDistanceLeft;
+    sal_Int32 nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aWrapDistanceLeft, 0, true, false);
     PropertySet(xShape).setAnyProperty(PROP_LeftMargin, uno::makeAny(nWrapDistanceLeft));
-    sal_Int32 nWrapDistanceRight = 0;
+    OUString aWrapDistanceRight = OUString::number(0x0001BE7C);
     if (!maTypeModel.maWrapDistanceRight.isEmpty())
-        nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceRight, 0, true, true);
+        aWrapDistanceRight = maTypeModel.maWrapDistanceRight;
+    sal_Int32 nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aWrapDistanceRight, 0, true, false);
     PropertySet(xShape).setAnyProperty(PROP_RightMargin, uno::makeAny(nWrapDistanceRight));
     sal_Int32 nWrapDistanceTop = 0;
     if (!maTypeModel.maWrapDistanceTop.isEmpty())

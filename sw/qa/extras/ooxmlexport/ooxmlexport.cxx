@@ -684,6 +684,11 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+
+    // Left / right margin was incorrect: the attribute was missing and we
+    // didn't have the right default (had 0 instead of the below one).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "LeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xFrame, "RightMargin"));
 }
 
 void Test::testCellBtlr()
