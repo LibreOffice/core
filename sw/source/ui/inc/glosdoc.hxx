@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _GLOSDOC_HXX
-#define _GLOSDOC_HXX
+#ifndef GLOSDOC_HXX
+#define GLOSDOC_HXX
 
-#include <tools/string.hxx>
+#include "rtl/ustring.hxx"
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 
 class SwTextBlocks;
@@ -49,17 +49,17 @@ class SW_DLLPUBLIC SwGlossaries
     UnoAutoTextGroups       m_aGlossaryGroups;
     UnoAutoTextEntries      m_aGlossaryEntries;
 
-    String                  m_aPath;
-    std::vector<rtl::OUString> m_aInvalidPaths;
-    std::vector<String>     m_PathArr;
-    std::vector<String>     m_GlosArr;
+    OUString                m_aPath;
+    std::vector<OUString>   m_aInvalidPaths;
+    std::vector<OUString>   m_PathArr;
+    std::vector<OUString>   m_GlosArr;
     sal_Bool                m_bError;
 
-    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, sal_Bool bCreate = sal_True) const;
-    SW_DLLPRIVATE std::vector<String> & GetNameList();
+    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const OUString &rName, sal_Bool bCreate = sal_True) const;
+    SW_DLLPRIVATE std::vector<OUString> & GetNameList();
 
     // implementation in unoatxt.cxx
-    SW_DLLPRIVATE void RemoveFileFromList( const String& rGroup );
+    SW_DLLPRIVATE void RemoveFileFromList( const OUString& rGroup );
     SW_DLLPRIVATE void InvalidateUNOOjects();
 
 public:
@@ -98,39 +98,39 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry >
                             GetAutoTextEntry(
-                                const String& _rCompleteGroupName,
+                                const OUString& _rCompleteGroupName,
                                 const OUString& _rGroupName,
                                 const OUString& _rEntryName,
                                 bool _bCreate = false
                             );
 
     sal_uInt16                  GetGroupCnt();
-    String                  GetGroupName(sal_uInt16 );
-    String                  GetGroupTitle( const String& rGroupName );
+    OUString        GetGroupName(sal_uInt16 );
+    OUString        GetGroupTitle( const OUString& rGroupName );
 
     sal_Bool            FindGroupName(OUString& rGroup);
 
-    SwTextBlocks*   GetGroupDoc(const String &rName,
+    SwTextBlocks*   GetGroupDoc(const OUString &rName,
                                 sal_Bool bCreate = sal_False);
     SwTextBlocks*   GetDefGroupDoc() { return GetGroupDoc(GetDefName()); }
     void            PutGroupDoc(SwTextBlocks *pBlock);
-    static String   GetDefName();
-    static String   GetExtension();
+    static OUString GetDefName();
+    static OUString GetExtension();
 
-    String          GetCompleteGroupName( const OUString& GroupName );
+    OUString        GetCompleteGroupName( const OUString& GroupName );
 
     sal_Bool            NewGroupDoc(OUString &rGroupName, const OUString& rTitle);
     sal_Bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
-    sal_Bool            DelGroupDoc(const String &);
-    SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, sal_Bool bShow = sal_True );
-    void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
+    sal_Bool        DelGroupDoc(const OUString &);
+    SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, sal_Bool bShow = sal_True );
+    void            SaveGroupDoc(const OUString &rGrpName, const OUString& rLongName );
     void            UpdateGlosPath(sal_Bool bFull);
     void            ShowError();
     inline sal_uLong            IsGlosPathErr() { return m_bError; }
-    std::vector<String> const& GetPathArray() const { return m_PathArr; }
+    std::vector<OUString> const& GetPathArray() const { return m_PathArr; }
 };
 
 
-#endif // _GLOSDOC_HXX
+#endif // GLOSDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

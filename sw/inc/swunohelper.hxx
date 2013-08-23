@@ -31,6 +31,8 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+namespace rtl {class OUString;}
+
 class String;
 class DateTime;
 
@@ -60,9 +62,9 @@ SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const String& rURL );
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a vector -->
     //                       !! objects must be deleted from the caller!!
-bool UCB_GetFileListOfFolder( const String& rURL,
-                                std::vector<String*>& rList,
-                                const String* pExtension = 0,
+bool UCB_GetFileListOfFolder( const OUString& rURL,
+                                std::vector<OUString*>& rList,
+                                const OUString* pExtension = 0,
                                 std::vector<DateTime*>* pDateTimeList = 0 );
 
     // is the URL an existing file?

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GLOSBIB_HXX
-#define _GLOSBIB_HXX
+#ifndef GLOSBIB_HXX
+#define GLOSBIB_HXX
 
 #include <vcl/edit.hxx>
 #include <svx/stddlg.hxx>
@@ -28,6 +28,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include "rtl/ustring.hxx"
 
 #include <vector>
 
@@ -103,7 +104,7 @@ protected:
 
 public:
     SwGlossaryGroupDlg(Window * pParent,
-                        std::vector<String> const& rPathArr,
+                        std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 

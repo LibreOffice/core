@@ -42,7 +42,7 @@
 #define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
-    std::vector<String> const& rPathArr, SwGlossaryHdl *pHdl)
+    std::vector<OUString> const& rPathArr, SwGlossaryHdl *pHdl)
     : SvxStandardDialog(pParent, "EditCategoriesDialog",
         "modules/swriter/ui/editcategories.ui")
     , pGlosHdl(pHdl)
@@ -76,9 +76,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
 
     for (size_t i = 0; i < rPathArr.size(); ++i)
     {
-        OUString sPath(rPathArr[i]);
-        INetURLObject aTempURL(sPath);
-        sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
+        INetURLObject aTempURL(rPathArr[i]);
+        const OUString sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         m_pPathLB->InsertEntry(sPath);
         sal_uLong nCaseReadonly = 0;
         utl::TempFile aTempFile(&sPath);

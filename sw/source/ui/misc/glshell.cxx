@@ -95,8 +95,8 @@ static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
     }
 }
 
-static sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
-                const String& rShortNm, const String& rLongNm )
+static sal_Bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
+                const OUString& rShortNm, const OUString& rLongNm )
 {
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
@@ -197,7 +197,7 @@ sal_Bool SwWebGlosDocShell::Save()
 
 SV_IMPL_REF ( SwDocShell )
 
-SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, sal_Bool bShow )
+SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString& rShortName, sal_Bool bShow )
 {
     SwDocShellRef xDocSh;
 
@@ -206,7 +206,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     {
         // query which view is registered. In WebWriter there is no normal view
         sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
-        String sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
+        const OUString sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
         if( 6 == nViewId )
         {
@@ -229,9 +229,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
 
         // set document title
         SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
-        String aDocTitle(SW_RES( STR_GLOSSARY ));
-        aDocTitle += ' ';
-        aDocTitle += sLongName;
+        const OUString aDocTitle(SW_RESSTR( STR_GLOSSARY ) + " " + sLongName);
 
         bool const bDoesUndo =
             xDocSh->GetDoc()->GetIDocumentUndoRedo().DoesUndo();
