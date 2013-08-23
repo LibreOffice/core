@@ -2647,21 +2647,19 @@ void CodeCompleteListBox::InsertSelectedEntry()
     if( !aFuncBuffer.toString().isEmpty() )
     {
         // if the user typed in something: remove, and insert
-        //TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
-        //GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_False );
         }
     }
     else
     {
         if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_True );
+            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), sal_False );
         }
     }
     HideAndRestoreFocus();
@@ -2701,8 +2699,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
                 if( aTextSelection.GetEnd().GetPara() != pCodeCompleteWindow->GetTextSelection().GetEnd().GetPara()-1 )
                 {
-                    pCodeCompleteWindow->Hide();
-                    pCodeCompleteWindow->pParent->GrabFocus();
+                    HideAndRestoreFocus();
                 }
                 break;
             }
@@ -2711,8 +2708,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 TextSelection aTextSelection( GetParentEditView()->GetSelection() );
                 if( aTextSelection.GetStart().GetIndex()-1 < pCodeCompleteWindow->GetTextSelection().GetStart().GetIndex() )
                 {//leave the cursor where it is
-                    pCodeCompleteWindow->Hide();
-                    pCodeCompleteWindow->pParent->GrabFocus();
+                    HideAndRestoreFocus();
                 }
                 break;
             }
@@ -2847,33 +2843,30 @@ void CodeCompleteWindow::ResizeListBox()
         // get column/line count
         const sal_uInt16& nColumns = aLongestEntry.getLength();
         const sal_uInt16& nLines = std::min( (sal_uInt16) 6, pListBox->GetEntryCount() );
-        const Font& aFont = pListBox->GetFont();// listbox's font: height is needed
 
-        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );
-        Size aSize = pListBox->GetOptimalSize();// this sets the correct width
-        aSize.setHeight( pListBox->CalcSize( nColumns, nLines ).getHeight() );// correct height
-
-        const Point& aBottomPoint = aVisArea.BottomRight();
-        const Point& aTopPoint = aVisArea.TopRight();
-
-        const long& nYDiff = aBottomPoint.Y() - aTopPoint.Y() - aPos.Y();
-        if( (nYDiff + aFont.GetHeight()) < aSize.Height() )
-        {//bottom part is clipped, fix the visibility by placing it over the line (not under)
-            const Font& aParFont = pParent->GetEditEngine()->GetFont();//parent's font (in the IDE): needed for height
-            aPos.Y() -= aSize.Height() + aParFont.GetHeight() + nCursorPad;
-        }
-
-        const long& nXDiff = aBottomPoint.X() - aPos.X();
-        if( nXDiff < aSize.Width() )
-        {//clipped at the right side, move it a bit left
-            aPos.X() -= aSize.Width();
-        }
-
-        pListBox->SetSizePixel( aSize );
-        aSize.setWidth( aSize.getWidth() + 1 );
-        aSize.setHeight( aSize.getHeight() + 1 );
-        // set the size and the position of the window
+        Size aSize = pListBox->CalcSize( nColumns, nLines );
+        //set the size
         SetSizePixel( aSize );
+        //1 px smaller, to see the border
+        aSize.setWidth( aSize.getWidth() - 1 );
+        aSize.setHeight( aSize.getHeight() - 1 );
+        pListBox->SetSizePixel( aSize );
+
+        //calculate position
+        const Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() );//the visible area
+        const Point& aBottomPoint = aVisArea.BottomRight();
+
+        if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
+        {//clipped at the bottom: move it up
+            const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetHeight();//parent's font (in the IDE): needed for height
+            aPos.Y() -= aSize.getHeight() + nParentFontHeight + nCursorPad;
+        }
+
+        if( aVisArea.BottomLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
+        {//clipped at the right side, move it a bit left
+            aPos.X() -= aSize.getWidth();
+        }
+        //set the position
         SetPosPixel( aPos );
     }
 }
