@@ -48,25 +48,11 @@
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
-#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
-#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <rtl/ustring.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/streamwrap.hxx>
-#include <rtl/uri.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <osl/file.h>
+#include <basegfx/tools/tools.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
@@ -94,12 +80,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using ::com::sun::star::uno::Reference;
-
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::beans::PropertyValue;
-
 
 TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
 
@@ -1116,7 +1096,6 @@ Rectangle SdPage::GetLayoutRect() const
 
 const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
 const int VERTICAL = 0x8000;
-const int PRESOBJPROP = 4;
 
 struct LayoutDescriptor
 {
@@ -1247,14 +1226,10 @@ rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const rtl::OUString& autolayout)
+static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
 {
     Rectangle aTitleRect;
     Rectangle aLayoutRect;
-    int presobjsize;
-    rtl::OUString sLayoutAttName;
-    rtl::OUString sPresObjKindAttName;
-    double propvalue[4];
 
     if( rPage.GetPageKind() != PK_HANDOUT )
     {
@@ -1278,42 +1253,39 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
     }
 
     rRectangle[0] = aTitleRect;
-
-    int i;
-    for( i = 1; i < MAX_PRESOBJS; i++ )
+    for( int i = 1; i < MAX_PRESOBJS; i++ )
         rRectangle[i] = aLayoutRect;
-    i=0;
-    for(i=0; i< PRESOBJPROP; i++)
-        propvalue[i]=0;
 
-    Point       aTitlePos( aTitleRect.TopLeft() );
-    Size        aLayoutSize( aLayoutRect.GetSize() );
-    Point       aLayoutPos( aLayoutRect.TopLeft() );
-    Size        aTempSize;
-    Point       aTempPnt;
-    aTempSize = aLayoutSize;
-    aTempPnt  = aLayoutPos;
+    const Point aTitlePos( aTitleRect.TopLeft() );
+    const Size  aLayoutSize( aLayoutRect.GetSize() );
+    const Point aLayoutPos( aLayoutRect.TopLeft() );
+    double propvalue[] = {0,0,0,0};
 
-    const std::vector<Reference<XNode>>  &layoutinfo = static_cast< SdDrawDocument* >( rPage.GetModel() )->GetLayoutVector(); //getting vector from "SdDrawDocument" ,not sure about the correct mechanism
-    for(size_t y=0; y < layoutinfo.size(); y++) //loop through vector of Xnodes
+    const std::vector< Reference<XNode> >& layoutInfo = static_cast<const SdDrawDocument*>(rPage.GetModel())->GetLayoutVector();
+    for( std::vector< Reference<XNode> >::const_iterator aIter=layoutInfo.begin(); aIter != layoutInfo.end(); ++aIter )
     {
-        Reference<XNode> layoutnode = layoutinfo[y];      //get i'th layout element
-        Reference<XNamedNodeMap> layoutattrlist =layoutnode->getAttributes();
-        Reference<XNode> layoutattr = layoutattrlist->getNamedItem("type");
-        sLayoutAttName=layoutattr->getNodeValue();              //get the attribute value of layout(i.e it's type)
-        rtl::OUString sLayoutType = autolayout;
+        Reference<XNode> layoutNode = *aIter;
+        Reference<XNamedNodeMap> layoutAttrList =layoutNode->getAttributes();
 
-        if(sLayoutAttName==sLayoutType)
+        // get the attribute value of layout (i.e it's type)
+        rtl::OUString sLayoutAttName =
+            layoutAttrList->getNamedItem("type")->getNodeValue();
+        if(sLayoutAttName == sLayoutType)
         {
             int count=0;
-            Reference<XNodeList> layoutchildrens = layoutnode->getChildNodes();
-            presobjsize = layoutchildrens->getLength();         //get the length of that of the layout(number of pres objects)
+            Reference<XNodeList> layoutChildren = layoutNode->getChildNodes();
+            const int presobjsize = layoutChildren->getLength();
             for( int j=0; j< presobjsize ; j++)
             {
+                // TODO: rework sd to permit arbitrary number of presentation objects
+                OSL_ASSERT(count < MAX_PRESOBJS);
+
                 rtl::OUString nodename;
-                Reference<XNode> presobj = layoutchildrens->item(j);    //get the j'th presobj for that layout
+                Reference<XNode> presobj = layoutChildren->item(j);
                 nodename=presobj->getNodeName();
-                if(nodename=="presobj")//check whether children is blank 'text-node' or 'presobj' node
+
+                //check whether children is blank 'text-node' or 'presobj' node
+                if(nodename == "presobj")
                 {
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
 
@@ -1333,26 +1305,24 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                     sValue = presObjPosY->getNodeValue();
                     propvalue[3] = sValue.toDouble();
 
-                    if(count==0)
+                    if(count == 0)
                     {
-                        Size aTitleSize ( aTitleRect.GetSize() );
-                        aTitleSize.Height() = sal_Int32(aTitleSize.Height() * propvalue[0]);
-                        aTitleSize.Width() = sal_Int32(aTitleSize.Width() * propvalue[1]);
-                        aTitlePos.X() = sal_Int32(aTitlePos.X() +(aTitleSize.Width() * propvalue[2]));
-                        aTitlePos.Y() = sal_Int32(aTitlePos.Y() + (aTitleSize.Height() * propvalue[3]));
-                        rRectangle[count] = Rectangle (aTitlePos, aTitleSize);
+                        Size aSize ( aTitleRect.GetSize() );
+                        aSize.Height() = basegfx::fround(aSize.Height() * propvalue[0]);
+                        aSize.Width() = basegfx::fround(aSize.Width() * propvalue[1]);
+                        Point aPos( basegfx::fround(aTitlePos.X() +(aSize.Width() * propvalue[2])),
+                                    basegfx::fround(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
+                        rRectangle[count] = Rectangle(aPos, aSize);
                         count = count+1;
                     }
                     else
                     {
-                        aLayoutSize = aTempSize; //to re-gain fixed layout size
-                        aLayoutPos = aTempPnt;  //to re-gain fixed layout pos
-                        aLayoutSize.Height() = sal_Int32(aLayoutSize.Height() * propvalue[0]);
-                        aLayoutSize.Width() = sal_Int32(aLayoutSize.Width() * propvalue[1]);
-                        aLayoutPos.X() = sal_Int32(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2]));
-                        aLayoutPos.Y() = sal_Int32(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[3]));
-                        rRectangle[count] = Rectangle (aLayoutPos, aLayoutSize);
-                        count=count+1;
+                        Size aSize( basegfx::fround(aLayoutSize.Width() * propvalue[1]),
+                                    basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
+                        Point aPos( basegfx::fround(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2])),
+                                    basegfx::fround(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[3])) );
+                        rRectangle[count] = Rectangle (aPos, aSize);
+                        count = count+1;
                     }
                 }
             }
@@ -1525,7 +1495,6 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
 
 void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate )
 {
-    rtl::OUString autolayout;
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
     const bool bSwitchLayout = eLayout != GetAutoLayout();
@@ -1546,11 +1515,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
 
     Rectangle aRectangle[MAX_PRESOBJS];
     const LayoutDescriptor& aDescriptor = GetLayoutDescriptor( meAutoLayout );
-    autolayout=enumtoString(meAutoLayout);
-    CalcAutoLayoutRectangles( *this, aRectangle, autolayout);
+    rtl::OUString sLayoutName( enumtoString(meAutoLayout) );
+    CalcAutoLayoutRectangles( *this, aRectangle, sLayoutName);
 
     std::set< SdrObject* > aUsedPresentationObjects;
-
 
     std::vector< SdrObject* > aLayoutShapes(PRESOBJ_MAX, 0);
     findAutoLayoutShapesImpl( *this, aDescriptor, aLayoutShapes, bInit, bSwitchLayout );

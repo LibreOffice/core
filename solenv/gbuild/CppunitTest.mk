@@ -53,6 +53,7 @@ gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filen
 define gb_CppunitTest__make_args
 $(HEADLESS) \
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
+"-env:BRAND_SHARE_SUBDIR=share" \
 $(if $(URE),\
     $(if $(strip $(CONFIGURATION_LAYERS)),\
 	    "-env:CONFIGURATION_LAYERS=$(strip $(CONFIGURATION_LAYERS))") \

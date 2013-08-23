@@ -264,8 +264,10 @@ public:
     bool IsExitAfterPresenting() const;
     void SetExitAfterPresenting( bool bExitAfterPresenting );
 
-    void SetLayoutVector();
-    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> &GetLayoutVector() { return maLayoutInfo; }
+    /// load xml-based impress layout definitions into document
+    void InitLayoutVector();
+    /// return reference to vector of Impress layout definitions
+    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetLayoutVector() const { return maLayoutInfo; }
 
     /** Insert pages into this document
 

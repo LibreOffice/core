@@ -29,6 +29,7 @@
 #include <editeng/scriptspaceitem.hxx>
 
 #include <unotools/useroptions.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
@@ -71,9 +72,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <osl/file.h>
@@ -192,7 +190,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
         new ImpMasterPageListWatcher(*this));
 
-    SetLayoutVector();
+    InitLayoutVector();
     SetObjectShell(pDrDocSh);       // for VCDrawModel
 
     if (mpDocSh)
@@ -1012,66 +1010,53 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
     return idx;
 }
 
-// to get the root element of the xml file
-Reference<XElement> getRoot()
+void SdDrawDocument::InitLayoutVector()
 {
-    const Reference<css::uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XMultiServiceFactory > xServiceFactory( xContext->getServiceManager() , UNO_QUERY_THROW );
-    Reference< util::XMacroExpander > xMacroExpander = util::theMacroExpander::get( xContext );
-    Reference< XMultiServiceFactory > xConfigProvider = configuration::theDefaultProvider::get( xContext );
+    const Reference<css::uno::XComponentContext> xContext(
+        ::comphelper::getProcessComponentContext() );
+    Reference< util::XMacroExpander > xMacroExpander(
+        util::theMacroExpander::get( xContext ) );
 
-    Any propValue = uno::makeAny(
-        beans::PropertyValue(
-            "nodepath", -1,
-            uno::makeAny( OUString( "/org.openoffice.Office.Impress/Misc" )),
-            beans::PropertyState_DIRECT_VALUE ) );
+    // get file list from configuration
+    Sequence< rtl::OUString > aFiles(
+        officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
 
-    Reference<container::XNameAccess> xNameAccess(
-        xConfigProvider->createInstanceWithArguments(
-            "com.sun.star.configuration.ConfigurationAccess",
-            Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
-
-    Sequence< rtl::OUString > aFiles;
-    xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
-    rtl::OUString aURL;
-
+    // loop over each file in sequence
+    rtl::OUString aFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
-        aURL = aFiles[i];
-        if( aURL.startsWith( "vnd.sun.star.expand:" ) )
+        aFilename = aFiles[i];
+        if( aFilename.startsWith( "vnd.sun.star.expand:" ) )
         {
             // cut protocol
-            rtl::OUString aMacro( aURL.copy( sizeof ( "vnd.sun.star.expand:" ) -1 ) );
+            rtl::OUString aMacro( aFilename.copy( sizeof ( "vnd.sun.star.expand:" ) -1 ) );
+
             // decode uric class chars
             aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+
             // expand macro string
-            aURL = xMacroExpander->expandMacros( aMacro );
+            aFilename = xMacroExpander->expandMacros( aMacro );
         }
-    }
 
-    if( aURL.startsWith( "file://" ) )
-    {
-        rtl::OUString aSysPath;
-        if( osl_getSystemPathFromFileURL( aURL.pData, &aSysPath.pData ) == osl_File_E_None )
-            aURL = aSysPath;
-    }
+        if( aFilename.startsWith( "file://" ) )
+        {
+            rtl::OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( aFilename.pData, &aSysPath.pData ) == osl_File_E_None )
+                aFilename = aSysPath;
+        }
 
-    const Reference<XDocumentBuilder> xDocBuilder( DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
-    const Reference<XDocument> xDoc = xDocBuilder->parseURI( aURL );
-    const Reference<XElement> xRoot = xDoc->getDocumentElement();
-    return xRoot;                      //this loops seems to work only once,so returning the root element
-}
+        // load layout file into DOM
+        Reference< XMultiServiceFactory > xServiceFactory(
+            xContext->getServiceManager() , UNO_QUERY_THROW );
+        const Reference<XDocumentBuilder> xDocBuilder(
+            DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-void SdDrawDocument::SetLayoutVector()
-{
-    int layoutlistsize;
-    const Reference<XElement> root = getRoot();                     //get the root element of my xml file
-    const Reference<XNodeList> layoutlist = root->getElementsByTagName("layout");
-    layoutlistsize=layoutlist->getLength();
-    for(int index=0; index < layoutlistsize; index++)
-    {
-        Reference<XNode> layoutnode = layoutlist->item(index);      //get i'th layout element
-        maLayoutInfo.push_back(layoutnode);
+        // loop over every layout entry in current file
+        const Reference<XDocument> xDoc = xDocBuilder->parseURI( aFilename );
+        const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
+        const int nElements = layoutlist->getLength();
+        for(int index=0; index < nElements; index++)
+            maLayoutInfo.push_back( layoutlist->item(index) );
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

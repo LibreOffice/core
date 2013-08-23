@@ -19,7 +19,7 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/sta
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/crdbus50.bau,user/autotext/en-US/crdbus50.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetup.xpm,user/config/psetup.xpm))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/transitions.xml,user/config/soffice.cfg/simpress/transitions.xml))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/simpress/transitions-ogl.xml,user/config/soffice.cfg/simpress/transitions-ogl.xml))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/transitions-ogl.xml,user/config/soffice.cfg/simpress/transitions-ogl.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/effects.xml,user/config/soffice.cfg/simpress/effects.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/layoutlist.xml,user/config/soffice.cfg/simpress/layoutlist.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetupl.xpm,user/config/psetupl.xpm))
