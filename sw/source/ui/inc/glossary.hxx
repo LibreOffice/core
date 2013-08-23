@@ -70,6 +70,10 @@ class SwGlTreeListBox : public SvTreeListBox
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos);
+
+    sal_Bool NotifyCopyingOrMoving( SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    bool              bIsMove);
 public:
     SwGlTreeListBox(Window* pParent, WinBits nBits);
 
