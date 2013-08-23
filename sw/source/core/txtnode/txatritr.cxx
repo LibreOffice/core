@@ -94,7 +94,7 @@ bool SwScriptIterator::Next()
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         xub_StrLen nStt,
                                         bool bUseGetWhichOfScript )
-    : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
+    : aSIter( reinterpret_cast<const String&>(rTNd.GetTxt()), nStt ), rTxtNd( rTNd ),
     pParaItem( 0 ), nChgPos( nStt ), nAttrPos( 0 ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
