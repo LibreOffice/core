@@ -210,7 +210,7 @@ sub get_file_component_attributes
 
     if ( $localstyles =~ /\bFONT\b/ )
     {
-        $attributes = 16;   # font files will not be deinstalled
+        $attributes = 8;    # font files will be deinstalled if the ref count is 0
     }
 
     if ( $localstyles =~ /\bASSEMBLY\b/ )
