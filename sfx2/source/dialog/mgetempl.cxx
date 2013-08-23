@@ -246,7 +246,7 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 //-------------------------------------------------------------------------
 
 void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
-                                               const String& rNew )
+                                               const OUString& rNew )
 
 /*  [Description]
 
@@ -424,7 +424,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
         if ( sCmp != aFollow )
             pStyle->SetFollow( aFollow );
 
-        if ( !aFollow.Len() )
+        if ( aFollow.isEmpty() )
             m_pFollowLb->SelectEntry( aName );
         else
             m_pFollowLb->SelectEntry( aFollow );
@@ -437,7 +437,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
         if ( sCmp != aParent )
             pStyle->SetParent( aParent );
 
-        if ( !aParent.Len() )
+        if ( aParent.isEmpty() )
             m_pBaseLb->SelectEntry( SfxResId(STR_NONE).toString() );
         else
             m_pBaseLb->SelectEntry( aParent );

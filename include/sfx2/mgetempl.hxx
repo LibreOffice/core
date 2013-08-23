@@ -55,13 +55,13 @@ class SfxManageStyleSheetPage : public SfxTabPage
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;
     const SfxStyleFamilyItem *pItem;
-    String aBuf;
+    OUString aBuf;
     sal_Bool bModified;
 
     // initial data for the style
-    String aName;
-    String aFollow;
-    String aParent;
+    OUString aName;
+    OUString aFollow;
+    OUString aParent;
     sal_uInt16 nFlags;
 
 private:
@@ -70,7 +70,7 @@ friend class SfxStyleDialog;
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
 
-    void    UpdateName_Impl(ListBox *, const String &rNew);
+    void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
 
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
