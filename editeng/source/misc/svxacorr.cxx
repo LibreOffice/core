@@ -2710,20 +2710,29 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                       xub_StrLen nEndPos) const
 {
     const String& rChk = pFnd->GetShort();
-    if( nEndPos >= rChk.Len() )
+    xub_StrLen left_wildcard = ( rChk.GetChar( 0 ) == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
+    xub_StrLen nSttWdPos = nEndPos;
+    bool bWasWordDelim = false;
+    if( nEndPos >= rChk.Len() - left_wildcard)
     {
-        xub_StrLen nCalcStt = nEndPos - rChk.Len();
-        if( ( !nCalcStt || nCalcStt == rStt ||
+
+        xub_StrLen nCalcStt = nEndPos - rChk.Len() + left_wildcard;
+        if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
                 IsWordDelim( rTxt.GetChar( nCalcStt - 1 ) ))) )
         {
             TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-
-            OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
-            if( rCmp.isEqual( rChk, sWord ))
+            OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len() - left_wildcard);
+            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.Copy(1), sWord) ))
             {
                 rStt = nCalcStt;
-                return pFnd;
+                if (!left_wildcard) return pFnd;
+                // get the first word delimiter position before the matching "*word" pattern
+                while( rStt && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --rStt ))))
+                    ;
+                if (bWasWordDelim) rStt++;
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + rStt, nEndPos - rStt), OUString(rTxt.GetBuffer() + rStt, nEndPos - rStt - rChk.Len() + 1) + OUString(pFnd->GetLong()));
+                if( Insert( pNew ) ) return pNew; else delete pNew;
             }
         }
         // match "word*" patterns, eg. "i18n*"
@@ -2731,8 +2740,6 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
         {
             String sTmp( rChk.Copy( 0, rChk.Len() - 1 ) );
             // Get the last word delimiter position
-            xub_StrLen nSttWdPos = nEndPos;
-            bool bWasWordDelim = false;
             bool not_suffix;
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --nSttWdPos ))))
                 ;
