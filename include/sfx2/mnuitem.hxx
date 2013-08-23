@@ -38,7 +38,7 @@ struct SfxMenuCtrlFactory;
 
 class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 {
-    String                  aTitle;
+    OUString                aTitle;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
     sal_Bool                    b_ShowStrings;
@@ -55,12 +55,12 @@ public:
 
         using SfxControllerItem::Bind;
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
-                                  const String& rTitle, SfxBindings& rBindings );
+                                  const OUString& rTitle, SfxBindings& rBindings );
     void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
                                   SfxVirtualMenu& rSubMenu,
-                                  const String& rTitle, SfxBindings& rBindings );
+                                  const OUString& rTitle, SfxBindings& rBindings );
 
-    String                  GetTitle() const;
+    OUString                GetTitle() const;
     SfxVirtualMenu*         GetPopupMenu() const;
     virtual PopupMenu*      GetPopup() const;
 
@@ -68,7 +68,7 @@ public:
                                           const SfxPoolItem* pState );
 
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
-    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
+    static SfxUnoMenuControl* CreateControl( const OUString&, sal_uInt16, Menu&, const OUString& sItemText, SfxBindings&, SfxVirtualMenu* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
 };
@@ -77,8 +77,8 @@ class SfxUnoMenuControl : public SfxMenuControl
 {
     SfxUnoControllerItem*   pUnoCtrl;
 public:
-                            SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
-                                               const String&,
+                            SfxUnoMenuControl( const OUString&, sal_uInt16 nId, Menu&,
+                                               const OUString&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
 };
@@ -99,7 +99,7 @@ struct SfxMenuCtrlFactory
     {}
 };
 
-inline String SfxMenuControl::GetTitle() const
+inline OUString SfxMenuControl::GetTitle() const
 {
     return aTitle;
 }

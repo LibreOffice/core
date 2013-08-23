@@ -72,7 +72,7 @@ using namespace ::com::sun::star::util;
 void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
     sal_uInt16 nSlotId,
-    const String& rTitle,
+    const OUString& rTitle,
     SfxBindings &rBindings )
 {
     aTitle = rTitle;
@@ -95,7 +95,7 @@ void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
     sal_uInt16 nSlotId,
     SfxVirtualMenu& rMenu,
-    const String& rTitle,
+    const OUString& rTitle,
     SfxBindings &rBindings )
 {
     SetId( nSlotId );
@@ -384,16 +384,16 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     return sal_False;
 }
 
-SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        sal_uInt16 nId, Menu& rMenu, const String& sItemText,
+SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,
+        sal_uInt16 nId, Menu& rMenu, const OUString& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
     return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, rBindings, pVirt);
 }
 
 SfxUnoMenuControl::SfxUnoMenuControl(
-    const String& rCmd, sal_uInt16 nSlotId, Menu& /*rMenu*/,
-    const String& rItemText,
+    const OUString& rCmd, sal_uInt16 nSlotId, Menu& /*rMenu*/,
+    const OUString& rItemText,
     SfxBindings& rBindings, SfxVirtualMenu* pVirt)
     : SfxMenuControl( nSlotId, rBindings )
 {
