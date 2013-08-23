@@ -265,6 +265,19 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     ISC_STATUS aErr;
 
+    if (m_xResultSet.is()) // Checks whether we have already run the statement.
+    {
+        disposeResultSet();
+        // Closes the cursor from the last run.
+        aErr = isc_dsql_free_statement(m_statusVector,
+                                       &m_aStatementHandle,
+                                       DSQL_close);
+        if (aErr)
+            evaluateStatusVector(m_statusVector,
+                                 "isc_dsql_free_statement: close cursor",
+                                 *this);
+    }
+
     aErr = isc_dsql_execute(m_statusVector,
                                 &m_pConnection->getTransaction(),
                                 &m_aStatementHandle,
