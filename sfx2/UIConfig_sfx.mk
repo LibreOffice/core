@@ -16,6 +16,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/documentfontspage \
 	sfx2/uiconfig/ui/documentinfopage \
 	sfx2/uiconfig/ui/documentpropertiesdialog \
+	sfx2/uiconfig/ui/errorfindemaildialog \
 	sfx2/uiconfig/ui/licensedialog \
 	sfx2/uiconfig/ui/managestylepage \
 	sfx2/uiconfig/ui/optprintpage \

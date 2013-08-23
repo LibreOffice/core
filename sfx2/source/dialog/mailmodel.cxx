@@ -51,7 +51,7 @@
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <sfx2/mailmodelapi.hxx>
 #include "sfxtypes.hxx"
@@ -892,7 +892,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     SolarMutexGuard aGuard;
                     Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
-                    ErrorBox aBox( pParentWindow, SfxResId( RID_ERRBOX_MAIL_CONFIG ));
+                    MessageDialog aBox(pParentWindow, "ErrorFindEmailDialog", "sfx/ui/errorfindemaildialog.ui");
                     aBox.Execute();
                     eResult = SEND_MAIL_CANCELLED;
                 }

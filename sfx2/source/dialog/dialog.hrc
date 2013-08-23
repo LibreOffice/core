@@ -52,8 +52,6 @@
 
 #define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
 
-#define RID_ERRBOX_MAIL_CONFIG          ( RC_DIALOG_BEGIN + 92 )
-
 // 100-106 in tbxcust.hrc
 #define STR_MACRO_LOSS                  ( RC_DIALOG_BEGIN + 107 )
 #define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
