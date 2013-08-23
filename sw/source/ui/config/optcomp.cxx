@@ -26,7 +26,6 @@
 #include "view.hxx"
 #include "wrtsh.hxx"
 
-#include "optcomp.hrc"
 #include "globals.hrc"
 #include <unotools/configmgr.hxx>
 #include <vcl/layout.hxx>
@@ -114,10 +113,10 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
     for (sal_uInt16 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
         String sEntry = m_pFormattingLB->GetEntry(nId);
-        if ( STR_TAB_ALIGNMENT == nId ||
-             STR_LINE_SPACING == nId ||
-             STR_USE_OBJPOSITIONING == nId ||
-             STR_USE_OURTEXTWRAPPING == nId )
+        if ( COPT_USE_OUR_TABSTOPS == nId ||
+             COPT_USE_LINESPACING == nId ||
+             COPT_USE_OBJECTPOSITIONING == nId ||
+             COPT_USE_OUR_TEXTWRAPPING == nId )
             ReplaceFormatName( sEntry );
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )

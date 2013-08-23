@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkGrid" id="OptCompatPage">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">6</property>
+    <child>
+      <object class="GtkFrame" id="compatframe">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
+        <child>
+          <object class="GtkAlignment" id="alignment4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkGrid" id="grid1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">5</property>
+                <child>
+                  <object class="svxcorelo-SvxCheckListBox" id="options:border">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Check List Box-selection1"/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="format">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <items>
+                      <item translatable="yes">Use printer metrics for document formatting</item>
+                      <item translatable="yes">Add spacing between paragraphs and tables (in current document)</item>
+                      <item translatable="yes">Add paragraph and table spacing at tops of pages (in current document)</item>
+                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 tabstop formatting</item>
+                      <item translatable="yes">Do not add leading (extra space) between lines of text</item>
+                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 line spacing</item>
+                      <item translatable="yes">Add paragraph and table spacing at bottom of table cells</item>
+                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 object positioning</item>
+                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 text wrapping around objects</item>
+                      <item translatable="yes">Consider wrapping style when positioning objects</item>
+                      <item translatable="yes">Expand word space on lines with manual line breaks in justified paragraphs</item>
+                      <item translatable="yes">&lt;User settings&gt;</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="default">
+                    <property name="label" translatable="yes">Use as _Default</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label11">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Compatibility options for %DOCNAME</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>
