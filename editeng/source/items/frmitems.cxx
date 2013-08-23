@@ -1313,7 +1313,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     aShadow.Location = eSet;
     aShadow.ShadowWidth =   bConvert ? TWIP_TO_MM100_UNSIGNED(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
-    aShadow.Color = aShadowColor.GetRGBColor();
+    aShadow.Color = aShadowColor.GetColor();
 
     switch ( nMemberId )
     {
@@ -1372,7 +1372,6 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         nWidth = bConvert ? MM100_TO_TWIP(aShadow.ShadowWidth) : aShadow.ShadowWidth;
         Color aSet(aShadow.Color);
-        aSet.SetTransparency(aShadow.IsTransparent ? 0xff : 0);
         aShadowColor = aSet;
     }
 

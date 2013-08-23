@@ -4319,7 +4319,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     OutputDevice *pOut = pGlobalShell->GetOut();
 
     sal_uLong nOldDrawMode = pOut->GetDrawMode();
-    Color aShadowColor( rShadow.GetColor() );
+    Color aShadowColor( rShadow.GetColor().GetRGBColor() );
     if( !aRegion.empty() && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
