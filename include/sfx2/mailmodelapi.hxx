@@ -27,8 +27,7 @@
 #include "sfx2/dllapi.h"
 
 // class AddressList_Impl ------------------------------------------------
-typedef String* AddressItemPtr_Impl;
-typedef ::std::vector< AddressItemPtr_Impl > AddressList_Impl;
+typedef ::std::vector< OUString > AddressList_Impl;
 
 // class SfxMailModel_Impl -----------------------------------------------
 
@@ -74,13 +73,12 @@ private:
     AddressList_Impl*   mpToList;
     AddressList_Impl*   mpCcList;
     AddressList_Impl*   mpBccList;
-    String              maFromAddress;
-    String              maSubject;
+    OUString            maFromAddress;
+    OUString            maSubject;
     MailPriority        mePriority;
 
     sal_Bool            mbLoadDone;
 
-    void                ClearList( AddressList_Impl* pList );
     SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                                                  const OUString& rFilterName,
@@ -102,9 +100,9 @@ public:
     SfxMailModel();
     ~SfxMailModel();
 
-    void                AddAddress( const String& rAddress, AddressRole eRole );
-    void                SetFromAddress( const String& rAddress )    { maFromAddress = rAddress; }
-    void                SetSubject( const String& rSubject )        { maSubject = rSubject; }
+    void                AddAddress( const OUString& rAddress, AddressRole eRole );
+    void                SetFromAddress( const OUString& rAddress )    { maFromAddress = rAddress; }
+    void                SetSubject( const OUString& rSubject )        { maSubject = rSubject; }
     void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
 
     /** attaches a document to the current attachment list, can be called more than once.
@@ -129,7 +127,7 @@ public:
     sal_Bool            IsEmpty() const;
 };
 
-sal_Bool CreateFromAddress_Impl( String& rFrom );
+sal_Bool CreateFromAddress_Impl( OUString& rFrom );
 
 #endif // INCLUDED_SFX_MAILMODEL_HXX
 

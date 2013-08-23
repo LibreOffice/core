@@ -131,16 +131,6 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
 
-void SfxMailModel::ClearList( AddressList_Impl* pList )
-{
-    if ( pList )
-    {
-        for( size_t i = 0, n = pList->size(); i < n; ++i )
-            delete pList->at(i);
-        pList->clear();
-    }
-}
-
 sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XModel >& xModel )
 {
     try
@@ -701,18 +691,15 @@ SfxMailModel::SfxMailModel() :
 
 SfxMailModel::~SfxMailModel()
 {
-    ClearList( mpToList );
     delete mpToList;
-    ClearList( mpCcList );
     delete mpCcList;
-    ClearList( mpBccList );
     delete mpBccList;
 }
 
-void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
+void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
 {
     // don't add a empty address
-    if ( rAddress.Len() > 0 )
+    if ( !rAddress.isEmpty() )
     {
         AddressList_Impl* pList = NULL;
         if ( ROLE_TO == eRole )
@@ -744,8 +731,7 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         if ( pList )
         {
             // add address to list
-            AddressItemPtr_Impl pAddress = new String( rAddress );
-            pList->push_back( pAddress );
+            pList->push_back( rAddress );
         }
     }
 }
@@ -804,7 +790,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
             if ( xSimpleMailMessage.is() )
             {
                 sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
-                if ( maFromAddress.Len() == 0 )
+                if ( maFromAddress.isEmpty() )
                 {
                     // from address not set, try figure out users e-mail address
                     CreateFromAddress_Impl( maFromAddress );
@@ -819,12 +805,12 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 if ( nToCount > 1 )
                 {
                     nCcSeqCount = nToCount - 1 + nCcCount;
-                    xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
+                    xSimpleMailMessage->setRecipient( mpToList->at( 0 ) );
                     nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                 }
                 else if ( nToCount == 1 )
                 {
-                    xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
+                    xSimpleMailMessage->setRecipient( mpToList->at( 0 ) );
                     nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                 }
 
@@ -839,13 +825,13 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     {
                         for ( size_t i = 1; i < nToCount; ++i )
                         {
-                            aCcRecipientSeq[nIndex++] = *mpToList->at(i);
+                            aCcRecipientSeq[nIndex++] = mpToList->at(i);
                         }
                     }
 
                     for ( size_t i = 0; i < nCcCount; i++ )
                     {
-                        aCcRecipientSeq[nIndex++] = *mpCcList->at(i);
+                        aCcRecipientSeq[nIndex++] = mpCcList->at(i);
                     }
                     xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
                 }
@@ -856,7 +842,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     Sequence< OUString > aBccRecipientSeq( nBccCount );
                     for ( size_t i = 0; i < nBccCount; ++i )
                     {
-                        aBccRecipientSeq[i] = *mpBccList->at(i);
+                        aBccRecipientSeq[i] = mpBccList->at(i);
                     }
                     xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
                 }
@@ -928,7 +914,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 // functions -------------------------------------------------------------
 
-sal_Bool CreateFromAddress_Impl( String& rFrom )
+sal_Bool CreateFromAddress_Impl( OUString& rFrom )
 
 /* [Description]
 
@@ -953,7 +939,7 @@ sal_Bool CreateFromAddress_Impl( String& rFrom )
             rFrom = comphelper::string::strip(aFirstName, ' ');
 
             if ( aName.Len() )
-                rFrom += ' ';
+                rFrom += " ";
         }
         rFrom += comphelper::string::strip(aName, ' ');
         // remove illegal characters
@@ -969,13 +955,13 @@ sal_Bool CreateFromAddress_Impl( String& rFrom )
 
     if ( aEmailName.Len() )
     {
-        if ( rFrom.Len() )
-            rFrom += ' ';
-        ( ( rFrom += '<' ) += comphelper::string::strip(aEmailName, ' ') ) += '>';
+        if ( !rFrom.isEmpty() )
+            rFrom += " ";
+        rFrom = rFrom + "<" + comphelper::string::strip(aEmailName, ' ') + ">";
     }
     else
-        rFrom.Erase();
-    return ( rFrom.Len() > 0 );
+        rFrom = "";
+    return !rFrom.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
