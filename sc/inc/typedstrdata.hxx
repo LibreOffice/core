@@ -27,13 +27,15 @@ public:
     };
 
     ScTypedStrData( const OUString& rStr, double nVal = 0.0,
-                    StringType eType = Standard );
+                    StringType eType = Standard, bool bDate = false );
 
     ScTypedStrData( const ScTypedStrData& rCpy );
 
     bool IsStrData() const;
+    bool IsDate() const;
     SC_DLLPUBLIC const OUString& GetString() const;
     StringType GetStringType() const;
+    double GetValue() const { return mfValue; }
 
     struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
     {
@@ -62,6 +64,7 @@ private:
     OUString maStrValue;
     double mfValue;
     StringType meStrType;
+    bool   mbIsDate;
 };
 
 class FindTypedStrData : std::unary_function<ScTypedStrData, bool>

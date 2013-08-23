@@ -186,6 +186,24 @@ private:
     ScMenuFloatingWindow* mpParentMenu;
 };
 
+
+class ScCheckListBox : public SvTreeListBox
+{
+    SvLBoxButtonData*   mpCheckButton;
+    SvTreeListEntry* CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const;
+    public:
+    ScCheckListBox( Window* pParent, WinBits nWinStyle = 0 ) : SvTreeListBox( pParent, nWinStyle ) { Init(); }
+    ScCheckListBox( Window* pParent, const ResId& rResId ) : SvTreeListBox( pParent, rResId ) { Init(); }
+    ~ScCheckListBox() { delete mpCheckButton; }
+    void Init();
+    void            CheckEntryPos       ( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck = sal_True );
+    void            CheckEntryPos       ( SvTreeListEntry* pEntry, sal_Bool bCheck = sal_True );
+    sal_Bool        IsChecked( OUString& sName, SvTreeListEntry* pParent );
+    SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
+    sal_uInt16 GetCheckedEntryCount() const;
+    void         ExpandChildren( SvTreeListEntry* pParent );
+    virtual void KeyInput( const KeyEvent& rKEvt );
+};
 /**
  * This class implements a popup window for field button, for quick access
  * of hide-item list, and possibly more stuff related to field options.
@@ -225,6 +243,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void setMemberSize(size_t n);
+    void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
     void initMembers();
     void setConfig(const Config& rConfig);
@@ -255,10 +274,14 @@ protected:
 private:
     struct Member
     {
-        OUString maName;
+        OUString maName; // node name
+        OUString maRealName;
         bool            mbVisible;
+        bool            mbDate;
+        bool            mbLeaf;
 
         Member();
+        SvTreeListEntry* mpParent;
     };
 
     class CancelButton : public ::CancelButton
@@ -299,7 +322,9 @@ private:
     DECL_LINK( CheckHdl, SvTreeListBox* );
 
 private:
-    SvxCheckListBox maChecks;
+    SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
+
+    ScCheckListBox maChecks;
 
     TriStateBox     maChkToggleAll;
     ImageButton     maBtnSelectSingle;

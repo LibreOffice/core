@@ -20,6 +20,9 @@ bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, 
     if (left.meStrType == Value)
         return left.mfValue < right.mfValue;
 
+    if (left.mbIsDate != right.mbIsDate)
+        return left.mbIsDate < right.mbIsDate;
+
     return ScGlobal::GetCaseCollator()->compareString(
         left.maStrValue, right.maStrValue) < 0;
 }
@@ -31,6 +34,9 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
 
     if (left.meStrType == Value)
         return left.mfValue < right.mfValue;
+
+    if (left.mbIsDate != right.mbIsDate)
+        return left.mbIsDate < right.mbIsDate;
 
     return ScGlobal::GetCollator()->compareString(
         left.maStrValue, right.maStrValue) < 0;
@@ -44,6 +50,9 @@ bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left,
     if (left.meStrType == Value && left.mfValue != right.mfValue)
         return false;
 
+    if (left.mbIsDate != right.mbIsDate )
+        return false;
+
     return ScGlobal::GetCaseCollator()->compareString(
         left.maStrValue, right.maStrValue) == 0;
 }
@@ -54,6 +63,9 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
         return false;
 
     if (left.meStrType == Value && left.mfValue != right.mfValue)
+        return false;
+
+    if (left.mbIsDate != right.mbIsDate )
         return false;
 
     return ScGlobal::GetCollator()->compareString(
@@ -75,19 +87,26 @@ bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 }
 
 ScTypedStrData::ScTypedStrData(
-    const OUString& rStr, double nVal, StringType nType ) :
+    const OUString& rStr, double nVal, StringType nType, bool bDate ) :
     maStrValue(rStr),
     mfValue(nVal),
-    meStrType(nType) {}
+    meStrType(nType),
+    mbIsDate( bDate ) {}
 
 ScTypedStrData::ScTypedStrData( const ScTypedStrData& rCpy ) :
     maStrValue(rCpy.maStrValue),
     mfValue(rCpy.mfValue),
-    meStrType(rCpy.meStrType) {}
+    meStrType(rCpy.meStrType),
+    mbIsDate( rCpy.mbIsDate ) {}
 
 bool ScTypedStrData::IsStrData() const
 {
     return meStrType != Value;
+}
+
+bool ScTypedStrData::IsDate() const
+{
+    return mbIsDate;
 }
 
 const OUString& ScTypedStrData::GetString() const

@@ -1795,15 +1795,17 @@ class FilterEntriesHandler
         }
 
         short nType = pFormatter->GetType(nFormat);
+        bool bDate = false;
         if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
         {
             // special case for date values.  Disregard the time
             // element if the number format is of date type.
             fVal = rtl::math::approxFloor(fVal);
             mbHasDates = true;
+            bDate = true;
         }
-
-        mrStrings.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value));
+        // maybe extend ScTypedStrData enum is also an option here
+        mrStrings.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
     }
 
 public:

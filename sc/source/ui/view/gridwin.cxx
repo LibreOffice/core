@@ -706,7 +706,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         bool bSelected = true;
         if (!aSelected.empty())
             bSelected = aSelected.count(aVal) > 0;
-        mpAutoFilterPopup->addMember(aVal, bSelected);
+        if ( it->IsDate() )
+            mpAutoFilterPopup->addDateMember( aVal, it->GetValue(), bSelected );
+        else
+            mpAutoFilterPopup->addMember(aVal, bSelected);
     }
     mpAutoFilterPopup->initMembers();
 

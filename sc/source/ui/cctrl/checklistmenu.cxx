@@ -29,6 +29,8 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include "svtools/fmtfield.hxx"
+#include "document.hxx"
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
@@ -850,6 +852,11 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
         mpParentMenu->terminateAllPopupMenus();
 }
 
+ScDocument* ScMenuFloatingWindow::getDoc()
+{
+    return mpDoc;
+}
+
 // ============================================================================
 
 ScCheckListMenuWindow::Config::Config() :
@@ -1078,7 +1085,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos(static_cast<sal_uInt16>(i), bSet);
+        maChecks.CheckEntryPos( maMembers[i].maName, maMembers[i].mpParent, bSet);
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
@@ -1088,8 +1095,9 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-    sal_uInt16 nSelected = maChecks.GetSelectEntryPos();
-    maChecks.CheckEntryPos(nSelected, bSet);
+//    sal_uInt16 nSelected = maChecks.GetSelectEntryPos();
+    SvTreeListEntry* pEntry = maChecks.GetCurEntry();
+    maChecks.CheckEntryPos(pEntry, bSet );
 }
 
 void ScCheckListMenuWindow::cycleFocus(bool bReverse)
@@ -1160,7 +1168,9 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
 {
     if (pChecks != &maChecks)
         return 0;
-
+    SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
+    if ( pEntry )
+        maChecks.CheckEntryPos( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
     size_t nNumChecked = maChecks.GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
@@ -1267,12 +1277,175 @@ void ScCheckListMenuWindow::setMemberSize(size_t n)
     maMembers.reserve(n);
 }
 
+void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, bool bVisible)
+{
+    ScDocument* pDoc = getDoc();
+    if ( pDoc )
+    {
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        OUString rsDate;
+        if ( pFormatter )
+        {
+            OUString sFormat("YYYY/MMMM/DD");
+            Color* pColor = NULL;
+            pFormatter->GetPreviewString(sFormat,
+                nVal,
+                rsDate,
+                &pColor,
+                ScGlobal::eLnge );
+        }
+        maChecks.SetUpdateMode(false);
+        sal_Int32 nIndex = 0;
+        std::vector< OUString > vParts;
+        OUString sParent;
+        SvTreeListEntry* pParent = NULL;
+        int count = 0;
+        do
+        {
+            OUString sPart = rsDate.getToken( 0, '/', nIndex );
+            bool bLeaf = ( ++count == 3 );
+            SvTreeListEntry* pChild = maChecks.FindEntry( pParent, sPart );
+            if ( !pChild )
+            {
+                if ( bLeaf )
+                    pChild = maChecks.SvTreeListBox::InsertEntry( sPart, pParent, sal_False, LISTBOX_APPEND, NULL, SvLBoxButtonKind_enabledCheckbox );
+                else
+                    pChild = maChecks.SvTreeListBox::InsertEntry( sPart, pParent, sal_True, LISTBOX_APPEND, NULL, SvLBoxButtonKind_enabledCheckbox );
+                Member aMember;
+                aMember.maName = sPart;
+                aMember.maRealName = rsName;
+                aMember.mbDate = true;
+                aMember.mbLeaf = bLeaf;
+                aMember.mbVisible = bVisible;
+                aMember.mpParent = pParent;
+                maMembers.push_back(aMember);
+            }
+            sParent = sPart;
+            pParent = pChild;
+        } while ( nIndex >= 0 );
+        maChecks.SetUpdateMode(true);
+    }
+}
+
 void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
 {
     Member aMember;
     aMember.maName = rName;
+    aMember.mbDate = false;
+    aMember.mbLeaf = true;
     aMember.mbVisible = bVisible;
+    aMember.mpParent = NULL;
     maMembers.push_back(aMember);
+}
+
+SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
+{
+    sal_uInt16 nRootPos = 0;
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
+    while ( pEntry )
+    {
+        if (  sNode.equals(GetEntryText( pEntry )) )
+            return pEntry;
+
+        pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
+    }
+    return NULL;
+}
+
+void ScCheckListBox::Init()
+{
+    mpCheckButton = new SvLBoxButtonData( this );
+    EnableCheckButton( mpCheckButton );
+    SetNodeDefaultImages();
+}
+
+sal_Bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
+{
+    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
+    if ( pEntry && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED)
+        return sal_True;
+    return sal_False;
+}
+
+void ScCheckListBox::CheckEntryPos( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck )
+{
+    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
+    if ( pEntry )
+        CheckEntryPos(  pEntry, bCheck );
+}
+
+void ScCheckListBox::CheckEntryPos( SvTreeListEntry* pParent, sal_Bool bCheck )
+{
+    // currently pParent ( and *all* children ) are checked with state of bCheck
+    // *BUT* if this is not a Root node then bCheck here should also influence the
+    // ancestor hierarchy ( e.g. a child node checked or uncheck MAY need to check/uncheck
+    // the parent/grandparent node )
+    if ( pParent )
+    {
+        SetCheckButtonState(
+            pParent, bCheck ? SvButtonState( SV_BUTTON_CHECKED ) :
+                                           SvButtonState( SV_BUTTON_UNCHECKED ) );
+    }
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
+    while ( pEntry )
+    {
+        CheckEntryPos( pEntry, bCheck );
+        pEntry = NextSibling( pEntry );
+    }
+}
+
+SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
+{
+    if ( pParent && GetCheckButtonState( pParent ) == SV_BUTTON_CHECKED  )
+        nCount++;
+    // Iterate over the children
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
+    while ( pEntry )
+    {
+        CountCheckedEntries( pEntry, nCount );
+        pEntry = NextSibling( pEntry );
+    }
+    return NULL;
+}
+
+sal_uInt16 ScCheckListBox::GetCheckedEntryCount() const
+{
+    sal_uLong nCount = 0;
+    CountCheckedEntries( NULL,  nCount );
+    return nCount;
+}
+
+void ScCheckListBox::ExpandChildren( SvTreeListEntry* pParent )
+{
+    if ( pParent )
+        Expand( pParent );
+    // Iterate over the children
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
+    while ( pEntry )
+    {
+        ExpandChildren( pEntry );
+        pEntry = NextSibling( pEntry );
+    }
+}
+
+void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode& rKey = rKEvt.GetKeyCode();
+
+    if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
+    {
+        SvTreeListEntry* pEntry = GetCurEntry();
+
+        if ( pEntry )
+        {
+            sal_Bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
+            CheckEntryPos( pEntry, !bCheck );
+            if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
+                CheckButtonHdl();
+        }
+    }
+    else if ( GetEntryCount() )
+        SvTreeListBox::KeyInput( rKEvt );
 }
 
 void ScCheckListMenuWindow::initMembers()
@@ -1282,8 +1455,19 @@ void ScCheckListMenuWindow::initMembers()
     maChecks.SetUpdateMode(false);
     for (size_t i = 0; i < n; ++i)
     {
-        maChecks.InsertEntry(maMembers[i].maName);
-        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), maMembers[i].mbVisible);
+        if ( !maMembers[ i ].mbDate )
+        {
+            maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, LISTBOX_APPEND, NULL,
+                SvLBoxButtonKind_enabledCheckbox );
+        }
+        // Expand all nodes of dates
+        // Needs better behaviour, what gets expanded how much etc. ( depending
+        // on the tree contents )
+        else if ( maMembers[ i ].mpParent == NULL )
+        {
+            maChecks.ExpandChildren( maChecks.FindEntry( NULL, maMembers[ i ].maName ) );
+        }
+        maChecks.CheckEntryPos( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
     }
@@ -1323,8 +1507,16 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
-        bool bState = maChecks.IsChecked(static_cast< sal_uInt16 >( i ));
-        aResult.insert(ResultType::value_type(maMembers[i].maName, bState));
+        if ( maMembers[i].mbLeaf )
+        {
+            bool bState =  maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent );
+            OUString sName;
+            if ( maMembers[i].mbDate )
+                sName = maMembers[i].maRealName;
+            else
+                sName = maMembers[i].maName;
+            aResult.insert(ResultType::value_type(sName, bState));
+        }
     }
     rResult.swap(aResult);
 }
