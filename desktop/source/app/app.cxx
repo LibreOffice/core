@@ -801,8 +801,9 @@ void MinimalCommandEnv::handle(
     css::deployment::VersionException verExc;
     if ( xRequest->getRequest() >>= verExc )
     {
-        // user interaction, if an extension is already been installed.
-        bApprove = handleVersionException( verExc );
+        // choose newest version, if an extension is already been installed.
+        const bool bChooseNewestVersion = true;
+        bApprove = handleVersionException( verExc, 0, bChooseNewestVersion );
     }
 
     const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts( xRequest->getContinuations());
