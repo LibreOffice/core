@@ -247,8 +247,6 @@ public:
                 LanguageType nLang, OUString& rLangStr, OUString& rCountry );
 
 
-        I18NLANGTAG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
-
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
                 const ::com::sun::star::lang::Locale & rLocale );
 

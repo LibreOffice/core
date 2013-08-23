@@ -1120,22 +1120,12 @@ LanguageTag & LanguageTag::makeFallback()
 {
     if (!mbIsFallback)
     {
-        if (mbInitializedLangID)
-        {
-            LanguageType nLang1 = getLanguageType();
-            LanguageType nLang2 = MsLangId::Conversion::lookupFallbackLanguage( nLang1);
-            if (nLang1 != nLang2)
-                reset( nLang2);
-        }
-        else
-        {
-            const lang::Locale& rLocale1 = getLocale();
-            lang::Locale aLocale2( MsLangId::Conversion::lookupFallbackLocale( rLocale1));
-            if (    rLocale1.Language != aLocale2.Language ||
-                    rLocale1.Country  != aLocale2.Country ||
-                    rLocale1.Variant  != aLocale2.Variant)
-                reset( aLocale2);
-        }
+        const lang::Locale& rLocale1 = getLocale( true);
+        lang::Locale aLocale2( MsLangId::Conversion::lookupFallbackLocale( rLocale1));
+        if (    rLocale1.Language != aLocale2.Language ||
+                rLocale1.Country  != aLocale2.Country ||
+                rLocale1.Variant  != aLocale2.Variant)
+            reset( aLocale2);
         mbIsFallback = true;
     }
     return *this;

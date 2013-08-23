@@ -767,12 +767,6 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry( LanguageType nLan
     return aLastResortFallbackEntry;
 }
 
-// static
-LanguageType MsLangId::Conversion::lookupFallbackLanguage( LanguageType nLang )
-{
-    return lcl_lookupFallbackEntry( nLang).mnLang;
-}
-
 
 // static
 ::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale( LanguageType nLang )
