@@ -27,6 +27,16 @@
 
 // =======================================================================
 
+struct IsoLangEntry
+{
+    LanguageType  mnLang;
+    sal_Char      maLangStr[4];
+    sal_Char      maCountry[3];
+
+    /** Obtain a language tag string with '-' separator. */
+    OUString getTagString() const;
+};
+
 struct IsoLangEngEntry
 {
     LanguageType        mnLang;
@@ -89,7 +99,7 @@ struct IsoLangOtherEntry
  * LANGUAGE_AZERI LANGUAGE_URDU LANGUAGE_KASHMIRI
  */
 
-static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
+static IsoLangEntry const aImplIsoLangEntries[] =
 {
     // MS-LANGID codes               ISO639-1/2/3 ISO3166
     { LANGUAGE_ENGLISH,                     "en", ""   },
@@ -524,10 +534,10 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
-static MsLangId::IsoLangEntry aLastResortFallbackEntry =
+static IsoLangEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US" };
 
-OUString MsLangId::IsoLangEntry::getTagString() const
+OUString IsoLangEntry::getTagString() const
 {
     if (maCountry[0])
         return OUString( OUString::createFromAscii( maLangStr) + "-" + OUString::createFromAscii( maCountry));
@@ -695,7 +705,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
 // -----------------------------------------------------------------------
 
-static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
+static const IsoLangEntry & lcl_lookupFallbackEntry(
         const ::com::sun::star::lang::Locale & rLocale )
 {
     // language is lower case in table
@@ -705,8 +715,8 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
     sal_Int32 nCountryLen = aUpperCountry.getLength();
 
     // Search for locale and remember first lang-only.
-    const MsLangId::IsoLangEntry* pFirstLang = NULL;
-    const MsLangId::IsoLangEntry* pEntry = aImplIsoLangEntries;
+    const IsoLangEntry* pFirstLang = NULL;
+    const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
     {
         if (aLowerLang.equalsAscii( pEntry->maLangStr))
@@ -762,7 +772,7 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
 ::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
         const ::com::sun::star::lang::Locale & rLocale )
 {
-    const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
+    const IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
     return ::com::sun::star::lang::Locale(
             OUString::createFromAscii( rEntry.maLangStr),
             OUString::createFromAscii( rEntry.maCountry),
@@ -985,15 +995,16 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     return Conversion::convertIsoNamesToLanguage( aLang, aCountry );
 }
 
-// -----------------------------------------------------------------------
-// pass one IsoLangEntry to the outer world of the resource compiler
 
 // static
-const MsLangId::IsoLangEntry* MsLangId::getIsoLangEntry( size_t nIndex )
+::std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
 {
-    if (nIndex < SAL_N_ELEMENTS(aImplIsoLangEntries))
-        return &aImplIsoLangEntries[ nIndex];
-    return 0;
+    ::std::vector< LanguagetagMapping > aVec;
+    for (const IsoLangEntry* pEntry = aImplIsoLangEntries; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+    {
+        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+    }
+    return aVec;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

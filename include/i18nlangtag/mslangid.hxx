@@ -25,6 +25,7 @@
 #include "i18nlangtag/i18nlangtagdllapi.h"
 #include "i18nlangtag/lang.h"
 #include <com/sun/star/lang/Locale.hpp>
+#include <vector>
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
@@ -173,26 +174,19 @@ public:
 
 // ---------------------------------------------------------------------------
 
-    /** @internal - Access to fields of an element of the simple conversion table.
-        For resource compiler build environment usage only! */
-    struct IsoLangEntry
+    struct LanguagetagMapping
     {
-        LanguageType  mnLang;
-        sal_Char      maLangStr[4];
-        sal_Char      maCountry[3];
+        OUString        maBcp47;
+        LanguageType    mnLang;
 
-        /** Obtain a language tag string with '-' separator. */
-        I18NLANGTAG_DLLPUBLIC OUString getTagString() const;
+        LanguagetagMapping( const OUString & rBcp47, LanguageType nLang ) : maBcp47(rBcp47), mnLang(nLang) {}
     };
 
-    /** @internal - Return a pointer to the IsoLangEntry of the underlying table,
-        matching the offset passed by nIndex. Only meaningful for the resource
-        compiler to build a list of known languages.
-
-        @returns address of IsoLangEntry, or NULL pointer if nIndex exceeds the
-        table elements' count.
+    /** @internal - Obtain a list of known locales (i.e. those that have a
+        defined mapping between MS-LangID and ISO codes or tags) as BCP 47
+        language tag strings.
      */
-    static const IsoLangEntry* getIsoLangEntry( size_t nIndex );
+    static ::std::vector< LanguagetagMapping > getDefinedLanguagetags();
 
 // ---------------------------------------------------------------------------
 
