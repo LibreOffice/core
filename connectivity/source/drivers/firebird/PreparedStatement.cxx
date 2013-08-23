@@ -207,6 +207,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     ensurePrepared();
 
     checkParameterIndex(nParameterIndex);
+    setParameterNull(nParameterIndex, false);
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
 
@@ -590,5 +591,17 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
     // TODO: sane error message here.
 }
 
+void OPreparedStatement::setParameterNull(sal_Int32 nParameterIndex,
+                                          bool bSetNull)
+{
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+    if (pVar->sqltype & 1)
+    {
+        if (bSetNull)
+            *pVar->sqlind = -1;
+        else
+            *pVar->sqlind = 0;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

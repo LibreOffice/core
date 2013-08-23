@@ -74,6 +74,8 @@ namespace connectivity
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(::com::sun::star::sdbc::SQLException);
 
+            void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
+
             void ensurePrepared()
                 throw(::com::sun::star::sdbc::SQLException);
 
