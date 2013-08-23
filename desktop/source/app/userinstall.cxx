@@ -23,7 +23,6 @@
 #include "sal/config.h"
 
 #include "userinstall.hxx"
-#include "langselect.hxx"
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
@@ -39,12 +38,7 @@
 #include <unotools/bootstrap.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <i18nlangtag/mslangid.hxx>
-#include <com/sun/star/lang/XLocalizable.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 
 #include "app.hxx"
 
@@ -65,25 +59,14 @@ namespace desktop {
     {
         try
         {
-            Reference< XMultiServiceFactory > theConfigProvider(
-                com::sun::star::configuration::theDefaultProvider::get(
-                    comphelper::getProcessComponentContext() ) );
-
-            // localize the provider to user selection
-            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
-            OUString aUserLanguage = LanguageSelection::getLanguageString();
-            LanguageTag aLanguageTag(aUserLanguage);
-            localizable->setLocale(aLanguageTag.getLocale( false));
-
             return officecfg::Setup::Office::ooSetupInstCompleted::get();
         }
         catch (Exception const & e)
         {
-            OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_FAIL(msg.getStr());
+            SAL_WARN(
+                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
+            return false;
         }
-
-        return false;
     }
 
     UserInstall::UserInstallStatus UserInstall::finalize()
