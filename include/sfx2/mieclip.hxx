@@ -33,7 +33,7 @@ class SvData;
 class SFX2_DLLPUBLIC MSE40HTMLClipFormatObj
 {
     SvStream* pStrm;
-    String sBaseURL;
+    OUString  sBaseURL;
 
 public:
     MSE40HTMLClipFormatObj() : pStrm(0)         {}
@@ -47,7 +47,7 @@ public:
 
     const SvStream* GetStream() const       { return pStrm; }
           SvStream* GetStream()             { return pStrm; }
-    const String& GetBaseURL() const        { return sBaseURL; }
+    const OUString& GetBaseURL() const      { return sBaseURL; }
 };
 
 
