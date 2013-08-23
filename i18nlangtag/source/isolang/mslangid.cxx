@@ -199,20 +199,12 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
 
 
 // static
-::com::sun::star::lang::Locale MsLangId::Conversion::convertLanguageToLocaleWithFallback(
-        LanguageType nLang )
-{
-    return lookupFallbackLocale( MsLangId::getRealLanguage( nLang));
-}
-
-
-// static
 ::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
             const ::com::sun::star::lang::Locale & rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
     if (rLocale.Language.isEmpty())
-        return Conversion::convertLanguageToLocaleWithFallback( LANGUAGE_SYSTEM);
+        return Conversion::lookupFallbackLocale( MsLangId::getRealLanguage( LANGUAGE_SYSTEM));
 
     return Conversion::lookupFallbackLocale( rLocale);
 }

@@ -259,16 +259,7 @@ public:
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
                 const ::com::sun::star::lang::Locale & rLocale );
 
-
-        /** Convert a LanguageType to a Locale, resolving LANGUAGE_SYSTEM,
-            falling back to a default locale if no exact match was found.
-
-            Used by getFallbackLocale(Locale)
-          */
-        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocaleWithFallback(
-                LanguageType nLang );
-
-        /** Used by convertLanguageToLocaleWithFallback(LanguageType) */
+        /** Used by getFallbackLocale(Locale) */
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
                 LanguageType nLang );
     };
