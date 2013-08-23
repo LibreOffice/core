@@ -2174,13 +2174,8 @@ CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
 
 {
     pParent->get(m_pBox, "CmisWindow");
-    if ( !m_aCmisPropertiesLines.empty())
-        m_nItemHeight = m_aCmisPropertiesLines.front().getItemHeight();
-    else
-    {
-        CmisPropertyLine aTemp( m_pBox );
-        m_nItemHeight = aTemp.getItemHeight();
-    }
+    CmisPropertyLine aTemp( m_pBox );
+    m_nItemHeight = aTemp.getItemHeight();
 };
 
 CmisPropertiesWindow::~CmisPropertiesWindow()
@@ -2190,6 +2185,13 @@ CmisPropertiesWindow::~CmisPropertiesWindow()
 
 void CmisPropertiesWindow::ClearAllLines()
 {
+    std::vector< CmisPropertyLine* >::iterator pIter;
+    for ( pIter = m_aCmisPropertiesLines.begin();
+          pIter != m_aCmisPropertiesLines.end(); ++pIter )
+    {
+        CmisPropertyLine* pLine = *pIter;
+        delete pLine;
+    }
     m_aCmisPropertiesLines.clear();
 }
 
@@ -2281,24 +2283,24 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
 {
     Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
     sal_Int32 i = 0;
-    boost::ptr_vector< CmisPropertyLine >::const_iterator pIter;
+    std::vector< CmisPropertyLine* >::const_iterator pIter;
     for ( pIter = m_aCmisPropertiesLines.begin();
             pIter != m_aCmisPropertiesLines.end(); ++pIter, ++i )
     {
-        CmisPropertyLine pLine = *pIter;
+        CmisPropertyLine* pLine = *pIter;
 
-        aPropertiesSeq[i].Id = pLine.m_sId;
-        aPropertiesSeq[i].Type = pLine.m_sType;
-        aPropertiesSeq[i].Updatable = pLine.m_bUpdatable;
-        aPropertiesSeq[i].Required = pLine.m_bRequired;
-        aPropertiesSeq[i].OpenChoice = pLine.m_bOpenChoice;
-        aPropertiesSeq[i].MultiValued = pLine.m_bMultiValued;
+        aPropertiesSeq[i].Id = pLine->m_sId;
+        aPropertiesSeq[i].Type = pLine->m_sType;
+        aPropertiesSeq[i].Updatable = pLine->m_bUpdatable;
+        aPropertiesSeq[i].Required = pLine->m_bRequired;
+        aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
+        aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
 
-        String sPropertyName = pLine.m_aName->GetText();
+        String sPropertyName = pLine->m_aName->GetText();
         if ( sPropertyName.Len() > 0 )
         {
             aPropertiesSeq[i].Name = sPropertyName;
-            OUString sType = pLine.m_aType->GetText( );
+            OUString sType = pLine->m_aType->GetText( );
             if ( CMIS_TYPE_INTEGER == sType ||
                  CMIS_TYPE_DECIMAL == sType )
             {
@@ -2306,27 +2308,35 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                 sal_uInt32 nIndex = const_cast< SvNumberFormatter& >(
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 sal_Bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
-                    IsNumberFormat( pLine.m_aValueEdit->GetText(), nIndex, nValue );
+                    IsNumberFormat( pLine->m_aValueEdit->GetText(), nIndex, nValue );
+                Sequence< double > seqValue( 1 );
+                seqValue[0] = nValue;
                 if ( bIsNum )
-                    aPropertiesSeq[i].Value <<= makeAny( nValue );
+                    aPropertiesSeq[i].Value <<= makeAny( seqValue );
             }
             else if ( CMIS_TYPE_BOOL == sType )
             {
-                bool bValue = pLine.m_aYesButton->IsChecked();
-                aPropertiesSeq[i].Value <<= makeAny( bValue );
+                bool bValue = pLine->m_aYesButton->IsChecked();
+                Sequence< bool > seqValue( 1 );
+                seqValue[0] = bValue;
+                aPropertiesSeq[i].Value <<= makeAny( seqValue );
             }
             else if ( CMIS_TYPE_DATETIME == sType )
             {
-                Date aTmpDate = pLine.m_aDateField->GetDate();
-                Time aTmpTime = pLine.m_aTimeField->GetTime();
+                Date aTmpDate = pLine->m_aDateField->GetDate();
+                Time aTmpTime = pLine->m_aTimeField->GetTime();
                 util::DateTime aDateTime(aTmpTime.GetNanoSec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                         aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
-                aPropertiesSeq[i].Value <<= aDateTime;
+                Sequence< util::DateTime > seqValue( 1 );
+                seqValue[0] = aDateTime;
+                aPropertiesSeq[i].Value <<= seqValue;
             }
             else
             {
-                OUString sValue( pLine.m_aValueEdit->GetText() );
-                aPropertiesSeq[i].Value <<= makeAny( sValue );
+                OUString sValue( pLine->m_aValueEdit->GetText() );
+                Sequence< OUString > seqValue( 1 );
+                seqValue[0] = sValue;
+                aPropertiesSeq[i].Value <<= makeAny( seqValue );
             }
         }
     }
@@ -2430,26 +2440,83 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
         Sequence< document::CmisProperty > aOldProps = pInfo->GetCmisProperties( );
         Sequence< document::CmisProperty > aNewProps = m_pPropertiesCtrl.GetCmisProperties();
 
-        for ( sal_Int32 i = 0; i< aNewProps.getLength( ); i++  )
+        std::vector< document::CmisProperty > changedProps;
+        for ( sal_Int32 i = 0; i< aNewProps.getLength( ); ++i )
+        if ( aOldProps[i].Updatable )
         {
-            OUString oldValue;
-            aOldProps[i].Value >>= oldValue;
-            OUString newValue;
-            aNewProps[i].Value >>= newValue;
-            if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
-                modifiedNum++;
+            if ( aOldProps[i].Type == CMIS_TYPE_STRING )
+            {
+                Sequence< OUString > oldValue;
+                aOldProps[i].Value >>= oldValue;
+                Sequence< OUString > newValue;
+                aNewProps[i].Value >>= newValue;
+                if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
+                {
+                    modifiedNum++;
+                    changedProps.push_back( aNewProps[i] );
+                }
+            }
+            else if ( aOldProps[i].Type == CMIS_TYPE_BOOL )
+            {
+                Sequence< bool > oldValue;
+                aOldProps[i].Value >>= oldValue;
+                Sequence< bool > newValue;
+                aNewProps[i].Value >>= newValue;
+                if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
+                {
+                    modifiedNum++;
+                    changedProps.push_back( aNewProps[i] );
+                }
+            }
+            else if ( aOldProps[i].Type == CMIS_TYPE_DATETIME )
+            {
+                Sequence< util::DateTime > oldValue;
+                aOldProps[i].Value >>= oldValue;
+                // We only edit hours and minutes
+                // don't compare NanoSeconds and Seconds
+                for ( sal_Int32 ii = 0; ii < oldValue.getLength( ); ++ii )
+                {
+                    oldValue[ii].NanoSeconds = 0;
+                    oldValue[ii].Seconds = 0;
+                }
+                Sequence< util::DateTime > newValue;
+                aNewProps[i].Value >>= newValue;
+                if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
+                {
+                    modifiedNum++;
+                    changedProps.push_back( aNewProps[i] );
+                }
+            }
+            else if ( aOldProps[i].Type == CMIS_TYPE_INTEGER )
+            {
+                Sequence< sal_Int64 > oldValue;
+                aOldProps[i].Value >>= oldValue;
+                Sequence< sal_Int64 > newValue;
+                aNewProps[i].Value >>= newValue;
+                if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
+                {
+                    modifiedNum++;
+                    changedProps.push_back( aNewProps[i] );
+                }
+            }
+            else if ( aOldProps[i].Type == CMIS_TYPE_DECIMAL )
+            {
+                Sequence< double > oldValue;
+                aOldProps[i].Value >>= oldValue;
+                Sequence< double > newValue;
+                aNewProps[i].Value >>= newValue;
+                if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
+                {
+                    modifiedNum++;
+                    changedProps.push_back( aNewProps[i] );
+                }
+            }
         }
         Sequence< document::CmisProperty> aModifiedProps( modifiedNum );
         sal_Int32 nCount = 0;
-        for ( sal_Int32 i = 0; i< aNewProps.getLength( ); i++  )
-        {
-            OUString oldValue;
-            aOldProps[i].Value >>= oldValue;
-            OUString newValue;
-            aNewProps[i].Value >>= newValue;
-            if ( !aNewProps[i].Id.isEmpty() && aNewProps[i].Updatable && oldValue != newValue )
-                aModifiedProps[ nCount++ ] = aNewProps[i];
-        }
+        for( std::vector< document::CmisProperty>::const_iterator pIter = changedProps.begin();
+            pIter != changedProps.end( ); ++pIter )
+                aModifiedProps[ nCount++ ] = *pIter;
         pInfo->SetCmisProperties( aModifiedProps );
     }
 
