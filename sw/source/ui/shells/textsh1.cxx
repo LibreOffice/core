@@ -931,10 +931,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Current page format
             ::SwToSfxPageDescAttr( aCoreSet );
 
-            OString sDefPage;
-            if (pItem)
-                sDefPage = OUStringToOString(((const SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
-
             // Properties of numbering
             if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
             {
@@ -948,6 +944,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if ( bUseDialog && GetActiveView() )
             {
+                OString sDefPage;
+                if (pItem)
+                    sDefPage = OUStringToOString(((const SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
