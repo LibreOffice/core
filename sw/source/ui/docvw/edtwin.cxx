@@ -1725,8 +1725,10 @@ KEYINPUT_CHECKTABLE:
                 case KEY_UP | KEY_SHIFT:
                 case KEY_DOWN | KEY_SHIFT:
                 {
-                    if ( pFlyFmt
-                         || ( (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))
+                    const int nSelectionType = rSh.GetSelectionType();
+                    if ( ( pFlyFmt
+                           && ( nSelectionType & (nsSelectionType::SEL_FRM|nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) ) )
+                         || ( ( nSelectionType & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM) )
                               && rSh.GetDrawView()->AreObjectsMarked() ) )
                     {
                         eKeyState = pFlyFmt ? KS_Fly_Change : KS_Draw_Change;
@@ -2333,23 +2335,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if(pFieldmark)
                 {
                     pFieldmark->SetChecked(!pFieldmark->IsChecked());
-                    SwDocShell* pDocSh = m_rView.GetDocShell();
-                    SwDoc *pDoc=pDocSh->GetDoc();
                     OSL_ENSURE(pFieldmark->IsExpanded(),
                         "where is the otherpos?");
                     if (pFieldmark->IsExpanded())
                     {
-                        SwPaM aPaM(pFieldmark->GetMarkPos(), pFieldmark->GetOtherMarkPos());
-                        if(0)
-                        {
-                            rSh.StartAllAction();  //$flr TODO: understand why this not works
-                            pDoc->SetModified(aPaM);
-                            rSh.EndAllAction();
-                        }
-                        else
-                        {
-                            rSh.CalcLayout(); // workaround
-                        }
+                        rSh.CalcLayout();
                     }
                 }
                 eKeyState = KS_End;
@@ -2869,6 +2859,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
          !rSh.IsObjSelectable( aDocPos ) )
     {
+        // Enhanced table selection
         if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
         {
             rSh.EnterStdMode();
@@ -2931,9 +2922,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
         else
         {
-            // Make sure the pointer is set to 0,
-            // otherwise it may point to nowhere after deleting the corresponding
-            // text node.
+            // Make sure the pointer is set to 0, otherwise it may point to
+            // nowhere after deleting the corresponding text node.
             m_rView.SetNumRuleNodeFromDoc( NULL );
             return;
         }
@@ -3040,6 +3030,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 bExecHyperlinks = sal_True;
         }
 
+        // Enhanced selection
         sal_uInt8 nNumberOfClicks = static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4);
         if ( 0 == nNumberOfClicks && 0 < rMEvt.GetClicks() )
             nNumberOfClicks = 4;
@@ -3315,6 +3306,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( bMod )
                             rSh.EnterAddMode();
 
+                        // Enhanced selection
                         if ( 3 == nNumberOfClicks )
                             rSh.SelSentence( &aDocPos );
                         else
@@ -3743,6 +3735,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     nPointer = POINTER_HSIZEBAR;
                     bChkTblSel = true;
                     break;
+                // Enhanced table selection
                 case SW_TABSEL_HORI :
                     nPointer = POINTER_TAB_SELECT_SE;
                     break;
