@@ -409,21 +409,44 @@ SwSavePaintStatics::~SwSavePaintStatics()
 
 //----------------- Implementation for the table borders --------------
 
-static pair<bool, pair<double, double> >
-lcl_TryMergeLines(pair<double, double> const mergeA,
-                  pair<double, double> const mergeB)
+/**
+ * Check whether the two primitve can be merged
+ *
+ * @param[in]   mergeA  A primitive start and end position
+ * @param[in]   mergeB  B primitive start and end position
+ * @return      1       if A and B can be merged to a primite staring with A, ending with B
+ *              2       if A and B can be merged to a primite staring with B, ending with A
+ *              0       if A and B can't be merged
+**/
+static sal_uInt8 lcl_TryMergeLines(
+    pair<double, double> const mergeA,
+    pair<double, double> const mergeB)
 {
     double const fMergeGap(nPixelSzW + nHalfPixelSzW); // NOT static!
-    if (   (mergeA.second + fMergeGap >= mergeB.first )
-        && (mergeA.first  - fMergeGap <= mergeB.second))
+    // A is above/before B
+    if( mergeA.second <= mergeB.second &&
+        mergeA.second + fMergeGap >= mergeB.first )
     {
-        return make_pair(true, make_pair(
-                                std::min(mergeA.first, mergeB.first),
-                                std::max(mergeA.second, mergeB.second)));
+        return 1;
     }
-    return make_pair(false, make_pair(0, 0));
+    // B is above/before A
+    else if( mergeB.second <= mergeA.second &&
+             mergeB.second + fMergeGap >= mergeA.first )
+    {
+        return 2;
+    }
+    return 0;
 }
 
+/**
+ * Make a new primitive from the two input borderline primitive
+ *
+ * @param[in]   rLine       starting primitive
+ * @param[in]   rOther      ending primitive
+ * @param[in]   rStart      starting point of merged primitive
+ * @param[in]   rEnd        ending point of merged primitive
+ * @return      merged primitive
+**/
 static ::rtl::Reference<BorderLinePrimitive2D>
 lcl_MergeBorderLines(
     BorderLinePrimitive2D const& rLine, BorderLinePrimitive2D const& rOther,
@@ -444,6 +467,14 @@ lcl_MergeBorderLines(
                 rLine.getStyle());
 }
 
+/**
+ * Merge the two borderline if possible.
+ *
+ * @param[in]   rThis   one borderline primitive
+ * @param[in]   rOther  other borderline primitive
+ * @return      merged borderline including the two input primitive, if they can be merged
+ *              0, otherwise
+**/
 static ::rtl::Reference<BorderLinePrimitive2D>
 lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                        BorderLinePrimitive2D const& rOther)
@@ -456,33 +487,27 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
     double thisWidth  = rThis.getEnd().getX() - rThis.getStart().getX();
     double otherHeight = rOther.getEnd().getY() -  rOther.getStart().getY();
     double otherWidth  = rOther.getEnd().getX() -  rOther.getStart().getX();
-    // check for same orientation, same line width and matching colors
+    // check for same orientation, same line width, same style and matching colors
     if (    ((thisHeight > thisWidth) == (otherHeight > otherWidth))
         &&  (rThis.getLeftWidth()     == rOther.getLeftWidth())
         &&  (rThis.getDistance()      == rOther.getDistance())
         &&  (rThis.getRightWidth()    == rOther.getRightWidth())
+        &&  (rThis.getStyle()         == rOther.getStyle())
         &&  (rThis.getRGBColorLeft()  == rOther.getRGBColorLeft())
         &&  (rThis.getRGBColorRight() == rOther.getRGBColorRight())
         &&  (rThis.hasGapColor()      == rOther.hasGapColor())
         &&  (!rThis.hasGapColor() ||
              (rThis.getRGBColorGap()  == rOther.getRGBColorGap())))
     {
+        int nRet = 0;
         if (thisHeight > thisWidth) // vertical line
         {
             if (rThis.getStart().getX() == rOther.getStart().getX())
             {
                 assert(rThis.getEnd().getX() == rOther.getEnd().getX());
-                pair<bool, pair<double, double> > const res = lcl_TryMergeLines(
+                nRet = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getY(), rThis.getEnd().getY()),
                     make_pair(rOther.getStart().getY(),rOther.getEnd().getY()));
-                if (res.first) // merge them
-                {
-                    basegfx::B2DPoint const start(
-                            rThis.getStart().getX(), res.second.first);
-                    basegfx::B2DPoint const end(
-                            rThis.getStart().getX(), res.second.second);
-                    return lcl_MergeBorderLines(rThis, rOther, start, end);
-                }
             }
         }
         else // horizontal line
@@ -490,18 +515,29 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
             if (rThis.getStart().getY() == rOther.getStart().getY())
             {
                 assert(rThis.getEnd().getY() == rOther.getEnd().getY());
-                pair<bool, pair<double, double> > const res = lcl_TryMergeLines(
+                nRet = lcl_TryMergeLines(
                     make_pair(rThis.getStart().getX(), rThis.getEnd().getX()),
                     make_pair(rOther.getStart().getX(),rOther.getEnd().getX()));
-                if (res.first) // merge them
-                {
-                    basegfx::B2DPoint const start(
-                            res.second.first, rThis.getStart().getY());
-                    basegfx::B2DPoint const end(
-                            res.second.second, rThis.getEnd().getY());
-                    return lcl_MergeBorderLines(rThis, rOther, start, end);
-                }
             }
+        }
+
+        // The merged primitive starts with rThis and ends with rOther
+        if (nRet == 1)
+        {
+            basegfx::B2DPoint const start(
+                rThis.getStart().getX(), rThis.getStart().getY());
+            basegfx::B2DPoint const end(
+                rOther.getEnd().getX(), rOther.getEnd().getY());
+            return lcl_MergeBorderLines(rThis, rOther, start, end);
+        }
+        // The merged primitive starts with rOther and ends with rThis
+        else if(nRet == 2)
+        {
+            basegfx::B2DPoint const start(
+                rOther.getStart().getX(), rOther.getStart().getY());
+            basegfx::B2DPoint const end(
+                rThis.getEnd().getX(), rThis.getEnd().getY());
+            return lcl_MergeBorderLines(rOther, rThis, start, end);
         }
     }
     return 0;
