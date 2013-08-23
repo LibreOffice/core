@@ -1441,7 +1441,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos & SFX_POSITION_MASK];
             rBar.nMode = nPos;
             rBar.nResId = pIFace->GetObjectBarResId(nNo).GetId();
-            const String *pName = pIFace->GetObjectBarName(nNo);
+            const OUString *pName = pIFace->GetObjectBarName(nNo);
             if ( pName )
                 rBar.aName = *pName;
             else

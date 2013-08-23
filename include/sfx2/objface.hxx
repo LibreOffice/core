@@ -63,7 +63,7 @@ public:
     const SfxSlot*          GetRealSlot( const SfxSlot * ) const;
     const SfxSlot*          GetRealSlot( sal_uInt16 nSlotId ) const;
     virtual const SfxSlot*  GetSlot( sal_uInt16 nSlotId ) const;
-    const SfxSlot*          GetSlot( const String& rCommand ) const;
+    const SfxSlot*          GetSlot( const OUString& rCommand ) const;
 
     const char*             GetClassName() const { return pName; }
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
@@ -75,21 +75,21 @@ public:
     const SfxInterface*     GetGenoType() const { return pGenoType; }
     const SfxInterface*     GetRealInterfaceForSlot( const SfxSlot* ) const;
 
-    void                    RegisterObjectBar( sal_uInt16, const ResId&, const String* pST=0 );
-    void                    RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
-    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, const String* pST=0 );
-    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, sal_uInt32 nFeature, const String* pST=0 );
+    void                    RegisterObjectBar( sal_uInt16, const ResId&, const OUString* pST=0 );
+    void                    RegisterObjectBar( sal_uInt16, const ResId&, sal_uInt32 nFeature, const OUString* pST=0 );
+    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, const OUString* pST=0 );
+    void                    RegisterChildWindow( sal_uInt16, sal_Bool bContext, sal_uInt32 nFeature, const OUString* pST=0 );
     void                    RegisterStatusBar( const ResId& );
     const ResId&            GetObjectBarResId( sal_uInt16 nNo ) const;
-    sal_uInt16                  GetObjectBarPos( sal_uInt16 nNo ) const;
+    sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
     sal_uInt32              GetObjectBarFeature( sal_uInt16 nNo ) const;
-    sal_uInt16                  GetObjectBarCount() const;
+    sal_uInt16              GetObjectBarCount() const;
     void                    SetObjectBarPos( sal_uInt16 nPos, sal_uInt16 nId );
-    const String*           GetObjectBarName( sal_uInt16 nNo ) const;
-    sal_Bool                    IsObjectBarVisible( sal_uInt16 nNo) const;
+    const OUString*         GetObjectBarName( sal_uInt16 nNo ) const;
+    sal_Bool                IsObjectBarVisible( sal_uInt16 nNo) const;
     sal_uInt32              GetChildWindowFeature( sal_uInt16 nNo ) const;
     sal_uInt32              GetChildWindowId( sal_uInt16 nNo ) const;
-    sal_uInt16                  GetChildWindowCount() const;
+    sal_uInt16              GetChildWindowCount() const;
     void                    RegisterPopupMenu( const ResId& );
     const ResId&            GetPopupMenuResId() const;
     const ResId&            GetStatusBarResId() const;

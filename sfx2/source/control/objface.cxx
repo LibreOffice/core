@@ -56,7 +56,7 @@ struct SfxObjectUI_Impl
     ResId   aResId;
     sal_Bool    bVisible;
     sal_Bool    bContext;
-    String* pName;
+    OUString* pName;
     sal_uInt32  nFeature;
 
     SfxObjectUI_Impl(sal_uInt16 n, const ResId& rResId, sal_Bool bVis, sal_uInt32 nFeat) :
@@ -105,7 +105,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr );
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr );
 
 //====================================================================
 
@@ -322,7 +322,7 @@ const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
     return p ? (const SfxSlot*)p : 0;
 }
 
-const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
+const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 {
     static const char UNO_COMMAND[] = ".uno:";
 
@@ -388,20 +388,20 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 //--------------------------------------------------------------------
 
 void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId,
-        const String *pStr )
+        const OUString *pStr )
 {
     RegisterObjectBar( nPos, rResId, 0UL, pStr );
 }
 
 
-void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr )
+void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr );
     if ( pUI )
         pImpData->aObjectBars.push_back(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr )
+SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
@@ -416,12 +416,12 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, 
         if( ! aResId.GetResMgr() )
             aResId.SetResMgr( SfxApplication::GetOrCreate()->GetOffResManager_Impl() );
         if ( !aResId.GetResMgr() || !aResId.GetResMgr()->IsAvailable(aResId) )
-            pUI->pName = new String ("NoName");
+            pUI->pName = new OUString ("NoName");
         else
-            pUI->pName = new String(aResId.toString());
+            pUI->pName = new OUString(aResId.toString());
     }
     else
-        pUI->pName = new String(*pStr);
+        pUI->pName = new OUString(*pStr);
 
     return pUI;
 }
@@ -483,12 +483,12 @@ sal_uInt16 SfxInterface::GetObjectBarCount() const
 }
 
 //--------------------------------------------------------------------
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, const String* pChildWinName)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, const OUString* pChildWinName)
 {
     RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
 }
 
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, sal_uInt32 nFeature, const String*)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, sal_Bool bContext, sal_uInt32 nFeature, const OUString*)
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), sal_True, nFeature);
     pUI->bContext = bContext;
@@ -572,7 +572,7 @@ const ResId& SfxInterface::GetStatusBarResId() const
 
 
 
-const String* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
+const OUString* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
 {
     sal_Bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
