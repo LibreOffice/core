@@ -1,3 +1,33 @@
+--- foo/foo/foo/boost/math/special_functions/airy.hpp
++++ foo/foo/foo/boost/math/special_functions/airy.hpp
+@@ -340,13 +340,6 @@
+ inline T airy_ai_zero(unsigned m, const Policy& pol)
+ {
+    BOOST_FPU_EXCEPTION_GUARD
+-   typedef typename policies::evaluation<T, Policy>::type value_type;
+-   typedef typename policies::normalise<
+-      Policy, 
+-      policies::promote_float<false>, 
+-      policies::promote_double<false>, 
+-      policies::discrete_quantile<>,
+-      policies::assert_undefined<> >::type forwarding_policy;
+    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+    return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<T>(m, pol), "boost::math::airy_ai_zero<%1%>(unsigned)");
+ }
+@@ -388,13 +381,6 @@
+ inline T airy_bi_zero(unsigned m, const Policy& pol)
+ {
+    BOOST_FPU_EXCEPTION_GUARD
+-   typedef typename policies::evaluation<T, Policy>::type value_type;
+-   typedef typename policies::normalise<
+-      Policy, 
+-      policies::promote_float<false>, 
+-      policies::promote_double<false>, 
+-      policies::discrete_quantile<>,
+-      policies::assert_undefined<> >::type forwarding_policy;
+    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+    return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<T>(m, pol), "boost::math::airy_bi_zero<%1%>(unsigned)");
+ }
 --- foo/foo/foo/boost/multi_array/base.hpp
 +++ foo/foo/foo/boost/multi_array/base.hpp
 @@ -501,6 +501,7 @@
