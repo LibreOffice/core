@@ -35,7 +35,6 @@
 #include "hints.hxx"
 
 #include "chrdlg.hrc"
-#include "ccoll.hrc"
 #include <vcl/svapp.hxx>
 
 #include "swuiccoll.hxx"
@@ -52,49 +51,50 @@ static long nTabs[] =
     };
 
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
-
-    : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
-    aConditionFL( this, SW_RES( FL_CONDITION )),
-    aConditionCB( this, SW_RES( CB_CONDITION ) ),
-    aContextFT  ( this, SW_RES( FT_CONTEXT  ) ),
-    aUsedFT     ( this, SW_RES( FT_USED         ) ),
-    aTbLinks(     this, SW_RES( TB_CONDCOLLS ) ),
-    aStyleFT    ( this, SW_RES( FT_STYLE    ) ),
-    aStyleLB    ( this, SW_RES( LB_STYLE    ) ),
-    aFilterLB   ( this, SW_RES( LB_FILTER   ) ),
-    aRemovePB   ( this, SW_RES( PB_REMOVE   ) ),
-    aAssignPB   ( this, SW_RES( PB_ASSIGN   ) ),
-    sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
-    aStrArr     (       SW_RES( STR_REGIONS  ) ),
+    : SfxTabPage(pParent, "ConditionPage",
+        "modules/swriter/ui/conditionpage.ui", rSet)
+    ,
     rSh(::GetActiveView()->GetWrtShell()),
     pCmds( SwCondCollItem::GetCmds() ),
     pFmt(0),
 
     bNewTemplate(sal_False)
 {
-    FreeResource();
+    get(m_pConditionCB, "condstyle");
+    get(m_pContextFT, "contextft");
+    get(m_pUsedFT, "usedft");
+    get(m_pStyleFT, "styleft");
+    get(m_pTbLinks, "links");
+    get(m_pStyleLB, "styles");
+    m_pStyleLB->SetStyle(m_pStyleLB->GetStyle() | WB_SORT);
+    m_pStyleLB->SetDropDownLineCount(12);
+    m_pTbLinks->set_height_request(m_pStyleLB->GetOptimalSize().Height());
+    get(m_pFilterLB, "filter");
+    get(m_pRemovePB, "remove");
+    get(m_pAssignPB, "apply");
+
+    sal_uInt16 nStrCount = m_pFilterLB->GetEntryCount();
+    for (sal_uInt16 i = 0; i < nStrCount; ++i)
+        m_aStrArr.push_back(m_pFilterLB->GetEntry(i));
+    m_pFilterLB->Clear();
+
     SetExchangeSupport();
 
-    aRemovePB.SetAccessibleRelationMemberOf(&aConditionFL);
-    aAssignPB.SetAccessibleRelationMemberOf(&aConditionFL);
-    aTbLinks.SetAccessibleRelationLabeledBy(&aConditionCB);
-
     // Install handlers
-    aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
-    aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aRemovePB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aAssignPB.SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
-    aTbLinks.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-    aStyleLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-    aFilterLB.SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
+    m_pConditionCB->SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
+    m_pTbLinks->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pStyleLB->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pTbLinks->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
+    m_pStyleLB->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
+    m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
 
-    aTbLinks.SetStyle(aTbLinks.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
-    aTbLinks.SetSelectionMode( SINGLE_SELECTION );
-    aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: Hack for the right selection
-    aTbLinks.SetSpaceBetweenEntries( 0 );
-    aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
+    m_pTbLinks->SetStyle(m_pTbLinks->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
+    m_pTbLinks->SetSelectionMode( SINGLE_SELECTION );
+    m_pTbLinks->SetTabs( &nTabs[0], MAP_APPFONT );
+    m_pTbLinks->Resize();  // OS: Hack for the right selection
+    m_pTbLinks->SetSpaceBetweenEntries( 0 );
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem = 0;
@@ -109,13 +109,13 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
     for( size_t i = 0; i < rFilterList.size(); ++i )
     {
-        aFilterLB.InsertEntry( rFilterList[ i ]->aName);
+        m_pFilterLB->InsertEntry( rFilterList[ i ]->aName);
         sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
-        aFilterLB.SetEntryData(i, pFilter);
+        m_pFilterLB->SetEntryData(i, pFilter);
     }
-    aFilterLB.SelectEntryPos(1);
+    m_pFilterLB->SelectEntryPos(1);
 
-    aTbLinks.Show();
+    m_pTbLinks->Show();
 
 }
 
@@ -126,8 +126,8 @@ Page: Dtor
 
 SwCondCollPage::~SwCondCollPage()
 {
-    for(sal_uInt16 i = 0; i < aFilterLB.GetEntryCount(); ++i)
-        delete (sal_uInt16*)aFilterLB.GetEntryData(i);
+    for(sal_uInt16 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
+        delete (sal_uInt16*)m_pFilterLB->GetEntryData(i);
 
 }
 
@@ -159,9 +159,9 @@ sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bModified = sal_True;
     SwCondCollItem aCondItem;
-    for(sal_uInt16 i = 0; i < aStrArr.Count(); i++)
+    for (size_t i = 0; i < m_aStrArr.size(); ++i)
     {
-        OUString sEntry = aTbLinks.GetEntryText(i, 1);
+        OUString sEntry = m_pTbLinks->GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
     }
     rSet.Put(aCondItem);
@@ -176,28 +176,28 @@ Page: Reset-Overload
 void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 {
     if(bNewTemplate)
-        aConditionCB.Enable();
+        m_pConditionCB->Enable();
     if(RES_CONDTXTFMTCOLL == pFmt->Which())
-        aConditionCB.Check();
-    OnOffHdl(&aConditionCB);
+        m_pConditionCB->Check();
+    OnOffHdl(m_pConditionCB);
 
-    aTbLinks.Clear();
+    m_pTbLinks->Clear();
 
     SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
     pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
-    aStyleLB.Clear();
+    m_pStyleLB->Clear();
     const SfxStyleSheetBase* pBase = pPool->First();
     while( pBase )
     {
         if(!pFmt || pBase->GetName() != pFmt->GetName())
-            aStyleLB.InsertEntry(pBase->GetName());
+            m_pStyleLB->InsertEntry(pBase->GetName());
         pBase = pPool->Next();
     }
-    aStyleLB.SelectEntryPos(0);
+    m_pStyleLB->SelectEntryPos(0);
 
-    for( sal_uInt16 n = 0; n < aStrArr.Count(); n++)
+    for (size_t n = 0; n < m_aStrArr.size(); ++n)
     {
-        OUString aEntry( aStrArr.GetString(n) + "\t" );
+        OUString aEntry( m_aStrArr[n] + "\t" );
 
         const SwCollCondition* pCond = 0;
         if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
@@ -208,9 +208,9 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
             aEntry += pCond->GetTxtFmtColl()->GetName();
         }
 
-        SvTreeListEntry* pE = aTbLinks.InsertEntryToColumn( aEntry, n );
+        SvTreeListEntry* pE = m_pTbLinks->InsertEntryToColumn( aEntry, n );
         if(0 == n)
-            aTbLinks.Select(pE);
+            m_pTbLinks->Select(pE);
     }
 
 }
@@ -223,14 +223,14 @@ sal_uInt16* SwCondCollPage::GetRanges()
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
     const sal_Bool bEnable = pBox->IsChecked();
-    aContextFT.Enable( bEnable );
-    aUsedFT   .Enable( bEnable );
-    aTbLinks  .EnableList( bEnable != sal_False );
-    aStyleFT  .Enable( bEnable );
-    aStyleLB  .Enable( bEnable );
-    aFilterLB .Enable( bEnable );
-    aRemovePB .Enable( bEnable );
-    aAssignPB .Enable( bEnable );
+    m_pContextFT->Enable( bEnable );
+    m_pUsedFT->Enable( bEnable );
+    m_pTbLinks->EnableList( bEnable != sal_False );
+    m_pStyleFT->Enable( bEnable );
+    m_pStyleLB->Enable( bEnable );
+    m_pFilterLB->Enable( bEnable );
+    m_pRemovePB->Enable( bEnable );
+    m_pAssignPB->Enable( bEnable );
     if( bEnable )
         SelectHdl(0);
     return 0;
@@ -238,40 +238,40 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
-    SvTreeListEntry* pE = aTbLinks.FirstSelected();
+    SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
     sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-        ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
+        ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {
         OSL_ENSURE( pE, "where's the empty entry from?" );
         return 0;
     }
 
-    String sSel = aStrArr.GetString( sal_uInt16(nPos) );
-    sSel += '\t';
+    OUString sSel = m_aStrArr[nPos];
+    sSel += "\t";
 
-    const sal_Bool bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
-    aAssignPB.Enable( !bAssEnabled );
-    aRemovePB.Enable(  bAssEnabled );
+    const sal_Bool bAssEnabled = pBtn != m_pRemovePB && m_pAssignPB->IsEnabled();
+    m_pAssignPB->Enable( !bAssEnabled );
+    m_pRemovePB->Enable(  bAssEnabled );
     if ( bAssEnabled )
-        sSel += aStyleLB.GetSelectEntry();
+        sSel += m_pStyleLB->GetSelectEntry();
 
-    aTbLinks.SetUpdateMode(sal_False);
-    aTbLinks.GetModel()->Remove(pE);
-    pE = aTbLinks.InsertEntryToColumn(sSel, nPos);
-    aTbLinks.Select(pE);
-    aTbLinks.MakeVisible(pE);
-    aTbLinks.SetUpdateMode(sal_True);
+    m_pTbLinks->SetUpdateMode(sal_False);
+    m_pTbLinks->GetModel()->Remove(pE);
+    pE = m_pTbLinks->InsertEntryToColumn(sSel, nPos);
+    m_pTbLinks->Select(pE);
+    m_pTbLinks->MakeVisible(pE);
+    m_pTbLinks->SetUpdateMode(sal_True);
     return 0;
 }
 
 IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
 {
-    if(pBox == &aFilterLB)
+    if (pBox == m_pFilterLB)
     {
-        aStyleLB.Clear();
+        m_pStyleLB->Clear();
         sal_uInt16 nSearchFlags = pBox->GetSelectEntryPos();
-        nSearchFlags = *(sal_uInt16*)aFilterLB.GetEntryData(nSearchFlags);
+        nSearchFlags = *(sal_uInt16*)m_pFilterLB->GetEntryData(nSearchFlags);
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -279,26 +279,26 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
         while( pBase )
         {
             if(!pFmt || pBase->GetName() != pFmt->GetName())
-                aStyleLB.InsertEntry(pBase->GetName());
+                m_pStyleLB->InsertEntry(pBase->GetName());
             pBase = pPool->Next();
         }
-        aStyleLB.SelectEntryPos(0);
-        SelectHdl(&aStyleLB);
+        m_pStyleLB->SelectEntryPos(0);
+        SelectHdl(m_pStyleLB);
 
     }
     else
     {
         String sTbEntry;
-        SvTreeListEntry* pE = aTbLinks.FirstSelected();
+        SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
         if(pE)
-            sTbEntry = aTbLinks.GetEntryText(pE);
+            sTbEntry = m_pTbLinks->GetEntryText(pE);
         sTbEntry = sTbEntry.GetToken(1, '\t');
-        String sStyle = aStyleLB.GetSelectEntry();
+        String sStyle = m_pStyleLB->GetSelectEntry();
 
-        aAssignPB.Enable( sStyle != sTbEntry && aConditionCB.IsChecked() );
+        m_pAssignPB->Enable( sStyle != sTbEntry && m_pConditionCB->IsChecked() );
 
-        if(pBox != &aStyleLB)
-            aRemovePB.Enable( aConditionCB.IsChecked() && sTbEntry.Len() );
+        if(pBox != m_pStyleLB)
+            m_pRemovePB->Enable( m_pConditionCB->IsChecked() && sTbEntry.Len() );
     }
     return 0;
 }

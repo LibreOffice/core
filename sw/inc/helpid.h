@@ -136,8 +136,6 @@
 
 // TabPage Help-IDs
 
-#define HID_COND_COLL                                           "SW_HID_COND_COLL"
-
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
 #define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
 #define HID_TP_TOX_SELECT                                       "SW_HID_TP_TOX_SELECT"
@@ -306,8 +304,6 @@
 
 #define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
 #define HID_PVIEW_TOOLBOX                                       "SW_HID_PVIEW_TOOLBOX"
-
-#define HID_COND_COLL_TABLIST                                   "SW_HID_COND_COLL_TABLIST"
 
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 

@@ -129,7 +129,6 @@
 
 #define TP_CONTENT_OPT              (RC_GLOBALS_BEGIN +  45)
 #define TP_STD_FONT                 (RC_GLOBALS_BEGIN +  47)
-#define TP_CONDCOLL                 (RC_GLOBALS_BEGIN +  48)
 
 #define TP_NUMBER                   (RC_GLOBALS_BEGIN +  57)
 

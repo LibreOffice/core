@@ -36,7 +36,6 @@
 #include "hints.hxx"
 
 #include "chrdlg.hrc"
-#include "ccoll.hrc"
 #include <vcl/svapp.hxx>
 
 #include <unomid.h>

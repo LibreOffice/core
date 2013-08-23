@@ -26,22 +26,20 @@ class SwFmt;
 
 class SwCondCollPage : public SfxTabPage
 {
-    FixedLine           aConditionFL;
-    CheckBox            aConditionCB;
+    CheckBox*           m_pConditionCB;
 
-    FixedText           aContextFT;
-    FixedText           aUsedFT;
-    SvTabListBox        aTbLinks;
+    FixedText*          m_pContextFT;
+    FixedText*          m_pUsedFT;
+    SvTabListBox*       m_pTbLinks;
 
-    FixedText           aStyleFT;
-    ListBox             aStyleLB;
-    ListBox             aFilterLB;
+    FixedText*          m_pStyleFT;
+    ListBox*            m_pStyleLB;
+    ListBox*            m_pFilterLB;
 
-    PushButton          aRemovePB;
-    PushButton          aAssignPB;
+    PushButton*         m_pRemovePB;
+    PushButton*         m_pAssignPB;
 
-    String              sNoTmpl;
-    ResStringArray      aStrArr;
+    std::vector<OUString> m_aStrArr;
 
     SwWrtShell          &rSh;
     const CommandStruct*pCmds;
