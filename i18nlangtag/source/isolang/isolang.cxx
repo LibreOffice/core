@@ -946,8 +946,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     if (nAtPos >= 0)
         aAtString = rString.copy( nAtPos+1 );
 
-    if (   ((nLangSepPos >= 0) && (nLangSepPos > nCountrySepPos))
-        || ((nLangSepPos < 0)) )
+    if (((nLangSepPos >= 0) && (nLangSepPos > nCountrySepPos)) || (nLangSepPos < 0))
     {
         // eg. "el.sun_eu_greek", "tchinese", "es.ISO8859-15"
         aLang    = rString.copy( 0, nCountrySepPos );
@@ -969,14 +968,14 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
         do
         {                         // avoid embedded \0 warning
-            if (( aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLangStr ))) &&
-               ( aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString ))))
+            if (aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLangStr )) &&
+                 aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString )))
             {
-                if ( aUpperCountry.isEmpty() ||
-                     aUpperCountry.equals( static_cast< const char* >( pGLIBCModifiersEntry->maCountry )))
-               {
+                if (aUpperCountry.isEmpty() ||
+                        aUpperCountry.equals( static_cast< const char* >( pGLIBCModifiersEntry->maCountry )))
+                {
                     return pGLIBCModifiersEntry->mnLang;
-               }
+                }
             }
             ++pGLIBCModifiersEntry;
         }
