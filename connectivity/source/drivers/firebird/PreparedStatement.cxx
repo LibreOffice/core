@@ -269,6 +269,9 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     {
         disposeResultSet();
         // Closes the cursor from the last run.
+        // This doesn't actually free the statement -- using DSQL_close closes
+        // the cursor and keeps the statement, using DSQL_drop frees the statement
+        // (and associated cursors).
         aErr = isc_dsql_free_statement(m_statusVector,
                                        &m_aStatementHandle,
                                        DSQL_close);
