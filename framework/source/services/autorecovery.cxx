@@ -2013,7 +2013,7 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 */
 void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
 {
-#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT || HAVE_FEATURE_MACOSX_SANDBOX
     (void) rInfo;
 #else
     if ( rInfo.Document.is() )

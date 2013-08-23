@@ -140,13 +140,21 @@ static const sal_Int8 LOCK_UI_TRY = 2;
 
 bool IsSystemFileLockingUsed()
 {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    return true;
+#else
     return officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::get();
+#endif
 }
 
 //----------------------------------------------------------------
 bool IsOOoLockFileUsed()
 {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    return false;
+#else
     return officecfg::Office::Common::Misc::UseDocumentOOoLockFile::get();
+#endif
 }
 
 bool IsLockingUsed()
@@ -831,6 +839,21 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
+// FIXME: Hmm actually lock files should be used for sftp: documents
+// even if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT. Only the use of lock
+// files for *local* documents is unnecessary in that case. But
+// actually, the checks for sftp: here are just wishful thinking; I
+// don't this there is any support for actually editing documents
+// behind sftp: URLs anyway.
+//
+// Sure, there could perhaps be a 3rd-party extension that brings UCB
+// the potential to handle files behind sftp:. But there could also be
+// an extension that handles some arbitrary foobar: scheme *and* it
+// could be that lock files would be the correct thing to use for
+// foobar: documents, too. But the hardcoded test below won't know
+// that. Clearly the knowledge whether lock files should be used or
+// not for some URL scheme belongs in UCB, not here.
+
 //------------------------------------------------------------------
 sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock )
 {
@@ -946,11 +969,15 @@ namespace
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
+#if HAVE_FEATURE_MACOSX_SANDBOX
+        return eProt == INET_PROT_SFTP;
+#else
         return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
+#endif
     }
 }
 
-#endif
+#endif // HAVE_FEATURE_MULTIUSER_ENVIRONMENT
 
 // returns true if the document can be opened for editing ( even if it should be a copy )
 // otherwise the document should be opened readonly
