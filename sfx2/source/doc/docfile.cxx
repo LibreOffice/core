@@ -143,6 +143,9 @@ static const sal_Int8 LOCK_UI_TRY = 2;
 
 bool IsSystemFileLockingUsed()
 {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    return true;
+#else
     // check whether system file locking has been used, the default value is false
     bool bUseSystemLock = false;
     try
@@ -165,11 +168,15 @@ bool IsSystemFileLockingUsed()
     }
 
     return bUseSystemLock;
+#endif
 }
 
 //----------------------------------------------------------------
 bool IsOOoLockFileUsed()
 {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+    return false;
+#else
     // check whether system file locking has been used, the default value is false
     bool bOOoLockFileUsed = false;
     try
@@ -192,6 +199,7 @@ bool IsOOoLockFileUsed()
     }
 
     return bOOoLockFileUsed;
+#endif
 }
 
 bool IsLockingUsed()
@@ -1003,7 +1011,11 @@ namespace
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
+#if HAVE_FEATURE_MACOSX_SANDBOX
+        return eProt == INET_PROT_SFTP;
+#else
         return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
+#endif
     }
 #endif
 }
