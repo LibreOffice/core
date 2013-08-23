@@ -307,21 +307,18 @@ int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 
 int X11SalData::XIOErrorHdl( Display * )
 {
-    if (::osl::Thread::getCurrentIdentifier() != Application::GetMainThreadIdentifier())
+    if (::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier())
     {
-        pthread_exit(NULL);
-        return 0;
+        /*  #106197# hack: until a real shutdown procedure exists
+         *  _exit ASAP
+         */
+        if( ImplGetSVData()->maAppData.mbAppQuit )
+            _exit(1);
+
+        // really bad hack
+        if( ! SessionManagerClient::checkDocumentsSaved() )
+            /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
     }
-
-    /*  #106197# hack: until a real shutdown procedure exists
-     *  _exit ASAP
-     */
-    if( ImplGetSVData()->maAppData.mbAppQuit )
-        _exit(1);
-
-    // really bad hack
-    if( ! SessionManagerClient::checkDocumentsSaved() )
-        /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
 
     std::fprintf( stderr, "X IO Error\n" );
     std::fflush( stdout );
@@ -331,7 +328,7 @@ int X11SalData::XIOErrorHdl( Display * )
      *  do apply here. Since there is nothing to be done after an XIO
      *  error we have to _exit immediately.
      */
-    _exit(0);
+    _exit(1);
     return 0;
 }
 
