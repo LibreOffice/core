@@ -55,8 +55,23 @@ $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
 $(call gb_Library_get_target,$(1)) : SOVERSION :=
-$(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 
+$(if $(gb_Package_PRESTAGEDIR),\
+    $(if $(wildcard $(gb_Package_PRESTAGEDIR)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))),\
+        $(call gb_Library__Library_impl_copy,$(0),$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))),\
+        $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))\
+    ),
+    $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))\
+)
+
+endef
+
+define gb_Library__Library_impl_copy
+$(info gb_Library__Library_impl_copy $(1) $(2) :$(call gb_Library_get_final_target,$(1)): :$(call gb_Library_get_target,$(1)): :$(OUTDIR)/lib/$(notdir $(2)):)
+$(call gb_Package_Package,Library_Copy_$(1),$(gb_Package_PRESTAGEDIR))
+$(call gb_Package_set_outdir,Library_Copy_$(1),$(INSTDIR))
+$(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
+$(OUTDIR)/lib/$(notdir $(2)) : $(INSTDIR)/$(2)
 endef
 
 define gb_Library__Library_impl
@@ -80,6 +95,7 @@ $(if $(filter $(call gb_Library_get_layer,$(1)):%,$(gb_Library_LAYER_DIRS)),\
 endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
@@ -93,6 +109,7 @@ $(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(3),$(3))
 
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
 $(call gb_Package_get_target,$(2)) : $(call gb_Library_get_target,$(1))
+$(info gb_Library__Library_package  $(call gb_Package_get_target,$(2)) : $(call gb_Library_get_target,$(1)))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef

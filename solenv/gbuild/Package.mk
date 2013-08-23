@@ -49,7 +49,15 @@ $(OUTDIR)/inc/% :
 define gb_PackagePart_PackagePart
 $(4)/$(1) : $(2) | $(dir $(4)/$(1)).dir
 $(2) :| $(3)
-$(call gb_Deliver_add_deliverable,$(4)/$(1),$(2),$(3))
+
+$(if $(gb_Package_PRESTAGEDIR),\
+	$(if $(wildcard $(gb_Package_PRESTAGEDIR)/$(1)),\
+		$(call gb_Deliver_add_deliverable,$(4)/$(1),$(gb_Package_PRESTAGEDIR)/$(1),$(3)),\
+		$(call gb_Deliver_add_deliverable,$(4)/$(1),$(2),$(3)) \
+	),\
+	$(call gb_Deliver_add_deliverable,$(4)/$(1),$(2),$(3)) \
+)
+
 endef
 
 
