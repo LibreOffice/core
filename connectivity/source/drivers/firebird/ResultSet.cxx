@@ -57,7 +57,7 @@ OResultSet::OResultSet(OConnection* pConnection,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* pSqlda)
     : OResultSet_BASE(pConnection->getMutex())
-    , OPropertySetHelper(OResultSet_BASE::rBHelper)
+    , OPropertyContainer(OResultSet_BASE::rBHelper)
     , m_pConnection(pConnection)
     , m_xStatement(xStatement)
     , m_xMetaData(0)
@@ -69,6 +69,31 @@ OResultSet::OResultSet(OConnection* pConnection,
     , m_fieldCount(pSqlda? pSqlda->sqld : 0)
 {
     SAL_INFO("connectivity.firebird", "OResultSet().");
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+                     PROPERTY_ID_ISBOOKMARKABLE,
+                     PropertyAttribute::READONLY,
+                     &m_bIsBookmarkable,
+                     ::getCppuType(&m_bIsBookmarkable));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+                     PROPERTY_ID_FETCHSIZE,
+                     PropertyAttribute::READONLY,
+                     &m_nFetchSize,
+                     ::getCppuType(&m_nFetchSize));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+                     PROPERTY_ID_RESULTSETTYPE,
+                     PropertyAttribute::READONLY,
+                     &m_nResultSetType,
+                     ::getCppuType(&m_nResultSetType));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+                     PROPERTY_ID_FETCHDIRECTION,
+                     PropertyAttribute::READONLY,
+                     &m_nFetchDirection,
+                     ::getCppuType(&m_nFetchDirection));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+                     PROPERTY_ID_RESULTSETCONCURRENCY,
+                     PropertyAttribute::READONLY,
+                     &m_nResultSetConcurrency,
+                     ::getCppuType(&m_nResultSetConcurrency));
 
     if (!pSqlda)
         return; // TODO: what?
@@ -258,33 +283,16 @@ void SAL_CALL OResultSet::checkRowIndex()
         throw SQLException( "Row index is out of valid range.", *this, OUString(),1, Any() );
     }
 }
-// -------------------------------------------------------------------------
-void OResultSet::disposing(void)
-{
 
-    OPropertySetHelper::disposing();
-
-    MutexGuard aGuard(m_pConnection->getMutex());
-
-    m_xMetaData     = NULL;
-}
-// -------------------------------------------------------------------------
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OResultSet_BASE::queryInterface(rType);
-    return aRet;
+    return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
- Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException)
-{
-    OTypeCollection aTypes(
-        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XMultiPropertySet > >::get(),
-        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XFastPropertySet > >::get(),
-        ::cppu::UnoType< uno::Reference< ::com::sun::star::beans::XPropertySet > >::get());
 
-    return concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
+ Sequence<  Type > SAL_CALL OResultSet::getTypes() throw( RuntimeException)
+{
+    return concatSequences(OPropertySetHelper::getTypes(), OResultSet_BASE::getTypes());
 }
 // ---- XColumnLocate ---------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
@@ -637,93 +645,18 @@ void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException)
                                                   *this,
                                                   Any());
 }
-// -------------------------------------------------------------------------
-IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
-{
-    Sequence< Property > aProps(6);
-    Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
-    DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
 
-    return new OPropertyArrayHelper(aProps);
+//----- OIdPropertyArrayUsageHelper ------------------------------------------
+IPropertyArrayHelper* OResultSet::createArrayHelper() const
+{
+    Sequence< Property > aProperties;
+    describeProperties(aProperties);
+    return new ::cppu::OPropertyArrayHelper(aProperties);
 }
-// -------------------------------------------------------------------------
+
 IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
     return *const_cast<OResultSet*>(this)->getArrayHelper();
-}
-// -------------------------------------------------------------------------
-sal_Bool OResultSet::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    (void) rConvertedValue;
-    (void) rOldValue;
-    (void) rValue;
-    switch(nHandle)
-    {
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-        default:
-            ;
-    }
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-void OResultSet::setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const Any& rValue
-                                                 )
-                                                 throw (Exception)
-{
-    (void) rValue;
-    switch(nHandle)
-    {
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-            throw Exception();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            break;
-        default:
-            ;
-    }
-}
-// -------------------------------------------------------------------------
-void OResultSet::getFastPropertyValue(
-                                Any& rValue,
-                                sal_Int32 nHandle
-                                     ) const
-{
-    (void) rValue;
-    switch(nHandle)
-    {
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-            ;
-    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OResultSet::acquire() throw()

@@ -26,8 +26,13 @@
 
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase8.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
 
 #include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -57,10 +62,17 @@ namespace connectivity
          * and ensure that the ResultSet is destroyed before disposing of the
          * SQLDA.
          */
-        class OResultSet :  public  OResultSet_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  OPropertyArrayUsageHelper<OResultSet>
+        class OResultSet: public OResultSet_BASE,
+                          public ::comphelper::OPropertyContainer,
+                          public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
+        private:
+            sal_Bool m_bIsBookmarkable = sal_False;
+            sal_Int32 m_nFetchSize = 1;
+            sal_Int32 m_nResultSetType = ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY;
+            sal_Int32 m_nFetchDirection = ::com::sun::star::sdbc::FetchDirection::FORWARD;
+            sal_Int32 m_nResultSetConcurrency = ::com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY;
+
         protected:
             OConnection* m_pConnection;
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& m_xStatement;
@@ -84,27 +96,9 @@ namespace connectivity
             template <typename T> T safelyRetrieveValue(sal_Int32 columnIndex)
                 throw(::com::sun::star::sdbc::SQLException);
 
-            // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-            // OPropertySetHelper
-            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-            virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                ::com::sun::star::uno::Any & rConvertedValue,
-                                ::com::sun::star::uno::Any & rOldValue,
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue )
-                                    throw (::com::sun::star::lang::IllegalArgumentException);
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                     )
-                                     throw (::com::sun::star::uno::Exception);
-            using cppu::OPropertySetHelper::getFastPropertyValue;
-            virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
+            // OIdPropertyArrayUsageHelper
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
             virtual void SAL_CALL checkColumnIndex( sal_Int32 index )
                 throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
@@ -126,10 +120,10 @@ namespace connectivity
                 return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(*(OResultSet_BASE*)this);
             }
 
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+                    const ::com::sun::star::uno::Type& rType)
+                throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
             //XTypeProvider
