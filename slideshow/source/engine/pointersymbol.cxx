@@ -225,7 +225,8 @@ void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D p
         if( aIter->second ) {
             aIter->second->movePixel(
                 calcSpritePos( aIter->first, pos ));
-            mrScreenUpdater.requestImmediateUpdate();
+            mrScreenUpdater.notifyUpdate();
+            mrScreenUpdater.commitUpdates();
         }
         ++aIter;
     }
