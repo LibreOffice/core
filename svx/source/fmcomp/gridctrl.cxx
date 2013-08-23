@@ -245,7 +245,7 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
 
 //==============================================================================
 
-static sal_uInt16 ControlMap[] =
+static const sal_uInt16 ControlMap[] =
     {
         DbGridControl::NavigationBar::RECORD_TEXT,
         DbGridControl::NavigationBar::RECORD_ABSOLUTE,

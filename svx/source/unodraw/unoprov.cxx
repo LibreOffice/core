@@ -834,7 +834,7 @@ namespace {
       static UHashMapImpl aImpl(63);
       static bool bInited = false;
       if (!bInited) {
-          struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
+          const struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
               { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),      OBJ_RECT },
               { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),            OBJ_CIRC },
               { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),            OBJ_UNO  },
@@ -1214,7 +1214,7 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
 //   the possibility to define it wrong
 // - change the compare to also work when a shorter name is in front of a longer one
 
-static sal_uInt16 SvxUnoColorNameDefResId[] =
+static const sal_uInt16 SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY_DEF,
     RID_SVXSTR_COLOR_BLACK_DEF,
@@ -1258,7 +1258,7 @@ static sal_uInt16 SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_TANGO_ALUMINIUM_DEF
 };
 
-static sal_uInt16 SvxUnoColorNameResId[] =
+static const sal_uInt16 SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY,
     RID_SVXSTR_COLOR_BLACK,
@@ -1304,7 +1304,7 @@ static sal_uInt16 SvxUnoColorNameResId[] =
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
+bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1343,7 +1343,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameResId, (sal_uInt16*)SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
+        if( SvxUnoConvertResourceString( SvxUnoColorNameResId, SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
             return aNew;
         }
@@ -1376,7 +1376,7 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameDefResId, (sal_uInt16*)SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
+        if( SvxUnoConvertResourceString( SvxUnoColorNameDefResId, SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
             return aNew;
         }

@@ -121,7 +121,7 @@ struct MapSlotToCmd
     const char* pCommand;
 };
 
-static MapSlotToCmd SlotToCommands[] =
+static const MapSlotToCmd SlotToCommands[] =
 {
     { SID_FM_PUSHBUTTON,        ".uno:Pushbutton"       },
     { SID_FM_RADIOBUTTON,       ".uno:RadioButton"      },

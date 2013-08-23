@@ -20,7 +20,7 @@
 #include "chinese_translation_unodialog.hxx"
 #include <cppuhelper/implementationentry.hxx>
 
-static struct ::cppu::ImplementationEntry g_entries_unodialogs_chinesetranslation[] =
+static const struct ::cppu::ImplementationEntry g_entries_unodialogs_chinesetranslation[] =
 {
     {
           ::textconversiondlgs::ChineseTranslation_UnoDialog::create

@@ -107,7 +107,7 @@ public:
     ImplRulerData&      operator=( const ImplRulerData& rData );
 };
 
-static RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
+static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 {
 { MAP_100TH_MM,        100,    25,     50,    100,     100, 3, " mm"    }, // MM
 { MAP_100TH_MM,       1000,   250,    500,   1000,    1000, 3, " cm"    }, // CM

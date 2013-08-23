@@ -103,7 +103,7 @@
 #include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
-static sal_uInt16 DatabaseSlotMap[] =
+static const sal_uInt16 DatabaseSlotMap[] =
 {
     SID_FM_RECORD_FIRST,
     SID_FM_RECORD_NEXT,
@@ -131,7 +131,7 @@ static sal_uInt16 DatabaseSlotMap[] =
 
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
-static sal_Int16 DlgSlotMap[] =    // slots des Controllers
+static const sal_Int16 DlgSlotMap[] =    // slots des Controllers
 {
     SID_FM_CTL_PROPERTIES,
     SID_FM_PROPERTIES,
@@ -147,7 +147,7 @@ static sal_Int16 DlgSlotMap[] =    // slots des Controllers
     0
 };
 
-static sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
+static const sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
@@ -178,7 +178,7 @@ static sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
 
 // die folgenden Arrays muessen kosistent sein, also einander entsprechende Eintraege an der selben relativen Position
 // innerhalb ihres jeweiligen Arrays stehen
-static sal_Int16 nConvertSlots[] =
+static const sal_Int16 nConvertSlots[] =
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
@@ -202,7 +202,7 @@ static sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_NAVIGATIONBAR
 };
 
-static sal_Int16 nCreateSlots[] =
+static const sal_Int16 nCreateSlots[] =
 {
     SID_FM_EDIT,
     SID_FM_PUSHBUTTON,
@@ -226,7 +226,7 @@ static sal_Int16 nCreateSlots[] =
     SID_FM_NAVIGATIONBAR
 };
 
-static sal_Int16 nObjectTypes[] =
+static const sal_Int16 nObjectTypes[] =
 {
     OBJ_FM_EDIT,
     OBJ_FM_BUTTON,
