@@ -83,6 +83,43 @@ X11SalData* GetX11SalData()
     return p2;
 }
 
+extern "C" {
+
+static int XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+{
+    GetX11SalData()->XError( pDisplay, pEvent );
+    return 0;
+}
+
+static int XIOErrorHdl( Display * )
+{
+    if (::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier())
+    {
+        /*  #106197# hack: until a real shutdown procedure exists
+         *  _exit ASAP
+         */
+        if( ImplGetSVData()->maAppData.mbAppQuit )
+            _exit(1);
+
+        // really bad hack
+        if( ! SessionManagerClient::checkDocumentsSaved() )
+            /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+    }
+
+    std::fprintf( stderr, "X IO Error\n" );
+    std::fflush( stdout );
+    std::fflush( stderr );
+
+    /*  #106197# the same reasons to use _exit instead of exit in salmain
+     *  do apply here. Since there is nothing to be done after an XIO
+     *  error we have to _exit immediately.
+     */
+    _exit(1);
+    return 0;
+}
+
+}
+
 static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
 
@@ -224,7 +261,7 @@ X11SalData::X11SalData( SalGenericDataType t, SalInstance *pInstance )
     pXLib_          = NULL;
     m_pPlugin       = NULL;
 
-    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)XIOErrorHdl );
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( XIOErrorHdl );
     PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
@@ -287,7 +324,7 @@ void X11SalData::PushXErrorLevel( bool bIgnore )
     rEnt.m_bWas = false;
     rEnt.m_bIgnore = bIgnore;
     rEnt.m_nLastErrorRequest = 0;
-    rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)XErrorHdl );
+    rEnt.m_aHandler = XSetErrorHandler( XErrorHdl );
 }
 
 void X11SalData::PopXErrorLevel()
@@ -298,40 +335,6 @@ void X11SalData::PopXErrorLevel()
         m_aXErrorHandlerStack.pop_back();
     }
 }
-
-int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
-{
-    GetX11SalData()->XError( pDisplay, pEvent );
-    return 0;
-}
-
-int X11SalData::XIOErrorHdl( Display * )
-{
-    if (::osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier())
-    {
-        /*  #106197# hack: until a real shutdown procedure exists
-         *  _exit ASAP
-         */
-        if( ImplGetSVData()->maAppData.mbAppQuit )
-            _exit(1);
-
-        // really bad hack
-        if( ! SessionManagerClient::checkDocumentsSaved() )
-            /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
-    }
-
-    std::fprintf( stderr, "X IO Error\n" );
-    std::fflush( stdout );
-    std::fflush( stderr );
-
-    /*  #106197# the same reasons to use _exit instead of exit in salmain
-     *  do apply here. Since there is nothing to be done after an XIO
-     *  error we have to _exit immediately.
-     */
-    _exit(1);
-    return 0;
-}
-
 
 SalXLib::SalXLib()
 {

@@ -45,9 +45,6 @@ typedef unsigned int pthread_t;
 
 class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
 {
-    static int XErrorHdl( Display*, XErrorEvent* );
-    static int XIOErrorHdl( Display* );
-
     struct XErrorStackEntry
     {
         bool            m_bIgnore;

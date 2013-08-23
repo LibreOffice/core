@@ -511,12 +511,16 @@ GtkData::GtkData( SalInstance *pInstance )
 
 XIOErrorHandler aOrigXIOErrorHandler = NULL;
 
-int XIOErrorHdl(Display *)
+extern "C" {
+
+static int XIOErrorHdl(Display *)
 {
     fprintf(stderr, "X IO Error\n");
     _exit(1);
         // avoid crashes in unrelated threads that still run while atexit
         // handlers are in progress
+}
+
 }
 
 GtkData::~GtkData()
