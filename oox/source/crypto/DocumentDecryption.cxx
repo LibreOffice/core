@@ -68,18 +68,28 @@ public:
 
 class AgileDocumentHandler : public ::cppu::WeakImplHelper1< XFastDocumentHandler >
 {
+    AgileEncryptionInfo& mInfo;
+
 public:
     AgileDocumentHandler(AgileEncryptionInfo& rInfo) :
         mInfo(rInfo)
     {}
 
-    AgileEncryptionInfo& mInfo;
-    void startDocument() {}
-    void endDocument() {}
-    void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ ) {}
-    void startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ ) {}
+    void SAL_CALL startDocument()
+        throw (RuntimeException, SAXException)
+    {}
+    void endDocument()
+        throw (RuntimeException, SAXException)
+    {}
+    void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
+        throw (RuntimeException, SAXException)
+    {}
+    void startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ )
+        throw (RuntimeException, SAXException)
+    {}
 
     void startUnknownElement( const OUString& /*aNamespace*/, const OUString& aName, const Reference< XFastAttributeList >& aAttributeList )
+        throw (RuntimeException, SAXException)
     {
         if(aName == "keyData")
         {
@@ -160,20 +170,28 @@ public:
         }
     }
 
-    void endFastElement( sal_Int32 /*aElement*/ ) {}
-    void endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ ) {}
+    void endFastElement( sal_Int32 /*aElement*/ )
+        throw (RuntimeException, SAXException)
+    {}
+    void endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ )
+        throw (RuntimeException, SAXException)
+    {}
 
     Reference< XFastContextHandler > createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
+        throw (RuntimeException, SAXException)
     {
         return NULL;
     }
 
     Reference< XFastContextHandler > createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
+        throw (RuntimeException, SAXException)
     {
         return this;
     }
 
-    void characters( const OUString& /*aChars*/ ) {}
+    void characters( const OUString& /*aChars*/ )
+        throw (RuntimeException, SAXException)
+    {}
 };
 
 } // namespace
