@@ -45,7 +45,8 @@ class AgileEngine : public CryptoEngine
     bool calculateHashFinal(const OUString& rPassword, std::vector<sal_uInt8>& aHashFinal);
 
     bool calculateBlock(
-            const std::vector<sal_uInt8>& rBlock,
+            const sal_uInt8* rBlock,
+            sal_uInt32 aBlockSize,
             std::vector<sal_uInt8>& rHashFinal,
             std::vector<sal_uInt8>& rInput,
             std::vector<sal_uInt8>& rOutput);

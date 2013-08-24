@@ -17,9 +17,9 @@ using namespace std;
 
 namespace {
 
-static const vector<sal_uInt8> vectorBlock1({ 0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79 });
-static const vector<sal_uInt8> vectorBlock2({ 0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e });
-static const vector<sal_uInt8> vectorBlock3({ 0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6 });
+const sal_uInt8 constBlock1[] = { 0xfe, 0xa7, 0xd2, 0x76, 0x3b, 0x4b, 0x9e, 0x79 };
+const sal_uInt8 constBlock2[] = { 0xd7, 0xaa, 0x0f, 0x6d, 0x30, 0x61, 0x34, 0x4e };
+const sal_uInt8 constBlock3[] = { 0x14, 0x6e, 0x0b, 0xe7, 0xab, 0xac, 0xd0, 0xd6 };
 
 bool hashCalc( std::vector<sal_uInt8>& output,
                std::vector<sal_uInt8>& input,
@@ -56,18 +56,19 @@ Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
 }
 
 bool AgileEngine::calculateBlock(
-    const vector<sal_uInt8>& rBlock,
+    const sal_uInt8* rBlock,
+    sal_uInt32 aBlockSize,
     vector<sal_uInt8>& rHashFinal,
     vector<sal_uInt8>& rInput,
     vector<sal_uInt8>& rOutput)
 {
     vector<sal_uInt8> hash(mInfo.hashSize, 0);
     vector<sal_uInt8> salt = mInfo.saltValue;
-    vector<sal_uInt8> dataFinal(mInfo.hashSize + rBlock.size(), 0);
+    vector<sal_uInt8> dataFinal(mInfo.hashSize + aBlockSize, 0);
     std::copy(rHashFinal.begin(), rHashFinal.end(), dataFinal.begin());
     std::copy(
-            rBlock.begin(),
-            rBlock.begin() + rBlock.size(),
+            rBlock,
+            rBlock + aBlockSize,
             dataFinal.begin() + mInfo.hashSize);
 
     hashCalc(hash, dataFinal, mInfo.hashAlgorithm);
@@ -127,11 +128,11 @@ bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
 
     vector<sal_uInt8> encryptedHashInput = mInfo.encryptedVerifierHashInput;
     vector<sal_uInt8> hashInput(mInfo.saltSize, 0);
-    calculateBlock(vectorBlock1, hashFinal, encryptedHashInput, hashInput);
+    calculateBlock(constBlock1, sizeof(constBlock1), hashFinal, encryptedHashInput, hashInput);
 
     vector<sal_uInt8> encryptedHashValue = mInfo.encryptedVerifierHashValue;
     vector<sal_uInt8> hashValue(encryptedHashValue.size(), 0);
-    calculateBlock(vectorBlock2, hashFinal, encryptedHashValue, hashValue);
+    calculateBlock(constBlock2, sizeof(constBlock2), hashFinal, encryptedHashValue, hashValue);
 
     vector<sal_uInt8> hash(mInfo.hashSize, 0);
     hashCalc(hash, hashInput, mInfo.hashAlgorithm);
@@ -139,7 +140,7 @@ bool AgileEngine::generateEncryptionKey(const OUString& rPassword)
     if (std::equal (hash.begin(), hash.end(), hashValue.begin()) )
     {
         vector<sal_uInt8> encryptedKeyValue = mInfo.encryptedKeyValue;
-        calculateBlock(vectorBlock3, hashFinal, encryptedKeyValue, mKey);
+        calculateBlock(constBlock3, sizeof(constBlock3), hashFinal, encryptedKeyValue, mKey);
         return true;
     }
 
