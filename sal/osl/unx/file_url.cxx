@@ -59,10 +59,6 @@
 
 using namespace osl;
 
-const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
-const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
-const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
-
 /* a slightly modified version of Pchar in rtl/source/uri.c */
 const sal_Bool uriCharClass[128] =
 {
@@ -93,7 +89,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     sal_Unicode protocolDelimiter[3] = { ':', '/', '/' };
 
     /* a valid file url may not start with '/' */
-    if( ( 0 == ustrFileURL->length ) || ( (sal_Unicode) '/' == ustrFileURL->buffer[0] ) )
+    if( ( 0 == ustrFileURL->length ) || ( '/' == ustrFileURL->buffer[0] ) )
     {
         return osl_File_E_INVAL;
     }
@@ -120,7 +116,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
             nOffset += nIndex;
 
             /* break url down in '/' divided tokens tokens */
-            nIndex = rtl_ustr_indexOfChar_WithLength( ustrFileURL->buffer + nOffset, ustrFileURL->length - nOffset, (sal_Unicode) '/' );
+            nIndex = rtl_ustr_indexOfChar_WithLength( ustrFileURL->buffer + nOffset, ustrFileURL->length - nOffset, '/' );
 
             /* copy token to new string */
             rtl_uString_newFromStr_WithLength( &ustrPathToken, ustrFileURL->buffer + nOffset,
@@ -130,7 +126,7 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
             rtl_uriDecode( ustrPathToken, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &pTmp );
 
             /* the result should not contain any '/' */
-            if( -1 != rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, (sal_Unicode) '/' ) )
+            if( -1 != rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, '/' ) )
             {
                 rtl_uString_release( pTmp );
                 rtl_uString_release( ustrPathToken );
@@ -188,10 +184,10 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         rtl_uString_newFromStr_WithLength( &pTmp, pTmp->buffer + nIndex, pTmp->length - nIndex );
 
     /* check if system path starts with ~ or ~user and replace it with the appropriate home dir */
-    if( (sal_Unicode) '~' == pTmp->buffer[0] )
+    if( '~' == pTmp->buffer[0] )
     {
         /* check if another user is specified */
-        if( ( 1 == pTmp->length ) || ( (sal_Unicode)'/' == pTmp->buffer[1] ) )
+        if( ( 1 == pTmp->length ) || ( '/' == pTmp->buffer[1] ) )
         {
             rtl_uString *pTmp2 = NULL;
 
@@ -257,10 +253,10 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
 
     /* check if system path starts with ~ or ~user and replace it with the appropriate home dir */
-    if( (sal_Unicode) '~' == ustrSystemPath->buffer[0] )
+    if( '~' == ustrSystemPath->buffer[0] )
     {
         /* check if another user is specified */
-        if( ( 1 == ustrSystemPath->length ) || ( (sal_Unicode)'/' == ustrSystemPath->buffer[1] ) )
+        if( ( 1 == ustrSystemPath->length ) || ( '/' == ustrSystemPath->buffer[1] ) )
         {
             /* osl_getHomeDir returns file URL */
             oslSecurity pSecurity = osl_getCurrentSecurity();
@@ -298,7 +294,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* remove all occurrences of '//' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
-            if( ((sal_Unicode) '/' == pTmp->buffer[nSrcIndex]) && ((sal_Unicode) '/' == pTmp->buffer[nIndex]) )
+            if( ('/' == pTmp->buffer[nSrcIndex]) && ('/' == pTmp->buffer[nIndex]) )
                 nDeleted++;
             else
                 pTmp->buffer[++nIndex] = pTmp->buffer[nSrcIndex];
@@ -317,7 +313,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     rtl_uString_release( pTmp );
 
     /* absolute urls should start with 'file://' */
-    if( (sal_Unicode)'/' == (*pustrFileURL)->buffer[0] )
+    if( '/' == (*pustrFileURL)->buffer[0] )
     {
         rtl_uString *pProtocol = NULL;
 
@@ -340,7 +336,7 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
 
     if (osl_File_E_None == osl_error)
     {
-        if (UNICHAR_SLASH == temp->buffer[0])
+        if ('/' == temp->buffer[0])
         {
             *pustrSystemPath = temp;
         }
@@ -409,12 +405,12 @@ namespace
 
         // move back to the next path separator
         // or to the start of the string
-        while ((p > aPath) && (*p != UNICHAR_SLASH))
+        while ((p > aPath) && (*p != '/'))
             p--;
 
         if (p >= aPath)
         {
-            if (UNICHAR_SLASH == *p)
+            if ('/' == *p)
             {
                 p++;
                *p = '\0';
@@ -495,25 +491,25 @@ namespace
         {
             // ignore '/.' , skip one part back when '/..'
 
-            if ((UNICHAR_DOT == *punresolved) && (UNICHAR_SLASH == *presolvedsf))
+            if (('.' == *punresolved) && ('/' == *presolvedsf))
             {
                 if ('\0' == *(punresolved + 1))
                 {
                     punresolved++;
                     continue;
                 }
-                else if (UNICHAR_SLASH == *(punresolved + 1))
+                else if ('/' == *(punresolved + 1))
                 {
                     punresolved += 2;
                     continue;
                 }
-                else if ((UNICHAR_DOT == *(punresolved + 1)) && ('\0' == *(punresolved + 2) || (UNICHAR_SLASH == *(punresolved + 2))))
+                else if (('.' == *(punresolved + 1)) && ('\0' == *(punresolved + 2) || ('/' == *(punresolved + 2))))
                 {
                     _rmlastpathtoken(path_resolved_so_far);
 
                     presolvedsf = ustrtoend(path_resolved_so_far) - 1;
 
-                    if (UNICHAR_SLASH == *(punresolved + 2))
+                    if ('/' == *(punresolved + 2))
                         punresolved += 3;
                     else
                         punresolved += 2;
@@ -538,7 +534,7 @@ namespace
                     }
                 }
             }
-            else if (UNICHAR_SLASH == *punresolved)
+            else if ('/' == *punresolved)
             {
                 if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
                     return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
@@ -554,12 +550,12 @@ namespace
                     if (osl_File_E_None != ferr)
                         return ferr;
 
-                    if (!_islastchr(path_resolved_so_far, UNICHAR_SLASH))
+                    if (!_islastchr(path_resolved_so_far, '/'))
                     {
                         if ((presolvedsf = ustrtoend(path_resolved_so_far)) > sentinel)
                             return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
-                        ustrchrcat(UNICHAR_SLASH, path_resolved_so_far);
+                        ustrchrcat('/', path_resolved_so_far);
                     }
                 }
             }
@@ -640,7 +636,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
         // SAL_ALLOW_LINKOO_SYMLINKS environment variable:
         // for linkoo to work, we need to let the symlinks to the libraries untouched
         rtl::OUString base;
-        sal_Int32 last_slash = unresolved_path.lastIndexOf( UNICHAR_SLASH );
+        sal_Int32 last_slash = unresolved_path.lastIndexOf( '/' );
 
         if (last_slash >= 0 && last_slash + 1 < unresolved_path.getLength()
             && ! ( last_slash + 2 == unresolved_path.getLength() && unresolved_path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("."), last_slash + 1) )
@@ -654,7 +650,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 
         if (!base.isEmpty())
         {
-            resolved_path += rtl::OUString( UNICHAR_SLASH );
+            resolved_path += "/";
             resolved_path += base;
         }
     }
