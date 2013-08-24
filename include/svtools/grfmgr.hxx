@@ -173,12 +173,12 @@ public:
     OUString SAL_CALL getUniqueID() throw (css::uno::RuntimeException);
 
 private:
-    explicit GraphicObject( const GraphicManager* pMgr = NULL );
-    GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr );
-    GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr );
+    explicit GraphicObject();
+    GraphicObject( const Graphic& rGraphic );
+    GraphicObject( const GraphicObject& rCacheObj );
     GraphicObject& operator=( const GraphicObject& rCacheObj );
 
-    explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr );
+    explicit GraphicObject( const OString& rUniqueID );
 
 public: // only for internal access:
     GraphicObject( css::uno::Sequence< css::uno::Any > const & args,
@@ -186,28 +186,28 @@ public: // only for internal access:
         throw( css::uno::RuntimeException );
     virtual ~GraphicObject();
 
-    static rtl::Reference< GraphicObject > Create( const GraphicManager* pMgr = NULL )
+    static rtl::Reference< GraphicObject > Create()
     {
-        return rtl::Reference< GraphicObject >( new GraphicObject( pMgr ) );
+        return rtl::Reference< GraphicObject >( new GraphicObject() );
     }
-    static rtl::Reference< GraphicObject > Create( const Graphic& rGraphic, const GraphicManager* pMgr = NULL )
+    static rtl::Reference< GraphicObject > Create( const Graphic& rGraphic )
     {
-        return rtl::Reference< GraphicObject >( new GraphicObject( rGraphic, pMgr ) );
+        return rtl::Reference< GraphicObject >( new GraphicObject( rGraphic ) );
     }
-    static rtl::Reference< GraphicObject > Create( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL )
+    static rtl::Reference< GraphicObject > Create( const GraphicObject& rCacheObj )
     {
-        return rtl::Reference< GraphicObject >( new GraphicObject( rCacheObj, pMgr ) );
+        return rtl::Reference< GraphicObject >( new GraphicObject( rCacheObj ) );
     }
-    static rtl::Reference< GraphicObject > Create( const rtl::Reference< GraphicObject > &xCacheObj, const GraphicManager* pMgr = NULL )
+    static rtl::Reference< GraphicObject > Create( const rtl::Reference< GraphicObject > &xCacheObj )
     {
         if( xCacheObj.is() )
-            return rtl::Reference< GraphicObject >( new GraphicObject( *xCacheObj.get(), pMgr ) );
+            return rtl::Reference< GraphicObject >( new GraphicObject( *xCacheObj.get() ) );
         else
             return rtl::Reference< GraphicObject >();
     }
-    static rtl::Reference< GraphicObject > Create( const OString& rUniqueID, const GraphicManager* pMgr = NULL )
+    static rtl::Reference< GraphicObject > Create( const OString& rUniqueID )
     {
-        return rtl::Reference< GraphicObject >( new GraphicObject( rUniqueID, pMgr ) );
+        return rtl::Reference< GraphicObject >( new GraphicObject( rUniqueID ) );
     }
 
 private:
@@ -237,10 +237,9 @@ private:
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
-                                const GraphicManager* pMgr,
                                 const OString* pID = NULL,
                                 const rtl::Reference< GraphicObject > &xCopyObj =
-                                    rtl::Reference< GraphicObject > () );
+                                    rtl::Reference< GraphicObject > ()
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     sal_Bool                SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
@@ -550,7 +549,7 @@ public:
         double fBottomCrop) const;
 };
 
-typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
+typedef ::std::vector< rtl::Reference< GraphicObject > > GraphicObjectList_impl;
 
 class SVT_DLLPUBLIC GraphicManager
 {
@@ -558,6 +557,8 @@ class SVT_DLLPUBLIC GraphicManager
     friend class GraphicDisplayCacheEntry;
 
 private:
+    /// GraphicManager is a singleton
+    static GraphicManager  *pGlobalManager;
 
     GraphicObjectList_impl  maObjList;
     GraphicCache*           mpCache;
@@ -569,7 +570,7 @@ private:
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            GraphicObject& rObj,
+                            const rtl::Reference< GraphicObject> & xObj,
                             const GraphicAttr& rAttr,
                             const sal_uLong nFlags,
                             sal_Bool& rCached
@@ -621,28 +622,29 @@ private:
 
                     // Only used by GraphicObject's Ctor's and Dtor's
     void SVT_DLLPRIVATE ImplRegisterObj(
-                            const GraphicObject& rObj,
+                            const rtl::Reference< GraphicObject >& xObj,
                             Graphic& rSubstitute,
                             const OString* pID = NULL,
                             const rtl::Reference< GraphicObject > &xCopyObj =
                                 rtl::Reference< GraphicObject > ()
                         );
-    void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
+    void SVT_DLLPRIVATE ImplUnregisterObj( const rtl::Reference< GraphicObject >& xObj );
     inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
 
                     // Only used in swap case by GraphicObject
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
+    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const rtl::Reference< GraphicObject > & xObj );
     sal_Bool SVT_DLLPRIVATE ImplFillSwappedGraphicObject(
-                            const GraphicObject& rObj,
+                            const rtl::Reference< GraphicObject >& xObj,
                             Graphic& rSubstitute
                         );
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const rtl::Reference< GraphicObject >& xObj );
 
-    OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
+    OString SVT_DLLPRIVATE ImplGetUniqueID( const rtl::Reference< GraphicObject >& xObj ) const;
+
+                        GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
 
 public:
 
-                        GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
                         ~GraphicManager();
 
     void                SetMaxCacheSize( sal_uLong nNewCacheSize );
@@ -654,13 +656,13 @@ public:
 
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
 
-    void                ReleaseFromCache( const GraphicObject& rObj );
+    void                ReleaseFromCache( const rtl::Reference< GraphicObject >& xObj );
 
     sal_Bool            IsInCache(
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            const GraphicObject& rObj,
+                            const rtl::Reference< GraphicObject > & xObj,
                             const GraphicAttr& rAttr
                         ) const;
 
@@ -668,7 +670,7 @@ public:
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            GraphicObject& rObj,
+                            rtl::Reference< GraphicObject >& xObj,
                             const GraphicAttr& rAttr,
                             const sal_uLong nFlags,
                             sal_Bool& rCached

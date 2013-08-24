@@ -264,13 +264,29 @@ TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
 //////////////////////////////////////////////////////////////////////////////
 
-XFillBitmapItem::XFillBitmapItem(const XubString& rName, const rtl::Reference< GraphicObject >& xGraphicObject)
+XFillBitmapItem::XFillBitmapItem(const OUString& rName, const rtl::Reference< GraphicObject >& xGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
     mxGraphicObject(GraphicObject::Create(xGraphicObject))
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+XFillBitmapItem::XFillBitmapItem(const BitmapEx &rBitmapEx)
+:   NameOrIndex(XATTR_FILLBITMAP, String()),
+    mxGraphicObject(GraphicObject::Create(Graphic(rBitmapEx)))
+{
+}
+
+XFillBitmapItem::XFillBitmapItem(const Graphic &rGraphic)
+:   NameOrIndex(XATTR_FILLBITMAP, String()),
+    mxGraphicObject(GraphicObject::Create(rGraphic))
+{
+}
+
+XFillBitmapItem::XFillBitmapItem(const rtl::Reference< GraphicObject > &xGraphicObject)
+:   NameOrIndex(XATTR_FILLBITMAP, String()),
+    mxGraphicObject(GraphicObject::Create(xGraphicObject))
+{
+}
 
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 :   NameOrIndex(rItem),

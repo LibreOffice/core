@@ -241,9 +241,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
             }
             else
             {
-                const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
-
-                _rOutAttrs.Put(XFillBitmapItem(String(), Graphic(aBitmapEx)));
+                _rOutAttrs.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx());
             }
         }
     }
@@ -263,7 +261,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
 
     // get bitmap and display it
-    const XFillBitmapItem aBmpItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx()));
+    const XFillBitmapItem aBmpItem(m_pBitmapCtl->GetBitmapEx());
     rXFSet.Put( aBmpItem );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
@@ -390,7 +388,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
         m_pCtlPixel->Invalidate();
 
         // display bitmap
-        const XFillBitmapItem aXBmpItem(String(), *pGraphicObject);
+        const XFillBitmapItem aXBmpItem(*pGraphicObject);
         rXFSet.Put( aXBmpItem );
 
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
@@ -907,7 +905,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     m_pBitmapCtl->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+    rXFSet.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx()));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 
@@ -926,7 +924,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     m_pBitmapCtl->SetBackgroundColor( m_pLbBackgroundColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+    rXFSet.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx()));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 
@@ -944,7 +942,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
         m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
 
         // get bitmap and display it
-        rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+        rXFSet.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx()));
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
 

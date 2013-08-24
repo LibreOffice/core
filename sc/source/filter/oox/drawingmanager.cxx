@@ -455,7 +455,7 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
         aXOBitmap.SetPixelColor( aPattColor );
         aXOBitmap.SetBackgroundColor( aBackColor );
         rSdrObj.SetMergedItem( XFillStyleItem( XFILL_BITMAP ) );
-        rSdrObj.SetMergedItem( XFillBitmapItem( EMPTY_STRING, aXOBitmap ) );
+        rSdrObj.SetMergedItem( XFillBitmapItem( aXOBitmap ) );
 #endif
     }
 

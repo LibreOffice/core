@@ -505,7 +505,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         aLogicalSize.Height() *= 5;
                         aFillBmp.SetPrefSize( aLogicalSize );
                         aFillBmp.SetPrefMapMode( MAP_100TH_MM );
-                        p3DObj->SetMergedItem(XFillBitmapItem(String(), GraphicObject::Create(Graphic(aFillBmp))));
+                        p3DObj->SetMergedItem(XFillBitmapItem(aFillBmp));
                     }
                     else
                     {
@@ -523,8 +523,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                                     (sal_Int32)( aBmpSize.Height() * fYScale ) );
                             Rectangle aCropRect( aPt, aSize );
                              aFillBmp.Crop( aCropRect );
-                            p3DObj->SetMergedItem(XFillBitmapItem(String(),
-                                                                  GraphicObject::Create(Graphic(aFillBmp))));
+                            p3DObj->SetMergedItem(XFillBitmapItem(aFillBmp));
                         }
                     }
                     pScene->Insert3DObj( p3DObj );
@@ -547,7 +546,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
                     if ( ( aLocalFillStyle == XFILL_BITMAP ) && !aFillBmp.IsEmpty() )
                     {
-                        p3DObj->SetMergedItem(XFillBitmapItem(String(), GraphicObject::Create(Graphic(aFillBmp))));
+                        p3DObj->SetMergedItem(XFillBitmapItem(aFillBmp));
                     }
                 }
                 else if ( aLocalFillStyle == XFILL_NONE )

@@ -456,7 +456,7 @@ sal_Bool ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& r
             SfxItemSet aSet( pScDrawView->GetModel()->GetItemPool(),
                                 XATTR_FILLSTYLE, XATTR_FILLBITMAP );
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(String(), rGraphic));
+            aSet.Put(XFillBitmapItem(rGraphic));
 
             pPickObj->SetMergedItemSetAndBroadcast(aSet);
 

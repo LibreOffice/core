@@ -1478,9 +1478,10 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     // for SdrGrafObj, use the graphic as fill style argument
                     const Graphic& rGraphic = pSdrGrafObj->GetGraphic();
 
-                    if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
+                    if(GRAPHIC_NONE != rGraphic.GetType() &&
+                       GRAPHIC_DEFAULT != rGraphic.GetType())
                     {
-                        aSet.Put(XFillBitmapItem(String(), rGraphic));
+                        aSet.Put(XFillBitmapItem(rGraphic));
                         aSet.Put(XFillStyleItem(XFILL_BITMAP));
                     }
                 }
@@ -1563,7 +1564,7 @@ sal_Bool SwFEShell::Paste( const Graphic &rGrf )
         SfxItemSet aSet(GetAttrPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
 
         aSet.Put(XFillStyleItem(XFILL_BITMAP));
-        aSet.Put(XFillBitmapItem(aEmptyStr, rGrf));
+        aSet.Put(XFillBitmapItem(rGrf));
         pView->SetAttributes(aSet, false);
     }
     return bRet;

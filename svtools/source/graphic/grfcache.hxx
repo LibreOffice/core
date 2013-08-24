@@ -20,6 +20,7 @@
 #ifndef _GRFCACHE_HXX
 #define _GRFCACHE_HXX
 
+#include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
 #include <list>
@@ -48,7 +49,7 @@ private:
     sal_uLong               mnUsedDisplaySize;
 
     sal_Bool                ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree );
-    GraphicCacheEntry*      ImplGetCacheEntry( const GraphicObject& rObj );
+    GraphicCacheEntry*      ImplGetCacheEntry( const rtl::Reference< GraphicObject >& xObj );
 
 
                             DECL_LINK( ReleaseTimeoutHdl, Timer* pTimer );
@@ -65,19 +66,19 @@ public:
 public:
 
     void                    AddGraphicObject(
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 Graphic& rSubstitute,
                                 const OString* pID,
-                                const GraphicObject* pCopyObj
+                                const rtl::Reference< GraphicObject >* pCopyObj
                             );
 
-    void                    ReleaseGraphicObject( const GraphicObject& rObj );
+    void                    ReleaseGraphicObject( const rtl::Reference< GraphicObject >& rObj );
 
-    void                    GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    sal_Bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
-    void                    GraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    void                    GraphicObjectWasSwappedOut( const rtl::Reference< GraphicObject >& rObj );
+    sal_Bool                FillSwappedGraphicObject( const rtl::Reference< GraphicObject >& rObj, Graphic& rSubstitute );
+    void                    GraphicObjectWasSwappedIn( const rtl::Reference< GraphicObject >& rObj );
 
-    OString            GetUniqueID( const GraphicObject& rObj ) const;
+    OString                 GetUniqueID( const rtl::Reference< GraphicObject >& rObj ) const;
 
 public:
 
@@ -101,7 +102,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 const GraphicAttr& rAttr
                             ) const;
 
@@ -109,7 +110,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 const GraphicAttr& rAttr
                             ) const;
 
@@ -117,7 +118,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 const GraphicAttr& rAttr,
                                 const BitmapEx& rBmpEx
                             );
@@ -126,7 +127,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 const GraphicAttr& rAttr,
                                 const GDIMetaFile& rMtf
                             );
@@ -135,7 +136,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicObject& rObj,
+                                const rtl::Reference< GraphicObject >& rObj,
                                 const GraphicAttr& rAttr
                             );
 };

@@ -2074,12 +2074,12 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
         const XBitmapEntry* pEntry = pBitmapList->GetBitmap(_nPos);
 
         rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
-        rXFSet.Put(XFillBitmapItem(String(), pEntry->GetGraphicObject()));
+        rXFSet.Put(XFillBitmapItem(pEntry->GetGraphicObject()));
     }
     else if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True, &pPoolItem ) )
     {
         rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
-        rXFSet.Put(XFillBitmapItem(String(), ((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
+        rXFSet.Put(XFillBitmapItem(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
     }
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );

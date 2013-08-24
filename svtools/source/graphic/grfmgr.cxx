@@ -61,13 +61,13 @@ struct GrfSimpleCacheObj
 
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
 
-GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject()
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager();
 }
 
 GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
@@ -77,7 +77,7 @@ GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMg
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager();
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
@@ -89,7 +89,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
+    ImplSetGraphicManager(NULL, &rGraphicObj );
 }
 
 GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
@@ -101,7 +101,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager( pMgr, &rUniqueID );
+    ImplSetGraphicManager(&rUniqueID );
 
     // update properties
     ImplAssignGraphicData();
@@ -195,44 +195,27 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const rtl::Reference< GraphicObject > &xCopyObj )
+void GraphicObject::ImplSetGraphicManager( const OString* pID, const rtl::Reference< GraphicObject > &xCopyObj )
 {
-    if( !mpMgr || ( pMgr != mpMgr ) )
+    GraphicManager *pGlobalMgr;
+
+    if ( ! ( pGlobalMgr = GraphicManager::pGlobalManager ) )
     {
-        if( !pMgr && mpMgr && ( mpMgr == mpGlobalMgr ) )
-            return;
-        else
-        {
-            if( mpMgr )
-            {
-                mpMgr->ImplUnregisterObj( *this );
-
-                if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-                    delete mpGlobalMgr, mpGlobalMgr = NULL;
-            }
-
-            if( !pMgr )
-            {
-                if( !mpGlobalMgr )
-                {
-                    mpGlobalMgr = new GraphicManager(
+        pGlobalMgr = new GraphicManager(
                         (officecfg::Office::Common::Cache::GraphicManager::
                          TotalCacheSize::get()),
                         (officecfg::Office::Common::Cache::GraphicManager::
                          ObjectCacheSize::get()));
-                    mpGlobalMgr->SetCacheTimeout(
+        pGlobalMgr->SetCacheTimeout(
                         officecfg::Office::Common::Cache::GraphicManager::
                         ObjectReleaseTime::get());
-                }
-
-                mpMgr = mpGlobalMgr;
-            }
-            else
-                mpMgr = (GraphicManager*) pMgr;
-
-            mpMgr->ImplRegisterObj( *this, maGraphic, pID, xCopyObj );
-        }
+        GraphicManager::pGlobalManager = pGlobalMgr;
     }
+
+    // FIXME: remove this member in favour of the global eventually
+    mpMgr = pGlobalMgr;
+
+    mpMgr->ImplRegisterObj( *this, maGraphic, pID, xCopyObj );
 }
 
 void GraphicObject::ImplAutoSwapIn()

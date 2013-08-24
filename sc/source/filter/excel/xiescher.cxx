@@ -758,7 +758,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             aBitmap = aXOBitmap.GetBitmap();
 
             rSdrObj.SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-            rSdrObj.SetMergedItem(XFillBitmapItem(EMPTY_STRING, Graphic(aBitmap)));
+            rSdrObj.SetMergedItem(XFillBitmapItem(Graphic(aBitmap)));
         }
     }
 }
