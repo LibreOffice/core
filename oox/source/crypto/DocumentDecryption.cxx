@@ -84,11 +84,11 @@ public:
     void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
         throw (RuntimeException, SAXException)
     {}
-    void startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ )
+    void SAL_CALL startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ )
         throw (RuntimeException, SAXException)
     {}
 
-    void startUnknownElement( const OUString& /*aNamespace*/, const OUString& aName, const Reference< XFastAttributeList >& aAttributeList )
+    void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& aName, const Reference< XFastAttributeList >& aAttributeList )
         throw (RuntimeException, SAXException)
     {
         if(aName == "keyData")
@@ -170,26 +170,26 @@ public:
         }
     }
 
-    void endFastElement( sal_Int32 /*aElement*/ )
+    void SAL_CALL endFastElement( sal_Int32 /*aElement*/ )
         throw (RuntimeException, SAXException)
     {}
-    void endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ )
+    void SAL_CALL endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ )
         throw (RuntimeException, SAXException)
     {}
 
-    Reference< XFastContextHandler > createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
+    Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
         throw (RuntimeException, SAXException)
     {
         return NULL;
     }
 
-    Reference< XFastContextHandler > createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
+    Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ )
         throw (RuntimeException, SAXException)
     {
         return this;
     }
 
-    void characters( const OUString& /*aChars*/ )
+    void SAL_CALL characters( const OUString& /*aChars*/ )
         throw (RuntimeException, SAXException)
     {}
 };
