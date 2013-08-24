@@ -70,21 +70,16 @@ void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
-void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
-{
-    // !!!
-}
-
 sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
-                                    const Size& rSz, const GraphicObject& rObj,
+                                    const Size& rSz, const rtl::Reference< GraphicObject > &rObj,
                                     const GraphicAttr& rAttr ) const
 {
     return mpCache->IsInDisplayCache( pOut, rPt, rSz, rObj, rAttr );
 }
 
 sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              GraphicObject& rObj, const GraphicAttr& rAttr,
-                              const sal_uLong nFlags, sal_Bool& rCached )
+                                  const rtl::Reference< GraphicObject >& rObj, const GraphicAttr& rAttr,
+                                  const sal_uLong nFlags, sal_Bool& rCached )
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
@@ -140,12 +135,10 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
 
 void GraphicManager::ImplRegisterObj( const rtl::Reference< GraphicObject >& xObj,
                                       Graphic& rSubstitute,
-                                      const OString* pID,
-                                      const rtl::Reference< GraphicObject >* pCopyObj )
+                                      const OString* pID )
 {
-#error mis-handling of pCopyObj
     maObjList.push_back( xObj );
-    mpCache->AddGraphicObject( xObj, rSubstitute, pID, pCopyObj );
+    mpCache->AddGraphicObject( xObj, rSubstitute, pID );
 }
 
 void GraphicManager::ImplUnregisterObj( const rtl::Reference< GraphicObject >& xObj )

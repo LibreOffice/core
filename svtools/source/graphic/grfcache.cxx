@@ -842,44 +842,16 @@ GraphicCache::~GraphicCache()
 void GraphicCache::AddGraphicObject(
     const rtl::Reference< GraphicObject >& xObj,
     Graphic& rSubstitute,
-    const OString* pID,
-    const rtl::Reference< GraphicObject >* pCopyObj
+    const OString* pID
 )
 {
-#error mis-handling of pCopyObj
-
     sal_Bool bInserted = sal_False;
 
     if(  !xObj->IsSwappedOut()
-      && (  pID
-         || (    pCopyObj
-            && ( pCopyObj->GetType() != GRAPHIC_NONE )
-            )
-         || ( xObj->GetType() != GRAPHIC_NONE )
+      && ( pID || ( xObj->GetType() != GRAPHIC_NONE )
          )
       )
     {
-        if( pCopyObj
-          && !maGraphicCache.empty()
-        )
-        {
-            GraphicCacheEntryList::iterator it = maGraphicCache.begin();
-            while(  !bInserted
-                 && ( it != maGraphicCache.end() )
-                 )
-            {
-                if( (*it)->HasGraphicObjectReference( *pCopyObj ) )
-                {
-                    (*it)->AddGraphicObjectReference( xObj, rSubstitute );
-                    bInserted = sal_True;
-                }
-                else
-                {
-                    ++it;
-                }
-            }
-        }
-
         if( !bInserted )
         {
             GraphicCacheEntryList::iterator it = maGraphicCache.begin();
@@ -1015,7 +987,7 @@ void GraphicCache::GraphicObjectWasSwappedIn( const rtl::Reference< GraphicObjec
         if( pEntry->GetID().IsEmpty() )
         {
             ReleaseGraphicObject( xObj );
-            AddGraphicObject( xObj, (Graphic&) xObj->GetGraphic(), NULL, NULL );
+            AddGraphicObject( xObj, (Graphic&) xObj->GetGraphic(), NULL );
         }
         else
             pEntry->GraphicObjectWasSwappedIn( xObj );

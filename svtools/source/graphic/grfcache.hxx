@@ -68,8 +68,7 @@ public:
     void                    AddGraphicObject(
                                 const rtl::Reference< GraphicObject >& rObj,
                                 Graphic& rSubstitute,
-                                const OString* pID,
-                                const rtl::Reference< GraphicObject >* pCopyObj
+                                const OString* pID
                             );
 
     void                    ReleaseGraphicObject( const rtl::Reference< GraphicObject >& rObj );

@@ -235,11 +235,7 @@ private:
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
-    void                    SVT_DLLPRIVATE ImplSetGraphicManager(
-                                const OString* pID = NULL,
-                                const rtl::Reference< GraphicObject > &xCopyObj =
-                                    rtl::Reference< GraphicObject > ()
-                            );
+    void                    SVT_DLLPRIVATE ImplSetup( const OString* pID = NULL );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     sal_Bool                SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
     sal_Bool                SVT_DLLPRIVATE ImplGetCropParams(
@@ -381,7 +377,6 @@ public:
                                 const GraphicAttr* pAttr = NULL,
                                 sal_uLong nFlags = GRFMGR_DRAW_STANDARD
                             ) const;
-    void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
 
@@ -617,13 +612,11 @@ private:
                             const GraphicAttr& rAttr
                         );
 
-                    // Only used by GraphicObject's Ctor's and Dtor's
+    // Only used by GraphicObject's Ctor's and Dtor's
     void SVT_DLLPRIVATE ImplRegisterObj(
                             const rtl::Reference< GraphicObject >& xObj,
                             Graphic& rSubstitute,
-                            const OString* pID = NULL,
-                            const rtl::Reference< GraphicObject > &xCopyObj =
-                                rtl::Reference< GraphicObject > ()
+                            const OString* pID = NULL
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const rtl::Reference< GraphicObject >& xObj );
     inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
@@ -652,8 +645,6 @@ public:
                         );
 
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
-
-    void                ReleaseFromCache( const rtl::Reference< GraphicObject >& xObj );
 
     sal_Bool            IsInCache(
                             OutputDevice* pOut,

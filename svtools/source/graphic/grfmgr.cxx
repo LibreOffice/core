@@ -61,26 +61,26 @@ struct GrfSimpleCacheObj
 
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
 
-GraphicObject::GraphicObject()
+GraphicObject::GraphicObject() :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager();
+    ImplSetup();
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const Graphic& rGraphic )
     maGraphic   ( rGraphic ),
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager();
+    ImplSetup();
 }
 
-GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
     SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
@@ -89,10 +89,10 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager(NULL, &rGraphicObj );
+    ImplSetup();
 }
 
-GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const OString& rUniqueID ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
@@ -101,7 +101,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager(&rUniqueID);
+    ImplSetup(&rUniqueID);
 
     // update properties
     ImplAssignGraphicData();
@@ -123,10 +123,10 @@ GraphicObject::GraphicObject( css::uno::Sequence< css::uno::Any > const & args,
             throw css::lang::IllegalArgumentException();
 
         OString bsId ( OUStringToOString ( sId, RTL_TEXTENCODING_UTF8 ) );
-        ImplSetGraphicManager( NULL, &bsId );
+        ImplSetup( &bsId );
     }
     else
-        ImplSetGraphicManager( NULL );
+        ImplSetup();
 }
 
 css::uno::Reference< css::graphic::XGraphic > SAL_CALL GraphicObject::getGraphic()
@@ -197,7 +197,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const OString* pID, const rtl::Reference< GraphicObject > &xCopyObj )
+void GraphicObject::ImplSetup( const OString* pID )
 {
     GraphicManager *pGlobalMgr;
 
@@ -217,7 +217,7 @@ void GraphicObject::ImplSetGraphicManager( const OString* pID, const rtl::Refere
     // FIXME: remove this member in favour of the global eventually
     mpMgr = pGlobalMgr;
 
-    mpMgr->ImplRegisterObj( *this, maGraphic, pID, xCopyObj );
+    mpMgr->ImplRegisterObj( *this, maGraphic, pID );
 }
 
 void GraphicObject::ImplAutoSwapIn()
@@ -479,7 +479,7 @@ void GraphicObject::GraphicManagerDestroyed()
 {
     // we're alive, but our manager doesn't live anymore ==> connect to default manager
     mpMgr = NULL;
-    ImplSetGraphicManager( NULL );
+    ImplSetup( NULL );
 }
 
 sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -503,12 +503,6 @@ sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Si
         bRet = sal_False;
 
     return bRet;
-}
-
-void GraphicObject::ReleaseFromCache()
-{
-
-    mpMgr->ReleaseFromCache( *this );
 }
 
 bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
