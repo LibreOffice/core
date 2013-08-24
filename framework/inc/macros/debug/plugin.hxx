@@ -144,7 +144,7 @@
                     {                                                                                       \
                         sal_Int32 nBytes = XSTREAM->available();                                            \
                         OString sInfo("Stream with ");                                                      \
-                        sInfo += OString::valueOf( (sal_Int32)nBytes );                                     \
+                        sInfo += OString::number(nBytes);                                                   \
                         sInfo += " Bytes, ";                                                                \
                         sBuffer.append( sInfo );                                                            \
                     }                                                                                       \

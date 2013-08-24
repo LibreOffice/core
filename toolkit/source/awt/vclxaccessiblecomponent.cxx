@@ -616,7 +616,7 @@ OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeExcep
         aName = GetWindow()->GetAccessibleName();
 #if OSL_DEBUG_LEVEL > 1
         aName += OUString(" (Type = ");
-        aName += OUString::valueOf(static_cast<sal_Int32>(GetWindow()->GetType()));
+        aName += OUString::number(static_cast<sal_Int32>(GetWindow()->GetType()));
         aName += OUString( ")");
 #endif
     }

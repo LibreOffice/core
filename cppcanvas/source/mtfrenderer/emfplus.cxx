@@ -771,7 +771,7 @@ namespace cppcanvas
                         mfStream.Seek(0);
                         static sal_Int32 emfp_debug_stream_number = 0;
                         OUString emfp_debug_filename("/tmp/emf-embedded-stream");
-                        emfp_debug_filename += OUString::valueOf(emfp_debug_stream_number++);
+                        emfp_debug_filename += OUString::number(emfp_debug_stream_number++);
                         emfp_debug_filename += OUString(".emf");
 
                         SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );

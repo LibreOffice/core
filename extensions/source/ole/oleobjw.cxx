@@ -1040,7 +1040,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                       "[automation bridge]IUnknownWrapper_Impl::"
                                       "invokeWithDispIdUnoTlb\n"
                                       "Could not create out parameter at index: " +
-                                OUString::valueOf((sal_Int32) i));
+                                OUString::number((sal_Int32) i));
                         }
 
                     }
@@ -1415,7 +1415,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
             {
                 throw InvocationTargetException(
                     "[automation bridge] ITypeInfo::GetIDsOfNames returned error "
-                    + OUString::valueOf((sal_Int32) hr, 16), Reference<XInterface>(), Any());
+                    + OUString::number((sal_Int32) hr, 16), Reference<XInterface>(), Any());
             }
         }
 
@@ -1870,7 +1870,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
         {
             throw InvocationTargetException(
                 "[automation bridge] ITypeInfo::GetIDsOfNames returned error "
-                + OUString::valueOf((sal_Int32) hr, 16), Reference<XInterface>(), Any());
+                + OUString::number((sal_Int32) hr, 16), Reference<XInterface>(), Any());
         }
     }
 
@@ -1906,7 +1906,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 OUStringBuffer buf(256);
                 buf.appendAscii("ole automation bridge: The called function expects an argument at"
                                 "position: "); //a different number of arguments")),
-                buf.append(OUString::valueOf((sal_Int32) i));
+                buf.append(OUString::number((sal_Int32) i));
                 buf.appendAscii(" (index starting at 0).");
                 throw IllegalArgumentException( buf.makeStringAndClear(),
                                                 Reference<XInterface>(), (sal_Int16) i);

@@ -2685,20 +2685,20 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
     OUString const sHash( " # " );
     if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        OUString sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
+        OUString sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
         sDebugText += sHash;
-        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
+        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
         sDebugText += sHash;
-        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
+        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
         rFixed.SetText(sDebugText);
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        String sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
+        String sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
         sDebugText += sHash;
-        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
+        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
         sDebugText += sHash;
-        sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
+        sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
         rFixed.SetText(sDebugText);
     }
 
