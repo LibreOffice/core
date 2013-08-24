@@ -24,10 +24,6 @@
 #include <stdio.h>
 
 #include <rtl/string.hxx>
-#include <rtl/bootstrap.hxx>
-#include <unotools/pathoptions.hxx>
-#include <tools/resid.hxx>
-#include <tools/config.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
@@ -41,8 +37,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include "com/sun/star/util/XFlushable.hpp"
 #include <rtl/instance.hxx>
-#include <osl/process.h>
-#include <osl/file.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -53,47 +47,9 @@ using namespace com::sun::star::util;
 
 namespace desktop {
 
-static char const SOFFICE_BOOTSTRAP[] = "Bootstrap";
-static char const SOFFICE_STARTLANG[] = "STARTLANG";
-
 sal_Bool LanguageSelection::bFoundLanguage = sal_False;
 OUString LanguageSelection::aFoundLanguage;
 LanguageSelection::LanguageSelectionStatus LanguageSelection::m_eStatus = LS_STATUS_OK;
-
-static sal_Bool existsURL( OUString const& sURL )
-{
-    using namespace osl;
-    DirectoryItem aDirItem;
-
-    if (!sURL.isEmpty())
-        return ( DirectoryItem::get( sURL, aDirItem ) == DirectoryItem::E_None );
-
-    return sal_False;
-}
-
-// locate soffice.ini/.rc file
-static OUString locateSofficeIniFile()
-{
-    OUString aUserDataPath;
-    OUString aSofficeIniFileURL;
-
-    // Retrieve the default file URL for the soffice.ini/rc
-    rtl::Bootstrap().getIniName( aSofficeIniFileURL );
-
-    if ( utl::Bootstrap::locateUserData( aUserDataPath ) == utl::Bootstrap::PATH_EXISTS )
-    {
-        sal_Int32 nIndex = aSofficeIniFileURL.lastIndexOf( '/');
-        if ( nIndex > 0 )
-        {
-            OUString aUserSofficeIniFileURL = aUserDataPath + "/config" + aSofficeIniFileURL.copy( nIndex );
-
-            if ( existsURL( aUserSofficeIniFileURL ))
-                return aUserSofficeIniFileURL;
-        }
-    }
-    // Fallback try to use the soffice.ini/rc from program folder
-    return aSofficeIniFileURL;
-}
 
 bool LanguageSelection::prepareLanguage()
 {
@@ -136,7 +92,6 @@ bool LanguageSelection::prepareLanguage()
 
     // get the selected UI language as string
     bool     bCmdLanguage( false );
-    bool     bIniLanguage( false );
     OUString aLocaleString = getUserUILanguage();
 
     if ( aLocaleString.isEmpty() )
@@ -153,23 +108,6 @@ bool LanguageSelection::prepareLanguage()
         }
         else
             aLocaleString = aEmpty;
-
-        if ( !bCmdLanguage )
-        {
-            OUString aSOfficeIniURL = locateSofficeIniFile();
-            Config aConfig(aSOfficeIniURL);
-            aConfig.SetGroup( SOFFICE_BOOTSTRAP );
-            OString sLang = aConfig.ReadKey( SOFFICE_STARTLANG );
-            aLocaleString = OUString( sLang.getStr(), sLang.getLength(), RTL_TEXTENCODING_ASCII_US );
-            if (isInstalledLanguage(aLocaleString, sal_False))
-            {
-                bIniLanguage   = true;
-                bFoundLanguage = true;
-                aFoundLanguage = aLocaleString;
-            }
-            else
-                aLocaleString = aEmpty;
-        }
     }
 
     // user further fallbacks for the UI language
@@ -192,14 +130,6 @@ bool LanguageSelection::prepareLanguage()
                 // Store language only
                 xProp->setPropertyValue("ooLocale", makeAny(aLocaleString));
                 Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-            }
-
-            if ( bIniLanguage )
-            {
-                // Store language only
-                Reference< XPropertySet > xProp2(getConfigAccess("org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-                xProp2->setPropertyValue("UILocale", makeAny(aLocaleString));
-                Reference< XChangesBatch >(xProp2, UNO_QUERY_THROW)->commitChanges();
             }
 
             MsLangId::setConfiguredSystemUILanguage( aUILanguageTag.getLanguageType( false) );

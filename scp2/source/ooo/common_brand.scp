@@ -939,20 +939,6 @@ ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     Value = "1";
 End
 
-#ifdef WNT
-ProfileItem gid_Brand_Profileitem_Soffice_Startlang
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 8;
-    Key = "STARTLANG";
-    Value = "[STARTLANG]";
-    Inifiletablekey = "STARTLANG";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-#endif
-
 ProfileItem gid_Brand_Profileitem_Version_Buildid
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
