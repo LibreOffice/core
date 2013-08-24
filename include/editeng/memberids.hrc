@@ -181,6 +181,9 @@
 #define MID_HORJUST_HORJUST     0
 #define MID_HORJUST_ADJUST      1
 
+// SvxShadowItem
+#define MID_SHADOW_TRANSPARENCE 1
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

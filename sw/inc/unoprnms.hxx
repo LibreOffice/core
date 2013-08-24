@@ -836,8 +836,9 @@ enum SwPropNameIds
 /* 0770 */  UNO_NAME_CHAR_TOP_BORDER_DISTANCE,
 /* 0771 */  UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE,
 /* 0772 */  UNO_NAME_CHAR_SHADOW_FORMAT,
+/* 0773 */  UNO_NAME_SHADOW_TRANSPARENCE,
 
-/* 0773 */  SW_PROPNAME_END
+            SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

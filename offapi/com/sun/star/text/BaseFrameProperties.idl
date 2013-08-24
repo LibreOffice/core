@@ -317,6 +317,15 @@ published service BaseFrameProperties
         */
         [optional, property] string FillGradientName;
 
+        /** This defines the degree of transparence of the shadow in percent.
+
+            <p>This is the same as setting the Color member of the
+            #ShadowFormat property to an ARGB color.</p>
+
+            @since LibreOffice 4.2
+         */
+        [optional, property] short ShadowTransparence;
+
 };
 
 

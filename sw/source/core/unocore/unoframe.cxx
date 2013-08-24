@@ -409,6 +409,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         bRet &= ((SfxPoolItem&)aSh).PutValue(*pSh, CONVERT_TWIPS);
         rToSet.Put(aSh);
     }
+    const ::uno::Any* pShTr;
+    if(GetProperty(RES_SHADOW, MID_SHADOW_TRANSPARENCE, pShTr) && rToSet.HasItem(RES_SHADOW))
+    {
+        SvxShadowItem aSh(static_cast<const SvxShadowItem&>(rToSet.Get(RES_SHADOW)));
+        bRet &= aSh.PutValue(*pShTr, MID_SHADOW_TRANSPARENCE);
+        rToSet.Put(aSh);
+    }
     const ::uno::Any* pSur      = 0;
     GetProperty(RES_SURROUND, MID_SURROUND_SURROUNDTYPE, pSur);
     const ::uno::Any* pSurAnch = 0;

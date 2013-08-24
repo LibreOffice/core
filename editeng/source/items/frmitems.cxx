@@ -1315,6 +1315,8 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
     aShadow.Color = aShadowColor.GetColor();
 
+    sal_Int8 nTransparence = rtl::math::round(float(aShadowColor.GetTransparency() * 100) / 255);
+
     switch ( nMemberId )
     {
         case MID_LOCATION: rVal <<= aShadow.Location; break;
@@ -1322,6 +1324,7 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_TRANSPARENT: rVal <<= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal <<= aShadow.Color; break;
         case 0: rVal <<= aShadow; break;
+        case MID_SHADOW_TRANSPARENCE: rVal <<= nTransparence; break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
@@ -1355,6 +1358,17 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_TRANSPARENT: rVal >>= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal >>= aShadow.Color; break;
         case 0: rVal >>= aShadow; break;
+        case MID_SHADOW_TRANSPARENCE:
+        {
+            sal_Int32 nTransparence = 0;
+            if (rVal >>= nTransparence)
+            {
+                Color aColor(aShadow.Color);
+                aColor.SetTransparency(rtl::math::round(float(nTransparence * 255) / 100));
+                aShadow.Color = aColor.GetColor();
+            }
+            break;
+        }
         default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 

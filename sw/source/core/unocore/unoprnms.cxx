@@ -802,6 +802,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0770 UNO_NAME_CHAR_TOP_BORDER_DISTANCE */    {MAP_CHAR_LEN("CharTopBorderDistance")},
 /* 0771 UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE */ {MAP_CHAR_LEN("CharBottomBorderDistance")},
 /* 0771 UNO_NAME_CHAR_SHADOW_FORMAT */          {MAP_CHAR_LEN("CharShadowFormat")},
+/* 0772 UNO_NAME_SHADOW_TRANSPARENCE */         {MAP_CHAR_LEN("ShadowTransparence")},
 
 
 // new items in this array must match enum SwPropNameIds
