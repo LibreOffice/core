@@ -473,10 +473,11 @@ bool LanguageTag::canonicalize()
                                 1 + aCountry.getLength());
                         aBuf.append( aLanguage);
                         if (!aScript.isEmpty())
-                            aBuf.append('-').append( aScript);
+                            aBuf.append("-" + aScript);
                         if (!aCountry.isEmpty())
-                            aBuf.append('-').append( aCountry);
+                            aBuf.append("-" + aCountry);
                         OUString aStr( aBuf.makeStringAndClear());
+
                         if (maBcp47 != aStr)
                         {
                             maBcp47 = aStr;
@@ -990,9 +991,7 @@ OUString LanguageTag::getLanguageAndScript() const
     OUString aScript( getScript());
     if (!aScript.isEmpty())
     {
-        OUStringBuffer aBuf( aLanguageScript.getLength() + 1 + aScript.getLength());
-        aBuf.append( aLanguageScript).append( '-').append( aScript);
-        aLanguageScript = aBuf.makeStringAndClear();
+        aLanguageScript += "-" + aScript;
     }
     return aLanguageScript;
 }
@@ -1414,9 +1413,7 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
             aBcp47 = rLocale.Language;
         else
         {
-            OUStringBuffer aBuf( rLocale.Language.getLength() + 1 + rLocale.Country.getLength());
-            aBuf.append( rLocale.Language).append( '-').append( rLocale.Country);
-            aBcp47 = aBuf.makeStringAndClear();
+            aBcp47 = rLocale.Language + "-" + rLocale.Country;
         }
     }
     return aBcp47;
