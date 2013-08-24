@@ -176,7 +176,6 @@ private:
     explicit GraphicObject();
     GraphicObject( const Graphic& rGraphic );
     GraphicObject( const GraphicObject& rCacheObj );
-    GraphicObject& operator=( const GraphicObject& rCacheObj );
 
     explicit GraphicObject( const OString& rUniqueID );
 
@@ -385,8 +384,6 @@ public:
     void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
-    void                    SetGraphic( const Graphic& rGraphic, const rtl::Reference< GraphicObject >& pCopyObj = rtl::Reference< GraphicObject >() );
-    void                    SetGraphic( const Graphic& rGraphic, const String& rLink );
 
     /** Get graphic transformed according to given attributes
 

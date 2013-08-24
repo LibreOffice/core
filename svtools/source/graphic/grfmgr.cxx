@@ -101,7 +101,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager(&rUniqueID );
+    ImplSetGraphicManager(&rUniqueID);
 
     // update properties
     ImplAssignGraphicData();
@@ -141,8 +141,10 @@ void SAL_CALL GraphicObject::setGraphic( const css::uno::Reference< css::graphic
 {
     SolarMutexGuard aSolarGuard;
 
-    Graphic aGraphic( xGraphic );
-    SetGraphic( aGraphic );
+    // GraphicObjects should be superficially immutable, and refer to one object.
+    assert( "this setGraphic method seems like a pretty horrible design flaw, and awfully un-necessary - please construct a new object" );
+//    Graphic aGraphic( xGraphic );
+//    SetGraphic( aGraphic );
 }
 
 OUString SAL_CALL GraphicObject::getUniqueID()
@@ -347,35 +349,6 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
     }
 
     return bRet;
-}
-
-GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
-{
-    // FIXME: mmeeks this operator should be removed [!] ...
-    assert(false);
-
-    if( &rGraphicObj != this )
-    {
-        mpMgr->ImplUnregisterObj( *this );
-
-        delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
-        delete mpSimpleCache, mpSimpleCache = NULL;
-        delete mpLink;
-        delete mpUserData;
-
-        maGraphic = rGraphicObj.GetGraphic();
-        maAttr = rGraphicObj.maAttr;
-        mpLink = rGraphicObj.mpLink ? new String( *rGraphicObj.mpLink ) : NULL;
-        mpUserData = rGraphicObj.mpUserData ? new String( *rGraphicObj.mpUserData ) : NULL;
-        ImplAssignGraphicData();
-        mbAutoSwapped = sal_False;
-        mpMgr = rGraphicObj.mpMgr;
-
-        mpMgr->ImplRegisterObj( *this, maGraphic, NULL,
-                                GraphicObject::Create( &rGraphicObj ) );
-    }
-
-    return *this;
 }
 
 sal_Bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
@@ -768,25 +741,6 @@ const Graphic& GraphicObject::GetGraphic() const
         ( (GraphicObject*) this )->ImplAutoSwapIn();
 
     return maGraphic;
-}
-
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const rtl::Reference< GraphicObject > &xCopyObj )
-{
-    mpMgr->ImplUnregisterObj( *this );
-
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Stop();
-
-    maGraphic = rGraphic;
-    mbAutoSwapped = sal_False;
-    ImplAssignGraphicData();
-    delete mpLink, mpLink = NULL;
-    delete mpSimpleCache, mpSimpleCache = NULL;
-
-    mpMgr->ImplRegisterObj( *this, maGraphic, 0, xCopyObj);
-
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Start();
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
