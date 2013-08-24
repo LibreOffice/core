@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
+#include <sys/stat.h>
+
 #include <stack>
 #include "osl/diagnose.h"
 #include <rtl/uri.hxx>
@@ -2074,6 +2078,23 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
     else
         aPath = rUnqPath;
 
+#if HAVE_FEATURE_MACOSX_SANDBOX
+
+    // Avoid annoying sandbox messages in the system.log from the
+    // below aDirectory.open(), which ends up calling opendir().
+    // Surely it is easier to just call stat()? Calling stat() on an
+    // arbitrary (?) directory does not seem to cause any sandbox
+    // violation, while opendir() does. (Sorry I could not be bothered
+    // to use some complex cross-platform abstraction over stat() here
+    // in this OS X specific code block.)
+
+    OUString aDirName;
+    struct stat s;
+    if( osl::FileBase::getSystemPathFromFileURL( aPath, aDirName ) == osl::FileBase::E_None &&
+        stat(OUStringToOString( aDirName, RTL_TEXTENCODING_UTF8).getStr(), &s ) == 0 &&
+        S_ISDIR( s.st_mode ) )
+        return sal_True;
+#endif
 
     // HACK: create directory on a mount point with nobrowse option
     // returns ENOSYS in any case !!
