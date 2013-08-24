@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "dp_ucb.h"
 #include "dp_resource.h"
@@ -358,7 +359,11 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->m_registrationData = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER";
         that->m_registryCache = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry";
         logFile = "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt";
+#if !HAVE_FEATURE_READONLY_INSTALLSET
+        // The "shared" extensions are read-only when we have a
+        // read-only installset.
         stamp = "$UNO_SHARED_PACKAGES_CACHE";
+#endif
     }
     else if ( context == "bundled" ) {
         that->m_activePackages = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
