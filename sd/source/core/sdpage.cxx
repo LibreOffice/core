@@ -1319,8 +1319,8 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
                     {
                         Size aSize( basegfx::fround(aLayoutSize.Width() * propvalue[1]),
                                     basegfx::fround(aLayoutSize.Height() * propvalue[0]) );
-                        Point aPos( basegfx::fround(aLayoutPos.X() +(aLayoutSize.Width() * propvalue[2])),
-                                    basegfx::fround(aLayoutPos.Y() + (aLayoutSize.Height() * propvalue[3])) );
+                        Point aPos( basegfx::fround(aLayoutPos.X() +(aSize.Width() * propvalue[2])),
+                                    basegfx::fround(aLayoutPos.Y() + (aSize.Height() * propvalue[3])) );
                         rRectangle[count] = Rectangle (aPos, aSize);
                         count = count+1;
                     }
