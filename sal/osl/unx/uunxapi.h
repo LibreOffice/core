@@ -17,55 +17,49 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef _OSL_UUNXAPI_H_
- #define _OSL_UUNXAPI_H_
+#ifndef _OSL_UUNXAPI_H_
+#define _OSL_UUNXAPI_H_
 
- #include <unistd.h>
- #include <stdlib.h>
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <rtl/ustring.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <rtl/ustring.h>
 
- #ifdef __cplusplus
- extern "C"
- {
- #endif
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
- /* @see access */
- int access_u(const rtl_uString* pustrPath, int mode);
+/* @see access */
+int access_u(const rtl_uString* pustrPath, int mode);
 
- /***********************************
-  @descr
-  The return value differs from the
-  realpath function
+/***********************************
+ @descr
+ The return value differs from the
+ realpath function
 
-  @returns sal_True on success else
-  sal_False
+ @returns sal_True on success else
+ sal_False
 
-  @see realpath
-  **********************************/
- sal_Bool realpath_u(
-     const rtl_uString* pustrFileName,
-    rtl_uString** ppustrResolvedName);
+ @see realpath
+ **********************************/
+sal_Bool realpath_u(
+    const rtl_uString* pustrFileName,
+   rtl_uString** ppustrResolvedName);
 
- /* @see stat */
- int stat_c(const char *cpPath, struct stat* buf);
+int stat_c(const char *cpPath, struct stat* buf);
 
- /* @see lstat */
- int lstat_c(const char *cpPath, struct stat* buf);
+int lstat_c(const char *cpPath, struct stat* buf);
 
- /* @see lstat */
- int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
+int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
 
- /* @see mkdir */
- int mkdir_u(const rtl_uString* path, mode_t mode);
+int mkdir_u(const rtl_uString* path, mode_t mode);
 
- #ifdef __cplusplus
- }
- #endif
+#ifdef __cplusplus
+}
+#endif
 
-
- #endif /* _OSL_UUNXAPI_H_ */
-
+#endif /* _OSL_UUNXAPI_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

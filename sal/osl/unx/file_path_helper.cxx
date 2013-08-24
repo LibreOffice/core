@@ -17,40 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "file_path_helper.h"
+#include "file_path_helper.hxx"
+#include "uunxapi.hxx"
 
- /*******************************************
-     Includes
-  ******************************************/
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
 
- #include "file_path_helper.h"
- #include "file_path_helper.hxx"
- #include "uunxapi.hxx"
+const sal_Unicode FPH_CHAR_PATH_SEPARATOR = (sal_Unicode)'/';
+const sal_Unicode FPH_CHAR_DOT            = (sal_Unicode)'.';
+const sal_Unicode FPH_CHAR_COLON          = (sal_Unicode)':';
 
- #include <osl/diagnose.h>
- #include <rtl/ustring.hxx>
+inline const rtl::OUString FPH_PATH_SEPARATOR()
+{ return rtl::OUString(FPH_CHAR_PATH_SEPARATOR); }
 
- /*******************************************
-     Constants
-  ******************************************/
+inline const rtl::OUString FPH_LOCAL_DIR_ENTRY()
+{ return rtl::OUString(FPH_CHAR_DOT); }
 
-  const sal_Unicode FPH_CHAR_PATH_SEPARATOR = (sal_Unicode)'/';
-  const sal_Unicode FPH_CHAR_DOT            = (sal_Unicode)'.';
-  const sal_Unicode FPH_CHAR_COLON          = (sal_Unicode)':';
+inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
+{ return rtl::OUString(".."); }
 
-  inline const rtl::OUString FPH_PATH_SEPARATOR()
-      { return rtl::OUString(FPH_CHAR_PATH_SEPARATOR); }
-  inline const rtl::OUString FPH_LOCAL_DIR_ENTRY()
-      { return rtl::OUString(FPH_CHAR_DOT); }
-  inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
-      { return rtl::OUString(".."); }
-
- /*******************************************
-  *  osl_systemPathRemoveSeparator
-  ******************************************/
-
- void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
- {
-     OSL_PRECOND(0 != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
+void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
+{
+    OSL_PRECOND(0 != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
     if (0 != pustrPath)
     {
         // maybe there are more than one separator at end
@@ -65,48 +54,36 @@
                      (pustrPath->length > 1 && pustrPath->buffer[pustrPath->length - 1] != FPH_CHAR_PATH_SEPARATOR), \
                      "osl_systemPathRemoveSeparator: Post condition failed");
     }
- }
+}
 
- /*******************************************
-    osl_systemPathEnsureSeparator
-  ******************************************/
+void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
+{
+    OSL_PRECOND((0 != ppustrPath) && (0 != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
+    if ((0 != ppustrPath) && (0 != *ppustrPath))
+    {
+        rtl::OUString path(*ppustrPath);
+        sal_Int32    lp = path.getLength();
+        sal_Int32    i  = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
 
- void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
- {
-     OSL_PRECOND((0 != ppustrPath) && (0 != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
-     if ((0 != ppustrPath) && (0 != *ppustrPath))
-     {
-         rtl::OUString path(*ppustrPath);
-         sal_Int32    lp = path.getLength();
-         sal_Int32    i  = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
+        if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
+        {
+            path += FPH_PATH_SEPARATOR();
+            rtl_uString_assign(ppustrPath, path.pData);
+        }
 
-         if ((lp > 1 && i != (lp - 1)) || ((lp < 2) && i < 0))
-         {
-             path += FPH_PATH_SEPARATOR();
-             rtl_uString_assign(ppustrPath, path.pData);
-         }
+        OSL_POSTCOND(path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR) == (path.getLength() - 1), \
+                     "osl_systemPathEnsureSeparator: Post condition failed");
+    }
+}
 
-         OSL_POSTCOND(path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR) == (path.getLength() - 1), \
-                      "osl_systemPathEnsureSeparator: Post condition failed");
-     }
- }
+sal_Bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
+{
+    OSL_PRECOND(0 != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
+    return ((0 == pustrPath) || (0 == pustrPath->length) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
+}
 
- /*******************************************
-  *  osl_systemPathIsRelativePath
-  ******************************************/
-
- sal_Bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
- {
-     OSL_PRECOND(0 != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
-     return ((0 == pustrPath) || (0 == pustrPath->length) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
- }
-
- /******************************************
-    osl_systemPathMakeAbsolutePath
-  *****************************************/
-
- void SAL_CALL osl_systemPathMakeAbsolutePath(
-     const rtl_uString* pustrBasePath,
+void SAL_CALL osl_systemPathMakeAbsolutePath(
+    const rtl_uString* pustrBasePath,
     const rtl_uString* pustrRelPath,
     rtl_uString**      ppustrAbsolutePath)
 {
@@ -122,13 +99,8 @@
     *ppustrAbsolutePath = base.pData;
 }
 
-
- /*******************************************
-     osl_systemPathGetFileOrLastDirectoryPart
-  ******************************************/
-
- void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
-     const rtl_uString*     pustrPath,
+void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
+    const rtl_uString*     pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart)
 {
     OSL_PRECOND(pustrPath && ppustrFileNameOrLastDirPart, \
@@ -149,13 +121,8 @@
     rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
 }
 
-
- /********************************************
-     osl_systemPathIsHiddenFileOrDirectoryEntry
- *********************************************/
-
- sal_Bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
-     const rtl_uString* pustrPath)
+sal_Bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
+    const rtl_uString* pustrPath)
 {
     OSL_PRECOND(0 != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
     if ((0 == pustrPath) || (0 == pustrPath->length))
@@ -169,11 +136,6 @@
             !osl_systemPathIsLocalOrParentDirectoryEntry(fdp.pData));
 }
 
-
- /************************************************
-     osl_systemPathIsLocalOrParentDirectoryEntry
- ************************************************/
-
 sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
     const rtl_uString* pustrPath)
 {
@@ -183,10 +145,8 @@ sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
 
     osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &dirent.pData);
 
-    return (
-            (dirent == FPH_LOCAL_DIR_ENTRY()) ||
-            (dirent == FPH_PARENT_DIR_ENTRY())
-           );
+    return (dirent == FPH_LOCAL_DIR_ENTRY() ||
+            dirent == FPH_PARENT_DIR_ENTRY());
 }
 
 /***********************************************
@@ -198,13 +158,10 @@ class path_list_iterator
 {
 public:
 
-    /******************************************
-      constructor
-
-     after construction get_current_item
-     returns the first path in list, no need
-     to call reset first
-     *****************************************/
+    /* after construction get_current_item
+       returns the first path in list, no need
+       to call reset first
+     */
     path_list_iterator(const rtl::OUString& path_list, sal_Unicode list_separator = FPH_CHAR_COLON) :
         m_path_list(path_list),
         m_end(m_path_list.getStr() + m_path_list.getLength() + 1),
@@ -213,18 +170,12 @@ public:
         reset();
     }
 
-    /******************************************
-     reset the iterator
-     *****************************************/
     void reset()
     {
         m_path_segment_begin = m_path_segment_end = m_path_list.getStr();
         advance();
     }
 
-    /******************************************
-     move the iterator to the next position
-     *****************************************/
     void next()
     {
         OSL_PRECOND(!done(), "path_list_iterator: Already done!");
@@ -233,17 +184,11 @@ public:
         advance();
     }
 
-    /******************************************
-     check if done
-     *****************************************/
     bool done() const
     {
         return (m_path_segment_end >= m_end);
     }
 
-    /******************************************
-     return the current item
-     *****************************************/
     rtl::OUString get_current_item() const
     {
         return rtl::OUString(
@@ -252,11 +197,9 @@ public:
     }
 
 private:
-
-    /******************************************
-     move m_path_end to the next separator or
-     to the edn of the string
-     *****************************************/
+    /* move m_path_end to the next separator or
+       to the end of the string
+     */
     void advance()
     {
         while (!done() && *m_path_segment_end && (*m_path_segment_end != m_separator))
@@ -291,12 +234,8 @@ private:
     path_list_iterator& operator=(const path_list_iterator& other);
 };
 
- /************************************************
-      osl_searchPath
-  ***********************************************/
-
 sal_Bool SAL_CALL osl_searchPath(
-     const rtl_uString* pustrFilePath,
+    const rtl_uString* pustrFilePath,
     const rtl_uString* pustrSearchPathList,
     rtl_uString**      ppustrPathFound)
 {

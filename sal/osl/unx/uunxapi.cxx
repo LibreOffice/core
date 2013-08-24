@@ -17,49 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #include "uunxapi.h"
- #include "system.h"
- #include <limits.h>
- #include <rtl/ustring.hxx>
- #include <osl/thread.h>
+#include "uunxapi.h"
+#include "system.h"
+#include <limits.h>
+#include <rtl/ustring.hxx>
+#include <osl/thread.h>
 
- #ifdef ANDROID
- #include <osl/detail/android-bootstrap.h>
- #endif
+#ifdef ANDROID
+#include <osl/detail/android-bootstrap.h>
+#endif
 
- //###########################
- inline rtl::OString OUStringToOString(const rtl_uString* s)
- {
-    return rtl::OUStringToOString(
-        rtl::OUString(const_cast<rtl_uString*>(s)),
-        osl_getThreadTextEncoding());
- }
+inline rtl::OString OUStringToOString(const rtl_uString* s)
+{
+    return rtl::OUStringToOString(rtl::OUString(const_cast<rtl_uString*>(s)),
+                                  osl_getThreadTextEncoding());
+}
 
- //###########################
 #ifdef MACOSX
 /*
  * Helper function for resolving Mac native alias files (not the same as unix alias files)
  * and to return the resolved alias as rtl::OString
  */
- inline rtl::OString macxp_resolveAliasAndConvert(const rtl_uString* s)
- {
-  rtl::OString p = OUStringToOString(s);
-  sal_Char path[PATH_MAX];
-  if (p.getLength() < PATH_MAX)
+inline rtl::OString macxp_resolveAliasAndConvert(const rtl_uString* s)
+{
+    rtl::OString p = OUStringToOString(s);
+    sal_Char path[PATH_MAX];
+    if (p.getLength() < PATH_MAX)
     {
-      strcpy(path, p.getStr());
-      macxp_resolveAlias(path, PATH_MAX);
-      p = rtl::OString(path);
+        strcpy(path, p.getStr());
+        macxp_resolveAlias(path, PATH_MAX);
+        p = rtl::OString(path);
     }
-  return p;
- }
+    return p;
+}
 #endif /* MACOSX */
 
- //###########################
- //access_u
- int access_u(const rtl_uString* pustrPath, int mode)
- {
-#ifndef MACOSX // not MACOSX
+int access_u(const rtl_uString* pustrPath, int mode)
+{
+#ifndef MACOSX
     rtl::OString fn = OUStringToOString(pustrPath);
 #ifdef ANDROID
     if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
@@ -81,13 +76,11 @@
 #else
     return access(macxp_resolveAliasAndConvert(pustrPath).getStr(), mode);
 #endif
- }
+}
 
- //#########################
- //realpath_u
- sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
- {
-#ifndef MACOSX // not MACOSX
+sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
+{
+#ifndef MACOSX
     rtl::OString fn = OUStringToOString(pustrFileName);
 #ifdef ANDROID
     if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
@@ -111,19 +104,16 @@
 
     if (bRet)
     {
-        rtl::OUString resolved = rtl::OStringToOUString(
-            rtl::OString(static_cast<sal_Char*>(rp)),
-            osl_getThreadTextEncoding());
+        rtl::OUString resolved = rtl::OStringToOUString(rtl::OString(static_cast<sal_Char*>(rp)),
+                                                        osl_getThreadTextEncoding());
 
         rtl_uString_assign(ppustrResolvedName, resolved.pData);
     }
     return bRet;
- }
+}
 
- //#########################
- //stat_c
-  int stat_c(const char* cpPath, struct stat* buf)
- {
+int stat_c(const char* cpPath, struct stat* buf)
+{
 #ifdef ANDROID
     if (strncmp(cpPath, "/assets", sizeof("/assets")-1) == 0 &&
         (cpPath[sizeof("/assets")-1] == '\0' ||
@@ -131,12 +121,10 @@
         return lo_apk_lstat(cpPath, buf);
 #endif
     return stat(cpPath, buf);
- }
+}
 
- //#########################
- //lstat_c
-  int lstat_c(const char* cpPath, struct stat* buf)
- {
+int lstat_c(const char* cpPath, struct stat* buf)
+{
 #ifdef ANDROID
     if (strncmp(cpPath, "/assets", sizeof("/assets")-1) == 0 &&
         (cpPath[sizeof("/assets")-1] == '\0' ||
@@ -144,26 +132,21 @@
         return lo_apk_lstat(cpPath, buf);
 #endif
     return lstat(cpPath, buf);
- }
+}
 
- //#########################
- //lstat_u
-  int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
- {
-#ifndef MACOSX  // not MACOSX
+int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
+{
+#ifndef MACOSX
     rtl::OString fn = OUStringToOString(pustrPath);
     return lstat_c(fn.getStr(), buf);
 #else
     return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
 #endif
- }
+}
 
- //#########################
- // @see mkdir
- int mkdir_u(const rtl_uString* path, mode_t mode)
- {
+int mkdir_u(const rtl_uString* path, mode_t mode)
+{
     return mkdir(OUStringToOString(path).getStr(), mode);
- }
-
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

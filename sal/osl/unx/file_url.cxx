@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "file_url.h"
 
 #include "system.h"
@@ -57,33 +56,12 @@
  so this code should be consolidated.
 
  **************************************************/
-/************************************************************************
- *   ToDo
- *
- *   Fix osl_getCanonicalName
- *
- ***********************************************************************/
-
-
-/***************************************************
- * namespace directives
- **************************************************/
 
 using namespace osl;
-
-/***************************************************
- * constants
- **************************************************/
 
 const sal_Unicode UNICHAR_SLASH = ((sal_Unicode)'/');
 const sal_Unicode UNICHAR_COLON = ((sal_Unicode)':');
 const sal_Unicode UNICHAR_DOT   = ((sal_Unicode)'.');
-
-/******************************************************************************
- *
- *                  Exported Module Functions
- *
- *****************************************************************************/
 
 /* a slightly modified version of Pchar in rtl/source/uri.c */
 const sal_Bool uriCharClass[128] =
@@ -121,10 +99,6 @@ static sal_Bool findWrongUsage( const sal_Unicode *path, sal_Int32 len )
 }
 */
 
-/****************************************************************************/
-/*  osl_getCanonicalName */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
     OSL_FAIL("osl_getCanonicalName not implemented");
@@ -132,10 +106,6 @@ oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uStrin
     rtl_uString_newFromString(pustrValidURL, ustrFileURL);
     return osl_File_E_None;
 }
-
-/****************************************************************************/
-/*  osl_getSystemPathFromFileURL */
-/****************************************************************************/
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath )
 {
@@ -288,10 +258,6 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     return osl_File_E_None;
 }
 
-/****************************************************************************/
-/*  osl_getFileURLFromSystemPath */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL )
 {
     static const sal_Unicode pDoubleSlash[2] = { '/', '/' };
@@ -434,7 +400,7 @@ oslFileError osl_getSystemPathFromFileURL_Ex(
     return osl_error;
 }
 
-namespace /* private */
+namespace
 {
 
     /******************************************************
@@ -671,12 +637,7 @@ namespace /* private */
         return osl_File_E_None;
     }
 
-} // end namespace private
-
-
-/******************************************************
- * osl_getAbsoluteFileURL
- ******************************************************/
+}
 
 oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* ustrRelativeURL, rtl_uString** pustrAbsoluteURL)
 {
@@ -753,8 +714,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
     return oslFileError(rc);
 }
 
-
-namespace /* private */
+namespace
 {
 
     /*********************************************
@@ -806,12 +766,7 @@ namespace /* private */
         return (search_path && osl::searchPath(file_path, rtl::OUString(search_path), result));
     }
 
-} // end namespace private
-
-
-/****************************************************************************
- *  osl_searchFileURL
- ***************************************************************************/
+}
 
 oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearchPath, rtl_uString** pustrURL)
 {
@@ -849,11 +804,6 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     return bfound ? osl_File_E_None : osl_File_E_NOENT;
 }
 
-
-/****************************************************************************
- * FileURLToPath
- ***************************************************************************/
-
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL)
 {
     rtl_uString* ustrSystemPath = NULL;
@@ -873,11 +823,7 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
     return osl_error;
 }
 
-/*****************************************************************************
- * UnicodeToText
- ****************************************************************************/
-
-namespace /* private */
+namespace
 {
     class UnicodeToTextConverter_Impl
     {
@@ -907,7 +853,7 @@ namespace /* private */
                 m_converter, 0, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
         }
     };
-} // end namespace private
+}
 
 int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen )
 {
@@ -929,11 +875,7 @@ int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sa
     return nDestBytes;
 }
 
-/*****************************************************************************
- * TextToUnicode
- ****************************************************************************/
-
-namespace /* private */
+namespace
 {
     class TextToUnicodeConverter_Impl
     {
@@ -964,7 +906,7 @@ namespace /* private */
                 m_converter, 0, pSrcBuf, nSrcBytes, pDstBuf, nDstChars, nFlags, pInfo, pSrcCvtBytes);
         }
     };
-} // end namespace private
+}
 
 int TextToUnicode(
     const char*  text,

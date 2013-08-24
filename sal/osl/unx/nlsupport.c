@@ -26,8 +26,8 @@
     defined(DRAGONFLY)
 #include <pthread.h>
 #if !defined(MACOSX) && !defined(IOS)
- #include <locale.h>
- #include <langinfo.h>
+#include <locale.h>
+#include <langinfo.h>
 #else
 #include <osl/module.h>
 #include <osl/thread.h>
@@ -35,11 +35,6 @@
 #endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
 #include <string.h>
-
-/*****************************************************************************
- typedefs
- *****************************************************************************/
-
 
 typedef struct {
     const char              *key;
@@ -962,6 +957,5 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 }
 
 #endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD || AIX */
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

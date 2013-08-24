@@ -26,17 +26,10 @@
 
 namespace osl
 {
-
-    /***********************************
-     osl::access
-
-     @see access
-     **********************************/
-
     inline int access(const rtl::OUString& ustrPath, int mode)
-     {
+    {
         return access_u(ustrPath.pData, mode);
-      }
+    }
 
     /***********************************
      osl::realpath
@@ -53,32 +46,20 @@ namespace osl
 
     inline sal_Bool realpath(
         const rtl::OUString& ustrFileName,
-       rtl::OUString& ustrResolvedName)
+        rtl::OUString& ustrResolvedName)
     {
         return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
-     }
+    }
 
+    inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
+    {
+        return lstat_u(ustrPath.pData, &buf);
+    }
 
-    /***********************************
-     osl::lstat
-
-     @see lstat
-     **********************************/
-
-     inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
-     {
-          return lstat_u(ustrPath.pData, &buf);
-     }
-
-   /***********************************
-         osl::mkdir
-         @see mkdir
-         **********************************/
-   inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
-   {
-       return mkdir_u(aPath.pData, aMode);
-   }
-
+    inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
+    {
+        return mkdir_u(aPath.pData, aMode);
+    }
 } // end namespace osl
 
 #endif /* _OSL_UUNXAPI_HXX_ */

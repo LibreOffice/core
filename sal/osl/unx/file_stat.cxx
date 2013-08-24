@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "osl/file.h"
 #include "osl/detail/file.h"
 
@@ -34,9 +33,8 @@
 #include "file_url.h"
 #include "uunxapi.hxx"
 
-namespace /* private */
+namespace
 {
-
     inline void set_file_type(const struct stat& file_stat, oslFileStatus* pStat)
     {
         /* links to directories state also to be a directory */
@@ -199,12 +197,7 @@ namespace /* private */
         return osl_File_E_None;
     }
 
-} // end namespace private
-
-
-/****************************************************************************
- *  osl_getFileStatus
- ****************************************************************************/
+}
 
 oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pStat, sal_uInt32 uFieldMask)
 {
@@ -261,10 +254,6 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
        }
     return osl_File_E_None;
 }
-
-/****************************************************************************/
-/*  osl_setFileAttributes */
-/****************************************************************************/
 
 static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_uInt64 uAttributes )
 {
@@ -325,10 +314,6 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt6
 
     return osl_psz_setFileAttributes( path, uAttributes );
 }
-
-/****************************************************************************/
-/*  osl_setFileTime */
-/****************************************************************************/
 
 static oslFileError osl_psz_setFileTime (
     const sal_Char* pszFilePath,

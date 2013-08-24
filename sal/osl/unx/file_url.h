@@ -27,30 +27,14 @@ extern "C"
 {
 #endif
 
-/**************************************************
- * osl_getSystemPathFromFileURL_Ex
- *************************************************/
-
 #define FURL_ALLOW_RELATIVE sal_True
 #define FURL_DENY_RELATIVE  sal_False
 
 oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
 
-/**************************************************
- * FileURLToPath
- *************************************************/
-
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
 
-/***************************************************
- * UnicodeToText
- **************************************************/
-
 int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen);
-
-/***************************************************
- * TextToUniCode
- **************************************************/
 
 int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 

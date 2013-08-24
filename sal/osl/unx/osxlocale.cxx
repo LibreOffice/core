@@ -28,7 +28,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 
-namespace /* private */
+namespace
 {
     template <typename T>
     class CFGuard
@@ -58,7 +58,7 @@ namespace /* private */
 
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
-} // namespace private
+}
 
 /** Grab current locale from system.
 */

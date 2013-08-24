@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "system.h"
 #include "readwrite_helper.h"
 
@@ -50,10 +49,6 @@
 
 /*#define DEBUG_OSL_PROFILE*/
 /*#define TRACE_OSL_PROFILE*/
-
-/*****************************************************************************/
-/* Data Type Definition */
-/*****************************************************************************/
 
 typedef time_t  osl_TStamp;
 
@@ -90,9 +85,7 @@ typedef struct _osl_TProfileSection
 } osl_TProfileSection;
 
 
-/*
-    Profile-data structure hidden behind oslProfile:
-*/
+/* Profile-data structure hidden behind oslProfile: */
 typedef struct _osl_TProfileImpl
 {
     sal_uInt32  m_Flags;
@@ -108,11 +101,6 @@ typedef struct _osl_TProfileImpl
     pthread_mutex_t m_AccessLock;
     sal_Bool    m_bIsValid;
 } osl_TProfileImpl;
-
-
-/*****************************************************************************/
-/* Static Module Function Declarations */
-/*****************************************************************************/
 
 static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption ProfileFlags);
 static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags);
@@ -150,9 +138,6 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
 
-/*****************************************************************************/
-/* Exported Module Functions */
-/*****************************************************************************/
 oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOption Options)
 {
     char profilePath[PATH_MAX] = "";
@@ -162,7 +147,6 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOpti
 
     return osl_psz_openProfile( profilePath,Options );
 }
-
 
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags)
 {
@@ -450,9 +434,11 @@ static sal_Bool writeProfileImpl(osl_TFile* pFile)
 
 
 sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_Char* pszString, sal_uInt32 MaxLen,
-                              const sal_Char* pszDefault)
+                                        const sal_Char* pszSection,
+                                        const sal_Char* pszEntry,
+                                        sal_Char* pszString,
+                                        sal_uInt32 MaxLen,
+                                        const sal_Char* pszDefault)
 {
     sal_uInt32    NoEntry;
     sal_Char* pStr=0;
@@ -546,10 +532,10 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     return (sal_True);
 }
 
-
 sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
-                            const sal_Char* pszSection, const sal_Char* pszEntry,
-                            sal_Bool Default)
+                                      const sal_Char* pszSection,
+                                      const sal_Char* pszEntry,
+                                      sal_Bool Default)
 {
     sal_Char Line[32];
     Line[0] = '\0';
@@ -578,11 +564,12 @@ sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
     return (Default);
 }
 
-
 sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
-                              sal_uInt32 Default)
+                                         const sal_Char* pszSection,
+                                         const sal_Char* pszEntry,
+                                         sal_uInt32 FirstId,
+                                         const sal_Char* Strings[],
+                                         sal_uInt32 Default)
 {
     sal_uInt32  i;
     sal_Char    Line[256];
@@ -613,8 +600,9 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
 }
 
 sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
-                               const sal_Char* pszSection, const sal_Char* pszEntry,
-                               const sal_Char* pszString)
+                                         const sal_Char* pszSection,
+                                         const sal_Char* pszEntry,
+                                         const sal_Char* pszString)
 {
     sal_uInt32  i;
     sal_Bool bRet = sal_False;
@@ -755,10 +743,10 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     return bRet;
 }
 
-
 sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
-                             const sal_Char* pszSection, const sal_Char* pszEntry,
-                             sal_Bool Value)
+                                       const sal_Char* pszSection,
+                                       const sal_Char* pszEntry,
+                                       sal_Bool Value)
 {
     sal_Bool bRet=sal_False;
 
@@ -778,11 +766,12 @@ sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
     return bRet;
 }
 
-
 sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
-                              const sal_Char* pszSection, const sal_Char* pszEntry,
-                              sal_uInt32 FirstId, const sal_Char* Strings[],
-                              sal_uInt32 Value)
+                                        const sal_Char* pszSection,
+                                        const sal_Char* pszEntry,
+                                        sal_uInt32 FirstId,
+                                        const sal_Char* Strings[],
+                                        sal_uInt32 Value)
 {
     int i, n = 0;
     sal_Bool bRet=sal_False;
@@ -805,9 +794,9 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
     return bRet;
 }
 
-
 sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
-                               const sal_Char *pszSection, const sal_Char *pszEntry)
+                                         const sal_Char *pszSection,
+                                         const sal_Char *pszEntry)
 {
     sal_uInt32    NoEntry;
     osl_TProfileSection* pSec;
@@ -890,9 +879,10 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     return bRet;
 }
 
-
-sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_Char *pszSection,
-                                      sal_Char* pszBuffer, sal_uInt32 MaxLen)
+sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
+                                                 const sal_Char *pszSection,
+                                                 sal_Char* pszBuffer,
+                                                 sal_uInt32 MaxLen)
 {
     sal_uInt32    i, n = 0;
     sal_uInt32    NoEntry;
@@ -995,7 +985,9 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
     return (n);
 }
 
-sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen)
+sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
+                                           sal_Char* pszBuffer,
+                                           sal_uInt32 MaxLen)
 {
     sal_uInt32    i, n = 0;
     osl_TProfileSection* pSec;
@@ -1087,10 +1079,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     return (n);
 }
 
-/*****************************************************************************/
-/* Static Module Functions */
-/*****************************************************************************/
-
 static osl_TStamp OslProfile_getFileStamp(osl_TFile* pFile)
 {
     struct stat status;
@@ -1170,12 +1158,12 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
             break;
     }
 
-#ifndef MACOSX // not MAC OSX
+#ifndef MACOSX
      if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 )
 #else
     /* Mac OSX will return ENOTSUP for webdav drives so we should ignore it */
     if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 && errno != ENOTSUP )
-#endif  /* MACOSX */
+#endif
     {
         OSL_TRACE("fcntl returned -1 (%s)",strerror(errno));
 #ifdef TRACE_OSL_PROFILE
@@ -1471,8 +1459,6 @@ static sal_Bool OslProfile_putLine(osl_TFile* pFile, const sal_Char *pszLine)
     return sal_True;
 }
 
-/* platform specific end */
-
 static sal_Char* stripBlanks(sal_Char* String, sal_uInt32* pLen)
 {
     if ( ( pLen != NULL ) && ( *pLen != 0 ) )
@@ -1650,8 +1636,10 @@ static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
     return;
 }
 
-static sal_Bool addEntry(osl_TProfileImpl* pProfile, osl_TProfileSection *pSection,
-                         int Line, sal_Char* Entry, sal_uInt32 Len)
+static sal_Bool addEntry(osl_TProfileImpl* pProfile,
+                         osl_TProfileSection *pSection,
+                         int Line, sal_Char* Entry,
+                         sal_uInt32 Len)
 {
     if (pSection != NULL)
     {
@@ -1788,14 +1776,16 @@ static void removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSect
     return;
 }
 
-static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char* Section,
-                                      const sal_Char* Entry, sal_uInt32 *pNoEntry)
+static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile,
+                                      const sal_Char* Section,
+                                      const sal_Char* Entry,
+                                      sal_uInt32 *pNoEntry)
 {
-static  sal_uInt32    Sect = 0;
-        sal_uInt32    i, n;
-        sal_uInt32  Len;
-        const sal_Char* pStr;
-        osl_TProfileSection* pSec=0;
+    static  sal_uInt32    Sect = 0;
+            sal_uInt32    i, n;
+            sal_uInt32  Len;
+            const sal_Char* pStr;
+            osl_TProfileSection* pSec=0;
 
     Len = strlen(Section);
 
@@ -1842,8 +1832,8 @@ static  sal_uInt32    Sect = 0;
 static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 {
     sal_uInt32  i;
-    sal_Char*       pStr;
-    sal_Char*       pChar;
+    sal_Char*   pStr;
+    sal_Char*   pChar;
 
     sal_Char* pLine;
     sal_Char* bWasAdded = NULL;
@@ -1997,7 +1987,6 @@ static sal_Bool storeProfile(osl_TProfileImpl* pProfile, sal_Bool bCleanup)
     return (sal_True);
 }
 
-
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
 {
     osl_TFile* pFile=0;
@@ -2057,7 +2046,6 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 
     return bRet;
 }
-
 
 static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen)
 {

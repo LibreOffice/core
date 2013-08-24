@@ -50,17 +50,12 @@
 #endif
 
 /************************************************************************
- *   ToDo
+ *   TODO
  *
  *   - Fix: check for corresponding struct sizes in exported functions
  *   - check size/use of oslDirectory
  *   - check size/use of oslDirectoryItem
  ***********************************************************************/
-/******************************************************************************
- *
- *                  Data Type Definition
- *
- ******************************************************************************/
 
 typedef struct
 {
@@ -136,18 +131,8 @@ oslFileType DirectoryItem_Impl::getFileType() const
     return osl_File_Type_Unknown;
 }
 
-/******************************************************************************
- *
- *                  C-String Function Declarations
- *
- *****************************************************************************/
-
 static oslFileError osl_psz_createDirectory(const sal_Char* pszPath);
 static oslFileError osl_psz_removeDirectory(const sal_Char* pszPath);
-
-/*******************************************************************
- *  osl_openDirectory
- ******************************************************************/
 
 oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirectory* pDirectory)
 {
@@ -240,10 +225,6 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
     return oslTranslateFileError(OSL_FET_ERROR, errno);
 }
 
-/****************************************************************************/
-/*  osl_closeDirectory */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
 {
     oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) Directory;
@@ -297,10 +278,6 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, sal_Bool bFilterLocalAndParen
 
     return pdirent;
 }
-
-/****************************************************************************
- *  osl_getNextDirectoryItem
- ***************************************************************************/
 
 oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
@@ -369,10 +346,6 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     return osl_File_E_None;
 }
 
-/****************************************************************************/
-/*  osl_getDirectoryItem */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirectoryItem* pItem )
 {
     rtl_uString* ustrSystemPath = NULL;
@@ -401,11 +374,6 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     return osl_error;
 }
 
-
-/****************************************************************************/
-/*  osl_acquireDirectoryItem */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
@@ -416,10 +384,6 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
     return osl_File_E_None;
 }
 
-/****************************************************************************/
-/*  osl_releaseDirectoryItem */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
@@ -429,10 +393,6 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
     pImpl->release();
     return osl_File_E_None;
 }
-
-/****************************************************************************/
-/*  osl_createDirectory */
-/****************************************************************************/
 
 oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
 {
@@ -454,10 +414,6 @@ oslFileError SAL_CALL osl_createDirectory( rtl_uString* ustrDirectoryURL )
     return osl_psz_createDirectory( path );
 }
 
-/****************************************************************************/
-/*  osl_removeDirectory */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
 {
     char path[PATH_MAX];
@@ -478,10 +434,6 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
     return osl_psz_removeDirectory( path );
 }
 
-/*****************************************
- * osl_psz_createDirectory
- ****************************************/
-
 static oslFileError osl_psz_createDirectory( const sal_Char* pszPath )
 {
     int nRet=0;
@@ -498,10 +450,6 @@ static oslFileError osl_psz_createDirectory( const sal_Char* pszPath )
     return osl_File_E_None;
 }
 
-/*****************************************
- * osl_psz_removeDirectory
- ****************************************/
-
 static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
 {
     int nRet=0;
@@ -516,10 +464,6 @@ static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
 
     return osl_File_E_None;
 }
-
-/****************************************************************************/
-/*  osl_createDirectoryPath */
-/****************************************************************************/
 
 static int path_make_parent(sal_Unicode* path)
 {
@@ -610,32 +554,15 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
 }
 
-/******************************************************************************
- *
- *                  C-String Function Declarations
- *
- *****************************************************************************/
-
 static oslFileError osl_psz_removeFile(const sal_Char* pszPath);
 static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
-
-
-/******************************************************************************
- *
- *                  Static Module Utility Function Declarations
- *
- *****************************************************************************/
 
 static oslFileError  oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists);
 static oslFileError  oslChangeFileModes(const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
 static int           oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName);
 static int           oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode);
 static oslFileError  oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
-
-/****************************************************************************/
-/*  osl_moveFile */
-/****************************************************************************/
 
 oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
@@ -664,10 +591,6 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return oslDoMoveFile( srcPath, destPath );
 }
 
-/****************************************************************************/
-/*  osl_copyFile */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrDestURL )
 {
     char srcPath[PATH_MAX];
@@ -695,10 +618,6 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     return osl_psz_copyFile( srcPath, destPath );
 }
 
-/****************************************************************************/
-/*  osl_removeFile */
-/****************************************************************************/
-
 oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
 {
     char path[PATH_MAX];
@@ -718,16 +637,6 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
 
     return osl_psz_removeFile( path );
 }
-
-/******************************************************************************
- *
- *                  Utility Functions
- *
- *****************************************************************************/
-
-/*****************************************
- * oslDoMoveFile
- ****************************************/
 
 static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszDestPath)
 {
@@ -755,9 +664,6 @@ static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszD
     return tErr;
 }
 
-/*****************************************
- * osl_psz_removeFile
- ****************************************/
 static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
 {
     int nRet=0;
@@ -785,13 +691,8 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     return osl_File_E_None;
 }
 
-/*****************************************
- * osl_psz_moveFile
- ****************************************/
-
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath)
 {
-
     int nRet = 0;
 
     nRet = rename(pszPath,pszDestPath);
@@ -804,10 +705,6 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
 
     return osl_File_E_None;
 }
-
-/*****************************************
- * osl_psz_copyFile
- ****************************************/
 
 static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* pszDestPath )
 {
@@ -882,17 +779,6 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     return tErr;
 }
 
-
-/******************************************************************************
- *
- *                  Utility Functions
- *
- *****************************************************************************/
-
-/*****************************************
- * oslDoCopy
- ****************************************/
-
 #define TMP_DEST_FILE_EXTENSION ".osl-tmp"
 
 static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists)
@@ -956,10 +842,6 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     return osl_File_E_None;
 }
 
-/*****************************************
- * oslChangeFileModes
- ****************************************/
-
 static oslFileError oslChangeFileModes( const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID)
 {
     int nRet=0;
@@ -998,10 +880,6 @@ static oslFileError oslChangeFileModes( const sal_Char* pszFileName, mode_t nMod
     return osl_File_E_None;
 }
 
-/*****************************************
- * oslDoCopyLink
- ****************************************/
-
 static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName)
 {
     int nRet=0;
@@ -1032,10 +910,6 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
     return 0;
 }
-
-/*****************************************
- * oslDoCopyFile
- ****************************************/
 
 static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode)
 {
