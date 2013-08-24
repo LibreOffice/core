@@ -2700,29 +2700,25 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
         throw uno::RuntimeException();
 
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->size();
+    const size_t nCount = pFldTypes->size();
 
-    std::vector<OUString*> aFldNames;
-    OUString* pString = new OUString();
-
-    for( sal_uInt16 i = 0; i < nCount; i++)
+    std::vector<OUString> aFldNames;
+    for( size_t i = 0; i < nCount; ++i )
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
 
-        if (SwXTextFieldMasters::getInstanceName(rFldType, *pString))
+        OUString sFldName;
+        if (SwXTextFieldMasters::getInstanceName(rFldType, sFldName))
         {
-            aFldNames.push_back(pString);
-            pString = new OUString();
+            aFldNames.push_back(sFldName);
         }
     }
-    delete pString;
 
-    uno::Sequence< OUString > aSeq( static_cast<sal_uInt16>(aFldNames.size()) );
+    uno::Sequence< OUString > aSeq( static_cast<sal_Int32>(aFldNames.size()) );
     OUString* pArray = aSeq.getArray();
-    for(sal_uInt16 i = 0; i < aFldNames.size();i++)
+    for (size_t i = 0; i<aFldNames.size(); ++i)
     {
-        pArray[i] = *aFldNames[i];
-        delete aFldNames[i];
+        pArray[i] = aFldNames[i];
     }
 
     return aSeq;
