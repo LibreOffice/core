@@ -390,7 +390,7 @@ short SwOutlineTabDialog::Ok()
                 pTxtColl->DeleteAssignmentToListLevelOfOutlineStyle();
                 pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
 
-                if( aCollNames[i].Len() )
+                if( !aCollNames[i].isEmpty() )
                 {
                     pTxtColl = rWrtSh.GetParaStyle(
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
@@ -626,7 +626,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     if( sOldName.Len() )
         for( i = 0; i < MAXLEVEL; ++i)
             if( aSaveCollNames[ i ] == sOldName && i != nTmpLevel &&
-                !pCollNames[ i ].Len() )
+                pCollNames[ i ].isEmpty() )
             {
                 sal_uInt8 n;
                 for( n = 0; n < MAXLEVEL; ++n )
@@ -1131,7 +1131,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     Point(nXStart + nTextOffset, nYStart),
                     (pOutlineNames == 0
                      ? utl::ConfigManager::getProductName()
-                     : OUString(pOutlineNames[nLevel])));
+                     : pOutlineNames[nLevel]));
             }
         }
     }

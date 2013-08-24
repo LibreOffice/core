@@ -38,6 +38,7 @@
 #include "swtypes.hxx"      //for MAXLEVEL
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
+#include "rtl/ustring.hxx"
 
 class SwWrtShell;
 class SwNumRule;
@@ -50,7 +51,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     sal_uInt16 m_nNumPosId;
     sal_uInt16 m_nOutlineId;
 
-    String              aCollNames[MAXLEVEL];
+    OUString            aCollNames[MAXLEVEL];
 
     SwWrtShell&         rWrtSh;
     SwNumRule*          pNumRule;
@@ -74,7 +75,7 @@ class SwOutlineTabDialog : public SfxTabDialog
 
     SwNumRule*          GetNumRule() {return pNumRule;}
     sal_uInt16              GetLevel(const String &rFmtName) const;
-    String*             GetCollNames() {return aCollNames;}
+    OUString*           GetCollNames() {return aCollNames;}
 
     static sal_uInt16       GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
@@ -98,7 +99,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     String              aSaveCollNames[MAXLEVEL];
     SwWrtShell*         pSh;
     SwNumRule*          pNumRule;
-    String*             pCollNames;
+    OUString*           pCollNames;
     sal_uInt16              nActLevel;
 
     DECL_LINK( LevelHdl, ListBox * );
