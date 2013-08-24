@@ -159,16 +159,14 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 ------------------------------------------------------------------------*/
 String SwGlossaryDlg::GetCurrGroup()
 {
-    if( ::GetCurrGlosGroup() && ::GetCurrGlosGroup()->Len() )
-        return *(::GetCurrGlosGroup());
+    if( !::GetCurrGlosGroup().isEmpty() )
+        return ::GetCurrGlosGroup();
     return SwGlossaries::GetDefName();
 }
 
 void SwGlossaryDlg::SetActGroup(const String &rGrp)
 {
-    if( !::GetCurrGlosGroup() )
-        ::SetCurrGlosGroup( new String );
-    *(::GetCurrGlosGroup()) = rGrp;
+    ::SetCurrGlosGroup(rGrp);
 }
 
 SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
@@ -199,10 +197,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     get(m_pEditBtn, "autotext");
 
     SvtLinguConfig aLocalLinguConfig;
-
-    // initialise static-pointer
-    if( !::GetCurrGlosGroup() )
-        ::SetCurrGlosGroup(new String);
 
     PopupMenu *pMenu = m_pEditBtn->GetPopupMenu();
     assert(pMenu);
@@ -251,11 +245,10 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         return 0;
     SvTreeListEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
-    String *pGlosGroup = ::GetCurrGlosGroup();
-    (*pGlosGroup) = pGroupData->sGroupName;
-    (*pGlosGroup) += GLOS_DELIM;
-    (*pGlosGroup) += OUString::number(pGroupData->nPathIdx);
-    pGlossaryHdl->SetCurGroup(*pGlosGroup);
+    ::SetCurrGlosGroup(pGroupData->sGroupName
+        + OUString(GLOS_DELIM)
+        + OUString::number(pGroupData->nPathIdx));
+    pGlossaryHdl->SetCurGroup(::GetCurrGlosGroup());
     // set current text block
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
@@ -268,7 +261,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         m_pShortNameEdit->SetText(*(String*)pEntry->GetUserData());
         pEntry = pBox->GetParent(pEntry);
         m_pInsertBtn->Enable( !bIsDocReadOnly);
-        ShowAutoText(*::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
+        ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
     else
         ShowAutoText(aEmptyStr, aEmptyStr);
@@ -277,10 +270,10 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
-        String sTemp(*::GetCurrGlosGroup());
+        OUString sTemp(::GetCurrGlosGroup());
         // the zeroth path is not being recorded!
-        if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
-            sTemp = sTemp.GetToken(0, GLOS_DELIM);
+        if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
+            sTemp = sTemp.getToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
         aReq.Done();
     }
@@ -294,10 +287,10 @@ void SwGlossaryDlg::Apply()
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
-        String sTemp(*::GetCurrGlosGroup());
+        OUString sTemp(::GetCurrGlosGroup());
         // the zeroth path is not being recorded!
-        if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
-            sTemp = sTemp.GetToken(0, GLOS_DELIM);
+        if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
+            sTemp = sTemp.getToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
         aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
         aReq.Done();
@@ -454,10 +447,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
             {
                 SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                String sTemp(*::GetCurrGlosGroup());
+                OUString sTemp(::GetCurrGlosGroup());
                 // the zeroth path is not being recorded!
-                if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
-                    sTemp = sTemp.GetToken(0, GLOS_DELIM);
+                if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
+                    sTemp = sTemp.getToken(0, GLOS_DELIM);
                 aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
                 aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
@@ -674,8 +667,8 @@ void SwGlossaryDlg::Init()
     // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvTreeListEntry* pSelEntry = 0;
-    const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
-    const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
+    const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
+    const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32());
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
     const OUString sMyAutoTextEnglish("My AutoText");
     const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
@@ -1073,8 +1066,7 @@ void SwGlossaryDlg::ShowPreview()
                         EX_SHOW_ONLINE_LAYOUT, &aLink );
     }
 
-    if (::GetCurrGlosGroup())
-        ShowAutoText(*::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
+    ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
 };
 
 IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)

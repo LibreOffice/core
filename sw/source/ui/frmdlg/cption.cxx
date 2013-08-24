@@ -42,16 +42,12 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
+#include "initui.hxx"
 #include <frmui.hrc>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 
 using namespace ::com::sun::star;
-
-extern String* GetOldGrfCat();
-extern String* GetOldTabCat();
-extern String* GetOldFrmCat();
-extern String* GetOldDrwCat();
 
 class SwSequenceOptionDialog : public SvxStandardDialog
 {
@@ -144,12 +140,12 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             m_pCategoryBox->InsertEntry(pType->GetName());
     }
 
-    String* pString = 0;
+    OUString sString;
     sal_uInt16 nPoolId = 0;
     if (eType & nsSelectionType::SEL_GRF)
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
-        pString = ::GetOldGrfCat();
+        sString = ::GetOldGrfCat();
         bCopyAttributes = sal_True;
         sObjectName = rSh.GetFlyName();
         //if not OLE
@@ -163,7 +159,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     else if( eType & nsSelectionType::SEL_TBL )
     {
         nPoolId = RES_POOLCOLL_LABEL_TABLE;
-        pString = ::GetOldTabCat();
+        sString = ::GetOldTabCat();
         uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
         xNameAccess = xTables->getTextTables();
         sObjectName = rSh.GetTableFmt()->GetName();
@@ -171,7 +167,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     else if( eType & nsSelectionType::SEL_FRM )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = ::GetOldFrmCat();
+        sString = ::GetOldFrmCat();
          uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
         xNameAccess = xFrms->getTextFrames();
         sObjectName = rSh.GetFlyName();
@@ -179,17 +175,17 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     else if( eType == nsSelectionType::SEL_TXT )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = ::GetOldFrmCat();
+        sString = ::GetOldFrmCat();
     }
     else if( eType & nsSelectionType::SEL_DRW )
     {
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
-        pString = ::GetOldDrwCat();
+        sString = ::GetOldDrwCat();
     }
     if( nPoolId )
     {
-        if( pString && pString->Len())
-            m_pCategoryBox->SetText( *pString );
+        if (!sString.isEmpty())
+            m_pCategoryBox->SetText( sString );
         else
             m_pCategoryBox->SetText(
                     SwStyleNameMapper::GetUIName( nPoolId, aEmptyStr ));

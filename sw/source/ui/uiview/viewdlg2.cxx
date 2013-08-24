@@ -37,16 +37,12 @@
 #include "edtwin.hxx"
 #include <SwStyleNameMapper.hxx>
 
+#include "initui.hxx"
 #include "swabstdlg.hxx"
 #include "frmui.hrc"
 #include "misc.hrc"
 
 #include "view.hrc"
-
-extern String* pOldGrfCat;
-extern String* pOldTabCat;
-extern String* pOldFrmCat;
-extern String* pOldDrwCat;
 
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
@@ -192,25 +188,16 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
 
     // rember category
-    String** ppStr = 0;
     if (eType & nsSelectionType::SEL_GRF)
-        ppStr = &pOldGrfCat;
+        SetOldGrfCat(rName);
     else if( eType & nsSelectionType::SEL_TBL)
-        ppStr = &pOldTabCat;
+        SetOldTabCat(rName);
     else if( eType & nsSelectionType::SEL_FRM)
-        ppStr = &pOldFrmCat;
+        SetOldFrmCat(rName);
     else if( eType == nsSelectionType::SEL_TXT)
-        ppStr = &pOldFrmCat;
+        SetOldFrmCat(rName);
     else if( eType & nsSelectionType::SEL_DRW)
-        ppStr = &pOldDrwCat;
-
-    if( ppStr )
-    {
-        if( !*ppStr )
-            *ppStr = new String( rName );
-        else
-            **ppStr = rName;
-    }
+        SetOldDrwCat(rName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

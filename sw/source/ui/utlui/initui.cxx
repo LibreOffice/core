@@ -42,35 +42,96 @@ SwGlossaries*       pGlossaries = 0;
 // Provides all needed paths. Is initialized by UI.
 SwGlossaryList*     pGlossaryList = 0;
 
-String* pOldGrfCat = 0;
-String* pOldTabCat = 0;
-String* pOldFrmCat = 0;
-String* pOldDrwCat = 0;
-String* pCurrGlosGroup = 0;
+namespace
+{
 
-String* GetOldGrfCat()
+enum CachedStringID
 {
-    return pOldGrfCat;
+    OldGrfCat,
+    OldTabCat,
+    OldFrmCat,
+    OldDrwCat,
+    CurrGlosGroup,
+    CachedStrings
+};
+
+OUString *StringCache[CachedStrings] = {0};
+
+inline OUString GetCachedString(CachedStringID id)
+{
+    return StringCache[id] ? *StringCache[id] : OUString();
 }
-String* GetOldTabCat()
+
+inline void SetCachedString(CachedStringID id, OUString sStr)
 {
-    return pOldTabCat;
+    if (StringCache[id])
+    {
+        *StringCache[id] = sStr;
+    }
+    else
+    {
+        StringCache[id] = new OUString(sStr);
+    }
 }
-String* GetOldFrmCat()
+
+void ClearStringCache()
 {
-    return pOldFrmCat;
+    for (int i=0; i<CachedStrings; ++i)
+    {
+        delete StringCache[i];
+    }
 }
-String* GetOldDrwCat()
-{
-    return pOldDrwCat;
+
 }
-String* GetCurrGlosGroup()
+
+OUString GetOldGrfCat()
 {
-    return pCurrGlosGroup;
+    return GetCachedString(OldGrfCat);
 }
-void SetCurrGlosGroup(String* pStr)
+
+void SetOldGrfCat(OUString sStr)
 {
-    pCurrGlosGroup = pStr;
+    SetCachedString(OldGrfCat, sStr);
+}
+
+OUString GetOldTabCat()
+{
+    return GetCachedString(OldTabCat);
+}
+
+void SetOldTabCat(OUString sStr)
+{
+    SetCachedString(OldTabCat, sStr);
+}
+
+OUString GetOldFrmCat()
+{
+    return GetCachedString(OldFrmCat);
+}
+
+void SetOldFrmCat(OUString sStr)
+{
+    SetCachedString(OldFrmCat, sStr);
+}
+
+OUString GetOldDrwCat()
+{
+    return GetCachedString(OldDrwCat);
+}
+
+void SetOldDrwCat(OUString sStr)
+{
+    SetCachedString(OldDrwCat, sStr);
+}
+
+OUString GetCurrGlosGroup()
+{
+    return GetCachedString(CurrGlosGroup);
+}
+
+void SetCurrGlosGroup(OUString sStr)
+{
+    SetCachedString(CurrGlosGroup, sStr);
 }
 
 std::vector<String>* pDBNameList = 0;
@@ -97,11 +158,7 @@ void _FinitUI()
 
     delete SwFieldType::pFldNames;
 
-    delete pOldGrfCat;
-    delete pOldTabCat;
-    delete pOldFrmCat;
-    delete pOldDrwCat;
-    delete pCurrGlosGroup;
+    ClearStringCache();
     delete pDBNameList;
     delete pGlossaryList;
     delete pAuthFieldNameList;
