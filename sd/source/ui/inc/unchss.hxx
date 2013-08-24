@@ -32,7 +32,7 @@ class StyleSheetUndoAction : public SdUndoAction
 
     SfxItemSet*     pNewSet;
     SfxItemSet*     pOldSet;
-    String          aComment;
+    OUString        aComment;
 
 public:
     TYPEINFO();

@@ -52,13 +52,12 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
     aComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
-    String aName(pStyleSheet->GetName());
+    OUString aName(pStyleSheet->GetName());
 
     // delete layout name and separator
-    String aSep( SD_LT_SEPARATOR );
-    sal_uInt16 nPos = aName.Search(aSep);
-    if( nPos != STRING_NOTFOUND )
-        aName.Erase(0, nPos + aSep.Len());
+    sal_Int32 nPos = aName.indexOf(SD_LT_SEPARATOR);
+    if (nPos != -1)
+        aName = aName.copy(nPos + strlen(SD_LT_SEPARATOR));
 
     if (aName == SD_RESSTR(STR_LAYOUT_TITLE))
     {
@@ -82,20 +81,17 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     }
     else
     {
-        String aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
-        nPos = aName.Search(aOutlineStr);
-        if (nPos != STRING_NOTFOUND)
+        OUString aOutlineStr(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
+        nPos = aName.indexOf(aOutlineStr);
+        if (nPos != -1)
         {
-            String aNumStr(aName.Copy(aOutlineStr.Len()));
-            aName = SD_RESSTR(STR_LAYOUT_OUTLINE);
-            aName += aNumStr;
+            OUString aNumStr(aName.copy(aOutlineStr.getLength()));
+            aName = SD_RESSTR(STR_LAYOUT_OUTLINE) + aNumStr;
         }
     }
 
     // replace placeholder with template name
-    nPos = aComment.Search(sal_Unicode('$'));
-    aComment.Erase(nPos, 1);
-    aComment.Insert(aName, nPos);
+    aComment = aComment.replaceFirst("$", aName);
 }
 
 
