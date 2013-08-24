@@ -396,7 +396,7 @@ protected:
     virtual bool DropdownField( const SwField* pFld );
     virtual bool PlaceholderField( const SwField* pFld );
 
-    virtual bool AnalyzeURL( const String& rURL, const String& rTarget, String* pLinkURL, String* pMark );
+    virtual bool AnalyzeURL( const OUString& rURL, const OUString& rTarget, OUString* pLinkURL, OUString* pMark );
 
     /// Reference to the export, where to get the data from
     WW8Export &m_rWW8Export;

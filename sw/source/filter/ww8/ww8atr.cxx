@@ -2401,12 +2401,11 @@ void WW8Export::WritePostItBegin( ww::bytes* pOut )
         pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 }
 
-String FieldString(ww::eField eIndex)
+OUString FieldString(ww::eField eIndex)
 {
-    String sRet(OUString("  "));
     if (const char *pField = ww::GetEnglishFieldName(eIndex))
-        sRet.InsertAscii(pField, 1);
-    return sRet;
+        return " " + OUString::createFromAscii(pField) + " ";
+    return OUString("  ");
 }
 
 void WW8AttributeOutput::HiddenField( const SwField& rFld )

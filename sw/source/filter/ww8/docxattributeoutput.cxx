@@ -1260,48 +1260,38 @@ void DocxAttributeOutput::EndRuby()
     m_pSerializer->endElementNS( XML_w, XML_ruby );
 }
 
-bool DocxAttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark )
+bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = AttributeOutputBase::AnalyzeURL( rUrl, rTarget, pLinkURL, pMark );
 
-    String sURL = *pLinkURL;
-    String sMark = *pMark;
-
-    bool bOutputField = sMark.Len();
-
-    if ( bOutputField )
+    if ( !pMark->isEmpty() )
     {
+        OUString sURL = *pLinkURL;
+
         if ( bBookMarkOnly )
             sURL = FieldString( ww::eHYPERLINK );
         else
-        {
-            String sFld( FieldString( ww::eHYPERLINK ) );
-            sFld.AppendAscii( "\"" );
-            sURL.Insert( sFld, 0 );
-            sURL += '\"';
-        }
+            sURL = FieldString( ww::eHYPERLINK ) + "\"" + sURL + "\"";
 
-        if ( sMark.Len() )
-            ( ( sURL.AppendAscii( " \\l \"" ) ) += sMark ) += '\"';
+        sURL += " \\l \"" + *pMark + "\"";
 
-        if ( rTarget.Len() )
-            ( sURL.AppendAscii( " \\n " ) ) += rTarget;
+        if ( !rTarget.isEmpty() )
+            sURL += " \\n " + rTarget;
+
+        *pLinkURL = sURL;
     }
-
-    *pLinkURL = sURL;
-    *pMark = sMark;
 
     return bBookMarkOnly;
 }
 
 bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 {
-    String sMark;
-    String sUrl;
+    OUString sMark;
+    OUString sUrl;
 
     bool bBookmarkOnly = AnalyzeURL( rUrl, rTarget, &sUrl, &sMark );
 
-    if ( sMark.Len() && !bBookmarkOnly )
+    if ( !sMark.isEmpty() && !bBookmarkOnly )
     {
         m_rExport.OutputField( NULL, ww::eHYPERLINK, sUrl );
     }
@@ -1312,17 +1302,15 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
         if ( !bBookmarkOnly )
         {
-            OUString osUrl( sUrl );
-
             OString sId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
                         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
-                        osUrl, true ), RTL_TEXTENCODING_UTF8 );
+                        sUrl, true ), RTL_TEXTENCODING_UTF8 );
 
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
         }
         else
             m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
-                    OUStringToOString( OUString( sMark ), RTL_TEXTENCODING_UTF8 ).getStr( ) );
+                    OUStringToOString( sMark, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 
         OUString sTarget( rTarget );
         if ( !sTarget.isEmpty() )
