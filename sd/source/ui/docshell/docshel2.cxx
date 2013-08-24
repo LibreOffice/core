@@ -286,12 +286,12 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
  */
 sal_Bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
 {
-    const String aStrForDlg( rName );
+    const OUString aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
 
     if( ! bIsNameValid )
     {
-        String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
+        OUString aDesc( SD_RESSTR( STR_WARN_PAGE_EXISTS ) );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : 0;
         if( aNameDlg )

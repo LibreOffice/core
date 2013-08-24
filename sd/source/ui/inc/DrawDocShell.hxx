@@ -127,7 +127,7 @@ public:
     void                    Disconnect(sd::ViewShell* pViewSh);
     void                    UpdateTablePointers();
 
-    sal_Bool                    GotoBookmark(const String& rBookmark);
+    sal_Bool                    GotoBookmark(const OUString& rBookmark);
 
     Bitmap                  GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel);
 
@@ -156,7 +156,7 @@ public:
 
     /** executes the SID_OPENDOC slot to let the framework open a document
         with the given URL and this document as a referer */
-    void                    OpenBookmark( const String& rBookmarkURL );
+    void                    OpenBookmark( const OUString& rBookmarkURL );
 
     /** checks, if the given name is a valid new name for a slide
 

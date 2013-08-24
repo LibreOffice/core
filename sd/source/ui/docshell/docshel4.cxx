@@ -652,7 +652,7 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
     return( (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool() );
 }
 
-sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
+sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 {
     sal_Bool bFound = sal_False;
 
@@ -846,7 +846,7 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
            masterpages about the name change.
         */
 
-        String aLayoutName;
+        OUString aLayoutName;
 
         SfxStringItem* pLayoutItem;
         if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, sal_False, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
@@ -860,7 +860,7 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
             aLayoutName = aURL.getName();
         }
 
-        if( aLayoutName.Len() )
+        if (!aLayoutName.isEmpty())
         {
             sal_uInt32 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
             for (sal_uInt32 i = 0; i < nCount; ++i)
@@ -935,7 +935,7 @@ OutputDevice* DrawDocShell::GetDocumentRefDev (void)
 
 /** executes the SID_OPENDOC slot to let the framework open a document
     with the given URL and this document as a referer */
-void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
+void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
 {
     SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
