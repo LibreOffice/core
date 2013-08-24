@@ -45,7 +45,7 @@ int access_u(const rtl_uString* pustrPath, int mode);
  **********************************/
 sal_Bool realpath_u(
     const rtl_uString* pustrFileName,
-   rtl_uString** ppustrResolvedName);
+    rtl_uString** ppustrResolvedName);
 
 int stat_c(const char *cpPath, struct stat* buf);
 
@@ -58,6 +58,8 @@ int mkdir_u(const rtl_uString* path, mode_t mode);
 int open_c(const char *cpPath, int oflag, int mode);
 
 int utime_c(const char *cpPath, struct utimbuf *times);
+
+int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
 
 #ifdef __cplusplus
 }

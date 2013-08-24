@@ -307,7 +307,7 @@ sal_uInt64 FileHandle_Impl::getSize() const
 oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
 {
     off_t const nSize = sal::static_int_cast< off_t >(uSize);
-    if (-1 == ftruncate (m_fd, nSize))
+    if (-1 == ftruncate_with_name (m_fd, nSize, m_strFilePath))
     {
         /* Failure. Save original result. Try fallback algorithm */
         oslFileError result = oslTranslateFileError (OSL_FET_ERROR, errno);
