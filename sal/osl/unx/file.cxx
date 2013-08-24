@@ -29,6 +29,7 @@
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.h"
 #include "file_url.h"
+#include "uunxapi.h"
 
 #include <algorithm>
 #include <limits>
@@ -43,7 +44,7 @@
 #include <sys/mount.h>
 #define HAVE_O_EXLOCK
 
-#include <Foundation/Foundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 
 #endif /* MACOSX */
 
@@ -842,17 +843,6 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR )
 #endif
 
-#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
-
-static NSUserDefaults *userDefaults = NULL;
-
-static void get_user_defaults()
-{
-    userDefaults = [NSUserDefaults standardUserDefaults];
-}
-
-#endif
-
 oslFileError
 SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags )
 {
@@ -916,41 +906,8 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         flags = osl_file_adjustLockFlags (cpFilePath, flags);
     }
 
-#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
-    static pthread_once_t once = PTHREAD_ONCE_INIT;
-    pthread_once(&once, &get_user_defaults);
-    NSURL *fileURL = NULL;
-    NSData *data = NULL;
-    NSURL *scopeURL = NULL;
-    BOOL stale;
-
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    if (userDefaults != NULL)
-        fileURL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpFilePath]];
-
-    if (fileURL != NULL)
-        data = [userDefaults dataForKey:[@"bookmarkFor:" stringByAppendingString:[fileURL absoluteString]]];
-
-    if (data != NULL)
-        scopeURL = [NSURL URLByResolvingBookmarkData:data
-                                             options:NSURLBookmarkResolutionWithSecurityScope
-                                       relativeToURL:nil
-                                 bookmarkDataIsStale:&stale
-                                               error:nil];
-    if (scopeURL != NULL)
-        [scopeURL startAccessingSecurityScopedResource];
-#endif
-
     /* open the file */
-    int fd = open( cpFilePath, flags, mode );
-
-
-#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
-    if (scopeURL != NULL)
-        [scopeURL stopAccessingSecurityScopedResource];
-    [pool release];
-#endif
+    int fd = open_c( cpFilePath, flags, mode );
 
 #ifdef IOS
     /* Horrible hack: If opening for RDWR and getting EPERM, just try
@@ -961,7 +918,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     if (-1 == fd && (flags & O_RDWR) && EPERM == errno)
     {
         int rdonly_flags = (flags & ~O_ACCMODE) | O_RDONLY;
-        fd = open( cpFilePath, rdonly_flags, mode );
+        fd = open_c( cpFilePath, rdonly_flags, mode );
     }
 #endif
     if (-1 == fd)

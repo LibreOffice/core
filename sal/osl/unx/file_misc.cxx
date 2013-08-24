@@ -740,7 +740,7 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     nUID=aFileStat.st_uid;
     nGID=aFileStat.st_gid;
 
-    nRet = stat(pszDestPath,&aFileStat);
+    nRet = stat_c(pszDestPath,&aFileStat);
     if ( nRet < 0 )
     {
         nRet=errno;

@@ -327,7 +327,7 @@ static oslFileError osl_psz_setFileTime (
     struct tm* pTM=0;
 #endif
 
-    nRet = lstat(pszFilePath,&aFileStat);
+    nRet = lstat_c(pszFilePath,&aFileStat);
 
     if ( nRet < 0 )
     {
@@ -385,7 +385,7 @@ static oslFileError osl_psz_setFileTime (
     fprintf(stderr,"Modification now '%s'\n",ctime(&aTimeBuffer.modtime));
 #endif
 
-    nRet=utime(pszFilePath,&aTimeBuffer);
+    nRet = utime_c(pszFilePath,&aTimeBuffer);
     if ( nRet < 0 )
     {
         nRet=errno;

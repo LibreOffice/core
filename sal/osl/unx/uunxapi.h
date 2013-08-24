@@ -31,7 +31,6 @@ extern "C"
 {
 #endif
 
-/* @see access */
 int access_u(const rtl_uString* pustrPath, int mode);
 
 /***********************************
@@ -55,6 +54,10 @@ int lstat_c(const char *cpPath, struct stat* buf);
 int lstat_u(const rtl_uString* pustrPath, struct stat* buf);
 
 int mkdir_u(const rtl_uString* path, mode_t mode);
+
+int open_c(const char *cpPath, int oflag, int mode);
+
+int utime_c(const char *cpPath, struct utimbuf *times);
 
 #ifdef __cplusplus
 }
