@@ -149,7 +149,7 @@ sal_Bool SwWrtShell::GoPrevBookmark()
     return MoveBookMark( BOOKMARK_PREV );
 }
 
-void SwWrtShell::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
+void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
     // OD 11.02.2003 #100556# - execute macro, if it is allowed.
     if ( IsMacroExecAllowed() )

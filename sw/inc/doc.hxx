@@ -1812,7 +1812,7 @@ public:
     const SwFmtINetFmt* FindINetAttr( const OUString& rName ) const;
 
     /// Call into intransparent Basic; expect possible Return String.
-    bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
+    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet = 0, SbxArray* pArgs = 0 );
 
     /// Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
