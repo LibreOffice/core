@@ -20,7 +20,7 @@
 #ifndef SD_PRES_LAYOUT_DLG_HXX
 #define SD_PRES_LAYOUT_DLG_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
