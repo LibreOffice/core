@@ -24,13 +24,14 @@
 #include <vcl/window.hxx>
 
 class SwNumRule;
+namespace rtl { class OUString; }
 
 class NumberingPreview : public Window
 {
     const SwNumRule*    pActNum;
     Font                aStdFont;
     long                nPageWidth;
-    const String*       pOutlineNames;
+    const OUString*     pOutlineNames;
     sal_Bool                bPosition;
     sal_uInt16              nActLevel;
 
@@ -58,7 +59,7 @@ class NumberingPreview : public Window
                     {pActNum = pNum; Invalidate();};
         void    SetPageWidth(long nPgWidth)
                                 {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const String* pNames)
+        void    SetOutlineNames(const OUString* pNames)
                         {pOutlineNames = pNames;}
         void    SetPositionMode()
                         { bPosition = sal_True;}
