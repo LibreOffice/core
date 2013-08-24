@@ -78,7 +78,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/binarycodec \
     oox/source/core/contexthandler2 \
     oox/source/core/contexthandler \
-    oox/source/core/DocumentCrypt \
     oox/source/core/fastparser \
     oox/source/core/fasttokenhandler \
     oox/source/core/filterbase \
@@ -90,6 +89,11 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/relationshandler \
     oox/source/core/services \
     oox/source/core/xmlfilterbase \
+    oox/source/crypto/AgileEngine \
+    oox/source/crypto/CryptTools \
+    oox/source/crypto/DocumentEncryption \
+    oox/source/crypto/DocumentDecryption \
+    oox/source/crypto/Standard2007Engine \
     oox/source/docprop/docprophandler \
     oox/source/docprop/ooxmldocpropimport \
     oox/source/drawingml/chart/axiscontext \

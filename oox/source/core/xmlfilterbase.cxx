@@ -49,7 +49,7 @@
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <oox/core/DocumentCrypt.hxx>
+#include <oox/crypto/DocumentEncryption.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -704,8 +704,8 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 
         Reference< XStream> xDocumentStream (FilterBase::implGetOutputStream(rMediaDescriptor));
         oox::ole::OleStorage aOleStorage( getComponentContext(), xDocumentStream, true );
-        AesEncoder encoder(getMainDocumentStream(), aOleStorage, aPassword);
-        bRet = encoder.encode();
+        DocumentEncryption encryptor(getMainDocumentStream(), aOleStorage, aPassword);
+        bRet = encryptor.encrypt();
         if (bRet)
             aOleStorage.commit();
     }

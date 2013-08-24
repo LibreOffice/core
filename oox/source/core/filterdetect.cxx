@@ -24,11 +24,12 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 
-#include "oox/core/DocumentCrypt.hxx"
 #include "oox/core/fastparser.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/ole/olestorage.hxx"
+
+#include "oox/crypto/DocumentDecryption.hxx"
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
@@ -270,23 +271,23 @@ bool lclIsZipPackage( const Reference< XComponentContext >& rxContext, const Ref
 class PasswordVerifier : public IDocPasswordVerifier
 {
 public:
-    explicit PasswordVerifier( AesDecoder& decoder );
+    explicit PasswordVerifier( DocumentDecryption& aDecryptor );
 
     virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData );
 
     virtual DocPasswordVerifierResult verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData );
 private:
-    AesDecoder& mDecoder;
+    DocumentDecryption& mDecryptor;
 };
 
-PasswordVerifier::PasswordVerifier( AesDecoder& decoder ) :
-    mDecoder(decoder)
+PasswordVerifier::PasswordVerifier( DocumentDecryption& aDecryptor ) :
+    mDecryptor(aDecryptor)
 {}
 
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData )
 {
-    if( mDecoder.generateEncryptionKey(rPassword) && mDecoder.checkCurrentEncryptionData() )
-        rEncryptionData = mDecoder.createEncryptionData();
+    if( mDecryptor.generateEncryptionKey(rPassword) )
+        rEncryptionData = mDecryptor.createEncryptionData();
 
     return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult_OK : comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
@@ -294,7 +295,7 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OU
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData )
 {
     comphelper::DocPasswordVerifierResult aResult = comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
-    if (AesDecoder::checkEncryptionData(rEncryptionData))
+    if (DocumentDecryption::checkEncryptionData(rEncryptionData))
         aResult = comphelper::DocPasswordVerifierResult_OK;
     return aResult;
 }
@@ -324,9 +325,9 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     {
         try
         {
-            AesDecoder aDecoder(aOleStorage);
+            DocumentDecryption aDecryptor(aOleStorage, mxContext);
 
-            if( aDecoder.readEncryptionInfo() )
+            if( aDecryptor.readEncryptionInfo() )
             {
                 /*  "VelvetSweatshop" is the built-in default encryption
                     password used by MS Excel for the "workbook protection"
@@ -339,7 +340,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     This helper returns either with the correct password
                     (according to the verifier), or with an empty string if
                     user has cancelled the password input dialog. */
-                PasswordVerifier aVerifier( aDecoder );
+                PasswordVerifier aVerifier( aDecryptor );
                 Sequence<NamedValue> aEncryptionData;
                 aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
                                                 aVerifier, rMediaDescriptor,
@@ -354,7 +355,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 {
                     // create temporary file for unencrypted package
                     Reference<XStream> xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
-                    aDecoder.decode( xTempFile );
+                    aDecryptor.decrypt( xTempFile );
 
                     // store temp file in media descriptor to keep it alive
                     rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
