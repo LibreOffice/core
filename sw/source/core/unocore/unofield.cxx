@@ -796,10 +796,10 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     SwFieldType* pType = GetFldType(true);
     if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
     {
-        String sName;
+        OUString sName;
         if(pType)
             SwXTextFieldMasters::getInstanceName(*pType, sName);
-        aRet <<= OUString(sName);
+        aRet <<= sName;
     }
     else if(pType)
     {
@@ -2659,48 +2659,37 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
 }
 
 sal_Bool SwXTextFieldMasters::getInstanceName(
-    const SwFieldType& rFldType, String& rName)
+    const SwFieldType& rFldType, OUString& rName)
 {
-    sal_Bool bRet = sal_True;
+    OUString sField;
+
     switch( rFldType.Which() )
     {
     case RES_USERFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "User."));
-        rName += rFldType.GetName();
+        sField = "User." + rFldType.GetName();
         break;
     case RES_DDEFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DDE."));
-        rName += rFldType.GetName();
+        sField = "DDE." + rFldType.GetName();
         break;
 
     case RES_SETEXPFLD:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "SetExpression."));
-        rName += String( SwStyleNameMapper::GetSpecialExtraProgName( rFldType.GetName() ) );
+        sField = "SetExpression." + SwStyleNameMapper::GetSpecialExtraProgName( rFldType.GetName() );
         break;
 
     case RES_DBFLD:
-        {
-            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
-            rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "DataBase."));
-            String sDBName(rFldType.GetName());
-            sDBName.SearchAndReplaceAll(DB_DELIM, '.');
-            rName += sDBName;
-        }
+        sField = "DataBase." + rFldType.GetName().replaceAll(OUString(DB_DELIM), ".");
         break;
 
     case RES_AUTHORITY:
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( COM_TEXT_FLDMASTER_CC ));
-        rName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Bibliography"));
+        sField = "Bibliography";
         break;
 
     default:
-        bRet = sal_False;
+        return sal_False;
     }
 
-    return bRet;
+    rName += COM_TEXT_FLDMASTER_CC + sField;
+    return sal_True;
 }
 
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
@@ -2713,8 +2702,8 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
     sal_uInt16 nCount = pFldTypes->size();
 
-    std::vector<String*> aFldNames;
-    String* pString = new String();
+    std::vector<OUString*> aFldNames;
+    OUString* pString = new OUString();
 
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
@@ -2723,7 +2712,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
         if (SwXTextFieldMasters::getInstanceName(rFldType, *pString))
         {
             aFldNames.push_back(pString);
-            pString = new String();
+            pString = new OUString();
         }
     }
     delete pString;

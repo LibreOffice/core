@@ -43,7 +43,7 @@ protected:
 public:
     SwXTextFieldMasters(SwDoc* pDoc);
 
-    static sal_Bool getInstanceName(const SwFieldType& rFldType, String& rName);
+    static sal_Bool getInstanceName(const SwFieldType& rFldType, OUString& rName);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
