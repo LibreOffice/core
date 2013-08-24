@@ -57,7 +57,7 @@ namespace sd
 
 TYPEINIT1( FuPresentationLayout, FuPoor );
 
-#define DOCUMENT_TOKEN (sal_Unicode('#'))
+#define DOCUMENT_TOKEN '#'
 
 FuPresentationLayout::FuPresentationLayout (
     ViewShell* pViewSh,
@@ -101,9 +101,10 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     DBG_ASSERT(nSelectedPage != SDRPAGE_NOTFOUND, "no selected page");
     SdPage* pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
-    String aOldPageLayoutName(pSelectedPage->GetLayoutName());
-    String aOldLayoutName(aOldPageLayoutName);
-    aOldLayoutName.Erase(aOldLayoutName.SearchAscii(SD_LT_SEPARATOR));
+    OUString aOldLayoutName(pSelectedPage->GetLayoutName());
+    sal_Int32 nPos = aOldLayoutName.indexOf(SD_LT_SEPARATOR);
+    if (nPos != -1)
+        aOldLayoutName = aOldLayoutName.copy(0, nPos);
 
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
@@ -120,7 +121,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     // call dialog
     sal_Bool   bLoad = sal_False;           // appear the new master pages?
-    String aFile;
+    OUString aFile;
 
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
 
@@ -188,15 +189,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
         if (bLoad)
         {
-            String aFileName = aFile.GetToken( 0, DOCUMENT_TOKEN );
+            OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN);
             SdDrawDocument* pTempDoc = mpDoc->OpenBookmarkDoc( aFileName );
 
             // #69581: If I chosed the standard-template I got no filename and so I get no
             //         SdDrawDocument-Pointer. But the method SetMasterPage is able to handle
             //         a NULL-pointer as a Standard-template ( look at SdDrawDocument::SetMasterPage )
-            String aLayoutName;
+            OUString aLayoutName;
             if( pTempDoc )
-                aLayoutName = aFile.GetToken( 1, DOCUMENT_TOKEN );
+                aLayoutName = aFile.getToken(1, DOCUMENT_TOKEN);
 
             mpDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
             mpDoc->CloseBookmarkDoc();

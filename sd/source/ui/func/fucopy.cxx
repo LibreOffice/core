@@ -65,9 +65,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     if( mpView->AreObjectsMarked() )
     {
         // Undo
-        String aString( mpView->GetDescriptionOfMarkedObjects() );
-        aString.Append( sal_Unicode(' ') );
-        aString.Append( SD_RESSTR( STR_UNDO_COPYOBJECTS ) );
+        OUString aString( mpView->GetDescriptionOfMarkedObjects() );
+        aString += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
         mpView->BegUndo( aString );
 
         const SfxItemSet* pArgs = rReq.GetArgs();
@@ -173,9 +172,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         if( nNumber > 1 )
         {
-            String aStr( SdResId( STR_OBJECTS ) );
-            aStr.Append( sal_Unicode(' ') );
-            aStr.Append( SD_RESSTR( STR_UNDO_COPYOBJECTS ) );
+            OUString aStr( SD_RESSTR( STR_OBJECTS ) );
+            aStr += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
 
             pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
             mpDocSh->SetWaitCursor( sal_True );
@@ -212,7 +210,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             {
                 SfxItemSet aNewSet( mpViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                aNewSet.Put( XFillColorItem( String(), aStartColor ) );
+                aNewSet.Put( XFillColorItem( OUString(), aStartColor ) );
                 mpView->SetAttributes( aNewSet );
             }
 
@@ -274,7 +272,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 Color aNewColor( nRed, nGreen, nBlue );
                 SfxItemSet aNewSet( mpViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                aNewSet.Put( XFillColorItem( String(), aNewColor ) );
+                aNewSet.Put( XFillColorItem( OUString(), aNewColor ) );
                 mpView->SetAttributes( aNewSet );
             }
         }

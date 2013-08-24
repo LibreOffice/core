@@ -73,10 +73,8 @@ void FuVectorize::DoExecute( SfxRequest& )
                 if( pPageView && rMtf.GetActionSize() )
                 {
                     SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( mpView->GetDescriptionOfMarkedObjects() );
-
-                    aStr.Append( sal_Unicode(' ') );
-                    aStr.Append( SD_RESSTR( STR_UNDO_VECTORIZE ) );
+                    OUString aStr( mpView->GetDescriptionOfMarkedObjects() );
+                    aStr += " " + SD_RESSTR( STR_UNDO_VECTORIZE );
                     mpView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
                     mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );

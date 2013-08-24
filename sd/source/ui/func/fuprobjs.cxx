@@ -74,8 +74,8 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
        if not, it is not allowed to edit the templates */
     SfxItemSet aSet(mpDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     pOutlineViewShell->GetStatusBarState( aSet );
-    String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
-    DBG_ASSERT(aLayoutName.Len(), "Layout not defined");
+    OUString aLayoutName = ((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    DBG_ASSERT(!aLayoutName.isEmpty(), "Layout not defined");
 
     sal_Bool    bUnique = sal_False;
     sal_Int16   nDepth, nTmp;
@@ -123,14 +123,12 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         if( bPage )
         {
             ePO = PO_TITLE;
-            String aStr(SdResId( STR_LAYOUT_TITLE ));
-            aStyleName += aStr ;
+            aStyleName += SD_RESSTR(STR_LAYOUT_TITLE);
         }
         else
         {
             ePO = (PresentationObjects) ( PO_OUTLINE_1 + nDepth - 1 );
-            String aStr(SdResId( STR_LAYOUT_OUTLINE ));
-            aStyleName += aStr ;
+            aStyleName += SD_RESSTR(STR_LAYOUT_OUTLINE);
             aStyleName += OUString(' ') ;
             aStyleName += OUString::number( nDepth ) ;
         }

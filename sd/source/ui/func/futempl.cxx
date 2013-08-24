@@ -112,8 +112,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     else if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
         sal_False, &pItem ))
     {
-        String sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
-        if (sFamily.CompareToAscii("graphics") == COMPARE_EQUAL)
+        OUString sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
+        if (sFamily == "graphics")
             nFamily = SD_STYLE_FAMILY_GRAPHICS;
         else
             nFamily = SD_STYLE_FAMILY_PSEUDO;
@@ -172,7 +172,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
             if (pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_ON)
             {
-                String aParentName(((const SfxStringItem&) pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
+                OUString aParentName(((const SfxStringItem&) pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
                 pStyleSheet->SetParent(aParentName);
             }
             else
@@ -310,7 +310,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
-                    String aName(pStyleSheet->GetName());
+                    OUString aName(pStyleSheet->GetName());
                     sal_uInt16 nDlgId = 0;
 
                     if (aName == SD_RESSTR(STR_PSEUDOSHEET_TITLE))
@@ -341,15 +341,14 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
-                    else if(aName.Search(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE)) !=
-                            STRING_NOTFOUND)
+                    else if(aName.indexOf(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE)) != -1)
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
-                        String aOutlineStr((SdResId(STR_PSEUDOSHEET_OUTLINE)));
+                        OUString aOutlineStr(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
                         // determine number, mind the blank between name and number
-                        String aNumStr(aName.Copy(aOutlineStr.Len() + 1));
-                        sal_uInt16 nLevel = (sal_uInt16)aNumStr.ToInt32();
+                        OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
+                        sal_uInt16 nLevel = (sal_uInt16)aNumStr.toInt32();
                         switch (nLevel)
                         {
                             case 1: ePO = PO_OUTLINE_1; break;
@@ -415,8 +414,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 {
                                     SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
 
-                                    String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                                    sStyleName.AppendAscii( " 1" );
+                                    OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
                                     SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
 
                                     if(pFirstStyleSheet)
@@ -430,8 +428,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 }
                             }
 
-                            String sStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                            sStyleName.Append( sal_Unicode( ' ' ));
+                            OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " ");
 
                             pStyleSheet->GetItemSet().Put(aTempSet);
                             SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
@@ -441,8 +438,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             {
                                 for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
                                 {
-                                    String aName( sStyleName );
-                                    aName.Append( OUString::number( (sal_Int32) n ));
+                                    OUString aName( sStyleName + OUString::number(n) );
 
                                     SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
 

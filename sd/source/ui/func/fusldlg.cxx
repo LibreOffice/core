@@ -63,8 +63,8 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     SfxItemSet      aDlgSet( mpDoc->GetPool(), ATTR_PRESENT_START, ATTR_PRESENT_END );
     std::vector<OUString> aPageNameList(mpDoc->GetSdPageCount( PK_STANDARD ));
-    const String&   rPresPage = rPresentationSettings.maPresPage;
-    String          aFirstPage;
+    const OUString& rPresPage = rPresentationSettings.maPresPage;
+    OUString        aFirstPage;
     SdPage*         pPage = NULL;
     long            nPage;
 
@@ -83,13 +83,13 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         // is this our (existing) first page?
         if ( rPresPage == aStr )
             aFirstPage = rPresPage;
-        else if ( pPage->IsSelected() && !aFirstPage.Len() )
+        else if ( pPage->IsSelected() && aFirstPage.isEmpty() )
             aFirstPage = aStr;
     }
     SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
-    if( !aFirstPage.Len() && pPage )
+    if( aFirstPage.isEmpty() && pPage )
         aFirstPage = pPage->GetName();
 
     aDlgSet.Put( SfxBoolItem( ATTR_PRESENT_ALL, rPresentationSettings.mbAll ) );

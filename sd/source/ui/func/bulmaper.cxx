@@ -104,9 +104,8 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         }
         else if( rSrcLevel.GetNumberingType() == com::sun::star::style::NumberingType::CHAR_SPECIAL )
         {
-            String aEmpty;
-            aNewLevel.SetPrefix( aEmpty );
-            aNewLevel.SetSuffix( aEmpty );
+            aNewLevel.SetPrefix("");
+            aNewLevel.SetSuffix("");
             aNumRule.SetLevel(nLevel, aNewLevel );
         }
     }

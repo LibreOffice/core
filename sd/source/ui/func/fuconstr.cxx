@@ -340,12 +340,9 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         /**********************************************
         * Objects was created on the slide master page
         ***********************************************/
-        String aName( pPage->GetLayoutName() );
-        String aSep = OUString(SD_LT_SEPARATOR);
-        sal_uInt16 n = aName.Search(aSep);
-        n = n + aSep.Len();
-        aName.Erase(n);
-        aName.Append( SD_RESSTR( STR_LAYOUT_BACKGROUNDOBJECTS ) );
+        OUString aName( pPage->GetLayoutName() );
+        sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + strlen(SD_LT_SEPARATOR);
+        aName = aName.copy(0, n) + SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
         SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                                 GetStyleSheetPool()->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
@@ -375,7 +372,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         ************************************/
         if ( bForceNoFillStyle )
         {
-            String aName(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
+            OUString aName(SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL));
             SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                          GetStyleSheetPool()->
                                          Find(aName, SD_STYLE_FAMILY_GRAPHICS);

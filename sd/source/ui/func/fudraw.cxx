@@ -828,7 +828,7 @@ sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
     sal_Bool bSet = sal_False;
-    String aHelpText;
+    OUString aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
 
     // URL for IMapObject underneath pointer is help text
@@ -841,7 +841,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             // show name
             aHelpText = pIMapObj->GetAltText();
 
-            if (aHelpText.Len() == 0)
+            if (aHelpText.isEmpty())
             {
                 // show url if no name is available
                 aHelpText = INetURLObject::decode( pIMapObj->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
@@ -886,8 +886,8 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // jump to object/page
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_BOOKMARK);
-                aHelpText.AppendAscii( ": " );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText += ": ";
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
             }
             break;
 
@@ -895,8 +895,8 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // jump to document (object/page)
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_DOCUMENT);
-                aHelpText.AppendAscii( ": " );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText += ": ";
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
             }
             break;
 
@@ -904,8 +904,8 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // execute program
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_PROGRAM);
-                aHelpText.AppendAscii( ": " );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText += ": ";
+                aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
             }
             break;
 
@@ -913,21 +913,20 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // execute program
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_MACRO);
-                aHelpText.AppendAscii( ": " );
+                aHelpText += ": ";
 
                 if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
                 {
-                    aHelpText.Append( pInfo->GetBookmark() );
+                    aHelpText += pInfo->GetBookmark();
                 }
                 else
                 {
-                    String sBookmark( pInfo->GetBookmark() );
-                    sal_Unicode cToken = '.';
-                    aHelpText.Append( sBookmark.GetToken( 2, cToken ) );
-                    aHelpText.Append( cToken );
-                    aHelpText.Append( sBookmark.GetToken( 1, cToken ) );
-                    aHelpText.Append( cToken );
-                    aHelpText.Append( sBookmark.GetToken( 0, cToken ) );
+                    OUString sBookmark( pInfo->GetBookmark() );
+                    aHelpText += sBookmark.getToken( 2, '.' );
+                    aHelpText += ".";
+                    aHelpText += sBookmark.getToken( 1, '.' );
+                    aHelpText += ".";
+                    aHelpText += sBookmark.getToken( 0, '.' );
                 }
             }
             break;
@@ -964,7 +963,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
         aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
     }
 
-    if (aHelpText.Len())
+    if (!aHelpText.isEmpty())
     {
         bSet = sal_True;
         Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());

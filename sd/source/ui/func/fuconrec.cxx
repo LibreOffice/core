@@ -240,7 +240,7 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if(SID_DRAW_MEASURELINE == nSlotId)
             {
                 SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-                String aStr(SdResId(STR_LAYER_MEASURELINES));
+                OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
                 pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
             }
 
@@ -501,7 +501,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     {
         // dimension line
         SdPage* pPage = (SdPage*) mpView->GetSdrPageView()->GetPage();
-        String aName(SdResId(STR_POOLSHEET_MEASURE));
+        OUString aName(SD_RESSTR(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
                                      GetStyleSheetPool()->
                                      Find(aName, SD_STYLE_FAMILY_GRAPHICS);
@@ -513,7 +513,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         }
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-        String aStr(SdResId(STR_LAYER_MEASURELINES));
+        OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
         pObj->SetLayer(rAdmin.GetLayerID(aStr, sal_False));
     }
     else if (nSlotId == OBJ_CUSTOMSHAPE )
@@ -532,7 +532,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 
     if( pLineEndList.is() )
     {
-        String aArrowName( SVX_RES(nResId) );
+        OUString aArrowName( SVX_RES(nResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )

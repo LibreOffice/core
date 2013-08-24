@@ -130,8 +130,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             // Get filter for current format
             try
             {
-                String  aExt;
-                String  aAllSpec( SdResId( STR_ALL_FILES ) );
+                OUString aAllSpec( SD_RESSTR( STR_ALL_FILES ) );
 
                 xFilterManager->appendFilter( aAllSpec, OUString("*.*") );
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
@@ -159,7 +158,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // get Powerpoint filter
-                aExt = OUString(".ppt");
+                OUString aExt = OUString(".ppt");
                 pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -635,7 +634,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         nNewPages = 0;
 
         pDocliner->GetUndoManager().EnterListAction(
-                                    SD_RESSTR(STR_UNDO_INSERT_FILE), String() );
+                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString() );
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
@@ -650,8 +649,8 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 !pOutliner->GetText(pSourcePara).isEmpty())
             {
                 pDocliner->Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
-                String aStyleSheetName( pStyleSheet->GetName() );
-                aStyleSheetName.Erase( aStyleSheetName.Len()-1, 1 );
+                OUString aStyleSheetName( pStyleSheet->GetName() );
+                aStyleSheetName = aStyleSheetName.copy( 0, aStyleSheetName.getLength()-1 );
                 aStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
                 SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
                 SfxStyleSheet* pOutlStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() );

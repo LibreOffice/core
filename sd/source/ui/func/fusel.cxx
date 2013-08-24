@@ -1200,9 +1200,9 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_DOCUMENT:
                 {
-                    String sBookmark( pInfo->GetBookmark() );
+                    OUString sBookmark( pInfo->GetBookmark() );
                     // Jump to document
-                    if (sBookmark.Len())
+                    if (!sBookmark.isEmpty())
                     {
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
                         SfxStringItem aStrItem(SID_FILE_NAME, sBookmark);
@@ -1288,7 +1288,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_PROGRAM:
                 {
-                   String aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
+                   OUString aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
                    INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->GetBookmark(),
                                                 URIHelper::GetMaybeFileHdl(), true, false,
                                                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
@@ -1314,7 +1314,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_MACRO:
                 {
                     // Execute macro
-                    String aMacro = pInfo->GetBookmark();
+                    OUString aMacro = pInfo->GetBookmark();
 
                     if ( SfxApplication::IsXScriptURL( aMacro ) )
                     {
@@ -1346,16 +1346,12 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         // aMacro has got following format:
                         // "Macroname.Modulname.Libname.Documentname" or
                         // "Macroname.Modulname.Libname.Applicationname"
-                        String aMacroName =
-                            aMacro.GetToken(0, sal_Unicode('.'));
-                        String aModulName =
-                             aMacro.GetToken(1, sal_Unicode('.'));
+                        OUString aMacroName = aMacro.getToken(0, '.');
+                        OUString aModulName = aMacro.getToken(1, '.');
 
                         // In this moment the Call-method only
                         // resolves modulename+macroname
-                        String aExecMacro(aModulName);
-                        aExecMacro.Append( sal_Unicode('.') );
-                        aExecMacro.Append( aMacroName );
+                        OUString aExecMacro(aModulName + "." + aMacroName);
                         bAnimated = mpDocSh->GetBasic()->Call(aExecMacro);
                     }
                 }

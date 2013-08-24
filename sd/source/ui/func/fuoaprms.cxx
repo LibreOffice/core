@@ -108,10 +108,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     Color           aFadeColor      = COL_LIGHTGRAY;
     sal_Bool            bInvisible      = sal_False;
     sal_Bool            bSoundOn        = sal_False;
-    String          aSound;
+    OUString        aSound;
     sal_Bool            bPlayFull       = sal_False;
     presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
-    String          aBookmark;
+    OUString        aBookmark;
 
     presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
@@ -791,7 +791,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                     pInfo->mbSecondPlayFull = bSecondPlayFull;
 
                 if (eClickAction == presentation::ClickAction_VERB)
-                    pInfo->mnVerb = (sal_uInt16)aBookmark.ToInt32();
+                    pInfo->mnVerb = (sal_uInt16)aBookmark.toInt32();
             }
         }
         // Set the Undo Group in of the Undo Manager

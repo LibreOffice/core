@@ -1149,7 +1149,7 @@ sal_Bool FuText::DeleteDefaultText()
                 if( bIsUndoEnabled )
                     pOutliner->EnableUndo(sal_False);
 
-                pOutliner->SetText( String(), pOutliner->GetParagraph( 0 ) );
+                pOutliner->SetText( OUString(), pOutliner->GetParagraph( 0 ) );
 
                 if( bIsUndoEnabled )
                     pOutliner->EnableUndo(sal_True);
@@ -1181,7 +1181,7 @@ sal_Bool FuText::RequestHelp(const HelpEvent& rHEvt)
     if ((Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled()) &&
         mxTextObj.is() && pOLV && pOLV->GetFieldUnderMousePointer())
     {
-        String aHelpText;
+        OUString aHelpText;
         const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
         const SvxFieldData* pField = pFieldItem->GetField();
 
@@ -1190,7 +1190,7 @@ sal_Bool FuText::RequestHelp(const HelpEvent& rHEvt)
             // URL-Field
             aHelpText = INetURLObject::decode( ((const SvxURLField*)pField)->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
         }
-        if (aHelpText.Len())
+        if (!aHelpText.isEmpty())
         {
             Rectangle aLogicPix = mpWindow->LogicToPixel(mxTextObj->GetLogicRect());
             Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),

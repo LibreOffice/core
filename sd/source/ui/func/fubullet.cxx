@@ -155,7 +155,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     if( pArgs )
         pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
-    String aChars, aFontName;
+    OUString aChars;
     Font aFont;
     if ( pItem )
     {
@@ -165,7 +165,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
         {
-            aFontName = pFontItem->GetValue();
+            OUString aFontName = pFontItem->GetValue();
             aFont = Font( aFontName, Size(1,1) );
         }
         else
@@ -178,7 +178,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         }
     }
 
-    if (!aChars.Len() )
+    if (aChars.isEmpty())
     {
         SfxAllItemSet aSet( mpDoc->GetPool() );
         aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
@@ -219,7 +219,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         delete( pDlg );
     }
 
-    if( aChars.Len() )
+    if (!aChars.isEmpty())
     {
         OutlinerView* pOV = NULL;
         ::Outliner*   pOL = NULL;

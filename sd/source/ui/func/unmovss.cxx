@@ -57,7 +57,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter, ++childlistiter )
         {
-            String aParent((*iter)->GetName());
+            OUString aParent((*iter)->GetName());
             for( SdStyleSheetVector::iterator childiter = (*childlistiter).begin(); childiter != (*childlistiter).end(); ++childiter )
             {
                 (*childiter)->SetParent(aParent);

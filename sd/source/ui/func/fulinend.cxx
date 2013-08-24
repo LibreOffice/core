@@ -92,8 +92,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
 
-        String aNewName( SdResId( STR_LINEEND ) );
-        String aDesc( SdResId( STR_DESC_LINEEND ) );
+        OUString aNewName( SD_RESSTR( STR_LINEEND ) );
+        OUString aDesc( SD_RESSTR( STR_DESC_LINEEND ) );
         OUString aName;
 
         long nCount = pLineEndList->Count();
@@ -138,9 +138,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
                 else
                 {
-                    String aStr(SdResId( STR_WARN_NAME_DUPLICATE ));
                     WarningBox aWarningBox( mpWindow, WinBits( WB_OK ),
-                         aStr );
+                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
                     aWarningBox.Execute();
                 }
             }

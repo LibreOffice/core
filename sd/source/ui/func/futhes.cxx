@@ -67,7 +67,7 @@ FunctionReference FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 void FuThesaurus::DoExecute( SfxRequest& )
 {
-    SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
+    SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
                              mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
 
     if( mpViewShell && mpViewShell->ISA(DrawViewShell) )

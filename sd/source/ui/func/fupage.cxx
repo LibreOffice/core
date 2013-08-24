@@ -347,13 +347,11 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 // notice-masterpage (at the moment)
                 if( ePageKind != PK_NOTES )
                 {
-                    String aTit(SdResId( STR_PAGE_BACKGROUND_TITLE ));
-                    String aTxt(SdResId( STR_PAGE_BACKGROUND_TXT ));
                     MessBox aQuestionBox (
                         pParent,
                         WB_YES_NO | WB_DEF_YES,
-                        aTit,
-                        aTxt );
+                        SD_RESSTR(STR_PAGE_BACKGROUND_TITLE),
+                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) );
                     aQuestionBox.SetImage( QueryBox::GetStandardImage() );
                     bSetToAllPages = ( RET_YES == aQuestionBox.Execute() );
                 }

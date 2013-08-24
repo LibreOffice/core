@@ -104,8 +104,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
         const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
 {
 
-    String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
-    mpView->BegUndo( aString );
+    mpView->BegUndo(SD_RESSTR(STR_UNDO_HANGULHANJACONVERSION));
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)

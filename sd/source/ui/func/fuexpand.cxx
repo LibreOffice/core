@@ -140,7 +140,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                                      pActualPage->GetUppBorder(),
                                      pActualPage->GetRgtBorder(),
                                      pActualPage->GetLwrBorder() );
-                    pPage->SetName(String());
+                    pPage->SetName(OUString());
 
                     // insert page after current page
                     mpDoc->InsertPage(pPage, nActualPageNum + nPos);
@@ -163,7 +163,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                                           pActualNotesPage->GetRgtBorder(),
                                           pActualNotesPage->GetLwrBorder() );
                     pNotesPage->SetPageKind(PK_NOTES);
-                    pNotesPage->SetName(String());
+                    pNotesPage->SetName(OUString());
 
                     // insert page after current page
                     mpDoc->InsertPage(pNotesPage, nActualPageNum + nPos);

@@ -142,8 +142,8 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                     }
 
                     // store as link
-                    String aFltName(aDlg.GetCurrentFilter());
-                    String aPath(aDlg.GetPath());
+                    OUString aFltName(aDlg.GetCurrentFilter());
+                    OUString aPath(aDlg.GetPath());
                     pGrafObj->SetGraphicLink(aPath, aFltName);
                 }
             }
@@ -182,20 +182,19 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() );
     if ( pDlg )
     {
-        const String                                aEmptyString;
         ::com::sun::star::datatransfer::DataFlavor  aFlavor;
 
-        pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_SVXB, aEmptyString );
-        pDlg->Insert( FORMAT_GDIMETAFILE, aEmptyString );
-        pDlg->Insert( FORMAT_BITMAP, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aEmptyString );
-        pDlg->Insert( FORMAT_STRING, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_HTML, aEmptyString );
-        pDlg->Insert( FORMAT_RTF, aEmptyString );
-        pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, aEmptyString );
+        pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_SVXB, OUString() );
+        pDlg->Insert( FORMAT_GDIMETAFILE, OUString() );
+        pDlg->Insert( FORMAT_BITMAP, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, OUString() );
+        pDlg->Insert( FORMAT_STRING, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_HTML, OUString() );
+        pDlg->Insert( FORMAT_RTF, OUString() );
+        pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, OUString() );
 
         //TODO/MBA: testing
         nFormatId = pDlg->GetFormat( aDataHelper );
@@ -450,7 +449,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     if( ERRCODE_NONE == aPluginFileDialog.Execute () )
                     {
                         // get URL
-                        String aStrURL(aPluginFileDialog.GetPath());
+                        OUString aStrURL(aPluginFileDialog.GetPath());
                         INetURLObject aURL( aStrURL, INET_PROT_FILE );
                         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                         {
@@ -475,10 +474,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         else
                         {
                             // unable to create PlugIn
-                            String aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
-                            String aMask;
-                            aMask += sal_Unicode('%');
-                            aStrErr.SearchAndReplace( aMask, aStrURL );
+                            OUString aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
+                            aStrErr = aStrErr.replaceFirst( "%", aStrURL );
                             ErrorBox( mpWindow, WB_3DLOOK | WB_OK, aStrErr ).Execute();
                         }
                     }

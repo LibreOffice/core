@@ -107,9 +107,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if( pArgs )
         {
             // Undo
-            String aString( mpView->GetDescriptionOfMarkedObjects() );
-            aString.Append( sal_Unicode(' ') );
-            aString.Append( SD_RESSTR( STR_TRANSFORM ) );
+            OUString aString( mpView->GetDescriptionOfMarkedObjects() );
+            aString += " " + SD_RESSTR( STR_TRANSFORM );
             mpView->BegUndo( aString );
 
             mpView->SetGeoAttrToMarked( *pArgs );
