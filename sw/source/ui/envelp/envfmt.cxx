@@ -260,7 +260,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         SwAbstractDialogFactory* pFact = swui::GetFactory();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        const String sFmtStr = pColl->GetName();
+        const OUString sFmtStr = pColl->GetName();
         SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR_ENV, &sFmtStr);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if (pDlg->Execute() == RET_OK)
@@ -299,7 +299,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         // set BoxInfo
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
-        const String sFmtStr = pColl->GetName();
+        const OUString sFmtStr = pColl->GetName();
         SwParaDlg *pDlg = new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr);
 
         if ( pDlg->Execute() == RET_OK )
