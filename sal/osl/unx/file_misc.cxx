@@ -145,7 +145,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
-    eRet = osl_getSystemPathFromFileURL_Ex(ustrDirectoryURL, &ustrSystemPath, sal_False);
+    eRet = osl_getSystemPathFromFileURL_Ex(ustrDirectoryURL, &ustrSystemPath);
 
     if( osl_File_E_None != eRet )
         return eRet;
@@ -355,7 +355,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     if ((0 == ustrFileURL) || (0 == ustrFileURL->length) || (0 == pItem))
         return osl_File_E_INVAL;
 
-    osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath, sal_False);
+    osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
     if (osl_File_E_None != osl_error)
         return osl_error;
 
@@ -541,8 +541,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
         return osl_File_E_INVAL;
 
     rtl::OUString sys_path;
-    oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(
-        aDirectoryUrl, &sys_path.pData, sal_False);
+    oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(aDirectoryUrl, &sys_path.pData);
 
     if (osl_error != osl_File_E_None)
         return osl_error;

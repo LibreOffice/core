@@ -120,7 +120,7 @@ static oslFileError osl_setup_base_directory_impl_(
 
     if (osl_File_E_None == error)
     {
-        error = osl_getSystemPathFromFileURL_Ex(dir_url, &dir, FURL_DENY_RELATIVE);
+        error = osl_getSystemPathFromFileURL_Ex(dir_url, &dir);
         rtl_uString_release(dir_url);
     }
 

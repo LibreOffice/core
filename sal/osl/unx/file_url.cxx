@@ -339,21 +339,18 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
     return osl_File_E_None;
 }
 
-/****************************************************************************
- * osl_getSystemPathFromFileURL_Ex - helper function
- * clients may specify if they want to accept relative
- * URLs or not
- ****************************************************************************/
-
+/*
+ * relative URLs are not accepted
+ */
 oslFileError osl_getSystemPathFromFileURL_Ex(
-    rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative)
+    rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath)
 {
     rtl_uString* temp = 0;
     oslFileError osl_error = osl_getSystemPathFromFileURL(ustrFileURL, &temp);
 
     if (osl_File_E_None == osl_error)
     {
-        if (bAllowRelative || (UNICHAR_SLASH == temp->buffer[0]))
+        if (UNICHAR_SLASH == temp->buffer[0])
         {
             *pustrSystemPath = temp;
         }
@@ -629,7 +626,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
     if (systemPathIsRelativePath(unresolved_path))
     {
         rtl::OUString base_path;
-        rc = (FileBase::RC) osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData, sal_False);
+        rc = (FileBase::RC) osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
 
         if (FileBase::E_None != rc)
             return oslFileError(rc);

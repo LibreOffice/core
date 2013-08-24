@@ -27,10 +27,7 @@ extern "C"
 {
 #endif
 
-#define FURL_ALLOW_RELATIVE sal_True
-#define FURL_DENY_RELATIVE  sal_False
-
-oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath, sal_Bool bAllowRelative);
+oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
 
