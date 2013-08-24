@@ -3597,19 +3597,6 @@ bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 
 bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
 {
-    if (!rCell.maBaseCell.isEmpty())
-    {
-        if (rCell.maBaseCell.meType != CELLTYPE_FORMULA)
-            return false;
-
-        return rCell.maBaseCell.mpFormula->IsMultilineResult();
-    }
-
-    ScAddress aAddr(static_cast<SCCOL>(rCell.aCellAddress.Column),
-                    static_cast<SCROW>(rCell.aCellAddress.Row),
-                    static_cast<SCTAB>(rCell.aCellAddress.Sheet));
-
-    rCell.maBaseCell.assign(*pDoc, aAddr);
     if (rCell.maBaseCell.meType != CELLTYPE_FORMULA)
         return false;
 
