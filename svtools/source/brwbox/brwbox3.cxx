@@ -229,9 +229,9 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = OUString( "TableCell" );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
-            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
-            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
             aRetText += "]";
 #endif
             break;
@@ -239,9 +239,9 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = OUString( "RowHeaderCell" );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
-            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
-            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
             aRetText += "]";
 #endif
             break;
@@ -249,9 +249,9 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             aRetText = OUString( "ColumnHeaderCell" );
 #if OSL_DEBUG_LEVEL > 1
             aRetText += " [";
-            aRetText += OUString::valueOf(sal_Int32(GetCurRow()));
+            aRetText += OUString::number(sal_Int32(GetCurRow()));
             aRetText += ",";
-            aRetText += OUString::valueOf(sal_Int32(GetCurColumnId()));
+            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
             aRetText += "]";
 #endif
             break;

@@ -148,7 +148,7 @@ namespace dbaui
             if (!_pNode->isToken())
             {
                 // rule name as rule: ...
-                rString = "RULE_ID: " + OUString::valueOf( (sal_Int32)_pNode->getRuleID() ) +
+                rString = "RULE_ID: " + OUString::number( (sal_Int32)_pNode->getRuleID() ) +
                           "(" + OSQLParser::RuleIDToStr(_pNode->getRuleID()) + ")";
 
 

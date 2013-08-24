@@ -281,7 +281,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     debug_logger->startElement("contexthandler.createFastChildContext");
     debug_logger->attribute("token", fastTokenToId(Element));
     debug_logger->attribute("type", getType());
-    debug_logger->attribute("discard-children", OUString::valueOf(m_bDiscardChildren));
+    debug_logger->attribute("discard-children", OUString::number(m_bDiscardChildren));
 #endif
 
     uno::Reference< xml::sax::XFastContextHandler > xResult;
