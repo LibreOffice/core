@@ -1475,7 +1475,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         const SvxMacro* pMacro = pFlyFmt->GetMacro().GetMacroTable().Get( nEvent );
         if( pMacro )
         {
-            String sRet;
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
             xVar->PutString( pFlyFmt->GetName() );
@@ -1488,8 +1487,9 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 xVar->PutUShort( rKeyCode.GetModifier() | rKeyCode.GetCode() );
             xArgs->Put( &xVar, 2 );
 
+            OUString sRet;
             rSh.ExecMacro( *pMacro, &sRet, &xArgs );
-            if( sRet.Len() && 0 != sRet.ToInt32() )
+            if( !sRet.isEmpty() && sRet.toInt32()!=0 )
                 return ;
         }
     }
@@ -3882,7 +3882,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         {
                             m_aRszMvHdlPt = aDocPt;
                             sal_uInt16 nPos = 0;
-                            String sRet;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFmt->GetName() );
@@ -3902,13 +3901,15 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
                             xArgs->Put( &xVar, ++nPos );
 
+                            OUString sRet;
+
                             ReleaseMouse();
 
                             rSh.ExecMacro( *pMacro, &sRet, &xArgs );
 
                             CaptureMouse();
 
-                            if( sRet.Len() && 0 != sRet.ToInt32() )
+                            if( !sRet.isEmpty() && sRet.toInt32()!=0 )
                                 return ;
                         }
                     }

@@ -264,8 +264,8 @@ void SwWrtShell::ClickToField( const SwField& rFld )
     case RES_MACROFLD:
         {
             const SwMacroField *pFld = (const SwMacroField*)&rFld;
-            String sText( rFld.GetPar2() );
-            String sRet( sText );
+            const OUString sText( rFld.GetPar2() );
+            OUString sRet( sText );
             ExecMacro( pFld->GetSvxMacro(), &sRet );
 
             // return value changed?

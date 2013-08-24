@@ -414,7 +414,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     SwView&             GetView() { return rView; }
 
     // Because nobody else is doing it, here is a ExecMacro()
-    void ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
+    void ExecMacro( const SvxMacro& rMacro, OUString* pRet = 0, SbxArray* pArgs = 0 );
     // call into the dark Basic/JavaScript
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                         bool bCheckPtr = false, SbxArray* pArgs = 0,
