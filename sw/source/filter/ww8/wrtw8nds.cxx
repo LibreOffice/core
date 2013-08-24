@@ -749,84 +749,73 @@ String &TruncateBookmark( String &rRet )
     return rRet;
 }
 
-bool AttributeOutputBase::AnalyzeURL( const String& rUrl, const String& /*rTarget*/, String* pLinkURL, String* pMark )
+bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rTarget*/, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = false;
 
-    INetURLObject aURL( rUrl );
-    String sMark;
-    String sURL;
+    OUString sMark;
+    OUString sURL;
 
-    if ( rUrl.Len() > 1 && rUrl.GetChar(0) == INET_MARK_TOKEN )
+    if ( rUrl.getLength() > 1 && rUrl[0] == INET_MARK_TOKEN )
     {
-        sMark = BookmarkToWriter( rUrl.Copy(1) );
+        sMark = BookmarkToWriter( rUrl.copy(1) );
 
-        xub_StrLen nPos = sMark.SearchBackward( cMarkSeparator );
+        const sal_Int32 nPos = sMark.lastIndexOf( cMarkSeparator );
 
-        String sRefType(comphelper::string::remove(sMark.Copy(nPos+1), ' '));
+        const OUString sRefType(nPos>=0 && nPos+1<sMark.getLength() ?
+                                sMark.copy(nPos+1).replaceAll(" ", "") :
+                                OUString());
 
         // #i21465# Only interested in outline references
-        if ( sRefType.EqualsAscii( pMarkToOutline ) )
+        if ( sRefType.equalsAscii( pMarkToOutline ) )
         {
-            String sLink = sMark.Copy(0, nPos);
+            OUString sLink = sMark.copy(0, nPos);
             SwImplBookmarksIter bkmkIterEnd = GetExport().maImplicitBookmarks.end();
             for ( SwImplBookmarksIter aIter = GetExport().maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter )
             {
-                String bkmkName  = aIter->first;
-
-                if ( bkmkName == sLink )
+                if ( aIter->first == sLink )
                 {
-                    sMark = String(  "_toc"  );
-                    sMark += OUString::number( aIter->second );
+                    sMark = "_toc" + OUString::number( aIter->second );
                 }
             }
         }
     }
     else
     {
+        INetURLObject aURL( rUrl );
         sURL = aURL.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS );
         sMark = aURL.GetMark( INetURLObject::DECODE_UNAMBIGUOUS );
-
     }
 
-    if ( sMark.Len() && !sURL.Len() )
+    if ( !sMark.isEmpty() && sURL.isEmpty() )
         bBookMarkOnly = true;
-
-
 
     *pMark = sMark;
     *pLinkURL = sURL;
     return bBookMarkOnly;
 }
 
-bool WW8AttributeOutput::AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark )
+bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = AttributeOutputBase::AnalyzeURL( rUrl, rTarget, pLinkURL, pMark );
 
-    String sURL = *pLinkURL;
-    String sMark = *pMark;
+    OUString sURL = *pLinkURL;
 
-    if ( sURL.Len() )
+    if ( !sURL.isEmpty() )
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
 
     if ( bBookMarkOnly )
         sURL = FieldString( ww::eHYPERLINK );
     else
-    {
-        String sFld( FieldString( ww::eHYPERLINK ) );
-        sFld.AppendAscii( "\"" );
-        sURL.Insert( sFld, 0 );
-        sURL += '\"';
-    }
+        sURL = FieldString( ww::eHYPERLINK ) + "\"" + sURL + "\"";
 
-    if ( sMark.Len() )
-        ( ( sURL.AppendAscii( " \\l \"" ) ) += sMark ) += '\"';
+    if ( !pMark->isEmpty() )
+        sURL += " \\l \"" + *pMark + "\"";
 
-    if ( rTarget.Len() )
-        ( sURL.AppendAscii( " \\n " ) ) += rTarget;
+    if ( !rTarget.isEmpty() )
+        sURL += " \\n " + rTarget;
 
     *pLinkURL = sURL;
-    *pMark = sMark;
 
     return bBookMarkOnly;
 }
@@ -838,8 +827,8 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
         return false;
 
     INetURLObject aURL( rUrl );
-    String sURL;
-    String sMark;
+    OUString sURL;
+    OUString sMark;
 
     bool bBookMarkOnly = AnalyzeURL( rUrl, rTarget, &sURL, &sMark );
 
@@ -895,7 +884,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     m_rWW8Export.pDataStrm->Write( aURLData1, sizeof( aURLData1 ) );
     /* Write HFD Structure */
     sal_uInt8 nAnchor = 0x00;
-    if ( sMark.Len() )
+    if ( !sMark.isEmpty() )
         nAnchor = 0x08;
     m_rWW8Export.pDataStrm->Write( &nAnchor, 1 ); // HFDBits
     m_rWW8Export.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) ); //clsid
@@ -905,7 +894,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     sal_uInt32 nFlag = bBookMarkOnly ? 0 : 0x01;
     if ( bAbsolute )
         nFlag |= 0x02;
-    if ( sMark.Len() )
+    if ( !sMark.isEmpty() )
         nFlag |= 0x08;
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nFlag );
 
@@ -928,37 +917,36 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
 
         // save the links to files as relative
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
-        if ( eProto == INET_PROT_FILE && sURL.EqualsAscii( "/", 0, 1 ) )
+        if ( eProto == INET_PROT_FILE && sURL.startsWith( "/" ) )
             sURL = aURL.PathToFileName();
 
         // special case for the absolute windows names
         // (convert '/c:/foo/bar.doc' into 'c:\foo\bar.doc')
-        sal_Unicode aDrive = ( sURL.Len() > 1 )? sURL.GetChar( 1 ): 0;
-        if ( sURL.EqualsAscii( "/", 0, 1 ) &&
-             ( ( aDrive >= 'A' && aDrive <= 'Z' ) || ( aDrive >= 'a' && aDrive <= 'z' ) ) &&
-             sURL.EqualsAscii( ":", 2, 1 ) )
+        if (sURL.getLength()>=3)
         {
-            sURL.Erase( 0, 1 );
-            sURL.SearchAndReplaceAll( '/', '\\' );
+            const sal_Unicode aDrive = sURL[1];
+            if ( sURL[0]=='/' && sURL[2]==':' &&
+                 ( (aDrive>='A' && aDrive<='Z' ) || (aDrive>='a' && aDrive<='z') ) )
+            {
+                sURL = sURL.copy(1).replaceAll("/", "\\");
+            }
         }
 
         // n#261623 convert smb notation to '\\'
         const char pSmb[] = "smb://";
-        if ( eProto == INET_PROT_SMB &&
-             sURL.EqualsAscii( pSmb, 0, sizeof( pSmb ) - 1 ) )
+        if ( eProto == INET_PROT_SMB && sURL.startsWith( pSmb ) )
         {
-            sURL.Erase( 0, sizeof( pSmb ) - 3 );
-            sURL.SearchAndReplaceAll( '/', '\\' );
+            sURL = sURL.copy( sizeof(pSmb)-3 ).replaceAll( "/", "\\" );
         }
 
         m_rWW8Export.pDataStrm->Write( MAGIC_C, sizeof(MAGIC_C) );
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sURL.Len()+1 );
+        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sURL.getLength()+1 );
         SwWW8Writer::WriteString8( *m_rWW8Export.pDataStrm, sURL, true,
                                     RTL_TEXTENCODING_MS_1252 );
         m_rWW8Export.pDataStrm->Write( MAGIC_D, sizeof( MAGIC_D ) );
 
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.Len() + 6 );
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.Len() );
+        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.getLength() + 6 );
+        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.getLength() );
         SwWW8Writer::WriteShort( *m_rWW8Export.pDataStrm, 3 );
         SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sURL, false );
     }
@@ -974,13 +962,13 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
         };
 
         m_rWW8Export.pDataStrm->Write( MAGIC_B, sizeof(MAGIC_B) );
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2 * ( sURL.Len() + 1 ) );
+        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2 * ( sURL.getLength() + 1 ) );
         SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sURL, true );
     }
 
-    if ( sMark.Len() )
+    if ( !sMark.isEmpty() )
     {
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sMark.Len()+1 );
+        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sMark.getLength()+1 );
         SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sMark, true );
     }
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nDataStt,

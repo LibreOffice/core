@@ -118,6 +118,7 @@ class SwNumRule;
 class wwFont;
 
 class String;
+namespace rtl { class OUString; }
 
 class MSWordExportBase;
 
@@ -574,7 +575,7 @@ protected:
     virtual bool DropdownField( const SwField* pFld ) = 0;
     virtual bool PlaceholderField( const SwField* pFld ) = 0;
 
-    virtual bool AnalyzeURL( const String& rUrl, const String& rTarget, String* pLinkURL, String* pMark );
+    virtual bool AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark );
 
     ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
