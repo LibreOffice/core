@@ -469,14 +469,11 @@ bool LanguageTag::canonicalize()
                     if (eExt == EXTRACTED_LSC)
                     {
                         // Rebuild bcp47 with proper casing of tags.
-                        OUStringBuffer aBuf( aLanguage.getLength() + 1 + aScript.getLength() +
-                                1 + aCountry.getLength());
-                        aBuf.append( aLanguage);
+                        OUString aStr = aLanguage;
                         if (!aScript.isEmpty())
-                            aBuf.append('-').append( aScript);
+                            aStr += "-" + aScript;
                         if (!aCountry.isEmpty())
-                            aBuf.append('-').append( aCountry);
-                        OUString aStr( aBuf.makeStringAndClear());
+                            aStr += "-" + aCountry;
                         if (maBcp47 != aStr)
                         {
                             maBcp47 = aStr;
@@ -990,9 +987,7 @@ OUString LanguageTag::getLanguageAndScript() const
     OUString aScript( getScript());
     if (!aScript.isEmpty())
     {
-        OUStringBuffer aBuf( aLanguageScript.getLength() + 1 + aScript.getLength());
-        aBuf.append( aLanguageScript).append( '-').append( aScript);
-        aLanguageScript = aBuf.makeStringAndClear();
+        aLanguageScript += "-" + aScript;
     }
     return aLanguageScript;
 }
@@ -1424,9 +1419,7 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
             aBcp47 = rLocale.Language;
         else
         {
-            OUStringBuffer aBuf( rLocale.Language.getLength() + 1 + rLocale.Country.getLength());
-            aBuf.append( rLocale.Language).append( '-').append( rLocale.Country);
-            aBcp47 = aBuf.makeStringAndClear();
+            aBcp47 = rLocale.Language + "-" + rLocale.Country;
         }
     }
     return aBcp47;
