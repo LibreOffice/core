@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
  #include "uunxapi.h"
  #include "system.h"
  #include <limits.h>
@@ -35,15 +37,85 @@
         osl_getThreadTextEncoding());
  }
 
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+
+static NSUserDefaults *userDefaults = NULL;
+
+static void get_user_defaults()
+{
+    userDefaults = [NSUserDefaults standardUserDefaults];
+}
+
+typedef struct {
+    NSURL *scopeURL;
+    NSAutoreleasePool *pool;
+} accessFilePathState;
+
+static accessFilePathState *
+prepare_to_access_file_path( const char *cpFilePath )
+{
+    static pthread_once_t once = PTHREAD_ONCE_INIT;
+    pthread_once(&once, &get_user_defaults);
+    NSURL *fileURL = nil;
+    NSData *data = nil;
+    BOOL stale;
+    accessFilePathState *state;
+
+    // If malloc() fails we are screwed anyway
+    state = (accessFilePathState*) malloc(sizeof(accessFilePathState));
+
+    state->pool = [[NSAutoreleasePool alloc] init];
+    state->scopeURL = nil;
+
+    if (userDefaults != nil)
+        fileURL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpFilePath]];
+
+    if (fileURL != nil)
+        data = [userDefaults dataForKey:[@"bookmarkFor:" stringByAppendingString:[fileURL absoluteString]]];
+
+    if (data != nil)
+        state->scopeURL = [NSURL URLByResolvingBookmarkData:data
+                                                    options:NSURLBookmarkResolutionWithSecurityScope
+                                              relativeToURL:nil
+                                        bookmarkDataIsStale:&stale
+                                                      error:nil];
+    if (state->scopeURL != nil)
+        [state->scopeURL startAccessingSecurityScopedResource];
+
+    return state;
+}
+
+static void
+done_accessing_file_path( const char * /*cpFilePath*/, accessFilePathState *state )
+{
+    int saved_errno = errno;
+
+    if (state->scopeURL != nil)
+        [state->scopeURL stopAccessingSecurityScopedResource];
+    [state->pool release];
+    free(state);
+
+    errno = saved_errno;
+}
+
+#else
+
+typedef void accessFilePathState;
+
+#define prepare_to_access_file_path( cpFilePath ) NULL
+
+#define done_accessing_file_path( cpFilePath, state ) ((void) cpFilePath, (void) state)
+
+#endif
+
  //###########################
 #ifdef MACOSX
 /*
  * Helper function for resolving Mac native alias files (not the same as unix alias files)
  * and to return the resolved alias as rtl::OString
  */
- inline rtl::OString macxp_resolveAliasAndConvert(const rtl_uString* s)
+ static rtl::OString macxp_resolveAliasAndConvert(rtl::OString p)
  {
-  rtl::OString p = OUStringToOString(s);
   sal_Char path[PATH_MAX];
   if (p.getLength() < PATH_MAX)
     {
@@ -59,8 +131,8 @@
  //access_u
  int access_u(const rtl_uString* pustrPath, int mode)
  {
-#ifndef MACOSX // not MACOSX
     rtl::OString fn = OUStringToOString(pustrPath);
+#ifndef MACOSX
 #ifdef ANDROID
     if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
         (fn.getStr()[sizeof("/assets")-1] == '\0' ||
@@ -79,7 +151,15 @@
 #endif
     return access(fn.getStr(), mode);
 #else
-    return access(macxp_resolveAliasAndConvert(pustrPath).getStr(), mode);
+
+    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
+
+    int result = access(macxp_resolveAliasAndConvert(fn).getStr(), mode);
+
+    done_accessing_file_path(fn.getStr(), state);
+
+    return result;
+
 #endif
  }
 
@@ -87,7 +167,6 @@
  //realpath_u
  sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
  {
-#ifndef MACOSX // not MACOSX
     rtl::OString fn = OUStringToOString(pustrFileName);
 #ifdef ANDROID
     if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
@@ -103,11 +182,17 @@
         return sal_True;
     }
 #endif
-#else
-    rtl::OString fn = macxp_resolveAliasAndConvert(pustrFileName);
+
+    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
+
+#ifdef MACOSX
+    fn = macxp_resolveAliasAndConvert(fn);
 #endif
+
     char  rp[PATH_MAX];
     bool  bRet = realpath(fn.getStr(), rp);
+
+    done_accessing_file_path(fn.getStr(), state);
 
     if (bRet)
     {
@@ -143,18 +228,25 @@
          cpPath[sizeof("/assets")-1] == '/'))
         return lo_apk_lstat(cpPath, buf);
 #endif
-    return lstat(cpPath, buf);
+
+    accessFilePathState *state = prepare_to_access_file_path(cpPath);
+
+    int result = lstat(cpPath, buf);
+
+    done_accessing_file_path(cpPath, state);
+
+    return result;
  }
 
  //#########################
  //lstat_u
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
-#ifndef MACOSX  // not MACOSX
     rtl::OString fn = OUStringToOString(pustrPath);
+#ifndef MACOSX
     return lstat_c(fn.getStr(), buf);
 #else
-    return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
+    return lstat(macxp_resolveAliasAndConvert(fn).getStr(), buf);
 #endif
  }
 
@@ -162,7 +254,37 @@
  // @see mkdir
  int mkdir_u(const rtl_uString* path, mode_t mode)
  {
-    return mkdir(OUStringToOString(path).getStr(), mode);
+    rtl::OString fn = OUStringToOString(path);
+
+    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
+
+    int result = mkdir(OUStringToOString(path).getStr(), mode);
+
+    done_accessing_file_path(fn.getStr(), state);
+
+    return result;
+}
+
+int open_c(const char *cpPath, int oflag, int mode)
+{
+    accessFilePathState *state = prepare_to_access_file_path(cpPath);
+
+    int result = open(cpPath, oflag, mode);
+
+    done_accessing_file_path(cpPath, state);
+
+    return result;
+}
+
+int utime_c(const char *cpPath, struct utimbuf *times)
+{
+    accessFilePathState *state = prepare_to_access_file_path(cpPath);
+
+    int result = utime(cpPath, times);
+
+    done_accessing_file_path(cpPath, state);
+
+    return result;
  }
 
 
