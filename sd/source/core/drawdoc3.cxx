@@ -226,7 +226,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
     if (!bOK)
     {
-        ErrorBox aErrorBox( NULL, (WinBits)WB_OK, String(SdResId(STR_READ_DATA_ERROR)));
+        ErrorBox aErrorBox( NULL, (WinBits)WB_OK, SD_RESSTR(STR_READ_DATA_ERROR));
         aErrorBox.Execute();
 
         CloseBookmarkDoc();
@@ -459,7 +459,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
-        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_INSERTPAGES)), String());
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), String());
     }
 
     //
@@ -513,7 +513,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(String(SdResId(STR_UNDO_INSERTPAGES)));
+        BegUndo(SD_RESSTR(STR_UNDO_INSERTPAGES));
 
     if (rBookmarkList.empty())
     {
@@ -1366,7 +1366,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if( bUndo )
     {
-        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), String());
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
@@ -1467,7 +1467,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                 String aTemp(aTargetNewLayoutName);
                 aTemp.AppendAscii(RTL_CONSTASCII_STRINGPARAM(SD_LT_SEPARATOR));
-                aTemp.Append(String(SdResId(STR_LAYOUT_OUTLINE)));
+                aTemp.Append(SD_RESSTR(STR_LAYOUT_OUTLINE));
 
                 pMaster->SetName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);
@@ -1746,7 +1746,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         OUString aName(createNewMasterPageLayoutName(*this));
         String aPageLayoutName(aName);
         aPageLayoutName.AppendAscii( SD_LT_SEPARATOR );
-        aPageLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+        aPageLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
         // Generate new stylesheets
         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutStyleSheets(aName);

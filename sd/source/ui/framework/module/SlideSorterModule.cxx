@@ -141,7 +141,7 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
             FrameworkHelper::msSlideSorterURL,
             FrameworkHelper::msCenterPaneURL);
-        aButtonA.ButtonLabel = String(SdResId(STR_SLIDE_MODE));
+        aButtonA.ButtonLabel = SD_RESSTR(STR_SLIDE_MODE);
 
         TabBarButton aButtonB;
         aButtonB.ResourceId = FrameworkHelper::CreateResourceId(

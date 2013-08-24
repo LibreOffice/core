@@ -383,7 +383,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 if ( mpView && mpView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
                 {
-                    InfoBox(mpWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
+                    InfoBox(mpWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
                 }
                 else
                 {
@@ -857,35 +857,35 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             case presentation::ClickAction_PREVPAGE:
             {
                 // jump to the prior page
-                aHelpText = String(SdResId(STR_CLICK_ACTION_PREVPAGE));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_PREVPAGE);
             }
             break;
 
             case presentation::ClickAction_NEXTPAGE:
             {
                 // jump to the next page
-                aHelpText = String(SdResId(STR_CLICK_ACTION_NEXTPAGE));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_NEXTPAGE);
             }
             break;
 
             case presentation::ClickAction_FIRSTPAGE:
             {
                 // jump to the first page
-                aHelpText = String(SdResId(STR_CLICK_ACTION_FIRSTPAGE));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_FIRSTPAGE);
             }
             break;
 
             case presentation::ClickAction_LASTPAGE:
             {
                 // jump to the last page
-                aHelpText = String(SdResId(STR_CLICK_ACTION_LASTPAGE));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_LASTPAGE);
             }
             break;
 
             case presentation::ClickAction_BOOKMARK:
             {
                 // jump to object/page
-                aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_BOOKMARK);
                 aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
@@ -894,7 +894,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             case presentation::ClickAction_DOCUMENT:
             {
                 // jump to document (object/page)
-                aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_DOCUMENT);
                 aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
@@ -903,7 +903,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             case presentation::ClickAction_PROGRAM:
             {
                 // execute program
-                aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_PROGRAM);
                 aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
@@ -912,7 +912,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             case presentation::ClickAction_MACRO:
             {
                 // execute program
-                aHelpText = String(SdResId(STR_CLICK_ACTION_MACRO));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_MACRO);
                 aHelpText.AppendAscii( ": " );
 
                 if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
@@ -935,21 +935,21 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             case presentation::ClickAction_SOUND:
             {
                 // play-back sound
-                aHelpText = String(SdResId(STR_CLICK_ACTION_SOUND));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_SOUND);
             }
             break;
 
             case presentation::ClickAction_VERB:
             {
                 // execute OLE-verb
-                aHelpText = String(SdResId(STR_CLICK_ACTION_VERB));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_VERB);
             }
             break;
 
             case presentation::ClickAction_STOPPRESENTATION:
             {
                 // quit presentation
-                aHelpText = String(SdResId(STR_CLICK_ACTION_STOPPRESENTATION));
+                aHelpText = SD_RESSTR(STR_CLICK_ACTION_STOPPRESENTATION);
             }
             break;
             default:

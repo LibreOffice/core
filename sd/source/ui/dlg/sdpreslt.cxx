@@ -179,7 +179,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
     SfxNewFileDialog* pDlg = new SfxNewFileDialog(this, SFXWB_PREVIEW);
-    pDlg->SetText(String(SdResId(STR_LOAD_PRESENTATION_LAYOUT)));
+    pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
     {

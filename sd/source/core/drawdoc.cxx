@@ -346,11 +346,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         String aControlLayerName( SdResId(STR_LAYER_CONTROLS) );
 
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_LAYOUT)) );
-        rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_BCKGRND)) );
-        rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_BCKGRNDOBJ)) );
+        rLayerAdmin.NewLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
+        rLayerAdmin.NewLayer( SD_RESSTR(STR_LAYER_BCKGRND) );
+        rLayerAdmin.NewLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
         rLayerAdmin.NewLayer( aControlLayerName );
-        rLayerAdmin.NewLayer( String(SdResId(STR_LAYER_MEASURELINES)) );
+        rLayerAdmin.NewLayer( SD_RESSTR(STR_LAYER_MEASURELINES) );
 
         rLayerAdmin.SetControlLayerName(aControlLayerName);
     }
@@ -595,7 +595,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
     // #i119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
-    SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(String( SdResId(STR_POOLSHEET_OBJNOLINENOFILL)), SD_STYLE_FAMILY_GRAPHICS)));
+    SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(SD_RESSTR(STR_POOLSHEET_OBJNOLINENOFILL), SD_STYLE_FAMILY_GRAPHICS)));
 
     // Initialize DrawOutliner and DocumentOutliner, but don't initialize the
     // global outliner, as it is not document specific like StyleSheetPool and

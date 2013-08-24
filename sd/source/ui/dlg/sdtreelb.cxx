@@ -763,7 +763,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            ErrorBox aErrorBox( this, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
+            ErrorBox aErrorBox( this, WB_OK, SD_RESSTR( STR_READ_DATA_ERROR ) );
             aErrorBox.Execute();
             mpMedium = 0; //On failure the SfxMedium is invalid
         }

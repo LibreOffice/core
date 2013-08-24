@@ -84,23 +84,23 @@ String SdLayer::convertToInternalName( const OUString& rName )
 {
     if ( rName == sUNO_LayerName_background )
     {
-        return String( SdResId( STR_LAYER_BCKGRND ) );
+        return SD_RESSTR( STR_LAYER_BCKGRND );
     }
     else if ( rName == sUNO_LayerName_background_objects )
     {
-        return  String( SdResId( STR_LAYER_BCKGRNDOBJ ) );
+        return  SD_RESSTR( STR_LAYER_BCKGRNDOBJ );
     }
     else if ( rName == sUNO_LayerName_layout )
     {
-        return  String( SdResId( STR_LAYER_LAYOUT ) );
+        return  SD_RESSTR( STR_LAYER_LAYOUT );
     }
     else if ( rName == sUNO_LayerName_controls )
     {
-        return  String( SdResId( STR_LAYER_CONTROLS ) );
+        return  SD_RESSTR( STR_LAYER_CONTROLS );
     }
     else if ( rName == sUNO_LayerName_measurelines )
     {
-        return  String( SdResId( STR_LAYER_MEASURELINES ) );
+        return  SD_RESSTR( STR_LAYER_MEASURELINES );
     }
     else
     {
@@ -110,23 +110,23 @@ String SdLayer::convertToInternalName( const OUString& rName )
 
 OUString SdLayer::convertToExternalName( const String& rName )
 {
-    if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) )
+    if( rName == SD_RESSTR( STR_LAYER_BCKGRND ) )
     {
         return OUString( sUNO_LayerName_background );
     }
-    else if( rName == String( SdResId( STR_LAYER_BCKGRNDOBJ ) ) )
+    else if( rName == SD_RESSTR( STR_LAYER_BCKGRNDOBJ ) )
     {
         return OUString( sUNO_LayerName_background_objects );
     }
-    else if( rName == String( SdResId( STR_LAYER_LAYOUT ) ) )
+    else if( rName == SD_RESSTR( STR_LAYER_LAYOUT ) )
     {
         return OUString( sUNO_LayerName_layout );
     }
-    else if( rName == String( SdResId( STR_LAYER_CONTROLS ) ) )
+    else if( rName == SD_RESSTR( STR_LAYER_CONTROLS ) )
     {
         return OUString( sUNO_LayerName_controls );
     }
-    else if( rName == String( SdResId( STR_LAYER_MEASURELINES ) ) )
+    else if( rName == SD_RESSTR( STR_LAYER_MEASURELINES ) )
     {
         return OUString( sUNO_LayerName_measurelines );
     }
@@ -530,7 +530,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         // Test for existing names
         while( aLayerName.Len()==0 || rLayerAdmin.GetLayer( aLayerName, sal_False) )
         {
-            aLayerName = String(SdResId(STR_LAYER));
+            aLayerName = SD_RESSTR(STR_LAYER);
             aLayerName += OUString::number(nLayer);
             ++nLayer;
         }

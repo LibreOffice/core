@@ -76,7 +76,7 @@ void FuVectorize::DoExecute( SfxRequest& )
                     String      aStr( mpView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
-                    aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );
+                    aStr.Append( SD_RESSTR( STR_UNDO_VECTORIZE ) );
                     mpView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
                     mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );

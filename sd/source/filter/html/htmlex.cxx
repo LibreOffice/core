@@ -2528,11 +2528,11 @@ String HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
     String aStrNavText;
     if( bIsText )
     {
-        aStrNavText = String( SdResId(STR_HTMLEXP_SETGRAPHIC) );
+        aStrNavText = SD_RESSTR(STR_HTMLEXP_SETGRAPHIC);
     }
     else
     {
-        aStrNavText = String( SdResId(STR_HTMLEXP_SETTEXT) );
+        aStrNavText = SD_RESSTR(STR_HTMLEXP_SETTEXT);
     }
 
     if(!bIsText && mnButtonThema != -1)

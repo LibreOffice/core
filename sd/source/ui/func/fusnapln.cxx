@@ -125,12 +125,12 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
             if ( rHelpLine.GetKind() == SDRHELPLINE_POINT )
             {
-                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETPOINT)));
+                pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETPOINT));
                 pDlg->SetInputFields(sal_True, sal_True);
             }
             else
             {
-                pDlg->SetText(String(SdResId(STR_SNAPDLG_SETLINE)));
+                pDlg->SetText(SD_RESSTR(STR_SNAPDLG_SETLINE));
 
                 if ( rHelpLine.GetKind() == SDRHELPLINE_VERTICAL )
                     pDlg->SetInputFields(sal_True, sal_False);

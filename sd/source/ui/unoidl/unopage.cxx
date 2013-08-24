@@ -755,7 +755,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -775,7 +775,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -1174,7 +1174,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False));
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False));
             }
             else
             {
@@ -1193,7 +1193,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False));
             }
             else
             {
@@ -2210,7 +2210,7 @@ String getUiNameFromPageApiNameImpl( const OUString& rApiName )
         if( nPageNumber != -1)
         {
             OUStringBuffer sBuffer;
-            sBuffer.append( String(SdResId(STR_PAGE)) );
+            sBuffer.append( SD_RESSTR(STR_PAGE) );
             sBuffer.append( sal_Unicode( ' ' ) );
             sBuffer.append( aNumber );
             return sBuffer.makeStringAndClear();
@@ -2934,7 +2934,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             {
                 String aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
                 aLayoutName.Erase(aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
-                aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
+                aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )
@@ -2978,7 +2978,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             {
                 String aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
                 aLayoutName.Erase( aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
-                aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
+                aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
                 if( pStyleSheet )

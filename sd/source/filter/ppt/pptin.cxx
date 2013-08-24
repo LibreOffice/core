@@ -249,8 +249,8 @@ sal_Bool ImplSdPPTImport::Import()
     ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
-    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
+    mnBackgroundLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), sal_False );
+    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), sal_False );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if ( pDocShell )
@@ -539,7 +539,7 @@ sal_Bool ImplSdPPTImport::Import()
     ///////////////////////////////////////////////////////////
     // create master pages:
     ///////////////////////////////////////////////////////////
-    SfxProgress* pStbMgr = new SfxProgress( pDocShell, String( SdResId( STR_POWERPOINT_IMPORT ) ),
+    SfxProgress* pStbMgr = new SfxProgress( pDocShell, SD_RESSTR( STR_POWERPOINT_IMPORT ),
             pMasterPages->size() + pSlidePages->size() + pNotePages->size() );
 
     sal_uInt32 nImportedPages = 0;
@@ -606,7 +606,7 @@ sal_Bool ImplSdPPTImport::Import()
                     {
                         if ( ePgKind == PK_STANDARD )
                         {   // standard page: create new presentation layout
-                            aLayoutName = String( SdResId( STR_LAYOUT_DEFAULT_TITLE_NAME ) );
+                            aLayoutName = SD_RESSTR( STR_LAYOUT_DEFAULT_TITLE_NAME );
                             aLayoutName += OUString::number( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
                             ( (SdStyleSheetPool*)mpDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
                         }
@@ -615,7 +615,7 @@ sal_Bool ImplSdPPTImport::Import()
                     }
                     pPage->SetName( aLayoutName );
                     aLayoutName.AppendAscii( SD_LT_SEPARATOR );
-                    aLayoutName += String( SdResId( STR_LAYOUT_OUTLINE ) );
+                    aLayoutName += SD_RESSTR( STR_LAYOUT_OUTLINE );
                     pPage->SetLayoutName( aLayoutName );
 
                     /////////////////////

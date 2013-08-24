@@ -177,7 +177,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             }
             else
             {
-                pStyleSheet->SetParent(String(SdResId(STR_STANDARD_STYLESHEET_NAME)));
+                pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
             }
         }
         break;
@@ -193,7 +193,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     p = 0;
                 }
                 pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
-                pStyleSheet->SetParent(String(SdResId(STR_STANDARD_STYLESHEET_NAME)));
+                pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
         }
         break;
 
@@ -313,35 +313,35 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     String aName(pStyleSheet->GetName());
                     sal_uInt16 nDlgId = 0;
 
-                    if (aName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
+                    if (aName == SD_RESSTR(STR_PSEUDOSHEET_TITLE))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_TITLE;
                     }
-                    else if (aName == String(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
+                    else if (aName == SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_SUBTITLE;
                     }
                     else if (aName ==
-                             String(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
+                             SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND;
                         ePO    = PO_BACKGROUND;
                     }
                     else if (aName ==
-                             String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
+                             SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_BACKGROUNDOBJECTS;
                     }
                     else if (aName ==
-                             String(SdResId(STR_PSEUDOSHEET_NOTES)))
+                             SD_RESSTR(STR_PSEUDOSHEET_NOTES))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
-                    else if(aName.Search(String(SdResId(STR_PSEUDOSHEET_OUTLINE))) !=
+                    else if(aName.Search(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE)) !=
                             STRING_NOTFOUND)
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;

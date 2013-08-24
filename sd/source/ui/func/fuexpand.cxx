@@ -108,7 +108,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
             const bool bUndo = mpView->IsUndoEnabled();
 
             if( bUndo )
-                mpView->BegUndo(String(SdResId(STR_UNDO_EXPAND_PAGE)));
+                mpView->BegUndo(SD_RESSTR(STR_UNDO_EXPAND_PAGE));
 
             // set current structuring-object into outliner
             OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();

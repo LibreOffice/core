@@ -452,8 +452,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
 {
     sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
     SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
 
     SdPage* pStandardPage = NULL;
 
@@ -514,8 +514,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
             pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
         }
 
-        aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+        aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pStandardPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -2706,7 +2706,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         String aLayoutName( aPrefix );
         aLayoutName.AppendAscii( SD_LT_SEPARATOR );
-        aLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+        aLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
         // create styles
         ((SdStyleSheetPool*)mpDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );

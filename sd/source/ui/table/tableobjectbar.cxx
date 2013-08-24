@@ -98,7 +98,7 @@ TableObjectBar::TableObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView )
     }
     SetRepeatTarget( mpView );
     SetHelpId( SD_IF_SDDRAWTABLEOBJECTBAR );
-    SetName( String( SdResId( RID_DRAW_TABLE_TOOLBOX ) ) );
+    SetName( SD_RESSTR( RID_DRAW_TABLE_TOOLBOX ) );
     SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Table));
 }
 

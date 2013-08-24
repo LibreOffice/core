@@ -542,8 +542,8 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
         switch( mnFamily )
         {
             case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
-            case SD_STYLE_FAMILY_CELL:          sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
-            default:                            sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
+            case SD_STYLE_FAMILY_CELL:          sDisplayName = SD_RESSTR(STR_CELL_STYLE_FAMILY); break;
+            default:                            sDisplayName = SD_RESSTR(STR_GRAPHICS_STYLE_FAMILY); break;
         }
         return Any( sDisplayName );
     }

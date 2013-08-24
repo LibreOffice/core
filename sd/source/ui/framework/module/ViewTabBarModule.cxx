@@ -173,7 +173,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aImpressViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msImpressViewURL,
                 xAnchor);
-            aImpressViewButton.ButtonLabel = String(SdResId(STR_DRAW_MODE));
+            aImpressViewButton.ButtonLabel = SD_RESSTR(STR_DRAW_MODE);
             if ( ! xBar->hasTabBarButton(aImpressViewButton))
                 xBar->addTabBarButtonAfter(aImpressViewButton, aEmptyButton);
 
@@ -181,7 +181,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aOutlineViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msOutlineViewURL,
                 xAnchor);
-            aOutlineViewButton.ButtonLabel = String(SdResId(STR_OUTLINE_MODE));
+            aOutlineViewButton.ButtonLabel = SD_RESSTR(STR_OUTLINE_MODE);
             if ( ! xBar->hasTabBarButton(aOutlineViewButton))
                 xBar->addTabBarButtonAfter(aOutlineViewButton, aImpressViewButton);
 
@@ -189,7 +189,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aNotesViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msNotesViewURL,
                 xAnchor);
-            aNotesViewButton.ButtonLabel = String(SdResId(STR_NOTES_MODE));
+            aNotesViewButton.ButtonLabel = SD_RESSTR(STR_NOTES_MODE);
             if ( ! xBar->hasTabBarButton(aNotesViewButton))
                 xBar->addTabBarButtonAfter(aNotesViewButton, aOutlineViewButton);
 
@@ -197,7 +197,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aHandoutViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msHandoutViewURL,
                 xAnchor);
-            aHandoutViewButton.ButtonLabel = String(SdResId(STR_HANDOUT_MODE));
+            aHandoutViewButton.ButtonLabel = SD_RESSTR(STR_HANDOUT_MODE);
             if ( ! xBar->hasTabBarButton(aHandoutViewButton))
                 xBar->addTabBarButtonAfter(aHandoutViewButton, aNotesViewButton);
         }

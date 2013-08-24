@@ -110,7 +110,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         OUString aOtherCont;
         const SfxFilter*            pFilter = NULL;
 
-        aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
+        aFileDialog.SetTitle( SD_RESSTR(STR_DLG_INSERT_PAGES_FROM_FILE) );
 
         if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
         {
@@ -308,7 +308,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     if( !bInserted )
     {
-        ErrorBox aErrorBox( mpWindow, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
+        ErrorBox aErrorBox( mpWindow, WB_OK, SD_RESSTR( STR_READ_DATA_ERROR ) );
         aErrorBox.Execute();
         delete pMedium;
     }
@@ -460,7 +460,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
         {
             ErrorBox aErrorBox( mpWindow, (WinBits)WB_OK,
-                      String(SdResId(STR_READ_DATA_ERROR)));
+                      SD_RESSTR(STR_READ_DATA_ERROR));
             aErrorBox.Execute();
         }
         else
@@ -509,7 +509,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
                 const bool bUndo = mpView->IsUndoEnabled();
                 if( bUndo )
-                    mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
+                    mpView->BegUndo(SD_RESSTR(STR_UNDO_INSERT_TEXTFRAME));
                 pPage->InsertObject(pTO);
 
                 /* can be bigger as the maximal allowed size:
@@ -608,7 +608,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
     {
         ErrorBox aErrorBox( mpWindow, (WinBits)WB_OK,
-                  String(SdResId(STR_READ_DATA_ERROR)));
+                  SD_RESSTR(STR_READ_DATA_ERROR));
         aErrorBox.Execute();
     }
     else
@@ -628,14 +628,14 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         mpDocSh->SetWaitCursor( sal_False );
 
-        SfxProgress* pProgress = new SfxProgress( mpDocSh, String( SdResId(STR_CREATE_PAGES)), nNewPages);
+        SfxProgress* pProgress = new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages);
         if( pProgress )
             pProgress->SetState( 0, 100 );
 
         nNewPages = 0;
 
         pDocliner->GetUndoManager().EnterListAction(
-                                    String(SdResId(STR_UNDO_INSERT_FILE)), String() );
+                                    SD_RESSTR(STR_UNDO_INSERT_FILE), String() );
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );

@@ -128,7 +128,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
 
         // prepare undo
         ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
-        rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
+        rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
                                     aEmptyStr );
 
         // insert given text
@@ -258,7 +258,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aOldSet.Put( pOV->GetAttribs() );
 
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
-            rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
+            rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
                                      aEmptyStr );
             pOV->InsertText(aChars, sal_True);
 

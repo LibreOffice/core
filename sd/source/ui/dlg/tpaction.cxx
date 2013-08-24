@@ -123,7 +123,7 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         mpDoc           ( NULL ),
         bTreeUpdated    ( sal_False )
 {
-    aEdtSound.SetAccessibleName(String(SdResId(STR_PATHNAME)));
+    aEdtSound.SetAccessibleName(SD_RESSTR(STR_PATHNAME));
     aBtnSeek.SetAccessibleRelationMemberOf( &aFlSeparator );
 
     FreeResource();
@@ -214,7 +214,7 @@ void SdTPAction::Construct()
         bOLEAction = sal_True;
 
         aVerbVector.push_back( 0 );
-        aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
+        aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( SD_RESSTR( STR_EDIT_OBJ ) ) );
     }
     else if( pOleObj )
     {
@@ -264,7 +264,7 @@ void SdTPAction::Construct()
     for (size_t nAction = 0, n = maCurrentActions.size(); nAction < n; nAction++)
     {
         sal_uInt16 nRId = GetClickActionSdResId( maCurrentActions[ nAction ] );
-        aLbAction.InsertEntry( String( SdResId( nRId ) ) );
+        aLbAction.InsertEntry( SD_RESSTR( nRId ) );
     }
 
 }
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             aEdtSound.Enable();
             aBtnSearch.Show();
             aBtnSearch.Enable();
-            aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_SOUND ) ) );
+            aFlSeparator.SetText( SD_RESSTR( STR_EFFECTDLG_SOUND ) );
             break;
 
         case presentation::ClickAction_PROGRAM:
@@ -615,12 +615,12 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             if( eCA == presentation::ClickAction_MACRO )
             {
                 aEdtMacro.Show();
-                aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_MACRO ) ) );
+                aFlSeparator.SetText( SD_RESSTR( STR_EFFECTDLG_MACRO ) );
             }
             else
             {
                 aEdtProgram.Show();
-                aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_PROGRAM ) ) );
+                aFlSeparator.SetText( SD_RESSTR( STR_EFFECTDLG_PROGRAM ) );
             }
             break;
 
@@ -633,8 +633,8 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             aBtnSearch.Show();
             aBtnSearch.Enable();
 
-            aFtTree.SetText( String( SdResId( STR_EFFECTDLG_JUMP ) ) );
-            aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_DOCUMENT ) ) );
+            aFtTree.SetText( SD_RESSTR( STR_EFFECTDLG_JUMP ) );
+            aFlSeparator.SetText( SD_RESSTR( STR_EFFECTDLG_DOCUMENT ) );
 
             CheckFileHdl( NULL );
             break;
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             aFtTree.Show();
             aLbOLEAction.Show();
 
-            aFtTree.SetText( String( SdResId( STR_EFFECTDLG_ACTION ) ) );
+            aFtTree.SetText( SD_RESSTR( STR_EFFECTDLG_ACTION ) );
             break;
 
         case presentation::ClickAction_BOOKMARK:
@@ -656,8 +656,8 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             aEdtBookmark.Show();
             aBtnSeek.Show();
 
-            aFtTree.SetText( String( SdResId( STR_EFFECTDLG_JUMP ) ) );
-            aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_PAGE_OBJECT ) ) );
+            aFtTree.SetText( SD_RESSTR( STR_EFFECTDLG_JUMP ) );
+            aFlSeparator.SetText( SD_RESSTR( STR_EFFECTDLG_PAGE_OBJECT ) );
             break;
         default:
             break;

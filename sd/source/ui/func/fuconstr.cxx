@@ -345,7 +345,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         sal_uInt16 n = aName.Search(aSep);
         n = n + aSep.Len();
         aName.Erase(n);
-        aName.Append( String ( SdResId( STR_LAYOUT_BACKGROUNDOBJECTS ) ) );
+        aName.Append( SD_RESSTR( STR_LAYOUT_BACKGROUNDOBJECTS ) );
         SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                                 GetStyleSheetPool()->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);

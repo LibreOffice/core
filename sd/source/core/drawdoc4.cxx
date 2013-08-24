@@ -124,7 +124,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     SdStyleSheetPool*       pSSPool = (SdStyleSheetPool*)GetStyleSheetPool();
     SfxStyleSheetBase*      pSheet = NULL;
     String                  aHelpFile;
-    String                  aStdName = String(SdResId(STR_STANDARD_STYLESHEET_NAME));
+    String                  aStdName = SD_RESSTR(STR_STANDARD_STYLESHEET_NAME);
 
     // Default style
 
@@ -250,7 +250,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemSet* pISet = NULL;
 
     // Object with arrowhead
-    aName = String(SdResId(STR_POOLSHEET_OBJWITHARROW));
+    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHARROW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
@@ -272,7 +272,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStartCenterItem(sal_True));
 
     // Object with Shadow
-    aName = String(SdResId(STR_POOLSHEET_OBJWITHSHADOW));
+    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHSHADOW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
@@ -284,7 +284,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SdrShadowYDistItem(200));
 
     // Object without fillung
-    aName = String(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
+    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
@@ -295,7 +295,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Object no fill no line
 
-    aName = String(SdResId(STR_POOLSHEET_OBJNOLINENOFILL));
+    aName = SD_RESSTR(STR_POOLSHEET_OBJNOLINENOFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJNOLINENOFILL );
@@ -306,7 +306,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Text
 
-    aName = String(SdResId(STR_POOLSHEET_TEXT));
+    aName = SD_RESSTR(STR_POOLSHEET_TEXT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
@@ -316,7 +316,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
     // Text body
-    aName = String(SdResId(STR_POOLSHEET_TEXTBODY));
+    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
@@ -328,7 +328,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        // 16 pt
 
     // Text body, justified
-    aName = String(SdResId(STR_POOLSHEET_TEXTBODY_JUSTIFY));
+    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_JUSTIFY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
@@ -340,7 +340,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST ));
 
     // Text body, indented
-    aName = String(SdResId(STR_POOLSHEET_TEXTBODY_INDENT));
+    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_INDENT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
@@ -355,7 +355,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Title
 
-    aName = String(SdResId(STR_POOLSHEET_TITLE));
+    aName = SD_RESSTR(STR_POOLSHEET_TITLE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
@@ -417,7 +417,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Headline
 
-    aName = String(SdResId(STR_POOLSHEET_HEADLINE));
+    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
@@ -467,7 +467,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Measurements
-    aName = String(SdResId(STR_POOLSHEET_MEASURE));
+    aName = SD_RESSTR(STR_POOLSHEET_MEASURE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_MEASURE );
@@ -486,7 +486,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SdrMeasureShowUnitItem(true));
 
     // Generate presentation templates for default layout.
-    String aPrefix = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
+    String aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
@@ -1014,23 +1014,23 @@ void SdDrawDocument::RestoreLayerNames()
 
             if (aLayerName.EqualsAscii( "LAYER_LAYOUT" ))
             {
-                pLayer->SetName(String(SdResId(STR_LAYER_LAYOUT)));
+                pLayer->SetName(SD_RESSTR(STR_LAYER_LAYOUT));
             }
             else if (aLayerName.EqualsAscii( "LAYER_BCKGRND" ))
             {
-                pLayer->SetName(String(SdResId(STR_LAYER_BCKGRND)));
+                pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRND));
             }
             else if (aLayerName.EqualsAscii( "LAYER_BACKGRNDOBJ" ))
             {
-                pLayer->SetName(String(SdResId(STR_LAYER_BCKGRNDOBJ)));
+                pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
             }
             else if (aLayerName.EqualsAscii( "LAYER_CONTROLS" ))
             {
-                pLayer->SetName(String(SdResId(STR_LAYER_CONTROLS)));
+                pLayer->SetName(SD_RESSTR(STR_LAYER_CONTROLS));
             }
             else if (aLayerName.EqualsAscii( "LAYER_MEASURELINES" ))
             {
-                pLayer->SetName(String(SdResId(STR_LAYER_MEASURELINES)));
+                pLayer->SetName(SD_RESSTR(STR_LAYER_MEASURELINES));
             }
         }
     }
@@ -1111,7 +1111,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     // their master pages.
     String aPageLayoutName(rNewName);
     aPageLayoutName.AppendAscii( SD_LT_SEPARATOR );
-    aPageLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
+    aPageLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
     // Inform all text objects on pages that use the renamed layout and set the
     // new name.

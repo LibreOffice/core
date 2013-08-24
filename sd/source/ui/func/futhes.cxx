@@ -113,7 +113,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
             if (eState == EE_SPELL_NOLANGUAGE)
             {
-                ErrorBox(mpWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
+                ErrorBox(mpWindow, WB_OK, SD_RESSTR(STR_NOLANGUAGE)).Execute();
             }
         }
     }
@@ -140,7 +140,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
         if (eState == EE_SPELL_NOLANGUAGE)
         {
-            ErrorBox(mpWindow, WB_OK, String(SdResId(STR_NOLANGUAGE))).Execute();
+            ErrorBox(mpWindow, WB_OK, SD_RESSTR(STR_NOLANGUAGE)).Execute();
         }
     }
 }

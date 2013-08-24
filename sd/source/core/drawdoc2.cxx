@@ -494,7 +494,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         }
 
         pHandoutPage->SetPageKind(PK_HANDOUT);
-        pHandoutPage->SetName( String (SdResId(STR_HANDOUT) ) );
+        pHandoutPage->SetName( SD_RESSTR(STR_HANDOUT) );
         InsertPage(pHandoutPage, 0);
 
         // Insert master page and register this with the handout page
@@ -698,7 +698,7 @@ sal_Bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
+        BegUndo(SD_RESSTR(STR_UNDO_MOVEPAGES));
 
     // List of selected pages
     std::vector<SdPage*> aPageList;
@@ -1281,8 +1281,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     return DuplicatePage (
@@ -1435,8 +1435,8 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != NULL)
     {
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), sal_False);
+        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False);
         SetOfByte aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);

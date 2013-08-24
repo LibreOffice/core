@@ -412,7 +412,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     String  aText( OUString("index") );
-    aText += String(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION));
+    aText += SD_RESSTR(STR_HTMLEXP_DEFAULT_EXTENSION);
     pPage2_Index->SetText(aText);
     pPage2_CGI->SetText( OUString( "/cgi-bin/" ) );
 
@@ -1145,7 +1145,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
                 if (iter != m_aDesignList.end())
                 {
                     ErrorBox aErrorBox(this, WB_YES_NO,
-                                       String(SdResId(STR_PUBDLG_SAMENAME)));
+                                       SD_RESSTR(STR_PUBDLG_SAMENAME));
                     bRetry = aErrorBox.Execute() == RET_NO;
 
                     if(!bRetry)

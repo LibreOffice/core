@@ -53,22 +53,22 @@ void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
     aTextRect.Bottom() =  nHeight + aTextRect.Top();
 
     SetTextColor(m_aTextColor);
-    DrawText( aTextRect, String(SdResId(STR_HTMLATTR_TEXT)),
+    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_TEXT),
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 
     aTextRect.Move(0,nHeight);
     SetTextColor(m_aLinkColor);
-    DrawText( aTextRect, String(SdResId(STR_HTMLATTR_LINK)),
+    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_LINK),
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 
     aTextRect.Move(0,nHeight);
     SetTextColor(m_aALinkColor);
-    DrawText( aTextRect, String(SdResId(STR_HTMLATTR_ALINK)),
+    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_ALINK),
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 
     aTextRect.Move(0,nHeight);
     SetTextColor(m_aVLinkColor);
-    DrawText( aTextRect, String(SdResId(STR_HTMLATTR_VLINK)),
+    DrawText( aTextRect, SD_RESSTR(STR_HTMLATTR_VLINK),
                          TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER );
 }
 

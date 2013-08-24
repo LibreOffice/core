@@ -1014,8 +1014,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String
             // Undo
             SdPage* pUndoPage = pPageToRename;
             SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
-            sal_uInt8 nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
-            sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
+            sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), sal_False );
+            sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), sal_False );
             SetOfByte aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)
@@ -1164,7 +1164,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     // created pages in aPagesToSelect.
     const bool bUndo (aPagesToDuplicate.size()>1 && mrSlideSorter.GetView().IsUndoEnabled());
     if (bUndo)
-        mrSlideSorter.GetView().BegUndo(String(SdResId(STR_INSERTPAGE)));
+        mrSlideSorter.GetView().BegUndo(SD_RESSTR(STR_INSERTPAGE));
 
     ::std::vector<SdPage*> aPagesToSelect;
     for(::std::vector<SdPage*>::const_iterator

@@ -494,7 +494,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             // background objects of the master page
             pSdrObj->SetLayer( rLayerAdmin.
-                GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False) );
+                GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), sal_False) );
         }
 
         // Subscribe object at the style sheet
@@ -572,7 +572,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
         aName.Erase(nPos);
     }
 
-    aName += String(SdResId(STR_LAYOUT_BACKGROUND));
+    aName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
@@ -601,22 +601,22 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
         break;
 
         case PRESOBJ_TITLE:
-            aName += String(SdResId(STR_LAYOUT_TITLE));
+            aName += SD_RESSTR(STR_LAYOUT_TITLE);
             break;
 
         case PRESOBJ_NOTES:
-            aName += String(SdResId(STR_LAYOUT_NOTES));
+            aName += SD_RESSTR(STR_LAYOUT_NOTES);
             break;
 
         case PRESOBJ_TEXT:
-            aName += String(SdResId(STR_LAYOUT_SUBTITLE));
+            aName += SD_RESSTR(STR_LAYOUT_SUBTITLE);
             break;
 
         case PRESOBJ_HEADER:
         case PRESOBJ_FOOTER:
         case PRESOBJ_DATETIME:
         case PRESOBJ_SLIDENUMBER:
-            aName += String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+            aName += SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
             break;
 
         default:
@@ -658,7 +658,7 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
         OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return 0;
     }
-    aStyleName.Append( String( SdResId( nNameId ) ) );
+    aStyleName.Append( SD_RESSTR( nNameId ) );
     if( nNameId == STR_LAYOUT_OUTLINE )
     {
         aStyleName.Append( sal_Unicode( ' ' ));
@@ -2512,7 +2512,7 @@ const String& SdPage::GetName() const
             // default name for handout pages
             sal_uInt16  nNum = (GetPageNum() + 1) / 2;
 
-            aCreatedPageName = String(SdResId(STR_PAGE));
+            aCreatedPageName = SD_RESSTR(STR_PAGE);
             aCreatedPageName += sal_Unicode( ' ' );
             if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
             {
@@ -2531,7 +2531,7 @@ const String& SdPage::GetName() const
             /******************************************************************
             * default name for note pages
             ******************************************************************/
-            aCreatedPageName = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
+            aCreatedPageName = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
         }
     }
     else
@@ -2542,7 +2542,7 @@ const String& SdPage::GetName() const
     if (mePageKind == PK_NOTES)
     {
         aCreatedPageName += sal_Unicode( ' ' );
-        aCreatedPageName += String(SdResId(STR_NOTES));
+        aCreatedPageName += SD_RESSTR(STR_NOTES);
     }
     else if (mePageKind == PK_HANDOUT && mbMaster)
     {
@@ -2581,63 +2581,63 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
         {
             if (mePageKind != PK_NOTES)
             {
-                aString = String ( SdResId( STR_PRESOBJ_MPTITLE ) );
+                aString = SD_RESSTR( STR_PRESOBJ_MPTITLE );
             }
             else
             {
-                aString = String ( SdResId( STR_PRESOBJ_MPNOTESTITLE ) );
+                aString = SD_RESSTR( STR_PRESOBJ_MPNOTESTITLE );
             }
         }
         else
         {
-            aString = String ( SdResId( STR_PRESOBJ_TITLE ) );
+            aString = SD_RESSTR( STR_PRESOBJ_TITLE );
         }
     }
     else if (eObjKind == PRESOBJ_OUTLINE)
     {
         if (mbMaster)
         {
-            aString = String ( SdResId( STR_PRESOBJ_MPOUTLINE ) );
+            aString = SD_RESSTR( STR_PRESOBJ_MPOUTLINE );
         }
         else
         {
-            aString = String ( SdResId( STR_PRESOBJ_OUTLINE ) );
+            aString = SD_RESSTR( STR_PRESOBJ_OUTLINE );
         }
     }
     else if (eObjKind == PRESOBJ_NOTES)
     {
         if (mbMaster)
         {
-            aString = String ( SdResId( STR_PRESOBJ_MPNOTESTEXT ) );
+            aString = SD_RESSTR( STR_PRESOBJ_MPNOTESTEXT );
         }
         else
         {
-            aString = String ( SdResId( STR_PRESOBJ_NOTESTEXT ) );
+            aString = SD_RESSTR( STR_PRESOBJ_NOTESTEXT );
         }
     }
     else if (eObjKind == PRESOBJ_TEXT)
     {
-        aString = String ( SdResId( STR_PRESOBJ_TEXT ) );
+        aString = SD_RESSTR( STR_PRESOBJ_TEXT );
     }
     else if (eObjKind == PRESOBJ_GRAPHIC)
     {
-        aString = String ( SdResId( STR_PRESOBJ_GRAPHIC ) );
+        aString = SD_RESSTR( STR_PRESOBJ_GRAPHIC );
     }
     else if (eObjKind == PRESOBJ_OBJECT)
     {
-        aString = String ( SdResId( STR_PRESOBJ_OBJECT ) );
+        aString = SD_RESSTR( STR_PRESOBJ_OBJECT );
     }
     else if (eObjKind == PRESOBJ_CHART)
     {
-        aString = String ( SdResId( STR_PRESOBJ_CHART ) );
+        aString = SD_RESSTR( STR_PRESOBJ_CHART );
     }
     else if (eObjKind == PRESOBJ_ORGCHART)
     {
-        aString = String ( SdResId( STR_PRESOBJ_ORGCHART ) );
+        aString = SD_RESSTR( STR_PRESOBJ_ORGCHART );
     }
     else if (eObjKind == PRESOBJ_CALC)
     {
-        aString = String ( SdResId( STR_PRESOBJ_TABLE ) );
+        aString = SD_RESSTR( STR_PRESOBJ_TABLE );
     }
 
     return(aString);

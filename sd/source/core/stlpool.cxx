@@ -124,7 +124,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 {
     String aName(rLayoutName);
     aName.AppendAscii( SD_LT_SEPARATOR );
-    aName += String(SdResId(STR_LAYOUT_TITLE));
+    aName += SD_RESSTR(STR_LAYOUT_TITLE);
     SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return pResult;
 }
@@ -140,7 +140,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::v
 {
     String aName(rLayoutName);
     aName.AppendAscii( SD_LT_SEPARATOR );
-    aName += String(SdResId(STR_LAYOUT_OUTLINE));
+    aName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
     for (sal_uInt16 nSheet = 1; nSheet < 10; nSheet++)
     {
@@ -326,7 +326,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     /**************************************************************************
     * Title
     **************************************************************************/
-    aName = String(SdResId(STR_LAYOUT_TITLE));
+    aName = SD_RESSTR(STR_LAYOUT_TITLE);
     aName.Insert(aPrefix, 0);
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
@@ -371,7 +371,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     /**************************************************************************
     * Subtitle
     **************************************************************************/
-    aName = String(SdResId(STR_LAYOUT_SUBTITLE));
+    aName = SD_RESSTR(STR_LAYOUT_SUBTITLE);
     aName.Insert(aPrefix, 0);
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
@@ -419,7 +419,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     /**************************************************************************
     * Notes
     **************************************************************************/
-    aName = String(SdResId(STR_LAYOUT_NOTES));
+    aName = SD_RESSTR(STR_LAYOUT_NOTES);
     aName.Insert(aPrefix, 0);
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
@@ -463,7 +463,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     /**************************************************************************
     * Background objects
     **************************************************************************/
-    aName = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+    aName = SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
     aName.Insert(aPrefix, 0);
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
@@ -486,7 +486,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     /**************************************************************************
     * Background
     **************************************************************************/
-    aName = String(SdResId(STR_LAYOUT_BACKGROUND));
+    aName = SD_RESSTR(STR_LAYOUT_BACKGROUND);
     aName.Insert(aPrefix, 0);
 
     if (!Find(aName, SD_STYLE_FAMILY_MASTERPAGE))
@@ -730,23 +730,23 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::ve
         aNameList.push_back(aStr);
     }
 
-    aStr = String(SdResId(STR_LAYOUT_TITLE));
+    aStr = SD_RESSTR(STR_LAYOUT_TITLE);
     aStr.Insert(aPrefix, 0);
     aNameList.push_back(aStr);
 
-    aStr = String(SdResId(STR_LAYOUT_SUBTITLE));
+    aStr = SD_RESSTR(STR_LAYOUT_SUBTITLE);
     aStr.Insert(aPrefix, 0);
     aNameList.push_back(aStr);
 
-    aStr = String(SdResId(STR_LAYOUT_NOTES));
+    aStr = SD_RESSTR(STR_LAYOUT_NOTES);
     aStr.Insert(aPrefix, 0);
     aNameList.push_back(aStr);
 
-    aStr = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
+    aStr = SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
     aStr.Insert(aPrefix, 0);
     aNameList.push_back(aStr);
 
-    aStr = String(SdResId(STR_LAYOUT_BACKGROUND));
+    aStr = SD_RESSTR(STR_LAYOUT_BACKGROUND);
     aStr.Insert(aPrefix, 0);
     aNameList.push_back(aStr);
 }
@@ -788,7 +788,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
     sal_uInt16 nUsedMask = SFXSTYLEBIT_USED;
 
-    aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_TITLE);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -797,7 +797,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
-    aName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -806,7 +806,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
-    aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -815,7 +815,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
-    aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -824,7 +824,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
-    aName = String(SdResId(STR_PSEUDOSHEET_NOTES));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_NOTES);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == 0 )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -835,7 +835,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
     pParent = NULL;
     SetSearchMask(SD_STYLE_FAMILY_PSEUDO);
-    aName = String(SdResId(STR_PSEUDOSHEET_OUTLINE));
+    aName = SD_RESSTR(STR_PSEUDOSHEET_OUTLINE);
     for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
     {
         String aLevelName(aName);
@@ -933,7 +933,7 @@ void SdStyleSheetPool::UpdateStdNames()
             {
                 if( nNameId )
                 {
-                    aNewName = String( SdResId( nNameId ) );
+                    aNewName = SD_RESSTR( nNameId );
                     if( nNameId == STR_PSEUDOSHEET_OUTLINE )
                     {
                         aNewName.Append( sal_Unicode( ' ' ));

@@ -51,7 +51,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     pOldSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
     pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
-    aComment = String(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
+    aComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
     String aName(pStyleSheet->GetName());
 
     // delete layout name and separator
@@ -60,25 +60,25 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     if( nPos != STRING_NOTFOUND )
         aName.Erase(0, nPos + aSep.Len());
 
-    if (aName == String(SdResId(STR_LAYOUT_TITLE)))
+    if (aName == SD_RESSTR(STR_LAYOUT_TITLE))
     {
-        aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
+        aName = SD_RESSTR(STR_PSEUDOSHEET_TITLE);
     }
-    else if (aName == String(SdResId(STR_LAYOUT_SUBTITLE)))
+    else if (aName == SD_RESSTR(STR_LAYOUT_SUBTITLE))
     {
-        aName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
+        aName = SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE);
     }
-    else if (aName == String(SdResId(STR_LAYOUT_BACKGROUND)))
+    else if (aName == SD_RESSTR(STR_LAYOUT_BACKGROUND))
     {
-        aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+        aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND);
     }
-    else if (aName == String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS)))
+    else if (aName == SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS))
     {
-        aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+        aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     }
-    else if (aName == String(SdResId(STR_LAYOUT_NOTES)))
+    else if (aName == SD_RESSTR(STR_LAYOUT_NOTES))
     {
-        aName = String(SdResId(STR_PSEUDOSHEET_NOTES));
+        aName = SD_RESSTR(STR_PSEUDOSHEET_NOTES);
     }
     else
     {
@@ -87,7 +87,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
         if (nPos != STRING_NOTFOUND)
         {
             String aNumStr(aName.Copy(aOutlineStr.Len()));
-            aName = String(SdResId(STR_LAYOUT_OUTLINE));
+            aName = SD_RESSTR(STR_LAYOUT_OUTLINE);
             aName += aNumStr;
         }
     }
