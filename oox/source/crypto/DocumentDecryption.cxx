@@ -78,7 +78,7 @@ public:
     void SAL_CALL startDocument()
         throw (RuntimeException, SAXException)
     {}
-    void endDocument()
+    void SAL_CALL endDocument()
         throw (RuntimeException, SAXException)
     {}
     void SAL_CALL setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
