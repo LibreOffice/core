@@ -69,7 +69,6 @@
 #define FT_TOKEN            32
 #define CB_USE_DASH         33
 #define FL_LEVEL            34
-#define WIN_TOKEN               35
 #define PB_ENTRYNO              36
 #define PB_ENTRY                37
 #define PB_CHAPTERINFO          38

@@ -507,112 +507,6 @@ TabPage TP_TOX_ENTRY
         Size = MAP_APPFONT ( 30, 8 ) ;
         Text [ en-US ] = "~Structure";
     };
-    Window WIN_TOKEN
-    {
-        Pos = MAP_APPFONT (  70, 15 ) ;
-        Size = MAP_APPFONT ( 136, 14 ) ;
-        ImageButton WIN_LEFT_SCROLL
-        {
-            HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_LEFT_SCROLL";
-            Pos = MAP_APPFONT (  0, 0 ) ;
-            Size = MAP_APPFONT ( 10, 12 ) ;
-            Symbol = IMAGEBUTTON_ARROW_LEFT;
-            DialogControl        = FALSE;
-            TabStop              = FALSE;
-        };
-        Window WIN_CTRL_PARENT
-        {
-            Pos = MAP_APPFONT (  11, 0 ) ;
-            Size = MAP_APPFONT ( 114, 12 ) ;
-            DialogControl        = TRUE;
-        };
-        ImageButton WIN_RIGHT_SCROLL
-        {
-            HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_RIGHT_SCROLL";
-            Pos = MAP_APPFONT (  126, 0 ) ;
-            Size = MAP_APPFONT ( 10, 12 ) ;
-            Symbol = IMAGEBUTTON_ARROW_RIGHT;
-            DialogControl        = FALSE;
-            TabStop              = FALSE;
-        };
-        String STR_TOKEN_ENTRY_NO
-        {
-            Text [ en-US ] = "E#";
-        };
-        String STR_TOKEN_ENTRY
-        {
-            Text [ en-US ] = "E";
-        };
-        String STR_TOKEN_TAB_STOP
-        {
-            Text [ en-US ] = "T";
-        };
-        String STR_TOKEN_TEXT
-        {
-            Text = "";
-            //unused
-        };
-        String STR_TOKEN_PAGE_NUMS
-        {
-            Text [ en-US ] = "#";
-        };
-        String STR_TOKEN_CHAPTER_INFO
-        {
-            Text [ en-US ] = "CI";
-        };
-        String STR_TOKEN_LINK_START
-        {
-            Text [ en-US ] = "LS";
-        };
-        String STR_TOKEN_LINK_END
-        {
-            Text [ en-US ] = "LE";
-        };
-        String STR_TOKEN_AUTHORITY
-        {
-            Text [ en-US ] = "A";
-        };
-        String STR_TOKEN_HELP_ENTRY_NO
-        {
-            Text [ en-US ] = "Chapter number";
-        };
-        String STR_TOKEN_HELP_ENTRY
-        {
-            Text [ en-US ] = "Entry";
-        };
-        String STR_TOKEN_HELP_TAB_STOP
-        {
-            Text [ en-US ] = "Tab stop";
-        };
-        String STR_TOKEN_HELP_TEXT
-        {
-            Text [ en-US ] = "Text";
-        };
-        String STR_TOKEN_HELP_PAGE_NUMS
-        {
-            Text [ en-US ] = "Page number";
-        };
-        String STR_TOKEN_HELP_CHAPTER_INFO
-        {
-            Text [ en-US ] = "Chapter info";
-        };
-        String STR_TOKEN_HELP_LINK_START
-        {
-            Text [ en-US ] = "Hyperlink start";
-        };
-        String STR_TOKEN_HELP_LINK_END
-        {
-            Text [ en-US ] = "Hyperlink end";
-        };
-        String STR_TOKEN_HELP_AUTHORITY
-        {
-            Text [ en-US ] = "Bibliography entry: ";
-        };
-        String STR_CHARSTYLE
-        {
-            Text [ en-US ] = "Character Style: ";
-        };
-    };
     PushButton PB_ALL_LEVELS
     {
         HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_ALL_LEVELS";
@@ -1027,6 +921,114 @@ TabPage TP_TOX_ENTRY
         Text [ en-US ] = "S";
     };
 };
+
+Window WIN_TOKEN
+{
+    Pos = MAP_APPFONT (  70, 15 ) ;
+    Size = MAP_APPFONT ( 136, 14 ) ;
+    ImageButton WIN_LEFT_SCROLL
+    {
+        HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_LEFT_SCROLL";
+        Pos = MAP_APPFONT (  0, 0 ) ;
+        Size = MAP_APPFONT ( 10, 12 ) ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT;
+        DialogControl        = FALSE;
+        TabStop              = FALSE;
+    };
+    Window WIN_CTRL_PARENT
+    {
+        Pos = MAP_APPFONT (  11, 0 ) ;
+        Size = MAP_APPFONT ( 114, 12 ) ;
+        DialogControl        = TRUE;
+    };
+    ImageButton WIN_RIGHT_SCROLL
+    {
+        HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_RIGHT_SCROLL";
+        Pos = MAP_APPFONT (  126, 0 ) ;
+        Size = MAP_APPFONT ( 10, 12 ) ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT;
+        DialogControl        = FALSE;
+        TabStop              = FALSE;
+    };
+    String STR_TOKEN_ENTRY_NO
+    {
+        Text [ en-US ] = "E#";
+    };
+    String STR_TOKEN_ENTRY
+    {
+        Text [ en-US ] = "E";
+    };
+    String STR_TOKEN_TAB_STOP
+    {
+        Text [ en-US ] = "T";
+    };
+    String STR_TOKEN_TEXT
+    {
+        Text = "";
+        //unused
+    };
+    String STR_TOKEN_PAGE_NUMS
+    {
+        Text [ en-US ] = "#";
+    };
+    String STR_TOKEN_CHAPTER_INFO
+    {
+        Text [ en-US ] = "CI";
+    };
+    String STR_TOKEN_LINK_START
+    {
+        Text [ en-US ] = "LS";
+    };
+    String STR_TOKEN_LINK_END
+    {
+        Text [ en-US ] = "LE";
+    };
+    String STR_TOKEN_AUTHORITY
+    {
+        Text [ en-US ] = "A";
+    };
+    String STR_TOKEN_HELP_ENTRY_NO
+    {
+        Text [ en-US ] = "Chapter number";
+    };
+    String STR_TOKEN_HELP_ENTRY
+    {
+        Text [ en-US ] = "Entry";
+    };
+    String STR_TOKEN_HELP_TAB_STOP
+    {
+        Text [ en-US ] = "Tab stop";
+    };
+    String STR_TOKEN_HELP_TEXT
+    {
+        Text [ en-US ] = "Text";
+    };
+    String STR_TOKEN_HELP_PAGE_NUMS
+    {
+        Text [ en-US ] = "Page number";
+    };
+    String STR_TOKEN_HELP_CHAPTER_INFO
+    {
+        Text [ en-US ] = "Chapter info";
+    };
+    String STR_TOKEN_HELP_LINK_START
+    {
+        Text [ en-US ] = "Hyperlink start";
+    };
+    String STR_TOKEN_HELP_LINK_END
+    {
+        Text [ en-US ] = "Hyperlink end";
+    };
+    String STR_TOKEN_HELP_AUTHORITY
+    {
+        Text [ en-US ] = "Bibliography entry: ";
+    };
+    String STR_CHARSTYLE
+    {
+        Text [ en-US ] = "Character Style: ";
+    };
+};
+
 ModalDialog DLG_ADD_IDX_STYLES
 {
     HelpId = HID_DLG_ADD_IDX_STYLES;
