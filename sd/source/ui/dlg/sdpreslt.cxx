@@ -31,7 +31,6 @@
 #include "sdpage.hxx"
 #include "DrawDocShell.hxx"
 
-#define DOCUMENT_TOKEN (sal_Unicode('#'))
 
 SdPresLayoutDlg::SdPresLayoutDlg(
     ::sd::DrawDocShell* pDocShell,
@@ -48,7 +47,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(
                 maCbxCheckMasters   (this, SdResId(CBX_CHECK_MASTERS)),
                 maBtnLoad            (this, SdResId(BTN_LOAD)),
                 mrOutAttrs           (rInAttrs),
-                maStrNone           ( SdResId( STR_NULL ) )
+                maStrNone           (SD_RESSTR(STR_NULL))
 {
     FreeResource();
 
@@ -84,7 +83,7 @@ void SdPresLayoutDlg::Reset()
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
         maName = ((const SfxStringItem*)pPoolItem)->GetValue();
     else
-        maName.Erase();
+        maName = "";
 
     FillValueSet();
 
@@ -109,19 +108,17 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     sal_Bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 
-    String aLayoutName;
+    OUString aLayoutName;
 
     if( bLoad )
     {
-        aLayoutName = maName;
-        aLayoutName.Append( DOCUMENT_TOKEN );
-        aLayoutName.Append( maLayoutNames[ nId - 1 ] );
+        aLayoutName = maName + "#" + maLayoutNames[ nId - 1 ];
     }
     else
     {
         aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
-            aLayoutName.Erase(); // that way we encode "- nothing -" (see below)
+            aLayoutName = ""; // that way we encode "- nothing -" (see below)
     }
 
     rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
@@ -151,9 +148,9 @@ void SdPresLayoutDlg::FillValueSet()
         SdPage* pMaster = (SdPage*)pDoc->GetMasterPage(nLayout);
         if (pMaster->GetPageKind() == PK_STANDARD)
         {
-            String aLayoutName(pMaster->GetLayoutName());
-            aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-            maLayoutNames.push_back(new String(aLayoutName));
+            OUString aLayoutName(pMaster->GetLayoutName());
+            aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+            maLayoutNames.push_back(aLayoutName);
 
             Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
             maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
@@ -204,7 +201,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             else
             {
                 // that way we encode "- nothing -"
-                maName.Erase();
+                maName = "";
             }
         }
         break;
@@ -218,12 +215,12 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
     {
         // check if template already ecists
         sal_Bool bExists = sal_False;
-        String aCompareStr( maName );
-        if( maName.Len() == 0 )
+        OUString aCompareStr(maName);
+        if (aCompareStr.isEmpty())
             aCompareStr = maStrNone;
 
         sal_uInt16 aPos = 0;
-        for (boost::ptr_vector<String>::iterator it = maLayoutNames.begin();
+        for (std::vector<OUString>::iterator it = maLayoutNames.begin();
 	          it != maLayoutNames.end() && !bExists; ++it, ++aPos)
         {
             if( aCompareStr == *it )
@@ -237,7 +234,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
         if( !bExists )
         {
             // load document in order to determine preview bitmap (if template is selected)
-            if( maName.Len() )
+            if (!maName.isEmpty())
             {
                 // determine document in order to call OpenBookmarkDoc
                 SdDrawDocument* pDoc = mpDocSh->GetDoc();
@@ -254,9 +251,9 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                         SdPage* pMaster = (SdPage*) pTemplDoc->GetMasterPage(nLayout);
                         if (pMaster->GetPageKind() == PK_STANDARD)
                         {
-                            String aLayoutName(pMaster->GetLayoutName());
-                            aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
-                            maLayoutNames.push_back(new String(aLayoutName));
+                            OUString aLayoutName(pMaster->GetLayoutName());
+                            aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+                            maLayoutNames.push_back(aLayoutName);
 
                             Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
                             maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
@@ -273,7 +270,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             else
             {
                 // empty layout
-                maLayoutNames.push_back( new String( maStrNone ) );
+                maLayoutNames.push_back(maStrNone);
                 maVS.InsertItem( (sal_uInt16) maLayoutNames.size(),
                         Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
             }

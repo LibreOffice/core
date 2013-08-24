@@ -64,11 +64,11 @@ private:
 
     const SfxItemSet&   mrOutAttrs;
 
-    boost::ptr_vector<String> maLayoutNames;
+    std::vector<OUString> maLayoutNames;
 
-    String              maName;          ///< layout name or file name
+    OUString            maName;          ///< layout name or file name
     long                mnLayoutCount;   ///< number of master pages in the document
-    const String        maStrNone;
+    const OUString      maStrNone;
 
     void                FillValueSet();
     void                Reset();
