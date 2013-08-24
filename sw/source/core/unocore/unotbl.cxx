@@ -562,7 +562,7 @@ static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRo
     return pXCell;
 }
 
-static void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
+static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllNames)
 {
     for( sal_uInt16 i = 0; i < rLines.size(); i++ )
     {
@@ -572,7 +572,7 @@ static void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNam
         {
             SwTableBox* pBox = rBoxes[j];
             if(pBox->GetName().Len() && pBox->getRowSpan() > 0 )
-                rAllNames.push_back( new String(pBox->GetName()) );
+                rAllNames.push_back( new OUString(pBox->GetName()) );
             SwTableLines& rBoxLines = pBox->GetTabLines();
             if(!rBoxLines.empty())
             {
@@ -2251,7 +2251,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
         SwTable* pTable = SwTable::FindTable( pFmt );
           // gibts an der Tabelle und an allen Boxen
         SwTableLines& rTblLines = pTable->GetTabLines();
-        std::vector<String*> aAllNames;
+        std::vector<OUString*> aAllNames;
         lcl_InspectLines(rTblLines, aAllNames);
         uno::Sequence< OUString > aRet( static_cast<sal_uInt16>(aAllNames.size()) );
         OUString* pArray = aRet.getArray();
