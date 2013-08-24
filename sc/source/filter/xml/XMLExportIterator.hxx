@@ -36,6 +36,9 @@
 #include "postit.hxx"
 #include "cellvalue.hxx"
 
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;
@@ -371,7 +374,7 @@ struct ScNoteExportData
 typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;
 typedef ::std::set< ScNoteExportData > ScMyNoteExportDataList;
 
-class ScMyNotEmptyCellsIterator
+class ScMyNotEmptyCellsIterator : boost::noncopyable
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
     com::sun::star::uno::Reference<com::sun::star::table::XCellRange> xCellRange;
@@ -389,7 +392,7 @@ class ScMyNotEmptyCellsIterator
     ScMyNoteExportDataList::iterator  maNoteExportListItr;
 
     ScXMLExport&                rExport;
-    ScHorizontalCellIterator*   pCellItr;
+    boost::scoped_ptr<ScHorizontalCellIterator> mpCellItr;
 
     SCCOL                       nCellCol;
     SCROW                       nCellRow;

@@ -642,7 +642,6 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
     rExport(rTempXMLExport),
-    pCellItr(NULL),
     nCurrentTable(SCTAB_MAX)
 {
 }
@@ -654,15 +653,13 @@ ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
 
 void ScMyNotEmptyCellsIterator::Clear()
 {
-    if (pCellItr)
-        delete pCellItr;
     if (!aAnnotations.empty())
     {
         OSL_FAIL("not all Annotations saved");
         aAnnotations.clear();
     }
     maNoteExportList.clear();
-    pCellItr = NULL;
+    mpCellItr.reset();
     pShapes = NULL;
     pNoteShapes = NULL;
     pMergedRanges = NULL;
@@ -675,7 +672,7 @@ void ScMyNotEmptyCellsIterator::Clear()
 
 void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
 {
-    if( pCellItr->GetPos( nCellCol, nCellRow ) )
+    if (mpCellItr->GetPos(nCellCol, nCellRow))
     {
         rAddress.Column = nCellCol;
         rAddress.Row = nCellRow;
@@ -691,7 +688,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
     rMyCell.bKnowWhetherIsEditCell = false;
     rMyCell.bIsEditCell = false;
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
-        pCellItr->GetNext( nCellCol, nCellRow );
+        mpCellItr->GetNext(nCellCol, nCellRow);
 }
 
 void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
@@ -766,10 +763,12 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     {
         maNoteExportList.clear();
         nCurrentTable = nTable;
-        if (pCellItr)
-            delete pCellItr;
-        pCellItr = new ScHorizontalCellIterator(rExport.GetDocument(), nCurrentTable, 0, 0,
-            static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)), static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable)));
+
+        mpCellItr.reset(
+            new ScHorizontalCellIterator(
+                rExport.GetDocument(), nCurrentTable, 0, 0,
+                static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
+                static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
 
         ScNotes* pNotes = rExport.GetDocument()->GetNotes(nTable);
         if(pNotes)
