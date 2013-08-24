@@ -92,16 +92,6 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
     sal_Unicode encodedSlash[3] = { '%', '2', 'F' };
     sal_Unicode protocolDelimiter[3] = { ':', '/', '/' };
 
-    /* temporary hack: if already system path, return ustrFileURL */
-    /*
-    if( (sal_Unicode) '/' == ustrFileURL->buffer[0] )
-    {
-        OSL_FAIL( "osl_getSystemPathFromFileURL: input is already system path" );
-        rtl_uString_assign( pustrSystemPath, ustrFileURL );
-        return osl_File_E_None;
-    }
-    */
-
     /* a valid file url may not start with '/' */
     if( ( 0 == ustrFileURL->length ) || ( (sal_Unicode) '/' == ustrFileURL->buffer[0] ) )
     {
