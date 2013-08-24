@@ -2752,7 +2752,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             if ( nFndPos != STRING_NOTFOUND )
             {
                 // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + nFndPos, nEndPos - nFndPos), pFnd->GetLong() + OUString(rTxt.GetBuffer() + nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len()));
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + nFndPos, nEndPos - nFndPos + ((rTxt.GetChar(nEndPos) != 0x20) ? 1: 0)), pFnd->GetLong() + OUString(rTxt.GetBuffer() + nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len()));
                 if( Insert( pNew ) )
                 {
                     rStt = nFndPos;
