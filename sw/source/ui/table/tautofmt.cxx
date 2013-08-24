@@ -333,10 +333,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 
             if( !bFmtInserted )
             {
-                bOk = RET_CANCEL == ErrorBox( this,
-                                    WinBits( WB_OK_CANCEL | WB_DEF_OK),
-                                    aStrInvalidFmt
-                                    ).Execute();
+                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFmt, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                                    .Execute();
             }
         }
         else
@@ -437,10 +435,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 
             if( !bFmtRenamed )
             {
-                bOk = RET_CANCEL == ErrorBox( this,
-                                    WinBits( WB_OK_CANCEL | WB_DEF_OK),
-                                    aStrInvalidFmt
-                                    ).Execute();
+                bOk = RET_CANCEL == MessageDialog(this, aStrInvalidFmt, VCL_MESSAGE_ERROR, VCL_BUTTONS_OK_CANCEL)
+                                    .Execute();
             }
         }
         else

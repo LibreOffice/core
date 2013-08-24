@@ -705,6 +705,11 @@ private:
     short get_response(const Window *pWindow) const;
 public:
 
+    MessageDialog(Window* pParent,
+        const OUString &rMessage,
+        VclMessageType eMessageType = VCL_MESSAGE_ERROR,
+        VclButtonsType eButtonsType = VCL_BUTTONS_OK,
+        WinBits nStyle = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE);
     MessageDialog(Window* pParent, WinBits nStyle);
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue);

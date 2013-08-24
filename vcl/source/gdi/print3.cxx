@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "vcl/layout.hxx"
 #include "vcl/print.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/metaact.hxx"
-#include "vcl/msgbox.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/unohelp.hxx"
 
@@ -312,7 +312,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
              // && ! pController->isDirectPrint()
            )
         {
-            ErrorBox aBox( NULL, VclResId( SV_PRINT_NOPRINTERWARNING ) );
+            MessageDialog aBox(NULL, "ErrorNoPrinterDialog",
+                "vcl/ui/errornoprinterdialog.ui");
             aBox.Execute();
         }
         pController->setValue( OUString( "IsDirect" ),
@@ -460,7 +461,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         if( pController->getFilteredPageCount() == 0 )
         {
-            ErrorBox aBox( NULL, VclResId( SV_PRINT_NOCONTENT ) );
+            MessageDialog aBox(NULL, "ErrorNoContentDialog",
+                "vcl/ui/errornocontentdialog.ui");
             aBox.Execute();
             return;
         }

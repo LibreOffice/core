@@ -1768,6 +1768,23 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     SetType(WINDOW_MESSBOX);
 }
 
+MessageDialog::MessageDialog(Window* pParent,
+    const OUString &rMessage,
+    VclMessageType eMessageType,
+    VclButtonsType eButtonsType,
+    WinBits nStyle)
+    : Dialog(pParent, nStyle)
+    , m_eButtonsType(eButtonsType)
+    , m_eMessageType(eMessageType)
+    , m_pGrid(NULL)
+    , m_pImage(NULL)
+    , m_pPrimaryMessage(NULL)
+    , m_pSecondaryMessage(NULL)
+    , m_sPrimaryString(rMessage)
+{
+    SetType(WINDOW_MESSBOX);
+}
+
 MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)

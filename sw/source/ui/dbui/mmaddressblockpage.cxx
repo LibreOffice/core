@@ -21,9 +21,9 @@
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
 #include <addresslistdialog.hxx>
-#include <vcl/xtextedt.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/txtattr.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/xtextedt.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
     catch (const uno::Exception& e)
     {
         OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
-        ErrorBox(this, WB_OK, e.Message).Execute();
+        MessageDialog(this, e.Message).Execute();
     }
     return 0;
 }

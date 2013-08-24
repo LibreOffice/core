@@ -70,7 +70,7 @@
 #include <svx/dlgutil.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
@@ -794,7 +794,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
-            ErrorBox aErrorBox( NULL, WB_OK, msg );
+            MessageDialog aErrorBox(NULL, msg);
             aErrorBox.SetText( "Explanations" );
             aErrorBox.Execute();
         }
