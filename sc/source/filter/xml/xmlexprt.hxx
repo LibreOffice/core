@@ -187,7 +187,6 @@ class ScXMLExport : public SvXMLExport
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
     bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
-    bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
     bool IsEditCell(ScMyCell& rCell) const;
     bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
     bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);

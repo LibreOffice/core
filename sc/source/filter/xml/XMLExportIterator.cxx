@@ -608,7 +608,6 @@ ScMyCell::ScMyCell() :
     bHasDetectiveObj( false ),
     bHasDetectiveOp( false ),
     bIsEditCell( false ),
-    bKnowWhetherIsEditCell( false ),
     bHasStringValue( false ),
     bHasDoubleValue( false ),
     bHasXText( false ),
@@ -682,14 +681,18 @@ void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
 
 void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddress& rAddress )
 {
+    rMyCell.maBaseCell.clear();
     rMyCell.aCellAddress = rAddress;
     rMyCell.bHasStringValue = false;
     rMyCell.bHasDoubleValue = false;
     rMyCell.bHasXText = false;
-    rMyCell.bKnowWhetherIsEditCell = false;
     rMyCell.bIsEditCell = false;
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
+    {
         mpCell = mpCellItr->GetNext(nCellCol, nCellRow);
+        if (mpCell)
+            rMyCell.maBaseCell = *mpCell;
+    }
 }
 
 void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )

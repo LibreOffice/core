@@ -327,7 +327,6 @@ struct ScMyCell
     bool                        bHasDetectiveOp;
 
     bool                        bIsEditCell;
-    bool                        bKnowWhetherIsEditCell;
     bool                        bHasStringValue;
     bool                        bHasDoubleValue;
     bool                        bHasXText;

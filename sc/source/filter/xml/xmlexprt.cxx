@@ -3590,31 +3590,9 @@ bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell
     return (aCell1.nType == aCell2.nType);
 }
 
-bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell) const
-{
-    ScAddress aCoreAddress(static_cast<SCCOL>(aAddress.Column),
-                        static_cast<SCROW>(aAddress.Row),
-                        static_cast<SCTAB>(aAddress.Sheet));
-
-    ScRefCellValue aCell;
-    aCell.assign(const_cast<ScDocument&>(*GetDocument()), aCoreAddress);
-
-    if (pMyCell)
-        pMyCell->maBaseCell = aCell;
-
-    return (aCell.meType == CELLTYPE_EDIT);
-}
-
 bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 {
-    if (rCell.bKnowWhetherIsEditCell)
-        return rCell.bIsEditCell;
-    else
-    {
-         rCell.bIsEditCell = IsEditCell(rCell.aCellAddress, &rCell);
-        rCell.bKnowWhetherIsEditCell = true;
-        return rCell.bIsEditCell;
-    }
+    return rCell.maBaseCell.meType == CELLTYPE_EDIT;
 }
 
 bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
