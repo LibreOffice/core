@@ -853,7 +853,6 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
         {
             DestFileExists=0;
         }
-/*        return oslTranslateFileError(nRet);*/
     }
 
     /* mfe: the destination file must not be a directory! */
