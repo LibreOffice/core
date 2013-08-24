@@ -64,6 +64,8 @@ int open_c(const char *cpPath, int oflag, int mode);
 
 int utime_c(const char *cpPath, struct utimbuf *times);
 
+int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path);
+
  #ifdef __cplusplus
  }
  #endif

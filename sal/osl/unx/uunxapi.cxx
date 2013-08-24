@@ -132,7 +132,6 @@ typedef void accessFilePathState;
  int access_u(const rtl_uString* pustrPath, int mode)
  {
     rtl::OString fn = OUStringToOString(pustrPath);
-#ifndef MACOSX
 #ifdef ANDROID
     if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
         (fn.getStr()[sizeof("/assets")-1] == '\0' ||
@@ -149,18 +148,18 @@ typedef void accessFilePathState;
         return 0;
     }
 #endif
-    return access(fn.getStr(), mode);
-#else
+
+#ifdef MACOSX
+    fn = macxp_resolveAliasAndConvert(fn);
+#endif
 
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
-    int result = access(macxp_resolveAliasAndConvert(fn).getStr(), mode);
+    int result = access(fn.getStr(), mode);
 
     done_accessing_file_path(fn.getStr(), state);
 
     return result;
-
-#endif
  }
 
  //#########################
@@ -183,11 +182,11 @@ typedef void accessFilePathState;
     }
 #endif
 
-    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
-
 #ifdef MACOSX
     fn = macxp_resolveAliasAndConvert(fn);
 #endif
+
+    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
     char  rp[PATH_MAX];
     bool  bRet = realpath(fn.getStr(), rp);
@@ -215,7 +214,14 @@ typedef void accessFilePathState;
          cpPath[sizeof("/assets")-1] == '/'))
         return lo_apk_lstat(cpPath, buf);
 #endif
-    return stat(cpPath, buf);
+
+    accessFilePathState *state = prepare_to_access_file_path(cpPath);
+
+    int result = stat(cpPath, buf);
+
+    done_accessing_file_path(cpPath, state);
+
+    return result;
  }
 
  //#########################
@@ -243,11 +249,12 @@ typedef void accessFilePathState;
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
     rtl::OString fn = OUStringToOString(pustrPath);
-#ifndef MACOSX
-    return lstat_c(fn.getStr(), buf);
-#else
-    return lstat(macxp_resolveAliasAndConvert(fn).getStr(), buf);
+
+#ifdef MACOSX
+    fn = macxp_resolveAliasAndConvert(fn);
 #endif
+
+    return lstat_c(fn.getStr(), buf);
  }
 
  //#########################
@@ -287,5 +294,30 @@ int utime_c(const char *cpPath, struct utimbuf *times)
     return result;
  }
 
+int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
+{
+    /* When sandboxed on OS X, ftruncate(), even if it takes an
+     * already open file descriptor which was retuned from an open()
+     * call already checked by the sandbox, still requires a security
+     * scope bookmark for the file to be active in case the file is
+     * one that the sandbox doesn't otherwise allow access to. Luckily
+     * LibreOffice usually calls ftruncate() through the helpful C++
+     * abstraction layer that keeps the pathname around.
+     */
+
+    rtl::OString fn = rtl::OString(path);
+
+#ifdef MACOSX
+    fn = macxp_resolveAliasAndConvert(fn);
+#endif
+
+    accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
+
+    int result = ftruncate(fd, uSize);
+
+    done_accessing_file_path(fn.getStr(), state);
+
+    return result;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
