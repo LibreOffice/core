@@ -113,18 +113,18 @@ void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_
     {
         if( ! m_aUserEvents.empty() )
         {
-            std::list< SalUserEvent >::iterator it, next;
-            next = m_aUserEvents.begin();
-            do
+            std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
+            while (it != m_aUserEvents.end())
             {
-                it = next++;
                 if( it->m_pFrame    == pFrame   &&
                     it->m_pData     == pData    &&
                     it->m_nEvent    == nEvent )
                 {
-                    m_aUserEvents.erase( it );
+                    it = m_aUserEvents.erase( it );
                 }
-            } while( next != m_aUserEvents.end() );
+                else
+                    ++it;
+            }
         }
 
         osl_releaseMutex( m_aEventGuard );
