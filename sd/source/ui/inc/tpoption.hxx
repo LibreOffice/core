@@ -111,13 +111,13 @@ private:
 
     sal_uInt32          nWidth;
     sal_uInt32          nHeight;
-    String          aInfo1;
-    String          aInfo2;
+    OUString aInfo1;
+    OUString aInfo2;
 
     SfxMapUnit          ePoolUnit;
 
-    String          GetScale( sal_Int32 nX, sal_Int32 nY );
-    sal_Bool            SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY );
+    OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
+    sal_Bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );
 
     DECL_LINK( SelectMetricHdl_Impl, void * );
 

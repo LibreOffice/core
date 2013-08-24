@@ -194,7 +194,7 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 |*
 \************************************************************************/
 #define TABLE_COUNT 12
-#define TOKEN (sal_Unicode(':'))
+#define TOKEN ':'
 
 SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
   SfxTabPage          ( pParent, "OptSavePage","modules/simpress/ui/optimpressgeneralpage.ui", rInAttrs )
@@ -253,7 +253,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     for ( i = 0; i < aMetricArr.Count(); ++i )
     {
-        String sMetric = aMetricArr.GetStringByPos( i );
+        OUString sMetric = aMetricArr.GetStringByPos( i );
         sal_IntPtr nFieldUnit = aMetricArr.GetValue( i );
         sal_uInt16 nPos = m_pLbMetric->InsertEntry( sMetric );
         m_pLbMetric->SetEntryData( nPos, (void*)nFieldUnit );
@@ -576,23 +576,19 @@ void    SdTpOptionsMisc::SetDrawMode()
 
 // -----------------------------------------------------------------------
 
-String SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
+OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
-    String aScale( OUString::number( nX ) );
-    aScale.Append( TOKEN );
-    aScale.Append( OUString::number( nY ) );
-
-    return( aScale );
+    return OUString::number(nX) + OUString(TOKEN) + OUString::number(nY);
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY )
+sal_Bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {
     if( comphelper::string::getTokenCount(aScale, TOKEN) != 2 )
         return( sal_False );
 
-    OUString aTmp(aScale.GetToken( 0, TOKEN ));
+    OUString aTmp(aScale.getToken(0, TOKEN));
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return sal_False;
 
@@ -600,7 +596,7 @@ sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int
     if( rX == 0 )
         return( sal_False );
 
-    aTmp = aScale.GetToken( 1, TOKEN );
+    aTmp = aScale.getToken(1, TOKEN);
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return sal_False;
 
