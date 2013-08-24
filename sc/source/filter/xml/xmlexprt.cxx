@@ -468,7 +468,6 @@ ScXMLExport::ScXMLExport(
     pCurrentCell(NULL),
     pMergedRangesContainer(NULL),
     pValidationsContainer(NULL),
-    pCellsItr(NULL),
     pChangeTrackingExportHelper(NULL),
     sLayerID( SC_LAYERID ),
     sCaptionShape("com.sun.star.drawing.CaptionShape"),
@@ -488,7 +487,7 @@ ScXMLExport::ScXMLExport(
         pRowFormatRanges = new ScRowFormatRanges();
         pMergedRangesContainer = new ScMyMergedRangesContainer();
         pValidationsContainer = new ScMyValidationsContainer();
-        pCellsItr = new ScMyNotEmptyCellsIterator(*this);
+        mpCellsItr.reset(new ScMyNotEmptyCellsIterator(*this));
         pDefaults = new ScMyDefaultStyles();
     }
     pCellStyles = new ScFormatRangeStyles();
@@ -551,7 +550,6 @@ ScXMLExport::~ScXMLExport()
         delete pValidationsContainer;
         delete pChangeTrackingExportHelper;
         delete pChartListener;
-        delete pCellsItr;
         delete pDefaults;
         delete pNumberFormatAttributesExportHelper;
 }
@@ -1939,14 +1937,14 @@ void ScXMLExport::_ExportContent()
         pMergedRangesContainer->Sort();
         pSharedData->GetDetectiveObjContainer()->Sort();
 
-        pCellsItr->Clear();
-        pCellsItr->SetShapes( pSharedData->GetShapesContainer() );
-        pCellsItr->SetNoteShapes( pSharedData->GetNoteShapes() );
-        pCellsItr->SetMergedRanges( pMergedRangesContainer );
-        pCellsItr->SetAreaLinks( &aAreaLinks );
-        pCellsItr->SetEmptyDatabaseRanges( &aEmptyRanges );
-        pCellsItr->SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
-        pCellsItr->SetDetectiveOp( &aDetectiveOpContainer );
+        mpCellsItr->Clear();
+        mpCellsItr->SetShapes( pSharedData->GetShapesContainer() );
+        mpCellsItr->SetNoteShapes( pSharedData->GetNoteShapes() );
+        mpCellsItr->SetMergedRanges( pMergedRangesContainer );
+        mpCellsItr->SetAreaLinks( &aAreaLinks );
+        mpCellsItr->SetEmptyDatabaseRanges( &aEmptyRanges );
+        mpCellsItr->SetDetectiveObj( pSharedData->GetDetectiveObjContainer() );
+        mpCellsItr->SetDetectiveOp( &aDetectiveOpContainer );
 
         if (nTableCount > 0)
             pValidationsContainer->WriteValidations(*this);
@@ -1968,7 +1966,7 @@ void ScXMLExport::_ExportContent()
                 pSheetData->AddSavePos( nTable, nNewStart, nNewEnd );
 
                 // skip iterator entries for this sheet
-                pCellsItr->SkipTable(static_cast<SCTAB>(nTable));
+                mpCellsItr->SkipTable(static_cast<SCTAB>(nTable));
             }
             else
             {
@@ -2969,7 +2967,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     table::CellRangeAddress aRange(GetEndAddress(xTable, nTable));
     pSharedData->SetLastColumn(nTable, aRange.EndColumn);
     pSharedData->SetLastRow(nTable, aRange.EndRow);
-    pCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);
+    mpCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);
     pGroupColumns->NewTable();
     pGroupRows->NewTable();
     FillColumnRowGroups();
@@ -2989,7 +2987,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     sal_Int32 nEqualCells(0);
     ScMyCell aCell;
     ScMyCell aPrevCell;
-    while(pCellsItr->GetNext(aCell, pCellStyles))
+    while (mpCellsItr->GetNext(aCell, pCellStyles))
     {
         if (bIsFirst)
         {
@@ -3206,8 +3204,14 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 
     if (!bIsEmpty)
     {
-        if ((aCell.nType == table::CellContentType_TEXT && IsEditCell(aCell)) ||
-            (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell)))
+        if (aCell.nType == table::CellContentType_TEXT && IsEditCell(aCell))
+        {
+            bEditCell = true;
+            uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);
+            if ( xText.is())
+                GetTextParagraphExport()->exportText(xText, false, false);
+        }
+        else if (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell))
         {
             bEditCell = true;
             uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);

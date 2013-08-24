@@ -73,6 +73,7 @@ class ScXMLExport : public SvXMLExport
     sal_Int32                   nSourceStreamPos;
 
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
+    boost::scoped_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
@@ -100,7 +101,6 @@ class ScXMLExport : public SvXMLExport
 
     ScMyMergedRangesContainer*  pMergedRangesContainer;
     ScMyValidationsContainer*   pValidationsContainer;
-    ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
     const OUString         sLayerID;
     const OUString         sCaptionShape;
