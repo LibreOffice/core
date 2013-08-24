@@ -843,7 +843,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)accessibilityAttributeValue:(NSString *)attribute forParameter:(id)parameter {
-    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << parameter << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeValue:" << attribute << " forParameter:" << ((NSObject*)parameter) << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: YES ];
     if ( [ self respondsToSelector: methodSelector ] ) {
         return [ self performSelector: methodSelector withObject: parameter ];
@@ -853,14 +853,14 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 
 -(BOOL)accessibilitySetOverrideValue:(id)value forAttribute:(NSString *)attribute
 {
-    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetOverrideValue:" << value << " forAttribute:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetOverrideValue:" << ((NSObject*)value) << " forAttribute:" << attribute << "]");
     (void)value;
     (void)attribute;
     return NO; // TODO
 }
 
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
-    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetValue:" << value << " forAttribute:" << attribute << "]");
+    SAL_INFO("vcl.a11y", "[" << self << " accessibilitySetValue:" << ((NSObject*)value) << " forAttribute:" << attribute << "]");
     SEL methodSelector = [ self selectorForAttribute: attribute asGetter: NO withGetterParameter: NO ];
     if ( [ AquaA11yComponentWrapper respondsToSelector: methodSelector ] ) {
         [ AquaA11yComponentWrapper performSelector: methodSelector withObject: self withObject: value ];
