@@ -275,23 +275,13 @@ void SwDocTest::testModelToViewHelper()
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
             OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAAA CCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
-            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+            CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD");
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
             OUString sViewText = aModelToViewHelper.getViewText();
-            OUStringBuffer aBuffer;
-            aBuffer.append("AAAABB ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" CCCCC ");
-            aBuffer.append(CH_TXTATR_BREAKWORD);
-            aBuffer.append(" DDDDD");
-            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+            CPPUNIT_ASSERT(sViewText == "AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD");
         }
 
         {
