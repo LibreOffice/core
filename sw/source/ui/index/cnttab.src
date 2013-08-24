@@ -45,6 +45,21 @@ String STR_USER_DEFINED_INDEX
     Text [ en-US ] = "User-Defined Index";
 };
 
+String STR_NOSORTKEY
+{
+    Text [ en-US ] = "<None>";
+};
+
+String STR_NO_CHAR_STYLE
+{
+    Text [ en-US ] = "<None>";
+};
+
+String STR_DELIM
+{
+    Text [ en-US ] = "S";
+};
+
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
 {
@@ -481,7 +496,6 @@ TabPage TP_TOX_SELECT
 
 TabPage TP_TOX_ENTRY
 {
-    HelpID =  HID_TP_TOX_ENTRY;
     Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Hide = TRUE ;
     FixedText FT_LEVEL
@@ -906,19 +920,6 @@ TabPage TP_TOX_ENTRY
         Pos = MAP_APPFONT ( 34 , 126) ;
         Size = MAP_APPFONT ( 220, 8  ) ;
         Text [ en-US ] = "Sort keys";
-    };
-
-    String STR_NOSORTKEY
-    {
-        Text [ en-US ] = "<None>";
-    };
-    String STR_NO_CHAR_STYLE
-    {
-        Text [ en-US ] = "<None>";
-    };
-    String STR_DELIM
-    {
-        Text [ en-US ] = "S";
     };
 };
 

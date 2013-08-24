@@ -291,8 +291,10 @@ class SwTokenWindow : public Window
     void        MoveControls(long nOffset);
 
 public:
-    SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId);
+    SwTokenWindow(Window* pParent, const ResId& rResId);
     ~SwTokenWindow();
+
+    void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
     void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
     sal_uInt16      GetLastLevel()const {return nLevel;};
@@ -334,96 +336,83 @@ class SwIdxTreeListBox : public SvTreeListBox
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 public:
-    SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId);
+    SwIdxTreeListBox(Window* pPar, WinBits nStyle);
+    void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
 };
 
 class SwTOXEntryTabPage : public SfxTabPage
 {
-    FixedText           aLevelFT;
-    SwIdxTreeListBox    aLevelLB;
+    FixedText*          m_pLevelFT;
+    SwIdxTreeListBox*   m_pLevelLB;
 
-    FixedLine       aEntryFL;
-    FixedText       aTokenFT;
-    SwTokenWindow   aTokenWIN;
-    PushButton      aAllLevelsPB;
+    SwTokenWindow*  m_pTokenWIN;
 
-    PushButton      aEntryNoPB;
-    PushButton      aEntryPB;
-    PushButton      aTabPB;
-    PushButton      aChapterInfoPB;
-    PushButton      aPageNoPB;
-    PushButton      aHyperLinkPB;
+    PushButton*     m_pAllLevelsPB;
 
-    ListBox         aAuthFieldsLB;
-    PushButton      aAuthInsertPB;
-    PushButton      aAuthRemovePB;
+    PushButton*     m_pEntryNoPB;
+    PushButton*     m_pEntryPB;
+    PushButton*     m_pTabPB;
+    PushButton*     m_pChapterInfoPB;
+    PushButton*     m_pPageNoPB;
+    PushButton*     m_pHyperLinkPB;
 
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;       // character style of the current token
-    PushButton      aEditStylePB;
+    ListBox*        m_pAuthFieldsLB;
+    PushButton*     m_pAuthInsertPB;
+    PushButton*     m_pAuthRemovePB;
 
-    FixedText       aChapterEntryFT;
-    ListBox         aChapterEntryLB;    // type of chapter info
+    ListBox*        m_pCharStyleLB;       // character style of the current token
+    PushButton*     m_pEditStylePB;
 
-    FixedText       aNumberFormatFT;
-    ListBox         aNumberFormatLB;    //!< format for numbering (E#)
+    FixedText*      m_pChapterEntryFT;
+    ListBox*        m_pChapterEntryLB;    // type of chapter info
 
-    FixedText       aEntryOutlineLevelFT;    //!< Fixed text, for i53420
-    NumericField    aEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
-    FixedText       aFillCharFT;
-    ComboBox        aFillCharCB;        // fill char for tab stop
-    FixedText       aTabPosFT;
-    MetricField     aTabPosMF;          // tab stop position
-    CheckBox        aAutoRightCB;
-    FixedLine       aFormatFL;
+    FixedText*      m_pNumberFormatFT;
+    ListBox*        m_pNumberFormatLB;    //!< format for numbering (E#)
 
-    CheckBox        aRelToStyleCB;      // position relative to the right margin of the para style
-    FixedText       aMainEntryStyleFT;
-    ListBox         aMainEntryStyleLB;  // character style of main entries in indexes
-    CheckBox        aAlphaDelimCB;
-    CheckBox        aCommaSeparatedCB;
+    FixedText*      m_pEntryOutlineLevelFT;    //!< Fixed text, for i53420
+    NumericField*   m_pEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
 
-    RadioButton     aSortDocPosRB;
-    RadioButton     aSortContentRB;
-    FixedLine       aSortingFL;
+    FixedText*      m_pFillCharFT;
+    ComboBox*       m_pFillCharCB;        // fill char for tab stop
 
-    FixedText           aFirstKeyFT;
-    ListBox             aFirstKeyLB;
-    ImageRadioButton    aFirstSortUpRB;
-    ImageRadioButton    aFirstSortDownRB;
+    FixedText*      m_pTabPosFT;
+    MetricField*    m_pTabPosMF;          // tab stop position
+    CheckBox*       m_pAutoRightCB;
 
-    FixedText           aSecondKeyFT;
-    ListBox             aSecondKeyLB;
-    ImageRadioButton    aSecondSortUpRB;
-    ImageRadioButton    aSecondSortDownRB;
+    VclContainer*   m_pFormatFrame;
+    FixedText*      m_pMainEntryStyleFT;
+    ListBox*        m_pMainEntryStyleLB;  // character style of main entries in indexes
+    CheckBox*       m_pAlphaDelimCB;
+    CheckBox*       m_pCommaSeparatedCB;
+    CheckBox*       m_pRelToStyleCB;      // position relative to the right margin of the para style
 
-    FixedText           aThirdKeyFT;
-    ListBox             aThirdKeyLB;
-    ImageRadioButton    aThirdSortUpRB;
-    ImageRadioButton    aThirdSortDownRB;
+    VclContainer*   m_pSortingFrame;
+    RadioButton*    m_pSortDocPosRB;
+    RadioButton*    m_pSortContentRB;
 
-    FixedLine       aSortKeyFL;
+    VclContainer*   m_pSortKeyFrame;
+    ListBox*        m_pFirstKeyLB;
+    RadioButton*    m_pFirstSortUpRB;
+    RadioButton*    m_pFirstSortDownRB;
 
-    String          sDelimStr;
-    String          sLevelStr;
-    String          sAuthTypeStr;
+    ListBox*        m_pSecondKeyLB;
+    RadioButton*    m_pSecondSortUpRB;
+    RadioButton*    m_pSecondSortDownRB;
 
-    String          sNoCharStyle;
-    String          sNoCharSortKey;
-    Point           aButtonPositions[5];
+    ListBox*        m_pThirdKeyLB;
+    RadioButton*    m_pThirdSortUpRB;
+    RadioButton*    m_pThirdSortDownRB;
+
+    OUString        sDelimStr;
+    OUString        sLevelStr;
+    OUString        sAuthTypeStr;
+
+    OUString        sNoCharStyle;
+    OUString        sNoCharSortKey;
     SwForm*         m_pCurrentForm;
 
-    Point           aRelToStylePos;
-    Point           aRelToStyleIdxPos;
-    Size            aLevelFLSize;
-
     CurTOXType      aLastTOXType;
-    sal_Bool            bInLevelHdl;
-
-    Point           aChapterEntryFTPosition; //!< holds position of ChapterEntryFT control,
-                                             //to be used in moving the element among different tokens
-    Point           aEntryOutlineLevelFTPosition;//!< holds position ofrEntryOutlineLevelFT control
-    sal_Int32       nBiasToEntryPoint;
+    bool            bInLevelHdl;
 
     DECL_LINK(StyleSelectHdl, ListBox*);
     DECL_LINK(EditStyleHdl, PushButton*);

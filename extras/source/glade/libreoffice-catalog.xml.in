@@ -368,6 +368,9 @@
     <glade-widget-class title="Tab List" name="svtlo-SvTabListBox"
                         generic-name="Tab List" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="SwIdxTreeListBox" name="swuilo-SwIdxTreeListBox"
+                        generic-name="SwIdxTreeListBox" parent="svtlo-SvTreeListBox"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
                         generic-name="Tooltip Tree List" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>

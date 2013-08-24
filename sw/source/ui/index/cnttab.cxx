@@ -1765,10 +1765,19 @@ void    SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
         Button::RequestHelp(rHEvt);
 }
 
-SwIdxTreeListBox::SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId) :
-        SvTreeListBox(pPar, rResId),
-        pParent(pPar)
+SwIdxTreeListBox::SwIdxTreeListBox(Window* pPar, WinBits nStyle)
+    : SvTreeListBox(pPar, nStyle)
+    , pParent(NULL)
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwIdxTreeListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SwIdxTreeListBox(pParent, nWinStyle);
 }
 
 void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
@@ -1809,194 +1818,157 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListBox::RequestHelp(rHEvt);
 }
 
-SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
-        SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
-    aLevelFT(this,              SW_RES(FT_LEVEL              )),
-    aLevelLB(this,              SW_RES(LB_LEVEL             )),
-    aEntryFL(this,              SW_RES(FL_ENTRY              )),
-
-    aTokenFT(this,              SW_RES(FT_TOKEN              )),
-    aTokenWIN(this,             SW_RES(WIN_TOKEN             )),
-    aAllLevelsPB(this,          SW_RES(PB_ALL_LEVELS            )),
-
-    aEntryNoPB(this,            SW_RES(PB_ENTRYNO            )),
-    aEntryPB(this,              SW_RES(PB_ENTRY             )),
-    aTabPB(this,                SW_RES(PB_TAB                )),
-    aChapterInfoPB(this,        SW_RES(PB_CHAPTERINFO        )),
-    aPageNoPB(this,             SW_RES(PB_PAGENO                )),
-    aHyperLinkPB(this,          SW_RES(PB_HYPERLINK         )),
-
-    aAuthFieldsLB(this,         SW_RES(LB_AUTHFIELD          )),
-    aAuthInsertPB(this,         SW_RES(PB_AUTHINSERT            )),
-    aAuthRemovePB(this,         SW_RES(PB_AUTHREMOVE            )),
-
-    aCharStyleFT(this,          SW_RES(FT_CHARSTYLE          )),
-    aCharStyleLB(this,          SW_RES(LB_CHARSTYLE         )),
-    aEditStylePB(this,          SW_RES(PB_EDITSTYLE         )),
-
-    aChapterEntryFT(this,       SW_RES(FT_CHAPTERENTRY       )),
-    aChapterEntryLB(this,       SW_RES(LB_CHAPTERENTRY       )),
-
-    aNumberFormatFT(this,       SW_RES(FT_ENTRY_NO           )),//i53420
-    aNumberFormatLB(this,       SW_RES(LB_ENTRY_NO           )),
-    aEntryOutlineLevelFT(this,  SW_RES(FT_LEVEL_OL           )),//i53420
-    aEntryOutlineLevelNF(this,  SW_RES(NF_LEVEL_OL           )),
-
-    aFillCharFT(this,           SW_RES(FT_FILLCHAR           )),
-    aFillCharCB(this,           SW_RES(CB_FILLCHAR          )),
-    aTabPosFT(this,             SW_RES(FT_TABPOS                )),
-    aTabPosMF(this,             SW_RES(MF_TABPOS                )),
-    aAutoRightCB(this,          SW_RES(CB_AUTORIGHT         )),
-    aFormatFL(this,             SW_RES(FL_FORMAT             )),
-
-
-    aRelToStyleCB(this,         SW_RES(CB_RELTOSTYLE         )),
-    aMainEntryStyleFT(this,     SW_RES(FT_MAIN_ENTRY_STYLE)),
-    aMainEntryStyleLB(this,     SW_RES(LB_MAIN_ENTRY_STYLE)),
-    aAlphaDelimCB(this,         SW_RES(CB_ALPHADELIM            )),
-    aCommaSeparatedCB(this,     SW_RES(CB_COMMASEPARATED        )),
-
-    aSortDocPosRB(this,         SW_RES(RB_DOCPOS                )),
-    aSortContentRB(this,        SW_RES(RB_SORTCONTENT       )),
-    aSortingFL(this,            SW_RES(FL_SORTING            )),
-
-    aFirstKeyFT(this,           SW_RES(FT_FIRSTKEY          )),
-    aFirstKeyLB(this,           SW_RES(LB_FIRSTKEY          )),
-    aFirstSortUpRB(this,        SW_RES(RB_SORTUP1            )),
-    aFirstSortDownRB(this,      SW_RES(RB_SORTDOWN1          )),
-
-    aSecondKeyFT(this,          SW_RES(FT_SECONDKEY          )),
-    aSecondKeyLB(this,          SW_RES(LB_SECONDKEY         )),
-    aSecondSortUpRB(this,       SW_RES(RB_SORTUP2            )),
-    aSecondSortDownRB(this,     SW_RES(RB_SORTDOWN2          )),
-
-    aThirdKeyFT(this,           SW_RES(FT_THIRDDKEY          )),
-    aThirdKeyLB(this,           SW_RES(LB_THIRDKEY           )),
-    aThirdSortUpRB(this,        SW_RES(RB_SORTUP3           )),
-    aThirdSortDownRB(this,      SW_RES(RB_SORTDOWN3          )),
-
-    aSortKeyFL(this,            SW_RES(FL_SORTKEY            )),
-
-    sDelimStr(                  SW_RES(STR_DELIM)),
-    sAuthTypeStr(               SW_RES(ST_AUTHTYPE)),
-
-    sNoCharStyle(               SW_RES(STR_NO_CHAR_STYLE)),
-    sNoCharSortKey(             SW_RES(STR_NOSORTKEY        )),
-    m_pCurrentForm(0),
-    bInLevelHdl(sal_False)
+SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pParent, "TocEntriesPage",
+        "modules/swriter/ui/tocentriespage.ui", rAttrSet)
+    , sDelimStr(SW_RESSTR(STR_DELIM))
+    , sNoCharStyle(SW_RESSTR(STR_NO_CHAR_STYLE))
+    , sNoCharSortKey(SW_RESSTR(STR_NOSORTKEY))
+    , m_pCurrentForm(0)
+    , bInLevelHdl(false)
 {
-    aEditStylePB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aHyperLinkPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aPageNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aTabPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aEntryPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aEntryNoPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aAllLevelsPB.SetAccessibleRelationMemberOf(&aEntryFL);
-    aTokenWIN.SetAccessibleRelationMemberOf(&aEntryFL);
-    aTokenWIN.SetAccessibleRelationLabeledBy(&aTokenFT);
+    get(m_pLevelFT, "levelft");
+    sAuthTypeStr = get<FixedText>("typeft")->GetText();
+    get(m_pLevelLB, "level");
+    m_pLevelLB->SetTabPage(this);
+    get(m_pAllLevelsPB, "all");
+    get(m_pEntryNoPB, "chapterno");
+    get(m_pEntryPB, "entrytext");
+    get(m_pTabPB, "tabstop");
+    get(m_pChapterInfoPB, "chapterinfo");
+    get(m_pPageNoPB, "pageno");
+    get(m_pHyperLinkPB, "hyperlink");
 
-    FreeResource();
+    get(m_pAuthFieldsLB, "authfield");
+    m_pAuthFieldsLB->SetStyle(m_pAuthFieldsLB->GetStyle() | WB_SORT);
+    get(m_pAuthInsertPB, "insert");
+    get(m_pAuthRemovePB, "remove");
 
-    sLevelStr = aLevelFT.GetText();
-    aLevelLB.SetStyle( aLevelLB.GetStyle() | WB_HSCROLL );
-    aLevelLB.SetSpaceBetweenEntries(0);
-    aLevelLB.SetSelectionMode( SINGLE_SELECTION );
-    aLevelLB.SetHighlightRange();   // select full width
-    aLevelLB.SetHelpId(HID_INSERT_INDEX_ENTRY_LEVEL_LB);
-    aLevelLB.Show();
+    get(m_pCharStyleLB, "charstyle");
+    get(m_pEditStylePB, "edit");
+
+    get(m_pChapterEntryFT, "chapterentryft");
+    get(m_pChapterEntryLB, "chapterentry");
+
+    get(m_pNumberFormatFT, "numberformatft");
+    get(m_pNumberFormatLB, "numberformat");
+
+    get(m_pEntryOutlineLevelFT, "entryoutlinelevelft");
+    get(m_pEntryOutlineLevelNF, "entryoutlinelevel");
+
+    get(m_pFillCharFT, "fillcharft");
+    get(m_pFillCharCB, "fillchar");
+
+    get(m_pTabPosFT, "tabstopposft");
+    get(m_pTabPosMF, "tabstoppos");
+    get(m_pAutoRightCB, "alignright");
+
+    get(m_pFormatFrame, "formatframe");
+    get(m_pRelToStyleCB, "reltostyle");
+    get(m_pMainEntryStyleFT, "mainstyleft");
+    get(m_pMainEntryStyleLB, "mainstyle");
+    get(m_pAlphaDelimCB, "alphadelim");
+    get(m_pCommaSeparatedCB, "commasep");
+
+    get(m_pSortingFrame, "sortingframe");
+    get(m_pSortDocPosRB, "sortpos");
+    get(m_pSortContentRB, "sortcontents");
+
+    get(m_pSortKeyFrame, "sortkeyframe");
+    get(m_pFirstKeyLB, "key1lb");
+    get(m_pSecondKeyLB, "key2lb");
+    get(m_pThirdKeyLB, "key3lb");
+    get(m_pFirstSortUpRB, "up1cb");
+    get(m_pSecondSortUpRB, "up2cb");
+    get(m_pThirdSortUpRB, "up3cb");
+    get(m_pFirstSortDownRB, "down1cb");
+    get(m_pSecondSortDownRB, "down2cb");
+    get(m_pThirdSortDownRB, "down3cb");
+
+    get(m_pTokenWIN, "token");
+    m_pTokenWIN->SetTabPage(this);
+
+    sLevelStr = m_pLevelFT->GetText();
+    m_pLevelLB->SetStyle( m_pLevelLB->GetStyle() | WB_HSCROLL );
+    m_pLevelLB->SetSpaceBetweenEntries(0);
+    m_pLevelLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pLevelLB->SetHighlightRange();   // select full width
+    m_pLevelLB->Show();
 
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
     aLastTOXType.nIndex = 0;
-    aLevelFLSize = aLevelFT.GetSizePixel();
 
     SetExchangeSupport();
-    aEntryNoPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aEntryPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aChapterInfoPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aPageNoPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aTabPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aHyperLinkPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
-    aEditStylePB.SetClickHdl(LINK(this, SwTOXEntryTabPage, EditStyleHdl));
-    aLevelLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, LevelHdl));
-    aTokenWIN.SetButtonSelectedHdl(LINK(this, SwTOXEntryTabPage, TokenSelectedHdl));
-    aTokenWIN.SetModifyHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
-    aCharStyleLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, StyleSelectHdl));
-    aCharStyleLB.InsertEntry(sNoCharStyle);
-    aChapterEntryLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoHdl));
-    aEntryOutlineLevelNF.SetModifyHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoOutlineHdl));
-    aNumberFormatLB.SetSelectHdl(LINK(this, SwTOXEntryTabPage, NumberFormatHdl));
+    m_pEntryNoPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pEntryPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pChapterInfoPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pPageNoPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pTabPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pHyperLinkPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
+    m_pEditStylePB->SetClickHdl(LINK(this, SwTOXEntryTabPage, EditStyleHdl));
+    m_pLevelLB->SetSelectHdl(LINK(this, SwTOXEntryTabPage, LevelHdl));
+    m_pTokenWIN->SetButtonSelectedHdl(LINK(this, SwTOXEntryTabPage, TokenSelectedHdl));
+    m_pTokenWIN->SetModifyHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+    m_pCharStyleLB->SetSelectHdl(LINK(this, SwTOXEntryTabPage, StyleSelectHdl));
+    m_pCharStyleLB->InsertEntry(sNoCharStyle);
+    m_pChapterEntryLB->SetSelectHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoHdl));
+    m_pEntryOutlineLevelNF->SetModifyHdl(LINK(this, SwTOXEntryTabPage, ChapterInfoOutlineHdl));
+    m_pNumberFormatLB->SetSelectHdl(LINK(this, SwTOXEntryTabPage, NumberFormatHdl));
 
-    aTabPosMF.SetModifyHdl(LINK(this, SwTOXEntryTabPage, TabPosHdl));
-    aFillCharCB.SetModifyHdl(LINK(this, SwTOXEntryTabPage, FillCharHdl));
-    aAutoRightCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, AutoRightHdl));
-    aAuthInsertPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, RemoveInsertAuthHdl));
-    aAuthRemovePB.SetClickHdl(LINK(this, SwTOXEntryTabPage, RemoveInsertAuthHdl));
-    aSortDocPosRB.SetClickHdl(LINK(this, SwTOXEntryTabPage, SortKeyHdl));
-    aSortContentRB.SetClickHdl(LINK(this, SwTOXEntryTabPage, SortKeyHdl));
-    aAllLevelsPB.SetClickHdl(LINK(this, SwTOXEntryTabPage, AllLevelsHdl));
+    m_pTabPosMF->SetModifyHdl(LINK(this, SwTOXEntryTabPage, TabPosHdl));
+    m_pFillCharCB->SetModifyHdl(LINK(this, SwTOXEntryTabPage, FillCharHdl));
+    m_pAutoRightCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, AutoRightHdl));
+    m_pAuthInsertPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, RemoveInsertAuthHdl));
+    m_pAuthRemovePB->SetClickHdl(LINK(this, SwTOXEntryTabPage, RemoveInsertAuthHdl));
+    m_pSortDocPosRB->SetClickHdl(LINK(this, SwTOXEntryTabPage, SortKeyHdl));
+    m_pSortContentRB->SetClickHdl(LINK(this, SwTOXEntryTabPage, SortKeyHdl));
+    m_pAllLevelsPB->SetClickHdl(LINK(this, SwTOXEntryTabPage, AllLevelsHdl));
 
-    aAlphaDelimCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
-    aCommaSeparatedCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
-    aRelToStyleCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+    m_pAlphaDelimCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+    m_pCommaSeparatedCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
+    m_pRelToStyleCB->SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
 
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
-    SetMetric(aTabPosMF, aMetric);
+    SetMetric(*m_pTabPosMF, aMetric);
 
-    aSortDocPosRB.Check();
+    m_pSortDocPosRB->Check();
 
-    aFillCharCB.SetMaxTextLen(1);
-    aFillCharCB.InsertEntry(OUString(' '));
-    aFillCharCB.InsertEntry(OUString('.'));
-    aFillCharCB.InsertEntry(OUString('-'));
-    aFillCharCB.InsertEntry(OUString('_'));
+    m_pFillCharCB->SetMaxTextLen(1);
+    m_pFillCharCB->InsertEntry(OUString(' '));
+    m_pFillCharCB->InsertEntry(OUString('.'));
+    m_pFillCharCB->InsertEntry(OUString('-'));
+    m_pFillCharCB->InsertEntry(OUString('_'));
 
-    aButtonPositions[0] = aEntryNoPB.GetPosPixel();
-    aButtonPositions[1] = aEntryPB.GetPosPixel();
-    aButtonPositions[2] = aChapterInfoPB.GetPosPixel();
-    aButtonPositions[3] = aPageNoPB.GetPosPixel();
-    aButtonPositions[4] = aTabPB.GetPosPixel();
-
-    aRelToStylePos = aRelToStyleCB.GetPosPixel();
-    aRelToStyleIdxPos = aCommaSeparatedCB.GetPosPixel();
-    aRelToStyleIdxPos.Y() +=
-        (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
-    aEditStylePB.Enable(sal_False);
-
-    //get position for Numbering and other stuff
-    aChapterEntryFTPosition = aChapterEntryFT.GetPosPixel();
-    aEntryOutlineLevelFTPosition = aEntryOutlineLevelFT.GetPosPixel();
-    nBiasToEntryPoint = aEntryOutlineLevelNF.GetPosPixel().X() -
-                               aEntryOutlineLevelFT.GetPosPixel().X();
+    m_pEditStylePB->Enable(sal_False);
 
     //fill the types in
-    sal_uInt16 i;
-    for( i = 0; i < AUTH_FIELD_END; i++)
+    for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
         String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-        sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
-        aAuthFieldsLB.SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
+        sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+        m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
     }
-    sal_uInt16 nPos = aFirstKeyLB.InsertEntry(sNoCharSortKey);
-    aFirstKeyLB.SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
-    nPos = aSecondKeyLB.InsertEntry(sNoCharSortKey);
-    aSecondKeyLB.SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
-    nPos = aThirdKeyLB.InsertEntry(sNoCharSortKey);
-    aThirdKeyLB.SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
+    sal_uInt16 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
+    m_pFirstKeyLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
+    nPos = m_pSecondKeyLB->InsertEntry(sNoCharSortKey);
+    m_pSecondKeyLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
+    nPos = m_pThirdKeyLB->InsertEntry(sNoCharSortKey);
+    m_pThirdKeyLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(USHRT_MAX)));
 
-    for( i = 0; i < AUTH_FIELD_END; i++)
+    for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
-        String sTmp(aAuthFieldsLB.GetEntry(i));
-        void* pEntryData = aAuthFieldsLB.GetEntryData(i);
-        nPos = aFirstKeyLB.InsertEntry(sTmp);
-        aFirstKeyLB.SetEntryData(nPos, pEntryData);
-        nPos = aSecondKeyLB.InsertEntry(sTmp);
-        aSecondKeyLB.SetEntryData(nPos, pEntryData);
-        nPos = aThirdKeyLB.InsertEntry(sTmp);
-        aThirdKeyLB.SetEntryData(nPos, pEntryData);
+        String sTmp(m_pAuthFieldsLB->GetEntry(i));
+        void* pEntryData = m_pAuthFieldsLB->GetEntryData(i);
+        nPos = m_pFirstKeyLB->InsertEntry(sTmp);
+        m_pFirstKeyLB->SetEntryData(nPos, pEntryData);
+        nPos = m_pSecondKeyLB->InsertEntry(sTmp);
+        m_pSecondKeyLB->SetEntryData(nPos, pEntryData);
+        nPos = m_pThirdKeyLB->InsertEntry(sTmp);
+        m_pThirdKeyLB->SetEntryData(nPos, pEntryData);
     }
-    aFirstKeyLB.SelectEntryPos(0);
-    aSecondKeyLB.SelectEntryPos(0);
-    aThirdKeyLB.SelectEntryPos(0);
+    m_pFirstKeyLB->SelectEntryPos(0);
+    m_pSecondKeyLB->SelectEntryPos(0);
+    m_pThirdKeyLB->SelectEntryPos(0);
 }
 /* --------------------------------------------------
     pVoid is used as signal to change all levels of the example
@@ -2008,7 +1980,7 @@ IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 
     if(pTOXDlg)
     {
-        sal_uInt16 nCurLevel = static_cast< sal_uInt16 >(aLevelLB.GetModel()->GetAbsPos(aLevelLB.FirstSelected()) + 1);
+        sal_uInt16 nCurLevel = static_cast< sal_uInt16 >(m_pLevelLB->GetModel()->GetAbsPos(m_pLevelLB->FirstSelected()) + 1);
         if(aLastTOXType.eType == TOX_CONTENT && pVoid)
             nCurLevel = USHRT_MAX;
         pTOXDlg->CreateOrUpdateExample(
@@ -2039,31 +2011,17 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
         if(sMainEntryCharStyle.Len())
         {
             if( LISTBOX_ENTRY_NOTFOUND ==
-                    aMainEntryStyleLB.GetEntryPos(sMainEntryCharStyle))
-                aMainEntryStyleLB.InsertEntry(
+                    m_pMainEntryStyleLB->GetEntryPos(sMainEntryCharStyle))
+                m_pMainEntryStyleLB->InsertEntry(
                         sMainEntryCharStyle);
-            aMainEntryStyleLB.SelectEntry(sMainEntryCharStyle);
+            m_pMainEntryStyleLB->SelectEntry(sMainEntryCharStyle);
         }
         else
-            aMainEntryStyleLB.SelectEntry(sNoCharStyle);
-        aAlphaDelimCB.Check( 0 != (rDesc.GetIndexOptions() & nsSwTOIOptions::TOI_ALPHA_DELIMITTER) );
+            m_pMainEntryStyleLB->SelectEntry(sNoCharStyle);
+        m_pAlphaDelimCB->Check( 0 != (rDesc.GetIndexOptions() & nsSwTOIOptions::TOI_ALPHA_DELIMITTER) );
     }
-    aRelToStyleCB.Check(m_pCurrentForm->IsRelTabPos());
-    aCommaSeparatedCB.Check(m_pCurrentForm->IsCommaSeparated());
-}
-
-static void lcl_ChgWidth(Window& rWin, long nDiff)
-{
- Size aTempSz(rWin.GetSizePixel());
-    aTempSz.Width() += nDiff;
-    rWin.SetSizePixel(aTempSz);
-}
-
-static void lcl_ChgXPos(Window& rWin, long nDiff)
-{
-    Point aTempPos(rWin.GetPosPixel());
-    aTempPos.X() += nDiff;
-    rWin.SetPosPixel(aTempPos);
+    m_pRelToStyleCB->Check(m_pCurrentForm->IsRelTabPos());
+    m_pCommaSeparatedCB->Check(m_pCurrentForm->IsCommaSeparated());
 }
 
 void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
@@ -2079,21 +2037,21 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         sal_Bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
         sal_Bool bToxIsSequence =    TOX_ILLUSTRATIONS == aCurType.eType;
 
-        aLevelLB.Clear();
+        m_pLevelLB->Clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
         {
             if(bToxIsAuthorities)
-                aLevelLB.InsertEntry( SwAuthorityFieldType::GetAuthTypeName(
+                m_pLevelLB->InsertEntry( SwAuthorityFieldType::GetAuthTypeName(
                                             (ToxAuthorityType) (i - 1)) );
             else if( bToxIsIndex )
             {
                 if(i == 1)
-                    aLevelLB.InsertEntry( sDelimStr );
+                    m_pLevelLB->InsertEntry( sDelimStr );
                 else
-                    aLevelLB.InsertEntry( OUString::number(i - 1) );
+                    m_pLevelLB->InsertEntry( OUString::number(i - 1) );
             }
             else
-                aLevelLB.InsertEntry(OUString::number(i));
+                m_pLevelLB->InsertEntry(OUString::number(i));
         }
         if(bToxIsAuthorities)
         {
@@ -2104,151 +2062,74 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
             if(pFType)
             {
                 if(pFType->IsSortByDocument())
-                    aSortDocPosRB.Check();
+                    m_pSortDocPosRB->Check();
                 else
                 {
-                    aSortContentRB.Check();
+                    m_pSortContentRB->Check();
                     sal_uInt16 nKeyCount = pFType->GetSortKeyCount();
                     if(0 < nKeyCount)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(0);
-                        aFirstKeyLB.SelectEntryPos(
-                            aFirstKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
-                        aFirstSortUpRB.Check(pKey->bSortAscending);
-                        aFirstSortDownRB.Check(!pKey->bSortAscending);
+                        m_pFirstKeyLB->SelectEntryPos(
+                            m_pFirstKeyLB->GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
+                        m_pFirstSortUpRB->Check(pKey->bSortAscending);
+                        m_pFirstSortDownRB->Check(!pKey->bSortAscending);
                     }
                     if(1 < nKeyCount)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(1);
-                        aSecondKeyLB.SelectEntryPos(
-                            aSecondKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
-                        aSecondSortUpRB.Check(pKey->bSortAscending);
-                        aSecondSortDownRB.Check(!pKey->bSortAscending);
+                        m_pSecondKeyLB->SelectEntryPos(
+                            m_pSecondKeyLB->GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
+                        m_pSecondSortUpRB->Check(pKey->bSortAscending);
+                        m_pSecondSortDownRB->Check(!pKey->bSortAscending);
                     }
                     if(2 < nKeyCount)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(2);
-                        aThirdKeyLB.SelectEntryPos(
-                            aThirdKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
-                        aThirdSortUpRB.Check(pKey->bSortAscending);
-                        aThirdSortDownRB.Check(!pKey->bSortAscending);
+                        m_pThirdKeyLB->SelectEntryPos(
+                            m_pThirdKeyLB->GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
+                        m_pThirdSortUpRB->Check(pKey->bSortAscending);
+                        m_pThirdSortDownRB->Check(!pKey->bSortAscending);
                     }
                 }
             }
-            SortKeyHdl(aSortDocPosRB.IsChecked() ? &aSortDocPosRB : &aSortContentRB);
-            aLevelFT.SetText(sAuthTypeStr);
+            SortKeyHdl(m_pSortDocPosRB->IsChecked() ? m_pSortDocPosRB : m_pSortContentRB);
+            m_pLevelFT->SetText(sAuthTypeStr);
         }
         else
-            aLevelFT.SetText(sLevelStr);
+            m_pLevelFT->SetText(sLevelStr);
 
-        long nDiff = 0;
-        if( bToxIsAuthorities ? aLevelFT.GetSizePixel() == aLevelFLSize
-                              : aLevelFT.GetSizePixel() != aLevelFLSize )
-        {
-            nDiff = aLevelFLSize.Width();
-            if( !bToxIsAuthorities )
-                nDiff *= -1;
-        }
-
-        if(nDiff)
-        {
-            lcl_ChgWidth(aLevelFT, nDiff);
-            lcl_ChgWidth(aLevelLB, nDiff);
-            lcl_ChgXPos(aCharStyleFT, nDiff);
-            lcl_ChgXPos(aCharStyleLB, nDiff);
-            lcl_ChgWidth(aCharStyleLB, -nDiff);
-            lcl_ChgXPos(aFillCharFT,  nDiff);
-            lcl_ChgXPos(aFillCharCB,  nDiff);
-            lcl_ChgXPos(aTabPosFT,   nDiff);
-            lcl_ChgXPos(aTabPosMF,   nDiff);
-            lcl_ChgXPos(aAutoRightCB, nDiff);
-            lcl_ChgXPos(aAuthFieldsLB,   nDiff);
-            lcl_ChgXPos(aAuthInsertPB,   nDiff);
-            lcl_ChgXPos(aAuthRemovePB,   nDiff);
-            lcl_ChgXPos(aTokenFT, nDiff);
-            lcl_ChgXPos(aTokenWIN,   nDiff);
-            lcl_ChgWidth(aTokenWIN, -nDiff);
-            lcl_ChgXPos(aSortDocPosRB,   nDiff);
-            lcl_ChgXPos(aSortContentRB,      nDiff);
-            lcl_ChgXPos(aFormatFL,  nDiff);
-            lcl_ChgWidth(aFormatFL,     -nDiff);
-            lcl_ChgXPos(aSortingFL, nDiff);
-            lcl_ChgWidth(aSortingFL,    -nDiff);
-            lcl_ChgXPos(aEntryFL,   nDiff);
-            lcl_ChgWidth(aEntryFL,  -nDiff);
-
-            lcl_ChgXPos(aFirstKeyFT, nDiff);
-            lcl_ChgXPos(aFirstKeyLB, nDiff);
-            lcl_ChgXPos(aSecondKeyFT, nDiff);
-            lcl_ChgXPos(aSecondKeyLB, nDiff);
-            lcl_ChgXPos(aThirdKeyFT, nDiff);
-            lcl_ChgXPos(aThirdKeyLB, nDiff);
-            lcl_ChgXPos(aSortKeyFL,     nDiff);
-
-            lcl_ChgWidth(aFirstKeyLB, -nDiff);
-            lcl_ChgWidth(aSecondKeyLB, -nDiff);
-            lcl_ChgWidth(aThirdKeyLB, -nDiff);
-            lcl_ChgWidth(aSortKeyFL, -nDiff);
-        }
-        Link aLink = aLevelLB.GetSelectHdl();
-        aLevelLB.SetSelectHdl(Link());
-        aLevelLB.Select( aLevelLB.GetEntry( bToxIsIndex ? 1 : 0 ) );
-        aLevelLB.SetSelectHdl(aLink);
-
-        // sort token buttons
-        aEntryNoPB.SetPosPixel(aButtonPositions[0]);
-        aEntryPB.SetPosPixel(aButtonPositions[ bToxIsContent ? 1 : 0]);
-        aChapterInfoPB.SetPosPixel(aButtonPositions[2]);
-        aPageNoPB.SetPosPixel(aButtonPositions[3]);
-        sal_uInt16 nBtPos = 1;
-        if( bToxIsContent )
-            nBtPos = 2;
-        else if( bToxIsAuthorities )
-            nBtPos = 4;
-        aTabPB.SetPosPixel(aButtonPositions[nBtPos]);
-        aHyperLinkPB.SetPosPixel(aButtonPositions[4]);
+        Link aLink = m_pLevelLB->GetSelectHdl();
+        m_pLevelLB->SetSelectHdl(Link());
+        m_pLevelLB->Select( m_pLevelLB->GetEntry( bToxIsIndex ? 1 : 0 ) );
+        m_pLevelLB->SetSelectHdl(aLink);
 
         //show or hide controls
-        aEntryNoPB.Show(        bToxIsContent );
-        aHyperLinkPB.Show(      bToxIsContent || bToxIsSequence );
-        aRelToStyleCB.Show(    !bToxIsAuthorities );
-        aChapterInfoPB.Show(    !bToxIsContent && !bToxIsAuthorities);
-        aEntryPB.Show(         !bToxIsAuthorities );
-        aPageNoPB.Show(        !bToxIsAuthorities );
-        aAuthFieldsLB.Show(     bToxIsAuthorities );
-        aAuthInsertPB.Show(     bToxIsAuthorities );
-        aAuthRemovePB.Show(     bToxIsAuthorities );
-        aFormatFL.Show(        !bToxIsAuthorities );
-        aSortDocPosRB.Show(     bToxIsAuthorities );
-        aSortContentRB.Show(    bToxIsAuthorities );
-        aSortingFL.Show(        bToxIsAuthorities );
-        aFirstKeyFT.Show(       bToxIsAuthorities );
-        aFirstKeyLB.Show(       bToxIsAuthorities );
-        aSecondKeyFT.Show(      bToxIsAuthorities );
-        aSecondKeyLB.Show(      bToxIsAuthorities );
-        aThirdKeyFT.Show(       bToxIsAuthorities );
-        aThirdKeyLB.Show(       bToxIsAuthorities );
-        aSortKeyFL.Show(        bToxIsAuthorities );
-        aFirstSortUpRB.Show(    bToxIsAuthorities );
-        aFirstSortDownRB.Show(  bToxIsAuthorities );
-        aSecondSortUpRB.Show(   bToxIsAuthorities );
-        aSecondSortDownRB.Show( bToxIsAuthorities );
-        aThirdSortUpRB.Show(    bToxIsAuthorities );
-        aThirdSortDownRB.Show(  bToxIsAuthorities );
+        m_pEntryNoPB->Show(bToxIsContent);
+        m_pHyperLinkPB->Show(bToxIsContent || bToxIsSequence);
+        m_pRelToStyleCB->Show(!bToxIsAuthorities);
+        m_pChapterInfoPB->Show(!bToxIsContent && !bToxIsAuthorities);
+        m_pEntryPB->Show(!bToxIsAuthorities);
+        m_pPageNoPB->Show(!bToxIsAuthorities);
+        m_pAuthFieldsLB->Show(bToxIsAuthorities);
+        m_pAuthInsertPB->Show(bToxIsAuthorities);
+        m_pAuthRemovePB->Show(bToxIsAuthorities);
 
-        aRelToStyleCB.SetPosPixel( bToxIsIndex ? aRelToStyleIdxPos
-                                               : aRelToStylePos );
+        m_pFormatFrame->Show(!bToxIsAuthorities);
 
-        aMainEntryStyleFT.Show( bToxIsIndex );
-        aMainEntryStyleLB.Show( bToxIsIndex );
-        aAlphaDelimCB.Show(     bToxIsIndex );
-        aCommaSeparatedCB.Show( bToxIsIndex );
+        m_pSortingFrame->Show(bToxIsAuthorities);
+        m_pSortKeyFrame->Show(bToxIsAuthorities);
+
+        m_pMainEntryStyleFT->Show(bToxIsIndex);
+        m_pMainEntryStyleLB->Show(bToxIsIndex);
+        m_pAlphaDelimCB->Show(bToxIsIndex);
+        m_pCommaSeparatedCB->Show(bToxIsIndex);
     }
     aLastTOXType = aCurType;
 
     //invalidate PatternWindow
-    aTokenWIN.SetInvalid();
-    LevelHdl(&aLevelLB);
+    m_pTokenWIN->SetInvalid();
+    LevelHdl(m_pLevelLB);
 }
 
 void SwTOXEntryTabPage::UpdateDescriptor()
@@ -2258,37 +2139,37 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aLastTOXType);
     if(TOX_INDEX == aLastTOXType.eType)
     {
-        String sTemp(aMainEntryStyleLB.GetSelectEntry());
+        String sTemp(m_pMainEntryStyleLB->GetSelectEntry());
         rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? aEmptyStr : sTemp);
         sal_uInt16 nIdxOptions = rDesc.GetIndexOptions() & ~nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
-        if(aAlphaDelimCB.IsChecked())
+        if(m_pAlphaDelimCB->IsChecked())
             nIdxOptions |= nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
         rDesc.SetIndexOptions(nIdxOptions);
     }
     else if(TOX_AUTHORITIES == aLastTOXType.eType)
     {
-        rDesc.SetSortByDocument(aSortDocPosRB.IsChecked());
+        rDesc.SetSortByDocument(m_pSortDocPosRB->IsChecked());
         SwTOXSortKey aKey1, aKey2, aKey3;
-        aKey1.eField = (ToxAuthorityField)(sal_uIntPtr)aFirstKeyLB.GetEntryData(
-                                    aFirstKeyLB.GetSelectEntryPos());
-        aKey1.bSortAscending = aFirstSortUpRB.IsChecked();
-        aKey2.eField = (ToxAuthorityField)(sal_uIntPtr)aSecondKeyLB.GetEntryData(
-                                    aSecondKeyLB.GetSelectEntryPos());
-        aKey2.bSortAscending = aSecondSortUpRB.IsChecked();
-        aKey3.eField = (ToxAuthorityField)(sal_uIntPtr)aThirdKeyLB.GetEntryData(
-                                aThirdKeyLB.GetSelectEntryPos());
-        aKey3.bSortAscending = aThirdSortUpRB.IsChecked();
+        aKey1.eField = (ToxAuthorityField)(sal_uIntPtr)m_pFirstKeyLB->GetEntryData(
+                                    m_pFirstKeyLB->GetSelectEntryPos());
+        aKey1.bSortAscending = m_pFirstSortUpRB->IsChecked();
+        aKey2.eField = (ToxAuthorityField)(sal_uIntPtr)m_pSecondKeyLB->GetEntryData(
+                                    m_pSecondKeyLB->GetSelectEntryPos());
+        aKey2.bSortAscending = m_pSecondSortUpRB->IsChecked();
+        aKey3.eField = (ToxAuthorityField)(sal_uIntPtr)m_pThirdKeyLB->GetEntryData(
+                                m_pThirdKeyLB->GetSelectEntryPos());
+        aKey3.bSortAscending = m_pThirdSortUpRB->IsChecked();
 
 
         rDesc.SetSortKeys(aKey1, aKey2, aKey3);
     }
     SwForm* pCurrentForm = pTOXDlg->GetForm(aLastTOXType);
-    if(aRelToStyleCB.IsVisible())
+    if(m_pRelToStyleCB->IsVisible())
     {
-        pCurrentForm->SetRelTabPos(aRelToStyleCB.IsChecked());
+        pCurrentForm->SetRelTabPos(m_pRelToStyleCB->IsChecked());
     }
-    if(aCommaSeparatedCB.IsVisible())
-        pCurrentForm->SetCommaSeparated(aCommaSeparatedCB.IsChecked());
+    if(m_pCommaSeparatedCB->IsVisible())
+        pCurrentForm->SetCommaSeparated(m_pCommaSeparatedCB->IsChecked());
 }
 
 int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
@@ -2304,9 +2185,9 @@ SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet& rA
 
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 {
-    if( LISTBOX_ENTRY_NOTFOUND != aCharStyleLB.GetSelectEntryPos())
+    if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
     {
-        SfxStringItem aStyle(SID_STYLE_EDIT, aCharStyleLB.GetSelectEntry());
+        SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_CHAR);
         // TODO: WrtShell?
 //      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
@@ -2323,27 +2204,27 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 
 IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
 {
-    bool bInsert = pButton == &aAuthInsertPB;
+    bool bInsert = pButton == m_pAuthInsertPB;
     if(bInsert)
     {
-        sal_uInt16 nSelPos = aAuthFieldsLB.GetSelectEntryPos();
-        String sToInsert(aAuthFieldsLB.GetSelectEntry());
+        sal_uInt16 nSelPos = m_pAuthFieldsLB->GetSelectEntryPos();
+        String sToInsert(m_pAuthFieldsLB->GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
-        aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)aAuthFieldsLB.GetEntryData(nSelPos);
-        aTokenWIN.InsertAtSelection(SwForm::GetFormAuth(), aInsert);
-        aAuthFieldsLB.RemoveEntry(sToInsert);
-        aAuthFieldsLB.SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
+        aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)m_pAuthFieldsLB->GetEntryData(nSelPos);
+        m_pTokenWIN->InsertAtSelection(SwForm::GetFormAuth(), aInsert);
+        m_pAuthFieldsLB->RemoveEntry(sToInsert);
+        m_pAuthFieldsLB->SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
     }
     else
     {
-        Control* pCtrl = aTokenWIN.GetActiveControl();
+        Control* pCtrl = m_pTokenWIN->GetActiveControl();
         OSL_ENSURE(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
         if( WINDOW_EDIT != pCtrl->GetType() )
         {
             //fill it into the ListBox
             const SwFormToken& rToken = ((SwTOXButton*)pCtrl)->GetFormToken();
             PreTokenButtonRemoved(rToken);
-            aTokenWIN.RemoveControl((SwTOXButton*)pCtrl);
+            m_pTokenWIN->RemoveControl((SwTOXButton*)pCtrl);
         }
     }
     ModifyHdl(0);
@@ -2355,8 +2236,8 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
     String sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
-    sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
-    aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
+    sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
+    m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
 /*-----------------------------------------------------------------------
 
@@ -2369,12 +2250,12 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     String sCharStyle;
     sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
-    if(pBtn == &aEntryNoPB)
+    if(pBtn == m_pEntryNoPB)
     {
         sText = SwForm::GetFormEntryNum();
         eTokenType = TOKEN_ENTRY_NO;
     }
-    else if(pBtn == &aEntryPB)
+    else if(pBtn == m_pEntryPB)
     {
         if( TOX_CONTENT == m_pCurrentForm->GetTOXType() )
         {
@@ -2387,24 +2268,24 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
             eTokenType = TOKEN_ENTRY;
         }
     }
-    else if(pBtn == &aChapterInfoPB)
+    else if(pBtn == m_pChapterInfoPB)
     {
         sText = SwForm::GetFormChapterMark();
         eTokenType = TOKEN_CHAPTER_INFO;
         nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
     }
-    else if(pBtn == &aPageNoPB)
+    else if(pBtn == m_pPageNoPB)
     {
         sText = SwForm::GetFormPageNums();
         eTokenType = TOKEN_PAGE_NUMS;
     }
-    else if(pBtn == &aHyperLinkPB)
+    else if(pBtn == m_pHyperLinkPB)
     {
         sText = SwForm::GetFormLinkStt();
         eTokenType = TOKEN_LINK_START;
         sCharStyle = String(SW_RES(STR_POOLCHR_TOXJUMP));
     }
-    else if(pBtn == &aTabPB)
+    else if(pBtn == m_pTabPB)
     {
         sText = SwForm::GetFormTab();
         eTokenType = TOKEN_TAB_STOP;
@@ -2413,7 +2294,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     aInsert.sCharStyleName = sCharStyle;
     aInsert.nTabStopPosition = 0;
     aInsert.nChapterFormat = nChapterFormat; // i89791
-    aTokenWIN.InsertAtSelection(sText, aInsert);
+    m_pTokenWIN->InsertAtSelection(sText, aInsert);
     ModifyHdl(0);
     return 0;
 }
@@ -2422,9 +2303,9 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
 {
     //get current level
     //write it into all levels
-    if(aTokenWIN.IsValid())
+    if(m_pTokenWIN->IsValid())
     {
-        String sNewToken = aTokenWIN.GetPattern();
+        String sNewToken = m_pTokenWIN->GetPattern();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
             m_pCurrentForm->SetPattern(i, sNewToken);
         //
@@ -2435,10 +2316,10 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
 
 void SwTOXEntryTabPage::WriteBackLevel()
 {
-    if(aTokenWIN.IsValid())
+    if(m_pTokenWIN->IsValid())
     {
-        String sNewToken = aTokenWIN.GetPattern();
-        sal_uInt16 nLastLevel = aTokenWIN.GetLastLevel();
+        String sNewToken = m_pTokenWIN->GetPattern();
+        sal_uInt16 nLastLevel = m_pTokenWIN->GetLastLevel();
         if(nLastLevel != USHRT_MAX)
             m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken );
     }
@@ -2452,16 +2333,16 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     WriteBackLevel();
 
     sal_uInt16 nLevel = static_cast< sal_uInt16 >(pBox->GetModel()->GetAbsPos(pBox->FirstSelected()));
-    aTokenWIN.SetForm(*m_pCurrentForm, nLevel);
+    m_pTokenWIN->SetForm(*m_pCurrentForm, nLevel);
     if(TOX_AUTHORITIES == m_pCurrentForm->GetTOXType())
     {
         //fill the types in
-        aAuthFieldsLB.Clear();
+        m_pAuthFieldsLB->Clear();
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
             String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
-            sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
-            aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
+            sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTmp);
+            m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
         // #i21237#
@@ -2474,14 +2355,14 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
-                sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*)(sal_uIntPtr)nSearch );
+                sal_uInt16  nLstBoxPos = m_pAuthFieldsLB->GetEntryPos( (void*)(sal_uIntPtr)nSearch );
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
-                aAuthFieldsLB.RemoveEntry(nLstBoxPos);
+                m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
 
             aIt++; // #i21237#
         }
-        aAuthFieldsLB.SelectEntryPos(0);
+        m_pAuthFieldsLB->SelectEntryPos(0);
     }
     bInLevelHdl = sal_False;
     pBox->GrabFocus();
@@ -2490,32 +2371,20 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 
 IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
 {
-    sal_Bool bEnable = &aSortContentRB == pButton;
-    aFirstKeyFT.Enable(bEnable);
-    aFirstKeyLB.Enable(bEnable);
-    aSecondKeyFT.Enable(bEnable);
-    aSecondKeyLB.Enable(bEnable);
-    aThirdKeyFT.Enable(bEnable);
-    aThirdKeyLB.Enable(bEnable);
-    aSortKeyFL.Enable(bEnable);
-    aFirstSortUpRB.Enable(bEnable);
-    aFirstSortDownRB.Enable(bEnable);
-    aSecondSortUpRB.Enable(bEnable);
-    aSecondSortDownRB.Enable(bEnable);
-    aThirdSortUpRB.Enable(bEnable);
-    aThirdSortDownRB.Enable(bEnable);
+    bool bEnable = m_pSortContentRB == pButton;
+    m_pSortKeyFrame->Enable(bEnable);
     return 0;
 }
 
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 {
     if (!pToken->sCharStyleName.isEmpty())
-        aCharStyleLB.SelectEntry(pToken->sCharStyleName);
+        m_pCharStyleLB->SelectEntry(pToken->sCharStyleName);
     else
-        aCharStyleLB.SelectEntry(sNoCharStyle);
+        m_pCharStyleLB->SelectEntry(sNoCharStyle);
 
-    String sEntry = aCharStyleLB.GetSelectEntry();
-    aEditStylePB.Enable(sEntry != sNoCharStyle);
+    String sEntry = m_pCharStyleLB->GetSelectEntry();
+    m_pEditStylePB->Enable(sEntry != sNoCharStyle);
 
     if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
     {
@@ -2523,102 +2392,102 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         switch(pToken->nChapterFormat)
         {
         default:
-            aChapterEntryLB.SetNoSelection();//to alert the user
+            m_pChapterEntryLB->SetNoSelection();//to alert the user
             break;
         case CF_NUM_NOPREPST_TITLE:
-            aChapterEntryLB.SelectEntryPos(0);
+            m_pChapterEntryLB->SelectEntryPos(0);
             break;
         case CF_TITLE:
-            aChapterEntryLB.SelectEntryPos(1);
+            m_pChapterEntryLB->SelectEntryPos(1);
            break;
         case CF_NUMBER_NOPREPST:
-            aChapterEntryLB.SelectEntryPos(2);
+            m_pChapterEntryLB->SelectEntryPos(2);
             break;
         }
 //i53420
 
-        aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
+        m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
     }
 
 //i53420
     if(pToken->eTokenType == TOKEN_ENTRY_NO)
     {
-        aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
+        m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
         sal_uInt16 nFormat = 0;
         if( pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE )
             nFormat = 1;
-        aNumberFormatLB.SelectEntryPos(nFormat);
+        m_pNumberFormatLB->SelectEntryPos(nFormat);
     }
 
     sal_Bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
-    aFillCharFT.Show(bTabStop);
-    aFillCharCB.Show(bTabStop);
-    aTabPosFT.Show(bTabStop);
-    aTabPosMF.Show(bTabStop);
-    aAutoRightCB.Show(bTabStop);
-    aAutoRightCB.Enable(bTabStop);
+    m_pFillCharFT->Show(bTabStop);
+    m_pFillCharCB->Show(bTabStop);
+    m_pTabPosFT->Show(bTabStop);
+    m_pTabPosMF->Show(bTabStop);
+    m_pAutoRightCB->Show(bTabStop);
+    m_pAutoRightCB->Enable(bTabStop);
     if(bTabStop)
     {
-        aTabPosMF.SetValue(aTabPosMF.Normalize(pToken->nTabStopPosition), FUNIT_TWIP);
-        aAutoRightCB.Check(SVX_TAB_ADJUST_END == pToken->eTabAlign);
-        aFillCharCB.SetText(OUString(pToken->cTabFillChar));
-        aTabPosFT.Enable(!aAutoRightCB.IsChecked());
-        aTabPosMF.Enable(!aAutoRightCB.IsChecked());
+        m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(pToken->nTabStopPosition), FUNIT_TWIP);
+        m_pAutoRightCB->Check(SVX_TAB_ADJUST_END == pToken->eTabAlign);
+        m_pFillCharCB->SetText(OUString(pToken->cTabFillChar));
+        m_pTabPosFT->Enable(!m_pAutoRightCB->IsChecked());
+        m_pTabPosMF->Enable(!m_pAutoRightCB->IsChecked());
     }
     else
     {
-        aTabPosMF.Enable(sal_False);
+        m_pTabPosMF->Enable(sal_False);
     }
 
     sal_Bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
     sal_Bool bIsEntryNumber = pToken->eTokenType == TOKEN_ENTRY_NO;
-    aChapterEntryFT.Show( bIsChapterInfo );
-    aChapterEntryLB.Show( bIsChapterInfo );
-    aEntryOutlineLevelFT.Show( bIsChapterInfo || bIsEntryNumber );
-    aEntryOutlineLevelNF.Show( bIsChapterInfo || bIsEntryNumber );
-    aNumberFormatFT.Show( bIsEntryNumber );
-    aNumberFormatLB.Show( bIsEntryNumber );
+    m_pChapterEntryFT->Show( bIsChapterInfo );
+    m_pChapterEntryLB->Show( bIsChapterInfo );
+    m_pEntryOutlineLevelFT->Show( bIsChapterInfo || bIsEntryNumber );
+    m_pEntryOutlineLevelNF->Show( bIsChapterInfo || bIsEntryNumber );
+    m_pNumberFormatFT->Show( bIsEntryNumber );
+    m_pNumberFormatLB->Show( bIsEntryNumber );
 
 
     //now enable the visible buttons
     //- inserting the same type of control is not allowed
     //- some types of controls can only appear once (EntryText EntryNumber)
 
-    if(aEntryNoPB.IsVisible())
+    if(m_pEntryNoPB->IsVisible())
     {
-        aEntryNoPB.Enable(TOKEN_ENTRY_NO != pToken->eTokenType );
+        m_pEntryNoPB->Enable(TOKEN_ENTRY_NO != pToken->eTokenType );
     }
-    if(aEntryPB.IsVisible())
+    if(m_pEntryPB->IsVisible())
     {
-        aEntryPB.Enable(TOKEN_ENTRY_TEXT != pToken->eTokenType &&
-                                !aTokenWIN.Contains(TOKEN_ENTRY_TEXT)
-                                && !aTokenWIN.Contains(TOKEN_ENTRY));
+        m_pEntryPB->Enable(TOKEN_ENTRY_TEXT != pToken->eTokenType &&
+                                !m_pTokenWIN->Contains(TOKEN_ENTRY_TEXT)
+                                && !m_pTokenWIN->Contains(TOKEN_ENTRY));
     }
 
-    if(aChapterInfoPB.IsVisible())
+    if(m_pChapterInfoPB->IsVisible())
     {
-        aChapterInfoPB.Enable(TOKEN_CHAPTER_INFO != pToken->eTokenType);
+        m_pChapterInfoPB->Enable(TOKEN_CHAPTER_INFO != pToken->eTokenType);
     }
-    if(aPageNoPB.IsVisible())
+    if(m_pPageNoPB->IsVisible())
     {
-        aPageNoPB.Enable(TOKEN_PAGE_NUMS != pToken->eTokenType &&
-                                !aTokenWIN.Contains(TOKEN_PAGE_NUMS));
+        m_pPageNoPB->Enable(TOKEN_PAGE_NUMS != pToken->eTokenType &&
+                                !m_pTokenWIN->Contains(TOKEN_PAGE_NUMS));
     }
-    if(aTabPB.IsVisible())
+    if(m_pTabPB->IsVisible())
     {
-        aTabPB.Enable(!bTabStop);
+        m_pTabPB->Enable(!bTabStop);
     }
-    if(aHyperLinkPB.IsVisible())
+    if(m_pHyperLinkPB->IsVisible())
     {
-        aHyperLinkPB.Enable(TOKEN_LINK_START != pToken->eTokenType &&
+        m_pHyperLinkPB->Enable(TOKEN_LINK_START != pToken->eTokenType &&
                             TOKEN_LINK_END != pToken->eTokenType);
     }
     //table of authorities
-    if(aAuthInsertPB.IsVisible())
+    if(m_pAuthInsertPB->IsVisible())
     {
         bool bText = TOKEN_TEXT == pToken->eTokenType;
-        aAuthInsertPB.Enable(bText && !aAuthFieldsLB.GetSelectEntry().isEmpty());
-        aAuthRemovePB.Enable(!bText);
+        m_pAuthInsertPB->Enable(bText && !m_pAuthFieldsLB->GetSelectEntry().isEmpty());
+        m_pAuthRemovePB->Enable(!bText);
     }
 
     return 0;
@@ -2628,10 +2497,10 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     String sEntry = pBox->GetSelectEntry();
     sal_uInt16 nId = (sal_uInt16)(sal_IntPtr)pBox->GetEntryData(pBox->GetSelectEntryPos());
-    aEditStylePB.Enable(sEntry != sNoCharStyle);
+    m_pEditStylePB->Enable(sEntry != sNoCharStyle);
     if(sEntry == sNoCharStyle)
         sEntry.Erase();
-    Control* pCtrl = aTokenWIN.GetActiveControl();
+    Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl)
     {
@@ -2650,7 +2519,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        Control* pCtrl = aTokenWIN.GetActiveControl();
+        Control* pCtrl = m_pTokenWIN->GetActiveControl();
         OSL_ENSURE(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
             ((SwTOXButton*)pCtrl)->SetChapterInfo(nPos);
@@ -2664,7 +2533,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
 {
     const sal_uInt16 nLevel = static_cast<sal_uInt8>(pField->GetValue());
 
-    Control* pCtrl = aTokenWIN.GetActiveControl();
+    Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         ((SwTOXButton*)pCtrl)->SetOutlineLevel(nLevel);
@@ -2679,7 +2548,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        Control* pCtrl = aTokenWIN.GetActiveControl();
+        Control* pCtrl = m_pTokenWIN->GetActiveControl();
         OSL_ENSURE(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
@@ -2692,7 +2561,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
 {
-    Control* pCtrl = aTokenWIN.GetActiveControl();
+    Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
@@ -2707,7 +2576,7 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
 
 IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
 {
-    Control* pCtrl = aTokenWIN.GetActiveControl();
+    Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
@@ -2727,7 +2596,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
 IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 {
     //the most right style::TabStop is usually right aligned
-    Control* pCurCtrl = aTokenWIN.GetActiveControl();
+    Control* pCurCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(WINDOW_EDIT != pCurCtrl->GetType() &&
             ((SwTOXButton*)pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
             "no style::TabStop selected!");
@@ -2737,8 +2606,8 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
     if(rToken.eTokenType == TOKEN_TAB_STOP)
         ((SwTOXButton*)pCurCtrl)->SetTabAlign(
             bChecked ? SVX_TAB_ADJUST_END : SVX_TAB_ADJUST_LEFT);
-    aTabPosFT.Enable(!bChecked);
-    aTabPosMF.Enable(!bChecked);
+    m_pTabPosFT->Enable(!bChecked);
+    m_pTabPosMF->Enable(!bChecked);
     ModifyHdl(0);
     return 0;
 }
@@ -2746,18 +2615,18 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
-    ::FillCharStyleListBox(aCharStyleLB, pDocSh, true, true);
+    ::FillCharStyleListBox(*m_pCharStyleLB, pDocSh, true, true);
     const String sDefault(SW_RES(STR_POOLCOLL_STANDARD));
-    for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
+    for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
-        String sEntry = aCharStyleLB.GetEntry(i);
+        String sEntry = m_pCharStyleLB->GetEntry(i);
         if(sDefault != sEntry)
         {
-            aMainEntryStyleLB.InsertEntry( sEntry );
-            aMainEntryStyleLB.SetEntryData(i, aCharStyleLB.GetEntryData(i));
+            m_pMainEntryStyleLB->InsertEntry( sEntry );
+            m_pMainEntryStyleLB->SetEntryData(i, m_pCharStyleLB->GetEntryData(i));
         }
     }
-    aMainEntryStyleLB.SelectEntry( SwStyleNameMapper::GetUIName(
+    m_pMainEntryStyleLB->SelectEntry( SwStyleNameMapper::GetUIName(
                                 RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
 }
 
@@ -2778,7 +2647,7 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     return sRet;
 }
 
-SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
+SwTokenWindow::SwTokenWindow(Window* pParent, const ResId& rResId) :
         Window( pParent, rResId ),
         aLeftScrollWin(this, ResId(WIN_LEFT_SCROLL, *rResId.GetResMgr()  )),
         aCtrlParentWin(this, ResId(WIN_CTRL_PARENT, *rResId.GetResMgr()   )),
@@ -2788,7 +2657,7 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         bValid(sal_False),
         sCharStyle(ResId(STR_CHARSTYLE, *rResId.GetResMgr())),
         pActiveCtrl(0),
-        m_pParent(pParent)
+        m_pParent(NULL)
 {
     SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
     SetHelpId(HID_TOKEN_WINDOW);
@@ -2810,6 +2679,11 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
     Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
     aLeftScrollWin.SetClickHdl(aLink);
     aRightScrollWin.SetClickHdl(aLink);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwTokenWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwTokenWindow(pParent, SW_RES(WIN_TOKEN));
 }
 
 SwTokenWindow::~SwTokenWindow()
@@ -3634,7 +3508,8 @@ void SwTokenWindow::GetFocus()
 }
 
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet )
-    : SfxTabPage(pParent, "TocStylesPage", "modules/swriter/ui/tocstylespage.ui", rAttrSet)
+    : SfxTabPage(pParent, "TocStylesPage",
+        "modules/swriter/ui/tocstylespage.ui", rAttrSet)
     , m_pCurrentForm(0)
 {
     get(m_pLevelLB, "levels");

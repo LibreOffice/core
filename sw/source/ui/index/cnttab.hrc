@@ -89,7 +89,6 @@
 #define CB_ALPHADELIM           58
 #define CB_COMMASEPARATED       59
 
-#define STR_NO_CHAR_STYLE       61
 #define CLB_FROMOBJ             62
 #define FL_FROMOBJ              63
 #define RES_SRCTYPES            64
@@ -160,14 +159,12 @@
 #define LB_THIRDKEY             133
 #define FL_SORTKEY              134
 #define FL_SORTING              135
-#define STR_NOSORTKEY           136
 #define RB_SORTUP1              137
 #define RB_SORTUP2              138
 #define RB_SORTUP3              139
 #define RB_SORTDOWN1            140
 #define RB_SORTDOWN2            141
 #define RB_SORTDOWN3            142
-#define STR_DELIM               143
 #define FL_SORTOPTIONS          144
 #define FT_LANGUAGE             145
 #define LB_LANGUAGE             146
