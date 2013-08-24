@@ -76,29 +76,6 @@ const sal_Bool uriCharClass[128] =
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /* pqrstuvwxyz{|}~  */
 };
 
-
-/* check for top wrong usage strings */
-/*
-static sal_Bool findWrongUsage( const sal_Unicode *path, sal_Int32 len )
-{
-    rtl_uString *pTmp = NULL;
-    sal_Bool bRet;
-
-    rtl_uString_newFromStr_WithLength( &pTmp, path, len );
-
-    rtl_ustr_toAsciiLowerCase_WithLength( pTmp->buffer, pTmp->length );
-
-    bRet = ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pTmp->buffer, pTmp->length, "ftp://", 6 ) ) ||
-           ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pTmp->buffer, pTmp->length, "http://", 7 ) ) ||
-           ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pTmp->buffer, pTmp->length, "vnd.sun.star", 12 ) ) ||
-           ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pTmp->buffer, pTmp->length, "private:", 8 ) ) ||
-           ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( pTmp->buffer, pTmp->length, "slot:", 5) );
-
-    rtl_uString_release( pTmp );
-    return bRet;
-}
-*/
-
 oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
     OSL_FAIL("osl_getCanonicalName not implemented");
@@ -248,11 +225,6 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         }
     }
 
-    /* temporary check for top 5 wrong usage strings (which are valid but unlikly filenames) */
-    /*
-    OSL_ASSERT( !findWrongUsage( pTmp->buffer, pTmp->length ) );
-    */
-
     rtl_uString_assign ( pustrSystemPath, pTmp );
     rtl_uString_release ( pTmp );
     return osl_File_E_None;
@@ -348,11 +320,6 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
     if( NULL == pTmp )
         rtl_uString_assign( &pTmp, ustrSystemPath );
-
-    /* temporary check for top 5 wrong usage strings (which are valid but unlikly filenames) */
-    /*
-    OSL_ASSERT( !findWrongUsage( pTmp->buffer, pTmp->length ) );
-    */
 
     /* file URLs must be URI encoded */
     rtl_uriEncode( pTmp, uriCharClass, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8, pustrFileURL );
