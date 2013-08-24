@@ -708,6 +708,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     MG_ED( "BottomBorder",      FO,     BORDER_BOTTOM,            XML_TYPE_BORDER, CTF_BOTTOMBORDER ),
     // RES_SHADOW
     MG_E( "ShadowFormat",       STYLE,  SHADOW,                 XML_TYPE_TEXT_SHADOW, 0 ),
+    MG_E( "ShadowTransparence", DRAW, SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
     // RES_FRMMACRO
     // TODO
     // RES_COL

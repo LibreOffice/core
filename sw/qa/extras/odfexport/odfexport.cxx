@@ -22,6 +22,7 @@ public:
     void testFdo58949();
     void testCharacterBorder();
     void testFdo43807();
+    void testTextframeTransparentShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -43,6 +44,7 @@ void Test::run()
         {"fdo58949.docx", &Test::testFdo58949},
         {"charborder.odt", &Test::testCharacterBorder },
         {"fdo43807.odt", &Test::testFdo43807 },
+        {"textframe-transparent-shadow.odt", &Test::testTextframeTransparentShadow},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -369,6 +371,15 @@ void Test::testFdo43807()
 
     xSet = uno::Reference<beans::XPropertySet>(getParagraph(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
+}
+
+void Test::testTextframeTransparentShadow()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xPicture(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // ODF stores opacity of 75%, that means 25% transparency.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPicture, "ShadowTransparence"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
