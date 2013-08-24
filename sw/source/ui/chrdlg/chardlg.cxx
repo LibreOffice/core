@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
-    sal_uInt8 nDialogMode, const String* pStr)
+    sal_uInt8 nDialogMode, const OUString* pStr)
     : SfxTabDialog(0, pParent, "CharacterPropertiesDialog",
         "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != 0)
     , m_rView(rVw)
@@ -67,11 +67,7 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
 {
     if(pStr)
     {
-        String aTmp( GetText() );
-        aTmp += SW_RESSTR(STR_TEXTCOLL_HEADER);
-        aTmp += *pStr;
-        aTmp += ')';
-        SetText(aTmp);
+        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pStr + OUString(')'));
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");

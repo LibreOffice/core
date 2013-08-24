@@ -56,7 +56,7 @@ public:
                 OString sResType = OString("FrameDialog"),
                 bool bFmt     = false,
                 OString sDefPage = OString(),
-                const String*   pFmtStr  = 0);
+                const OUString* pFmtStr  = 0);
 
     ~SwFrmDlg();
 

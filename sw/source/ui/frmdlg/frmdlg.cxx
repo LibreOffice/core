@@ -53,7 +53,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     OString             sResType,
                     bool                bFormat,
                     OString             sDefPage,
-                    const String*       pStr)
+                    const OUString*     pStr)
 
     : SfxTabDialog(pViewFrame, pParent, sResType,
         OUString("modules/swriter/ui/") +
@@ -82,10 +82,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     //
     if(pStr)
     {
-        String aTmp( GetText() );
-        aTmp += SW_RESSTR(STR_COLL_HEADER);
-        aTmp += *pStr;
-        aTmp += ')';
+        SetText(GetText() + SW_RESSTR(STR_COLL_HEADER) + *pStr + OUString(')'));
     }
 
     m_nStdId = AddTabPage("type",  SwFrmPage::Create, 0);

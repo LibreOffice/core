@@ -340,7 +340,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh) = 0; // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw) = 0; //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        sal_uInt8 nDialogMode, const String* pFmtStr = 0) = 0;  // add for SwCharDlg
+        sal_uInt8 nDialogMode, const OUString* pFmtStr = 0) = 0;  // add for SwCharDlg
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0; //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId) = 0; //add for SwCaptionDialog
 
@@ -365,7 +365,7 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     sal_uInt8 nDialogMode,
-                                                    const String *pCollName = 0,
+                                                    const OUString *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
                                                     OString sDefPage = OString() ) = 0;
 
@@ -397,7 +397,7 @@ public:
                                                 bool bNewFrm = true,
                                                 bool bFmt = false,
                                                 OString sDefPage = OString(),
-                                                const String* pFmtStr = 0) = 0;  //add for SwFrmDlg
+                                                const OUString* pFmtStr = 0) = 0;  //add for SwFrmDlg
     // @param nSlot
     // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
     // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane

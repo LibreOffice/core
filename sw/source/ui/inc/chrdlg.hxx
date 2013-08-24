@@ -50,7 +50,7 @@ class SwCharDlg: public SfxTabDialog
 
 public:
     SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-              sal_uInt8 nDialogMode, const String* pFmtStr = 0);
+              sal_uInt8 nDialogMode, const OUString* pFmtStr = 0);
 
     ~SwCharDlg();
 

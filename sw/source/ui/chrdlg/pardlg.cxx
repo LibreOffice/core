@@ -48,7 +48,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
                     SwView& rVw,
                     const SfxItemSet& rCoreSet,
                     sal_uInt8 nDialogMode,
-                    const String *pTitle,
+                    const OUString *pTitle,
                     sal_Bool bDraw,
                     OString sDefPage)
     : SfxTabDialog(pParent,
@@ -71,11 +71,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
     if(pTitle)
     {
         // Update title
-        String aTmp( GetText() );
-        aTmp += SW_RESSTR(STR_TEXTCOLL_HEADER);
-        aTmp += *pTitle;
-        aTmp += ')';
-        SetText(aTmp);
+        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pTitle + OUString(')'));
     }
     // tabs common to paragraph and draw paragraphs (paragraphs inside a text box)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

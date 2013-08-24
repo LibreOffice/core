@@ -705,7 +705,7 @@ VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& 
 
  // add for SwCharDlg
 SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pParent, SwView& pVw,
-    const SfxItemSet& rCoreSet, sal_uInt8 nDialogMode, const String* pFmtStr)
+    const SfxItemSet& rCoreSet, sal_uInt8 nDialogMode, const OUString* pFmtStr)
 {
 
     SfxTabDialog* pDlg = new SwCharDlg(pParent, pVw, rCoreSet, nDialogMode, pFmtStr);
@@ -794,7 +794,7 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pParent, SwView& rVw,
                                                     const SfxItemSet& rCoreSet  ,
                                                     sal_uInt8 nDialogMode,
-                                                    const String *pCollName,
+                                                    const OUString *pCollName,
                                                     sal_Bool bDraw ,
                                                     OString sDefPage)
 {
@@ -925,7 +925,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OSt
                                                 bool        bNewFrm,
                                                 bool        bFmt,
                                                 OString     sDefPage,
-                                                const String*   pFmtStr ) //add for SwFrmDlg
+                                                const OUString* pFmtStr ) //add for SwFrmDlg
 {
     SfxTabDialog* pDlg = new SwFrmDlg(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFmt, sDefPage, pFmtStr);
     return new AbstractTabDialog_Impl(pDlg);
