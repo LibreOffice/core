@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8Mk\u003d",
+        "filename": "vcl/unx/gtk/app/gtkdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-08-24T04:29:58Z",
+      "side": 1,
+      "message": "Do you really want this to be kept in?",
+      "revId": "9ff4c35f1d8e7e603b23245afb6947b8260fabfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
