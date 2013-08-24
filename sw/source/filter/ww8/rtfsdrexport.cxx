@@ -321,10 +321,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                         if (!aVerticies.isEmpty() )
                         {
                             // We know the number of vertices at the end only, so we have to prepend them here.
-                            OStringBuffer aBuf;
-                            aBuf.append("8;").append((sal_Int32)nVertices);
-                            aBuf.append(aVerticies.makeStringAndClear());
-                            m_aShapeProps.insert(std::pair<OString,OString>("pVerticies", aBuf.makeStringAndClear()));
+                            m_aShapeProps.insert(std::pair<OString,OString>("pVerticies", "8;" + OString::number(nVertices) + aVerticies.makeStringAndClear()));
                         }
                         if ( !aSegmentInfo.isEmpty() )
                             m_aShapeProps.insert(std::pair<OString,OString>("pSegmentInfo", aSegmentInfo.makeStringAndClear()));

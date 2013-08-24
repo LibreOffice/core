@@ -161,15 +161,9 @@ namespace sw { namespace mark
 
     OUString MarkBase::ToString( ) const
     {
-        OUStringBuffer buf;
-        buf.append("Mark: ( Name, [ Node1, Index1 ] ): ( ");
-        buf.append( m_aName ).append(", [ ");
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .append(", ");
-        buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) )
-            .append(" ] )");
-
-        return buf.makeStringAndClear( );
+        return "Mark: ( Name, [ Node1, Index1 ] ): ( " + m_aName + ", [ "
+            + OUString::number( GetMarkPos().nNode.GetIndex( ) )  + ", "
+            + OUString::number( GetMarkPos().nContent.GetIndex( ) ) + " ] )";
     }
 
     MarkBase::~MarkBase()
@@ -306,21 +300,11 @@ namespace sw { namespace mark
 
     OUString Fieldmark::ToString( ) const
     {
-        OUStringBuffer buf;
-        buf.append(
-            "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( ");
-        buf.append( m_aName ).append(", ");
-        buf.append( m_aFieldname ).append(", [ ");
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .append(", ");
-        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
-            .append(" ], [");
-        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
-            .append(", ");
-        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
-            .append(" ] ) ");
-
-        return buf.makeStringAndClear( );
+        return "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " + m_aName + ", "
+            + m_aFieldname + ", [ " + OUString::number( GetMarkPos().nNode.GetIndex( ) )
+            + ", " + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
+            + OUString::number( GetOtherMarkPos().nNode.GetIndex( ) ) + ", "
+            + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
     }
 
     void Fieldmark::Invalidate( )
@@ -387,21 +371,13 @@ namespace sw { namespace mark
 
     OUString CheckboxFieldmark::toString( ) const
     {
-        OUStringBuffer buf;
-        buf.append(
-            "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( ");
-        buf.append( m_aName ).append(", ");
-        buf.append( GetFieldname() ).append(", [ ");
-        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .append(", ");
-        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
-            .append(" ], [");
-        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
-            .append(", ");
-        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
-            .append(" ] ) ");
 
-        return buf.makeStringAndClear( );
+        return "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "
+            + m_aName + ", " + GetFieldname() + ", [ "
+            + OUString::number(GetMarkPos().nNode.GetIndex( ) ) + ", "
+            + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
+            + OUString::number( GetOtherMarkPos().nNode.GetIndex( ) ) + ", "
+            + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
     }
 }}
 
