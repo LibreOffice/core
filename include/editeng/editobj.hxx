@@ -107,8 +107,6 @@ public:
      * Sections never overlap each other; if an attribute was applied to [0-6]
      * and another applied to [3-10], you would get 3 sections that are [0-3],
      * [3-6] and [6-10].
-     *
-     * <p>Note that this method skips field attributes.</p>
      */
     void GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const;
 

@@ -950,7 +950,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         {
             const XEditAttribute& rAttr = rC.aAttribs[i];
             const SfxPoolItem* pItem = rAttr.GetItem();
-            if (!pItem || pItem->Which() == EE_FEATURE_FIELD)
+            if (!pItem)
                 continue;
 
             size_t nStart = rAttr.GetStart(), nEnd = rAttr.GetEnd();
