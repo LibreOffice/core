@@ -25,6 +25,8 @@
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 
+#include <sal/log.hxx>
+
 #include "system.h"
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.h"
@@ -52,13 +54,12 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-#ifdef DEBUG_OSL_FILE
-#   define OSL_FILE_TRACE osl_trace
-#else
-#   define OSL_FILE_TRACE(fmt, ...)
-#endif
-
-
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl_String * string)
+{
+    return stream << rtl_string_getStr(string);
+}
 
 /*******************************************************************
  *
@@ -292,7 +293,7 @@ sal_uInt64 FileHandle_Impl::getPos() const
 
 oslFileError FileHandle_Impl::setPos (sal_uInt64 uPos)
 {
-    OSL_FILE_TRACE("FileHandle_Impl::setPos(%d, %lld) => %lld", m_fd, getPos(), uPos);
+    SAL_INFO("osl.file", "FileHandle_Impl::setPos(" << m_fd << ", " << getPos() << ") => " << uPos);
     m_fileptr = sal::static_int_cast< off_t >(uPos);
     return osl_File_E_None;
 }
@@ -339,7 +340,7 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
             return (result);
     }
 
-    OSL_FILE_TRACE("osl_setFileSize(%d, %lld) => %ld", m_fd, getSize(), nSize);
+    SAL_INFO("osl.file", "osl_setFileSize(" << m_fd << ", " << getSize() << ") => " << nSize);
     m_size = sal::static_int_cast< sal_uInt64 >(nSize);
     return osl_File_E_None;
 }
@@ -388,7 +389,7 @@ oslFileError FileHandle_Impl::readAt (
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-    OSL_FILE_TRACE("FileHandle_Impl::readAt(%d, %lld, %ld)", m_fd, nOffset, nBytes);
+    SAL_INFO("sal.file", "FileHandle_Impl::readAt(" << m_fd << ", " << nOffset << ", " << nBytes << ")");
     *pBytesRead = nBytes;
     return osl_File_E_None;
 }
@@ -411,7 +412,7 @@ oslFileError FileHandle_Impl::writeAt (
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-    OSL_FILE_TRACE("FileHandle_Impl::writeAt(%d, %lld, %ld)", m_fd, nOffset, nBytes);
+    SAL_INFO("sal.file", "FileHandle_Impl::writeAt(" << m_fd << ", " << nOffset << ", " << nBytes << ")");
     m_size = std::max (m_size, sal::static_int_cast< sal_uInt64 >(nOffset + nBytes));
 
     *pBytesWritten = nBytes;
@@ -480,7 +481,7 @@ oslFileError FileHandle_Impl::readFileAt (
             }
 
             size_t const bytes = std::min (m_buflen - bufpos, nBytesRequested);
-            OSL_FILE_TRACE("FileHandle_Impl::readFileAt(%d, %lld, %ld)", m_fd, nOffset, bytes);
+            SAL_INFO("sal.file", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
             memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
             nBytesRequested -= bytes, *pBytesRead += bytes, nOffset += bytes;
@@ -547,7 +548,7 @@ oslFileError FileHandle_Impl::writeFileAt (
             }
 
             size_t const bytes = std::min (m_bufsiz - bufpos, nBytesToWrite);
-            OSL_FILE_TRACE("FileHandle_Impl::writeFileAt(%d, %lld, %ld)", m_fd, nOffset, bytes);
+            SAL_INFO("sal.file", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
             memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
             nBytesToWrite -= bytes, *pBytesWritten += bytes, nOffset += bytes;
@@ -742,8 +743,7 @@ oslFileHandle osl::detail::createFileHandleFromFD( int fd )
         pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
     }
 
-    OSL_FILE_TRACE("osl::detail::createFileHandleFromFD(%d, writeable) => %s",
-                   pImpl->m_fd, rtl_string_getStr(pImpl->m_strFilePath));
+    SAL_INFO("sal.file", "osl::detail::createFileHandleFromFD(" << pImpl->m_fd << ", writeable) => " << pImpl->m_strFilePath);
     return (oslFileHandle)(pImpl);
 }
 
@@ -864,8 +864,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         void *address;
         size_t size;
         address = lo_apkentry(cpFilePath, &size);
-        OSL_TRACE("osl_openFile(%s) => %p",
-                  cpFilePath, address);
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => " << address);
         if (address == NULL)
         {
             errno = ENOENT;
@@ -924,10 +923,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     if (-1 == fd)
     {
         int saved_errno = errno;
-        OSL_TRACE("osl_openFile(%s, %s) failed: %s",
-                  cpFilePath,
-                  flags & O_RDWR ? "writeable":"readonly",
-                  strerror(saved_errno));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") failed: " << strerror(saved_errno));
         return oslTranslateFileError (OSL_FET_ERROR, saved_errno);
     }
 
@@ -939,11 +935,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         if (-1 == f)
         {
             int saved_errno = errno;
-            OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_GETFL) failed: %s",
-                      cpFilePath,
-                      flags & O_RDWR ? "writeable":"readonly",
-                      fd,
-                      strerror(saved_errno));
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
@@ -951,11 +943,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         if (-1 == fcntl (fd, F_SETFL, (f & ~O_NONBLOCK)))
         {
             int saved_errno = errno;
-            OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_SETFL) failed: %s",
-                      cpFilePath,
-                      flags & O_RDWR ? "writeable":"readonly",
-                      fd,
-                      strerror(saved_errno));
+             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
@@ -967,11 +955,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     if (-1 == fstat (fd, &aFileStat))
     {
         int saved_errno = errno;
-        OSL_TRACE("osl_openFile(%s, %s): fstat(%d) failed: %s",
-                  cpFilePath,
-                  flags & O_RDWR ? "writeable":"readonly",
-                  fd,
-                  strerror(saved_errno));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
         eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
         (void) close(fd);
         return eRet;
@@ -979,8 +963,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     if (!S_ISREG(aFileStat.st_mode))
     {
         /* we only open regular files here */
-        OSL_TRACE("osl_openFile(%s): not a regular file",
-                  cpFilePath);
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << "): not a regular file");
         (void) close(fd);
         return osl_File_E_INVAL;
     }
@@ -1010,11 +993,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
             if (-1 == fcntl (fd, F_SETLK, &aflock))
             {
                 int saved_errno = errno;
-                OSL_TRACE("osl_openFile(%s, %s): fcntl(%d, F_SETLK) failed: %s",
-                          cpFilePath,
-                          flags & O_RDWR ? "writeable":"readonly",
-                          fd,
-                          strerror(saved_errno));
+                SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
                 eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
                 (void) close(fd);
                 return eRet;
@@ -1035,10 +1014,7 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
-    OSL_TRACE("osl_openFile(%s, %s) => %d",
-              rtl_string_getStr(pImpl->m_strFilePath),
-              flags & O_RDWR ? "writeable":"readonly",
-              pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_openFile(" << pImpl->m_strFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
     *pHandle = (oslFileHandle)(pImpl);
     return osl_File_E_None;
@@ -1077,7 +1053,7 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     if (pImpl == 0)
         return osl_File_E_INVAL;
 
-    OSL_TRACE("osl_closeFile(%s:%d)", rtl_string_getStr(pImpl->m_strFilePath), pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_closeFile(" << pImpl->m_strFilePath << ":" << pImpl->m_fd << ")");
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
@@ -1124,7 +1100,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
 
-    OSL_TRACE("osl_syncFile(%d)", pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_syncFile(" << pImpl->m_fd << ")");
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
@@ -1231,13 +1207,12 @@ SAL_CALL osl_mapFile (
         int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
         if (e != 0)
         {
-            OSL_TRACE(
-                "posix_madvise(..., POSIX_MADV_WILLNEED) failed with %d", e);
+            SAL_INFO("sal.file", "posix_madvise(..., POSIX_MADV_WILLNEED) failed with " << e);
         }
 #elif defined SOLARIS
         if (madvise(static_cast< caddr_t >(p), nLength, MADV_WILLNEED) != 0)
         {
-            OSL_TRACE("madvise(..., MADV_WILLNEED) failed with %d", errno);
+            SAL_INFO("sal.file", "madvise(..., MADV_WILLNEED) failed with " << strerror(errno));
         }
 #endif
     }
