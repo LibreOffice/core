@@ -21,6 +21,7 @@
 
 #include "tools/solar.h"
 #include "swdllapi.h"
+#include "rtl/ustring.hxx"
 
 #include <vector>
 
@@ -35,19 +36,17 @@ class SwThesaurus;
  */
 extern  SwThesaurus*    pThes;
 
-extern  String*         pOldGrfCat;
-extern  String*         pOldTabCat;
-extern  String*         pOldFrmCat;
+SW_DLLPUBLIC OUString GetOldGrfCat();
+SW_DLLPUBLIC void SetOldGrfCat(OUString sStr);
+SW_DLLPUBLIC OUString GetOldTabCat();
+SW_DLLPUBLIC void SetOldTabCat(OUString sStr);
+SW_DLLPUBLIC OUString GetOldFrmCat();
+SW_DLLPUBLIC void SetOldFrmCat(OUString sStr);
+SW_DLLPUBLIC OUString GetOldDrwCat();
+SW_DLLPUBLIC void SetOldDrwCat(OUString sStr);
 
-extern  String*         pCurrGlosGroup;
-
-SW_DLLPUBLIC String* GetOldGrfCat();
-SW_DLLPUBLIC String* GetOldTabCat();
-SW_DLLPUBLIC String* GetOldFrmCat();
-SW_DLLPUBLIC String* GetOldDrwCat();
-
-SW_DLLPUBLIC String* GetCurrGlosGroup();
-SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
+SW_DLLPUBLIC OUString GetCurrGlosGroup();
+SW_DLLPUBLIC void SetCurrGlosGroup(OUString sStr);
 
 extern std::vector<String>*   pDBNameList;
 
