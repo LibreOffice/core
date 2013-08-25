@@ -306,7 +306,7 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 #
 	for framework in `find $(DEVINSTALLDIR)/opt/LibreOffice.app -name '*.framework' -type d`; do \
         for version in $$framework/Versions/*; do \
-            test -d $$version && codesign --force --verbose --prefix=$(MACOSX_BUNDLE_IDENTIFIER). --sign $(MACOSX_CODESIGNING_IDENTITY) $$version; \
+            if test ! -L $$version -a -d $$version; then codesign --force --verbose --prefix=$(MACOSX_BUNDLE_IDENTIFIER). --sign $(MACOSX_CODESIGNING_IDENTITY) $$version; fi; \
         done; \
     done
 #
