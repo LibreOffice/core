@@ -455,35 +455,47 @@ throw (uno::RuntimeException)
     return OUString("SwXFieldMaster");
 }
 
+namespace
+{
+
+OUString getServiceName(const sal_uInt16 aId)
+{
+    const sal_Char* pEntry;
+    switch (aId)
+    {
+        case RES_USERFLD:
+            pEntry = "User";
+            break;
+        case RES_DBFLD:
+            pEntry = "Database";
+            break;
+        case RES_SETEXPFLD:
+            pEntry = "SetExpression";
+            break;
+        case RES_DDEFLD:
+            pEntry = "DDE";
+            break;
+        case RES_AUTHORITY:
+            pEntry = "Bibliography";
+            break;
+        default:
+            return OUString();
+    }
+
+    return "com.sun.star.text.fieldmaster." + OUString::createFromAscii(pEntry);
+}
+
+}
+
 sal_Bool SAL_CALL
 SwXFieldMaster::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    sal_Bool bRet = sal_False;
-    if(rServiceName.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextFieldMaster")))
-        bRet = sal_True;
-    else
-    {
-        const sal_Char* pEntry;
-        switch (m_pImpl->m_nResTypeId)
-        {
-        case RES_USERFLD:   pEntry = "User";            break;
-        case RES_DBFLD:     pEntry = "Database";        break;
-        case RES_SETEXPFLD: pEntry = "SetExpression";   break;
-        case RES_DDEFLD:    pEntry = "DDE";             break;
-        case RES_AUTHORITY: pEntry = "Bibliography";    break;
-        default: pEntry = 0;
-        }
-        if( pEntry )
-        {
-            OString aTmp = OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
-                "com.sun.star.text.fieldmaster.")).append(pEntry).
-                makeStringAndClear();
-            bRet = rServiceName.equalsAsciiL(aTmp.getStr(), aTmp.getLength());
-        }
-    }
-    return bRet;
+    if (rServiceName=="com.sun.star.text.TextFieldMaster")
+        return sal_True;
+
+    const OUString sName(getServiceName(m_pImpl->m_nResTypeId));
+    return !sName.isEmpty() && sName==rServiceName;
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -492,23 +504,7 @@ SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException)
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.text.TextFieldMaster";
-
-    const sal_Char* pEntry1;
-    switch (m_pImpl->m_nResTypeId)
-    {
-    case RES_USERFLD:   pEntry1 = "User";           break;
-    case RES_DBFLD:     pEntry1 = "Database";       break;
-    case RES_SETEXPFLD: pEntry1 = "SetExpression";  break;
-    case RES_DDEFLD:    pEntry1 = "DDE";            break;
-    case RES_AUTHORITY: pEntry1 = "Bibliography";   break;
-    default: pEntry1 = 0;
-    }
-    if( pEntry1 )
-    {
-        String s;
-        s.AppendAscii( "com.sun.star.text.fieldmaster." ).AppendAscii( pEntry1 );
-        pArray[1] = s;
-    }
+    pArray[1] = getServiceName(m_pImpl->m_nResTypeId);
     return aRet;
 }
 
