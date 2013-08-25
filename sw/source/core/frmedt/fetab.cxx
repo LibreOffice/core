@@ -1031,7 +1031,7 @@ void SwFEShell::UnProtectTbls()
     EndAllActionAndCall();
 }
 
-sal_Bool SwFEShell::HasTblAnyProtection( const String* pTblName,
+sal_Bool SwFEShell::HasTblAnyProtection( const OUString* pTblName,
                                     sal_Bool* pFullTblProtection )
 {
     return GetDoc()->HasTblAnyProtection( GetCrsr()->GetPoint(), pTblName,

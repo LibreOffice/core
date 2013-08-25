@@ -29,7 +29,7 @@
 #include <flyenum.hxx>
 
 #include <svx/svdtypes.hxx>
-
+#include "rtl/ustring.hxx"
 #include <svtools/embedhlp.hxx>
 
 #include <vector>
@@ -651,7 +651,7 @@ public:
                              cursor is not allowed in readonly. */
     void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTbls();   ///< Unprotect all tables in selection.
-    sal_Bool HasTblAnyProtection( const String* pTblName = 0,
+    sal_Bool HasTblAnyProtection( const OUString* pTblName = 0,
                                 sal_Bool* pFullTblProtection = 0 );
     sal_Bool CanUnProtectCells() const;
 

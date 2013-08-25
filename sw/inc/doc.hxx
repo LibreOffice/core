@@ -359,7 +359,7 @@ class SW_DLLPUBLIC SwDoc :
     tHashMapForLists maListStyleLists;
 
     SwRedlineTbl    *mpRedlineTbl;           ///< List of all Redlines.
-    String          *mpAutoFmtRedlnComment;  ///< Comment for Redlines inserted via AutoFormat.
+    OUString        *mpAutoFmtRedlnComment;  ///< Comment for Redlines inserted via AutoFormat.
 
     SwUnoCrsrTbl    *mpUnoCrsrTbl;
 
@@ -1689,7 +1689,7 @@ public:
     sal_Bool UnProtectCells( const SwSelBoxes& rBoxes );
     sal_Bool UnProtectTbls( const SwPaM& rPam );
     sal_Bool HasTblAnyProtection( const SwPosition* pPos,
-                              const String* pTblName = 0,
+                              const OUString* pTblName = 0,
                               sal_Bool* pFullTblProtection = 0 );
 
     /// Split table at baseline position, i.e. create a new table.
@@ -1854,7 +1854,7 @@ public:
     /** Set comment-text for Redline. It then comes in via AppendRedLine.
      Used by AutoFormat. 0-pointer resets mode.
      Sequence number is for conjoining of Redlines by the UI. */
-    void SetAutoFmtRedlineComment( const String* pTxt, sal_uInt16 nSeqNo = 0 );
+    void SetAutoFmtRedlineComment( const OUString* pTxt, sal_uInt16 nSeqNo = 0 );
 
     bool IsAutoFmtRedline() const           { return mbIsAutoFmtRedline; }
     void SetAutoFmtRedline( bool bFlag )    { mbIsAutoFmtRedline = bFlag; }
