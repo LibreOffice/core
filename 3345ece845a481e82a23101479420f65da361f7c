@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8Kg\u003d",
+        "filename": "sw/source/core/doc/extinput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-25T13:03:50Z",
+      "side": 1,
+      "message": "this is not quite right - we want to stop if _any_ of CH_TXTATR_INWORD or CH_TXTATR_BREAKWORD are in the text but this checks that _both_ are there",
+      "revId": "3345ece845a481e82a23101479420f65da361f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
