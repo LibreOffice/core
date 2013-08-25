@@ -41,7 +41,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-// Fuer Linienenden-Controller
+// For End Line Controlleer
 #define MAX_LINES 12
 
 // STATIC DATA -----------------------------------------------------------
@@ -114,7 +114,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
         }
         else if ( nSID != SID_DASH_LIST )
         {
-            // kein oder uneindeutiger Status
+        // no or ambiguous status
             pBox->SetNoSelection();
         }
     }
@@ -131,9 +131,9 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
 
-        // Da der Timer unerwartet zuschlagen kann, kann es vorkommen, dass
-        // die LB noch nicht gefuellt ist. Ein ClearCache() am Control im
-        // DelayHdl() blieb ohne Erfolg.
+    // Since the timer can strike unexpectedly, it may happen that
+    // the LB is not yet filled. A ClearCache() on the control
+    // in DelayHdl () was unsuccessful.
         if( pBox->GetEntryCount() == 0 )
             pBox->FillControl();
 
@@ -168,14 +168,14 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                OSL_FAIL( "Nicht unterstuetzter Linientyp" );
+                OSL_FAIL( "Unsupported type of line" );
                 break;
         }
     }
 
     if ( pState && ( pState->ISA( SvxDashListItem ) ) )
     {
-        // Die Liste der Linienstile hat sich geaendert
+    // The list of line styles has changed
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
 
@@ -240,10 +240,10 @@ void SvxLineWidthToolBoxControl::StateChanged(
 
             if ( eState == SFX_ITEM_AVAILABLE )
             {
-                DBG_ASSERT( pState->ISA(XLineWidthItem), "falscher ItemType" );
+                DBG_ASSERT( pState->ISA(XLineWidthItem), "wrong ItemType" );
 
-                // Core-Unit an MetricField uebergeben
-                // Darf nicht in CreateItemWin() geschehen!
+        // Core-Unit handed over to MetricField
+        // Should not happen in CreateItemWin ()!
                 SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM; // CD!!! GetCoreMetric();
                 pFld->SetCoreUnit( eUnit );
 
@@ -304,7 +304,7 @@ void SvxLineColorToolBoxControl::StateChanged(
 
             if ( eState == SFX_ITEM_AVAILABLE )
             {
-                DBG_ASSERT( pState->ISA(XLineColorItem), "falscher ItemTyoe" );
+                DBG_ASSERT( pState->ISA(XLineColorItem), "wrong ItemType" );
                 pBox->Update( (const XLineColorItem*) pState );
             }
             else
@@ -325,7 +325,7 @@ void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
 
         DBG_ASSERT( pBox, "Window not found" );
 
-        // Die Liste der Farben (ColorTable) hat sich geaendert:
+    // The list of colors (ColorTable) has changed:
         ::Color aTmpColor( pBox->GetSelectEntryColor() );
         pBox->Clear();
         pBox->Fill( ( (SvxColorListItem*)pState )->GetColorList() );
@@ -404,12 +404,12 @@ void SvxLineEndWindow::implInit()
         if( pItem )
             nLineEndWidth = ( (SfxUInt16Item*) pItem )->GetValue();
     }
-    DBG_ASSERT( pLineEndList.is(), "LineEndList wurde nicht gefunden" );
+    DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
     aLineEndSet.SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
     aLineEndSet.SetColCount( nCols );
 
-    // ValueSet mit Eintraegen der LineEndList fuellen
+    // ValueSet fill with entries of LineEndList
     FillValueSet();
 
     AddStatusListener( OUString( ".uno:LineEndListState" ));
@@ -445,12 +445,12 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     {
         pLineEndItem    = new XLineEndItem();
     }
-    else if( nId % 2 ) // LinienAnfang
+    else if( nId % 2 ) // beginning of line
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( ( nId - 1 ) / 2 - 1 );
         pLineStartItem  = new XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() );
     }
-    else // LinienEnde
+    else // end of line
     {
         XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nId / 2 - 2 );
         pLineEndItem    = new XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() );
@@ -501,13 +501,13 @@ void SvxLineEndWindow::FillValueSet()
 
         long nCount = pLineEndList->Count();
 
-        // Erster Eintrag: kein LinienEnde
-        // Temporaer wird ein Eintrag hinzugefuegt, um die UI-Bitmap zu erhalten
+    // First entry: no line end.
+    // An entry is temporarly added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
         pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
         pEntry = pLineEndList->GetLineEnd( nCount );
         Bitmap aBmp = pLineEndList->GetUiBitmap( nCount );
-        OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
+        OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         aBmpSize = aBmp.GetSizePixel();
         aVD.SetOutputSizePixel( aBmpSize, sal_False );
@@ -524,9 +524,9 @@ void SvxLineEndWindow::FillValueSet()
         for( long i = 0; i < nCount; i++ )
         {
             pEntry = pLineEndList->GetLineEnd( i );
-            DBG_ASSERT( pEntry, "Konnte auf LineEndEntry nicht zugreifen" );
+            DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
             aBmp = pLineEndList->GetUiBitmap( i );
-            OSL_ENSURE( !aBmp.IsEmpty(), "UI-Bitmap wurde nicht erzeugt" );
+            OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
             aVD.DrawBitmap( aPt0, aBmp );
             aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
@@ -574,18 +574,18 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
     aBitmapSize.Height() += 6; //
 
     Size aItemSize = aLineEndSet.CalcItemSizePixel( aBitmapSize );  // -> Member
-    //Size aOldSize = GetOutputSizePixel(); // fuer Breite
+    //Size aOldSize = GetOutputSizePixel(); // for width
 
     sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
 
-    // Spalten ermitteln
+    // identify columns
     long nItemW = aItemSize.Width();
     long nW = rNewSize.Width();
     nCols = (sal_uInt16) std::max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
                                             (sal_uIntPtr) 1L );
     nCols *= 2;
 
-    // Reihen ermitteln
+    // identify lines
     long nItemH = aItemSize.Height();
     long nH = rNewSize.Height();
     nLines = (sal_uInt16) std::max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
@@ -597,7 +597,7 @@ void SvxLineEndWindow::Resizing( Size& rNewSize )
         nCols = nMaxCols;
     nW = nItemW * nCols;
 
-    // Keine ungerade Anzahl von Spalten
+    // No odd number of columns
     if( nCols % 2 )
         nCols--;
     nCols = std::max( nCols, (sal_uInt16) 2 );
@@ -633,11 +633,11 @@ void SvxLineEndWindow::StateChanged(
 {
     if ( nSID == SID_LINEEND_LIST )
     {
-        // Die Liste der LinienEnden (LineEndList) hat sich geaendert:
+    // The list of line ends (LineEndList) has changed
         if ( pState && pState->ISA( SvxLineEndListItem ))
         {
             pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
-            DBG_ASSERT( pLineEndList.is(), "LineEndList nicht gefunden" );
+            DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
             aLineEndSet.Clear();
             FillValueSet();
