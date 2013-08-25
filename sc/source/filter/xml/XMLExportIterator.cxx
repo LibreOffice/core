@@ -693,14 +693,11 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
         if (mpCell)
             rMyCell.maBaseCell = *mpCell;
     }
-}
 
-void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
-{
     rMyCell.bIsMatrixCovered = false;
     rMyCell.bIsMatrixBase = false;
 
-    bool bIsMatrixBase(false);
+    bool bIsMatrixBase = false;
 
     ScAddress aScAddress;
     ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
@@ -879,7 +876,6 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
             pDetectiveOp->SetCellData( aCell );
 
         HasAnnotation( aCell );
-        SetMatrixCellData( aCell );
         bool bIsAutoStyle;
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
         sal_Int32 nRemoveBeforeRow = aLastAddress.Row;

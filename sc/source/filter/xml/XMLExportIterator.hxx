@@ -401,7 +401,6 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
     void                        UpdateAddress( ::com::sun::star::table::CellAddress& rAddress );
     void                        SetCellData( ScMyCell& rMyCell, ::com::sun::star::table::CellAddress& rAddress );
 
-    void                        SetMatrixCellData( ScMyCell& rMyCell );
     void                        HasAnnotation( ScMyCell& aCell );
 public:
                                 ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
