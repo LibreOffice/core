@@ -21,13 +21,6 @@ namespace VLC
         void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
         void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
 
-        ApiMap VLC_MEDIA_API[] =
-        {
-            SYM_MAP( libvlc_media_new_path ),
-            SYM_MAP( libvlc_media_release ),
-            SYM_MAP( libvlc_media_retain )
-        };
-
         libvlc_media_t* InitMedia( const rtl::OUString& url, VLC::Instance& instance )
         {
             rtl::OString dest;
@@ -35,14 +28,23 @@ namespace VLC
 
             return libvlc_media_new_path(instance, dest.getStr());
         }
-
     }
 
+bool Media::LoadSymbols()
+{
+    ApiMap VLC_MEDIA_API[] =
+    {
+        SYM_MAP( libvlc_media_new_path ),
+        SYM_MAP( libvlc_media_release ),
+        SYM_MAP( libvlc_media_retain )
+    };
+
+    return InitApiMap( VLC_MEDIA_API );
+}
 
 Media::Media( const rtl::OUString& url, Instance& instance )
+    : mMedia( InitMedia( url, instance ) )
 {
-    InitApiMap(VLC_MEDIA_API);
-    mMedia = InitMedia( url, instance );
 }
 
 Media::Media( const Media& other )

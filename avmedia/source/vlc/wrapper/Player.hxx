@@ -23,6 +23,7 @@ namespace VLC
     class Player
     {
     public:
+        static bool LoadSymbols();
         Player( Media& media );
         Player( const Player& other );
         const Player& operator=( const Player& other );

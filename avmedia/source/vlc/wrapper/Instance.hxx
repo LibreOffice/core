@@ -19,6 +19,7 @@ namespace VLC
     class Instance
     {
     public:
+        static bool LoadSymbols();
         Instance( int argc, const char * const argv[] );
         Instance( const Instance& other );
         const Instance& operator=( const Instance& other );

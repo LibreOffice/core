@@ -20,6 +20,7 @@ namespace VLC
     class Media
     {
     public:
+        static bool LoadSymbols();
         Media( const rtl::OUString& url, Instance& instance );
         Media( const Media& other );
         const Media& operator=( const Media& other );

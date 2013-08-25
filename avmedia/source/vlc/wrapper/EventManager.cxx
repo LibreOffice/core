@@ -30,16 +30,9 @@ namespace VLC
                                         libvlc_event_type_t i_event_type,
                                         libvlc_callback_t f_callback,
                                         void *p_user_data );
-
-        ApiMap VLC_EVENT_MANAGER_API[] =
-        {
-            SYM_MAP( libvlc_media_player_event_manager ),
-            SYM_MAP( libvlc_event_attach ),
-            SYM_MAP( libvlc_event_detach )
-        };
     }
 
-void EventManagerEventHandler( const libvlc_event_t *event, void *pData )
+void EventManager::Handler( const libvlc_event_t *event, void *pData )
 {
     EventManager *instance = static_cast<EventManager*>( pData );
     switch ( event->type )
@@ -53,11 +46,23 @@ void EventManagerEventHandler( const libvlc_event_t *event, void *pData )
     }
 }
 
+bool EventManager::LoadSymbols()
+{
+    ApiMap VLC_EVENT_MANAGER_API[] =
+    {
+        SYM_MAP( libvlc_media_player_event_manager ),
+        SYM_MAP( libvlc_event_attach ),
+        SYM_MAP( libvlc_event_detach )
+    };
+
+    return InitApiMap( VLC_EVENT_MANAGER_API );
+}
+
 EventManager::EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh )
     : mEventHandler( eh )
+    , mManager( libvlc_media_player_event_manager( player ) )
 {
-    InitApiMap( VLC_EVENT_MANAGER_API );
-    mManager = libvlc_media_player_event_manager( player );
+
 }
 
 EventManager::~EventManager()
@@ -67,9 +72,9 @@ EventManager::~EventManager()
 void EventManager::registerSignal( int signal, const Callback& callback )
 {
     if ( callback.empty() )
-        libvlc_event_detach( mManager, signal, EventManagerEventHandler, this );
+        libvlc_event_detach( mManager, signal, Handler, this );
     else
-        libvlc_event_attach( mManager, signal, EventManagerEventHandler, this );
+        libvlc_event_attach( mManager, signal, Handler, this );
 }
 
 void EventManager::onPaused( const EventManager::Callback& callback )

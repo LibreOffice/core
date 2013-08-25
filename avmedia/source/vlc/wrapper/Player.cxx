@@ -41,7 +41,10 @@ namespace VLC
         void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
         unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
         void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
+    }
 
+    bool Player::LoadSymbols()
+    {
         ApiMap VLC_PLAYER_API[] =
         {
             SYM_MAP( libvlc_media_player_new_from_media ),
@@ -64,12 +67,13 @@ namespace VLC
             SYM_MAP( libvlc_video_set_mouse_input ),
             SYM_MAP( libvlc_media_player_retain )
         };
+
+        return InitApiMap( VLC_PLAYER_API );
     }
 
     Player::Player(Media& media)
+        : mPlayer( libvlc_media_player_new_from_media( media ) )
     {
-        InitApiMap(VLC_PLAYER_API);
-        mPlayer = libvlc_media_player_new_from_media( media );
     }
 
     Player::Player( const Player& other )

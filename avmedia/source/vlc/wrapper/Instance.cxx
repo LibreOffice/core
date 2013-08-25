@@ -17,20 +17,23 @@ namespace VLC
         libvlc_instance_t* ( *libvlc_new ) ( int argc, const char * const *argv );
         void ( *libvlc_release ) ( libvlc_instance_t *p_instance );
         void ( *libvlc_retain ) ( libvlc_instance_t *p_instance );
+    }
 
+    bool Instance::LoadSymbols()
+    {
         ApiMap VLC_INSTANCE_API[] =
         {
             SYM_MAP( libvlc_new ),
             SYM_MAP( libvlc_release ),
             SYM_MAP( libvlc_retain )
         };
+
+        return InitApiMap( VLC_INSTANCE_API );
     }
 
     Instance::Instance( int argc, const char * const argv[] )
+        : mInstance( libvlc_new( argc, argv ) )
     {
-        InitApiMap( VLC_INSTANCE_API );
-
-        mInstance = libvlc_new( argc, argv );
     }
 
     Instance::Instance( const Instance& other )

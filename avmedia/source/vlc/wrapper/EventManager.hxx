@@ -23,8 +23,9 @@ namespace VLC
     class EventHandler;
     class EventManager
     {
-        friend void EventManagerEventHandler( const libvlc_event_t *event, void *pData );
+
     public:
+        static bool LoadSymbols();
         typedef boost::function<void()> Callback;
 
         EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh );
@@ -41,6 +42,8 @@ namespace VLC
         TCallback mOnEndReached;
 
         void registerSignal( int signal, const Callback& callback );
+
+        static void Handler( const libvlc_event_t *event, void *pData );
     };
 }
 

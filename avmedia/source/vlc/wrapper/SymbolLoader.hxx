@@ -53,31 +53,34 @@ namespace
     }
 }
 
-template<size_t N>
-bool InitApiMap( const ApiMap ( &pMap )[N]  )
+namespace VLC
 {
-    oslModule aModule;
-
-    for (uint j = 0; j < sizeof(libNames) / sizeof(libNames[0]); ++j)
+    template<size_t N>
+    bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
-        aModule = osl_loadModule( OUString::createFromAscii
-                                  ( libNames[ j ] ).pData,
-                                  SAL_LOADMODULE_DEFAULT );
+        oslModule aModule;
 
-        if( aModule == NULL)
-            continue;
-
-        if (tryLink( aModule, pMap ))
+        for (uint j = 0; j < sizeof(libNames) / sizeof(libNames[0]); ++j)
         {
+            aModule = osl_loadModule( OUString::createFromAscii
+                                    ( libNames[ j ] ).pData,
+                                    SAL_LOADMODULE_DEFAULT );
+
+            if( aModule == NULL)
+                continue;
+
+            if (tryLink( aModule, pMap ))
+            {
+                osl_unloadModule( aModule );
+                return true;
+            }
+
             osl_unloadModule( aModule );
-            return true;
         }
 
-        osl_unloadModule( aModule );
+        std::cerr << "Cannot load libvlc" << std::endl;
+        return false;
     }
-
-    std::cerr << "Cannot load libvlc" << std::endl;
-    return false;
 }
 
 #endif
