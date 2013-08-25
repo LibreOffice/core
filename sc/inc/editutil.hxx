@@ -77,6 +77,9 @@ public:
 
     static EditTextObject* Clone( const EditTextObject& rSrc, ScDocument& rDestDoc );
 
+    static OUString GetCellFieldValue(
+        const SvxFieldData& rFieldData, const ScDocument* pDoc, Color** ppTextColor );
+
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,

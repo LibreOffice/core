@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
 #include "xmlstyle.hxx"
@@ -89,6 +87,8 @@
 #include "editeng/wghtitem.hxx"
 #include "editeng/wrlmitem.hxx"
 #include "editeng/xmlcnitm.hxx"
+#include "editeng/flditem.hxx"
+#include "editeng/eeitem.hxx"
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
@@ -151,6 +151,7 @@
 
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <boost/scoped_ptr.hpp>
 
 //! not found in unonames.hxx
 #define SC_LAYERID "LayerID"
@@ -1113,16 +1114,23 @@ void ScXMLExport::ExportExternalRefCacheStyles()
 
 namespace {
 
-void toXMLPropertyStates(
+const SvxFieldData* toXMLPropertyStates(
     std::vector<XMLPropertyState>& rPropStates, const std::vector<const SfxPoolItem*>& rSecAttrs,
     const UniReference<XMLPropertySetMapper>& xMapper, const ScXMLEditAttributeMap& rAttrMap )
 {
+    const SvxFieldData* pField = NULL;
     sal_Int32 nEntryCount = xMapper->GetEntryCount();
     rPropStates.reserve(rSecAttrs.size());
     std::vector<const SfxPoolItem*>::const_iterator it = rSecAttrs.begin(), itEnd = rSecAttrs.end();
     for (; it != itEnd; ++it)
     {
         const SfxPoolItem* p = *it;
+        if (p->Which() == EE_FEATURE_FIELD)
+        {
+            pField = static_cast<const SvxFieldItem*>(p)->GetField();
+            continue;
+        }
+
         const ScXMLEditAttributeMap::Entry* pEntry = rAttrMap.getEntryByItemID(p->Which());
         if (!pEntry)
             continue;
@@ -1317,6 +1325,8 @@ void toXMLPropertyStates(
                 continue;
         }
     }
+
+    return pField;
 }
 
 }
@@ -3061,6 +3071,94 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
 
 namespace {
 
+void writeContent(
+    ScXMLExport& rExport, const OUString& rStyleName, const OUString& rContent, const SvxFieldData* pField )
+{
+    boost::scoped_ptr<SvXMLElementExport> pElem;
+    if (!rStyleName.isEmpty())
+    {
+        // Formatted section with automatic style.
+        rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, rStyleName);
+        OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+            XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN));
+        pElem.reset(new SvXMLElementExport(rExport, aElemName, false, false));
+    }
+
+    if (pField)
+    {
+        // Write an field item.
+        OUString aFieldVal = ScEditUtil::GetCellFieldValue(*pField, rExport.GetDocument(), NULL);
+        switch (pField->GetClassId())
+        {
+            case text::textfield::Type::URL:
+            {
+                // <text:a xlink:href="url" xlink:type="simple">value</text:a>
+
+                OUString aURL = static_cast<const SvxURLField*>(pField)->GetURL();
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aURL);
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
+
+                OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT, GetXMLToken(XML_A));
+                SvXMLElementExport aElem(rExport, aElemName, false, false);
+                rExport.Characters(aFieldVal);
+            }
+            break;
+            case text::textfield::Type::DATE:
+            {
+                // <text:date style:data-style-name="N2" text:date-value="YYYY-MM-DD">value</text:date>
+
+                Date aDate(Date::SYSTEM);
+                OUStringBuffer aBuf;
+                sal_Int32 nVal = aDate.GetYear();
+                aBuf.append(nVal);
+                aBuf.append(sal_Unicode('-'));
+                nVal = aDate.GetMonth();
+                if (nVal < 10)
+                    aBuf.append(sal_Unicode('0'));
+                aBuf.append(nVal);
+                aBuf.append(sal_Unicode('-'));
+                nVal = aDate.GetDay();
+                if (nVal < 10)
+                    aBuf.append(sal_Unicode('0'));
+                aBuf.append(nVal);
+                rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME, "N2");
+                rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_DATE_VALUE, aBuf.makeStringAndClear());
+
+                OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT, GetXMLToken(XML_DATE));
+                SvXMLElementExport aElem(rExport, aElemName, false, false);
+                rExport.Characters(aFieldVal);
+            }
+            break;
+            case text::textfield::Type::DOCINFO_TITLE:
+            {
+                // <text:title>value</text:title>
+
+                OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT, GetXMLToken(XML_TITLE));
+                SvXMLElementExport aElem(rExport, aElemName, false, false);
+                rExport.Characters(aFieldVal);
+            }
+            break;
+            case text::textfield::Type::TABLE:
+            {
+                // <text:sheet-name>value</text:sheet-name>
+
+                OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_TEXT, GetXMLToken(XML_SHEET_NAME));
+                SvXMLElementExport aElem(rExport, aElemName, false, false);
+                rExport.Characters(aFieldVal);
+            }
+            break;
+            default:
+                rExport.Characters(aFieldVal);
+        }
+    }
+    else
+        rExport.Characters(rContent);
+}
+
 void flushParagraph(
     ScXMLExport& rExport, const OUString& rParaText,
     UniReference<XMLPropertySetMapper> xMapper, UniReference<SvXMLAutoStylePoolP> xStylePool,
@@ -3083,23 +3181,9 @@ void flushParagraph(
         OUString aContent(pBeg, pEnd-pBeg);
 
         std::vector<XMLPropertyState> aPropStates;
-        toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
+        const SvxFieldData* pField = toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
         OUString aStyleName = xStylePool->Find(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
-
-        if (aStyleName.isEmpty())
-        {
-            // Unformatted section.
-            rExport.Characters(aContent);
-        }
-        else
-        {
-            // Formatted section with automatic style.
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, aStyleName);
-            aElemName = rExport.GetNamespaceMap().GetQNameByKey(
-                XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN));
-            SvXMLElementExport aElem(rExport, aElemName, false, false);
-            rExport.Characters(aContent);
-        }
+        writeContent(rExport, aStyleName, aContent, pField);
     }
 }
 

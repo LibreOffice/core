@@ -195,6 +195,93 @@ EditTextObject* ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDest
     return pNew;
 }
 
+OUString ScEditUtil::GetCellFieldValue(
+    const SvxFieldData& rFieldData, const ScDocument* pDoc, Color** ppTextColor )
+{
+    OUString aRet;
+    switch (rFieldData.GetClassId())
+    {
+        case text::textfield::Type::URL:
+        {
+            const SvxURLField& rField = static_cast<const SvxURLField&>(rFieldData);
+            OUString aURL = rField.GetURL();
+
+            switch (rField.GetFormat())
+            {
+                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
+                case SVXURLFORMAT_REPR:
+                    aRet = rField.GetRepresentation();
+                break;
+                case SVXURLFORMAT_URL:
+                    aRet = aURL;
+                break;
+                default:
+                    ;
+            }
+
+            svtools::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl(aURL) ? svtools::LINKSVISITED : svtools::LINKS;
+
+            if (ppTextColor)
+                *ppTextColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
+        }
+        break;
+        case text::textfield::Type::EXTENDED_TIME:
+        {
+            const SvxExtTimeField& rField = static_cast<const SvxExtTimeField&>(rFieldData);
+            if (pDoc)
+                aRet = rField.GetFormatted(*pDoc->GetFormatTable(), ScGlobal::eLnge);
+            else
+            {
+                /* TODO: quite expensive, we could have a global formatter? */
+                SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), ScGlobal::eLnge );
+                aRet = rField.GetFormatted(aFormatter, ScGlobal::eLnge);
+            }
+        }
+        break;
+        case text::textfield::Type::DATE:
+        {
+            Date aDate(Date::SYSTEM);
+            aRet = ScGlobal::pLocaleData->getDate(aDate);
+        }
+        break;
+        case text::textfield::Type::DOCINFO_TITLE:
+        {
+            if (pDoc)
+            {
+                SfxObjectShell* pDocShell = pDoc->GetDocumentShell();
+                if (pDocShell)
+                {
+                    aRet = pDocShell->getDocProperties()->getTitle();
+                    if (aRet.isEmpty())
+                        aRet = pDocShell->GetTitle();
+                }
+            }
+            if (aRet.isEmpty())
+                aRet = "?";
+        }
+        break;
+        case text::textfield::Type::TABLE:
+        {
+            const SvxTableField& rField = static_cast<const SvxTableField&>(rFieldData);
+            SCTAB nTab = rField.GetTab();
+            OUString aName;
+            if (pDoc && pDoc->GetName(nTab, aName))
+                aRet = aName;
+            else
+                aRet = "?";
+        }
+        break;
+        default:
+            aRet = "?";
+    }
+
+    if (aRet.isEmpty())        // leer ist baeh
+        aRet = " ";         // Space ist Default der Editengine
+
+    return aRet;
+}
+
 //------------------------------------------------------------------------
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
@@ -818,86 +905,7 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     if (!pFieldData)
         return OUString(" ");
 
-    sal_uInt16 nClsId = pFieldData->GetClassId();
-    switch (nClsId)
-    {
-        case text::textfield::Type::URL:
-        {
-            const SvxURLField* pField = static_cast<const SvxURLField*>(pFieldData);
-            OUString aURL = pField->GetURL();
-
-            switch (pField->GetFormat())
-            {
-                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
-                case SVXURLFORMAT_REPR:
-                    aRet = pField->GetRepresentation();
-                break;
-                case SVXURLFORMAT_URL:
-                    aRet = aURL;
-                break;
-                default:
-                    ;
-            }
-
-            svtools::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl(String(aURL)) ? svtools::LINKSVISITED : svtools::LINKS;
-            rTxtColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
-        }
-        break;
-        case text::textfield::Type::EXTENDED_TIME:
-        {
-            const SvxExtTimeField* pField = static_cast<const SvxExtTimeField*>(pFieldData);
-            if (mpDoc)
-                aRet = pField->GetFormatted(*mpDoc->GetFormatTable(), ScGlobal::eLnge);
-            else
-            {
-                /* TODO: quite expensive, we could have a global formatter? */
-                SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), ScGlobal::eLnge );
-                aRet = pField->GetFormatted( aFormatter, ScGlobal::eLnge);
-            }
-        }
-        break;
-        case text::textfield::Type::DATE:
-        {
-            Date aDate(Date::SYSTEM);
-            aRet = ScGlobal::pLocaleData->getDate(aDate);
-        }
-        break;
-        case text::textfield::Type::DOCINFO_TITLE:
-        {
-            if (mpDoc)
-            {
-                SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
-                if (pDocShell)
-                {
-                    aRet = pDocShell->getDocProperties()->getTitle();
-                    if (aRet.isEmpty())
-                        aRet = pDocShell->GetTitle();
-                }
-            }
-            if (aRet.isEmpty())
-                aRet = "?";
-        }
-        break;
-        case text::textfield::Type::TABLE:
-        {
-            const SvxTableField* pField = static_cast<const SvxTableField*>(pFieldData);
-            SCTAB nTab = pField->GetTab();
-            OUString aName;
-            if (mpDoc && mpDoc->GetName(nTab, aName))
-                aRet = aName;
-            else
-                aRet = "?";
-        }
-        break;
-        default:
-            aRet = "?";
-    }
-
-    if (aRet.isEmpty())        // leer ist baeh
-        aRet = " ";         // Space ist Default der Editengine
-
-    return aRet;
+    return ScEditUtil::GetCellFieldValue(*pFieldData, mpDoc, &rTxtColor);
 }
 
 void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal_uInt16 )
