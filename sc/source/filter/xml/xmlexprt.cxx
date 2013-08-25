@@ -3067,9 +3067,6 @@ void flushParagraph(
     const ScXMLEditAttributeMap& rAttrMap,
     std::vector<editeng::SectionAttribute>::const_iterator it, std::vector<editeng::SectionAttribute>::const_iterator itEnd )
 {
-    if (it == itEnd)
-        return;
-
     OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
         XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
     SvXMLElementExport aElemP(rExport, aElemName, false, false);

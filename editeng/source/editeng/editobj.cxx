@@ -902,6 +902,13 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
     {
         size_t nPara = distance(aParaBorders.begin(), it);
         const SectionBordersType& rBorders = *it;
+        if (rBorders.size() == 1 && rBorders[0] == 0)
+        {
+            // Empty paragraph. Push an empty section.
+            aAttrs.push_back(editeng::SectionAttribute(nPara, 0, 0));
+            continue;
+        }
+
         SectionBordersType::const_iterator itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
         size_t nPrev = *itBorder;
         size_t nCur;
