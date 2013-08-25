@@ -125,12 +125,6 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
-ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	pl \
-))
-endif
-
 ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	npsoplugin \
@@ -219,6 +213,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
+	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \
 	ctl \
@@ -305,6 +300,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	offacc \
 	passwordcontainer \
 	pcr \
+	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
 	pdffilter \
 	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
 	res \
@@ -320,6 +316,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
+	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	svgio \
@@ -376,6 +373,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		) \
 		smplmail \
 		wininetbe1 \
+		$(if $(filter YES,$(WITH_MOZAB4WIN)), \
+			mozab2 \
+			mozabdrv \
+		) \
+		$(if $(filter NO,$(WITH_MOZAB4WIN)),mozbootstrap) \
+	) \
+	$(if $(filter $(OS),WNT),, \
+		mork \
+		mozbootstrap \
 	) \
 	$(if $(filter $(OS),MACOSX), \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \
@@ -411,15 +417,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	sdbc \
 	avmediaQuickTime \
 	filtertracer \
-	mork \
-	mozab2 \
-	mozabdrv \
 	rpt \
 	rptui \
 	rptxml \
 	simplecm \
 	spa \
-	spell \
 	sts \
 	vclplug_tde \
 	vclplug_kde \
@@ -524,6 +526,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	localedata_euro \
 	localedata_others \
 	mcnttype \
+	$(if $(ENABLE_JAVA), \
+		$(if $(filter $(OS),MACOSX),,officebean) \
+	) \
+        $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	sdbc2 \
@@ -542,15 +548,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	xmlsecurity \
 	xsec_fw \
 	xstor \
+	$(if $(filter $(OS),MACOSX), \
+		macab1 \
+		macabdrv1 \
+	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	bluez_bluetooth \
-	emboleobj \
 	libreoffice \
-	macab1 \
-	macabdrv1 \
-	mozbootstrap \
-	officebean \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \
@@ -592,7 +597,6 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	cmdmail \
 	OGLTrans \
 	pdfimport \
 	postgresql-sdbc \
