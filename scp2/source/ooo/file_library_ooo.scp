@@ -82,11 +82,6 @@ End
 
 #endif
 
-
-#if ! defined WNT // no longer supported on Windows
-STD_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail )
-#endif
-
 #ifndef SYSTEM_CURL
 
 File gid_File_Lib_Curl
@@ -109,27 +104,6 @@ File gid_File_Lib_Curl
 End
 
 #endif
-
-/* fdo#60491 always need emboleobj library on non-WNT platforms */
-#if !defined(WNT) || !defined(DISABLE_ATL)
-SPECIAL_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
-#endif
-
-#ifdef UNX
-
-#ifdef MACOSX
-File gid_File_Lib_Macab_1
-    PACKED_LIB_FILE_BODY;
-    Name = STRING(CONCAT2(libmacab1,UNXSUFFIX));
-End
-
-File gid_File_Lib_Macab_Drv_1
-    PACKED_LIB_FILE_BODY;
-    Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
-End
-#endif  // #ifdef MACOSX
-
-#endif  // #ifdef UNX
 
 #if defined UNX && ! defined MACOSX
 #ifdef ENABLE_TDE
@@ -260,50 +234,6 @@ End
 
 #endif
 
-#if defined(WNT)
-
-#if defined WITH_MOZAB4WIN
-
-STD_LIB_FILE(gid_File_Lib_Mozab,mozab2)
-STD_LIB_FILE(gid_File_Lib_Mozabdrv,mozabdrv)
-
-#else
-
-File gid_File_Lib_Mozbootstrap
-    PACKED_LIB_FILE_BODY;
-    Name = "mozbootstrap.dll";
-End
-
-#endif
-
-#else
-
-STD_LIB_FILE(gid_File_Lib_Mork,mork)
-SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
-
-#endif
-
-#ifdef ENABLE_JAVA
-#ifndef MACOSX
-
-File gid_File_Lib_Officebean
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_LIB_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libofficebean,UNXSUFFIX));
-  #else
-    Name = "officebean.dll";
-  #endif
-End
-
-#endif
-#endif
-
-#if defined ENABLE_NPAPI_FROM_BROWSER
-STD_LIB_FILE( gid_File_Lib_Pl , pl)
-#endif
-
 #if defined(UNX) && ! defined(MACOSX)
 #ifdef ENABLE_TDE
 File gid_File_Lib_Vclplug_Tde
@@ -358,11 +288,6 @@ File gid_File_Lib_Spa
 End
 
 #endif
-
-File gid_File_Lib_Spell
-    PACKED_LIB_FILE_BODY;
-    Name = LIBNAME(spell);
-End
 
 #if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
