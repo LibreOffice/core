@@ -16,6 +16,24 @@
       "revId": "3345ece845a481e82a23101479420f65da361f7c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8IQ\u003d",
+        "filename": "sw/source/core/doc/extinput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-25T17:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//8Kg\u003d",
+      "revId": "3345ece845a481e82a23101479420f65da361f7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
