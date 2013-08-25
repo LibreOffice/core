@@ -3059,6 +3059,55 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     }
 }
 
+namespace {
+
+void flushParagraph(
+    ScXMLExport& rExport, const OUString& rParaText,
+    UniReference<XMLPropertySetMapper> xMapper, UniReference<SvXMLAutoStylePoolP> xStylePool,
+    const ScXMLEditAttributeMap& rAttrMap,
+    std::vector<editeng::SectionAttribute>::const_iterator it, std::vector<editeng::SectionAttribute>::const_iterator itEnd )
+{
+    if (it == itEnd)
+        return;
+
+    OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+        XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
+    SvXMLElementExport aElemP(rExport, aElemName, false, false);
+
+    for (; it != itEnd; ++it)
+    {
+        const editeng::SectionAttribute& rSec = *it;
+
+        const sal_Unicode* pBeg = rParaText.getStr();
+        std::advance(pBeg, rSec.mnStart);
+        const sal_Unicode* pEnd = pBeg;
+        std::advance(pEnd, rSec.mnEnd-rSec.mnStart);
+
+        OUString aContent(pBeg, pEnd-pBeg);
+
+        std::vector<XMLPropertyState> aPropStates;
+        toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
+        OUString aStyleName = xStylePool->Find(XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
+
+        if (aStyleName.isEmpty())
+        {
+            // Unformatted section.
+            rExport.Characters(aContent);
+        }
+        else
+        {
+            // Formatted section with automatic style.
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, aStyleName);
+            aElemName = rExport.GetNamespaceMap().GetQNameByKey(
+                XML_NAMESPACE_TEXT, GetXMLToken(XML_SPAN));
+            SvXMLElementExport aElem(rExport, aElemName, false, false);
+            rExport.Characters(aContent);
+        }
+    }
+}
+
+}
+
 void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 {
     // nEqualCellCount is the number of additional cells
@@ -3214,12 +3263,10 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 
     if (!bIsEmpty)
     {
-        if (aCell.nType == table::CellContentType_TEXT && IsEditCell(aCell))
+        if (aCell.nType == table::CellContentType_TEXT && aCell.maBaseCell.meType == CELLTYPE_EDIT)
         {
             bEditCell = true;
-            uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);
-            if ( xText.is())
-                GetTextParagraphExport()->exportText(xText, false, false);
+            WriteEditCell(aCell.maBaseCell.mpEditText);
         }
         else if (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell))
         {
@@ -3239,6 +3286,41 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     WriteShapes(aCell);
     if (!bIsEmpty)
         IncrementProgressBar(bEditCell);
+}
+
+void ScXMLExport::WriteEditCell(const EditTextObject* pText)
+{
+    UniReference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
+    UniReference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
+    const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
+
+    // Get raw paragraph texts first.
+    std::vector<OUString> aParaTexts;
+    sal_Int32 nParaCount = pText->GetParagraphCount();
+    aParaTexts.reserve(nParaCount);
+    for (sal_Int32 i = 0; i < nParaCount; ++i)
+        aParaTexts.push_back(pText->GetText(i));
+
+    // Get all section data and iterate through them.
+    std::vector<editeng::SectionAttribute> aAttrs;
+    pText->GetAllSectionAttributes(aAttrs);
+    std::vector<editeng::SectionAttribute>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
+    std::vector<editeng::SectionAttribute>::const_iterator itPara = itSec;
+    size_t nCurPara = 0; // current paragraph
+    for (; itSec != itSecEnd; ++itSec)
+    {
+        const editeng::SectionAttribute& rSec = *itSec;
+        if (nCurPara == rSec.mnParagraph)
+            // Still in the same paragraph.
+            continue;
+
+        // Start of a new paragraph. Flush the old paragraph.
+        flushParagraph(*this, aParaTexts[nCurPara], xMapper, xStylePool, rAttrMap, itPara, itSec);
+        nCurPara = rSec.mnParagraph;
+        itPara = itSec;
+    }
+
+    flushParagraph(*this, aParaTexts[nCurPara], xMapper, xStylePool, rAttrMap, itPara, itSecEnd);
 }
 
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
