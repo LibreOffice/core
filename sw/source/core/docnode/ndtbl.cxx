@@ -4538,7 +4538,7 @@ sal_Bool SwDoc::UnProtectTbls( const SwPaM& rPam )
 }
 
 sal_Bool SwDoc::HasTblAnyProtection( const SwPosition* pPos,
-                                 const String* pTblName,
+                                 const OUString* pTblName,
                                  sal_Bool* pFullTblProtection )
 {
     sal_Bool bHasProtection = sal_False;

@@ -298,7 +298,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
         if( mbIsAutoFmtRedline )
         {
             pNewRedl->SetAutoFmtFlag();
-            if( mpAutoFmtRedlnComment && mpAutoFmtRedlnComment->Len() )
+            if( mpAutoFmtRedlnComment && !mpAutoFmtRedlnComment->isEmpty() )
             {
                 pNewRedl->SetComment( *mpAutoFmtRedlnComment );
                 pNewRedl->SetSeqNo( mnAutoFmtRedlnCommentNo );
@@ -2537,13 +2537,13 @@ void SwDoc::UpdateRedlineAttr()
 /// AppendRedline. Is used by Autoformat.
 /// A null pointer resets the mode. The pointer is not copied, so it
 /// needs to stay valid!
-void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, sal_uInt16 nSeqNo )
+void SwDoc::SetAutoFmtRedlineComment( const OUString* pTxt, sal_uInt16 nSeqNo )
 {
     mbIsAutoFmtRedline = 0 != pTxt;
     if( pTxt )
     {
         if( !mpAutoFmtRedlnComment )
-            mpAutoFmtRedlnComment = new String( *pTxt );
+            mpAutoFmtRedlnComment = new OUString( *pTxt );
         else
             *mpAutoFmtRedlnComment = *pTxt;
     }

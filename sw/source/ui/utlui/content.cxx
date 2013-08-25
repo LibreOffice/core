@@ -1051,7 +1051,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(404, sUnprotTbl);
                 sal_Bool bFull = sal_False;
-                String sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
+                OUString sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
                 sal_Bool bProt =pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
                 pSubPop4->EnableItem(403, !bFull );
                 pSubPop4->EnableItem(404, bProt );

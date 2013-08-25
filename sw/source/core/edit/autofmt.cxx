@@ -265,7 +265,7 @@ void SwAutoFormat::_GetCharClass( LanguageType eLang )
 
 void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
 {
-    String sTxt;
+    OUString sTxt;
     sal_uInt16 nSeqNo = 0;
     if( STR_AUTOFMTREDL_END > nActionId )
     {
@@ -292,7 +292,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        sTxt = OUString("Action text is missing");
+        sTxt = "Action text is missing";
 #endif
 
     pDoc->SetAutoFmtRedlineComment( &sTxt, nSeqNo );
@@ -1765,10 +1765,9 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 {
     if( aFlags.bWithRedlining )
     {
-        String sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
+        OUString sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
-        sTxt.SearchAndReplace( OUString("$(ARG1)"),
-                                OUString::number( nLvl + 1 ) );
+        sTxt = sTxt.replaceAll( "$(ARG1)", OUString::number( nLvl + 1 ) );
         pDoc->SetAutoFmtRedlineComment( &sTxt );
     }
 
