@@ -1469,8 +1469,9 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     // They are stored as matching the originals, so that we will be later
     // able to build the chains accordingly.
     ::std::vector< SwFrmFmt* > aVecSwFrmFmt;
+    ::std::set< _ZSortFly >::const_iterator it=aSet.begin();
 
-    for (::std::set< _ZSortFly >::const_iterator it=aSet.begin() ; it != aSet.end(); ++it )
+    while (it != aSet.end())
     {
         // #i59964#
         // correct determination of new anchor position
@@ -1570,7 +1571,9 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
                 bMakeCpy = false;
-                aSet.erase ( it );
+                ::std::set< _ZSortFly >::const_iterator it_erase=it++;
+                aSet.erase (it_erase);
+                continue;
             }
         }
 
@@ -1578,6 +1581,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         if( bMakeCpy )
             aVecSwFrmFmt.push_back( pDest->CopyLayoutFmt( *(*it).GetFmt(),
                         aAnchor, false, true ) );
+        ++it;
     }
 
     // Rebuild as much as possible of all chains that are available in the original,
