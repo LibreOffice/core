@@ -3342,11 +3342,11 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 
     if (!bIsEmpty)
     {
-        if (aCell.nType == table::CellContentType_TEXT && aCell.maBaseCell.meType == CELLTYPE_EDIT)
+        if (aCell.maBaseCell.meType == CELLTYPE_EDIT)
         {
             WriteEditCell(aCell.maBaseCell.mpEditText);
         }
-        else if (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell))
+        else if (aCell.maBaseCell.meType == CELLTYPE_FORMULA && aCell.maBaseCell.mpFormula->IsMultilineResult())
         {
             WriteMultiLineFormulaResult(aCell.maBaseCell.mpFormula);
         }
@@ -3796,14 +3796,6 @@ bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell
 bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
 {
     return rCell.maBaseCell.meType == CELLTYPE_EDIT;
-}
-
-bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
-{
-    if (rCell.maBaseCell.meType != CELLTYPE_FORMULA)
-        return false;
-
-    return rCell.maBaseCell.mpFormula->IsMultilineResult();
 }
 
 bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)

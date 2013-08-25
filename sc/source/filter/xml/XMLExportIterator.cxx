@@ -701,8 +701,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
 
     ScAddress aScAddress;
     ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
-    CellType eCalcType = rExport.GetDocument()->GetCellType( aScAddress );
-    switch (eCalcType)
+    switch (rMyCell.maBaseCell.meType)
     {
         case CELLTYPE_VALUE:
             rMyCell.nType = table::CellContentType_VALUE;
@@ -718,7 +717,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
             rMyCell.nType = table::CellContentType_EMPTY;
     }
 
-    if (rMyCell.nType == table::CellContentType_FORMULA)
+    if (rMyCell.maBaseCell.meType == CELLTYPE_FORMULA)
         if( rExport.IsMatrix( aScAddress, rMyCell.aMatrixRange, bIsMatrixBase ) )
         {
             rMyCell.bIsMatrixBase = bIsMatrixBase;

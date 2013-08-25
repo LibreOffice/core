@@ -192,8 +192,7 @@ class ScXMLExport : public SvXMLExport
 
     bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
     bool IsEditCell(ScMyCell& rCell) const;
-    bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
-    bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
+    bool IsCellEqual(ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();
