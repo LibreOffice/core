@@ -899,7 +899,6 @@ OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_Int32 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
-    OUString aRet;
     const SvxFieldData* pFieldData = rField.GetField();
 
     if (!pFieldData)
