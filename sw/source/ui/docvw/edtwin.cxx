@@ -2276,8 +2276,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if(pFieldmark)
                 {
                     pFieldmark->SetChecked(!pFieldmark->IsChecked());
-                    SwDocShell* pDocSh = rView.GetDocShell();
-                    SwDoc *pDoc=pDocSh->GetDoc();
                     OSL_ENSURE(pFieldmark->IsExpanded(),
                         "where is the otherpos?");
                     if (pFieldmark->IsExpanded())
