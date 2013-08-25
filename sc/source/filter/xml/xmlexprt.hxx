@@ -220,7 +220,7 @@ class ScXMLExport : public SvXMLExport
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xRowProperties,
         const OUString* pOldName, sal_Int32& rIndex );
 
-    void IncrementProgressBar(bool bEditCell, sal_Int32 nInc = 1);
+    void IncrementProgressBar(bool bFlush, sal_Int32 nInc = 1);
 
     void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
 

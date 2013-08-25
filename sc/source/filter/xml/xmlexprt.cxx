@@ -3340,18 +3340,14 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     WriteAnnotation(aCell);
     WriteDetective(aCell);
 
-    bool bEditCell = false;
-
     if (!bIsEmpty)
     {
         if (aCell.nType == table::CellContentType_TEXT && aCell.maBaseCell.meType == CELLTYPE_EDIT)
         {
-            bEditCell = true;
             WriteEditCell(aCell.maBaseCell.mpEditText);
         }
         else if (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell))
         {
-            bEditCell = true;
             WriteMultiLineFormulaResult(aCell.maBaseCell.mpFormula);
         }
         else
@@ -3364,7 +3360,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     }
     WriteShapes(aCell);
     if (!bIsEmpty)
-        IncrementProgressBar(bEditCell);
+        IncrementProgressBar(false);
 }
 
 void ScXMLExport::WriteEditCell(const EditTextObject* pText)
@@ -5006,10 +5002,10 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
         XML_NAMESPACE_PRESENTATION );
 }
 
-void ScXMLExport::IncrementProgressBar(bool bEditCell, sal_Int32 nInc)
+void ScXMLExport::IncrementProgressBar(bool bFlush, sal_Int32 nInc)
 {
     nProgressCount += nInc;
-    if (bEditCell || nProgressCount > 100)
+    if (bFlush || nProgressCount > 100)
     {
         GetProgressBarHelper()->Increment(nProgressCount);
         nProgressCount = 0;
