@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8Io\u003d",
+        "filename": "sw/source/core/crsr/bookmrk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-08-25T15:58:58Z",
+      "side": 1,
+      "message": "You seem to have removed the trailing space in  \", [\", is that intentional?",
+      "revId": "cb16d3fa01d85f360b6461a8b199ddcec38b301c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
