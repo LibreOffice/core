@@ -860,35 +860,25 @@ public:
 void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const
 {
     typedef std::vector<size_t> SectionBordersType;
-    typedef std::map<size_t, SectionBordersType> ParagraphsType;
-    ParagraphsType aParaBorders;
+    typedef std::vector<SectionBordersType> ParagraphsType;
+    ParagraphsType aParaBorders(aContents.size());
 
     // First pass: determine section borders for each paragraph.
     for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
     {
         const ContentInfo& rC = aContents[nPara];
+        SectionBordersType& rBorders = aParaBorders[nPara];
+        rBorders.push_back(0);
+        rBorders.push_back(rC.GetText().Len());
         for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
         {
             const XEditAttribute& rAttr = rC.aAttribs[nAttr];
             const SfxPoolItem* pItem = rAttr.GetItem();
-            if (!pItem || pItem->Which() == EE_FEATURE_FIELD)
+            if (!pItem)
                 continue;
 
-            ParagraphsType::iterator it = aParaBorders.lower_bound(nPara);
-            SectionBordersType* pBorders = NULL;
-            if (it != aParaBorders.end() && !aParaBorders.key_comp()(nPara, it->first))
-            {
-                // Container for this paragraph already exists.
-                pBorders = &it->second;
-            }
-            else
-            {
-                it = aParaBorders.insert(it, ParagraphsType::value_type(nPara, SectionBordersType()));
-                pBorders = &it->second;
-            }
-
-            pBorders->push_back(rAttr.GetStart());
-            pBorders->push_back(rAttr.GetEnd());
+            rBorders.push_back(rAttr.GetStart());
+            rBorders.push_back(rAttr.GetEnd());
         }
     }
 
@@ -896,7 +886,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
     ParagraphsType::iterator it = aParaBorders.begin(), itEnd = aParaBorders.end();
     for (; it != itEnd; ++it)
     {
-        SectionBordersType& rBorders = it->second;
+        SectionBordersType& rBorders = *it;
         std::sort(rBorders.begin(), rBorders.end());
         SectionBordersType::iterator itUniqueEnd = std::unique(rBorders.begin(), rBorders.end());
         rBorders.erase(itUniqueEnd, rBorders.end());
@@ -910,11 +900,8 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
     it = aParaBorders.begin();
     for (; it != itEnd; ++it)
     {
-        size_t nPara = it->first;
-        const SectionBordersType& rBorders = it->second;
-        if (rBorders.empty())
-            continue;
-
+        size_t nPara = distance(aParaBorders.begin(), it);
+        const SectionBordersType& rBorders = *it;
         SectionBordersType::const_iterator itBorder = rBorders.begin(), itBorderEnd = rBorders.end();
         size_t nPrev = *itBorder;
         size_t nCur;
@@ -933,7 +920,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
     std::vector<editeng::SectionAttribute>::iterator itAttr = aAttrs.begin();
     for (; it != itEnd; ++it)
     {
-        size_t nPara = it->first;
+        size_t nPara = distance(aParaBorders.begin(), it);
         const ContentInfo& rC = aContents[nPara];
         if (itAttr->mnParagraph != nPara)
             // Find the first container for the current paragraph.
