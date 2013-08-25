@@ -606,210 +606,210 @@ class ImplRulerData;
 class SVT_DLLPUBLIC Ruler : public Window
 {
 private:
-    VirtualDevice       maVirDev;
-    MapMode             maMapMode;
-    long                mnBorderOff;
-    long                mnWinOff;
-    long                mnWinWidth;
-    long                mnWidth;
-    long                mnHeight;
-    long                mnVirOff;
-    long                mnVirWidth;
-    long                mnVirHeight;
-    long                mnBorderWidth;
-    long                mnStartDragPos;
-    long                mnDragPos;
-    sal_uLong               mnUpdateEvtId;
-    ImplRulerData*      mpSaveData;
-    ImplRulerData*      mpData;
-    ImplRulerData*      mpDragData;
-    Rectangle           maExtraRect;
-    WinBits             mnWinStyle;
-    sal_uInt16              mnUnitIndex;
-    sal_uInt16              mnDragAryPos;
-    sal_uInt16              mnDragSize;
-    sal_uInt16              mnDragScroll;
-    sal_uInt16              mnDragModifier;
-    sal_uInt16              mnExtraStyle;
-    sal_uInt16              mnExtraClicks;
-    sal_uInt16              mnExtraModifier;
-    long                mnCharWidth;
-    long                mnLineHeight;
+    VirtualDevice   maVirDev;
+    MapMode         maMapMode;
+    long            mnBorderOff;
+    long            mnWinOff;
+    long            mnWinWidth;
+    long            mnWidth;
+    long            mnHeight;
+    long            mnVirOff;
+    long            mnVirWidth;
+    long            mnVirHeight;
+    long            mnBorderWidth;
+    long            mnStartDragPos;
+    long            mnDragPos;
+    sal_uLong       mnUpdateEvtId;
+    ImplRulerData*  mpSaveData;
+    ImplRulerData*  mpData;
+    ImplRulerData*  mpDragData;
+    Rectangle       maExtraRect;
+    WinBits         mnWinStyle;
+    sal_uInt16      mnUnitIndex;
+    sal_uInt16      mnDragAryPos;
+    sal_uInt16      mnDragSize;
+    sal_uInt16      mnDragScroll;
+    sal_uInt16      mnDragModifier;
+    sal_uInt16      mnExtraStyle;
+    sal_uInt16      mnExtraClicks;
+    sal_uInt16      mnExtraModifier;
+    long            mnCharWidth;
+    long            mnLineHeight;
 
-    RulerExtra          meExtraType;
-    RulerType           meDragType;
-    MapUnit             meSourceUnit;
-    FieldUnit           meUnit;
-    Fraction            maZoom;
-    sal_Bool                mbCalc;
-    sal_Bool                mbFormat;
-    sal_Bool                mbDrag;
-    sal_Bool                mbDragDelete;
-    sal_Bool                mbDragCanceled;
-    sal_Bool                mbAutoWinWidth;
-    sal_Bool                mbActive;
-    sal_uInt8                mnUpdateFlags;
-    Link                maStartDragHdl;
-    Link                maDragHdl;
-    Link                maEndDragHdl;
-    Link                maClickHdl;
-    Link                maDoubleClickHdl;
-    Link                maExtraDownHdl;
+    RulerExtra      meExtraType;
+    RulerType       meDragType;
+    MapUnit         meSourceUnit;
+    FieldUnit       meUnit;
+    Fraction        maZoom;
+    sal_Bool        mbCalc;
+    sal_Bool        mbFormat;
+    sal_Bool        mbDrag;
+    sal_Bool        mbDragDelete;
+    sal_Bool        mbDragCanceled;
+    sal_Bool        mbAutoWinWidth;
+    sal_Bool        mbActive;
+    sal_uInt8       mnUpdateFlags;
+    Link            maStartDragHdl;
+    Link            maDragHdl;
+    Link            maEndDragHdl;
+    Link            maClickHdl;
+    Link            maDoubleClickHdl;
+    Link            maExtraDownHdl;
 
-    SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void                ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
+    SVT_DLLPRIVATE void ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
 
-    SVT_DLLPRIVATE void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
-    SVT_DLLPRIVATE void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void                ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle );
-    SVT_DLLPRIVATE void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle );
-    SVT_DLLPRIVATE void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
+    SVT_DLLPRIVATE void ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle );
+    SVT_DLLPRIVATE void ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
+    SVT_DLLPRIVATE void ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle );
+    SVT_DLLPRIVATE void ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
+
     using Window::ImplInit;
-    SVT_DLLPRIVATE void                ImplInit( WinBits nWinBits );
-    SVT_DLLPRIVATE void                ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
-    SVT_DLLPRIVATE void                ImplCalc();
-    SVT_DLLPRIVATE void                ImplFormat();
-    SVT_DLLPRIVATE void                ImplInitExtraField( sal_Bool bUpdate );
-    SVT_DLLPRIVATE void                ImplInvertLines( sal_Bool bErase = sal_False );
-    SVT_DLLPRIVATE void                ImplDraw();
-    SVT_DLLPRIVATE void                ImplDrawExtra( sal_Bool bPaint = sal_False );
-    SVT_DLLPRIVATE void                ImplUpdate( sal_Bool bMustCalc = sal_False );
+    SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
+    SVT_DLLPRIVATE void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SVT_DLLPRIVATE void ImplCalc();
+    SVT_DLLPRIVATE void ImplFormat();
+    SVT_DLLPRIVATE void ImplInitExtraField( sal_Bool bUpdate );
+    SVT_DLLPRIVATE void ImplInvertLines( sal_Bool bErase = sal_False );
+    SVT_DLLPRIVATE void ImplDraw();
+    SVT_DLLPRIVATE void ImplDrawExtra( sal_Bool bPaint = sal_False );
+    SVT_DLLPRIVATE void ImplUpdate( sal_Bool bMustCalc = sal_False );
+
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_Bool                ImplHitTest( const Point& rPos,
-                                     ImplRulerHitTest* pHitTest,
-                                     sal_Bool bRequiredStyle = sal_False,
-                                     sal_uInt16 nRequiredStyle = 0 ) const;
-    SVT_DLLPRIVATE sal_Bool                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
-    SVT_DLLPRIVATE sal_Bool                ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier );
-    SVT_DLLPRIVATE void                ImplDrag( const Point& rPos );
-    SVT_DLLPRIVATE void                ImplEndDrag();
-                        DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
+    SVT_DLLPRIVATE sal_Bool ImplHitTest( const Point& rPos,
+                                         ImplRulerHitTest* pHitTest,
+                                         sal_Bool bRequiredStyle = sal_False,
+                                        sal_uInt16 nRequiredStyle = 0 ) const;
+    SVT_DLLPRIVATE sal_Bool ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
+    SVT_DLLPRIVATE sal_Bool ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier );
+    SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
+    SVT_DLLPRIVATE void     ImplEndDrag();
+
+    DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
 
     // Forbidden and not implemented.
     Ruler (const Ruler &);
-    Ruler & operator= (const Ruler &);
+    Ruler& operator= (const Ruler &);
 
 protected:
-    long GetRulerVirHeight() const;
-    MapMode GetCurrentMapMode() const { return maMapMode; }
-    RulerUnitData GetCurrentRulerUnit() const;
+    long            GetRulerVirHeight() const;
+    MapMode         GetCurrentMapMode() const { return maMapMode; }
+    RulerUnitData   GetCurrentRulerUnit() const;
 
 public:
-                        Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
-    virtual             ~Ruler();
+            Ruler( Window* pParent, WinBits nWinStyle = WB_STDRULER );
+    virtual ~Ruler();
 
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        Paint( const Rectangle& rRect );
-    virtual void        Resize();
-    virtual void        StateChanged( StateChangedType nStateChange );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    MouseMove( const MouseEvent& rMEvt );
+    virtual void    Tracking( const TrackingEvent& rTEvt );
+    virtual void    Paint( const Rectangle& rRect );
+    virtual void    Resize();
+    virtual void    StateChanged( StateChangedType nStateChange );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual long        StartDrag();
-    virtual void        Drag();
-    virtual void        EndDrag();
-    virtual void        Click();
-    virtual void        DoubleClick();
-    virtual void        ExtraDown();
+    virtual long    StartDrag();
+    virtual void    Drag();
+    virtual void    EndDrag();
+    virtual void    Click();
+    virtual void    DoubleClick();
+    virtual void    ExtraDown();
 
-    void                Activate();
-    void                Deactivate();
-    sal_Bool                IsActive() const { return mbActive; }
+    void            Activate();
+    void            Deactivate();
+    sal_Bool        IsActive() const { return mbActive; }
 
-    void                SetWinPos( long nOff = 0, long nWidth = 0 );
-    long                GetWinOffset() const { return mnWinOff; }
-    long                GetWinWidth() const { return mnWinWidth; }
-    void                SetPagePos( long nOff = 0, long nWidth = 0 );
-    long                GetPageOffset() const;
-    long                GetPageWidth() const;
-    void                SetBorderPos( long nOff = 0 );
-    long                GetBorderOffset() const { return mnBorderOff; }
-    Rectangle           GetExtraRect() const { return maExtraRect; }
+    void            SetWinPos( long nOff = 0, long nWidth = 0 );
+    long            GetWinOffset() const { return mnWinOff; }
+    long            GetWinWidth() const { return mnWinWidth; }
+    void            SetPagePos( long nOff = 0, long nWidth = 0 );
+    long            GetPageOffset() const;
+    long            GetPageWidth() const;
+    void            SetBorderPos( long nOff = 0 );
+    long            GetBorderOffset() const { return mnBorderOff; }
+    Rectangle       GetExtraRect() const { return maExtraRect; }
 
-    void                SetUnit( FieldUnit eNewUnit );
-    FieldUnit           GetUnit() const { return meUnit; }
-    void                SetZoom( const Fraction& rNewZoom );
-    Fraction            GetZoom() const { return maZoom; }
+    void            SetUnit( FieldUnit eNewUnit );
+    FieldUnit       GetUnit() const { return meUnit; }
+    void            SetZoom( const Fraction& rNewZoom );
+    Fraction        GetZoom() const { return maZoom; }
 
-    void                SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
-    MapUnit             GetSourceUnit() const { return meSourceUnit; }
+    void            SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
+    MapUnit         GetSourceUnit() const { return meSourceUnit; }
 
-    void                SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
-    RulerExtra          GetExtraType() const { return meExtraType; }
-    sal_uInt16              GetExtraStyle()  const { return mnExtraStyle; }
-    sal_uInt16              GetExtraClicks() const { return mnExtraClicks; }
-    sal_uInt16              GetExtraModifier() const { return mnExtraModifier; }
+    void            SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
+    RulerExtra      GetExtraType() const { return meExtraType; }
+    sal_uInt16      GetExtraStyle()  const { return mnExtraStyle; }
+    sal_uInt16      GetExtraClicks() const { return mnExtraClicks; }
+    sal_uInt16      GetExtraModifier() const { return mnExtraModifier; }
 
-    sal_Bool                StartDocDrag( const MouseEvent& rMEvt,
-                                      RulerType eDragType = RULER_TYPE_DONTKNOW );
-    RulerType           GetDragType() const { return meDragType; }
-    long                GetDragPos() const { return mnDragPos; }
-    sal_uInt16              GetDragAryPos() const { return mnDragAryPos; }
-    sal_uInt16              GetDragSize() const { return mnDragSize; }
-    sal_Bool                IsDragDelete() const { return mbDragDelete; }
-    sal_Bool                IsDragCanceled() const { return mbDragCanceled; }
-    sal_uInt16              GetDragScroll() const { return mnDragScroll; }
-    sal_uInt16              GetDragModifier() const { return mnDragModifier; }
-    sal_Bool                IsDrag() const { return mbDrag; }
-    void                CancelDrag();
-    long                GetClickPos() const { return mnDragPos; }
-    RulerType           GetClickType() const { return meDragType; }
-    sal_uInt16              GetClickAryPos() const { return mnDragAryPos; }
+    sal_Bool        StartDocDrag( const MouseEvent& rMEvt,
+                                  RulerType eDragType = RULER_TYPE_DONTKNOW );
+    RulerType       GetDragType() const { return meDragType; }
+    long            GetDragPos() const { return mnDragPos; }
+    sal_uInt16      GetDragAryPos() const { return mnDragAryPos; }
+    sal_uInt16      GetDragSize() const { return mnDragSize; }
+    sal_Bool        IsDragDelete() const { return mbDragDelete; }
+    sal_Bool        IsDragCanceled() const { return mbDragCanceled; }
+    sal_uInt16      GetDragScroll() const { return mnDragScroll; }
+    sal_uInt16      GetDragModifier() const { return mnDragModifier; }
+    sal_Bool        IsDrag() const { return mbDrag; }
+    void            CancelDrag();
+    long            GetClickPos() const { return mnDragPos; }
+    RulerType       GetClickType() const { return meDragType; }
+    sal_uInt16      GetClickAryPos() const { return mnDragAryPos; }
+
     using Window::GetType;
-    RulerType           GetType( const Point& rPos,
-                                 sal_uInt16* pAryPos = NULL ) const;
+    RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = NULL ) const;
 
-    void                SetNullOffset( long nPos );
-    long                GetNullOffset() const;
-    void                SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
-    void                SetMargin1( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
-    long                GetMargin1() const;
-    void                SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
-    void                SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
-    long                GetMargin2() const;
+    void            SetNullOffset( long nPos );
+    long            GetNullOffset() const;
+    void            SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
+    void            SetMargin1( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
+    long            GetMargin1() const;
+    void            SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
+    void            SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
+    long            GetMargin2() const;
 
-    void                SetLeftFrameMargin( long nPos );
-    void                SetRightFrameMargin( long nPos );
+    void            SetLeftFrameMargin( long nPos );
+    void            SetRightFrameMargin( long nPos );
+    void            SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
+    void            SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
+    void            SetIndents( sal_uInt16 n = 0, const RulerIndent* pIndentAry = NULL );
 
-    void                SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
+    void            SetTabs( sal_uInt16 n = 0, const RulerTab* pTabAry = NULL );
+    sal_uInt16      GetTabCount() const;
+    const RulerTab* GetTabs() const;
 
-    void                SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
+    static void     DrawTab( OutputDevice* pDevice, const Color &rFillColor,
+                             const Point& rPos, sal_uInt16 nStyle );
 
-    void                SetIndents( sal_uInt16 n = 0, const RulerIndent* pIndentAry = NULL );
+    void            SetStyle( WinBits nStyle );
+    WinBits         GetStyle() const { return mnWinStyle; }
 
-    void                SetTabs( sal_uInt16 n = 0, const RulerTab* pTabAry = NULL );
-    sal_uInt16              GetTabCount() const;
-    const RulerTab*     GetTabs() const;
-
-    static void         DrawTab( OutputDevice* pDevice, const Color &rFillColor,
-                                 const Point& rPos, sal_uInt16 nStyle );
-
-    void                SetStyle( WinBits nStyle );
-    WinBits             GetStyle() const { return mnWinStyle; }
-
-    void                SetStartDragHdl( const Link& rLink ) { maStartDragHdl = rLink; }
-    const Link&         GetStartDragHdl() const { return maStartDragHdl; }
-    void                SetDragHdl( const Link& rLink ) { maDragHdl = rLink; }
-    const Link&         GetDragHdl() const { return maDragHdl; }
-    void                SetEndDragHdl( const Link& rLink ) { maEndDragHdl = rLink; }
-    const Link&         GetEndDragHdl() const { return maEndDragHdl; }
-    void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
-    const Link&         GetClickHdl() const { return maClickHdl; }
-    void                SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
-    const Link&         GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void                SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
-    const Link&         GetExtraDownHdl() const { return maExtraDownHdl; }
+    void            SetStartDragHdl( const Link& rLink ) { maStartDragHdl = rLink; }
+    const Link&     GetStartDragHdl() const { return maStartDragHdl; }
+    void            SetDragHdl( const Link& rLink ) { maDragHdl = rLink; }
+    const Link&     GetDragHdl() const { return maDragHdl; }
+    void            SetEndDragHdl( const Link& rLink ) { maEndDragHdl = rLink; }
+    const Link&     GetEndDragHdl() const { return maEndDragHdl; }
+    void            SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
+    const Link&     GetClickHdl() const { return maClickHdl; }
+    void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
+    const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
+    void            SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
+    const Link&     GetExtraDownHdl() const { return maExtraDownHdl; }
 
     //set text direction right-to-left
-    void                SetTextRTL(sal_Bool bRTL);
+    void            SetTextRTL(sal_Bool bRTL);
 
-    void                SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
-    void                SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
+    void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
+    void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 
-    void                DrawTicks();
+    void            DrawTicks();
 };
 
 #endif  // _RULER_HXX
