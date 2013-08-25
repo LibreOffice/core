@@ -249,8 +249,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Referenc
     {
         if( it->m_xListener == xListener )
         {
-            m_aListeners.erase( it );
-            it = m_aListeners.begin();
+            it = m_aListeners.erase(it);
         }
         else
             ++it;
