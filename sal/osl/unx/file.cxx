@@ -293,7 +293,7 @@ sal_uInt64 FileHandle_Impl::getPos() const
 
 oslFileError FileHandle_Impl::setPos (sal_uInt64 uPos)
 {
-    SAL_INFO("osl.file", "FileHandle_Impl::setPos(" << m_fd << ", " << getPos() << ") => " << uPos);
+    SAL_INFO("sal.file", "FileHandle_Impl::setPos(" << m_fd << ", " << getPos() << ") => " << uPos);
     m_fileptr = sal::static_int_cast< off_t >(uPos);
     return osl_File_E_None;
 }
@@ -340,7 +340,7 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
             return (result);
     }
 
-    SAL_INFO("osl.file", "osl_setFileSize(" << m_fd << ", " << getSize() << ") => " << nSize);
+    SAL_INFO("sal.file", "osl_setFileSize(" << m_fd << ", " << getSize() << ") => " << nSize);
     m_size = sal::static_int_cast< sal_uInt64 >(nSize);
     return osl_File_E_None;
 }
