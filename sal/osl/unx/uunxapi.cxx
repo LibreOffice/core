@@ -262,6 +262,33 @@ int open_c(const char *cpPath, int oflag, int mode)
 
     int result = open(cpPath, oflag, mode);
 
+#if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+    if (result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
+    {
+        // A new file was created. Check if it is outside the sandbox.
+        // (In that case it must be one the user selected as export or
+        // save destination in a file dialog, otherwise we wouldn't
+        // have been able to crete it.) Create and store a security
+        // scoped bookmark for it so that we can access the file in
+        // the future, too. (For the "Recent Files" functionality.)
+        const char *sandbox = [NSHomeDirectory() UTF8String];
+        if (!(memcmp(sandbox, cpPath, strlen(sandbox)) == 0 &&
+              cpPath[strlen(sandbox)] == '/'))
+        {
+            NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpPath]];
+            NSData *data = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
+                         includingResourceValuesForKeys:nil
+                                          relativeToURL:nil
+                                                  error:nil];
+            if (data != NULL)
+            {
+                [userDefaults setObject:data
+                                 forKey:[@"bookmarkFor:" stringByAppendingString:[url absoluteString]]];
+            }
+        }
+    }
+#endif
+
     done_accessing_file_path(cpPath, state);
 
     return result;
