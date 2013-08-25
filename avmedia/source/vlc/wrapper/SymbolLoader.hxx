@@ -9,7 +9,10 @@
 
 #ifndef _SYMBOL_LOADER_HXX
 #define _SYMBOL_LOADER_HXX
-
+#if defined( WNT )
+# include <windows.h>
+# include <winreg.h>
+#endif
 #include <iostream>
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
@@ -26,11 +29,33 @@ struct ApiMap
 
 namespace
 {
-    const char *libNames[] = {
-        "libvlc.so.5",
-        "libvlc.dll",
-        "libvlc.dylib"
-    };
+#if defined( UNX )
+    const char LibName[] = "libvlc.so.5";
+#elif defined( MACOS )
+    const char LibName[] = "/Applications/VLC.app/libvlc.dylib";
+#elif defined( WNT )
+    const char LibName[] = "libvlc.dll";
+
+    OUString GetVLCPath()
+    {
+        HKEY hKey;
+        TCHAR arCurrent[MAX_PATH];
+        DWORD dwType, dwCurrentSize = sizeof( arCurrent );
+
+        if ( ::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T( "Software\\VideoLAN\\VLC" ),
+                             0, KEY_READ, &hKey ) == ERROR_SUCCESS )
+        {
+            if ( ::RegQueryValueEx( hKey, _T( "InstallDir" ), NULL, &dwType, ( LPBYTE )arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
+            {
+                ::RegCloseKey( hKey );
+                return OUString::createFromAscii( arCurrent ) + "/";
+            }
+
+            ::RegCloseKey( hKey );
+        }
+    }
+#endif
+
 
     template<size_t N>
     bool tryLink( oslModule &aModule, const ApiMap ( &pMap )[N] )
@@ -58,27 +83,29 @@ namespace VLC
     template<size_t N>
     bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
-        oslModule aModule;
+#if defined( UNX ) || defined( MACOS )
+        const OUString& fullPath = OUString::createFromAscii(LibName);
+#elif defined( WNT )
+        const OUString& fullPath = GetVLCPath() + OUString::createFromAscii(LibName);
+#endif
 
-        for (uint j = 0; j < sizeof(libNames) / sizeof(libNames[0]); ++j)
+        oslModule aModule = osl_loadModule( fullPath.pData,
+                                            SAL_LOADMODULE_DEFAULT );
+
+        if( aModule == NULL)
         {
-            aModule = osl_loadModule( OUString::createFromAscii
-                                    ( libNames[ j ] ).pData,
-                                    SAL_LOADMODULE_DEFAULT );
-
-            if( aModule == NULL)
-                continue;
-
-            if (tryLink( aModule, pMap ))
-            {
-                osl_unloadModule( aModule );
-                return true;
-            }
-
-            osl_unloadModule( aModule );
+            std::cerr << "Cannot load libvlc" << std::endl;
+            return false;
         }
 
-        std::cerr << "Cannot load libvlc" << std::endl;
+        if (tryLink( aModule, pMap ))
+        {
+            osl_unloadModule( aModule );
+            return true;
+        }
+
+        osl_unloadModule( aModule );
+
         return false;
     }
 }
