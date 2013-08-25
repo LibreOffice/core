@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8I0\u003d",
+        "filename": "sw/source/core/edit/autofmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1770,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-25T15:22:52Z",
+      "side": 1,
+      "message": "the old code only replaced one instance not all but the string shouldn\u0027t contain more than one anyways...",
+      "revId": "541bbb406edc8cd0926c5a50c28a2fa67dce114c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
