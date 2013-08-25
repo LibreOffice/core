@@ -166,13 +166,8 @@ public class AccessibleEditableTextImpl extends AccessibleTextImpl implements ja
         attribute = as.getAttribute(StyleConstants.FontFamily);
         if (null != attribute) {
             com.sun.star.beans.PropertyValue propertyValue = new com.sun.star.beans.PropertyValue();
-            propertyValue.Name = "CharFontPitch";
-
-            if (StyleConstants.getFontFamily(as).equals( "Proportional" )) {
-                propertyValue.Value = new Short("2");
-            } else {
-                propertyValue.Value = new Short("1");
-            }
+            propertyValue.Name = "CharFontName";
+            propertyValue.Value = new String(StyleConstants.getFontFamily(as));
             propertyValues.add(propertyValue);
         }
 
