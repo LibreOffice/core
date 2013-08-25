@@ -363,18 +363,16 @@ GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
 
 void ServerFont::GarbageCollect( long nMinLruIndex )
 {
-    GlyphList::iterator it_next = maGlyphList.begin();
-    while( it_next != maGlyphList.end() )
+    GlyphList::iterator it = maGlyphList.begin();
+    while( it != maGlyphList.end() )
     {
-        GlyphList::iterator it = it_next++;
         GlyphData& rGD = it->second;
         if( (nMinLruIndex - rGD.GetLruValue()) > 0 )
         {
             OSL_ASSERT( mnBytesUsed >= sizeof(GlyphData) );
             mnBytesUsed -= sizeof( GlyphData );
             GlyphCache::GetInstance().RemovingGlyph( rGD );
-            maGlyphList.erase( it );
-            it_next = maGlyphList.begin();
+            it = maGlyphList.erase( it );
         }
     }
 }
