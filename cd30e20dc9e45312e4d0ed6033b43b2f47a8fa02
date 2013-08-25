@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8JY\u003d",
+        "filename": "sw/source/ui/utlui/initui.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-25T14:52:13Z",
+      "side": 1,
+      "message": "global vars should have g_ prefix",
+      "revId": "cd30e20dc9e45312e4d0ed6033b43b2f47a8fa02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
