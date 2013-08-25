@@ -36,7 +36,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     final static double toPointFactor = 1 / ((7 / 10) + 34.5);
     final static String[] attributeList = {
         "ParaAdjust", "CharBackColor", "CharWeight", "ParaFirstLineIndent",
-        "CharFontPitch", "CharHeight", "CharColor", "CharPosture",
+        "CharFontName", "CharHeight", "CharColor", "CharPosture",
         "ParaLeftMargin", "ParaLineSpacing", "ParaTopMargin", "ParaBottomMargin",
         "CharStrikeout", "CharEscapement", "ParaTabStops", "CharUnderline"
     };
@@ -296,10 +296,8 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     (float) (toPointFactor * AnyConverter.toInt(property.Value)));
 
                 // Set font family attribute
-            } else if (property.Name.equals("CharFontPitch")) {
-                if (AnyConverter.toShort(property.Value) == 2) {
-                    StyleConstants.setFontFamily(as, "Proportional");
-                }
+            } else if (property.Name.equals("CharFontName")) {
+                StyleConstants.setFontFamily(as, AnyConverter.toString(property.Value));
 
                 // Set font size attribute
             } else if (property.Name.equals("CharHeight")) {
