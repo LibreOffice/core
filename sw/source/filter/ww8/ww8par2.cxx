@@ -3854,7 +3854,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     pStStrm->Seek( rSI.nFilePos );
 
     short nSkip, cbStd;
-    String sName;
+    OUString sName;
 
     boost::scoped_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// read Style
 
@@ -3863,7 +3863,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     // either no Name or unused Slot or unknown Style
 
-    if ( !xStd || (0 == sName.Len()) || ((1 != xStd->sgc) && (2 != xStd->sgc)) )
+    if ( !xStd || sName.isEmpty() || ((1 != xStd->sgc) && (2 != xStd->sgc)) )
     {
         pStStrm->SeekRel( nSkip );
         return;
