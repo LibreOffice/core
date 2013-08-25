@@ -6043,7 +6043,7 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
     return pStd;
 }
 
-WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
+WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
 {
     // Attention: MacWord-Documents have their Stylenames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
@@ -6062,7 +6062,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     // lies Pascal-String
                     *pString = read_uInt8_BeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
-                    rSkip -= 2+ pString->Len();
+                    rSkip -= pString->getLength() + 2;
                     break;
                 case 8:
                     // handle Unicode-String with leading length short and
@@ -6070,7 +6070,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     if (TestBeltAndBraces<sal_Unicode>(rSt))
                     {
                         *pString = read_uInt16_BeltAndBracesString(rSt);
-                        rSkip -= (pString->Len() + 2) * 2;
+                        rSkip -= (pString->getLength() + 2) * 2;
                     }
                     else
                     {
@@ -6086,7 +6086,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                         */
                         *pString = read_uInt8_BeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
                         // leading len and trailing zero --> 2
-                        rSkip -= 2+ pString->Len();
+                        rSkip -= pString->getLength() + 2;
                     }
                     break;
                 default:
@@ -6095,7 +6095,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
             }
         }
         else
-            *pString = aEmptyStr;   // Kann keinen Namen liefern
+            *pString = OUString();   // Kann keinen Namen liefern
     }
     return pStd;
 }

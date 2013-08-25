@@ -30,6 +30,7 @@
 #include <tools/solar.h>        // UINTXX
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
+#include "rtl/ustring.hxx"
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 
@@ -1455,7 +1456,7 @@ protected:
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
     WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
-    WW8_STD* Read1Style( short& rSkip, String* pString, short* pcbStd );
+    WW8_STD* Read1Style( short& rSkip, OUString* pString, short* pcbStd );
     sal_uInt16 GetCount() const { return cstd; }
 };
 
