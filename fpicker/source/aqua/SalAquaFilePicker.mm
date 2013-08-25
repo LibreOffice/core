@@ -340,6 +340,12 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
         if (userDefaults != NULL &&
             [url respondsToSelector:@selector(bookmarkDataWithOptions:includingResourceValuesForKeys:relativeToURL:error:)])
         {
+            // In the case of "Save As" when the user has input a new
+            // file name, this call will return nil, as bookmarks can
+            // (naturally) only be created for existing file system
+            // objects. In that case, code at a much lower level, in
+            // sal, takes care of creating a bookmark when a new file
+            // has been created outside the sandbox.
             NSData *data = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
                          includingResourceValuesForKeys:nil
                                           relativeToURL:nil
