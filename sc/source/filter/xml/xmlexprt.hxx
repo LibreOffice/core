@@ -61,6 +61,7 @@ class ScXMLCachedRowAttrAccess;
 class ScRangeName;
 class ScXMLEditAttributeMap;
 class EditTextObject;
+class ScFormulaCell;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -180,6 +181,7 @@ class ScXMLExport : public SvXMLExport
     void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
     void WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount);
     void WriteEditCell(const EditTextObject* pText);
+    void WriteMultiLineFormulaResult(const ScFormulaCell* pCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);
     void WriteDetective(const ScMyCell& rMyCell);

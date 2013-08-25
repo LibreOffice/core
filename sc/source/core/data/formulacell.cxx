@@ -1705,6 +1705,11 @@ double ScFormulaCell::GetResultDouble() const
     return aResult.GetDouble();
 }
 
+OUString ScFormulaCell::GetResultString() const
+{
+    return aResult.GetString();
+}
+
 void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
 {
     aResult.SetMatrix(nCols, nRows, pMat, pUL);

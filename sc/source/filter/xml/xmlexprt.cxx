@@ -3352,9 +3352,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         else if (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell))
         {
             bEditCell = true;
-            uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);
-            if ( xText.is())
-                GetTextParagraphExport()->exportText(xText, false, false);
+            WriteMultiLineFormulaResult(aCell.maBaseCell.mpFormula);
         }
         else
         {
@@ -3402,6 +3400,42 @@ void ScXMLExport::WriteEditCell(const EditTextObject* pText)
     }
 
     flushParagraph(*this, aParaTexts[nCurPara], xMapper, xStylePool, rAttrMap, itPara, itSecEnd);
+}
+
+void ScXMLExport::WriteMultiLineFormulaResult(const ScFormulaCell* pCell)
+{
+    OUString aElemName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
+
+    OUString aResStr = pCell->GetResultString();
+    const sal_Unicode* p = aResStr.getStr();
+    const sal_Unicode* pEnd = p + static_cast<size_t>(aResStr.getLength());
+    const sal_Unicode* pPara = p; // paragraph head.
+    for (; p != pEnd; ++p)
+    {
+        if (*p != '\n')
+            continue;
+
+        // flush the paragraph.
+        OUString aContent;
+        if (*pPara == '\n')
+            ++pPara;
+        if (p > pPara)
+            aContent = OUString(pPara, p-pPara);
+
+        SvXMLElementExport aElem(*this, aElemName, false, false);
+        Characters(aContent);
+
+        pPara = p;
+    }
+
+    OUString aContent;
+    if (*pPara == '\n')
+        ++pPara;
+    if (pEnd > pPara)
+        aContent = OUString(pPara, pEnd-pPara);
+
+    SvXMLElementExport aElem(*this, aElemName, false, false);
+    Characters(aContent);
 }
 
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)

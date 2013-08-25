@@ -310,6 +310,7 @@ public:
     void SetResultToken( const formula::FormulaToken* pToken );
 
     double GetResultDouble() const;
+    OUString GetResultString() const;
 
     void            SetErrCode( sal_uInt16 n );
     bool IsHyperLinkCell() const;
