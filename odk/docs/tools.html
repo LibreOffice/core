@@ -676,10 +676,10 @@ types the specified types depend on.</p>
 		  <p class="head2">Usage:</p>
 		  <blockquote>
 		  <b><code>
-			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url>) dump [&lt;options>] -t &lt;type&gt; ...<br/>
-			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) component [&lt;options&gt;] -n &lt;name&gt; -t &lt;type&gt; ...<br/>
-			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) calc-add-in [&lt;options&gt;] -n &lt;name&gt; -t &lt;add-in_service&gt;<br/>
-			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt; | -env:UNO_TYPES=&lt;url&gt;) add-on [&lt;options&gt;] -n &lt;name&gt; -p &lt;protocol_name:command,...&gt;
+			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt;) dump [&lt;options>] -t &lt;type&gt; ...<br/>
+			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt;) component [&lt;options&gt;] -n &lt;name&gt; -t &lt;type&gt; ...<br/>
+			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt;) calc-add-in [&lt;options&gt;] -n &lt;name&gt; -t &lt;add-in_service&gt;<br/>
+			uno-skeletonmaker (-env:INIFILENAME=&lt;url&gt;) add-on [&lt;options&gt;] -n &lt;name&gt; -p &lt;protocol_name:command,...&gt;
 			uno-skeletonmaker -V, --version<br/>
 			uno-skeletonmaker -h, --help<br/>
 		  </code></b>
@@ -708,10 +708,6 @@ types the specified types depend on.</p>
 		  <tr>
             <td class="cell15"><code>-env:INIFILENAME=&lt;url&gt;</code></td>
 			<td class="cell85">url specifies a URL to an UNO ini|rc file of an existing UNO environment (URE, office installation).</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-env:UNO_TYPES=&lt;url&gt;</code></td>
-			<td class="cell85">url specifies a binary type library file. It can be a space separated list of urls.</td>
           </tr>
 		  <tr>
 		    <td class="cell15"><code>-a, --all</code></td>
