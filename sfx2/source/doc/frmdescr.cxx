@@ -72,13 +72,13 @@ SfxItemSet* SfxFrameDescriptor::GetArgs()
     return pImp->pArgs;
 }
 
-void SfxFrameDescriptor::SetURL( const String& rURL )
+void SfxFrameDescriptor::SetURL( const OUString& rURL )
 {
     aURL = INetURLObject(rURL);
     SetActualURL( aURL );
 }
 
-void SfxFrameDescriptor::SetActualURL( const String& rURL )
+void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
 {
     aActualURL = INetURLObject(rURL);
     if ( pImp->pArgs )

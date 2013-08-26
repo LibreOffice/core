@@ -71,7 +71,7 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
 {
     INetURLObject           aURL;
     INetURLObject           aActualURL;
-    String                  aName;
+    OUString                aName;
     Size                    aMargin;
     long                    nWidth;
     ScrollingMode           eScroll;
@@ -92,11 +92,11 @@ public:
     SfxItemSet*             GetArgs();
     const INetURLObject&    GetURL() const
                             { return aURL; }
-    void                    SetURL( const String& rURL );
+    void                    SetURL( const OUString& rURL );
     const INetURLObject&    GetActualURL() const
                             { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
-    void                    SetActualURL( const String& rURL );
+    void                    SetActualURL( const OUString& rURL );
     void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
     sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
     void                    SetEditable( sal_Bool bSet );
@@ -121,9 +121,9 @@ public:
                             { bResizeHorizontal = bResizeVertical = bRes; }
 
                             // FrameName
-    const String&           GetName() const
+    const OUString&         GetName() const
                             { return aName; }
-    void                    SetName( const String& rName )
+    void                    SetName( const OUString& rName )
                             { aName = rName; }
 
                             // Margin, Scrolling
@@ -172,8 +172,8 @@ public:
 // No block to implement a =operator
 struct SfxFrameProperties
 {
-    String                              aURL;
-    String                              aName;
+    OUString                            aURL;
+    OUString                            aName;
     long                                lMarginWidth;
     long                                lMarginHeight;
     long                                lSize;
