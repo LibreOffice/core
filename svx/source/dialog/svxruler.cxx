@@ -1220,11 +1220,15 @@ long SvxRuler::GetLeftFrameMargin() const
     // #126721# for some unknown reason the current column is set to 0xffff
     DBG_ASSERT(!pColumnItem || pColumnItem->GetActColumn() < pColumnItem->Count(),
                     "issue #126721# - invalid current column!");
-    long nLeft =
-        pColumnItem && pColumnItem->Count() && pColumnItem->GetActColumn() < pColumnItem->Count() ?
-        (*pColumnItem)[pColumnItem->GetActColumn()].nStart : 0;
-    if(pParaBorderItem && (!pColumnItem || pColumnItem->IsTable()))
-        nLeft += pParaBorderItem->GetLeft();
+    long nLeft = 0;
+    if (pColumnItem &&
+        pColumnItem->Count() &&
+        pColumnItem->GetActColumn() < pColumnItem->Count())
+    {
+        nLeft = (*pColumnItem)[pColumnItem->GetActColumn()].nStart;
+    }
+    //if(pParaBorderItem && (!pColumnItem || pColumnItem->IsTable()))
+    //    nLeft += pParaBorderItem->GetLeft();
     return nLeft;
 }
 
@@ -1252,10 +1256,7 @@ long SvxRuler::GetRightFrameMargin() const
     {
         if(!IsActLastColumn( sal_True ))
         {
-            long nRet = (*pColumnItem)[GetActRightColumn( sal_True )].nEnd;
-            if(pColumnItem->IsTable() && pParaBorderItem)
-                nRet -= pParaBorderItem->GetRight();
-            return nRet;
+            return (*pColumnItem)[GetActRightColumn( sal_True )].nEnd;
         }
     }
 
