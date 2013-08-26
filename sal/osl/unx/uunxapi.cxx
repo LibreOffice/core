@@ -272,7 +272,8 @@ int open_c(const char *cpPath, int oflag, int mode)
         // scoped bookmark for it so that we can access the file in
         // the future, too. (For the "Recent Files" functionality.)
         const char *sandbox = [NSHomeDirectory() UTF8String];
-        if (!(memcmp(sandbox, cpPath, strlen(sandbox)) == 0 &&
+        if (!(strlen(cpPath) > strlen(sandbox) &&
+              memcmp(sandbox, cpPath, strlen(sandbox)) == 0 &&
               cpPath[strlen(sandbox)] == '/'))
         {
             NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpPath]];
