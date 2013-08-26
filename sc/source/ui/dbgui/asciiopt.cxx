@@ -168,7 +168,7 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
          nInfoCount      == rCmp.nInfoCount )
     {
         OSL_ENSURE( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
-                     "0-Zeiger in ScAsciiOptions" );
+                     "NULL pointer in ScAsciiOptions::operator==() column info" );
         for (sal_uInt16 i=0; i<nInfoCount; i++)
             if ( pColStart[i] != rCmp.pColStart[i] ||
                  pColFormat[i] != rCmp.pColFormat[i] )
@@ -179,11 +179,8 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     return false;
 }
 
-//
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
-//
-
+// The options string must not contain semicolons (because of the pick list),
+// use comma as separator.
 
 void ScAsciiOptions::ReadFromString( const String& rString )
 {
@@ -192,10 +189,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     xub_StrLen nSub;
     xub_StrLen i;
 
-        //
-        //  Feld-Trenner
-        //
-
+    // Field separator.
     if ( nCount >= 1 )
     {
         bFixedLen = bMergeFieldSeps = false;
@@ -219,10 +213,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         }
     }
 
-        //
-        //  Text-Trenner
-        //
-
+    // Text separator.
     if ( nCount >= 2 )
     {
         aToken = rString.GetToken(1,',');
@@ -230,30 +221,21 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         cTextSep = (sal_Unicode) nVal;
     }
 
-        //
-        //  Zeichensatz
-        //
-
+    // Text encoding.
     if ( nCount >= 3 )
     {
         aToken = rString.GetToken(2,',');
         eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
-        //
-        //  Startzeile
-        //
-
+    // Number of start row.
     if ( nCount >= 4 )
     {
         aToken = rString.GetToken(3,',');
         nStartRow = aToken.ToInt32();
     }
 
-        //
-        //  Spalten-Infos
-        //
-
+    // Column info.
     if ( nCount >= 5 )
     {
         delete[] pColStart;
@@ -311,10 +293,7 @@ String ScAsciiOptions::WriteToString() const
 {
     OUString aOutStr;
 
-        //
-        //  Feld-Trenner
-        //
-
+    // Field separator.
     if ( bFixedLen )
         aOutStr += pStrFix;
     else if ( !aFieldSeps.Len() )
@@ -335,27 +314,20 @@ String ScAsciiOptions::WriteToString() const
         }
     }
 
-    aOutStr += "," +
-               // Text-Trenner
-               OUString::number(cTextSep) + ",";
+    // Text delimiter.
+    aOutStr += "," + OUString::number(cTextSep) + ",";
 
-        //
-        //  Zeichensatz
-        //
-
+    // Text encoding.
     if ( bCharSetSystem )           // force "SYSTEM"
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
-    aOutStr += "," +
-               // Startzeile
-               OUString::number(nStartRow) + ",";
 
-        //
-        //  Spalten-Infos
-        //
+    // Number of start row.
+    aOutStr += "," + OUString::number(nStartRow) + ",";
 
-    OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
+    // Column info.
+    OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "NULL pointer in ScAsciiOptions column info" );
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)
