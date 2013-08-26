@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8FQ\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-26T12:47:44Z",
+      "side": 1,
+      "message": "aha... need to check for YES or NO value here, not just empty",
+      "revId": "27d5a65a27ec898a9b3facf62c354634a61334e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
