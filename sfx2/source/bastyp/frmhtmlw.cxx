@@ -63,8 +63,8 @@ const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015\012";
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const sal_Char *pIndent,
-                                  const String& rName,
-                                  const String& rContent, sal_Bool bHTTPEquiv,
+                                  const OUString& rName,
+                                  const OUString& rContent, sal_Bool bHTTPEquiv,
                                      rtl_TextEncoding eDestEnc,
                                   OUString *pNonConvertableChars  )
 {
@@ -85,7 +85,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ) << "\">";
 }
 
-void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
+void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         const sal_Char *pIndent,
         rtl_TextEncoding eDestEnc,
@@ -247,7 +247,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 }
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
-    SvStream& rOut, const String& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
+    SvStream& rOut, const OUString& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
     rtl_TextEncoding eDestEnc, OUString *pNonConvertableChars )
 {
     try
