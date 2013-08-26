@@ -16,6 +16,24 @@
       "revId": "9ff4c35f1d8e7e603b23245afb6947b8260fabfc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8Hw\u003d",
+        "filename": "vcl/unx/gtk/app/gtkdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-08-26T06:51:11Z",
+      "side": 1,
+      "message": "Yes, give the user at least /some/ clue what\u0027s gone wrong; analogous to what the XIOErrorHdl in vcl/unx/generic/app/saldata.cxx does (and the X11 default routine is even more verbose).",
+      "parentUuid": "AAAAXn//8Mk\u003d",
+      "revId": "9ff4c35f1d8e7e603b23245afb6947b8260fabfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
