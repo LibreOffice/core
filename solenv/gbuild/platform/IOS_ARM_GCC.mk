@@ -178,6 +178,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
