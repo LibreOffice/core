@@ -307,7 +307,9 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 {
     execute();
     // TODO: get the number of rows changed -- look in Statement::executeUpdate for details
-    return 0;
+    // 1 is a temporary hack so that things like dbaccess's keyset which rely
+    // on the value work correctly.
+    return 1;
 }
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
