@@ -935,7 +935,7 @@ void generateDocumentation(std::ostream & o,
         case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
-                options.java5 ? "generic class" : "class");
+                "class template");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,
@@ -946,7 +946,7 @@ void generateDocumentation(std::ostream & o,
         case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
             printMapsToCppType(
                 o, options, manager, sort, nucleus, rank, arguments, entity,
-                options.java5 ? "generic class instantiation" : "class");
+                "class template instantiation");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,
