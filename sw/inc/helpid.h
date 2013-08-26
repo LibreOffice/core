@@ -311,12 +311,6 @@
 #define HID_AUTOFORMAT_ACCEPT                                   "SW_HID_AUTOFORMAT_ACCEPT"
 #define HID_AUTOFORMAT_EDIT_CHG                                 "SW_HID_AUTOFORMAT_EDIT_CHG"
 
-//insert index/entries/Pattern buttons and edits
-#define HID_TOX_ENTRY_BUTTON                                    "SW_HID_TOX_ENTRY_BUTTON"
-#define HID_TOX_ENTRY_EDIT                                      "SW_HID_TOX_ENTRY_EDIT"
-
-#define HID_TOKEN_WINDOW                                        "SW_HID_TOKEN_WINDOW"
-
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
 #define HID_AUTH_FIELD_AUTHORITY_TYPE                           "SW_HID_AUTH_FIELD_AUTHORITY_TYPE"
 #define HID_AUTH_FIELD_ADDRESS                                  "SW_HID_AUTH_FIELD_ADDRESS"
