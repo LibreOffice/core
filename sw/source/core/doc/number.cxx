@@ -739,7 +739,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
         bool bOldHadPrefix = true;
-        bool bFirstIteration = true;
         OUString sOldPrefix;
 
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
@@ -779,7 +778,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                     aExtremities.nPrefixChars -= nStrip;
                 }
 
-                if ((bFirstIteration || bOldHadPrefix) &&
+                if ((bOldHadPrefix) &&
                      aExtremities.nSuffixChars &&
                      !aExtremities.nPrefixChars
                    )
@@ -787,11 +786,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                     int nStrip2 = aPrevStr.Len();
                     while (aPrevStr.Len() - nStrip2 < aExtremities.nSuffixChars)
                     {
-                        char const cur = aPrevStr.GetChar(nStrip2);
-                        if  (!bFirstIteration && '\t' != cur && ' ' != cur)
-                        {
-                            break;
-                        }
                         --nStrip2;
                     }
                     if (nStrip2 < aPrevStr.Len())
@@ -799,7 +793,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                         aPrevStr.Erase(nStrip2, aPrevStr.Len() - nStrip2);
                     }
                 }
-                else if (sOldPrefix.getLength())
+                else if (!aExtremities.nSuffixChars && !bOldHadPrefix)
                 {
                     aRefNumStr.Insert(sOldPrefix, 0);
                 }
@@ -808,11 +802,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
 
                 aRefNumStr.Insert( aPrevStr, 0 );
-            }
-            else if ( aRefNumStr.Len() > 0 )
-            {
-                sOldPrefix += " ";
-                bOldHadPrefix = true;
             }
 
             if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevelInListTree() > 0 )
@@ -830,7 +819,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             {
                 break;
             }
-            bFirstIteration = false;
         } while ( pWorkingNodeNum &&
                   pWorkingNodeNum->GetLevelInListTree() >= 0 &&
                   static_cast<sal_uInt8>(pWorkingNodeNum->GetLevelInListTree()) >= nRestrictInclToThisLevel );
