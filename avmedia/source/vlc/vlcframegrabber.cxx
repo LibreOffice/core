@@ -1,4 +1,5 @@
 #include <boost/bind.hpp>
+#include <iostream>
 #include <osl/conditn.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
