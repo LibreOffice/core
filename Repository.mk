@@ -300,7 +300,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	offacc \
 	passwordcontainer \
 	pcr \
-	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
+	$(if $(filter YES,$(ENABLE_NPAPI_FROM_BROWSER)),pl) \
 	pdffilter \
 	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
 	res \
