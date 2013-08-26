@@ -10,6 +10,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -73,6 +74,7 @@ public:
     void testN822175();
     void testFdo58577();
     void testFdo60990();
+    void testBnc834035();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -82,6 +84,14 @@ public:
 
 private:
     void run();
+    /**
+     * Given that some problem doesn't affect the result in the importer, we
+     * test the resulting file directly, by opening the zip file, parsing an
+     * xml stream, and asserting an XPath expression. This method returns the
+     * xml stream, so that you can do the asserting.
+     */
+    xmlDocPtr parseExport();
+    void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute = OString(), OUString aExpectedValue = OUString());
 };
 
 void Test::run()
@@ -123,6 +133,7 @@ void Test::run()
         {"n822175.odt", &Test::testN822175},
         {"fdo58577.odt", &Test::testFdo58577},
         {"fdo60990.odt", &Test::testFdo60990},
+        {"bnc834035.odt", &Test::testBnc834035},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -142,6 +153,46 @@ void Test::run()
         (this->*rEntry.pMethod)();
         finish();
     }
+}
+
+xmlDocPtr Test::parseExport()
+{
+    // Create the zip file.
+    utl::TempFile aTempFile;
+    save("Office Open XML Text", aTempFile);
+
+    // Read the XML stream we're interested in.
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
+    boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
+    pStream->Seek(STREAM_SEEK_TO_END);
+    sal_Size nSize = pStream->Tell();
+    pStream->Seek(0);
+    OStringBuffer aDocument(nSize);
+    char ch;
+    for (sal_Size i = 0; i < nSize; ++i)
+    {
+        *pStream >> ch;
+        aDocument.append(ch);
+    }
+
+    // Parse the XML.
+    return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
+}
+
+void Test::assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OUString aExpectedValue)
+{
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
+    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    if (aAttribute.isEmpty())
+        return;
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+    CPPUNIT_ASSERT_EQUAL(aExpectedValue, aValue);
 }
 
 void Test::testZoom()
@@ -707,6 +758,18 @@ void Test::testFdo60990()
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00FF00), getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
+}
+
+void Test::testBnc834035()
+{
+    // This is tricky, when saving manually, there are 2 hyperlinks, here only
+    // one, no idea why. That one still shows that we're not using bookmarks, though.
+
+    // Illustration index had wrong hyperlinks: anchor was using Writer's
+    // <seqname>!<index>|sequence syntax, not a bookmark name.
+    xmlDocPtr pXmlDoc = parseExport();
+    // This was Figure!1|sequence.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

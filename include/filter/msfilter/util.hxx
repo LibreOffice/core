@@ -88,6 +88,13 @@ public:
     static sal_Int32 getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize );
     static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
 };
+
+/**
+ * Finds the quoted text in a field instruction text.
+ *
+ * Example: SEQ "Figure" \someoption -> "Figure"
+ */
+MSFILTER_DLLPUBLIC OUString findQuotedText( const OUString& rCommand, const sal_Char* cStartQuote, const sal_Unicode uEndQuote );
 }
 }
 

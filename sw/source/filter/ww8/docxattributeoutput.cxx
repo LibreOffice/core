@@ -699,6 +699,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
             FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
             FSNS( XML_w, XML_name ), rName.getStr(),
             FSEND );
+        m_sLastOpenedMark = rName;
     }
     m_rMarksStart.clear();
 
@@ -828,6 +829,12 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
 
 void DocxAttributeOutput::DoWriteCmd( String& rCmd )
 {
+    OUString sCmd = OUString(rCmd).trim();
+    if (sCmd.startsWith("SEQ"))
+    {
+        OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\').trim();
+        m_aSeqMarksNames[sSeqName].push_back(m_sLastOpenedMark);
+    }
     // Write the Field command
     m_pSerializer->startElementNS( XML_w, XML_instrText, FSEND );
     m_pSerializer->writeEscaped( OUString( rCmd ) );
@@ -1313,8 +1320,33 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
         }
         else
+        {
+            // Is this a link to a sequence? Then try to replace that with a
+            // normal bookmark, as Word won't understand our special
+            // <seqname>!<index>|sequence syntax.
+            OUString aMark(sMark);
+            if (aMark.endsWith("|sequence"))
+            {
+                sal_Int32 nPos = aMark.indexOf('!');
+                if (nPos != -1)
+                {
+                    // Extract <seqname>, the field instruction text has the name quoted.
+                    OUString aSequenceName = OUString('"') + aMark.copy(0, nPos) + OUString('"');
+                    // Extract <index>.
+                    sal_uInt32 nIndex = aMark.copy(nPos + 1, aMark.getLength() - nPos - sizeof("|sequence")).toInt32();
+                    std::map<OUString, std::vector<OString> >::iterator it = m_aSeqMarksNames.find(aSequenceName);
+                    if (it != m_aSeqMarksNames.end())
+                    {
+                        std::vector<OString>& rNames = it->second;
+                        if (rNames.size() > nIndex)
+                            // We know the bookmark name for this sequence and this index, do the replacement.
+                            sMark = OStringToOUString(rNames[nIndex], RTL_TEXTENCODING_UTF8);
+                    }
+                }
+            }
             m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
                     OUStringToOString( OUString( sMark ), RTL_TEXTENCODING_UTF8 ).getStr( ) );
+        }
 
         OUString sTarget( rTarget );
         if ( !sTarget.isEmpty() )
