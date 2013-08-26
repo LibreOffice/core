@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//8GQ\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-08-26T11:25:06Z",
+      "side": 1,
+      "message": "oops... typo ^^",
+      "parentUuid": "AAAAXn//8Gc\u003d",
+      "revId": "d78e3b84e6682ebec8e682e4bdf880ab89c67842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//8Gg\u003d",
         "filename": "Repository.mk",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-08-26T11:17:06Z",
       "side": 1,
       "message": "nested $(filter)? is that really necessary?\n\nhow about $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) ?",
+      "revId": "d78e3b84e6682ebec8e682e4bdf880ab89c67842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//8GU\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-08-26T11:25:06Z",
+      "side": 1,
+      "message": "Much better, thanks Michael :)",
+      "parentUuid": "AAAAXn//8Gg\u003d",
       "revId": "d78e3b84e6682ebec8e682e4bdf880ab89c67842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
