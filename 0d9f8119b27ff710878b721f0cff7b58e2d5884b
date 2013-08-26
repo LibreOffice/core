@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8G4\u003d",
+        "filename": "i18nlangtag/source/languagetag/languagetag.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-08-26T09:53:23Z",
+      "side": 1,
+      "message": "This one is actually a case where the replacement should not be done. For each operator+\u003d a new OUString instance is allocated, the operator+ template has no beneficial effect.",
+      "revId": "0d9f8119b27ff710878b721f0cff7b58e2d5884b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
