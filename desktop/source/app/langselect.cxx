@@ -112,7 +112,7 @@ OUString getEmergencyLocale() {
             return locale;
         }
         locale = getInstalledLocale(
-            inst, officecfg::System::L10N::UILocale::UILocale::get());
+            inst, officecfg::System::L10N::UILocale::get());
         if (!locale.isEmpty()) {
             return locale;
         }
@@ -165,7 +165,7 @@ bool prepareLocale() {
     }
     if (locale.isEmpty()) {
         locale = getInstalledLocale(
-            inst, officecfg::System::L10N::UILocale::UILocale::get());
+            inst, officecfg::System::L10N::UILocale::get());
     }
     if (locale.isEmpty()) {
         locale = getInstalledLocale(inst, "en-US");
