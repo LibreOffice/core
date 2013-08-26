@@ -67,11 +67,11 @@ namespace connectivity
                           public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         private:
-            sal_Bool m_bIsBookmarkable = sal_False;
-            sal_Int32 m_nFetchSize = 1;
-            sal_Int32 m_nResultSetType = ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY;
-            sal_Int32 m_nFetchDirection = ::com::sun::star::sdbc::FetchDirection::FORWARD;
-            sal_Int32 m_nResultSetConcurrency = ::com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY;
+            sal_Bool m_bIsBookmarkable;
+            sal_Int32 m_nFetchSize;
+            sal_Int32 m_nResultSetType;
+            sal_Int32 m_nFetchDirection;
+            sal_Int32 m_nResultSetConcurrency;
 
         protected:
             OConnection* m_pConnection;
