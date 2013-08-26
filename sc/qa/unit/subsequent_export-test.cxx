@@ -36,6 +36,8 @@
 #include "editeng/postitem.hxx"
 #include "editeng/editdata.hxx"
 #include "editeng/eeitem.hxx"
+#include "editeng/editobj.hxx"
+#include "editeng/sectionattribute.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -343,10 +345,140 @@ void ScExportTest::testNamedRangeBugfdo62729()
 
 void ScExportTest::testRichTextExportODS()
 {
+    struct
+    {
+        static bool isBold(const editeng::SectionAttribute& rAttr)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_WEIGHT)
+                    continue;
+
+                return static_cast<const SvxWeightItem*>(p)->GetWeight() == WEIGHT_BOLD;
+            }
+            return false;
+        }
+
+        static bool isItalic(const editeng::SectionAttribute& rAttr)
+        {
+            if (rAttr.maAttributes.empty())
+                return false;
+
+            std::vector<const SfxPoolItem*>::const_iterator it = rAttr.maAttributes.begin(), itEnd = rAttr.maAttributes.end();
+            for (; it != itEnd; ++it)
+            {
+                const SfxPoolItem* p = *it;
+                if (p->Which() != EE_CHAR_ITALIC)
+                    continue;
+
+                return static_cast<const SvxPostureItem*>(p)->GetPosture() == ITALIC_NORMAL;
+            }
+            return false;
+        }
+
+        bool checkB2(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 1)
+                return false;
+
+            if (pText->GetText(0) != "Bold and Italic")
+                return false;
+
+            std::vector<editeng::SectionAttribute> aSecAttrs;
+            pText->GetAllSectionAttributes(aSecAttrs);
+            if (aSecAttrs.size() != 3)
+                return false;
+
+            // Check the first bold section.
+            const editeng::SectionAttribute* pAttr = &aSecAttrs[0];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isBold(*pAttr))
+                return false;
+
+            // The middle section should be unformatted.
+            pAttr = &aSecAttrs[1];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 4 || pAttr->mnEnd != 9)
+                return false;
+
+            if (!pAttr->maAttributes.empty())
+                return false;
+
+            // The last section should be italic.
+            pAttr = &aSecAttrs[2];
+            if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 9 || pAttr->mnEnd != 15)
+                return false;
+
+            if (pAttr->maAttributes.size() != 1 || !isItalic(*pAttr))
+                return false;
+
+            return true;
+        }
+
+        bool checkB4(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 3)
+                return false;
+
+            if (pText->GetText(0) != "One")
+                return false;
+
+            if (pText->GetText(1) != "Two")
+                return false;
+
+            if (pText->GetText(2) != "Three")
+                return false;
+
+            return true;
+        }
+
+        bool checkB5(const EditTextObject* pText) const
+        {
+            if (!pText)
+                return false;
+
+            if (pText->GetParagraphCount() != 6)
+                return false;
+
+            if (pText->GetText(0) != "")
+                return false;
+
+            if (pText->GetText(1) != "Two")
+                return false;
+
+            if (pText->GetText(2) != "Three")
+                return false;
+
+            if (pText->GetText(3) != "")
+                return false;
+
+            if (pText->GetText(4) != "Five")
+                return false;
+
+            if (pText->GetText(5) != "")
+                return false;
+
+            return true;
+        }
+
+    } aCheckFunc;
+
     // Start with an empty document, put one edit text cell, and make sure it
     // survives the save and reload.
-    ScDocShellRef xNewDocSh = loadDoc("empty.", ODS);
-    ScDocument* pDoc = xNewDocSh->GetDocument();
+    ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS);
+    ScDocument* pDoc = xOrigDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
@@ -380,23 +512,56 @@ void ScExportTest::testRichTextExportODS()
     // Set this edit text to cell B2.
     pDoc->SetEditText(ScAddress(1,1,0), rEE.CreateTextObject());
     const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(1,1,0));
-    CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
+    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
 
     // Now, save and reload this document.
-    ScDocShellRef xDocSh = saveAndReload(xNewDocSh, ODS);
-    xNewDocSh->DoClose();
-    CPPUNIT_ASSERT(xDocSh.Is());
-    pDoc = xDocSh->GetDocument();
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
+    xOrigDocSh->DoClose();
+    CPPUNIT_ASSERT(xNewDocSh.Is());
+    pDoc = xNewDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
 
     // Make sure the content of B2 is still intact.
-    CPPUNIT_ASSERT_EQUAL(aCellText, pDoc->GetString(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+
+    // Insert a multi-line content to B4.
+    rEE.Clear();
+    rEE.SetText("One\nTwo\nThree");
+    pDoc->SetEditText(ScAddress(3,1,0), rEE.CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
+
+    // Reload the doc again, and check the content of B2 and B4.
+    ScDocShellRef xNewDocSh2 = saveAndReload(xNewDocSh, ODS);
+    pDoc = xNewDocSh2->GetDocument();
+    xNewDocSh->DoClose();
 
     pEditText = pDoc->GetEditText(ScAddress(1,1,0));
     CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
+    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
 
-    xDocSh->DoClose();
+    // Insert a multi-line content to B5, but this time, set some empty paragraphs.
+    rEE.Clear();
+    rEE.SetText("\nTwo\nThree\n\nFive\n");
+    pDoc->SetEditText(ScAddress(4,1,0), rEE.CreateTextObject());
+    pEditText = pDoc->GetEditText(ScAddress(4,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
+
+    // Reload the doc again, and check the content of B2, B4 and B6.
+    ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, ODS);
+    pDoc = xNewDocSh3->GetDocument();
+    xNewDocSh2->DoClose();
+
+    pEditText = pDoc->GetEditText(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(3,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
+    pEditText = pDoc->GetEditText(ScAddress(4,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
+
+    xNewDocSh3->DoClose();
 }
 
 namespace {
