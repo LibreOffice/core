@@ -191,7 +191,7 @@ void SvxFillToolBoxControl::StateChanged(
         }
         else
         {
-            // leerer oder uneindeutiger Status
+            // empty or ambiguous status
             if( nSID == SID_ATTR_FILL_STYLE )
             {
                 pFillTypeLB->SetNoSelection();
@@ -235,7 +235,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 
         XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
 
-        // Pruefen, ob Fuellstil schon vorher aktiv war
+        // Check if the fill style was already active
         //if( eTmpXFS != eXFS )
         if( (XFillStyle) eLastXFS != eXFS )
             pFillControl->SelectFillTypeHdl( NULL );
@@ -259,8 +259,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                          pFillAttrLB->GetSelectEntryColor() != aColor )
                         pFillAttrLB->SelectEntry( aColor );
 
-                    // NEU
-                    // Pruefen, ob Eintrag nicht in der Liste ist
+                    // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntryPos() ==
                         LISTBOX_ENTRY_NOTFOUND ||
                         pFillAttrLB->GetSelectEntryColor() != aColor )
@@ -269,7 +268,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         String aTmpStr;
                         if( nCount > 0 )
                         {
-                            //Letzter Eintrag wird auf temporaere Farbe geprueft
+                            // Last entry gets tested against temporary color
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
                                  aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
@@ -286,7 +285,6 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         //pFillAttrLB->SetUpdateMode( sal_True );
                         pFillAttrLB->SelectEntryPos( nPos );
                     }
-                    // NEU
                 }
                 else
                     pFillAttrLB->SetNoSelection();
@@ -299,15 +297,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 {
                     String aString( pGradientItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
-                    // NEU
-                    // Pruefen, ob Eintrag nicht in der Liste ist
+                    // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
-                            //Letzter Eintrag wird auf temporaeren Eintrag geprueft
+                            // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
                                  aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
@@ -336,7 +333,6 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aGradientList.Remove( 0 );
                         delete pEntry;
                     }
-                    // NEU
                 }
                 else
                     pFillAttrLB->SetNoSelection();
@@ -349,15 +345,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 {
                     String aString( pHatchItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
-                    // NEU
-                    // Pruefen, ob Eintrag nicht in der Liste ist
+                    // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
-                            //Letzter Eintrag wird auf temporaeren Eintrag geprueft
+                            // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
                                  aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
@@ -386,7 +381,6 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aHatchList.Remove( 0 );
                         delete pEntry;
                     }
-                    // NEU
                 }
                 else
                     pFillAttrLB->SetNoSelection();
@@ -406,15 +400,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
                     //  SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) ) );
                     pFillAttrLB->SelectEntry( aString );
-                    // NEU
-                    // Pruefen, ob Eintrag nicht in der Liste ist
+                    // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         String aTmpStr;
                         if( nCount > 0 )
                         {
-                            //Letzter Eintrag wird auf temporaeren Eintrag geprueft
+                            // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
                                  aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
@@ -437,7 +430,6 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         xBitmapList->Remove( 0 );
                         delete pEntry;
                     }
-                    // NEU
                 }
                 else
                     pFillAttrLB->SetNoSelection();
@@ -445,7 +437,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             break;
 
             default:
-                OSL_FAIL( "Nicht unterstuetzter Flaechentyp" );
+                OSL_FAIL( "Unsupported fill type" );
             break;
         }
     }
@@ -454,7 +446,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
     {
         XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
 
-        // Die Listen haben sich geaendert ?
+        // Does the lists have changed?
         if( pState->ISA( SvxColorListItem ) &&
             eXFS == XFILL_SOLID )
         {
@@ -497,8 +489,8 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
     if ( GetSlotId() == SID_ATTR_FILL_STYLE )
     {
         pFillControl = new FillControl( pParent );
-        // Damit dem FillControl das SvxFillToolBoxControl bekannt ist
-        // (und um kompatibel zu bleiben)
+        // Thus the FillControl is known by SvxFillToolBoxControl
+        // (and in order to remain compatible)
         pFillControl->SetData( this );
 
         pFillAttrLB = (SvxFillAttrBox*)pFillControl->pLbFillAttr;
@@ -570,16 +562,15 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
 {
     XFillStyle  eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
 
-    // Spaeter sollte eine Optimierung derart erfolgen, dass die
-    // Listen, bzw. Tables nur dann geloescht und wieder aufgebaut
-    // werden, wenn sich die Listen, bzw. Tables tatsaechlich geaendert
-    // haben (in den LBs natuerlich).
+    // Later, an optimization should be accomplished,
+    // that the lists or tables can only be deleted and rebuilt
+    // when the lists, or tables have actually changed (in the LBs of course).
 
     if ( ( pBox && !pBox->IsTravelSelect() ) || !pBox )
     {
-        // Damit wir in folgendem Fall einen Status anzeigen koennen:
-        // Ein Typ wurde ausgewaehlt aber kein Attribut.
-        // Die Selektion hat genau die gleichen Attribute wie die vorherige.
+        // So that we can show a status in the following case:
+        // One type was selected but no attribute.
+        // The selection has exactly the same attributes as the previous one.
 //      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
 //      if( pControlerItem )
 //          pControlerItem->ClearCache();
@@ -654,7 +645,7 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
             break;
         }
 
-        if( eXFS != XFILL_NONE ) // Wurde schon erledigt
+        if( eXFS != XFILL_NONE ) // Has already been done
         {
             if ( pBox )
                 pLbFillType->Selected();
@@ -703,8 +694,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
             case XFILL_SOLID:
             {
-                // NEU
-                //Eintrag wird auf temporaere Farbe geprueft
+                // Entry gets tested against temporary color
                 String aTmpStr = pLbFillAttr->GetSelectEntry();
                 if( aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
                 {
@@ -730,7 +720,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     SvxGradientListItem aItem(
                         *(const SvxGradientListItem*)( pSh->GetItem( SID_GRADIENT_LIST ) ) );
 
-                    if ( nPos < aItem.GetGradientList()->Count() )  // kein temp. Eintrag ?
+                    if ( nPos < aItem.GetGradientList()->Count() )  // no temporary entry?
                     {
                         XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
@@ -753,7 +743,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 {
                     SvxHatchListItem aItem( *(const SvxHatchListItem*)( pSh->GetItem( SID_HATCH_LIST ) ) );
 
-                    if ( nPos < aItem.GetHatchList()->Count() )  // kein temp. Eintrag ?
+                    if ( nPos < aItem.GetHatchList()->Count() )  // no temporary entry?
                     {
                         XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
@@ -777,7 +767,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     SvxBitmapListItem aItem(
                         *(const SvxBitmapListItem*)( pSh->GetItem( SID_BITMAP_LIST ) ) );
 
-                    if ( nPos < aItem.GetBitmapList()->Count() )  // kein temp. Eintrag ?
+                    if ( nPos < aItem.GetBitmapList()->Count() )  // no temporary entry?
                     {
                         const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
                         const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
@@ -810,10 +800,10 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
 void FillControl::Resize()
 {
-    // Breite der beiden ListBoxen nicht 1/2 : 1/2, sondern 2/5 : 3/5
+    // Width of the two list boxes not 1/2 : 1/2, but 2/5 : 3/5
     long nW = GetOutputSizePixel().Width() / 5;
     long nH = 180;
-    long nSep = 0; // war vorher 4
+    long nSep = 0; // was previously 4
 
     pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
     pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
