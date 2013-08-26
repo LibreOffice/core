@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8FA\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-08-26T12:54:00Z",
+      "side": 1,
+      "message": "but now it\u0027s not a variable any more just a literal WITH_MOZAB4WIN",
+      "revId": "9851862f85394d1dba5eed48e8d931bb64a4f97d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
