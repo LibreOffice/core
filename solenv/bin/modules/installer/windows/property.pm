@@ -49,6 +49,7 @@ sub get_arpcomments_for_property_table
 
     my $languagestring = $$languagestringref;
     $languagestring =~ s/\_/\,/g;
+    if ( length($languagestring) > 30 ) { $languagestring = "multilanguage"; } # fdo#64053
 
     $comment = $comment . " ($languagestring)";
 
