@@ -83,7 +83,7 @@ void printType(
         sType = sType.copy(std::strlen("java.lang."));
     }
     o << sType;
-    if (!arguments.empty() && options.java5) {
+    if (!arguments.empty()) {
         o << '<';
         for (std::vector< OUString >::const_iterator i(arguments.begin());
              i != arguments.end(); ++i)
@@ -614,7 +614,7 @@ void printConstructors(
             o << ", ";
             printType(o, options, manager, j->type, false);
             if (j->rest) {
-                o << (options.java5 ? "..." : "[]");
+                o << "...";
             }
             o << ' '
               << codemaker::java::translateUnoToJavaIdentifier(
@@ -672,7 +672,7 @@ void printMapsToJavaType(
     codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments, const char * javaTypeSort)
 {
-    o << "maps to Java " << (options.java5 ? "1.5" : "1.4") << " ";
+    o << "maps to Java " << "1.5" << " ";
     if (javaTypeSort != 0) {
         o << javaTypeSort << ' ';
     }
@@ -819,7 +819,7 @@ void generateDocumentation(std::ostream & o,
         case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
             printMapsToJavaType(
                 o, options, manager, sort, nucleus, rank, arguments,
-                options.java5 ? "generic class" : "class");
+                "generic class");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,
@@ -830,7 +830,7 @@ void generateDocumentation(std::ostream & o,
         case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
             printMapsToJavaType(
                 o, options, manager, sort, nucleus, rank, arguments,
-                options.java5 ? "generic class instantiation" : "class");
+                "generic class instantiation");
             o << "; full constructor:\n";
             printConstructor(
                 o, options, manager,

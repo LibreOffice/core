@@ -610,12 +610,8 @@ void generateFunctionParameterMap(std::ostream& o,
                 o << "        ParamMap fpm;\n";
             }
             else {
-                if ( options.java5 )
-                    o << "        java.util.Hashtable< Integer, String > fpm = "
-                        "new java.util.Hashtable< Integer, String >();\n";
-                else
-                    o << "        java.util.Hashtable fpm = "
-                        "new java.util.Hashtable();\n";
+                o << "        java.util.Hashtable< Integer, String > fpm = "
+                    "new java.util.Hashtable< Integer, String >();\n";
             }
             bFirst = false;
         } else
@@ -623,11 +619,8 @@ void generateFunctionParameterMap(std::ostream& o,
                 o << "        fpm = ParamMap();\n";
             }
             else {
-                if ( options.java5 )
-                    o << "        fpm = new java.util.Hashtable< "
-                        "Integer, String >();\n";
-                else
-                    o << "        fpm = new java.util.Hashtable();\n";
+                o << "        fpm = new java.util.Hashtable< "
+                    "Integer, String >();\n";
             }
 
         std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::size_type
@@ -643,14 +636,9 @@ void generateFunctionParameterMap(std::ostream& o,
                   << "\");\n";
             }
             else {
-                if ( options.java5 )
-                    o << "        fpm.put(" << n << ", \""
-                      << j->name
-                      << "\");\n";
-                else
-                    o << "       fpm.put(new Integer(" << n << "), \""
-                      << j->name
-                      << "\");\n";
+                o << "        fpm.put(" << n << ", \""
+                  << j->name
+                  << "\");\n";
             }
             ++n;
         }

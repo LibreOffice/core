@@ -40,11 +40,10 @@ typedef ::std::vector< unoidl::AccumulationBasedServiceEntity::Property >
 AttributeInfo;
 
 struct ProgramOptions {
-    ProgramOptions(): java5(true), all(false), dump(false), license(false),
+    ProgramOptions(): all(false), dump(false), license(false),
                       shortnames(false), supportpropertysetmixin(false),
                       backwardcompatible(false), language(1), componenttype(1) {}
 
-    bool java5;
     bool all;
     bool dump;
     bool license;

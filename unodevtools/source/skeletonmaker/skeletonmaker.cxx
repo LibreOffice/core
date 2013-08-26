@@ -52,8 +52,7 @@ static const char usageText[] =
 "\n options:\n"
 "    -a, --all              list all interface methods, not only the direct\n"
 "                           ones\n"
-"    --(java4|java5|cpp)    select the target language\n"
-"                           --java4 generate output for Java 1.4 or earlier\n"
+"    --(java5|cpp)          select the target language\n"
 "                           --java5 generate output for Java 1.5 or later (is \n"
 "                                   currently the default)\n"
 "                           --cpp   generate output for C++\n"
@@ -186,17 +185,14 @@ SAL_IMPLEMENT_MAIN()
             continue;
         }
         if ( readOption( &bOption, "java4", &nPos, arg) ) {
-            options.java5 = false;
-            options.language = 1;
-            continue;
+            std::cerr <<
+              "\nError: Java 1.4 is no longer supported, use --java5 instead\n";
         }
         if ( readOption( &bOption, "java5", &nPos, arg) ) {
-            options.java5 = true;
             options.language = 1;
             continue;
         }
         if ( readOption( &bOption, "cpp", &nPos, arg) ) {
-            options.java5 = false;
             options.language = 2;
             continue;
         }

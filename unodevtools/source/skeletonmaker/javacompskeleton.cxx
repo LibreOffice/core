@@ -290,7 +290,7 @@ void generateXLocalizableBodies(std::ostream& o) {
         "        return m_locale;\n    }\n\n";
 }
 
-void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
+void generateXAddInBodies(std::ostream& o, ProgramOptions const &)
 {
     // com.sun.star.sheet.XAddIn:
     // getProgrammaticFuntionName
@@ -330,36 +330,21 @@ void generateXAddInBodies(std::ostream& o, ProgramOptions const & options)
     // getDisplayArgumentName
     o << "    public String getDisplayArgumentName(String "
         "aProgrammaticFunctionName, int nArgument)\n    {\n";
-    if (options.java5) {
-        o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
-            "                                m_functionMap.get(\n"
-            "                                    aProgrammaticFunctionName).get("
-            "nArgument),\n"
-            "                                sDISPLAYNAME);\n    }\n\n";
-    } else {
-        o << "        return getAddinProperty(aProgrammaticFunctionName, (String)\n"
-            "                                ((java.util.Hashtable)m_functionMap."
-            "get(\n                                    aProgrammaticFunctionName))."
-            "get(\n                                        new Integer(nArgument))"
-            ", sDISPLAYNAME);\n    }\n\n";
-    }
+    o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
+        "                                m_functionMap.get(\n"
+        "                                    aProgrammaticFunctionName).get("
+        "nArgument),\n"
+        "                                sDISPLAYNAME);\n    }\n\n";
 
     // getArgumentDescription
     o << "    public String getArgumentDescription(String "
         "aProgrammaticFunctionName, int nArgument)\n    {\n";
-    if (options.java5) {
-        o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
-            "                                m_functionMap.get(\n"
-            "                                    aProgrammaticFunctionName).get("
-            "nArgument),\n"
-            "                                sDESCRIPTION);\n    }\n\n";
-    } else {
-        o << "        return getAddinProperty(aProgrammaticFunctionName, (String)\n"
-            "                                ((java.util.Hashtable)m_functionMap."
-            "get(\n                                    aProgrammaticFunctionName))."
-            "get(\n                                        new Integer(nArgument))"
-            ", sDESCRIPTION);\n    }\n\n";
-    }
+    o << "        return getAddinProperty(aProgrammaticFunctionName,\n"
+        "                                m_functionMap.get(\n"
+        "                                    aProgrammaticFunctionName).get("
+        "nArgument),\n"
+        "                                sDESCRIPTION);\n    }\n\n";
+
     // getProgrammaticCategoryName
     o << "    public String getProgrammaticCategoryName(String "
         "aProgrammaticFunctionName)\n    {\n"
@@ -618,24 +603,16 @@ void generateAddinConstructorAndHelper(std::ostream& o,
         "m_xHAccess = null;\n"
         "    private com.sun.star.container.XHierarchicalNameAccess  "
         "m_xCompAccess = null;\n";
-    if (options.java5) {
-        o << "    private java.util.Hashtable<\n        String, "
-            "java.util.Hashtable< Integer, String> > m_functionMap = null;\n\n";
-    } else {
-        o << "    private java.util.Hashtable m_functionMap = null;\n\n";
-    }
+    o << "    private java.util.Hashtable<\n        String, "
+        "java.util.Hashtable< Integer, String> > m_functionMap = null;\n\n";
+
     // Constructor
     o << "\n    public " << classname << "( XComponentContext context )\n    {\n"
         "        m_xContext = context;\n\n"
         "        try {\n";
 
-    if (options.java5) {
-        o << "        m_functionMap = new java.util.Hashtable<\n"
-            "            String, java.util.Hashtable< Integer, "
-            "String > >();\n\n";
-    } else {
-        o << "        m_functionMap = new java.util.Hashtable();\n\n";
-    }
+    o << "        m_functionMap = new java.util.Hashtable<\n"
+        "            String, java.util.Hashtable< Integer, String > >();\n\n";
 
     generateFunctionParameterMap(o, options,  manager, interfaces);
 
