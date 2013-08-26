@@ -189,7 +189,8 @@ private:
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
-    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> maLayoutInfo;
+    std::vector<com::sun::star::uno::Reference<
+        com::sun::star::xml::dom::XNode> > maLayoutInfo;
 
     bool                mbUseEmbedFonts;
 
@@ -267,7 +268,9 @@ public:
     /// load xml-based impress layout definitions into document
     void InitLayoutVector();
     /// return reference to vector of Impress layout definitions
-    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetLayoutVector() const { return maLayoutInfo; }
+    const std::vector<com::sun::star::uno::Reference<
+        com::sun::star::xml::dom::XNode> >& GetLayoutVector() const
+    { return maLayoutInfo; }
 
     /** Insert pages into this document
 
