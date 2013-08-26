@@ -293,7 +293,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
     }
 
-    // Detect special nubmers.
+    // Detect special numbers.
     if (nCount >= 8)
     {
         aToken = rString.GetToken(7, ',');
