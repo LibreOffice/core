@@ -339,7 +339,84 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+// Feel free to move this to some more general place for reuse
+// http://en.wikipedia.org/wiki/Word_wrap#Minimum_raggedness
+// Mostly based on Alexey Frunze's nifty example at
+// http://stackoverflow.com/questions/9071205/balanced-word-wrap-minimum-raggedness-in-php
+namespace MinimumRaggednessWrap
+{
+    std::deque<size_t> GetEndOfLineIndexes(const std::vector<sal_Int32> rWidthsOf, sal_Int32 nLineWidth)
+    {
+        ++nLineWidth;
+
+        size_t nWidthsCount = rWidthsOf.size();
+        std::vector<sal_Int32> aCosts(nWidthsCount * nWidthsCount);
+
+        // cost function c(i, j) that computes the cost of a line consisting of
+        // the words Word[i] to Word[j]
+        for (size_t i = 0; i < nWidthsCount; ++i)
+        {
+            for (size_t j = 0; j < nWidthsCount; ++j)
+            {
+                if (j >= i)
+                {
+                    sal_Int32 c = nLineWidth - (j - i);
+                    for (size_t k = i; k <= j; ++k)
+                        c -= rWidthsOf[k];
+                    c = (c >= 0) ? c * c : SAL_MAX_INT32;
+                    aCosts[j * nWidthsCount + i] = c;
+                }
+                else
+                {
+                    aCosts[j * nWidthsCount + i] = SAL_MAX_INT32;
+                }
+            }
+        }
+
+        std::vector<sal_Int32> aFunction(nWidthsCount);
+        std::vector<sal_Int32> aWrapPoints(nWidthsCount);
+
+        // f(j) in aFunction[], collect wrap points in aWrapPoints[]
+        for (size_t j = 0; j < nWidthsCount; ++j)
+        {
+            aFunction[j] = aCosts[j * nWidthsCount];
+            if (aFunction[j] == SAL_MAX_INT32)
+            {
+                for (size_t k = 0; k < j; ++k)
+                {
+                    sal_Int32 s;
+                    if (aFunction[k] == SAL_MAX_INT32 || aCosts[j * nWidthsCount + k + 1] == SAL_MAX_INT32)
+                        s = SAL_MAX_INT32;
+                    else
+                        s = aFunction[k] + aCosts[j * nWidthsCount + k + 1];
+                    if (aFunction[j] > s)
+                    {
+                        aFunction[j] = s;
+                        aWrapPoints[j] = k + 1;
+                    }
+                }
+            }
+        }
+
+        std::deque<size_t> aSolution;
+
+        // no solution
+        if (aFunction[nWidthsCount - 1] == SAL_MAX_INT32)
+            return aSolution;
+
+        // optimal solution
+        size_t j = nWidthsCount - 1;
+        while (1)
+        {
+            aSolution.push_front(j);
+            if (!aWrapPoints[j])
+                break;
+            j = aWrapPoints[j] - 1;
+        }
+
+        return aSolution;
+    }
+};
 
 Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHeight )
 {
@@ -394,6 +471,20 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
         long            nMaxWidth = nWidth;
         sal_uInt16          nPos = 0;
 
+        //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
+        //of ugly bare tabs on lines of their own
+
+        //collect widths
+        std::vector<sal_Int32> aWidths;
+        for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+             it != mpTabCtrlData->maItemList.end(); ++it )
+        {
+            aWidths.push_back(ImplGetItemSize( &(*it), nMaxWidth ).Width());
+        }
+
+        //aBreakIndexes will contain the indexes of the last tab on each row
+        std::deque<size_t> aBreakIndexes(MinimumRaggednessWrap::GetEndOfLineIndexes(aWidths, nMaxWidth - nOffsetX - 2));
+
         if ( (mnMaxPageWidth > 0) && (mnMaxPageWidth < nMaxWidth) )
             nMaxWidth = mnMaxPageWidth;
         nMaxWidth -= GetItemsOffset().X();
@@ -403,20 +494,32 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
         long            nLineWidthAry[100];
         sal_uInt16          nLinePosAry[101];
 
-        long nTotalWidth = nOffsetX;
-        for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
-        {
-            nTotalWidth += ImplGetItemSize( &(*it), nMaxWidth ).Width();
-        }
-        long nWrapWidth = nWidth / ceil((double)nTotalWidth / nWidth);
-
         nLineWidthAry[0] = 0;
         nLinePosAry[0] = 0;
+        size_t nIndex = 0;
         for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+             it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
         {
             aSize = ImplGetItemSize( &(*it), nMaxWidth );
+
+            bool bNewLine = false;
+            if (!aBreakIndexes.empty() && nIndex > aBreakIndexes.front())
+            {
+                aBreakIndexes.pop_front();
+                bNewLine = true;
+            }
+
+            if ( bNewLine && (nWidth > 2+nOffsetX) )
+            {
+                if ( nLines == 99 )
+                    break;
+
+                nX = nOffsetX;
+                nY += aSize.Height();
+                nLines++;
+                nLineWidthAry[nLines] = 0;
+                nLinePosAry[nLines] = nPos;
+            }
 
             Rectangle aNewRect( Point( nX, nY ), aSize );
             if ( mbSmallInvalidate && (it->maRect != aNewRect) )
@@ -432,23 +535,6 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
                 nCurLine = nLines;
 
             nPos++;
-
-            if ( (nX > nWrapWidth - 2) && (nWidth > 2+nOffsetX) )
-            {
-                if ( nLines == 99 )
-                    break;
-
-                nX  = nOffsetX;
-                nY += aSize.Height();
-                nLines++;
-                nLineWidthAry[nLines] = 0;
-                nLinePosAry[nLines] = nPos;
-            }
-        }
-
-        if ( nX == nOffsetX )
-        {
-            nLines--;
         }
 
         if ( nLines && !mpTabCtrlData->maItemList.empty() )
