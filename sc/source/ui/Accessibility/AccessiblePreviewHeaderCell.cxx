@@ -17,6 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+/* Somehow, under same circumstances, MSVC creates object code for 2
+ * inlined functions. Nobody here uses them, so simply define them away
+ * so that there be no dupplicate symbols anymore.
+
+ * The symbols "extents" and "indices" come from boost::multi_array.
+ */
+
 #ifdef indices
 #undef indices
 #endif
