@@ -63,9 +63,9 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     boost::optional<FormulaWithNamespace> maFormula; /// table:formula attribute
     boost::optional<OUString> maStringValue;         /// office:string-value attribute
     boost::optional<OUString> maContentValidationName;
+    boost::optional<OUString> maFirstParagraph; /// unformatted first paragraph, for better performance.
 
     ScEditEngineDefaulter* mpEditEngine;
-    OUString maFirstParagraph; /// unformatted first paragraph, for better performance.
     OUStringBuffer maParagraph;
     sal_Int32 mnCurParagraph;
 

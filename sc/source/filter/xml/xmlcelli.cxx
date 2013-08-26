@@ -600,10 +600,10 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
 
 OUString ScXMLTableRowCellContext::GetFirstParagraph() const
 {
-    if (maFirstParagraph.isEmpty())
+    if (!maFirstParagraph)
         return mpEditEngine->GetText(0);
 
-    return maFirstParagraph;
+    return *maFirstParagraph;
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldDate(const OUString& rStyleName)
@@ -635,12 +635,12 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
 
     if (mbEditEngineHasText)
     {
-        if (!maFirstParagraph.isEmpty())
+        if (maFirstParagraph)
         {
             // Flush the cached first paragraph first.
             mpEditEngine->Clear();
-            mpEditEngine->SetText(maFirstParagraph);
-            maFirstParagraph = OUString();
+            mpEditEngine->SetText(*maFirstParagraph);
+            maFirstParagraph.reset();
         }
         mpEditEngine->InsertParagraph(mpEditEngine->GetParagraphCount(), maParagraph.makeStringAndClear());
     }
@@ -652,7 +652,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     }
     else if (mnCurParagraph == 0)
     {
-        maFirstParagraph = maParagraph.makeStringAndClear();
+        maFirstParagraph.reset(maParagraph.makeStringAndClear());
         mbEditEngineHasText = true;
     }
 
@@ -1089,10 +1089,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         }
         else if (mbEditEngineHasText)
         {
-            if (!maFirstParagraph.isEmpty())
+            if (maFirstParagraph)
             {
                 // This is a normal text without format runs.
-                rDoc.setStringCell(rCurrentPos, maFirstParagraph);
+                rDoc.setStringCell(rCurrentPos, *maFirstParagraph);
             }
             else
             {
