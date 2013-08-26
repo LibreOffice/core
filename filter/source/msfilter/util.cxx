@@ -427,6 +427,25 @@ const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSO
     return spPaperSizeTable[ nMSOPaperIndex ];
 }
 
+OUString findQuotedText( const OUString& rCommand,
+                const sal_Char* cStartQuote, const sal_Unicode uEndQuote )
+{
+    OUString sRet;
+    OUString sStartQuote( OUString::createFromAscii(cStartQuote) );
+    sal_Int32 nStartIndex = rCommand.indexOf( sStartQuote );
+    if( nStartIndex >= 0 )
+    {
+        sal_Int32 nStartLength = sStartQuote.getLength();
+        sal_Int32 nEndIndex = rCommand.indexOf( uEndQuote, nStartIndex + nStartLength);
+        if( nEndIndex > nStartIndex )
+        {
+            sRet = rCommand.copy( nStartIndex + nStartLength, nEndIndex - nStartIndex - nStartLength);
+        }
+    }
+    return sRet;
+
+}
+
 }
 }
 

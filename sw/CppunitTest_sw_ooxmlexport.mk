@@ -76,6 +76,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
+	uui/util/uui \
     writerfilter/util/writerfilter \
     xmloff/util/xo \
 ))
