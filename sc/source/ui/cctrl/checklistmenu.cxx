@@ -884,7 +884,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
-    maChecks(this, 0),
+    maChecks(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
     maChkToggleAll(this, 0),
     maBtnSelectSingle  (this, 0),
     maBtnUnselectSingle(this, 0),
@@ -1085,7 +1085,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos( maMembers[i].maName, maMembers[i].mpParent, bSet);
+        maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, bSet);
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
@@ -1095,9 +1095,8 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
-//    sal_uInt16 nSelected = maChecks.GetSelectEntryPos();
     SvTreeListEntry* pEntry = maChecks.GetCurEntry();
-    maChecks.CheckEntryPos(pEntry, bSet );
+    maChecks.CheckEntry(pEntry, bSet );
 }
 
 void ScCheckListMenuWindow::cycleFocus(bool bReverse)
@@ -1170,7 +1169,7 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
         return 0;
     SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
     if ( pEntry )
-        maChecks.CheckEntryPos( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
+        maChecks.CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
     size_t nNumChecked = maChecks.GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
         // all members visible
@@ -1338,6 +1337,18 @@ void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
     maMembers.push_back(aMember);
 }
 
+ScCheckListBox::ScCheckListBox( Window* pParent, WinBits nWinStyle )
+   :  SvTreeListBox( pParent, nWinStyle ), mpCheckButton( NULL )
+{
+    Init();
+}
+
+ScCheckListBox::ScCheckListBox( Window* pParent, const ResId& rResId )
+   :  SvTreeListBox( pParent, rResId ), mpCheckButton( NULL )
+{
+    Init();
+}
+
 SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
 {
     sal_uInt16 nRootPos = 0;
@@ -1367,19 +1378,16 @@ sal_Bool ScCheckListBox::IsChecked( OUString& sName, SvTreeListEntry* pParent )
     return sal_False;
 }
 
-void ScCheckListBox::CheckEntryPos( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck )
+void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, sal_Bool bCheck )
 {
     SvTreeListEntry* pEntry = FindEntry( pParent, sName );
     if ( pEntry )
-        CheckEntryPos(  pEntry, bCheck );
+        CheckEntry(  pEntry, bCheck );
 }
 
-void ScCheckListBox::CheckEntryPos( SvTreeListEntry* pParent, sal_Bool bCheck )
+// Recursively check all children of pParent
+void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, sal_Bool bCheck )
 {
-    // currently pParent ( and *all* children ) are checked with state of bCheck
-    // *BUT* if this is not a Root node then bCheck here should also influence the
-    // ancestor hierarchy ( e.g. a child node checked or uncheck MAY need to check/uncheck
-    // the parent/grandparent node )
     if ( pParent )
     {
         SetCheckButtonState(
@@ -1389,8 +1397,42 @@ void ScCheckListBox::CheckEntryPos( SvTreeListEntry* pParent, sal_Bool bCheck )
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
     while ( pEntry )
     {
-        CheckEntryPos( pEntry, bCheck );
+        CheckAllChildren( pEntry, bCheck );
         pEntry = NextSibling( pEntry );
+    }
+}
+
+void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, sal_Bool bCheck )
+{
+    // recursively check all items below pParent
+    CheckAllChildren( pParent, bCheck );
+    // checking pParent can affect ancestors, e.g. if ancestor is unchecked and pParent is
+    // now checked then the ancestor needs to be checked also
+    SvTreeListEntry* pAncestor = GetParent(pParent);
+    if ( pAncestor )
+    {
+        while ( pAncestor )
+        {
+            // if any first level children checked then ancestor
+            // needs to be checked, similarly if no first level children
+            // checked then ancestor needs to be unchecked
+            SvTreeListEntry* pChild = FirstChild( pAncestor );
+            bool bChildChecked = false;
+
+            while ( pChild )
+            {
+                if ( GetCheckButtonState( pChild ) == SV_BUTTON_CHECKED )
+                {
+                    bChildChecked = true;
+                    break;
+                }
+                pChild = NextSibling( pChild );
+            }
+            SetCheckButtonState(
+                pAncestor, bChildChecked ? SvButtonState( SV_BUTTON_CHECKED ) :
+                                           SvButtonState( SV_BUTTON_UNCHECKED ) );
+            pAncestor = GetParent(pAncestor);
+        }
     }
 }
 
@@ -1439,7 +1481,7 @@ void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
         if ( pEntry )
         {
             sal_Bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
-            CheckEntryPos( pEntry, !bCheck );
+            CheckEntry( pEntry, !bCheck );
             if ( bCheck != ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) )
                 CheckButtonHdl();
         }
@@ -1460,14 +1502,12 @@ void ScCheckListMenuWindow::initMembers()
             maChecks.InsertEntry(maMembers[i].maName, NULL, sal_False, LISTBOX_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox );
         }
-        // Expand all nodes of dates
-        // Needs better behaviour, what gets expanded how much etc. ( depending
-        // on the tree contents )
-        else if ( maMembers[ i ].mpParent == NULL )
-        {
-            maChecks.ExpandChildren( maChecks.FindEntry( NULL, maMembers[ i ].maName ) );
-        }
-        maChecks.CheckEntryPos( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
+
+        maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
+        // Expand first node of checked dates
+        if ( maMembers[ i ].mpParent == NULL && maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent ) )
+            maChecks.Expand( maChecks.FindEntry( NULL, maMembers[ i ].maName ) );
+
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
     }
