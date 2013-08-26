@@ -12,6 +12,7 @@
 "ChartLegend";"com::sun::star::drawing::Shape";"Style#optional"
 "ChartLegend";"com::sun::star::drawing::Shape";"Transformation#optional"
 "ChartLegend";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"ChartLegend";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "ChartLegend";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "ChartLegend";"com::sun::star::drawing::LineProperties";"LineStyle"
 "ChartLegend";"com::sun::star::drawing::LineProperties";"LineDash"

@@ -23,7 +23,7 @@
 // defines ------------------------------------------------------------------
 
 #define OWN_ATTR_VALUE_START                    3900
-#define OWN_ATTR_VALUE_END                      3990
+#define OWN_ATTR_VALUE_END                      3991
 
 #define RID_SFX_START               260
 //      RID_SFX_END                 9999

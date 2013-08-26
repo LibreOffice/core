@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XGluePointsSupplier.idl>
 #include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-
+#include <com/sun/star/beans/PropertyValue.idl>
 
  module com {  module sun {  module star {  module drawing {
 
@@ -153,6 +153,17 @@ published service Shape
     /** this property lets you get and set a hyperlink for this shape.
      */
     [optional, property] string Hyperlink;
+
+    /** Grab bag of shape properties, used as a string-any map for
+        interim interop purposes.
+
+        @since LibreOffice 4.2
+
+        <p>This property is intentionally not handled by the ODF
+        filter. Any member that should be handled there should be
+        first moved out from this grab bag to a separate property.</p>
+    */
+    [optional, property] sequence<com::sun::star::beans::PropertyValue> InteropGrabBag;
 };
 
 

@@ -11,6 +11,7 @@
 "SvxShapeControl";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapeControl";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapeControl";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapeControl";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapeControl";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "SvxShapeControl";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "SvxShapeControl";"com::sun::star::drawing::XControlShape";"getControl()"

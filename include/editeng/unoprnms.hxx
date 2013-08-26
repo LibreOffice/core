@@ -154,6 +154,7 @@
 #define UNO_NAME_POLYPOLYGONBEZIER              "PolyPolygonBezier"
 #define UNO_NAME_POLYGON                        "Polygon"
 
+#define UNO_NAME_MISC_OBJ_INTEROPGRABBAG        "InteropGrabBag"
 #define UNO_NAME_MISC_OBJ_ZORDER                "ZOrder"
 #define UNO_NAME_MISC_OBJ_MOVEPROTECT           "MoveProtect"
 #define UNO_NAME_MISC_OBJ_SIZEPROTECT           "SizeProtect"

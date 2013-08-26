@@ -11,6 +11,7 @@
 "SdXShape";"com::sun::star::drawing::Shape";"Style#optional"
 "SdXShape";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SdXShape";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SdXShape";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SdXShape";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "SdXShape";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "SdXShape";"com::sun::star::beans::XTolerantMultiPropertySet#optional";"setPropertyValuesTolerant()"

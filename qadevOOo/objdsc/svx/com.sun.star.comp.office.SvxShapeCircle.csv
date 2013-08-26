@@ -76,6 +76,7 @@
 "SvxShapeCircle";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapeCircle";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapeCircle";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapeCircle";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapeCircle";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "SvxShapeCircle";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"
 "SvxShapeCircle";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontNameComplex"
