@@ -545,7 +545,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 		ftransl \
 		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
 		$(if $(DISABLE_ATL),,\
-			oleautobridge \
 			inprocserv \
 		) \
 		$(if $(WINDOWS_SDK_HOME),\
