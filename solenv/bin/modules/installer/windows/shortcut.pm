@@ -199,6 +199,7 @@ sub get_shortcut_description
 
     my $description = "";
     if ( $shortcut->{'Tooltip'} ) { $description = $shortcut->{'Tooltip'}; }
+    $description =~ s/\\\"/\"/g;  # no more masquerading of '"'
 
     return $description;
 }

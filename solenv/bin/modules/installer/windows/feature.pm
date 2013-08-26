@@ -387,6 +387,7 @@ sub create_feature_table
             $feature{'feature_parent'} = get_feature_parent($onefeature);
             $feature{'Title'} = $onefeature->{'Name'};
             $feature{'Description'} = $onefeature->{'Description'};
+            $feature{'Description'} =~ s/\\\"/\"/g;  # no more masquerading of '"'
             $feature{'Display'} = get_feature_display($onefeature);
             $feature{'Level'} = get_feature_level($onefeature);
             $feature{'Directory_'} = get_feature_directory($onefeature);
