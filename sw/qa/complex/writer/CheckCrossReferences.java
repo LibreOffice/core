@@ -38,7 +38,20 @@ public class CheckCrossReferences {
     public com.sun.star.text.XTextField getNextField()
         throws com.sun.star.uno.Exception
     {
-        if ( xPortionEnum != null ) {
+        while (true) {
+            while (xPortionEnum == null) {
+                if (!xParaEnum.hasMoreElements())
+                    fail("Cannot retrieve next field.");
+
+                com.sun.star.container.XEnumerationAccess aPara =
+                    UnoRuntime.queryInterface(
+                    com.sun.star.container.XEnumerationAccess.class, xParaEnum.nextElement());
+                xPortionEnum = aPara.createEnumeration();
+            }
+
+            if ( xPortionEnum == null )
+                break;
+
             while ( xPortionEnum.hasMoreElements() ) {
                 com.sun.star.beans.XPropertySet xPortionProps =
                     UnoRuntime.queryInterface(
@@ -53,30 +66,9 @@ public class CheckCrossReferences {
                     return xField;
                 }
             }
+            xPortionEnum = null;
         }
 
-        while ( xParaEnum.hasMoreElements() ) {
-            com.sun.star.container.XEnumerationAccess aPara =
-                UnoRuntime.queryInterface(
-                com.sun.star.container.XEnumerationAccess.class, xParaEnum.nextElement());
-            xPortionEnum = aPara.createEnumeration();
-            while ( xPortionEnum.hasMoreElements() ) {
-                com.sun.star.beans.XPropertySet xPortionProps =
-                    UnoRuntime.queryInterface(
-                    com.sun.star.beans.XPropertySet.class , xPortionEnum.nextElement());
-                final String sPortionType =
-                    xPortionProps.getPropertyValue( "TextPortionType" ).toString();
-                if ( sPortionType.equals( "TextField") ) {
-                    com.sun.star.text.XTextField xField = UnoRuntime.queryInterface(
-                        com.sun.star.text.XTextField.class,
-                        xPortionProps.getPropertyValue( "TextField" ) );
-                    assertNotNull("Cannot retrieve next field.", xField);
-                    return xField;
-                }
-            }
-        }
-
-        fail("Cannot retrieve next field.");
         return null; // unreachable
     }
 
@@ -135,6 +127,12 @@ public class CheckCrossReferences {
             final String FldResult4 = "1";
             final String FldResult5 = "1";
             final String FldResult6 = "A.1";
+            final String FldResult7 = "2(a)";
+            final String FldResult8 = "2(b)";
+            final String FldResult9 = "2";
+            final String FldResult10 = "1(a)";
+            final String FldResult11 = "(b)";
+            final String FldResult12 = "(a)";
 
             // variables for current field
             com.sun.star.text.XTextField xField = null;
@@ -175,6 +173,42 @@ public class CheckCrossReferences {
             checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult6 );
             checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
             checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult6 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult7 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult7 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult8 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult11 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult8 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult9 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult9 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult9 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult4 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult4 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult10 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult10 );
+
+            xField = getNextField();
+            xProps = getFieldProps( xField );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER, FldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_NO_CONTEXT, FldResult12 );
+            checkField( xField, xProps, com.sun.star.text.ReferenceFieldPart.NUMBER_FULL_CONTEXT, FldResult7 );
         }
 
         // insert a certain cross-reference bookmark and a reference field to this bookmark
