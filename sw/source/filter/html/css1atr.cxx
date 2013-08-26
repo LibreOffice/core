@@ -3744,6 +3744,8 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
+/* RES_CHRATR_BIDIRTL */            0,
+/* RES_CHRATR_IDCTHINT */           0,
 
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
@@ -3773,9 +3775,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_HYPHENZONE*/          0,
 /* RES_PARATR_DROP */               OutCSS1_SwFmtDrop,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
+/* RES_PARATR_NUMRULE */            0,
+/* RES_PARATR_SCRIPTSPACE */        0,
+/* RES_PARATR_HANGINGPUNCTUATION */ 0,
 /* RES_PARATR_FORBIDDEN_RULES */    0, // new
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
@@ -3822,13 +3824,13 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_COLUMNBALANCE */             0,
 /* RES_FRAMEDIR */                  OutCSS1_SvxFrameDirection,
 /* RES_HEADER_FOOTER_EAT_SPACING */ 0,
-/* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_ROW_SPLIT */                 0,
 /* RES_FOLLOW_TEXT_FLOW */          0,
+/* RES_COLLAPSING_BORDERS */        0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_AUTO_STYLE */                0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0,
+/* RES_FRMATR_STYLE_NAME */         0,
+/* RES_FRMATR_CONDITIONAL_STYLE_NAME */  0,
 
 /* RES_GRFATR_MIRRORGRF */          0,
 /* RES_GRFATR_CROPGRF   */          0,
