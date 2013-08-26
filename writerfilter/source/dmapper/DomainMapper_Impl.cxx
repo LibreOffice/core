@@ -75,6 +75,7 @@
 #include <comphelper/stlunosequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <filter/msfilter/util.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -1778,33 +1779,12 @@ void DomainMapper_Impl::PopShapeContext()
     }
 }
 
-
-OUString lcl_FindQuotedText( const OUString& rCommand,
-                const sal_Char* cStartQuote, const sal_Unicode uEndQuote )
-{
-    OUString sRet;
-    OUString sStartQuote( OUString::createFromAscii(cStartQuote) );
-    sal_Int32 nStartIndex = rCommand.indexOf( sStartQuote );
-    if( nStartIndex >= 0 )
-    {
-        sal_Int32 nStartLength = sStartQuote.getLength();
-        sal_Int32 nEndIndex = rCommand.indexOf( uEndQuote, nStartIndex + nStartLength);
-        if( nEndIndex > nStartIndex )
-        {
-            sRet = rCommand.copy( nStartIndex + nStartLength, nEndIndex - nStartIndex - nStartLength);
-        }
-    }
-    return sRet;
-
-}
-
-
 sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
 
     //  The command looks like: " PAGE \* Arabic "
-    OUString sNumber = lcl_FindQuotedText(rCommand, "\\* ", ' ');
+    OUString sNumber = msfilter::util::findQuotedText(rCommand, "\\* ", ' ');
 
     if( !sNumber.isEmpty() )
     {
@@ -1899,7 +1879,7 @@ style::NumberingType::
 OUString lcl_ParseFormat( const OUString& rCommand )
 {
     //  The command looks like: " DATE \@ "dd MMMM yyyy"
-    return lcl_FindQuotedText(rCommand, "\\@ \"", '\"');
+    return msfilter::util::findQuotedText(rCommand, "\\@ \"", '\"');
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
