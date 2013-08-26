@@ -112,6 +112,7 @@ public:
     void testFdo44689_start_page_7();
     void testFdo67737();
     void testTransparentShadow();
+    void testBnc834035();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,6 +201,7 @@ void Test::run()
         {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
         {"fdo67737.docx", &Test::testFdo67737},
         {"transparent-shadow.docx", &Test::testTransparentShadow},
+        {"bnc834035.odt", &Test::testBnc834035},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1231,6 +1233,18 @@ void Test::testTransparentShadow()
     uno::Reference<drawing::XShape> xPicture(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xPicture, "ShadowFormat");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7f808080), aShadow.Color);
+}
+
+void Test::testBnc834035()
+{
+    // This is tricky, when saving manually, there are 2 hyperlinks, here only
+    // one, no idea why. That one still shows that we're not using bookmarks, though.
+
+    // Illustration index had wrong hyperlinks: anchor was using Writer's
+    // <seqname>!<index>|sequence syntax, not a bookmark name.
+    xmlDocPtr pXmlDoc = parseExport();
+    // This was Figure!1|sequence.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "anchor", "_Toc363553908");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

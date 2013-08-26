@@ -649,6 +649,13 @@ private:
     /// Maps of the bookmarks ids
     std::map<OString, sal_uInt16> m_rOpenedMarksIds;
 
+    /// Name of the last opened bookmark.
+    OString m_sLastOpenedMark;
+
+    /// If there are bookmarks around sequence fields, this map contains the
+    /// names of these bookmarks for each sequence.
+    std::map<OUString, std::vector<OString> > m_aSeqMarksNames;
+
     /// The current table helper
     SwWriteTable *m_pTableWrt;
 
