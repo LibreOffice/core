@@ -734,6 +734,7 @@ void SwUndoTxtToTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDelBoxes )
     {
+        pTNd->DelFrms();
         SwTable& rTbl = pTNd->GetTable();
         for( sal_uInt16 n = pDelBoxes->size(); n; )
         {
