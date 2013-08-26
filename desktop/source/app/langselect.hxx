@@ -17,49 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <list>
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <svl/languageoptions.hxx>
+#ifndef INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
+#define INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
 
-namespace desktop
-{
+#include "sal/config.h"
 
-class LanguageSelection
-{
-public:
-    enum LanguageSelectionStatus
-    {
-        LS_STATUS_OK,
-        LS_STATUS_CANNOT_DETERMINE_LANGUAGE,
-        LS_STATUS_CONFIGURATIONACCESS_BROKEN
-    };
+#include "rtl/ustring.hxx"
 
-    static OUString getLanguageString();
-    static bool prepareLanguage();
-    static LanguageSelectionStatus getStatus();
+namespace desktop { namespace langselect {
 
-private:
-    static OUString aFoundLanguage;
-    static sal_Bool bFoundLanguage;
-    static LanguageSelectionStatus m_eStatus;
+OUString getEmergencyLocale();
 
-    static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
-        getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate=sal_False);
-    static com::sun::star::uno::Sequence< OUString > getInstalledLanguages();
-    static sal_Bool isInstalledLanguage(OUString& usLocale, sal_Bool bExact=sal_False);
-    static OUString getFirstInstalledLanguage();
-    static OUString getUserUILanguage();
-    static OUString getUserLanguage();
-    static OUString getSystemLanguage();
-    static void resetUserLanguage();
-    static void setDefaultLanguage(const OUString&);
-};
+bool prepareLocale();
 
-} //namespace desktop
+} }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

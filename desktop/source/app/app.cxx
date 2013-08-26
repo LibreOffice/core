@@ -36,7 +36,9 @@
 #include "exithelper.h"
 #include "migration.hxx"
 
+#include <svl/languageoptions.hxx>
 #include <svtools/javacontext.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/SessionListener.hpp>
@@ -334,7 +336,7 @@ ResMgr* Desktop::GetDesktopResManager()
             // Use VCL to get the correct language specific message as we
             // are in the bootstrap process and not able to get the installed
             // language!!
-            OUString aUILocaleString = LanguageSelection::getLanguageString();
+            OUString aUILocaleString = langselect::getEmergencyLocale();
             LanguageTag aLanguageTag( aUILocaleString);
             //! ResMgr may modify the Locale for fallback!
             Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLanguageTag);
@@ -580,13 +582,16 @@ void Desktop::Init()
 
     if ( m_aBootstrapError == BE_OK )
     {
-        // prepare language
-        if ( !LanguageSelection::prepareLanguage() )
+        try
         {
-            if ( LanguageSelection::getStatus() == LanguageSelection::LS_STATUS_CANNOT_DETERMINE_LANGUAGE )
+            if (!langselect::prepareLocale())
+            {
                 SetBootstrapError( BE_LANGUAGE_MISSING, OUString() );
-            else
-                SetBootstrapError( BE_OFFICECONFIG_BROKEN, OUString() );
+            }
+        }
+        catch (css::uno::Exception & e)
+        {
+            SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
         }
     }
 
@@ -979,14 +984,15 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
-        OUString aMessage;
-        OUStringBuffer aDiagnosticMessage( 100 );
-        OUString aErrorMsg;
-        aErrorMsg = GetMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
-            OUString( "A general error occurred while accessing your central configuration." ) );
-        aDiagnosticMessage.append( aErrorMsg );
-        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
-        FatalError(aMessage);
+        OUString msg(
+            GetMsgString(
+                STR_CONFIG_ERR_ACCESS_GENERAL,
+                ("A general error occurred while accessing your central"
+                 " configuration.")));
+        if (!aErrorMessage.isEmpty()) {
+            msg += "\n(\"" + aErrorMessage + "\")";
+        }
+        FatalError(MakeStartupErrorMessage(msg));
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {

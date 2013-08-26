@@ -17,424 +17,197 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include "boost/shared_ptr.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/lang/XLocalizable.hpp"
+#include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "comphelper/configuration.hxx"
+#include "comphelper/processfactory.hxx"
+#include "i18nlangtag/lang.h"
+#include "i18nlangtag/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
+#include "officecfg/Office/Linguistic.hxx"
+#include "officecfg/Setup.hxx"
+#include "officecfg/System.hxx"
+#include "rtl/ustring.hxx"
+#include "sal/log.hxx"
+#include "sal/types.h"
+#include "svl/languageoptions.hxx"
 
 #include "app.hxx"
-#include "langselect.hxx"
+
 #include "cmdlineargs.hxx"
-#include <stdio.h>
+#include "langselect.hxx"
 
-#include <rtl/string.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/lang/XLocalizable.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include "com/sun/star/util/XFlushable.hpp"
-#include <rtl/instance.hxx>
+namespace desktop { namespace langselect {
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
+namespace {
 
+OUString foundLocale;
 
-namespace desktop {
-
-sal_Bool LanguageSelection::bFoundLanguage = sal_False;
-OUString LanguageSelection::aFoundLanguage;
-LanguageSelection::LanguageSelectionStatus LanguageSelection::m_eStatus = LS_STATUS_OK;
-
-bool LanguageSelection::prepareLanguage()
+OUString getInstalledLocale(
+    css::uno::Sequence<OUString> const & installed, OUString const & locale)
 {
-    m_eStatus = LS_STATUS_OK;
-    Reference< XLocalizable > theConfigProvider(
-        com::sun::star::configuration::theDefaultProvider::get(
-            comphelper::getProcessComponentContext() ),
-        UNO_QUERY_THROW );
-
-    sal_Bool bSuccess = sal_False;
-
-    // #i42730#get the windows 16Bit locale - it should be preferred over the UI language
-    try
-    {
-        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.System/L10N/", sal_False), UNO_QUERY_THROW);
-        Any aWin16SysLocale = xProp->getPropertyValue("SystemLocale");
-        OUString sWin16SysLocale;
-        aWin16SysLocale >>= sWin16SysLocale;
-        if( !sWin16SysLocale.isEmpty())
-            setDefaultLanguage(sWin16SysLocale);
-    }
-    catch(const Exception&)
-    {
-        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-    }
-
-    // #i32939# use system locale to set document default locale
-    try
-    {
-        OUString usLocale;
-        Reference< XPropertySet > xLocaleProp(getConfigAccess(
-            "org.openoffice.System/L10N", sal_True), UNO_QUERY_THROW);
-        xLocaleProp->getPropertyValue("Locale") >>= usLocale;
-            setDefaultLanguage(usLocale);
-    }
-    catch (const Exception&)
-    {
-        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-    }
-
-    // get the selected UI language as string
-    bool     bCmdLanguage( false );
-    OUString aLocaleString = getUserUILanguage();
-
-    if ( aLocaleString.isEmpty() )
-    {
-        OUString aEmpty;
-
-        const CommandLineArgs& rCmdLineArgs = Desktop::GetCommandLineArgs();
-        aLocaleString = rCmdLineArgs.GetLanguage();
-        if (isInstalledLanguage(aLocaleString, sal_False))
-        {
-            bCmdLanguage   = true;
-            bFoundLanguage = true;
-            aFoundLanguage = aLocaleString;
+    for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
+        if (installed[i] == locale) {
+            return installed[i];
         }
-        else
-            aLocaleString = aEmpty;
     }
-
-    // user further fallbacks for the UI language
-    if ( aLocaleString.isEmpty() )
-        aLocaleString = getLanguageString();
-
-    if ( !aLocaleString.isEmpty() )
-    {
-        try
-        {
-            // prepare default config provider by localizing it to the selected
-            // locale this will ensure localized configuration settings to be
-            // selected according to the UI language.
-            LanguageTag aUILanguageTag(aLocaleString);
-            theConfigProvider->setLocale(aUILanguageTag.getLocale( false));
-
-            Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
-            if ( !bCmdLanguage )
-            {
-                // Store language only
-                xProp->setPropertyValue("ooLocale", makeAny(aLocaleString));
-                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+    // FIXME: It is not very clever to handle the zh-HK -> zh-TW fallback here,
+    // but right now, there is no place that handles those fallbacks globally:
+    if (locale == "zh-HK") {
+        for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
+            if (installed[i] == "zh-TW") {
+                return installed[i];
             }
-
-            MsLangId::setConfiguredSystemUILanguage( aUILanguageTag.getLanguageType( false) );
-
-            OUString sLocale;
-            xProp->getPropertyValue("ooSetupSystemLocale") >>= sLocale;
-            if ( !sLocale.isEmpty() )
-            {
-                LanguageTag aLocaleLanguageTag(sLocale);
-                MsLangId::setConfiguredSystemLanguage( aLocaleLanguageTag.getLanguageType( false) );
-            }
-            else
-                MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
-
-            bSuccess = sal_True;
-        }
-        catch ( const PropertyVetoException& )
-        {
-            // we are not allowed to change this
-        }
-        catch (const Exception& e)
-        {
-            OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(aMsg.getStr());
-
         }
     }
-
-    // #i32939# setting of default document locale
-    // #i32939# this should not be based on the UI language
-    setDefaultLanguage(aLocaleString);
-
-    return bSuccess;
+    for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
+        if (locale.startsWith(installed[i])) {
+            return installed[i];
+        }
+    }
+    return OUString();
 }
 
-void LanguageSelection::setDefaultLanguage(const OUString& sLocale)
-{
+void setMsLangIdFallback(OUString const & locale) {
     // #i32939# setting of default document language
     // See #i42730# for rules for determining source of settings
-
-    // determine script type of locale
-    LanguageType nLang = LanguageTag::convertToLanguageType(sLocale);
-    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(nLang);
-
-    switch (nScriptType)
-    {
+    if (!locale.isEmpty()) {
+        LanguageType type = LanguageTag::convertToLanguageType(locale);
+        switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
         case SCRIPTTYPE_ASIAN:
-            MsLangId::setConfiguredAsianFallback( nLang );
+            MsLangId::setConfiguredAsianFallback(type);
             break;
         case SCRIPTTYPE_COMPLEX:
-            MsLangId::setConfiguredComplexFallback( nLang );
+            MsLangId::setConfiguredComplexFallback(type);
             break;
         default:
-            MsLangId::setConfiguredWesternFallback( nLang );
-            break;
-    }
-}
-
-OUString LanguageSelection::getUserUILanguage()
-{
-    // check whether the user has selected a specific language
-    OUString aUserLanguage = getUserLanguage();
-    if (!aUserLanguage.isEmpty() )
-    {
-        if (isInstalledLanguage(aUserLanguage))
-        {
-            // all is well
-            bFoundLanguage = sal_True;
-            aFoundLanguage = aUserLanguage;
-            return aFoundLanguage;
-        }
-        else
-        {
-            // selected language is not/no longer installed
-            resetUserLanguage();
-        }
-    }
-
-    return aUserLanguage;
-}
-
-OUString LanguageSelection::getLanguageString()
-{
-    // did we already find a language?
-    if (bFoundLanguage)
-        return aFoundLanguage;
-
-    // check whether the user has selected a specific language
-    OUString aUserLanguage = getUserUILanguage();
-    if (!aUserLanguage.isEmpty() )
-        return aUserLanguage ;
-
-    // try to use system default
-    aUserLanguage = getSystemLanguage();
-    if (!aUserLanguage.isEmpty() )
-    {
-        if (isInstalledLanguage(aUserLanguage, sal_False))
-        {
-            // great, system default language is available
-            bFoundLanguage = sal_True;
-            aFoundLanguage = aUserLanguage;
-            return aFoundLanguage;
-        }
-    }
-    // fallback 1: en-US
-    OUString usFB("en-US");
-    if (isInstalledLanguage(usFB))
-    {
-        bFoundLanguage = sal_True;
-        aFoundLanguage = "en-US";
-        return aFoundLanguage;
-    }
-
-    // fallback didn't work use first installed language
-    aUserLanguage = getFirstInstalledLanguage();
-
-    bFoundLanguage = sal_True;
-    aFoundLanguage = aUserLanguage;
-    return aFoundLanguage;
-}
-
-Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate)
-{
-    Reference< XNameAccess > xNameAccess;
-    try{
-        OUString sAccessSrvc;
-        if (bUpdate)
-            sAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
-        else
-            sAccessSrvc = "com.sun.star.configuration.ConfigurationAccess";
-
-        OUString sConfigURL = OUString::createFromAscii(pPath);
-
-        Reference< XMultiServiceFactory > theConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext() ) );
-
-        // access the provider
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= sConfigURL;
-        xNameAccess = Reference< XNameAccess > (
-            theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY_THROW );
-    } catch (const com::sun::star::uno::Exception& e)
-    {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
-    }
-    return xNameAccess;
-}
-
-Sequence< OUString > LanguageSelection::getInstalledLanguages()
-{
-    Sequence< OUString > seqLanguages;
-    Reference< XNameAccess > xAccess = getConfigAccess("org.openoffice.Setup/Office/InstalledLocales", sal_False);
-    if (!xAccess.is()) return seqLanguages;
-    seqLanguages = xAccess->getElementNames();
-    return seqLanguages;
-}
-
-// FIXME
-// it's not very clever to handle language fallbacks here, but
-// right now, there is no place that handles those fallbacks globally
-static Sequence< OUString > _getFallbackLocales(const OUString& aIsoLang)
-{
-    Sequence< OUString > seqFallbacks;
-    if ( aIsoLang == "zh-HK" ) {
-        seqFallbacks = Sequence< OUString >(1);
-        seqFallbacks[0] = "zh-TW";
-    }
-    return seqFallbacks;
-}
-
-sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bExact)
-{
-    sal_Bool bInstalled = sal_False;
-    Sequence< OUString > seqLanguages = getInstalledLanguages();
-    for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
-    {
-        if (usLocale.equals(seqLanguages[i]))
-        {
-            bInstalled = sal_True;
+            MsLangId::setConfiguredWesternFallback(type);
             break;
         }
     }
+}
 
-    if (!bInstalled && !bExact)
-    {
-        // try fallback locales
-        Sequence< OUString > seqFallbacks = _getFallbackLocales(usLocale);
-        for (sal_Int32 j=0; j<seqFallbacks.getLength(); j++)
-        {
-            for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
-            {
-                if (seqFallbacks[j].equals(seqLanguages[i]))
-                {
-                    bInstalled = sal_True;
-                    usLocale = seqFallbacks[j];
-                    break;
-                }
+}
+
+OUString getEmergencyLocale() {
+    if (!foundLocale.isEmpty()) {
+        return foundLocale;
+    }
+    try {
+        css::uno::Sequence<OUString> inst(
+            officecfg::Setup::Office::InstalledLocales::get()->
+            getElementNames());
+        OUString locale(
+            getInstalledLocale(
+                inst,
+                officecfg::Office::Linguistic::General::UILocale::get()));
+        if (!locale.isEmpty()) {
+            return locale;
+        }
+        locale = getInstalledLocale(
+            inst, officecfg::System::L10N::UILocale::UILocale::get());
+        if (!locale.isEmpty()) {
+            return locale;
+        }
+        locale = getInstalledLocale(inst, "en-US");
+        if (!locale.isEmpty()) {
+            return locale;
+        }
+        if (inst.hasElements()) {
+            return inst[0];
+        }
+    } catch (css::uno::Exception & e) {
+        SAL_WARN("desktop.app", "ignoring Exception \"" << e.Message << "\"");
+    }
+    return OUString();
+}
+
+bool prepareLocale() {
+    // #i42730# Get the windows 16Bit locale, it should be preferred over the UI
+    // locale:
+    setMsLangIdFallback(officecfg::System::L10N::SystemLocale::get());
+    // #i32939# Use system locale to set document default locale:
+    setMsLangIdFallback(officecfg::System::L10N::Locale::get());
+    css::uno::Sequence<OUString> inst(
+        officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+    OUString locale(officecfg::Office::Linguistic::General::UILocale::get());
+    if (!locale.isEmpty()) {
+        locale = getInstalledLocale(inst, locale);
+        if (locale.isEmpty()) {
+            // Selected language is not/no longer installed:
+            try {
+                boost::shared_ptr<comphelper::ConfigurationChanges> batch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Linguistic::General::UILocale::set(
+                    "", batch);
+                batch->commit();
+            } catch (css::uno::Exception & e) {
+                SAL_WARN(
+                    "desktop.app",
+                    "ignoring Exception \"" << e.Message << "\"");
             }
         }
     }
-
-    if (!bInstalled && !bExact)
-    {
-        // no exact match was found, well try to find a substitute
-        for (sal_Int32 i=0; i<seqLanguages.getLength(); i++)
-        {
-            if (usLocale.indexOf(seqLanguages[i]) == 0)
-            {
-                // requested locale starts with the installed locale
-                // (i.e. installed locale has index 0 in requested locale)
-                bInstalled = sal_True;
-                usLocale   = seqLanguages[i];
-                break;
-            }
+    bool cmdLanguage = false;
+    if (locale.isEmpty()) {
+        locale = getInstalledLocale(
+            inst, Desktop::GetCommandLineArgs().GetLanguage());
+        if (!locale.isEmpty()) {
+            cmdLanguage = true;
         }
     }
-    return bInstalled;
-}
-
-OUString LanguageSelection::getFirstInstalledLanguage()
-{
-    OUString aLanguage;
-    Sequence< OUString > seqLanguages = getInstalledLanguages();
-    if (seqLanguages.getLength() > 0)
-        aLanguage = seqLanguages[0];
-    return aLanguage;
-}
-
-OUString LanguageSelection::getUserLanguage()
-{
-    OUString aUserLanguage;
-    Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_False));
-    if (xAccess.is())
-    {
-        try
-        {
-            xAccess->getByName("UILocale") >>= aUserLanguage;
-        }
-        catch ( NoSuchElementException const & )
-        {
-            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-            return OUString();
-        }
-        catch ( WrappedTargetException const & )
-        {
-            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-            return OUString();
+    if (locale.isEmpty()) {
+        locale = getInstalledLocale(
+            inst, officecfg::System::L10N::UILocale::UILocale::get());
+    }
+    if (locale.isEmpty()) {
+        locale = getInstalledLocale(inst, "en-US");
+    }
+    if (locale.isEmpty() && inst.hasElements()) {
+        locale = inst[0];
+    }
+    if (locale.isEmpty()) {
+        return false;
+    }
+    LanguageTag tag(locale);
+    // Prepare default config provider by localizing it to the selected
+    // locale this will ensure localized configuration settings to be
+    // selected according to the UI language:
+    css::uno::Reference<css::lang::XLocalizable>(
+        com::sun::star::configuration::theDefaultProvider::get(
+            comphelper::getProcessComponentContext()),
+        css::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
+    if (!cmdLanguage) {
+        try {
+            boost::shared_ptr<comphelper::ConfigurationChanges> batch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Setup::L10N::ooLocale::set(locale, batch);
+            batch->commit();
+        } catch (css::uno::Exception & e) {
+            SAL_WARN(
+                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
         }
     }
-    return aUserLanguage;
+    MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));
+    OUString setupSysLoc(officecfg::Setup::L10N::ooSetupSystemLocale::get());
+    MsLangId::setConfiguredSystemLanguage(
+        setupSysLoc.isEmpty()
+        ? MsLangId::getSystemLanguage()
+        : LanguageTag(setupSysLoc).getLanguageType(false));
+    // #i32939# setting of default document locale
+    // #i32939# this should not be based on the UI language
+    setMsLangIdFallback(locale);
+    foundLocale = locale;
+    return true;
 }
 
-OUString LanguageSelection::getSystemLanguage()
-{
-    OUString aUserLanguage;
-    Reference< XNameAccess > xAccess(getConfigAccess("org.openoffice.System/L10N", sal_False));
-    if (xAccess.is())
-    {
-        try
-        {
-            xAccess->getByName("UILocale") >>= aUserLanguage;
-        }
-        catch ( NoSuchElementException const & )
-        {
-            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-            return OUString();
-        }
-        catch ( WrappedTargetException const & )
-        {
-            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-            return OUString();
-        }
-    }
-    return aUserLanguage;
-}
-
-
-void LanguageSelection::resetUserLanguage()
-{
-    try
-    {
-        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
-        xProp->setPropertyValue("UILocale", makeAny(OUString()));
-        Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-    }
-    catch ( const PropertyVetoException& )
-    {
-        // we are not allowed to change this
-    }
-    catch (const Exception& e)
-    {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
-        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
-    }
-}
-
-LanguageSelection::LanguageSelectionStatus LanguageSelection::getStatus()
-{
-    return m_eStatus;
-}
-
-} // namespace desktop
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
