@@ -96,6 +96,19 @@ public:
 
     void    SetColInfo( sal_uInt16 nCount, const sal_Int32* pStart, const sal_uInt8* pFormat );
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
+
+    /** From the import field separators obtain the one most likely to be used
+        for export, if multiple separators weighted comma, tab, semicolon,
+        space and other.
+
+        @param  bDecodeNumbers
+                If TRUE, the separators are encoded as numbers and need to be
+                decoded before characters can be extracted, for example "59/44"
+                to ";,".
+                If FALSE, the string is taken as is and each character is
+                expected to be one separator.
+     */
+    static sal_Unicode  GetWeightedFieldSep( const String & rFieldSeps, bool bDecodeNumbers );
 };
 
 /// How ScImportAsciiDlg is called

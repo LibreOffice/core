@@ -187,7 +187,7 @@ void ScImportExport::SetExtOptions( const ScAsciiOptions& rOpt )
 
     //  "normale" Optionen uebernehmen
 
-    cSep = rOpt.GetFieldSeps().GetChar(0);
+    cSep = ScAsciiOptions::GetWeightedFieldSep( rOpt.GetFieldSeps(), false);
     cStr = rOpt.GetTextSep();
 }
 

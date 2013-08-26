@@ -18,6 +18,7 @@
  */
 
 #include "imoptdlg.hxx"
+#include "asciiopt.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
 #include <comphelper/string.hxx>
@@ -51,7 +52,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
             bFixedWidth = sal_True;
         else
-            nFieldSepCode = (sal_Unicode) aToken.ToInt32();
+            nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);

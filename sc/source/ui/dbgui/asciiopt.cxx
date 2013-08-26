@@ -179,6 +179,25 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     return false;
 }
 
+String lcl_decodeSepString( const String & rSepNums, bool & o_bMergeFieldSeps )
+{
+    String aFieldSeps;
+    xub_StrLen nSub = comphelper::string::getTokenCount( rSepNums, '/');
+    for (xub_StrLen i=0; i<nSub; ++i)
+    {
+        String aCode = rSepNums.GetToken( i, '/' );
+        if ( aCode.EqualsAscii(pStrMrg) )
+            o_bMergeFieldSeps = true;
+        else
+        {
+            sal_Int32 nVal = aCode.ToInt32();
+            if ( nVal )
+                aFieldSeps += (sal_Unicode) nVal;
+        }
+    }
+    return aFieldSeps;
+}
+
 // The options string must not contain semicolons (because of the pick list),
 // use comma as separator.
 
@@ -186,31 +205,16 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 {
     xub_StrLen nCount = comphelper::string::getTokenCount(rString, ',');
     String aToken;
-    xub_StrLen nSub;
-    xub_StrLen i;
 
     // Field separator.
     if ( nCount >= 1 )
     {
         bFixedLen = bMergeFieldSeps = false;
-        aFieldSeps.Erase();
 
         aToken = rString.GetToken(0,',');
         if ( aToken.EqualsAscii(pStrFix) )
             bFixedLen = true;
-        nSub = comphelper::string::getTokenCount(aToken, '/');
-        for ( i=0; i<nSub; i++ )
-        {
-            String aCode = aToken.GetToken( i, '/' );
-            if ( aCode.EqualsAscii(pStrMrg) )
-                bMergeFieldSeps = true;
-            else
-            {
-                sal_Int32 nVal = aCode.ToInt32();
-                if ( nVal )
-                    aFieldSeps += (sal_Unicode) nVal;
-            }
-        }
+        aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
     }
 
     // Text separator.
@@ -242,7 +246,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         delete[] pColFormat;
 
         aToken = rString.GetToken(4,',');
-        nSub = comphelper::string::getTokenCount(aToken, '/');
+        xub_StrLen nSub = comphelper::string::getTokenCount(aToken, '/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
         {
@@ -352,6 +356,29 @@ String ScAsciiOptions::WriteToString() const
     // 10th token is used for "Save cell formulas" in export options
 
     return aOutStr;
+}
+
+// static
+sal_Unicode ScAsciiOptions::GetWeightedFieldSep( const String & rFieldSeps, bool bDecodeNumbers )
+{
+    bool bMergeFieldSeps = false;
+    String aFieldSeps( bDecodeNumbers ? lcl_decodeSepString( rFieldSeps, bMergeFieldSeps) : rFieldSeps);
+    if (aFieldSeps.Len() <= 1)
+        return aFieldSeps.GetChar(0);
+    else
+    {
+        // There can be only one separator for output. See also fdo#53449
+        if (aFieldSeps.Search(',') != STRING_NOTFOUND)
+            return ',';
+        else if (aFieldSeps.Search('\t') != STRING_NOTFOUND)
+            return '\t';
+        else if (aFieldSeps.Search(';') != STRING_NOTFOUND)
+            return ';';
+        else if (aFieldSeps.Search(' ') != STRING_NOTFOUND)
+            return ' ';
+        else
+            return aFieldSeps.GetChar(0);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
