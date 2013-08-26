@@ -24,6 +24,8 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/random.h>
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 
 #include <sfx2/docinf.hxx>
 #include <sfx2/request.hxx>
@@ -1797,13 +1799,13 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     if( !pSD )
         return 0;
 
-    String sAuthor;
-    String sInitials;
-    String sName;
+    OUString sAuthor;
+    OUString sInitials;
+    OUString sName;
     if( bVer67 )
     {
         const WW67_ATRD* pDescri = (const WW67_ATRD*)pSD->GetData();
-        const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
+        const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
         if (pA)
             sAuthor = *pA;
         else
@@ -1815,12 +1817,15 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
 
         {
-            sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
+            const sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
+            OUStringBuffer aBuf;
+            aBuf.setLength(nLen);
             for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
-                sInitials += SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+                aBuf[nIdx-1] = SVBT16ToShort(pDescri->xstUsrInitl[nIdx]);
+            sInitials = aBuf.makeStringAndClear();
         }
 
-        if (const String* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
+        if (const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst)))
             sAuthor = *pA;
         else
             sAuthor = sInitials;
@@ -5497,12 +5502,12 @@ void SwWW8ImplReader::SetOutLineStyles()
     }
 }
 
-const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
+const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
 {
     if (!mpAtnNames && pWwFib->lcbGrpStAtnOwners)
     {
         // Determine authors: can be found in the TableStream
-        mpAtnNames = new ::std::vector<String>;
+        mpAtnNames = new ::std::vector<OUString>;
         SvStream& rStrm = *pTableStream;
 
         long nOldPos = rStrm.Tell();
@@ -5515,19 +5520,19 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
             {
                 mpAtnNames->push_back(read_uInt8_PascalString(rStrm,
                     RTL_TEXTENCODING_MS_1252));
-                nRead += mpAtnNames->rbegin()->Len() + 1; // Length + sal_uInt8 count
+                nRead += mpAtnNames->rbegin()->getLength() + 1; // Length + sal_uInt8 count
             }
             else
             {
                 mpAtnNames->push_back(read_uInt16_PascalString(rStrm));
                 // Unicode: double the length + sal_uInt16 count
-                nRead += mpAtnNames->rbegin()->Len() * 2 + 2;
+                nRead += (mpAtnNames->rbegin()->getLength() + 1)*2;
             }
         }
         rStrm.Seek( nOldPos );
     }
 
-    const String *pRet = 0;
+    const OUString *pRet = 0;
     if (mpAtnNames && nIdx < mpAtnNames->size())
         pRet = &((*mpAtnNames)[nIdx]);
     return pRet;

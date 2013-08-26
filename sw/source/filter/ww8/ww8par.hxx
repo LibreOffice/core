@@ -1164,7 +1164,7 @@ private:
 
     SwMSDffManager* pMSDffManager;
 
-    std::vector<String>* mpAtnNames;
+    std::vector<OUString>* mpAtnNames;
     boost::shared_ptr< std::map<sal_uInt32, int> > mpAtnIndexes;
     boost::shared_ptr<WW8PLCFspecial> mpAtnStarts;
     boost::shared_ptr<WW8PLCFspecial> mpAtnEnds;
@@ -1553,7 +1553,7 @@ private:
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
-    const String* GetAnnotationAuthor(sal_uInt16 nIdx);
+    const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
     int GetAnnotationIndex(sal_uInt32 nTag);
     WW8_CP GetAnnotationStart(int nIndex);
     WW8_CP GetAnnotationEnd(int nIndex);
