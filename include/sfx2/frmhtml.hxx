@@ -28,7 +28,6 @@
 
 class SfxFrameHTMLParser;
 class SfxMedium;
-namespace svtools { class AsynchronLink; }
 
 class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
 {
@@ -38,7 +37,7 @@ protected:
 
 public:
     // These methods can also be used by other parsers.
-    static void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, const String& );
+    static void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, const OUString& );
 
 };
 

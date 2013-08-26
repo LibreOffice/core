@@ -47,7 +47,7 @@ static HTMLOptionEnum const aScollingTable[] =
 };
 
 void SfxFrameHTMLParser::ParseFrameOptions(
-    SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const String& rBaseURL )
+    SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const OUString& rBaseURL )
 {
     // Get and set the options
     Size aMargin( pFrame->GetMargin() );
