@@ -35,6 +35,7 @@
 #include "editeng/wghtitem.hxx"
 #include "editeng/postitem.hxx"
 #include "editeng/editdata.hxx"
+#include "editeng/eeitem.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -77,7 +78,7 @@ public:
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
-//  CPPUNIT_TEST(testRichTextExportODS); This currently fails.
+    CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -361,7 +362,7 @@ void ScExportTest::testRichTextExportODS()
         SfxItemSet aItemSet = rEE.GetEmptyItemSet();
         aSel.nStartPos = 0;
         aSel.nEndPos = 4;
-        SvxWeightItem aWeight(WEIGHT_BOLD, ATTR_FONT_WEIGHT);
+        SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
         aItemSet.Put(aWeight);
         rEE.QuickSetAttribs(aItemSet, aSel);
     }
@@ -369,7 +370,7 @@ void ScExportTest::testRichTextExportODS()
     {
         // Set the 'Italic' part italic.
         SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-        SvxPostureItem aItalic(ITALIC_NORMAL, ATTR_FONT_POSTURE);
+        SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
         aItemSet.Put(aItalic);
         aSel.nStartPos = 9;
         aSel.nEndPos = 15;
