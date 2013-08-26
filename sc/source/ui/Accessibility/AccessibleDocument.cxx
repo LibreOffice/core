@@ -17,6 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef indices
+#undef indices
+#endif
+#define indices dummy1_indices
+
+#ifdef extents
+#undef extents
+#endif
+#define extents dummy1_extents
+
 #include "AccessibleDocument.hxx"
 #include "AccessibleSpreadsheet.hxx"
 #include "tabvwsh.hxx"
@@ -59,6 +69,14 @@
 
 #include <list>
 #include <algorithm>
+
+#ifdef indices
+#undef indices
+#endif
+
+#ifdef extents
+#undef extents
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
