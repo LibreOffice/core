@@ -190,7 +190,7 @@ gb_Library__get_layer_componentprefix = \
 # Make/awk/sed/whatever syntax.
 
 gb_Library__COMPONENTPREFIXES := \
-    NONE:vnd.sun.star.expand:\dLO_LIB_DIR/ \
+    NONE:vnd.sun.star.expand:\dLO_BUILD_LIB_DIR/ \
     OOO:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
     OXT:./ \
