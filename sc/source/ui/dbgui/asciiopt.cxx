@@ -155,7 +155,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 }
 
 
-sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
+bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
@@ -174,7 +174,7 @@ sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
                  pColFormat[i] != rCmp.pColFormat[i] )
                 return false;
 
-        return sal_True;
+        return true;
     }
     return false;
 }
@@ -203,13 +203,13 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
         aToken = rString.GetToken(0,',');
         if ( aToken.EqualsAscii(pStrFix) )
-            bFixedLen = sal_True;
+            bFixedLen = true;
         nSub = comphelper::string::getTokenCount(aToken, '/');
         for ( i=0; i<nSub; i++ )
         {
             String aCode = aToken.GetToken( i, '/' );
             if ( aCode.EqualsAscii(pStrMrg) )
-                bMergeFieldSeps = sal_True;
+                bMergeFieldSeps = true;
             else
             {
                 sal_Int32 nVal = aCode.ToInt32();
@@ -300,7 +300,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
     }
     else
-        bDetectSpecialNumber = sal_True;    // default of versions that didn't add the parameter
+        bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
 
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options

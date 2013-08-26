@@ -39,15 +39,15 @@
 class ScAsciiOptions
 {
 private:
-    sal_Bool        bFixedLen;
+    bool        bFixedLen;
     String      aFieldSeps;
-    sal_Bool        bMergeFieldSeps;
+    bool        bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
     sal_Unicode cTextSep;
     CharSet     eCharSet;
     LanguageType eLang;
-    sal_Bool        bCharSetSystem;
+    bool        bCharSetSystem;
     long        nStartRow;
     sal_uInt16      nInfoCount;
     sal_Int32* pColStart;  //! TODO replace with vector
@@ -62,7 +62,7 @@ public:
 
     ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
 
-    sal_Bool            operator==( const ScAsciiOptions& rCmp ) const;
+    bool            operator==( const ScAsciiOptions& rCmp ) const;
 
     void            ReadFromString( const String& rString );
     String          WriteToString() const;
@@ -70,24 +70,24 @@ public:
     void            InterpretColumnList( const String& rString );
 
     CharSet             GetCharSet() const      { return eCharSet; }
-    sal_Bool                GetCharSetSystem() const    { return bCharSetSystem; }
+    bool                GetCharSetSystem() const    { return bCharSetSystem; }
     const String&       GetFieldSeps() const    { return aFieldSeps; }
-    sal_Bool                IsMergeSeps() const     { return bMergeFieldSeps; }
+    bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
-    sal_Bool                IsFixedLen() const      { return bFixedLen; }
-    sal_uInt16              GetInfoCount() const    { return nInfoCount; }
-    const sal_Int32*   GetColStart() const     { return pColStart; }
-    const sal_uInt8*            GetColFormat() const    { return pColFormat; }
+    bool                IsFixedLen() const      { return bFixedLen; }
+    sal_uInt16          GetInfoCount() const    { return nInfoCount; }
+    const sal_Int32*    GetColStart() const     { return pColStart; }
+    const sal_uInt8*    GetColFormat() const    { return pColFormat; }
     long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
     void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
-    void    SetCharSetSystem( sal_Bool bSet )       { bCharSetSystem = bSet; }
-    void    SetFixedLen( sal_Bool bSet )            { bFixedLen = bSet; }
+    void    SetCharSetSystem( bool bSet )       { bCharSetSystem = bSet; }
+    void    SetFixedLen( bool bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
-    void    SetMergeSeps( sal_Bool bSet )           { bMergeFieldSeps = bSet; }
+    void    SetMergeSeps( bool bSet )           { bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
