@@ -356,21 +356,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xsltfilter \
 	$(if $(filter $(OS),WNT), \
 		ado \
-		dnd \
-		dtrans \
-		fps \
-		ftransl \
-		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
-		$(if $(DISABLE_ATL),,oleautobridge \
-				inprocserv \
-		) \
-		$(if $(WINDOWS_SDK_HOME),instooofiltmsi \
-			qslnkmsi \
-			reg4allmsdoc \
-			sdqsmsi \
-			sellangmsi \
-			sn_tools \
-		) \
+		$(if $(DISABLE_ATL),,oleautobridge) \
 		smplmail \
 		wininetbe1 \
 		$(if $(filter YES,$(WITH_MOZAB4WIN)), \
@@ -529,7 +515,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_JAVA), \
 		$(if $(filter $(OS),MACOSX),,officebean) \
 	) \
-        $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
+	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	sdbc2 \
@@ -551,6 +537,25 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(filter $(OS),MACOSX), \
 		macab1 \
 		macabdrv1 \
+	) \
+	$(if $(filter WNT,$(OS)), \
+		dnd \
+		dtrans \
+		fps \
+		ftransl \
+		$(if $(ENABLE_JAVA),java_uno_accessbridge) \
+		$(if $(DISABLE_ATL),,\
+			oleautobridge \
+			inprocserv \
+		) \
+		$(if $(WINDOWS_SDK_HOME),\
+			instooofiltmsi \
+			qslnkmsi \
+			reg4allmsdoc \
+			sdqsmsi \
+			sellangmsi \
+			sn_tools \
+		) \
 	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
