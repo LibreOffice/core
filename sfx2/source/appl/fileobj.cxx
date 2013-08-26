@@ -87,7 +87,7 @@ SvFileObject::~SvFileObject()
 
 
 sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
-                                const String & rMimeType,
+                                const OUString & rMimeType,
                                 sal_Bool bGetSynchron )
 {
     sal_uIntPtr nFmt = SotExchange::GetFormatStringId( rMimeType );

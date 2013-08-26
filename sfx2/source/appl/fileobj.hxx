@@ -66,7 +66,7 @@ public:
     SvFileObject();
 
     virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
-                            const String & rMimeType,
+                            const OUString & rMimeType,
                             sal_Bool bSynchron = sal_False );
 
     virtual sal_Bool    Connect( sfx2::SvBaseLink* );

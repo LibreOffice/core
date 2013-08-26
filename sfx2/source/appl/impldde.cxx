@@ -130,7 +130,7 @@ SvDDEObject::~SvDDEObject()
 }
 
 sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
-                            const String & rMimeType,
+                            const OUString & rMimeType,
                             sal_Bool bSynchron )
 {
     if( !pConnection )

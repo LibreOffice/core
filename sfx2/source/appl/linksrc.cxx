@@ -311,7 +311,7 @@ void SvLinkSource::NotifyDataChanged()
 
 // notify the sink, the mime type is not
 // a selection criterion
-void SvLinkSource::DataChanged( const String & rMimeType,
+void SvLinkSource::DataChanged( const OUString & rMimeType,
                                 const ::com::sun::star::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
@@ -349,7 +349,7 @@ void SvLinkSource::DataChanged( const String & rMimeType,
 
 
 // only one link is correct
-void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const String& rMimeType,
+void SvLinkSource::AddDataAdvise( SvBaseLink * pLink, const OUString& rMimeType,
                                     sal_uInt16 nAdviseModes )
 {
     SvLinkSource_Entry_Impl* pNew = new SvLinkSource_Entry_Impl(
@@ -415,7 +415,7 @@ sal_Bool SvLinkSource::Connect( SvBaseLink* )
     return sal_True;
 }
 
-sal_Bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const String &, sal_Bool )
+sal_Bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const OUString &, sal_Bool )
 {
     return sal_False;
 }

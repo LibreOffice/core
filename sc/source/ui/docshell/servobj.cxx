@@ -135,7 +135,7 @@ void ScServerObject::EndListeningAll()
 
 sal_Bool ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
-        const String & rMimeType, sal_Bool /* bSynchron */ )
+        const OUString & rMimeType, sal_Bool /* bSynchron */ )
 {
     if (!pDocSh)
         return false;

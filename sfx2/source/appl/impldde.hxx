@@ -55,7 +55,7 @@ public:
     SvDDEObject();
 
     virtual sal_Bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
-                                const String & aMimeType,
+                                const OUString & aMimeType,
                                 sal_Bool bSynchron = sal_False );
 
     virtual sal_Bool    Connect( SvBaseLink * );

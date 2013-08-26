@@ -40,7 +40,7 @@ SwServerObject::~SwServerObject()
 }
 
 sal_Bool SwServerObject::GetData( uno::Any & rData,
-                                const String & rMimeType, sal_Bool )
+                                const OUString & rMimeType, sal_Bool )
 {
     sal_Bool bRet = sal_False;
     WriterRef xWrt;

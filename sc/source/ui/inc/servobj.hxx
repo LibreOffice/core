@@ -55,7 +55,7 @@ public:
     virtual ~ScServerObject();
 
     virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
-                             const String & rMimeType,
+                             const OUString & rMimeType,
                              sal_Bool bSynchron = false );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

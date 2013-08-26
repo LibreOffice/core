@@ -34,7 +34,9 @@ namespace com { namespace sun { namespace star { namespace uno
     class Any;
 }}}}
 class Window;
-class String;
+namespace rtl {
+    class OUString;
+}
 
 #ifndef ADVISEMODE_NODATA
 // Must be the same value as Ole2 ADVF_*
@@ -69,14 +71,14 @@ public:
     void                SetUpdateTimeout( sal_uIntPtr nTime );
                         // notify the sink, the mime type is not
                         // a selection criterion
-    void                DataChanged( const String & rMimeType,
+    void                DataChanged( const rtl::OUString & rMimeType,
                                     const ::com::sun::star::uno::Any & rVal );
     void                SendDataChanged();
     void                NotifyDataChanged();
 
     virtual sal_Bool        Connect( SvBaseLink* );
     virtual sal_Bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
-                                const String & rMimeType,
+                                const rtl::OUString & rMimeType,
                                 sal_Bool bSynchron = sal_False );
 
                         // sal_True => waitinmg for data
@@ -88,7 +90,7 @@ public:
     virtual void        Edit( Window *, SvBaseLink *, const Link& rEndEditHdl );
 
 
-    void                AddDataAdvise( SvBaseLink *, const String & rMimeType,
+    void                AddDataAdvise( SvBaseLink *, const rtl::OUString & rMimeType,
                                         sal_uInt16 nAdviceMode );
     void                RemoveAllDataAdvise( SvBaseLink * );
 
