@@ -13,6 +13,7 @@
 "SvxShapeGroup";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapeGroup";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapeGroup";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapeGroup";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapeGroup";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "SvxShapeGroup";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "SvxShapeGroup";"com::sun::star::drawing::XShapeGroup";"enterGroup()"

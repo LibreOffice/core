@@ -79,6 +79,7 @@
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapePolyPolygonBezier";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"
 "SvxShapePolyPolygonBezier";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontNameComplex"

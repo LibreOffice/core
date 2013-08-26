@@ -76,6 +76,7 @@
 "ScAnnotationShapeObj";"com::sun::star::drawing::Shape";"Style#optional"
 "ScAnnotationShapeObj";"com::sun::star::drawing::Shape";"Transformation#optional"
 "ScAnnotationShapeObj";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"ScAnnotationShapeObj";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"
 "ScAnnotationShapeObj";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontNameComplex"

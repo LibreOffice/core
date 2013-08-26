@@ -12,6 +12,7 @@
 "ChartTitle";"com::sun::star::drawing::Shape";"Style#optional"
 "ChartTitle";"com::sun::star::drawing::Shape";"Transformation#optional"
 "ChartTitle";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"ChartTitle";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "ChartTitle";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "ChartTitle";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "ChartTitle";"com::sun::star::chart::ChartTitle";"TextRotation"

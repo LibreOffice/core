@@ -76,6 +76,7 @@
 "SvxShapePolyPolygon";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapePolyPolygon";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapePolyPolygon";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapePolyPolygon";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontNameComplex"

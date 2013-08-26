@@ -186,7 +186,8 @@
 
 #define OWN_ATTR_MEDIA_STREAM                   (OWN_ATTR_VALUE_START+89)
 #define OWN_ATTR_MEDIA_TEMPFILEURL              (OWN_ATTR_VALUE_START+90)
-// ATTENTION: maximum is OWN_ATTR_VALUE_START+90, see svl/inc/svl/solar.hrc
+#define OWN_ATTR_INTEROPGRABBAG                 (OWN_ATTR_VALUE_START+91)
+// ATTENTION: maximum is OWN_ATTR_VALUE_START+91, see include/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -315,6 +316,7 @@
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT),        OWN_ATTR_BOUNDRECT,         &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 #define MISC_OBJ_PROPERTIES \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0)),  0,  0}, \
     MISC_OBJ_PROPERTIES_NO_SHEAR \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SHEARANGLE),       SDRATTR_SHEARANGLE,         &::getCppuType((const sal_Int32*)0),        0,  0},
 

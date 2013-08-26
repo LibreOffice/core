@@ -76,6 +76,7 @@
 "SvxShape";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShape";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShape";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShape";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShape";"com::sun::star::drawing::TextShape";"CornerRadius"
 "SvxShape";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "SvxShape";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"

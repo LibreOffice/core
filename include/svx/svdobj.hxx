@@ -26,6 +26,7 @@
 #include <vcl/mapmod.hxx>
 #include <tools/string.hxx>
 #include <tools/weakbase.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <svx/svdsob.hxx>
@@ -61,6 +62,7 @@ class SdrPage;
 class SdrPageView;
 class SdrView;
 class SfxItemSet;
+class SfxGrabBagItem;
 class SfxSetItem;
 class SfxStyleSheet;
 class SfxUndoAction;
@@ -357,6 +359,9 @@ protected:
 
     sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
 
+    SfxGrabBagItem*             pGrabBagItem; // Holds the GrabBagItem property
+
+
     /** Position in the navigation order.  SAL_MAX_UINT32 when not used.
     */
     sal_uInt32                  mnNavigationPosition;
@@ -537,6 +542,11 @@ public:
     // Das Setzen der Ordnungsnummer sollte nur vom Model bzw. von der Page
     // geschehen.
     void SetOrdNum(sal_uInt32 nNum);
+
+    // GrabBagItem for interim interop purposes
+    void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
+
+    void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
 
     /** Return the position in the navigation order for the called object.
         Note that this method may update the navigation position of the

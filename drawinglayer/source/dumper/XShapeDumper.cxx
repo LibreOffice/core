@@ -37,6 +37,7 @@ namespace {
 void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonBezierCoords(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
 void dumpPointSequenceSequence(com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence, uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
+void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
 
 // FillProperties.idl
 void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
@@ -133,6 +134,7 @@ void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, x
 void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter);
+void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGrabBag, xmlTextWriterPtr xmlWriter);
 
 // CustomShape.idl
 void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
@@ -1052,6 +1054,17 @@ void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter)
         OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
 }
 
+void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGrabBag, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
+
+    sal_Int32 nLength = aInteropGrabBag.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+        dumpPropertyValueAsElement(aInteropGrabBag[i], xmlWriter);
+
+    xmlTextWriterEndElement( xmlWriter );
+}
+
 // --------------------------------
 // ---------- XShape.idl ----------
 // --------------------------------
@@ -1154,6 +1167,10 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
 
         xmlTextWriterEndElement(xmlWriter);
     }
+
+    // TODO: Add here dumping of XDocument for future OOX Smart-Art
+    // properties.
+
     // TODO more, if necessary
 
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, rPropertyValue.Handle);

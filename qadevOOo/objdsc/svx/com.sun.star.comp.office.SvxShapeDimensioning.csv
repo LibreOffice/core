@@ -94,6 +94,7 @@
 "SvxShapeDimensioning";"com::sun::star::drawing::Shape";"Style#optional"
 "SvxShapeDimensioning";"com::sun::star::drawing::Shape";"Transformation#optional"
 "SvxShapeDimensioning";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"SvxShapeDimensioning";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharHeightComplex"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharWeightComplex"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterPropertiesComplex#optional";"CharFontNameComplex"

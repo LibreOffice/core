@@ -2451,6 +2451,12 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         break;
     }
 
+    case OWN_ATTR_INTEROPGRABBAG:
+    {
+        mpObj->SetGrabBagItem(rValue);
+        return true;
+    }
+
     case SDRATTR_OBJMOVEPROTECT:
     {
         sal_Bool bMoveProtect = sal_Bool();
@@ -2853,6 +2859,12 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     case SDRATTR_SHEARANGLE:
         rValue <<= (sal_Int32)mpObj->GetShearAngle();
         break;
+
+    case OWN_ATTR_INTEROPGRABBAG:
+    {
+        mpObj->GetGrabBagItem(rValue);
+        break;
+    }
 
     case SDRATTR_OBJMOVEPROTECT:
         rValue = uno::makeAny( (sal_Bool) mpObj->IsMoveProtect() );

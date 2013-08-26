@@ -38,6 +38,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/whiter.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <tools/bigint.hxx>
 #include <tools/diagnose_ex.h>
@@ -433,6 +434,7 @@ SdrObject::SdrObject()
     ,pUserCall(NULL)
     ,pPlusData(NULL)
     ,nOrdNum(0)
+    ,pGrabBagItem(NULL)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
     ,mpSvxShape( NULL )
@@ -500,6 +502,8 @@ SdrObject::~SdrObject()
     DBG_DTOR(SdrObject,NULL);
     SendUserCall(SDRUSERCALL_DELETE, GetLastBoundRect());
     delete pPlusData;
+
+    delete pGrabBagItem;
 
     if(mpProperties)
     {
@@ -906,6 +910,27 @@ void SdrObject::SetOrdNum(sal_uInt32 nNum)
     nOrdNum = nNum;
 }
 
+void SdrObject::GetGrabBagItem(com::sun::star::uno::Any& rVal) const
+{
+    if (pGrabBagItem != NULL)
+        pGrabBagItem->QueryValue(rVal);
+    else {
+        uno::Sequence<beans::PropertyValue> aValue(0);
+        rVal = uno::makeAny(aValue);
+    }
+}
+
+void SdrObject::SetGrabBagItem(const com::sun::star::uno::Any& rVal)
+{
+    if (pGrabBagItem == NULL)
+        pGrabBagItem = new SfxGrabBagItem;
+
+    pGrabBagItem->PutValue(rVal);
+
+    SetChanged();
+    BroadcastObjectChange();
+}
+
 sal_uInt32 SdrObject::GetNavigationPosition (void)
 {
     if (pObjList!=NULL && pObjList->RecalcNavigationPositions())
@@ -1086,6 +1111,12 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
         delete pPlusData->pBroadcast; // broadcaster isn't copied
         pPlusData->pBroadcast=NULL;
     }
+
+    delete pGrabBagItem;
+    pGrabBagItem=NULL;
+    if (rObj.pGrabBagItem!=NULL)
+        pGrabBagItem=static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() );
+
     aGridOffset = rObj.aGridOffset;
     return *this;
 }

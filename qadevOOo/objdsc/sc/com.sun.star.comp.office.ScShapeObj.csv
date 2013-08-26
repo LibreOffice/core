@@ -11,6 +11,7 @@
 "ScShapeObj";"com::sun::star::drawing::Shape";"Style#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"Transformation#optional"
 "ScShapeObj";"com::sun::star::drawing::Shape";"ShapeUserDefinedAttributes#optional"
+"ScShapeObj";"com::sun::star::drawing::Shape";"InteropGrabBag#optional"
 "ScShapeObj";"com::sun::star::drawing::XShapeDescriptor";"getShapeType()"
 "ScShapeObj";"com::sun::star::drawing::XGluePointsSupplier#optional";"getGluePoints()"
 "ScShapeObj";"com::sun::star::sheet::Shape";"Anchor"
