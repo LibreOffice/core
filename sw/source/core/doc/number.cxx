@@ -730,7 +730,6 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
         bool bOldHadPrefix = true;
-        OUString sOldPrefix;
 
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
         do
@@ -772,21 +771,9 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                      !aExtremities.nPrefixChars
                    )
                 {
-                    nStrip = 0;
-                    while (nStrip < aExtremities.nSuffixChars)
-                    {
-                        ++nStrip;
-                    }
-                    if (nStrip)
-                    {
-                        aPrevStr = aPrevStr.copy(0, aPrevStr.getLength()-nStrip);
-                    }
+                    aPrevStr = aPrevStr.copy(0,
+                        aPrevStr.getLength() - aExtremities.nSuffixChars);
                 }
-                else if (!aExtremities.nSuffixChars && !bOldHadPrefix)
-                {
-                    aRefNumStr = sOldPrefix + aRefNumStr;
-                }
-                sOldPrefix = OUString();
 
                 bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
 
