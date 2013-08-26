@@ -1295,7 +1295,6 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
         }
         maChecks.SetUpdateMode(false);
         sal_Int32 nIndex = 0;
-        std::vector< OUString > vParts;
         OUString sParent;
         SvTreeListEntry* pParent = NULL;
         int count = 0;
