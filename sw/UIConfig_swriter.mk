@@ -182,6 +182,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/templatedialog16 \
 	sw/uiconfig/swriter/ui/textgridpage \
 	sw/uiconfig/swriter/ui/titlepage \
+	sw/uiconfig/swriter/ui/tokenwidget \
 	sw/uiconfig/swriter/ui/viewoptionspage \
 	sw/uiconfig/swriter/ui/wordcount \
 	sw/uiconfig/swriter/ui/wrapdialog \

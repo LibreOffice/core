@@ -124,9 +124,7 @@
 
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  77)
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)
-#define WIN_TOKEN                   (RC_GLOBALS_BEGIN +  89)
 #define TP_TOX_SELECT               (RC_GLOBALS_BEGIN +  90)
-#define TP_TOX_ENTRY                (RC_GLOBALS_BEGIN +  91)
 #define TP_TOX_STYLES               (RC_GLOBALS_BEGIN +  92)
 #define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
 //maximum: RC_GLOBALS_BEGIN +  120

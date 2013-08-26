@@ -2647,43 +2647,60 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     return sRet;
 }
 
-SwTokenWindow::SwTokenWindow(Window* pParent, const ResId& rResId) :
-        Window( pParent, rResId ),
-        aLeftScrollWin(this, ResId(WIN_LEFT_SCROLL, *rResId.GetResMgr()  )),
-        aCtrlParentWin(this, ResId(WIN_CTRL_PARENT, *rResId.GetResMgr()   )),
-        aRightScrollWin(this, ResId(WIN_RIGHT_SCROLL, *rResId.GetResMgr() )),
-        pForm(0),
-        nLevel(0),
-        bValid(sal_False),
-        sCharStyle(ResId(STR_CHARSTYLE, *rResId.GetResMgr())),
-        pActiveCtrl(0),
-        m_pParent(NULL)
+SwTokenWindow::SwTokenWindow(Window* pParent)
+    : VclHBox(pParent)
+    , pForm(0)
+    , nLevel(0)
+    , bValid(false)
+    , sCharStyle(SW_RESSTR(STR_CHARSTYLE))
+    , pActiveCtrl(0)
+    , m_pParent(NULL)
 {
-    SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
-    SetHelpId(HID_TOKEN_WINDOW);
-    for(sal_uInt16 i = 0; i < TOKEN_END; i++)
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
+        "modules/swriter/ui/tokenwidget.ui", "TokenWidget");
+    get(m_pLeftScrollWin, "left");
+    get(m_pCtrlParentWin, "ctrl");
+    m_pCtrlParentWin->set_height_request(Edit::GetMinimumEditSize().Height());
+    get(m_pRightScrollWin, "right");
+
+    for (sal_uInt16 i = 0; i < TOKEN_END; ++i)
     {
         sal_uInt16 nTextId = STR_BUTTON_TEXT_START + i;
         if( STR_TOKEN_ENTRY_TEXT == nTextId )
             nTextId = STR_TOKEN_ENTRY;
-        aButtonTexts[i] = String(ResId(nTextId, *rResId.GetResMgr()));
+        aButtonTexts[i] = SW_RESSTR(nTextId);
 
         sal_uInt16 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
         if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
             nHelpId = STR_TOKEN_HELP_ENTRY;
-        aButtonHelpTexts[i] = String(ResId(nHelpId, *rResId.GetResMgr()));
+        aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
     }
 
-    FreeResource();
-
     Link aLink(LINK(this, SwTokenWindow, ScrollHdl));
-    aLeftScrollWin.SetClickHdl(aLink);
-    aRightScrollWin.SetClickHdl(aLink);
+    m_pLeftScrollWin->SetClickHdl(aLink);
+    m_pRightScrollWin->SetClickHdl(aLink);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwTokenWindow(Window *pParent, VclBuilder::stringmap &)
 {
-    return new SwTokenWindow(pParent, SW_RES(WIN_TOKEN));
+    return new SwTokenWindow(pParent);
+}
+
+void SwTokenWindow::setAllocation(const Size &rAllocation)
+{
+    VclHBox::setAllocation(rAllocation);
+
+    if (aControlList.empty())
+        return;
+
+    Size aControlSize(m_pCtrlParentWin->GetSizePixel());
+    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    {
+        Control* pControl = (*it);
+        Size aSize(pControl->GetSizePixel());
+        aSize.Height() = aControlSize.Height();
+        pControl->SetSizePixel(aSize);
+    }
 }
 
 SwTokenWindow::~SwTokenWindow()
@@ -2803,7 +2820,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
 Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rToken)
 {
     Control* pRet = 0;
-    Size aControlSize(GetOutputSizePixel());
+    Size aControlSize(m_pCtrlParentWin->GetSizePixel());
     Point aControlPos;
 
     if(!aControlList.empty())
@@ -2817,7 +2834,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
 
     if(TOKEN_TEXT == rToken.eTokenType)
     {
-        SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, rToken);
+        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
         aControlList.push_back(pEdit);
@@ -2834,7 +2851,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     }
     else
     {
-        SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, rToken);
+        SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
 
         aControlList.push_back(pButton);
@@ -2850,9 +2867,9 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         else
         {
             //use the first two chars as symbol
-            String sTmp(SwAuthorityFieldType::GetAuthFieldName(
+            OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
                         (ToxAuthorityField)rToken.nAuthorityField));
-            pButton->SetText(sTmp.Copy(0, 2));
+            pButton->SetText(sTmp.copy(0, 2));
         }
 
         pButton->Show();
@@ -3003,7 +3020,7 @@ void    SwTokenWindow::InsertAtSelection(
         ((SwTOXEdit*)pActiveCtrl)->AdjustSize();
 
         SwFormToken aTmpToken(TOKEN_TEXT);
-        SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
+        SwTOXEdit* pEdit = new SwTOXEdit(m_pCtrlParentWin, this, aTmpToken);
 
         iterActive = aControlList.insert(iterActive, pEdit);
 
@@ -3023,7 +3040,7 @@ void    SwTokenWindow::InsertAtSelection(
     }
 
     //now the new button
-    SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
+    SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, aToInsertToken);
 
     aControlList.insert(iterActive, pButton);
 
@@ -3134,7 +3151,7 @@ void SwTokenWindow::AdjustScrolling()
         Control* pFirstCtrl = *(aControlList.begin());
         Control* pLastCtrl = *(aControlList.rbegin());
 
-        long nSpace = aCtrlParentWin.GetSizePixel().Width();
+        long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
         long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
                                                     + pLastCtrl->GetSizePixel().Width();
         bool bEnable = nWidth > nSpace;
@@ -3154,9 +3171,9 @@ void SwTokenWindow::AdjustScrolling()
             if(nMove)
                 MoveControls(nMove);
 
-            aLeftScrollWin.Enable(pFirstCtrl->GetPosPixel().X() < 0);
+            m_pLeftScrollWin->Enable(pFirstCtrl->GetPosPixel().X() < 0);
 
-            aRightScrollWin.Enable((pLastCtrl->GetPosPixel().X() + pLastCtrl->GetSizePixel().Width()) > nSpace);
+            m_pRightScrollWin->Enable((pLastCtrl->GetPosPixel().X() + pLastCtrl->GetSizePixel().Width()) > nSpace);
         }
         else
         {
@@ -3169,8 +3186,8 @@ void SwTokenWindow::AdjustScrolling()
                     MoveControls(-nFirstPos);
             }
 
-            aRightScrollWin.Enable(false);
-            aLeftScrollWin.Enable(false);
+            m_pRightScrollWin->Enable(false);
+            m_pLeftScrollWin->Enable(false);
         }
     }
 }
@@ -3180,7 +3197,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     if(aControlList.empty())
         return 0;
 
-    const long nSpace = aCtrlParentWin.GetSizePixel().Width();
+    const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
     String sMessage(OUString("Space: "));
@@ -3203,7 +3220,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 #endif
 
     long nMove = 0;
-    if(pBtn == &aLeftScrollWin)
+    if(pBtn == m_pLeftScrollWin)
     {
         //find the first completely visible control (left edge visible)
         for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
@@ -3269,10 +3286,10 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         Control *pCtrl = 0;
 
         pCtrl = *(aControlList.begin());
-        aLeftScrollWin.Enable(pCtrl->GetPosPixel().X() < 0);
+        m_pLeftScrollWin->Enable(pCtrl->GetPosPixel().X() < 0);
 
         pCtrl = *(aControlList.rbegin());
-        aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
+        m_pRightScrollWin->Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
     }
 
     return 0;
@@ -3366,23 +3383,6 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         bRet = sal_True;
     }
     return bRet;
-}
-
-void SwTokenWindow::Resize()
-{
- Size aCompleteSize(GetOutputSizePixel());
-
- Point aRightPos(aRightScrollWin.GetPosPixel());
- Size aRightSize(aRightScrollWin.GetSizePixel());
-
- Size aMiddleSize(aCtrlParentWin.GetSizePixel());
-
-    long nMove = aCompleteSize.Width() - aRightSize.Width() - aRightPos.X();
-
-    aRightPos.X() += nMove;
-    aRightScrollWin.SetPosPixel(aRightPos);
-    aMiddleSize.Width() += nMove;
-    aCtrlParentWin.SetSizePixel(aMiddleSize);
 }
 
 IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)

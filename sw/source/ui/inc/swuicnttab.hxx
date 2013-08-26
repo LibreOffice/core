@@ -253,23 +253,23 @@ class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
 
-class SwTokenWindow : public Window
+class SwTokenWindow : public VclHBox, public VclBuilderContainer
 {
     typedef std::vector<Control*>::iterator ctrl_iterator;
     typedef std::vector<Control*>::const_iterator ctrl_const_iterator;
     typedef std::vector<Control*>::reverse_iterator ctrl_reverse_iterator;
     typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
 
-    ImageButton     aLeftScrollWin;
-    Window          aCtrlParentWin;
-    ImageButton     aRightScrollWin;
+    Button* m_pLeftScrollWin;
+    Window* m_pCtrlParentWin;
+    Button* m_pRightScrollWin;
     std::vector<Control*>   aControlList;
     SwForm*         pForm;
-    sal_uInt16          nLevel;
-    sal_Bool            bValid;
-    String          aButtonTexts[TOKEN_END]; // Text of the buttons
-    String          aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
-    String          sCharStyle;
+    sal_uInt16      nLevel;
+    bool            bValid;
+    OUString        aButtonTexts[TOKEN_END]; // Text of the buttons
+    OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
+    OUString        sCharStyle;
     Link            aButtonSelectedHdl;
     Control*        pActiveCtrl;
     Link            aModifyHdl;
@@ -291,7 +291,7 @@ class SwTokenWindow : public Window
     void        MoveControls(long nOffset);
 
 public:
-    SwTokenWindow(Window* pParent, const ResId& rResId);
+    SwTokenWindow(Window* pParent);
     ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
@@ -324,8 +324,8 @@ public:
     sal_Bool        CreateQuickHelp(Control* pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
 
-    virtual void        Resize();
-    virtual void        GetFocus();
+    virtual void    GetFocus();
+    virtual void    setAllocation(const Size &rAllocation);
 };
 
 class SwTOXEntryTabPage;

@@ -60,6 +60,85 @@ String STR_DELIM
     Text [ en-US ] = "S";
 };
 
+String STR_TOKEN_ENTRY_NO
+{
+    Text [ en-US ] = "E#";
+};
+String STR_TOKEN_ENTRY
+{
+    Text [ en-US ] = "E";
+};
+String STR_TOKEN_TAB_STOP
+{
+    Text [ en-US ] = "T";
+};
+String STR_TOKEN_TEXT
+{
+    Text = "";
+    //unused
+};
+String STR_TOKEN_PAGE_NUMS
+{
+    Text [ en-US ] = "#";
+};
+String STR_TOKEN_CHAPTER_INFO
+{
+    Text [ en-US ] = "CI";
+};
+String STR_TOKEN_LINK_START
+{
+    Text [ en-US ] = "LS";
+};
+String STR_TOKEN_LINK_END
+{
+    Text [ en-US ] = "LE";
+};
+String STR_TOKEN_AUTHORITY
+{
+    Text [ en-US ] = "A";
+};
+String STR_TOKEN_HELP_ENTRY_NO
+{
+    Text [ en-US ] = "Chapter number";
+};
+String STR_TOKEN_HELP_ENTRY
+{
+    Text [ en-US ] = "Entry";
+};
+String STR_TOKEN_HELP_TAB_STOP
+{
+    Text [ en-US ] = "Tab stop";
+};
+String STR_TOKEN_HELP_TEXT
+{
+    Text [ en-US ] = "Text";
+};
+String STR_TOKEN_HELP_PAGE_NUMS
+{
+    Text [ en-US ] = "Page number";
+};
+String STR_TOKEN_HELP_CHAPTER_INFO
+{
+    Text [ en-US ] = "Chapter info";
+};
+String STR_TOKEN_HELP_LINK_START
+{
+    Text [ en-US ] = "Hyperlink start";
+};
+String STR_TOKEN_HELP_LINK_END
+{
+    Text [ en-US ] = "Hyperlink end";
+};
+String STR_TOKEN_HELP_AUTHORITY
+{
+    Text [ en-US ] = "Bibliography entry: ";
+};
+String STR_CHARSTYLE
+{
+    Text [ en-US ] = "Character Style: ";
+};
+
+
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
 {
@@ -491,542 +570,6 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 50, 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
-    };
-};
-
-TabPage TP_TOX_ENTRY
-{
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    Hide = TRUE ;
-    FixedText FT_LEVEL
-    {
-        Pos = MAP_APPFONT ( 6, 3 ) ;
-        Size = MAP_APPFONT ( 25, 8 ) ;
-        Text [ en-US ] = "~Level";
-    };
-    Control LB_LEVEL
-    {
-        Pos = MAP_APPFONT (  6, 15 ) ;
-        Size = MAP_APPFONT ( 25, 167 ) ;
-        TabStop = TRUE ;
-        Border = TRUE;
-    };
-    String ST_AUTHTYPE
-    {
-        Text [ en-US ] = "~Type";
-    };
-    FixedText FT_TOKEN
-    {
-        Pos = MAP_APPFONT (  37, 18 ) ;
-        Size = MAP_APPFONT ( 30, 8 ) ;
-        Text [ en-US ] = "~Structure";
-    };
-    PushButton PB_ALL_LEVELS
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_ALL_LEVELS";
-        Pos = MAP_APPFONT ( 209 , 14 ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "~All";
-    };
-    PushButton PB_ENTRYNO
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_ENTRYNO";
-        Pos = MAP_APPFONT ( 37 , 32 ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "Chapter no.";
-    };
-    PushButton PB_ENTRY
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_ENTRY";
-        Pos = MAP_APPFONT (  80, 32 ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "Entry text";
-    };
-    PushButton PB_CHAPTERINFO
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_CHAPTERINFO";
-        Pos = MAP_APPFONT ( 123 , 32 ) ;
-        Size = MAP_APPFONT ( 40, 14) ;
-        Text [ en-US ] = "~Chapter info";
-    };
-    PushButton PB_PAGENO
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_PAGENO";
-        Pos = MAP_APPFONT ( 166 , 32 ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "Page no.";
-    };
-    PushButton PB_TAB
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_TAB";
-        Pos = MAP_APPFONT ( 209 ,32  ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "Tab stop";
-    };
-    PushButton PB_HYPERLINK
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_HYPERLINK";
-        Pos = MAP_APPFONT ( 209 , 32 ) ;
-        Size = MAP_APPFONT ( 40, 14 ) ;
-        Text [ en-US ] = "H~yperlink";
-    };
-    ListBox LB_AUTHFIELD
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_AUTHFIELD";
-        Pos = MAP_APPFONT ( 37 , 33 ) ;
-        Size = MAP_APPFONT ( 59, 60 ) ;
-        DropDown = TRUE;
-        Border = TRUE;
-        Sort = TRUE;
-    };
-    PushButton PB_AUTHINSERT
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_AUTHINSERT";
-        Pos = MAP_APPFONT ( 99 , 32 ) ;
-        Size = MAP_APPFONT ( 39, 14 ) ;
-        Text [ en-US ] = "~Insert";
-    };
-    PushButton PB_AUTHREMOVE
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_AUTHREMOVE";
-        Pos = MAP_APPFONT ( 142 , 32 ) ;
-        Size = MAP_APPFONT ( 39, 14 ) ;
-        Text [ en-US ] = "~Remove";
-    };
-    FixedText FT_CHARSTYLE
-    {
-        Pos = MAP_APPFONT ( 37 , 55 ) ;
-        Size = MAP_APPFONT (60 , 8 ) ;
-        Text [ en-US ] = "Character Style";
-    };
-    ListBox LB_CHARSTYLE
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_CHARSTYLE";
-        Pos = MAP_APPFONT ( 100 , 53 ) ;
-        Size = MAP_APPFONT ( 93, 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-    PushButton PB_EDITSTYLE
-    {
-        HelpID = "sw:PushButton:TP_TOX_ENTRY:PB_EDITSTYLE";
-        Pos = MAP_APPFONT ( 199 , 52 ) ;
-        Size = MAP_APPFONT ( 50, 14 ) ;
-        Text [ en-US ] = "~Edit...";
-    };
-    FixedText FT_FILLCHAR
-    {
-        Pos = MAP_APPFONT ( 37 , 71 ) ;
-        Size = MAP_APPFONT (60 , 8 ) ;
-        Text [ en-US ] = "Fill character";
-    };
-    ComboBox CB_FILLCHAR
-    {
-        HelpID = "sw:ComboBox:TP_TOX_ENTRY:CB_FILLCHAR";
-        Pos = MAP_APPFONT ( 100 , 69 ) ;
-        Size = MAP_APPFONT ( 40, 40 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    };
-    FixedText FT_CHAPTERENTRY
-    {
-        Pos = MAP_APPFONT ( 37 , 71 ) ;
-        Size = MAP_APPFONT ( 60, 8 ) ;
-        Text [ en-US ] = "Chapter entry";
-    };
-    ListBox LB_CHAPTERENTRY
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_CHAPTERENTRY";
-        Pos = MAP_APPFONT ( 100 , 69 ) ;
-        Size = MAP_APPFONT ( 93, 40 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-    StringList [ en-US ] =
-    {
-            < "Number range only" ; > ;
-        < "Description only" ; > ;
-        < "Number range and description" ; > ;
-    };
-    };
-
-    FixedText FT_ENTRY_NO
-        {
-            Pos = MAP_APPFONT ( 37 , 71 ) ;
-            Size = MAP_APPFONT ( 60, 8 ) ;
-            Text [ en-US ] = "Format";
-        };
-    ListBox LB_ENTRY_NO
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_ENTRY_NO";
-        Pos = MAP_APPFONT ( 100 , 69 ) ;
-        Size = MAP_APPFONT ( 93, 40 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        StringList [ en-US ] =
-            {
-                < "Number" ; > ;
-                < "Number without separator" ; > ;
-            };
-    };
-
-    FixedText       FT_LEVEL_OL
-        {
-            Pos = MAP_APPFONT ( 37 , 87 ) ;
-            Size = MAP_APPFONT ( 60 , 8 ) ;
-            Text [ en-US ] = "Evaluate up to level";
-        };
-    NumericField    NF_LEVEL_OL
-        {
-        HelpID = "sw:NumericField:TP_TOX_ENTRY:NF_LEVEL_OL";
-            Pos = MAP_APPFONT ( 100 , 85 ) ;
-            Size = MAP_APPFONT ( 20 , 12 ) ;
-            Border = TRUE ;
-            TabStop = TRUE ;
-            Left = TRUE ;
-            Repeat = TRUE ;
-            Spin = TRUE ;
-            Minimum = 1 ;
-            Maximum = 10 ;
-            Value = 10 ;
-            SpinSize = 1 ;
-        };
-
-    FixedText FT_TABPOS
-    {
-        Pos = MAP_APPFONT ( 37 , 87 ) ;
-        Size = MAP_APPFONT ( 60, 8 ) ;
-        Text [ en-US ] = "Tab stop position";
-    };
-    MetricField MF_TABPOS
-    {
-        HelpID = "sw:MetricField:TP_TOX_ENTRY:MF_TABPOS";
-        Pos = MAP_APPFONT ( 100 , 85 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 0 ;
-        Maximum = 1999 ;
-        DecimalDigits = 2 ;
-        Value = 0 ;
-        Unit = FUNIT_CM ;
-        First = 0 ;
-        Last = 1999 ;
-        SpinSize = 5 ;
-    };
-    CheckBox CB_AUTORIGHT
-    {
-        HelpID = "sw:CheckBox:TP_TOX_ENTRY:CB_AUTORIGHT";
-        Pos = MAP_APPFONT ( 143 , 86 ) ;
-        Size = MAP_APPFONT ( 100, 10 ) ;
-        Text [ en-US ] = "Align right";
-    };
-    FixedLine FL_ENTRY
-    {
-        Pos = MAP_APPFONT ( 34 , 3 ) ;
-        Size = MAP_APPFONT ( 220, 8 ) ;
-        Text [ en-US ] = "Structure and Formatting";
-    };
-    CheckBox CB_RELTOSTYLE
-    {
-        HelpID = "sw:CheckBox:TP_TOX_ENTRY:CB_RELTOSTYLE";
-        Pos = MAP_APPFONT ( 37 , 110 ) ;
-        Size = MAP_APPFONT ( 200, 10 ) ;
-        Text [ en-US ] = "Tab position relati~ve to Paragraph Style indent";
-    };
-    FixedText FT_MAIN_ENTRY_STYLE
-    {
-        Pos = MAP_APPFONT ( 37 , 112 ) ;
-        Size = MAP_APPFONT ( 116, 8 ) ;
-        Text [ en-US ] = "Character Style for main entries";
-    };
-    ListBox LB_MAIN_ENTRY_STYLE
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_MAIN_ENTRY_STYLE";
-        Pos = MAP_APPFONT ( 157 , 110 ) ;
-        Size = MAP_APPFONT ( 92, 80 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        AutoHScroll = TRUE;
-    };
-
-    CheckBox CB_ALPHADELIM
-    {
-        HelpID = "sw:CheckBox:TP_TOX_ENTRY:CB_ALPHADELIM";
-        Pos = MAP_APPFONT ( 37 , 126 ) ;
-        Size = MAP_APPFONT ( 105, 10 ) ;
-        Text [ en-US ] = "Alphabetical delimiter";
-    };
-    CheckBox CB_COMMASEPARATED
-    {
-        HelpID = "sw:CheckBox:TP_TOX_ENTRY:CB_COMMASEPARATED";
-        Pos = MAP_APPFONT ( 37 , 140 ) ;
-        Size = MAP_APPFONT ( 105, 10 ) ;
-        Text [ en-US ] = "Key separated by commas";
-    };
-    FixedLine FL_FORMAT
-    {
-        Pos = MAP_APPFONT ( 34 , 99 ) ;
-        Size = MAP_APPFONT ( 220, 8  ) ;
-        Text [ en-US ] = "Format";
-    };
-    RadioButton RB_DOCPOS
-    {
-        HelpID = "sw:RadioButton:TP_TOX_ENTRY:RB_DOCPOS";
-        Pos = MAP_APPFONT ( 40 , 113) ;
-        Size = MAP_APPFONT ( 94, 10  ) ;
-        Text [ en-US ] = "Document ~position ";
-    };
-    RadioButton RB_SORTCONTENT
-    {
-        HelpID = "sw:RadioButton:TP_TOX_ENTRY:RB_SORTCONTENT";
-        Pos = MAP_APPFONT ( 136 , 113 ) ;
-        Size = MAP_APPFONT ( 90, 10  ) ;
-        Text [ en-US ] = "~Content";
-    };
-    FixedLine FL_SORTING
-    {
-        Pos = MAP_APPFONT ( 34 , 102 ) ;
-        Size = MAP_APPFONT ( 220, 8  ) ;
-        Text [ en-US ] = "Sort by";
-    };
-    FixedText FT_FIRSTKEY
-    {
-        Pos = MAP_APPFONT ( 40 , 140 ) ;
-        Size = MAP_APPFONT ( 10, 8  ) ;
-        Text = "~1" ;
-    };
-    ListBox LB_FIRSTKEY
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_FIRSTKEY";
-        Pos = MAP_APPFONT ( 60 , 138 ) ;
-        Size = MAP_APPFONT ( 159, 50  ) ;
-        Border = TRUE;
-        DropDown = TRUE;
-    };
-    ImageRadioButton RB_SORTUP1
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTUP1";
-        Pos = MAP_APPFONT ( 222 , 138 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10712.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        Check = TRUE;
-        QuickHelpText [ en-US ] = "Ascending";
-    };
-    ImageRadioButton RB_SORTDOWN1
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTDOWN1";
-        Pos = MAP_APPFONT ( 237 , 138 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10713.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        QuickHelpText [ en-US ] = "Descending";
-    };
-    ImageRadioButton RB_SORTUP2
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTUP2";
-        Pos = MAP_APPFONT ( 222 , 153 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10712.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        Check = TRUE;
-        QuickHelpText [ en-US ] = "Ascending";
-    };
-    ImageRadioButton RB_SORTDOWN2
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTDOWN2";
-        Pos = MAP_APPFONT ( 237 , 153 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10713.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        QuickHelpText [ en-US ] = "Descending";
-    };
-    ImageRadioButton RB_SORTUP3
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTUP3";
-        Pos = MAP_APPFONT ( 222 , 168 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10712.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        Check = TRUE;
-        QuickHelpText [ en-US ] = "Ascending";
-    };
-    ImageRadioButton RB_SORTDOWN3
-    {
-        HelpID = "sw:ImageRadioButton:TP_TOX_ENTRY:RB_SORTDOWN3";
-        Pos = MAP_APPFONT ( 237 ,168 ) ;
-        Size = MAP_APPFONT ( 12, 12  ) ;
-        RadioButtonImage =
-            Image
-            {
-                ImageBitmap = Bitmap{File = "sc10713.bmp"; };
-                MaskColor = IMAGE_MASK_COLOR ;
-            };
-        QuickHelpText [ en-US ] = "Descending";
-    };
-    FixedText FT_SECONDKEY
-    {
-        Pos = MAP_APPFONT ( 40 , 155 ) ;
-        Size = MAP_APPFONT ( 10, 8  ) ;
-        Text = "~2" ;
-    };
-    ListBox LB_SECONDKEY
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_SECONDKEY";
-        Pos = MAP_APPFONT ( 60 , 153 ) ;
-        Size = MAP_APPFONT ( 159, 50  ) ;
-        Border = TRUE;
-        DropDown = TRUE;
-    };
-    FixedText FT_THIRDDKEY
-    {
-        Pos = MAP_APPFONT ( 40 , 170 ) ;
-        Size = MAP_APPFONT ( 10, 8  ) ;
-        Text = "~3" ;
-    };
-    ListBox LB_THIRDKEY
-    {
-        HelpID = "sw:ListBox:TP_TOX_ENTRY:LB_THIRDKEY";
-        Pos = MAP_APPFONT ( 60 , 168 ) ;
-        Size = MAP_APPFONT ( 159, 50  ) ;
-        Border = TRUE;
-        DropDown = TRUE;
-    };
-    FixedLine FL_SORTKEY
-    {
-        Pos = MAP_APPFONT ( 34 , 126) ;
-        Size = MAP_APPFONT ( 220, 8  ) ;
-        Text [ en-US ] = "Sort keys";
-    };
-};
-
-Window WIN_TOKEN
-{
-    Pos = MAP_APPFONT (  70, 15 ) ;
-    Size = MAP_APPFONT ( 136, 14 ) ;
-    ImageButton WIN_LEFT_SCROLL
-    {
-        HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_LEFT_SCROLL";
-        Pos = MAP_APPFONT (  0, 0 ) ;
-        Size = MAP_APPFONT ( 10, 12 ) ;
-        Symbol = IMAGEBUTTON_ARROW_LEFT;
-        DialogControl        = FALSE;
-        TabStop              = FALSE;
-    };
-    Window WIN_CTRL_PARENT
-    {
-        Pos = MAP_APPFONT (  11, 0 ) ;
-        Size = MAP_APPFONT ( 114, 12 ) ;
-        DialogControl        = TRUE;
-    };
-    ImageButton WIN_RIGHT_SCROLL
-    {
-        HelpID = "sw:ImageButton:TP_TOX_ENTRY:WIN_RIGHT_SCROLL";
-        Pos = MAP_APPFONT (  126, 0 ) ;
-        Size = MAP_APPFONT ( 10, 12 ) ;
-        Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        DialogControl        = FALSE;
-        TabStop              = FALSE;
-    };
-    String STR_TOKEN_ENTRY_NO
-    {
-        Text [ en-US ] = "E#";
-    };
-    String STR_TOKEN_ENTRY
-    {
-        Text [ en-US ] = "E";
-    };
-    String STR_TOKEN_TAB_STOP
-    {
-        Text [ en-US ] = "T";
-    };
-    String STR_TOKEN_TEXT
-    {
-        Text = "";
-        //unused
-    };
-    String STR_TOKEN_PAGE_NUMS
-    {
-        Text [ en-US ] = "#";
-    };
-    String STR_TOKEN_CHAPTER_INFO
-    {
-        Text [ en-US ] = "CI";
-    };
-    String STR_TOKEN_LINK_START
-    {
-        Text [ en-US ] = "LS";
-    };
-    String STR_TOKEN_LINK_END
-    {
-        Text [ en-US ] = "LE";
-    };
-    String STR_TOKEN_AUTHORITY
-    {
-        Text [ en-US ] = "A";
-    };
-    String STR_TOKEN_HELP_ENTRY_NO
-    {
-        Text [ en-US ] = "Chapter number";
-    };
-    String STR_TOKEN_HELP_ENTRY
-    {
-        Text [ en-US ] = "Entry";
-    };
-    String STR_TOKEN_HELP_TAB_STOP
-    {
-        Text [ en-US ] = "Tab stop";
-    };
-    String STR_TOKEN_HELP_TEXT
-    {
-        Text [ en-US ] = "Text";
-    };
-    String STR_TOKEN_HELP_PAGE_NUMS
-    {
-        Text [ en-US ] = "Page number";
-    };
-    String STR_TOKEN_HELP_CHAPTER_INFO
-    {
-        Text [ en-US ] = "Chapter info";
-    };
-    String STR_TOKEN_HELP_LINK_START
-    {
-        Text [ en-US ] = "Hyperlink start";
-    };
-    String STR_TOKEN_HELP_LINK_END
-    {
-        Text [ en-US ] = "Hyperlink end";
-    };
-    String STR_TOKEN_HELP_AUTHORITY
-    {
-        Text [ en-US ] = "Bibliography entry: ";
-    };
-    String STR_CHARSTYLE
-    {
-        Text [ en-US ] = "Character Style: ";
     };
 };
 
