@@ -372,7 +372,7 @@ String ScAsciiOptions::WriteToString() const
                // Language
                OUString::number(eLang) + "," +
                // Import quoted field as text.
-               OUString::boolean( bQuotedFieldAsText ) + ",";
+               OUString::boolean( bQuotedFieldAsText ) + "," +
                // Detect special numbers.
                OUString::boolean( bDetectSpecialNumber );
 
