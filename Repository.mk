@@ -435,6 +435,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	smoketest \
 	subsequenttest \
 	test \
+	testtools_cppobj \
+	testtools_bridgetest \
+	testtools_constructors \
 	unobootstrapprotector \
 	unoexceptionprotector \
 	unotest \
@@ -606,12 +609,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
-))
-
-$(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
-	testtools_cppobj \
-	testtools_bridgetest \
-	testtools_constructors \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \

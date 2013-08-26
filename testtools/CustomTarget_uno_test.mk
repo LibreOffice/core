@@ -22,6 +22,7 @@ $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		$(call gb_Executable_get_command,uno) \
 		-s com.sun.star.test.bridge.BridgeTest \
 		-- com.sun.star.test.bridge.CppTestObject \
+		-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR)) \
 		-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target,uno_services)) \
 		-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb))
 
