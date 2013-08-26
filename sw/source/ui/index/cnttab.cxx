@@ -1574,7 +1574,6 @@ public:
         bNextControl(false),
         m_pParent( pTokenWin )
     {
-        SetHelpId( HID_TOX_ENTRY_EDIT );
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -1654,7 +1653,6 @@ public:
         bNextControl(false),
         m_pParent(pTokenWin)
     {
-        SetHelpId(HID_TOX_ENTRY_BUTTON);
     }
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
