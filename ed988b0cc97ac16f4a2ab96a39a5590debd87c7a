@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//8H4\u003d",
+        "filename": "avmedia/source/vlc/wrapper/SymbolLoader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-08-26T05:57:09Z",
+      "side": 1,
+      "message": "It should be /Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib . At least in VLC 2.0.8. But of course exactly where in the app bundle they keep the libvcl.dylib is their internal implementation detail. Having a \"lib\" subfolder under the \"MacOS\" folder is certainly not a \"normal\" way on OS X, so it might change in newer versions. Or be different in older ones.",
+      "revId": "ed988b0cc97ac16f4a2ab96a39a5590debd87c7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
