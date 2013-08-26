@@ -179,7 +179,7 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     return false;
 }
 
-String lcl_decodeSepString( const String & rSepNums, bool & o_bMergeFieldSeps )
+static String lcl_decodeSepString( const String & rSepNums, bool & o_bMergeFieldSeps )
 {
     String aFieldSeps;
     xub_StrLen nSub = comphelper::string::getTokenCount( rSepNums, '/');
