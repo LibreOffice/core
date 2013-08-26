@@ -17,6 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef indices
+#undef indices
+#endif
+#define indices dummy2_indices
+
+#ifdef extents
+#undef extents
+#endif
+#define extents dummy2_extents
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
@@ -41,6 +51,14 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <toolkit/helper/convert.hxx>
+
+#ifdef indices
+#undef indices
+#endif
+
+#ifdef extents
+#undef extents
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
