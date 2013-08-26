@@ -934,7 +934,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
         const sal_Unicode cSep = ';';
         OUString aQuotedPairs( "\"\"" );
         xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
-        maTables.Erase();
+        maTables = "";
         sal_Int32 nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
@@ -952,7 +952,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
     }
 }
 
-void XclImpWebQuery::Apply( ScDocument& rDoc, const String& rFilterName )
+void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
 {
     if( maURL.Len() && (meMode != xlWQUnknown) && rDoc.GetDocumentShell() )
     {

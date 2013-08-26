@@ -197,8 +197,8 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 
         UpdateNow().Enable();
 
-        String sType, sLink;
-        String *pLinkNm = &sLink, *pFilter = 0;
+        OUString sType, sLink;
+        OUString *pLinkNm = &sLink, *pFilter = 0;
 
         if( FILEOBJECT & pLink->GetObjType() )
         {
@@ -219,7 +219,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
                 Manual().Check();
         }
 
-        String aFileName;
+        OUString aFileName;
         pLinkMgr->GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
         aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
         FileName().SetText( aFileName );
@@ -350,8 +350,8 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         {
             uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
-            String sType, sFile, sLinkName;
-            String  sFilter;
+            OUString sType, sFile, sLinkName;
+            OUString sFilter;
             SvTreeListEntry* pEntry = Links().FirstSelected();
             SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
             pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
@@ -379,7 +379,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                     INetURLObject aUrl_(sFile);
                     INetURLObject aUrl2(aPath, INET_PROT_FILE);
                     aUrl2.insertName( aUrl_.getName() );
-                    String sNewLinkName;
+                    OUString sNewLinkName;
                     MakeLnkName( sNewLinkName, 0 ,
                             aUrl2.GetMainURL(INetURLObject::DECODE_TO_IURI), sLinkName, &sFilter);
                     pLink->SetLinkSourceName( sNewLinkName );
@@ -621,7 +621,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
 void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_Bool bSelect )
 {
-    String aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
+    OUString aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 
     pLinkMgr->GetDisplayNames( (SvBaseLink*)&rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
@@ -641,14 +641,14 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
         aTxt = aFileName;
 
     aEntry = aTxt;
-    aEntry += '\t';
+    aEntry += "\t";
     if( OBJECT_CLIENT_GRF == rLink.GetObjType() )
         aEntry += sFilter;
     else
         aEntry += sLinkNm;
-    aEntry += '\t';
+    aEntry += "\t";
     aEntry += sTypeNm;
-    aEntry += '\t';
+    aEntry += "\t";
     aEntry += ImplGetStateStr( rLink );
 
     SvTreeListEntry * pE = Links().InsertEntryToColumn( aEntry, nPos );

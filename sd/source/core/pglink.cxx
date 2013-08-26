@@ -70,9 +70,9 @@ SdPageLink::~SdPageLink()
         * Only standard pages are allowed to be linked
         * The corresponding note pages are updated automaticly
         **********************************************************************/
-        String aFileName;
-        String aBookmarkName;
-        String aFilterName;
+        OUString aFileName;
+        OUString aBookmarkName;
+        OUString aFilterName;
         pLinkManager->GetDisplayNames( this,0, &aFileName, &aBookmarkName,
                                       &aFilterName);
         pPage->SetFileName(aFileName);
@@ -85,7 +85,7 @@ SdPageLink::~SdPageLink()
             /******************************************************************
             * the linked page is replaced in the model
             ******************************************************************/
-            if (aBookmarkName.Len() == 0)
+            if (aBookmarkName.isEmpty())
             {
                 // no page name specified: we assume it is the first page
                 aBookmarkName = pBookmarkDoc->GetSdPage(0, PK_STANDARD)->GetName();

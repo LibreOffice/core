@@ -30,8 +30,8 @@ namespace sfx2 { class FileDialogHelper; }
 
 class SvFileObject : public sfx2::SvLinkSource
 {
-    String              sFileNm;
-    String              sFilter;
+    OUString            sFileNm;
+    OUString            sFilter;
     String              sReferer;
     Link                aEndEditLink;
     SfxMediumRef        xMed;

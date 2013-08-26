@@ -321,7 +321,7 @@ void SdPage::ConnectLink()
 {
     sfx2::LinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
 
-    if (pLinkManager && !mpPageLink && maFileName.Len() && maBookmarkName.Len() &&
+    if (pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
         mePageKind==PK_STANDARD && !IsMasterPage() &&
         ( (SdDrawDocument*) pModel)->IsNewOrLoadCompleted())
     {
@@ -335,7 +335,7 @@ void SdPage::ConnectLink()
         {
             // No links to document owned pages!
             mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);
-            String aFilterName(SdResId(STR_IMPRESS));
+            OUString aFilterName(SdResId(STR_IMPRESS));
             pLinkManager->InsertFileLink(*mpPageLink, OBJECT_CLIENT_FILE,
                                          maFileName, &aFilterName, &maBookmarkName);
             mpPageLink->Connect();

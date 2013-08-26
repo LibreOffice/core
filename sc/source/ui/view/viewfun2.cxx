@@ -2403,8 +2403,8 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
         SfxMedium* pMed = pSrcShell->GetMedium();
-        String aFileName = pMed->GetName();
-        String aFilterName;
+        OUString aFileName = pMed->GetName();
+        OUString aFilterName;
         if (pMed->GetFilter())
             aFilterName = pMed->GetFilter()->GetFilterName();
         String aOptions = ScDocumentLoader::GetOptions(*pMed);

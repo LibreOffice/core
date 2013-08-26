@@ -80,12 +80,12 @@ void ImpSdrObjTextLink::Closed()
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
         if( pData )
         {
-            String aFile;
-            String aFilter;
+            OUString aFile;
+            OUString aFilter;
             pLinkManager->GetDisplayNames( this, 0,&aFile, 0, &aFilter );
 
-            if( !pData->aFileName.Equals( aFile ) ||
-                !pData->aFilterName.Equals( aFilter ))
+            if( pData->aFileName != aFile ||
+                pData->aFilterName != aFilter )
             {
                 pData->aFileName = aFile;
                 pData->aFilterName = aFilter;
@@ -267,17 +267,11 @@ void SdrTextObj::ImpLinkAnmeldung()
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // don't register twice
-        pData->pLink=new ImpSdrObjTextLink(this);
-#ifdef __GNUC__
+        pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
-                                     pData->aFilterName.Len() ?
-                                      &pData->aFilterName : (const String *)NULL,
-                                     (const String *)NULL);
-#else
-        pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
-                                     pData->aFilterName.Len() ? &pData->aFilterName : NULL,NULL);
-#endif
-        pData->pLink->Connect();
+                                     !pData->aFilterName.isEmpty() ?
+                                      &pData->aFilterName : NULL,
+                                     NULL);
     }
 }
 

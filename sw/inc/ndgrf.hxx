@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
 
-    void InsertLink( const String& rGrfName, const String& rFltName );
+    void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
     sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
     /** adjust return type and rename method to
@@ -171,7 +171,7 @@ public:
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
-    sal_Bool ReRead( const String& rGrfName, const String& rFltName,
+    sal_Bool ReRead( const String& rGrfName, const OUString& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  sal_Bool bModify = sal_True );

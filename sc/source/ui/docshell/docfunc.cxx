@@ -5222,7 +5222,7 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
 //------------------------------------------------------------------------
 
 sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
-                                const String& rOptions, const String& rSource,
+                                const String& rOptions, const OUString& rSource,
                                 const ScRange& rDestRange, sal_uLong nRefresh,
                                 sal_Bool bFitBlock, sal_Bool bApi )
 {
@@ -5278,7 +5278,7 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
                                         aNewOptions, rSource, rDestRange, nRefresh );
-    String aTmp = aFilterName;
+    OUString aTmp = aFilterName;
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aTmp, &rSource );
 
     //  Undo fuer den leeren Link

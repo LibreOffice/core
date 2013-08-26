@@ -134,7 +134,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 }
 
 sal_Bool SwGrfNode::ReRead(
-    const String& rGrfName, const String& rFltName,
+    const String& rGrfName, const OUString& rFltName,
     const Graphic* pGraphic, const GraphicObject* pGrfObj,
     sal_Bool bNewGrf )
 {
@@ -153,11 +153,11 @@ sal_Bool SwGrfNode::ReRead(
         if( rGrfName.Len() )
         {
             // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
-            String sCmd( rGrfName );
-            if( rFltName.Len() )
+            OUString sCmd( rGrfName );
+            if( !rFltName.isEmpty() )
             {
                 sal_uInt16 nNewType;
-                if( rFltName.EqualsAscii( "DDE" ))
+                if( rFltName == "DDE" )
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
@@ -644,7 +644,7 @@ sal_Bool SwGrfNode::RestorePersistentData()
     return sal_True;
 }
 
-void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
+void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 {
     refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
 
@@ -652,25 +652,25 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
     if( GetNodes().IsDocNodes() )
     {
         refLink->SetVisible( pIDLA->IsVisibleLinks() );
-        if( rFltName.EqualsAscii( "DDE" ))
+        if( rFltName == "DDE" )
         {
             sal_Int32 nTmp = 0;
             String sApp, sTopic, sItem;
-            sApp = rGrfName.GetToken( 0, sfx2::cTokenSeparator, nTmp );
-            sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeparator, nTmp );
-            sItem = rGrfName.Copy( nTmp );
+            sApp = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
+            sTopic = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
+            sItem = rGrfName.copy( nTmp );
             pIDLA->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
         }
         else
         {
-            sal_Bool bSync = rFltName.EqualsAscii( "SYNCHRON" );
+            sal_Bool bSync = rFltName == "SYNCHRON";
             refLink->SetSynchron( bSync );
             refLink->SetContentType( SOT_FORMATSTR_ID_SVXB );
 
             pIDLA->GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,
-                                (!bSync && rFltName.Len() ? &rFltName : 0) );
+                                (!bSync && !rFltName.isEmpty() ? &rFltName : 0) );
         }
     }
     maGrfObj.SetLink( rGrfName );
@@ -946,15 +946,15 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
-    String sFile, sFilter;
+    OUString sFile, sFilter;
     if( IsLinkedFile() )
         rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
     else if( IsLinkedDDE() )
     {
-        String sTmp1, sTmp2;
+        OUString sTmp1, sTmp2;
         rMgr.GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
         sfx2::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
-        sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
+        sFilter = "DDE";
     }
 
     SwGrfNode* pGrfNd = pDoc->GetNodes().MakeGrfNode( rIdx, sFile, sFilter,
@@ -1039,7 +1039,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
         const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
-        String sFileNm;
+        OUString sFileNm;
         for( sal_uInt16 n = rLnks.size(); n; )
         {
             ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
@@ -1158,7 +1158,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
     {
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
 
-        String sGrfNm;
+        OUString sGrfNm;
         refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
 
         mpThreadConsumer->CreateThread( sGrfNm );
@@ -1212,10 +1212,9 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
 
     if ( IsLinkedFile() )
     {
-        String sGrfNm;
+        OUString sGrfNm;
         refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
-        String sProtocol( "vnd.sun.star.pkg:" );
-        if ( sGrfNm.CompareTo( sProtocol, sProtocol.Len() ) != 0 )
+        if ( !sGrfNm.startsWith( "vnd.sun.star.pkg:" ) )
         {
             bRet = true;
         }

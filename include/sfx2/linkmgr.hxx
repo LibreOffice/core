@@ -63,7 +63,7 @@ class SFX2_DLLPUBLIC LinkManager
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
     sal_Bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
-                            const String* pName = 0 );
+                            const OUString* pName = 0 );
 public:
 
     enum LinkState
@@ -95,9 +95,9 @@ public:
 
     // the links connect to a SvLinkSource and adds to the list
     sal_Bool        InsertDDELink( SvBaseLink*,
-                        const String& rServer,
-                        const String& rTopic,
-                        const String& rItem );
+                        const OUString& rServer,
+                        const OUString& rTopic,
+                        const OUString& rItem );
 
     // if everything is already set at the link!
     sal_Bool        InsertDDELink( SvBaseLink* );
@@ -105,13 +105,9 @@ public:
     // Connect the links to a pseudo-object and add to the list
     bool InsertFileLink( sfx2::SvBaseLink&,
                         sal_uInt16 nFileType,
-                        const String& rFileNm,
-                        const String* pFilterNm = 0,
-                        const String* pRange = 0 );
-
-    bool InsertFileLink(
-        sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const OUString& rFileNm,
-        const OUString* pFilterNm = NULL, const OUString* pRange = NULL);
+                        const OUString& rFileNm,
+                        const OUString* pFilterNm = NULL,
+                        const OUString* pRange = NULL );
 
     void ReconnectDdeLink(SfxObjectShell& rServer);
 
@@ -126,14 +122,10 @@ public:
 
     // Obtain the string for the dialog
     bool GetDisplayNames( const SvBaseLink *,
-                                    String* pType,
-                                    String* pFile = 0,
-                                    String* pLink = 0,
-                                    String* pFilter = 0 ) const;
-
-    bool GetDisplayNames(
-        const SvBaseLink* pLink, OUString* pType, OUString* pFile = NULL,
-        OUString* pLinkStr = NULL, OUString* pFilter = NULL) const;
+                                    OUString* pType,
+                                    OUString* pFile = NULL,
+                                    OUString* pLink = NULL,
+                                    OUString* pFilter = NULL ) const;
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 
@@ -166,7 +158,7 @@ public:
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
-    static sal_Bool GetGraphicFromAny( const String& rMimeType,
+    static sal_Bool GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf );
 
@@ -182,11 +174,11 @@ const sal_Unicode cTokenSeparator = 0xFFFF;
 // create a string for the SvLinkName. For:
 // - DDE the first 3 Strings, (Server, Topic, Item)
 // - File-/Graphics-LinkNames the last 3 Strings (FileName, Region, Filter)
-SFX2_DLLPUBLIC void MakeLnkName( String& rName,
-                 const String* pType,       // Can also be null!!
-                 const String& rFile,
-                 const String& rLink,
-                 const String* pFilter = 0 );
+SFX2_DLLPUBLIC void MakeLnkName( OUString& rName,
+                 const OUString* pType,       // Can also be null!!
+                 const OUString& rFile,
+                 const OUString& rLink,
+                 const OUString* pFilter = 0 );
 
 }
 

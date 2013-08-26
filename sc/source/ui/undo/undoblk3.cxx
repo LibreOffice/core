@@ -1489,9 +1489,9 @@ static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const Stri
 }
 
 ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,
-                            const String& rDoc,
-                            const String& rFlt, const String& rOpt,
-                            const String& rArea, const ScRange& rDestRange,
+                            const OUString& rDoc,
+                            const OUString& rFlt, const String& rOpt,
+                            const OUString& rArea, const ScRange& rDestRange,
                             sal_uLong nRefresh )
     :   ScSimpleUndo    ( pShell ),
         aDocName        ( rDoc ),
@@ -1552,8 +1552,8 @@ bool ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoRemoveAreaLink::ScUndoRemoveAreaLink( ScDocShell* pShell,
-                            const String& rDoc, const String& rFlt, const String& rOpt,
-                            const String& rArea, const ScRange& rDestRange,
+                            const OUString& rDoc, const OUString& rFlt, const String& rOpt,
+                            const OUString& rArea, const ScRange& rDestRange,
                             sal_uLong nRefresh )
     :   ScSimpleUndo    ( pShell ),
         aDocName        ( rDoc ),

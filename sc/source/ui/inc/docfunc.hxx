@@ -197,8 +197,8 @@ public:
     virtual sal_Bool        CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     virtual sal_Bool        InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );
 
-    virtual sal_Bool        InsertAreaLink( const String& rFile, const String& rFilter,
-                                            const String& rOptions, const String& rSource,
+    sal_Bool                InsertAreaLink( const String& rFile, const String& rFilter,
+                                            const String& rOptions, const OUString& rSource,
                                             const ScRange& rDestRange, sal_uLong nRefresh,
                                             sal_Bool bFitBlock, sal_Bool bApi );
 

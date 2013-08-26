@@ -85,7 +85,7 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
 {
     FreeResource();
 
-    String sServer, sTopic, sItem;
+    OUString sServer, sTopic, sItem;
     pLink->GetLinkManager()->GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
 
     aEdDdeApp.SetText( sServer );
@@ -96,12 +96,12 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
     aEdDdeTopic.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
     aEdDdeItem.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
 
-    aOKButton1.Enable( sServer.Len() && sTopic.Len() && sItem.Len() );
+    aOKButton1.Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
 }
 
 String SvDDELinkEditDialog::GetCmd() const
 {
-    String sCmd( aEdDdeApp.GetText() ), sRet;
+    OUString sCmd( aEdDdeApp.GetText() ), sRet;
     ::sfx2::MakeLnkName( sRet, &sCmd, aEdDdeTopic.GetText(), aEdDdeItem.GetText() );
     return sRet;
 }
@@ -215,10 +215,10 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     if( !pSvLink->GetLinkManager() )
         return sal_False;
 
-    String sServer, sTopic;
+    OUString sServer, sTopic;
     pSvLink->GetLinkManager()->GetDisplayNames( pSvLink, &sServer, &sTopic, &sItem );
 
-    if( !sServer.Len() || !sTopic.Len() || !sItem.Len() )
+    if( sServer.isEmpty() || sTopic.isEmpty() || sItem.isEmpty() )
         return sal_False;
 
     pConnection = new DdeConnection( sServer, sTopic );
@@ -226,7 +226,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     {
        // Is it possible to address the system-Topic?
        // then the server is up, it just does not know the topic!
-        if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )
+        if( sTopic.equalsIgnoreAsciiCase( "SYSTEM" ) )
         {
             sal_Bool bSysTopic;
             {

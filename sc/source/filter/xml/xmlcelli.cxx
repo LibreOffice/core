@@ -996,8 +996,8 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
             ScRange aDestRange( rPosition.Col(), rPosition.Row(), rPosition.Tab(),
                 rPosition.Col() + static_cast<SCCOL>(pCellRangeSource->nColumns - 1),
                 rPosition.Row() + static_cast<SCROW>(pCellRangeSource->nRows - 1), rPosition.Tab() );
-            String sFilterName( pCellRangeSource->sFilterName );
-            String sSourceStr( pCellRangeSource->sSourceStr );
+            OUString sFilterName( pCellRangeSource->sFilterName );
+            OUString sSourceStr( pCellRangeSource->sSourceStr );
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
                 sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
             sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();

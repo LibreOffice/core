@@ -2020,7 +2020,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 sal_Bool bMsg )
 {
     // data from Clipboardformat
-    String aApp, aTopic, aItem;
+    OUString aApp, aTopic, aItem;
 
     {
         SotStorageStreamRef xStrm;
@@ -2036,7 +2036,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         aItem = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
     }
 
-    String aCmd;
+    OUString aCmd;
     sfx2::MakeLnkName( aCmd, &aApp, aTopic, aItem );
 
     // do we want to read in a graphic now?

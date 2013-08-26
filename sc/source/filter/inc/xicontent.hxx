@@ -206,7 +206,7 @@ public:
     void                ReadWqtables( XclImpStream& rStrm );
 
     /** Inserts the web query into the document. */
-    void                Apply( ScDocument& rDoc, const String& rFilterName );
+    void                Apply( ScDocument& rDoc, const OUString& rFilterName );
 
 private:
     /** Specifies the type of the web query (which ranges are imported). */
@@ -219,7 +219,7 @@ private:
     };
 
     String              maURL;          /// Source document URL.
-    String              maTables;       /// List of source range names.
+    OUString            maTables;       /// List of source range names.
     ScRange             maDestRange;    /// Destination range.
     XclImpWebQueryMode  meMode;         /// Current mode of the web query.
     sal_uInt16          mnRefresh;      /// Refresh time in minutes.

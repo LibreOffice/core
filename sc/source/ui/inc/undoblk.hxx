@@ -741,9 +741,9 @@ class ScUndoInsertAreaLink : public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoInsertAreaLink( ScDocShell* pShell,
-                                          const String& rDoc,
-                                          const String& rFlt, const String& rOpt,
-                                          const String& rArea, const ScRange& rDestRange,
+                                          const OUString& rDocName,
+                                          const OUString& rFltName, const String& rOptions,
+                                          const OUString& rAreaName, const ScRange& rDestRange,
                                           sal_uLong nRefreshDelay );
     virtual         ~ScUndoInsertAreaLink();
 
@@ -755,10 +755,10 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String          aDocName;
-    String          aFltName;
+    OUString        aDocName;
+    OUString        aFltName;
     String          aOptions;
-    String          aAreaName;
+    OUString        aAreaName;
     ScRange         aRange;
     sal_uLong           nRefreshDelay;
 };
@@ -769,9 +769,9 @@ class ScUndoRemoveAreaLink : public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoRemoveAreaLink( ScDocShell* pShell,
-                                          const String& rDoc,
-                                          const String& rFlt, const String& rOpt,
-                                          const String& rArea, const ScRange& rDestRange,
+                                          const OUString& rDocName,
+                                          const OUString& rFltName, const String& rOptions,
+                                          const OUString& rAreaName, const ScRange& rDestRange,
                                           sal_uLong nRefreshDelay );
     virtual         ~ScUndoRemoveAreaLink();
 
@@ -783,10 +783,10 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String          aDocName;
-    String          aFltName;
+    OUString        aDocName;
+    OUString        aFltName;
     String          aOptions;
-    String          aAreaName;
+    OUString        aAreaName;
     ScRange         aRange;
     sal_uLong           nRefreshDelay;
 };

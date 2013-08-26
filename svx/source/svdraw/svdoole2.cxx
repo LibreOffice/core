@@ -900,9 +900,9 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
         sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
         if ( pLinkManager )
         {
-            String aNewLinkURL;
+            OUString aNewLinkURL;
             pLinkManager->GetDisplayNames( mpImpl->mpObjectLink, 0, &aNewLinkURL, 0, 0 );
-            if ( !aNewLinkURL.EqualsIgnoreCaseAscii( mpImpl->maLinkURL ) )
+            if ( !aNewLinkURL.equalsIgnoreAsciiCase( mpImpl->maLinkURL ) )
             {
                 const_cast<SdrOle2Obj*>(this)->GetObjRef_Impl();
                 uno::Reference< embed::XCommonEmbedPersist > xPersObj( xObjRef.GetObject(), uno::UNO_QUERY );

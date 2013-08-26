@@ -58,9 +58,9 @@ TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
 
-ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
-                        const String& rFilter, const String& rOpt,
-                        const String& rArea, const ScRange& rDest,
+ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
+                        const OUString& rFilter, const OUString& rOpt,
+                        const OUString& rArea, const ScRange& rDest,
                         sal_uLong nRefresh ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer  ( nRefresh ),
@@ -127,8 +127,8 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
             aArea = aSourceArea;
 
             // adjust in dialog:
-            String aNewLinkName;
-            String aTmp = aFilter;
+            OUString aNewLinkName;
+            OUString aTmp = aFilter;
             sfx2::MakeLnkName(aNewLinkName, NULL, aFile, aArea, &aTmp);
             aFilter = aTmp;
             SetName( aNewLinkName );
@@ -168,8 +168,8 @@ void ScAreaLink::SetDestArea(const ScRange& rNew)
     aDestArea = rNew;           // fuer Undo
 }
 
-void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
-                                const String& rArea)
+void ScAreaLink::SetSource(const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
+                                const OUString& rArea)
 {
     aFileName   = rDoc;
     aFilterName = rFlt;
@@ -177,13 +177,13 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     aSourceArea = rArea;
 
     //  also update link name for dialog
-    String aNewLinkName;
+    OUString aNewLinkName;
     sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
     SetName( aNewLinkName );
 }
 
-bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
-                            const String& rSource, const ScRange& rDest ) const
+bool ScAreaLink::IsEqual( const OUString& rFile, const OUString& rFilter, const OUString& rOpt,
+                            const OUString& rSource, const ScRange& rDest ) const
 {
     return aFileName == rFile && aFilterName == rFilter && aOptions == rOpt &&
             aSourceArea == rSource && aDestArea.aStart == rDest.aStart;
@@ -229,12 +229,12 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUStr
 
 //  ausfuehren:
 
-sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
-                            const String& rNewArea, sal_uLong nNewRefresh )
+sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
+                            const OUString& rNewArea, sal_uLong nNewRefresh )
 {
     //  Dokument laden - wie TabLink
 
-    if (!rNewFile.Len() || !rNewFilter.Len())
+    if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
     String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
@@ -251,7 +251,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if ( rNewFilter != aFilterName )
-        aOptions.Erase();
+        aOptions = "";
 
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, pFilter);
 
@@ -504,7 +504,7 @@ IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl)
                  pImpl->m_pDialog->GetSource(), pImpl->m_pDialog->GetRefresh() );
 
         //  copy source data from members (set in Refresh) into link name for dialog
-        String aNewLinkName;
+        OUString aNewLinkName;
         sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }

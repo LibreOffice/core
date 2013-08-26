@@ -33,7 +33,7 @@ namespace sfx2
 
 class SvDDEObject : public SvLinkSource
 {
-    String sItem;
+    OUString sItem;
 
     DdeConnection* pConnection;
     DdeLink* pLink;

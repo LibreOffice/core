@@ -179,7 +179,7 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nObjType,
                                 sal_uInt16 nUpdateMode,
-                                const String* pName )
+                                const OUString* pName )
 {
     // This First
     pLink->SetObjType( nObjType );
@@ -191,14 +191,14 @@ sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
 
 
 sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink,
-                                    const String& rServer,
-                                    const String& rTopic,
-                                    const String& rItem )
+                                    const OUString& rServer,
+                                    const OUString& rTopic,
+                                    const OUString& rItem )
 {
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
         return sal_False;
 
-    String sCmd;
+    OUString sCmd;
     ::sfx2::MakeLnkName( sCmd, &rServer, rTopic, rItem );
 
     pLink->SetObjType( OBJECT_CLIENT_DDE );
@@ -222,10 +222,10 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 
 // Obtain the string for the dialog
 bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
-                                        String* pType,
-                                        String* pFile,
-                                        String* pLinkStr,
-                                        String* pFilter ) const
+                                        OUString* pType,
+                                        OUString* pFile,
+                                        OUString* pLinkStr,
+                                        OUString* pFilter ) const
 {
     bool bRet = false;
     const String sLNm( pLink->GetLinkSourceName() );
@@ -280,23 +280,6 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
         }
     }
 
-    return bRet;
-}
-
-bool LinkManager::GetDisplayNames(
-    const SvBaseLink* pLink, OUString* pType, OUString* pFile,
-    OUString* pLinkStr, OUString* pFilter) const
-{
-    String aType, aFile, aLinkStr, aFilter;
-    bool bRet = GetDisplayNames(pLink, &aType, &aFile, &aLinkStr, &aFilter);
-    if (pType)
-        *pType = aType;
-    if (pFile)
-        *pFile = aFile;
-    if (pLinkStr)
-        *pLinkStr = aLinkStr;
-    if (pFilter)
-        *pFilter = aFilter;
     return bRet;
 }
 
@@ -389,26 +372,26 @@ void LinkManager::RemoveServer( SvLinkSource* pObj )
 }
 
 
-void MakeLnkName( String& rName, const String* pType, const String& rFile,
-                    const String& rLink, const String* pFilter )
+void MakeLnkName( OUString& rName, const OUString* pType, const OUString& rFile,
+                    const OUString& rLink, const OUString* pFilter )
 {
     if( pType )
     {
         rName = comphelper::string::strip(*pType, ' ');
-        rName += cTokenSeparator;
+        rName += OUString(cTokenSeparator);
     }
-    else if( rName.Len() )
-        rName.Erase();
+    else if( !rName.isEmpty() )
+        rName = "";
 
     rName += rFile;
 
     rName = comphelper::string::strip(rName, ' ');
-    rName += cTokenSeparator;
+    rName += OUString(cTokenSeparator);
     rName = comphelper::string::strip(rName, ' ');
     rName += rLink;
     if( pFilter )
     {
-        rName += cTokenSeparator;
+        rName += OUString(cTokenSeparator);
         rName += *pFilter;
         rName = comphelper::string::strip(rName, ' ');
     }
@@ -426,11 +409,11 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
     for (size_t i = 0; i < n; ++i)
     {
         ::sfx2::SvBaseLink* p = *rLinks[i];
-        String aType, aFile, aLink, aFilter;
+        OUString aType, aFile, aLink, aFilter;
         if (!GetDisplayNames(p, &aType, &aFile, &aLink, &aFilter))
             continue;
 
-        if (!aType.EqualsAscii("soffice"))
+        if (aType != "soffice")
             // DDE connections between OOo apps are always named 'soffice'.
             continue;
 
@@ -443,7 +426,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
             // This DDE link is not associated with this server shell...  Skip it.
             continue;
 
-        if (!aLink.Len())
+        if (aLink.isEmpty())
             continue;
 
         LinkServerShell(aLink, rServer, *p);
@@ -462,25 +445,6 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
             &rLink, aFl.MimeType,
             sfx2::LINKUPDATE_ONCALL == rLink.GetUpdateMode() ? ADVISEMODE_ONLYONCE : 0);
     }
-}
-
-bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
-                                    sal_uInt16 nFileType,
-                                    const String& rFileNm,
-                                    const String* pFilterNm,
-                                    const String* pRange )
-{
-    if( !( OBJECT_CLIENT_SO & rLink.GetObjType() ))
-        return false;
-
-    String sCmd( rFileNm );
-    sCmd += ::sfx2::cTokenSeparator;
-    if( pRange )
-        sCmd += *pRange;
-    if( pFilterNm )
-        ( sCmd += ::sfx2::cTokenSeparator ) += *pFilterNm;
-
-    return InsertLink( &rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &sCmd );
 }
 
 bool LinkManager::InsertFileLink(
@@ -503,7 +467,7 @@ bool LinkManager::InsertFileLink(
         aBuf.append(*pFilterNm);
     }
 
-    String aCmd = aBuf.makeStringAndClear();
+    OUString aCmd = aBuf.makeStringAndClear();
     return InsertLink(&rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &aCmd);
 }
 
@@ -540,7 +504,7 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
 
 // ----------------------------------------------------------------------
 
-sal_Bool LinkManager::GetGraphicFromAny( const String& rMimeType,
+sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf )
 {
@@ -598,9 +562,9 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
     SfxObjectShell* pFndShell = 0;
     sal_uInt16 nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
-    String sTopic, sItem, sReferer;
+    OUString sTopic, sItem, sReferer;
     LinkManager* pLinkMgr = pLink->GetLinkManager();
-    if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && sTopic.Len())
+    if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && !sTopic.isEmpty())
     {
         // first only loop over the DocumentShells the shells and find those
         // with the name:
@@ -656,7 +620,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     }
 
     // empty topics are not allowed - which document is it
-    if( !sTopic.Len() )
+    if( sTopic.isEmpty() )
         return sal_False;
 
     if (pFndShell)

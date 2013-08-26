@@ -97,8 +97,8 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     friend class                ImpSdrObjTextLink;
 
     SdrTextObj*                 pObj;
-    String                      aFileName;   // Name des referenzierten Dokuments
-    String                      aFilterName; // ggf. ein Filter
+    OUString                    aFileName;   // Name des referenzierten Dokuments
+    OUString                    aFilterName; // ggf. ein Filter
     DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
     ImpSdrObjTextLink*          pLink;
     rtl_TextEncoding            eCharSet;

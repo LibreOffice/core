@@ -305,7 +305,7 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 {
     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
-    const sal_uInt16 nFilter = sFilter.Len() && rGF.GetImportFormatCount()
+    const sal_uInt16 nFilter = !sFilter.isEmpty() && rGF.GetImportFormatCount()
                             ? rGF.GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
@@ -358,12 +358,12 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             DBG_WARNING3( "Graphic error [%d] - [%s] URL[%s]",
                             nRes,
                             xMed->GetPhysicalName().getStr(),
-                            sFileNm.GetBuffer() );
+                            sFileNm.getStr() );
         }
         else
         {
             DBG_WARNING2( "Graphic error [%d] - [%s]",
-                            nRes, sFileNm.GetBuffer() );
+                            nRes, sFileNm.getStr() );
         }
     }
 #endif
@@ -420,7 +420,7 @@ String impl_getFilter( const String& _rURL )
 void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& rEndEditHdl )
 {
     aEndEditLink = rEndEditHdl;
-    String sFile, sRange, sTmpFilter;
+    OUString sFile, sRange, sTmpFilter;
     if( pLink && pLink->GetLinkManager() )
     {
         pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFile, &sRange, &sTmpFilter );
@@ -439,15 +439,15 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 if( !aDlg.Execute() )
                 {
                     sFile = aDlg.GetPath();
-                    sFile += ::sfx2::cTokenSeparator;
-                    sFile += ::sfx2::cTokenSeparator;
+                    sFile += OUString(::sfx2::cTokenSeparator);
+                    sFile += OUString(::sfx2::cTokenSeparator);
                     sFile += aDlg.GetCurrentFilter();
 
                     if ( aEndEditLink.IsSet() )
                         aEndEditLink.Call( &sFile );
                 }
                 else
-                    sFile.Erase();
+                    sFile = "";
             }
             break;
 
@@ -483,7 +483,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
             break;
 
             default:
-                sFile.Erase();
+                sFile = "";
         }
     }
 }

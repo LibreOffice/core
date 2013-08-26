@@ -642,7 +642,7 @@ bool SfxDdeDocTopic_Impl::StartAdviseLoop()
     if( pNewObj )
     {
         // then we also establish a corresponding SvBaseLink
-        String sNm, sTmp( Application::GetAppName() );
+        OUString sNm, sTmp( Application::GetAppName() );
         ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
         new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
         bRet = true;

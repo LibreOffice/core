@@ -2486,7 +2486,7 @@ static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks&
         {
                 ::sfx2::SvBaseLinkRef xLink = pLnk;
 
-                String sFName;
+                OUString sFName;
                 rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
 
                 INetURLObject aURL( sFName );

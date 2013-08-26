@@ -33,10 +33,10 @@ class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     AreaLink_Impl*  pImpl;
-    String          aFileName;
-    String          aFilterName;
-    String          aOptions;
-    String          aSourceArea;
+    OUString        aFileName;
+    OUString        aFilterName;
+    OUString        aOptions;
+    OUString        aSourceArea;
     ScRange         aDestArea;
     bool            bAddUndo;
     bool            bInCreate;
@@ -45,9 +45,9 @@ private:
 
 public:
     TYPEINFO();
-    ScAreaLink( SfxObjectShell* pShell, const String& rFile,
-                    const String& rFilter, const String& rOpt,
-                    const String& rArea, const ScRange& rDest, sal_uLong nRefresh );
+    ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
+                    const OUString& rFilter, const OUString& rOpt,
+                    const OUString& rArea, const ScRange& rDest, sal_uLong nRefresh );
     virtual ~ScAreaLink();
 
     virtual void Closed();
@@ -56,22 +56,22 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    sal_Bool    Refresh( const String& rNewFile, const String& rNewFilter,
-                    const String& rNewArea, sal_uLong nNewRefresh );
+    sal_Bool    Refresh( const OUString& rNewFile, const OUString& rNewFilter,
+                    const OUString& rNewArea, sal_uLong nNewRefresh );
 
     void    SetInCreate(bool bSet)                  { bInCreate = bSet; }
     void    SetDoInsert(bool bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
-    void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
-                        const String& rArea);
+    void    SetSource(const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
+                        const OUString& rArea);
 
-    bool IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
-                  const String& rSource, const ScRange& rDest ) const;
+    bool IsEqual( const OUString& rFile, const OUString& rFilter, const OUString& rOpt,
+                  const OUString& rSource, const ScRange& rDest ) const;
 
-    const String&   GetFile() const         { return aFileName;     }
-    const String&   GetFilter() const       { return aFilterName;   }
-    const String&   GetOptions() const      { return aOptions;      }
-    const String&   GetSource() const       { return aSourceArea;   }
+    const OUString& GetFile() const         { return aFileName;     }
+    const OUString& GetFilter() const       { return aFilterName;   }
+    const OUString& GetOptions() const      { return aOptions;      }
+    const OUString& GetSource() const       { return aSourceArea;   }
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK( RefreshHdl, void* );

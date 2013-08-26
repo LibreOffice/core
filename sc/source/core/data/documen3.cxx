@@ -570,7 +570,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
-        String aFilName = aFilterName;
+        OUString aFilName = aFilterName;
         GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, OUString(aFileName),
                                         &aFilName );
         pLink->Update();

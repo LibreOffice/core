@@ -481,25 +481,25 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
         SetLinkSourceName( _rNewName );
         if( !Update() )
         {
-            String sApp, sTopic, sItem, sError;
+            OUString sApp, sTopic, sItem, sError;
             pImpl->m_pLinkMgr->GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( nObjType == OBJECT_CLIENT_DDE )
             {
                 sError = SFX2_RESSTR(STR_DDE_ERROR);
 
-                sal_uInt16 nFndPos = sError.Search( '%' );
-                if( STRING_NOTFOUND != nFndPos )
+                sal_Int32 nFndPos = sError.indexOf( '%' );
+                if( -1 != nFndPos )
                 {
-                    sError.Erase( nFndPos, 1 ).Insert( sApp, nFndPos );
-                    nFndPos = nFndPos + sApp.Len();
+                    sError = sError.replaceAt( nFndPos, 1, sApp );
+                    nFndPos = nFndPos + sApp.getLength();
                 }
-                if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
+                if( -1 != ( nFndPos = sError.indexOf( '%', nFndPos )))
                 {
-                    sError.Erase( nFndPos, 1 ).Insert( sTopic, nFndPos );
-                    nFndPos = nFndPos + sTopic.Len();
+                    sError = sError.replaceAt( nFndPos, 1, sTopic );
+                    nFndPos = nFndPos + sTopic.getLength();
                 }
-                if( STRING_NOTFOUND != ( nFndPos = sError.Search( '%', nFndPos )))
-                    sError.Erase( nFndPos, 1 ).Insert( sItem, nFndPos );
+                if( -1 != ( nFndPos = sError.indexOf( '%', nFndPos )))
+                    sError = sError.replaceAt( nFndPos, 1, sItem );
             }
             else
                 return false;

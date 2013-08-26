@@ -123,8 +123,8 @@ protected:
     bool        mbLoopSound;
     bool        mbStopSound;
     String      maCreatedPageName;        ///< generated page name by GetPageName.
-    String      maFileName;               ///< file name.
-    String      maBookmarkName;           ///< Bookmark name.
+    OUString    maFileName;               ///< file name.
+    OUString    maBookmarkName;           ///< Bookmark name.
     sal_Bool    mbScaleObjects;           ///< Objects should be scaled
     sal_Bool    mbBackgroundFullSize;     ///< Background object to represent the whole page.
     rtl_TextEncoding meCharSet;           ///< Text encoding
