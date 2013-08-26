@@ -88,11 +88,11 @@ namespace ww
                         reinterpret_cast<const sal_uInt8 *>(&(*pIter));
                     for (size_t i=0; i < nSize; ++i)
                     {
-                        sError += OUString::valueOf(
+                        sError += OUString::number(
                             static_cast<sal_Int32>(pHack[i]), 16);
-                        sError += OUString::valueOf(sal_Unicode(' '));
+                        sError += OUString(' ');
                     }
-                    sError += OUString::valueOf(sal_Unicode('\n'));
+                    sError += OUString('\n');
                     while (*pIter == *(pIter+1) && pIter < pBeforeEnd)
                         ++pIter;
                 }
