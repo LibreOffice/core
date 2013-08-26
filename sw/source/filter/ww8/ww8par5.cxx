@@ -2302,7 +2302,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
                 aVText += aReadParam.GetResult();
                 if (bNewVText)
                 {
-                    bBracket = aVText.EqualsIgnoreCaseAscii(OUString('['), 1, 0)
+                    bBracket = aVText.EqualsIgnoreCaseAscii(OUString('['), 0, 1)
                         ? true : false;
                     bNewVText = false;
                 }
@@ -2616,7 +2616,7 @@ void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
     case 'A':
         {
             String sTemp = rReadParam.GetResult();
-            if ( !sTemp.EqualsIgnoreCaseAscii("d", 1, 0) )
+            if ( !sTemp.EqualsIgnoreCaseAscii("d", 0, 1) )
             {
                 break;
             }
@@ -2624,7 +2624,7 @@ void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
         }
     case -2:
         {
-            if ( rReadParam.GetResult().EqualsIgnoreCaseAscii('(', 1, 0) )
+            if ( rReadParam.GetResult().EqualsIgnoreCaseAscii('(', 0, 1) )
             {
                 for (int i=0;i<2;i++)
                 {
@@ -2634,8 +2634,8 @@ void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
                         if (-2 != rReadParam.SkipToNextToken())
                             break;
                         String sF = rReadParam.GetResult();
-                        if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 1, 0))
-                            || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 1, 0)))
+                        if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii('p', 0, 1))
+                            || (('d' == cChar) && sF.EqualsIgnoreCaseAscii('o', 0, 1)))
                         {
                             if (-2 == rReadParam.SkipToNextToken())
                             {
@@ -2740,7 +2740,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                 if ('u' == nRet)
                 {
                     if (-2 == rReadParam.SkipToNextToken() &&
-                      (rReadParam.GetResult().EqualsIgnoreCaseAscii(OUString('p'), 1, 0)))
+                      (rReadParam.GetResult().EqualsIgnoreCaseAscii(OUString('p'), 0, 1)))
                     {
                         if (-2 == rReadParam.SkipToNextToken())
                         {
