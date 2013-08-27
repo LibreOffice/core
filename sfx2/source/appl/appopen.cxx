@@ -316,7 +316,7 @@ sal_uInt32 CheckPasswd_Impl
 //--------------------------------------------------------------------
 
 
-sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFileName, sal_Bool bCopy, SfxItemSet* pSet )
+sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, sal_Bool bCopy, SfxItemSet* pSet )
 {
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ) );
@@ -799,7 +799,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, sal_False );
     String aFileName = pFileName->GetValue();
 
-    String aReferer;
+    OUString aReferer;
     SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, sal_False );
     if ( pRefererItem )
         aReferer = pRefererItem->GetValue();

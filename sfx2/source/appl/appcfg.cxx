@@ -495,7 +495,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pReferer ) const
+sal_Bool SfxApplication::IsSecureURL( const INetURLObject& rURL, const OUString* pReferer ) const
 {
     return SvtSecurityOptions().IsSecureURL( rURL.GetMainURL( INetURLObject::NO_DECODE ), *pReferer );
 }
@@ -903,6 +903,6 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
         new SfxEventAsyncer_Impl( rEventHint );
 }
 
-IMPL_OBJHINT( SfxStringHint, String )
+IMPL_OBJHINT( SfxStringHint, OUString )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

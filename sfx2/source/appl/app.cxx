@@ -248,7 +248,7 @@ SfxApplication::~SfxApplication()
 
 //====================================================================
 
-const String& SfxApplication::GetLastDir_Impl() const
+const OUString& SfxApplication::GetLastDir_Impl() const
 
 /*  [Description]
 
@@ -266,7 +266,7 @@ const String& SfxApplication::GetLastDir_Impl() const
     return pAppData_Impl->aLastDir;
 }
 
-const String& SfxApplication::GetLastSaveDirectory() const
+const OUString& SfxApplication::GetLastSaveDirectory() const
 
 /*  [Description]
 
@@ -284,7 +284,7 @@ const String& SfxApplication::GetLastSaveDirectory() const
 
 void SfxApplication::SetLastDir_Impl
 (
-    const String&   rNewDir     /* Complete directory path as a string */
+    const OUString&   rNewDir     /* Complete directory path as a string */
 )
 
 /*  [Description]
@@ -526,7 +526,7 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 #endif
 }
 
-sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
+sal_Bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 {
     sal_Bool result = sal_False;
 
@@ -626,7 +626,7 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 #endif
 }
 
-ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
+ErrCode SfxApplication::CallBasic( const OUString& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
 {
 #ifdef DISABLE_SCRIPTING
     (void) rCode;

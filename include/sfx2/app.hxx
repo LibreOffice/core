@@ -113,7 +113,7 @@ public:
 
 //TODO/CLEANUP
 //is apparently used only in SfxPickList/SfxFrameLoader
-DECL_OBJHINT( SfxStringHint, String );
+DECL_OBJHINT( SfxStringHint, OUString );
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
@@ -165,7 +165,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const String& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;
 
@@ -175,16 +175,16 @@ public:
     // members
     SfxFilterMatcher&           GetFilterMatcher();
     SfxProgress*                GetProgress() const;
-    const String&               GetLastSaveDirectory() const;
+    const OUString&               GetLastSaveDirectory() const;
     sal_uInt16                  GetFreeIndex();
     void                        ReleaseIndex(sal_uInt16 i);
 
     // Basic/Scripting
-    static sal_Bool             IsXScriptURL( const String& rScriptURL );
+    static sal_Bool             IsXScriptURL( const OUString& rScriptURL );
     static OUString      ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
-    static ErrCode              CallBasic( const String&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
-    static ErrCode              CallAppBasic( const String& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
+    static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
+    static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
                                 { return CallBasic( i_macroName, SfxApplication::GetOrCreate()->GetBasicManager(), i_args, i_ret ); }
     BasicManager*               GetBasicManager();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
@@ -200,7 +200,7 @@ public:
     virtual void                Invalidate(sal_uInt16 nId = 0);
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
     sal_Bool                        IsDowning() const;
-    sal_Bool                        IsSecureURL( const INetURLObject &rURL, const String *pReferer ) const;
+    sal_Bool                        IsSecureURL( const INetURLObject &rURL, const OUString *pReferer ) const;
     void                        ResetLastDir();
 
     SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}
@@ -243,8 +243,8 @@ public:
     SAL_DLLPRIVATE void         OfaState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
-    SAL_DLLPRIVATE const String& GetLastDir_Impl() const;
-    SAL_DLLPRIVATE void         SetLastDir_Impl( const String & );
+    SAL_DLLPRIVATE const OUString& GetLastDir_Impl() const;
+    SAL_DLLPRIVATE void         SetLastDir_Impl( const OUString & );
 
     SAL_DLLPRIVATE void         Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=0) const;

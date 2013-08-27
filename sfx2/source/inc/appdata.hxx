@@ -70,7 +70,7 @@ class SfxAppData_Impl
 {
 public:
     IndexBitSet                         aIndexBitSet;           // for counting noname documents
-    String                              aLastDir;               // for IO dialog
+    OUString                            aLastDir;               // for IO dialog
 
     // DDE stuff
     DdeService*                         pDdeService;
