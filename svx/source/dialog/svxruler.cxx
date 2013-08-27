@@ -48,12 +48,10 @@
 #define OBJECT_BORDER_COUNT 4
 #define TAB_GAP 1
 #define INDENT_GAP 2
-#define INDENT_FIRST_LINE   4
-#define INDENT_LEFT_MARGIN  5
-#define INDENT_RIGHT_MARGIN 6
-#define INDENT_LEFT_BORDER  2
-#define INDENT_RIGHT_BORDER 3
-#define INDENT_COUNT        5 //without the first two old values
+#define INDENT_FIRST_LINE   2
+#define INDENT_LEFT_MARGIN  3
+#define INDENT_RIGHT_MARGIN 4
+#define INDENT_COUNT        3 //without the first two old values
 
 #ifdef DEBUG_RULER
 #include <vcl/lstbox.hxx>
@@ -278,8 +276,6 @@ SvxRuler::SvxRuler(
         pIndents[INDENT_FIRST_LINE].nStyle = RULER_INDENT_TOP;
         pIndents[INDENT_LEFT_MARGIN].nStyle = RULER_INDENT_BOTTOM;
         pIndents[INDENT_RIGHT_MARGIN].nStyle = RULER_INDENT_BOTTOM;
-        pIndents[INDENT_LEFT_BORDER].nStyle = RULER_INDENT_BORDER;
-        pIndents[INDENT_RIGHT_BORDER].nStyle = RULER_INDENT_BORDER;
 
         for(sal_uInt16 nIn = 0; nIn < 7; nIn++)
             pIndents[nIn].nPos = 0;
@@ -802,17 +798,6 @@ void SvxRuler::UpdatePara()
                         ConvertHPosPixel(nRightFrameMargin - mpParaItem->GetRight() + lAppNullOffset);
             pIndents[INDENT_RIGHT_MARGIN].nPos = rightMargin;
         }
-        if(mpParaBorderItem.get())
-        {
-            pIndents[INDENT_LEFT_BORDER].nPos =
-            ConvertHPosPixel( nLeftFrameMargin + lAppNullOffset);
-            pIndents[INDENT_RIGHT_BORDER].nPos =
-                ConvertHPosPixel(nRightFrameMargin - lAppNullOffset);
-            pIndents[INDENT_LEFT_BORDER].nStyle = pIndents[INDENT_RIGHT_BORDER].nStyle &= ~RULER_STYLE_INVISIBLE;
-        }
-        else
-            pIndents[INDENT_LEFT_BORDER].nStyle = pIndents[INDENT_RIGHT_BORDER].nStyle |= RULER_STYLE_INVISIBLE;
-
         SetIndents(INDENT_COUNT, pIndents+INDENT_GAP);
     }
     else
