@@ -407,8 +407,9 @@ sub create_package
                 # Sign the .app as a whole, which means (re-)signing
                 # the CFBundleExecutable from Info.plist, i.e.
                 # soffice, plus the contents of the Resources tree
-                # (which at the moment is not much, far from all of
-                # our non-code "resources").
+                # (which unless you used
+                # --enable-canonical-installation-tree-structure is
+                # not much, far from all of our non-code "resources").
 
                 # Don't bother yet to sign each individual .dylib. (We
                 # do that for "make dev-install", but not here.)
@@ -416,13 +417,6 @@ sub create_package
                 # The executables have already been signed by
                 # gb_LinkTarget__command_dynamiclink in
                 # solenv/gbuild/platform/macosx.mk.
-
-                # Eventually it would be a good idea to re-organise
-                # the app bundle structure to be more Mac-like and
-                # actually put all non-code resources (including
-                # extension scripts!) into Resources so that they
-                # participate in the signing and their validity can be
-                # guaranteed.
 
                 $entitlements = '';
                 $entitlements = "--entitlements $ENV{'BUILDDIR'}/lo.xcent" if defined($ENV{'ENABLE_MACOSX_SANDBOX'});
