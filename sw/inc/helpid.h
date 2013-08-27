@@ -137,10 +137,8 @@
 
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
 #define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
-#define HID_TP_TOX_SELECT                                       "SW_HID_TP_TOX_SELECT"
 #define HID_DLG_ADD_IDX_STYLES                                  "SW_HID_DLG_ADD_IDX_STYLES"
 #define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"
-#define HID_OLE_CHECKLB                                         "SW_HID_OLE_CHECKLB"
 
 #define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"
 

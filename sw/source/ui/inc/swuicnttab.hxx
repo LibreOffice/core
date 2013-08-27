@@ -130,81 +130,67 @@ class IndexEntrySupplierWrapper;
 
 class SwTOXSelectTabPage : public SfxTabPage
 {
-    FixedLine       aTypeTitleFL;
-    FixedText       aTitleFT;
-    Edit            aTitleED;
-    FixedText       aTypeFT;
-    ListBox         aTypeLB;
-    CheckBox        aReadOnlyCB;
+    Edit*           m_pTitleED;
+    FixedText*      m_pTypeFT;
+    ListBox*        m_pTypeLB;
+    CheckBox*       m_pReadOnlyCB;
 
-    FixedLine       aAreaFL;
-    FixedText       aAreaFT;
-    ListBox         aAreaLB;
-    FixedText       aLevelFT;   //content, user
-    NumericField    aLevelNF;   //content, user
+    VclContainer*   m_pAreaFrame;
+    ListBox*        m_pAreaLB;
+    FixedText*      m_pLevelFT;   //content, user
+    NumericField*   m_pLevelNF;   //content, user
 
     //content
-    FixedLine       aCreateFromFL;  // content, user, illustration
-    CheckBox        aFromHeadingsCB;
-    CheckBox        aAddStylesCB;
-    PushButton      aAddStylesPB;
-    Point           aAddStylesPosDef;
-    Point           aAddStylesPosUser;
+    VclContainer*   m_pCreateFrame;  // content, user, illustration
+    CheckBox*       m_pFromHeadingsCB;
+    CheckBox*       m_pAddStylesCB;
+    PushButton*     m_pAddStylesPB;
     //user
-    CheckBox        aFromTablesCB;
-    CheckBox        aFromFramesCB;
-    CheckBox        aFromGraphicsCB;
-    CheckBox        aFromOLECB;
-    CheckBox        aLevelFromChapterCB;
+    CheckBox*       m_pFromTablesCB;
+    CheckBox*       m_pFromFramesCB;
+    CheckBox*       m_pFromGraphicsCB;
+    CheckBox*       m_pFromOLECB;
+    CheckBox*       m_pLevelFromChapterCB;
 
     //illustration + table
-    RadioButton     aFromCaptionsRB;
-    RadioButton     aFromObjectNamesRB;
+    RadioButton*    m_pFromCaptionsRB;
+    RadioButton*    m_pFromObjectNamesRB;
 
     //illustration and tables
-    FixedText       aCaptionSequenceFT;
-    ListBox         aCaptionSequenceLB;
-    FixedText       aDisplayTypeFT;
-    ListBox         aDisplayTypeLB;
+    FixedText*      m_pCaptionSequenceFT;
+    ListBox*        m_pCaptionSequenceLB;
+    FixedText*      m_pDisplayTypeFT;
+    ListBox*        m_pDisplayTypeLB;
 
     //all but illustration and table
-    CheckBox        aTOXMarksCB;
-
-    //
+    CheckBox*       m_pTOXMarksCB;
 
     //index only
-    FixedLine       aIdxOptionsFL;
-    CheckBox        aCollectSameCB;
-    CheckBox        aUseFFCB;
-    CheckBox        aUseDashCB;
-    CheckBox        aCaseSensitiveCB;
-    CheckBox        aInitialCapsCB;
-    CheckBox        aKeyAsEntryCB;
-    CheckBox        aFromFileCB;
-    MenuButton      aAutoMarkPB;
+    VclContainer*   m_pIdxOptionsFrame;
+    CheckBox*       m_pCollectSameCB;
+    CheckBox*       m_pUseFFCB;
+    CheckBox*       m_pUseDashCB;
+    CheckBox*       m_pCaseSensitiveCB;
+    CheckBox*       m_pInitialCapsCB;
+    CheckBox*       m_pKeyAsEntryCB;
+    CheckBox*       m_pFromFileCB;
+    MenuButton*     m_pAutoMarkPB;
 
     // object only
     SwOLENames      aFromNames;
-    SvxCheckListBox aFromObjCLB;
-    FixedLine       aFromObjFL;
+    SvxCheckListBox* m_pFromObjCLB;
+    VclContainer*   m_pFromObjFrame;
 
-    CheckBox        aSequenceCB;
-    FixedText       aBracketFT;
-    ListBox         aBracketLB;
-    FixedLine       aAuthorityFormatFL;
+    CheckBox*       m_pSequenceCB;
+    ListBox*        m_pBracketLB;
+    VclContainer*   m_pAuthorityFrame;
 
     //all
-    FixedLine       aSortOptionsFL;
-    FixedText       aLanguageFT;
-    SvxLanguageBox  aLanguageLB;
-    FixedText       aSortAlgorithmFT;
-    ListBox         aSortAlgorithmLB;
+    VclContainer*   m_pSortFrame;
+    SvxLanguageBox* m_pLanguageLB;
+    ListBox*        m_pSortAlgorithmLB;
 
     IndexEntryResource* pIndexRes;
-
-    Point           aCBLeftPos1;
-    Point           aCBLeftPos2;
-    Point           aCBLeftPos3;
 
     String          aStyleArr[MAXLEVEL];
     String          sAutoMarkURL;

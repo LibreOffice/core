@@ -16,135 +16,17 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define FT_LEVEL        6
-#define FL_TITLE       14
-#define ED_TITLE       15
-#define BT_HELP        16
 
-#define LB_ENTRY       20
-#define ED_ENTRY       22
-#define FL_ENTRY       28
-#define LB_LEVEL       29
-#define FL_FORMAT      33
-#define BT_EDIT_STYLE       40
-#define CB_CASE             43
-#define CB_OBJECT           51
-#define FT_MAIN_ENTRY_STYLE 56
-#define LB_MAIN_ENTRY_STYLE 57
-
-//restart numbering
-#define FT_TYPE             1
-#define LB_TYPE             2
-#define CB_READONLY         3
-#define FT_TITLE            4
-
-#define FL_TYPETITLE            6
-#define LB_AREA             7
-
-#define NF_LEVEL            9
-#define FL_AREA                         10
-#define CB_FROMHEADINGS     11
-#define PB_CHAPTERDLG       12
-#define CB_ADDSTYLES        13
-#define PB_ADDSTYLES        14
-
-
-#define CB_FROMOLE          17
-#define CB_LEVELFROMCHAPTER 18
-#define RB_FROMCAPTIONS     19
-#define RB_FROMOBJECTNAMES  20
-#define CB_TOXMARKS         21
-#define FL_CREATEFROM           22
-#define CB_COLLECTSAME      23
-#define CB_USEFF            24
-#define CB_CASESENSITIVE    25
-#define CB_INITIALCAPS      26
-#define CB_KEYASENTRY       27
-#define CB_FROMFILE         28
-
-#define MB_AUTOMARK         29
-#define FL_IDXOPTIONS       30
-
-#define FT_TOKEN            32
-#define CB_USE_DASH         33
-#define FL_LEVEL            34
-#define PB_ENTRYNO              36
-#define PB_ENTRY                37
-#define PB_CHAPTERINFO          38
-#define PB_PAGENO               39
-#define PB_TAB                  40
-#define PB_HYPERLINK            41
-#define FT_CHARSTYLE            42
-#define LB_CHARSTYLE            43
-#define PB_EDITSTYLE            44
-#define FT_FILLCHAR             45
-#define CB_FILLCHAR             46
-#define FT_CHAPTERENTRY         47
-#define LB_CHAPTERENTRY         48
-#define FT_TABPOS               51
-#define MF_TABPOS               52
-#define CB_AUTORIGHT            53
-#define CB_RELTOSTYLE           54
-#define CB_ALPHADELIM           58
-#define CB_COMMASEPARATED       59
-
-#define CLB_FROMOBJ             62
-#define FL_FROMOBJ              63
-#define RES_SRCTYPES            64
-#define FT_AREA                 69
 #define TLB_STYLES              100
-#define FL_STYLES                   101
+#define FL_STYLES               101
 #define PB_OK                   102
 #define PB_CANCEL               103
 #define PB_HELP                 104
-#define FT_CAPTIONSEQUENCE      105
-#define LB_CAPTIONSEQUENCE      106
-#define FT_DISPLAYTYPE          107
-#define LB_DISPLAYTYPE          108
 #define TR_HEADER               109
 #define PB_LEFT                 110
 #define PB_RIGHT                111
 #define HB_STYLES               112
 #define ST_HB_FIRST             113
-#define CB_FROMTABLES           114
-#define CB_FROMFRAMES           115
-#define CB_FROMGRAPHICS         116
-#define ST_USER_ADDSTYLE        117
-#define ST_AUTOMARK_TYPE        118
-#define LB_AUTHFIELD            119
-#define PB_AUTHINSERT           120
-#define PB_AUTHREMOVE           121
-#define CB_SEQUENCE             122
-#define FT_BRACKET              123
-#define LB_BRACKET              124
-#define FL_AUTHORITY            125
-#define RB_DOCPOS               126
-#define RB_SORTCONTENT          127
-#define FT_FIRSTKEY             128
-#define LB_FIRSTKEY             129
-#define FT_SECONDKEY            130
-#define LB_SECONDKEY            131
-#define FT_THIRDDKEY            132
-#define LB_THIRDKEY             133
-#define FL_SORTKEY              134
-#define FL_SORTING              135
-#define RB_SORTUP1              137
-#define RB_SORTUP2              138
-#define RB_SORTUP3              139
-#define RB_SORTDOWN1            140
-#define RB_SORTDOWN2            141
-#define RB_SORTDOWN3            142
-#define FL_SORTOPTIONS          144
-#define FT_LANGUAGE             145
-#define LB_LANGUAGE             146
-#define FT_SORTALG              147
-#define LB_SORTALG              148
-#define ST_NO_BRACKET           151
-
-#define FT_LEVEL_OL             152
-#define NF_LEVEL_OL             153
-#define FT_ENTRY_NO             154
-#define LB_ENTRY_NO             155
 
 #define TO_CONTENT          1
 #define TO_INDEX            2
@@ -153,16 +35,5 @@
 #define TO_USER             16
 #define TO_OBJECT           32
 #define TO_AUTHORITIES      64
-
-#define AREA_DOCUMENT       1
-#define AREA_CHAPTER        2
-
-//TabDialog
-#define WIN_EXAMPLE         1
-
-//ButtonMenu
-#define MN_AUTOMARK_OPEN    1
-#define MN_AUTOMARK_NEW     2
-#define MN_AUTOMARK_EDIT    3
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

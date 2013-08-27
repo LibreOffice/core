@@ -821,134 +821,117 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
     return 0;
 }
 
-SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
-    SfxTabPage(pParent, SW_RES(TP_TOX_SELECT), rAttrSet),
-
-    aTypeTitleFL(       this, SW_RES(FL_TYPETITLE        )),
-    aTitleFT(           this, SW_RES(FT_TITLE            )),
-    aTitleED(           this, SW_RES(ED_TITLE           )),
-    aTypeFT(            this, SW_RES(FT_TYPE                )),
-    aTypeLB(            this, SW_RES(LB_TYPE                )),
-    aReadOnlyCB(        this, SW_RES(CB_READONLY            )),
-
-    aAreaFL(            this, SW_RES(FL_AREA             )),
-    aAreaFT(            this, SW_RES(FT_AREA             )),
-    aAreaLB(            this, SW_RES(LB_AREA                )),
-    aLevelFT(           this, SW_RES(FT_LEVEL           )),
-    aLevelNF(           this, SW_RES(NF_LEVEL           )),
-
-    aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
-    aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-    aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
-    aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
-
-    aFromTablesCB(      this, SW_RES(CB_FROMTABLES       )),
-    aFromFramesCB(      this, SW_RES(CB_FROMFRAMES      )),
-    aFromGraphicsCB(    this, SW_RES(CB_FROMGRAPHICS        )),
-    aFromOLECB(         this, SW_RES(CB_FROMOLE         )),
-    aLevelFromChapterCB(this, SW_RES(CB_LEVELFROMCHAPTER    )),
-
-    aFromCaptionsRB(    this, SW_RES(RB_FROMCAPTIONS     )),
-    aFromObjectNamesRB( this, SW_RES(RB_FROMOBJECTNAMES )),
-
-    aCaptionSequenceFT( this, SW_RES(FT_CAPTIONSEQUENCE  )),
-    aCaptionSequenceLB( this, SW_RES(LB_CAPTIONSEQUENCE  )),
-    aDisplayTypeFT(     this, SW_RES(FT_DISPLAYTYPE     )),
-    aDisplayTypeLB(     this, SW_RES(LB_DISPLAYTYPE     )),
-
-    aTOXMarksCB(        this, SW_RES(CB_TOXMARKS         )),
-
-    aIdxOptionsFL(      this, SW_RES(FL_IDXOPTIONS       )),
-    aCollectSameCB(     this, SW_RES(CB_COLLECTSAME      )),
-    aUseFFCB(           this, SW_RES(CB_USEFF           )),
-    aUseDashCB(         this, SW_RES(CB_USE_DASH            )),
-    aCaseSensitiveCB(   this, SW_RES(CB_CASESENSITIVE   )),
-    aInitialCapsCB(     this, SW_RES(CB_INITIALCAPS     )),
-    aKeyAsEntryCB(      this, SW_RES(CB_KEYASENTRY      )),
-    aFromFileCB(        this, SW_RES(CB_FROMFILE            )),
-    aAutoMarkPB(        this, SW_RES(MB_AUTOMARK            )),
-
-    aFromNames(         SW_RES(RES_SRCTYPES              )),
-    aFromObjCLB(        this, SW_RES(CLB_FROMOBJ            )),
-    aFromObjFL(         this, SW_RES(FL_FROMOBJ          )),
-
-    aSequenceCB(        this, SW_RES(CB_SEQUENCE         )),
-    aBracketFT(         this, SW_RES(FT_BRACKET         )),
-    aBracketLB(         this, SW_RES(LB_BRACKET         )),
-    aAuthorityFormatFL( this, SW_RES(FL_AUTHORITY        )),
-
-    aSortOptionsFL(     this, SW_RES(FL_SORTOPTIONS      )),
-    aLanguageFT(        this, SW_RES(FT_LANGUAGE         )),
-    aLanguageLB(        this, SW_RES(LB_LANGUAGE         )),
-    aSortAlgorithmFT(   this, SW_RES(FT_SORTALG          )),
-    aSortAlgorithmLB(   this, SW_RES(LB_SORTALG          )),
-
-    pIndexRes(0),
-
-    sAutoMarkType(SW_RES(ST_AUTOMARK_TYPE)),
-    sAddStyleUser(SW_RES(ST_USER_ADDSTYLE)),
-    bFirstCall(sal_True)
+SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pParent, "TocIndexPage",
+        "modules/swriter/ui/tocindexpage.ui", rAttrSet)
+    , aFromNames(SW_RES(RES_SRCTYPES))
+    , pIndexRes(0)
+    , sAutoMarkType(SW_RESSTR(STR_AUTOMARK_TYPE))
+    , bFirstCall(true)
 {
-    aBracketLB.InsertEntry(String(SW_RES(ST_NO_BRACKET)), 0);
+    get(m_pTitleED, "title");
+    get(m_pTypeFT, "typeft");
+    get(m_pTypeLB, "type");
+    get(m_pReadOnlyCB, "readonly");
 
-    aAddStylesPB.SetAccessibleRelationMemberOf(&aCreateFromFL);
-    aAddStylesPB.SetAccessibleRelationLabeledBy(&aAddStylesCB);
-    aAddStylesPB.SetAccessibleName(aAddStylesCB.GetText());
+    get(m_pAreaFrame, "areaframe");
+    get(m_pAreaLB, "scope");
+    get(m_pLevelFT, "levelft");
+    get(m_pLevelNF, "level");
 
-    FreeResource();
+    get(m_pCreateFrame, "createframe");
+    get(m_pFromHeadingsCB, "fromheadings");
+    get(m_pAddStylesCB, "addstylescb");
+    sAddStyleUser = get<Window>("stylescb")->GetText();
+    get(m_pAddStylesPB, "styles");
+    get(m_pFromTablesCB, "fromtables");
+    get(m_pFromFramesCB, "fromframes");
+    get(m_pFromGraphicsCB, "fromgraphics");
+    get(m_pFromOLECB, "fromoles");
+    get(m_pLevelFromChapterCB, "uselevel");
+
+    get(m_pFromCaptionsRB, "captions");
+    get(m_pFromObjectNamesRB, "objnames");
+
+    get(m_pCaptionSequenceFT, "categoryft");
+    get(m_pCaptionSequenceLB, "category");
+    get(m_pDisplayTypeFT, "displayft");
+    get(m_pDisplayTypeLB, "display");
+    get(m_pTOXMarksCB, "indexmarks");
+
+    get(m_pIdxOptionsFrame, "optionsframe");
+    get(m_pCollectSameCB, "combinesame");
+    get(m_pUseFFCB, "useff");
+    get(m_pUseDashCB, "usedash");
+    get(m_pCaseSensitiveCB, "casesens");
+    get(m_pInitialCapsCB, "initcaps");
+    get(m_pKeyAsEntryCB, "keyasentry");
+    get(m_pFromFileCB, "fromfile");
+    get(m_pAutoMarkPB, "file");
+
+    get(m_pFromObjFrame, "objectframe");
+    get(m_pFromObjCLB, "objects");
+
+    get(m_pAuthorityFrame, "authframe");
+    get(m_pSequenceCB, "numberentries");
+    get(m_pBracketLB, "brackets");
+
+    get(m_pSortFrame, "sortframe");
+    get(m_pLanguageLB, "lang");
+    get(m_pSortAlgorithmLB, "keytype");
+
+    //Default mode is arranged to be the tallest mode
+    //of alphabetical index, lock that height in now
+    Size aPrefSize(get_preferred_size());
+    set_height_request(aPrefSize.Height());
 
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
-    aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
+    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
                                  sal_False, sal_False, sal_False );
 
-    sAddStyleContent = aAddStylesCB.GetText();
-
-    aCBLeftPos1 = aFromHeadingsCB.GetPosPixel();
-    aCBLeftPos2 = aAddStylesCB.GetPosPixel();
-    aCBLeftPos3 = aTOXMarksCB.GetPosPixel();
+    sAddStyleContent = m_pAddStylesCB->GetText();
 
     ResStringArray& rNames = aFromNames.GetNames();
     for(sal_uInt16 i = 0; i < rNames.Count(); i++)
     {
-        aFromObjCLB.InsertEntry(rNames.GetString(i));
-        aFromObjCLB.SetEntryData( i, (void*)rNames.GetValue(i) );
+        m_pFromObjCLB->InsertEntry(rNames.GetString(i));
+        m_pFromObjCLB->SetEntryData( i, (void*)rNames.GetValue(i) );
     }
-    aFromObjCLB.SetHelpId(HID_OLE_CHECKLB);
 
     SetExchangeSupport();
-    aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
+    m_pTypeLB->SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
-    aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
+    m_pAddStylesPB->SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
 
-    PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
+    PopupMenu*  pMenu = m_pAutoMarkPB->GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
     pMenu->SetSelectHdl(LINK(this, SwTOXSelectTabPage, MenuExecuteHdl));
 
     Link aLk =  LINK(this, SwTOXSelectTabPage, CheckBoxHdl);
-    aAddStylesCB    .SetClickHdl(aLk);
-    aFromHeadingsCB .SetClickHdl(aLk);
-    aTOXMarksCB     .SetClickHdl(aLk);
-    aFromFileCB     .SetClickHdl(aLk);
-    aCollectSameCB  .SetClickHdl(aLk);
-    aUseFFCB        .SetClickHdl(aLk);
-    aUseDashCB      .SetClickHdl(aLk);
-    aInitialCapsCB  .SetClickHdl(aLk);
-    aKeyAsEntryCB   .SetClickHdl(aLk);
+    m_pAddStylesCB->SetClickHdl(aLk);
+    m_pFromHeadingsCB->SetClickHdl(aLk);
+    m_pTOXMarksCB->SetClickHdl(aLk);
+    m_pFromFileCB->SetClickHdl(aLk);
+    m_pCollectSameCB->SetClickHdl(aLk);
+    m_pUseFFCB->SetClickHdl(aLk);
+    m_pUseDashCB->SetClickHdl(aLk);
+    m_pInitialCapsCB->SetClickHdl(aLk);
+    m_pKeyAsEntryCB->SetClickHdl(aLk);
 
     Link aModifyLk = LINK(this, SwTOXSelectTabPage, ModifyHdl);
-    aTitleED.SetModifyHdl(aModifyLk);
-    aLevelNF.SetModifyHdl(aModifyLk);
-    aSortAlgorithmLB.SetSelectHdl(aModifyLk);
+    m_pTitleED->SetModifyHdl(aModifyLk);
+    m_pLevelNF->SetModifyHdl(aModifyLk);
+    m_pSortAlgorithmLB->SetSelectHdl(aModifyLk);
 
     aLk =  LINK(this, SwTOXSelectTabPage, RadioButtonHdl);
-    aFromCaptionsRB.SetClickHdl(aLk);
-    aFromObjectNamesRB.SetClickHdl(aLk);
-    RadioButtonHdl(&aFromCaptionsRB);
+    m_pFromCaptionsRB->SetClickHdl(aLk);
+    m_pFromObjectNamesRB->SetClickHdl(aLk);
+    RadioButtonHdl(m_pFromCaptionsRB);
 
-    aLanguageLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, LanguageHdl));
-    aTypeLB.SelectEntryPos(0);
-    aTitleED.SaveValue();
+    m_pLanguageLB->SetSelectHdl(LINK(this, SwTOXSelectTabPage, LanguageHdl));
+    m_pTypeLB->SelectEntryPos(0);
+    m_pTitleED->SaveValue();
 }
 
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
@@ -963,14 +946,14 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
     if(nUserTypeCount > 1)
     {
         //insert all new user indexes names after the standard user index
-        sal_uInt16 nPos = aTypeLB.GetEntryPos((void*)(sal_uInt32)TO_USER);
+        sal_uInt16 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER);
         nPos++;
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
-            nPos = aTypeLB.InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
+            nPos = m_pTypeLB->InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
             sal_uIntPtr nEntryData = nUser << 8;
             nEntryData |= TO_USER;
-            aTypeLB.SetEntryData(nPos, (void*)nEntryData);
+            m_pTypeLB->SetEntryData(nPos, (void*)nEntryData);
         }
     }
 }
@@ -1006,10 +989,10 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
     CurTOXType eCurType (eSet, 0);
 
     sal_IntPtr nData = lcl_TOXTypesToUserData(eCurType);
-    aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos((void*)nData));
-    aTypeFT.Enable(sal_False);
-    aTypeLB.Enable(sal_False);
-    TOXTypeHdl(&aTypeLB);
+    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos((void*)nData));
+    m_pTypeFT->Enable(sal_False);
+    m_pTypeLB->Enable(sal_False);
+    TOXTypeHdl(m_pTypeLB);
 }
 
 static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
@@ -1040,20 +1023,20 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-    aReadOnlyCB.Check(rDesc.IsReadonly());
-    if(aTitleED.GetText() == aTitleED.GetSavedValue())
+    m_pReadOnlyCB->Check(rDesc.IsReadonly());
+    if(m_pTitleED->GetText() == m_pTitleED->GetSavedValue())
     {
         if(rDesc.GetTitle())
-            aTitleED.SetText(*rDesc.GetTitle());
+            m_pTitleED->SetText(*rDesc.GetTitle());
         else
-            aTitleED.SetText(aEmptyStr);
-        aTitleED.SaveValue();
+            m_pTitleED->SetText(aEmptyStr);
+        m_pTitleED->SaveValue();
     }
 
-    aAreaLB.SelectEntryPos(rDesc.IsFromChapter() ? 1 : 0);
+    m_pAreaLB->SelectEntryPos(rDesc.IsFromChapter() ? 1 : 0);
 
     if(aCurType.eType != TOX_INDEX)
-        aLevelNF.SetValue(rDesc.GetLevel());   //content, user
+        m_pLevelNF->SetValue(rDesc.GetLevel());   //content, user
 
     sal_uInt16 nCreateType = rDesc.GetContentOptions();
 
@@ -1067,83 +1050,83 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
             bHasStyleNames = sal_True;
             break;
         }
-    aAddStylesCB.Check(bHasStyleNames && (nCreateType & nsSwTOXElement::TOX_TEMPLATE));
+    m_pAddStylesCB->Check(bHasStyleNames && (nCreateType & nsSwTOXElement::TOX_TEMPLATE));
 
-    aFromOLECB.     Check( 0 != (nCreateType & nsSwTOXElement::TOX_OLE) );
-    aFromTablesCB.  Check( 0 != (nCreateType & nsSwTOXElement::TOX_TABLE) );
-    aFromGraphicsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_GRAPHIC) );
-    aFromFramesCB.  Check( 0 != (nCreateType & nsSwTOXElement::TOX_FRAME) );
+    m_pFromOLECB->     Check( 0 != (nCreateType & nsSwTOXElement::TOX_OLE) );
+    m_pFromTablesCB->  Check( 0 != (nCreateType & nsSwTOXElement::TOX_TABLE) );
+    m_pFromGraphicsCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_GRAPHIC) );
+    m_pFromFramesCB->  Check( 0 != (nCreateType & nsSwTOXElement::TOX_FRAME) );
 
-    aLevelFromChapterCB.Check(rDesc.IsLevelFromChapter());
+    m_pLevelFromChapterCB->Check(rDesc.IsLevelFromChapter());
 
     //all but illustration and table
-    aTOXMarksCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_MARK) );
+    m_pTOXMarksCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_MARK) );
 
     //content
     if(TOX_CONTENT == aCurType.eType)
     {
-        aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        aAddStylesCB.SetText(sAddStyleContent);
-        aAddStylesPB.Enable(aAddStylesCB.IsChecked());
+        m_pFromHeadingsCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
+        m_pAddStylesCB->SetText(sAddStyleContent);
+        m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
     //index only
     else if(TOX_INDEX == aCurType.eType)
     {
         sal_uInt16 nIndexOptions = rDesc.GetIndexOptions();
-        aCollectSameCB.     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_SAME_ENTRY) );
-        aUseFFCB.           Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_FF) );
-        aUseDashCB.         Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_DASH) );
-        if(aUseFFCB.IsChecked())
-            aUseDashCB.Enable(sal_False);
-        else if(aUseDashCB.IsChecked())
-            aUseFFCB.Enable(sal_False);
+        m_pCollectSameCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_SAME_ENTRY) );
+        m_pUseFFCB->           Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_FF) );
+        m_pUseDashCB->         Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_DASH) );
+        if(m_pUseFFCB->IsChecked())
+            m_pUseDashCB->Enable(sal_False);
+        else if(m_pUseDashCB->IsChecked())
+            m_pUseFFCB->Enable(sal_False);
 
-        aCaseSensitiveCB.   Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE) );
-        aInitialCapsCB.     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_INITIAL_CAPS) );
-        aKeyAsEntryCB.      Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_KEY_AS_ENTRY) );
+        m_pCaseSensitiveCB->   Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE) );
+        m_pInitialCapsCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_INITIAL_CAPS) );
+        m_pKeyAsEntryCB->      Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_KEY_AS_ENTRY) );
     }
     else if(TOX_ILLUSTRATIONS == aCurType.eType ||
         TOX_TABLES == aCurType.eType)
     {
-        aFromObjectNamesRB.Check(rDesc.IsCreateFromObjectNames());
-        aFromCaptionsRB.Check(!rDesc.IsCreateFromObjectNames());
-        aCaptionSequenceLB.SelectEntry(rDesc.GetSequenceName());
-        aDisplayTypeLB.SelectEntryPos( static_cast< sal_uInt16 >(rDesc.GetCaptionDisplay()) );
-        RadioButtonHdl(&aFromCaptionsRB);
+        m_pFromObjectNamesRB->Check(rDesc.IsCreateFromObjectNames());
+        m_pFromCaptionsRB->Check(!rDesc.IsCreateFromObjectNames());
+        m_pCaptionSequenceLB->SelectEntry(rDesc.GetSequenceName());
+        m_pDisplayTypeLB->SelectEntryPos( static_cast< sal_uInt16 >(rDesc.GetCaptionDisplay()) );
+        RadioButtonHdl(m_pFromCaptionsRB);
 
     }
     else if(TOX_OBJECTS == aCurType.eType)
     {
         long nOLEData = rDesc.GetOLEOptions();
-        for(sal_uInt16 nFromObj = 0; nFromObj < aFromObjCLB.GetEntryCount(); nFromObj++)
+        for(sal_uInt16 nFromObj = 0; nFromObj < m_pFromObjCLB->GetEntryCount(); nFromObj++)
         {
-            sal_IntPtr nData = (sal_IntPtr)aFromObjCLB.GetEntryData(nFromObj);
-            aFromObjCLB.CheckEntryPos(nFromObj, 0 != (nData & nOLEData));
+            sal_IntPtr nData = (sal_IntPtr)m_pFromObjCLB->GetEntryData(nFromObj);
+            m_pFromObjCLB->CheckEntryPos(nFromObj, 0 != (nData & nOLEData));
         }
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
     {
         String sBrackets(rDesc.GetAuthBrackets());
         if(!sBrackets.Len() || sBrackets.EqualsAscii("  "))
-            aBracketLB.SelectEntryPos(0);
+            m_pBracketLB->SelectEntryPos(0);
         else
-            aBracketLB.SelectEntry(sBrackets);
-        aSequenceCB.Check(rDesc.IsAuthSequence());
+            m_pBracketLB->SelectEntry(sBrackets);
+        m_pSequenceCB->Check(rDesc.IsAuthSequence());
     }
-    aAutoMarkPB.Enable(aFromFileCB.IsChecked());
+    m_pAutoMarkPB->Enable(m_pFromFileCB->IsChecked());
 
     for(i = 0; i < MAXLEVEL; i++)
         aStyleArr[i] = rDesc.GetStyleNames(i);
 
-    aLanguageLB.SelectLanguage(rDesc.GetLanguage());
+    m_pLanguageLB->SelectLanguage(rDesc.GetLanguage());
     LanguageHdl(0);
-    for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
+    for( long nCnt = 0; nCnt < m_pSortAlgorithmLB->GetEntryCount(); ++nCnt )
     {
-        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (sal_uInt16)nCnt );
+        const String* pEntryData = (const String*)m_pSortAlgorithmLB->GetEntryData( (sal_uInt16)nCnt );
         OSL_ENSURE(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
-            aSortAlgorithmLB.SelectEntryPos( (sal_uInt16)nCnt );
+            m_pSortAlgorithmLB->SelectEntryPos( (sal_uInt16)nCnt );
             break;
         }
     }
@@ -1154,30 +1137,30 @@ void SwTOXSelectTabPage::FillTOXDescription()
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-    rDesc.SetTitle(aTitleED.GetText());
-    rDesc.SetFromChapter(1 == aAreaLB.GetSelectEntryPos());
+    rDesc.SetTitle(m_pTitleED->GetText());
+    rDesc.SetFromChapter(1 == m_pAreaLB->GetSelectEntryPos());
     sal_uInt16 nContentOptions = 0;
-    if(aTOXMarksCB.IsVisible() && aTOXMarksCB.IsChecked())
+    if(m_pTOXMarksCB->IsVisible() && m_pTOXMarksCB->IsChecked())
         nContentOptions |= nsSwTOXElement::TOX_MARK;
 
     sal_uInt16 nIndexOptions = rDesc.GetIndexOptions()&nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
     switch(rDesc.GetTOXType())
     {
         case TOX_CONTENT:
-            if(aFromHeadingsCB.IsChecked())
+            if(m_pFromHeadingsCB->IsChecked())
                 nContentOptions |= nsSwTOXElement::TOX_OUTLINELEVEL;
         break;
         case TOX_USER:
         {
-            rDesc.SetTOUName(aTypeLB.GetSelectEntry());
+            rDesc.SetTOUName(m_pTypeLB->GetSelectEntry());
 
-            if(aFromOLECB.IsChecked())
+            if(m_pFromOLECB->IsChecked())
                 nContentOptions |= nsSwTOXElement::TOX_OLE;
-            if(aFromTablesCB.IsChecked())
+            if(m_pFromTablesCB->IsChecked())
                 nContentOptions |= nsSwTOXElement::TOX_TABLE;
-            if(aFromFramesCB.IsChecked())
+            if(m_pFromFramesCB->IsChecked())
                 nContentOptions |= nsSwTOXElement::TOX_FRAME;
-            if(aFromGraphicsCB.IsChecked())
+            if(m_pFromGraphicsCB->IsChecked())
                 nContentOptions |= nsSwTOXElement::TOX_GRAPHIC;
         }
         break;
@@ -1185,19 +1168,19 @@ void SwTOXSelectTabPage::FillTOXDescription()
         {
             nContentOptions = nsSwTOXElement::TOX_MARK;
 
-            if(aCollectSameCB.IsChecked())
+            if(m_pCollectSameCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_SAME_ENTRY;
-            if(aUseFFCB.IsChecked())
+            if(m_pUseFFCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_FF;
-            if(aUseDashCB.IsChecked())
+            if(m_pUseDashCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_DASH;
-            if(aCaseSensitiveCB.IsChecked())
+            if(m_pCaseSensitiveCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_CASE_SENSITIVE;
-            if(aInitialCapsCB.IsChecked())
+            if(m_pInitialCapsCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_INITIAL_CAPS;
-            if(aKeyAsEntryCB.IsChecked())
+            if(m_pKeyAsEntryCB->IsChecked())
                 nIndexOptions |= nsSwTOIOptions::TOI_KEY_AS_ENTRY;
-            if(aFromFileCB.IsChecked())
+            if(m_pFromFileCB->IsChecked())
                 rDesc.SetAutoMarkURL(sAutoMarkURL);
             else
                 rDesc.SetAutoMarkURL(aEmptyStr);
@@ -1205,18 +1188,18 @@ void SwTOXSelectTabPage::FillTOXDescription()
         break;
         case TOX_ILLUSTRATIONS:
         case TOX_TABLES :
-            rDesc.SetCreateFromObjectNames(aFromObjectNamesRB.IsChecked());
-            rDesc.SetSequenceName(aCaptionSequenceLB.GetSelectEntry());
-            rDesc.SetCaptionDisplay((SwCaptionDisplay)aDisplayTypeLB.GetSelectEntryPos());
+            rDesc.SetCreateFromObjectNames(m_pFromObjectNamesRB->IsChecked());
+            rDesc.SetSequenceName(m_pCaptionSequenceLB->GetSelectEntry());
+            rDesc.SetCaptionDisplay((SwCaptionDisplay)m_pDisplayTypeLB->GetSelectEntryPos());
         break;
         case TOX_OBJECTS:
         {
             long nOLEData = 0;
-            for(sal_uInt16 i = 0; i < aFromObjCLB.GetEntryCount(); i++)
+            for(sal_uInt16 i = 0; i < m_pFromObjCLB->GetEntryCount(); i++)
             {
-                if(aFromObjCLB.IsChecked(i))
+                if(m_pFromObjCLB->IsChecked(i))
                 {
-                    sal_IntPtr nData = (sal_IntPtr)aFromObjCLB.GetEntryData(i);
+                    sal_IntPtr nData = (sal_IntPtr)m_pFromObjCLB->GetEntryData(i);
                     nOLEData |= nData;
                 }
             }
@@ -1225,36 +1208,36 @@ void SwTOXSelectTabPage::FillTOXDescription()
         break;
         case TOX_AUTHORITIES:
         {
-            if(aBracketLB.GetSelectEntryPos())
-                rDesc.SetAuthBrackets(aBracketLB.GetSelectEntry());
+            if(m_pBracketLB->GetSelectEntryPos())
+                rDesc.SetAuthBrackets(m_pBracketLB->GetSelectEntry());
             else
                 rDesc.SetAuthBrackets(aEmptyStr);
-            rDesc.SetAuthSequence(aSequenceCB.IsChecked());
+            rDesc.SetAuthSequence(m_pSequenceCB->IsChecked());
         }
         break;
     }
 
-    rDesc.SetLevelFromChapter(  aLevelFromChapterCB.IsVisible() &&
-                                aLevelFromChapterCB.IsChecked());
-    if(aTOXMarksCB.IsChecked() && aTOXMarksCB.IsVisible())
+    rDesc.SetLevelFromChapter(  m_pLevelFromChapterCB->IsVisible() &&
+                                m_pLevelFromChapterCB->IsChecked());
+    if(m_pTOXMarksCB->IsChecked() && m_pTOXMarksCB->IsVisible())
         nContentOptions |= nsSwTOXElement::TOX_MARK;
-    if(aFromHeadingsCB.IsChecked() && aFromHeadingsCB.IsVisible())
+    if(m_pFromHeadingsCB->IsChecked() && m_pFromHeadingsCB->IsVisible())
         nContentOptions |= nsSwTOXElement::TOX_OUTLINELEVEL;
-    if(aAddStylesCB.IsChecked() && aAddStylesCB.IsVisible())
+    if(m_pAddStylesCB->IsChecked() && m_pAddStylesCB->IsVisible())
         nContentOptions |= nsSwTOXElement::TOX_TEMPLATE;
 
     rDesc.SetContentOptions(nContentOptions);
     rDesc.SetIndexOptions(nIndexOptions);
-    rDesc.SetLevel( static_cast< sal_uInt8 >(aLevelNF.GetValue()) );
+    rDesc.SetLevel( static_cast< sal_uInt8 >(m_pLevelNF->GetValue()) );
 
-    rDesc.SetReadonly(aReadOnlyCB.IsChecked());
+    rDesc.SetReadonly(m_pReadOnlyCB->IsChecked());
 
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         rDesc.SetStyleNames(aStyleArr[i], i);
 
-    rDesc.SetLanguage(aLanguageLB.GetSelectLanguage());
-    const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData(
-                                            aSortAlgorithmLB.GetSelectEntryPos() );
+    rDesc.SetLanguage(m_pLanguageLB->GetSelectLanguage());
+    const String* pEntryData = (const String*)m_pSortAlgorithmLB->GetEntryData(
+                                            m_pSortAlgorithmLB->GetSelectEntryPos() );
     OSL_ENSURE(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
@@ -1266,31 +1249,31 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
     SwWrtShell& rSh = pTOXDlg->GetWrtShell();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     sal_IntPtr nData = lcl_TOXTypesToUserData(aCurType);
-    aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos((void*)nData));
+    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos((void*)nData));
 
     sAutoMarkURL = INetURLObject::decode( rSh.GetTOIAutoMarkURL(),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
-    aFromFileCB.Check( 0 != sAutoMarkURL.Len() );
+    m_pFromFileCB->Check( 0 != sAutoMarkURL.Len() );
 
-    aCaptionSequenceLB.Clear();
+    m_pCaptionSequenceLB->Clear();
     sal_uInt16 i, nCount = rSh.GetFldTypeCount(RES_SETEXPFLD);
     for (i = 0; i < nCount; i++)
     {
         SwFieldType *pType = rSh.GetFldType( i, RES_SETEXPFLD );
         if( pType->Which() == RES_SETEXPFLD &&
             ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-            aCaptionSequenceLB.InsertEntry(pType->GetName());
+            m_pCaptionSequenceLB->InsertEntry(pType->GetName());
     }
 
     if(pTOXDlg->IsTOXEditMode())
     {
-        aTypeFT.Enable(sal_False);
-        aTypeLB.Enable(sal_False);
+        m_pTypeFT->Enable(sal_False);
+        m_pTypeLB->Enable(sal_False);
     }
-    TOXTypeHdl(&aTypeLB);
-    CheckBoxHdl(&aAddStylesCB);
+    TOXTypeHdl(m_pTypeLB);
+    CheckBoxHdl(m_pAddStylesCB);
 }
 
 void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
@@ -1302,7 +1285,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
-            (sal_uInt16)(sal_IntPtr)aTypeLB.GetEntryData( aTypeLB.GetSelectEntryPos() )));
+            (sal_uInt16)(sal_IntPtr)m_pTypeLB->GetEntryData( m_pTypeLB->GetSelectEntryPos() )));
     FillTOXDescription();
     return LEAVE_PAGE;
 }
@@ -1326,94 +1309,57 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
-    aAreaLB.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
-    aLevelFT.Show( 0 != (nType & (TO_CONTENT)) );
-    aLevelNF.Show( 0 != (nType & (TO_CONTENT)) );
-    aLevelFromChapterCB.Show( 0 != (nType & (TO_USER)) );
-    aAreaFT.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
-    aAreaFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_pAreaLB->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
+    m_pLevelFT->Show( 0 != (nType & (TO_CONTENT)) );
+    m_pLevelNF->Show( 0 != (nType & (TO_CONTENT)) );
+    m_pLevelFromChapterCB->Show( 0 != (nType & (TO_USER)) );
+    m_pAreaFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
-    aFromHeadingsCB.Show( 0 != (nType & (TO_CONTENT)) );
-    aAddStylesCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
-    aAddStylesPB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_pFromHeadingsCB->Show( 0 != (nType & (TO_CONTENT)) );
+    m_pAddStylesCB->Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_pAddStylesPB->Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    aFromTablesCB.Show( 0 != (nType & (TO_USER)) );
-    aFromFramesCB.Show( 0 != (nType & (TO_USER)) );
-    aFromGraphicsCB.Show( 0 != (nType & (TO_USER)) );
-    aFromOLECB.Show( 0 != (nType & (TO_USER)) );
+    m_pFromTablesCB->Show( 0 != (nType & (TO_USER)) );
+    m_pFromFramesCB->Show( 0 != (nType & (TO_USER)) );
+    m_pFromGraphicsCB->Show( 0 != (nType & (TO_USER)) );
+    m_pFromOLECB->Show( 0 != (nType & (TO_USER)) );
 
-    aFromCaptionsRB.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    aFromObjectNamesRB.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pFromCaptionsRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pFromObjectNamesRB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
 
-    aTOXMarksCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
+    m_pTOXMarksCB->Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
-    aCreateFromFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE)) );
-    aCaptionSequenceFT.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    aCaptionSequenceLB.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    aDisplayTypeFT.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
-    aDisplayTypeLB.Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pCreateFrame->Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE)) );
+    m_pCaptionSequenceFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pCaptionSequenceLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pDisplayTypeFT->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
+    m_pDisplayTypeLB->Show( 0 != (nType & (TO_ILLUSTRATION|TO_TABLE)) );
 
-    aSequenceCB.Show( 0 != (nType & TO_AUTHORITIES) );
-    aBracketFT.Show( 0 != (nType & TO_AUTHORITIES) );
-    aBracketLB.Show( 0 != (nType & TO_AUTHORITIES) );
-    aAuthorityFormatFL.Show( 0 != (nType & TO_AUTHORITIES) );
+    m_pAuthorityFrame->Show( 0 != (nType & TO_AUTHORITIES) );
 
-    sal_Bool bEnableSortLanguage = 0 != (nType & (TO_INDEX|TO_AUTHORITIES));
-    aSortOptionsFL.Show(bEnableSortLanguage);
-    aLanguageFT.Show(bEnableSortLanguage);
-    aLanguageLB.Show(bEnableSortLanguage);
-    aSortAlgorithmFT.Show(bEnableSortLanguage);
-    aSortAlgorithmLB.Show(bEnableSortLanguage);
+    bool bEnableSortLanguage = 0 != (nType & (TO_INDEX|TO_AUTHORITIES));
+    m_pSortFrame->Show(bEnableSortLanguage);
 
-        // initialize button positions
-
-    //#i111993# add styles button has two different positions
-    if( !aAddStylesPosDef.X() )
+    if( nType & TO_ILLUSTRATION )
     {
-        aAddStylesPosDef = ( aAddStylesPB.GetPosPixel() );
-        // move left!
-        Point aPos(aAddStylesPosDef);
-        aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
-        aAddStylesPosUser = aPos;
+        m_pCaptionSequenceLB->SelectEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_LABEL_ABB, OUString() ));
     }
-
-    if( nType & TO_ILLUSTRATION )       //add by zhaojianwei
-        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
-                                    RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
     else if( nType & TO_TABLE )
-        aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
-                                    RES_POOLCOLL_LABEL_TABLE, aEmptyStr ));
+    {
+        m_pCaptionSequenceLB->SelectEntry( SwStyleNameMapper::GetUIName(
+                                    RES_POOLCOLL_LABEL_TABLE, OUString() ));
+    }
     else if( nType & TO_USER )
     {
-        aAddStylesCB.SetText(sAddStyleUser);
-        aAddStylesPB.SetPosPixel(aAddStylesPosUser);
-    }
-    else if( nType & TO_CONTENT )
-    {
-        aAddStylesPB.SetPosPixel(aAddStylesPosDef);
+        m_pAddStylesCB->SetText(sAddStyleUser);
     }
 
-    aCollectSameCB.Show( 0 != (nType & TO_INDEX) );
-    aUseFFCB.Show( 0 != (nType & TO_INDEX) );
-    aUseDashCB.Show( 0 != (nType & TO_INDEX) );
-    aCaseSensitiveCB.Show( 0 != (nType & TO_INDEX) );
-    aInitialCapsCB.Show( 0 != (nType & TO_INDEX) );
-    aKeyAsEntryCB.Show( 0 != (nType & TO_INDEX) );
-    aFromFileCB.Show( 0 != (nType & TO_INDEX) );
-    aAutoMarkPB.Show( 0 != (nType & TO_INDEX) );
-
-    aIdxOptionsFL.Show( 0 != (nType & TO_INDEX) );
+    m_pIdxOptionsFrame->Show( 0 != (nType & TO_INDEX) );
 
     //object index
-    aFromObjCLB.Show( 0 != (nType & TO_OBJECT) );
-    aFromObjFL.Show( 0 != (nType & TO_OBJECT) );
+    m_pFromObjFrame->Show( 0 != (nType & TO_OBJECT) );
 
-    //move controls
-    aAddStylesCB.SetPosPixel(nType & TO_USER ? aCBLeftPos1 : aCBLeftPos2);
- Point aPBPos(aAddStylesPB.GetPosPixel());
-    aPBPos.Y() = nType & TO_USER ? aCBLeftPos1.Y() : aCBLeftPos2.Y();
-    aAddStylesPB.SetPosPixel(aPBPos);
-    aTOXMarksCB.SetPosPixel(nType & TO_USER ? aCBLeftPos2 : aCBLeftPos3);
     //set control values from the proper TOXDescription
     {
         ApplyTOXDescription();
@@ -1440,23 +1386,23 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     if(TOX_CONTENT == aCurType.eType)
     {
         //at least one of the three CheckBoxes must be checked
-        if(!aAddStylesCB.IsChecked() && !aFromHeadingsCB.IsChecked() && !aTOXMarksCB.IsChecked())
+        if(!m_pAddStylesCB->IsChecked() && !m_pFromHeadingsCB->IsChecked() && !m_pTOXMarksCB->IsChecked())
         {
             //TODO: InfoBox?
             pBox->Check(sal_True);
         }
-        aAddStylesPB.Enable(aAddStylesCB.IsChecked());
+        m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
     if(TOX_USER == aCurType.eType)
     {
-        aAddStylesPB.Enable(aAddStylesCB.IsChecked());
+        m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
     else if(TOX_INDEX == aCurType.eType)
     {
-        aAutoMarkPB.Enable(aFromFileCB.IsChecked());
-        aUseFFCB.Enable(aCollectSameCB.IsChecked() && !aUseDashCB.IsChecked());
-        aUseDashCB.Enable(aCollectSameCB.IsChecked() && !aUseFFCB.IsChecked());
-        aCaseSensitiveCB.Enable(aCollectSameCB.IsChecked());
+        m_pAutoMarkPB->Enable(m_pFromFileCB->IsChecked());
+        m_pUseFFCB->Enable(m_pCollectSameCB->IsChecked() && !m_pUseDashCB->IsChecked());
+        m_pUseDashCB->Enable(m_pCollectSameCB->IsChecked() && !m_pUseFFCB->IsChecked());
+        m_pCaseSensitiveCB->Enable(m_pCollectSameCB->IsChecked());
     }
     ModifyHdl(0);
     return 0;
@@ -1464,18 +1410,18 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
 
 IMPL_LINK_NOARG(SwTOXSelectTabPage, RadioButtonHdl)
 {
-    sal_Bool bEnable = aFromCaptionsRB.IsChecked();
-    aCaptionSequenceFT.Enable(bEnable);
-    aCaptionSequenceLB.Enable(bEnable);
-    aDisplayTypeFT.Enable(bEnable);
-    aDisplayTypeLB.Enable(bEnable);
+    sal_Bool bEnable = m_pFromCaptionsRB->IsChecked();
+    m_pCaptionSequenceFT->Enable(bEnable);
+    m_pCaptionSequenceLB->Enable(bEnable);
+    m_pDisplayTypeFT->Enable(bEnable);
+    m_pDisplayTypeLB->Enable(bEnable);
     ModifyHdl(0);
     return 0;
 }
 
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
-    lang::Locale aLcl( LanguageTag( aLanguageLB.GetSelectLanguage() ).getLocale() );
+    lang::Locale aLcl( LanguageTag( m_pLanguageLB->GetSelectLanguage() ).getLocale() );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )
@@ -1483,14 +1429,14 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
     String sOldString;
     void* pUserData;
-    if( 0 != (pUserData = aSortAlgorithmLB.GetEntryData( aSortAlgorithmLB.GetSelectEntryPos())) )
+    if( 0 != (pUserData = m_pSortAlgorithmLB->GetEntryData( m_pSortAlgorithmLB->GetSelectEntryPos())) )
         sOldString = *(String*)pUserData;
     void* pDel;
-    sal_uInt16 nEnd = aSortAlgorithmLB.GetEntryCount();
+    sal_uInt16 nEnd = m_pSortAlgorithmLB->GetEntryCount();
     for( sal_uInt16 n = 0; n < nEnd; ++n )
-        if( 0 != ( pDel = aSortAlgorithmLB.GetEntryData( n )) )
+        if( 0 != ( pDel = m_pSortAlgorithmLB->GetEntryData( n )) )
             delete (String*)pDel;
-    aSortAlgorithmLB.Clear();
+    m_pSortAlgorithmLB->Clear();
 
     sal_uInt16 nInsPos;
     String sAlg, sUINm;
@@ -1498,14 +1444,14 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     for( sal_uInt16 nCnt = 0; nCnt < nEnd; ++nCnt )
     {
         sUINm = pIndexRes->GetTranslation( sAlg = aSeq[ nCnt ] );
-        nInsPos = aSortAlgorithmLB.InsertEntry( sUINm );
-        aSortAlgorithmLB.SetEntryData( nInsPos, new String( sAlg ));
+        nInsPos = m_pSortAlgorithmLB->InsertEntry( sUINm );
+        m_pSortAlgorithmLB->SetEntryData( nInsPos, new String( sAlg ));
         if( sAlg == sOldString )
-            aSortAlgorithmLB.SelectEntryPos( nInsPos );
+            m_pSortAlgorithmLB->SelectEntryPos( nInsPos );
     }
 
-    if( LISTBOX_ENTRY_NOTFOUND == aSortAlgorithmLB.GetSelectEntryPos() )
-        aSortAlgorithmLB.SelectEntryPos( 0 );
+    if( LISTBOX_ENTRY_NOTFOUND == m_pSortAlgorithmLB->GetSelectEntryPos() )
+        m_pSortAlgorithmLB->SelectEntryPos( 0 );
 
     if(pBox)
         ModifyHdl(0);
@@ -1525,37 +1471,37 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 
 IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
 {
-    pMenu->EnableItem(MN_AUTOMARK_EDIT, sAutoMarkURL.Len() > 0);
+    pMenu->EnableItem("edit", sAutoMarkURL.Len() > 0);
     return 0;
 }
 
 IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
 {
     const String sSaveAutoMarkURL = sAutoMarkURL;
-    switch(pMenu->GetCurItemId())
+    OString sIdent(pMenu->GetCurItemIdent());
+
+    if (sIdent == "open")
     {
-        case  MN_AUTOMARK_OPEN:
-            sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
-                                    sAutoMarkURL, sAutoMarkType, true);
-        break;
-        case  MN_AUTOMARK_NEW :
+        sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
+                                sAutoMarkURL, sAutoMarkType, true);
+    }
+    else if ((sIdent == "new") || (sIdent == "edit"))
+    {
+        bool bNew = (sIdent == "new");
+        if (bNew)
+        {
             sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
                                     sAutoMarkURL, sAutoMarkType, false);
             if( !sAutoMarkURL.Len() )
-                break;
-        //no break
-        case  MN_AUTOMARK_EDIT:
-        {
-            bool bNew = pMenu->GetCurItemId()== MN_AUTOMARK_NEW;
-            SwAutoMarkDlg_Impl* pAutoMarkDlg = new SwAutoMarkDlg_Impl(
-                    &aAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew );
-
-            if( RET_OK != pAutoMarkDlg->Execute() && bNew )
-                sAutoMarkURL = sSaveAutoMarkURL;
-            delete pAutoMarkDlg;
-
+                return 0;
         }
-        break;
+
+        SwAutoMarkDlg_Impl* pAutoMarkDlg = new SwAutoMarkDlg_Impl(
+                m_pAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew );
+
+        if( RET_OK != pAutoMarkDlg->Execute() && bNew )
+            sAutoMarkURL = sSaveAutoMarkURL;
+        delete pAutoMarkDlg;
     }
     return 0;
 }
