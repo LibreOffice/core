@@ -89,29 +89,29 @@ public:
 
 class SfxNamedHint : public SfxHint
 {
-    String              _aEventName;
+    OUString            _aEventName;
     SfxObjectShell*     _pObjShell;
-    String              _aArgs;
+    OUString            _aArgs;
 
 public:
                         TYPEINFO();
 
-                        SfxNamedHint( const String& rName,
-                                      const String& rArgs,
+                        SfxNamedHint( const OUString& rName,
+                                      const OUString& rArgs,
                                       SfxObjectShell *pObj = 0  )
                         :   _aEventName( rName ),
                             _pObjShell( pObj),
                             _aArgs( rArgs )
                         {}
 
-                        SfxNamedHint( const String& rName,
+                        SfxNamedHint( const OUString& rName,
                                       SfxObjectShell *pObj = 0 )
                         :   _aEventName( rName ),
                             _pObjShell( pObj )
                         {}
 
-    const String&       GetArgs() const { return _aArgs;}
-    const String&       GetName() const { return _aEventName; }
+    const OUString&     GetArgs() const { return _aArgs;}
+    const OUString&     GetName() const { return _aEventName; }
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
