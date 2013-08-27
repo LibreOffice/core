@@ -73,9 +73,9 @@ public:
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
     const char*     GetShortName() const { return pShortName; }
-    String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    String          GetFactoryName() const { return OUString::createFromAscii(pShortName); }
-    String          GetModuleName() const;
+    OUString        GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
+    OUString        GetFactoryName() const { return OUString::createFromAscii(pShortName); }
+    OUString        GetModuleName() const;
     SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
 
     // Views
@@ -84,13 +84,13 @@ public:
     SfxViewFactory& GetViewFactory(sal_uInt16 i = 0) const;
 
     /// returns the view factory whose GetAPIViewName or GetLegacyViewName delivers the requested logical name
-    SfxViewFactory* GetViewFactoryByViewName( const String& i_rViewName ) const;
+    SfxViewFactory* GetViewFactoryByViewName( const OUString& i_rViewName ) const;
 
     // Filter
     const SfxFilter* GetTemplateFilter() const;
-    static String   GetStandardTemplate( const String& rServiceName );
-    static void     SetStandardTemplate( const String& rServiceName, const String& rTemplateName );
-    static void     SetSystemTemplate( const String& rServiceName, const String& rTemplateName );
+    static OUString GetStandardTemplate( const OUString& rServiceName );
+    static void     SetStandardTemplate( const OUString& rServiceName, const OUString& rTemplateName );
+    static void     SetSystemTemplate( const OUString& rServiceName, const OUString& rTemplateName );
 
     void            SetDocumentServiceName( const OUString& rServiceName );
     const OUString&    GetDocumentServiceName() const;

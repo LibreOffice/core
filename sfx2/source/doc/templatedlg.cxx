@@ -1773,7 +1773,7 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 
     for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
     {
-        if ( SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).Len() > 0 )
+        if ( ! SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).isEmpty() )
         {
             SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
             SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );

@@ -194,7 +194,7 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
     pImpl->pModule = pMod;
 }
 
-void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const String& rTemplateName )
+void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OUString& rTemplateName )
 {
     static const int nMaxPathSize = 16000;
     static OUString SERVICE_FILTER_FACTORY("com.sun.star.document.FilterFactory");
@@ -261,7 +261,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aBackupURL += DEF_TPL_STR;
             aBackupURL += aExt;
 
-            if ( rTemplateName.Len() != 0 )
+            if ( !rTemplateName.isEmpty() )
             {
                 if ( xSimpleFileAccess->exists( aUserTemplateURL ) && !bChanged )
                     xSimpleFileAccess->copy( aUserTemplateURL, aBackupURL );
@@ -307,7 +307,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
     }
 }
 
-void SfxObjectFactory::SetStandardTemplate( const String& rServiceName, const String& rTemplate )
+void SfxObjectFactory::SetStandardTemplate( const OUString& rServiceName, const OUString& rTemplate )
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
     if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
@@ -319,13 +319,13 @@ void SfxObjectFactory::SetStandardTemplate( const String& rServiceName, const St
     }
 }
 
-String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
+OUString SfxObjectFactory::GetStandardTemplate( const OUString& rServiceName )
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
     if (eFac == SvtModuleOptions::E_UNKNOWN_FACTORY)
         eFac = SvtModuleOptions::ClassifyFactoryByShortName(rServiceName);
 
-    String sTemplate;
+    OUString sTemplate;
     if (eFac != SvtModuleOptions::E_UNKNOWN_FACTORY)
         sTemplate = SvtModuleOptions().GetFactoryStandardTemplate(eFac);
 
@@ -368,7 +368,7 @@ const SvGlobalName& SfxObjectFactory::GetClassId() const
     return pImpl->aClassName;
 }
 
-String SfxObjectFactory::GetFactoryURL() const
+OUString SfxObjectFactory::GetFactoryURL() const
 {
     OUStringBuffer aURLComposer;
     aURLComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM("private:factory/"));
@@ -376,7 +376,7 @@ String SfxObjectFactory::GetFactoryURL() const
     return aURLComposer.makeStringAndClear();
 }
 
-String SfxObjectFactory::GetModuleName() const
+OUString SfxObjectFactory::GetModuleName() const
 {
     try
     {
@@ -413,7 +413,7 @@ sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const s
     return i_nFallback;
 }
 
-SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rViewName ) const
+SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const OUString& i_rViewName ) const
 {
     for (   sal_uInt16 nViewNo = 0;
             nViewNo < GetViewFactoryCount();
