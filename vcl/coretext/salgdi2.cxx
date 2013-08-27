@@ -348,9 +348,13 @@ sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 
 // -----------------------------------------------------------------------
 
-static bool AddTempFontDir( const char* pDir )
+static bool AddTempDevFont(const OUString& rFontFileURL)
 {
-    CFStringRef rDir = CFStringCreateWithCString(NULL, pDir, kCFStringEncodingUTF8);
+    OUString aUSytemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
+    OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
+
+    CFStringRef rDir = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
     CFURLRef rDirURL = CFURLCreateWithFileSystemPath(NULL, rDir, kCFURLPOSIXPathStyle, true);
 
     CFErrorRef error;
@@ -365,24 +369,36 @@ static bool AddTempFontDir( const char* pDir )
     return true;
 }
 
-static bool AddLocalTempFontDirs( void )
+static void AddTempFontDir( const OUString &rFontDirUrl )
+{
+    osl::Directory aFontDir( rFontDirUrl );
+    osl::FileBase::RC rcOSL = aFontDir.open();
+    if( rcOSL == osl::FileBase::E_None )
+    {
+        osl::DirectoryItem aDirItem;
+
+        while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
+        {
+            osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
+            rcOSL = aDirItem.getFileStatus( aFileStatus );
+            if ( rcOSL == osl::FileBase::E_None )
+                AddTempDevFont(aFileStatus.getFileURL());
+        }
+    }
+}
+
+static void AddLocalTempFontDirs()
 {
     static bool bFirst = true;
     if( !bFirst )
-        return false;
+        return;
     bFirst = false;
 
     // add private font files
 
     OUString aBrandStr( "$BRAND_BASE_DIR" );
     rtl_bootstrap_expandMacros( &aBrandStr.pData );
-    OUString aBrandSysPath;
-    OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
-
-    OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
-    aBrandFontDir.append( OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
-    aBrandFontDir.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
-    return AddTempFontDir( aBrandFontDir.getStr() );
+    AddTempFontDir( aBrandStr + "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
 }
 
 void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
@@ -419,23 +435,7 @@ void AquaSalGraphics::ClearDevFontCache()
 bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/ )
 {
-    OUString aUSytemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
-    OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
-
-    CFStringRef rDir = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
-    CFURLRef rDirURL = CFURLCreateWithFileSystemPath(NULL, rDir, kCFURLPOSIXPathStyle, true);
-
-    CFErrorRef error;
-    bool success = CTFontManagerRegisterFontsForURL(rDirURL, kCTFontManagerScopeProcess, &error);
-
-    if (!success)
-    {
-        CFRelease(error);
-        return false;
-    }
-
-    return true;
+    return ::AddTempDevFont(rFontFileURL);
 }
 
 // -----------------------------------------------------------------------
