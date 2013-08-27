@@ -93,13 +93,11 @@ public:
 
     bool IsValid() const;
     void    SetValid();
-    void    MarkInvalid( sal_uInt16 nS, sal_uInt16 nE );
+    void SetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd );
+    void ResetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd );
 
     sal_uInt16  GetInvalidStart() const { return nInvalidStart; }
-    sal_uInt16& GetInvalidStart()       { return nInvalidStart; }
-
     sal_uInt16  GetInvalidEnd() const   { return nInvalidEnd; }
-    sal_uInt16& GetInvalidEnd()         { return nInvalidEnd; }
 
     void TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSep );
     void TextDeleted( sal_uInt16 nPos, sal_uInt16 nLength );

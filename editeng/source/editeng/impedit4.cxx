@@ -2311,9 +2311,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                             if ( bCursorPos )
                             {
                                 // Then continue to mark as invalid ...
-                                pWrongList->GetInvalidStart() = nWStart;
-                                pWrongList->GetInvalidEnd() = nWEnd;
-                                bRestartTimer = sal_True;
+                                pWrongList->ResetInvalidRange(nWStart, nWEnd);
+                                bRestartTimer = true;
                             }
                             else
                             {

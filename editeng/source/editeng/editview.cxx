@@ -1132,8 +1132,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             if (xSavDic.is())
                 xSavDic->store();
 
-            aPaM.GetNode()->GetWrongList()->GetInvalidStart() = 0;
-            aPaM.GetNode()->GetWrongList()->GetInvalidEnd() = aPaM.GetNode()->Len();
+            aPaM.GetNode()->GetWrongList()->ResetInvalidRange(0, aPaM.GetNode()->Len());
             PIMPEE->StartOnlineSpellTimer();
 
             if ( pCallBack )

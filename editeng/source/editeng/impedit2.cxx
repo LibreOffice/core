@@ -2230,7 +2230,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         xub_StrLen nEnd = pLeft->Len();
         xub_StrLen nInv = nEnd ? nEnd-1 : nEnd;
         pLeft->GetWrongList()->ClearWrongs( nInv, 0xFFFF, pLeft );  // Possibly remove one
-        pLeft->GetWrongList()->MarkInvalid( nInv, nEnd+1 );
+        pLeft->GetWrongList()->SetInvalidRange(nInv, nEnd+1);
         // Take over misspelled words
         WrongList* pRWrongs = pRight->GetWrongList();
         for (WrongList::iterator i = pRWrongs->begin(); i < pRWrongs->end(); ++i)
@@ -2833,11 +2833,11 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         }
         sal_uInt16 nInv = nEnd ? nEnd-1 : nEnd;
         if ( nEnd )
-            pLWrongs->MarkInvalid( nInv, nEnd );
+            pLWrongs->SetInvalidRange(nInv, nEnd);
         else
             pLWrongs->SetValid();
         pRWrongs->SetValid(); // otherwise 0 - 0xFFFF
-        pRWrongs->MarkInvalid( 0, 1 );  // Only test the first word
+        pRWrongs->SetInvalidRange(0, 1);  // Only test the first word
     }
 
     ParaPortion* pPortion = FindParaPortion( rPaM.GetNode() );

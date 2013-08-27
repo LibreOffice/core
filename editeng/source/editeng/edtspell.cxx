@@ -218,12 +218,19 @@ void WrongList::SetValid()
     nInvalidEnd = 0;
 }
 
-void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
+void WrongList::SetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd )
 {
-    if ( (nInvalidStart == Valid) || ( nInvalidStart > nS ) )
-        nInvalidStart = nS;
-    if ( nInvalidEnd < nE )
-        nInvalidEnd = nE;
+    if (nInvalidStart == Valid || nStart < nInvalidStart)
+        nInvalidStart = nStart;
+
+    if (nInvalidEnd < nEnd)
+        nInvalidEnd = nEnd;
+}
+
+void WrongList::ResetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd )
+{
+    nInvalidStart = nStart;
+    nInvalidEnd = nEnd;
 }
 
 void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSep )
@@ -471,7 +478,7 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd )
 void WrongList::MarkWrongsInvalid()
 {
     if (!maRanges.empty())
-        MarkInvalid(maRanges.front().nStart, maRanges.back().nEnd );
+        SetInvalidRange(maRanges.front().nStart, maRanges.back().nEnd);
 }
 
 WrongList* WrongList::Clone() const

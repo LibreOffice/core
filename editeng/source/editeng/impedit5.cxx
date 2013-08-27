@@ -581,7 +581,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
             {
                 pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
                 if ( bCheckLanguage )
-                    pNode->GetWrongList()->MarkInvalid( nStartPos, nEndPos );
+                    pNode->GetWrongList()->SetInvalidRange(nStartPos, nEndPos);
             }
         }
     }
