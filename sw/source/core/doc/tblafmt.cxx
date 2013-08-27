@@ -958,12 +958,9 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     , m_pDoc(pDoc)
 {
     OUString sNm;
-    // FIXME Yuk! we are creating the table styles ATM, but in the targetted
-    // ideal, the table styles are created with the document
     sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
-    SwTableFormat* pStyle = pDoc->FindTableFormatByName(sNm);
-    if ( !pStyle )
-        pStyle = pDoc->MakeTableFrameFormat( sNm, pDoc->GetDfltFrameFormat() );
+    SwTableFormat* pStyle = pDoc->MakeTableFrameFormat( sNm, pDoc->GetDfltFrameFormat() );
+
     std::unique_ptr<SwTableAutoFormat> pNewTableAutoFormat(new SwTableAutoFormat(sNm, pStyle));
 
     SwTableBoxFormat* pNewBoxFormat = pDoc->MakeTableBoxFormat();

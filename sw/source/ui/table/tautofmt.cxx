@@ -177,8 +177,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTable = new SwTableAutoFormatTable(pWrtShell->GetDoc());
-    pTableTable->Load();
+    pTableTable = pWrtShell->GetDoc()->GetTableStyles();
 
     Init(pSelFormat);
 }
@@ -190,7 +189,6 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 
 void SwAutoFormatDlg::dispose()
 {
-    delete pTableTable;
     m_pLbFormat.clear();
     m_pFormatting.clear();
     m_pBtnNumFormat.clear();

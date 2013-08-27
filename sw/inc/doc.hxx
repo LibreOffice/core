@@ -132,6 +132,7 @@ class SwTOXTypes;
 class SwTabCols;
 class SwTable;
 class SwTableAutoFormat;
+class SwTableAutoFormatTable;
 class SwTableBox;
 class SwTableBoxFormat;
 class SwTableFormat;
@@ -299,6 +300,7 @@ class SW_DLLPUBLIC SwDoc :
     SwFrameFormats       *mpSpzFrameFormatTable;
     SwSectionFormats   *mpSectionFormatTable;
     SwFrameFormats       *mpTableFrameFormatTable;     //< For tables
+    SwTableAutoFormatTable *mpTableStyleTable;    ///< Table styles
     SwTextFormatColls   *mpTextFormatCollTable;    //< FormatCollections
     SwGrfFormatColls   *mpGrfFormatCollTable;
 
@@ -858,6 +860,7 @@ public:
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
     SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
+    SwTableAutoFormatTable* GetTableStyles() { return mpTableStyleTable; };
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */

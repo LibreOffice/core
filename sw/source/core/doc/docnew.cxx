@@ -108,6 +108,7 @@
 #include <fldbas.hxx>
 #include <wrtsh.hxx>
 #include <unocrsr.hxx>
+#include <tblafmt.hxx>
 
 #include <cmdid.h>
 
@@ -305,6 +306,9 @@ SwDoc::SwDoc()
     /* Formats */
     mpFrameFormatTable->push_back(mpDfltFrameFormat);
     mpCharFormatTable->push_back(mpDfltCharFormat);
+
+    mpTableStyleTable = new SwTableAutoFormatTable( this );
+    mpTableStyleTable->Load();
 
     /* FormatColls */
     // TXT
@@ -575,6 +579,7 @@ SwDoc::~SwDoc()
     delete mpCharFormatTable;
     delete mpSectionFormatTable;
     delete mpTableFrameFormatTable;
+    delete mpTableStyleTable;
     delete mpDfltTextFormatColl;
     delete mpDfltGrfFormatColl;
     delete mpNumRuleTable;
