@@ -133,29 +133,34 @@ namespace comphelper
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource ) SAL_THROW( ( ) )
     {
-        ::osl::MutexGuard aGuard( lclMutex::get() );
+        EventListeners * pListeners(0);
 
-        ClientMap::iterator aClientPos;
-        if ( !implLookupClient( _nClient, aClientPos ) )
-            // already asserted in implLookupClient
-            return;
+        {
+            // rhbz#1001768 drop the mutex before calling disposeAndClear
+            ::osl::MutexGuard aGuard( lclMutex::get() );
+
+            ClientMap::iterator aClientPos;
+            if (!implLookupClient(_nClient, aClientPos))
+                // already asserted in implLookupClient
+                return;
+
+            // notify the listeners
+            pListeners = aClientPos->second;
+
+            // we do not need the entry in the clients map anymore
+            // (do this before actually notifying, because some client
+            // implementations have re-entrance problems and call into
+            // revokeClient while we are notifying from here)
+            Clients::get().erase(aClientPos);
+        }
 
         // notify the "disposing" event for this client
         EventObject aDisposalEvent;
         aDisposalEvent.Source = _rxEventSource;
 
-        // notify the listeners
-        EventListeners* pListeners = aClientPos->second;
-
-        // we do not need the entry in the clients map anymore
-        // (do this before actually notifying, because some client implementations have re-entrance
-        // problems and call into revokeClient while we are notifying from hereing)
-        Clients::get().erase( aClientPos );
-
         // now really do the notification
         pListeners->disposeAndClear( aDisposalEvent );
         delete pListeners;
-
     }
 
     //---------------------------------------------------------------------
