@@ -116,6 +116,8 @@ sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     evaluateStatusVector(m_statusVector, sql, *this);
     // TODO: get number of changed rows with SELECT ROW_COUNT (use executeQuery)
     //     return getUpdateCount();
+    // We can't use     return getStatementChangeCount(); since that depends
+    // on having the statement handle, so maybe just use executeQuery instead?
     return 0;
 }
 
@@ -152,7 +154,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
 
     evaluateStatusVector(m_statusVector, sql, *this);
 
-    if (isDDLStatement(m_aStatementHandle))
+    if (isDDLStatement())
         m_pConnection->commit();
 
     return m_xResultSet;

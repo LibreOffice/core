@@ -344,32 +344,112 @@ uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatementC
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-bool OStatementCommonBase::isDDLStatement(isc_stmt_handle& aStatementHandle)
+short OStatementCommonBase::getSqlInfoItem(char aInfoItem)
     throw (SQLException)
 {
     ISC_STATUS_ARRAY aStatusVector;
     ISC_STATUS aErr;
 
-    char aInfoItems[] = {isc_info_sql_stmt_type};
+    char aInfoItems[] = {aInfoItem};
     char aResultsBuffer[8];
 
     aErr = isc_dsql_sql_info(aStatusVector,
-                             &aStatementHandle,
+                             &m_aStatementHandle,
                              sizeof(aInfoItems),
                              aInfoItems,
                              sizeof(aResultsBuffer),
                              aResultsBuffer);
 
-    if (!aErr && aResultsBuffer[0] == isc_info_sql_stmt_type)
+    if (!aErr && aResultsBuffer[0] == aInfoItem)
     {
         const short aBytes = (short) isc_vax_integer(aResultsBuffer+1, 2);
-        const short aStatementType = (short) isc_vax_integer(aResultsBuffer+3, aBytes);
-        if (aStatementType == isc_info_sql_stmt_ddl)
-            return true;
+        return (short) isc_vax_integer(aResultsBuffer+3, aBytes);
     }
+
     evaluateStatusVector(aStatusVector,
                          "isc_dsq_sql_info",
                          *this);
-    return false;
+    return 0;
+}
+
+bool OStatementCommonBase::isDDLStatement()
+    throw (SQLException)
+{
+    if (getSqlInfoItem(isc_info_sql_stmt_type) == isc_info_sql_stmt_ddl)
+        return true;
+    else
+        return false;
+}
+
+sal_Int32 OStatementCommonBase::getStatementChangeCount()
+    throw (SQLException)
+{
+    const short aStatementType = getSqlInfoItem(isc_info_sql_stmt_type);
+
+
+
+    ISC_STATUS_ARRAY aStatusVector;
+    ISC_STATUS aErr;
+
+    // This is somewhat undocumented so I'm just guessing and hoping for the best.
+    char aInfoItems[] = {isc_info_sql_records};
+    char aResultsBuffer[1024];
+
+    aErr = isc_dsql_sql_info(aStatusVector,
+                             &m_aStatementHandle,
+                             sizeof(aInfoItems),
+                             aInfoItems,
+                             sizeof(aResultsBuffer),
+                             aResultsBuffer);
+
+    if (aErr)
+    {
+        evaluateStatusVector(aStatusVector,
+                             "isc_dsq_sql_info",
+                             *this);
+        return 0;
+    }
+
+    short aDesiredInfoType = 0;
+    switch (aStatementType)
+    {
+        case isc_info_sql_stmt_select:
+            aDesiredInfoType = isc_info_req_select_count;
+            break;
+        case isc_info_sql_stmt_insert:
+            aDesiredInfoType = isc_info_req_insert_count;
+            break;
+        case isc_info_sql_stmt_update:
+            aDesiredInfoType = isc_info_req_update_count;
+            break;
+        case isc_info_sql_stmt_delete:
+            aDesiredInfoType = isc_info_req_delete_count;
+            break;
+        default:
+            throw SQLException(); // TODO: better error message?
+    }
+
+    char* pResults = aResultsBuffer;
+    if (((short) *pResults++) == isc_info_sql_records)
+    {
+//         const short aTotalLength = (short) isc_vax_integer(pResults, 2);
+        pResults += 2;
+
+        // Seems to be of form TOKEN (1 byte), LENGTH (2 bytes), DATA (LENGTH bytes)
+        while (*pResults != isc_info_rsb_end)
+        {
+            const char aToken = *pResults;
+            const short aLength =  (short) isc_vax_integer(pResults+1, 2);
+
+            if (aToken == aDesiredInfoType)
+            {
+                return sal_Int32(isc_vax_integer(pResults + 3, aLength));
+            }
+
+            pResults += (3 + aLength);
+        }
+    }
+
+    return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

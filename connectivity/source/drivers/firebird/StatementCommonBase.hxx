@@ -92,7 +92,11 @@ namespace connectivity
                                              XSQLDA* pInSqlda=0)
                 throw (::com::sun::star::sdbc::SQLException);
 
-            bool isDDLStatement(isc_stmt_handle& aStatementHandle)
+            short getSqlInfoItem(char aInfoItem)
+                throw (::com::sun::star::sdbc::SQLException);
+            bool isDDLStatement()
+                throw (::com::sun::star::sdbc::SQLException);
+            sal_Int32 getStatementChangeCount()
                 throw (::com::sun::star::sdbc::SQLException);
 
         public:
