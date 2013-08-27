@@ -59,8 +59,8 @@ public:
     EditSpellWrapper( Window* pWin,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 > &xChecker,
-            sal_Bool bIsStart,
-            sal_Bool bIsAllRight, EditView* pView );
+            bool bIsStart,
+            bool bIsAllRight, EditView* pView );
 
 };
 
@@ -81,7 +81,7 @@ class WrongList
     sal_uInt16  nInvalidStart;
     sal_uInt16  nInvalidEnd;
 
-    sal_Bool    DbgIsBuggy() const;
+    bool DbgIsBuggy() const;
 
 public:
     typedef std::vector<WrongRange>::iterator iterator;
@@ -101,13 +101,13 @@ public:
     sal_uInt16  GetInvalidEnd() const   { return nInvalidEnd; }
     sal_uInt16& GetInvalidEnd()         { return nInvalidEnd; }
 
-    void    TextInserted( sal_uInt16 nPos, sal_uInt16 nChars, sal_Bool bPosIsSep );
-    void    TextDeleted( sal_uInt16 nPos, sal_uInt16 nChars );
+    void TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSep );
+    void TextDeleted( sal_uInt16 nPos, sal_uInt16 nLength );
 
     void InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd );
-    sal_Bool    NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
-    sal_Bool    HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
-    sal_Bool    HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
+    bool NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
+    bool HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
+    bool HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
     void    ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd, const ContentNode* pNode );
     void    MarkWrongsInvalid();
 
@@ -133,8 +133,8 @@ class EdtAutoCorrDoc : public SvxAutoCorrDoc
     ContentNode*    pCurNode;
     sal_uInt16          nCursor;
 
-    sal_Bool            bAllowUndoAction;
-    sal_Bool            bUndoAction;
+    bool            bAllowUndoAction;
+    bool            bUndoAction;
 
 protected:
     void            ImplStartUndoAction();
