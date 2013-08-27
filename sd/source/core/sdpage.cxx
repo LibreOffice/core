@@ -51,7 +51,16 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <rtl/ustring.hxx>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
+#include <rtl/uri.hxx>
+#include <osl/file.h>
+#include <officecfg/Office/Impress.hxx>
 #include <basegfx/tools/tools.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
@@ -854,8 +863,80 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
     }
 }
 
+static const std::vector<rtl::OUString> PageKindVector = {"PK_STANDARD","PK_NOTES" , "PK_HANDOUT"};
+static const std::vector<rtl::OUString> PresObjKindVector = {"PRESOBJ_NONE", "PRESOBJ_TITLE", "PRESOBJ_OUTLINE",
+                                                             "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
+                                                             "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
+                                                             "PRESOBJ_IMAGE", "PRESOBJ_PAGE", "PRESOBJ_HANDOUT",
+                                                             "PRESOBJ_NOTES","PRESOBJ_HEADER", "PRESOBJ_FOOTER",
+                                                             "PRESOBJ_DATETIME", "PRESOBJ_SLIDENUMBER", "PRESOBJ_CALC",
+                                                             "PRESOBJ_MEDIA", "PRESOBJ_MAX" };
+
+void getPresObjProp( SdPage& rPage, const rtl::OUString& sObjKind, const rtl::OUString& sPageKind, double presObjPropValue[])
+{
+    bool bNoObjectFound = true;  //used to break from outer loop
+
+    const std::vector< Reference<XNode> >& objectInfo = static_cast<const SdDrawDocument*>(rPage.GetModel())->GetObjectVector();
+    for( std::vector< Reference<XNode> >::const_iterator aIter=objectInfo.begin(); aIter != objectInfo.end(); ++aIter )
+    {
+        if(bNoObjectFound)
+        {
+            Reference<XNode> objectNode = *aIter;      //get i'th object element
+            Reference<XNamedNodeMap> objectattrlist = objectNode->getAttributes();
+            Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
+            rtl::OUString sObjType = objectattr->getNodeValue();
+
+            if(sObjType == sObjKind)
+            {
+                Reference<XNodeList> objectChildren = objectNode->getChildNodes();
+                const int objSize = objectChildren->getLength();
+
+                for( int j=0; j< objSize; j++)
+                {
+                    Reference<XNode> obj = objectChildren->item(j);
+                    rtl::OUString nodename = obj->getNodeName();
+
+                    //check whether children is blank 'text-node' or 'object-prop' node
+                    if(nodename == "object-prop")
+                    {
+                        Reference<XNamedNodeMap> ObjAttributes = obj->getAttributes();
+                        Reference<XNode> ObjPageKind = ObjAttributes->getNamedItem("pagekind");
+                        rtl::OUString sObjPageKind = ObjPageKind->getNodeValue();
+
+                        if(sObjPageKind == sPageKind)
+                        {
+                            Reference<XNode> ObjSizeHeight = ObjAttributes->getNamedItem("relative-height");
+                            rtl::OUString sValue = ObjSizeHeight->getNodeValue();
+                            presObjPropValue[0] = sValue.toDouble();
+
+                            Reference<XNode> ObjSizeWidth = ObjAttributes->getNamedItem("relative-width");
+                            sValue = ObjSizeWidth->getNodeValue();
+                            presObjPropValue[1] = sValue.toDouble();
+
+                            Reference<XNode> ObjPosX = ObjAttributes->getNamedItem("relative-posX");
+                            sValue = ObjPosX->getNodeValue();
+                            presObjPropValue[2] = sValue.toDouble();
+
+                            Reference<XNode> ObjPosY = ObjAttributes->getNamedItem("relative-posY");
+                            sValue = ObjPosY->getNodeValue();
+                            presObjPropValue[3] = sValue.toDouble();
+
+                            bNoObjectFound = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else
+            break;
+    }
+}
+
 SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 {
+    double propvalue[] = {0,0,0,0};
+
     if( eObjKind == PRESOBJ_TITLE )
     {
         Rectangle aTitleRect( GetTitleRect() );
@@ -873,46 +954,35 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
+        rtl::OUString sObjKind = PresObjKindVector[eObjKind];
+        rtl::OUString sPageKind = PageKindVector[mePageKind];
         // create footer objects for standard master page
         if( mePageKind == PK_STANDARD )
         {
             const long nLftBorder = GetLftBorder();
             const long nUppBorder = GetUppBorder();
 
-            Size aPageSize ( GetSize() );
-            aPageSize.Width()  -= nLftBorder + GetRgtBorder();
-            aPageSize.Height() -= nUppBorder + GetLwrBorder();
+            Point aPos ( nLftBorder, nUppBorder );
+            Size aSize ( GetSize() );
 
-            const int Y = long(nUppBorder + aPageSize.Height() * 0.911);
-            const int W1 = long(aPageSize.Width() * 0.233);
-            const int W2 = long(aPageSize.Width() * 0.317);
-            const int H = long(aPageSize.Height() * 0.069);
+            aSize.Width()  -= nLftBorder + GetRgtBorder();
+            aSize.Height() -= nUppBorder + GetLwrBorder();
 
-            if( eObjKind == PRESOBJ_DATETIME )
-            {
-                Point aPos( long(nLftBorder+(aPageSize.Width()*0.05)), Y );
-                Size aSize( W1, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_DATETIME, sal_False, aRect, bInsert );
-            }
-            else if( eObjKind == PRESOBJ_FOOTER )
-            {
-                Point aPos( long(nLftBorder+ aPageSize.Width() * 0.342), Y );
-                Size aSize( W2, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_FOOTER, sal_False, aRect, bInsert );
-            }
-            else if( eObjKind == PRESOBJ_SLIDENUMBER )
-            {
-                Point aPos( long(nLftBorder+(aPageSize.Width()*0.717)), Y );
-                Size aSize( W1, H );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_SLIDENUMBER, sal_False, aRect, bInsert );
-            }
-            else
+            getPresObjProp( this, sObjKind, sPageKind, propvalue);
+            aPos.X() += long( aSize.Width() * propvalue[2] );
+            aPos.Y() += long( aSize.Height() * propvalue[3] );
+            aSize.Width() = long( aSize.Width() * propvalue[1] );
+            aSize.Height() = long( aSize.Height() * propvalue[0] );
+
+            if(eObjKind == PRESOBJ_HEADER )
             {
                 OSL_FAIL( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
                 return NULL;
+            }
+            else
+            {
+                Rectangle aRect( aPos, aSize );
+                return CreatePresObj( eObjKind, sal_False, aRect, bInsert );
             }
         }
         else
@@ -922,44 +992,24 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             aPageSize.Width()  -= GetLftBorder() + GetRgtBorder();
             aPageSize.Height() -= GetUppBorder() + GetLwrBorder();
 
+            Point aPosition ( GetLftBorder(), GetUppBorder() );
 
-            const int NOTES_HEADER_FOOTER_WIDTH = long(aPageSize.Width() * 0.434);
-            const int NOTES_HEADER_FOOTER_HEIGHT = long(aPageSize.Height() * 0.05);
-
+            getPresObjProp( this, sObjKind, sPageKind, propvalue);
+            int NOTES_HEADER_FOOTER_WIDTH = long(aPageSize.Width() * propvalue[1]);
+            int NOTES_HEADER_FOOTER_HEIGHT = long(aPageSize.Height() * propvalue[0]);
             Size aSize( NOTES_HEADER_FOOTER_WIDTH, NOTES_HEADER_FOOTER_HEIGHT );
+            Point aPos ( 0 ,0 );
+            if( propvalue[2] == 0 )
+                aPos.X() = aPosition.X();
+            else
+                aPos.X() = aPosition.X() + long( aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH );
+            if( propvalue[3] == 0 )
+                aPos.Y() = aPosition.Y();
+            else
+                aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
 
-            const int X1 = GetLftBorder();
-            const int X2 = GetLftBorder() + long(aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH);
-            const int Y1 = GetUppBorder();
-            const int Y2 = GetUppBorder() + long(aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
-
-            if( eObjKind == PRESOBJ_HEADER )
-            {
-                Point aPos( X1, Y1 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_HEADER, sal_False, aRect, bInsert );
-            }
-            else if( eObjKind == PRESOBJ_DATETIME )
-            {
-                Point aPos( X2, Y1 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_DATETIME, sal_False, aRect, bInsert );
-            }
-            else if( eObjKind == PRESOBJ_FOOTER )
-            {
-                Point aPos( X1, Y2 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_FOOTER, sal_False, aRect, bInsert );
-            }
-            else if( eObjKind == PRESOBJ_SLIDENUMBER )
-            {
-                Point aPos( X2, Y2 );
-                Rectangle aRect( aPos, aSize );
-                return CreatePresObj( PRESOBJ_SLIDENUMBER, sal_False, aRect, bInsert );
-            }
-
-            OSL_FAIL("SdPage::CreateDefaultPresObj() - this should not happen!");
-            return NULL;
+            Rectangle aRect( aPos, aSize );
+            return CreatePresObj( eObjKind, sal_False, aRect, bInsert );
         }
     }
     else
@@ -978,6 +1028,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 Rectangle SdPage::GetTitleRect() const
 {
     Rectangle aTitleRect;
+    double propvalue[] = {0,0,0,0};
 
     if (mePageKind != PK_HANDOUT)
     {
@@ -988,21 +1039,26 @@ Rectangle SdPage::GetTitleRect() const
         Size aTitleSize ( GetSize() );
         aTitleSize.Width()  -= GetLftBorder() + GetRgtBorder();
         aTitleSize.Height() -= GetUppBorder() + GetLwrBorder();
+        rtl::OUString sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PK_STANDARD)
         {
-            aTitlePos.X() += long( aTitleSize.Width() * 0.05 );
-            aTitlePos.Y() += long( aTitleSize.Height() * 0.0399 );
-            aTitleSize.Width() = long( aTitleSize.Width() * 0.9 );
-            aTitleSize.Height() = long( aTitleSize.Height() * 0.167 );
+            getPresObjProp( this, "PRESOBJ_TITLE" ,sPageKind, propvalue);
+            aTitlePos.X() += long( aTitleSize.Width() * propvalue[2] );
+            aTitlePos.Y() += long( aTitleSize.Height() * propvalue[3] );
+            aTitleSize.Width() = long( aTitleSize.Width() * propvalue[1] );
+            aTitleSize.Height() = long( aTitleSize.Height() * propvalue[0] );
         }
         else if (mePageKind == PK_NOTES)
         {
             Point aPos = aTitlePos;
-            aPos.Y() += long( aTitleSize.Height() * 0.076 );
+            getPresObjProp( this, "PRESOBJ_TITLE" ,sPageKind, propvalue);
+            aPos.X() += long( aTitleSize.Width() * propvalue[2] );
+            aPos.Y() += long( aTitleSize.Height() * propvalue[3] );
 
             // limit height
-            aTitleSize.Height() = (long) (aTitleSize.Height() * 0.375);
+            aTitleSize.Height() = long( aTitleSize.Height() * propvalue[0] );
+            aTitleSize.Width() = long( aTitleSize.Width() * propvalue[1] );
 
             Size aPartArea = aTitleSize;
             Size aSize;
@@ -1056,6 +1112,7 @@ Rectangle SdPage::GetTitleRect() const
 Rectangle SdPage::GetLayoutRect() const
 {
     Rectangle aLayoutRect;
+    double propvalue[] = {0,0,0,0};
 
     if (mePageKind != PK_HANDOUT)
     {
@@ -1063,22 +1120,25 @@ Rectangle SdPage::GetLayoutRect() const
         Size aLayoutSize ( GetSize() );
         aLayoutSize.Width()  -= GetLftBorder() + GetRgtBorder();
         aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
+        rtl::OUString sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PK_STANDARD)
         {
-            aLayoutPos.X() += long( aLayoutSize.Width() * 0.05 );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * 0.234 );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.9 );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.58 );
+            getPresObjProp( this ,"PRESOBJ_OUTLINE", sPageKind, propvalue);
+            aLayoutPos.X() += long( aLayoutSize.Width() * propvalue[2] );
+            aLayoutPos.Y() += long( aLayoutSize.Height() * propvalue[3] );
+            aLayoutSize.Width() = long( aLayoutSize.Width() * propvalue[1] );
+            aLayoutSize.Height() = long( aLayoutSize.Height() * propvalue[0] );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
         else if (mePageKind == PK_NOTES)
         {
-            aLayoutPos.X() += long( aLayoutSize.Width() * 0.1 );
-            aLayoutPos.Y() += long( aLayoutSize.Height() * 0.475 );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.8 );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.45 );
+            getPresObjProp( this, "PRESOBJ_NOTES", sPageKind, propvalue);
+            aLayoutPos.X() += long( aLayoutSize.Width() * propvalue[2] );
+            aLayoutPos.Y() += long( aLayoutSize.Height() * propvalue[3] );
+            aLayoutSize.Width() = long( aLayoutSize.Width() * propvalue[1] );
+            aLayoutSize.Height() = long( aLayoutSize.Height() * propvalue[0] );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
