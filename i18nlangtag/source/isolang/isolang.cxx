@@ -773,9 +773,9 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
                 pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
         {
-            if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript))
+            if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript))
             {
-                if (pScriptEntry->getTagString() == rLocale.Variant)
+                if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
                     return pScriptEntry->getLocale();
                 if (!pFirstScript)
                     pFirstScript = pScriptEntry;
@@ -792,8 +792,8 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
                 for (const IsoLanguageScriptCountryEntry* pScriptEntry = pFirstScript;
                         pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
                 {
-                    if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript) &&
-                            pScriptEntry->maCountry == rLocale.Country)
+                    if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript) &&
+                            rLocale.Country.equalsIgnoreAsciiCaseAscii( pScriptEntry->maCountry))
                         return pScriptEntry->getLocale();
                 }
             }
@@ -888,9 +888,9 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
                 pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
         {
-            if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript))
+            if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript))
             {
-                if (pScriptEntry->getTagString() == rLocale.Variant)
+                if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
                     return pScriptEntry->mnLang;
             }
         }
