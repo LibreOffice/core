@@ -55,7 +55,7 @@ SFX2_DLLPUBLIC inline void reverseUniqueHelpIdHack(Window &rWindow)
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
     sal_uInt32              nUniqId;
-    String                  aExtraData;
+    OUString                aExtraData;
     const SfxItemSet*       pInputSet;
     SfxItemSet*             pOutputSet;
 
@@ -72,7 +72,7 @@ protected:
     SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
     SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
-    String&             GetExtraData()      { return aExtraData; }
+    OUString&           GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }
     void                SetUniqId(sal_uInt32 nSettingsId)  { nUniqId = nSettingsId; }
     SfxItemSet*         GetItemSet()        { return pOutputSet; }

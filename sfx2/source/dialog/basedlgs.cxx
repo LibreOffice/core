@@ -101,8 +101,8 @@ void SfxModalDialog::SetDialogData_Impl()
     SvtViewOptions aDlgOpt( E_DIALOG, OUString::number( nUniqId ) );
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
-    if ( aExtraData.Len() )
-        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aExtraData ) ) );
+    if ( !aExtraData.isEmpty() )
+        aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aExtraData ) );
 }
 
 // -----------------------------------------------------------------------

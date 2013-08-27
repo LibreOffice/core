@@ -282,7 +282,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aWinData.append('V').append(static_cast<sal_Int32>(nVersion)).
         append(',').append(rInfo.bVisible ? 'V' : 'H').append(',').
         append(static_cast<sal_Int32>(rInfo.nFlags));
-    if ( rInfo.aExtraString.Len() )
+    if ( !rInfo.aExtraString.isEmpty() )
     {
         aWinData.append(',');
         aWinData.append(rInfo.aExtraString);
@@ -566,50 +566,47 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
 )   const
 {
     // invalid?
-    if ( !aExtraString.Len() )
+    if ( aExtraString.isEmpty() )
         return sal_False;
-    String aStr;
-    sal_uInt16 nPos = aExtraString.SearchAscii("AL:");
-    if ( nPos == STRING_NOTFOUND )
+    OUString aStr;
+    sal_Int32 nPos = aExtraString.indexOf("AL:");
+    if ( nPos == -1 )
         return sal_False;
 
     // Try to read the alignment string "ALIGN :(...)", but if
     // it is not present, then use an older version
-    if ( nPos != STRING_NOTFOUND )
+    sal_Int32 n1 = aExtraString.indexOf('(', nPos);
+    if ( n1 != -1 )
     {
-        sal_uInt16 n1 = aExtraString.Search('(', nPos);
-        if ( n1 != STRING_NOTFOUND )
+        sal_Int32 n2 = aExtraString.indexOf(')', n1);
+        if ( n2 != -1 )
         {
-            sal_uInt16 n2 = aExtraString.Search(')', n1);
-            if ( n2 != STRING_NOTFOUND )
-            {
-                // Cut out Alignment string
-                aStr = aExtraString.Copy(nPos, n2 - nPos + 1);
-                aStr.Erase(nPos, n1-nPos+1);
-            }
+            // Cut out Alignment string
+            aStr = aExtraString.copy(nPos, n2 - nPos + 1);
+            aStr = aStr.replaceAt(nPos, n1-nPos+1, "");
         }
     }
 
     // First extract the Alignment
-    if ( !aStr.Len() )
+    if ( aStr.isEmpty() )
         return sal_False;
     if ( pAlign )
-        *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.ToInt32();
+        *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
 
     // then the LastAlignment
-    nPos = aStr.Search(',');
-    if ( nPos == STRING_NOTFOUND )
+    nPos = aStr.indexOf(',');
+    if ( nPos == -1 )
         return sal_False;
-    aStr.Erase(0, nPos+1);
+    aStr = aStr.copy(nPos+1);
     if ( pLastAlign )
-        *pLastAlign = (SfxChildAlignment) (sal_uInt16) aStr.ToInt32();
+        *pLastAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
 
     // Then the splitting information
-    nPos = aStr.Search(',');
-    if ( nPos == STRING_NOTFOUND )
+    nPos = aStr.indexOf(',');
+    if ( nPos == -1 )
         // No docking in a Splitwindow
         return sal_True;
-    aStr.Erase(0, nPos+1);
+    aStr = aStr.copy(nPos+1);
     Point aChildPos;
     Size aChildSize;
     if ( GetPosSizeFromString( aStr, aChildPos, aChildSize ) )

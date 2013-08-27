@@ -981,38 +981,38 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     }
 
     sal_Bool bVertHorzRead( sal_False );
-    if ( pInfo->aExtraString.Len() )
+    if ( !pInfo->aExtraString.isEmpty() )
     {
         // get information about alignment, split size and position in SplitWindow
-        String aStr;
-        sal_uInt16 nPos = pInfo->aExtraString.SearchAscii("AL:");
-        if ( nPos != STRING_NOTFOUND )
+        OUString aStr;
+        sal_Int32 nPos = pInfo->aExtraString.indexOf("AL:");
+        if ( nPos != -1 )
         {
             // alignment information
-            sal_uInt16 n1 = pInfo->aExtraString.Search('(', nPos);
-            if ( n1 != STRING_NOTFOUND )
+            sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
+            if ( n1 != -1 )
             {
-                sal_uInt16 n2 = pInfo->aExtraString.Search(')', n1);
-                if ( n2 != STRING_NOTFOUND )
+                sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
+                if ( n2 != -1 )
                 {
                     // extract alignment information from extrastring
-                    aStr = pInfo->aExtraString.Copy(nPos, n2 - nPos + 1);
-                    pInfo->aExtraString.Erase(nPos, n2 - nPos + 1);
-                    aStr.Erase(nPos, n1-nPos+1);
+                    aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
+                    pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
+                    aStr = aStr.replaceAt(nPos, n1-nPos+1, "");
                 }
             }
         }
 
-        if ( aStr.Len() )
+        if ( !aStr.isEmpty() )
         {
             // accept window state only if alignment is also set
             pImp->aWinState = pInfo->aWinState;
 
             // check for valid alignment
-            SfxChildAlignment eLocalAlignment = (SfxChildAlignment) (sal_uInt16) aStr.ToInt32();
+            SfxChildAlignment eLocalAlignment = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
             if ( pImp->bDockingPrevented )
                 // docking prevented, ignore old configuration and take alignment from default
-                aStr.Erase();
+                aStr = "";
             else
                 SetAlignment( eLocalAlignment );
 
@@ -1021,23 +1021,23 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             {
                 OSL_FAIL("Invalid Alignment!");
                 SetAlignment( eAlign );
-                aStr.Erase();
+                aStr = "";
             }
 
             // get last alignment (for toggeling)
-            nPos = aStr.Search(',');
-            if ( nPos != STRING_NOTFOUND )
+            nPos = aStr.indexOf(',');
+            if ( nPos != -1 )
             {
-                aStr.Erase(0, nPos+1);
-                pImp->SetLastAlignment( (SfxChildAlignment) (sal_uInt16) aStr.ToInt32() );
+                aStr = aStr.copy(nPos+1);
+                pImp->SetLastAlignment( (SfxChildAlignment) (sal_uInt16) aStr.toInt32() );
             }
 
-            nPos = aStr.Search(',');
-            if ( nPos != STRING_NOTFOUND )
+            nPos = aStr.indexOf(',');
+            if ( nPos != -1 )
             {
                 // get split size and position in SplitWindow
                 Point aPos;
-                aStr.Erase(0, nPos+1);
+                aStr = aStr.copy(nPos+1);
                 if ( GetPosSizeFromString( aStr, aPos, pImp->aSplitSize ) )
                 {
                     pImp->nLine = pImp->nDockLine = (sal_uInt16) aPos.X();
@@ -1200,26 +1200,26 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aWinState = pImp->aWinState;
     rInfo.aExtraString = "AL:(";
     rInfo.aExtraString += OUString::number((sal_uInt16) GetAlignment());
-    rInfo.aExtraString += ',';
+    rInfo.aExtraString += ",";
     rInfo.aExtraString += OUString::number ((sal_uInt16) pImp->GetLastAlignment());
     if ( pImp->bSplitable )
     {
         Point aPos(pImp->nLine, pImp->nPos);
-        rInfo.aExtraString += ',';
+        rInfo.aExtraString += ",";
         rInfo.aExtraString += OUString::number( aPos.X() );
-        rInfo.aExtraString += '/';
+        rInfo.aExtraString += "/";
         rInfo.aExtraString += OUString::number( aPos.Y() );
-        rInfo.aExtraString += '/';
+        rInfo.aExtraString += "/";
         rInfo.aExtraString += OUString::number( pImp->nHorizontalSize );
-        rInfo.aExtraString += '/';
+        rInfo.aExtraString += "/";
         rInfo.aExtraString += OUString::number( pImp->nVerticalSize );
-        rInfo.aExtraString += ',';
+        rInfo.aExtraString += ",";
         rInfo.aExtraString += OUString::number( pImp->aSplitSize.Width() );
-        rInfo.aExtraString += ';';
+        rInfo.aExtraString += ";";
         rInfo.aExtraString += OUString::number( pImp->aSplitSize.Height() );
     }
 
-    rInfo.aExtraString += ')';
+    rInfo.aExtraString += ")";
 }
 
 //-------------------------------------------------------------------------

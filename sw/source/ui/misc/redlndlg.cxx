@@ -1196,20 +1196,20 @@ void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
     }
 }
 
-void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
+void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
 {
-    rExtraData.AppendAscii("AcceptChgDat:(");
+    rExtraData += "AcceptChgDat:(";
 
     sal_uInt16  nCount = pTable->TabCount();
 
     rExtraData += OUString::number(nCount);
-    rExtraData += ';';
+    rExtraData += ";";
     for(sal_uInt16 i = 0; i < nCount; i++)
     {
         rExtraData += OUString::number( pTable->GetTab(i) );
-        rExtraData += ';';
+        rExtraData += ";";
     }
-    rExtraData += ')';
+    rExtraData += ")";
 }
 
 

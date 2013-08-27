@@ -50,12 +50,12 @@ class SfxChildWindowContext;
 // ChildWindow Configuration
 struct SfxChildWinInfo
 {
-    sal_Bool                bVisible;
+    sal_Bool            bVisible;
     Point               aPos;
     Size                aSize;
-    sal_uInt16              nFlags;
-    String              aExtraString;
-    OString        aWinState;
+    sal_uInt16          nFlags;
+    OUString            aExtraString;
+    OString             aWinState;
 
                         SfxChildWinInfo()
                         {

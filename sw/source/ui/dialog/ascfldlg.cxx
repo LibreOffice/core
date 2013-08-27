@@ -71,16 +71,16 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         const OUString sFindNm = OUString::createFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
-        if( STRING_NOTFOUND != nStt )
+        sal_Int32 nEnd, nStt = GetExtraData().indexOf( sFindNm );
+        if( -1 != nStt )
         {
             nStt += nDialogExtraDataLen;
-            nEnd = GetExtraData().Search( cDialogExtraDataClose, nStt );
-            if( STRING_NOTFOUND != nEnd )
+            nEnd = GetExtraData().indexOf( cDialogExtraDataClose, nStt );
+            if( -1 != nEnd )
             {
-                aOpt.ReadUserData( GetExtraData().Copy( nStt, nEnd - nStt ));
+                aOpt.ReadUserData( GetExtraData().copy( nStt, nEnd - nStt ));
                 nStt -= nDialogExtraDataLen;
-                GetExtraData().Erase( nStt, nEnd - nStt + 1 );
+                GetExtraData() = GetExtraData().replaceAt( nStt, nEnd - nStt + 1, "" );
             }
         }
     }
@@ -266,19 +266,19 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
         const OUString sFindNm = OUString::createFromAscii(
                                     m_pFontLB->IsVisible() ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
-        if( STRING_NOTFOUND != nStt )
+        sal_Int32 nEnd, nStt = GetExtraData().indexOf( sFindNm );
+        if( -1 != nStt )
         {
             // called twice, so remove "old" settings
-            nEnd = GetExtraData().Search( cDialogExtraDataClose,
+            nEnd = GetExtraData().indexOf( cDialogExtraDataClose,
                                             nStt + nDialogExtraDataLen );
-            if( STRING_NOTFOUND != nEnd )
-                GetExtraData().Erase( nStt, nEnd - nStt + 1 );
+            if( -1 != nEnd )
+                GetExtraData() = GetExtraData().replaceAt( nStt, nEnd - nStt + 1, "" );
         }
-        String sTmp(GetExtraData());
+        OUString sTmp(GetExtraData());
         sTmp += sFindNm;
         sTmp += sData;
-        sTmp += cDialogExtraDataClose;
+        sTmp += OUString(cDialogExtraDataClose);
         GetExtraData() = sTmp;
     }
 }

@@ -1787,28 +1787,27 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 
 void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 {
-    String aStr;
+    OUString aStr;
     if(pInfo!=NULL)
     {
-        if ( pInfo->aExtraString.Len() )
+        if ( !pInfo->aExtraString.isEmpty() )
         {
-            xub_StrLen nPos = pInfo->aExtraString.Search(
-                OUString("AcceptChgDat:"));
+            sal_Int32 nPos = pInfo->aExtraString.indexOf("AcceptChgDat:");
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor
-            if ( nPos != STRING_NOTFOUND )
+            if ( nPos != -1 )
             {
-                xub_StrLen n1 = pInfo->aExtraString.Search('(', nPos);
-                if ( n1 != STRING_NOTFOUND )
+                sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
+                if ( n1 != -1 )
                 {
-                    xub_StrLen n2 = pInfo->aExtraString.Search(')', n1);
-                    if ( n2 != STRING_NOTFOUND )
+                    sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
+                    if ( n2 != -1 )
                     {
                         // Alignment-String herausschneiden
-                        aStr = pInfo->aExtraString.Copy(nPos, n2 - nPos + 1);
-                        pInfo->aExtraString.Erase(nPos, n2 - nPos + 1);
-                        aStr.Erase(0, n1-nPos+1);
+                        aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
+                        pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
+                        aStr = aStr.copy( n1-nPos+1 );
                     }
                 }
             }
@@ -1816,15 +1815,15 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
     }
     SfxModelessDialog::Initialize(pInfo);
 
-    if ( aStr.Len())
+    if ( !aStr.isEmpty())
     {
-        sal_uInt16 nCount=(sal_uInt16)aStr.ToInt32();
+        sal_uInt16 nCount=(sal_uInt16)aStr.toInt32();
 
         for(sal_uInt16 i=0;i<nCount;i++)
         {
-            xub_StrLen n1 = aStr.Search(';');
-            aStr.Erase(0, n1+1);
-            pTheView->SetTab(i,(sal_uInt16)aStr.ToInt32(),MAP_PIXEL);
+            sal_Int32 n1 = aStr.indexOf(';');
+            aStr = aStr.copy( n1+1 );
+            pTheView->SetTab(i, (sal_uInt16)aStr.toInt32(), MAP_PIXEL);
         }
     }
 }
@@ -1834,18 +1833,18 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxModelessDialog::FillInfo(rInfo);
-    rInfo.aExtraString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "AcceptChgDat:(" ));
+    rInfo.aExtraString += "AcceptChgDat:(";
 
     sal_uInt16  nCount=pTheView->TabCount();
 
     rInfo.aExtraString += OUString::number(nCount);
-    rInfo.aExtraString += ';';
+    rInfo.aExtraString += ";";
     for(sal_uInt16 i=0;i<nCount;i++)
     {
         rInfo.aExtraString += OUString::number(pTheView->GetTab(i));
-        rInfo.aExtraString += ';';
+        rInfo.aExtraString += ";";
     }
-    rInfo.aExtraString += ')';
+    rInfo.aExtraString += ")";
 }
 
 void ScAcceptChgDlg::InitFilter()

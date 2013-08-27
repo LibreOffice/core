@@ -87,28 +87,28 @@ CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
 
 CopyDlg::~CopyDlg()
 {
-    String& rStr = GetExtraData();
+    OUString& rStr = GetExtraData();
 
     rStr = OUString::number(m_pNumFldCopies->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString(TOKEN);
 
     rStr += OUString::number(m_pMtrFldMoveX->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number(m_pMtrFldMoveY->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number(m_pMtrFldAngle->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number(m_pMtrFldWidth->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number(m_pMtrFldHeight->GetValue());
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number( m_pLbStartColor->GetSelectEntryColor().GetColor() );
-    rStr.Append( TOKEN );
+    rStr += OUString( TOKEN );
 
     rStr += OUString::number( m_pLbEndColor->GetSelectEntryColor().GetColor() );
 }

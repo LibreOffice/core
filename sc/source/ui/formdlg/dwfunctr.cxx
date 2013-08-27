@@ -1054,28 +1054,27 @@ IMPL_LINK_NOARG(ScFunctionDockWin, TimerHdl)
 
 void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
 {
-    String aStr;
+    OUString aStr;
     if(pInfo!=NULL)
     {
-        if ( pInfo->aExtraString.Len() )
+        if ( !pInfo->aExtraString.isEmpty() )
         {
-            xub_StrLen nPos = pInfo->aExtraString.Search(
-                OUString("ScFuncList:"));
+            sal_Int32 nPos = pInfo->aExtraString.indexOf( "ScFuncList:" );
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor
-            if ( nPos != STRING_NOTFOUND )
+            if ( nPos != -1 )
             {
-                xub_StrLen n1 = pInfo->aExtraString.Search('(', nPos);
-                if ( n1 != STRING_NOTFOUND )
+                sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
+                if ( n1 != -1 )
                 {
-                    xub_StrLen n2 = pInfo->aExtraString.Search(')', n1);
-                    if ( n2 != STRING_NOTFOUND )
+                    sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
+                    if ( n2 != -1 )
                     {
                         // Alignment-String herausschneiden
-                        aStr = pInfo->aExtraString.Copy(nPos, n2 - nPos + 1);
-                        pInfo->aExtraString.Erase(nPos, n2 - nPos + 1);
-                        aStr.Erase(0, n1-nPos+1);
+                        aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
+                        pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
+                        aStr = aStr.copy( n1-nPos+1 );
                     }
                 }
             }
@@ -1083,13 +1082,13 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
     }
     SfxDockingWindow::Initialize(pInfo);
 
-    if ( aStr.Len())
+    if ( !aStr.isEmpty())
     {
-        aSplitterInitPos=aPrivatSplit.GetPosPixel();
-        aSplitterInitPos.Y()=(sal_uInt16) aStr.ToInt32();
-        xub_StrLen n1 = aStr.Search(';');
-        aStr.Erase(0, n1+1);
-        sal_uInt16 nSelPos=sal::static_int_cast<sal_uInt16>( aStr.ToInt32() );
+        aSplitterInitPos = aPrivatSplit.GetPosPixel();
+        aSplitterInitPos.Y() = (sal_uInt16) aStr.toInt32();
+        sal_Int32 n1 = aStr.indexOf(';');
+        aStr = aStr.copy( n1+1 );
+        sal_uInt16 nSelPos = sal::static_int_cast<sal_uInt16>( aStr.toInt32() );
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 

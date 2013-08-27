@@ -127,7 +127,7 @@ public:
     void            CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept );
 
     void            Initialize(const String &rExtraData);
-    void            FillInfo(String &rExtraData) const;
+    void            FillInfo(OUString &rExtraData) const;
 
     virtual void    Activate();
 };

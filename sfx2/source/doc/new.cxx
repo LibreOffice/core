@@ -523,12 +523,12 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         }
     }
 
-    String &rExtra = pAntiImplP->GetExtraData();
+    OUString &rExtra = pAntiImplP->GetExtraData();
     sal_Int32 nTokCount = comphelper::string::getTokenCount(rExtra, '|');
     if( nTokCount > 0 && nFlags )
-        MORE_BTN(SetState(comphelper::string::equals(rExtra.GetToken( 0, '|'), 'Y')));
+        MORE_BTN(SetState(comphelper::string::equals(rExtra.getToken( 0, '|'), 'Y')));
     if( nTokCount > 1 && nFlags )
-        aPreviewBtn.Check(comphelper::string::equals(rExtra.GetToken( 1 ,'|'), 'Y'));
+        aPreviewBtn.Check(comphelper::string::equals(rExtra.getToken( 1 ,'|'), 'Y'));
 
     aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
@@ -558,10 +558,10 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
 
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 {
-    String &rExtra = pAntiImpl->GetExtraData();
-    rExtra = MORE_BTN(GetState()) ? 'Y' : 'N';
-    rExtra += '|';
-    rExtra += aPreviewBtn.IsChecked() ? 'Y' : 'N';
+    OUString &rExtra = pAntiImpl->GetExtraData();
+    rExtra = MORE_BTN(GetState()) ? "Y" : "N";
+    rExtra += "|";
+    rExtra += aPreviewBtn.IsChecked() ? "Y" : "N";
 
     delete pMoreBt;
 }
