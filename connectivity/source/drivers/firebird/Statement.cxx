@@ -97,28 +97,8 @@ void OStatement::disposeResultSet()
 sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    SAL_INFO("connectivity.firebird", "executeUpdate(" << sql << ")");
-
-    int aErr = isc_dsql_execute_immediate(m_statusVector,
-                                          &m_pConnection->getDBHandle(),
-                                          &m_pConnection->getTransaction(),
-                                          0,
-                                          OUStringToOString(sql, RTL_TEXTENCODING_UTF8).getStr(),
-                                          FIREBIRD_SQL_DIALECT,
-                                          NULL);
-
-    if (aErr)
-        SAL_WARN("connectivity.firebird", "isc_dsql_execute_immediate failed" );
-
-    evaluateStatusVector(m_statusVector, sql, *this);
-    // TODO: get number of changed rows with SELECT ROW_COUNT (use executeQuery)
-    //     return getUpdateCount();
-    // We can't use     return getStatementChangeCount(); since that depends
-    // on having the statement handle, so maybe just use executeQuery instead?
-    return 0;
+    execute(sql);
+    return getStatementChangeCount();
 }
 
 
