@@ -42,6 +42,19 @@ struct IsoLanguageCountryEntry
     ::com::sun::star::lang::Locale getLocale() const;
 };
 
+struct IsoLanguageScriptCountryEntry
+{
+    LanguageType  mnLang;
+    sal_Char      maLanguageScript[9];      ///< "ll-Ssss" or "lll-Ssss"
+    sal_Char      maCountry[3];
+
+    /** Obtain a language tag string with '-' separator. */
+    OUString getTagString() const;
+
+    /** Obtain a locale. */
+    ::com::sun::star::lang::Locale getLocale() const;
+};
+
 struct IsoLangEngEntry
 {
     LanguageType        mnLang;
@@ -539,6 +552,12 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
+static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
+{
+//  { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,   "sr-Latn", "RS" },  // for example, once we support it in l10n
+    { LANGUAGE_DONTKNOW,                    "",        ""   }   // marks end of table
+};
+
 static IsoLanguageCountryEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US" };
 
@@ -553,6 +572,19 @@ OUString IsoLanguageCountryEntry::getTagString() const
 ::com::sun::star::lang::Locale IsoLanguageCountryEntry::getLocale() const
 {
     return lang::Locale( OUString::createFromAscii( maLanguage), OUString::createFromAscii( maCountry), OUString());
+}
+
+OUString IsoLanguageScriptCountryEntry::getTagString() const
+{
+    if (maCountry[0])
+        return OUString( OUString::createFromAscii( maLanguageScript) + "-" + OUString::createFromAscii( maCountry));
+    else
+        return OUString::createFromAscii( maLanguageScript);
+}
+
+::com::sun::star::lang::Locale IsoLanguageScriptCountryEntry::getLocale() const
+{
+    return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
 
 // -----------------------------------------------------------------------
