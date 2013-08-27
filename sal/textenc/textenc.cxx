@@ -380,7 +380,8 @@ void SAL_CALL thisModule() {}
 class FullTextEncodingData: private boost::noncopyable {
 public:
     FullTextEncodingData() {
-        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenc"))) {
+        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo")))
+        {
             SAL_WARN( "sal.textenc", "Loading sal_textenc library failed" );
             std::abort();
         }
