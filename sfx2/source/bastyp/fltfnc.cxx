@@ -136,10 +136,10 @@ inline String ToUpper_Impl( const String &rStr )
 class SfxFilterContainer_Impl
 {
 public:
-    String              aName;
-    String              aServiceName;
+    OUString            aName;
+    OUString            aServiceName;
 
-                        SfxFilterContainer_Impl( const String& rName )
+                        SfxFilterContainer_Impl( const OUString& rName )
                             : aName( rName )
                         {
                             aServiceName = SfxObjectShell::GetServiceNameFromFactory( rName );
@@ -153,9 +153,9 @@ const SfxFilter* SfxFilterContainer::aMethod( ArgType aArg, SfxFilterFlags nMust
     return aMatch.aMethod( aArg, nMust, nDont ); \
 }
 
-IMPL_FORWARD_LOOP( GetFilter4EA, const String&, rEA );
-IMPL_FORWARD_LOOP( GetFilter4Extension, const String&, rExt );
-IMPL_FORWARD_LOOP( GetFilter4FilterName, const String&, rName );
+IMPL_FORWARD_LOOP( GetFilter4EA, const OUString&, rEA );
+IMPL_FORWARD_LOOP( GetFilter4Extension, const OUString&, rExt );
+IMPL_FORWARD_LOOP( GetFilter4FilterName, const OUString&, rName );
 
 const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
@@ -165,7 +165,7 @@ const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilt
 
 //----------------------------------------------------------------
 
-SfxFilterContainer::SfxFilterContainer( const String& rName )
+SfxFilterContainer::SfxFilterContainer( const OUString& rName )
 {
     pImpl = new SfxFilterContainer_Impl( rName );
 }
@@ -179,12 +179,12 @@ SfxFilterContainer::~SfxFilterContainer()
 
 //----------------------------------------------------------------
 
-const String SfxFilterContainer::GetName() const
+const OUString SfxFilterContainer::GetName() const
 {
     return pImpl->aName;
 }
 
-const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName )
+const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rName )
 {
     // Try to find out the type of factory.
     // Interpret given name as Service- and ShortName!
@@ -683,7 +683,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const OUString& rMediaType, S
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4EA( const OUString& rType, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     if ( m_rImpl.pList )
     {
@@ -712,7 +712,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFl
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     if ( m_rImpl.pList )
     {
@@ -765,7 +765,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFil
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     m_rImpl.InitForIterating();
     const SfxFilter* pFirstFilter=0;
@@ -785,14 +785,14 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFil
     return pFirstFilter;
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     String aName( rName );
     sal_uInt16 nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
         SAL_WARN( "sfx.bastyp", "Old filter name used!");
-        aName = rName.Copy( nIndex + 2 );
+        aName = rName.copy( nIndex + 2 );
     }
 
     if ( bFirstRead )
@@ -840,7 +840,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
     return NULL;
 }
 
-IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
+IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
     if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
