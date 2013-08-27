@@ -1050,7 +1050,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
-    String aStringTypeFN;
+    OUString aStringTypeFN;
     if ( pFileDlg->Execute( pDialogParams, aStringTypeFN ) != ERRCODE_NONE )
     {
         throw task::ErrorCodeIOException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );

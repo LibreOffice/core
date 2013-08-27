@@ -1452,7 +1452,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                                         SfxItemSet *&   rpSet,
-                                        String&         rFilter )
+                                        OUString&       rFilter )
 {
     // rFilter is a pure output parameter, it shouldn't be used for anything else
     // changing this would surely break code
@@ -1641,18 +1641,18 @@ OUString FileDialogHelper_Impl::getFilter() const
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
+void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
 {
     _rFilter = getCurrentFilterUIName();
 
-    if ( !_rFilter.Len() )
+    if ( _rFilter.isEmpty() )
         _rFilter = maCurFilter;
 
-    if ( _rFilter.Len() && mpMatcher )
+    if ( !_rFilter.isEmpty() && mpMatcher )
     {
         const SfxFilter* pFilter =
             mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
-        _rFilter = pFilter ? String(pFilter->GetFilterName()) : _rFilter.Erase();
+        _rFilter = pFilter ? pFilter->GetFilterName() : OUString("");
     }
 }
 
@@ -2288,7 +2288,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
-    const String& rFact,
+    const OUString& rFact,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont )
 {
@@ -2304,11 +2304,11 @@ FileDialogHelper::FileDialogHelper(
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
-    const String& rFact,
+    const OUString& rFact,
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
-    const String& rStandardDir,
+    const OUString& rStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
@@ -2367,7 +2367,7 @@ FileDialogHelper::~FileDialogHelper()
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::CreateMatcher( const String& rFactory )
+void FileDialogHelper::CreateMatcher( const OUString& rFactory )
 {
     mpImp->createMatcher( SfxObjectShell::GetServiceNameFromFactory(rFactory) );
 }
@@ -2397,8 +2397,8 @@ IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker)
 // rDirPath has to be a directory
 ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
                                    SfxItemSet *&   rpSet,
-                                   String&         rFilter,
-                                   const String&   rDirPath )
+                                   OUString&       rFilter,
+                                   const OUString& rDirPath )
 {
     SetDisplayFolder( rDirPath );
     return mpImp->execute( rpURLList, rpSet, rFilter );
@@ -2413,7 +2413,7 @@ ErrCode FileDialogHelper::Execute()
 
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
-                                   String&         rFilter )
+                                   OUString&       rFilter )
 {
     ErrCode nRet;
     std::vector<OUString> rURLList;
@@ -2447,23 +2447,23 @@ sal_Bool FileDialogHelper::IsPasswordEnabled() const
 
 // ------------------------------------------------------------------------
 
-String FileDialogHelper::GetRealFilter() const
+OUString FileDialogHelper::GetRealFilter() const
 {
-    String sFilter;
+    OUString sFilter;
     if ( mpImp )
         mpImp->getRealFilter( sFilter );
     return sFilter;
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetTitle( const String& rNewTitle )
+void FileDialogHelper::SetTitle( const OUString& rNewTitle )
 {
     if ( mpImp->mxFileDlg.is() )
         mpImp->mxFileDlg->setTitle( rNewTitle );
 }
 
 // ------------------------------------------------------------------------
-String FileDialogHelper::GetPath() const
+OUString FileDialogHelper::GetPath() const
 {
     OUString aPath;
 
@@ -2539,13 +2539,13 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 }
 
 // ------------------------------------------------------------------------
-String FileDialogHelper::GetDisplayDirectory() const
+OUString FileDialogHelper::GetDisplayDirectory() const
 {
     return mpImp->getPath();
 }
 
 // ------------------------------------------------------------------------
-String FileDialogHelper::GetCurrentFilter() const
+OUString FileDialogHelper::GetCurrentFilter() const
 {
     return mpImp->getFilter();
 }
@@ -2576,9 +2576,9 @@ static int impl_isFolder( const OUString& rPath )
     return -1;
 }
 
-void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
+void FileDialogHelper::SetDisplayDirectory( const OUString& _rPath )
 {
-    if ( !_rPath.Len() )
+    if ( _rPath.isEmpty() )
         return;
 
     // if the given path isn't a folder, we cut off the last part
@@ -2613,28 +2613,28 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetDisplayFolder( const String& _rURL )
+void FileDialogHelper::SetDisplayFolder( const OUString& _rURL )
 {
     mpImp->displayFolder( _rURL );
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetFileName( const String& _rFileName )
+void FileDialogHelper::SetFileName( const OUString& _rFileName )
 {
     mpImp->setFileName( _rFileName );
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::AddFilter( const String& rFilterName,
-                                  const String& rExtension )
+void FileDialogHelper::AddFilter( const OUString& rFilterName,
+                                  const OUString& rExtension )
 {
     mpImp->addFilter( rFilterName, rExtension );
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetCurrentFilter( const String& rFilter )
+void FileDialogHelper::SetCurrentFilter( const OUString& rFilter )
 {
-    String sFilter( rFilter );
+    OUString sFilter( rFilter );
     if ( mpImp->isShowFilterExtensionEnabled() )
         sFilter = mpImp->getFilterWithExtension( rFilter );
     mpImp->setFilter( sFilter );
@@ -2690,25 +2690,25 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,
-                             const String& rFact,
+                             const OUString& rFact,
                              std::vector<OUString>& rpURLList,
-                             String& rFilter,
+                             OUString& rFilter,
                              SfxItemSet *& rpSet,
-                             const String* pPath,
+                             const OUString* pPath,
                              sal_Int16 nDialog,
-                             const String& rStandardDir,
+                             const OUString& rStandardDir,
                              const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nDialogType, nFlags,
             rFact, nDialog, 0, 0, rStandardDir, rBlackList );
 
-    String aPath;
+    OUString aPath;
     if ( pPath )
         aPath = *pPath;
 
     nRet = aDialog.Execute( rpURLList, rpSet, rFilter, aPath );
-    DBG_ASSERT( rFilter.SearchAscii(": ") == STRING_NOTFOUND, "Old filter name used!");
+    DBG_ASSERT( rFilter.indexOf(": ") == -1, "Old filter name used!");
 
     return nRet;
 }

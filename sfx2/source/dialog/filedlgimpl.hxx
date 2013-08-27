@@ -188,7 +188,7 @@ namespace sfx2
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,
                                          SfxItemSet *&   rpSet,
-                                         String&         rFilter );
+                                         OUString&       rFilter );
         ErrCode                 execute();
 
         void                    setFilter( const OUString& rFilter );
@@ -201,9 +201,9 @@ namespace sfx2
         void                    displayFolder( const OUString& rPath );
         void                    setFileName( const OUString& _rFile );
 
-        OUString         getPath() const;
-        OUString         getFilter() const;
-        void                    getRealFilter( String& _rFilter ) const;
+        OUString                getPath() const;
+        OUString                getFilter() const;
+        void                    getRealFilter( OUString& _rFilter ) const;
 
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
         void                    createMatcher( const String& rFactory );

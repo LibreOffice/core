@@ -636,9 +636,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // get FileName from dialog
         std::vector<OUString> pURLList;
-        String aFilter;
+        OUString aFilter;
         SfxItemSet* pSet = NULL;
-        String aPath;
+        OUString aPath;
         SFX_REQUEST_ARG( rReq, pFolderNameItem, SfxStringItem, SID_PATH, sal_False );
         if ( pFolderNameItem )
             aPath = pFolderNameItem->GetValue();
@@ -646,10 +646,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             aPath = SvtPathOptions().GetTemplatePath();
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(aPath, ';');
-            aPath = aPath.GetToken(
-                sal::static_int_cast< xub_StrLen >(
-                    nTokenCount ? ( nTokenCount - 1 ) : 0 ),
-                ';' );
+            aPath = aPath.getToken( nTokenCount ? ( nTokenCount - 1 ) : 0 , ';' );
         }
 
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
@@ -672,7 +669,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                SFXWB_MULTISELECTION, String(), pURLList,
+                SFXWB_MULTISELECTION, OUString(), pURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 
         if ( nErr == ERRCODE_ABORT )
@@ -682,7 +679,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         rReq.SetArgs( *(SfxAllItemSet*)pSet );
-        if (aFilter.Len() >0 )
+        if ( !aFilter.isEmpty() )
             rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
         rReq.AppendItem( SfxStringItem( SID_REFERER, OUString(SFX_REFERER_USER) ) );

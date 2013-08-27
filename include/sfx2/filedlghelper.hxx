@@ -111,17 +111,17 @@ public:
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
-                                              const String& rFactory,
+                                              const OUString& rFactory,
                                               SfxFilterFlags nMust = 0,
                                               SfxFilterFlags nDont = 0 );
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
-                                              const String& rFactory,
+                                              const OUString& rFactory,
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
                                               SfxFilterFlags nDont,
-                                              const String& rStandardDir,
+                                              const OUString& rStandardDir,
                                               const ::com::sun::star::uno::Sequence< OUString >& rBlackList);
 
                             FileDialogHelper( sal_Int16 nDialogType,
@@ -140,10 +140,10 @@ public:
     inline ErrCode          GetError() const { return m_nError; }
     sal_Int16               GetDialogType() const;
     sal_Bool                IsPasswordEnabled() const;
-    String                  GetRealFilter() const;
+    OUString                  GetRealFilter() const;
 
-    void                    SetTitle( const String&  rNewTitle );
-    String                  GetPath() const;
+    void                    SetTitle( const OUString&  rNewTitle );
+    OUString                GetPath() const;
 
     /** @deprected: Don't use this method to retrieve the selected files
         There are file picker which can provide multiple selected file which belong
@@ -155,8 +155,8 @@ public:
     /** Provides the selected files with full path information */
     ::com::sun::star::uno::Sequence< OUString > GetSelectedFiles() const;
 
-    void                     AddFilter( const String& rFilterName, const String& rExtension );
-    void                     SetCurrentFilter( const String& rFilter );
+    void                     AddFilter( const OUString& rFilterName, const OUString& rExtension );
+    void                     SetCurrentFilter( const OUString& rFilter );
 
     /** sets an initial display directory/file name
 
@@ -168,7 +168,7 @@ public:
 
             Use SetDisplayFolder and SetFileName.
     */
-    void                     SetDisplayDirectory( const String& rPath );
+    void                     SetDisplayDirectory( const OUString& rPath );
 
     /** sets a new folder whose content is to be displayed in the file picker
 
@@ -179,7 +179,7 @@ public:
         @throws ::com::sun::star::uno::RuntimeException
             if the invocation of any of the file picker or UCB methods throws a RuntimeException.
     */
-    void                     SetDisplayFolder( const String& _rURL );
+    void                     SetDisplayFolder( const OUString& _rURL );
 
     /** sets an initial file name to display
 
@@ -193,10 +193,10 @@ public:
             <li>Exceptions thrown from the <code>XFilePicker</code> are caught and silenced.</li>
         </ul>
     */
-    void                     SetFileName( const String& _rFileName );
+    void                     SetFileName( const OUString& _rFileName );
 
-    String                   GetCurrentFilter() const;
-    String                   GetDisplayDirectory() const;
+    OUString                 GetCurrentFilter() const;
+    OUString                 GetDisplayDirectory() const;
     ErrCode                  GetGraphic( Graphic& rGraphic ) const;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > GetFilePicker() const;
@@ -220,7 +220,7 @@ public:
             a corresponding element herein.
     */
     void                    SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
-    void                    CreateMatcher( const String& rName );
+    void                    CreateMatcher( const OUString& rName );
 
     /** sets the context of the dialog and trigger necessary actions e.g. loading config, setting help id
         @param _eNewContext
@@ -231,11 +231,11 @@ public:
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
    ErrCode                  Execute( std::vector<OUString>& rpURLList,
-                                      SfxItemSet *&   rpSet,
-                                      String&         rFilter,
-                                      const String&   rDirPath );
-    ErrCode                  Execute( SfxItemSet *&   rpSet,
-                                      String&         rFilter );
+                                     SfxItemSet *&   rpSet,
+                                     OUString&         rFilter,
+                                     const OUString&   rDirPath );
+   ErrCode                  Execute( SfxItemSet *&   rpSet,
+                                     OUString&         rFilter );
 };
 
 #define SFX2_IMPL_DIALOG_CONFIG 0
@@ -244,13 +244,13 @@ public:
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,
-                             const String& rFact,
+                             const OUString& rFact,
                              std::vector<OUString>& rpURLList,
-                             String& rFilter,
+                             OUString& rFilter,
                              SfxItemSet *& rpSet,
-                             const String* pPath = NULL,
+                             const OUString* pPath = NULL,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                             const String& rStandardDir = OUString(),
+                             const OUString& rStandardDir = OUString(),
                              const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >());
 
 
