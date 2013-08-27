@@ -766,7 +766,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
     sal_Int32 nCountryLen = aUpperCountry.getLength();
 
-    if (!rLocale.Variant.isEmpty())
+    if (rLocale.Language == I18NLANGTAG_QLT)
     {
         // Search in ISO lll-Ssss-CC
         const IsoLanguageScriptCountryEntry* pFirstScript = NULL;
