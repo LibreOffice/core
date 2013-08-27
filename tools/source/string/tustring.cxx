@@ -265,22 +265,6 @@ void STRING::ReleaseBufferAccess( xub_StrLen nLen )
         mpData->mnLen = nLen;
 }
 
-STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    if ( nLen )
-        mpData = ImplAllocData( nLen );
-    else
-    {
-        mpData = NULL;
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-
-    return mpData->maStr;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

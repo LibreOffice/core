@@ -276,7 +276,6 @@ public:
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
     sal_Unicode*        GetBufferAccess();
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
-    sal_Unicode*        AllocBuffer( xub_StrLen nLen );
 
     friend sal_Bool     operator == ( const UniString& rStr1,   const UniString& rStr2 )
                             { return rStr1.Equals( rStr2 ); }
