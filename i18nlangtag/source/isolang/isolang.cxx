@@ -718,7 +718,9 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     {
         if ( pScriptEntry->mnLang == nLang )
         {
-            rLocale = pScriptEntry->getLocale();
+            rLocale.Language = I18NLANGTAG_QLT;
+            rLocale.Country  = OUString::createFromAscii( pScriptEntry->maCountry);
+            rLocale.Variant  = pScriptEntry->getTagString();
             return;
         }
     }
