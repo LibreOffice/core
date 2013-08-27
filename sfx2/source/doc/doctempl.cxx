@@ -282,7 +282,7 @@ static sal_Bool getTextProperty_Impl( Content& rContent,
 
 //========================================================================
 
-String SfxDocumentTemplates::GetFullRegionName
+OUString SfxDocumentTemplates::GetFullRegionName
 (
     sal_uInt16 nIdx                     // Region Index
 )   const
@@ -297,7 +297,7 @@ String SfxDocumentTemplates::GetFullRegionName
 
 {
     // First: find the RegionData for the index
-    String aName;
+    OUString aName;
 
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -318,7 +318,7 @@ String SfxDocumentTemplates::GetFullRegionName
 
 //------------------------------------------------------------------------
 
-const String& SfxDocumentTemplates::GetRegionName
+const OUString& SfxDocumentTemplates::GetRegionName
 (
     sal_uInt16 nIdx                 // Region Index
 )   const
@@ -333,7 +333,7 @@ const String& SfxDocumentTemplates::GetRegionName
 
 */
 {
-    static String maTmpString;
+    static OUString maTmpString;
 
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -344,10 +344,10 @@ const String& SfxDocumentTemplates::GetRegionName
         if ( pData )
             maTmpString = pData->GetTitle();
         else
-            maTmpString.Erase();
+            maTmpString = "";
     }
     else
-        maTmpString.Erase();
+        maTmpString = "";
 
     return maTmpString;
 }
@@ -408,7 +408,7 @@ sal_uInt16 SfxDocumentTemplates::GetCount
 
 //------------------------------------------------------------------------
 
-const String& SfxDocumentTemplates::GetName
+const OUString& SfxDocumentTemplates::GetName
 (
     sal_uInt16 nRegion,     //  Region Index, in which the entry lies
     sal_uInt16 nIdx         //  Index of the entry
@@ -426,7 +426,7 @@ const String& SfxDocumentTemplates::GetName
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
-    static String maTmpString;
+    static OUString maTmpString;
 
     if ( pImp->Construct() )
     {
@@ -439,17 +439,17 @@ const String& SfxDocumentTemplates::GetName
         if ( pEntry )
             maTmpString = pEntry->GetTitle();
         else
-            maTmpString.Erase();
+            maTmpString = "";
     }
     else
-        maTmpString.Erase();
+        maTmpString = "";
 
     return maTmpString;
 }
 
 //------------------------------------------------------------------------
 
-String SfxDocumentTemplates::GetPath
+OUString SfxDocumentTemplates::GetPath
 (
     sal_uInt16  nRegion,    //  Region Index, in which the entry lies
     sal_uInt16  nIdx        //  Index of the entry
@@ -467,7 +467,7 @@ String SfxDocumentTemplates::GetPath
     DocTemplLocker_Impl aLocker( *pImp );
 
     if ( !pImp->Construct() )
-        return String();
+        return OUString();
 
     DocTempl_EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
@@ -478,7 +478,7 @@ String SfxDocumentTemplates::GetPath
     if ( pEntry )
         return pEntry->GetTargetURL();
     else
-        return String();
+        return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -713,7 +713,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
 (
     sal_uInt16          nRegion,    //  Region of the template to be exported
     sal_uInt16          nIdx,       //  Index of the template to be exported
-    const String&   rName       /*  File name under which the template is to
+    const OUString&     rName       /*  File name under which the template is to
                                     be created */
 )   const
 
@@ -786,7 +786,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     sal_uInt16      nRegion,        /*  Region in which the template is to be
                                     imported */
     sal_uInt16      nIdx,           //  Index of the new template in this Region
-    String&     rName           /*  File name of the template to be imported
+    OUString&       rName           /*  File name of the template to be imported
                                     as an out parameter of the (automatically
                                     generated from the file name) logical name
                                     of the template */
@@ -992,7 +992,7 @@ sal_Bool SfxDocumentTemplates::Delete
 
 sal_Bool SfxDocumentTemplates::InsertDir
 (
-    const String&   rText,      //  the logical name of the new Region
+    const OUString&     rText,      //  the logical name of the new Region
     sal_uInt16          nRegion     //  Region Index
 )
 
@@ -1113,9 +1113,9 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
 
 sal_Bool SfxDocumentTemplates::GetFull
 (
-    const String &rRegion,      // Region Name
-    const String &rName,        // Template Name
-    String &rPath               // Out: Path + File name
+    const OUString &rRegion,      // Region Name
+    const OUString &rName,        // Template Name
+    OUString &rPath               // Out: Path + File name
 )
 
 /*  [Description]
@@ -1136,7 +1136,7 @@ sal_Bool SfxDocumentTemplates::GetFull
     DocTemplLocker_Impl aLocker( *pImp );
 
     // We don't search for empty names!
-    if ( ! rName.Len() )
+    if ( rName.isEmpty() )
         return sal_False;
 
     if ( ! pImp->Construct() )
@@ -1150,7 +1150,7 @@ sal_Bool SfxDocumentTemplates::GetFull
         RegionData_Impl *pRegion = pImp->GetRegion( i );
 
         if( pRegion &&
-            ( !rRegion.Len() || ( rRegion == String( pRegion->GetTitle() ) ) ) )
+            ( rRegion.isEmpty() || ( rRegion == pRegion->GetTitle() ) ) )
         {
             pEntry = pRegion->GetEntry( rName );
 
@@ -1169,9 +1169,9 @@ sal_Bool SfxDocumentTemplates::GetFull
 
 sal_Bool SfxDocumentTemplates::GetLogicNames
 (
-    const String &rPath,            // Full Path to the template
-    String &rRegion,                // Out: Region name
-    String &rName                   // Out: Template name
+    const OUString &rPath,            // Full Path to the template
+    OUString &rRegion,                // Out: Region name
+    OUString &rName                   // Out: Template name
 ) const
 
 /*  [Description]

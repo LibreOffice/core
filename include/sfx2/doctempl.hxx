@@ -62,13 +62,13 @@ public:
 
     void                ReInitFromComponent();
 
-    sal_uInt16              GetRegionCount() const;
-    const String&       GetRegionName(sal_uInt16 nIdx) const;                   //dv!
-    String              GetFullRegionName(sal_uInt16 nIdx) const;
+    sal_uInt16          GetRegionCount() const;
+    const OUString&     GetRegionName(sal_uInt16 nIdx) const;                   //dv!
+    OUString            GetFullRegionName(sal_uInt16 nIdx) const;
 
-    sal_uInt16              GetCount(sal_uInt16 nRegion) const;
-    const String&       GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
-    String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
+    sal_uInt16          GetCount(sal_uInt16 nRegion) const;
+    const OUString&     GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
+    OUString            GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     // Allows to retrieve the target template URL from the UCB
     OUString     GetTemplateTargetURLFromComponent( const OUString& aGroupName,
@@ -90,7 +90,7 @@ public:
                          sal_uInt16 nSourceRegion,
                          sal_uInt16 nSourceIdx);
     sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
-    sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
+    sal_Bool            InsertDir(const OUString &rText, sal_uInt16 nRegion);
 
     sal_Bool InsertTemplate (sal_uInt16 nSourceRegion, sal_uInt16 nIdx, const OUString &rName, const OUString &rPath);
 
@@ -109,11 +109,11 @@ public:
     */
     sal_Bool            SetName(const OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
 
-    sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
-    sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);
+    sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const OUString &rName) const;
+    sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, OUString &rName);
 
-    sal_Bool            GetFull( const String& rRegion, const String& rName, String& rPath );
-    sal_Bool            GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
+    sal_Bool            GetFull( const OUString& rRegion, const OUString& rName, OUString& rPath );
+    sal_Bool            GetLogicNames( const OUString& rPath, OUString& rRegion, OUString& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.
 

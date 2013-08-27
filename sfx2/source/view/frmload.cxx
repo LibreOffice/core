@@ -323,7 +323,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
     const OUString sURL               = io_rDescriptor.getOrDefault( "URL",                OUString() );
 
     // determine the full URL of the template to use, if any
-    String sTemplateURL;
+    OUString sTemplateURL;
     if ( !sTemplateRegioName.isEmpty() && !sTemplateName.isEmpty() )
     {
         SfxDocumentTemplates aTmpFac;
@@ -337,7 +337,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
             sTemplateURL = SfxObjectFactory::GetStandardTemplate( SfxObjectShell::GetServiceNameFromFactory( sURL ) );
     }
 
-    if ( sTemplateURL.Len() > 0 )
+    if ( !sTemplateURL.isEmpty() )
     {
         // detect the filter for the template. Might still be NULL (if the template is broken, or does not
         // exist, or some such), but this is handled by our caller the same way as if no template/URL was present.

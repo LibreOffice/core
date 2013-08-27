@@ -618,8 +618,8 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFmt) const
                 // fuers besorgen vom RegionNamen !!
                 SfxDocumentTemplates aFac;
                 aFac.Construct();
-                String sTmp;
-                String sRegion;
+                OUString sTmp;
+                OUString sRegion;
                 aFac.GetLogicNames( xDocProps->getTemplateURL(), sRegion, sTmp );
                 aRet = sRegion;
             }

@@ -396,7 +396,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     OUString aTemplName( xDocProps->getTemplateName() );
     OUString aTemplURL( xDocProps->getTemplateURL() );
-    String aFoundName;
+    OUString aFoundName;
 
     if ( !aTemplName.isEmpty() || (!aTemplURL.isEmpty() && !IsReadOnly()) )
     {
@@ -416,13 +416,13 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
         }
 
-        if( !aFoundName.Len() && !aTemplName.isEmpty() )
+        if( aFoundName.isEmpty() && !aTemplName.isEmpty() )
             // if the template filename did not lead to success,
             // try to get a file name for the logical template name
-            aTempl.GetFull( String(), aTemplName, aFoundName );
+            aTempl.GetFull( OUString(), aTemplName, aFoundName );
     }
 
-    if ( aFoundName.Len() )
+    if ( !aFoundName.isEmpty() )
     {
         // check existence of template storage
         aTemplURL = aFoundName;
@@ -527,8 +527,8 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
 
         if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
         {
-            String aFoundName;
-            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+            OUString aFoundName;
+            if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( OUString(), rTemplateName, aFoundName ) )
             {
                 INetURLObject aObj( rFileName );
                 xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );

@@ -588,7 +588,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 nDocId = (pRegionItem->maTemplates.back()).nDocId+1;
             }
 
-            String aPath(rPath);
+            OUString aPath(rPath);
             sal_uInt16 nRegionId = maRegions[i]->mnRegionId;
 
             if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
@@ -628,7 +628,7 @@ bool TemplateLocalView::copyFrom(const OUString &rPath)
     sal_uInt16 nDocId = 0;
     sal_uInt16 nRegionId = pRegItem->mnRegionId;
 
-    String aPath(rPath);
+    OUString aPath(rPath);
 
     if (!pRegItem->maTemplates.empty())
         nDocId = (pRegItem->maTemplates.back()).nDocId+1;
@@ -659,7 +659,7 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
     sal_uInt16 nId = 1;
     sal_uInt16 nDocId = 0;
     sal_uInt16 nRegionId = pItem->mnRegionId;
-    String aPath(rPath);
+    OUString aPath(rPath);
 
     if (!pItem->maTemplates.empty())
     {

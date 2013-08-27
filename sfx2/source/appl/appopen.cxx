@@ -483,7 +483,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
     SfxObjectShellLock xDoc;
 
-    String  aTemplateRegion, aTemplateName, aTemplateFileName;
+    OUString  aTemplateRegion, aTemplateName, aTemplateFileName;
     sal_Bool    bDirect = sal_False; // through FileName instead of Region/Template
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
@@ -535,10 +535,10 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     if ( !bDirect )
     {
         SfxDocumentTemplates aTmpFac;
-        if( !aTemplateFileName.Len() )
+        if( aTemplateFileName.isEmpty() )
             aTmpFac.GetFull( aTemplateRegion, aTemplateName, aTemplateFileName );
 
-        if( !aTemplateFileName.Len() )
+        if( aTemplateFileName.isEmpty() )
             lErr = ERRCODE_SFX_TEMPLATENOTFOUND;
     }
 
@@ -558,7 +558,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         const SfxPoolItem *pRet=0;
         SfxStringItem aReferer( SID_REFERER, "private:user" );
         SfxStringItem aTarget( SID_TARGETNAME, "_default" );
-        if ( aTemplateFileName.Len() )
+        if ( !aTemplateFileName.isEmpty() )
         {
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
 
