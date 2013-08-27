@@ -211,9 +211,9 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
     if ( _bUnbindHandle )
         nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
 
-    if ( m_aBindVector.size() > 1 )
+    if ( m_aBindVector.size() > 0 )
     {
-        TVoidVector::iterator pValue = m_aBindVector.begin() + 1;
+        TVoidVector::iterator pValue = m_aBindVector.begin();
         TVoidVector::iterator pEnd = m_aBindVector.end();
         for(; pValue != pEnd; ++pValue)
         {
@@ -271,7 +271,6 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
             }
         }
         m_aBindVector.clear();
-        m_aBindVector.push_back(TVoidPtr(0,0)); // the first is reserved for the bookmark
     }
     return nRet;
 }
@@ -344,8 +343,7 @@ void OResultSet::allocBuffer()
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
 
-    m_aBindVector.reserve(nLen+1);
-    m_aBindVector.push_back(TVoidPtr(0,0)); // the first is reserved for the bookmark
+    m_aBindVector.reserve(nLen);
     m_aRow.resize(nLen+1);
 
     m_aRow[0].setTypeKind(DataType::VARBINARY);
