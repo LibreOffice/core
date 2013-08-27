@@ -189,6 +189,7 @@ private:
 
     std::vector< OUString > maAnnotationAuthors;
     std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> maLayoutInfo;
+    std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>> maPresObjectInfo;
 
     bool                mbUseEmbedFonts;
 
@@ -265,6 +266,10 @@ public:
     /// return reference to vector of Impress layout definitions
     const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetLayoutVector() const { return maLayoutInfo; }
 
+   /// load xml-based impress master presentation object definitions into document
+    void InitObjectVector();
+    /// return reference to vector of master presentation object definitions
+    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetObjectVector() const { return maPresObjectInfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
