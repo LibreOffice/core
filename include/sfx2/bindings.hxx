@@ -196,7 +196,7 @@ public:
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
     SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE sal_Bool ExecuteCommand_Impl( const String& rCommand );
+    SAL_DLLPRIVATE sal_Bool ExecuteCommand_Impl( const OUString& rCommand );
     SAL_DLLPRIVATE void SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );

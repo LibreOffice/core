@@ -2191,7 +2191,7 @@ SystemWindow* SfxBindings::GetSystemWindow() const
     return pTop->GetFrame().GetTopWindow_Impl();
 }
 
-sal_Bool SfxBindings::ExecuteCommand_Impl( const String& rCommand )
+sal_Bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = rCommand;
