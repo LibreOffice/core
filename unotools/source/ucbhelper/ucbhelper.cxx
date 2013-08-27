@@ -42,6 +42,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/util/DateTime.hpp"
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -451,6 +452,25 @@ bool utl::UCBContentHelper::EqualURLs(
             ucb->createContentIdentifier(canonic(url1)),
             ucb->createContentIdentifier(canonic(url2)))
         == 0;
+}
+
+bool utl::UCBContentHelper::ensureFolder(
+    css::uno::Reference< css::uno::XComponentContext > xCtx,
+    css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
+    const OUString& rFolder, ucbhelper::Content & result)
+{
+    INetURLObject aURL( rFolder );
+    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    aURL.removeSegment();
+    ::ucbhelper::Content aParent;
+
+    if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+                              xEnv, xCtx, aParent ) )
+    {
+        return ::utl::UCBContentHelper::MakeFolder(aParent, aTitle, result);
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
