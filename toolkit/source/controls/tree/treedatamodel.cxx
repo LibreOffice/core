@@ -436,23 +436,16 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
+    if( (nChildIndex < 0) || (nChildIndex >= (sal_Int32)maChildren.size()) )
+        throw IndexOutOfBoundsException();
+
     MutableTreeNodeRef xImpl;
 
-    if( (nChildIndex >= 0) && (nChildIndex < (sal_Int32)maChildren.size()) )
-    {
-        TreeNodeVector::iterator aIter( maChildren.begin() );
-        while( nChildIndex-- && (aIter != maChildren.end()) )
-            ++aIter;
+    TreeNodeVector::iterator aIter( maChildren.begin() );
+    std::advance(aIter, nChildIndex);
 
-        if( aIter != maChildren.end() )
-        {
-            xImpl = (*aIter);
-            maChildren.erase( aIter );
-        }
-    }
-
-    if( !xImpl.is() )
-        throw IndexOutOfBoundsException();
+    xImpl = (*aIter);
+    maChildren.erase( aIter );
 
     xImpl->setParent(0);
     xImpl->mbIsInserted = false;
