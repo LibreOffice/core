@@ -71,7 +71,7 @@
 #define RSC_MOREBUTTON          (RSC_NOTYPE + 0x4c)
 #define RSC_SPINBUTTON          (RSC_NOTYPE + 0x4d)
 #define RSC_RADIOBUTTON         (RSC_NOTYPE + 0x4e)
-#define RSC_IMAGERADIOBUTTON    (RSC_NOTYPE + 0x4f)
+
 #define RSC_CHECKBOX            (RSC_NOTYPE + 0x50)
 #define RSC_TRISTATEBOX         (RSC_NOTYPE + 0x51)
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)

@@ -1271,7 +1271,6 @@ void DbgDialogTest( Window* pWindow )
             }
 
             if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
-                 (pChild->GetType() == WINDOW_IMAGERADIOBUTTON) ||
                  (pChild->GetType() == WINDOW_CHECKBOX) ||
                  (pChild->GetType() == WINDOW_TRISTATEBOX) ||
                  (pChild->GetType() == WINDOW_PUSHBUTTON) )
@@ -1281,8 +1280,6 @@ void DbgDialogTest( Window* pWindow )
                     const char* pClass;
                     if ( pChild->GetType() == WINDOW_RADIOBUTTON )
                         pClass = "RadioButton";
-                    else if ( pChild->GetType() == WINDOW_IMAGERADIOBUTTON )
-                        pClass = "ImageRadioButton";
                     else if ( pChild->GetType() == WINDOW_CHECKBOX )
                         pClass = "CheckBox";
                     else if ( pChild->GetType() == WINDOW_TRISTATEBOX )
@@ -1302,7 +1299,6 @@ void DbgDialogTest( Window* pWindow )
                     switch( pChild->GetType() )
                     {
                         case WINDOW_RADIOBUTTON:
-                        case WINDOW_IMAGERADIOBUTTON:
                             aWidth = ((RadioButton*)pChild)->CalcMinimumSize(0).Width();
                             break;
                         case WINDOW_CHECKBOX:
@@ -1405,7 +1401,6 @@ void DbgDialogTest( Window* pWindow )
                  " WB_IGNORETAB"));
 
             if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
-                 (pChild->GetType() == WINDOW_IMAGERADIOBUTTON) ||
                  (pChild->GetType() == WINDOW_CHECKBOX) ||
                  (pChild->GetType() == WINDOW_TRISTATEBOX) ||
                  (pChild->GetType() == WINDOW_FIXEDTEXT) )
@@ -1484,7 +1479,6 @@ void DbgDialogTest( Window* pWindow )
                 }
 
                 if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
-                     (pChild->GetType() == WINDOW_IMAGERADIOBUTTON) ||
                      (pChild->GetType() == WINDOW_CHECKBOX) ||
                      (pChild->GetType() == WINDOW_TRISTATEBOX) ||
                      (pChild->GetType() == WINDOW_PUSHBUTTON) ||
@@ -1516,8 +1510,7 @@ void DbgDialogTest( Window* pWindow )
                     Rectangle   aChildRect( aNewPos, pChild->GetSizePixel() );
 
                     if ( cAccel || (pChild->GetStyle() & WB_TABSTOP) ||
-                         (pChild->GetType() == WINDOW_RADIOBUTTON) ||
-                         (pChild->GetType() == WINDOW_IMAGERADIOBUTTON) )
+                         (pChild->GetType() == WINDOW_RADIOBUTTON) )
                     {
                         if ( (aNewPos.X() <= aTabPos.X()) && (aNewPos.Y() <= aTabPos.Y()) )
                         {

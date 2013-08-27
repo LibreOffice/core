@@ -15,15 +15,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NBDTMGFACT_HXX
-#include <svx/nbdtmgfact.hxx>
-#endif
-namespace svx { namespace sidebar {
-NBOutlineTypeMgrFact::NBOutlineTypeMgrFact()
-{
-}
 
-NBOTypeMgrBase* NBOutlineTypeMgrFact::CreateInstance(const NBOType aType)
+#include <svx/nbdtmgfact.hxx>
+
+namespace svx { namespace sidebar { namespace NBOutlineTypeMgrFact {
+
+NBOTypeMgrBase* CreateInstance(const NBOType aType)
 {
     //NBOTypeMgrBase* pRet= 0;
     if ( aType == eNBOType::BULLETS )
@@ -44,5 +41,5 @@ NBOTypeMgrBase* NBOutlineTypeMgrFact::CreateInstance(const NBOType aType)
     }
     return NULL;
 }
-}}
 
+}}}

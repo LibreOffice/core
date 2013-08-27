@@ -819,19 +819,6 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const NBOType aType):
     ImplLoad(OUString("standard.sya"));
 }
 
-MixBulletsTypeMgr::MixBulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg):
-    NBOTypeMgrBase(aType,pArg)
-{
-    Init();
-    for(sal_Int32 nItem = 0; nItem < DEFAULT_BULLET_TYPES; nItem++ )
-    {
-        pDefaultActualBullets[nItem] = pActualBullets[nItem];
-    }
-    //Initial the first time to store the default value. Then do it again for customized value
-    Init();
-    ImplLoad(OUString("standard.sya"));
-}
-
 MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {
@@ -1348,19 +1335,6 @@ NumberingTypeMgr* NumberingTypeMgr::_instance = 0;
 
 NumberingTypeMgr::NumberingTypeMgr(const NBOType aType):
     NBOTypeMgrBase(aType),
-    //pNumSettingsArr( new NumSettingsArr_Impl ),
-    pNumberSettingsArr (new NumberSettingsArr_Impl)
-{
-    Init();
-    pDefaultNumberSettingsArr = pNumberSettingsArr;
-    pNumberSettingsArr = new NumberSettingsArr_Impl;
-    //Initial the first time to store the default value. Then do it again for customized value
-    Init();
-    ImplLoad(OUString("standard.syb"));
-}
-
-NumberingTypeMgr::NumberingTypeMgr(const NBOType aType,const SfxItemSet* pArg):
-    NBOTypeMgrBase(aType,pArg),
     //pNumSettingsArr( new NumSettingsArr_Impl ),
     pNumberSettingsArr (new NumberSettingsArr_Impl)
 {

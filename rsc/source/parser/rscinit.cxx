@@ -83,7 +83,6 @@ void RscTypCont::Init()
     RscTop   *  pClassCancelButton;
     RscTop   *  pClassHelpButton;
     RscTop   *  pClassRadioButton;
-    RscTop   *  pClassImageRadioButton;
     RscTop   *  pClassImageButton;
     RscTop   *  pClassTriStateBox;
     RscTop   *  pClassEdit;
@@ -445,11 +444,6 @@ void RscTypCont::Init()
 {
     pClassRadioButton = InitClassRadioButton( pClassButton );
     pRoot->Insert( pClassRadioButton );
-
-    nId = pHS->getID( "ImageRadioButton" );
-    pClassImageRadioButton = InitClassImageRadioButton( pClassRadioButton,
-                                                        pClassImage );
-    pRoot->Insert( pClassImageRadioButton );
 
     pClassTriStateBox = InitClassTriStateBox( pClassControl, pTriState );
     pRoot->Insert( pClassTriStateBox );

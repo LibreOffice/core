@@ -8824,7 +8824,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WINDOW_COLORDIALOG: nRole = accessibility::AccessibleRole::COLOR_CHOOSER; break;
         case WINDOW_FONTDIALOG: nRole = accessibility::AccessibleRole::FONT_CHOOSER; break;
 
-        case WINDOW_IMAGERADIOBUTTON:
         case WINDOW_RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
         case WINDOW_TRISTATEBOX:
         case WINDOW_CHECKBOX: nRole = accessibility::AccessibleRole::CHECK_BOX; break;

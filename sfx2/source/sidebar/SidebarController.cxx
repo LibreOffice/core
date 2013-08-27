@@ -807,25 +807,6 @@ void SidebarController::ShowPopupMenu (
 
 
 
-void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) const
-{
-    try
-    {
-        const util::URL aURL (Tools::GetURL(rsMenuCommand));
-        Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
-        if (xDispatch.is())
-            xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
-    }
-    catch(Exception& rException)
-    {
-        OSL_TRACE("caught exception: %s",
-            OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-    }
-}
-
-
-
-
 ::boost::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {

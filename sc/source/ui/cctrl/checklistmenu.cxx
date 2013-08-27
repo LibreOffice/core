@@ -1342,12 +1342,6 @@ ScCheckListBox::ScCheckListBox( Window* pParent, WinBits nWinStyle )
     Init();
 }
 
-ScCheckListBox::ScCheckListBox( Window* pParent, const ResId& rResId )
-   :  SvTreeListBox( pParent, rResId ), mpCheckButton( NULL )
-{
-    Init();
-}
-
 SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
 {
     sal_uInt16 nRootPos = 0;

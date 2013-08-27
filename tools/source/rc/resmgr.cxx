@@ -1680,7 +1680,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_CURRENCYFIELD:     aHID.append( "CurrencyField" );    break;
                     case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
                     case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
-                    case RSC_IMAGERADIOBUTTON:  aHID.append( "ImageRadioButton" ); break;
                     case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;
                     case RSC_METRICBOX:         aHID.append( "MetricBox" );        break;
                     case RSC_CURRENCYBOX:       aHID.append( "CurrencyBox" );      break;

@@ -27,14 +27,6 @@
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 
-ConditionEdit::ConditionEdit(Window* pParent, const ResId& rResId)
-    : Edit(pParent, rResId)
-    , DropTargetHelper(this)
-    , bBrackets(true)
-    , bEnableDrop(true)
-{
-}
-
 ConditionEdit::ConditionEdit(Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)
     , DropTargetHelper(this)

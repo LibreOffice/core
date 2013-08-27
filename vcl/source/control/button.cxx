@@ -4090,20 +4090,6 @@ ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-ImageRadioButton::ImageRadioButton( Window* pParent, const ResId& rResId ) :
-    RadioButton( pParent, rResId.SetRT( RSC_IMAGERADIOBUTTON ) )
-{
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( RSC_IMAGERADIOBUTTON_IMAGE & nObjMask )
-    {
-        SetModeRadioImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 ImageRadioButton::~ImageRadioButton()
 {
 }

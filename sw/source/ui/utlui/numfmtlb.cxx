@@ -54,22 +54,6 @@ using namespace ::com::sun::star::lang;
  *     nDefFmt:     Select this format and possibly insert it
  */
 
-NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
-                                    short nFormatType, sal_uLong nDefFmt,
-                                    sal_Bool bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (sal_False),
-    nDefFormat          (nDefFmt),
-    pVw                 (0),
-    pOwnFormatter       (0),
-    bShowLanguageControl(sal_False),
-    bUseAutomaticLanguage(sal_True)
-{
-    Init(nFormatType, bUsrFmts);
-}
-
 NumFormatListBox::NumFormatListBox(Window* pWin, WinBits nStyle) :
     ListBox             ( pWin, nStyle ),
     nCurrFormatType     (-1),

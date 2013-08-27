@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 {
     switch ( pWindow->GetType() )
     {
-        case WINDOW_IMAGERADIOBUTTON:
         case WINDOW_IMAGEBUTTON:
         case WINDOW_SPINBUTTON:
         case WINDOW_MENUBUTTON:

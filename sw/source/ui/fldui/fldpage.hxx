@@ -77,10 +77,6 @@ protected:
     using SfxTabPage::ActivatePage;
 
 public:
-                        SwFldPage(  Window *pParent,
-                                    const ResId &rId,
-                                    const SfxItemSet &rAttrSet );
-
     SwFldPage(Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
 

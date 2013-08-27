@@ -310,7 +310,6 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
         static MixBulletsTypeMgr* _instance;
     public:
         MixBulletsTypeMgr(const NBOType aType);
-        MixBulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg);
         MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr);
         virtual ~MixBulletsTypeMgr() {}
         virtual void Init();
@@ -340,7 +339,6 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         static NumberingTypeMgr*    _instance;
     public:
         NumberingTypeMgr(const NBOType aType);
-        NumberingTypeMgr(const NBOType aType,const SfxItemSet* pArg);
         NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr);
         virtual ~NumberingTypeMgr() {}
         virtual void Init();

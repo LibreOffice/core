@@ -540,7 +540,6 @@ class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 
 public:
     explicit        ImageRadioButton( Window* pParent, WinBits nStyle = 0 );
-    explicit        ImageRadioButton( Window* pParent, const ResId& );
     virtual         ~ImageRadioButton();
 };
 

@@ -17,17 +17,9 @@
  */
 #ifndef _NBDTMGFACT_HXX
 #define _NBDTMGFACT_HXX
-#ifndef _NBDTMG_HXX
 #include "nbdtmg.hxx"
-#endif
-namespace svx { namespace sidebar {
-class SVX_DLLPUBLIC NBOutlineTypeMgrFact
-{
-public:
-    static NBOTypeMgrBase* CreateInstance(const NBOType aType);
-    NBOutlineTypeMgrFact();
-    virtual ~NBOutlineTypeMgrFact() {}
-};
-}}
+namespace svx { namespace sidebar { namespace NBOutlineTypeMgrFact {
+    SVX_DLLPUBLIC NBOTypeMgrBase* CreateInstance(const NBOType aType);
+}}}
 #endif
 

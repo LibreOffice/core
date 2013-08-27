@@ -41,22 +41,6 @@
 
 using namespace ::com::sun::star;
 
-SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
-                        const SfxItemSet &rAttrSet )
-    :SfxTabPage     (pParent, rId, rAttrSet),
-    m_pCurFld       (0),
-    m_pWrtShell     (0),
-    m_nTypeSel      (LISTBOX_ENTRY_NOTFOUND),
-    m_nSelectionSel (LISTBOX_ENTRY_NOTFOUND),
-    m_bFldEdit      (false),
-    m_bInsert           (sal_True),
-    m_bFldDlgHtmlMode   (sal_False),
-    m_bRefresh          (sal_False),
-    m_bFirstHTMLInit    (sal_True)
-{
-
-}
-
 SwFldPage::SwFldPage(Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, rID, rUIXMLDescription, rAttrSet)

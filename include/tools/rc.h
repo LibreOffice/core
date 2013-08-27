@@ -186,9 +186,6 @@ typedef short RSWND_STYLE;
 #define RSC_IMAGEBUTTON_SYMBOL          0x02
 #define RSC_IMAGEBUTTON_STATE           0x04
 
-// For "ImageRadioButtons":
-#define RSC_IMAGERADIOBUTTON_IMAGE      0x01
-
 // For "Image":
 #define RSC_IMAGE_IMAGEBITMAP           0x01
 #define RSC_IMAGE_MASKBITMAP            0x02

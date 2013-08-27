@@ -190,7 +190,6 @@ private:
     void ShowPopupMenu (
         const Rectangle& rButtonBox,
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    void ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) const;
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     DECL_LINK(OnMenuItemSelected, Menu*);

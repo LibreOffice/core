@@ -282,7 +282,6 @@ static ComponentInfo aComponentInfos [] =
     { "frame",          WINDOW_GROUPBOX },
     { "helpbutton",         WINDOW_HELPBUTTON },
     { "imagebutton",        WINDOW_IMAGEBUTTON },
-    { "imageradiobutton",   WINDOW_IMAGERADIOBUTTON },
     { "infobox",            WINDOW_INFOBOX },
     { "listbox",            WINDOW_LISTBOX },
     { "longcurrencybox",    WINDOW_LONGCURRENCYBOX },
@@ -752,10 +751,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_IMAGEBUTTON:
                  pNewWindow = new ImageButton( pParent, nWinBits );
-                *ppNewComp = new VCLXButton;
-            break;
-            case WINDOW_IMAGERADIOBUTTON:
-                pNewWindow = new ImageRadioButton( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
             case WINDOW_INFOBOX:

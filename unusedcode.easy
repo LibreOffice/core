@@ -60,6 +60,7 @@ ScFormulaCell::GetValueAlways()
 ScFormulaCell::HasColRowName() const
 ScFormulaCell::IsSharedInvariant() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
+ScMyNotEmptyCellsIterator::GetCell() const
 ScRangeData::SetMaxCol(short)
 ScRangeData::SetMaxRow(int)
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
@@ -76,6 +77,7 @@ SmFontPickList::Contains(Font const&) const
 StatusBar::CopyItems(StatusBar const&)
 StatusBar::HideItems()
 StatusBar::ShowItems()
+String::AllocBuffer(unsigned short)
 SvFileStream::GetFileHandle() const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
@@ -149,12 +151,14 @@ drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
 drawinglayer::attribute::Sdr3DObjectAttribute::isDefault() const
 drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
 drawinglayer::geometry::ViewInformation2D::isDefault() const
+editeng::SectionAttribute::SectionAttribute()
 formula::DoubleVectorRefToken::GetArrayLength() const
 formula::FormulaDlg::CheckMatrix()
 formula::FormulaDlg::isUserMatrix() const
 framework::MenuBarManager::getComponentContext()
 framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
+oox::core::Decrypt::aes128cbc(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&)
 oox::core::FilterBaseImpl::finalizeFilter()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
@@ -196,7 +200,6 @@ sfx2::sidebar::FocusManager::IsAnyButtonFocused() const
 sfx2::sidebar::FocusManager::IsAnyPanelFocused() const
 sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()
-sfx2::sidebar::SidebarController::ShowDetailMenu(rtl::OUString const&) const
 sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
@@ -208,8 +211,6 @@ svx::sidebar::BulletsTypeMgr::BulletsTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LineWidthControl::GetValueSet()
-svx::sidebar::MixBulletsTypeMgr::MixBulletsTypeMgr(unsigned short, SfxItemSet const*)
-svx::sidebar::NBOutlineTypeMgrFact::NBOutlineTypeMgrFact()
 svx::sidebar::NumberingTypeMgr::GetNumCount() const
 svx::sidebar::NumberingTypeMgr::GetNumSettingByIndex(unsigned short) const
 svx::sidebar::NumberingTypeMgr::NumberingTypeMgr(unsigned short, SfxItemSet const*)
