@@ -712,7 +712,18 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
-    // Search for LangID (in this table we find only defined ISO combinations)
+    // Search for LangID in ISO lll-Ssss-CC
+    for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
+            pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
+    {
+        if ( pScriptEntry->mnLang == nLang )
+        {
+            rLocale = pScriptEntry->getLocale();
+            return;
+        }
+    }
+
+    // Search for LangID in ISO lll-CC
     for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
@@ -752,6 +763,50 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     // country is upper case in table
     OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
     sal_Int32 nCountryLen = aUpperCountry.getLength();
+
+    if (!rLocale.Variant.isEmpty())
+    {
+        // Search in ISO lll-Ssss-CC
+        const IsoLanguageScriptCountryEntry* pFirstScript = NULL;
+        for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
+                pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
+        {
+            if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript))
+            {
+                if (pScriptEntry->getTagString() == rLocale.Variant)
+                    return pScriptEntry->getLocale();
+                if (!pFirstScript)
+                    pFirstScript = pScriptEntry;
+            }
+        }
+        // If at least a lll-Ssss matched, try that with country or use it as
+        // fallback.
+        if (pFirstScript)
+        {
+            // Check for country only if there is more than lll-Ssss-CC in tag
+            // string, else we would had matched it already.
+            if (!rLocale.Country.isEmpty() && rLocale.Variant.getLength() > 11)
+            {
+                for (const IsoLanguageScriptCountryEntry* pScriptEntry = pFirstScript;
+                        pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
+                {
+                    if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript) &&
+                            pScriptEntry->maCountry == rLocale.Country)
+                        return pScriptEntry->getLocale();
+                }
+            }
+            return pFirstScript->getLocale();
+        }
+        // Extract language from tag string, country is used as present in
+        // Locale because in the tables that follow we have only ISO 3166
+        // countries and if that is in the tag string we also have it in the
+        // Locale.
+        sal_Int32 nIndex = 0;
+        aLowerLang = rLocale.Variant.getToken( 0, '-', nIndex).toAsciiLowerCase();
+        // Cater for "x-..."
+        if (aLowerLang.getLength() == 1 && aLowerLang[0] == 'x' && nIndex > 0)
+            aLowerLang += "-" + rLocale.Variant.getToken( 0, '-', nIndex).toAsciiLowerCase();
+    }
 
     // Search for locale and remember first lang-only.
     const IsoLanguageCountryEntry* pFirstLang = NULL;
