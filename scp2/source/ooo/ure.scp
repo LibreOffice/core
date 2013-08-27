@@ -263,46 +263,6 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
 #endif
 End
 
-#ifdef AIX
-Unixlink gid_Unixlink_File_Dl_Reg
-    BIN_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("reg");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    Target = SCP2_URE_DL_VER("reg", "3");
-End
-
-Unixlink gid_Unixlink_File_Dl_Store
-    BIN_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("store");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    Target = SCP2_URE_DL_VER("store", "3");
-End
-
-#if defined ENABLE_JAVA
-
-Unixlink gid_Unixlink_File_Dl_Jvmaccess
-    BIN_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_COMID_NORMAL("jvmaccess");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    Target = SCP2_URE_DL_COMID_VER("jvmaccess", "3");
-End
-
-Unixlink gid_Unixlink_File_Dl_Jvmfwk
-    BIN_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("jvmfwk");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    Target = SCP2_URE_DL_VER("jvmfwk", "3");
-End
-
-#endif # JAVA
-
-#endif # AIX
-
-
 File gid_File_Dl_Profile_Jvmfwk3rc
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -697,11 +657,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Salhelper,
             gid_Unixlink_File_Dl_Salhelper,
             gid_File_Dl_Profile_Uno,
-            gid_Unixlink_File_Dl_Reg,
             gid_Unixlink_File_Dl_Rmcxt,
-            gid_Unixlink_File_Dl_Store,
-            gid_Unixlink_File_Dl_Jvmaccess,
-            gid_Unixlink_File_Dl_Jvmfwk,
             gid_File_Dl_JrepropertiesClass,
             gid_File_Dl_Profile_Jvmfwk3rc,
             gid_File_Dl_Jpipe,
@@ -729,11 +685,7 @@ Module gid_Module_Root_Ure_Hidden
                  gid_Unixlink_File_Dl_Cppu,
                  gid_Unixlink_File_Dl_Cppuhelper,
                  gid_Unixlink_File_Dl_PurpEnvHelper,
-                 gid_Unixlink_File_Dl_Reg,
                  gid_Unixlink_File_Dl_Rmcxt,
-                 gid_Unixlink_File_Dl_Store,
-                 gid_Unixlink_File_Dl_Jvmaccess,
-                 gid_Unixlink_File_Dl_Jvmfwk,
                  gid_Unixlink_File_Dl_Libxml2);
 End
 
