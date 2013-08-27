@@ -235,7 +235,7 @@ gb_Library_PLAINEXT := .lib
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):URELIB) \
