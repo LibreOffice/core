@@ -647,13 +647,13 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element 
     }
 }
 
-void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     const sal_Int32 nCount = maObjectList.size();
-    if( Index >= nCount )
+    if( nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
-    if( nCount - 1 == Index )
+    if( nCount - 1 == nIndex )
     {
         maObjectList.back()->release();
         maObjectList.pop_back();
@@ -661,8 +661,7 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 Index ) throw(IndexOutOfBo
     else
     {
         std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-        for( sal_Int32 n = 0; n < Index; n++ )
-            ++aIter;
+        std::advance(aIter, nIndex);
 
         (*aIter)->release();
         maObjectList.erase( aIter );
