@@ -447,6 +447,9 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
     xImpl = (*aIter);
     maChildren.erase( aIter );
 
+    if( !xImpl.is() )
+        throw IndexOutOfBoundsException();
+
     xImpl->setParent(0);
     xImpl->mbIsInserted = false;
 
