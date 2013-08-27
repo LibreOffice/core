@@ -823,18 +823,17 @@ void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Re
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
-        sal_Bool bFound = sal_False;
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aEnd = mxEventListeners.end();
 
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
+             aIter != aEnd;
+             ++aIter)
         {
             if( *aIter == rxListener )
             {
                 mxEventListeners.erase( aIter );
-                bFound = sal_True;
+                break;
             }
-            else
-                ++aIter;
         }
     }
 }
