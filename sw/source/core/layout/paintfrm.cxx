@@ -4877,8 +4877,11 @@ void PaintCharacterBorder(
             0, &rFont.GetShadowColor(), rFont.GetShadowWidth(),
             rFont.GetAbsShadowLocation(bVerticalLayout));
 
-        lcl_PaintShadow( SwRect(aAlignedRect), aAlignedRect, aShadow,
-                         false, bTop, bBottom, bLeft, bRight);
+        if( aShadow.GetLocation() != SVX_SHADOW_NONE )
+        {
+            lcl_PaintShadow( SwRect(aAlignedRect), aAlignedRect, aShadow,
+                             false, bTop, bBottom, bLeft, bRight);
+        }
     }
 
     // Init borders, after this initialization top, bottom, right and left means the
