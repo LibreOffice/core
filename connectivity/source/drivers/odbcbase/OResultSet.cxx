@@ -195,13 +195,12 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    if(!m_aBindVector.empty())
-        releaseBuffer();
+    releaseBuffer();
     if(m_bFreeHandle)
         m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
 
-m_xStatement.clear();
-m_xMetaData.clear();
+    m_xStatement.clear();
+    m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
