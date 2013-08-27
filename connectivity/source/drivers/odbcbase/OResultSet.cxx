@@ -896,6 +896,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         throw;
     }
 
+    nRet = unbind();
+    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if ( bPositionByBookmark )
     {
@@ -907,8 +909,6 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         nRet = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_RELATIVE,0); // OJ 06.03.2004
     // sometimes we got an error but we are not interested in anymore #106047# OJ
     //  OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    nRet = unbind();
-    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if(m_pSkipDeletedSet)
     {
