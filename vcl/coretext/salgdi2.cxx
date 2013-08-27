@@ -354,11 +354,11 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
     OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
 
-    CFStringRef rDir = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
-    CFURLRef rDirURL = CFURLCreateWithFileSystemPath(NULL, rDir, kCFURLPOSIXPathStyle, true);
+    CFStringRef rFontPath = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
+    CFURLRef rFontURL = CFURLCreateWithFileSystemPath(NULL, rFontPath, kCFURLPOSIXPathStyle, true);
 
     CFErrorRef error;
-    bool success = CTFontManagerRegisterFontsForURL(rDirURL, kCTFontManagerScopeProcess, &error);
+    bool success = CTFontManagerRegisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, &error);
 
     if (!success)
     {
