@@ -45,6 +45,7 @@ $(call gb_PythonTest_get_target,%) :
 		PYTHONPATH="$(PYPATH)" \
 		UserInstallation=$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*))user) \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*)))" \
+		PYTHONDONTWRITEBYTECODE=1 \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_PythonTest_COMMAND) \
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \
