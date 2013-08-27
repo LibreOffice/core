@@ -1571,8 +1571,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
                 bMakeCpy = false;
-                ::std::set< _ZSortFly >::const_iterator it_erase=it++;
-                aSet.erase (it_erase);
+                aSet.erase (it++);
                 continue;
             }
         }
