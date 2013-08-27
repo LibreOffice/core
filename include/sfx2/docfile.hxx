@@ -74,7 +74,7 @@ public:
                         /**
                          * @param pSet Takes ownership
                          */
-                        SfxMedium( const String &rName,
+                        SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
@@ -94,14 +94,14 @@ public:
                          * @param pSet does NOT take ownership
                          */
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                    const String& rBaseURL,
+                                    const OUString& rBaseURL,
                                     const SfxItemSet* pSet=0 );
                         /**
                          * @param pSet does NOT take ownership
                          */
                         SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                    const String& rBaseURL,
-                                    const String& rTypeName,
+                                    const OUString& rBaseURL,
+                                    const OUString& rTypeName,
                                     const SfxItemSet* pSet=0 );
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
@@ -175,7 +175,7 @@ public:
     sal_Bool            UsesCache() const;
     void                SetUsesCache( sal_Bool );
     sal_Bool            IsExpired() const;
-    void                SetName( const String& rName, sal_Bool bSetOrigURL = sal_False );
+    void                SetName( const OUString& rName, sal_Bool bSetOrigURL = sal_False );
     sal_Bool            IsAllowedForExternalBrowser() const;
     long                GetFileVersion() const;
 

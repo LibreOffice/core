@@ -2753,7 +2753,7 @@ void SfxMedium::SetIsRemote_Impl()
 
 
 
-void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
+void SfxMedium::SetName( const OUString& aNameP, sal_Bool bSetOrigURL )
 {
     if (pImp->aOrigURL.isEmpty())
         pImp->aOrigURL = pImp->m_aLogicName;
@@ -2841,7 +2841,7 @@ void SfxMedium::CompleteReOpen()
     pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
 
-SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
+SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     pImp(new SfxMedium_Impl(this))
 {
     pImp->m_pSet = pInSet;
@@ -2920,7 +2920,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 //------------------------------------------------------------------
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p ) :
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl(this))
 {
     OUString aType = SfxFilter::GetTypeFromStorage(rStor);
@@ -2939,7 +2939,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 
 //------------------------------------------------------------------
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String &rTypeName, const SfxItemSet* p ) :
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl(this))
 {
     pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
