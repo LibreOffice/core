@@ -878,13 +878,39 @@ LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& 
 LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
         const ::com::sun::star::lang::Locale& rLocale )
 {
-    /* FIXME: this x-... is temporary until conversion will be moved up to
-     * LanguageTag. Also handle the nasty "*" joker as privateuse. */
-    LanguageType nRet = ((!rLocale.Variant.isEmpty() &&
-                (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))) ?
-            convertPrivateUseToLanguage( rLocale.Variant) :
-            convertIsoNamesToLanguage( rLocale.Language, rLocale.Country));
-    return nRet;
+    if (rLocale.Language == I18NLANGTAG_QLT)
+    {
+        // "x-..." private use and the nasty "*" joker
+        if (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))
+            return convertPrivateUseToLanguage( rLocale.Variant);
+
+        // Search in ISO lll-Ssss-CC
+        for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
+                pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
+        {
+            if (rLocale.Variant.startsWith( pScriptEntry->maLanguageScript))
+            {
+                if (pScriptEntry->getTagString() == rLocale.Variant)
+                    return pScriptEntry->mnLang;
+            }
+        }
+    }
+    else
+    {
+        // language is lower case in table
+        OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
+        // country is upper case in table
+        OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
+
+        // Search in ISO lll-CC
+        for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+                pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+        {
+            if (aLowerLang.equalsAscii( pEntry->maLanguage) && aUpperCountry.equalsAscii( pEntry->maCountry))
+                return pEntry->mnLang;
+        }
+    }
+    return LANGUAGE_DONTKNOW;
 }
 
 
