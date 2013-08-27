@@ -192,6 +192,9 @@ private:
     std::vector<com::sun::star::uno::Reference<
         com::sun::star::xml::dom::XNode> > maLayoutInfo;
 
+    std::vector<com::sun::star::uno::Reference<
+        com::sun::star::xml::dom::XNode> > maPresObjectInfo;
+
     bool                mbUseEmbedFonts;
 
 protected:
@@ -272,6 +275,10 @@ public:
         com::sun::star::xml::dom::XNode> >& GetLayoutVector() const
     { return maLayoutInfo; }
 
+   /// load xml-based impress master presentation object definitions into document
+    void InitObjectVector();
+    /// return reference to vector of master presentation object definitions
+    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetObjectVector() const { return maPresObjectInfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
@@ -317,6 +324,7 @@ public:
         Whether the replace operation should take the name from the new
         page, or preserve the old name
      */
+
     sal_Bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
                                   std::vector<OUString> *pExchangeList,
                               sal_Bool bLink, sal_Bool bReplace, sal_uInt16 nPgPos,

@@ -482,6 +482,20 @@
         </info>
         <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/layoutlist.xml</value>
       </prop>
+      <prop oor:name="PresObjListFiles" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>
+            Contains a list of xml files defining the presentation
+            object used in the master page of "notes" and "handout".
+            It contains properties of presentation objects,like
+            their position, width, and height. Entries are run
+            through macro expansion, so, vnd.sun.star.expand prefix is
+            allowed.
+          </desc>
+          <label>List of files containing master presentation objects</label>
+        </info>
+        <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/config/soffice.cfg/simpress/objectlist.xml</value>
+      </prop>
       <prop oor:name="PreviewNewEffects" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: -->
         <!-- OldLocation: -->

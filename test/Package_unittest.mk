@@ -23,6 +23,7 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/so
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/transitions-ogl.xml,user/config/soffice.cfg/simpress/transitions-ogl.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/effects.xml,user/config/soffice.cfg/simpress/effects.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/layoutlist.xml,user/config/soffice.cfg/simpress/layoutlist.xml))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/install/share/config/soffice.cfg/simpress/objectlist.xml,user/config/soffice.cfg/simpress/objectlist.xml))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetupl.xpm,user/config/psetupl.xpm))
 
 # vim: set noet sw=4 ts=4:
