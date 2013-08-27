@@ -32,7 +32,7 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
+  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
  </plugins>
 </javaSelection>

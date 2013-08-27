@@ -451,21 +451,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	$(if $(SOLAR_JAVA),java_uno) \
 	$(if $(SOLAR_JAVA),juh) \
 	$(if $(SOLAR_JAVA),juhx) \
-	$(if $(SOLAR_JAVA),jvmaccess) \
-	$(if $(SOLAR_JAVA),jvmfwk) \
 	log_uno \
-	reg \
-	sal_textenc \
-	store \
-	$(if $(SOLAR_JAVA),sunjavaplugin) \
-	unoidl \
 	unsafe_uno \
 	$(if $(URELIBS),urelibs) \
-	xmlreader \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,URE, \
+$(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,URE, \
 	acceptor \
 	binaryurp \
 	bootstrap \
@@ -475,14 +467,22 @@ $(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,URE, \
 	invocation \
 	$(if $(SOLAR_JAVA),javaloader) \
 	$(if $(SOLAR_JAVA),javavm) \
+	$(if $(SOLAR_JAVA),jvmaccess) \
+	$(if $(SOLAR_JAVA),jvmfwk) \
 	namingservice \
 	proxyfac \
 	reflection \
+	reg \
+	sal_textenc \
 	stocservices \
+	store \
 	streams \
+	$(if $(SOLAR_JAVA),sunjavaplugin) \
 	textinstream \
 	textoutstream \
+	unoidl \
 	uuresolver \
+	xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \

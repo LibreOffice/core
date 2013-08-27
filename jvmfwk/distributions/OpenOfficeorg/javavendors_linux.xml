@@ -44,11 +44,11 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="IBM Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="Blackdown Java-Linux Team">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
-  <library vendor="BEA Systems, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.so</library>
+  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="IBM Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="Blackdown Java-Linux Team">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="Free Software Foundation, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
+  <library vendor="BEA Systems, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.so</library>
  </plugins>
 </javaSelection>
