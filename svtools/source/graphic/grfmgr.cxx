@@ -70,7 +70,7 @@ GraphicObject::GraphicObject() :
     ImplSetup();
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic )
+GraphicObject::GraphicObject( const Graphic& rGraphic ) :
     maGraphic   ( rGraphic ),
     mpLink      ( NULL ),
     mpUserData  ( NULL )
@@ -136,7 +136,7 @@ css::uno::Reference< css::graphic::XGraphic > SAL_CALL GraphicObject::getGraphic
     return GetGraphic().GetXGraphic();
 }
 
-void SAL_CALL GraphicObject::setGraphic( const css::uno::Reference< css::graphic::XGraphic >& xGraphic )
+void SAL_CALL GraphicObject::setGraphic( const css::uno::Reference< css::graphic::XGraphic >& /* xGraphic */ )
     throw( RuntimeException )
 {
     SolarMutexGuard aSolarGuard;
@@ -158,12 +158,7 @@ OUString SAL_CALL GraphicObject::getUniqueID()
 GraphicObject::~GraphicObject()
 {
     if( mpMgr )
-    {
-        mpMgr->ImplUnregisterObj( *this );
-
-        if( ( mpMgr == mpGlobalMgr ) && !mpGlobalMgr->ImplHasObjects() )
-            delete mpGlobalMgr, mpGlobalMgr = NULL;
-    }
+        mpMgr->ImplUnregisterObj( rtl::Reference< GraphicObject >( this ) );
 
     delete mpSwapOutTimer;
     delete mpSwapStreamHdl;
@@ -483,7 +478,7 @@ void GraphicObject::GraphicManagerDestroyed()
 }
 
 sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              const GraphicAttr* pAttr, sal_uLong nFlags ) const
+                                  const GraphicAttr* pAttr, sal_uLong nFlags ) const
 {
     sal_Bool bRet;
 
@@ -497,7 +492,10 @@ sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Si
             sal_Bool        bRectClip;
             ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
         }
-        bRet = mpMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+        bRet = mpMgr->IsInCache( pOut, aPt, aSz,
+                                 rtl::Reference< GraphicObject >(
+                                        const_cast< GraphicObject *>( this ) ),
+                                 ( pAttr ? *pAttr : GetAttr() ) );
     }
     else
         bRet = sal_False;
@@ -562,7 +560,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         }
     }
 
-    bRet = mpMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
+    bRet = mpMgr->DrawObj( pOut, aPt, aSz, rtl::Reference< GraphicObject >( this ), aAttr, nFlags, bCached );
 
     if( bCropped )
         pOut->Pop();
@@ -735,12 +733,6 @@ const Graphic& GraphicObject::GetGraphic() const
         ( (GraphicObject*) this )->ImplAutoSwapIn();
 
     return maGraphic;
-}
-
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
-{
-    SetGraphic( rGraphic );
-    mpLink = new String( rLink );
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
@@ -1098,10 +1090,12 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
-    sal_Bool            bLink;
+    sal_Bool        bLink;
 
     rIStm >> aGraphic >> aAttr >> bLink;
 
+#error - tweak me here ...
+    // FIXME: we need to have a Create method for stream loading ...
     rGraphicObj.SetGraphic( aGraphic );
     rGraphicObj.SetAttr( aAttr );
 
@@ -1117,6 +1111,8 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     return rIStm;
 }
+
+// FIXME: should we match the create with a save method ?
 
 SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {

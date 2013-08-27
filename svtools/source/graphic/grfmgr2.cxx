@@ -78,7 +78,8 @@ sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 }
 
 sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                  const rtl::Reference< GraphicObject >& rObj, const GraphicAttr& rAttr,
+                                  const rtl::Reference< GraphicObject >& xObj,
+                                  const GraphicAttr& rAttr,
                                   const sal_uLong nFlags, sal_Bool& rCached )
 {
     Point   aPt( rPt );
@@ -87,18 +88,18 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
 
     rCached = sal_False;
 
-    if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
+    if( ( xObj->GetType() == GRAPHIC_BITMAP ) || ( xObj->GetType() == GRAPHIC_GDIMETAFILE ) )
     {
         // create output and fill cache
 
-        if( rObj.IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
+        if( xObj->IsAnimated() || ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
             ( !( nFlags & GRFMGR_DRAW_NO_SUBSTITUTE ) &&
               ( ( nFlags & GRFMGR_DRAW_SUBSTITUTE ) ||
                 !( nFlags & GRFMGR_DRAW_CACHED ) ||
                 ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() ) ) ) )
         {
             // simple output of transformed graphic
-            const Graphic aGraphic( rObj.GetTransformedGraphic( &rAttr ) );
+            const Graphic aGraphic( xObj->GetTransformedGraphic( &rAttr ) );
 
             if( aGraphic.IsSupportedGraphic() )
             {
@@ -123,8 +124,8 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
         if( !bRet )
         {
             // cached/direct drawing
-            if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
-                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, nFlags, rCached );
+            if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, xObj, rAttr ) )
+                bRet = ImplDraw( pOut, aPt, aSz, xObj, rAttr, nFlags, rCached );
             else
                 bRet = rCached = sal_True;
         }
@@ -133,10 +134,11 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
     return bRet;
 }
 
-void GraphicManager::ImplRegisterObj( const rtl::Reference< GraphicObject >& xObj,
+void GraphicManager::ImplRegisterObj( GraphicObject &rObj,
                                       Graphic& rSubstitute,
                                       const OString* pID )
 {
+    rtl::Reference< GraphicObject > xObj( &rObj );
     maObjList.push_back( xObj );
     mpCache->AddGraphicObject( xObj, rSubstitute, pID );
 }
@@ -146,31 +148,34 @@ void GraphicManager::ImplUnregisterObj( const rtl::Reference< GraphicObject >& x
     mpCache->ReleaseGraphicObject( xObj );
     for( GraphicObjectList_impl::iterator it = maObjList.begin(); it != maObjList.end(); ++it )
     {
-        if ( *it == &xObj ) {
+        if ( *it == xObj ) {
             maObjList.erase( it );
             break;
         }
     }
+    // FIXME: do we need to delete ourselves when we unregister the last object ?
 }
 
-void GraphicManager::ImplGraphicObjectWasSwappedOut( const rtl::Reference< GraphicObject >& xObj)
+void GraphicManager::ImplGraphicObjectWasSwappedOut( GraphicObject& rObj)
 {
-    mpCache->GraphicObjectWasSwappedOut( xObj );
+    mpCache->GraphicObjectWasSwappedOut( rtl::Reference< GraphicObject >( &rObj ) );
 }
 
-OString GraphicManager::ImplGetUniqueID( const rtl::Reference< GraphicObject >& xObj ) const
+OString GraphicManager::ImplGetUniqueID( const GraphicObject &rObj ) const
 {
-    return mpCache->GetUniqueID( xObj );
+    return mpCache->GetUniqueID( rtl::Reference< GraphicObject >(
+                const_cast< GraphicObject * > ( &rObj ) ) );
 }
 
-sal_Bool GraphicManager::ImplFillSwappedGraphicObject( const rtl::Reference< GraphicObject >& xObj, Graphic& rSubstitute )
+sal_Bool GraphicManager::ImplFillSwappedGraphicObject( GraphicObject & rObj, Graphic& rSubstitute )
 {
-    return( mpCache->FillSwappedGraphicObject( xObj, rSubstitute ) );
+    return( mpCache->FillSwappedGraphicObject( rtl::Reference< GraphicObject >( &rObj ),
+                                               rSubstitute ) );
 }
 
-void GraphicManager::ImplGraphicObjectWasSwappedIn( const rtl::Reference< GraphicObject >& xObj )
+void GraphicManager::ImplGraphicObjectWasSwappedIn( GraphicObject &rObj )
 {
-    mpCache->GraphicObjectWasSwappedIn( xObj );
+    mpCache->GraphicObjectWasSwappedIn( rtl::Reference< GraphicObject >( &rObj ) );
 }
 
 sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
@@ -1857,15 +1862,15 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
             // draw alpha content, if any
             if( IsTransparent() )
             {
-                GraphicObject aAlphaGraphic;
+                rtl::Reference< GraphicObject > xAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                    xAlphaGraphic = GraphicObject::Create( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
                 else
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
+                    xAlphaGraphic = GraphicObject::Create( GetGraphic().GetBitmapEx().GetMask() );
 
-                if( aAlphaGraphic.ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
-                                                      nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
+                if( xAlphaGraphic->ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+                                                       nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
                 {
                     // Combine bitmap and alpha/mask
                     if( GetGraphic().IsAlpha() )

@@ -614,22 +614,23 @@ private:
 
     // Only used by GraphicObject's Ctor's and Dtor's
     void SVT_DLLPRIVATE ImplRegisterObj(
-                            const rtl::Reference< GraphicObject >& xObj,
+                            GraphicObject &rObj,
                             Graphic& rSubstitute,
                             const OString* pID = NULL
                         );
+
     void SVT_DLLPRIVATE ImplUnregisterObj( const rtl::Reference< GraphicObject >& xObj );
     inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
 
                     // Only used in swap case by GraphicObject
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const rtl::Reference< GraphicObject > & xObj );
+    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( GraphicObject & rObj );
     sal_Bool SVT_DLLPRIVATE ImplFillSwappedGraphicObject(
-                            const rtl::Reference< GraphicObject >& xObj,
+                            GraphicObject& rObj,
                             Graphic& rSubstitute
                         );
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const rtl::Reference< GraphicObject >& xObj );
+    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( GraphicObject& rObj );
 
-    OString SVT_DLLPRIVATE ImplGetUniqueID( const rtl::Reference< GraphicObject >& xObj ) const;
+    OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject & rObj ) const;
 
                         GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
 
@@ -658,7 +659,7 @@ public:
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            rtl::Reference< GraphicObject >& xObj,
+                            const rtl::Reference< GraphicObject >& xObj,
                             const GraphicAttr& rAttr,
                             const sal_uLong nFlags,
                             sal_Bool& rCached
