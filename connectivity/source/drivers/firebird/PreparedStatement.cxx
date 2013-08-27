@@ -24,6 +24,7 @@
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <propertyids.hxx>
@@ -320,25 +321,48 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
 
     return m_xResultSet;
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
+//----- XParameters -----------------------------------------------------------
+void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
+    throw(SQLException, RuntimeException)
 {
-    (void) parameterIndex;
+    (void) nIndex;
     (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
+    // TODO: decide how to deal with bools. Probably just as a byte, although
+    // it might be best to just determine the db type and set as appropriate?
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
+
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 x)
+    throw(SQLException, RuntimeException)
 {
-    (void) parameterIndex;
+    (void) nIndex;
     (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
+    ::dbtools::throwFunctionNotSupportedException("setByte not supported in firebird",
+                                                  *this,
+                                                  Any());
+}
+
+void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 x)
+    throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
 
+    checkParameterIndex(nIndex);
+    setParameterNull(nIndex, false);
 
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
+
+    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+
+    if (dtype != SQL_SHORT)
+        throw SQLException(); // TODO: cast instead?
+
+    memcpy(pVar->sqldata, &x, 2);
 }
 // -------------------------------------------------------------------------
 
@@ -488,16 +512,6 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
     (void) parameterIndex;
     (void) x;
