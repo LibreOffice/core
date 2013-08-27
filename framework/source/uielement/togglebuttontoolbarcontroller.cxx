@@ -242,9 +242,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     {
                         if ( nPos < sal_Int32( m_aDropdownMenuList.size() ))
                         {
-                            std::vector< OUString >::iterator aIter = m_aDropdownMenuList.begin();
-                            aIter += nPos;
-                            m_aDropdownMenuList.erase( aIter );
+                            m_aDropdownMenuList.erase(m_aDropdownMenuList.begin() + nPos);
                         }
                     }
                     break;
