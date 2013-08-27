@@ -713,8 +713,8 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
     // Search for LangID (in this table we find only defined ISO combinations)
-    const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
-    do
+    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         if ( pEntry->mnLang == nLang )
         {
@@ -723,13 +723,11 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
             rLocale.Variant  = OUString();
             return;
         }
-        ++pEntry;
     }
-    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // Look for privateuse definitions.
-    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
-    do
+    for (const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
+            pPrivateEntry->mnLang != LANGUAGE_DONTKNOW; ++pPrivateEntry)
     {
         if ( pPrivateEntry->mnLang == nLang )
         {
@@ -738,9 +736,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
             rLocale.Variant  = OUString::createFromAscii( pPrivateEntry->mpLanguage );
             return;
         }
-        ++pPrivateEntry;
     }
-    while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // Not found. Passed rLocale argument remains unchanged.
 }
@@ -760,7 +756,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     // Search for locale and remember first lang-only.
     const IsoLanguageCountryEntry* pFirstLang = NULL;
     const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
-    do
+    for ( ; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         if (aLowerLang.equalsAscii( pEntry->maLanguage))
         {
@@ -786,9 +782,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
             if (!pFirstLang)
                 pFirstLang = pEntry;
         }
-        ++pEntry;
     }
-    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // Language not found at all => use default.
     if (!pFirstLang)
@@ -796,16 +790,14 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
     // Search for first entry of language with any country.
     pEntry = pFirstLang;
-    do
+    for ( ; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         if (aLowerLang.equalsAscii( pEntry->maLanguage))
         {
             if (*pEntry->maCountry)
                 return pEntry->getLocale();
         }
-        ++pEntry;
     }
-    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     return aLastResortFallbackEntry.getLocale();
 }
@@ -815,13 +807,12 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 // static
 LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& rPriv )
 {
-    const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
-    do
+    for (const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
+            pPrivateEntry->mnLang != LANGUAGE_DONTKNOW; ++pPrivateEntry)
     {
         if ( rPriv.equalsIgnoreAsciiCaseAscii( pPrivateEntry->mpLanguage ) )
             return pPrivateEntry->mnLang;
-        ++pPrivateEntry;
-    } while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
+    }
     return LANGUAGE_DONTKNOW;
 }
 
@@ -837,8 +828,8 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
 
     //  first look for exact match
     const IsoLanguageCountryEntry* pFirstLang = NULL;
-    const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
-    do
+    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         if ( aLowerLang.equalsAscii( pEntry->maLanguage ) )
         {
@@ -850,26 +841,22 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
             else if ( !*pEntry->maCountry )
                 pFirstLang = pEntry;
         }
-        ++pEntry;
     }
-    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // some eng countries should be mapped to a specific english language
     if ( aLowerLang == "en" )
     {
-        const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
-        do
+        for (const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
+                pEngEntry->mnLang != LANGUAGE_DONTKNOW; ++pEngEntry)
         {
             if ( aUpperCountry.equalsAscii( pEngEntry->maCountry ) )
                 return pEngEntry->mnLang;
-            ++pEngEntry;
         }
-        while ( pEngEntry->mnLang != LANGUAGE_DONTKNOW );
     }
 
     // test for specific languages which are not used standard ISO 3166 codes
-    const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
-    do
+    for (const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
+            pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW; ++pNoneStdEntry)
     {
         if ( aLowerLang.equalsAscii( pNoneStdEntry->maLanguage ) )
         {
@@ -877,23 +864,19 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
             if ( aUpperCountry.equalsIgnoreAsciiCaseAscii( pNoneStdEntry->maCountry ) )
                 return pNoneStdEntry->mnLang;
         }
-        ++pNoneStdEntry;
     }
-    while ( pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW );
-    pNoneStdEntry = aImplIsoNoneStdLangEntries2;
-    do
+    for (const IsoLangNoneStdEntry* pNoneStdEntry2 = aImplIsoNoneStdLangEntries2;
+            pNoneStdEntry2->mnLang != LANGUAGE_DONTKNOW; ++pNoneStdEntry2)
     {
-        if ( aLowerLang.equalsAscii( pNoneStdEntry->maLanguage ) )
+        if ( aLowerLang.equalsAscii( pNoneStdEntry2->maLanguage ) )
         {
             // The countries in this table are not all in upper case
-            if ( aUpperCountry.equalsIgnoreAsciiCaseAscii( pNoneStdEntry->maCountry ) )
-                return pNoneStdEntry->mnLang;
+            if ( aUpperCountry.equalsIgnoreAsciiCaseAscii( pNoneStdEntry2->maCountry ) )
+                return pNoneStdEntry2->mnLang;
         }
-        ++pNoneStdEntry;
     }
-    while ( pNoneStdEntry->mnLang != LANGUAGE_DONTKNOW );
 
-    // If the language is correct, than we return the default language
+    // If the language is correct, then we return the default language
     if ( pFirstLang )
         return pFirstLang->mnLang;
 
@@ -901,14 +884,12 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     //  (to allow reading country and language in separate steps, in any order)
     if ( !rCountry.isEmpty() && rLang.isEmpty() )
     {
-        const IsoLanguageCountryEntry* pEntry2 = aImplIsoLangEntries;
-        do
+        for (const IsoLanguageCountryEntry* pEntry2 = aImplIsoLangEntries;
+                pEntry2->mnLang != LANGUAGE_DONTKNOW; ++pEntry2)
         {
             if ( aUpperCountry.equalsAscii( pEntry2->maCountry ) )
                 return pEntry2->mnLang;
-            ++pEntry2;
         }
-        while ( pEntry2->mnLang != LANGUAGE_DONTKNOW );
 
         aLowerLang = aUpperCountry.toAsciiLowerCase();
     }
@@ -919,14 +900,12 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
         return nLang;
 
     // Now look for all other definitions, which are not standard
-    const IsoLangOtherEntry* pOtherEntry = aImplOtherEntries;
-    do
+    for (const IsoLangOtherEntry* pOtherEntry = aImplOtherEntries;
+            pOtherEntry->mnLang != LANGUAGE_DONTKNOW; ++pOtherEntry)
     {
         if ( aLowerLang.equalsAscii( pOtherEntry->mpLanguage ) )
             return pOtherEntry->mnLang;
-        ++pOtherEntry;
     }
-    while ( pOtherEntry->mnLang != LANGUAGE_DONTKNOW );
 
     return LANGUAGE_DONTKNOW;
 }
@@ -1006,8 +985,8 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         OString aLowerLang = aLang.toAsciiLowerCase();
         // country is upper case in table
         OString aUpperCountry = aCountry.toAsciiUpperCase();
-        const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
-        do
+        for (const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
+                pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW; ++pGLIBCModifiersEntry)
         {                         // avoid embedded \0 warning
             if (aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLanguage )) &&
                  aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString )))
@@ -1018,9 +997,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
                     return pGLIBCModifiersEntry->mnLang;
                 }
             }
-            ++pGLIBCModifiersEntry;
         }
-        while ( pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW );
     }
 
     return Conversion::convertIsoNamesToLanguage( aLang, aCountry );
