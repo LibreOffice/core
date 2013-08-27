@@ -560,7 +560,7 @@ template< typename ValueT >
 void NumericFieldWrapper< ValueT >::SetControlDontKnow( bool bSet )
 {
     if( bSet )
-        this->GetControl().SetText( String() );
+        this->GetControl().SetText( OUString() );
 }
 
 template< typename ValueT >
@@ -587,7 +587,7 @@ template< typename ValueT >
 void MetricFieldWrapper< ValueT >::SetControlDontKnow( bool bSet )
 {
     if( bSet )
-        this->GetControl().SetText( String() );
+        this->GetControl().SetText( OUString() );
 }
 
 template< typename ValueT >
