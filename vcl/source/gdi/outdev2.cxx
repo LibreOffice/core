@@ -37,6 +37,7 @@
 #include <window.h>
 #include <outdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 DBG_NAMEEX( OutputDevice )
 
@@ -692,8 +693,9 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bSheared(!basegfx::fTools::equalZero(fShearX));
     const bool bMirroredX(basegfx::fTools::less(aScale.getX(), 0.0));
     const bool bMirroredY(basegfx::fTools::less(aScale.getY(), 0.0));
+    static bool bForceToOwnTransformer(false);
 
-    if(!bRotated && !bSheared && !bMirroredX && !bMirroredY)
+    if(!bForceToOwnTransformer && !bRotated && !bSheared && !bMirroredX && !bMirroredY)
     {
         // with no rotation, shear or mirroring it can be mapped to DrawBitmapEx
         // do *not* execute the mirroring here, it's done in the fallback
@@ -714,7 +716,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile && !bPrinter);
 
-    if(bTryDirectPaint)
+    if(!bForceToOwnTransformer && bTryDirectPaint)
     {
         // try to paint directly
         const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
@@ -747,7 +749,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(!bDone)
     {
         // take the fallback when no rotate and shear, but mirror (else we would have done this above)
-        if(!bRotated && !bSheared)
+        if(!bForceToOwnTransformer && !bRotated && !bSheared)
         {
             // with no rotation or shear it can be mapped to DrawBitmapEx
             // do *not* execute the mirroring here, it's done in the fallback
@@ -760,14 +762,115 @@ void OutputDevice::DrawTransformedBitmapEx(
 
         // fallback; create transformed bitmap the hard way (back-transform
         // the pixels) and paint
-        basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
-        const double fMaximumArea(bMetafile ? 800000.0 : 200000.0);
-        const BitmapEx aTransformed(rBitmapEx.getTransformed(aFullTransform, fMaximumArea));
-        aTargetRange.transform(rTransformation);
-        const Point aDestPt(basegfx::fround(aTargetRange.getMinX()), basegfx::fround(aTargetRange.getMinY()));
-        const Size aDestSize(basegfx::fround(aTargetRange.getWidth()), basegfx::fround(aTargetRange.getHeight()));
+        basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
 
-        DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+        // limit maximum area to something looking good for non-pixel-based targets (metafile, printer)
+        double fMaximumArea(1000000.0);
+
+        if(!bMetafile && !bPrinter)
+        {
+            // limit TargetRange to existing pixels (if pixel device)
+            // first get discrete range of object
+            basegfx::B2DRange aFullPixelRange(aVisibleRange);
+
+            aFullPixelRange.transform(aFullTransform);
+
+            if(basegfx::fTools::equalZero(aFullPixelRange.getWidth()) || basegfx::fTools::equalZero(aFullPixelRange.getHeight()))
+            {
+                // object is outside of visible area
+                return;
+            }
+
+            // now get discrete target pixels; start with OutDev pixel size and evtl.
+            // intersect with active clipping area
+            basegfx::B2DRange aOutPixel(
+                0.0,
+                0.0,
+                GetOutputSizePixel().Width(),
+                GetOutputSizePixel().Height());
+
+            if(IsClipRegion())
+            {
+                const Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
+
+                aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
+                    basegfx::B2DRange(
+                        aRegionRectangle.Left(),
+                        aRegionRectangle.Top(),
+                        aRegionRectangle.Right() + 1,
+                        aRegionRectangle.Bottom() + 1));
+            }
+
+            if(aOutPixel.isEmpty())
+            {
+                // no active output area
+                return;
+            }
+
+            // if aFullPixelRange is not completely inside of aOutPixel,
+            // reduction of target pixels is possible
+            basegfx::B2DRange aVisiblePixelRange(aFullPixelRange);
+
+            if(!aOutPixel.isInside(aFullPixelRange))
+            {
+                aVisiblePixelRange.intersect(aOutPixel);
+
+                if(aVisiblePixelRange.isEmpty())
+                {
+                    // nothing in visible part, reduces to nothing
+                    return;
+                }
+
+                // aVisiblePixelRange contains the reduced output area in
+                // discrete coordinates. To make it useful everywhere, make it relative to
+                // the object range
+                basegfx::B2DHomMatrix aMakeVisibleRangeRelative;
+
+                aVisibleRange = aVisiblePixelRange;
+                aMakeVisibleRangeRelative.translate(
+                    -aFullPixelRange.getMinX(),
+                    -aFullPixelRange.getMinY());
+                aMakeVisibleRangeRelative.scale(
+                    1.0 / aFullPixelRange.getWidth(),
+                    1.0 / aFullPixelRange.getHeight());
+                aVisibleRange.transform(aMakeVisibleRangeRelative);
+            }
+
+            // for pixel devices, do *not* limit size, else OutputDevice::ImplDrawAlpha
+            // will create another, badly scaled bitmap to do the job. Nonetheless, do a
+            // maximum clipping of something big (1600x1280x2). Add 1.0 to avoid rounding
+            // errors in rough estimations
+            const double fNewMaxArea(aVisiblePixelRange.getWidth() * aVisiblePixelRange.getHeight());
+
+            fMaximumArea = std::min(4096000.0, fNewMaxArea + 1.0);
+        }
+
+        if(!aVisibleRange.isEmpty())
+        {
+            static bool bDoSmoothAtAll(true);
+            const BitmapEx aTransformed(
+                rBitmapEx.getTransformed(
+                    aFullTransform,
+                    aVisibleRange,
+                    fMaximumArea,
+                    bDoSmoothAtAll));
+            basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
+
+            // get logic object target range
+            aTargetRange.transform(rTransformation);
+
+            // get from unified/relative VisibleRange to logoc one
+            aVisibleRange.transform(
+                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aTargetRange.getRange(),
+                    aTargetRange.getMinimum()));
+
+            // extract point and size; do not remove size, the bitmap may have been prepared reduced by purpose
+            const Point aDestPt(basegfx::fround(aVisibleRange.getMinX()), basegfx::fround(aVisibleRange.getMinY()));
+            const Size aDestSize(basegfx::fround(aVisibleRange.getWidth()), basegfx::fround(aVisibleRange.getHeight()));
+
+            DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+        }
     }
 }
 

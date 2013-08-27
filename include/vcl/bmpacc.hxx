@@ -158,6 +158,16 @@ public:
     inline BitmapColor          GetColor( long nY, long nX ) const;
     inline sal_uInt8            GetPixelIndex( long nY, long nX ) const;
     inline sal_uInt8            GetLuminance( long nY, long nX ) const;
+
+    /** Get the interpolated color at coordinates fY, fX; if outside, return rFallback */
+    BitmapColor GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
+
+    /** Get the color at coordinates fY, fX; if outside, return rFallback. Automatically does the correct
+        inside/outside checks, e.g. static_cast< sal_uInt32 >(-0.25) *is* 0, not -1 and has to be outside */
+    BitmapColor GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
+
+    /** Get the color at coordinates nY, nX; if outside, return rFallback */
+    BitmapColor GetColorWithFallback( long nY, long nX, const BitmapColor& rFallback ) const;
 };
 
 // ---------------------

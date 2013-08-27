@@ -277,6 +277,126 @@ sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColo
     return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );
 }
 
+BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const
+{
+    // ask directly doubles >= 0.0 here to avoid rounded values of 0 at small negative
+    // double values, e.g. static_cast< sal_Int32 >(-0.25) is 0, not -1, but *has* to be outside (!)
+    if(mpBuffer && fX >= 0.0 && fY >= 0.0)
+    {
+        const sal_Int32 nX(static_cast< sal_Int32 >(fX));
+        const sal_Int32 nY(static_cast< sal_Int32 >(fY));
+
+        if(nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
+        {
+            // get base-return value from inside pixel
+            BitmapColor aRetval(GetColor(nY, nX));
+
+            // calculate deltas and indices for neighbour accesses
+            sal_Int16 nDeltaX((fX - (nX + 0.5)) * 255.0); // [-255 .. 255]
+            sal_Int16 nDeltaY((fY - (nY + 0.5)) * 255.0); // [-255 .. 255]
+            sal_Int16 nIndX(0);
+            sal_Int16 nIndY(0);
+
+            if(nDeltaX > 0)
+            {
+                nIndX = nX + 1;
+            }
+            else
+            {
+                nIndX = nX - 1;
+                nDeltaX = -nDeltaX;
+            }
+
+            if(nDeltaY > 0)
+            {
+                nIndY = nY + 1;
+            }
+            else
+            {
+                nIndY = nY - 1;
+                nDeltaY = -nDeltaY;
+            }
+
+            // get right/left neighbour
+            BitmapColor aXCol(rFallback);
+
+            if(nDeltaX && nIndX >= 0 && nIndX < mpBuffer->mnWidth)
+            {
+                aXCol = GetColor(nY, nIndX);
+            }
+
+            // get top/bottom neighbour
+            BitmapColor aYCol(rFallback);
+
+            if(nDeltaY && nIndY >= 0 && nIndY < mpBuffer->mnHeight)
+            {
+                aYCol = GetColor(nIndY, nX);
+            }
+
+            // get one of four edge neighbours
+            BitmapColor aXYCol(rFallback);
+
+            if(nDeltaX && nDeltaY && nIndX >=0 && nIndY >= 0 && nIndX < mpBuffer->mnWidth && nIndY < mpBuffer->mnHeight)
+            {
+                aXYCol = GetColor(nIndY, nIndX);
+            }
+
+            // merge return value with right/left neighbour
+            if(aXCol != aRetval)
+            {
+                aRetval.Merge(aXCol, 255 - nDeltaX);
+            }
+
+            // merge top/bottom neighbour with edge
+            if(aYCol != aXYCol)
+            {
+                aYCol.Merge(aXYCol, 255 - nDeltaX);
+            }
+
+            // merge return value with already merged top/bottom neighbour
+            if(aRetval != aYCol)
+            {
+                aRetval.Merge(aYCol, 255 - nDeltaY);
+            }
+
+            return aRetval;
+        }
+    }
+
+    return rFallback;
+}
+
+BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const
+{
+    // ask directly doubles >= 0.0 here to avoid rounded values of 0 at small negative
+    // double values, e.g. static_cast< sal_Int32 >(-0.25) is 0, not -1, but *has* to be outside (!)
+    if(mpBuffer && fX >= 0.0 && fY >= 0.0)
+    {
+        const sal_Int32 nX(static_cast< sal_Int32 >(fX));
+        const sal_Int32 nY(static_cast< sal_Int32 >(fY));
+
+        if(nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
+        {
+            return GetColor(nY, nX);
+        }
+    }
+
+    return rFallback;
+}
+
+BitmapColor BitmapReadAccess::GetColorWithFallback( long nY, long nX, const BitmapColor& rFallback ) const
+{
+    if(mpBuffer)
+    {
+        if(nX >= 0 && nY >= 0 && nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
+        {
+            return GetColor(nY, nX);
+        }
+    }
+
+    return rFallback;
+}
+
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
             BitmapReadAccess( rBitmap, sal_True ),
             mpLineColor     ( NULL ),

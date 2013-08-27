@@ -831,87 +831,6 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
 
 namespace
 {
-    void impSmoothPoint(BitmapColor& rValue, const basegfx::B2DPoint& rSource, sal_Int32 nIntX, sal_Int32 nIntY, BitmapReadAccess& rRead)
-    {
-        double fDeltaX(rSource.getX() - nIntX);
-        double fDeltaY(rSource.getY() - nIntY);
-        sal_Int32 nIndX(0L);
-        sal_Int32 nIndY(0L);
-
-        if(fDeltaX > 0.0 && nIntX + 1L < rRead.Width())
-        {
-            nIndX++;
-        }
-        else if(fDeltaX < 0.0 && nIntX >= 1L)
-        {
-            fDeltaX = -fDeltaX;
-            nIndX--;
-        }
-
-        if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
-        {
-            nIndY++;
-        }
-        else if(fDeltaY < 0.0 && nIntY >= 1L)
-        {
-            fDeltaY = -fDeltaY;
-            nIndY--;
-        }
-
-        if(nIndX || nIndY)
-        {
-            const double fColorToReal(1.0 / 255.0);
-            double fR(rValue.GetRed() * fColorToReal);
-            double fG(rValue.GetGreen() * fColorToReal);
-            double fB(rValue.GetBlue() * fColorToReal);
-            double fRBottom(0.0), fGBottom(0.0), fBBottom(0.0);
-
-            if(nIndX)
-            {
-                const double fMulA(fDeltaX * fColorToReal);
-                double fMulB(1.0 - fDeltaX);
-                const BitmapColor aTopPartner(rRead.GetColor(nIntY, nIntX + nIndX));
-
-                fR = (fR * fMulB) + (aTopPartner.GetRed() * fMulA);
-                fG = (fG * fMulB) + (aTopPartner.GetGreen() * fMulA);
-                fB = (fB * fMulB) + (aTopPartner.GetBlue() * fMulA);
-
-                if(nIndY)
-                {
-                    fMulB *= fColorToReal;
-                    const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
-                    const BitmapColor aBottomPartner(rRead.GetColor(nIntY + nIndY, nIntX + nIndX));
-
-                    fRBottom = (aBottom.GetRed() * fMulB) + (aBottomPartner.GetRed() * fMulA);
-                    fGBottom = (aBottom.GetGreen() * fMulB) + (aBottomPartner.GetGreen() * fMulA);
-                    fBBottom = (aBottom.GetBlue() * fMulB) + (aBottomPartner.GetBlue() * fMulA);
-                }
-            }
-
-            if(nIndY)
-            {
-                if(!nIndX)
-                {
-                    const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
-
-                    fRBottom = aBottom.GetRed() * fColorToReal;
-                    fGBottom = aBottom.GetGreen() * fColorToReal;
-                    fBBottom = aBottom.GetBlue() * fColorToReal;
-                }
-
-                const double fMulB(1.0 - fDeltaY);
-
-                fR = (fR * fMulB) + (fRBottom * fDeltaY);
-                fG = (fG * fMulB) + (fGBottom * fDeltaY);
-                fB = (fB * fMulB) + (fBBottom * fDeltaY);
-            }
-
-            rValue.SetRed((sal_uInt8)(fR * 255.0));
-            rValue.SetGreen((sal_uInt8)(fG * 255.0));
-            rValue.SetBlue((sal_uInt8)(fB * 255.0));
-        }
-    }
-
     Bitmap impTransformBitmap(
         const Bitmap& rSource,
         const Size aDestinationSize,
@@ -923,54 +842,41 @@ namespace
 
         if(pWrite)
         {
-            const Size aContentSizePixel(rSource.GetSizePixel());
+            //const Size aContentSizePixel(rSource.GetSizePixel());
             BitmapReadAccess* pRead = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
 
             if(pRead)
             {
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
-                bool bWorkWithIndex(rSource.GetBitCount() <= 8);
-                BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
+                const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
                 for(sal_Int32 y(0L); y < aDestinationSizePixel.getHeight(); y++)
                 {
                     for(sal_Int32 x(0L); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
-                        const sal_Int32 nIntX(basegfx::fround(aSourceCoor.getX()));
 
-                        if(nIntX >= 0L && nIntX < aContentSizePixel.getWidth())
+                        if(bSmooth)
                         {
-                            const sal_Int32 nIntY(basegfx::fround(aSourceCoor.getY()));
-
-                            if(nIntY >= 0L && nIntY < aContentSizePixel.getHeight())
-                            {
-                                // inside pixel
-                                BitmapColor aValue;
-
-                                if(bWorkWithIndex)
-                                {
-                                    aValue = pRead->GetPaletteColor(pRead->GetPixelIndex(nIntY, nIntX));
-                                }
-                                else
-                                {
-                                    aValue = pRead->GetPixel(nIntY, nIntX);
-                                }
-
-                                if(bSmooth)
-                                {
-                                    impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
-                                }
-
-                                pWrite->SetPixel(y, x, aValue);
-                                continue;
-                            }
+                            pWrite->SetPixel(
+                                y,
+                                x,
+                                pRead->GetInterpolatedColorWithFallback(
+                                    aSourceCoor.getY(),
+                                    aSourceCoor.getX(),
+                                    aOutside));
                         }
-
-                        // here are outside pixels. Complete mask
-                        if(bWorkWithIndex)
+                        else
                         {
-                            pWrite->SetPixel(y, x, aOutside);
+                            // this version does the correct <= 0.0 checks, so no need
+                            // to do the static_cast< sal_Int32 > self and make an error
+                            pWrite->SetPixel(
+                                y,
+                                x,
+                                pRead->GetColorWithFallback(
+                                    aSourceCoor.getY(),
+                                    aSourceCoor.getX(),
+                                    aOutside));
                         }
                     }
                 }
@@ -986,25 +892,26 @@ namespace
         return aDestination;
     }
 } // end of anonymous namespace
+
 BitmapEx BitmapEx::TransformBitmapEx(
     double fWidth,
     double fHeight,
-    const basegfx::B2DHomMatrix& rTransformation) const
+    const basegfx::B2DHomMatrix& rTransformation,
+    bool bSmooth) const
 {
     if(fWidth <= 1 || fHeight <= 1)
         return BitmapEx();
 
     // force destination to 24 bit, we want to smooth output
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
-    static bool bDoSmoothAtAll(true);
-    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bDoSmoothAtAll));
+    const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
 
     // create mask
     if(IsTransparent())
     {
         if(IsAlpha())
         {
-            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bDoSmoothAtAll));
+            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
             return BitmapEx(aDestination, AlphaMask(aAlpha));
         }
         else
@@ -1021,7 +928,9 @@ BitmapEx BitmapEx::TransformBitmapEx(
 
 BitmapEx BitmapEx::getTransformed(
     const basegfx::B2DHomMatrix& rTransformation,
-    double fMaximumArea) const
+    const basegfx::B2DRange& rVisibleRange,
+    double fMaximumArea,
+    bool bSmooth) const
 {
     BitmapEx aRetval;
 
@@ -1034,20 +943,31 @@ BitmapEx BitmapEx::getTransformed(
     if(!nSourceWidth || !nSourceHeight)
         return aRetval;
 
-    // Get dest range
+    // Get aOutlineRange
     basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+
     aOutlineRange.transform(rTransformation);
 
-    // get target size
-    double fWidth(aOutlineRange.getWidth());
-    double fHeight(aOutlineRange.getHeight());
+    // create visible range from it by moving from relative to absolute
+    basegfx::B2DRange aVisibleRange(rVisibleRange);
+
+    aVisibleRange.transform(
+        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            aOutlineRange.getRange(),
+            aOutlineRange.getMinimum()));
+
+    // get target size (which is visible range's size)
+    double fWidth(aVisibleRange.getWidth());
+    double fHeight(aVisibleRange.getHeight());
 
     if(fWidth < 1.0 || fHeight < 1.0)
+    {
         return aRetval;
+    }
 
     // test if discrete size (pixel) maybe too big and limit it
     const double fArea(fWidth * fHeight);
-    const bool bNeedToReduce(fArea > fMaximumArea);
+    const bool bNeedToReduce(basegfx::fTools::more(fArea, fMaximumArea));
     double fReduceFactor(1.0);
 
     if(bNeedToReduce)
@@ -1068,8 +988,10 @@ BitmapEx BitmapEx::getTransformed(
     // aOutlineRange
     aTransform = rTransformation * aTransform;
 
-    // substract top-left of aOutlineRange
-    aTransform.translate(-aOutlineRange.getMinX(), -aOutlineRange.getMinY());
+    // substract top-left of absolute VisibleRange
+    aTransform.translate(
+        -aVisibleRange.getMinX(),
+        -aVisibleRange.getMinY());
 
     // scale to target pixels (if needed)
     if(bNeedToReduce)
@@ -1081,7 +1003,7 @@ BitmapEx BitmapEx::getTransformed(
     aTransform.invert();
 
     // create bitmap using source, destination and linear back-transformation
-    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform);
+    aRetval = TransformBitmapEx(fWidth, fHeight, aTransform, bSmooth);
 
     return aRetval;
 }
