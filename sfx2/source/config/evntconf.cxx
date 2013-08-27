@@ -131,9 +131,9 @@ sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
     return 0;
 }
 
-void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, sal_uInt16 nID )
+void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, sal_uInt16 nID )
 {
-    aEventsList.push_back( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
+    aEventsList.push_back( new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
 }
 
 

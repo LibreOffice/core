@@ -36,12 +36,12 @@ class SvxMacroTableDtor;
 struct SFX2_DLLPUBLIC SfxEventName
 {
     sal_uInt16  mnId;
-    String  maEventName;
-    String  maUIName;
+    OUString    maEventName;
+    OUString    maUIName;
 
             SfxEventName( sal_uInt16 nId,
-                             const String& rEventName,
-                             const String& rUIName )
+                             const OUString& rEventName,
+                             const OUString& rUIName )
                 : mnId( nId )
                 , maEventName( rEventName )
                 , maUIName( rUIName ) {}
@@ -91,7 +91,7 @@ public:
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
     void SetEvents( const SfxEventNamesList& rList ) { aEventsList = rList; }
-    void                    AddEvent( const String&, const String&, sal_uInt16 );
+    void                    AddEvent( const OUString&, const OUString&, sal_uInt16 );
 };
 
 // -----------------------------------------------------------------------
