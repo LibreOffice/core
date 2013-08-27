@@ -37,6 +37,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 
+#include <editeng/unoprnms.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/spltitem.hxx>
@@ -107,6 +108,12 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
+#include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
+#include <com/sun/star/xml/dom/XAttr.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -990,6 +997,9 @@ void DocxAttributeOutput::StartRunProperties()
 
     OSL_ASSERT( m_postponedGraphic == NULL );
     m_postponedGraphic = new std::list< PostponedGraphic >;
+
+    OSL_ASSERT( m_postponedDiagram == NULL );
+    m_postponedDiagram = new std::list< PostponedDiagram >;
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -1103,6 +1113,8 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
     WritePostponedGraphic();
 
+    WritePostponedDiagram();
+
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
@@ -1116,6 +1128,16 @@ void DocxAttributeOutput::WritePostponedGraphic()
         FlyFrameGraphic( it->grfNode, it->size );
     delete m_postponedGraphic;
     m_postponedGraphic = NULL;
+}
+
+void DocxAttributeOutput::WritePostponedDiagram()
+{
+    for( std::list< PostponedDiagram >::const_iterator it = m_postponedDiagram->begin();
+         it != m_postponedDiagram->end();
+         ++it )
+        WriteDiagram( it->object, it->size );
+    delete m_postponedDiagram;
+    m_postponedDiagram = NULL;
 }
 
 void DocxAttributeOutput::FootnoteEndnoteRefTag()
@@ -2880,35 +2902,47 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    bool bSwapInPage = false;
-                    if ( !pSdrObj->GetPage() )
+                    if ( IsDiagram( pSdrObj ) )
                     {
-                        if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
-                        {
-                            if ( SdrPage *pPage = pModel->GetPage( 0 ) )
-                            {
-                                bSwapInPage = true;
-                                const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
-                            }
+                        if ( m_postponedDiagram == NULL )
+                            WriteDiagram( pSdrObj, rFrame.GetLayoutSize() );
+                        else // we are writing out attributes, but w:drawing should not be inside w:rPr,
+                        {    // so write it out later
+                            m_postponedDiagram->push_back( PostponedDiagram( pSdrObj, rFrame.GetSize() ) );
                         }
                     }
+                    else
+                    {
+                        bool bSwapInPage = false;
+                        if ( !pSdrObj->GetPage() )
+                        {
+                            if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
+                            {
+                                if ( SdrPage *pPage = pModel->GetPage( 0 ) )
+                                {
+                                    bSwapInPage = true;
+                                    const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
+                                }
+                            }
+                        }
 
-                    m_pSerializer->startElementNS( XML_w, XML_pict,
-                            FSEND );
+                        m_pSerializer->startElementNS( XML_w, XML_pict,
+                                FSEND );
 
-                    // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
-                    const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
-                    SwFmtHoriOrient rHoriOri = rFrmFmt.GetHoriOrient();
-                    SwFmtVertOrient rVertOri = rFrmFmt.GetVertOrient();
-                    m_rExport.VMLExporter().AddSdrObject( *pSdrObj,
-                            rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
-                            rHoriOri.GetRelationOrient(),
-                            rVertOri.GetRelationOrient(), &rNdTopLeft );
+                        // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
+                        const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
+                        SwFmtHoriOrient rHoriOri = rFrmFmt.GetHoriOrient();
+                        SwFmtVertOrient rVertOri = rFrmFmt.GetVertOrient();
+                        m_rExport.VMLExporter().AddSdrObject( *pSdrObj,
+                                rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+                                rHoriOri.GetRelationOrient(),
+                                rVertOri.GetRelationOrient(), &rNdTopLeft );
 
-                    m_pSerializer->endElementNS( XML_w, XML_pict );
+                        m_pSerializer->endElementNS( XML_w, XML_pict );
 
-                    if ( bSwapInPage )
-                        const_cast< SdrObject* >( pSdrObj )->SetPage( 0 );
+                        if ( bSwapInPage )
+                            const_cast< SdrObject* >( pSdrObj )->SetPage( 0 );
+                    }
                 }
             }
             break;
@@ -2939,6 +2973,216 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
     }
 
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_POSTPONE );
+}
+
+bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
+{
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)sdrObject)->getUnoShape(), uno::UNO_QUERY );
+    if ( !xShape.is() )
+        return false;
+
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+    if ( !xPropSet.is() )
+        return false;
+
+    // if the shape doesn't have the InteropGrabBag property, it's not a diagram
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return false;
+
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        // if we find any of the diagram components, it's a diagram
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXData" || propName == "OOXLayout" || propName == "OOXStyle" ||
+             propName == "OOXColor" || propName == "OOXDrawing")
+            return true;
+    }
+    return false;
+}
+
+void DocxAttributeOutput::WriteDiagram( const SdrObject* sdrObject, const Size& size )
+{
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)sdrObject)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+
+    uno::Reference<xml::dom::XDocument> dataDom;
+    uno::Reference<xml::dom::XDocument> layoutDom;
+    uno::Reference<xml::dom::XDocument> styleDom;
+    uno::Reference<xml::dom::XDocument> colorDom;
+    uno::Reference<xml::dom::XDocument> drawingDom;
+
+    // retrieve the doms from the GrabBag
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXData" )
+             propList[nProp].Value >>= dataDom;
+        else if ( propName == "OOXLayout" )
+             propList[nProp].Value >>= layoutDom;
+        else if ( propName == "OOXStyle" )
+             propList[nProp].Value >>= styleDom;
+        else if ( propName == "OOXColor" )
+             propList[nProp].Value >>= colorDom;
+        else if ( propName == "OOXDrawing" )
+             propList[nProp].Value >>= drawingDom;
+    }
+
+    // check that we have the 4 mandatory XDocuments
+    // if not, there was an error importing and we won't output anything
+    if ( !dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is() )
+        return;
+
+    // write necessary tags to document.xml
+    m_pSerializer->startElementNS( XML_w, XML_drawing,
+        FSEND );
+    m_pSerializer->startElementNS( XML_wp, XML_inline,
+        XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+        FSEND );
+
+    OString aWidth( OString::number( TwipsToEMU( size.Width() ) ) );
+    OString aHeight( OString::number( TwipsToEMU( size.Height() ) ) );
+    m_pSerializer->singleElementNS( XML_wp, XML_extent,
+        XML_cx, aWidth.getStr(),
+        XML_cy, aHeight.getStr(),
+        FSEND );
+    // TODO - the right effectExtent, extent including the effect
+    m_pSerializer->singleElementNS( XML_wp, XML_effectExtent,
+        XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
+        FSEND );
+
+    // generate an unique id
+    static sal_Int32 diagramCount = 0;
+    diagramCount++;
+    OUString sName = "Diagram" + OUString::number( diagramCount );
+
+    m_pSerializer->singleElementNS( XML_wp, XML_docPr,
+        XML_id, I32S( diagramCount ),
+        XML_name, USS( sName ),
+        FSEND );
+
+    m_pSerializer->singleElementNS( XML_wp, XML_cNvGraphicFramePr,
+        FSEND );
+
+    m_pSerializer->startElementNS( XML_a, XML_graphic,
+        FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main",
+        FSEND );
+
+    m_pSerializer->startElementNS( XML_a, XML_graphicData,
+        XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+        FSEND );
+
+    // add data relation
+    OUString dataFileName = "diagrams/data" + OUString::number( diagramCount ) + ".xml";
+    OString dataRelId = OUStringToOString(m_rExport.GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData",
+        dataFileName, false ), RTL_TEXTENCODING_UTF8 );
+
+    // add layout relation
+    OUString layoutFileName = "diagrams/layout" + OUString::number( diagramCount ) + ".xml";
+    OString layoutRelId = OUStringToOString(m_rExport.GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout",
+        layoutFileName, false ), RTL_TEXTENCODING_UTF8 );
+
+    // add style relation
+    OUString styleFileName = "diagrams/quickStyle" + OUString::number( diagramCount ) + ".xml";
+    OString styleRelId = OUStringToOString(m_rExport.GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle",
+        styleFileName , false), RTL_TEXTENCODING_UTF8 );
+
+    // add color relation
+    OUString colorFileName = "diagrams/colors" + OUString::number( diagramCount ) + ".xml";
+    OString colorRelId = OUStringToOString(m_rExport.GetFilter().addRelation( m_pSerializer->getOutputStream(),
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors",
+        colorFileName, false ), RTL_TEXTENCODING_UTF8 );
+
+    OUString drawingFileName;
+    if ( drawingDom.is() )
+    {
+        // add drawing relation
+        drawingFileName = "diagrams/drawing" + OUString::number( diagramCount ) + ".xml";
+        OUString drawingRelId = m_rExport.GetFilter().addRelation( m_pSerializer->getOutputStream(),
+            "http://schemas.microsoft.com/office/2007/relationships/diagramDrawing",
+            drawingFileName , false);
+
+        // the data dom contains a reference to the drawing relation. We need to update it with the new generated
+        // relation value before writing the dom to a file
+
+        // Get the dsp:damaModelExt node from the dom
+        uno::Reference< xml::dom::XNodeList > nodeList =
+            dataDom->getElementsByTagNameNS( "http://schemas.microsoft.com/office/drawing/2008/diagram", "dataModelExt" );
+
+        // There must be one element only so get it
+        uno::Reference< xml::dom::XNode > node = nodeList->item( 0 );
+
+        // Get the list of attributes of the node
+        uno::Reference< xml::dom::XNamedNodeMap > nodeMap = node->getAttributes();
+
+        // Get the node with the relId attribute and set its new value
+        uno::Reference< xml::dom::XNode > relIdNode = nodeMap->getNamedItem( "relId" );
+        relIdNode->setNodeValue( drawingRelId );
+    }
+
+    m_pSerializer->singleElementNS ( XML_dgm, XML_relIds,
+                                     FSNS( XML_xmlns, XML_dgm ), "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+                                     FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                                     FSNS( XML_r, XML_dm ), dataRelId.getStr(),
+                                     FSNS( XML_r, XML_lo ), layoutRelId.getStr(),
+                                     FSNS( XML_r, XML_qs ), styleRelId.getStr(),
+                                     FSNS( XML_r, XML_cs ), colorRelId.getStr(),
+                                     FSEND );
+
+    m_pSerializer->endElementNS( XML_a, XML_graphicData );
+    m_pSerializer->endElementNS( XML_a, XML_graphic );
+    m_pSerializer->endElementNS( XML_wp, XML_inline );
+    m_pSerializer->endElementNS( XML_w, XML_drawing );
+
+    uno::Reference< xml::sax::XSAXSerializable > serializer;
+    uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+
+    // write data file
+    serializer.set( dataDom, uno::UNO_QUERY );
+    writer->setOutputStream( m_rExport.GetFilter().openFragmentStream( "word/" + dataFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml" ) );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
+
+    // write layout file
+    serializer.set( layoutDom, uno::UNO_QUERY );
+    writer->setOutputStream( m_rExport.GetFilter().openFragmentStream( "word/" + layoutFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml" ) );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
+
+    // write style file
+    serializer.set( styleDom, uno::UNO_QUERY );
+    writer->setOutputStream( m_rExport.GetFilter().openFragmentStream( "word/" + styleFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml" ) );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
+
+    // write color file
+    serializer.set( colorDom, uno::UNO_QUERY );
+    writer->setOutputStream( m_rExport.GetFilter().openFragmentStream( "word/" + colorFileName,
+        "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml" ) );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
+
+    // write drawing file
+    if ( drawingDom.is() )
+    {
+        serializer.set( drawingDom, uno::UNO_QUERY );
+        writer->setOutputStream( m_rExport.GetFilter().openFragmentStream( "word/" + drawingFileName,
+            "application/vnd.openxmlformats-officedocument.drawingml.diagramDrawing+xml" ) );
+        serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+            uno::Sequence< beans::StringPair >() );
+    }
 }
 
 void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
@@ -5416,6 +5660,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
       m_postponedGraphic( NULL ),
+      m_postponedDiagram( NULL ),
       m_postponedMath( NULL ),
       pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),
