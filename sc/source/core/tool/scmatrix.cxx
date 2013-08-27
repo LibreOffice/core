@@ -32,6 +32,7 @@
 #include <math.h>
 
 #include <vector>
+#include <limits>
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
@@ -942,11 +943,12 @@ public:
     }
 };
 
+const size_t ResultNotSet = std::numeric_limits<size_t>::max();
 
-template<typename vType>
+template<typename _Type>
 class WalkAndMatchElements : std::unary_function<MatrixImplType::element_block_node_type, void>
 {
-    vType maMatchValue;
+    _Type maMatchValue;
     MatrixImplType::size_pair_type maSize;
     size_t mnCol1;
     size_t mnCol2;
@@ -954,8 +956,13 @@ class WalkAndMatchElements : std::unary_function<MatrixImplType::element_block_n
     size_t mnIndex;
 
 public:
-    WalkAndMatchElements(vType aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2)
-        : maMatchValue(aMatchValue), maSize(aSize), mnCol1(nCol1), mnCol2(nCol2), mnResult(SCSIZE_MAX), mnIndex(0) {}
+    WalkAndMatchElements(_Type aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2) :
+        maMatchValue(aMatchValue),
+        maSize(aSize),
+        mnCol1(nCol1),
+        mnCol2(nCol2),
+        mnResult(ResultNotSet),
+        mnIndex(0) {}
 
     size_t getMatching() const { return mnResult; }
 
@@ -964,12 +971,11 @@ public:
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
         // early exit if match aleady found
-        if (mnResult != SCSIZE_MAX)
+        if (mnResult != ResultNotSet)
             return;
 
         // limit lookup to the requested columns
-        if (mnIndex >= ( mnCol1 * maSize.row ) &&
-            mnIndex <= ( ( mnCol2 + 1 ) * maSize.row ) )
+        if ((mnCol1 * maSize.row) <= mnIndex && mnIndex < ((mnCol2 + 1) * maSize.row))
         {
             mnResult = compare(node);
         }
@@ -979,14 +985,15 @@ public:
 };
 
 template<>
-size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block_node_type& node) const {
+size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block_node_type& node) const
+{
     size_t nCount = 0;
     switch (node.type)
     {
         case mdds::mtm::element_numeric:
         {
-            mdds::mtv::numeric_element_block::const_iterator it = mdds::mtv::numeric_element_block::begin(*node.data);
-            mdds::mtv::numeric_element_block::const_iterator itEnd = mdds::mtv::numeric_element_block::end(*node.data);
+            MatrixImplType::numeric_block_type::const_iterator it = MatrixImplType::numeric_block_type::begin(*node.data);
+            MatrixImplType::numeric_block_type::const_iterator itEnd = MatrixImplType::numeric_block_type::end(*node.data);
             for (; it != itEnd; ++it, nCount++)
             {
                 if (*it == maMatchValue)
@@ -998,9 +1005,9 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
         }
         case mdds::mtm::element_boolean:
         {
-            mdds::mtv::boolean_element_block::const_iterator it = mdds::mtv::boolean_element_block::begin(*node.data);
-            mdds::mtv::boolean_element_block::const_iterator itEnd = mdds::mtv::boolean_element_block::end(*node.data);
-            for (; it != itEnd; ++it, nCount++)
+            MatrixImplType::boolean_block_type::const_iterator it = MatrixImplType::boolean_block_type::begin(*node.data);
+            MatrixImplType::boolean_block_type::const_iterator itEnd = MatrixImplType::boolean_block_type::end(*node.data);
+            for (; it != itEnd; ++it, ++nCount)
             {
                 if (*it == maMatchValue)
                 {
@@ -1015,11 +1022,12 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
         default:
             ;
     }
-    return SCSIZE_MAX;
+    return ResultNotSet;
 }
 
 template<>
-size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_block_node_type& node) const {
+size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_block_node_type& node) const
+{
     size_t nCount = 0;
     switch (node.type)
     {
@@ -1042,7 +1050,7 @@ size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_blo
         default:
             ;
     }
-    return SCSIZE_MAX;
+    return ResultNotSet;
 }
 
 
