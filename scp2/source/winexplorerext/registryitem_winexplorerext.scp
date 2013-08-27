@@ -36,7 +36,7 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
@@ -44,7 +44,7 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     Value = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -89,7 +89,7 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
@@ -98,7 +98,7 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     Val64 = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -158,7 +158,7 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
@@ -166,7 +166,7 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer
     Value = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -227,7 +227,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\ooofilt_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
@@ -235,7 +235,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     Value = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -293,7 +293,7 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
@@ -301,7 +301,7 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     Value = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -363,7 +363,7 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer
     Value = "[INSTALLLOCATION]program\shlxthdl\propertyhdl_x64.dll";
 End
 
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     ComponentCondition = "VersionNT >= 600";
@@ -372,7 +372,7 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer
     Value = "Apartment";
 End
 
-RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel_x64
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64 >= 600";
