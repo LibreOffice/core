@@ -25,6 +25,8 @@
 #include "i18nlangtag/mslangid.hxx"
 #include "i18nlangtag/languagetag.hxx"
 
+using namespace com::sun::star;
+
 // =======================================================================
 
 struct IsoLanguageCountryEntry
@@ -35,6 +37,9 @@ struct IsoLanguageCountryEntry
 
     /** Obtain a language tag string with '-' separator. */
     OUString getTagString() const;
+
+    /** Obtain a locale. */
+    ::com::sun::star::lang::Locale getLocale() const;
 };
 
 struct IsoLangEngEntry
@@ -545,6 +550,11 @@ OUString IsoLanguageCountryEntry::getTagString() const
         return OUString::createFromAscii( maLanguage);
 }
 
+::com::sun::star::lang::Locale IsoLanguageCountryEntry::getLocale() const
+{
+    return lang::Locale( OUString::createFromAscii( maLanguage), OUString::createFromAscii( maCountry), OUString());
+}
+
 // -----------------------------------------------------------------------
 
 // In this table are the countries which should mapped to a specific
@@ -705,7 +715,8 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
 // -----------------------------------------------------------------------
 
-static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
+// static
+::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
         const ::com::sun::star::lang::Locale & rLocale )
 {
     // language is lower case in table
@@ -724,7 +735,7 @@ static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
             if (*pEntry->maCountry)
             {
                 if (nCountryLen && aUpperCountry.equalsAscii( pEntry->maCountry))
-                    return *pEntry;
+                    return pEntry->getLocale();
             }
             else
             {
@@ -735,7 +746,7 @@ static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
                     case LANGUAGE_USER_LOJBAN:
-                        return *pEntry;
+                        return pEntry->getLocale();
                     default:
                         ;   // nothing
                 }
@@ -749,7 +760,7 @@ static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
 
     // Language not found at all => use default.
     if (!pFirstLang)
-        return aLastResortFallbackEntry;
+        return aLastResortFallbackEntry.getLocale();
 
     // Search for first entry of language with any country.
     pEntry = pFirstLang;
@@ -758,25 +769,13 @@ static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
         if (aLowerLang.equalsAscii( pEntry->maLanguage))
         {
             if (*pEntry->maCountry)
-                return *pEntry;
+                return pEntry->getLocale();
         }
         ++pEntry;
     }
     while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
-    return aLastResortFallbackEntry;
-}
-
-
-// static
-::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
-        const ::com::sun::star::lang::Locale & rLocale )
-{
-    const IsoLanguageCountryEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
-    return ::com::sun::star::lang::Locale(
-            OUString::createFromAscii( rEntry.maLanguage),
-            OUString::createFromAscii( rEntry.maCountry),
-            OUString());
+    return aLastResortFallbackEntry.getLocale();
 }
 
 // =======================================================================
