@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# Script to sign dylibs and frameworks in an app bundle plus the
+# bundle itself. Called from
+# installer::simplepackage::create_package() in
+# solenv/bin/modules/installer/simplepackage.pm
+
+test `uname` = Darwin || { echo This is for OS X only; exit 1; }
+
+test $# = 1 || { echo Usage: $0 app-bundle; exit 1; }
+
+for V in \
+    BUILDDIR \
+    MACOSX_BUNDLE_IDENTIFIER \
+    MACOSX_CODESIGNING_IDENTITY; do
+    if test -z `eval echo '$'$V`; then
+       echo No '$'$V "environment variable! This should be run in a build only"
+       exit 1
+    fi
+done
+
+APP_BUNDLE=$1
+
+# Sign dylibs
+#
+# Executables get signed right after linking, see
+# solenv/gbuild/platform/macosx.mk. But many of our dylibs are built
+# by ad-hoc or 3rd-party mechanisms, so we can't easily sign them
+# right after linking. So do it here.
+#
+# The dylibs in the Python framework are called *.so. Go figure
+#
+# First sign all files that can use the default identifier in the hope
+# that codesign will contact the timestamp server just once for all
+# mentioned on the command line.
+
+find $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' \) ! -type l | \
+xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign $MACOSX_CODESIGNING_IDENTITY
+
+find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
+while read dylib; do \
+    id=`basename "$dylib"`; \
+    id=`echo $id | sed -e 's/dylib.*/dylib/'`; \
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign $MACOSX_CODESIGNING_IDENTITY "$dylib"; \
+done
+
+# The executables have already been signed by
+# gb_LinkTarget__command_dynamiclink in
+# solenv/gbuild/platform/macosx.mk.
+
+# Sign frameworks.
+#
+# Yeah, we don't bundle any other framework than our Python one, and
+# it has just one version, so this generic search is mostly for
+# completeness.
+
+for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
+    for version in $framework/Versions/*; do \
+        if test ! -L $version -a -d $version; then codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign $MACOSX_CODESIGNING_IDENTITY $version; fi; \
+    done; \
+done
+
+# Sign the app bundle as a whole which means (re-)signing the
+# CFBundleExecutable from Info.plist, i.e. soffice, plus the contents
+# of the Resources tree (which unless you used
+# --enable-canonical-installation-tree-structure is not much, far from
+# all of our non-code "resources").
+#
+# At this stage we also attach the entitlements in the sandboxing case
+
+if test $ENABLE_MACOSX_SANDBOX = YES; then
+    entitlements="--entitlements $BUILDDIR/lo.xcent"
+fi
+
+codesign --force --verbose --sign $MACOSX_CODESIGNING_IDENTITY $entitlements $APP_BUNDLE
+
+exit 0

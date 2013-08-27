@@ -262,10 +262,6 @@ install-strip:
 
 endif # !MACOSX
 
-ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
-entitlements:=--entitlements $(BUILDDIR)/lo.xcent
-endif
-
 dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
@@ -275,47 +271,7 @@ else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-#
-# Sign dylibs
-#
-# Executables get signed right after linking, see
-# solenv/gbuild/platform/macosx.mk. But many of our dylibs are built
-# by ad-hoc or 3rd-party mechanisms, so we can't easily sign them
-# right after linking. So do it here.
-#
-# The dylibs in the Python framework are called *.so. Go figure
-#
-	find $(DEVINSTALLDIR)/opt/LibreOffice.app \( -name '*.dylib' -or -name '*.dylib.*' -or -name '*.so' \) ! -type l | \
-        while read dylib; do \
-            id=`basename "$$dylib"`; \
-            case $$id in \
-            *.dylib|*.so) \
-                ;; \
-            *.dylib.*) \
-                id=`echo $$id | sed -e 's/dylib.*/dylib/'`; \
-                ;; \
-            esac; \
-            codesign --verbose --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$$id --sign $(MACOSX_CODESIGNING_IDENTITY) "$$dylib"; \
-        done
-#
-# Sign frameworks.
-#
-# Yeah, we don't bundle any other framework than our Python one, and
-# it has just one version, so this generic search is mostly for
-# completeness.
-#
-	for framework in `find $(DEVINSTALLDIR)/opt/LibreOffice.app -name '*.framework' -type d`; do \
-        for version in $$framework/Versions/*; do \
-            if test ! -L $$version -a -d $$version; then codesign --force --verbose --prefix=$(MACOSX_BUNDLE_IDENTIFIER). --sign $(MACOSX_CODESIGNING_IDENTITY) $$version; fi; \
-        done; \
-    done
-#
-# Sign the app bundle as a whole (will sign the soffice binary too)
-#
-# At this stage we also attach the entitlements in the sandboxing case
-#
-	codesign --force --verbose --sign $(MACOSX_CODESIGNING_IDENTITY) $(entitlements) $(DEVINSTALLDIR)/opt/LibreOffice.app
-#
+	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/LibreOffice.app
 endif
 ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
