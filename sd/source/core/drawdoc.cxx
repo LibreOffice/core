@@ -76,6 +76,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <osl/file.h>
+#include <comphelper/configparser.hxx>
+#include <boost/shared_ptr.hpp>
 
 #include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
@@ -191,6 +193,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         new ImpMasterPageListWatcher(*this));
 
     InitLayoutVector();
+    InitObjectVector();
     SetObjectShell(pDrDocSh);       // for VCDrawModel
 
     if (mpDocSh)
@@ -1004,49 +1007,49 @@ void SdDrawDocument::InitLayoutVector()
 {
     const Reference<css::uno::XComponentContext> xContext(
         ::comphelper::getProcessComponentContext() );
-    Reference< util::XMacroExpander > xMacroExpander(
-        util::theMacroExpander::get( xContext ) );
 
-    // get file list from configuration
-    Sequence< rtl::OUString > aFiles(
-        officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< OUString > pFilename = ::comphelper::getExpandedFilePath("LayoutListFiles");
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    // loop over each file in sequence
-    rtl::OUString aFilename;
-    for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
-    {
-        aFilename = aFiles[i];
-        if( aFilename.startsWith( "vnd.sun.star.expand:" ) )
-        {
-            // cut protocol
-            rtl::OUString aMacro( aFilename.copy( sizeof ( "vnd.sun.star.expand:" ) -1 ) );
+    rtl::OUString sFilename = *pFilename.get();
 
-            // decode uric class chars
-            aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+    // load layout file into DOM
+    Reference< XMultiServiceFactory > xServiceFactory(
+        xContext->getServiceManager() , UNO_QUERY_THROW );
+    const Reference<XDocumentBuilder> xDocBuilder(
+        DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-            // expand macro string
-            aFilename = xMacroExpander->expandMacros( aMacro );
-        }
+    // loop over every layout entry in current file
+    const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
+    const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
+    const int nElements = layoutlist->getLength();
+    for(int index=0; index < nElements; index++)
+        maLayoutInfo.push_back( layoutlist->item(index) );
+}
 
-        if( aFilename.startsWith( "file://" ) )
-        {
-            rtl::OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aFilename.pData, &aSysPath.pData ) == osl_File_E_None )
-                aFilename = aSysPath;
-        }
+void SdDrawDocument::InitObjectVector()
+{
+    const Reference<css::uno::XComponentContext> xContext(
+        ::comphelper::getProcessComponentContext() );
 
-        // load layout file into DOM
-        Reference< XMultiServiceFactory > xServiceFactory(
-            xContext->getServiceManager() , UNO_QUERY_THROW );
-        const Reference<XDocumentBuilder> xDocBuilder(
-            DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    std::auto_ptr< OUString > pFilename = ::comphelper::getExpandedFilePath("PresObjListFiles");
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
-        // loop over every layout entry in current file
-        const Reference<XDocument> xDoc = xDocBuilder->parseURI( aFilename );
-        const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
-        const int nElements = layoutlist->getLength();
-        for(int index=0; index < nElements; index++)
-            maLayoutInfo.push_back( layoutlist->item(index) );
-    }
+    rtl::OUString sFilename = *pFilename.get();
+
+    // load presentation object file into DOM
+    Reference< XMultiServiceFactory > xServiceFactory(
+        xContext->getServiceManager() , UNO_QUERY_THROW );
+    const Reference<XDocumentBuilder> xDocBuilder(
+        DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
+
+    // loop over every object entry in current file
+    const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
+    const Reference<XNodeList> objectlist = xDoc->getElementsByTagName("object");
+    const int nElements = objectlist->getLength();
+    for(int index=0; index < nElements; index++)
+        maPresObjectInfo.push_back( objectlist->item(index) );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
