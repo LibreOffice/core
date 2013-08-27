@@ -353,6 +353,11 @@ private:
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
 
+    /// checks whether the current component is a diagram
+    bool IsDiagram (const SdrObject* sdrObject);
+    /// writes a diagram
+    void WriteDiagram(const SdrObject* sdrObject, const Size& size);
+
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -597,6 +602,7 @@ private:
     void DoWriteBookmarks( );
     void WritePostponedGraphic();
     void WritePostponedMath();
+    void WritePostponedDiagram();
     void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
@@ -689,6 +695,13 @@ private:
         Size size;
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
+    struct PostponedDiagram
+    {
+        PostponedDiagram( const SdrObject* o, Size s ) : object( o ), size( s ) {};
+        const SdrObject* object;
+        Size size;
+    };
+    std::list< PostponedDiagram >* m_postponedDiagram;
     const SwOLENode* m_postponedMath;
     const SwField* pendingPlaceholder;
     std::vector< const SwPostItField* > m_postitFields;
