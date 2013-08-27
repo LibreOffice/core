@@ -263,9 +263,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                         {
                             if ( m_aDropdownMenuList[j] == aText )
                             {
-                                std::vector< OUString >::iterator aIter = m_aDropdownMenuList.begin();
-                                aIter += j;
-                                m_aDropdownMenuList.erase( aIter );
+                                m_aDropdownMenuList.erase(m_aDropdownMenuList.begin() + j);
                                 break;
                             }
                         }
