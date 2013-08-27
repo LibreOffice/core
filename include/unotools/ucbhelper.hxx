@@ -26,9 +26,15 @@
 #include "sal/types.h"
 #include "unotools/unotoolsdllapi.h"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class Any;
+        class XComponentContext;
+    }
+    namespace ucb{
+        class XCommandEnvironment;
+    }
+} } }
 namespace ucbhelper { class Content; }
 
 namespace utl { namespace UCBContentHelper {
@@ -52,6 +58,12 @@ UNOTOOLS_DLLPUBLIC com::sun::star::uno::Any GetProperty(
 UNOTOOLS_DLLPUBLIC bool MakeFolder(
     ucbhelper::Content & parent, OUString const & title,
     ucbhelper::Content & result, bool exclusive = false);
+
+/// like mkdir -p
+UNOTOOLS_DLLPUBLIC bool ensureFolder(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xCtx,
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv,
+    const OUString& rFolder, ucbhelper::Content & result);
 
 /// @return the value of the "Size" property of the given content, or zero if
 ///     obtaining the property yields a void value or raises a

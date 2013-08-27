@@ -2109,25 +2109,6 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
         aTransactTemp.EnableKillingFile( true );
 }
 
-bool ensureFolder(
-    uno::Reference< uno::XComponentContext > xCtx,
-    uno::Reference< ucb::XCommandEnvironment > xEnv,
-    const OUString& rFolder, ucbhelper::Content & result)
-{
-    INetURLObject aURL( rFolder );
-    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    aURL.removeSegment();
-    ::ucbhelper::Content aParent;
-
-    if ( ::ucbhelper::Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ),
-                              xEnv, xCtx, aParent ) )
-    {
-        return ::utl::UCBContentHelper::MakeFolder(aParent, aTitle, result);
-    }
-
-    return false;
-}
-
 //------------------------------------------------------------------
 void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent )
 {
@@ -2146,7 +2127,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     // create content for the parent folder ( = backup folder )
     ::ucbhelper::Content  aContent;
     Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-    if( ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
+    if( ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
         DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aBakDir );
 
     if ( pImp->m_aBackupURL.isEmpty() )
@@ -2186,7 +2167,7 @@ void SfxMedium::DoBackup_Impl()
         // create content for the parent folder ( = backup folder )
         ::ucbhelper::Content  aContent;
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if( ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
+        if( ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
         {
             // save as ".bak" file
             INetURLObject aDest( aBakDir );
