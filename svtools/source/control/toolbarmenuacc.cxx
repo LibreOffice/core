@@ -330,18 +330,9 @@ void SAL_CALL ToolbarMenuAcc::removeAccessibleEventListener( const Reference< XA
 
     if( rxListener.is() )
     {
-        EventListenerVector::const_iterator aEnd = mxEventListeners.end();
-
-        for(EventListenerVector::iterator aIter = mxEventListeners.begin();
-              aIter != aEnd;
-              ++aIter)
-        {
-            if( *aIter == rxListener )
-            {
-                mxEventListeners.erase(aIter);
-                break;
-            }
-        }
+        EventListenerVector::iterator aIter = std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
+        if (aIter != mxEventListeners.end())
+            mxEventListeners.erase(aIter);
     }
 }
 
@@ -831,18 +822,9 @@ void SAL_CALL ToolbarMenuEntryAcc::removeAccessibleEventListener( const Referenc
 
     if( rxListener.is() )
     {
-        EventListenerVector::const_iterator aEnd = mxEventListeners.end();
-
-        for (EventListenerVector::iterator aIter = mxEventListeners.begin();
-               aIter != aEnd;
-               ++aIter)
-        {
-            if( *aIter == rxListener )
-            {
-                mxEventListeners.erase( aIter );
-                break;
-            }
-        }
+        EventListenerVector::iterator aIter = std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
+        if (aIter != mxEventListeners.end())
+            mxEventListeners.erase(aIter);
     }
 }
 
