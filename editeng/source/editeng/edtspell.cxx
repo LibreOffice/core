@@ -196,11 +196,9 @@ void EditSpellWrapper::CheckSpellTo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
+sal_uInt16 WrongList::Valid = std::numeric_limits<sal_uInt16>::max();
 
-#define NOT_INVALID 0xFFFF
-
-WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(0xFFFF) {}
+WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(Valid) {}
 
 WrongList::WrongList(const WrongList& r) :
     maRanges(r.maRanges),
@@ -211,18 +209,18 @@ WrongList::~WrongList() {}
 
 bool WrongList::IsInvalid() const
 {
-    return nInvalidStart != NOT_INVALID;
+    return nInvalidStart != Valid;
 }
 
 void WrongList::SetValid()
 {
-    nInvalidStart = NOT_INVALID;
+    nInvalidStart = Valid;
     nInvalidEnd = 0;
 }
 
 void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
 {
-    if ( ( nInvalidStart == NOT_INVALID ) || ( nInvalidStart > nS ) )
+    if ( (nInvalidStart == Valid) || ( nInvalidStart > nS ) )
         nInvalidStart = nS;
     if ( nInvalidEnd < nE )
         nInvalidEnd = nE;

@@ -75,7 +75,8 @@ struct WrongRange
 
 class WrongList
 {
-private:
+    static sal_uInt16 Valid;
+
     std::vector<WrongRange> maRanges;
     sal_uInt16  nInvalidStart;
     sal_uInt16  nInvalidEnd;
