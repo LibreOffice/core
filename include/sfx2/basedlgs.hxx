@@ -166,7 +166,7 @@ struct SingleTabDlgImpl
 {
     SfxTabPage*                 m_pSfxPage;
     FixedLine*                  m_pLine;
-    String                      m_sInfoURL;
+    OUString                    m_sInfoURL;
     Link                        m_aInfoLink;
 
     SingleTabDlgImpl()
