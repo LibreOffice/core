@@ -2251,7 +2251,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
         if ( pThisNodeOnly )
             pNode = pThisNodeOnly;
 
-        if ( pNode->GetWrongList()->IsInvalid() )
+        if (!pNode->GetWrongList()->IsValid())
         {
             WrongList* pWrongList = pNode->GetWrongList();
             sal_uInt16 nInvStart = pWrongList->GetInvalidStart();

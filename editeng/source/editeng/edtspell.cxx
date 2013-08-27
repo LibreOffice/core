@@ -207,9 +207,9 @@ WrongList::WrongList(const WrongList& r) :
 
 WrongList::~WrongList() {}
 
-bool WrongList::IsInvalid() const
+bool WrongList::IsValid() const
 {
-    return nInvalidStart != Valid;
+    return nInvalidStart == Valid;
 }
 
 void WrongList::SetValid()
@@ -228,7 +228,7 @@ void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
 
 void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsSep )
 {
-    if ( !IsInvalid() )
+    if (IsValid())
     {
         nInvalidStart = nPos;
         nInvalidEnd = nPos+nNew;
@@ -298,7 +298,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
 void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
 {
     sal_uInt16 nEndChanges = nPos+nDeleted;
-    if ( !IsInvalid() )
+    if (IsValid())
     {
         sal_uInt16 nNewInvalidStart = nPos ? nPos - 1 : 0;
         nInvalidStart = nNewInvalidStart;

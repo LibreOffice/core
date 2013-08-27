@@ -91,7 +91,7 @@ public:
     WrongList(const WrongList& r);
     ~WrongList();
 
-    bool    IsInvalid() const;
+    bool IsValid() const;
     void    SetValid();
     void    MarkInvalid( sal_uInt16 nS, sal_uInt16 nE );
 
