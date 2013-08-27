@@ -139,7 +139,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        if ( aURL.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
+        if ( aURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:") )
         {
             OSL_FAIL( "Packages URL's are not valid for storages!\n" ); // ???
             throw lang::IllegalArgumentException(); // TODO:
