@@ -948,12 +948,14 @@ class WalkAndMatchElements : std::unary_function<MatrixImplType::element_block_n
 {
     vType maMatchValue;
     MatrixImplType::size_pair_type maSize;
-    size_t mnCol1, mnCol2;
-    size_t mnResult, mnIndex;
+    size_t mnCol1;
+    size_t mnCol2;
+    size_t mnResult;
+    size_t mnIndex;
 
 public:
     WalkAndMatchElements(vType aMatchValue, const MatrixImplType::size_pair_type& aSize, size_t nCol1, size_t nCol2)
-        : maMatchValue(aMatchValue), maSize(aSize), mnCol1(nCol1), mnCol2(nCol2), mnResult(size_t_MAX), mnIndex(0) {}
+        : maMatchValue(aMatchValue), maSize(aSize), mnCol1(nCol1), mnCol2(nCol2), mnResult(SCSIZE_MAX), mnIndex(0) {}
 
     size_t getMatching() const { return mnResult; }
 
