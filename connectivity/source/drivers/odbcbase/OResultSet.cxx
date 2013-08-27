@@ -938,29 +938,47 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 
     SQLRETURN nRet;
 
-    sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
-    Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
-    if ( bPositionByBookmark )
+    try
     {
-        SQLLEN nRealLen = 0;
-        nRet = N3SQLBindCol(m_aStatementHandle,
-                            0,
-                            SQL_C_VARBOOKMARK,
-                            aBookmark.getArray(),
-                            aBookmark.getLength(),
-                            &nRealLen
-                            );
-        fillNeededData(nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK));
-        aBookmark.realloc(nRealLen);
-        m_aRow[0]=aBookmark;
-        m_aRow[0].setBound(true);
+        sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
+        if ( bPositionByBookmark )
+        {
+            getBookmark();
+            assert(m_aRow[0].isBound());
+            Sequence<sal_Int8> aBookmark(m_aRow[0].getSequence());
+            SQLLEN nRealLen = aBookmark.getLength();
+            nRet = N3SQLBindCol(m_aStatementHandle,
+                                0,
+                                SQL_C_VARBOOKMARK,
+                                aBookmark.getArray(),
+                                aBookmark.getLength(),
+                                &nRealLen
+                                );
+            OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+            fillNeededData(nRet = N3SQLBulkOperations(m_aStatementHandle, SQL_UPDATE_BY_BOOKMARK));
+            // the driver should not have touched this
+            // (neither the contents of aBookmark FWIW)
+            assert(nRealLen == aBookmark.getLength());
+        }
+        else
+        {
+            fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
+        }
+        OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        // unbind all columns so we can fetch all columns again with SQLGetData
+        // (and also so that our buffers don't clobber anything, and
+        //  so that a subsequent fetch does not overwrite m_aRow[0])
+        invalidateCache();
+        nRet = unbind();
+        OSL_ENSURE(nRet == SQL_SUCCESS,"ODBC insert could not unbind the columns after success");
     }
-    else
-        fillNeededData(nRet = N3SQLSetPos(m_aStatementHandle,1,SQL_UPDATE,SQL_LOCK_NO_CHANGE));
-    OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    // now unbind all columns so we can fetch all columns again with SQLGetData
-    nRet = unbind();
-    OSL_ENSURE(nRet == SQL_SUCCESS,"Could not unbind the columns!");
+    catch(...)
+    {
+        // unbind all columns so that a subsequent fetch does not overwrite m_aRow[0]
+        nRet = unbind();
+        OSL_ENSURE(nRet == SQL_SUCCESS,"ODBC insert could not unbind the columns after failure");
+        throw;
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
