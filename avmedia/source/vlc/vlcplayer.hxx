@@ -21,7 +21,6 @@
 #define _VLCPLAYER_HXX
 
 #include "vlccommon.hxx"
-#include <vlc/vlc.h>
 #include <boost/shared_ptr.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/media/XPlayer.hpp>

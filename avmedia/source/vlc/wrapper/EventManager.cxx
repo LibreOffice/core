@@ -7,15 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vlc/libvlc.h>
-#include <vlc/libvlc_media.h>
-#include <vlc/libvlc_events.h>
-
 #include "EventManager.hxx"
 #include "SymbolLoader.hxx"
 #include "EventHandler.hxx"
-
-typedef void ( *libvlc_callback_t ) ( const struct libvlc_event_t *, void * );
+#include "Types.hxx"
 
 namespace VLC
 {
