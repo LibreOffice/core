@@ -12,6 +12,7 @@
 
 ModalDialog RID_SCDLG_COND_FORMAT_MANAGER
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_COND_FORMAT_MANAGER";
     OutputSize = TRUE;
     Hide = TRUE;
     Size = MAP_APPFONT ( 300, 275 );
