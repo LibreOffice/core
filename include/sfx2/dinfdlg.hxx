@@ -83,7 +83,7 @@ private:
 public:
     TYPEINFO();
     SfxDocumentInfoItem();
-    SfxDocumentInfoItem( const String &rFileName,
+    SfxDocumentInfoItem( const OUString &rFileName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         sal_Bool bUseUserData );
@@ -372,7 +372,7 @@ struct CustomPropertyLine
     CustomPropertiesEdit            m_aValueEdit;
     CustomPropertiesDateField       m_aDateField;
     CustomPropertiesTimeField       m_aTimeField;
-    const String                    m_sDurationFormat;
+    const OUString                  m_sDurationFormat;
     CustomPropertiesDurationField   m_aDurationField;
     CustomPropertiesEditButton     m_aEditButton;
     CustomPropertiesYesNoButton     m_aYesNoButton;

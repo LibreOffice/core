@@ -220,7 +220,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 //------------------------------------------------------------------------
 
-SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
+SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         sal_Bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
