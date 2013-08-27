@@ -219,10 +219,6 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         }
 
         ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
-
-        // TargetListe kann von uns wieder geloescht werden
-        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-            delete aTargetList[ i ];
     }
 }
 

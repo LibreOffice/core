@@ -65,7 +65,7 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     m_pEdtName->SetText( rName );
 
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        m_pCbbTargets->InsertEntry( *rTargetList[ i ] );
+        m_pCbbTargets->InsertEntry( rTargetList[ i ] );
 
     if( !rTarget.Len() )
         m_pCbbTargets->SetText( OUString("_self") );

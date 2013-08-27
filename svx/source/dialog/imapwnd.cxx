@@ -70,10 +70,6 @@ IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< X
 
 IMapWindow::~IMapWindow()
 {
-    // Delete Liste
-    for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-        delete aTargetList[ i ];
-
     SfxItemPool::Free(pIMapPool);
     delete[] pItemInfo;
 }
@@ -165,13 +161,11 @@ const ImageMap& IMapWindow::GetImageMap()
 void IMapWindow::SetTargetList( TargetList& rTargetList )
 {
     // Delete old List
-    for( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-        delete aTargetList[ i ];
     aTargetList.clear();
 
     // Fill with the provided list
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        aTargetList.push_back( new String( *rTargetList[ i ] ) );
+        aTargetList.push_back( rTargetList[ i ] );
 
     pModel->SetChanged( sal_False );
 }

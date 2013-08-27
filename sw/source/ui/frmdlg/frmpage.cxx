@@ -2709,11 +2709,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
             size_t nCount = pList->size();
             for ( size_t i = 0; i < nCount; i++ )
             {
-                pFrameCB->InsertEntry( *pList->at( i ) );
-            }
-            for ( size_t i = nCount; i; )
-            {
-                delete pList->at( --i );
+                pFrameCB->InsertEntry( pList->at( i ) );
             }
         }
         delete pList;

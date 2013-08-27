@@ -81,7 +81,7 @@ class SystemWindow;
 class SfxFrame;
 typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 
-typedef ::std::vector< String* > TargetList;
+typedef ::std::vector<OUString> TargetList;
 
 #define SFXFRAME_HASTITLE     0x0001
 

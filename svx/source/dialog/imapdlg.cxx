@@ -284,7 +284,7 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
     maCbbTarget.Clear();
 
     for ( size_t i = 0, n = aNewList.size(); i < n; ++i )
-        maCbbTarget.InsertEntry( *aNewList[ i ] );
+        maCbbTarget.InsertEntry( aNewList[ i ] );
 }
 
 void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
@@ -301,8 +301,6 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
 
     // Delete UpdateTargetList, because this method can still be called several
     // times before the update timer is turned on
-    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
-        delete pOwnData->aUpdateTargetList[ i ];
     pOwnData->aUpdateTargetList.clear();
 
     // TargetList must be copied, since it is owned by the caller and can be
@@ -313,7 +311,7 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
         TargetList aTargetList( *pTargetList );
 
         for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-            pOwnData->aUpdateTargetList.push_back( new String( *aTargetList[ i ] ) );
+            pOwnData->aUpdateTargetList.push_back( aTargetList[ i ] );
     }
 
     pOwnData->aTimer.Start();
@@ -746,8 +744,6 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
     }
 
     // Delete the copied list again in the Update method
-    for ( size_t i = 0, n = pOwnData->aUpdateTargetList.size(); i < n; ++i )
-        delete pOwnData->aUpdateTargetList[ i ];
     pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );

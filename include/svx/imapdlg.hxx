@@ -51,7 +51,7 @@ class ImageMap;
 \************************************************************************/
 
 class Graphic;
-typedef ::std::vector< String* > TargetList;
+typedef ::std::vector< OUString > TargetList;
 
 class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {

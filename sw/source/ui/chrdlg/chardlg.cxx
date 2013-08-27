@@ -177,15 +177,10 @@ SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
     if ( !pList->empty() )
     {
         size_t nCount = pList->size();
-        size_t i;
 
-        for ( i = 0; i < nCount; i++ )
+        for ( size_t i = 0; i < nCount; i++ )
         {
-            m_pTargetFrmLB->InsertEntry( *pList->at( i ) );
-        }
-        for ( i = nCount; i; )
-        {
-            delete pList->at( --i );
+            m_pTargetFrmLB->InsertEntry( pList->at( i ) );
         }
     }
     delete pList;

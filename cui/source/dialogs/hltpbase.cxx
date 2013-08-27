@@ -58,11 +58,7 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
             size_t i;
             for ( i = 0; i < nCount; i++ )
             {
-                InsertEntry( *pList->at( i ) );
-            }
-            for ( i = nCount; i; )
-            {
-                delete pList->at( --i );
+                InsertEntry( pList->at( i ) );
             }
         }
     }

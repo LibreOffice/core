@@ -54,7 +54,7 @@ class Graphic;
 class SdrObject;
 class SvxSpellWrapper;
 
-typedef ::std::vector< String* > TargetList;
+typedef ::std::vector< OUString > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
 

@@ -350,8 +350,6 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         // We can delete the target list
         if ( pTargetList )
         {
-            for ( size_t i = 0, n = pTargetList->size(); i < n; ++i )
-                delete pTargetList->at( i );
             delete pTargetList;
         }
     }
