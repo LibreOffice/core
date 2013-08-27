@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <comphelper/processfactory.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <svl/urihelper.hxx>
 
 #include <editeng/svxacorr.hxx>
@@ -31,6 +33,7 @@
 #include <rtl/instance.hxx>
 
 using namespace utl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 
@@ -47,10 +50,18 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     SvtPathOptions aPathOpt;
     String sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
+    sSharePath = sAutoPath.GetToken(0, ';');
+    sUserPath = sAutoPath.GetToken(1, ';');
+
+    //fdo#67743 ensure the userdir exists so that any later attempt to copy the
+    //shared autocorrect file into the user dir will succeed
+    ::ucbhelper::Content aContent;
+    Reference < ucb::XCommandEnvironment > xEnv;
+    ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, sUserPath, aContent);
+
     String* pS = &sSharePath;
     for( sal_uInt16 n = 0; n < 2; ++n, pS = &sUserPath )
     {
-        *pS = sAutoPath.GetToken( n, ';' );
         INetURLObject aPath( *pS );
         aPath.insertName(OUString("acor"));
         *pS = aPath.GetMainURL(INetURLObject::DECODE_TO_IURI);
