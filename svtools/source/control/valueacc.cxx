@@ -384,18 +384,17 @@ void SAL_CALL ValueSetAcc::removeAccessibleEventListener( const uno::Reference< 
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
-        sal_Bool bFound = sal_False;
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aEnd = mxEventListeners.end();
 
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for(::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
+              aIter != aEnd;
+              ++aIter)
         {
             if( *aIter == rxListener )
             {
-                mxEventListeners.erase( aIter );
-                bFound = sal_True;
+                mxEventListeners.erase(aIter);
+                break;
             }
-            else
-                ++aIter;
         }
     }
 }
@@ -1048,18 +1047,17 @@ void SAL_CALL ValueItemAcc::removeAccessibleEventListener( const uno::Reference<
 
     if( rxListener.is() )
     {
-           ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
-        sal_Bool bFound = sal_False;
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aEnd = mxEventListeners.end();
 
-        while( !bFound && ( aIter != mxEventListeners.end() ) )
+        for(::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
+              aIter != aEnd;
+              ++aIter)
         {
             if( *aIter == rxListener )
             {
-                mxEventListeners.erase( aIter );
-                bFound = sal_True;
+                mxEventListeners.erase(aIter);
+                break;
             }
-            else
-                ++aIter;
         }
     }
 }
