@@ -163,6 +163,7 @@ class SwTOXTypes;
 class SwTabCols;
 class SwTable;
 class SwTableAutoFmt;
+class SwTableAutoFmtTbl;
 class SwTableBox;
 class SwTableBoxFmt;
 class SwTableFmt;
@@ -310,6 +311,7 @@ class SW_DLLPUBLIC SwDoc :
     SwFrmFmts       *mpSpzFrmFmtTbl;
     SwSectionFmts   *mpSectionFmtTbl;
     SwFrmFmts       *mpTblFrmFmtTbl;     ///< For tables
+    SwTableAutoFmtTbl *mpTblStyleTbl;    ///< Table styles
     SwTxtFmtColls   *mpTxtFmtCollTbl;    ///< FormatCollections
     SwGrfFmtColls   *mpGrfFmtCollTbl;
 
@@ -1283,6 +1285,7 @@ public:
     SwTableFmt* MakeTblFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
+    SwTableAutoFmtTbl* GetTableStyles() { return mpTblStyleTbl; };
 
     /** Access to frames.
     Iterate over Flys - forr Basic-Collections. */

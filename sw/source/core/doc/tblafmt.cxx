@@ -961,13 +961,10 @@ SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     : m_pImpl(new Impl)
     , m_pDoc( pDoc)
 {
-    String sNm;
-    // FIXME Yuk! we are creating the table styles ATM, but in the targetted
-    // ideal, the table styles are created with the document
+    OUString sNm;
     sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
-    SwTableFmt* pStyle = pDoc->FindTblFmtByName(sNm);
-    if ( !pStyle )
-        pStyle = pDoc->MakeTblFrmFmt( sNm, pDoc->GetDfltFrmFmt() );
+    SwTableFmt* pStyle = pDoc->MakeTblFrmFmt( sNm, pDoc->GetDfltFrmFmt() );
+
     SwTableAutoFmt* pNewTableAutoFmt = new SwTableAutoFmt( sNm, pStyle );
 
     SwTableBoxFmt* pNewBoxFmt = pDoc->MakeTableBoxFmt();

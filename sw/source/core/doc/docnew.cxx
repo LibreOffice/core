@@ -89,6 +89,7 @@
 #include <UndoManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
+#include <tblafmt.hxx>
 
 #include <cmdid.h>              // for the default printer in SetJob
 
@@ -353,6 +354,9 @@ SwDoc::SwDoc()
     /* Formats */
     mpFrmFmtTbl->push_back(mpDfltFrmFmt);
     mpCharFmtTbl->push_back(mpDfltCharFmt);
+
+    mpTblStyleTbl = new SwTableAutoFmtTbl( this );
+    mpTblStyleTbl->Load();
 
     /* FmtColls */
     // TXT
@@ -656,6 +660,7 @@ SwDoc::~SwDoc()
     delete mpCharFmtTbl;
     delete mpSectionFmtTbl;
     delete mpTblFrmFmtTbl;
+    delete mpTblStyleTbl;
     delete mpDfltTxtFmtColl;
     delete mpDfltGrfFmtColl;
     delete mpNumRuleTbl;

@@ -170,15 +170,13 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTbl = new SwTableAutoFmtTbl(pWrtShell->GetDoc());
-    pTableTbl->Load();
+    pTableTbl = pWrtShell->GetDoc()->GetTableStyles();
 
     Init(pSelFmt);
 }
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
-    delete pTableTbl;
 }
 
 void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
