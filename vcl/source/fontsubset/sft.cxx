@@ -414,7 +414,7 @@ _inline sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
 
 #ifndef NO_TYPE42
 /* Hex Formatter functions */
-static char HexChars[] = "0123456789ABCDEF";
+static const char HexChars[] = "0123456789ABCDEF";
 
 static HexFmt *HexFmtNew(FILE *outf)
 {

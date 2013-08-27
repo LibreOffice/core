@@ -164,7 +164,7 @@ static const com::sun::star::uno::Type& Sequence_SendMediaTypes_getCppuType()
 
 #define ATTR_DEFAULT ( PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID | PropertyAttribute::MAYBEDEFAULT )
 
-static PropertyTableEntry __aPropertyTable[] =
+static const PropertyTableEntry __aPropertyTable[] =
 {
     { "Account",            -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
     { "AutoUpdateInterval", -1,                                 ATTR_DEFAULT,   &sal_uInt32_getCppuType },

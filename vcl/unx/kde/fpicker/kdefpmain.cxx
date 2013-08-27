@@ -60,7 +60,7 @@
 // Main
 //////////////////////////////////////////////////////////////////////////
 
-static KCmdLineOptions sOptions[] =
+static const KCmdLineOptions sOptions[] =
 {
     { "winid <argument>", I18N_NOOP("Window ID to which is the fpicker modal"), "0" },
     KCmdLineLastOption

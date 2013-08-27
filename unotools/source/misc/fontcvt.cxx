@@ -1404,7 +1404,7 @@ void ConvertChar::RecodeString( OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen
 
 struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
-static RecodeTable aStarSymbolRecodeTable[] =
+static const RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: fgrep for FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
@@ -1428,7 +1428,7 @@ static RecodeTable aStarSymbolRecodeTable[] =
     {"mtextra",         {aMTExtraTab, "StarSymbol", NULL}}
 };
 
-static RecodeTable aAppleSymbolRecodeTable[] = {
+static const RecodeTable aAppleSymbolRecodeTable[] = {
     {"symbol",         {aAdobeSymbolToAppleSymbolTab, "AppleSymbol", NULL}}
 };
 
@@ -1451,7 +1451,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
         int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
-            RecodeTable& r = aStarSymbolRecodeTable[i];
+            const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
@@ -1464,7 +1464,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, con
         int nEntries = SAL_N_ELEMENTS(aAppleSymbolRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
-            RecodeTable& r = aAppleSymbolRecodeTable[i];
+            const RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
@@ -1496,7 +1496,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
             nEntries = 2;
         for( int i = 0; i < nEntries; ++i )
         {
-            RecodeTable& r = aStarSymbolRecodeTable[i];
+            const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }

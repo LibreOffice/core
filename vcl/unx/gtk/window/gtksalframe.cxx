@@ -598,7 +598,7 @@ static void activate_uno(GSimpleAction *action, GVariant*, gpointer)
     xDisp->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
 }
 
-static GActionEntry app_entries[] = {
+static const GActionEntry app_entries[] = {
   { "OptionsTreeDialog", activate_uno, NULL, NULL, NULL, {0} },
   { "About", activate_uno, NULL, NULL, NULL, {0} },
   { "HelpIndex", activate_uno, NULL, NULL, NULL, {0} },

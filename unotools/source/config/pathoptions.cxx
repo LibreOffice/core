@@ -196,7 +196,7 @@ struct VarNameAttribute
     VarNameProperty         eVarProperty;   // Which return value is needed by this path variable
 };
 
-static PropertyStruct aPropNames[] =
+static const PropertyStruct aPropNames[] =
 {
     { "Addin",          SvtPathOptions::PATH_ADDIN          },
     { "AutoCorrect",    SvtPathOptions::PATH_AUTOCORRECT    },
@@ -224,7 +224,7 @@ static PropertyStruct aPropNames[] =
     { "Fingerprint",    SvtPathOptions::PATH_FINGERPRINT    }
 };
 
-static VarNameAttribute aVarNameAttribute[] =
+static const VarNameAttribute aVarNameAttribute[] =
 {
     { SUBSTITUTE_INSTPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(instpath)
     { SUBSTITUTE_PROGPATH,  VAR_NEEDS_SYSTEM_PATH },    // $(progpath)

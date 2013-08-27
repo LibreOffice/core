@@ -52,9 +52,9 @@ DBG_NAMEEX( Region )
 // =======================================================================
 
 static int const s_ImplArySize = MAP_PIXEL+1;
-static long aImplNumeratorAry[s_ImplArySize] =
+static const long aImplNumeratorAry[s_ImplArySize] =
     {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1 };
-static long aImplDenominatorAry[s_ImplArySize] =
+static const long aImplDenominatorAry[s_ImplArySize] =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
 
 // -----------------------------------------------------------------------

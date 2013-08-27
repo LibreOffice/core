@@ -25,7 +25,7 @@ struct XPMRGBTab
     sal_uInt8  blue;
 };
 
-static XPMRGBTab pRGBTable[] = {
+static const XPMRGBTab pRGBTable[] = {
 { "white",                  255, 255, 255 },
 { "black",                  0,   0,   0 },
 { "snow",                   255, 250, 250 },

@@ -45,7 +45,7 @@
 
 struct ChainMove { long nDX; long nDY; };
 
-static ChainMove aImplMove[ 8 ] =   {
+static const ChainMove aImplMove[ 8 ] =   {
                                         { 1L, 0L },
                                         { 0L, -1L },
                                         { -1L, 0L },
@@ -56,7 +56,7 @@ static ChainMove aImplMove[ 8 ] =   {
                                         { 1L, 1L }
                                     };
 
-static ChainMove aImplMoveInner[ 8 ] =  {
+static const ChainMove aImplMoveInner[ 8 ] =  {
                                             { 0L, 1L },
                                             { 1L, 0L },
                                             { 0L, -1L },
@@ -67,7 +67,7 @@ static ChainMove aImplMoveInner[ 8 ] =  {
                                             { -1L, 0L }
                                         };
 
-static ChainMove aImplMoveOuter[ 8 ] =  {
+static const ChainMove aImplMoveOuter[ 8 ] =  {
                                             { 0L, -1L },
                                             { -1L, 0L },
                                             { 0L, 1L },
