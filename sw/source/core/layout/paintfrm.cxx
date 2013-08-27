@@ -2797,13 +2797,11 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
             rNew.mnStartPos = rOld.mnEndPos;
 
             // update current lines set
-            pLineSet->erase( aIter );
+            pLineSet->erase(aIter++);
             if ( aLeft.mnStartPos   < aLeft.mnEndPos   ) pLineSet->insert( aLeft );
             if ( aMiddle.mnStartPos < aMiddle.mnEndPos ) pLineSet->insert( aMiddle );
 
-            aIter = pLineSet->begin();
-
-            continue; // start over
+            continue;
         }
         else if ( SwLineEntry::OVERLAP2 == nOverlapType )
         {
