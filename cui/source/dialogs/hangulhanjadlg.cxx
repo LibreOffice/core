@@ -1086,9 +1086,8 @@ namespace svx
                         xNameCont->removeByName( xDic->getName() );
 
                         //adapt local caches:
-                        HHDictList::iterator aIter(m_aDictList.begin());
-                        m_aDictList.erase(aIter+nSelPos );
-                        m_aDictsLB.RemoveEntry( nSelPos );
+                        m_aDictList.erase(m_aDictList.begin()+nSelPos );
+                        m_aDictsLB.RemoveEntry(nSelPos);
                     }
                     catch( const ElementExistException& )
                     {
