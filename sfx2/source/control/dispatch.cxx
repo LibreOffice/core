@@ -944,7 +944,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 
 //--------------------------------------------------------------------
 
-const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
+const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 {
     // Count the number of Shells on the linked Dispatcher
     Flush();

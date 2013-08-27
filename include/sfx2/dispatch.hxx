@@ -148,7 +148,7 @@ public:
                                  sal_uInt16 nModi,
                                  const SfxItemSet &rArgs );
 
-    const SfxSlot*      GetSlot( const String& rCommand );
+    const SfxSlot*      GetSlot( const OUString& rCommand );
 
     sal_Bool                IsActive( const SfxShell& rShell );
     sal_Bool                IsOnTop( const SfxShell& rShell );
@@ -184,7 +184,7 @@ public:
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny );
 
-    ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const String& );
+    ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const OUString& );
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32              GetDisableFlags() const;
 
@@ -204,7 +204,7 @@ public:
     SAL_DLLPRIVATE void DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* pOld );
     SAL_DLLPRIVATE void DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(sal_Bool);
-    SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, String *pStr );
+    SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, OUString *pStr );
 };
 
 //--------------------------------------------------------------------
