@@ -871,7 +871,6 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
                                 &nRealLen
                                 );
 
-    aBookmark.realloc(nRealLen);
     sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
     if ( bPositionByBookmark )
     {
@@ -885,6 +884,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
         nRet = N3SQLSetPos( m_aStatementHandle, 1, SQL_ADD, SQL_LOCK_NO_CHANGE );
         fillNeededData( nRet );
     }
+    aBookmark.realloc(nRealLen);
     try
     {
         OTools::ThrowException(m_pStatement->getOwnConnection(),nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
