@@ -74,6 +74,7 @@ private:
     CheckBox*               m_pExperimentalCB;
     CheckBox*               m_pExpSidebarCB;
     CheckBox*               m_pMacroCB;
+    PushButton*             m_pExpertConfig;
 
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;
@@ -87,6 +88,7 @@ private:
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(ParameterHdl_Impl, void *);
     DECL_LINK(ClassPathHdl_Impl, void *);
+    DECL_LINK(ExpertConfigHdl_Impl, void *);
     DECL_LINK(ResetHdl_Impl, void *);
 
     DECL_LINK(              StartFolderPickerHdl, void * );

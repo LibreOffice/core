@@ -48,11 +48,10 @@ struct Prop_Impl
     }
 };
 
-CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
-    :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
+CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent )
+    :ModalDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui")
 {
-    get(m_pDefaultBtn,"default");
-    get(m_pEditBtn, "edit");
+    //get(m_pResetBtn, "reset");
 
     m_pPrefCtrl = get<SvSimpleTableContainer>("preferences");
 
@@ -63,13 +62,11 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
     WinBits nBits = WB_SCROLL | WB_SORT | WB_HSCROLL | WB_VSCROLL;
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );
 
-    m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
-
     HeaderBar &rBar = pPrefBox->GetTheHeaderBar();
-    rBar.InsertItem( ITEMID_PREFNAME, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW);
-    rBar.InsertItem( ITEMID_PROPERTY, get<FixedText>("property")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
-    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
-    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
+    rBar.InsertItem( ITEMID_PREFNAME, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
+    rBar.InsertItem( ITEMID_PROPERTY, get<FixedText>("property")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
+    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
+    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
 
     long aTabs[] = {4,120,50,50,50};//TODO: Not works correctly hardcoded for now.
 
@@ -79,16 +76,16 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet&
 
     pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 
+    pPrefBox->SetDoubleClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
+    pPrefBox->SetSelectionMode( SINGLE_SELECTION );
+    pPrefBox->SetHighlightRange();
+
+    Reset();
 }
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 {
     delete pPrefBox;
-}
-
-SfxTabPage* CuiAboutConfigTabPage::Create( Window* pParent, const SfxItemSet& rItemSet )
-{
-    return ( new CuiAboutConfigTabPage( pParent, rItemSet) );
 }
 
 void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OUString& rType, OUString& rValue)
@@ -104,15 +101,12 @@ void CuiAboutConfigTabPage::InsertEntry( OUString& rProp, OUString&  rStatus, OU
     pPrefBox->Insert( pEntry );
 }
 
-void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
+void CuiAboutConfigTabPage::Reset()
 {
-    OUString sRootNodePath = "/";
+    OUString sRootNodePath = "";
     pPrefBox->Clear();
 
     VectorOfModified.clear();
-
-    m_pDefaultBtn->Enable(sal_False);
-    //m_pEditBtn->Enable(sal_False);
 
     const char* entries[] = {
            "/org.openoffice.Office.Common",
@@ -123,11 +117,13 @@ void CuiAboutConfigTabPage::Reset( const SfxItemSet& )
     {
         sRootNodePath = OUString::createFromAscii( entries[nInd] );
         Reference< XNameAccess > xConfigAccess = getConfigAccess( sRootNodePath, sal_False );
+        pPrefBox->SetUpdateMode(sal_False);
         FillItems( xConfigAccess, sRootNodePath );
+        pPrefBox->SetUpdateMode(sal_True);
     }
 }
 
-sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
+sal_Bool CuiAboutConfigTabPage::FillItemSet()
 {
     sal_Bool bModified = sal_False;
     Reference< XNameAccess > xUpdateAccess = getConfigAccess( "/", sal_True );
@@ -138,7 +134,6 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
 
     for( size_t nInd = 0; nInd < VectorOfModified.size(); ++nInd )
     {
-        //beans::NamedValue aNamedValue = VectorOfModified[ nInd ];
         Prop_Impl* aNamedValue = VectorOfModified[ nInd ];
 
         xUpdateAccess = getConfigAccess( aNamedValue->Name , sal_True );
@@ -161,8 +156,6 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
     sal_Bool bIsLeafNode;
 
     Reference< XHierarchicalNameAccess > xHierarchicalNameAccess( xNameAccess, uno::UNO_QUERY_THROW );
-
-    pPrefBox->SetUpdateMode(sal_False);
 
     uno::Sequence< OUString > seqItems = xNameAccess->getElementNames();
     for( sal_Int16 i = 0; i < seqItems.getLength(); ++i )
@@ -275,8 +268,6 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
             InsertEntry( sPath, seqItems [ i ], sType, sValue);
         }
     }
-
-    pPrefBox->SetUpdateMode(sal_True);
 }
 
 Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath, sal_Bool bUpdate )
@@ -286,6 +277,8 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
                 com::sun::star::configuration::theDefaultProvider::get( xContext  ) );
 
+    if( sNodePath == OUString("") )
+        sNodePath = OUString("/");
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
     aProperty.Value = uno::makeAny( sNodePath );
@@ -308,7 +301,6 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     return xNameAccess;
 }
 
-//void CuiAboutConfigTabPage::AddToModifiedVector( beans::NamedValue& rProp )
 void CuiAboutConfigTabPage::AddToModifiedVector( Prop_Impl* rProp )
 {
     bool isModifiedBefore = false;
@@ -347,30 +339,32 @@ CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
 
 IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
-    if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
-        return 0;
-
-    HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    SvSortMode eMode = SortAscending;
-
-    if ( bUp )
-    {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
-        eMode = SortDescending;
-    }
-    else
-    {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
-    }
-    pBar->SetItemBits( ITEMID_TYPE, nBits );
-    SvTreeList* pModel = pPrefBox->GetModel();
-    pModel->SetSortMode( eMode );
-    pModel->Resort();
-    return 1;
+    return 0;
 }
+    //if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
+        //return 0;
+
+    //HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
+    //sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    //SvSortMode eMode = SortAscending;
+
+    //if ( bUp )
+    //{
+        //nBits &= ~HIB_UPARROW;
+        //nBits |= HIB_DOWNARROW;
+        //eMode = SortDescending;
+    //}
+    //else
+    //{
+        //nBits &= ~HIB_DOWNARROW;
+        //nBits |= HIB_UPARROW;
+    //}
+    //pBar->SetItemBits( ITEMID_TYPE, nBits );
+    //SvTreeList* pModel = pPrefBox->GetModel();
+    //pModel->SetSortMode( eMode );
+    //pModel->Resort();
+    //return 1;
+//}
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
@@ -437,6 +431,12 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 
     return 0;
 
+}
+
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetHdl_Impl )
+{
+    Reset();
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,8 @@
 
 #include <svtools/miscopt.hxx>
 
+#include "optaboutconfig.hxx"
+
 #include "optjava.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
@@ -150,6 +152,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     get(m_pExperimentalCB, "experimental");
     get(m_pExpSidebarCB, "exp_sidebar");
     get(m_pMacroCB, "macrorecording");
+    get(m_pExpertConfig, "expert");
     m_sAccessibilityText = get<FixedText>("a11y")->GetText();
     m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
 
@@ -180,6 +183,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_pClassPathBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
+
+    m_pExpertConfig->SetClickHdl( LINK(this, SvxJavaOptionsPage, ExpertConfigHdl_Impl) );
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
@@ -366,6 +371,23 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
     else
         m_pPathDlg->SetClassPath( sClassPath );
 #endif
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ExpertConfigHdl_Impl)
+{
+    CuiAboutConfigTabPage* pAboutConfigDialog =
+        new CuiAboutConfigTabPage( 0 );
+
+    bool ret = pAboutConfigDialog->Execute();
+
+    if( ret == RET_OK )
+    {
+        pAboutConfigDialog->FillItemSet();
+    }
+
+    delete pAboutConfigDialog;
+
     return 0;
 }
 
