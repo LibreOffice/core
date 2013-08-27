@@ -30,7 +30,7 @@
 struct IsoLangEntry
 {
     LanguageType  mnLang;
-    sal_Char      maLangStr[4];
+    sal_Char      maLanguage[4];
     sal_Char      maCountry[3];
 
     /** Obtain a language tag string with '-' separator. */
@@ -46,7 +46,7 @@ struct IsoLangEngEntry
 struct IsoLangNoneStdEntry
 {
     LanguageType        mnLang;
-    sal_Char            maLangStr[4];
+    sal_Char            maLanguage[4];
     sal_Char            maCountry[9];
 };
 
@@ -540,9 +540,9 @@ static IsoLangEntry aLastResortFallbackEntry =
 OUString IsoLangEntry::getTagString() const
 {
     if (maCountry[0])
-        return OUString( OUString::createFromAscii( maLangStr) + "-" + OUString::createFromAscii( maCountry));
+        return OUString( OUString::createFromAscii( maLanguage) + "-" + OUString::createFromAscii( maCountry));
     else
-        return OUString::createFromAscii( maLangStr);
+        return OUString::createFromAscii( maLanguage);
 }
 
 // -----------------------------------------------------------------------
@@ -676,7 +676,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     {
         if ( pEntry->mnLang == nLang )
         {
-            rLocale.Language = OUString::createFromAscii( pEntry->maLangStr );
+            rLocale.Language = OUString::createFromAscii( pEntry->maLanguage );
             rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
             rLocale.Variant  = OUString();
             return;
@@ -719,7 +719,7 @@ static const IsoLangEntry & lcl_lookupFallbackEntry(
     const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
     {
-        if (aLowerLang.equalsAscii( pEntry->maLangStr))
+        if (aLowerLang.equalsAscii( pEntry->maLanguage))
         {
             if (*pEntry->maCountry)
             {
@@ -755,7 +755,7 @@ static const IsoLangEntry & lcl_lookupFallbackEntry(
     pEntry = pFirstLang;
     do
     {
-        if (aLowerLang.equalsAscii( pEntry->maLangStr))
+        if (aLowerLang.equalsAscii( pEntry->maLanguage))
         {
             if (*pEntry->maCountry)
                 return *pEntry;
@@ -774,7 +774,7 @@ static const IsoLangEntry & lcl_lookupFallbackEntry(
 {
     const IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
     return ::com::sun::star::lang::Locale(
-            OUString::createFromAscii( rEntry.maLangStr),
+            OUString::createFromAscii( rEntry.maLanguage),
             OUString::createFromAscii( rEntry.maCountry),
             OUString());
 }
@@ -809,7 +809,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
     {
-        if ( aLowerLang.equalsAscii( pEntry->maLangStr ) )
+        if ( aLowerLang.equalsAscii( pEntry->maLanguage ) )
         {
             if ( aUpperCountry.isEmpty() ||
                  aUpperCountry.equalsAscii( pEntry->maCountry ) )
@@ -840,7 +840,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
     do
     {
-        if ( aLowerLang.equalsAscii( pNoneStdEntry->maLangStr ) )
+        if ( aLowerLang.equalsAscii( pNoneStdEntry->maLanguage ) )
         {
             // The countries in this table are not all in upper case
             if ( aUpperCountry.equalsIgnoreAsciiCaseAscii( pNoneStdEntry->maCountry ) )
@@ -852,7 +852,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     pNoneStdEntry = aImplIsoNoneStdLangEntries2;
     do
     {
-        if ( aLowerLang.equalsAscii( pNoneStdEntry->maLangStr ) )
+        if ( aLowerLang.equalsAscii( pNoneStdEntry->maLanguage ) )
         {
             // The countries in this table are not all in upper case
             if ( aUpperCountry.equalsIgnoreAsciiCaseAscii( pNoneStdEntry->maCountry ) )
@@ -916,7 +916,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OString& rLa
 struct IsoLangGLIBCModifiersEntry
 {
     LanguageType  mnLang;
-    sal_Char      maLangStr[4];
+    sal_Char      maLanguage[4];
     sal_Char      maCountry[3];
     sal_Char      maAtString[9];
 };
@@ -978,7 +978,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
         do
         {                         // avoid embedded \0 warning
-            if (aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLangStr )) &&
+            if (aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLanguage )) &&
                  aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString )))
             {
                 if (aUpperCountry.isEmpty() ||
