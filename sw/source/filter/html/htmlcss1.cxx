@@ -413,14 +413,6 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
             bSetBox = sal_True;
         }
 
-        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BOX, sal_False, &pItem ) )
-        {
-            // eine Umrandung wird gesetzt
-            aBoxItem = *((const SvxBoxItem *)pItem);
-            pItemSet2->ClearItem( RES_BOX );
-            bSetBox = sal_True;
-        }
-
         if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_FRAMEDIR, sal_False, &pItem ) )
         {
             // eine Umrandung wird gesetzt
