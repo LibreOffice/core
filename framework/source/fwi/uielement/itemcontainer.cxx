@@ -200,15 +200,13 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
                                         (OWeakObject *)this, 2 );
 }
 
-void SAL_CALL ItemContainer::removeByIndex( sal_Int32 Index )
+void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
 throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ShareGuard aLock( m_aShareMutex );
-    if ( (sal_Int32)m_aItemVector.size() > Index )
+    if ( (sal_Int32)m_aItemVector.size() > nIndex )
     {
-        std::vector< Sequence< PropertyValue > >::iterator aIter = m_aItemVector.begin();
-        aIter += Index;
-        m_aItemVector.erase( aIter );
+        m_aItemVector.erase(m_aItemVector.begin() + nIndex);
     }
     else
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
