@@ -53,7 +53,7 @@ struct IsoLangNoneStdEntry
 struct IsoLangOtherEntry
 {
     LanguageType        mnLang;
-    const sal_Char*     mpLangStr;
+    const sal_Char*     mpLanguage;
 };
 
 // -----------------------------------------------------------------------
@@ -693,7 +693,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         {
             rLocale.Language = I18NLANGTAG_QLT;
             rLocale.Country  = OUString();
-            rLocale.Variant  = OUString::createFromAscii( pPrivateEntry->mpLangStr );
+            rLocale.Variant  = OUString::createFromAscii( pPrivateEntry->mpLanguage );
             return;
         }
         ++pPrivateEntry;
@@ -787,7 +787,7 @@ LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& 
     const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
     do
     {
-        if ( rPriv.equalsIgnoreAsciiCaseAscii( pPrivateEntry->mpLangStr ) )
+        if ( rPriv.equalsIgnoreAsciiCaseAscii( pPrivateEntry->mpLanguage ) )
             return pPrivateEntry->mnLang;
         ++pPrivateEntry;
     } while ( pPrivateEntry->mnLang != LANGUAGE_DONTKNOW );
@@ -891,7 +891,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     const IsoLangOtherEntry* pOtherEntry = aImplOtherEntries;
     do
     {
-        if ( aLowerLang.equalsAscii( pOtherEntry->mpLangStr ) )
+        if ( aLowerLang.equalsAscii( pOtherEntry->mpLanguage ) )
             return pOtherEntry->mnLang;
         ++pOtherEntry;
     }
