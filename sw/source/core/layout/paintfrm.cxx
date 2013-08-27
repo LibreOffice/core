@@ -4354,7 +4354,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             }
             break;
         default:
-            OSL_ENSURE( false, "new ShadowLocation() ?" );
+            assert(false);
             break;
     }
 
