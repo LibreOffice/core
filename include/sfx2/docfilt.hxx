@@ -98,11 +98,11 @@ public:
     sal_uInt16          GetDocIconId() const { return nDocIcon; }
     const OUString& GetUserData() const { return aUserData; }
     const OUString& GetDefaultTemplate() const { return aDefaultTemplate; }
-    void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
+    void            SetDefaultTemplate( const OUString& rStr ) { aDefaultTemplate = rStr; }
     bool            UsesStorage() const { return GetFormat() != 0; }
     void SetURLPattern( const OUString& rStr );
     OUString GetURLPattern() const { return aPattern; }
-    void            SetUIName( const String& rName ) { aUIName = rName; }
+    void            SetUIName( const OUString& rName ) { aUIName = rName; }
     void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
     sal_uIntPtr           GetVersion() const { return nVersion; }
     OUString GetSuffixes() const;
@@ -110,9 +110,9 @@ public:
     const OUString& GetServiceName() const { return aServiceName; }
     const OUString& GetProviderName() const;
 
-    static const SfxFilter* GetDefaultFilter( const String& rName );
-    static const SfxFilter* GetFilterByName( const String& rName );
-    static const SfxFilter* GetDefaultFilterFromFactory( const String& rServiceName );
+    static const SfxFilter* GetDefaultFilter( const OUString& rName );
+    static const SfxFilter* GetFilterByName( const OUString& rName );
+    static const SfxFilter* GetDefaultFilterFromFactory( const OUString& rServiceName );
 
     static OUString GetTypeFromStorage( const SotStorage& rStg );
     static OUString GetTypeFromStorage(

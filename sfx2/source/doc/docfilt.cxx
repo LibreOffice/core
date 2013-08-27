@@ -125,17 +125,17 @@ OUString SfxFilter::GetSuffixes() const
     return aRet;
 }
 
-const SfxFilter* SfxFilter::GetDefaultFilter( const String& rName )
+const SfxFilter* SfxFilter::GetDefaultFilter( const OUString& rName )
 {
     return SfxFilterContainer::GetDefaultFilter_Impl( rName );
 }
 
-const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const String& rFact )
+const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const OUString& rFact )
 {
     return GetDefaultFilter( SfxObjectShell::GetServiceNameFromFactory( rFact ) );
 }
 
-const SfxFilter* SfxFilter::GetFilterByName( const String& rName )
+const SfxFilter* SfxFilter::GetFilterByName( const OUString& rName )
 {
     SfxFilterMatcher aMatch;
     return aMatch.GetFilter4FilterName( rName, 0, 0 );
