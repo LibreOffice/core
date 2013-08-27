@@ -22,11 +22,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment4">
-    <property name="lower">10000</property>
-    <property name="upper">23590000</property>
-    <property name="value">100000</property>
-  </object>
   <object class="GtkBox" id="OptMemoryPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -229,7 +224,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="adjustment">adjustment4</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
