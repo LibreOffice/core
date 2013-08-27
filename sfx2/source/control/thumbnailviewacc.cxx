@@ -307,18 +307,11 @@ void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Refere
 
     if( rxListener.is() )
     {
-        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aEnd = mxEventListeners.end();
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
+            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
 
-        for (std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
-               aIter != aEnd;
-               ++aIter)
-        {
-            if( *aIter == rxListener )
-            {
-                mxEventListeners.erase( aIter );
-                break;
-            }
-        }
+        if (aIter != mxEventListeners.end())
+            mxEventListeners.erase( aIter );
     }
 }
 
@@ -823,18 +816,11 @@ void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Re
 
     if( rxListener.is() )
     {
-        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator aEnd = mxEventListeners.end();
+        std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter =
+            std::find(mxEventListeners.begin(), mxEventListeners.end(), rxListener);
 
-        for (::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::iterator aIter = mxEventListeners.begin();
-             aIter != aEnd;
-             ++aIter)
-        {
-            if( *aIter == rxListener )
-            {
-                mxEventListeners.erase( aIter );
-                break;
-            }
-        }
+        if (aIter != mxEventListeners.end())
+            mxEventListeners.erase( aIter );
     }
 }
 
