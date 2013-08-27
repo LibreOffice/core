@@ -104,13 +104,43 @@
               <placeholder/>
             </child>
             <child type="tab">
+              <object class="GtkLabel" id="labelTP_PARA_ALIGN">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0.4699999988079071</property>
+                <property name="label" translatable="yes">Alignment</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="labelTP_PARA_EXT">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0.46000000834465027</property>
+                <property name="label" translatable="yes">Text Flow</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
               <object class="GtkLabel" id="labelTP_PARA_ASIAN">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Asian Typography</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -124,7 +154,7 @@
                 <property name="label" translatable="yes">Outline &amp; Numbering</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">4</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -136,36 +166,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Tabs</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="labelTP_PARA_ALIGN">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0.4699999988079071</property>
-                <property name="label" translatable="yes">Alignment</property>
-              </object>
-              <packing>
-                <property name="position">4</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="labelTP_PARA_EXT">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0.46000000834465027</property>
-                <property name="label" translatable="yes">Text Flow</property>
               </object>
               <packing>
                 <property name="position">5</property>
