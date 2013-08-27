@@ -6,7 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
@@ -183,13 +182,7 @@ have the same width (full page width, half page width).
 xray ThisComponent.DrawPage.getByIndex(0).BoundRect
 */
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> rule1, rule2, rule3, rule4;
-    drawPage->getByIndex(0) >>= rule1;
-    drawPage->getByIndex(1) >>= rule2;
-    drawPage->getByIndex(2) >>= rule3;
-    drawPage->getByIndex(3) >>= rule4;
+    uno::Reference<drawing::XShape> rule1 = getShape(1), rule2 = getShape(2), rule3 = getShape(3), rule4 = getShape(4);
     uno::Reference<beans::XPropertySet> ruleProperties1(rule1, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> ruleProperties2(rule2, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> ruleProperties3(rule3, uno::UNO_QUERY);

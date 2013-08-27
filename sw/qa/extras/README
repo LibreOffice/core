@@ -216,11 +216,7 @@ graphic = image.Graphic
 
 C++:
 
-uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-uno::Reference<drawing::XShape> image;
-drawPage->getByIndex(0) >>= image;
+uno::Reference<drawing::XShape> image = getShape(1);
 uno::Reference<graphic::XGraphic> graphic = getProperty< uno::Reference< graphic::XGraphic > >( image, "Graphic" );
 
 

@@ -9,7 +9,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -234,21 +233,14 @@ void Test::run()
 
 void Test::testN751054()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
-    text::TextContentAnchorType eValue;
-    xPropertySet->getPropertyValue("AnchorType") >>= eValue;
+    text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
 void Test::testN751117()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-
     // First shape: the end should be an arrow, should be rotated and should be flipped.
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     OUString aValue;
     xPropertySet->getPropertyValue("LineEndName") >>= aValue;
     CPPUNIT_ASSERT(aValue.indexOf("Arrow") != -1);
@@ -263,7 +255,7 @@ void Test::testN751117()
     CPPUNIT_ASSERT(aActualSize.Width > 0);
 
     // The second shape should be a line
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
 }
 
@@ -372,10 +364,7 @@ void Test::testN751077()
 xray ThisComponent.DrawPage(1).getByIndex(0).String
 xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
 */
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTextDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xShapes(getShape(2), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xShapes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("TEXT1\n"), xShape->getString());
     // we want to test the textbox is on the first page (it was put onto another page without the fix),
@@ -398,7 +387,7 @@ xray image.AnchorType
     uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 1 ), drawPage->getCount());
-    uno::Reference<drawing::XShapes> shapes(drawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> shapes(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> image;
     shapes->getByIndex(0) >>= image;
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
@@ -419,11 +408,7 @@ void Test::testN705956_2()
 image = ThisComponent.DrawPage.getByIndex(0)
 xray image.FillColor
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> image;
-    drawPage->getByIndex(0) >>= image;
+    uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     sal_Int32 fillColor;
     imageProperties->getPropertyValue( "FillColor" ) >>= fillColor;
@@ -437,13 +422,7 @@ The document contains 3 images (Red, Black, Green, in this order), with explicit
 w:relativeHeight (300, 0, 225763766). Check that they are in the right ZOrder
 after they are loaded.
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> image1, image2, image3;
-    drawPage->getByIndex( 0 ) >>= image1;
-    drawPage->getByIndex( 1 ) >>= image2;
-    drawPage->getByIndex( 2 ) >>= image3;
+    uno::Reference<drawing::XShape> image1 = getShape(1), image2 = getShape(2), image3 = getShape(3);
     sal_Int32 zOrder1, zOrder2, zOrder3;
     OUString descr1, descr2, descr3;
     uno::Reference<beans::XPropertySet> imageProperties1(image1, uno::UNO_QUERY);
@@ -531,9 +510,7 @@ void Test::testN760764()
 
 void Test::testN764005()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
     // The picture in the header wasn't absolutely positioned and wasn't in the background.
     text::TextContentAnchorType eValue;
@@ -550,7 +527,7 @@ void Test::testSmartart()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
 
-    uno::Reference<container::XIndexAccess> xGroup(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
 
     uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
@@ -576,9 +553,7 @@ xray shape.AnchorType
 xray shape.AnchorPosition.X
 xray ThisComponent.StyleFamilies.PageStyles.Default.Width
 */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     // The paragraph is right-aligned and the picture does not explicitly specify position,
     // so check it's anchored as character and in the right side of the document.
     text::TextContentAnchorType anchorType;
@@ -647,9 +622,7 @@ void Test::testN758883()
      *
      * xray ThisComponent.DrawPage(0).Surround ' was 2, should be 1
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    xPropertySet.set(xDraws->getByIndex(0), uno::UNO_QUERY);
+    xPropertySet.set(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_THROUGHT);
@@ -659,13 +632,13 @@ void Test::testN758883()
      *
      * xray ThisComponent.DrawPage(1).AnchorType ' was 1, should be 4
      */
-    xPropertySet.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    xPropertySet.set(getShape(2), uno::UNO_QUERY);
     text::TextContentAnchorType eAnchorType;
     xPropertySet->getPropertyValue("AnchorType") >>= eAnchorType;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 
     // 6th problem: xray ThisComponent.DrawPage(2).AnchorType ' was 2, should be 4
-    xPropertySet.set(xDraws->getByIndex(2), uno::UNO_QUERY);
+    xPropertySet.set(getShape(3), uno::UNO_QUERY);
     xPropertySet->getPropertyValue("AnchorType") >>= eAnchorType;
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 }
@@ -838,9 +811,7 @@ void Test::testN775899()
 void Test::testN777345()
 {
     // The problem was that v:imagedata inside v:rect was ignored.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
     Graphic aGraphic(xGraphic);
     // If this changes later, feel free to update it, but make sure it's not
@@ -903,9 +874,7 @@ void Test::testInk()
      *
      * xray ThisComponent.DrawPage(0).supportsService("com.sun.star.drawing.OpenBezierShape")
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
 }
 
@@ -933,9 +902,7 @@ void Test::testN779627()
      * Another problem tested with this document is that the roundrect is
      * centered vertically and horizontally.
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProperties( xDraws->getByIndex(3), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(4), uno::UNO_QUERY );
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
     // If this goes wrong, probably the index of the shape is changed and the test should be adjusted.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.RectangleShape"), xShapeDescriptor->getShapeType());
@@ -1004,9 +971,7 @@ void Test::testShadow()
      * The problem was that drop shadows on inline images were not being
      * imported and applied.
      */
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(2), uno::UNO_QUERY);
 
     table::ShadowFormat aShadow;
     xPropertySet->getPropertyValue("ShadowFormat") >>= aShadow;
@@ -1054,9 +1019,7 @@ void Test::testN779941()
 void Test::testN783638()
 {
     // The problem was that the margins of inline images were not zero.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
 }
 
@@ -1354,17 +1317,13 @@ void Test::testConditionalstylesTbllook()
 
 void Test::testFdo63685()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // Was 85697, i.e. original 114120 was converted to mm100 from twips, not from EMUs.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xDraws->getByIndex(0), "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(getShape(1), "TopMargin"));
 }
 
 void Test::testN592908_Frame()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
@@ -1372,9 +1331,7 @@ void Test::testN592908_Frame()
 
 void Test::testN592908_Picture()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
@@ -1382,11 +1339,8 @@ void Test::testN592908_Picture()
 
 void Test::testN779630()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-
     // First shape: date picker
-    uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.DateField")));
@@ -1395,7 +1349,7 @@ void Test::testN779630()
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
 
     // Second shape: combo box
-    xControlShape.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
     xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
@@ -1438,9 +1392,7 @@ void Test::testN820509()
     CPPUNIT_ASSERT_EQUAL(false, bool(xFormLayerAccess->isFormDesignMode()));
 
     // M.d.yyyy date format was unhandled.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
@@ -1467,16 +1419,12 @@ void Test::testN820504()
 
     // Also, the groupshape was anchored at-page instead of at-character
     // (that's incorrect as Word only supports at-character and as-character).
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(xDraws->getByIndex(0), "AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 void Test::testFdo43641()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xGroupShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
@@ -1494,9 +1442,7 @@ void Test::testTableAutoColumnFixedSize()
 
 void Test::testFdo46361()
 {
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xGroupShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
     // This was CENTER.
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
@@ -1535,9 +1481,7 @@ void Test::testFdo66474()
 void Test::testGroupshapeRotation()
 {
     // Rotation on groupshapes wasn't handled at all by the VML importer.
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(xDraws->getByIndex(0), "RotateAngle"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
 void Test::testBnc780044Spacing()
