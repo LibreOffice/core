@@ -169,12 +169,7 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
     if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
-    /* FIXME: this x-... is temporary until conversion will be moved up to
-     * LanguageTag. Also handle the nasty "*" joker as privateuse. */
-    LanguageType nRet = ((!rLocale.Variant.isEmpty() &&
-                (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))) ?
-            convertPrivateUseToLanguage( rLocale.Variant) :
-            convertIsoNamesToLanguage( rLocale.Language, rLocale.Country));
+    LanguageType nRet = convertLocaleToLanguageImpl( rLocale);
     if (nRet == LANGUAGE_DONTKNOW)
         nRet = LANGUAGE_SYSTEM;
 

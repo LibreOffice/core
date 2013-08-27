@@ -875,6 +875,20 @@ LanguageType MsLangId::Conversion::convertPrivateUseToLanguage( const OUString& 
 
 
 // static
+LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
+        const ::com::sun::star::lang::Locale& rLocale )
+{
+    /* FIXME: this x-... is temporary until conversion will be moved up to
+     * LanguageTag. Also handle the nasty "*" joker as privateuse. */
+    LanguageType nRet = ((!rLocale.Variant.isEmpty() &&
+                (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))) ?
+            convertPrivateUseToLanguage( rLocale.Variant) :
+            convertIsoNamesToLanguage( rLocale.Language, rLocale.Country));
+    return nRet;
+}
+
+
+// static
 LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rLang,
         const OUString& rCountry )
 {

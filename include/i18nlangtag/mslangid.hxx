@@ -212,7 +212,11 @@ public:
         I18NLANGTAG_DLLPRIVATE static LanguageType convertLocaleToLanguage(
                 const ::com::sun::star::lang::Locale & rLocale );
 
-        /** Convert x-... privateuse, used by convertLocaleToLanguage(Locale) */
+        /** Used by convertLocaleToLanguage(Locale) */
+        I18NLANGTAG_DLLPRIVATE static LanguageType convertLocaleToLanguageImpl(
+                const ::com::sun::star::lang::Locale & rLocale );
+
+        /** Convert x-... privateuse, used by convertLocaleToLanguageImpl(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
                 const OUString& rPriv );
 
