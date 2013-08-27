@@ -109,16 +109,14 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 Index )
+void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
     throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
 
-    if ( (sal_Int32)m_aPropertySetVector.size() > Index )
+    if ( (sal_Int32)m_aPropertySetVector.size() > nIndex )
     {
-        PropertySetVector::iterator aIter = m_aPropertySetVector.begin();
-        aIter += Index;
-        m_aPropertySetVector.erase( aIter );
+        m_aPropertySetVector.erase(m_aPropertySetVector.begin() +  nIndex);
     }
     else
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
