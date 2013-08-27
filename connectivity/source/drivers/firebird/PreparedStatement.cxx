@@ -335,17 +335,17 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
     // it might be best to just determine the db type and set as appropriate?
 }
 
-void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 x)
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
     throw(SQLException, RuntimeException)
 {
     (void) nIndex;
-    (void) x;
+    (void) nValue;
     ::dbtools::throwFunctionNotSupportedException("setByte not supported in firebird",
                                                   *this,
                                                   Any());
 }
 
-void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 x)
+void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
@@ -362,7 +362,47 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 x)
     if (dtype != SQL_SHORT)
         throw SQLException(); // TODO: cast instead?
 
-    memcpy(pVar->sqldata, &x, 2);
+    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+}
+
+void SAL_CALL OPreparedStatement::setInt(sal_Int32 nIndex, sal_Int32 nValue)
+    throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard( m_pConnection->getMutex() );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
+
+    checkParameterIndex(nIndex);
+    setParameterNull(nIndex, false);
+
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
+
+    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+
+    if (dtype != SQL_LONG)
+        throw SQLException(); // TODO: cast instead?
+
+    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+}
+
+void SAL_CALL OPreparedStatement::setLong(sal_Int32 nIndex, sal_Int64 nValue)
+    throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard( m_pConnection->getMutex() );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
+
+    checkParameterIndex(nIndex);
+    setParameterNull(nIndex, false);
+
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
+
+    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+
+    if (dtype != SQL_INT64)
+        throw SQLException(); // TODO: cast instead?
+
+    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 // -------------------------------------------------------------------------
 
@@ -412,26 +452,6 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 {
     (void) parameterIndex;
     (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) aVal;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
