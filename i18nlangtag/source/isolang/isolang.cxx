@@ -27,7 +27,7 @@
 
 // =======================================================================
 
-struct IsoLangEntry
+struct IsoLanguageCountryEntry
 {
     LanguageType  mnLang;
     sal_Char      maLanguage[4];
@@ -99,7 +99,7 @@ struct IsoLangOtherEntry
  * LANGUAGE_AZERI LANGUAGE_URDU LANGUAGE_KASHMIRI
  */
 
-static IsoLangEntry const aImplIsoLangEntries[] =
+static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 {
     // MS-LANGID codes               ISO639-1/2/3 ISO3166
     { LANGUAGE_ENGLISH,                     "en", ""   },
@@ -534,10 +534,10 @@ static IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
-static IsoLangEntry aLastResortFallbackEntry =
+static IsoLanguageCountryEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US" };
 
-OUString IsoLangEntry::getTagString() const
+OUString IsoLanguageCountryEntry::getTagString() const
 {
     if (maCountry[0])
         return OUString( OUString::createFromAscii( maLanguage) + "-" + OUString::createFromAscii( maCountry));
@@ -671,7 +671,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
     // Search for LangID (in this table we find only defined ISO combinations)
-    const IsoLangEntry* pEntry = aImplIsoLangEntries;
+    const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
     do
     {
         if ( pEntry->mnLang == nLang )
@@ -705,7 +705,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
 // -----------------------------------------------------------------------
 
-static const IsoLangEntry & lcl_lookupFallbackEntry(
+static const IsoLanguageCountryEntry & lcl_lookupFallbackEntry(
         const ::com::sun::star::lang::Locale & rLocale )
 {
     // language is lower case in table
@@ -715,8 +715,8 @@ static const IsoLangEntry & lcl_lookupFallbackEntry(
     sal_Int32 nCountryLen = aUpperCountry.getLength();
 
     // Search for locale and remember first lang-only.
-    const IsoLangEntry* pFirstLang = NULL;
-    const IsoLangEntry* pEntry = aImplIsoLangEntries;
+    const IsoLanguageCountryEntry* pFirstLang = NULL;
+    const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
     do
     {
         if (aLowerLang.equalsAscii( pEntry->maLanguage))
@@ -772,7 +772,7 @@ static const IsoLangEntry & lcl_lookupFallbackEntry(
 ::com::sun::star::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
         const ::com::sun::star::lang::Locale & rLocale )
 {
-    const IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
+    const IsoLanguageCountryEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
     return ::com::sun::star::lang::Locale(
             OUString::createFromAscii( rEntry.maLanguage),
             OUString::createFromAscii( rEntry.maCountry),
@@ -805,8 +805,8 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     OUString aUpperCountry = rCountry.toAsciiUpperCase();
 
     //  first look for exact match
-    const IsoLangEntry* pFirstLang = NULL;
-    const IsoLangEntry* pEntry = aImplIsoLangEntries;
+    const IsoLanguageCountryEntry* pFirstLang = NULL;
+    const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
     do
     {
         if ( aLowerLang.equalsAscii( pEntry->maLanguage ) )
@@ -870,7 +870,7 @@ LanguageType MsLangId::Conversion::convertIsoNamesToLanguage( const OUString& rL
     //  (to allow reading country and language in separate steps, in any order)
     if ( !rCountry.isEmpty() && rLang.isEmpty() )
     {
-        const IsoLangEntry* pEntry2 = aImplIsoLangEntries;
+        const IsoLanguageCountryEntry* pEntry2 = aImplIsoLangEntries;
         do
         {
             if ( aUpperCountry.equalsAscii( pEntry2->maCountry ) )
@@ -1000,7 +1000,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 ::std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
 {
     ::std::vector< LanguagetagMapping > aVec;
-    for (const IsoLangEntry* pEntry = aImplIsoLangEntries; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
     }
