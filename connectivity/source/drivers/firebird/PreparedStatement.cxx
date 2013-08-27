@@ -323,6 +323,16 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
 }
 
 //----- XParameters -----------------------------------------------------------
+void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 nSqlType)
+    throw(SQLException, RuntimeException)
+{
+    (void) nSqlType;
+    MutexGuard aGuard( m_pConnection->getMutex() );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+    setParameterNull(nIndex, true);
+}
+
 void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
     throw(SQLException, RuntimeException)
 {
@@ -452,16 +462,6 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
 {
     (void) parameterIndex;
     (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) sqlType;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
