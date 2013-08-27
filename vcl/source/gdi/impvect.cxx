@@ -82,18 +82,18 @@ struct ImplColorSet
 {
     BitmapColor maColor;
     sal_uInt16      mnIndex;
-    sal_Bool        mbSet;
+    bool        mbSet;
 
-    sal_Bool        operator<( const ImplColorSet& rSet ) const;
-    sal_Bool        operator>( const ImplColorSet& rSet ) const;
+    bool        operator<( const ImplColorSet& rSet ) const;
+    bool        operator>( const ImplColorSet& rSet ) const;
 };
 
-inline sal_Bool ImplColorSet::operator<( const ImplColorSet& rSet ) const
+inline bool ImplColorSet::operator<( const ImplColorSet& rSet ) const
 {
     return( mbSet && ( !rSet.mbSet || ( maColor.GetLuminance() > rSet.maColor.GetLuminance() ) ) );
 }
 
-inline sal_Bool ImplColorSet::operator>( const ImplColorSet& rSet ) const
+inline bool ImplColorSet::operator>( const ImplColorSet& rSet ) const
 {
     return( !mbSet || ( rSet.mbSet && maColor.GetLuminance() < rSet.maColor.GetLuminance() ) );
 }
@@ -675,7 +675,7 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
 
         for( long nY = 0L; nY < nHeight; nY++ )
             for( long nX = 0L; nX < nWidth; nX++ )
-                pColorSet[ pRAcc->GetPixel( nY, nX ).GetIndex() ].mbSet = 1;
+                pColorSet[ pRAcc->GetPixel( nY, nX ).GetIndex() ].mbSet = true;
 
         qsort( pColorSet, 256, sizeof( ImplColorSet ), ImplColorSetCmpFnc );
 

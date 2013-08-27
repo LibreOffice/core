@@ -132,14 +132,14 @@ TOOLKIT_DLLPUBLIC WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt
 {
     WinBits nWinBits = 0;
 
-    sal_Bool bMessBox = sal_False;
+    bool bMessBox = false;
     if ( ( nCompType == WINDOW_INFOBOX ) ||
          ( nCompType == WINDOW_MESSBOX ) ||
          ( nCompType == WINDOW_QUERYBOX ) ||
          ( nCompType == WINDOW_WARNINGBOX ) ||
          ( nCompType == WINDOW_ERRORBOX ) )
     {
-        bMessBox = sal_True;
+        bMessBox = true;
     }
 
     bool bDecoratedWindow = false;
@@ -337,14 +337,14 @@ static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecon
 
 sal_uInt16 ImplGetComponentType( const String& rServiceName )
 {
-    static sal_Bool bSorted = sal_False;
+    static bool bSorted = false;
     if( !bSorted )
     {
         qsort(  (void*) aComponentInfos,
                 sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
                 sizeof( ComponentInfo ),
                 ComponentInfoCompare );
-        bSorted = sal_True;
+        bSorted = true;
     }
 
 
@@ -411,7 +411,7 @@ namespace
 //  ----------------------------------------------------
 
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
-static sal_Bool                                 bInitedByVCLToolkit = sal_False;
+static bool                                 bInitedByVCLToolkit = false;
 
 static osl::Mutex & getInitMutex()
 {
@@ -527,7 +527,7 @@ void SAL_CALL VCLXToolkit::disposing()
             {
                 Application::Quit();
                 JoinMainLoopThread();
-                bInitedByVCLToolkit = sal_False;
+                bInitedByVCLToolkit = false;
             }
         }
     }
@@ -634,7 +634,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     {
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
         // spaeter mal ::com::sun::star::uno::Exception...
-        sal_Bool bException = sal_True;
+        bool bException = true;
         if  (   ( nType == WINDOW_DIALOG )
             ||  ( nType == WINDOW_MODALDIALOG )
             ||  ( nType == WINDOW_MODELESSDIALOG )
@@ -644,13 +644,13 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             ||  ( nType == WINDOW_ERRORBOX )
             ||  ( nType == WINDOW_QUERYBOX )
             )
-            bException = sal_False;
+            bException = false;
         else if ( ( nType == WINDOW_WINDOW ) ||
                   ( nType == WINDOW_WORKWINDOW ) ||
                   ( nType == VCLWINDOW_FRAMEWINDOW ) )
         {
             if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_TOP )
-                bException = sal_False;
+                bException = false;
         }
 
         if ( bException )
