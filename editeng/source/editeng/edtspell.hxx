@@ -103,7 +103,7 @@ public:
     void    TextInserted( sal_uInt16 nPos, sal_uInt16 nChars, sal_Bool bPosIsSep );
     void    TextDeleted( sal_uInt16 nPos, sal_uInt16 nChars );
 
-    void    InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bClearRange );
+    void InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd );
     sal_Bool    NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
     sal_Bool    HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
     sal_Bool    HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;

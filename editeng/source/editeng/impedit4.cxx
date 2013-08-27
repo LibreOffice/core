@@ -2321,7 +2321,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                                 // spanning exactly over words because the
                                 // WordDelimiters during expansion are not
                                 // evaluated.
-                                pWrongList->InsertWrong( nWStart, nXEnd, sal_True );
+                                pWrongList->InsertWrong(nWStart, nXEnd);
                                 bChanged = sal_True;
                             }
                         }

@@ -441,8 +441,7 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "ClearWrongs: WrongList broken!");
 }
 
-void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
-            sal_Bool bClearRange )
+void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     WrongList::iterator nPos = end();
     for (WrongList::iterator i = begin(); i != end(); ++i)
@@ -450,7 +449,6 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
         if (i->nStart >= nStart )
         {
             nPos = i;
-            if ( bClearRange )
             {
                 // It can really only happen that the Wrong starts exactly here
                 // and runs along, but not that there are several ranges ...
