@@ -34,8 +34,8 @@
  </vendor>
  </vendorInfos>
  <plugins>
-  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.dylib</library>
-  <library vendor="Apple Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.dylib</library>
-  <library vendor="Apple Computer, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavaplugin.dylib</library>
+  <library vendor="Oracle Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.dylib</library>
+  <library vendor="Apple Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.dylib</library>
+  <library vendor="Apple Computer, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/libsunjavapluginlo.dylib</library>
  </plugins>
 </javaSelection>

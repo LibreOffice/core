@@ -213,6 +213,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
@@ -223,6 +224,7 @@ gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTVEREXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -234,6 +236,7 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):$(lib)$(gb_Library_OOODLLEXT)) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTVERDLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVERDLLEXT)) \

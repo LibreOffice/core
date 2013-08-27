@@ -46,7 +46,7 @@ look like.
  </vendorInfos>
 
  <plugins>
-  <library vendor="Sun Microsystems Inc.">libsunjavaplugin.dll</library>
+  <library vendor="Sun Microsystems Inc.">libsunjavapluginlo.dll</library>
   <library vendor="VendorX">./pluginDir/vendorx.dll</library>
  </plugins>
 </javaSelection>
