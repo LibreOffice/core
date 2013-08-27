@@ -50,7 +50,7 @@ extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, Sf
 namespace sfx2 {
 
 DocumentInserter::DocumentInserter(
-    const String& rFactory, bool const bEnableMultiSelection) :
+    const OUString& rFactory, bool const bEnableMultiSelection) :
 
       m_sDocFactory             ( rFactory )
     , m_nDlgFlags               ( (bEnableMultiSelection)
@@ -92,7 +92,7 @@ SfxMedium* DocumentInserter::CreateMedium()
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
         pMedium->UseInteractionHandler( sal_True );
         SfxFilterMatcher* pMatcher = NULL;
-        if ( m_sDocFactory.Len() )
+        if ( !m_sDocFactory.isEmpty() )
             pMatcher = new SfxFilterMatcher( m_sDocFactory );
         else
             pMatcher = new SfxFilterMatcher();

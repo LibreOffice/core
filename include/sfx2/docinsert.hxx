@@ -38,8 +38,8 @@ namespace sfx2 {
 class SFX2_DLLPUBLIC DocumentInserter
 {
 private:
-    String                  m_sDocFactory;
-    String                  m_sFilter;
+    OUString                m_sDocFactory;
+    OUString                m_sFilter;
     Link                    m_aDialogClosedLink;
 
     sal_Int64 const         m_nDlgFlags;
@@ -52,7 +52,7 @@ private:
     DECL_LINK(DialogClosedHdl, void *);
 
 public:
-    DocumentInserter(const String& rFactory,
+    DocumentInserter(const OUString& rFactory,
                      bool const bEnableMultiSelection = false);
     ~DocumentInserter();
 
@@ -61,7 +61,7 @@ public:
     SfxMediumList*          CreateMediumList();
 
     inline ErrCode          GetError() const { return m_nError; }
-    inline String           GetFilter() const { return m_sFilter; }
+    inline OUString         GetFilter() const { return m_sFilter; }
 };
 
 } // namespace sfx2
