@@ -86,7 +86,7 @@ SfxMedium* DocumentInserter::CreateMedium()
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
         DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
-        String sURL(m_pURLList[0]);
+        OUString sURL(m_pURLList[0]);
         pMedium = new SfxMedium(
                 sURL, SFX_STREAM_READONLY,
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
@@ -197,7 +197,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                     short nRet = aPasswordDlg.Execute();
                     if ( RET_OK == nRet )
                     {
-                        String aPasswd = aPasswordDlg.GetPassword();
+                        OUString aPasswd = aPasswordDlg.GetPassword();
                         m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
                     }
                     else

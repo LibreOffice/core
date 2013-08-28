@@ -301,8 +301,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     aPrinter.getArray()[1].Value <<= eOrient;
 
     aPrinter.getArray()[0].Name = "Name";
-    String sStringTemp = pPrinter->GetName() ;
-    aPrinter.getArray()[0].Value <<= OUString( sStringTemp );
+    OUString sStringTemp = pPrinter->GetName() ;
+    aPrinter.getArray()[0].Value <<= sStringTemp;
 
     return aPrinter;
 }
@@ -475,13 +475,13 @@ class ImplUCBPrintWatcher : public ::osl::Thread
         /// of course we must know the printer which execute the job
         SfxPrinter* m_pPrinter;
         /// this describes the target location for the printed temp file
-        String m_sTargetURL;
+        OUString m_sTargetURL;
         /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
         ::utl::TempFile* m_pTempFile;
 
     public:
         /* initialize this watcher but don't start it */
-        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, const String& sTargetURL )
+        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, const OUString& sTargetURL )
                 : m_pPrinter  ( pPrinter   )
                 , m_sTargetURL( sTargetURL )
                 , m_pTempFile ( pTempFile  )
@@ -522,17 +522,17 @@ class ImplUCBPrintWatcher : public ::osl::Thread
            the thread, if finishing of the job was detected outside this thread.
            But it must be called without using a corresponding thread for the given parameter!
          */
-        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const String& sTargetURL )
+        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const OUString& sTargetURL )
         {
             // move the file
             try
             {
                 INetURLObject aSplitter(sTargetURL);
-                String        sFileName = aSplitter.getName(
+                OUString        sFileName = aSplitter.getName(
                                             INetURLObject::LAST_SEGMENT,
                                             true,
                                             INetURLObject::DECODE_WITH_CHARSET);
-                if (aSplitter.removeSegment() && sFileName.Len()>0)
+                if (aSplitter.removeSegment() && !sFileName.isEmpty())
                 {
                     ::ucbhelper::Content aSource(
                             OUString((*ppTempFile)->GetURL()),
@@ -604,7 +604,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // to the right location. But in case of no file name is given or it is already
     // a local one we can supress this special handling. Because then vcl makes all
     // right for us.
-    String sUcbUrl;
+    OUString sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;
 
     uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );

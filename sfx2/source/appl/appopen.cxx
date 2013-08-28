@@ -141,8 +141,8 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& ) thr
 
 //====================================================================
 
-void SetTemplate_Impl( const String &rFileName,
-                        const String &rLongName,
+void SetTemplate_Impl( const OUString &rFileName,
+                        const OUString &rLongName,
                         SfxObjectShell *pDoc)
 {
     // write TemplateName to DocumentProperties of document

@@ -123,8 +123,8 @@ using ::std::vector;
 class WaitWindow_Impl : public WorkWindow
 {
     Rectangle   _aRect;
-    sal_uInt16      _nTextStyle;
-    String      _aText;
+    sal_uInt16  _nTextStyle;
+    OUString    _aText;
 
     public:
                      WaitWindow_Impl();
@@ -546,7 +546,7 @@ void SfxDocTplService_Impl::getDirList()
     // Get the template dir list
     // TODO/LATER: let use service, register listener
     INetURLObject   aURL;
-    String          aDirs = SvtPathOptions().GetTemplatePath();
+    OUString    aDirs = SvtPathOptions().GetTemplatePath();
     sal_uInt16  nCount = comphelper::string::getTokenCount(aDirs, C_DELIM);
 
     maTemplateDirs = Sequence< OUString >( nCount );
@@ -558,7 +558,7 @@ void SfxDocTplService_Impl::getDirList()
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
+        aURL.SetURL( aDirs.getToken( i, C_DELIM ) );
         maTemplateDirs[i] = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
         sal_Int32 nIndex = maTemplateDirs[i].indexOf( aPrefix );
@@ -1891,7 +1891,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
              * if the old template was the standard template
              * it is necessary to change the standard template with the new file name
              */
-            String sStdTmplFile = SfxObjectFactory::GetStandardTemplate( sDocServiceName );
+            OUString sStdTmplFile = SfxObjectFactory::GetStandardTemplate( sDocServiceName );
             if ( INetURLObject( sStdTmplFile ) == INetURLObject( aTemplateToRemoveTargetURL ) )
             {
                 SfxObjectFactory::SetStandardTemplate( sDocServiceName, aNewTemplateTargetURL );

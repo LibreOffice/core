@@ -134,16 +134,16 @@ public:
                             const SfxOleTextEncoding& rTextEnc );
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
-                            const SfxOleTextEncoding& rTextEnc, const String& rValue );
+                            const SfxOleTextEncoding& rTextEnc, const OUString& rValue );
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
                             rtl_TextEncoding eTextEnc );
 
-    inline const String& GetValue() const { return maValue; }
-    inline void         SetValue( const String& rValue ) { maValue = rValue; }
+    inline const OUString& GetValue() const { return maValue; }
+    inline void            SetValue( const OUString& rValue ) { maValue = rValue; }
 
 private:
-    String              maValue;
+    OUString            maValue;
 };
 
 // ============================================================================
@@ -156,7 +156,7 @@ public:
                             sal_Int32 nPropId, const SfxOleTextEncoding& rTextEnc );
     explicit            SfxOleString8Property(
                             sal_Int32 nPropId, const SfxOleTextEncoding& rTextEnc,
-                            const String& rValue );
+                            const OUString& rValue );
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
@@ -325,7 +325,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
         ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
         rStrm.Read( &aBuffer.front(), static_cast< sal_Size >( nSize ) );
         // create string from encoded character array
-        aValue = String( &aBuffer.front(), GetTextEncoding() );
+        aValue = OUString( &aBuffer.front(), strlen( &aBuffer.front() ), GetTextEncoding() );
     }
     return aValue;
 }
@@ -504,7 +504,7 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(
 }
 
 SfxOleStringPropertyBase::SfxOleStringPropertyBase(
-        sal_Int32 nPropId, sal_Int32 nPropType, const SfxOleTextEncoding& rTextEnc, const String& rValue ) :
+        sal_Int32 nPropId, sal_Int32 nPropType, const SfxOleTextEncoding& rTextEnc, const OUString& rValue ) :
     SfxOlePropertyBase( nPropId, nPropType ),
     SfxOleStringHelper( rTextEnc ),
     maValue( rValue )
@@ -527,7 +527,7 @@ SfxOleString8Property::SfxOleString8Property(
 }
 
 SfxOleString8Property::SfxOleString8Property(
-        sal_Int32 nPropId, const SfxOleTextEncoding& rTextEnc, const String& rValue ) :
+        sal_Int32 nPropId, const SfxOleTextEncoding& rTextEnc, const OUString& rValue ) :
     SfxOleStringPropertyBase( nPropId, PROPTYPE_STRING8, rTextEnc, rValue )
 {
 }

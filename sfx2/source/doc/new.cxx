@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     if ( aPreviewBtn.IsChecked() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
     {
 
-        String aFileName = aTemplates.GetPath( aRegionLb.GetSelectEntryPos(), nEntry-1);
+        OUString aFileName = aTemplates.GetPath( aRegionLb.GetSelectEntryPos(), nEntry-1);
         INetURLObject aTestObj( aFileName );
         if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -284,11 +284,11 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
     aTemplateLb.SetUpdateMode(sal_False);
     aTemplateLb.Clear();
-    String aSel=aRegionLb.GetSelectEntry();
-    sal_uInt16 nc=aSel.Search('(');
-    if (nc-1&&nc!=STRING_NOTFOUND)
-        aSel.Erase(nc-1);
-    if (aSel.CompareIgnoreCaseToAscii( SfxResId(STR_STANDARD).toString() )==COMPARE_EQUAL)
+    OUString aSel = aRegionLb.GetSelectEntry();
+    sal_Int32 nc = aSel.indexOf('(');
+    if (nc != -1)
+        aSel = aSel.replaceAt(nc-1, 1, "");
+    if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD).toString() ) == 0 )
         aTemplateLb.InsertEntry(aNone);
     for (sal_uInt16 i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(aTemplates.GetName(nRegion, i));
@@ -371,15 +371,15 @@ IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
-    sal_uInt16 nEntry=aTemplateLb.GetSelectEntryPos();
-    String aSel=aRegionLb.GetSelectEntry();
-    sal_uInt16 nc=aSel.Search('(');
-    if (nc-1&&nc!=STRING_NOTFOUND)
-        aSel.Erase(nc-1);
-    if (aSel.CompareIgnoreCaseToAscii(SfxResId(STR_STANDARD).toString())!=COMPARE_EQUAL)
+    sal_uInt16 nEntry = aTemplateLb.GetSelectEntryPos();
+    OUString aSel = aRegionLb.GetSelectEntry();
+    sal_Int32 nc = aSel.indexOf('(');
+    if (nc!= -1)
+        aSel = aSel.replaceAt(nc-1, 1, "");
+    if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD).toString()) != 0 )
         nEntry++;
     if (!aTemplateLb.GetSelectEntryCount())
-        nEntry=0;
+        nEntry = 0;
     return nEntry;
 }
 

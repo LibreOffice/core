@@ -119,9 +119,9 @@ void SfxFilter::SetURLPattern( const OUString& rStr )
 
 OUString SfxFilter::GetSuffixes() const
 {
-    String aRet = GetWildcard().getGlob();
-    while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
-    while( aRet.SearchAndReplace( ';', ',' ) != STRING_NOTFOUND ) ;
+    OUString aRet = GetWildcard().getGlob();
+    aRet = aRet.replaceAll( "*.", "" );
+    aRet = aRet.replaceAll( ";", "," );
     return aRet;
 }
 

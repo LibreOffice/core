@@ -73,7 +73,7 @@ struct SfxObjectFactory_Impl
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
     sal_uInt16                  nImageId;
-    String                      aStandardTemplate;
+    OUString                    aStandardTemplate;
     sal_Bool                    bTemplateInitialized;
     SvGlobalName                aClassName;
 
@@ -107,22 +107,22 @@ SfxObjectFactory::SfxObjectFactory
     DBG_CTOR(SfxObjectFactory, 0);
     pImpl->pFilterContainer = new SfxFilterContainer( OUString::createFromAscii( pName ) );
 
-    String aShortName( OUString::createFromAscii( pShortName ) );
-    aShortName.ToLowerAscii();
+    OUString aShortName( OUString::createFromAscii( pShortName ) );
+    aShortName = aShortName.toAsciiLowerCase();
     pImpl->aClassName = rName;
-    if ( aShortName.EqualsAscii( "swriter" ) )
+    if ( aShortName == "swriter" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SW );
-    else if ( aShortName.EqualsAscii( "swriter/web" ) )
+    else if ( aShortName == "swriter/web" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWWEB );
-    else if ( aShortName.EqualsAscii( "swriter/globaldocument" ) )
+    else if ( aShortName == "swriter/globaldocument" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWGLOB );
-    else if ( aShortName.EqualsAscii( "scalc" ) )
+    else if ( aShortName == "scalc" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SC );
-    else if ( aShortName.EqualsAscii( "simpress" ) )
+    else if ( aShortName == "simpress" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SI );
-    else if ( aShortName.EqualsAscii( "sdraw" ) )
+    else if ( aShortName == "sdraw" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SD );
-    else if ( aShortName.EqualsAscii( "message" ) )
+    else if ( aShortName == "message" )
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 }
 
@@ -146,7 +146,7 @@ void SfxObjectFactory::RegisterViewFactory
 {
 #if OSL_DEBUG_LEVEL > 0
     {
-        const String sViewName( rFactory.GetAPIViewName() );
+        const OUString sViewName( rFactory.GetAPIViewName() );
         for ( SfxViewFactoryArr_Impl::const_iterator it = pImpl->aViewFactoryArr.begin(); it != pImpl->aViewFactoryArr.end(); ++it )
         {
             if ( (*it)->GetAPIViewName() != sViewName )
@@ -208,7 +208,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     static OUString DEF_TPL_STR("/soffice.");
 
     OUString sURL;
-    String      sPath;
+    OUString sPath;
     sal_Unicode aPathBuffer[nMaxPathSize];
     if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))
         sPath = OUString( aPathBuffer );
@@ -388,7 +388,7 @@ OUString SfxObjectFactory::GetModuleName() const
         OUString sDocService(GetDocumentServiceName());
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(sDocService) );
         OUString sModuleName = aPropSet.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
-        return String(sModuleName);
+        return sModuleName;
     }
     catch(const css::uno::RuntimeException&)
     {
@@ -398,7 +398,7 @@ OUString SfxObjectFactory::GetModuleName() const
     {
     }
 
-    return String();
+    return OUString();
 }
 
 

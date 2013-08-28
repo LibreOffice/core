@@ -568,7 +568,7 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
             throw uno::RuntimeException();
 
         if ( !pMedium )
-            pMedium = new SfxMedium( xStorage, String() );
+            pMedium = new SfxMedium( xStorage, OUString() );
         else
             pMedium->SetStorage_Impl( xStorage );
 
@@ -2559,7 +2559,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     if ( pSalvageItem )
     {
         SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False);
-        String aFilterName;
+        OUString aFilterName;
         const SfxFilter *pFilter = NULL;
         if ( pFilterItem )
             pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
@@ -2965,7 +2965,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
 
     if ( SvtSecurityOptions().IsOptionSet( eOption ) )
     {
-        String sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
+        OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
         sal_uInt16 nWantedStates = HIDDENINFORMATION_RECORDEDCHANGES | HIDDENINFORMATION_NOTES;
         if ( eFact != WhenPrinting )
             nWantedStates |= HIDDENINFORMATION_DOCUMENTVERSIONS;
@@ -2975,25 +2975,25 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Windo
         if ( ( nStates & HIDDENINFORMATION_RECORDEDCHANGES ) == HIDDENINFORMATION_RECORDEDCHANGES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES).toString();
-            sMessage += '\n';
+            sMessage += "\n";
             bWarning = true;
         }
         if ( ( nStates & HIDDENINFORMATION_NOTES ) == HIDDENINFORMATION_NOTES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_NOTES).toString();
-            sMessage += '\n';
+            sMessage += "\n";
             bWarning = true;
         }
         if ( ( nStates & HIDDENINFORMATION_DOCUMENTVERSIONS ) == HIDDENINFORMATION_DOCUMENTVERSIONS )
         {
             sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS).toString();
-            sMessage += '\n';
+            sMessage += "\n";
             bWarning = true;
         }
 
         if ( bWarning )
         {
-            sMessage += '\n';
+            sMessage += "\n";
             sMessage += SfxResId(nResId).toString();
             WarningBox aWBox( pParent, WB_YES_NO | WB_DEF_NO, sMessage );
             nRet = aWBox.Execute();

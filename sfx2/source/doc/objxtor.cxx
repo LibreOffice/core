@@ -982,20 +982,20 @@ Reference< XInterface > SfxObjectShell::GetCurrentComponent()
 OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
 {
     //! Remove everything behind name!
-    String aFact( rFact );
-    String aPrefix = OUString("private:factory/");
-    if ( aPrefix.Len() == aFact.Match( aPrefix ) )
-        aFact.Erase( 0, aPrefix.Len() );
-    sal_uInt16 nPos = aFact.Search( '?' );
-    String aParam;
-    if ( nPos != STRING_NOTFOUND )
+    OUString aFact( rFact );
+    OUString aPrefix("private:factory/");
+    if ( aFact.startsWith( aPrefix ) )
+        aFact = aFact.copy( aPrefix.getLength() );
+    sal_Int32 nPos = aFact.indexOf( '?' );
+    OUString aParam;
+    if ( nPos != -1 )
     {
-        aParam = aFact.Copy( nPos, aFact.Len() );
-        aFact.Erase( nPos, aFact.Len() );
-        aParam.Erase(0,1);
+        aParam = aFact.copy( nPos );
+        aFact = aFact.copy( 0, nPos );
+        aParam = aParam.copy(1);
     }
     aFact = comphelper::string::remove(aFact, '4');
-    aFact.ToLowerAscii();
+    aFact = aFact.toAsciiLowerCase();
 
     // HACK: sometimes a real document service name is given here instead of
     // a factory short name. Set return value directly to this service name as fallback
@@ -1003,48 +1003,48 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
     // use rFact instead of normed aFact value !
     OUString aServiceName = rFact;
 
-    if ( aFact.EqualsAscii("swriter") )
+    if ( aFact == "swriter" )
     {
-        aServiceName = OUString("com.sun.star.text.TextDocument");
+        aServiceName = "com.sun.star.text.TextDocument";
     }
-    else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
+    else if ( aFact == "sweb" || aFact == "swriter/web" )
     {
-        aServiceName = OUString("com.sun.star.text.WebDocument");
+        aServiceName = "com.sun.star.text.WebDocument";
     }
-    else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
+    else if ( aFact == "sglobal" || aFact == "swriter/globaldocument" )
     {
-        aServiceName = OUString("com.sun.star.text.GlobalDocument");
+        aServiceName = "com.sun.star.text.GlobalDocument";
     }
-    else if ( aFact.EqualsAscii("scalc") )
+    else if ( aFact == "scalc" )
     {
-        aServiceName = OUString("com.sun.star.sheet.SpreadsheetDocument");
+        aServiceName = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    else if ( aFact.EqualsAscii("sdraw") )
+    else if ( aFact == "sdraw" )
     {
-        aServiceName = OUString("com.sun.star.drawing.DrawingDocument");
+        aServiceName = "com.sun.star.drawing.DrawingDocument";
     }
-    else if ( aFact.EqualsAscii("simpress") )
+    else if ( aFact == "simpress" )
     {
-        aServiceName = OUString("com.sun.star.presentation.PresentationDocument");
+        aServiceName = "com.sun.star.presentation.PresentationDocument";
     }
-    else if ( aFact.EqualsAscii("schart") )
+    else if ( aFact == "schart" )
     {
-        aServiceName = OUString("com.sun.star.chart.ChartDocument");
+        aServiceName = "com.sun.star.chart.ChartDocument";
     }
-    else if ( aFact.EqualsAscii("smath") )
+    else if ( aFact == "smath" )
     {
-        aServiceName = OUString("com.sun.star.formula.FormulaProperties");
+        aServiceName = "com.sun.star.formula.FormulaProperties";
     }
 #ifndef DISABLE_SCRIPTING
-    else if ( aFact.EqualsAscii("sbasic") )
+    else if ( aFact == "sbasic" )
     {
-        aServiceName = OUString("com.sun.star.script.BasicIDE");
+        aServiceName = "com.sun.star.script.BasicIDE";
     }
 #endif
 #ifndef DISABLE_DBCONNECTIVITY
-    else if ( aFact.EqualsAscii("sdatabase") )
+    else if ( aFact == "sdatabase" )
     {
-        aServiceName = OUString("com.sun.star.sdb.OfficeDatabaseDocument");
+        aServiceName = "com.sun.star.sdb.OfficeDatabaseDocument";
     }
 #endif
 

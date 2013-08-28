@@ -113,17 +113,17 @@ using namespace ::com::sun::star::task;
 
 class SfxSaveAsContext_Impl
 {
-    String&     _rNewNameVar;
-    String      _aNewName;
+    OUString&     _rNewNameVar;
+    OUString      _aNewName;
 
 public:
-                SfxSaveAsContext_Impl( String &rNewNameVar,
-                                       const String &rNewName )
+                SfxSaveAsContext_Impl( OUString &rNewNameVar,
+                                       const OUString &rNewName )
                 :   _rNewNameVar( rNewNameVar ),
                     _aNewName( rNewName )
                 { rNewNameVar = rNewName; }
                 ~SfxSaveAsContext_Impl()
-                { _rNewNameVar.Erase(); }
+                { _rNewNameVar = ""; }
 };
 
 //====================================================================
@@ -295,7 +295,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
 
     if ( GetMedium() )
     {
-        String aFilterName;
+        OUString aFilterName;
         SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
         {
@@ -313,7 +313,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         }
 
         // in case no filter defined use default one
-        if( !aFilterName.Len() )
+        if( aFilterName.isEmpty() )
         {
             const SfxFilter* pFilt = SfxFilter::GetDefaultFilterFromFactory(GetFactory().GetFactoryName());
 
@@ -478,7 +478,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     bReadOnly = pROItem->GetValue();
 
                 // collect data for dialog
-                String aURL, aTitle;
+                OUString aURL, aTitle;
                 if ( HasName() )
                 {
                     aURL = GetMedium()->GetName();
@@ -1258,8 +1258,8 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
                 pFrame->ExecuteSlot( rReq );
             else
             {
-                String aFileName( GetObjectShell()->GetMedium()->GetName() );
-                if ( aFileName.Len() )
+                OUString aFileName( GetObjectShell()->GetMedium()->GetName() );
+                if ( !aFileName.isEmpty() )
                 {
                     SfxStringItem aName( SID_FILE_NAME, aFileName );
                     SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, sal_True );

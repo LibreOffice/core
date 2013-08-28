@@ -746,9 +746,9 @@ sal_Bool SfxMedium::IsPreview_Impl()
         SFX_ITEMSET_ARG( GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, false);
         if ( pFlags )
         {
-            String aFileFlags = pFlags->GetValue();
-            aFileFlags.ToUpperAscii();
-            if ( STRING_NOTFOUND != aFileFlags.Search( 'B' ) )
+            OUString aFileFlags = pFlags->GetValue();
+            aFileFlags = aFileFlags.toAsciiUpperCase();
+            if ( -1 != aFileFlags.indexOf( 'B' ) )
                 bPreview = true;
         }
     }
@@ -965,7 +965,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
 
 namespace
 {
-    bool isSuitableProtocolForLocking(const String & rLogicName)
+    bool isSuitableProtocolForLocking(const OUString & rLogicName)
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
@@ -1047,7 +1047,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                 {
                     // the file is not readonly, check the ACL
 
-                    String aPhysPath;
+                    OUString aPhysPath;
                     if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
                         bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
                 }
@@ -1357,7 +1357,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                 {
                     // Unpack Stream  in TempDir
                     ::utl::TempFile aTempFile;
-                    String          aTmpName = aTempFile.GetURL();
+                    OUString          aTmpName = aTempFile.GetURL();
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
                     *pStream >> aTmpStream;
@@ -2161,8 +2161,8 @@ void SfxMedium::DoBackup_Impl()
     bool        bSuccess = false;
 
     // get path for backups
-    String aBakDir = SvtPathOptions().GetBackupPath();
-    if( aBakDir.Len() )
+    OUString aBakDir = SvtPathOptions().GetBackupPath();
+    if( !aBakDir.isEmpty() )
     {
         // create content for the parent folder ( = backup folder )
         ::ucbhelper::Content  aContent;
@@ -2173,7 +2173,7 @@ void SfxMedium::DoBackup_Impl()
             INetURLObject aDest( aBakDir );
             aDest.insertName( aSource.getName() );
             aDest.setExtension( "bak" );
-            String aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
             // create a content for the source file
             ::ucbhelper::Content aSourceContent;
@@ -3621,7 +3621,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 // TODO/LATER: reuse the pImp->pTempFile if it already exists
                 CanDisposeStorage_Impl( false );
                 Close();
-                SetPhysicalName_Impl( String() );
+                SetPhysicalName_Impl( OUString() );
                 SetName( aNewURL );
 
                 // remove the readonly state
@@ -3652,7 +3652,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 if ( aResult.isEmpty() )
                 {
                     Close();
-                    SetPhysicalName_Impl( String() );
+                    SetPhysicalName_Impl( OUString() );
                     SetName( aOrigURL );
                     if ( bWasReadonly )
                     {
@@ -3686,7 +3686,7 @@ sal_Bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
             // TODO/LATER: reuse the pImp->pTempFile if it already exists
             CanDisposeStorage_Impl( false );
             Close();
-            SetPhysicalName_Impl( String() );
+            SetPhysicalName_Impl( OUString() );
             SetName( aURL );
 
             // open the temporary file based document
@@ -3714,7 +3714,7 @@ sal_Bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
             if ( !bResult )
             {
                 Close();
-                SetPhysicalName_Impl( String() );
+                SetPhysicalName_Impl( OUString() );
                 SetName( aOrigURL );
                 GetMedium_Impl();
                 pImp->xStorage = xStorage;

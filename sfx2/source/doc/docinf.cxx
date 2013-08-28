@@ -53,7 +53,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
     // load the property set
     SfxOlePropertySet aGlobSet;
     ErrCode nGlobError = aGlobSet.LoadPropertySet(i_pStorage,
-        String( STREAM_SUMMARYINFO  ) );
+        OUString( STREAM_SUMMARYINFO  ) );
 
     // global section
     SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
@@ -134,7 +134,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
     // load the property set
     SfxOlePropertySet aDocSet;
     ErrCode nDocError = aDocSet.LoadPropertySet(i_pStorage,
-        String( STREAM_DOCSUMMARYINFO  ) );
+        OUString( STREAM_DOCSUMMARYINFO  ) );
 
     // custom properties
     SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
@@ -205,7 +205,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     SfxOleSection& rGlobSect = aGlobSet.AddSection( SECTION_GLOBAL );
     rGlobSect.SetStringValue( PROPID_TITLE,    i_xDocProps->getTitle() );
     rGlobSect.SetStringValue( PROPID_SUBJECT,  i_xDocProps->getSubject() );
-    String aStr = ::comphelper::string::convertCommaSeparated(
+    OUString aStr = ::comphelper::string::convertCommaSeparated(
         i_xDocProps->getKeywords() );
     rGlobSect.SetStringValue( PROPID_KEYWORDS, aStr );
     rGlobSect.SetStringValue( PROPID_TEMPLATE, i_xDocProps->getTemplateName() );
@@ -295,7 +295,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
 
     // save the property set
     ErrCode nDocError = aDocSet.SavePropertySet(i_pStorage,
-        String( STREAM_DOCSUMMARYINFO  ) );
+        OUString( STREAM_DOCSUMMARYINFO  ) );
 
     // return code
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);

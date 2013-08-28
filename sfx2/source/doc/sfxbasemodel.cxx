@@ -1122,8 +1122,8 @@ void SAL_CALL SfxBaseModel::connectController( const Reference< frame::XControll
         SfxViewFrame* pViewFrame = SfxViewFrame::Get( xController, GetObjectShell() );
         ENSURE_OR_THROW( pViewFrame, "SFX document without SFX view!?" );
         pViewFrame->UpdateDocument_Impl();
-        const String sDocumentURL = GetObjectShell()->GetMedium()->GetName();
-        if ( sDocumentURL.Len() )
+        const OUString sDocumentURL = GetObjectShell()->GetMedium()->GetName();
+        if ( !sDocumentURL.isEmpty() )
             SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
     }
 }
@@ -1868,7 +1868,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         return;
     }
 
-    String aFilterName;
+    OUString aFilterName;
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
     if( pFilterNameItem )
         aFilterName = pFilterNameItem->GetValue();
@@ -1995,7 +1995,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
-                aDesc.maDisplayName = String();
+                aDesc.maDisplayName = "";
                 aDesc.mbCanLink = sal_False;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
@@ -2376,7 +2376,7 @@ Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDia
     SfxModelGuard aGuard( *this );
 
     if ( m_pData->m_pObjectShell )
-        return m_pData->m_pObjectShell->AdjustMacroMode( String(), false );
+        return m_pData->m_pObjectShell->AdjustMacroMode( OUString(), false );
     return sal_False;
 }
 
@@ -3011,7 +3011,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                                 m_pData->m_pObjectShell ) );
 
         SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
-        aParams->Put( SfxStringItem( SID_FILE_NAME, String(sURL) ) );
+        aParams->Put( SfxStringItem( SID_FILE_NAME, sURL ) );
         if ( bSaveTo )
             aParams->Put( SfxBoolItem( SID_SAVETO, sal_True ) );
 
@@ -3720,7 +3720,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     SfxAllItemSet aSet( SFX_APP()->GetPool() );
 
     // the BaseURL is part of the ItemSet
-    SfxMedium* pMedium = new SfxMedium( xStorage, String() );
+    SfxMedium* pMedium = new SfxMedium( xStorage, OUString() );
     TransformParameters( SID_OPENDOC, aMediaDescriptor, aSet );
     pMedium->GetItemSet()->Put( aSet );
 
@@ -3764,7 +3764,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     sal_Int32 nVersion = SOFFICE_FILEFORMAT_CURRENT;
     if( pItem )
     {
-        String aFilterName = pItem->GetValue();
+        OUString aFilterName = pItem->GetValue();
         const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
         if ( pFilter && pFilter->UsesStorage() )
             nVersion = pFilter->GetVersion();
@@ -3783,7 +3783,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, sal_False, false );
 
         // BaseURL is part of the ItemSet
-        SfxMedium aMedium( xStorage, String(), &aSet );
+        SfxMedium aMedium( xStorage, OUString(), &aSet );
         aMedium.CanDisposeStorage_Impl( sal_False );
         if ( aMedium.GetFilter() )
         {

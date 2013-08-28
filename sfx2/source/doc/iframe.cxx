@@ -210,7 +210,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
     {
         OUString aURL;
         aAny >>= aURL;
-        maFrmDescr.SetURL( String(aURL) );
+        maFrmDescr.SetURL( aURL );
     }
     break;
     case WID_FRAME_NAME:
