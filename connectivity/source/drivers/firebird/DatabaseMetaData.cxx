@@ -949,7 +949,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[15] = new ORowSetValueDecorator(sal_Int16(7)); // Max scale
         aResults.push_back(aRow);
         // SQL_DOUBLE
-        aRow[1] = new ORowSetValueDecorator(OUString("REAL"));
+        aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE PRECISION"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_DOUBLE));
         aRow[3] = new ORowSetValueDecorator(sal_Int16(15)); // Precision
         aRow[14] = new ORowSetValueDecorator(sal_Int16(1)); // Minimum scale
