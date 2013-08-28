@@ -46,6 +46,7 @@
 #include <cellatr.hxx>
 #include <mvsave.hxx>
 #include <swtblfmt.hxx>
+#include <tblafmt.hxx>
 #include <swddetbl.hxx>
 #include <poolfmt.hxx>
 #include <tblrwcl.hxx>
@@ -2152,10 +2153,15 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pInsDoc->CopyTxtColl( *pSrcDoc->GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
+    SwTableFmt* pStyle = (SwTableFmt*)GetTableFmt()->GetRegisteredIn();
+    SwTableAutoFmt* pAutoFmt = 0;
+    if( pStyle )
+        pAutoFmt = new SwTableAutoFmt( pStyle->GetName(), pStyle );
+
     SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
-            0, 0, sal_False, IsNewModel() );
+            pAutoFmt, 0, sal_False, IsNewModel() );
     if( !pNewTbl )
         return false;
 
