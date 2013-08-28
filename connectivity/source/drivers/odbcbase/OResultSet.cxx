@@ -413,7 +413,7 @@ void OResultSet::ensureCacheForColumn(sal_Int32 columnIndex)
         return;
 
     m_aRow.resize(columnIndex + 1);
-    TDataRow::iterator i (m_aRow.begin() + uColumnIndex);
+    TDataRow::iterator i (m_aRow.begin() + oldCacheSize);
     const TDataRow::const_iterator end(m_aRow.end());
     for (; i != end; ++i)
     {
