@@ -27,7 +27,7 @@
 namespace sfx2
 {
 
-QueryTemplateBox::QueryTemplateBox( Window* pParent, const String& rMessage ) :
+QueryTemplateBox::QueryTemplateBox( Window* pParent, const OUString& rMessage ) :
     MessBox ( pParent, 0, Application::GetDisplayName(), rMessage )
 {
     SetImage( QueryBox::GetStandardImage() );

@@ -27,7 +27,7 @@ namespace sfx2
     class QueryTemplateBox : public MessBox
     {
     public:
-        QueryTemplateBox( Window* pParent, const String& rMessage );
+        QueryTemplateBox( Window* pParent, const OUString& rMessage );
     };
 
 } // end of namespace sfx2
