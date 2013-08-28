@@ -90,8 +90,6 @@ public class ScAccessiblePageHeader extends TestCase {
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
-        XInterface oObj = null;
-
         // inserting some content to have non-empty page preview
         XCell xCell = null;
         try {
@@ -137,20 +135,28 @@ public class ScAccessiblePageHeader extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
-
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.HEADER, "");
-
-        log.println("ImplementationName " + utils.getImplName(oObj));
-        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+        XInterface oObj = null;
+        for (;;) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+            if (xRoot != null) {
+                oObj = AccessibilityTools.getAccessibleObjectForRole
+                    (xRoot, AccessibleRole.HEADER, "");
+                if (oObj != null) {
+                    log.println("ImplementationName " + utils.getImplName(oObj));
+                    AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+                    break;
+                }
+            }
+            log.println("No HEADER found yet, retrying");
+        }
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
