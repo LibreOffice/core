@@ -1577,7 +1577,7 @@ void OResultSet::fillColumn(const sal_Int32 _nColumn)
     }
 
     TDataRow::iterator pColumn      = m_aRow.begin() + curCol;
-    TDataRow::iterator pColumnEnd   = m_aRow.begin() + _nColumn + 1;
+    const TDataRow::const_iterator pColumnEnd   = m_aRow.begin() + _nColumn + 1;
 
     if(curCol==0)
     {
