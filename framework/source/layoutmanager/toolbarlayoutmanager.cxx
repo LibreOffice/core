@@ -2269,7 +2269,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
             }
         }
 
-        if ( nSpace > 0 )
+/*        if ( nSpace > 0 )
         {
             sal_Int32 nMove = std::min( nSpace, static_cast<sal_Int32>(aFrontDockingRect.getWidth()) );
             if ( bHorzDockArea )
@@ -2277,8 +2277,131 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
             else
                 aFrontDockingRect.Move( 0, -nMove );
         }
+ - elixir
+*/
 
         return aFrontDockingRect;
+    }
+}
+
+void ToolbarLayoutManager::implts_reAlignToolbarsIfRequired(
+    ui::DockingArea     eDockingArea,
+    sal_Int32           nCurrentRow,
+    sal_Int32           nRowCol,
+    const ::Size&       rContainerWinSize,
+    UIElement&          rUIElement,
+    ::Rectangle&        rTrackingRect,
+    const ::Rectangle&  rRowColumnRect,
+    SingleRowColumnWindowData& rRowColumnsWindowData)
+{
+    sal_Int32 nPosX( std::max( sal_Int32( rTrackingRect.Left()), sal_Int32( 0 )));
+
+    if (( nPosX + rTrackingRect.getWidth()) > rContainerWinSize.Width() )
+        nPosX = std::min( nPosX,
+                            std::max( sal_Int32( rContainerWinSize.Width() - rTrackingRect.getWidth() ),
+                                      sal_Int32( 0 )));
+
+    sal_Int32 nSize = std::min( rContainerWinSize.Width(), rTrackingRect.getWidth() );
+    ::Rectangle aTrackingRect( rTrackingRect );
+
+    aTrackingRect.SetPos( ::Point( nPosX, rRowColumnRect.Top()) );
+    aTrackingRect.setWidth( nSize );
+    aTrackingRect.setHeight( rRowColumnRect.getHeight() );
+
+    // We want to keep track of the row from where the toolbar is getting docked
+
+    // static bool_Sal isOldRowColSet (false);
+    static sal_Int32 nOldRowCol = nRowCol;
+    static sal_Int32 nNewRowCol = nRowCol;
+
+    if ( nRowCol != nNewRowCol )
+    {
+        // isOldRowColSet = true;
+        nOldRowCol = nNewRowCol;
+        nNewRowCol = nRowCol;
+    }
+/*
+    if ( isOldRowColSet && ( nOldRowCol != nRowCol ) )
+    {
+        isOldRowColSet = false;
+    }
+
+    sal_Bool bIsOldRowSet (false);
+
+    if( !IsOldRowSet && ( nOldRow != nCurrentRow ) )
+    {
+        bIsOldRowSet = true;
+    }
+*/
+
+    sal_uInt32 nCount = rRowColumnsWindowData.aRowColumnWindows.size();
+
+    if ( rRowColumnsWindowData.aRowColumnWindows.empty() )
+        return ;
+    else if ( nCount == 1 )     // one toolbar already on this current row
+    {
+        if ( rUIElement.m_aName == rRowColumnsWindowData.aUIElementNames[0] )      // trying to dock same toolbar on same line
+            rUIElement.m_aDockedData.m_aPos.X = 0;
+        else
+            // append this new toolbar as right-aligned
+            rUIElement.m_aDockedData.m_aPos.X = ( rContainerWinSize.Width() - rTrackingRect.getWidth() );
+
+        rRowColumnsWindowData.aRowColumnWindowSizes[0].X = 0;
+        return;
+    }
+    else if ( nCount > 1 )
+    {
+        sal_Int32 nBlankSpaces = nCount;
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
+        {
+            if ( rUIElement.m_aName == rRowColumnsWindowData.aUIElementNames[i] )      // trying to dock same toolbar on same line
+                nBlankSpaces -= 1;
+        }
+
+        sal_Int32 nOccupiedRowSpace( 0 );   // the space which is occupied by toolbars, in the current row
+        sal_Int32 nLeftSpace( 0 );          // the remaining space to be utilized
+        sal_Bool  isToolbarAlreadyPresent( false );
+
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
+        {
+            nOccupiedRowSpace += rRowColumnsWindowData.aRowColumnWindowSizes[i].Width ;
+            if ( rUIElement.m_aName == rRowColumnsWindowData.aUIElementNames[i] )
+                isToolbarAlreadyPresent = true;
+        }
+
+        // Also add the width of toolbar which is getting appended,
+        // if the toolbar was not already present on the same line
+        if (!isToolbarAlreadyPresent)
+            nOccupiedRowSpace += rTrackingRect.getWidth();
+
+
+        nLeftSpace = rContainerWinSize.Width() - nOccupiedRowSpace ;
+        sal_Int32 nUniformSpace( 0 );       // the uniform distance to be set between two toolbars
+
+        if( nLeftSpace > 0 )                // i.e. the objects in a row are not overflowing
+        {
+            nUniformSpace = nLeftSpace / nBlankSpaces ; // a new toolbar would be appended
+        }
+
+        sal_Int32 nLastItemEndPos( rContainerWinSize.Width() );
+        sal_Bool bTrackingToolbarPositionSet( false );
+
+        for ( sal_Int32 i = nCount-1; i >= 0; i-- )
+        {
+            if ( !bTrackingToolbarPositionSet && ( nPosX > rRowColumnsWindowData.aRowColumnWindowSizes[i].X ) )
+            {
+                rUIElement.m_aDockedData.m_aPos.X = ::std::max( sal_Int32( 0 ), ( nLastItemEndPos - rTrackingRect.getWidth() ) );
+                bTrackingToolbarPositionSet = true;
+                nLastItemEndPos -= ( rTrackingRect.getWidth() + nUniformSpace );
+            }
+            if ( bTrackingToolbarPositionSet || ( nPosX < rRowColumnsWindowData.aRowColumnWindowSizes[i].X ) )
+            {
+                rRowColumnsWindowData.aRowColumnWindowSizes[i].X = ::std::max( sal_Int32( 0 ),( nLastItemEndPos - rRowColumnsWindowData.aRowColumnWindowSizes[i].Width ) ) ;
+                nLastItemEndPos -= ( rRowColumnsWindowData.aRowColumnWindowSizes[i].Width + nUniformSpace ) ;
+            }
+        }
+
+        return;
     }
 }
 
@@ -2467,8 +2590,8 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                 if ( isHorizontalDockingArea( nDockingArea ))
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_uInt32 j = i; j < nCount ; j++ )
-                        rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff;
+                    // for ( sal_uInt32 j = i; j < nCount ; j++ )
+                    //     rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff; - elixir
                 }
                 else
                 {
@@ -2485,8 +2608,8 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                 if ( isHorizontalDockingArea( nDockingArea ))
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_uInt32 j = i; j < nCount; j++ )
-                        rRowColumnWindowData.aRowColumnWindowSizes[j].X -= nSpace;
+                    // for ( sal_uInt32 j = i; j < nCount; j++ )
+                        // rRowColumnWindowData.aRowColumnWindowSizes[j].X -= nSpace; - elixir
                 }
                 else
                 {
@@ -2535,8 +2658,8 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
                     }
 
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_uInt32 j = i; j < nCount; j++ )
-                        rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff;
+                    // for ( sal_uInt32 j = i; j < nCount; j++ )
+                       // rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff; - elixir
                 }
                 else
                 {
@@ -2845,6 +2968,8 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                     rTrackingRect = implts_calcTrackingAndElementRect(
                                         eDockedArea, nRowCol, rUIElement,
                                         aTrackingRect, aRowColumnRect, aContainerWinSize );
+                    if( isHorizontalDockingArea( eDockedArea ) )
+                        implts_reAlignToolbarsIfRequired( eDockedArea, nIndex, nRowCol, aContainerWinSize, rUIElement,  rTrackingRect, aRowColumnRect, aRowColumnsWindowData[nIndex] );
                     return;
                 }
             }
@@ -2852,7 +2977,9 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
             {
                 if ((( nRowCol == nMinRowCol ) && ( rDockingOperation == DOCKOP_BEFORE_COLROW )) ||
                     (( nRowCol == nMaxRowCol ) && ( rDockingOperation == DOCKOP_AFTER_COLROW  )))
-                    bOpOutsideOfDockingArea = true;
+                    {
+                        bOpOutsideOfDockingArea = true;
+                    }
                 else
                 {
                     // handle docking before/after a row
@@ -2895,7 +3022,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                     if ( bHorizontalDockArea )
                         rUIElement.m_aDockedData.m_aPos.Y = nRowCol;
                     else
-                        rUIElement.m_aDockedData.m_aPos.X = nRowCol;
+                        rUIElement.m_aDockedData.m_aPos.X = 0 /* nRowCol */;
 
                     rTrackingRect.Move( nOffsetX, nOffsetY );
                     rTrackingRect.SetSize( aTrackingRect.GetSize() );
@@ -2927,7 +3054,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
                 sal_Int32 nPosY( std::max( aDockingAreaRect.Top(), aDockingAreaRect.Bottom() ));
                 if ( eDockedArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
                     nPosY -= rTrackingRect.getHeight();
-                rTrackingRect.SetPos( Point( nPosX, nPosY ));
+                // rTrackingRect.SetPos( Point( nPosX, nPosY ));
                 rUIElement.m_aDockedData.m_aPos.Y = 0;
             }
             else if ( rMousePos.Y() < ( aDockingAreaRect.Top() + ( nDockHeight / 2 )))
@@ -2950,12 +3077,13 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
             }
             rTrackingRect.setWidth( nSize );
 
-            {
+/*            {
                 SolarMutexGuard aGuard;
                 nPosX = pDockingAreaWindow->ScreenToOutputPixel(
                                     pContainerWindow->OutputToScreenPixel( rTrackingRect.TopLeft() )).X();
             }
-            rUIElement.m_aDockedData.m_aPos.X = nPosX;
+*/
+            rUIElement.m_aDockedData.m_aPos.X = 0 /* nPosX */;
         }
         else
         {
@@ -3051,7 +3179,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     UIElement& rUIElement,
     const ::Rectangle& rTrackingRect,
     const ::Rectangle& rRowColumnRect,
-    const ::Size& rContainerWinSize )
+    const ::Size& rContainerWinSize)
 {
     ReadGuard aReadGuard( m_aLock );
     ::Rectangle aDockingAreaOffsets( m_aDockingAreaOffsets );
@@ -3072,6 +3200,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     if ( bHorizontalDockArea )
     {
         sal_Int32 nPosX( std::max( sal_Int32( rTrackingRect.Left()), sal_Int32( 0 )));
+
         if (( nPosX + rTrackingRect.getWidth()) > rContainerWinSize.Width() )
             nPosX = std::min( nPosX,
                                 std::max( sal_Int32( rContainerWinSize.Width() - rTrackingRect.getWidth() ),
@@ -3084,7 +3213,7 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
         aTrackingRect.setHeight( rRowColumnRect.getHeight() );
 
         // Set virtual position
-        rUIElement.m_aDockedData.m_aPos.X = nPosX;
+        // rUIElement.m_aDockedData.m_aPos.X = nPosX;
         rUIElement.m_aDockedData.m_aPos.Y = nRowCol;
     }
     else
@@ -3462,7 +3591,6 @@ throw (uno::RuntimeException)
 
                 ::Rectangle aNewDockingRect( aTrackingRect );
 
-
                 implts_calcDockingPosSize( aUIDockingElement, eDockingOperation, aNewDockingRect, aMousePos );
 
                 ::Point aScreenPos = pContainerWindow->OutputToScreenPixel( aNewDockingRect.TopLeft() );
@@ -3514,8 +3642,6 @@ throw (uno::RuntimeException)
             if ( !aDockingData.bFloating )
             {
                 m_aDockUIElement.m_aDockedData = aUIDockingElement.m_aDockedData;
-
-
                 m_eDockOperation               = eDockingOperation;
             }
             else

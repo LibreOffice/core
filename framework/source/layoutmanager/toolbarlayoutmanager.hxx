@@ -254,6 +254,14 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
                                                            const ::Rectangle& rDockedElementRect,
                                                            const OUString& rMovedElementName,
                                                            const ::Rectangle& rMovedElementRect );
+        void             implts_reAlignToolbarsIfRequired( ::com::sun::star::ui::DockingArea eDockingArea,
+                                                           sal_Int32 nCurrentRow,
+                                                           sal_Int32 nRowCol,
+                                                           const ::Size& rContainerWinSize,
+                                                           UIElement& rUIElement,
+                                                           ::Rectangle& rTrackingRect,
+                                                           const ::Rectangle&  rRowColumnRect,
+                                                           SingleRowColumnWindowData& rRowColumnsWindowData );
         ::Rectangle      implts_calcTrackingAndElementRect( ::com::sun::star::ui::DockingArea eDockingArea,
                                                             sal_Int32 nRowCol,
                                                             UIElement& rUIElement,
