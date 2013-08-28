@@ -1206,7 +1206,6 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  Runtim
         if(m_nUseBookmarks == SQL_UB_OFF)
             throw SQLException();
 
-        fillColumn(0);
         Sequence<sal_Int8> bookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
         m_aPosToBookmarks[bookmark] = m_nRowPos;
         OSL_ENSURE(bookmark.getLength(),"Invalid bookmark from length 0!");
