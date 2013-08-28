@@ -3230,10 +3230,22 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
                FSNS( XML_w, XML_offsetFrom ), bExportDistanceFromPageEdge ? "page" : "text",
                FSEND );
 
-        m_pSerializer->mark();
+        OutputBorderOptions aOutputBorderOptions = lcl_getBoxBorderOptions();
+
+        // Check if the distance is larger than 31 points
+        aOutputBorderOptions.bCheckDistanceSize = true;
+
+        // Check if there is a shadow item
+        const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
+        if ( pItem )
+        {
+            const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
+            aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
+        }
+
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
 
         m_pSerializer->endElementNS( XML_w, XML_pgBorders );
-        m_pSerializer->mark();
     }
 }
 
@@ -5177,21 +5189,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
     }
 
-
-    if ( m_bOpenedSectPr && GetWritingHeaderFooter() == false)
-    {
-        // Inside a section
-
-        // Check if the distance is larger than 31 points
-        aOutputBorderOptions.bCheckDistanceSize = true;
-
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins );
-
-        // Special handling for pgBorder
-        m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
-        m_pSerializer->mergeTopMarks( );
-    }
-    else
+    if ( !m_bOpenedSectPr || GetWritingHeaderFooter())
     {
         // Not inside a section
 
