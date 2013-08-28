@@ -80,6 +80,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getScript() == "Latn" );
         CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de-Latn" );
 #endif
+        CPPUNIT_ASSERT( de_DE.makeFallback().getBcp47() == "de-DE");
     }
 
     {
@@ -171,6 +172,12 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[1] == "ca-valencia");
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[2] == "ca-ES");
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[3] == "ca");
+        /* TODO: conversion doesn't know this yet, once it does activate test. */
+#if 0
+        CPPUNIT_ASSERT( ca_ES_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
+#else
+        CPPUNIT_ASSERT( ca_ES_valencia.makeFallback().getBcp47() == "ca-ES");
+#endif
     }
 
     {
@@ -193,6 +200,12 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia_Fallbacks.size() == 2);
         CPPUNIT_ASSERT( ca_valencia_Fallbacks[0] == "ca-valencia");
         CPPUNIT_ASSERT( ca_valencia_Fallbacks[1] == "ca");
+        /* TODO: conversion doesn't know this yet, once it does activate test. */
+#if 0
+        CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
+#else
+        CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES");
+#endif
     }
 
     {
