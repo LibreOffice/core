@@ -143,7 +143,7 @@ struct SwCrsrMoveState
     sal_Bool bRealWidth;            ///< Calculation of the width required
     sal_Bool b2Lines;               ///< Check 2line portions and fill p2Lines
     sal_Bool bNoScroll;             ///< No scrolling of undersized textframes
-    sal_Bool bPosMatchesBounds;     /**< GetCrsrOfst should not return the next
+    bool bPosMatchesBounds;         /**< GetCrsrOfst should not return the next
                                        position if screen position is inside second
                                        have of bound rect */
 
