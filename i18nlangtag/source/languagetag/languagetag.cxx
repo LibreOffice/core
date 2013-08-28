@@ -1175,6 +1175,9 @@ LanguageTag & LanguageTag::makeFallback()
                         break;  // for, success
                 }
             }
+            SAL_INFO( "i18nlangtag", "LanguageTag::makeFallback - for (" <<
+                    rLocale1.Language << "," << rLocale1.Country << "," << rLocale1.Variant << ") to (" <<
+                    aLocale2.Language << "," << aLocale2.Country << "," << aLocale2.Variant << ")");
             reset( aLocale2);
         }
         mbIsFallback = true;
