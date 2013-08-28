@@ -20,7 +20,6 @@
 #include "osl/module.h"
 #include "osl/process.h"
 
-#include "rtl/ustrbuf.hxx"
 #include "rtl/bootstrap.hxx"
 
 #include "salinst.hxx"
@@ -50,11 +49,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
     {
         return NULL;
     }
-    OUStringBuffer aModName( 128 );
-    aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
-    aModName.append( rModuleBase );
-    aModName.appendAscii( SAL_DLLPOSTFIX );
-    OUString aModule = aModName.makeStringAndClear();
+    OUString aModule(SAL_DLLPREFIX "vclplug_" + rModuleBase + SAL_DLLPOSTFIX);
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
@@ -65,11 +60,9 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         if( aProc )
         {
             pInst = aProc( aMod );
-#if OSL_DEBUG_LEVEL > 1
-            std::fprintf( stderr, "sal plugin %s produced instance %p\n",
-                     OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                     pInst );
-#endif
+            SAL_INFO(
+                "vcl.plugadapt",
+                "sal plugin " << aModule << " produced instance " << pInst);
             if( pInst )
             {
                 pCloseModule = aMod;
@@ -81,7 +74,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  * #i109007# KDE3 seems to have the same problem.
-		 * And same applies for KDE4.
+                 * And same applies for KDE4.
                  */
                 if( rModuleBase == "gtk" || rModuleBase == "gtk3" || rModuleBase == "tde" || rModuleBase == "kde" || rModuleBase == "kde4" )
                 {
@@ -95,19 +88,21 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         }
         else
         {
-#if OSL_DEBUG_LEVEL > 1
-            std::fprintf( stderr, "could not load symbol %s from shared object %s\n",
-                     "create_SalInstance",
-                     OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+            SAL_WARN(
+                "vcl.plugadapt",
+                "could not load symbol create_SalInstance from shared object "
+                    << aModule);
             osl_unloadModule( aMod );
         }
     }
-#if OSL_DEBUG_LEVEL > 1
+    else if (bForce)
+    {
+        SAL_WARN("vcl.plugadapt", "could not load shared object " << aModule);
+    }
     else
-        std::fprintf( stderr, "could not load shared object %s\n",
-                 OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
+    {
+        SAL_INFO("vcl.plugadapt", "could not load shared object " << aModule);
+    }
 
     return pInst;
 }
@@ -116,14 +111,14 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
 static DesktopType get_desktop_environment()
 {
-    OUStringBuffer aModName( 128 );
-    #ifdef LIBO_MERGELIBS
-        aModName.appendAscii( SAL_DLLPREFIX"merged" );
-    #else
-        aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
-    #endif
-    aModName.appendAscii( SAL_DLLPOSTFIX );
-    OUString aModule = aModName.makeStringAndClear();
+    OUString aModule(
+        SAL_DLLPREFIX
+#if defined LIBO_MERGELIBS
+        "merged"
+#else
+        "desktop_detector"
+#endif
+        SAL_DLLPOSTFIX);
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
@@ -148,7 +143,7 @@ static DesktopType get_desktop_environment()
 
 static SalInstance* autodetect_plugin()
 {
-    static const char* pTDEFallbackList[] =
+    static const char* const pTDEFallbackList[] =
     {
         "tde",
 #if ENABLE_KDE4
@@ -160,7 +155,7 @@ static SalInstance* autodetect_plugin()
         "gtk3", "gtk", "gen", 0
     };
 
-    static const char* pKDEFallbackList[] =
+    static const char* const pKDEFallbackList[] =
     {
 #if ENABLE_KDE4
         "kde4",
@@ -171,18 +166,18 @@ static SalInstance* autodetect_plugin()
         "gtk3", "gtk", "gen", 0
     };
 
-    static const char* pStandardFallbackList[] =
+    static const char* const pStandardFallbackList[] =
     {
         "gtk3", "gtk", "gen", 0
     };
 
-    static const char* pHeadlessFallbackList[] =
+    static const char* const pHeadlessFallbackList[] =
     {
         "svp", 0
     };
 
     DesktopType desktop = get_desktop_environment();
-    const char ** pList = pStandardFallbackList;
+    const char * const * pList = pStandardFallbackList;
     int nListEntry = 0;
 
     // no server at all: dummy plugin
@@ -207,10 +202,9 @@ static SalInstance* autodetect_plugin()
     {
         OUString aTry( OUString::createFromAscii( pList[nListEntry] ) );
         pInst = tryInstance( aTry );
-        #if OSL_DEBUG_LEVEL > 1
-        if( pInst )
-            std::fprintf( stderr, "plugin autodetection: %s\n", pList[nListEntry] );
-        #endif
+        SAL_INFO_IF(
+            pInst, "vcl.plugadapt",
+            "plugin autodetection: " << pList[nListEntry]);
         nListEntry++;
     }
 
@@ -222,14 +216,16 @@ SalInstance *CreateSalInstance()
     SalInstance *pInst = NULL;
 
     OUString aUsePlugin;
-    static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
-    if( pUsePlugin )
-        aUsePlugin = OUString::createFromAscii( pUsePlugin );
-    else
-        rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
-
     if( Application::IsHeadlessModeRequested() )
         aUsePlugin = "svp";
+    else
+    {
+        static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+        if( pUsePlugin )
+            aUsePlugin = OUString::createFromAscii( pUsePlugin );
+        else
+            rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
+    }
 
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
@@ -238,9 +234,10 @@ SalInstance *CreateSalInstance()
         pInst = autodetect_plugin();
 
     // fallback, try everything
-    const char* pPlugin[] = { "gtk3", "gtk", "kde4", "kde", "tde", "gen", 0 };
+    static const char* const pPlugin[] = {
+        "gtk3", "gtk", "kde4", "kde", "tde", "gen" };
 
-    for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
+    for ( int i = 0; !pInst && i != SAL_N_ELEMENTS(pPlugin); ++i )
         pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
 
     if( ! pInst )
@@ -289,20 +286,18 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-// Order to match desktops.hxx' DesktopType
-static const char * desktop_strings[] = {
-    "none", "unknown", "GNOME",
-    "XFCE", "MATE", "TDE",
-    "KDE", "KDE4" };
-
 const OUString& SalGetDesktopEnvironment()
 {
+    // Order to match desktops.hxx' DesktopType
+    static const char * const desktop_strings[] = {
+        "none", "unknown", "GNOME",
+        "XFCE", "MATE", "TDE",
+        "KDE", "KDE4" };
     static OUString aRet;
     if( aRet.isEmpty())
     {
-        OUStringBuffer buf( 8 );
-        buf.appendAscii( desktop_strings[ get_desktop_environment() ] );
-        aRet = buf.makeStringAndClear();
+        aRet = OUString::createFromAscii(
+            desktop_strings[get_desktop_environment()]);
     }
     return aRet;
 }
