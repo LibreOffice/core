@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_SCPATATR_HXX
 #define SC_SCPATATR_HXX
 
@@ -37,7 +35,6 @@ class Fraction;
 class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;
-
 
 //  how to treat COL_AUTO in GetFont:
 
@@ -125,6 +122,7 @@ public:
 
     sal_Bool                    IsVisible() const;
     sal_Bool                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
+    sal_Bool                    IsEqual( const ScPatternAttr& rOther ) const;
 
                             /** If font is an old symbol font StarBats/StarMath
                                 with text encoding RTL_TEXTENC_SYMBOL */

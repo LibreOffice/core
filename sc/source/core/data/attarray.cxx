@@ -1927,21 +1927,38 @@ sal_Bool ScAttrArray::GetLastAttr( SCROW& rLastRow, SCROW nLastData ) const
         rLastRow = MAXROW;
         return sal_True;
     }
+
     sal_Bool bFound = sal_False;
-    SCSIZE nEndPos = nCount - 1;
-    SCSIZE nStartPos = nEndPos;
-    while ( nStartPos > 0 && pData[nStartPos-1].nRow > nLastData &&
-            !pData[nStartPos].pPattern->IsVisible() )
-        --nStartPos;
-    if(nStartPos == 0 && !pData[nStartPos].pPattern->IsVisible()) // add this condition for handle only default pattern in one colume
-        rLastRow = nLastData;
-    else if(nStartPos >= 0 && pData[nStartPos].nRow > nLastData)
+
+    // Loop backwards from the end instead of using Search, assuming that
+    // there usually aren't many attributes below the last cell.
+    SCSIZE nPos = nCount;
+    while ( nPos > 0 && pData[nPos - 1].nRow > nLastData )
     {
-        bFound = sal_True;
-        rLastRow = pData[nStartPos].nRow;
+        SCSIZE nEndPos = nPos - 1;
+        SCSIZE nStartPos = nEndPos;
+        while ( nStartPos > 0 && pData[nStartPos - 1].nRow > nLastData &&
+                pData[nStartPos - 1].pPattern->IsEqual( *pData[nStartPos].pPattern ) )
+            --nStartPos;
+
+        SCROW nAttrStartRow = ( nStartPos > 0 ) ? ( pData[nStartPos - 1].nRow + 1 ) : 0;
+        if ( nAttrStartRow <= nLastData )
+            nAttrStartRow = nLastData + 1;
+        SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
+        if ( nAttrSize >= SC_VISATTR_STOP )
+        {
+            bFound = sal_False;
+        }
+        else if ( !bFound )
+        {
+            rLastRow = pData[nEndPos].nRow;
+            bFound = sal_True;
+        }
+
+        // look further from the top of the range.
+        nPos = nStartPos;
     }
-    else
-        rLastRow = nLastData;
+
     return bFound;
 }
 

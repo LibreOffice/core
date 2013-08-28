@@ -1144,6 +1144,19 @@ sal_Bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
     //!     auch hier nur wirklich sichtbare Werte testen !!!
 }
 
+sal_Bool ScPatternAttr::IsEqual( const ScPatternAttr& rOther ) const
+{
+    const SfxItemSet& rThisSet = GetItemSet();
+    const SfxItemSet& rOtherSet = rOther.GetItemSet();
+
+    return OneEqual( rThisSet, rOtherSet, ATTR_BACKGROUND ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_TLBR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_VALUE_FORMAT ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
+}
+
 const String* ScPatternAttr::GetStyleName() const
 {
     return pName ? pName : ( pStyle ? &pStyle->GetName() : NULL );
