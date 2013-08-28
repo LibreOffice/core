@@ -971,13 +971,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Spacing_before:
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                // Don't overwrite NS_ooxml::LN_CT_Spacing_beforeAutospacing.
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
             break;
         case NS_ooxml::LN_CT_Spacing_beforeLines:
             break;
         case NS_ooxml::LN_CT_Spacing_after:
             if (m_pImpl->GetTopContext())
-                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                // Don't overwrite NS_ooxml::LN_CT_Spacing_afterAutospacing.
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
             break;
         case NS_ooxml::LN_CT_Spacing_afterLines:
             break;
