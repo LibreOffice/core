@@ -189,10 +189,10 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia.getCountry() == "" );
         CPPUNIT_ASSERT( ca_valencia.getScript() == "" );
         CPPUNIT_ASSERT( ca_valencia.getLanguageAndScript() == "ca" );
-        ::std::vector< OUString > ca_ES_valencia_Fallbacks( ca_valencia.getFallbackStrings());
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks.size() == 2);
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[0] == "ca-valencia");
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[1] == "ca");
+        ::std::vector< OUString > ca_valencia_Fallbacks( ca_valencia.getFallbackStrings());
+        CPPUNIT_ASSERT( ca_valencia_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( ca_valencia_Fallbacks[0] == "ca-valencia");
+        CPPUNIT_ASSERT( ca_valencia_Fallbacks[1] == "ca");
     }
 
     {
