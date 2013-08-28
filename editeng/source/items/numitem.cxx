@@ -693,15 +693,15 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     for (sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         rStream >> nTmp16;
-        sal_Bool hasNumberingFormat = nTmp16;
+        sal_Bool hasNumberingFormat = nTmp16 & 1;
+        aFmtsSet[i] = nTmp16 & 2; // fdo#68648 reset flag
         if ( hasNumberingFormat ){
             aFmts[i] = new SvxNumberFormat( rStream );
-            aFmtsSet[i] = sal_True;
         }
         else
         {
             aFmts[i] = 0;
-            aFmtsSet[i] = sal_False;
+            aFmtsSet[i] = sal_False; // actually only false is valid
         }
     }
     //second nFeatureFlags for new versions
@@ -726,9 +726,10 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     sal_Bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
+        sal_uInt16 nSetFlag(aFmtsSet[i] ? 2 : 0); // fdo#68648 store that too
         if(aFmts[i])
         {
-            rStream << sal_uInt16(1);
+            rStream << sal_uInt16(1 | nSetFlag);
             if(bConvertBulletFont && aFmts[i]->GetBulletFont())
             {
                 if(!pConverter)
@@ -739,7 +740,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
             aFmts[i]->Store(rStream, pConverter);
         }
         else
-            rStream << sal_uInt16(0);
+            rStream << sal_uInt16(0 | nSetFlag);
     }
     //second save of nFeatureFlags for new versions
     rStream<<(sal_uInt16)nFeatureFlags;
