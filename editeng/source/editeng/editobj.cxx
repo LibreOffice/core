@@ -923,42 +923,35 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         return;
 
     // Go through all formatted paragraphs, and store format items.
-    it = aParaBorders.begin();
     std::vector<editeng::SectionAttribute>::iterator itAttr = aAttrs.begin();
-    for (; it != itEnd; ++it)
+    for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
     {
-        size_t nPara = distance(aParaBorders.begin(), it);
         const ContentInfo& rC = aContents[nPara];
-        if (itAttr->mnParagraph != nPara)
-            // Find the first container for the current paragraph.
-            itAttr = std::find_if(itAttr, aAttrs.end(), FindByParagraph(nPara));
 
+        itAttr = std::find_if(itAttr, aAttrs.end(), FindByParagraph(nPara));
         if (itAttr == aAttrs.end())
             // This should never happen. There is a logic error somewhere...
             return;
 
-        // Remember this position.
-        std::vector<editeng::SectionAttribute>::iterator itAttrHead = itAttr;
-
         for (size_t i = 0; i < rC.aAttribs.size(); ++i)
         {
-            const XEditAttribute& rAttr = rC.aAttribs[i];
-            const SfxPoolItem* pItem = rAttr.GetItem();
+            const XEditAttribute& rXAttr = rC.aAttribs[i];
+            const SfxPoolItem* pItem = rXAttr.GetItem();
             if (!pItem)
                 continue;
 
-            size_t nStart = rAttr.GetStart(), nEnd = rAttr.GetEnd();
-            itAttr = itAttrHead;
+            size_t nStart = rXAttr.GetStart(), nEnd = rXAttr.GetEnd();
+            std::vector<editeng::SectionAttribute>::iterator itCurAttr = itAttr;
 
             // Find the container whose start position matches.
-            itAttr = std::find_if(itAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
-            if (itAttr == aAttrs.end())
+            itCurAttr = std::find_if(itCurAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
+            if (itCurAttr == aAttrs.end())
                 // This should never happen. There is a logic error somewhere...
                 return;
 
-            for (; itAttr != aAttrs.end() && itAttr->mnEnd <= nEnd; ++itAttr)
+            for (; itCurAttr != aAttrs.end() && itCurAttr->mnParagraph == nPara && itCurAttr->mnEnd <= nEnd; ++itCurAttr)
             {
-                editeng::SectionAttribute& rSecAttr = *itAttr;
+                editeng::SectionAttribute& rSecAttr = *itCurAttr;
                 rSecAttr.maAttributes.push_back(pItem);
             }
         }

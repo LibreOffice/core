@@ -384,47 +384,109 @@ void Test::testSectionAttributes()
     SvxWeightItem aBold(WEIGHT_BOLD, EE_CHAR_WEIGHT);
     SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
 
-    OUString aParaText = "aaabbbccc";
-    aEngine.SetText(aParaText);
-    pSet->Put(aBold);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
-    aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
-    pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
-    pSet->Put(aItalic);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+    {
+        OUString aParaText = "aaabbbccc";
+        aEngine.SetText(aParaText);
+        pSet->Put(aBold);
+        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
+        pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
+        pSet->Put(aItalic);
+        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
 
-    aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
-    boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-    CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
-    std::vector<editeng::SectionAttribute> aAttrs;
-    pEditText->GetAllSectionAttributes(aAttrs);
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
+        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        std::vector<editeng::SectionAttribute> aAttrs;
+        pEditText->GetAllSectionAttributes(aAttrs);
 
-    // Now, we should have a total of 3 sections.
-    CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
+        // Now, we should have a total of 3 sections.
+        CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
 
-    // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
-    const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
-    CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
+        // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
+        const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
-    // Second section should be 3-6, and it should be both bold and italic.
-    pSecAttr = &aAttrs[1];
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnStart);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnEnd);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->maAttributes.size());
-    CPPUNIT_ASSERT_MESSAGE("This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr));
+        // Second section should be 3-6, and it should be both bold and italic.
+        pSecAttr = &aAttrs[1];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr));
 
-    // Third section should be 6-9, and it should be only italic.
-    pSecAttr = &aAttrs[2];
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnStart);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pSecAttr->mnEnd);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
-    CPPUNIT_ASSERT_MESSAGE("This section must be italic.", hasItalic(*pSecAttr));
+        // Third section should be 6-9, and it should be only italic.
+        pSecAttr = &aAttrs[2];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(9), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be italic.", hasItalic(*pSecAttr));
+    }
+
+    {
+        // Set text consisting of 5 paragraphs with the 2nd and 4th paragraphs
+        // being empty.
+        aEngine.Clear();
+        aEngine.SetText("one\n\ntwo\n\nthree");
+        sal_Int32 nParaCount = aEngine.GetParagraphCount();
+        sal_Int32 nCheck = 5;
+        CPPUNIT_ASSERT_EQUAL(nCheck, nParaCount);
+
+        // Apply boldness to paragraphs 1, 3, 5 only. Leave 2 and 4 unformatted.
+        pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
+        pSet->Put(aBold);
+        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,3));
+        aEngine.QuickSetAttribs(*pSet, ESelection(2,0,2,3));
+        aEngine.QuickSetAttribs(*pSet, ESelection(4,0,4,5));
+
+        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        std::vector<editeng::SectionAttribute> aAttrs;
+        pEditText->GetAllSectionAttributes(aAttrs);
+        size_t nSecCountCheck = 5;
+        CPPUNIT_ASSERT_EQUAL(nSecCountCheck, aAttrs.size());
+
+        // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
+        const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
+
+        pSecAttr = &aAttrs[2];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
+
+        pSecAttr = &aAttrs[4];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->maAttributes.size());
+        CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
+
+        // The 2nd and 4th paragraphs should be empty.
+        pSecAttr = &aAttrs[1];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_MESSAGE("Attribute array should be empty.", pSecAttr->maAttributes.empty());
+
+        pSecAttr = &aAttrs[3];
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnEnd);
+        CPPUNIT_ASSERT_MESSAGE("Attribute array should be empty.", pSecAttr->maAttributes.empty());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
