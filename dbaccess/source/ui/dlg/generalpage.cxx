@@ -54,18 +54,15 @@ namespace dbaui
     // OGeneralPage
     OGeneralPage::OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
-        ,m_pSpecialMessage              ( NULL )
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )
+        ,m_pSpecialMessage              ( NULL )
         ,m_eLastMessage                 ( smNone )
         ,m_bDisplayingInvalid           ( sal_False )
         ,m_bInitTypeList                ( true )
-        ,m_bInitEmbeddedDBList          ( true )
         ,m_pDatasourceType              ( NULL )
-        ,m_pEmbeddedDBType              ( NULL )
         ,m_pCollection                  ( NULL )
     {
         get( m_pDatasourceType, "datasourceType" );
-        get( m_pEmbeddedDBType, "embeddeddbList" );
         get( m_pSpecialMessage, "specialMessage" );
 
         // extract the datasource type collection from the item set
@@ -76,7 +73,6 @@ namespace dbaui
 
         // do some knittings
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
-        m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPage, OnEmbeddedDBTypeSelected));
     }
 
     OGeneralPage::~OGeneralPage()
@@ -142,7 +138,7 @@ namespace dbaui
         }
     }
 
-    void OGeneralPage::initializeEmbeddedDBList()
+    void OGeneralPageWizard::initializeEmbeddedDBList()
     {
         if ( m_bInitEmbeddedDBList )
         {
@@ -221,10 +217,8 @@ namespace dbaui
     void OGeneralPage::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         initializeTypeList();
-        initializeEmbeddedDBList();
 
         m_pDatasourceType->SelectEntry( getDatasourceName( _rSet ) );
-        m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
 
         // notify our listener that our type selection has changed (if so)
         // FIXME: how to detect that it did not changed? (fdo#62937)
@@ -237,7 +231,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
 
-    OUString OGeneralPage::getEmbeddedDBName( const SfxItemSet& _rSet )
+    OUString OGeneralPageWizard::getEmbeddedDBName( const SfxItemSet& _rSet )
     {
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
@@ -245,7 +239,6 @@ namespace dbaui
 
         // if the selection is invalid, disable everything
         String sName,sConnectURL;
-        m_bDisplayingInvalid = !bValid;
         if ( bValid )
         {
             // collect some items and some values
@@ -276,10 +269,10 @@ namespace dbaui
         {   // this indicates it's really a type which is known in general, but not supported on the current platform
             // show a message saying so
             //  eSpecialMessage = smUnsupportedType;
-            insertDatasourceTypeEntryData( m_eCurrentSelection, sDisplayName );
+            insertEmbeddedDBTypeEntryData( m_eCurrentSelection, sDisplayName );
             // remember this type so we can show the special message again if the user selects this
             // type again (without changing the data source)
-            m_eNotSupportedKnownType = m_pCollection->determineType( m_eCurrentSelection );
+            m_eNotSupportedKnownType = m_pCollection->determineType( m_eCurrentSelection ); // TODO:
         }
 
         return sDisplayName;
@@ -370,7 +363,7 @@ namespace dbaui
         m_aURLPrefixes[nPos] = _sType;
     }
 
-    void OGeneralPage::insertEmbeddedDBTypeEntryData(const OUString& _sType, String sDisplayName)
+    void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, String sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);
@@ -406,7 +399,7 @@ namespace dbaui
         OGenericAdministrationPage::Reset(_rCoreAttrs);
     }
 
-    IMPL_LINK( OGeneralPage, OnEmbeddedDBTypeSelected, ListBox*, _pBox )
+    IMPL_LINK( OGeneralPageWizard, OnEmbeddedDBTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
         sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
@@ -498,10 +491,12 @@ namespace dbaui
         ,m_pRB_OpenExistingDatabase     ( NULL )
         ,m_pRB_ConnectDatabase          ( NULL )
         ,m_pFT_EmbeddedDBLabel          ( NULL )
+        ,m_pEmbeddedDBType              ( NULL )
         ,m_pFT_DocListLabel             ( NULL )
         ,m_pLB_DocumentList             ( NULL )
         ,m_pPB_OpenDatabase             ( NULL )
         ,m_eOriginalCreationMode        ( eCreateNew )
+        ,m_bInitEmbeddedDBList          ( true )
     {
         get( m_pFT_HeaderText, "headerText" );
         get( m_pFT_HelpText, "helpText" );
@@ -509,6 +504,7 @@ namespace dbaui
         get( m_pRB_OpenExistingDatabase, "openExistingDatabase" );
         get( m_pRB_ConnectDatabase, "connectDatabase" );
         get( m_pFT_EmbeddedDBLabel, "embeddeddbLabel" );
+        get( m_pEmbeddedDBType, "embeddeddbList" );
         get( m_pFT_DocListLabel, "docListLabel" );
         get( m_pLB_DocumentList, "documentList" );
         get( m_pPB_OpenDatabase, "openDatabase" );
@@ -538,6 +534,7 @@ namespace dbaui
             m_pRB_CreateDatabase->Check();
 
         // do some knittings
+        m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPageWizard, OnEmbeddedDBTypeSelected));
         m_pRB_CreateDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnCreateDatabaseModeSelected ) );
         m_pRB_ConnectDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_pRB_OpenExistingDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
@@ -566,6 +563,9 @@ namespace dbaui
     void OGeneralPageWizard::implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue )
     {
         OGeneralPage::implInitControls( _rSet, _bSaveValue );
+
+        initializeEmbeddedDBList();
+        m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
@@ -682,7 +682,8 @@ namespace dbaui
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call( this );
-        OnEmbeddedDBTypeSelected(m_pEmbeddedDBType);
+
+        OnEmbeddedDBTypeSelected( m_pEmbeddedDBType );
         return 1L;
     }
 

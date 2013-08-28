@@ -37,12 +37,12 @@ namespace dbaui
         OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
         ~OGeneralPage();
 
-    private:
-        FixedText*          m_pSpecialMessage;
-
         OUString            m_eCurrentSelection;    /// currently selected type
         ::dbaccess::DATASOURCE_TYPE
                             m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
+
+    private:
+        FixedText*          m_pSpecialMessage;
 
         enum SPECIAL_MESSAGE
         {
@@ -54,22 +54,17 @@ namespace dbaui
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
-        bool                m_bInitEmbeddedDBList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData( const OUString& _sType, String sDisplayName );
-        void                insertEmbeddedDBTypeEntryData( const OUString& _sType, String sDisplayName );
 
     protected:
         ListBox*            m_pDatasourceType;
-        ListBox*            m_pEmbeddedDBType;
 
         ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
 
         ::std::vector< OUString>
                             m_aURLPrefixes;
-        ::std::vector< OUString>
-                            m_aEmbeddedURLPrefixes;
 
     public:
         /// set a handler which gets called every time the user selects a new type
@@ -84,7 +79,6 @@ namespace dbaui
 
         virtual void implInitControls( const SfxItemSet& _rSet, sal_Bool _bSaveValue );
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
-        virtual OUString getEmbeddedDBName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
@@ -94,7 +88,6 @@ namespace dbaui
 
         void onTypeSelected(const OUString& _sURLPrefix);
         void initializeTypeList();
-        void initializeEmbeddedDBList();
 
         void implSetCurrentType( const OUString& _eType );
 
@@ -104,7 +97,6 @@ namespace dbaui
         virtual void setParentTitle( const OUString& _sURLPrefix );
 
         DECL_LINK(OnDatasourceTypeSelected, ListBox*);
-        DECL_LINK(OnEmbeddedDBTypeSelected, ListBox*);
     };
 
     // OGeneralPageDialog
@@ -150,6 +142,8 @@ namespace dbaui
         RadioButton*            m_pRB_ConnectDatabase;
 
         FixedText*              m_pFT_EmbeddedDBLabel;
+        ListBox*                m_pEmbeddedDBType;
+
         FixedText*              m_pFT_DocListLabel;
         OpenDocumentListBox*    m_pLB_DocumentList;
         OpenDocumentButton*     m_pPB_OpenDatabase;
@@ -164,6 +158,9 @@ namespace dbaui
 
         ::svt::ControlDependencyManager
                                 m_aControlDependencies;
+
+        bool                    m_bInitEmbeddedDBList : 1;
+        void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, String sDisplayName );
 
     public:
         void                    SetCreationModeHandler( const Link& _rHandler ) { m_aCreationModeHandler = _rHandler; }
@@ -182,7 +179,14 @@ namespace dbaui
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );
         virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
+        ::std::vector< OUString>
+                            m_aEmbeddedURLPrefixes;
+
+        virtual OUString getEmbeddedDBName( const SfxItemSet& _rSet );
+        void initializeEmbeddedDBList();
+
     protected:
+        DECL_LINK( OnEmbeddedDBTypeSelected, ListBox* );
         DECL_LINK( OnCreateDatabaseModeSelected, RadioButton* );
         DECL_LINK( OnSetupModeSelected, RadioButton* );
         DECL_LINK( OnDocumentSelected, ListBox* );
