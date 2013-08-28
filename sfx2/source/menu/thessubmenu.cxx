@@ -40,19 +40,19 @@
 using namespace ::com::sun::star;
 
 OUString SfxThesSubMenuHelper::GetText(
-    const String &rLookUpString,
-    xub_StrLen nDelimPos )
+    const OUString &rLookUpString,
+    sal_Int32 nDelimPos )
 {
-    return OUString( rLookUpString.Copy( 0, nDelimPos ) );
+    return rLookUpString.copy( 0, nDelimPos );
 }
 
 
 void SfxThesSubMenuHelper::GetLocale(
     lang::Locale /*out */ &rLocale,
-    const String &rLookUpString,
-    xub_StrLen nDelimPos  )
+    const OUString &rLookUpString,
+    sal_Int32 nDelimPos  )
 {
-    String aIsoLang( rLookUpString.Copy( nDelimPos + 1) );
+    OUString aIsoLang( rLookUpString.copy( nDelimPos + 1) );
     rLocale = LanguageTag::convertToLocale( aIsoLang);
 }
 
@@ -123,9 +123,9 @@ bool SfxThesSubMenuHelper::GetMeanings(
 }
 
 
-String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) const
+OUString SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) const
 {
-    String aRes;
+    OUString aRes;
     uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
             OUString("com.sun.star.linguistic2.Thesaurus"), rLocale );
     // there should be at most one thesaurus configured for each language

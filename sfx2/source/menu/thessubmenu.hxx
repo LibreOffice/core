@@ -42,10 +42,10 @@ public:
     SfxThesSubMenuHelper();
     ~SfxThesSubMenuHelper();
 
-    static OUString     GetText( const String &rLookUpString, xub_StrLen nDelimPos );
+    static OUString     GetText( const OUString &rLookUpString, sal_Int32 nDelimPos );
 
     // returns the Locale to be used for the selected text when the thesaurus is to be called
-    static void GetLocale( css::lang::Locale /*out */ &rLocale, const String &rLookUpString, xub_StrLen nDelimPos );
+    static void GetLocale( css::lang::Locale /*out */ &rLocale, const OUString &rLookUpString, sal_Int32 nDelimPos );
 
     // returns true if the locale is upported by the theasaurus
     bool    IsSupportedLocale( const css::lang::Locale & rLocale ) const;
@@ -53,7 +53,7 @@ public:
     // get the first nMax Synonym entries, even if different meanings need to be evaluated
     bool    GetMeanings( std::vector< OUString > & rSynonyms, const OUString & rWord, const css::lang::Locale & rLocale, sal_Int16 nMaxSynonms );
 
-    String  GetThesImplName( const css::lang::Locale &rLocale ) const;
+    OUString  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
 
