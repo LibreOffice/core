@@ -1019,7 +1019,7 @@ void SfxVirtualMenu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 
 // set the text of the specified item
 
-void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const String& rText )
+void SfxVirtualMenu::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
     DBG_CHKTHIS(SfxVirtualMenu, 0);
     DBG_ASSERT( this != 0, "");

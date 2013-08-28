@@ -85,7 +85,7 @@ public:
                         SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
     void            CheckItem( sal_uInt16 nItemId, sal_Bool bCheck );
     void            EnableItem( sal_uInt16 nItemId, sal_Bool bEnable );
-    void            SetItemText( sal_uInt16 nItemId, const String& rText );
+    void            SetItemText( sal_uInt16 nItemId, const OUString& rText );
 
     sal_uInt16          GetItemCount() const;
     Menu*           GetSVMenu() const;
