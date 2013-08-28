@@ -145,6 +145,29 @@ void TestLanguageTag::testAllTags()
     }
 
     {
+        OUString s_ca_valencia_ES( "ca-ES-valencia" );
+        LanguageTag ca_valencia_ES( s_ca_valencia_ES, true );
+        lang::Locale aLocale = ca_valencia_ES.getLocale();
+        CPPUNIT_ASSERT( ca_valencia_ES.getBcp47() == s_ca_valencia_ES );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "ES" );
+        CPPUNIT_ASSERT( aLocale.Variant == s_ca_valencia_ES );
+        /* TODO: conversion doesn't know this yet, once it does activate test. */
+#if 0
+        CPPUNIT_ASSERT( ca_valencia_ES.getLanguageType() == LANGUAGE_USER_CATALAN_VALENCIAN );
+#else
+        CPPUNIT_ASSERT( ca_valencia_ES.getLanguageType() == LANGUAGE_SYSTEM );
+#endif
+        CPPUNIT_ASSERT( ca_valencia_ES.isValidBcp47() == true );
+        CPPUNIT_ASSERT( ca_valencia_ES.isIsoLocale() == false );
+        CPPUNIT_ASSERT( ca_valencia_ES.isIsoODF() == false );
+        CPPUNIT_ASSERT( ca_valencia_ES.getLanguage() == "ca" );
+        CPPUNIT_ASSERT( ca_valencia_ES.getCountry() == "ES" );
+        CPPUNIT_ASSERT( ca_valencia_ES.getScript() == "" );
+        CPPUNIT_ASSERT( ca_valencia_ES.getLanguageAndScript() == "ca" );
+    }
+
+    {
         OUString s_de_DE( "de-DE" );
         LanguageTag de_DE( s_de_DE, true );
         lang::Locale aLocale = de_DE.getLocale();
