@@ -560,6 +560,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 
 static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
+    // MS-LangID                      ISO639-ISO15924, ISO3166
 //  { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,   "sr-Latn", "RS" },  // for example, once we support it in l10n; TODO: adapt unit test in this case
     { LANGUAGE_DONTKNOW,                    "",        ""   }   // marks end of table
 };
