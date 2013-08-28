@@ -1143,7 +1143,7 @@ void SfxWorkWindow::ResetObjectBars_Impl()
 //------------------------------------------------------------------------
 
 void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
-            SfxInterface* pIFace, const String *pName)
+            SfxInterface* pIFace, const OUString *pName)
 {
     DBG_ASSERT( (nPos & SFX_POSITION_MASK) < SFX_OBJECTBAR_MAX,
                 "object bar position overflow" );
@@ -1163,7 +1163,7 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
     if (pName)
         aObjBar.aName = *pName;
     else
-        aObjBar.aName.Erase();
+        aObjBar.aName = "";
 
     for ( sal_uInt16 n=0; n<aObjBarList.size(); n++ )
     {

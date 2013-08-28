@@ -96,7 +96,7 @@ struct SfxObjectBars_Impl
 {
     sal_uInt32     nResId;  // Resource - and ConfigId of the Toolbox
     sal_uInt16     nMode;   // special visibility flags
-    String         aName;
+    OUString       aName;
     SfxInterface*  pIFace;
 
     SfxObjectBars_Impl() : nResId(0), nMode(0), pIFace(NULL) {}
@@ -1445,7 +1445,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( pName )
                 rBar.aName = *pName;
             else
-                rBar.aName.Erase();
+                rBar.aName = "";
             rBar.pIFace = pIFace;
 
             if ( bUIActive || bIsActive )
