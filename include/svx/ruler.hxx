@@ -25,6 +25,7 @@
 #include <svx/svxdllapi.h>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 class SvxProtectItem;
 class SvxRulerItem;
@@ -57,7 +58,9 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     boost::scoped_ptr<SvxObjectItem>      mpObjectItem;     // object
 
     Window*         pEditWin;
-    SvxRuler_Impl*  pRuler_Imp;
+
+    boost::scoped_ptr<SvxRuler_Impl> mpRulerImpl;
+
     sal_Bool        bAppSetNullOffset :1;
     sal_Bool        bHorz :1;
     long            lLogicNullOffset;     // in logic coordinates
@@ -84,11 +87,12 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_uInt16      nTabBufSize;
     long            lDefTabDist;
     long            lTabPos;
-    RulerTab*       pTabs;            // tab positions in pixel
-    RulerIndent*    pIndents;      // paragraph margins in pixel
-    RulerBorder*    pBorders;
+    boost::scoped_array<RulerTab>    mpTabs;    // tab positions in pixel
+    boost::scoped_array<RulerIndent> mpIndents; // paragraph margins in pixel
+    boost::scoped_array<RulerBorder> mpBorders;
     sal_uInt16      nBorderCount;
-    RulerBorder*    pObjectBorders;
+    boost::scoped_array<RulerBorder> mpObjectBorders;
+
     SfxBindings*    pBindings;
     long            nDragOffset;
     long            nMaxLeft;
