@@ -191,7 +191,7 @@ protected:
     void                HideHdl( void* );
     void                ShowHdl( void* );
 
-    sal_Bool                Execute_Impl( sal_uInt16 nId, const String& rStr, const String& rRefStr,
+    sal_Bool                Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                                       sal_uInt16* pIdx = NULL, const sal_uInt16* pModifier = NULL );
 
@@ -207,7 +207,7 @@ protected:
     void                SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void                SetWaterCanState( const SfxBoolItem* pItem );
 
-    void                SelectStyle( const String& rStyle );
+    void                SelectStyle( const OUString& rStyle );
     sal_Bool            HasSelectedStyle() const;
     SfxStyleSheetBase  *GetSelectedStyle() const;
     void                FillTreeBox();
@@ -249,7 +249,7 @@ public:
     void                ExecuteContextMenu_Impl( const Point& rPos, Window* pWin );
     void                EnableExample_Impl( sal_uInt16 nId, sal_Bool bEnable );
     SfxStyleFamily      GetActualFamily() const;
-    String              GetSelectedEntry() const;
+    OUString            GetSelectedEntry() const;
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
 
     virtual void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen

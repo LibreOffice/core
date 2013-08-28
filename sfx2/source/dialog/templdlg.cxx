@@ -1119,7 +1119,7 @@ SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
 
 //-------------------------------------------------------------------------
 
-void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
+void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
 {
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
     if ( !pItem )
@@ -1142,7 +1142,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
 
     if ( pTreeBox )
     {
-        if ( rStr.Len() )
+        if ( !rStr.isEmpty() )
         {
             SvTreeListEntry* pEntry = pTreeBox->First();
             while ( pEntry )
@@ -1161,7 +1161,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
     }
     else
     {
-        sal_Bool bSelect = ( rStr.Len() > 0 );
+        sal_Bool bSelect = ! rStr.isEmpty();
         if ( bSelect )
         {
             SvTreeListEntry* pEntry = (SvTreeListEntry*)aFmtLb.FirstVisible();
@@ -1194,9 +1194,9 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
 
 //-------------------------------------------------------------------------
 
-String SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
+OUString SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
 {
-    String aRet;
+    OUString aRet;
     if ( pTreeBox )
     {
         SvTreeListEntry* pEntry = pTreeBox->FirstSelected();
@@ -1748,7 +1748,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
 
 // Internal: Perform functions through the Dispatcher
 sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
-    sal_uInt16 nId, const String &rStr, const String& rRefStr, sal_uInt16 nFamily,
+    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
     sal_uInt16 nMask, sal_uInt16 *pIdx, const sal_uInt16* pModifier)
 {
     SfxDispatcher &rDispatcher = *SFX_APP()->GetDispatcher_Impl();
@@ -1759,7 +1759,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
     const SfxPoolItem* pItems[ 6 ];
     sal_uInt16 nCount = 0;
-    if( rStr.Len() )
+    if( !rStr.isEmpty() )
         pItems[ nCount++ ] = &aItem;
     pItems[ nCount++ ] = &aFamily;
     if( nMask )
@@ -1772,7 +1772,7 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
         pItems[ nCount++ ] = &aUpdName;
     }
 
-    if ( rRefStr.Len() )
+    if ( !rRefStr.isEmpty() )
         pItems[ nCount++ ] = &aRefName;
 
     pItems[ nCount++ ] = 0;
@@ -2283,7 +2283,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
     (void)pControl; //unused
     // only if that region is allowed
     if ( IsInitialized() && 0 != pFamilyState[nActFamily-1] &&
-         GetSelectedEntry().Len() )
+         !GetSelectedEntry().isEmpty() )
     {
         sal_uInt16 nModifier = aFmtLb.GetModifier();
         Execute_Impl(SID_STYLE_APPLY,
