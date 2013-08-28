@@ -896,7 +896,7 @@ public:
     LanguageType        GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
-    void                DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
+    void DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, bool bSpellAtCursorPos = false, bool bInteruptable = true );
     EESpellState        Spell( EditView* pEditView, sal_Bool bMultipleDoc );
     EESpellState        HasSpellErrors();
     EESpellState        StartThesaurus( EditView* pEditView );

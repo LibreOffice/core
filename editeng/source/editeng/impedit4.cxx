@@ -2217,7 +2217,7 @@ void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
 }
 
 
-void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpellAtCursorPos, sal_Bool bInteruptable )
+void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtCursorPos, bool bInteruptable )
 {
     /*
      It will iterate over all the paragraphs, paragraphs with only
@@ -2239,7 +2239,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
         DBG_CHKOBJ( pActiveView, EditView, 0 );
         aCursorPos = pActiveView->pImpEditView->GetEditSelection().Max();
     }
-    sal_Bool bRestartTimer = sal_False;
+
+    bool bRestartTimer = false;
 
     ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count() - 1 );
     sal_Int32 nNodes = GetEditDoc().Count();
@@ -2259,7 +2260,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
 
             sal_uInt16 nWrongs = 0; // Lose control also in the paragraphs
             sal_uInt16 nPaintFrom = 0xFFFF, nPaintTo = 0;
-            sal_Bool bSimpleRepaint = sal_True;
+            bool bSimpleRepaint = true;
 
             pWrongList->SetValid();
 
@@ -2275,7 +2276,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                 String aWord( GetSelected( aSel ) );
                 // If afterwards a dot, this must be handed over!
                 // If an abbreviation ...
-                sal_Bool bDottAdded = sal_False;
+                bool bDottAdded = false;
                 if ( aSel.Max().GetIndex() < aSel.Max().GetNode()->Len() )
                 {
                     sal_Unicode cNext = aSel.Max().GetNode()->GetChar( aSel.Max().GetIndex() );
@@ -2283,12 +2284,12 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                     {
                         aSel.Max().GetIndex()++;
                         aWord += cNext;
-                        bDottAdded = sal_True;
+                        bDottAdded = true;
                     }
                 }
 
 
-                sal_Bool bChanged = sal_False;
+                bool bChanged = false;
                 if ( aWord.Len() > 0 )
                 {
                     sal_uInt16 nWStart = aSel.Min().GetIndex();
@@ -2302,11 +2303,11 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                         {
                             // Mark Word as wrong...
                             // But only when not at Cursor-Position...
-                            sal_Bool bCursorPos = sal_False;
+                            bool bCursorPos = false;
                             if ( aCursorPos.GetNode() == pNode )
                             {
                                 if ( ( nWStart <= aCursorPos.GetIndex() ) && nWEnd >= aCursorPos.GetIndex() )
-                                    bCursorPos = sal_True;
+                                    bCursorPos = true;
                             }
                             if ( bCursorPos )
                             {
@@ -2321,7 +2322,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                                 // WordDelimiters during expansion are not
                                 // evaluated.
                                 pWrongList->InsertWrong(nWStart, nXEnd);
-                                bChanged = sal_True;
+                                bChanged = true;
                             }
                         }
                     }
@@ -2331,8 +2332,8 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                         if ( pWrongList->HasAnyWrong( nWStart, nWEnd ) )
                         {
                             pWrongList->ClearWrongs( nWStart, nWEnd, pNode );
-                            bSimpleRepaint = sal_False;
-                            bChanged = sal_True;
+                            bSimpleRepaint = false;
+                            bChanged = true;
                         }
                     }
                     if ( bChanged  )
@@ -2407,7 +2408,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
             nInvalids++;
             if ( bInteruptable && ( nInvalids >= 2 ) )
             {
-                bRestartTimer = sal_True;
+                bRestartTimer = true;
                 break;
             }
         }
