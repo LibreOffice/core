@@ -1160,7 +1160,23 @@ LanguageTag & LanguageTag::makeFallback()
         if (    rLocale1.Language != aLocale2.Language ||
                 rLocale1.Country  != aLocale2.Country ||
                 rLocale1.Variant  != aLocale2.Variant)
+        {
+            if (rLocale1.Language != "en" && aLocale2.Language == "en" && aLocale2.Country == "US")
+            {
+                // "en-US" is the last resort fallback, try if we get a better
+                // one for the fallback hierarchy of a non-"en" locale.
+                ::std::vector< OUString > aFallbacks( getFallbackStrings());
+                aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+                for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                {
+                    lang::Locale aLocale3( LanguageTag( *it).getLocale());
+                    aLocale2 = MsLangId::Conversion::lookupFallbackLocale( aLocale3);
+                    if (aLocale2.Language != "en" || aLocale2.Country != "US")
+                        break;  // for, success
+                }
+            }
             reset( aLocale2);
+        }
         mbIsFallback = true;
     }
     return *this;
