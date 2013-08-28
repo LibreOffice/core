@@ -79,7 +79,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumFormatListBox(Window *pP
     else
         nBits |= WB_BORDER;
 
-    return new NumFormatListBox(pParent, nBits|WB_SIMPLEMODE);
+    NumFormatListBox* pListBox = new NumFormatListBox(pParent, nBits|WB_SIMPLEMODE);
+
+    if (bDropdown)
+        pListBox->EnableAutoSize(true);
+
+    return pListBox;
 }
 
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
