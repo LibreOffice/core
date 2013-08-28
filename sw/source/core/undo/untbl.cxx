@@ -116,7 +116,7 @@ class _SaveTable
     SfxItemSet aTblSet;
     _SaveLine* pLine;
     const SwTable* pSwTable;
-    String sSaveFmtName;
+    OUString sSaveFmtName;
     SfxItemSets aSets;
     SwFrmFmts aFrmFmts;
     sal_uInt16 nLineCount;
@@ -978,7 +978,7 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, bool bMdfyBox )
         pLn->RestoreAttr( *rTbl.GetTabLines()[ n ], *this );
     }
 
-    if( !sSaveFmtName.Len() )
+    if( sSaveFmtName.isEmpty() )
         SwTableFmt::RestoreTableProperties( NULL, rTbl );
     else
     {
