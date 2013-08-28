@@ -40,8 +40,8 @@ DBG_NAMEEX(SfxObjectShell)
 class SfxViewFrame;
 struct MarkData_Impl
 {
-    String aMark;
-    String aUserData;
+    OUString aMark;
+    OUString aUserData;
     SfxViewFrame* pFrame;
 };
 
@@ -61,8 +61,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     ::sfx2::DocumentMacroMode
                         aMacroMode;
     SfxProgress*        pProgress;
-    String              aTitle;
-    String              aTempName;
+    OUString            aTitle;
+    OUString            aTempName;
     DateTime            nTime;
     sal_uInt16          nVisualDocumentNumber;
     sal_Int16           nDocumentSignatureState;

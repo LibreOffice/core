@@ -814,7 +814,7 @@ OUString SfxObjectShell::GetTitle
         return String();
 
     // Create Title?
-    if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
+    if ( SFX_TITLE_DETECT == nMaxLength && pImp->aTitle.isEmpty() )
     {
         static sal_Bool bRecur = sal_False;
         if ( bRecur )
@@ -843,7 +843,7 @@ OUString SfxObjectShell::GetTitle
         return X(GetAPIName());
 
     // Special case templates:
-    if( IsTemplate() && pImp->aTitle.Len() &&
+    if( IsTemplate() && !pImp->aTitle.isEmpty() &&
          ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
         return X(pImp->aTitle);
 
@@ -863,7 +863,7 @@ OUString SfxObjectShell::GetTitle
     if ( !HasName() || !pMed )
     {
         // Title already set?
-        if ( pImp->aTitle.Len() )
+        if ( !pImp->aTitle.isEmpty() )
             return X(pImp->aTitle);
 
         // must it be numbered?
@@ -898,7 +898,7 @@ OUString SfxObjectShell::GetTitle
         else if ( nMaxLength == SFX_TITLE_FILENAME )
             return X( aURL.getName( INetURLObject::LAST_SEGMENT,
                 true, INetURLObject::DECODE_WITH_CHARSET ) );
-        else if ( !pImp->aTitle.Len() )
+        else if ( pImp->aTitle.isEmpty() )
             pImp->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
                                          true, INetURLObject::DECODE_WITH_CHARSET );
     }
@@ -929,11 +929,11 @@ OUString SfxObjectShell::GetTitle
             return X(aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 
         // Generate Title from file name if possible
-        if ( !pImp->aTitle.Len() )
+        if ( pImp->aTitle.isEmpty() )
             pImp->aTitle = aURL.GetBase();
 
         // workaround for the case when the name can not be retrieved from URL by INetURLObject
-        if ( !pImp->aTitle.Len() )
+        if ( pImp->aTitle.isEmpty() )
             pImp->aTitle = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
     }
 
@@ -952,7 +952,7 @@ void SfxObjectShell::InvalidateName()
 */
 
 {
-    pImp->aTitle.Erase();
+    pImp->aTitle = "";
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
     Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
@@ -965,7 +965,7 @@ void SfxObjectShell::SetNamedVisibility_Impl()
     if ( !pImp->bIsNamedVisible )
     {
         pImp->bIsNamedVisible = sal_True;
-        if ( !HasName() && USHRT_MAX == pImp->nVisualDocumentNumber && !pImp->aTitle.Len() )
+        if ( !HasName() && USHRT_MAX == pImp->nVisualDocumentNumber && pImp->aTitle.isEmpty() )
         {
             pImp->nVisualDocumentNumber = SFX_APP()->GetFreeIndex();
             Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
@@ -1398,9 +1398,9 @@ void SfxObjectShell::PositionView_Impl()
     if( pMark )
     {
         SfxViewShell* pSh = pMark->pFrame->GetViewShell();
-        if( pMark->aUserData.Len() )
+        if( !pMark->aUserData.isEmpty() )
             pSh->ReadUserData( pMark->aUserData, sal_True );
-        else if( pMark->aMark.Len() )
+        else if( !pMark->aMark.isEmpty() )
             pSh->JumpToMark( pMark->aMark );
         DELETEZ( Get_Impl()->pMarkData );
     }
