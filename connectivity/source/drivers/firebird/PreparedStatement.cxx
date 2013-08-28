@@ -376,6 +376,19 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 nIndex, sal_Int64 nValue)
 {
     setValue< sal_Int64 >(nIndex, nValue, SQL_INT64);
 }
+
+void SAL_CALL OPreparedStatement::setFloat(sal_Int32 nIndex, float nValue)
+    throw(SQLException, RuntimeException)
+{
+    setValue< sal_Int64 >(nIndex, nValue, SQL_FLOAT);
+}
+
+void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
+    throw(SQLException, RuntimeException)
+{
+    setValue< sal_Int64 >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
+}
+
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
@@ -403,27 +416,6 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
 {
     (void) parameterIndex;
     (void) aVal;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) x;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-}
-
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
-{
-    (void) parameterIndex;
-    (void) x;
     ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
