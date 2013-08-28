@@ -51,21 +51,21 @@ using namespace ::com::sun::star::task;
 struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
-    String                  aText, aStateText;
-    sal_uIntPtr                 nMax;
+    OUString                aText, aStateText;
+    sal_uIntPtr             nMax;
     clock_t                 nCreate;
     clock_t                 nNextReschedule;
-    sal_Bool                    bLocked, bAllDocs;
-    sal_Bool                    bWaitMode;
-    sal_Bool                    bAllowRescheduling;
-    sal_Bool                    bRunning;
+    sal_Bool                bLocked, bAllDocs;
+    sal_Bool                bWaitMode;
+    sal_Bool                bAllowRescheduling;
+    sal_Bool                bRunning;
 
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
     SfxWorkWindow*          pWorkWin;
     SfxViewFrame*           pView;
 
-                            SfxProgress_Impl( const String& );
+                            SfxProgress_Impl( const OUString& );
     void                    Enable_Impl( sal_Bool );
 
 };
@@ -102,7 +102,7 @@ void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 
 // -----------------------------------------------------------------------
 
-SfxProgress_Impl::SfxProgress_Impl( const String &/*rTitle*/ )
+SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
     : pActiveProgress(0), pWorkWin(0), pView(0)
 {
 }

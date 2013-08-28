@@ -46,9 +46,9 @@
 using namespace ::com::sun::star;
 
 
-sal_Char sHTML_MIME_text[] = "text/";
-sal_Char sHTML_MIME_application[] = "application/";
-sal_Char sHTML_MIME_experimental[] = "x-";
+const sal_Char sHTML_MIME_text[] = "text/";
+const sal_Char sHTML_MIME_application[] = "application/";
+const sal_Char sHTML_MIME_experimental[] = "x-";
 
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum const aAreaShapeOptEnums[] =
@@ -88,7 +88,7 @@ bool SfxHTMLParser::ParseMapOptions(
 {
     DBG_ASSERT( pImageMap, "ParseMapOptions: No Image-Map" );
 
-    String aName;
+    OUString aName;
 
     for (size_t i = rOptions.size(); i; )
     {
@@ -101,10 +101,10 @@ bool SfxHTMLParser::ParseMapOptions(
         }
     }
 
-    if( aName.Len() )
+    if( !aName.isEmpty() )
         pImageMap->SetName( aName );
 
-    return aName.Len() > 0;
+    return !aName.isEmpty();
 }
 
 bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
@@ -116,7 +116,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 
     sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
     std::vector<sal_uInt32> aCoords;
-    String aName, aHRef, aAlt, aTarget, sEmpty;
+    OUString aName, aHRef, aAlt, aTarget, sEmpty;
     sal_Bool bNoHRef = sal_False;
     SvxMacroTableDtor aMacroTbl;
 
@@ -163,8 +163,8 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 IMAPOBJ_SETEVENT:
             if( nEvent )
             {
-                String sTmp( rOption.GetString() );
-                if( sTmp.Len() )
+                OUString sTmp( rOption.GetString() );
+                if( !sTmp.isEmpty() )
                 {
                     sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
                     aMacroTbl.Insert( nEvent, SvxMacro( sTmp, sEmpty, eScrpType ));
@@ -175,7 +175,7 @@ IMAPOBJ_SETEVENT:
     }
 
     if( bNoHRef )
-        aHRef.Erase();
+        aHRef = "";
 
     sal_Bool bNewArea = sal_True;
     switch( nShape )
@@ -185,7 +185,7 @@ IMAPOBJ_SETEVENT:
         {
             Rectangle aRect( aCoords[0], aCoords[1],
                              aCoords[2], aCoords[3] );
-            IMapRectangleObject aMapRObj( aRect, aHRef, aAlt, String(), aTarget, aName,
+            IMapRectangleObject aMapRObj( aRect, aHRef, aAlt, OUString(), aTarget, aName,
                                           !bNoHRef );
             if( !aMacroTbl.empty() )
                 aMapRObj.SetMacroTable( aMacroTbl );
@@ -196,7 +196,7 @@ IMAPOBJ_SETEVENT:
         if( aCoords.size() >=3 )
         {
             Point aPoint( aCoords[0], aCoords[1] );
-            IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, String(),
+            IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, OUString(),
                                        aTarget, aName, !bNoHRef );
             if( !aMacroTbl.empty() )
                 aMapCObj.SetMacroTable( aMacroTbl );
@@ -210,7 +210,7 @@ IMAPOBJ_SETEVENT:
             Polygon aPoly( nCount );
             for( sal_uInt16 i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
-            IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, String(), aTarget, aName,
+            IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, OUString(), aTarget, aName,
                                         !bNoHRef );
             if( !aMacroTbl.empty() )
                 aMapPObj.SetMacroTable( aMacroTbl );
@@ -279,27 +279,25 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
             {
                 if( !aKV.GetValue().isEmpty() )
                 {
-                    String aTmp( aKV.GetValue() );
-                    if( aTmp.EqualsIgnoreCaseAscii( sHTML_MIME_text, 0, 5 ) )
-                        aTmp.Erase( 0, 5 );
-                    else if( aTmp.EqualsIgnoreCaseAscii( sHTML_MIME_application,
-                                                         0, 12 ) )
-                        aTmp.Erase( 0, 12 );
+                    OUString aTmp( aKV.GetValue() );
+                    if( aTmp.startsWithIgnoreAsciiCase( sHTML_MIME_text ) )
+                        aTmp = aTmp.copy( 5 );
+                    else if( aTmp.startsWithIgnoreAsciiCase( sHTML_MIME_application ) )
+                        aTmp = aTmp.copy( 12 );
                     else
                         break;
 
-                    if( aTmp.EqualsIgnoreCaseAscii( sHTML_MIME_experimental, 0,
-                                                    2 ) )
+                    if( aTmp.startsWithIgnoreAsciiCase( sHTML_MIME_experimental ) )
                     {
-                        aTmp.Erase( 0, 2 );
+                        aTmp = aTmp.copy( 2 );
                     }
 
-                    if( aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
+                    if( aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_starbasic ) )
                     {
                         eScriptType = STARBASIC;
                         aScriptType = SVX_MACRO_LANGUAGE_STARBASIC;
                     }
-                    if( !aTmp.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
+                    if( !aTmp.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_LG_javascript ) )
                     {
                         eScriptType = EXTENDED_STYPE;
                         aScriptType = aTmp;

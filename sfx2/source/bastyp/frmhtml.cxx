@@ -73,9 +73,8 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             }
         case HTML_O_SRC:
             pFrame->SetURL(
-                String(
                     INetURLObject::GetAbsURL(
-                        rBaseURL, aOption.GetString())) );
+                        rBaseURL, aOption.GetString()) );
             break;
         case HTML_O_NAME:
             pFrame->SetName( aOption.GetString() );
@@ -101,10 +100,10 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             break;
         case HTML_O_FRAMEBORDER:
         {
-            String aStr = aOption.GetString();
+            OUString aStr = aOption.GetString();
             sal_Bool bBorder = sal_True;
-            if ( aStr.EqualsIgnoreCaseAscii("NO") ||
-                 aStr.EqualsIgnoreCaseAscii("0") )
+            if ( aStr.equalsIgnoreAsciiCase("NO") ||
+                 aStr.equalsIgnoreAsciiCase("0") )
                 bBorder = sal_False;
             pFrame->SetFrameBorder( bBorder );
             break;
@@ -115,17 +114,17 @@ void SfxFrameHTMLParser::ParseFrameOptions(
         default:
             if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))
             {
-                String aStr = aOption.GetString();
+                OUString aStr = aOption.GetString();
                 sal_Bool bReadonly = sal_True;
-                if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
+                if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bReadonly = sal_False;
                 pFrame->SetReadOnly( bReadonly );
             }
             else if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_EDIT))
             {
-                String aStr = aOption.GetString();
+                OUString aStr = aOption.GetString();
                 sal_Bool bEdit = sal_True;
-                if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
+                if ( aStr.equalsIgnoreAsciiCase("FALSE") )
                     bEdit = sal_False;
                 pFrame->SetEditable( bEdit );
             }

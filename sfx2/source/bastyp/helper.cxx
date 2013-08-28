@@ -94,13 +94,13 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
             {
                 while ( xResultSet->next() )
                 {
-                    String aTitle( xRow->getString(1) );
-                    String aType( xRow->getString(2) );
-                    String aRow = aTitle;
-                    aRow += '\t';
+                    OUString aTitle( xRow->getString(1) );
+                    OUString aType( xRow->getString(2) );
+                    OUString aRow = aTitle;
+                    aRow += "\t";
                     aRow += aType;
-                    aRow += '\t';
-                    aRow += String( xContentAccess->queryContentIdentifierString() );
+                    aRow += "\t";
+                    aRow += xContentAccess->queryContentIdentifierString();
                     aList.push_back( OUString( aRow ) );
                 }
             }
@@ -163,14 +163,14 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
             {
                 while ( xResultSet->next() )
                 {
-                    String aTitle( xRow->getString(1) );
+                    OUString aTitle( xRow->getString(1) );
                     sal_Bool bFolder = xRow->getBoolean(2);
-                    String aRow = aTitle;
-                    aRow += '\t';
-                    aRow += String( xContentAccess->queryContentIdentifierString() );
-                    aRow += '\t';
-                    aRow += bFolder ? '1' : '0';
-                    aProperties.push_back( OUString( aRow ) );
+                    OUString aRow = aTitle;
+                    aRow += "\t";
+                    aRow += xContentAccess->queryContentIdentifierString();
+                    aRow += "\t";
+                    aRow += bFolder ? "1" : "0";
+                    aProperties.push_back( aRow );
                 }
             }
             catch( const ucb::CommandAbortedException& )

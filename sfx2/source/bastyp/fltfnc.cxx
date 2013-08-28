@@ -126,7 +126,7 @@ static void CreateFilterArr()
 }
 
 //----------------------------------------------------------------
-inline String ToUpper_Impl( const String &rStr )
+inline OUString ToUpper_Impl( const OUString &rStr )
 {
     return SvtSysLocale().GetCharClass().uppercase( rStr );
 }
@@ -198,8 +198,8 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
         return NULL;
 
     // For the following code we need some additional information.
-    String sServiceName   = aOpt.GetFactoryName(eFactory);
-    String sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
+    OUString sServiceName   = aOpt.GetFactoryName(eFactory);
+    OUString sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
 
     // Try to get the default filter. Dont fiorget to verify it.
     // May the set default filter does not exists any longer or
@@ -509,8 +509,8 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
     {
         // Here could a  re-installation be offered
-        String aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
-        aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
+        OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
+        aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
         QueryBox aQuery( NULL, WB_YES_NO | WB_DEF_YES, aText );
         short nRet = aQuery.Execute();
         if ( nRet == RET_YES )
@@ -527,8 +527,8 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
     }
     else if ( pFilter->GetFilterFlags() & SFX_FILTER_CONSULTSERVICE )
     {
-        String aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
-        aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
+        OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
+        aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
         InfoBox ( NULL, aText ).Execute();
         return sal_False;
     }
@@ -601,9 +601,9 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, sal_False);
     if ( !bHidden && pFlags )
     {
-        String aFlags( pFlags->GetValue() );
-        aFlags.ToUpperAscii();
-        if( STRING_NOTFOUND != aFlags.Search( 'H' ) )
+        OUString aFlags( pFlags->GetValue() );
+        aFlags = aFlags.toAsciiUpperCase();
+        if( -1 != aFlags.indexOf( 'H' ) )
             bHidden = sal_True;
     }
     *ppFilter = pFilter;
@@ -721,14 +721,14 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             {
-                String sWildCard = ToUpper_Impl( pFilter->GetWildcard().getGlob() );
-                String sExt      = ToUpper_Impl( rExt );
+                OUString sWildCard = ToUpper_Impl( pFilter->GetWildcard().getGlob() );
+                OUString sExt      = ToUpper_Impl( rExt );
 
-                if (!sExt.Len())
+                if (sExt.isEmpty())
                     continue;
 
-                if (sExt.GetChar(0) != (sal_Unicode)'.')
-                    sExt.Insert((sal_Unicode)'.', 0);
+                if (sExt[0] != (sal_Unicode)'.')
+                    sExt = "." + sExt;
 
                 WildCard aCheck(sWildCard, ';');
                 if (aCheck.Matches(sExt))
@@ -740,9 +740,9 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
     }
 
     // Use extension without dot!
-    String sExt( rExt );
-    if ( sExt.Len() && ( sExt.GetChar(0) == (sal_Unicode)'.' ))
-        sExt.Erase(0,1);
+    OUString sExt( rExt );
+    if ( !sExt.isEmpty() && ( sExt[0] == (sal_Unicode)'.' ))
+        sExt = sExt.copy(1);
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = OUString("Extensions");
@@ -786,9 +786,9 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const OUString& rName, SfxF
 
 const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    String aName( rName );
-    sal_uInt16 nIndex = aName.SearchAscii(": ");
-    if (  nIndex != STRING_NOTFOUND )
+    OUString aName( rName );
+    sal_Int32 nIndex = aName.indexOf(": ");
+    if (  nIndex != -1 )
     {
         SAL_WARN( "sfx.bastyp", "Old filter name used!");
         aName = rName.copy( nIndex + 2 );
@@ -842,7 +842,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
 IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
-    if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
+    if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
         !pFilter->GetWildcard().Matches(OUString("*.*")) &&
         !pFilter->GetWildcard().Matches(OUString('*'))
        )
