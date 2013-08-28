@@ -48,9 +48,9 @@ private:
     Link                m_aFindHdl;
     Link                m_aCloseHdl;
 
-    String              m_sToggleText;
-    OUString     m_sConfigName;
-    OString      m_sWinState;
+    OUString            m_sToggleText;
+    OUString            m_sConfigName;
+    OString             m_sWinState;
 
     bool                m_bIsConstructed;
 
@@ -67,8 +67,8 @@ public:
     inline void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
     inline void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
 
-    inline String       GetSearchText() const { return m_aSearchEdit.GetText(); }
-    inline void         SetSearchText( const String& _rText ) { m_aSearchEdit.SetText( _rText ); }
+    inline OUString     GetSearchText() const { return m_aSearchEdit.GetText(); }
+    inline void         SetSearchText( const OUString& _rText ) { m_aSearchEdit.SetText( _rText ); }
     inline bool         IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != sal_False ); }
     inline bool         IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != sal_False ); }
     inline bool         IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != sal_False ); }
