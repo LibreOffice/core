@@ -99,16 +99,16 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
 
 // -----------------------------------------------------------------------
 
-sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
+sal_Bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
 {
     if ( comphelper::string::getTokenCount(rStr, '/') != 4 )
         return sal_False;
 
     sal_Int32 nIdx = 0;
-    rPos.X() = rStr.GetToken(0, '/', nIdx).ToInt32();
-    rPos.Y() = rStr.GetToken(0, '/', nIdx).ToInt32();
-    rSize.Width() = rStr.GetToken(0, '/', nIdx).ToInt32();
-    rSize.Height() = rStr.GetToken(0, '/', nIdx).ToInt32();
+    rPos.X() = rStr.getToken(0, '/', nIdx).toInt32();
+    rPos.Y() = rStr.getToken(0, '/', nIdx).toInt32();
+    rSize.Width() = rStr.getToken(0, '/', nIdx).toInt32();
+    rSize.Height() = rStr.getToken(0, '/', nIdx).toInt32();
 
     // negative sizes are invalid
     if ( rSize.Width() < 0 || rSize.Height() < 0 )
@@ -117,19 +117,19 @@ sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
     return sal_True;
 }
 
-sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize )
+sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 {
-    xub_StrLen nIndex = rStr.Search( ',' );
-    if ( nIndex != STRING_NOTFOUND )
+    sal_Int32 nIndex = rStr.indexOf( ',' );
+    if ( nIndex != -1 )
     {
-        String aStr = rStr.Copy( nIndex+1 );
+        OUString aStr = rStr.copy( nIndex+1 );
 
         sal_Int32 nCount = comphelper::string::getTokenCount(aStr, ';');
         if ( nCount != 2 )
             return sal_False;
 
-        rSize.Width() = aStr.GetToken(0, ';' ).ToInt32();
-        rSize.Height() = aStr.GetToken(1, ';' ).ToInt32();
+        rSize.Width() = aStr.getToken(0, ';' ).toInt32();
+        rSize.Height() = aStr.getToken(1, ';' ).toInt32();
 
         // negative sizes are invalid
         if ( rSize.Width() < 0 || rSize.Height() < 0 )

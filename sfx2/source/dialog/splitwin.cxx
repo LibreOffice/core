@@ -264,34 +264,34 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         //  Read Configuration
-        String aWindowId = OUString("SplitWindow");
+        OUString aWindowId("SplitWindow");
         aWindowId += OUString::number( (sal_Int32) eTbxAlign );
         SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
-        String aWinData;
+        OUString aWinData;
         Any aUserItem = aWinOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
-            aWinData = String( aTemp );
-        if ( aWinData.Len() && aWinData.GetChar( (sal_uInt16) 0 ) == 'V' )
+            aWinData = aTemp;
+        if ( !aWinData.isEmpty() && aWinData[0] == 'V' )
         {
-            pEmptyWin->nState = (sal_uInt16) aWinData.GetToken( 1, ',' ).ToInt32();
+            pEmptyWin->nState = (sal_uInt16) aWinData.getToken( 1, ',' ).toInt32();
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = sal_True;
             bPinned = sal_True; // always assume pinned - floating mode not used anymore
 
             sal_uInt16 i=2;
-            sal_uInt16 nCount = (sal_uInt16) aWinData.GetToken(i++, ',').ToInt32();
+            sal_uInt16 nCount = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 SfxDock_Impl *pDock = new SfxDock_Impl;
                 pDock->pWin = 0;
                 pDock->bNewLine = sal_False;
                 pDock->bHide = sal_True;
-                pDock->nType = (sal_uInt16) aWinData.GetToken(i++, ',').ToInt32();
+                pDock->nType = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
                 if ( !pDock->nType )
                 {
                     // could mean NewLine
-                    pDock->nType = (sal_uInt16) aWinData.GetToken(i++, ',').ToInt32();
+                    pDock->nType = (sal_uInt16) aWinData.getToken(i++, ',').toInt32();
                     if ( !pDock->nType )
                     {
                         // Read error
@@ -367,7 +367,7 @@ void SfxSplitWindow::SaveConfig_Impl()
         aWinData.append(static_cast<sal_Int32>(pDock->nType));
     }
 
-    String aWindowId = OUString("SplitWindow");
+    OUString aWindowId("SplitWindow");
     aWindowId += OUString::number( (sal_Int32) GetAlign() );
     SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
     aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );

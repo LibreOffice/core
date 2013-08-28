@@ -119,7 +119,7 @@ namespace {
 
 String CreateSizeText( sal_Int64 nSize )
 {
-    String aUnitStr = OUString(' ');
+    OUString aUnitStr(" ");
     aUnitStr += SfxResId(STR_BYTES).toString();
     sal_Int64 nSize1 = nSize;
     sal_Int64 nSize2 = nSize1;
@@ -131,7 +131,7 @@ String CreateSizeText( sal_Int64 nSize )
     if ( nSize1 >= 10000 && nSize1 < nMega )
     {
         nSize1 /= 1024;
-        aUnitStr = ' ';
+        aUnitStr = " ";
         aUnitStr += SfxResId(STR_KB).toString();
         fSize /= 1024;
         nDec = 0;
@@ -139,7 +139,7 @@ String CreateSizeText( sal_Int64 nSize )
     else if ( nSize1 >= nMega && nSize1 < nGiga )
     {
         nSize1 /= nMega;
-        aUnitStr = ' ';
+        aUnitStr = " ";
         aUnitStr += SfxResId(STR_MB).toString();
         fSize /= nMega;
         nDec = 2;
@@ -147,14 +147,14 @@ String CreateSizeText( sal_Int64 nSize )
     else if ( nSize1 >= nGiga )
     {
         nSize1 /= nGiga;
-        aUnitStr = ' ';
+        aUnitStr = " ";
         aUnitStr += SfxResId(STR_GB).toString();
         fSize /= nGiga;
         nDec = 3;
     }
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
-    String aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
+    OUString aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
     aSizeStr += aUnitStr;
     if ( nSize1 < nSize2 )
     {
@@ -165,20 +165,20 @@ String CreateSizeText( sal_Int64 nSize )
 
         aSizeStr += " (";
         aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
-        aSizeStr += ' ';
+        aSizeStr += " ";
         aSizeStr += SfxResId(STR_BYTES).toString();
-        aSizeStr += ')';
+        aSizeStr += ")";
     }
     return aSizeStr;
 }
 
-String ConvertDateTime_Impl( const String& rName,
+String ConvertDateTime_Impl( const OUString& rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
     Date aD(uDT.Day, uDT.Month, uDT.Year);
     Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-     const String pDelim ( ", " );
-     String aStr( rWrapper.getDate( aD ) );
+     const OUString pDelim ( ", " );
+     OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
      aStr += rWrapper.getTime( aT, sal_True, sal_False );
      OUString aAuthor = comphelper::string::stripStart(rName, ' ');
@@ -485,7 +485,7 @@ void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& r
 
 bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
-    String aValue;
+    OUString aValue;
     sal_Int32 nValue = 0;
     sal_Bool bValue = sal_False;
     sal_Bool bIsInt = sal_False;
@@ -711,32 +711,32 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 //------------------------------------------------------------------------
 namespace
 {
-    String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
+    OUString GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
     {
         const LocaleDataWrapper& rWrapper( Application::GetSettings().GetLocaleDataWrapper() );
 
         Date aDate( _nDate );
         Time aTime( _nTime );
-        String aStr( rWrapper.getDate( aDate ) );
-        aStr.AppendAscii( ", " );
+        OUString aStr( rWrapper.getDate( aDate ) );
+        aStr += ", ";
         aStr += rWrapper.getTime( aTime );
         return aStr;
     }
 
     // copy from xmlsecurity/source/dialog/resourcemanager.cxx
-    String GetContentPart( const String& _rRawString, const String& _rPartId )
+    OUString GetContentPart( const OUString& _rRawString, const OUString& _rPartId )
     {
-        String s;
+        OUString s;
 
-        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
-        if ( nContStart != STRING_NOTFOUND )
+        sal_Int32  nContStart = _rRawString.indexOf( _rPartId );
+        if ( nContStart != -1 )
         {
-            nContStart = nContStart + _rPartId.Len();
+            nContStart = nContStart + _rPartId.getLength();
             ++nContStart; // now it's start of content, directly after Id
 
-            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+            sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
 
-            s = String( _rRawString, nContStart, nContEnd - nContStart );
+            s = _rRawString.copy( nContStart, nContEnd - nContStart );
         }
 
         return s;
@@ -794,7 +794,7 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
 {
-    String aName;
+    OUString aName;
     if ( bEnableUseUserData && m_pUseUserDataCB->IsChecked() )
         aName = SvtUserOptions().GetFullName();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
@@ -859,7 +859,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
             Reference< security::XDocumentDigitalSignatures > xD(
                 security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
 
-            String s;
+            OUString s;
             Sequence< security::DocumentSignatureInformation > aInfos;
             aInfos = xD->verifyDocumentContentSignatures( pMedium->GetZipStorageToSign_Impl(),
                                                             uno::Reference< io::XInputStream >() );
@@ -870,7 +870,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
                 OUString aCN_Id("CN");
                 const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
                 s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
-                s.AppendAscii( ", " );
+                s += ", ";
                 s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
             }
             m_pSignedValFt->SetText( s );
@@ -997,23 +997,23 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     }
 
     // determine file name
-    String aFile( m_pInfoItem->GetValue() );
-    String aFactory( aFile );
-    if ( aFile.Len() > 2 && aFile.GetChar(0) == '[' )
+    OUString aFile( m_pInfoItem->GetValue() );
+    OUString aFactory( aFile );
+    if ( aFile.getLength() > 2 && aFile[0] == '[' )
     {
-        sal_uInt16 nPos = aFile.Search( ']' );
-        aFactory = aFile.Copy( 1, nPos-1  );
-        aFile = aFile.Copy( nPos+1 );
+        sal_Int32 nPos = aFile.indexOf( ']' );
+        aFactory = aFile.copy( 1, nPos-1  );
+        aFile = aFile.copy( nPos+1 );
     }
 
     // determine name
-    String aName;
+    OUString aName;
     const SfxPoolItem* pItem = 0;
     if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, sal_False, &pItem ) )
     {
         INetURLObject aURL(aFile);
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
-        if ( !aName.Len() || aURL.GetProtocol() == INET_PROT_PRIVATE )
+        if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIVATE )
             aName = SfxResId( STR_NONAME ).toString();
         m_pNameED->SetReadOnly( sal_True );
     }
@@ -1036,17 +1036,17 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
-    const String& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     m_pBmp->SetImage( SvFileInformationManager::GetImage( aURL, sal_True ) );
 
     // determine size and type
-    String aSizeText( m_aUnknownSize );
+    OUString aSizeText( m_aUnknownSize );
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
     m_pShowSizeFT->SetText( aSizeText );
 
-    String aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
-    if ( aDescription.Len() == 0 )
+    OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
+    if ( aDescription.isEmpty() )
         aDescription = SfxResId( STR_SFX_NEWOFFICEDOC ).toString();
     m_pShowTypeFT->SetText( aDescription );
 
@@ -1059,7 +1059,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aPath.removeSegment();
         // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
         aPath.removeFinalSlash();
-        String aText( aPath.PathToFileName() ); //! (pb) MaxLen?
+        OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
         m_pFileValFt->SetText( aText );
     }
     else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
@@ -1116,20 +1116,20 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
 
      // Determine the Titels
     const SfxPoolItem* pItem = 0;
-    String aTitle( GetText() );
+    OUString aTitle( GetText() );
     if ( SFX_ITEM_SET !=
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, sal_False, &pItem ) )
     {
         // File name
-        String aFile( m_pInfoItem->GetValue() );
+        OUString aFile( m_pInfoItem->GetValue() );
 
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( aFile);
         if ( INET_PROT_PRIV_SOFFICE != aURL.GetProtocol() )
         {
-            String aLastName( aURL.GetLastName() );
-            if ( aLastName.Len() )
+            OUString aLastName( aURL.GetLastName() );
+            if ( !aLastName.isEmpty() )
                 aTitle += aLastName;
             else
                 aTitle += aFile;
@@ -1292,14 +1292,14 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
-    String sText(rDuration.Negative ? OUString('-') : OUString('+'));
+    OUString sText(rDuration.Negative ? OUString('-') : OUString('+'));
     sText += m_pLine->m_sDurationFormat;
-    sText.SearchAndReplace(OUString("%1"), OUString::number( rDuration.Years ) );
-    sText.SearchAndReplace(OUString("%2"), OUString::number( rDuration.Months ) );
-    sText.SearchAndReplace(OUString("%3"), OUString::number( rDuration.Days   ) );
-    sText.SearchAndReplace(OUString("%4"), OUString::number( rDuration.Hours  ) );
-    sText.SearchAndReplace(OUString("%5"), OUString::number( rDuration.Minutes) );
-    sText.SearchAndReplace(OUString("%6"), OUString::number( rDuration.Seconds) );
+    sText = sText.replaceFirst( "%1", OUString::number( rDuration.Years ) );
+    sText = sText.replaceFirst( "%2", OUString::number( rDuration.Months ) );
+    sText = sText.replaceFirst( "%3", OUString::number( rDuration.Days   ) );
+    sText = sText.replaceFirst( "%4", OUString::number( rDuration.Hours  ) );
+    sText = sText.replaceFirst( "%5", OUString::number( rDuration.Minutes) );
+    sText = sText.replaceFirst( "%6", OUString::number( rDuration.Seconds) );
     SetText( sText );
 }
 
@@ -1525,8 +1525,8 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     pLine->m_bTypeLostFocus = false;
     sal_Int64 nType = sal_Int64(
         (sal_IntPtr)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
-    String sValue = pLine->m_aValueEdit.GetText();
-    if ( sValue.Len() == 0 )
+    OUString sValue = pLine->m_aValueEdit.GetText();
+    if ( sValue.isEmpty() )
         return true;
 
     sal_uInt32 nIndex = 0xFFFFFFFF;
@@ -1861,8 +1861,8 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
         if ( pLine->m_bIsRemoved )
             continue;
 
-        String sPropertyName = pLine->m_aNameBox.GetText();
-        if ( sPropertyName.Len() > 0 )
+        OUString sPropertyName = pLine->m_aNameBox.GetText();
+        if ( !sPropertyName.isEmpty() )
         {
             aPropertiesSeq[i].Name = sPropertyName;
             sal_Int64 nType = sal_Int64(

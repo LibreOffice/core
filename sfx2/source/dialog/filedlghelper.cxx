@@ -156,8 +156,8 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     return pRet;
 }
 
-String EncodeSpaces_Impl( const String& rSource );
-String DecodeSpaces_Impl( const String& rSource );
+OUString EncodeSpaces_Impl( const OUString& rSource );
+OUString DecodeSpaces_Impl( const OUString& rSource );
 
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
@@ -292,7 +292,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = String( pHelp->GetHelpText( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), NULL ) );
+        aHelpText = pHelp->GetHelpText( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), NULL );
     return aHelpText;
 }
 
@@ -396,10 +396,10 @@ void FileDialogHelper_Impl::SaveLastUsedFilter( void )
 // ------------------------------------------------------------------------
 const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
 {
-    String aFilterName = getCurrentFilterUIName();
+    OUString aFilterName = getCurrentFilterUIName();
 
     const SfxFilter* pFilter = NULL;
-    if ( mpMatcher && aFilterName.Len() )
+    if ( mpMatcher && !aFilterName.isEmpty() )
         pFilter = mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
 
     return pFilter;
@@ -1632,9 +1632,9 @@ OUString FileDialogHelper_Impl::getPath() const
 // ------------------------------------------------------------------------
 OUString FileDialogHelper_Impl::getFilter() const
 {
-    String aFilter = getCurrentFilterUIName();
+    OUString aFilter = getCurrentFilterUIName();
 
-    if( !aFilter.Len() )
+    if( aFilter.isEmpty() )
         aFilter = maCurFilter;
 
     return aFilter;
@@ -1899,21 +1899,21 @@ void FileDialogHelper_Impl::addGraphicFilter()
     sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
-    String aExtensions;
+    OUString aExtensions;
 
     for ( i = 0; i < nCount; i++ )
     {
         j = 0;
-        String sWildcard;
+        OUString sWildcard;
         while( true )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
-            if ( !sWildcard.Len() )
+            if ( sWildcard.isEmpty() )
                 break;
-            if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
+            if ( aExtensions.indexOf( sWildcard ) == -1 )
             {
-                if ( aExtensions.Len() )
-                    aExtensions += sal_Unicode(';');
+                if ( !aExtensions.isEmpty() )
+                    aExtensions += ";";
                 aExtensions += sWildcard;
             }
         }
@@ -1941,19 +1941,19 @@ void FileDialogHelper_Impl::addGraphicFilter()
     // Now add the filter
     for ( i = 0; i < nCount; i++ )
     {
-        String aName = mpGraphicFilter->GetImportFormatName( i );
-        String aExt;
+        OUString aName = mpGraphicFilter->GetImportFormatName( i );
+        OUString aExt;
         j = 0;
-        String sWildcard;
+        OUString sWildcard;
         while( true )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
-            if ( !sWildcard.Len() )
+            if ( sWildcard.isEmpty() )
                 break;
-            if ( aExt.Search( sWildcard ) == STRING_NOTFOUND )
+            if ( aExt.indexOf( sWildcard ) == -1 )
             {
-                if ( aExt.Len() )
-                    aExt += sal_Unicode(';');
+                if ( !aExt.isEmpty() )
+                    aExt += ";";
                 aExt += sWildcard;
             }
         }
@@ -1984,7 +1984,7 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData = OUString(GRF_CONFIG_STR);
+        String aUserData(GRF_CONFIG_STR);
 
         try
         {
@@ -1998,7 +1998,7 @@ void FileDialogHelper_Impl::saveConfig()
             if ( aObj.GetProtocol() == INET_PROT_FILE )
                 aUserData.SetToken( 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-            String aFilter = getFilter();
+            OUString aFilter = getFilter();
             aFilter = EncodeSpaces_Impl( aFilter );
             aUserData.SetToken( 3, ' ', aFilter );
 
@@ -2010,14 +2010,14 @@ void FileDialogHelper_Impl::saveConfig()
     {
         sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-        String aUserData = OUString(STD_CONFIG_STR);
+        String aUserData(STD_CONFIG_STR);
 
         if ( aDlgOpt.Exists() )
         {
             Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
             OUString aTemp;
             if ( aUserItem >>= aTemp )
-                aUserData = String( aTemp );
+                aUserData = aTemp;
         }
 
         if ( mbHasAutoExt )
@@ -2052,7 +2052,7 @@ void FileDialogHelper_Impl::saveConfig()
                 sal_Bool bSelection = sal_True;
                 aValue >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
-                    aUserData.Append(' ');
+                    aUserData += " ";
                 aUserData.SetToken( 2, ' ', OUString::number( (sal_Int32) bSelection ) );
                 bWriteConfig = sal_True;
             }
@@ -2070,22 +2070,22 @@ void FileDialogHelper_Impl::saveConfig()
 // ------------------------------------------------------------------------
 namespace
 {
-    static OUString getInitPath( const String& _rFallback, const xub_StrLen _nFallbackToken )
+    static OUString getInitPath( const OUString& _rFallback, const xub_StrLen _nFallbackToken )
     {
         SfxApplication *pSfxApp = SFX_APP();
-        String sPath = pSfxApp->GetLastDir_Impl();
+        OUString sPath = pSfxApp->GetLastDir_Impl();
 
-        if ( !sPath.Len() )
-            sPath = _rFallback.GetToken( _nFallbackToken, ' ' );
+        if ( sPath.isEmpty() )
+            sPath = _rFallback.getToken( _nFallbackToken, ' ' );
 
         // check if the path points to a valid (accessible) directory
         sal_Bool bValid = sal_False;
-        if ( sPath.Len() )
+        if ( !sPath.isEmpty() )
         {
-            String sPathCheck( sPath );
-            if ( sPathCheck.GetBuffer()[ sPathCheck.Len() - 1 ] != '/' )
-                sPathCheck += '/';
-            sPathCheck += '.';
+            OUString sPathCheck( sPath );
+            if ( sPathCheck[ sPathCheck.getLength() - 1 ] != '/' )
+                sPathCheck += "/";
+            sPathCheck += ".";
             try
             {
                 ::ucbhelper::Content aContent( sPathCheck, uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -2095,7 +2095,7 @@ namespace
         }
 
         if ( !bValid )
-            sPath.Erase();
+            sPath = "";
 
         return sPath;
     }
@@ -2113,27 +2113,27 @@ void FileDialogHelper_Impl::loadConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aViewOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData;
+        OUString aUserData;
 
         if ( aViewOpt.Exists() )
         {
             Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
             OUString aTemp;
             if ( aUserItem >>= aTemp )
-                aUserData = String( aTemp );
+                aUserData = aTemp;
         }
 
-        if ( aUserData.Len() > 0 )
+        if ( !aUserData.isEmpty() )
         {
             try
             {
                 // respect the last "insert as link" state
-                sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
+                sal_Bool bLink = (sal_Bool) aUserData.getToken( 0, ' ' ).toInt32();
                 aValue <<= bLink;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
                 // respect the last "show preview" state
-                sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
+                sal_Bool bShowPreview = (sal_Bool) aUserData.getToken( 1, ' ' ).toInt32();
                 aValue <<= bShowPreview;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
@@ -2142,7 +2142,7 @@ void FileDialogHelper_Impl::loadConfig()
 
                 if ( maCurFilter.isEmpty() )
                 {
-                    String aFilter = aUserData.GetToken( 3, ' ' );
+                    OUString aFilter = aUserData.getToken( 3, ' ' );
                     aFilter = DecodeSpaces_Impl( aFilter );
                     setFilter( aFilter );
                 }
@@ -2159,17 +2159,17 @@ void FileDialogHelper_Impl::loadConfig()
     else
     {
         SvtViewOptions aViewOpt( E_DIALOG, IODLG_CONFIGNAME );
-        String aUserData;
+        OUString aUserData;
 
         if ( aViewOpt.Exists() )
         {
             Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
             OUString aTemp;
             if ( aUserItem >>= aTemp )
-                aUserData = String( aTemp );
+                aUserData = aTemp;
         }
 
-        if ( ! aUserData.Len() )
+        if ( aUserData.isEmpty() )
             aUserData = STD_CONFIG_STR;
 
         if ( maPath.isEmpty() )
@@ -2177,7 +2177,7 @@ void FileDialogHelper_Impl::loadConfig()
 
         if ( mbHasAutoExt )
         {
-            sal_Int32 nFlag = aUserData.GetToken( 0, ' ' ).ToInt32();
+            sal_Int32 nFlag = aUserData.getToken( 0, ' ' ).toInt32();
             aValue <<= (sal_Bool) nFlag;
             try
             {
@@ -2188,7 +2188,7 @@ void FileDialogHelper_Impl::loadConfig()
 
         if( mbHasSelectionBox )
         {
-            sal_Int32 nFlag = aUserData.GetToken( 2, ' ' ).ToInt32();
+            sal_Int32 nFlag = aUserData.getToken( 2, ' ' ).toInt32();
             aValue <<= (sal_Bool) nFlag;
             try
             {
@@ -2789,7 +2789,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
 }
 
 // ------------------------------------------------------------------------
-String EncodeSpaces_Impl( const String& rSource )
+OUString EncodeSpaces_Impl( const OUString& rSource )
 {
     OUString sRet( rSource );
     sRet = sRet.replaceAll( " ", "%20" );
@@ -2797,7 +2797,7 @@ String EncodeSpaces_Impl( const String& rSource )
 }
 
 // ------------------------------------------------------------------------
-String DecodeSpaces_Impl( const String& rSource )
+OUString DecodeSpaces_Impl( const OUString& rSource )
 {
     OUString sRet( rSource );
     sRet = sRet.replaceAll( "%20", " " );

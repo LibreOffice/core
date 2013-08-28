@@ -124,7 +124,7 @@ void SfxModalDialog::GetDialogData_Impl()
         Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
-            aExtraData = String( aTemp );
+            aExtraData = aTemp;
     }
 }
 
@@ -686,7 +686,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialogBase, OKHdl_Impl)
     {
         // Save user data in IniManager.
         pImpl->m_pSfxPage->FillUserData();
-        String sData( pImpl->m_pSfxPage->GetUserData() );
+        OUString sData( pImpl->m_pSfxPage->GetUserData() );
         SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
         aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
@@ -855,11 +855,11 @@ void SfxNoLayoutSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     {
         // First obtain the user data, only then Reset()
         SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( GetUniqId() ) );
-        String sUserData;
+        OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
-            sUserData = String( aTemp );
+            sUserData = aTemp;
         pImpl->m_pSfxPage->SetUserData( sUserData );
         pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
         pImpl->m_pSfxPage->Show();

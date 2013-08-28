@@ -454,7 +454,7 @@ namespace sfx2
         ::std::vector< OUString > aWildCards;
 
     public:
-        AppendWildcardToDescriptor( const String& _rWildCard );
+        AppendWildcardToDescriptor( const OUString& _rWildCard );
 
         // operate on a single class entry
         void operator() ( const FilterGroupEntryReferrer::value_type& _rClassReference )
@@ -469,17 +469,17 @@ namespace sfx2
     };
 
     //====================================================================
-    AppendWildcardToDescriptor::AppendWildcardToDescriptor( const String& _rWildCard )
+    AppendWildcardToDescriptor::AppendWildcardToDescriptor( const OUString& _rWildCard )
     {
-        DBG_ASSERT( _rWildCard.Len(),
+        DBG_ASSERT( !_rWildCard.isEmpty(),
             "AppendWildcardToDescriptor::AppendWildcardToDescriptor: invalid wildcard!" );
-        DBG_ASSERT( _rWildCard.GetBuffer()[0] != s_cWildcardSeparator,
+        DBG_ASSERT( _rWildCard[0] != s_cWildcardSeparator,
             "AppendWildcardToDescriptor::AppendWildcardToDescriptor: wildcard already separated!" );
 
         aWildCards.reserve( comphelper::string::getTokenCount(_rWildCard, s_cWildcardSeparator) );
 
-        const sal_Unicode* pTokenLoop = _rWildCard.GetBuffer();
-        const sal_Unicode* pTokenLoopEnd = pTokenLoop + _rWildCard.Len();
+        const sal_Unicode* pTokenLoop = _rWildCard.getStr();
+        const sal_Unicode* pTokenLoopEnd = pTokenLoop + _rWildCard.getLength();
         const sal_Unicode* pTokenStart = pTokenLoop;
         for ( ; pTokenLoop != pTokenLoopEnd; ++pTokenLoop )
         {
@@ -610,9 +610,9 @@ namespace sfx2
         // the group which we currently work with
         GroupedFilterList::iterator aCurrentGroup = _rAllFilters.end(); // no current group
         // the filter container of the current group - if this changes between two filters, a new group is reached
-        String aCurrentServiceName;
+        OUString aCurrentServiceName;
 
-        String sFilterWildcard;
+        OUString sFilterWildcard;
         OUString sFilterName;
         // loop through all the filters
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
@@ -621,11 +621,11 @@ namespace sfx2
             sFilterWildcard = pFilter->GetWildcard().getGlob();
             AppendWildcardToDescriptor aExtendWildcard( sFilterWildcard );
 
-            DBG_ASSERT( sFilterWildcard.Len(), "sfx2::lcl_GroupAndClassify: invalid wildcard of this filter!" );
+            DBG_ASSERT( !sFilterWildcard.isEmpty(), "sfx2::lcl_GroupAndClassify: invalid wildcard of this filter!" );
 
             // ===========================================================
             // check for a change in the group
-            String aServiceName = pFilter->GetServiceName();
+            OUString aServiceName = pFilter->GetServiceName();
             if ( aServiceName != aCurrentServiceName )
             {   // we reached a new group
 
@@ -692,7 +692,7 @@ namespace sfx2
                     // within the "real" group (aCollectedLocals is only temporary)
                     // -> do this now (as we just encountered the first filter belonging to this local class
                     // add a new entry which is the "real" group entry
-                    aCurrentGroup->push_back( FilterDescriptor( aBelongsToLocal->second->First, String() ) );
+                    aCurrentGroup->push_back( FilterDescriptor( aBelongsToLocal->second->First, OUString() ) );
                     // the position where we inserted the entry
                     FilterGroup::iterator aInsertPos = aCurrentGroup->end();
                     --aInsertPos;
@@ -750,7 +750,7 @@ namespace sfx2
             // operate on a single filter
             void operator() ( const FilterDescriptor& _rFilterEntry )
             {
-                String sDisplayText = m_bAddExtension
+                OUString sDisplayText = m_bAddExtension
                     ? addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True, *m_pFileDlgImpl )
                     : _rFilterEntry.First;
                 m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
@@ -762,7 +762,7 @@ namespace sfx2
 // =======================================================================
 
     //--------------------------------------------------------------------
-    sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, String& /* [out] */ _rAllFilterName )
+    sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
         sal_Bool        bHasAll = sal_False;
         _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL ).toString();
@@ -781,7 +781,7 @@ namespace sfx2
     void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rFilters )
     {
         // ===============================================================
-        String sAllFilterName;
+        OUString sAllFilterName;
         if ( !lcl_hasAllFilesFilter( _rFilterMatcher, sAllFilterName ) )
         {
             // get the first group of filters (by definition, this group contains the global classes)
@@ -1182,7 +1182,7 @@ namespace sfx2
 
         if ( sRet.indexOf( sAllFilter ) == -1 )
         {
-            String sExt = _rExtension;
+            OUString sExt = _rExtension;
             if ( !_bForOpen )
             {
                 // show '*' in extensions only when opening a document

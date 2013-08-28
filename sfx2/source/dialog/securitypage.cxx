@@ -96,7 +96,7 @@ namespace
 static short lcl_GetPassword(
     Window *pParent,
     bool bProtect,
-    /*out*/String &rPassword )
+    /*out*/OUString &rPassword )
 {
     bool bRes = false;
     SfxPasswordDialog aPasswdDlg( pParent );
@@ -112,7 +112,7 @@ static short lcl_GetPassword(
 }
 
 
-static bool lcl_IsPasswordCorrect( const String &rPassword )
+static bool lcl_IsPasswordCorrect( const OUString &rPassword )
 {
     bool bRes = false;
 
@@ -144,9 +144,9 @@ struct SfxSecurityPage_Impl
 
     bool                m_bOrigPasswordIsConfirmed;
     bool                m_bNewPasswordIsValid;
-    String              m_aNewPassword;
+    OUString            m_aNewPassword;
 
-    String              m_aEndRedliningWarning;
+    OUString            m_aEndRedliningWarning;
     bool                m_bEndRedliningWarningDone;
 
     DECL_LINK( RecordChangesCBToggleHdl, void* );
@@ -203,8 +203,8 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
             // sanity checks
             DBG_ASSERT( bDoRecordChanges || !bDoChangeProtection, "no change recording should imply no change protection" );
             DBG_ASSERT( bDoChangeProtection || !bDoRecordChanges, "no change protection should imply no change recording" );
-            DBG_ASSERT( !bDoChangeProtection || m_aNewPassword.Len() > 0, "change protection should imply password length is > 0" );
-            DBG_ASSERT( bDoChangeProtection || m_aNewPassword.Len() == 0, "no change protection should imply password length is 0" );
+            DBG_ASSERT( !bDoChangeProtection || !m_aNewPassword.isEmpty(), "change protection should imply password length is > 0" );
+            DBG_ASSERT( bDoChangeProtection || m_aNewPassword.isEmpty(), "no change protection should imply password length is 0" );
 
             // change recording
             if (bDoRecordChanges != pCurDocShell->IsChangeRecording())
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
                 && m_pProtectPB->IsVisible();
         if (!bAlreadyDone && bNeedPasssword)
         {
-            String aPasswordText;
+            OUString aPasswordText;
 
             // dialog canceled or no password provided
             if (!lcl_GetPassword( m_rMyTabPage.GetParent(), false, aPasswordText ))
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
             // remember required values to change protection and change recording in
             // FillItemSet_Impl later on if password was correct.
             m_bNewPasswordIsValid = true;
-            m_aNewPassword = String();
+            m_aNewPassword = "";
             m_pProtectPB->Show();
             m_pUnProtectPB->Hide();
         }
@@ -387,7 +387,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     const bool bCurrentProtection = m_pUnProtectPB->IsVisible();
 
     // ask user for password (if still necessary)
-    String aPasswordText;
+    OUString aPasswordText;
     bool bNewProtection = !bCurrentProtection;
     const bool bNeedPassword = bNewProtection || !m_bOrigPasswordIsConfirmed;
     if (bNeedPassword)
@@ -410,7 +410,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
     // remember required values to change protection and change recording in
     // FillItemSet_Impl later on if password was correct.
     m_bNewPasswordIsValid = true;
-    m_aNewPassword = bNewProtection? aPasswordText : String();
+    m_aNewPassword = bNewProtection? aPasswordText : OUString();
 
     m_pRecordChangesCB->Check( bNewProtection );
 

@@ -50,9 +50,9 @@ using ::std::vector;
 // **************************************************************************
 struct SfxVersionInfo
 {
-    String                  aName;
-    String                  aComment;
-    String                  aAuthor;
+    OUString                aName;
+    OUString                aComment;
+    OUString                aAuthor;
     DateTime                aCreationDate;
 
                             SfxVersionInfo();
@@ -265,8 +265,8 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
 
 
     // set dialog title (filename or docinfo title)
-    String sText = GetText();
-    ( sText += ' ' ) += pViewFrame->GetObjectShell()->GetTitle();
+    OUString sText = GetText();
+    sText = sText + " " + pViewFrame->GetObjectShell()->GetTitle();
     SetText( sText );
 
     Init_Impl();
@@ -274,28 +274,28 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     m_pVersionBox->setColSizes();
 }
 
-String ConvertWhiteSpaces_Impl( const String& rText )
+String ConvertWhiteSpaces_Impl( const OUString& rText )
 {
     // converted linebreaks and tabs to blanks; it's necessary for the display
-    String sConverted;
-    const sal_Unicode* pChars = rText.GetBuffer();
+    OUStringBuffer sConverted;
+    const sal_Unicode* pChars = rText.getStr();
     while ( *pChars )
     {
         switch ( *pChars )
         {
             case '\n' :
             case '\t' :
-                sConverted += ' ';
+                sConverted.append(' ');
                 break;
 
             default:
-                sConverted += *pChars;
+                sConverted.append(*pChars);
         }
 
         ++pChars;
     }
 
-    return sConverted;
+    return sConverted.makeStringAndClear();
 }
 
 void SfxVersionDialog::Init_Impl()
@@ -309,10 +309,10 @@ void SfxVersionDialog::Init_Impl()
         for ( size_t n = 0; n < m_pTable->size(); ++n )
         {
             SfxVersionInfo *pInfo = m_pTable->at( n );
-            String aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-            aEntry += '\t';
+            OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+            aEntry += "\t";
             aEntry += pInfo->aAuthor;
-            aEntry += '\t';
+            aEntry += "\t";
             aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
             SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
             pEntry->SetUserData( pInfo );

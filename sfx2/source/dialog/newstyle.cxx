@@ -31,7 +31,7 @@
 IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 {
     (void)pControl; //unused
-    const String aName( aColBox.GetText() );
+    const OUString aName( aColBox.GetText() );
     SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily(), SFXSTYLEBIT_ALL );
     if ( pStyle )
     {

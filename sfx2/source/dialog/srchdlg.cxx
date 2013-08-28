@@ -87,18 +87,18 @@ void SearchDialog::LoadConfig()
         OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
-            String sUserData( aTemp );
+            OUString sUserData( aTemp );
             DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
             sal_Int32 nIdx = 0;
-            String sSearchText = sUserData.GetToken( 0, ';', nIdx );
-            m_aWholeWordsBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
-            m_aMatchCaseBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
-            m_aWrapAroundBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
-            m_aBackwardsBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
+            OUString sSearchText = sUserData.getToken( 0, ';', nIdx );
+            m_aWholeWordsBox.Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_aMatchCaseBox.Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_aWrapAroundBox.Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_aBackwardsBox.Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
 
             nIdx = 0;
             while ( nIdx != -1 )
-                m_aSearchEdit.InsertEntry( sSearchText.GetToken( 0, '\t', nIdx ) );
+                m_aSearchEdit.InsertEntry( sSearchText.getToken( 0, '\t', nIdx ) );
             m_aSearchEdit.SelectEntryPos(0);
         }
     }
@@ -110,21 +110,21 @@ void SearchDialog::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
-    String sUserData;
+    OUString sUserData;
     sal_uInt16 i = 0, nCount = std::min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
     {
         sUserData += m_aSearchEdit.GetEntry(i);
-        sUserData += '\t';
+        sUserData += "\t";
     }
     sUserData = comphelper::string::stripStart(sUserData, '\t');
-    sUserData += ';';
+    sUserData += ";";
     sUserData += OUString::number( m_aWholeWordsBox.IsChecked() ? 1 : 0 );
-    sUserData += ';';
+    sUserData += ";";
     sUserData += OUString::number( m_aMatchCaseBox.IsChecked() ? 1 : 0 );
-    sUserData += ';';
+    sUserData += ";";
     sUserData += OUString::number( m_aWrapAroundBox.IsChecked() ? 1 : 0 );
-    sUserData += ';';
+    sUserData += ";";
     sUserData += OUString::number( m_aBackwardsBox.IsChecked() ? 1 : 0 );
 
     Any aUserItem = makeAny( OUString( sUserData ) );
@@ -133,7 +133,7 @@ void SearchDialog::SaveConfig()
 
 IMPL_LINK_NOARG(SearchDialog, FindHdl)
 {
-    String sSrchTxt = m_aSearchEdit.GetText();
+    OUString sSrchTxt = m_aSearchEdit.GetText();
     sal_uInt16 nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
     if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
         m_aSearchEdit.RemoveEntryAt(nPos);
@@ -145,7 +145,7 @@ IMPL_LINK_NOARG(SearchDialog, FindHdl)
 
 IMPL_LINK_NOARG(SearchDialog, ToggleHdl)
 {
-    String sTemp = m_aWrapAroundBox.GetText();
+    OUString sTemp = m_aWrapAroundBox.GetText();
     m_aWrapAroundBox.SetText( m_sToggleText );
     m_sToggleText = sTemp;
     return 0;

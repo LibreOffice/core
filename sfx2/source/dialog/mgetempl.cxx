@@ -89,9 +89,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pStyle->GetName().isEmpty() && pPool )
     {
         // NullString as Name -> generate Name
-        String aNoName( SfxResId(STR_NONAME).toString() );
+        OUString aNoName( SfxResId(STR_NONAME).toString() );
         sal_uInt16 nNo = 1;
-        String aNo( aNoName );
+        OUString aNo( aNoName );
         aNoName += OUString::number( nNo );
         while ( pPool->Find( aNoName ) )
         {
@@ -147,7 +147,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
 
         while ( pPoolStyle )
         {
-            const String aStr( pPoolStyle->GetName() );
+            const OUString aStr( pPoolStyle->GetName() );
             // own name as base template
             if ( aStr != aName )
                 m_pBaseLb->InsertEntry( aStr );
@@ -336,7 +336,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 */
 
 {
-    const String aStr(comphelper::string::stripStart(pEdit->GetText(), ' '));
+    const OUString aStr(comphelper::string::stripStart(pEdit->GetText(), ' '));
     pEdit->SetText( aStr );
     // Update the Listbox of the base template if possible
     if ( aStr != aBuf )
@@ -411,7 +411,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
 {
     bModified = sal_False;
-    String sCmp( pStyle->GetName() );
+    OUString sCmp( pStyle->GetName() );
 
     if ( sCmp != aName )
         pStyle->SetName( aName );

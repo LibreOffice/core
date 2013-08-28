@@ -495,8 +495,8 @@ SfxTabDialog::~SfxTabDialog()
         {
             // save settings of all pages (user data)
             pDataObject->pTabPage->FillUserData();
-            String aPageData( pDataObject->pTabPage->GetUserData() );
-            if ( aPageData.Len() )
+            OUString aPageData( pDataObject->pTabPage->GetUserData() );
+            if ( !aPageData.isEmpty() )
             {
                 // save settings of all pages (user data)
                 SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
@@ -864,8 +864,8 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
         if ( pDataObject->pTabPage )
         {
             pDataObject->pTabPage->FillUserData();
-            String aPageData( pDataObject->pTabPage->GetUserData() );
-            if ( aPageData.Len() )
+            OUString aPageData( pDataObject->pTabPage->GetUserData() );
+            if ( !aPageData.isEmpty() )
             {
                 // save settings of this page (user data)
                 SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
@@ -1302,11 +1302,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         pDataObject->pTabPage = pTabPage;
 
         SvtViewOptions aPageOpt( E_TABPAGE, OUString::number( pDataObject->nId ) );
-        String sUserData;
+        OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
-            sUserData = String( aTemp );
+            sUserData = aTemp;
         pTabPage->SetUserData( sUserData );
         Size aSiz = pTabPage->GetSizePixel();
 

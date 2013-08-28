@@ -930,15 +930,15 @@ sal_Bool CreateFromAddress_Impl( OUString& rFrom )
 
 {
     SvtUserOptions aUserCFG;
-    String aName        = aUserCFG.GetLastName  ();
-    String aFirstName   = aUserCFG.GetFirstName ();
-    if ( aFirstName.Len() || aName.Len() )
+    OUString aName        = aUserCFG.GetLastName  ();
+    OUString aFirstName   = aUserCFG.GetFirstName ();
+    if ( !aFirstName.isEmpty() || !aName.isEmpty() )
     {
-        if ( aFirstName.Len() )
+        if ( !aFirstName.isEmpty() )
         {
             rFrom = comphelper::string::strip(aFirstName, ' ');
 
-            if ( aName.Len() )
+            if ( !aName.isEmpty() )
                 rFrom += " ";
         }
         rFrom += comphelper::string::strip(aName, ' ');
@@ -947,13 +947,13 @@ sal_Bool CreateFromAddress_Impl( OUString& rFrom )
         rFrom = comphelper::string::remove(rFrom, '>');
         rFrom = comphelper::string::remove(rFrom, '@');
     }
-    String aEmailName = aUserCFG.GetEmail();
+    OUString aEmailName = aUserCFG.GetEmail();
 
     // remove illegal characters
     aEmailName = comphelper::string::remove(aEmailName, '<');
     aEmailName = comphelper::string::remove(aEmailName, '>');
 
-    if ( aEmailName.Len() )
+    if ( !aEmailName.isEmpty() )
     {
         if ( !rFrom.isEmpty() )
             rFrom += " ";

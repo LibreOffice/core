@@ -869,7 +869,7 @@ namespace sfx2
         );
         virtual ~TaskPaneController_Impl();
 
-        void    SetDefaultTitle( const String& i_rTitle );
+        void    SetDefaultTitle( const OUString& i_rTitle );
         void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     protected:
@@ -971,7 +971,7 @@ namespace sfx2
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    void TaskPaneController_Impl::SetDefaultTitle( const String& i_rTitle )
+    void TaskPaneController_Impl::SetDefaultTitle( const OUString& i_rTitle )
     {
         m_sDefaultTitle = i_rTitle;
         impl_updateDockingWindowTitle();
