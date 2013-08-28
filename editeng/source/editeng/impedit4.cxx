@@ -2272,7 +2272,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )
                     break;  // Document end or end of invalid region
 
-                aSel = SelectWord( aSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+                aSel = SelectWord( aSel, i18n::WordType::DICTIONARY_WORD );
                 String aWord( GetSelected( aSel ) );
                 // If afterwards a dot, this must be handed over!
                 // If an abbreviation ...
@@ -2345,7 +2345,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 }
 
                 EditPaM aLastEnd( aSel.Max() );
-                aSel = WordRight( aSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+                aSel = WordRight( aSel.Max(), i18n::WordType::DICTIONARY_WORD );
                 if ( bChanged && ( aSel.Min().GetNode() == pNode ) &&
                         ( ( aSel.Min().GetIndex()-aLastEnd.GetIndex() > 1 ) ) )
                 {
