@@ -1123,10 +1123,11 @@ bool LanguageTag::isIsoODF() const
         if (isIsoLocale())
             return ((meIsIsoODF = DECISION_YES) == DECISION_YES);
         // If this is not ISO locale for which script must not exist it can
-        // still be ISO locale plus ISO script lll-Ssss-CC
+        // still be ISO locale plus ISO script lll-Ssss-CC, but not ll-vvvv ...
+        // ll-vvvvvvvv
         meIsIsoODF = ((maBcp47.getLength() <= 11 &&
-                    isIsoLanguage( getLanguage()) && isIsoCountry( getRegion()) && isIsoScript( getScript())) ?
-                DECISION_YES : DECISION_NO);
+                    isIsoLanguage( getLanguage()) && isIsoCountry( getRegion()) && isIsoScript( getScript()) &&
+                    getVariants().isEmpty()) ? DECISION_YES : DECISION_NO);
     }
     return meIsIsoODF == DECISION_YES;
 }
