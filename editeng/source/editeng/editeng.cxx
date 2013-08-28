@@ -1547,7 +1547,7 @@ sal_uLong EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextForm
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
     pImpEditEngine->EnableUndo( sal_False );
-    pImpEditEngine->SetText( XubString() );
+    pImpEditEngine->SetText( OUString() );
     EditPaM aPaM( pImpEditEngine->GetEditDoc().GetStartPaM() );
     pImpEditEngine->Read( rInput, rBaseURL, eFormat, EditSelection( aPaM, aPaM ), pHTTPHeaderAttrs );
     pImpEditEngine->EnableUndo( bUndoEnabled );
@@ -2760,7 +2760,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const Font& rFont )
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
 {
     rSet.Put( SvxLanguageItem( rFont.GetLanguage(), EE_CHAR_LANGUAGE ) );
-    rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), XubString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+    rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), OUString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
     rSet.Put( SvxFontHeightItem( rFont.GetSize().Height(), 100, EE_CHAR_FONTHEIGHT )  );
     rSet.Put( SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH ) );
     rSet.Put( SvxShadowedItem( rFont.IsShadow(), EE_CHAR_SHADOW )  );

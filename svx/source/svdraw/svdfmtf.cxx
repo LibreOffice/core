@@ -996,7 +996,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 
 /**************************************************************************************************/
 
-void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct )
+void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rStr, const MetaAction& rAct )
 {
     // calc text box size, add 5% to make it fit safely
 

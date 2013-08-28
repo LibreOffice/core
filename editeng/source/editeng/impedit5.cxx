@@ -227,7 +227,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId, const ESelection& aSel )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), XubString(), nId );
+        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
         pUndoMarkSelection = new ESelection( aSel );
     }
@@ -237,7 +237,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), XubString(), nId );
+        GetUndoManager().EnterListAction( GetEditEnginePtr()->GetUndoComment( nId ), OUString(), nId );
         DBG_ASSERT( !pUndoMarkSelection, "UndoAction SelectionMarker?" );
     }
 }

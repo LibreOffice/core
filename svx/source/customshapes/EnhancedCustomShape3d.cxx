@@ -442,7 +442,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                                 // switch from line to fill, copy line attr to fill attr (color, transparence)
                                 aLocalSet.Put(XLineWidthItem(0));
                                 aLocalSet.Put(XLineStyleItem(XLINE_NONE));
-                                aLocalSet.Put(XFillColorItem(XubString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
+                                aLocalSet.Put(XFillColorItem(OUString(), ((const XLineColorItem&)(aLocalSet.Get(XATTR_LINECOLOR))).GetColorValue()));
                                 aLocalSet.Put(XFillStyleItem(XFILL_SOLID));
                                 aLocalSet.Put(XFillTransparenceItem(((const XLineTransparenceItem&)(aLocalSet.Get(XATTR_LINETRANSPARENCE))).GetValue()));
                                 aLocalFillStyle = XFILL_SOLID;

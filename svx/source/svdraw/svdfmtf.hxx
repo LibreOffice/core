@@ -141,7 +141,7 @@ protected:
     void DoAction(MetaTextLanguageAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
     void DoAction(MetaOverlineColorAction& rAct)  { rAct.Execute(&maVD); mbFntDirty = true; }
 
-    void ImportText(const Point& rPos, const XubString& rStr, const MetaAction& rAct);
+    void ImportText(const Point& rPos, const OUString& rStr, const MetaAction& rAct);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj(SdrObject* pObj, bool bScale = true);
     void MapScaling();

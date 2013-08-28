@@ -250,7 +250,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     MapUnit ePntUnit( MAP_TWIP );
     lValue = LogicToLogic( lValue , eOrgUnit, ePntUnit );
 
-    XubString strCurrValue = maMFWidth.GetText();
+    OUString strCurrValue = maMFWidth.GetText();
     sal_uInt16 i = 0;
     for(; i < 8; i++)
         if(strCurrValue == rStr[i])

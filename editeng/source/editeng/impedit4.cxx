@@ -1175,7 +1175,7 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     sal_Bool _bUpdate = GetUpdateMode();
     sal_Bool _bUndo = IsUndoEnabled();
 
-    SetText( XubString() );
+    SetText( OUString() );
     EditPaM aPaM = aEditDoc.GetStartPaM();
 
     SetUpdateMode( sal_False );

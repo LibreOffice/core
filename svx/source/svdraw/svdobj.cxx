@@ -2190,7 +2190,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SFX_ITEM_SET && pModel!=NULL) {
-        XubString aLayerName=((const SdrLayerNameItem*)pPoolItem)->GetValue();
+        OUString aLayerName=((const SdrLayerNameItem*)pPoolItem)->GetValue();
         const SdrLayerAdmin* pLayAd=pPage!=NULL ? &pPage->GetLayerAdmin() : pModel!=NULL ? &pModel->GetLayerAdmin() : NULL;
         if (pLayAd!=NULL) {
             const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName, true);
@@ -2205,7 +2205,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJECTNAME,true,&pPoolItem)==SFX_ITEM_SET) {
-        XubString aName=((const SdrObjectNameItem*)pPoolItem)->GetValue();
+        OUString aName=((const SdrObjectNameItem*)pPoolItem)->GetValue();
         SetName(aName);
     }
     Rectangle aNewLogic(rLogic);
@@ -2259,9 +2259,9 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
     if (rLogic.GetHeight()!=rSnap.GetHeight()) {
         lcl_SetItem(rAttr,bMerge,SdrLogicSizeHeightItem(rLogic.GetHeight()-1));
     }
-    XubString aName(GetName());
+    OUString aName(GetName());
 
-    if(aName.Len())
+    if (!aName.isEmpty())
     {
         lcl_SetItem(rAttr, bMerge, SdrObjectNameItem(aName));
     }
@@ -2510,7 +2510,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 aSet.Put(XLineStyleItem(XLINE_NONE));
                 Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
                 sal_uInt16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-                aSet.Put(XFillColorItem(XubString(), aColorLine));
+                aSet.Put(XFillColorItem(OUString(), aColorLine));
                 aSet.Put(XFillStyleItem(XFILL_SOLID));
                 aSet.Put(XFillTransparenceItem(nTransLine));
 
