@@ -1664,8 +1664,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
         const SfxItemSet* pOldI = pISet;
 
-        AttrOutput().SectionPageBorders( pPdFmt, pPdFirstPgFmt );
-
         const SfxPoolItem* pItem;
         if ( titlePage && SFX_ITEM_SET ==
                 pPdFirstPgFmt->GetItemState( RES_PAPER_BIN, true, &pItem ) )
@@ -1700,6 +1698,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
         pISet = &pPdFmt->GetAttrSet();
         AttrOutput().OutputStyleItemSet( pPdFmt->GetAttrSet(), true, false );
+        AttrOutput().SectionPageBorders( pPdFmt, pPdFirstPgFmt );
         pISet = pOldI;
 
         // then the rest of the settings from PageDesc
