@@ -148,7 +148,7 @@ ContentInfo::~ContentInfo()
     aAttribs.clear();
 }
 
-WrongList* ContentInfo::GetWrongList() const
+const WrongList* ContentInfo::GetWrongList() const
 {
     return mpWrongs.get();
 }

@@ -149,7 +149,7 @@ public:
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
     SfxStyleFamily&     GetFamily()         { return eFamily; }
 
-    WrongList* GetWrongList() const;
+    const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
     bool operator==( const ContentInfo& rCompare ) const;
     bool operator!=( const ContentInfo& rCompare ) const;
