@@ -2420,22 +2420,23 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         pEntry = pFontData->CreateFontInstance( aFontSelData );
 
         // if we found a different symbol font we need a symbol conversion table
-        if( pFontData->IsSymbolFont() )
+        if( pFontData->IsSymbolFont() || aFontSelData.IsSymbolFont() )
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
                 pEntry->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
-#ifdef MACOSX
-            //It might be better to dig out the font version of the target font
-            //to see if it's a modern re-coded apple symbol font in case that
-            //font shows up on a different platform
-            if (!pEntry->mpConversion &&
-                aFontSelData.maTargetName.EqualsIgnoreCaseAscii("symbol") &&
-                aFontSelData.maSearchName.EqualsIgnoreCaseAscii("symbol"))
-            {
-                pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
-            }
-#endif
         }
+
+#ifdef MACOSX
+        //It might be better to dig out the font version of the target font
+        //to see if it's a modern re-coded apple symbol font in case that
+        //font shows up on a different platform
+        if (!pEntry->mpConversion &&
+            aFontSelData.maTargetName.EqualsIgnoreCaseAscii("symbol") &&
+            aFontSelData.maSearchName.EqualsIgnoreCaseAscii("symbol"))
+        {
+                pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
+        }
+#endif
 
         // add the new entry to the cache
         maFontInstanceList[ aFontSelData ] = pEntry;
