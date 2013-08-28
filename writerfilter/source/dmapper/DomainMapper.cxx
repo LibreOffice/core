@@ -1155,17 +1155,16 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                              uno::makeAny( aLocale ) );
         }
         break;
-// This is the value when the compat option is not enabled. No idea where it comes from, the spec doesn't mention it.
-#define AUTO_PARA_SPACING sal_Int32(49)
+        // See SwWW8ImplReader::GetParagraphAutoSpace() on why these are 100 and 280
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( AUTO_PARA_SPACING ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
             else
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
-                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( AUTO_PARA_SPACING ) );
+                m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
             else
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
