@@ -196,89 +196,89 @@ void EditSpellWrapper::CheckSpellTo()
     }
 }
 
-sal_uInt16 WrongList::Valid = std::numeric_limits<sal_uInt16>::max();
+size_t WrongList::Valid = std::numeric_limits<size_t>::max();
 
-WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(Valid) {}
+WrongList::WrongList() : mnInvalidStart(0), mnInvalidEnd(Valid) {}
 
 WrongList::WrongList(const WrongList& r) :
     maRanges(r.maRanges),
-    nInvalidStart(r.nInvalidStart),
-    nInvalidEnd(r.nInvalidEnd) {}
+    mnInvalidStart(r.mnInvalidStart),
+    mnInvalidEnd(r.mnInvalidEnd) {}
 
 WrongList::~WrongList() {}
 
 bool WrongList::IsValid() const
 {
-    return nInvalidStart == Valid;
+    return mnInvalidStart == Valid;
 }
 
 void WrongList::SetValid()
 {
-    nInvalidStart = Valid;
-    nInvalidEnd = 0;
+    mnInvalidStart = Valid;
+    mnInvalidEnd = 0;
 }
 
-void WrongList::SetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd )
+void WrongList::SetInvalidRange( size_t nStart, size_t nEnd )
 {
-    if (nInvalidStart == Valid || nStart < nInvalidStart)
-        nInvalidStart = nStart;
+    if (mnInvalidStart == Valid || nStart < mnInvalidStart)
+        mnInvalidStart = nStart;
 
-    if (nInvalidEnd < nEnd)
-        nInvalidEnd = nEnd;
+    if (mnInvalidEnd < nEnd)
+        mnInvalidEnd = nEnd;
 }
 
-void WrongList::ResetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd )
+void WrongList::ResetInvalidRange( size_t nStart, size_t nEnd )
 {
-    nInvalidStart = nStart;
-    nInvalidEnd = nEnd;
+    mnInvalidStart = nStart;
+    mnInvalidEnd = nEnd;
 }
 
-void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSep )
+void WrongList::TextInserted( size_t nPos, size_t nLength, bool bPosIsSep )
 {
     if (IsValid())
     {
-        nInvalidStart = nPos;
-        nInvalidEnd = nPos + nLength;
+        mnInvalidStart = nPos;
+        mnInvalidEnd = nPos + nLength;
     }
     else
     {
-        if ( nInvalidStart > nPos )
-            nInvalidStart = nPos;
-        if ( nInvalidEnd >= nPos )
-            nInvalidEnd = nInvalidEnd + nLength;
+        if ( mnInvalidStart > nPos )
+            mnInvalidStart = nPos;
+        if ( mnInvalidEnd >= nPos )
+            mnInvalidEnd = mnInvalidEnd + nLength;
         else
-            nInvalidEnd = nPos + nLength;
+            mnInvalidEnd = nPos + nLength;
     }
 
     for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
-        WrongRange& rWrong = maRanges[i];
+        editeng::MisspellRange& rWrong = maRanges[i];
         bool bRefIsValid = true;
-        if (rWrong.nEnd >= nPos)
+        if (rWrong.mnEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if (rWrong.nStart > nPos)
+            if (rWrong.mnStart > nPos)
             {
-                rWrong.nStart += nLength;
-                rWrong.nEnd += nLength;
+                rWrong.mnStart += nLength;
+                rWrong.mnEnd += nLength;
             }
             // 1: Starts before and goes until nPos...
-            else if (rWrong.nEnd == nPos)
+            else if (rWrong.mnEnd == nPos)
             {
                 // Should be halted at a blank!
                 if ( !bPosIsSep )
-                    rWrong.nEnd += nLength;
+                    rWrong.mnEnd += nLength;
             }
             // 2: Starts before and goes until after nPos...
-            else if ((rWrong.nStart < nPos) && (rWrong.nEnd > nPos))
+            else if ((rWrong.mnStart < nPos) && (rWrong.mnEnd > nPos))
             {
-                rWrong.nEnd += nLength;
+                rWrong.mnEnd += nLength;
                 // When a separator remove and re-examine the Wrong
                 if ( bPosIsSep )
                 {
                     // Split Wrong...
-                    WrongRange aNewWrong(rWrong.nStart, nPos);
-                    rWrong.nStart = nPos + 1;
+                    editeng::MisspellRange aNewWrong(rWrong.mnStart, nPos);
+                    rWrong.mnStart = nPos + 1;
                     maRanges.insert(maRanges.begin() + i, aNewWrong);
                     // Reference no longer valid after Insert, the other
                     // was inserted in front of this position
@@ -287,76 +287,76 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSe
                 }
             }
             // 3: Attribute starts at position ..
-            else if (rWrong.nStart == nPos)
+            else if (rWrong.mnStart == nPos)
             {
-                rWrong.nEnd += nLength;
+                rWrong.mnEnd += nLength;
                 if ( bPosIsSep )
-                    ++(rWrong.nStart);
+                    ++(rWrong.mnStart);
             }
         }
-        SAL_WARN_IF(bRefIsValid && rWrong.nStart >= rWrong.nEnd, "editeng",
-                "TextInserted, WrongRange: Start >= End?!");
+        SAL_WARN_IF(bRefIsValid && rWrong.mnStart >= rWrong.mnEnd, "editeng",
+                "TextInserted, editeng::MisspellRange: Start >= End?!");
         (void)bRefIsValid;
     }
 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
 
-void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nLength )
+void WrongList::TextDeleted( size_t nPos, size_t nLength )
 {
-    sal_uInt16 nEndPos = nPos + nLength;
+    size_t nEndPos = nPos + nLength;
     if (IsValid())
     {
         sal_uInt16 nNewInvalidStart = nPos ? nPos - 1 : 0;
-        nInvalidStart = nNewInvalidStart;
-        nInvalidEnd = nNewInvalidStart + 1;
+        mnInvalidStart = nNewInvalidStart;
+        mnInvalidEnd = nNewInvalidStart + 1;
     }
     else
     {
-        if ( nInvalidStart > nPos )
-            nInvalidStart = nPos;
-        if ( nInvalidEnd > nPos )
+        if ( mnInvalidStart > nPos )
+            mnInvalidStart = nPos;
+        if ( mnInvalidEnd > nPos )
         {
-            if (nInvalidEnd > nEndPos)
-                nInvalidEnd = nInvalidEnd - nLength;
+            if (mnInvalidEnd > nEndPos)
+                mnInvalidEnd = mnInvalidEnd - nLength;
             else
-                nInvalidEnd = nPos+1;
+                mnInvalidEnd = nPos+1;
         }
     }
 
     for (WrongList::iterator i = begin(); i != end(); )
     {
         bool bDelWrong = false;
-        if (i->nEnd >= nPos)
+        if (i->mnEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if (i->nStart >= nEndPos)
+            if (i->mnStart >= nEndPos)
             {
-                i->nStart -= nLength;
-                i->nEnd -= nLength;
+                i->mnStart -= nLength;
+                i->mnEnd -= nLength;
             }
             // 1. Delete Internal Wrongs ...
-            else if (i->nStart >= nPos && i->nEnd <= nEndPos)
+            else if (i->mnStart >= nPos && i->mnEnd <= nEndPos)
             {
                 bDelWrong = true;
             }
             // 2. Wrong begins before, ends inside or behind it ...
-            else if (i->nStart <= nPos && i->nEnd > nPos)
+            else if (i->mnStart <= nPos && i->mnEnd > nPos)
             {
-                if (i->nEnd <= nEndPos)   // ends inside
-                    i->nEnd = nPos;
+                if (i->mnEnd <= nEndPos)   // ends inside
+                    i->mnEnd = nPos;
                 else
-                    i->nEnd -= nLength; // ends after
+                    i->mnEnd -= nLength; // ends after
             }
             // 3. Wrong begins inside, ending after ...
-            else if (i->nStart >= nPos && i->nEnd > nEndPos)
+            else if (i->mnStart >= nPos && i->mnEnd > nEndPos)
             {
-                i->nStart = nEndPos - nLength;
-                i->nEnd -= nLength;
+                i->mnStart = nEndPos - nLength;
+                i->mnEnd -= nLength;
             }
         }
-        SAL_WARN_IF(i->nStart >= i->nEnd, "editeng",
-                "TextDeleted, WrongRange: Start >= End?!");
+        SAL_WARN_IF(i->mnStart >= i->mnEnd, "editeng",
+                "TextDeleted, editeng::MisspellRange: Start >= End?!");
         if ( bDelWrong )
         {
             i = maRanges.erase(i);
@@ -370,7 +370,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nLength )
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "TextDeleted: WrongList broken!");
 }
 
-bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
+bool WrongList::NextWrong( size_t& rnStart, size_t& rnEnd ) const
 {
     /*
         rnStart get the start position, is possibly adjusted wrt. Wrong start
@@ -378,56 +378,56 @@ bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
     */
     for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
-        if ( i->nEnd > rnStart )
+        if (i->mnEnd > rnStart)
         {
-            rnStart = i->nStart;
-            rnEnd = i->nEnd;
+            rnStart = i->mnStart;
+            rnEnd = i->mnEnd;
             return true;
         }
     }
     return false;
 }
 
-bool WrongList::HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
+bool WrongList::HasWrong( size_t nStart, size_t nEnd ) const
 {
     for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
-        if (i->nStart == nStart && i->nEnd == nEnd)
+        if (i->mnStart == nStart && i->mnEnd == nEnd)
             return true;
-        else if ( i->nStart >= nStart )
+        else if (i->mnStart >= nStart)
             break;
     }
     return false;
 }
 
-bool WrongList::HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
+bool WrongList::HasAnyWrong( size_t nStart, size_t nEnd ) const
 {
     for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
-        if (i->nEnd >= nStart && i->nStart < nEnd)
+        if (i->mnEnd >= nStart && i->mnStart < nEnd)
             return true;
-        else if (i->nStart >= nEnd)
+        else if (i->mnStart >= nEnd)
             break;
     }
     return false;
 }
 
-void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
+void WrongList::ClearWrongs( size_t nStart, size_t nEnd,
             const ContentNode* pNode )
 {
     for (WrongList::iterator i = begin(); i != end(); )
     {
-        if (i->nEnd > nStart && i->nStart < nEnd)
+        if (i->mnEnd > nStart && i->mnStart < nEnd)
         {
-            if (i->nEnd > nEnd) // Runs out
+            if (i->mnEnd > nEnd) // Runs out
             {
-                i->nStart = nEnd;
+                i->mnStart = nEnd;
                 // Blanks?
-                while (i->nStart < pNode->Len() &&
-                       (pNode->GetChar(i->nStart) == ' ' ||
-                        pNode->IsFeature(i->nStart)))
+                while (i->mnStart < pNode->Len() &&
+                       (pNode->GetChar(i->mnStart) == ' ' ||
+                        pNode->IsFeature(i->mnStart)))
                 {
-                    ++(i->nStart);
+                    ++i->mnStart;
                 }
                 ++i;
             }
@@ -446,12 +446,12 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "ClearWrongs: WrongList broken!");
 }
 
-void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd )
+void WrongList::InsertWrong( size_t nStart, size_t nEnd )
 {
     WrongList::iterator nPos = end();
     for (WrongList::iterator i = begin(); i != end(); ++i)
     {
-        if (i->nStart >= nStart )
+        if (i->mnStart >= nStart)
         {
             nPos = i;
             {
@@ -459,18 +459,18 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd )
                 // and runs along, but not that there are several ranges ...
                 // Exactly in the range is no one allowed to be, otherwise this
                 // Method can not be called!
-                SAL_WARN_IF((i->nStart != nStart || i->nEnd <= nEnd) && i->nStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
-                if (i->nStart == nStart && i->nEnd > nEnd)
-                    i->nStart = nEnd + 1;
+                SAL_WARN_IF((i->mnStart != nStart || i->mnEnd <= nEnd) && i->mnStart <= nEnd, "editeng", "InsertWrong: RangeMismatch!");
+                if (i->mnStart == nStart && i->mnEnd > nEnd)
+                    i->mnStart = nEnd + 1;
             }
             break;
         }
     }
 
     if (nPos != maRanges.end())
-        maRanges.insert(nPos, WrongRange(nStart, nEnd));
+        maRanges.insert(nPos, editeng::MisspellRange(nStart, nEnd));
     else
-        maRanges.push_back(WrongRange(nStart, nEnd));
+        maRanges.push_back(editeng::MisspellRange(nStart, nEnd));
 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
@@ -478,7 +478,7 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd )
 void WrongList::MarkWrongsInvalid()
 {
     if (!maRanges.empty())
-        SetInvalidRange(maRanges.front().nStart, maRanges.back().nEnd);
+        SetInvalidRange(maRanges.front().mnStart, maRanges.back().mnEnd);
 }
 
 WrongList* WrongList::Clone() const
@@ -500,7 +500,7 @@ bool WrongList::operator==(const WrongList& rCompare) const
 
     for (; rCA != maRanges.end(); ++rCA, ++rCB)
     {
-        if(rCA->nStart != rCB->nStart || rCA->nEnd != rCB->nEnd)
+        if(rCA->mnStart != rCB->mnStart || rCA->mnEnd != rCB->mnEnd)
             return false;
     }
 
@@ -512,17 +512,17 @@ bool WrongList::empty() const
     return maRanges.empty();
 }
 
-void WrongList::push_back(const WrongRange& rRange)
+void WrongList::push_back(const editeng::MisspellRange& rRange)
 {
     maRanges.push_back(rRange);
 }
 
-WrongRange& WrongList::back()
+editeng::MisspellRange& WrongList::back()
 {
     return maRanges.back();
 }
 
-const WrongRange& WrongList::back() const
+const editeng::MisspellRange& WrongList::back() const
 {
     return maRanges.back();
 }
@@ -556,10 +556,10 @@ bool WrongList::DbgIsBuggy() const
         for (WrongList::const_iterator j = i + 1; !bError && (j != end()); ++j)
         {
             // 1) Start before, End after the second Start
-            if (i->nStart <= j->nStart && i->nEnd >= j->nStart)
+            if (i->mnStart <= j->mnStart && i->mnEnd >= j->mnStart)
                 bError = true;
             // 2) Start after the second Start, but still before the second End
-            else if (i->nStart >= j->nStart && i->nStart <= j->nEnd)
+            else if (i->mnStart >= j->mnStart && i->mnStart <= j->mnEnd)
                 bError = true;
         }
     }

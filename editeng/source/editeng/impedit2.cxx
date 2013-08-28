@@ -2235,10 +2235,10 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         WrongList* pRWrongs = pRight->GetWrongList();
         for (WrongList::iterator i = pRWrongs->begin(); i < pRWrongs->end(); ++i)
         {
-            if (i->nStart != 0)   // Not a subsequent
+            if (i->mnStart != 0)   // Not a subsequent
             {
-                i->nStart = i->nStart + nEnd;
-                i->nEnd = i->nEnd + nEnd;
+                i->mnStart = i->mnStart + nEnd;
+                i->mnEnd = i->mnEnd + nEnd;
                 pLeft->GetWrongList()->push_back(*i);
             }
         }
@@ -2821,15 +2821,15 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
         {
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if (i->nStart > nEnd)
+            if (i->mnStart > nEnd)
             {
                 pRWrongs->push_back(*i);
-                WrongRange& rRWrong = pRWrongs->back();
-                rRWrong.nStart = rRWrong.nStart - nEnd;
-                rRWrong.nEnd = rRWrong.nEnd - nEnd;
+                editeng::MisspellRange& rRWrong = pRWrongs->back();
+                rRWrong.mnStart = rRWrong.mnStart - nEnd;
+                rRWrong.mnEnd = rRWrong.mnEnd - nEnd;
             }
-            else if (i->nStart < nEnd && i->nEnd > nEnd)
-                i->nEnd = nEnd;
+            else if (i->mnStart < nEnd && i->mnEnd > nEnd)
+                i->mnEnd = nEnd;
         }
         sal_uInt16 nInv = nEnd ? nEnd-1 : nEnd;
         if ( nEnd )

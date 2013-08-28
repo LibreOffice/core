@@ -25,6 +25,7 @@
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/svxenum.hxx>
+#include "editeng/misspellrange.hxx"
 #include <tools/link.hxx>
 #include <vcl/outdev.hxx>
 
@@ -64,50 +65,44 @@ public:
 
 };
 
-
-struct WrongRange
-{
-    sal_uInt16 nStart;
-    sal_uInt16 nEnd;
-
-    WrongRange( sal_uInt16 nS, sal_uInt16 nE ) { nStart = nS; nEnd = nE; }
-};
-
+/**
+ * Keeps track of misspelled ranges in paragraph.
+ */
 class WrongList
 {
-    static sal_uInt16 Valid;
+    static size_t Valid;
 
-    std::vector<WrongRange> maRanges;
-    sal_uInt16  nInvalidStart;
-    sal_uInt16  nInvalidEnd;
+    std::vector<editeng::MisspellRange> maRanges;
+    size_t mnInvalidStart;
+    size_t mnInvalidEnd;
 
     bool DbgIsBuggy() const;
 
 public:
-    typedef std::vector<WrongRange>::iterator iterator;
-    typedef std::vector<WrongRange>::const_iterator const_iterator;
+    typedef std::vector<editeng::MisspellRange>::iterator iterator;
+    typedef std::vector<editeng::MisspellRange>::const_iterator const_iterator;
 
     WrongList();
     WrongList(const WrongList& r);
     ~WrongList();
 
     bool IsValid() const;
-    void    SetValid();
-    void SetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd );
-    void ResetInvalidRange( sal_uInt16 nStart, sal_uInt16 nEnd );
+    void SetValid();
+    void SetInvalidRange( size_t nStart, size_t nEnd );
+    void ResetInvalidRange( size_t nStart, size_t nEnd );
 
-    sal_uInt16  GetInvalidStart() const { return nInvalidStart; }
-    sal_uInt16  GetInvalidEnd() const   { return nInvalidEnd; }
+    size_t GetInvalidStart() const { return mnInvalidStart; }
+    size_t GetInvalidEnd() const   { return mnInvalidEnd; }
 
-    void TextInserted( sal_uInt16 nPos, sal_uInt16 nLength, bool bPosIsSep );
-    void TextDeleted( sal_uInt16 nPos, sal_uInt16 nLength );
+    void TextInserted( size_t nPos, size_t nLength, bool bPosIsSep );
+    void TextDeleted( size_t nPos, size_t nLength );
 
-    void InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd );
-    bool NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
-    bool HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
-    bool HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
-    void    ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd, const ContentNode* pNode );
-    void    MarkWrongsInvalid();
+    void InsertWrong( size_t nStart, size_t nEnd );
+    bool NextWrong( size_t& rnStart, size_t& rnEnd ) const;
+    bool HasWrong( size_t nStart, size_t nEnd ) const;
+    bool HasAnyWrong( size_t nStart, size_t nEnd ) const;
+    void ClearWrongs( size_t nStart, size_t nEnd, const ContentNode* pNode );
+    void MarkWrongsInvalid();
 
     WrongList*  Clone() const;
 
@@ -115,9 +110,9 @@ public:
     bool operator==(const WrongList& rCompare) const;
 
     bool empty() const;
-    void push_back(const WrongRange& rRange);
-    WrongRange& back();
-    const WrongRange& back() const;
+    void push_back(const editeng::MisspellRange& rRange);
+    editeng::MisspellRange& back();
+    const editeng::MisspellRange& back() const;
 
     iterator begin();
     iterator end();

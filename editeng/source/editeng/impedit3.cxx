@@ -169,8 +169,8 @@ static void lcl_DrawRedLines(
         else
             nStyle = WAVE_FLAT;
 
-        sal_uInt16 nEnd, nStart = nIndex;
-        sal_Bool bWrong = pWrongs->NextWrong( nStart, nEnd );
+        size_t nEnd, nStart = nIndex;
+        bool bWrong = pWrongs->NextWrong( nStart, nEnd );
         while ( bWrong )
         {
             if ( nStart >= nMaxEnd )
@@ -225,7 +225,7 @@ static void lcl_DrawRedLines(
             if ( nEnd < nMaxEnd )
                 bWrong = pWrongs->NextWrong( nStart, nEnd );
             else
-                bWrong = sal_False;
+                bWrong = false;
         }
     }
 }
@@ -3232,9 +3232,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                         if(pWrongs && !pWrongs->empty())
                                         {
-                                            sal_uInt16 nStart(nIndex);
-                                            sal_uInt16 nEnd(0);
-                                            sal_Bool bWrong(pWrongs->NextWrong(nStart, nEnd));
+                                            size_t nStart = nIndex, nEnd = 0;
+                                            bool bWrong = pWrongs->NextWrong(nStart, nEnd);
                                             const sal_uInt16 nMaxEnd(nIndex + pTextPortion->GetLen());
 
                                             while(bWrong)
