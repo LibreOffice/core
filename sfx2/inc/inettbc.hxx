@@ -35,7 +35,7 @@ private:
     ::svt::AcceleratorExecute*  pAccExec;
 
     SvtURLBox*              GetURLBox() const;
-    void                    OpenURL( const String& rName, sal_Bool bNew ) const;
+    void                    OpenURL( const OUString& rName, sal_Bool bNew ) const;
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );

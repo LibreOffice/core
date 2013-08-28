@@ -81,7 +81,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 //***************************************************************************
 
-void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*/ ) const
 {
     String aName;
     String aFilter;
