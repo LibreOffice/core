@@ -144,20 +144,20 @@ public:
                             SfxOleTextEncoding( eTextEnc ) {}
 
     /** Loads a string from the passed stream with current encoding (maybe Unicode). */
-    String              LoadString8( SvStream& rStrm ) const;
+    OUString            LoadString8( SvStream& rStrm ) const;
     /** Saves a string to the passed stream with current encoding (maybe Unicode). */
-    void                SaveString8( SvStream& rStrm, const String& rValue ) const;
+    void                SaveString8( SvStream& rStrm, const OUString& rValue ) const;
 
     /** Loads a Unicode string from the passed stream, ignores own encoding. */
-    String              LoadString16( SvStream& rStrm ) const;
+    OUString            LoadString16( SvStream& rStrm ) const;
     /** Saves a Unicode string to the passed stream, ignores own encoding. */
-    void                SaveString16( SvStream& rStrm, const String& rValue ) const;
+    void                SaveString16( SvStream& rStrm, const OUString& rValue ) const;
 
 private:
-    String              ImplLoadString8( SvStream& rStrm ) const;
-    String              ImplLoadString16( SvStream& rStrm ) const;
-    void                ImplSaveString8( SvStream& rStrm, const String& rValue ) const;
-    void                ImplSaveString16( SvStream& rStrm, const String& rValue ) const;
+    OUString            ImplLoadString8( SvStream& rStrm ) const;
+    OUString            ImplLoadString16( SvStream& rStrm ) const;
+    void                ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const;
+    void                ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const;
 };
 
 // ============================================================================
@@ -251,16 +251,16 @@ public:
     inline void         SetNameCount( sal_Int32 nNameCount ) { SetPropType( nNameCount ); }
 
     /** Returns the custom name for the passed property ID, or an empty string, if name not found. */
-    const String&       GetPropertyName( sal_Int32 nPropId ) const;
+    OUString            GetPropertyName( sal_Int32 nPropId ) const;
     /** Sets a custom name for the passed property ID. */
-    void                SetPropertyName( sal_Int32 nPropId, const String& rPropName );
+    void                SetPropertyName( sal_Int32 nPropId, const OUString& rPropName );
 
 private:
     virtual void        ImplLoad( SvStream& rStrm );
     virtual void        ImplSave( SvStream& rStrm );
 
 private:
-    typedef ::std::map< sal_Int32, String > SfxOlePropNameMap;
+    typedef ::std::map< sal_Int32, OUString > SfxOlePropNameMap;
     SfxOlePropNameMap   maPropNameMap;
 };
 
@@ -288,7 +288,7 @@ public:
     bool                GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const;
     /** Returns the value of a string property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
-    bool                GetStringValue( String& rValue, sal_Int32 nPropId ) const;
+    bool                GetStringValue( OUString& rValue, sal_Int32 nPropId ) const;
     /** Returns the value of a time stamp property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
     bool                GetFileTimeValue( ::com::sun::star::util::DateTime& rValue, sal_Int32 nPropId ) const;
@@ -306,7 +306,7 @@ public:
     void                SetBoolValue( sal_Int32 nPropId, bool bValue );
     /** Inserts a string property with the passed value.
         @return  true = Property inserted; false = String was empty, property not inserted. */
-    bool                SetStringValue( sal_Int32 nPropId, const String& rValue, bool bSkipEmpty = true );
+    bool                SetStringValue( sal_Int32 nPropId, const OUString& rValue, bool bSkipEmpty = true );
     /** Inserts a time stamp property with the passed value. */
     void                SetFileTimeValue( sal_Int32 nPropId, const ::com::sun::star::util::DateTime& rValue );
     /** Inserts a date property with the passed value. */
@@ -325,9 +325,9 @@ public:
     bool                SetAnyValue( sal_Int32 nPropId, const com::sun::star::uno::Any& rValue );
 
     /** Returns the custom name for the passed property ID, or an empty string, if name not found. */
-    const String&       GetPropertyName( sal_Int32 nPropId ) const;
+    OUString            GetPropertyName( sal_Int32 nPropId ) const;
     /** Sets a custom name for the passed property ID. */
-    void                SetPropertyName( sal_Int32 nPropId, const String& rPropName );
+    void                SetPropertyName( sal_Int32 nPropId, const OUString& rPropName );
 
     /** Returns the identifiers of all existing properties in the passed vector. */
     void                GetPropertyIds( ::std::vector< sal_Int32 >& rPropIds ) const;
@@ -371,9 +371,9 @@ public:
     inline explicit     SfxOlePropertySet() {}
 
     /** Loads this object from the passed storage. */
-    ErrCode             LoadPropertySet( SotStorage* pStrg, const String& rStrmName );
+    ErrCode             LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName );
     /** Saves this object to the passed storage. */
-    ErrCode             SavePropertySet( SotStorage* pStrg, const String& rStrmName );
+    ErrCode             SavePropertySet( SotStorage* pStrg, const OUString& rStrmName );
 
     /** Returns the specified section, or an empty reference, if nothing found. */
     SfxOleSectionRef    GetSection( SfxOleSectionType eSection ) const;

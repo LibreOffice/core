@@ -60,7 +60,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
     if( xGlobSect.get() )
     {
         // set supported properties
-        String aStrValue;
+        OUString aStrValue;
         util::DateTime aDateTime;
 
         if( xGlobSect->GetStringValue( aStrValue, PROPID_TITLE ) )
@@ -103,7 +103,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
 
         if( xGlobSect->GetStringValue( aStrValue, PROPID_REVNUMBER ) )
         {
-            sal_Int16 nRevision = static_cast< sal_Int16 >( aStrValue.ToInt32() );
+            sal_Int16 nRevision = static_cast< sal_Int16 >( aStrValue.toInt32() );
             if ( nRevision > 0 )
                 i_xDocProps->setEditingCycles( nRevision );
         }
@@ -172,7 +172,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         {
             try
             {
-                String aStrValue;
+                OUString aStrValue;
                 if ( xBuiltin->GetStringValue( aStrValue, PROPID_MANAGER ) )
                     xWriterProps->setManager( aStrValue );
                 if ( xBuiltin->GetStringValue( aStrValue, PROPID_CATEGORY ) )

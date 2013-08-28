@@ -285,12 +285,12 @@ void SfxOleTextEncoding::SetCodePage( sal_uInt16 nCodePage )
 
 // ----------------------------------------------------------------------------
 
-String SfxOleStringHelper::LoadString8( SvStream& rStrm ) const
+OUString SfxOleStringHelper::LoadString8( SvStream& rStrm ) const
 {
     return IsUnicode() ? ImplLoadString16( rStrm ) : ImplLoadString8( rStrm );
 }
 
-void SfxOleStringHelper::SaveString8( SvStream& rStrm, const String& rValue ) const
+void SfxOleStringHelper::SaveString8( SvStream& rStrm, const OUString& rValue ) const
 {
     if( IsUnicode() )
         ImplSaveString16( rStrm, rValue );
@@ -298,19 +298,19 @@ void SfxOleStringHelper::SaveString8( SvStream& rStrm, const String& rValue ) co
         ImplSaveString8( rStrm, rValue );
 }
 
-String SfxOleStringHelper::LoadString16( SvStream& rStrm ) const
+OUString SfxOleStringHelper::LoadString16( SvStream& rStrm ) const
 {
     return ImplLoadString16( rStrm );
 }
 
-void SfxOleStringHelper::SaveString16( SvStream& rStrm, const String& rValue ) const
+void SfxOleStringHelper::SaveString16( SvStream& rStrm, const OUString& rValue ) const
 {
     ImplSaveString16( rStrm, rValue );
 }
 
-String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
+OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
 {
-    String aValue;
+    OUString aValue;
     // read size field (signed 32-bit)
     sal_Int32 nSize(0);
     rStrm >> nSize;
@@ -330,9 +330,9 @@ String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     return aValue;
 }
 
-String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
+OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
 {
-    String aValue;
+    OUString aValue;
     // read size field (signed 32-bit), may be buffer size or character count
     sal_Int32 nSize(0);
     rStrm >> nSize;
@@ -359,7 +359,7 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
     return aValue;
 }
 
-void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const String& rValue ) const
+void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const OUString& rValue ) const
 {
     // encode to byte string
     OString aEncoded(OUStringToOString(rValue, GetTextEncoding()));
@@ -371,14 +371,14 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const String& rValue 
     rStrm << sal_uInt8( 0 );
 }
 
-void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const String& rValue ) const
+void SfxOleStringHelper::ImplSaveString16( SvStream& rStrm, const OUString& rValue ) const
 {
     // write size field (including trailing NUL character)
-    sal_Int32 nSize = static_cast< sal_Int32 >( rValue.Len() + 1 );
+    sal_Int32 nSize = static_cast< sal_Int32 >( rValue.getLength() + 1 );
     rStrm << nSize;
     // write character array with trailing NUL character
-    for( xub_StrLen nIdx = 0; nIdx < rValue.Len(); ++nIdx )
-        rStrm << static_cast< sal_uInt16 >( rValue.GetChar( nIdx ) );
+    for( sal_Int32 nIdx = 0; nIdx < rValue.getLength(); ++nIdx )
+        rStrm << static_cast< sal_uInt16 >( rValue[ nIdx ] );
     rStrm << sal_uInt16( 0 );
     // stream is always padded to 32-bit boundary, add 2 bytes on odd character count
     if( (nSize & 1) == 1 )
@@ -727,13 +727,13 @@ SfxOleDictionaryProperty::SfxOleDictionaryProperty( const SfxOleTextEncoding& rT
 {
 }
 
-const String& SfxOleDictionaryProperty::GetPropertyName( sal_Int32 nPropId ) const
+OUString SfxOleDictionaryProperty::GetPropertyName( sal_Int32 nPropId ) const
 {
     SfxOlePropNameMap::const_iterator aIt = maPropNameMap.find( nPropId );
-    return (aIt == maPropNameMap.end()) ? String::EmptyString() : aIt->second;
+    return (aIt == maPropNameMap.end()) ? OUString("") : aIt->second;
 }
 
-void SfxOleDictionaryProperty::SetPropertyName( sal_Int32 nPropId, const String& rPropName )
+void SfxOleDictionaryProperty::SetPropertyName( sal_Int32 nPropId, const OUString& rPropName )
 {
     maPropNameMap[ nPropId ] = rPropName;
     // dictionary property contains number of pairs in property type field
@@ -814,7 +814,7 @@ bool SfxOleSection::GetBoolValue( bool& rbValue, sal_Int32 nPropId ) const
     return pProp != 0;
 }
 
-bool SfxOleSection::GetStringValue( String& rValue, sal_Int32 nPropId ) const
+bool SfxOleSection::GetStringValue( OUString& rValue, sal_Int32 nPropId ) const
 {
     SfxOlePropertyRef xProp = GetProperty( nPropId );
     const SfxOleStringPropertyBase* pProp =
@@ -875,9 +875,9 @@ void SfxOleSection::SetBoolValue( sal_Int32 nPropId, bool bValue )
     SetProperty( SfxOlePropertyRef( new SfxOleBoolProperty( nPropId, bValue ) ) );
 }
 
-bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const String& rValue, bool bSkipEmpty )
+bool SfxOleSection::SetStringValue( sal_Int32 nPropId, const OUString& rValue, bool bSkipEmpty )
 {
-    bool bInserted = !bSkipEmpty || (rValue.Len() > 0);
+    bool bInserted = !bSkipEmpty || !rValue.isEmpty();
     if( bInserted )
         SetProperty( SfxOlePropertyRef( new SfxOleString8Property( nPropId, maCodePageProp, rValue ) ) );
     return bInserted;
@@ -930,7 +930,7 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     sal_Int32 nInt32 = 0;
     double fDouble = 0.0;
     bool bBool = false;
-    String aString;
+    OUString aString;
     ::com::sun::star::util::DateTime aApiDateTime;
     ::com::sun::star::util::Date aApiDate;
 
@@ -941,7 +941,7 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     else if( GetBoolValue( bBool, nPropId ) )
         ::comphelper::setBOOL( aValue, bBool ? sal_True : sal_False );
     else if( GetStringValue( aString, nPropId ) )
-        aValue <<= OUString( aString );
+        aValue <<= aString;
     else if( GetFileTimeValue( aApiDateTime, nPropId ) )
     {
         aValue <<= aApiDateTime;
@@ -979,12 +979,12 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
     return bInserted;
 }
 
-const String& SfxOleSection::GetPropertyName( sal_Int32 nPropId ) const
+OUString SfxOleSection::GetPropertyName( sal_Int32 nPropId ) const
 {
     return maDictProp.GetPropertyName( nPropId );
 }
 
-void SfxOleSection::SetPropertyName( sal_Int32 nPropId, const String& rPropName )
+void SfxOleSection::SetPropertyName( sal_Int32 nPropId, const OUString& rPropName )
 {
     maDictProp.SetPropertyName( nPropId, rPropName );
 }
@@ -1154,7 +1154,7 @@ void SfxOleSection::SaveProperty( SvStream& rStrm, SfxOlePropertyBase& rProp, sa
 
 // ----------------------------------------------------------------------------
 
-ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const String& rStrmName )
+ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& rStrmName )
 {
     if( pStrg )
     {
@@ -1172,7 +1172,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const String& rSt
     return GetError();
 }
 
-ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const String& rStrmName )
+ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& rStrmName )
 {
     if( pStrg )
     {
