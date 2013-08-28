@@ -581,7 +581,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 {
     // MS-LangID                            full BCP47, ISO3166
-//  { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca-valencia-ES", "ES" },   // for example, once we support it in l10n; TODO: add to unit test
+//  { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca-ES-valencia", "ES" },   // for example, once we support it in l10n; TODO: add to unit test
     { LANGUAGE_DONTKNOW,                    "", ""   }   // marks end of table
 };
 
