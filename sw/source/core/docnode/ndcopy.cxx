@@ -258,11 +258,11 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     SwTableFormat* pStyle = (SwTableFormat*)GetTable().GetFrameFormat()->GetRegisteredIn();
-    SwTableFormat* pActualStyle = pDoc->FindTableFormatByName( pStyle->GetName(), sal_True );
+    SwTableFormat* pActualStyle = pStyle ? pDoc->FindTableFormatByName( pStyle->GetName() , sal_True ) : 0;
     if( !pActualStyle )
         pActualStyle = pStyle;
 
-    SwFrameFormat* pTableFormat = pDoc->MakeTableFrameFormat( sTableName, pStyle ? pStyle : pDoc->GetDfltFrameFormat() );
+    SwFrameFormat* pTableFormat = pDoc->MakeTableFrameFormat( sTableName, pActualStyle ? pActualStyle : pDoc->GetDfltFrameFormat() );
     pTableFormat->CopyAttrs( *GetTable().GetFrameFormat() );
     SwTableNode* pTableNd = new SwTableNode( rIdx );
     SwEndNode* pEndNd = new SwEndNode( rIdx, *pTableNd );
