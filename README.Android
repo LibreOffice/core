@@ -102,7 +102,7 @@ executable program, but as a shared object. The Java NativeActivity
 bootstrapper loads that shared object with dlopen.
 
 Anyway, our current "experimental" apps (DocumentLoader,
-LibreOffice4Android and LibreOfficeDesbktop) are not based on
+LibreOffice4Android and LibreOfficeDesktop) are not based on
 NativeActivity any more. They have normal Java code for the activity,
 and just call out to a single, app-specific native library (called
 liblo-native-code.so) to do all the heavy lifting.
