@@ -11,7 +11,7 @@ slideshow module though (including the 3D transitions engine
 slideshow/source/engine/OGLTrans).
 
 the most used filters are ODF's odp, binary ppt and OOXML's
-pptx. their locations are listed bellow:
+pptx. their locations are listed below:
 
  * odp import and export filters are in xmloff module (mostly xmloff/source/draw)
 
