@@ -63,7 +63,7 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 
 // -----------------------------------------------------------------------
 
-void HelpInterceptor_Impl::addURL( const String& rURL )
+void HelpInterceptor_Impl::addURL( const OUString& rURL )
 {
   if ( !m_pHistory )
         m_pHistory = new HelpHistoryList_Impl;

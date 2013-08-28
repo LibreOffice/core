@@ -33,10 +33,10 @@
 
 struct HelpHistoryEntry_Impl
 {
-    String  aURL;
+    OUString  aURL;
     com::sun::star::uno::Any    aViewData;
 
-    HelpHistoryEntry_Impl( const String& rURL, const com::sun::star::uno::Any& rViewData ) :
+    HelpHistoryEntry_Impl( const OUString& rURL, const com::sun::star::uno::Any& rViewData ) :
         aURL( rURL ), aViewData(rViewData) {}
 };
 
@@ -65,18 +65,18 @@ friend class SfxHelpWindow_Impl;
 
     HelpHistoryList_Impl*       m_pHistory;
     SfxHelpWindow_Impl*         m_pWindow;
-    sal_uIntPtr                     m_nCurPos;
-    String                      m_aCurrentURL;
+    sal_uIntPtr                 m_nCurPos;
+    OUString                    m_aCurrentURL;
     com::sun::star::uno::Any    m_aViewData;
 
-    void                        addURL( const String& rURL );
+    void                        addURL( const OUString& rURL );
 
 public:
     HelpInterceptor_Impl();
     ~HelpInterceptor_Impl();
 
     void                    setInterception( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame );
-    String                  GetCurrentURL() const { return m_aCurrentURL; }
+    OUString                GetCurrentURL() const { return m_aCurrentURL; }
 
 
 
@@ -121,7 +121,7 @@ class HelpListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::fram
 private:
     HelpInterceptor_Impl*   pInterceptor;
     Link                    aChangeLink;
-    String                  aFactory;
+    OUString                aFactory;
 
 public:
     HelpListener_Impl( HelpInterceptor_Impl* pInter );
@@ -132,7 +132,7 @@ public:
                                 throw( ::com::sun::star::uno::RuntimeException );
 
     void                    SetChangeHdl( const Link& rLink ) { aChangeLink = rLink; }
-    String                  GetFactory() const { return aFactory; }
+    OUString                GetFactory() const { return aFactory; }
 };
 // HelpStatusListener_Impl -----------------------------------------------------
 
