@@ -1484,6 +1484,7 @@ const_type :
             if (!idlc()->error()->checkPublished(type))
             {
                 type = 0;
+                $$ = ET_none;
             }
             else
             {
