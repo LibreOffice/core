@@ -61,6 +61,19 @@ struct IsoLanguageScriptCountryEntry
     bool startsInIgnoreAsciiCase( const OUString & rStr ) const;
 };
 
+struct Bcp47CountryEntry
+{
+    LanguageType    mnLang;
+    const sal_Char* mpBcp47;
+    sal_Char        maCountry[3];
+
+    /** Obtain a language tag string with '-' separator. */
+    OUString getTagString() const;
+
+    /** Obtain a locale. */
+    ::com::sun::star::lang::Locale getLocale() const;
+};
+
 struct IsoLangEngEntry
 {
     LanguageType        mnLang;
@@ -565,6 +578,13 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_DONTKNOW,                    "",        ""   }   // marks end of table
 };
 
+static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
+{
+    // MS-LangID                            full BCP47, ISO3166
+//  { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca-valencia-ES", "ES" },   // for example, once we support it in l10n; TODO: add to unit test
+    { LANGUAGE_DONTKNOW,                    "", ""   }   // marks end of table
+};
+
 static IsoLanguageCountryEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US" };
 
@@ -597,6 +617,16 @@ OUString IsoLanguageScriptCountryEntry::getTagString() const
 bool IsoLanguageScriptCountryEntry::startsInIgnoreAsciiCase( const OUString & rStr ) const
 {
     return rStr.matchIgnoreAsciiCaseAsciiL( maLanguageScript, strlen( maLanguageScript), 0);
+}
+
+OUString Bcp47CountryEntry::getTagString() const
+{
+    return OUString::createFromAscii( mpBcp47);
+}
+
+::com::sun::star::lang::Locale Bcp47CountryEntry::getLocale() const
+{
+    return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
 
 // -----------------------------------------------------------------------
