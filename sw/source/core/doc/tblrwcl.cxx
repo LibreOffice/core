@@ -51,6 +51,7 @@
 #include <cellatr.hxx>
 #include <mvsave.hxx>
 #include <swtblfmt.hxx>
+#include <tblafmt.hxx>
 #include <swddetbl.hxx>
 #include <poolfmt.hxx>
 #include <tblrwcl.hxx>
@@ -2080,10 +2081,15 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pInsDoc->CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
-    SwTable* pNewTable = const_cast<SwTable*>(pInsDoc->InsertTable(
+    SwTableFormat* pStyle = (SwTableFormat*)GetFrameFormat()->GetRegisteredIn();
+    SwTableAutoFormat* pAutoFormat = 0;
+    if( pStyle )
+        pAutoFormat = new SwTableAutoFormat( pStyle->GetName(), pStyle );
+
+    SwTable* pNewTable = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrameFormat()->GetHoriOrient().GetHoriOrient(),
-            0, 0, false, IsNewModel() ));
+            pAutoFormat, 0, sal_False, IsNewModel() );
     if( !pNewTable )
         return false;
 
