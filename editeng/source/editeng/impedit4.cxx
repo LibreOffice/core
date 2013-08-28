@@ -2230,7 +2230,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
       even out properly with VDev on transitions from wrong => right)
     */
 
-     if ( !xSpeller.is() )
+    if ( !xSpeller.is() )
         return;
 
     EditPaM aCursorPos;
@@ -2273,7 +2273,6 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     break;  // Document end or end of invalid region
 
                 aSel = SelectWord( aSel, i18n::WordType::DICTIONARY_WORD );
-                String aWord( GetSelected( aSel ) );
                 // If afterwards a dot, this must be handed over!
                 // If an abbreviation ...
                 bool bDottAdded = false;
@@ -2283,14 +2282,13 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                     if ( cNext == '.' )
                     {
                         aSel.Max().GetIndex()++;
-                        aWord += cNext;
                         bDottAdded = true;
                     }
                 }
-
+                OUString aWord = GetSelected(aSel);
 
                 bool bChanged = false;
-                if ( aWord.Len() > 0 )
+                if (!aWord.isEmpty())
                 {
                     sal_uInt16 nWStart = aSel.Min().GetIndex();
                     sal_uInt16 nWEnd= aSel.Max().GetIndex();
