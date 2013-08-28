@@ -52,7 +52,7 @@ private:
     sal_Bool    m_bFinished;
     sal_Bool    m_bSuccess;
     Link        m_aOpenLink;
-    String      m_sURL;
+    OUString    m_sURL;
 
 public:
     OpenStatusListener_Impl() : m_bFinished( sal_False ), m_bSuccess( sal_False ) {}
@@ -62,8 +62,8 @@ public:
 
     inline sal_Bool         IsFinished() const { return m_bFinished; }
     inline sal_Bool         IsSuccessful() const { return m_bSuccess; }
-    inline void             SetURL( const String& rURL ) { m_sURL = rURL; }
-    inline String           GetURL() const  { return m_sURL; }
+    inline void             SetURL( const OUString& rURL ) { m_sURL = rURL; }
+    inline OUString         GetURL() const  { return m_sURL; }
     inline void             SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
 };
 
@@ -88,7 +88,7 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 
     inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }
-    String          GetSelectEntry() const;
+    OUString        GetSelectEntry() const;
 };
 
 // class HelpTabPage_Impl ------------------------------------------------
@@ -121,7 +121,7 @@ public:
     virtual Control*    GetLastFocusControl();
 
     inline void     SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
-    inline String   GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
+    inline OUString GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
     inline void     SetFocusOnBox() { aContentBox.GrabFocus(); }
 };
 
@@ -149,8 +149,8 @@ private:
     Timer               aKeywordTimer;
     Link                aKeywordLink;
 
-    String              sFactory;
-    String              sKeyword;
+    OUString            sFactory;
+    OUString            sKeyword;
 
     long                nMinWidth;
     sal_Bool            bIsActivated;
@@ -170,14 +170,14 @@ public:
     virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    void                SetFactory( const String& rFactory );
-    inline String       GetFactory() const { return sFactory; }
-    String              GetSelectEntry() const;
+    void                SetFactory( const OUString& rFactory );
+    inline OUString     GetFactory() const { return sFactory; }
+    OUString            GetSelectEntry() const;
     inline void         SetFocusOnBox() { aIndexCB.GrabFocus(); }
     inline sal_Bool     HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
 
     inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
-    void                SetKeyword( const String& rKeyword );
+    void                SetKeyword( const OUString& rKeyword );
     sal_Bool            HasKeyword() const;
     sal_Bool            HasKeywordIgnoreCase();
     void                OpenKeyword();
@@ -222,13 +222,13 @@ private:
     PushButton              aOpenBtn;
 
     Size                    aMinSize;
-    String                  aFactory;
+    OUString                aFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
                             xBreakIterator;
 
     void                ClearSearchResults();
-    void                RememberSearchText( const String& rSearchText );
+    void                RememberSearchText( const OUString& rSearchText );
 
     DECL_LINK(SearchHdl, void *);
     DECL_LINK(OpenHdl, void *);
@@ -243,14 +243,14 @@ public:
     virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    inline void         SetFactory( const String& rFactory ) { aFactory = rFactory; }
-    String              GetSelectEntry() const;
+    inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
+    OUString            GetSelectEntry() const;
     void                ClearPage();
     inline void         SetFocusOnBox() { aResultsLB.GrabFocus(); }
     inline sal_Bool     HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
-    inline String       GetSearchText() const { return aSearchED.GetText(); }
+    inline OUString     GetSearchText() const { return aSearchED.GetText(); }
     inline sal_Bool     IsFullWordSearch() const { return aFullWordsCB.IsChecked(); }
-    sal_Bool            OpenKeyword( const String& rKeyword );
+    sal_Bool            OpenKeyword( const OUString& rKeyword );
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -286,8 +286,8 @@ public:
     virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
-    String              GetSelectEntry() const;
-    void                AddBookmarks( const String& rTitle, const String& rURL );
+    OUString            GetSelectEntry() const;
+    void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     inline void         SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
 };
 
@@ -307,7 +307,7 @@ private:
     Link                aSelectFactoryLink;
     Link                aPageDoubleClickLink;
     Link                aIndexKeywordLink;
-    String              sKeyword;
+    OUString            sKeyword;
 
     SfxHelpWindow_Impl*     pParentWin;
 
@@ -345,19 +345,19 @@ public:
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
-    void                SetFactory( const String& rFactory, sal_Bool bActive );
-    inline String       GetFactory() const { return pIPage->GetFactory(); }
-    String              GetSelectEntry() const;
-    void                AddBookmarks( const String& rTitle, const String& rURL );
-    bool                IsValidFactory( const String& _rFactory );
-    inline String       GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
+    void                SetFactory( const OUString& rFactory, sal_Bool bActive );
+    inline OUString     GetFactory() const { return pIPage->GetFactory(); }
+    OUString            GetSelectEntry() const;
+    void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
+    bool                IsValidFactory( const OUString& _rFactory );
+    inline OUString     GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
     inline void         UpdateTabControl() { aTabCtrl.Invalidate(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
     sal_Bool            HasFocusOnEdit() const;
-    String              GetSearchText() const;
+    OUString            GetSearchText() const;
     sal_Bool            IsFullWordSearch() const;
-    void                OpenKeyword( const String& rKeyword );
+    void                OpenKeyword( const OUString& rKeyword );
     void                SelectExecutableEntry();
     inline bool         WasCursorLeftOrRight();
 };
@@ -435,11 +435,11 @@ private:
     Timer                   aSelectTimer;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
-    String                  aIndexOnText;
-    String                  aIndexOffText;
-    String                  aSearchText;
-    String                  aOnStartupText;
-    OUString         sCurrentFactory;
+    OUString                aIndexOnText;
+    OUString                aIndexOffText;
+    OUString                aSearchText;
+    OUString                aOnStartupText;
+    OUString                sCurrentFactory;
 
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
@@ -487,7 +487,7 @@ public:
 
     inline void             SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
     void                    ToggleIndex( sal_Bool bOn );
-    void                    SelectSearchText( const String& rSearchText, sal_Bool _bIsFullWordSearch );
+    void                    SelectSearchText( const OUString& rSearchText, sal_Bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
     inline ToolBox&         GetToolBox() { return aToolBox; }
      void                   CloseFrame();
@@ -524,7 +524,7 @@ friend class SfxHelpIndexWindow_Impl;
     sal_Bool            bGrabFocusToToolBox;
     Point               aWinPos;
     OUString            sTitle;
-    String              sKeyword;
+    OUString            sKeyword;
 
     virtual void        Resize();
     virtual void        Split();
@@ -555,14 +555,14 @@ public:
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
                         getOpenListener() const { return xOpenListener; }
 
-    void                SetFactory( const String& rFactory );
-    void                SetHelpURL( const String& rURL );
+    void                SetFactory( const OUString& rFactory );
+    void                SetHelpURL( const OUString& rURL );
     void                DoAction( sal_uInt16 nActionId );
     void                CloseWindow();
 
     void                UpdateToolbox();
-    inline void         OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
-    inline String       GetFactory() const { return pIndexWin->GetFactory(); }
+    inline void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
+    inline OUString     GetFactory() const { return pIndexWin->GetFactory(); }
 
     sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
     sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
@@ -592,8 +592,8 @@ public:
     SfxAddHelpBookmarkDialog_Impl( Window* pParent, sal_Bool bRename = sal_True );
     ~SfxAddHelpBookmarkDialog_Impl();
 
-    void            SetTitle( const String& rTitle );
-    inline String   GetTitle() const { return aTitleED.GetText(); }
+    void            SetTitle( const OUString& rTitle );
+    inline OUString GetTitle() const { return aTitleED.GetText(); }
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL

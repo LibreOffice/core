@@ -405,7 +405,7 @@ long ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-String ContentListBox_Impl::GetSelectEntry() const
+OUString ContentListBox_Impl::GetSelectEntry() const
 {
     String aRet;
     SvTreeListEntry* pEntry = FirstSelected();
@@ -716,7 +716,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
     aIndexCB.SetUpdateMode( sal_True );
 
-    if ( sKeyword.Len() > 0 )
+    if ( !sKeyword.isEmpty() )
         aKeywordLink.Call( this );
 }
 
@@ -747,7 +747,7 @@ IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
 {
     if ( &aFactoryTimer == pTimer )
         InitializeIndex();
-    else if ( &aKeywordTimer == pTimer && sKeyword.Len() > 0 )
+    else if ( &aKeywordTimer == pTimer && !sKeyword.isEmpty() )
         aKeywordLink.Call( this );
     return 0;
 }
@@ -812,13 +812,13 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-void IndexTabPage_Impl::SetFactory( const String& rFactory )
+void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 {
-    String sNewFactory( rFactory );
-    DBG_ASSERT( sNewFactory.Len() > 0, "empty factory" );
+    OUString sNewFactory( rFactory );
+    DBG_ASSERT( !sNewFactory.isEmpty(), "empty factory" );
     bool bValid = m_pIdxWin->IsValidFactory( rFactory );
 
-    if ( sFactory.Len() == 0 && !bValid )
+    if ( sFactory.isEmpty() && !bValid )
     {
         sNewFactory = SfxHelp::GetDefaultHelpModule();
         bValid = true;
@@ -835,7 +835,7 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
 
 // -----------------------------------------------------------------------
 
-String IndexTabPage_Impl::GetSelectEntry() const
+OUString IndexTabPage_Impl::GetSelectEntry() const
 {
     String aRet;
     IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
@@ -846,7 +846,7 @@ String IndexTabPage_Impl::GetSelectEntry() const
 
 // -----------------------------------------------------------------------
 
-void IndexTabPage_Impl::SetKeyword( const String& rKeyword )
+void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 {
     sKeyword = rKeyword;
 
@@ -861,7 +861,7 @@ void IndexTabPage_Impl::SetKeyword( const String& rKeyword )
 sal_Bool IndexTabPage_Impl::HasKeyword() const
 {
     sal_Bool bRet = sal_False;
-    if ( sKeyword.Len() > 0 )
+    if ( !sKeyword.isEmpty() )
     {
         sal_uInt16 nPos = aIndexCB.GetEntryPos( sKeyword );
         bRet = ( nPos != LISTBOX_ENTRY_NOTFOUND );
@@ -875,7 +875,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
 sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 {
     sal_Bool bRet = sal_False;
-    if ( sKeyword.Len() > 0 )
+    if ( !sKeyword.isEmpty() )
     {
         sal_uInt16 nEntries = aIndexCB.GetEntryCount();
         String sIndexItem;
@@ -898,11 +898,11 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
 
 void IndexTabPage_Impl::OpenKeyword()
 {
-    if ( sKeyword.Len() > 0 )
+    if ( !sKeyword.isEmpty() )
     {
         aIndexCB.SetText( sKeyword );
         aIndexCB.GetDoubleClickHdl().Call( NULL );
-        sKeyword.Erase();
+        sKeyword = "";
     }
 }
 
@@ -1037,7 +1037,7 @@ void SearchTabPage_Impl::ClearSearchResults()
 
 // -----------------------------------------------------------------------
 
-void SearchTabPage_Impl::RememberSearchText( const String& rSearchText )
+void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 {
     for ( sal_uInt16 i = 0; i < aSearchED.GetEntryCount(); ++i )
     {
@@ -1177,7 +1177,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-String SearchTabPage_Impl::GetSelectEntry() const
+OUString SearchTabPage_Impl::GetSelectEntry() const
 {
     String aRet;
     String* pData = (String*)(sal_uIntPtr)aResultsLB.GetEntryData( aResultsLB.GetSelectEntryPos() );
@@ -1196,7 +1196,7 @@ void SearchTabPage_Impl::ClearPage()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SearchTabPage_Impl::OpenKeyword( const String& rKeyword )
+sal_Bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
     sal_Bool bRet = sal_False;
     aSearchED.SetText( rKeyword );
@@ -1439,18 +1439,18 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-String BookmarksTabPage_Impl::GetSelectEntry() const
+OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
-    String aRet;
+    OUString aRet;
     String* pData = (String*)(sal_uIntPtr)aBookmarksBox.GetEntryData( aBookmarksBox.GetSelectEntryPos() );
     if ( pData )
-        aRet = String( *pData );
+        aRet = *pData;
     return aRet;
 }
 
 // -----------------------------------------------------------------------
 
-void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rURL )
+void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
@@ -1848,9 +1848,9 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActive )
+void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, sal_Bool bActive )
 {
-    if ( rFactory.Len() > 0 )
+    if ( !rFactory.isEmpty() )
     {
         GetIndexPage()->SetFactory( rFactory );
         // the index page did a check if rFactory is valid,
@@ -1863,9 +1863,9 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
 
 // -----------------------------------------------------------------------
 
-String SfxHelpIndexWindow_Impl::GetSelectEntry() const
+OUString SfxHelpIndexWindow_Impl::GetSelectEntry() const
 {
-    String sRet;
+    OUString sRet;
 
     switch ( aTabCtrl.GetCurPageId() )
     {
@@ -1891,14 +1891,14 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 
 // -----------------------------------------------------------------------
 
-void SfxHelpIndexWindow_Impl::AddBookmarks( const String& rTitle, const String& rURL )
+void SfxHelpIndexWindow_Impl::AddBookmarks( const OUString& rTitle, const OUString& rURL )
 {
     GetBookmarksPage()->AddBookmarks( rTitle, rURL );
 }
 
 // -----------------------------------------------------------------------
 
-bool SfxHelpIndexWindow_Impl::IsValidFactory( const String& _rFactory )
+bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
 {
     bool bValid = false;
     for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
@@ -1949,7 +1949,7 @@ sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 
 // -----------------------------------------------------------------------
 
-String SfxHelpIndexWindow_Impl::GetSearchText() const
+OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
     String sRet;
     if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
@@ -1969,7 +1969,7 @@ sal_Bool SfxHelpIndexWindow_Impl::IsFullWordSearch() const
 
 // -----------------------------------------------------------------------
 
-void SfxHelpIndexWindow_Impl::OpenKeyword( const String& rKeyword )
+void SfxHelpIndexWindow_Impl::OpenKeyword( const OUString& rKeyword )
 {
     sKeyword = rKeyword;
     DBG_ASSERT( pIPage, "invalid index page" );
@@ -2683,7 +2683,7 @@ void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 
 // -----------------------------------------------------------------------
 
-void SfxHelpTextWindow_Impl::SelectSearchText( const String& rSearchText, sal_Bool _bIsFullWordSearch )
+void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, sal_Bool _bIsFullWordSearch )
 {
     aSearchText = rSearchText;
     bIsFullWordSearch = _bIsFullWordSearch;
@@ -3227,14 +3227,14 @@ void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow_Impl::SetFactory( const String& rFactory )
+void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
 {
     pIndexWin->SetFactory( rFactory, sal_True );
 }
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
+void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
 {
     INetURLObject aObj( rURL );
     if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
@@ -3418,10 +3418,10 @@ SfxAddHelpBookmarkDialog_Impl::~SfxAddHelpBookmarkDialog_Impl()
 
 // -----------------------------------------------------------------------
 
-void SfxAddHelpBookmarkDialog_Impl::SetTitle( const String& rTitle )
+void SfxAddHelpBookmarkDialog_Impl::SetTitle( const OUString& rTitle )
 {
     aTitleED.SetText( rTitle );
-    aTitleED.SetSelection( Selection( 0, rTitle.Len() ) );
+    aTitleED.SetSelection( Selection( 0, rTitle.getLength() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
