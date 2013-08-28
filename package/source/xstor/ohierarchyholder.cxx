@@ -291,8 +291,7 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.begin();
-        const OHierarchyElementList_Impl::const_iterator aEnd = m_aChildren.end();
-        while (aIter != aEnd)
+        while (aIter != m_aChildren.end())
         {
             if (aIter->second == aRef )
                 aIter = m_aChildren.erase(aIter);
