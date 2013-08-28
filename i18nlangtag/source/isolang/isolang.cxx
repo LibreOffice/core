@@ -753,6 +753,19 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
+    // Search for LangID in BCP47
+    for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
+            pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
+    {
+        if ( pBcp47Entry->mnLang == nLang )
+        {
+            rLocale.Language = I18NLANGTAG_QLT;
+            rLocale.Country  = OUString::createFromAscii( pBcp47Entry->maCountry);
+            rLocale.Variant  = pBcp47Entry->getTagString();
+            return;
+        }
+    }
+
     // Search for LangID in ISO lll-Ssss-CC
     for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
             pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
@@ -809,6 +822,15 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
+        // Search in BCP47, only full match, only LanguageTag can decide the
+        // proper fallback.
+        for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
+                pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
+        {
+            if (rLocale.Variant.equalsIgnoreAsciiCase( pBcp47Entry->getTagString()))
+                return pBcp47Entry->getLocale();
+        }
+
         // Search in ISO lll-Ssss-CC
         const IsoLanguageScriptCountryEntry* pFirstScript = NULL;
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
@@ -840,6 +862,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
             }
             return pFirstScript->getLocale();
         }
+
         // Extract language from tag string, country is used as present in
         // Locale because in the tables that follow we have only ISO 3166
         // countries and if that is in the tag string we also have it in the
@@ -927,6 +950,14 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
         // "x-..." private use and the nasty "*" joker
         if (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))
             return convertPrivateUseToLanguage( rLocale.Variant);
+
+        // Search in BCP47
+        for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
+                pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
+        {
+            if (rLocale.Variant.equalsIgnoreAsciiCase( pBcp47Entry->getTagString()))
+                return pBcp47Entry->mnLang;
+        }
 
         // Search in ISO lll-Ssss-CC
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
@@ -1149,6 +1180,11 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 ::std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
 {
     ::std::vector< LanguagetagMapping > aVec;
+    for (const Bcp47CountryEntry* pEntry = aImplBcp47CountryEntries;
+            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+    {
+        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+    }
     for (const IsoLanguageScriptCountryEntry* pEntry = aImplIsoLangScriptEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
