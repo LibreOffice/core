@@ -69,11 +69,11 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType)
     case SQL_LONG:
         return DataType::INTEGER;
     case SQL_FLOAT:
-        return DataType::REAL;
+        return DataType::FLOAT;
     case SQL_DOUBLE:
         return DataType::DOUBLE;
     case SQL_D_FLOAT:
-        return DataType::FLOAT;
+        return DataType::DOUBLE;
     case SQL_TIMESTAMP:
         return DataType::TIMESTAMP;
     case SQL_BLOB:
