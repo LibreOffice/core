@@ -114,6 +114,7 @@ public:
     void testTransparentShadow();
     void testBnc834035();
     void testFdo68418();
+    void testA4AndBorders();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -204,6 +205,7 @@ void Test::run()
         {"transparent-shadow.docx", &Test::testTransparentShadow},
         {"bnc834035.odt", &Test::testBnc834035},
         {"fdo68418.docx", &Test::testFdo68418},
+        {"a4andborders.docx", &Test::testA4AndBorders},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1248,6 +1250,18 @@ void Test::testFdo68418()
 
     // First page footer is empty, second page footer is 'aaaa'
     CPPUNIT_ASSERT_EQUAL(OUString("aaaa"), xFooterParagraph->getString());        // I get an error that it expects ''
+}
+
+void Test::testA4AndBorders()
+{
+    /*
+     * The problem was that in case of a document with borders, the pgSz attribute
+     * was exported as a child of pgBorders, thus being ignored on reload.
+     * We assert dimension against A4 size in mm (to avoid minor rounding errors)
+     */
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Width (mm)", sal_Int32(210), getProperty<sal_Int32>(xPageStyle, "Width") / 100);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect Page Height (mm)", sal_Int32(297), getProperty<sal_Int32>(xPageStyle, "Height") / 100);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
