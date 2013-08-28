@@ -560,7 +560,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 
 static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
-//  { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,   "sr-Latn", "RS" },  // for example, once we support it in l10n
+//  { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,   "sr-Latn", "RS" },  // for example, once we support it in l10n; TODO: adapt unit test in this case
     { LANGUAGE_DONTKNOW,                    "",        ""   }   // marks end of table
 };
 
@@ -1116,7 +1116,13 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 ::std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
 {
     ::std::vector< LanguagetagMapping > aVec;
-    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries; pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+    for (const IsoLanguageScriptCountryEntry* pEntry = aImplIsoLangScriptEntries;
+            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+    {
+        aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
+    }
+    for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+            pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
         aVec.push_back( LanguagetagMapping( pEntry->getTagString(), pEntry->mnLang));
     }
