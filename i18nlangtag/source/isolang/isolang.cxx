@@ -53,6 +53,12 @@ struct IsoLanguageScriptCountryEntry
 
     /** Obtain a locale. */
     ::com::sun::star::lang::Locale getLocale() const;
+
+    /** If rStr starts with maLanguageScript ignoring case.
+
+        We don't have OUString::startsWithIgnoreAsciiCaseAscii()
+     */
+    bool startsInIgnoreAsciiCase( const OUString & rStr ) const;
 };
 
 struct IsoLangEngEntry
@@ -587,6 +593,11 @@ OUString IsoLanguageScriptCountryEntry::getTagString() const
     return lang::Locale( I18NLANGTAG_QLT, OUString::createFromAscii( maCountry), getTagString());
 }
 
+bool IsoLanguageScriptCountryEntry::startsInIgnoreAsciiCase( const OUString & rStr ) const
+{
+    return rStr.matchIgnoreAsciiCaseAsciiL( maLanguageScript, strlen( maLanguageScript), 0);
+}
+
 // -----------------------------------------------------------------------
 
 // In this table are the countries which should mapped to a specific
@@ -773,7 +784,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
                 pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
         {
-            if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript))
+            if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
             {
                 if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
                     return pScriptEntry->getLocale();
@@ -792,7 +803,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
                 for (const IsoLanguageScriptCountryEntry* pScriptEntry = pFirstScript;
                         pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
                 {
-                    if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript) &&
+                    if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant) &&
                             rLocale.Country.equalsIgnoreAsciiCaseAscii( pScriptEntry->maCountry))
                         return pScriptEntry->getLocale();
                 }
@@ -888,7 +899,7 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
         for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
                 pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
         {
-            if (rLocale.Variant.startsWithIgnoreAsciiCase( pScriptEntry->maLanguageScript))
+            if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
             {
                 if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
                     return pScriptEntry->mnLang;
