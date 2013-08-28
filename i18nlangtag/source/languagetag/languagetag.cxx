@@ -853,13 +853,17 @@ OUString LanguageTag::getVariantsFromLangtag()
         const lt_list_t* pVariantsT = lt_tag_get_variants( MPLANGTAG);
         for (const lt_list_t* pE = pVariantsT; pE; pE = lt_list_next( pE))
         {
-            const lt_pointer_t pV = lt_list_value( pE);
-            if (pV)
+            const lt_variant_t* pVariantT = static_cast<const lt_variant_t*>(lt_list_value( pE));
+            if (pVariantT)
             {
-                if (aVariants.isEmpty())
-                    aVariants = OUString::createFromAscii( static_cast<const char*>(pV));
-                else
-                    aVariants += "-" + OUString::createFromAscii( static_cast<const char*>(pV));
+                const char* p = lt_variant_get_tag( pVariantT);
+                if (p)
+                {
+                    if (aVariants.isEmpty())
+                        aVariants = OUString::createFromAscii( p);
+                    else
+                        aVariants += "-" + OUString::createFromAscii( p);
+                }
             }
         }
     }
