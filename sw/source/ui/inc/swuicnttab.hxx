@@ -200,7 +200,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     const IndexEntrySupplierWrapper* pIndexEntryWrapper;
 
-    sal_Bool            bFirstCall;
+    bool            m_bWaitingInitialSettings;
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
     DECL_LINK(AddStylesHdl, PushButton* );

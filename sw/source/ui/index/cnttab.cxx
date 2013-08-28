@@ -827,7 +827,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     , aFromNames(SW_RES(RES_SRCTYPES))
     , pIndexRes(0)
     , sAutoMarkType(SW_RESSTR(STR_AUTOMARK_TYPE))
-    , bFirstCall(true)
+    , m_bWaitingInitialSettings(true)
 {
     get(m_pTitleED, "title");
     get(m_pTypeFT, "typeft");
@@ -1272,6 +1272,14 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
         m_pTypeFT->Enable(sal_False);
         m_pTypeLB->Enable(sal_False);
     }
+
+    if (!m_bWaitingInitialSettings)
+    {
+        // save current values into the proper TOXDescription
+        FillTOXDescription();
+    }
+    m_bWaitingInitialSettings = false;
+
     TOXTypeHdl(m_pTypeLB);
     CheckBoxHdl(m_pAddStylesCB);
 }
@@ -1298,12 +1306,6 @@ SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet& rAttr
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-    if(!bFirstCall)
-    {
-        // save current values into the proper TOXDescription
-        FillTOXDescription();
-    }
-    bFirstCall = sal_False;
     const sal_uInt16 nType =  sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(
                                 pBox->GetEntryData( pBox->GetSelectEntryPos() )));
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
@@ -1370,10 +1372,10 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 
 IMPL_LINK_NOARG(SwTOXSelectTabPage, ModifyHdl)
 {
-    SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-    if(pTOXDlg)
+    if(!m_bWaitingInitialSettings)
     {
         FillTOXDescription();
+        SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
         pTOXDlg->CreateOrUpdateExample(pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_SELECT);
     }
     return 0;
@@ -1920,9 +1922,9 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 {
     UpdateDescriptor();
-    SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
 
-    if(pTOXDlg)
+    SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
+    if (pTOXDlg)
     {
         sal_uInt16 nCurLevel = static_cast< sal_uInt16 >(m_pLevelLB->GetModel()->GetAbsPos(m_pLevelLB->FirstSelected()) + 1);
         if(aLastTOXType.eType == TOX_CONTENT && pVoid)
@@ -3664,7 +3666,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
 void SwTOXStylesTabPage::Modify()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-    if(pTOXDlg)
+    if (pTOXDlg)
     {
         GetForm() = *m_pCurrentForm;
         pTOXDlg->CreateOrUpdateExample(pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_STYLES);
