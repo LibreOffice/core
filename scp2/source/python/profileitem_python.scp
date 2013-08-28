@@ -41,7 +41,7 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
   #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Value = "$ORIGIN/../Frameworks/LibreOfficePython.framework";
   #elif defined MACOSX
-    Value = CONCAT2($ORIGIN,/LibreOfficePython.framework);
+    Value = "$ORIGIN/LibreOfficePython.framework";
   #else
     Value = CONCAT2($ORIGIN/python-core-,PYVERSION);
   #endif
@@ -54,37 +54,37 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONPATH";
-#ifdef SYSTEM_PYTHON
+  #if defined SYSTEM_PYTHON
     Value = "$ORIGIN";
-#else
-  #ifdef UNX
-    #ifdef MACOSX
-    #define FRAMEWORKLIB CONCAT3($ORIGIN,/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
+  #elif defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+    #define FRAMEWORKLIB CONCAT2($ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
     Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
 		   /lib-dynload FRAMEWORKLIB,
 		   /lib-tk FRAMEWORKLIB,
 		   /site-packages $ORIGIN);
-    #else
+  #elif defined MACOSX
+    #define FRAMEWORKLIB CONCAT2($ORIGIN/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
+    Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
+		   /lib-dynload FRAMEWORKLIB,
+		   /lib-tk FRAMEWORKLIB,
+		   /site-packages $ORIGIN);
+  #elif defined UNX
     Value = CONCAT9($ORIGIN/python-core-,PYVERSION,
 		   /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-dynload $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN);
-    #endif
-  #else
-   #ifdef _gcc3
+  #elif defined _gcc3
     Value = STRING(CONCAT9($ORIGIN/python-core-,PYVERSION,
 		   /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-dynload $ORIGIN/python-core-,PYVERSION,
 		   /lib/lib-tk $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN));
-   #else
+  #else
     Value = STRING(CONCAT5($ORIGIN/python-core-,PYVERSION,
                    /lib $ORIGIN/python-core-,PYVERSION,
 		   /lib/site-packages $ORIGIN));
-   #endif
   #endif
-#endif
 End
 
 // DISABLE_PYUNO
