@@ -1175,13 +1175,26 @@ LanguageTag & LanguageTag::makeFallback()
         return aVec;
     }
     aVec.push_back( getBcp47());
+    OUString aVariants( getVariants());
     OUString aTmp;
     if (hasScript())
     {
         OUString aScript( getScript());
         if (!aCountry.isEmpty())
         {
+            if (!aVariants.isEmpty())
+            {
+                aTmp = aLanguage + "-" + aScript + "-" + aCountry + "-" + aVariants;
+                if (aTmp != aVec[0])
+                    aVec.push_back( aTmp);
+            }
             aTmp = aLanguage + "-" + aScript + "-" + aCountry;
+            if (aTmp != aVec[0])
+                aVec.push_back( aTmp);
+        }
+        if (!aVariants.isEmpty())
+        {
+            aTmp = aLanguage + "-" + aScript + "-" + aVariants;
             if (aTmp != aVec[0])
                 aVec.push_back( aTmp);
         }
@@ -1191,7 +1204,19 @@ LanguageTag & LanguageTag::makeFallback()
     }
     if (!aCountry.isEmpty())
     {
+        if (!aVariants.isEmpty())
+        {
+            aTmp = aLanguage + "-" + aCountry + "-" + aVariants;
+            if (aTmp != aVec[0])
+                aVec.push_back( aTmp);
+        }
         aTmp = aLanguage + "-" + aCountry;
+        if (aTmp != aVec[0])
+            aVec.push_back( aTmp);
+    }
+    if (!aVariants.isEmpty())
+    {
+        aTmp = aLanguage + "-" + aVariants;
         if (aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
