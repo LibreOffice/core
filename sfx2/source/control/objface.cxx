@@ -326,14 +326,14 @@ const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const
 {
     static const char UNO_COMMAND[] = ".uno:";
 
-    String aCommand( rCommand );
-    if ( aCommand.SearchAscii( UNO_COMMAND ) == 0 )
-         aCommand.Erase( 0, sizeof( UNO_COMMAND )-1 );
+    OUString aCommand( rCommand );
+    if ( aCommand.startsWith( UNO_COMMAND ) )
+         aCommand = aCommand.copy( sizeof( UNO_COMMAND )-1 );
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         if ( (pSlots+n)->pUnoName &&
-             aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
+             aCommand.compareToIgnoreAsciiCaseAscii( (pSlots+n)->GetUnoName() ) == 0 )
             return pSlots+n;
     }
 

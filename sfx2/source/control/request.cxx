@@ -55,7 +55,7 @@ struct SfxRequest_Impl: public SfxListener
 
 {
     SfxRequest*     pAnti;       // Owner because of dying pool
-    String          aTarget;     // if possible from target object set by App
+    OUString        aTarget;     // if possible from target object set by App
     SfxItemPool*    pPool;       // ItemSet build with this pool
     SfxPoolItem*    pRetVal;     // Return value belongs to itself
     SfxShell*       pShell;      // run from this shell
@@ -334,13 +334,13 @@ void SfxRequest_Impl::Record
 */
 
 {
-    String aCommand = OUString(".uno:");
-    aCommand.AppendAscii( pSlot->GetUnoName() );
+    OUString aCommand(".uno:");
+    aCommand += OUString( pSlot->GetUnoName(), strlen( pSlot->GetUnoName() ), RTL_TEXTENCODING_UTF8 );
     OUString aCmd( aCommand );
     if(xRecorder.is())
     {
         uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
-        if ( xReplace.is() && aCmd.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
+        if ( xReplace.is() && aCmd == ".uno:InsertText" )
         {
             sal_Int32 nCount = xReplace->getCount();
             if ( nCount )
