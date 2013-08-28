@@ -5988,9 +5988,9 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     // Right shadow & corners
     if ( bPaintRightShadow )
     {
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - mnShadowPxWidth) ) ),
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Bottom() + 1 - (aPageBottomRightShadow.GetSizePixel().Height() - mnShadowPxWidth) ) ),
             aPageBottomRightShadow );
-        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right() + 1, aPagePxRect.Top() - mnShadowPxWidth ) ),
+        pOut->DrawBitmapEx( pOut->PixelToLogic( Point( aPaintRect.Right(), aPagePxRect.Top() - mnShadowPxWidth ) ),
             aPageTopRightShadow );
 
         if ( aPagePxRect.Height() > 2 * mnShadowPxWidth)
@@ -6021,7 +6021,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
 
     BitmapEx aPageBottomShadow = aPageBottomShadowBase;
     aPageBottomShadow.Scale( aPaintRect.Width(), 1 );
-    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Bottom() + 1 ),
+    lcl_paintBitmapExToRect( pOut, Point( aPaintRect.Left(), aPagePxRect.Bottom() + 2 ),
                              aPageBottomShadow, BOTTOM );
     BitmapEx aPageTopShadow = aPageTopShadowBase;
     aPageTopShadow.Scale( aPaintRect.Width(), 1 );
