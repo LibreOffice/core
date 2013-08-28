@@ -2290,18 +2290,19 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
                 pEntry->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
-#ifdef MACOSX
-            //It might be better to dig out the font version of the target font
-            //to see if it's a modern re-coded apple symbol font in case that
-            //font shows up on a different platform
-            if (!pEntry->mpConversion &&
-                aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
-                aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
-            {
-                pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
-            }
-#endif
         }
+
+#ifdef MACOSX
+        //It might be better to dig out the font version of the target font
+        //to see if it's a modern re-coded apple symbol font in case that
+        //font shows up on a different platform
+        if (!pEntry->mpConversion &&
+            aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
+            aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
+        {
+            pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
+        }
+#endif
 
         // add the new entry to the cache
         maFontInstanceList[ aFontSelData ] = pEntry;
