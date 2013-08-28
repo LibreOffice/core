@@ -211,7 +211,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
-            else if ( pImp->aFactoryName.Len() )
+            else if ( !pImp->aFactoryName.isEmpty() )
                 aFactName = pImp->aFactoryName;
             else
             {
@@ -295,7 +295,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
             case SID_NEWDOCDIRECT :
             {
-                if ( pImp->aFactoryName.Len() )
+                if ( !pImp->aFactoryName.isEmpty() )
                 {
                     String aFact = OUString("private:factory/");
                     aFact += pImp->aFactoryName;

@@ -33,7 +33,7 @@ struct SfxViewFrame_Impl
     Size                aMargin;
     Size                aSize;
     TypeId              aLastType;
-    String              aActualURL;
+    OUString            aActualURL;
     SfxFrame&           rFrame;
     svtools::AsynchronLink* pReloader;
     Window*             pWindow;
@@ -50,7 +50,7 @@ struct SfxViewFrame_Impl
     sal_Bool            bEnabled:1;
     sal_Bool            bWindowWasEnabled:1;
     sal_Bool            bActive;
-    String              aFactoryName;
+    OUString            aFactoryName;
     ::boost::optional< bool >
                         aHasToolPanels;
 
