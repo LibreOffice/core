@@ -106,22 +106,7 @@ void OPreparedStatement::ensurePrepared()
                                1,
                                m_pInSqlda);
     }
-//         char aItems[] = {
-//             isc_info_sql_num_variables
-//         };
-//         char aResultBuffer[8];
-//         isc_dsql_sql_info(m_statusVector,
-//                           &m_aStatementHandle,
-//                           sizeof(aItems),
-//                           aItems,
-//                           sizeof(aResultBuffer),
-//                           aResultBuffer);
-//         if (aResultBuffer[0] == isc_info_sql_num_variables)
-//         {
-//             short aVarLength = (short) isc_vax_integer(aResultBuffer+1, 2);
-//             m_nNumParams = isc_vax_integer(aResultBuffer+3, aVarLength);
-//         }
-//     }
+
     if (!aErr)
         mallocSQLVAR(m_pInSqlda);
     else
