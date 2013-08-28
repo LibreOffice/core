@@ -1701,7 +1701,16 @@ AC_ARG_WITH(jdk-home,
 
 AC_ARG_WITH(help,
     AS_HELP_STRING([--with-help],
-        [Enable the build of help.]))
+        [Enable the build of help. There is a special parameter "common" that
+         can be used to bundle only the common part, .e.g help-specific icons.
+         This is useful when you build the helpcontent separately.])
+    [
+                          Usage:     --with-help	build the entire local help
+                        	     --without-help     no local help (default)
+                        	     --with-help=common bundle common files for the local
+                        	                        help but do not build the whole help
+    ],
+,)
 
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
@@ -4623,14 +4632,21 @@ fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
 AC_MSG_CHECKING([whether to build help])
-if test "$with_help" = "yes" -a $_os != iOS -a $_os != Android; then
-    AC_MSG_RESULT([yes])
+HELP_COMMON_ONLY=FALSE
+if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE HELP"
-    SCPDEFS="$SCPDEFS -DWITH_HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
+    if test "$with_help" = "common" ; then
+	HELP_COMMON_ONLY=TRUE
+	AC_MSG_RESULT([common only])
+    else
+	SCPDEFS="$SCPDEFS -DWITH_HELP"
+	AC_MSG_RESULT([yes])
+    fi
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(HELP_COMMON_ONLY)
 
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
