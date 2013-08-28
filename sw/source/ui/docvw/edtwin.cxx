@@ -2742,7 +2742,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             rSh.SetShowHeaderFooterSeparator( Footer, false );
 
             // Repaint everything
-            rSh.GetWin()->Invalidate();
+            // FIXME fdo#67358 for unknown reasons this causes painting
+            // problems when resizing table columns, so disable it
+//            rSh.GetWin()->Invalidate();
         }
     }
 
