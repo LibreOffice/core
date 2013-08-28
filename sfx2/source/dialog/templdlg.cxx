@@ -52,7 +52,6 @@
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 #include "arrdecl.hxx"
-#include "fltfnc.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>

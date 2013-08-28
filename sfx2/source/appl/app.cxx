@@ -74,7 +74,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include "fltfnc.hxx"
 #include <sfx2/new.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

@@ -114,7 +114,6 @@ using namespace ::com::sun::star::container;
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/event.hxx>
-#include "fltfnc.hxx"
 #include <sfx2/sfx.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

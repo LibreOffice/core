@@ -128,7 +128,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/objitem.hxx>
 #include "sfx2/viewfac.hxx"
 #include <sfx2/event.hxx>
-#include "fltfnc.hxx"
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>

@@ -30,7 +30,7 @@
 
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfilt.hxx>
-#include "fltfnc.hxx"
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/objsh.hxx>
 

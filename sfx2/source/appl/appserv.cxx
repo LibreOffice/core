@@ -101,7 +101,6 @@
 #include "sfxtypes.hxx"
 #include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
-#include "fltfnc.hxx"
 #include <sfx2/sfx.hrc>
 #include "app.hrc"
 #include <sfx2/passwd.hxx>

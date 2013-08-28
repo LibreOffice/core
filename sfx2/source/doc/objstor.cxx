@@ -107,7 +107,7 @@
 #include <sfx2/request.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
-#include "fltfnc.hxx"
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "objshimp.hxx"

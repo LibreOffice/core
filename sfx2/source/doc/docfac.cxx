@@ -37,7 +37,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "sfx2/viewfac.hxx"
-#include "fltfnc.hxx"
+#include <sfx2/fcontnr.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

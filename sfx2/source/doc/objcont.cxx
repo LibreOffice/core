@@ -54,7 +54,7 @@
 #include "sfx2/sfxresid.hxx"
 #include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
-#include "fltfnc.hxx"
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>

@@ -18,7 +18,6 @@
  */
 
 
-#include "fltfnc.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

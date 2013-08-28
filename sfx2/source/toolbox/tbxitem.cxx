@@ -72,7 +72,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/dispatch.hxx>
-#include "fltfnc.hxx"
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
 #include "statcach.hxx"
