@@ -112,22 +112,21 @@ const XParaPortion& XParaPortionList::operator [](size_t i) const
     return maList[i];
 }
 
-ContentInfo::ContentInfo( SfxItemPool& rPool ) : aParaAttribs( rPool, EE_PARA_START, EE_CHAR_END )
+ContentInfo::ContentInfo( SfxItemPool& rPool ) :
+    eFamily(SFX_STYLE_FAMILY_PARA),
+    aParaAttribs(rPool, EE_PARA_START, EE_CHAR_END)
 {
-    eFamily = SFX_STYLE_FAMILY_PARA;
-    pWrongs = NULL;
 }
 
 // the real Copy constructor is nonsens, since I have to work with another Pool!
-ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse )
-    : aParaAttribs( rPoolToUse, EE_PARA_START, EE_CHAR_END )
-    , pWrongs(0)
+ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse ) :
+    aText(rCopyFrom.aText),
+    aStyle(rCopyFrom.aStyle),
+    eFamily(rCopyFrom.eFamily),
+    aParaAttribs(rPoolToUse, EE_PARA_START, EE_CHAR_END)
 {
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
-    aText = rCopyFrom.GetText();
-    aStyle = rCopyFrom.GetStyle();
-    eFamily = rCopyFrom.GetFamily();
 
     for (size_t i = 0; i < rCopyFrom.aAttribs.size(); ++i)
     {
@@ -138,7 +137,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     }
 
     if ( rCopyFrom.GetWrongList() )
-        pWrongs = rCopyFrom.GetWrongList()->Clone();
+        mpWrongs.reset(rCopyFrom.GetWrongList()->Clone());
 }
 
 ContentInfo::~ContentInfo()
@@ -147,8 +146,16 @@ ContentInfo::~ContentInfo()
     for (; it != itEnd; ++it)
         aParaAttribs.GetPool()->Remove(*it->GetItem());
     aAttribs.clear();
+}
 
-    delete pWrongs;
+WrongList* ContentInfo::GetWrongList() const
+{
+    return mpWrongs.get();
+}
+
+void ContentInfo::SetWrongList( WrongList* p )
+{
+    mpWrongs.reset(p);
 }
 
 // #i102062#

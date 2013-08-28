@@ -1373,7 +1373,6 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
         if ( bNewContent && GetStatus().DoOnlineSpelling() && pC->GetWrongList() )
         {
-            aPaM.GetNode()->DestroyWrongList(); // otherwise MLK, if list exists...
             aPaM.GetNode()->SetWrongList( pC->GetWrongList()->Clone() );
         }
 

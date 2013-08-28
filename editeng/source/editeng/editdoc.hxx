@@ -34,6 +34,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ImpEditEngine;
 class SvxTabStop;
@@ -258,7 +259,7 @@ private:
     XubString maString;
     ContentAttribs  aContentAttribs;
     CharAttribList  aCharAttribList;
-    WrongList*      pWrongList;
+    boost::scoped_ptr<WrongList> mpWrongList;
 
 public:
                     ContentNode( SfxItemPool& rItemPool );
@@ -282,9 +283,9 @@ public:
 
     void            CreateDefFont();
 
-    WrongList*      GetWrongList()          { return pWrongList; }
-    const WrongList* GetWrongList() const { return pWrongList; }
-    void            SetWrongList( WrongList* p );
+    WrongList* GetWrongList();
+    const WrongList* GetWrongList() const;
+    void SetWrongList( WrongList* p );
 
     void            CreateWrongList();
     void            DestroyWrongList();

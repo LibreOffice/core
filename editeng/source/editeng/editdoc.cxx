@@ -1299,20 +1299,17 @@ sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  )
 ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
     DBG_CTOR( EE_ContentNode, 0 );
-    pWrongList = NULL;
 }
 
 ContentNode::ContentNode( const XubString& rStr, const ContentAttribs& rContentAttribs ) :
     maString(rStr), aContentAttribs(rContentAttribs)
 {
     DBG_CTOR( EE_ContentNode, 0 );
-    pWrongList = NULL;
 }
 
 ContentNode::~ContentNode()
 {
     DBG_DTOR( EE_ContentNode, 0 );
-    delete pWrongList;
 }
 
 void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool& rItemPool )
@@ -1440,10 +1437,10 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-    if ( pWrongList )
+    if (mpWrongList)
     {
         bool bSep = ( maString.GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
-        pWrongList->TextInserted( nIndex, nNew, bSep );
+        mpWrongList->TextInserted( nIndex, nNew, bSep );
     }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -1531,8 +1528,8 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
     if ( bResort )
         aCharAttribList.ResortAttribs();
 
-    if ( pWrongList )
-        pWrongList->TextDeleted( nIndex, nDeleted );
+    if (mpWrongList)
+        mpWrongList->TextDeleted(nIndex, nDeleted);
 
 #if OSL_DEBUG_LEVEL > 2
     OSL_ENSURE( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start list distorted" );
@@ -1680,12 +1677,6 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont )
         CreateDefFont();
 }
 
-void ContentNode::DestroyWrongList()
-{
-    delete pWrongList;
-    pWrongList = NULL;
-}
-
 bool ContentNode::IsFeature( sal_uInt16 nPos ) const
 {
     return maString.GetChar(nPos) == CH_FEATURE;
@@ -1741,16 +1732,31 @@ sal_Unicode ContentNode::GetChar(sal_uInt16 nPos) const
     return maString.GetChar(nPos);
 }
 
-void ContentNode::CreateWrongList()
+WrongList* ContentNode::GetWrongList()
 {
-    DBG_ASSERT( !pWrongList, "WrongList already exist!" );
-    pWrongList = new WrongList;
+    return mpWrongList.get();
+}
+
+const WrongList* ContentNode::GetWrongList() const
+{
+    return mpWrongList.get();
 }
 
 void ContentNode::SetWrongList( WrongList* p )
 {
-    DBG_ASSERT( !pWrongList, "WrongList already exist!" );
-    pWrongList = p;
+    DBG_ASSERT(!mpWrongList, "WrongList already exist!");
+    mpWrongList.reset(p);
+}
+
+void ContentNode::CreateWrongList()
+{
+    DBG_ASSERT(!mpWrongList, "WrongList already exist!");
+    mpWrongList.reset(new WrongList);
+}
+
+void ContentNode::DestroyWrongList()
+{
+    mpWrongList.reset();
 }
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool ) :

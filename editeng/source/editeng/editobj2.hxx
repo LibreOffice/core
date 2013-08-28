@@ -27,6 +27,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace editeng {
 
@@ -114,7 +115,7 @@ public:
 
 };
 
-class ContentInfo
+class ContentInfo : boost::noncopyable
 {
     friend class EditTextObjectImpl;
 public:
@@ -127,7 +128,7 @@ private:
     XEditAttributesType aAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
-    WrongList*          pWrongs;
+    boost::scoped_ptr<WrongList> mpWrongs;
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
@@ -148,8 +149,8 @@ public:
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
     SfxStyleFamily&     GetFamily()         { return eFamily; }
 
-    WrongList*          GetWrongList() const            { return pWrongs; }
-    void                SetWrongList( WrongList* p )    { pWrongs = p; }
+    WrongList* GetWrongList() const;
+    void SetWrongList( WrongList* p );
     bool operator==( const ContentInfo& rCompare ) const;
     bool operator!=( const ContentInfo& rCompare ) const;
 
