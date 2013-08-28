@@ -32,7 +32,7 @@ class SvFileObject : public sfx2::SvLinkSource
 {
     OUString            sFileNm;
     OUString            sFilter;
-    String              sReferer;
+    OUString            sReferer;
     Link                aEndEditLink;
     SfxMediumRef        xMed;
     Impl_DownLoadData*  pDownLoadData;
