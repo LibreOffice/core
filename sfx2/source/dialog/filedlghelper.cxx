@@ -349,16 +349,16 @@ void FileDialogHelper_Impl::dispose()
 }
 
 // ------------------------------------------------------------------------
-String FileDialogHelper_Impl::getCurrentFilterUIName() const
+OUString FileDialogHelper_Impl::getCurrentFilterUIName() const
 {
-    String aFilterName;
+    OUString aFilterName;
     uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
     if( xFltMgr.is() )
     {
         aFilterName = xFltMgr->getCurrentFilter();
 
-        if ( aFilterName.Len() && isShowFilterExtensionEnabled() )
+        if ( !aFilterName.isEmpty() && isShowFilterExtensionEnabled() )
             aFilterName = getFilterName( aFilterName );
     }
 
@@ -905,7 +905,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int64 nFlags,
     sal_Int16 nDialog,
     Window* _pPreferredParentWindow,
-    const String& sStandardDir,
+    const OUString& sStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList
     )
     :m_nDialogType          ( nDialogType )
@@ -1783,7 +1783,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::createMatcher( const String& rFactory )
+void FileDialogHelper_Impl::createMatcher( const OUString& rFactory )
 {
     if (mbDeleteMatcher)
         delete mpMatcher;
@@ -1793,7 +1793,7 @@ void FileDialogHelper_Impl::createMatcher( const String& rFactory )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::addFilters( const String& rFactory,
+void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
@@ -1806,7 +1806,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
         delete mpMatcher;
 
     // we still need a matcher to convert UI names to filter names
-    if ( !rFactory.Len() )
+    if ( rFactory.isEmpty() )
     {
         SfxApplication *pSfxApp = SFX_APP();
         mpMatcher = &pSfxApp->GetFilterMatcher();

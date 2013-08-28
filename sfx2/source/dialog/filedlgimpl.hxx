@@ -100,7 +100,7 @@ namespace sfx2
         sal_Bool                    mbSelectionFltrEnabled  : 1;
 
     private:
-        void                    addFilters( const String& rFactory,
+        void                    addFilters( const OUString& rFactory,
                                             SfxFilterFlags nMust,
                                             SfxFilterFlags nDont );
         void                    addFilter( const OUString& rFilterName,
@@ -135,7 +135,7 @@ namespace sfx2
         sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
 
         sal_Bool                isInOpenMode() const;
-        String                  getCurrentFilterUIName() const;
+        OUString                getCurrentFilterUIName() const;
 
         void                    LoadLastUsedFilter( const OUString& _rContextIdentifier );
         void                    SaveLastUsedFilter( const OUString& _rContextIdentifier );
@@ -181,7 +181,7 @@ namespace sfx2
                                     sal_Int64 nFlags,
                                     sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                                     Window* _pPreferredParentWindow = NULL,
-                                    const String& sStandardDir = OUString(),
+                                    const OUString& sStandardDir = OUString(),
                                     const ::com::sun::star::uno::Sequence< OUString >&   rBlackList = ::com::sun::star::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl();
@@ -206,7 +206,7 @@ namespace sfx2
         void                    getRealFilter( OUString& _rFilter ) const;
 
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
-        void                    createMatcher( const String& rFactory );
+        void                    createMatcher( const OUString& rFactory );
 
         sal_Bool                isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const OUString& rFilter,
