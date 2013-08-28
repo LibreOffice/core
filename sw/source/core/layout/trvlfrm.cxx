@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <comphelper/flagguard.hxx>
 #include <tools/bigint.hxx>
 #include <tools/line.hxx>
 #include <editeng/opaqitem.hxx>
@@ -283,10 +284,48 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pTextNd )
             {
                 SwCntntFrm* pTextFrm = pTextNd->getLayoutFrm( getRootFrm( ) );
-                SwRect rTextRect;
-                pTextFrm->GetCharRect( rTextRect, aTextPos );
 
-                nTextDistance = lcl_getDistance( rTextRect, rPoint );
+                // try this again but prefer the "previous" position
+                SwCrsrMoveState aMoveState;
+                SwCrsrMoveState *const pState((pCMS) ? pCMS : &aMoveState);
+                comphelper::FlagRestorationGuard g(
+                        pState->bPosMatchesBounds, true);
+                SwPosition prevTextPos(*pPos);
+                SwLayoutFrm::GetCrsrOfst(&prevTextPos, aPoint, pState);
+
+                SwRect aTextRect;
+                pTextFrm->GetCharRect(aTextRect, prevTextPos);
+
+                if (prevTextPos.nContent < pTextNd->Len())
+                {
+                    // aRextRect is just a line on the left edge of the
+                    // previous character; to get a better measure from
+                    // lcl_getDistance, extend that to a rectangle over
+                    // the entire character.
+                    SwPosition const nextTextPos(prevTextPos.nNode,
+                            SwIndex(prevTextPos.nContent, +1));
+                    SwRect nextTextRect;
+                    pTextFrm->GetCharRect(nextTextRect, nextTextPos);
+                    SWRECTFN(pTextFrm);
+                    if ((aTextRect.*fnRect->fnGetTop)() ==
+                        (nextTextRect.*fnRect->fnGetTop)()) // same line?
+                    {
+                        // need to handle mixed RTL/LTR portions somehow
+                        if ((aTextRect.*fnRect->fnGetLeft)() <
+                            (nextTextRect.*fnRect->fnGetLeft)())
+                        {
+                            (aTextRect.*fnRect->fnSetRight)(
+                                    (nextTextRect.*fnRect->fnGetLeft)());
+                        }
+                        else // RTL
+                        {
+                            (aTextRect.*fnRect->fnSetLeft)(
+                                    (nextTextRect.*fnRect->fnGetLeft)());
+                        }
+                    }
+                }
+
+                nTextDistance = lcl_getDistance(aTextRect, rPoint);
                 bValidTextDistance = true;
             }
 
