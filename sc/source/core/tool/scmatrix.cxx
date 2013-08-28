@@ -1009,7 +1009,7 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
             MatrixImplType::boolean_block_type::const_iterator itEnd = MatrixImplType::boolean_block_type::end(*node.data);
             for (; it != itEnd; ++it, ++nCount)
             {
-                if (*it == maMatchValue)
+                if (int(*it) == maMatchValue)
                 {
                     return mnIndex + nCount;
                 }
