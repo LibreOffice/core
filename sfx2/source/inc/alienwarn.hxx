@@ -38,7 +38,7 @@ private:
     void                    InitSize();
 
 public:
-             SfxAlienWarningDialog( Window* pParent, const String& _rFormatName );
+             SfxAlienWarningDialog( Window* pParent, const OUString& _rFormatName );
     virtual ~SfxAlienWarningDialog();
 };
 

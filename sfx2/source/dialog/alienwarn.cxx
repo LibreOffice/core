@@ -30,7 +30,7 @@
 
 // class SfxAlienWarningDialog -------------------------------------------
 
-SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rFormatName ) :
+SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const OUString& _rFormatName ) :
 
     SfxModalDialog( pParent, SfxResId( RID_DLG_ALIEN_WARNING ) ),
 
