@@ -435,28 +435,8 @@ namespace drawinglayer
                 }
             }
 
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            const bool bRotated(!basegfx::fTools::equalZero(fRotate));
-            const bool bSheared(!basegfx::fTools::equalZero(fShearX));
-
-            if(!aBitmapEx.IsTransparent() && (bSheared || bRotated))
-            {
-                // parts will be uncovered, extend aBitmapEx with a mask bitmap
-                const Bitmap aContent(aBitmapEx.GetBitmap());
-#if defined(MACOSX)
-                AlphaMask aMaskBmp( aContent.GetSizePixel());
-                aMaskBmp.Erase( 0);
-#else
-                Bitmap aMaskBmp( aContent.GetSizePixel(), 1);
-                aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
-#endif
-                aBitmapEx = BitmapEx(aContent, aMaskBmp);
-            }
+            // #122923# do no longer add Alpha channel here; the right place to do this is when really
+            // the own transformer is used (see OutputDevice::DrawTransformedBitmapEx).
 
             // draw using OutputDevice'sDrawTransformedBitmapEx
             mpOutputDevice->DrawTransformedBitmapEx(aLocalTransform, aBitmapEx);

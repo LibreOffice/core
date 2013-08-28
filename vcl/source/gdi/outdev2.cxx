@@ -765,7 +765,13 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::B2DRange aVisibleRange(0.0, 0.0, 1.0, 1.0);
 
         // limit maximum area to something looking good for non-pixel-based targets (metafile, printer)
-        double fMaximumArea(1000000.0);
+        // by using a fixed minimum (allow at least, but no need to utilize) for good smooting and an area
+        // dependent of original size for good quality when e.g. rotated/sheared. Still, limit to a maximum
+        // to avoid crashes/ressource problems (ca. 1500x3000 here)
+        const Size& rOriginalSizePixel(rBitmapEx.GetSizePixel());
+        const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
+        const double fOrigAreaScaled(bSheared || bRotated ? fOrigArea * 1.44 : fOrigArea);
+        double fMaximumArea(std::min(4500000.0, std::max(1000000.0, fOrigAreaScaled)));
 
         if(!bMetafile && !bPrinter)
         {
@@ -848,12 +854,30 @@ void OutputDevice::DrawTransformedBitmapEx(
         if(!aVisibleRange.isEmpty())
         {
             static bool bDoSmoothAtAll(true);
-            const BitmapEx aTransformed(
-                rBitmapEx.getTransformed(
-                    aFullTransform,
-                    aVisibleRange,
-                    fMaximumArea,
-                    bDoSmoothAtAll));
+            BitmapEx aTransformed(rBitmapEx);
+
+            // #122923# when the result needs an alpha channel due to being rotated or sheared
+            // and thus uncovering areas, add these channels so that the own transformer (used
+            // in getTransformed) also creates a transformed alpha channel
+            if(!aTransformed.IsTransparent() && (bSheared || bRotated))
+            {
+                // parts will be uncovered, extend aTransformed with a mask bitmap
+                const Bitmap aContent(aTransformed.GetBitmap());
+#if defined(MACOSX)
+                AlphaMask aMaskBmp(aContent.GetSizePixel());
+                aMaskBmp.Erase(0);
+#else
+                Bitmap aMaskBmp(aContent.GetSizePixel(), 1);
+                aMaskBmp.Erase(Color(COL_BLACK)); // #122758# Initialize to non-transparent
+#endif
+                aTransformed = BitmapEx(aContent, aMaskBmp);
+            }
+
+            aTransformed = aTransformed.getTransformed(
+                aFullTransform,
+                aVisibleRange,
+                fMaximumArea,
+                bDoSmoothAtAll);
             basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
 
             // get logic object target range
