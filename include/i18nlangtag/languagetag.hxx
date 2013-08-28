@@ -184,6 +184,16 @@ public:
      */
     OUString                        getRegion() const;
 
+    /** Get BCP 47 variant subtags, of the IANA Language Subtag Registry.
+
+        If there are multiple variant subtags they are separated by '-'.
+
+        This is NOT related to Locale.Variant!
+
+        Always resolves an empty tag to the system locale.
+     */
+    OUString                        getVariants() const;
+
     /** Get a GLIBC locale string.
 
         Always resolves an empty tag to the system locale.
@@ -483,6 +493,7 @@ private:
     OUString    getLanguageFromLangtag();
     OUString    getScriptFromLangtag();
     OUString    getRegionFromLangtag();
+    OUString    getVariantsFromLangtag();
 
     void            resetVars();
 

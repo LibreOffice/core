@@ -842,6 +842,31 @@ OUString LanguageTag::getRegionFromLangtag()
 }
 
 
+OUString LanguageTag::getVariantsFromLangtag()
+{
+    OUString aVariants;
+    synCanonicalize();
+    if (maBcp47.isEmpty())
+        return aVariants;
+    if (mpImplLangtag)
+    {
+        const lt_list_t* pVariantsT = lt_tag_get_variants( MPLANGTAG);
+        for (const lt_list_t* pE = pVariantsT; pE; pE = lt_list_next( pE))
+        {
+            const lt_pointer_t pV = lt_list_value( pE);
+            if (pV)
+            {
+                if (aVariants.isEmpty())
+                    aVariants = OUString::createFromAscii( static_cast<const char*>(pV));
+                else
+                    aVariants += "-" + OUString::createFromAscii( static_cast<const char*>(pV));
+            }
+        }
+    }
+    return aVariants;
+}
+
+
 const com::sun::star::lang::Locale & LanguageTag::getLocale( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
@@ -1013,6 +1038,12 @@ OUString LanguageTag::getCountry() const
 OUString LanguageTag::getRegion() const
 {
     return const_cast<LanguageTag*>(this)->getRegionFromLangtag();
+}
+
+
+OUString LanguageTag::getVariants() const
+{
+    return const_cast<LanguageTag*>(this)->getVariantsFromLangtag();
 }
 
 
