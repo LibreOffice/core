@@ -81,7 +81,7 @@
 #include "editeng/kernitem.hxx"
 #include "editeng/langitem.hxx"
 #include "editeng/postitem.hxx"
-#include "editeng/sectionattribute.hxx"
+#include "editeng/section.hxx"
 #include "editeng/shdditem.hxx"
 #include "editeng/udlnitem.hxx"
 #include "editeng/wghtitem.hxx"
@@ -1344,12 +1344,12 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
     sal_Int32 nCellCount = 0;
     for (const EditTextObject* pEdit = aIter.first(); pEdit; pEdit = aIter.next(), ++nCellCount)
     {
-        std::vector<editeng::SectionAttribute> aAttrs;
-        pEdit->GetAllSectionAttributes(aAttrs);
+        std::vector<editeng::Section> aAttrs;
+        pEdit->GetAllSections(aAttrs);
         if (aAttrs.empty())
             continue;
 
-        std::vector<editeng::SectionAttribute>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
+        std::vector<editeng::Section>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
         for (; itSec != itSecEnd; ++itSec)
         {
             const std::vector<const SfxPoolItem*>& rSecAttrs = itSec->maAttributes;
@@ -3163,7 +3163,7 @@ void flushParagraph(
     ScXMLExport& rExport, const OUString& rParaText,
     UniReference<XMLPropertySetMapper> xMapper, UniReference<SvXMLAutoStylePoolP> xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
-    std::vector<editeng::SectionAttribute>::const_iterator it, std::vector<editeng::SectionAttribute>::const_iterator itEnd )
+    std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator itEnd )
 {
     OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
         XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
@@ -3171,7 +3171,7 @@ void flushParagraph(
 
     for (; it != itEnd; ++it)
     {
-        const editeng::SectionAttribute& rSec = *it;
+        const editeng::Section& rSec = *it;
 
         const sal_Unicode* pBeg = rParaText.getStr();
         std::advance(pBeg, rSec.mnStart);
@@ -3377,14 +3377,14 @@ void ScXMLExport::WriteEditCell(const EditTextObject* pText)
         aParaTexts.push_back(pText->GetText(i));
 
     // Get all section data and iterate through them.
-    std::vector<editeng::SectionAttribute> aAttrs;
-    pText->GetAllSectionAttributes(aAttrs);
-    std::vector<editeng::SectionAttribute>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
-    std::vector<editeng::SectionAttribute>::const_iterator itPara = itSec;
+    std::vector<editeng::Section> aAttrs;
+    pText->GetAllSections(aAttrs);
+    std::vector<editeng::Section>::const_iterator itSec = aAttrs.begin(), itSecEnd = aAttrs.end();
+    std::vector<editeng::Section>::const_iterator itPara = itSec;
     size_t nCurPara = 0; // current paragraph
     for (; itSec != itSecEnd; ++itSec)
     {
-        const editeng::SectionAttribute& rSec = *itSec;
+        const editeng::Section& rSec = *itSec;
         if (nCurPara == rSec.mnParagraph)
             // Still in the same paragraph.
             continue;

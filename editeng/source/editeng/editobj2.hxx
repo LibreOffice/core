@@ -30,7 +30,7 @@
 
 namespace editeng {
 
-struct SectionAttribute;
+struct Section;
 
 }
 
@@ -225,7 +225,7 @@ public:
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
 
-    void GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const;
+    void GetAllSections( std::vector<editeng::Section>& rAttrs ) const;
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;

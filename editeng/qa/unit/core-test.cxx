@@ -23,7 +23,7 @@
 #include "editeng/unofield.hxx"
 #include "editeng/wghtitem.hxx"
 #include "editeng/postitem.hxx"
-#include "editeng/sectionattribute.hxx"
+#include "editeng/section.hxx"
 #include "editeng/editobj.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -342,7 +342,7 @@ void Test::testAutocorrect()
     }
 }
 
-bool hasBold(const editeng::SectionAttribute& rSecAttr)
+bool hasBold(const editeng::Section& rSecAttr)
 {
     std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
     for (; it != itEnd; ++it)
@@ -359,7 +359,7 @@ bool hasBold(const editeng::SectionAttribute& rSecAttr)
     return false;
 }
 
-bool hasItalic(const editeng::SectionAttribute& rSecAttr)
+bool hasItalic(const editeng::Section& rSecAttr)
 {
     std::vector<const SfxPoolItem*>::const_iterator it = rSecAttr.maAttributes.begin(), itEnd = rSecAttr.maAttributes.end();
     for (; it != itEnd; ++it)
@@ -397,14 +397,14 @@ void Test::testSectionAttributes()
         aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
         boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
-        std::vector<editeng::SectionAttribute> aAttrs;
-        pEditText->GetAllSectionAttributes(aAttrs);
+        std::vector<editeng::Section> aAttrs;
+        pEditText->GetAllSections(aAttrs);
 
         // Now, we should have a total of 3 sections.
         CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
 
         // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
-        const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
+        const editeng::Section* pSecAttr = &aAttrs[0];
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);
@@ -447,13 +447,13 @@ void Test::testSectionAttributes()
 
         boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
-        std::vector<editeng::SectionAttribute> aAttrs;
-        pEditText->GetAllSectionAttributes(aAttrs);
+        std::vector<editeng::Section> aAttrs;
+        pEditText->GetAllSections(aAttrs);
         size_t nSecCountCheck = 5;
         CPPUNIT_ASSERT_EQUAL(nSecCountCheck, aAttrs.size());
 
         // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
-        const editeng::SectionAttribute* pSecAttr = &aAttrs[0];
+        const editeng::Section* pSecAttr = &aAttrs[0];
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pSecAttr->mnStart);
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pSecAttr->mnEnd);

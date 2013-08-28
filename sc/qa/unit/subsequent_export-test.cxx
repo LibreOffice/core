@@ -37,7 +37,7 @@
 #include "editeng/editdata.hxx"
 #include "editeng/eeitem.hxx"
 #include "editeng/editobj.hxx"
-#include "editeng/sectionattribute.hxx"
+#include "editeng/section.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -347,7 +347,7 @@ void ScExportTest::testRichTextExportODS()
 {
     struct
     {
-        static bool isBold(const editeng::SectionAttribute& rAttr)
+        static bool isBold(const editeng::Section& rAttr)
         {
             if (rAttr.maAttributes.empty())
                 return false;
@@ -364,7 +364,7 @@ void ScExportTest::testRichTextExportODS()
             return false;
         }
 
-        static bool isItalic(const editeng::SectionAttribute& rAttr)
+        static bool isItalic(const editeng::Section& rAttr)
         {
             if (rAttr.maAttributes.empty())
                 return false;
@@ -392,13 +392,13 @@ void ScExportTest::testRichTextExportODS()
             if (pText->GetText(0) != "Bold and Italic")
                 return false;
 
-            std::vector<editeng::SectionAttribute> aSecAttrs;
-            pText->GetAllSectionAttributes(aSecAttrs);
+            std::vector<editeng::Section> aSecAttrs;
+            pText->GetAllSections(aSecAttrs);
             if (aSecAttrs.size() != 3)
                 return false;
 
             // Check the first bold section.
-            const editeng::SectionAttribute* pAttr = &aSecAttrs[0];
+            const editeng::Section* pAttr = &aSecAttrs[0];
             if (pAttr->mnParagraph != 0 ||pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;
 

@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "editeng/sectionattribute.hxx"
+#include "editeng/section.hxx"
 
 namespace editeng {
 
-SectionAttribute::SectionAttribute() : mnParagraph(0), mnStart(0), mnEnd(0) {}
+Section::Section() : mnParagraph(0), mnStart(0), mnEnd(0) {}
 
-SectionAttribute::SectionAttribute(size_t nPara, size_t nStart, size_t nEnd) :
+Section::Section(size_t nPara, size_t nStart, size_t nEnd) :
     mnParagraph(nPara), mnStart(nStart), mnEnd(nEnd){}
 
 }

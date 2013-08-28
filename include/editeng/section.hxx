@@ -18,7 +18,7 @@ class SfxPoolItem;
 
 namespace editeng {
 
-struct EDITENG_DLLPUBLIC SectionAttribute
+struct EDITENG_DLLPUBLIC Section
 {
     size_t mnParagraph;
     size_t mnStart;
@@ -26,8 +26,8 @@ struct EDITENG_DLLPUBLIC SectionAttribute
 
     std::vector<const SfxPoolItem*> maAttributes;
 
-    SectionAttribute();
-    SectionAttribute(size_t nPara, size_t nStart, size_t nEnd);
+    Section();
+    Section(size_t nPara, size_t nStart, size_t nEnd);
 };
 
 }

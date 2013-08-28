@@ -28,7 +28,7 @@
 
 #include "editeng/fieldupdater.hxx"
 #include "editeng/macros.hxx"
-#include "editeng/sectionattribute.hxx"
+#include "editeng/section.hxx"
 #include <editobj2.hxx>
 #include <editeng/editdata.hxx>
 #include <editattr.hxx>
@@ -277,9 +277,9 @@ bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
     return mpImpl->RemoveCharAttribs(nWhich);
 }
 
-void EditTextObject::GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const
+void EditTextObject::GetAllSections( std::vector<editeng::Section>& rAttrs ) const
 {
-    mpImpl->GetAllSectionAttributes(rAttrs);
+    mpImpl->GetAllSections(rAttrs);
 }
 
 void EditTextObject::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const
@@ -832,24 +832,24 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 
 namespace {
 
-class FindByParagraph : std::unary_function<editeng::SectionAttribute, bool>
+class FindByParagraph : std::unary_function<editeng::Section, bool>
 {
     size_t mnPara;
 public:
     FindByParagraph(size_t nPara) : mnPara(nPara) {}
-    bool operator() (const editeng::SectionAttribute& rAttr) const
+    bool operator() (const editeng::Section& rAttr) const
     {
         return rAttr.mnParagraph == mnPara;
     }
 };
 
-class FindBySectionStart : std::unary_function<editeng::SectionAttribute, bool>
+class FindBySectionStart : std::unary_function<editeng::Section, bool>
 {
     size_t mnPara;
     size_t mnStart;
 public:
     FindBySectionStart(size_t nPara, size_t nStart) : mnPara(nPara), mnStart(nStart) {}
-    bool operator() (const editeng::SectionAttribute& rAttr) const
+    bool operator() (const editeng::Section& rAttr) const
     {
         return rAttr.mnParagraph == mnPara && rAttr.mnStart == mnStart;
     }
@@ -857,7 +857,7 @@ public:
 
 }
 
-void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAttribute>& rAttrs ) const
+void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs ) const
 {
     typedef std::vector<size_t> SectionBordersType;
     typedef std::vector<SectionBordersType> ParagraphsType;
@@ -892,7 +892,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         rBorders.erase(itUniqueEnd, rBorders.end());
     }
 
-    std::vector<editeng::SectionAttribute> aAttrs;
+    std::vector<editeng::Section> aAttrs;
 
     // Create storage for each section.  Note that this creates storage even
     // for unformatted sections.  The entries are sorted first by paragraph,
@@ -905,7 +905,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         if (rBorders.size() == 1 && rBorders[0] == 0)
         {
             // Empty paragraph. Push an empty section.
-            aAttrs.push_back(editeng::SectionAttribute(nPara, 0, 0));
+            aAttrs.push_back(editeng::Section(nPara, 0, 0));
             continue;
         }
 
@@ -915,7 +915,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         for (++itBorder; itBorder != itBorderEnd; ++itBorder, nPrev = nCur)
         {
             nCur = *itBorder;
-            aAttrs.push_back(editeng::SectionAttribute(nPara, nPrev, nCur));
+            aAttrs.push_back(editeng::Section(nPara, nPrev, nCur));
         }
     }
 
@@ -923,7 +923,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
         return;
 
     // Go through all formatted paragraphs, and store format items.
-    std::vector<editeng::SectionAttribute>::iterator itAttr = aAttrs.begin();
+    std::vector<editeng::Section>::iterator itAttr = aAttrs.begin();
     for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
     {
         const ContentInfo& rC = aContents[nPara];
@@ -941,7 +941,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
                 continue;
 
             size_t nStart = rXAttr.GetStart(), nEnd = rXAttr.GetEnd();
-            std::vector<editeng::SectionAttribute>::iterator itCurAttr = itAttr;
+            std::vector<editeng::Section>::iterator itCurAttr = itAttr;
 
             // Find the container whose start position matches.
             itCurAttr = std::find_if(itCurAttr, aAttrs.end(), FindBySectionStart(nPara, nStart));
@@ -951,7 +951,7 @@ void EditTextObjectImpl::GetAllSectionAttributes( std::vector<editeng::SectionAt
 
             for (; itCurAttr != aAttrs.end() && itCurAttr->mnParagraph == nPara && itCurAttr->mnEnd <= nEnd; ++itCurAttr)
             {
-                editeng::SectionAttribute& rSecAttr = *itCurAttr;
+                editeng::Section& rSecAttr = *itCurAttr;
                 rSecAttr.maAttributes.push_back(pItem);
             }
         }
