@@ -1184,6 +1184,7 @@ LanguageTag & LanguageTag::makeFallback()
     if (hasScript())
     {
         OUString aScript( getScript());
+        bool bHaveLanguageScriptVariant = false;
         if (!aCountry.isEmpty())
         {
             if (!aVariants.isEmpty())
@@ -1191,12 +1192,18 @@ LanguageTag & LanguageTag::makeFallback()
                 aTmp = aLanguage + "-" + aScript + "-" + aCountry + "-" + aVariants;
                 if (aTmp != aVec[0])
                     aVec.push_back( aTmp);
+                // Language with variant but without country before language
+                // without variant but with country.
+                aTmp = aLanguage + "-" + aScript + "-" + aVariants;
+                if (aTmp != aVec[0])
+                    aVec.push_back( aTmp);
+                bHaveLanguageScriptVariant = true;
             }
             aTmp = aLanguage + "-" + aScript + "-" + aCountry;
             if (aTmp != aVec[0])
                 aVec.push_back( aTmp);
         }
-        if (!aVariants.isEmpty())
+        if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
             aTmp = aLanguage + "-" + aScript + "-" + aVariants;
             if (aTmp != aVec[0])
@@ -1206,6 +1213,7 @@ LanguageTag & LanguageTag::makeFallback()
         if (aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
+    bool bHaveLanguageVariant = false;
     if (!aCountry.isEmpty())
     {
         if (!aVariants.isEmpty())
@@ -1213,12 +1221,18 @@ LanguageTag & LanguageTag::makeFallback()
             aTmp = aLanguage + "-" + aCountry + "-" + aVariants;
             if (aTmp != aVec[0])
                 aVec.push_back( aTmp);
+            // Language with variant but without country before language
+            // without variant but with country.
+            aTmp = aLanguage + "-" + aVariants;
+            if (aTmp != aVec[0])
+                aVec.push_back( aTmp);
+            bHaveLanguageVariant = true;
         }
         aTmp = aLanguage + "-" + aCountry;
         if (aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
-    if (!aVariants.isEmpty())
+    if (!aVariants.isEmpty() && !bHaveLanguageVariant)
     {
         aTmp = aLanguage + "-" + aVariants;
         if (aTmp != aVec[0])
