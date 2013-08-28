@@ -1003,15 +1003,19 @@ void SvxRuler::UpdateTabs()
         // fill the rest with default Tabs
         if(bRTL)
         {
+            sal_Int32 aFirst = pTabs[nTabCount].nPos;
             for(j = 0; j < nDefTabBuf; ++j)
             {
                 pTabs[nTabCount + TAB_GAP].nPos =
-                    pTabs[nTabCount].nPos - nDefTabDist;
+                    aFirst - ConvertHPosPixel(j * lDefTabDist);
 
                 if(j == 0 )
+                {
                     pTabs[nTabCount + TAB_GAP].nPos -=
                         ((pTabs[nTabCount + TAB_GAP].nPos - lRightPixMargin)
                          % nDefTabDist );
+                }
+
                 if(pTabs[nTabCount+TAB_GAP].nPos <= lParaIndentPix)
                     break;
                 pTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
@@ -1020,6 +1024,7 @@ void SvxRuler::UpdateTabs()
         }
         else
         {
+            sal_Int32 aFirst = 0;
             for(j = 0; j < nDefTabBuf; ++j)
             {
                 if( j == 0 )
@@ -1029,27 +1034,26 @@ void SvxRuler::UpdateTabs()
                     {
                         pTabs[nTabCount + TAB_GAP].nPos =
                             (pTabs[nTabCount].nPos + nDefTabDist);
+
                         pTabs[nTabCount + TAB_GAP].nPos -=
                             ((pTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix)
                                 % nDefTabDist );
+                        aFirst = pTabs[nTabCount + TAB_GAP].nPos;
                     }
                     else
                     {
                         if( pTabs[nTabCount].nPos < 0 )
-                        {
-                            pTabs[nTabCount + TAB_GAP].nPos = ( pTabs[nTabCount].nPos / nDefTabDist ) * nDefTabDist;
-                        }
+                            aFirst = ( pTabs[nTabCount].nPos / nDefTabDist ) * nDefTabDist;
                         else
-                        {
-                            pTabs[nTabCount + TAB_GAP].nPos = ( pTabs[nTabCount].nPos / nDefTabDist + 1 ) * nDefTabDist;
-                        }
+                            aFirst = ( pTabs[nTabCount].nPos / nDefTabDist + 1 ) * nDefTabDist;
+                        pTabs[nTabCount + TAB_GAP].nPos = aFirst;
                     }
-
                 }
                 else
                 {
                     //simply add the default distance to the last position
-                    pTabs[nTabCount + TAB_GAP].nPos = pTabs[nTabCount].nPos + nDefTabDist;
+
+                    pTabs[nTabCount + TAB_GAP].nPos = aFirst + ConvertHPosPixel(j * lDefTabDist);
                 }
 
                 if(pTabs[nTabCount + TAB_GAP].nPos >= lRightIndent)

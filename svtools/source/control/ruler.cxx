@@ -807,71 +807,79 @@ static void ImplDrawRulerTab( OutputDevice* pDevice,
 
     sal_uInt16 nTabStyle = nStyle & RULER_TAB_STYLE;
     bool bRTL = 0 != (nStyle & RULER_TAB_RTL);
-    Rectangle aRect1, aRect2, aRect3;
+
+    Rectangle aRect1;
+    Rectangle aRect2;
+    Rectangle aRect3;
+
     aRect3.SetEmpty();
     if ( nTabStyle == RULER_TAB_DEFAULT )
     {
-        aRect1.Left() =     rPos.X() - RULER_TAB_DWIDTH2 + 1                ;
-        aRect1.Top() =      rPos.Y() - RULER_TAB_DHEIGHT2 + 1               ;
-        aRect1.Right() =    rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH ;
-        aRect1.Bottom() =   rPos.Y();
-        aRect2.Left() =     rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3;
-        aRect2.Top() =      rPos.Y() - RULER_TAB_DHEIGHT + 1;
-        aRect2.Right() =    rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3 + RULER_TAB_DWIDTH4 - 1;
-        aRect2.Bottom() =   rPos.Y();
+        aRect1.Left() =   rPos.X() - RULER_TAB_DWIDTH2 + 1;
+        aRect1.Top() =    rPos.Y() - RULER_TAB_DHEIGHT2 + 1;
+        aRect1.Right() =  rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH;
+        aRect1.Bottom() = rPos.Y();
+
+        aRect2.Left() =   rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3;
+        aRect2.Top() =    rPos.Y() - RULER_TAB_DHEIGHT + 1;
+        aRect2.Right() =  rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3 + RULER_TAB_DWIDTH4 - 1;
+        aRect2.Bottom() = rPos.Y();
 
     }
-    else if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) ||( bRTL && nTabStyle == RULER_TAB_RIGHT))
+    else if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) || ( bRTL && nTabStyle == RULER_TAB_RIGHT))
     {
-        aRect1.Left() =     rPos.X();
-        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
-        aRect1.Right() =    rPos.X() + RULER_TAB_WIDTH - 1;
-        aRect1.Bottom() =   rPos.Y();
-        aRect2.Left() =     rPos.X();
-        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
-        aRect2.Right() =    rPos.X() + RULER_TAB_WIDTH2 - 1;
-        aRect2.Bottom() =   rPos.Y();
+        aRect1.Left() =   rPos.X();
+        aRect1.Top() =    rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =  rPos.X() + RULER_TAB_WIDTH - 1;
+        aRect1.Bottom() = rPos.Y();
+
+        aRect2.Left() =   rPos.X();
+        aRect2.Top() =    rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =  rPos.X() + RULER_TAB_WIDTH2 - 1;
+        aRect2.Bottom() = rPos.Y();
     }
     else if ( (!bRTL && nTabStyle == RULER_TAB_RIGHT) ||( bRTL && nTabStyle == RULER_TAB_LEFT))
     {
-        aRect1.Left() =     rPos.X() - RULER_TAB_WIDTH + 1;
-        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
-        aRect1.Right() =    rPos.X();
-        aRect1.Bottom() =   rPos.Y();
-        aRect2.Left() =     rPos.X() - RULER_TAB_WIDTH2 + 1;
-        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
-        aRect2.Right() =    rPos.X();
-        aRect2.Bottom() =   rPos.Y();
+        aRect1.Left() =   rPos.X() - RULER_TAB_WIDTH + 1;
+        aRect1.Top() =    rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =  rPos.X();
+        aRect1.Bottom() = rPos.Y();
+
+        aRect2.Left() =   rPos.X() - RULER_TAB_WIDTH2 + 1;
+        aRect2.Top() =    rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =  rPos.X();
+        aRect2.Bottom() = rPos.Y();
     }
     else
     {
-        aRect1.Left() =     rPos.X() - RULER_TAB_CWIDTH2 + 1;
-        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
-        aRect1.Right() =    rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
-        aRect1.Bottom() =   rPos.Y();
-        aRect2.Left() =     rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3;
-        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
-        aRect2.Right() =    rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3 + RULER_TAB_CWIDTH4 - 1;
-        aRect2.Bottom() =   rPos.Y();
+        aRect1.Left() =   rPos.X() - RULER_TAB_CWIDTH2 + 1;
+        aRect1.Top() =    rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =  rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+        aRect1.Bottom() = rPos.Y();
+
+        aRect2.Left() =   rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3;
+        aRect2.Top() =    rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =  rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3 + RULER_TAB_CWIDTH4 - 1;
+        aRect2.Bottom() = rPos.Y();
 
         if ( nTabStyle == RULER_TAB_DECIMAL )
         {
-            aRect3.Left() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1;
-            aRect3.Top()  = rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
+            aRect3.Left() =  rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1;
+            aRect3.Top()  =  rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
             aRect3.Right() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
             aRect3.Bottom()= rPos.Y() - RULER_TAB_HEIGHT + 1 + 2 ;
         }
     }
-    if( 0 == (nWinBits&WB_HORZ) )
+    if( 0 == (nWinBits & WB_HORZ) )
     {
-        bool bRightAligned = 0 != (nWinBits&WB_RIGHT_ALIGNED);
+        bool bRightAligned = 0 != (nWinBits & WB_RIGHT_ALIGNED);
         lcl_RotateRect_Impl(aRect1, rPos.Y(), bRightAligned);
         lcl_RotateRect_Impl(aRect2, rPos.Y(), bRightAligned);
         lcl_RotateRect_Impl(aRect3, rPos.Y(), bRightAligned);
     }
     pDevice->DrawRect( aRect1 );
     pDevice->DrawRect( aRect2 );
-    if(!aRect2.IsEmpty())
+    if(!aRect3.IsEmpty())
         pDevice->DrawRect( aRect3 );
 
 }
@@ -903,12 +911,12 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
         if ( mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE )
             continue;
 
-        long n;
-            n = mpData->pTabs[i].nPos;
-        n += +mpData->nNullVirOff;
-        long nTopBottom = GetStyle() & WB_RIGHT_ALIGNED ? nVirTop : nVirBottom;
-        if ( (n >= nMin) && (n <= nMax) )
-            ImplDrawTab( &maVirDev, Point( n, nTopBottom ), mpData->pTabs[i].nStyle );
+        long aPosition;
+        aPosition = mpData->pTabs[i].nPos;
+        aPosition += +mpData->nNullVirOff;
+        long nTopBottom = (GetStyle() & WB_RIGHT_ALIGNED) ? nVirTop : nVirBottom;
+        if (nMin <= aPosition && aPosition <= nMax)
+            ImplDrawTab( &maVirDev, Point( aPosition, nTopBottom ), mpData->pTabs[i].nStyle );
     }
 }
 
