@@ -129,7 +129,7 @@ void SfxViewFrame::UpdateTitle()
 
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
-    String aURL;
+    OUString aURL;
     GetFrame();  // -Wall required??
     if ( pObjSh->HasName() )
     {
@@ -142,10 +142,10 @@ void SfxViewFrame::UpdateTitle()
         pImp->aActualURL = aURL;
 
     // SbxObjects name
-    String aSbxName = pObjSh->SfxShell::GetName();
+    OUString aSbxName = pObjSh->SfxShell::GetName();
     if ( IsVisible() )
     {
-        aSbxName += ':';
+        aSbxName += ":";
         aSbxName += OUString::number(pImp->nDocViewNo);
     }
 
@@ -208,7 +208,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_NEWDOCDIRECT :
         {
             SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
-            String aFactName;
+            OUString aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
             else if ( !pImp->aFactoryName.isEmpty() )
@@ -220,7 +220,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             }
 
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-            String aFact = OUString("private:factory/");
+            OUString aFact("private:factory/");
             aFact += aFactName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
@@ -297,7 +297,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
                 if ( !pImp->aFactoryName.isEmpty() )
                 {
-                    String aFact = OUString("private:factory/");
+                    OUString aFact("private:factory/");
                     aFact += pImp->aFactoryName;
                     rSet.Put( SfxStringItem( nWhich, aFact ) );
                 }

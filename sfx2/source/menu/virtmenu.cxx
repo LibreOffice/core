@@ -357,7 +357,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
             DELETEZ( pPopup );
         }
 
-        const String sItemText = pSVMenu->GetItemText(nSlotId);
+        const OUString sItemText = pSVMenu->GetItemText(nSlotId);
 
         if ( pPopup )
         {
@@ -410,8 +410,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 case MENUITEM_STRINGIMAGE:
                 {
                     SfxMenuControl *pMnuCtrl=0;
-                    String aCmd( pSVMenu->GetItemCommand( nSlotId ) );
-                    if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
+                    OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
+                    if ( !aCmd.isEmpty() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, *pBindings, this );

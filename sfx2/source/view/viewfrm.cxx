@@ -606,7 +606,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxMedium *pMedium = xOldObj->GetMedium();
 
                 // Remove Frameset before the FramesetView may disappear
-                String aURL;
+                OUString aURL;
                 if (pURLItem)
                     aURL = pURLItem->GetValue();
                 else
@@ -687,7 +687,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if ( pURLItem )
                     pNewSet->Put( SfxStringItem( SID_REFERER, pMedium->GetName() ) );
                 else
-                    pNewSet->Put( SfxStringItem( SID_REFERER, String() ) );
+                    pNewSet->Put( SfxStringItem( SID_REFERER, OUString() ) );
 
                 xOldObj->CancelTransfers();
 
@@ -1000,7 +1000,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
     {
-        String aTmp(SvtResId(STR_UNDO).toString());
+        OUString aTmp(SvtResId(STR_UNDO).toString());
         aTmp+= pShUndoMgr->GetUndoActionComment(0);
         rSet.Put( SfxStringItem( SID_UNDO, aTmp ) );
     }
@@ -1009,7 +1009,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
     {
-        String aTmp(SvtResId(STR_REDO).toString());
+        OUString aTmp(SvtResId(STR_REDO).toString());
         aTmp += pShUndoMgr->GetRedoActionComment(0);
         rSet.Put( SfxStringItem( SID_REDO, aTmp ) );
     }
@@ -1019,7 +1019,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
          pShUndoMgr->CanRepeat(*pTarget) )
     {
-        String aTmp(SvtResId(STR_REPEAT).toString());
+        OUString aTmp(SvtResId(STR_REPEAT).toString());
         aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }
@@ -2055,20 +2055,20 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
     // determine the logical (API) view name
     const SfxObjectFactory& rDocFactory( pCurrentShell->GetObjectShell()->GetFactory() );
     const sal_uInt16 nCurViewNo = rDocFactory.GetViewNo_Impl( GetCurViewId(), 0 );
-    const String sCurrentViewName = rDocFactory.GetViewFactory( nCurViewNo ).GetAPIViewName();
+    const OUString sCurrentViewName = rDocFactory.GetViewFactory( nCurViewNo ).GetAPIViewName();
     const sal_uInt16 nNewViewNo = rDocFactory.GetViewNo_Impl( i_nNewViewId, 0 );
-    const String sNewViewName = rDocFactory.GetViewFactory( nNewViewNo ).GetAPIViewName();
-    if ( ( sCurrentViewName.Len() == 0 ) || ( sNewViewName.Len() == 0 ) )
+    const OUString sNewViewName = rDocFactory.GetViewFactory( nNewViewNo ).GetAPIViewName();
+    if ( sCurrentViewName.isEmpty() || sNewViewName.isEmpty() )
     {
         // can't say anything about the view, the respective application did not yet migrate its code to
         // named view factories => bail out
         OSL_FAIL( "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
         return;
     }
-    OSL_ENSURE( !sNewViewName.Equals( sCurrentViewName ), "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
+    OSL_ENSURE( sNewViewName != sCurrentViewName, "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
 
     // save the view data only when we're moving from a non-print-preview to the print-preview view
-    if ( !sNewViewName.EqualsAscii( "PrintPreview" ) )
+    if ( sNewViewName != "PrintPreview" )
         return;
 
     // retrieve the view data from the view
@@ -2491,7 +2491,7 @@ OUString SfxViewFrame::GetActualPresentationURL_Impl() const
 {
     if ( xObjSh.Is() )
         return xObjSh->GetMedium()->GetName();
-    return String();
+    return OUString();
 }
 
 void SfxViewFrame::SetModalMode( sal_Bool bModal )
@@ -2548,7 +2548,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool 
         nLine++;
     }
 
-    DBG_ASSERTWARNING( nStartPos != STRING_NOTFOUND, "CutLines: Start row not found!" );
+    DBG_ASSERTWARNING( nStartPos != -1, "CutLines: Start row not found!" );
 
     if ( nStartPos != -1 )
     {
@@ -2598,16 +2598,16 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
     SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pSfxApp->GetPool() );
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,sal_True) );
     const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot( aReq );
-    String aScriptURL;
+    OUString aScriptURL;
     if ( pRet )
         aScriptURL = ((SfxStringItem*)pRet)->GetValue();
-    if ( aScriptURL.Len() )
+    if ( !aScriptURL.isEmpty() )
     {
         // parse scriptURL
-        String aLibName;
-        String aModuleName;
-        String aMacroName;
-        String aLocation;
+        OUString aLibName;
+        OUString aModuleName;
+        OUString aMacroName;
+        OUString aLocation;
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
             com::sun::star::uri::UriReferenceFactory::create( xContext );
@@ -2631,12 +2631,12 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         BasicManager* pBasMgr = 0;
-        if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
+        if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
             // application basic
             pBasMgr = pSfxApp->GetBasicManager();
         }
-        else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
+        else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
         {
             pBasMgr = GetObjectShell()->GetBasicManager();
         }
@@ -2663,11 +2663,11 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 
         // open lib container and break operation if it couldn't be opened
         com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibCont;
-        if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
+        if ( aLocation.equalsIgnoreAsciiCase( "application" ) )
         {
             xLibCont = SFX_APP()->GetBasicContainer();
         }
-        else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
+        else if ( aLocation.equalsIgnoreAsciiCase( "document" ) )
         {
             xLibCont = GetObjectShell()->GetBasicContainer();
         }
@@ -2757,7 +2757,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 SfxDispatcher* pDispat = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if ( pDispat )
                 {
-                    SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, String(), String() );
+                    SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, OUString(), OUString() );
                     pDispat->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
                 }
             }

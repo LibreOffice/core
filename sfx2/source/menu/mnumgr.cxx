@@ -140,7 +140,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
 
     Graphic aGraphic;
-    const String aFilterName( IMP_PNG  );
+    const OUString aFilterName( IMP_PNG  );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -157,16 +157,16 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     PopupMenu* pThesSubMenu = 0;
     SfxPoolItem *pItem = 0;
     pBindings->QueryState( SID_THES, pItem );
-    String aThesLookUpStr;
+    OUString aThesLookUpStr;
     SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem);
-    xub_StrLen nDelimPos = STRING_LEN;
+    sal_Int32 nDelimPos = STRING_LEN;
     if (pStrItem)
     {
         aThesLookUpStr = pStrItem->GetValue();
-        nDelimPos = aThesLookUpStr.SearchBackward( '#' );
+        nDelimPos = aThesLookUpStr.lastIndexOf( '#' );
     }
     delete pItem;
-    if (aThesLookUpStr.Len() > 0 && nDelimPos != STRING_NOTFOUND)
+    if ( !aThesLookUpStr.isEmpty() && nDelimPos != -1 )
     {
         // get synonym list for sub menu
         std::vector< OUString > aSynonyms;
@@ -185,9 +185,9 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
             SvtLinguConfig aCfg;
 
             Image aImage;
-            String sThesImplName( aHelper.GetThesImplName( aLocale ) );
+            OUString sThesImplName( aHelper.GetThesImplName( aLocale ) );
             OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
-            if (sThesImplName.Len() > 0 && !aSynonymsImageUrl.isEmpty())
+            if (!sThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty())
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
             for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
@@ -195,7 +195,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
                 //! item ids should start with values > 0, since 0 has special meaning
                 const sal_uInt16 nId = i + 1;
 
-                String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
+                OUString aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
                 OUString aCmd(".uno:ThesaurusFromContext?WordReplace:string=" );
                 aCmd += aItemText;
@@ -230,8 +230,8 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 {
     sal_uInt16 nId = (sal_uInt16) pSelMenu->GetCurItemId();
-    String aCommand = pSelMenu->GetItemCommand( nId );
-    if ( !aCommand.Len() && pBindings )
+    OUString aCommand = pSelMenu->GetItemCommand( nId );
+    if ( aCommand.isEmpty() && pBindings )
     {
         const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pBindings->GetDispatcher()->GetFrame() ).GetSlot( nId );
         if ( pSlot && pSlot->pUnoName )
@@ -240,7 +240,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         }
     }
 
-    if ( aCommand.Len() )
+    if ( !aCommand.isEmpty() )
     {
         pBindings->ExecuteCommand_Impl( aCommand );
     }

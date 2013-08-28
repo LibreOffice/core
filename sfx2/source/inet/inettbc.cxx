@@ -83,20 +83,20 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*/ ) const
 {
-    String aName;
-    String aFilter;
-    String aOptions;
+    OUString aName;
+    OUString aFilter;
+    OUString aOptions;
 
     INetURLObject aObj( rName );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aBaseURL = GetURLBox()->GetBaseURL();
+        OUString aBaseURL = GetURLBox()->GetBaseURL();
         aName = SvtURLBox::ParseSmart( rName, aBaseURL, SvtPathOptions().GetWorkPath() );
     }
     else
         aName = rName;
 
-    if ( !aName.Len() )
+    if ( aName.isEmpty() )
         return;
 
     Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
@@ -117,7 +117,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*
             aArgs[1].Name = OUString( "FileName" );
             aArgs[1].Value = makeAny( OUString( aName ));
 
-            if ( aFilter.Len() )
+            if ( !aFilter.isEmpty() )
             {
                 aArgs.realloc( 4 );
                 aArgs[2].Name = OUString("FilterOptions");
@@ -167,9 +167,9 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
 IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)
 {
     SvtURLBox* pURLBox = GetURLBox();
-    String aName( pURLBox->GetURL() );
+    OUString aName( pURLBox->GetURL() );
 
-    if ( !pURLBox->IsTravelSelect() && aName.Len() )
+    if ( !pURLBox->IsTravelSelect() && !aName.isEmpty() )
         OpenURL( aName, sal_False );
 
     return 1L;
@@ -247,7 +247,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             }
 
             const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);
-            String aRep( pURL->GetValue() );
+            OUString aRep( pURL->GetValue() );
             INetURLObject aURL( aRep );
             INetProtocol eProt = aURL.GetProtocol();
             if ( eProt == INET_PROT_FILE )

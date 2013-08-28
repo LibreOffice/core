@@ -353,8 +353,8 @@ void Deck::ShowPanel (const Panel& rPanel)
 
 const char* GetWindowClassification (const Window* pWindow)
 {
-    const String& rsName (pWindow->GetText());
-    if (rsName.Len() > 0)
+    const OUString& rsName (pWindow->GetText());
+    if (!rsName.isEmpty())
     {
         return ::rtl::OUStringToOString(rsName, RTL_TEXTENCODING_ASCII_US).getStr();
     }

@@ -527,11 +527,11 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
             if ( pMailRecipient )
             {
-                String aRecipient( pMailRecipient->GetValue() );
-                String aMailToStr(OUString("mailto:"));
+                OUString aRecipient( pMailRecipient->GetValue() );
+                OUString aMailToStr("mailto:");
 
-                if ( aRecipient.Search( aMailToStr ) == 0 )
-                    aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
+                if ( aRecipient.indexOf( aMailToStr ) == 0 )
+                    aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
             }
             SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
@@ -1927,7 +1927,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
     for ( sal_uInt16 nPos=0; nPos<nCount; ++nPos )
     {
         sal_uInt16 nId = pMenu->GetItemId(nPos);
-        String aCmd = pMenu->GetItemCommand(nId);
+        OUString aCmd = pMenu->GetItemCommand(nId);
         PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
         if ( pPopup )
         {
@@ -1935,7 +1935,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
         }
         else if ( nId < 5000 )
         {
-            if ( aCmd.CompareToAscii(".uno:", 5) == 0 )
+            if ( aCmd.startsWith(".uno:") )
             {
                 for (sal_uInt16 nIdx=0;;)
                 {

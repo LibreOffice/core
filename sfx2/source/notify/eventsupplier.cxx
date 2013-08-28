@@ -398,7 +398,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
             if ( aLibrary == "application" )
                 aLibrary = SFX_APP()->GetName();
             else
-                aLibrary = OUString();
+                aLibrary = "";
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
         }
         else if ( eType == EXTENDED_STYPE )
@@ -443,7 +443,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
             {
                 sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
-                if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+                if ( ( nHashPos != -1 ) && ( nHashPos < nArgsPos ) )
                 {
                     OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if ( aBasMgrName == "." )
@@ -463,7 +463,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         else if ( !aMacroName.isEmpty() )
         {
             aScript = OUString( MACRO_PRFIX  );
-            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
+            if ( aLibrary != SFX_APP()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
                 aScript += OUString('.');
 
             aScript += OUString('/');
@@ -474,12 +474,12 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
             // wrong properties
             return;
 
-        if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
+        if (aLibrary != "document")
         {
-            if ( aLibrary.isEmpty() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
-                aLibrary = OUString("document");
+            if ( aLibrary.isEmpty() || (pDoc && ( aLibrary == pDoc->GetTitle( SFX_TITLE_APINAME ) || aLibrary == pDoc->GetTitle() )) )
+                aLibrary = "document";
             else
-                aLibrary = OUString("application");
+                aLibrary = "application";
         }
 
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );

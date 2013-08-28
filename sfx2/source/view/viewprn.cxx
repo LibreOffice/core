@@ -545,8 +545,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     }
 
     // For the MAC to have its "temporary of class String" in next if()
-    String aTempPrtName = pNewPrinter->GetName();
-    String aDocPrtName = pDocPrinter->GetName();
+    OUString aTempPrtName = pNewPrinter->GetName();
+    OUString aDocPrtName = pDocPrinter->GetName();
 
     // Was the printer selection changed from Default to Specific
     // or the other way around?
@@ -632,8 +632,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     SfxPrinter* pDocPrt = GetPrinter(sal_False);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
-        aJobSetup.SetValue( String( "IsQuickJob"  ),
-                            String( "true"  ) );
+        aJobSetup.SetValue( OUString( "IsQuickJob"  ),
+                            OUString( "true"  ) );
 
     Printer::PrintJob( pController, aJobSetup );
 }
@@ -666,7 +666,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     // no help button in dialogs if called from the help window
     // (pressing help button would exchange the current page inside the help
     // document that is going to be printed!)
-    String aHelpFilterName( "writer_web_HTML_help" );
+    OUString aHelpFilterName( "writer_web_HTML_help" );
     SfxMedium* pMedium = GetViewFrame()->GetObjectShell()->GetMedium();
     const SfxFilter* pFilter = pMedium ? pMedium->GetFilter() : NULL;
     sal_Bool bPrintOnHelp = ( pFilter && pFilter->GetFilterName() == aHelpFilterName );

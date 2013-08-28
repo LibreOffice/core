@@ -210,18 +210,18 @@ void SfxMenuControl::StateChanged
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {
         // Get MenuText from SfxStringItem
-        String aStr( ((const SfxStringItem*)pState)->GetValue() );
-        if ( aStr.CompareToAscii("($1)",4) == COMPARE_EQUAL )
+        OUString aStr( ((const SfxStringItem*)pState)->GetValue() );
+        if ( aStr.startsWith("($1)") )
         {
-            String aEntry(SfxResId(STR_UPDATEDOC).toString());
-            aEntry += ' ';
-            aEntry += aStr.Copy(4);
+            OUString aEntry(SfxResId(STR_UPDATEDOC).toString());
+            aEntry += " ";
+            aEntry += aStr.copy(4);
             aStr = aEntry;
         }
-        else if ( aStr.CompareToAscii("($2)",4) == COMPARE_EQUAL )
+        else if ( aStr.startsWith("($2)") )
         {
-            String aEntry(SfxResId(STR_CLOSEDOC_ANDRETURN).toString());
-            aEntry += aStr.Copy(4);
+            OUString aEntry(SfxResId(STR_CLOSEDOC_ANDRETURN).toString());
+            aEntry += aStr.copy(4);
             aStr = aEntry;
         }
 
@@ -363,8 +363,8 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                             }
                         }
 
-                        String aCmd( pActMenu->GetItemCommand( nItemId ) );
-                        if ( !bImageSet && aCmd.Len() )
+                        OUString aCmd( pActMenu->GetItemCommand( nItemId ) );
+                        if ( !bImageSet && !aCmd.isEmpty() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
                                 INetURLObject(aCmd), sal_False );
@@ -413,9 +413,9 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
 long Select_Impl( void* /*pHdl*/, void* pVoid )
 {
     Menu* pMenu = (Menu*)pVoid;
-    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
+    OUString aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
 
-    if( !aURL.Len() )
+    if( aURL.isEmpty() )
         return 0;
 
     Reference < ::com::sun::star::frame::XDesktop2 > xDesktop =

@@ -405,7 +405,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     GetParentFrame();
     const SfxMedium *pMed = pDoc->GetMedium();
-    GetDescriptor()->SetActualURL( String(pMed->GetOrigURL()) );
+    GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
     SFX_ITEMSET_ARG( pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, sal_False );
     sal_Bool bEditable = ( !pItem || pItem->GetValue() );
@@ -416,7 +416,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     SfxItemSet* pItemSet = pMed->GetItemSet();
 
     const SfxFilter* pFilter = pMed->GetOrigFilter();
-    String aFilter;
+    OUString aFilter;
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
@@ -432,7 +432,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     if ( pRefererItem )
         pSet->Put( *pRefererItem );
     else
-        pSet->Put( SfxStringItem( SID_REFERER, String() ) );
+        pSet->Put( SfxStringItem( SID_REFERER, OUString() ) );
 
     if ( pOptionsItem )
         pSet->Put( *pOptionsItem );
@@ -467,11 +467,11 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
     if ( !GetParentFrame() )
     {
         // An empty string for 'No Target'
-        rList.push_back( String() );
-        rList.push_back( String( "_top" ) );
-        rList.push_back( String( "_parent" ) );
-        rList.push_back( String( "_blank" ) );
-        rList.push_back( String( "_self" ) );
+        rList.push_back( OUString() );
+        rList.push_back( OUString( "_top" ) );
+        rList.push_back( OUString( "_parent" ) );
+        rList.push_back( OUString( "_blank" ) );
+        rList.push_back( OUString( "_self" ) );
     }
 
     SfxViewFrame* pView = GetCurrentViewFrame();
