@@ -2712,10 +2712,10 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     const String& rChk = pFnd->GetShort();
     xub_StrLen left_wildcard = ( rChk.GetChar( 0 ) == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
     xub_StrLen nSttWdPos = nEndPos;
-    bool bWasWordDelim = false;
     if( nEndPos >= rChk.Len() - left_wildcard)
     {
 
+        bool bWasWordDelim = false;
         xub_StrLen nCalcStt = nEndPos - rChk.Len() + left_wildcard;
         if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
