@@ -127,6 +127,7 @@ public:
     void testFdo66474();
     void testGroupshapeRotation();
     void testBnc780044Spacing();
+    void testTableAutoNested();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -220,6 +221,7 @@ void Test::run()
         {"fdo66474.docx", &Test::testFdo66474},
         {"groupshape-rotation.docx", &Test::testGroupshapeRotation},
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
+        {"table-auto-nested.docx", &Test::testTableAutoNested},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1493,6 +1495,17 @@ void Test::testBnc780044Spacing()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
+void Test::testTableAutoNested()
+{
+    // This was 176, when compat option is not enabled, the auto paragraph bottom margin value was incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(494), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // This was 115596, i.e. the width of the outer table was too large.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(23051), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
