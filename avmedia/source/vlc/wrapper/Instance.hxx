@@ -14,8 +14,6 @@ struct libvlc_instance_t;
 
 namespace VLC
 {
-
-
     class Instance
     {
     public:

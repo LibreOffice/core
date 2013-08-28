@@ -1,9 +1,12 @@
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
 #include "wrapper/Instance.hxx"
 #include "wrapper/EventManager.hxx"
 #include "wrapper/Media.hxx"
 #include "wrapper/Player.hxx"
+#include "wrapper/Common.hxx"
 
 using namespace ::com::sun::star;
 
@@ -19,9 +22,25 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
 {
     using namespace VLC;
     static bool success = Instance::LoadSymbols() && EventManager::LoadSymbols()
-                          && Media::LoadSymbols() && Player::LoadSymbols();
+                          && Media::LoadSymbols() && Player::LoadSymbols() && Common::LoadSymbols();
 
     m_is_vlc_found = success;
+    if (m_is_vlc_found)
+    {
+        //Check VLC version
+        std::vector<std::string> verComponents;
+        const std::string str(Common::Version());
+        boost::split(verComponents,
+                     str,
+                     boost::is_any_of(".-"));
+        if (verComponents.size() < 3
+            || boost::lexical_cast<int>(verComponents[0]) < 2
+            || (boost::lexical_cast<int>(verComponents[1]) == 0 && boost::lexical_cast<int>(verComponents[2]) < 8))
+        {
+            m_is_vlc_found = false;
+        }
+    }
+
     if (m_is_vlc_found)
         mEventHandler->launch();
 }
