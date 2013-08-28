@@ -74,6 +74,12 @@ namespace connectivity
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(::com::sun::star::sdbc::SQLException);
 
+            /**
+             * Set a numeric value in the input SQLDA. If the destination
+             * parameter is not of nType then an Exception will be thrown.
+             */
+            template <typename T> void setValue(sal_Int32 nIndex, T nValue, ISC_SHORT nType)
+                throw(::com::sun::star::sdbc::SQLException);
             void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
 
             void ensurePrepared()

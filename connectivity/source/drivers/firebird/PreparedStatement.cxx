@@ -345,6 +345,25 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
     // it might be best to just determine the db type and set as appropriate?
 }
 
+template <typename T>
+void OPreparedStatement::setValue(sal_Int32 nIndex, T nValue, ISC_SHORT nType)
+    throw(SQLException)
+{
+    MutexGuard aGuard( m_pConnection->getMutex() );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
+
+    checkParameterIndex(nIndex);
+    setParameterNull(nIndex, false);
+
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
+
+    if ((pVar->sqltype & ~1) != nType)
+        throw SQLException(); // TODO: cast instead?
+
+    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+}
+
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
     throw(SQLException, RuntimeException)
 {
@@ -358,61 +377,19 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-    ensurePrepared();
-
-    checkParameterIndex(nIndex);
-    setParameterNull(nIndex, false);
-
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
-
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
-
-    if (dtype != SQL_SHORT)
-        throw SQLException(); // TODO: cast instead?
-
-    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+    setValue< sal_Int16 >(nIndex, nValue, SQL_SHORT);
 }
 
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 nIndex, sal_Int32 nValue)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-    ensurePrepared();
-
-    checkParameterIndex(nIndex);
-    setParameterNull(nIndex, false);
-
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
-
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
-
-    if (dtype != SQL_LONG)
-        throw SQLException(); // TODO: cast instead?
-
-    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+    setValue< sal_Int32 >(nIndex, nValue, SQL_LONG);
 }
 
 void SAL_CALL OPreparedStatement::setLong(sal_Int32 nIndex, sal_Int64 nValue)
     throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-    ensurePrepared();
-
-    checkParameterIndex(nIndex);
-    setParameterNull(nIndex, false);
-
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
-
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
-
-    if (dtype != SQL_INT64)
-        throw SQLException(); // TODO: cast instead?
-
-    memcpy(pVar->sqldata, &nValue, sizeof(nValue));
+    setValue< sal_Int64 >(nIndex, nValue, SQL_INT64);
 }
 // -------------------------------------------------------------------------
 
