@@ -65,8 +65,9 @@ namespace dbaui
         ,m_pCollection                  ( NULL )
     {
         get( m_pDatasourceType, "datasourceType" );
-        get( m_pEmbeddedDBType, "embeddeddbList" );
         get( m_pSpecialMessage, "specialMessage" );
+        // Only exists in generalpagewizard.ui and not in generalpagedialog.ui
+        m_pEmbeddedDBType = get< ListBox >( "embeddeddbList" );
 
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
@@ -76,7 +77,8 @@ namespace dbaui
 
         // do some knittings
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
-        m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPage, OnEmbeddedDBTypeSelected));
+        if (m_pEmbeddedDBType)
+            m_pEmbeddedDBType->SetSelectHdl(LINK(this, OGeneralPage, OnEmbeddedDBTypeSelected));
     }
 
     OGeneralPage::~OGeneralPage()
@@ -144,7 +146,7 @@ namespace dbaui
 
     void OGeneralPage::initializeEmbeddedDBList()
     {
-        if ( m_bInitEmbeddedDBList )
+        if ( m_pEmbeddedDBType && m_bInitEmbeddedDBList )
         {
             m_bInitEmbeddedDBList = false;
              m_pEmbeddedDBType->Clear();
@@ -224,7 +226,8 @@ namespace dbaui
         initializeEmbeddedDBList();
 
         m_pDatasourceType->SelectEntry( getDatasourceName( _rSet ) );
-        m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
+        if ( m_pEmbeddedDBType )
+            m_pEmbeddedDBType->SelectEntry( getEmbeddedDBName( _rSet ) );
 
         // notify our listener that our type selection has changed (if so)
         // FIXME: how to detect that it did not changed? (fdo#62937)
@@ -585,7 +588,8 @@ namespace dbaui
         }
         else
         {
-            m_aControlDependencies.enableOnRadioCheck( *m_pRB_CreateDatabase, *m_pEmbeddedDBType, *m_pFT_EmbeddedDBLabel );
+            if (m_pEmbeddedDBType)
+                m_aControlDependencies.enableOnRadioCheck( *m_pRB_CreateDatabase, *m_pEmbeddedDBType, *m_pFT_EmbeddedDBLabel );
             m_aControlDependencies.enableOnRadioCheck( *m_pRB_ConnectDatabase, *m_pDatasourceType );
             m_aControlDependencies.enableOnRadioCheck( *m_pRB_OpenExistingDatabase, *m_pPB_OpenDatabase, *m_pFT_DocListLabel, *m_pLB_DocumentList );
         }
@@ -682,7 +686,8 @@ namespace dbaui
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call( this );
-        OnEmbeddedDBTypeSelected(m_pEmbeddedDBType);
+        if ( m_pEmbeddedDBType )
+            OnEmbeddedDBTypeSelected( m_pEmbeddedDBType );
         return 1L;
     }
 
