@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//71U\u003d",
+        "filename": "sw/source/core/crsr/findattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-29T15:17:02Z",
+      "side": 1,
+      "message": "Two style issues: n prefix is for plain numbers, it seems existing code usually uses the \"o\" prefix for optional variables. Also: boost::optional provider a bool operator, so just \"oNumOffset1\" is enough inside if(), no need to write out .is_initialized(), I think.",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//71Q\u003d",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-29T15:17:02Z",
+      "side": 1,
+      "message": "Is this still needed? I hoped that the use of boost::optional will allow to differentiate between \"not set\" and \"set to 0\".",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//71M\u003d",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-29T15:17:02Z",
+      "side": 1,
+      "message": "Wouldn\u0027t make it sense to use boost::optional here as well, if core uses it?",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//71I\u003d",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-29T15:17:02Z",
+      "side": 1,
+      "message": "Hrm, is this an independent change? At other places you were doing the opposite (\"\u003e\u003d\" -\u003e \"\u003e\").",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//71E\u003d",
+        "filename": "sw/source/ui/utlui/uitool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-08-29T15:17:02Z",
+      "side": 1,
+      "message": "No need for this, git blame will show you authorship automatically.",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
