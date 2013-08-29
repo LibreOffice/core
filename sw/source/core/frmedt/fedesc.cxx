@@ -65,7 +65,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
     const SwFrm *pFlow = 0;
-    sal_uInt16 nPageNmOffset = 0;
+    ::boost::optional<sal_uInt16> oPageNumOffset;
 
     OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc only without selection!");
 
@@ -81,7 +81,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
             if( rPgDesc.GetPageDesc() )
             {
                 // wir haben ihn den Schlingel
-                nPageNmOffset = rPgDesc.GetNumOffset();
+                oPageNumOffset = rPgDesc.GetNumOffset();
                 break;
             }
         }
@@ -101,7 +101,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     // use pagenumber
     SwFmtPageDesc aNew( &rDesc );
-    aNew.SetNumOffset( nPageNmOffset );
+    aNew.SetNumOffset( oPageNumOffset );
 
     if ( pFlow->IsInTab() )
         GetDoc()->SetAttr( aNew, *(SwFmt*)pFlow->FindTabFrm()->GetFmt() );

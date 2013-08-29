@@ -40,6 +40,8 @@ class SwSplitTblDlg;
 
 #include "itabenum.hxx"
 
+#include <boost/optional.hpp>
+
 namespace sw
 {
 class DropDownFieldDialog;
@@ -105,9 +107,9 @@ class VclAbstractDialog_Impl : public VclAbstractDialog
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl,SwBreakDlg)
-    virtual OUString  GetTemplateName();
-    virtual sal_uInt16  GetKind();
-    virtual sal_uInt16  GetPageNumber();
+    virtual OUString                        GetTemplateName();
+    virtual sal_uInt16                      GetKind();
+    virtual ::boost::optional<sal_uInt16>   GetPageNumber();
 
 };
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for

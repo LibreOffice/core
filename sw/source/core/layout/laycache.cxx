@@ -621,17 +621,25 @@ bool SwLayHelper::CheckInsertPage()
 
     if ( bBrk || pDesc )
     {
-        sal_uInt16 nPgNum = 0;
+        ::boost::optional<sal_uInt16> oPgNum;
         if ( !pDesc )
+        {
             pDesc = rpPage->GetPageDesc()->GetFollow();
+
+            SwFmtPageDesc rFollowDesc( pDesc );
+            oPgNum = rFollowDesc.GetNumOffset();
+            if ( oPgNum )
+                ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
+        }
         else
         {
-            if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
+            oPgNum = rDesc.GetNumOffset();
+            if ( oPgNum )
                 ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
         }
         bool bNextPageOdd = !rpPage->OnRightPage();
         bool bInsertEmpty = false;
-        if( nPgNum && bNextPageOdd != ( ( nPgNum % 2 ) != 0 ) )
+        if( oPgNum && bNextPageOdd != ( ( oPgNum.get() % 2 ) != 0 ) )
         {
             bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = true;

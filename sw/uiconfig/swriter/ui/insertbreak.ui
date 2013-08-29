@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">1</property>
+    <property name="lower">0</property>
     <property name="upper">9999</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>

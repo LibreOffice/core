@@ -166,8 +166,7 @@ public:
 
     /// The style of the page numbers.
     ///
-    /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber );
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber );
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode );
