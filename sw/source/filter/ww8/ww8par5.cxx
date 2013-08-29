@@ -103,7 +103,7 @@ public:
     WW8ReadFieldParams( const OUString& rData );
     ~WW8ReadFieldParams();
 
-    sal_Int32 GoToTokenParam();
+    bool GoToTokenParam();
     sal_Int32 SkipToNextToken();
     sal_Int32 GetTokenSttPtr() const   { return nFnd;  }
 
@@ -156,13 +156,13 @@ OUString WW8ReadFieldParams::GetResult() const
 }
 
 
-sal_Int32 WW8ReadFieldParams::GoToTokenParam()
+bool WW8ReadFieldParams::GoToTokenParam()
 {
     const sal_Int32 nOld = nNext;
     if( -2 == SkipToNextToken() )
-        return GetTokenSttPtr();
+        return GetTokenSttPtr()>=0;
     nNext = nOld;
-    return -1;
+    return false;
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
@@ -270,7 +270,7 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal
 {
     sal_Int32 nStart = 0;
     sal_Int32 nEnd   = 0;
-    if ( GoToTokenParam()>=0 )
+    if ( GoToTokenParam() )
     {
 
         const OUString sParams( GetResult() );
@@ -1276,7 +1276,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, String& rStr )
             break;
         case 'd':
         case 'D':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
                 aDef = aReadParam.GetResult();
             break;
         }
@@ -1462,7 +1462,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
             break;
         case 'd':
         case 'D':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
                 aDef = aReadParam.GetResult();
             break;
         }
@@ -1966,12 +1966,12 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
             break;
         case 'f':
         case 'F':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
                 aName = aReadParam.GetResult();
             break;
         case 's':
         case 'S':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
             {
                 const OUString aSiz = aReadParam.GetResult();
                 if ( !aSiz.isEmpty() )
@@ -2852,7 +2852,7 @@ static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
                             WW8ReadFieldParams& rParam,
                             SwCaptionDisplay eCaptionType)
 {
-    if ( rParam.GoToTokenParam()>=0 )
+    if ( rParam.GoToTokenParam() )
     {
         SwTOXType* pType = (SwTOXType*)rDoc.GetTOXType( TOX_ILLUSTRATIONS, 0);
         rBase.RegisterToTOXType( *pType );
@@ -2920,7 +2920,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
 static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     WW8ReadFieldParams& rParam)
 {
-    if ( rParam.GoToTokenParam()>=0 )
+    if ( rParam.GoToTokenParam() )
     {
         String sParams( rParam.GetResult() );
         if( sParams.Len() )
@@ -3073,7 +3073,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 switch( nRet )
                 {
                 case 'c':
-                    if ( aReadParam.GoToTokenParam()>=0 )
+                    if ( aReadParam.GoToTokenParam() )
                     {
                         const OUString sParams( aReadParam.GetResult() );
                         // if NO String just ignore the \c
@@ -3085,7 +3085,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 case 'e':
                     {
-                        if ( aReadParam.GoToTokenParam()>=0 )  // if NO String just ignore the \e
+                        if ( aReadParam.GoToTokenParam() )  // if NO String just ignore the \e
                         {
                             String sDelimiter( aReadParam.GetResult() );
                             SwForm aForm( pBase->GetTOXForm() );
@@ -3209,7 +3209,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 case 'p':
                     {
-                        if ( aReadParam.GoToTokenParam()>=0 )  // if NO String just ignore the \p
+                        if ( aReadParam.GoToTokenParam() )  // if NO String just ignore the \p
                         {
                             String sDelimiter( aReadParam.GetResult() );
                             SwForm aForm( pBase->GetTOXForm() );
@@ -3634,7 +3634,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bId
             break;
 
         case 'f':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
             {
                 const OUString sParams( aReadParam.GetResult() );
                 if( sParams[0]!='C' && sParams[0]!='c' )
@@ -3643,7 +3643,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bId
             break;
 
         case 'l':
-            if ( aReadParam.GoToTokenParam()>=0 )
+            if ( aReadParam.GoToTokenParam() )
             {
                 const OUString sParams( aReadParam.GetResult() );
                 // if NO String just ignore the \l
