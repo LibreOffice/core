@@ -44,6 +44,10 @@ namespace connectivity
 
         class FirebirdDriver : public ODriver_BASE
         {
+        private:
+            static const ::rtl::OUString our_sFirebirdTmpVar;
+            static const ::rtl::OUString our_sFirebirdLockVar;
+
         protected:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
             OWeakRefArray               m_xConnections; //  vector containing a list
