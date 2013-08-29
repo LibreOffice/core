@@ -559,9 +559,9 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 {
     OUString &rExtra = pAntiImpl->GetExtraData();
-    rExtra = MORE_BTN(GetState()) ? "Y" : "N";
+    rExtra = MORE_BTN(GetState()) ? OUString("Y") : OUString("N");
     rExtra += "|";
-    rExtra += aPreviewBtn.IsChecked() ? "Y" : "N";
+    rExtra += aPreviewBtn.IsChecked() ? OUString("Y") : OUString("N");
 
     delete pMoreBt;
 }
