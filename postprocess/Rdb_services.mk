@@ -337,7 +337,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 endif # DESKTOP
 
-ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
+ifeq ($(ENABLE_NPAPI_FROM_BROWSER),TRUE)
 $(eval $(call gb_Rdb_add_components,services,\
 	extensions/source/plugin/pl \
 ))

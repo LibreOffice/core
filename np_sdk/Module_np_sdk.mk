@@ -10,9 +10,9 @@
 
 $(eval $(call gb_Module_Module,np_sdk))
 
-ifneq (,$(filter YES,$(ENABLE_NPAPI_FROM_BROWSER) $(ENABLE_NPAPI_INTO_BROWSER)))
+ifneq ($(ENABLE_NPAPI_FROM_BROWSER)$(ENABLE_NPAPI_INTO_BROWSER),)
 
-ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	StaticLibrary_nputils \
 ))

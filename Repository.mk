@@ -81,9 +81,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	gnome-open-url.bin \
-	$(if $(filter YES,$(ENABLE_NPAPI_INTO_BROWSER)),nsplugin) \
+	$(if $(ENABLE_NPAPI_INTO_BROWSER),nsplugin) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
-	$(if $(filter YES,$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
+	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
 	$(if $(filter-out WNT,$(OS)),soffice.bin) \
 	spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
@@ -125,7 +125,7 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
-ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	npsoplugin \
 ))
@@ -300,7 +300,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	offacc \
 	passwordcontainer \
 	pcr \
-	$(if $(filter YES,$(ENABLE_NPAPI_FROM_BROWSER)),pl) \
+	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
 	pdffilter \
 	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
 	res \

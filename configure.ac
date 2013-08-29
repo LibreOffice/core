@@ -1678,8 +1678,8 @@ AC_ARG_WITH(system-liblangtag,
 AC_ARG_WITH(system-npapi-headers,
     AS_HELP_STRING([--with-system-npapi-headers],
         [Use NPAPI headers provided by system instead of bundled ones. Used in
-         extensions/source/nsplugin (ENABLE_NPAPI_INTO_BROWSER=YES) and
-         extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=YES)]),,
+         extensions/source/nsplugin (ENABLE_NPAPI_INTO_BROWSER=TRUE) and
+         extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=TRUE)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
 
@@ -8952,10 +8952,10 @@ if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVE
         "$enable_headless" != yes
 then
     AC_MSG_RESULT([yes])
-    ENABLE_NPAPI_FROM_BROWSER=YES
+    ENABLE_NPAPI_FROM_BROWSER=TRUE
 else
     AC_MSG_RESULT([no])
-    ENABLE_NPAPI_FROM_BROWSER=NO
+    ENABLE_NPAPI_FROM_BROWSER=
 fi
 AC_SUBST(ENABLE_NPAPI_FROM_BROWSER)
 
@@ -8967,10 +8967,10 @@ if test "$_os" == WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iO
         "$enable_headless" != yes -a "$enable_gtk" != no
 then
     AC_MSG_RESULT([yes])
-    ENABLE_NPAPI_INTO_BROWSER=YES
+    ENABLE_NPAPI_INTO_BROWSER=TRUE
 else
     AC_MSG_RESULT([no])
-    ENABLE_NPAPI_INTO_BROWSER=NO
+    ENABLE_NPAPI_INTO_BROWSER=
 fi
 AC_SUBST(ENABLE_NPAPI_INTO_BROWSER)
 
