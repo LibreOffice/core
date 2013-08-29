@@ -84,7 +84,7 @@ endif # DISABLE_ATL
 
 endif # WNT
 
-ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
+ifeq ($(ENABLE_NPAPI_FROM_BROWSER),TRUE)
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_pl \
@@ -99,9 +99,9 @@ $(eval $(call gb_Module_add_targets,extensions,\
 endif
 endif
 
-endif # ENABLE_NPAPI_FROM_BROWSER=YES
+endif # ENABLE_NPAPI_FROM_BROWSER=TRUE
 
-ifeq ($(ENABLE_NPAPI_INTO_BROWSER),YES)
+ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	Executable_nsplugin \
@@ -115,7 +115,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif
 
-endif # ENABLE_NPAPI_INTO_BROWSER=YES
+endif # ENABLE_NPAPI_INTO_BROWSER=TRUE
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
