@@ -85,7 +85,6 @@ private:
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const OUString& rStorageName );
 
-    SVX_DLLPRIVATE String                      ImplGetUniqueName( ::comphelper::IEmbeddedHelper*, const sal_Char* p ) const;
     SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
                                     const OUString& rContainerStorageName,
                                     OUString& rObjName,
