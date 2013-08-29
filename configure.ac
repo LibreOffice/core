@@ -2670,6 +2670,9 @@ if test $_os = Darwin; then
         AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
         10.6)
+            if test "$enable_libc__" = yes; then
+                AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
+            fi
             # did someone copy her 10.6 sdk into xcode 4 (needed on Mountain Lion)?
             if test "$(echo $MACOSX_SDK_PATH | cut -c1-23)" = "/Applications/Xcode.app"; then
                 CC="`xcrun -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
@@ -2682,7 +2685,10 @@ if test $_os = Darwin; then
             LIBTOOL=libtool
             ;;
         10.7|10.8|10.9)
-            if test "$enable_libc__" = yes -a "$with_macosx_version_min_required" != 10.6; then
+            if test "$enable_libc__" = yes; then
+                if test "$with_macosx_version_min_required" = 10.6; then
+                    AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
+                fi
                 # Use libc++ instead of libstdc++ when possible
                 # and also compile as C++11
                 stdlib="-std=c++11 -stdlib=libc++"
