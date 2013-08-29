@@ -9,6 +9,12 @@
 #import "AppDelegate.h"
 #import "ControlVariables.h"
 #import "UINavigationController+Theme.h"
+
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -43,6 +49,10 @@
                                              forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
     [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
                                                 forState:UIControlStateHighlighted];
+    
+    UIPageControl *pageControl = [UIPageControl appearance];
+    pageControl.pageIndicatorTintColor = UIColorFromRGB(0x2980b9);
+    pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0x1abc9c);
     return YES;
 }
 
