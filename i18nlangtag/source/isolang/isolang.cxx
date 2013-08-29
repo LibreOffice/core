@@ -147,7 +147,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_AUS,                 "en", "AU" },
     { LANGUAGE_ENGLISH_CAN,                 "en", "CA" },
     { LANGUAGE_FRENCH,                      "fr", "FR" },
-    { LANGUAGE_FRENCH,                      "fr", ""   },
     { LANGUAGE_GERMAN,                      "de", "DE" },
     { LANGUAGE_ITALIAN,                     "it", "IT" },
     { LANGUAGE_DUTCH,                       "nl", "NL" },
