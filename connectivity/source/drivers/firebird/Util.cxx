@@ -216,7 +216,7 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = (char *)malloc(sizeof(double));
             break;
         case SQL_TIMESTAMP:
-            pVar->sqldata = (char *)malloc(sizeof(time_t));
+            pVar->sqldata = (char*) malloc(sizeof(ISC_TIMESTAMP));
             break;
         case SQL_BLOB:
             pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
@@ -225,10 +225,10 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             assert(false); // TODO: implement
             break;
         case SQL_TYPE_TIME:
-            assert(false); // TODO: implement
+            pVar->sqldata = (char*) malloc(sizeof(ISC_TIME));
             break;
         case SQL_TYPE_DATE:
-            assert(false); // TODO: implement
+            pVar->sqldata = (char*) malloc(sizeof(ISC_DATE));
             break;
         case SQL_INT64:
             pVar->sqldata = (char *)malloc(sizeof(int));
@@ -269,15 +269,11 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
         case SQL_TIMESTAMP:
         case SQL_BLOB:
         case SQL_INT64:
+        case SQL_TYPE_TIME:
+        case SQL_TYPE_DATE:
             free(pVar->sqldata);
             break;
         case SQL_ARRAY:
-            assert(false); // TODO: implement
-            break;
-        case SQL_TYPE_TIME:
-            assert(false); // TODO: implement
-            break;
-        case SQL_TYPE_DATE:
             assert(false); // TODO: implement
             break;
         case SQL_NULL:
