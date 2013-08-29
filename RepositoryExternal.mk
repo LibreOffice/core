@@ -825,7 +825,7 @@ define gb_LinkTarget__use_glib
 $(error gb_LinkTarget__use_glib should not be called any more)
 endef
 
-ifeq ($(ENABLE_LIBLANGTAG),YES)
+ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 
 ifeq ($(SYSTEM_LIBLANGTAG),YES)
 

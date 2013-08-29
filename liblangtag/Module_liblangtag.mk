@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,liblangtag))
 
-ifeq ($(ENABLE_LIBLANGTAG),YES)
+ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 ifeq ($(SYSTEM_LIBLANGTAG),NO)
 
 $(eval $(call gb_Module_add_targets,liblangtag,\
