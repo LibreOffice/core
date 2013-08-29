@@ -11621,7 +11621,7 @@ ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
 if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS \); then
-    ENABLE_LIBLANGTAG=YES
+    ENABLE_LIBLANGTAG=TRUE
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
     if test "$with_system_liblangtag" = yes; then
@@ -11636,7 +11636,6 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
         BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
     fi
 else
-    ENABLE_LIBLANGTAG=NO
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_LIBLANGTAG)

@@ -22,7 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(ENABLE_LIBLANGTAG),YES)
+ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
 	liblangtag \
 	libxml2 \
