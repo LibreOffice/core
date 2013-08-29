@@ -22,7 +22,7 @@ $(eval $(call gb_Library_use_sdk_api,avmediavlc))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,avmediavlc,\
-    -DWINNT
+    -DWINNT \
 ))
 endif
 
