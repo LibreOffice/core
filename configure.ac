@@ -10104,19 +10104,17 @@ AC_SUBST(GSTREAMER_0_10_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_0_10)
 
 dnl ===================================================================
-dnl Check whether the VLC libraries are available.
+dnl Check whether to build the VLC avmedia backend
 dnl ===================================================================
 
 ENABLE_VLC=""
 
-if test "$build_gstreamer" = "yes"; then
-    AC_MSG_CHECKING([whether to enable the new VLC avmedia backend])
-    if test "x$enable_vlc" != "xno"; then
-        ENABLE_VLC="TRUE"
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
+AC_MSG_CHECKING([whether to enable the VLC avmedia backend])
+if test $_os != iOS -a $_os != Android -a "$enable_vlc" = yes; then
+    ENABLE_VLC="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_VLC)
 
