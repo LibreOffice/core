@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_buildid.h>
+
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -242,10 +244,11 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
-#ifdef EXTRA_BUILDID
-    sVersion += "\n";
-    sVersion += EXTRA_BUILDID;
-#endif
+    if (strlen(EXTRA_BUILDID) > 0)
+    {
+        sVersion += "\n";
+        sVersion += EXTRA_BUILDID;
+    }
 
     return sVersion;
 }
