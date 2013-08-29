@@ -58,8 +58,6 @@ sub action($$$)
          'shl/URELIB/URELIB' => '@loader_path',
          'shl/OOO/URELIB' => ($OLD ? '@loader_path/../ure-link/lib' : '@loader_path'),
          'shl/OOO/OOO' => '@loader_path',
-         'fb/OOO/URELIB' => ($OLD ? '@rpath/../ure-link/lib' : '@executable_path/../Frameworks'),
-         'fb/OOO/OOO' => '@rpath',
          'shl/OXT/URELIB' => ($OLD ? '@executable_path/urelibs' : '@executable_path/../Frameworks'),
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
@@ -70,7 +68,7 @@ sub action($$$)
     return $act;
 }
 
-@ARGV >= 2 or die 'Usage: app|shl|fb UREBIN|URELIB|OOO|SDKBIN|OXT|NONE <filepath>*';
+@ARGV >= 2 or die 'Usage: app|shl UREBIN|URELIB|OOO|SDKBIN|OXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 foreach $file (@ARGV)

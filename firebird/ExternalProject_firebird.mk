@@ -40,9 +40,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				,$(ICU_CPPFLAGS)) \
 			-L$(OUTDIR)/lib \
 			" \
-		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
-		&& export DYLD_LIBRARY_PATH="$(OUTDIR)/lib:$(call gb_UnpackedTarball_get_dir,boost)/source/lib" \
-		$(if $(filter WNT-MSC,$(OS)-$(COM)), && export PATH="$(PATH):$(shell cygpath $(OUTDIR)/lib):$(shell cygpath $(call gb_UnpackedTarball_get_dir,icu)/source/lib)") \
 		&& ./configure \
 			--without-editline \
 			--disable-superserver \
@@ -50,7 +47,8 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-		&& export CHANGE_INSTALL_NAMES="$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl fb OOO" \
-		&& $(MAKE) firebird_embedded \
+		&& export CHANGE_INSTALL_NAMES_APP="$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app NONE" \
+		&& export CHANGE_INSTALL_NAMES_SHL="$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl OOO" \
+		&& $(gb_Helper_set_ld_path) $(MAKE) firebird_embedded \
 	)
 # vim: set noet sw=4 ts=4:
