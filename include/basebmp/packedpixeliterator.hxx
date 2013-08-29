@@ -47,7 +47,7 @@ inline value_type get_mask( difference_type d )
     const unsigned int nIntraWordPositions( sizeof(value_type)*8 / bits_per_pixel );
 
     //      create bits_per_pixel 1s      shift to intra-word position
-    return ((~(~0 << bits_per_pixel)) << bits_per_pixel*(MsbFirst ?
+    return ((~(~0U << bits_per_pixel)) << bits_per_pixel*(MsbFirst ?
                                                          (nIntraWordPositions-1 - (d % nIntraWordPositions)) :
                                                          (d % nIntraWordPositions)));
 }

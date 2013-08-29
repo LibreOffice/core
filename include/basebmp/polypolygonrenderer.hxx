@@ -39,7 +39,7 @@ namespace basebmp
     namespace detail
     {
         /// convert int32 to 32:32 fixed point
-        inline sal_Int64 toFractional( sal_Int32 v ) { return (sal_Int64)v << 32; }
+        inline sal_Int64 toFractional( sal_Int32 v ) { return sal_Int64(sal_uInt64(v) << 32); }
         /// convert double to 32:32 fixed point
         inline sal_Int64 toFractional( double v ) { return (sal_Int64)(v*SAL_MAX_UINT32 + (v < 0.0 ? -0.5 : 0.5 )); }
         /// convert 32:32 fixed point to int32 (truncate)
