@@ -26,6 +26,8 @@
 #include "resource/sharedresources.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <osl/process.h>
+#include <osl/file.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -52,9 +54,21 @@ namespace connectivity
     }
 }
 
+// Static const member variables
+const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
+const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
+
 FirebirdDriver::FirebirdDriver()
     : ODriver_BASE(m_aMutex)
 {
+    OUString sTmpDir;
+    ::osl::FileBase::getTempDirURL(sTmpDir);
+
+    // Overrides firebird's default of /tmp or c:\temp
+    osl_setEnvironment(our_sFirebirdTmpVar.pData, sTmpDir.pData);
+    // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
+    sTmpDir += "/firebird";
+    osl_setEnvironment(our_sFirebirdLockVar.pData, sTmpDir.pData);
 }
 
 void FirebirdDriver::disposing()
@@ -69,6 +83,9 @@ void FirebirdDriver::disposing()
             xComp->dispose();
     }
     m_xConnections.clear();
+
+    osl_clearEnvironment(our_sFirebirdTmpVar.pData);
+    osl_clearEnvironment(our_sFirebirdLockVar.pData);
 
     ODriver_BASE::disposing();
 }
