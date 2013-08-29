@@ -46,7 +46,10 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--with-system-icu --without-fbsample --without-fbsample-db \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-		&& $(gb_Helper_set_ld_path) $(MAKE) firebird_embedded \
+		&& $(if $(filter WNT,$(OS)),\
+			   PATH="$(shell cygpath -u $(OUTDIR)/bin):$$PATH",\
+			   $(gb_Helper_set_ld_path)) \
+		   $(MAKE) firebird_embedded \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.2) \
