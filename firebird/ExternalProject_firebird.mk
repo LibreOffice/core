@@ -45,10 +45,10 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--disable-superserver \
 			--with-system-icu --without-fbsample --without-fbsample-db \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-		&& export CHANGE_INSTALL_NAMES_APP="$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app NONE" \
-		&& export CHANGE_INSTALL_NAMES_SHL="$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl OOO" \
 		&& $(gb_Helper_set_ld_path) $(MAKE) firebird_embedded \
+		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.2) \
 	)
 # vim: set noet sw=4 ts=4:
