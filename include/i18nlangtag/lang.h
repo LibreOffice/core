@@ -357,7 +357,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TURKMEN                    0x0442
 #define LANGUAGE_UIGHUR_CHINA               0x0480
 #define LANGUAGE_UKRAINIAN                  0x0422
-#define LANGUAGE_URDU                       0x0020  /* primary only, not a locale! */
 #define LANGUAGE_URDU_INDIA                 0x0820
 #define LANGUAGE_URDU_PAKISTAN              0x0420
 #define LANGUAGE_UZBEK_CYRILLIC             0x0843

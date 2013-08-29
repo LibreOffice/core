@@ -204,7 +204,7 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY :
-        case LANGUAGE_URDU                & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_URDU_PAKISTAN       & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY :
@@ -362,7 +362,6 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_TIBETAN:
         case LANGUAGE_DZONGKHA:
         case LANGUAGE_USER_TIBETAN_INDIA:
-        case LANGUAGE_URDU:
         case LANGUAGE_URDU_PAKISTAN:
         case LANGUAGE_URDU_INDIA:
         case LANGUAGE_USER_KURDISH_IRAQ:

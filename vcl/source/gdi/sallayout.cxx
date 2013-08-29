@@ -251,7 +251,7 @@ VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
             nOffset = 0x0660 - '0';  // arabic-indic digits
             break;
         case LANGUAGE_FARSI         & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_URDU_PAKISTAN & LANGUAGE_MASK_PRIMARY:
         case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
         case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x06F0 - '0';  // eastern arabic-indic digits

@@ -135,7 +135,7 @@ struct IsoLangOtherEntry
  * strongly doubt that most callers exactly expect the behavior described.
  * Currently these primary LangIDs are used literally in OOo code:
  * LANGUAGE_ENGLISH LANGUAGE_CHINESE
- * LANGUAGE_URDU LANGUAGE_KASHMIRI
+ * LANGUAGE_KASHMIRI
  */
 
 static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
@@ -297,7 +297,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BURMESE,                     "my", "MM" },
     { LANGUAGE_KAZAKH,                      "kk", "KZ" },
     { LANGUAGE_ENGLISH_INDIA,               "en", "IN" },
-    { LANGUAGE_URDU,                        "ur", ""   },
     { LANGUAGE_URDU_INDIA,                  "ur", "IN" },
     { LANGUAGE_URDU_PAKISTAN,               "ur", "PK" },
     { LANGUAGE_HINDI,                       "hi", "IN" },
