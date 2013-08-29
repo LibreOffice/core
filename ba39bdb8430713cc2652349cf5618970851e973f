@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//708\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3217,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "Here, you can simply access aCell.maBaseCell.mfValue directly below, instead of using a local variable fValue to assign value to. When the cell type is VALUE, maBaseCell is guaranteed to have mfValue populated.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//704\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3219,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "Here, you can replace fValue with aCell.maBaseCell.mfValue.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//700\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3222,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//70w\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3227,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "So, this part confuses me. No harm leaving it as it is for now, but I *think* sFormula always equals the string value, in which case we won\u0027t need to call lcl_GetRawString(). Better check with Markus first.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//70s\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3228,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "let\u0027s use assignment i.e. sCellString \u003d aCell.maBaseCell.getString(pDoc), which looks nicer.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//70o\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3238,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "Either take a reference here to avoid making a copy, or just use aCell.maBaseCell directly below, and eliminate this line.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//70g\u003d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3825,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-29T15:49:35Z",
+      "side": 1,
+      "message": "Here too, you can access maBaseCell.mfValue directly, since we know ahead of time that both cells are of value type.",
+      "revId": "ba39bdb8430713cc2652349cf5618970851e973f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
