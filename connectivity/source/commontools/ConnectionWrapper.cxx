@@ -187,7 +187,7 @@ namespace
         {}
         bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::com::sun::star::beans::PropertyValue& rhs) const
         {
-            return !!(lhs.Name.equalsIgnoreAsciiCase( rhs.Name ));
+            return lhs.Name.compareToIgnoreAsciiCase(rhs.Name) < 0;
         }
     };
 
