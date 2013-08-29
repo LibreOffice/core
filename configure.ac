@@ -11234,12 +11234,12 @@ AC_SUBST(WITH_HELPPACK_INTEGRATION)
 dnl ===================================================================
 dnl Test whether to use CoreText framework
 dnl ===================================================================
-ENABLE_CORETEXT=NO
+ENABLE_CORETEXT=
 if test "$_os" = "Darwin"; then
     AC_MSG_CHECKING([whether to use CoreText framework])
     if test "$enable_coretext" != no -o "$BITNESS_OVERRIDE" = 64; then
         AC_MSG_RESULT([yes])
-        ENABLE_CORETEXT=YES
+        ENABLE_CORETEXT=TRUE
     else
         AC_MSG_RESULT([no])
     fi
