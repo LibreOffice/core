@@ -356,7 +356,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
 	-DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
 
-ifeq ($(ENABLE_CORETEXT),YES)
+ifeq ($(ENABLE_CORETEXT),TRUE)
 
 $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_CORETEXT \
