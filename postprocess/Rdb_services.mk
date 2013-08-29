@@ -260,7 +260,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_TDEAB), \
 		connectivity/source/drivers/kab/tdeab1 \
 	) \
-	$(if $(SOLAR_JAVA), \
+	$(if $(ENABLE_JAVA), \
 		connectivity/source/drivers/hsqldb/hsqldb \
 		connectivity/source/drivers/jdbc/jdbc \
 	) \
