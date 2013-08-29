@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//76s\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Syntax here has slightly changed, have a look at master for how LayoutListFiles currently look like",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76o\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Trailing whitespace?",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76g\u003d",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Can those huge switch statements be mangled into a static array / explicit table lookup?",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76c\u003d",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Same here?",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76Y\u003d",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "the propvalue parameter type is not quite idiomatic ;)\n\nIn general - since this method gets called multiple times, prolly worth buffering the xml ...",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76k\u003d",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "The above code now resides two times in sd, and at least two more times in the remaining office code. please consolidate it into _one_ place, e.g. in module comphelper.",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76U\u003d",
+        "filename": "sd/xml/objectlist.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Just wondering - all those PK_HANDOUT/NOTES entries here look largely redundant? Can we not kill that extra duplication?",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//76Q\u003d",
+        "filename": "test/user-template/user/config/soffice.cfg/simpress/objectlist.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-08-29T01:25:11Z",
+      "side": 1,
+      "message": "Those duplicated files are becoming a nuisance, and a source for inconsistency. Can you poke the gbuild wizards on the list / irc if there is an option to share them with sd?",
+      "revId": "63f13c9f713907f1bee1c82132fa57c9ff1e5e2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
