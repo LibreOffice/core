@@ -658,7 +658,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
 
 TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
-XLineDashItem::XLineDashItem(const XubString& rName, const XDash& rTheDash) :
+XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
     NameOrIndex(XATTR_LINEDASH, rName),
     aDash(rTheDash)
 {
@@ -1114,7 +1114,7 @@ XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
 {
 }
 
-XLineColorItem::XLineColorItem(const XubString& rName, const Color& rTheColor) :
+XLineColorItem::XLineColorItem(const OUString& rName, const Color& rTheColor) :
     XColorItem(XATTR_LINECOLOR, rName, rTheColor)
 {
 }
@@ -1277,7 +1277,7 @@ XLineStartItem::XLineStartItem(sal_Int32 nIndex)
 {
 }
 
-XLineStartItem::XLineStartItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineStartItem::XLineStartItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex(XATTR_LINESTART, rName),
     maPolyPolygon(rPolyPolygon)
 {
@@ -1635,7 +1635,7 @@ XLineEndItem::XLineEndItem(sal_Int32 nIndex)
 {
 }
 
-XLineEndItem::XLineEndItem(const XubString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineEndItem::XLineEndItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex(XATTR_LINEEND, rName),
     maPolyPolygon(rPolyPolygon)
 {
