@@ -390,26 +390,32 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     setValue< double >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
 }
 
-// -------------------------------------------------------------------------
-
-void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setDate(sal_Int32 nIndex, const Date& rDate)
+    throw(SQLException, RuntimeException)
 {
-    (void) parameterIndex;
-    (void) aData;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    struct tm aCTime;
+    aCTime.tm_mday = rDate.Day;
+    aCTime.tm_mon = rDate.Month;
+    aCTime.tm_year = rDate.Year;
 
+    ISC_DATE aISCDate;
+    isc_encode_sql_date(&aCTime, &aISCDate);
+
+    setValue< ISC_DATE >(nIndex, aISCDate, SQL_TYPE_DATE);
 }
-// -------------------------------------------------------------------------
 
-
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 nIndex, const Time& rTime)
+    throw(SQLException, RuntimeException)
 {
-    (void) parameterIndex;
-    (void) aVal;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    struct tm aCTime;
+    aCTime.tm_sec = rTime.Seconds;
+    aCTime.tm_min = rTime.Minutes;
+    aCTime.tm_hour = rTime.Hours;
 
+    ISC_TIME aISCTime;
+    isc_encode_sql_time(&aCTime, &aISCTime);
+
+    setValue< ISC_TIME >(nIndex, aISCTime, SQL_TYPE_TIME);
 }
 
 void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime& rTimestamp)
