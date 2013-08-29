@@ -2927,6 +2927,12 @@ void SwUndoSplitTbl::UndoImpl(::sw::UndoRedoContext & rContext)
             pTblNd->GetTable().RestoreRowSpan( *mpSaveRowSpan );
     }
     ClearFEShellTabCols();
+
+    pTblNd = rIdx.GetNode().FindTableNode();
+    if( pTblNd )
+        SwTableFmt::AssignFormatParents( (SwTableFmt*)pTblNd->GetTable().
+                                          GetTableFmt()->GetRegisteredIn(),
+                                          pTblNd->GetTable() );
 }
 
 void SwUndoSplitTbl::RedoImpl(::sw::UndoRedoContext & rContext)

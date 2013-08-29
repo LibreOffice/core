@@ -3153,6 +3153,9 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( rTbl.GetFrmFmt()->GetName() );
 
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTbl.GetTableFmt()->GetRegisteredIn(), rTbl );
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTbl.GetTableFmt()->GetRegisteredIn(), pNew->GetTable() );
+
     SetFieldsDirty( true, NULL, 0 );
 
     return 0 != pNew;
