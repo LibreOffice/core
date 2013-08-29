@@ -201,7 +201,7 @@
 
 # pragma mark - welcome page
 
--(IBAction)startConnectionModal:(id)sender
+-(void)startConnectionModal:(id)sender
 {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"iPad_autosize"
                                                              bundle: nil];
@@ -375,6 +375,7 @@
                                                              [self presentViewController:sspt animated:YES completion:^{}];
                                                          }
                                                      }];
+    [self startConnectionModal:nil];
 }
 
 - (void) setWelcomePageVisible:(BOOL)visible
@@ -429,7 +430,6 @@
     [self setNextButton:nil];
     [self setSlideNumber:nil];
     [self setSlideNumber:nil];
-    [self setWelcome_connect_button:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowFinishedObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowImageNoteReadyObserver];
@@ -437,7 +437,6 @@
     [self setStartButton:nil];
     [self setClearButton:nil];
     [self setTimeLabel:nil];
-    [self setWelcome_label:nil];
     [self setGearButton:nil];
     [super viewDidUnload];
 }
@@ -523,7 +522,9 @@ static BOOL isBlank = NO;
 #pragma mark - Reconnection
 - (void) didReceiveDisconnection
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self startConnectionModal:nil];
+    }];
     
     if (self.welcome_blocking_page.isHidden == YES) {
         [self setWelcomePageVisible:YES];

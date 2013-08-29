@@ -26,12 +26,9 @@
 @property BOOL masterIsHiddenWhenLandscape;
 
 // Welcome page
--(IBAction)startConnectionModal:(id)sender;
+-(void)startConnectionModal:(id)sender;
 - (void) setWelcomePageVisible:(BOOL)visible;
 @property (weak, nonatomic) IBOutlet UIView *welcome_blocking_page;
-@property (weak, nonatomic) IBOutlet UIImageView *welcome_libO_icon;
-@property (weak, nonatomic) IBOutlet UIButton *welcome_connect_button;
-@property (weak, nonatomic) IBOutlet UILabel *welcome_label;
 
 @property (weak, nonatomic) IBOutlet UITableView *horizontalTableView;
 @property (weak, nonatomic) IBOutlet UIButton *startButton;

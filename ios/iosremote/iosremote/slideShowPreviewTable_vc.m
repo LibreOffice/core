@@ -109,16 +109,21 @@
         _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_startButton setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            _startButton.frame = CGRectMake(10.0, 30.0, 300.0, 50.0);
+            _startButton.frame = CGRectMake(145.0, 30.0, 160.0, 40.0);
         } else {
             self.modalViewController.view.backgroundColor = [UIColor clearColor];
-            _startButton.frame = CGRectMake(30.0, 50.0, 470.0, 50.0);
+            _startButton.frame = CGRectMake(30.0, 50.0, 470.0, 40.0);
         }
         [_startButton setTitle:NSLocalizedString(@"Start Presentation", nil) forState:UIControlStateNormal];
         [_startButton setTitleColor:kTintColor forState:UIControlStateNormal];
         [_startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
         [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchUpInside];
         
+        UIImage *backgroundImage = [UIImage imageNamed:@"buttonBackground"];
+        UIEdgeInsets insets = UIEdgeInsetsMake(20, 7, 20, 7);
+        UIImage *stretchableBackgroundImage = [backgroundImage resizableImageWithCapInsets:insets];
+        
+        [_startButton setBackgroundImage:stretchableBackgroundImage forState:UIControlStateNormal];
         _startButton.tag = 1;
     }
     return _startButton;

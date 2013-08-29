@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="qoG-TN-hN0">
     <dependencies>
+        <deployment version="1552" identifier="iOS"/>
         <development version="4600" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
+        <!--Walk Through Container View Controller-->
+        <scene sceneID="zBS-q0-LyD">
+            <objects>
+                <viewController id="xbC-af-Ssw" customClass="WalkThroughContainerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EpC-35-Pc5">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ZQV-e8-dtc"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WjV-ox-pc7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="80" y="-992"/>
+        </scene>
         <!--Server list vc - Impress Remote-->
         <scene sceneID="5">
             <objects>
@@ -43,6 +59,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Impress Remote" id="yR1-m8-JWN">
+                        <barButtonItem key="leftBarButtonItem" title="Help" id="Ved-Cp-htB">
+                            <connections>
+                                <segue destination="xbC-af-Ssw" kind="push" id="mx5-BO-ZzL"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add.png" style="done" id="bHy-yX-SPg">
                             <connections>
                                 <segue destination="maT-Bx-l5y" kind="push" identifier="create_new_server" id="UYr-8d-fk5"/>
@@ -53,6 +74,7 @@
                         <outlet property="serverTable" destination="naQ-T4-jWV" id="hd3-Vm-fk6"/>
                         <segue destination="UPe-3R-KdQ" kind="push" identifier="pinValidation" id="UQQ-pV-3o3"/>
                         <segue destination="Ybo-9c-MB8" kind="push" identifier="SlideShowPreview" id="EWS-Nn-mQc"/>
+                        <segue destination="xbC-af-Ssw" kind="push" identifier="howtoSegue" id="gc3-eP-dlL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -79,19 +101,16 @@
                                 <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Waiting for validation from Impress..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lSD-BG-kVe">
-                                <rect key="frame" x="33" y="380" width="276" height="21"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="WTPairingScreenshot.png" id="4cX-m9-dNc">
+                                <rect key="frame" x="6" y="345" width="309" height="134"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="c3o-oA-oin"/>
                     <connections>
                         <outlet property="pinLabel" destination="f2u-bG-5ak" id="Y7S-6h-awe"/>
-                        <outlet property="statusLabel" destination="lSD-BG-kVe" id="mmM-4x-ktw"/>
                         <segue destination="Ybo-9c-MB8" kind="push" identifier="pinValidated" id="pTl-ua-9pr"/>
                     </connections>
                 </viewController>
@@ -299,7 +318,7 @@
                                 <rect key="frame" x="-13" y="191" width="346" height="269"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Lecturer's Notes   " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y23-iV-GJx">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="   Lecturer's Notes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y23-iV-GJx">
                                         <rect key="frame" x="20" y="0.0" width="306" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.66274509803921566" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
@@ -335,44 +354,47 @@
                                 <rect key="frame" x="0.0" y="460" width="320" height="88"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vh9-Zy-DPu">
-                                        <rect key="frame" x="20" y="14" width="93" height="60"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="released_previous_button.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" id="vh9-Zy-DPu">
+                                        <rect key="frame" x="20" y="14" width="93" height="67"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
+                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
+                                        <state key="normal" title="Previous" backgroundImage="released_previous_button.png">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted" backgroundImage="pushed_previous_button.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="previousSlideAction:" destination="Ivv-3X-Nhr" eventType="touchUpInside" id="DAf-Qp-7KW"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XDZ-bs-OUM">
-                                        <rect key="frame" x="207" y="14" width="93" height="60"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="released_next_button.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" id="XDZ-bs-OUM">
+                                        <rect key="frame" x="207" y="14" width="93" height="67"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
+                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
+                                        <state key="normal" title="Next" backgroundImage="released_next_button.png">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted" backgroundImage="pushed_next_button.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="nextSlideAction:" destination="Ivv-3X-Nhr" eventType="touchUpInside" id="qTl-Ib-3Z8"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kMb-xm-ope">
-                                        <rect key="frame" x="132" y="14" width="59" height="60"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" id="kMb-xm-ope">
+                                        <rect key="frame" x="132" y="14" width="59" height="67"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" title="Button" image="pointer.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="11"/>
+                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-2"/>
+                                        <state key="normal" title="Pointer" backgroundImage="pointer.png">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" image="pointer_pushed.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="highlighted" backgroundImage="pointer_pushed.png">
+                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="accPointerAction:" destination="Ivv-3X-Nhr" eventType="touchDown" id="35J-B2-GIE"/>
@@ -422,8 +444,8 @@
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation(TODO)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wJK-w7-Zs9">
                                             <rect key="frame" x="20" y="20" width="280" height="100"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="24"/>
+                                            <color key="textColor" red="0.21176470589999999" green="0.81568627449999997" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -502,6 +524,7 @@
     </scenes>
     <resources>
         <image name="Default-568h.png" width="640" height="1136"/>
+        <image name="WTPairingScreenshot.png" width="481" height="199"/>
         <image name="add.png" width="30" height="30"/>
         <image name="ic_launcher.png" width="16" height="16"/>
         <image name="pointer.png" width="143" height="147"/>
@@ -513,13 +536,84 @@
         <image name="timer_clear_btn.png" width="60" height="60"/>
         <image name="timer_start_btn.png" width="60" height="60"/>
     </resources>
+    <classes>
+        <class className="EditableTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
+        </class>
+        <class className="LibONavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
+        </class>
+        <class className="SWRevealViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SWRevealViewController.h"/>
+        </class>
+        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
+        </class>
+        <class className="newServerViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="pinValidation_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="server_list_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="startPresentationAction:"/>
+                <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc_iphone" superclassName="slideShowPreviewTable_vc">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_iphone.h"/>
+            <relationships>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="slideShowSwipeInList" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList.h"/>
+        </class>
+        <class className="slideShow_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShow_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="accPointerAction:"/>
+                <relationship kind="action" name="nextSlideAction:"/>
+                <relationship kind="action" name="pointerAction:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
+                <relationship kind="outlet" name="blockingView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="notesView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="pointerBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="revealButtonItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="secondarySlideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="slideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="touchPointerImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="EWS-Nn-mQc"/>
+        <segue reference="mx5-BO-ZzL"/>
+        <segue reference="pTl-ua-9pr"/>
         <segue reference="eIY-4P-1sI"/>
     </inferredMetricsTieBreakers>
 </document>

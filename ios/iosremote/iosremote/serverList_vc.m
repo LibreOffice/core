@@ -230,7 +230,6 @@
     _style = UITableViewCellSelectionStyleNone;
     
     [self setTitle:NSLocalizedString(@"Impress Remote", @"App name displayed on navbar")];
-    
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -262,13 +261,24 @@
     [self.serviceBrowser setDelegate:self];
     [self startSearching];
     
-    if (![[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]) {
-        [self revealHelpInfo:[self.tableView cellForRowAtIndexPath:[NSIndexPath
-                                                                    indexPathForRow:0
-                                                                    inSection:0]].accessoryView];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HOWTO_GUIDE_SEEN"])
+    {
+        UIAlertView * av = [[UIAlertView alloc] initWithTitle:@"How-To guide" message:NSLocalizedString(@"Take a tour of iOS Impress Remote?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"No, thanks", nil) otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
+        
+        [av show];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HOWTO_GUIDE_SEEN"];
     }
     
     [super viewDidAppear:animated];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 0){
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+    }else if (buttonIndex == 1){
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+        [self performSegueWithIdentifier:@"howtoSegue" sender:self];
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -394,7 +404,7 @@
         [sectionFooter setNumberOfLines:5];
         sectionFooter.backgroundColor = [UIColor clearColor];
         sectionFooter.font = kAppSmallTextFont;
-        sectionFooter.textColor = kTintColor;
+        sectionFooter.textColor = kTextTintColor;
         sectionFooter.text = NSLocalizedString(@"Customize server config instruction", @"Displayed when no customized server is available");
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, [self tableView:tableView heightForFooterInSection:section])];
@@ -436,15 +446,15 @@
 {
     if (sender) {
         if ([[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"])
-            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x,
-                                                        sender.frame.origin.y + sender.frame.size.height/2)
+            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x - sender.frame.size.width,
+                                                        sender.frame.origin.y + sender.frame.size.height/3)
                                      inView:sender
                                    withText:[NSString
                                              stringWithFormat:NSLocalizedString(@"* Launch Impress on your computer\n* Connect both devices to the same WiFi network\n* P.S. Your iOS device is connected to \"%@\" now", nil), [[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]]
                                    delegate:nil];
         else {
-            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x,
-                                                        sender.frame.origin.y + sender.frame.size.height/2)
+            [PopoverView showPopoverAtPoint:CGPointMake(sender.frame.origin.x - sender.frame.size.width,
+                                                        sender.frame.origin.y + sender.frame.size.height/3)
                                      inView:sender
                                    withText:[NSString
                                              stringWithFormat:NSLocalizedString(@"* You don't have a WiFi connection now.\n* Connect your iOS device and your computer to the same network\n* Refresh\n* hint: you may create a personal hotspot on your computer/iPhone", nil), [[CommunicationManager fetchSSIDInfo] valueForKey:@"SSID"]]

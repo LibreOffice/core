@@ -37,7 +37,9 @@
 
 #define kHorizontalTableCellHighlightedBackgroundColor [UIColor colorWithRed:0 green:0.4745098 blue:0.29019808 alpha:0.9]
 
-#define kTintColor                                  [UIColor colorWithRed:0 green:0.462745098 blue:1 alpha:1.0]
+#define kTintColor                                  [UIColor orangeColor]
+
+#define kTextTintColor                              [UIColor colorWithRed:0 green:0.462745098 blue:1 alpha:1.0]
 
 #define kAppTitleFont                               [UIFont fontWithName:@"HelveticaNeue-Medium" size:20.0f]
 

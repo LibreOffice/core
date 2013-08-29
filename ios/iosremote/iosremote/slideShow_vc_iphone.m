@@ -325,13 +325,11 @@
     if (!isBlank) {
         [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0)
                                  inView:self.view
-                              withTitle:NSLocalizedString(@"More", @"Popover title")
                         withStringArray:[NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", nil), NSLocalizedString(@"Restart", nil), NSLocalizedString(@"Blank Screen", nil), nil]
                                delegate:self];
     } else {
         [PopoverView showPopoverAtPoint: CGPointMake(self.navigationController.view.frame.size.width - 20, 0)
                                  inView:self.view
-                              withTitle:@"More"
                         withStringArray:[NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", nil), NSLocalizedString(@"Restart", nil), NSLocalizedString(@"Resume from blank screen", nil), nil]
                                delegate:self];
     }

@@ -43,11 +43,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Connect" id="wYh-MF-Ao6">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="yai-U0-WT9">
-                            <connections>
-                                <action selector="cancelModalView:" destination="5QV-E7-KNT" id="rSl-Rp-xQb"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add.png" id="pU6-XF-laS">
                             <connections>
                                 <segue destination="65c-5D-pB7" kind="push" identifier="create_new_server" id="ORn-0W-dHd"/>
@@ -299,7 +294,7 @@
                                 <rect key="frame" x="-13" y="595" width="794" height="303"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Lecturer's Notes   " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Yn-0z-Cjz">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="   Lecturer's Notes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Yn-0z-Cjz">
                                         <rect key="frame" x="20" y="0.0" width="754" height="31"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.66274509800000003" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
@@ -386,36 +381,6 @@
                             <view alpha="0.50000000000000011" contentMode="scaleToFill" id="jX5-gj-cqE">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="libO_icon.png" id="Qe8-38-thk">
-                                        <rect key="frame" x="264" y="95" width="240" height="248"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1Yr-C2-huW">
-                                        <rect key="frame" x="294" y="610" width="180" height="77"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                        <state key="normal" title="Connect" backgroundImage="navBarButtonNormal.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="startConnectionModal:" destination="TYh-Hw-m1Q" eventType="touchUpInside" id="8aS-7k-5Ga"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="LibreOffice Impress Remote" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="yiP-rQ-s7i">
-                                        <rect key="frame" x="101" y="471" width="566" height="131"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Bold" family="Apple SD Gothic Neo" pointSize="38"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                        <color key="shadowColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                        <size key="shadowOffset" width="0.0" height="0.0"/>
-                                    </label>
-                                </subviews>
                                 <color key="backgroundColor" red="0.89411764709999997" green="0.43529411759999997" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
@@ -436,9 +401,6 @@
                         <outlet property="startButton" destination="8iO-H3-CJ7" id="ym1-Hg-BPE"/>
                         <outlet property="timeLabel" destination="dtc-vP-agf" id="WsH-Gm-dBN"/>
                         <outlet property="welcome_blocking_page" destination="jX5-gj-cqE" id="5dH-dT-AG4"/>
-                        <outlet property="welcome_connect_button" destination="1Yr-C2-huW" id="fm5-IB-oyc"/>
-                        <outlet property="welcome_label" destination="yiP-rQ-s7i" id="rGp-xL-dH2"/>
-                        <outlet property="welcome_libO_icon" destination="Qe8-38-thk" id="w3C-h1-OL0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e0y-Q9-Urg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -473,14 +435,14 @@
                                 <rect key="frame" x="0.0" y="22" width="320" height="178"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="178"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="177"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" image="Default.png" id="dn1-99-Dde">
-                                            <rect key="frame" x="44" y="4.5" width="233" height="163"/>
+                                            <rect key="frame" x="44" y="4" width="233" height="163"/>
                                         </imageView>
                                         <label clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="1" highlighted="YES" id="qrH-bi-qw7">
-                                            <rect key="frame" x="-605" y="151" width="29" height="21"/>
+                                            <rect key="frame" x="-605" y="150" width="29" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <accessibility key="accessibilityConfiguration">
@@ -532,8 +494,6 @@
         <image name="add.png" width="30" height="30"/>
         <image name="gear.png" width="55" height="35"/>
         <image name="gear_pressed" width="16" height="16"/>
-        <image name="libO_icon.png" width="598" height="598"/>
-        <image name="navBarButtonNormal.png" width="30" height="20"/>
         <image name="nextButton_normal.png" width="42" height="230"/>
         <image name="nextButton_pressed.png" width="42" height="230"/>
         <image name="previousButton_normal.png" width="42" height="230"/>
@@ -548,7 +508,6 @@
                 <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
                 <relationship kind="action" name="previousSlideAction:"/>
-                <relationship kind="action" name="startConnectionModal:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
@@ -562,9 +521,6 @@
                 <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="welcome_blocking_page" candidateClass="UIView"/>
-                <relationship kind="outlet" name="welcome_connect_button" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="welcome_label" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="welcome_libO_icon" candidateClass="UIImageView"/>
             </relationships>
         </class>
         <class className="EditableTableViewCell" superclassName="UITableViewCell">
