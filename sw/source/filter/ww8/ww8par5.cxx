@@ -18,9 +18,6 @@
  */
 
 
-#include <ctype.h>              // tolower
-#include <stdio.h>              // sscanf()
-
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <comphelper/processfactory.hxx>
