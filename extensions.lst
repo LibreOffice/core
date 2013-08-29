@@ -31,7 +31,7 @@
 # the name has to be specified after the URL enclosed in double quotes.
 
 
-# Some extensions that are installed indepently of the language.
+# Some extensions that are installed independently of the language.
 
 # the presenter console extension
 # [ language=all && ENABLE_XXX ]
