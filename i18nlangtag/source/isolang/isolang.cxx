@@ -302,8 +302,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GUJARATI,                    "gu", "IN" },
     { LANGUAGE_KANNADA,                     "kn", "IN" },
     { LANGUAGE_ASSAMESE,                    "as", "IN" },
-    { LANGUAGE_KASHMIRI,                    "ks", ""   },   // Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
     { LANGUAGE_KASHMIRI_INDIA,              "ks", "IN" },
+    { LANGUAGE_KASHMIRI,                    "ks", ""   },   // Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
     { LANGUAGE_MALAYALAM,                   "ml", "IN" },
     { LANGUAGE_MANIPURI,                   "mni", "IN" },
     { LANGUAGE_MARATHI,                     "mr", "IN" },
@@ -870,6 +870,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
                     case LANGUAGE_USER_LOJBAN:
+                    case LANGUAGE_KASHMIRI:
                         return pEntry->getLocale();
                     default:
                         ;   // nothing
