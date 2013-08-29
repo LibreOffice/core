@@ -18,7 +18,9 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	scp2/impress \
 	scp2/math \
 	scp2/ooo \
-	scp2/firebird \
+	$(if $(filter TRUE,$(ENABLE_FIREBIRD_SDBC)),\
+		scp2/firebird \
+	) \
 	scp2/python \
 	scp2/ure \
 	scp2/writer \
