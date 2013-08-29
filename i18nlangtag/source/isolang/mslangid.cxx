@@ -256,13 +256,13 @@ bool MsLangId::isTraditionalChinese( const ::com::sun::star::lang::Locale & rLoc
 //static
 bool MsLangId::isChinese( LanguageType nLang )
 {
-    return MsLangId::getPrimaryLanguage(nLang) == LANGUAGE_CHINESE;
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_CHINESE);
 }
 
 //static
 bool MsLangId::isKorean( LanguageType nLang )
 {
-    return MsLangId::getPrimaryLanguage(nLang) == LANGUAGE_KOREAN;
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_KOREAN);
 }
 
 // static
