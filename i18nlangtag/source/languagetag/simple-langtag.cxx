@@ -19,10 +19,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
+#include <vector>
 
 namespace {
 
 typedef int lt_bool_t;
+typedef void* lt_pointer_t;
 
 struct lt_error_t {
     void *something;
@@ -134,19 +136,87 @@ struct lt_region_t : public my_t_impl
     virtual ~lt_region_t() {}
 };
 
+struct lt_variant_t : public my_t_impl
+{
+    explicit lt_variant_t() : my_t_impl() {}
+    virtual ~lt_variant_t() {}
+};
+
+struct lt_list_t : public my_t_impl
+{
+    lt_list_t* mpPrev;
+    lt_list_t* mpNext;
+    explicit lt_list_t() : my_t_impl(), mpPrev(NULL), mpNext(NULL) {}
+    explicit lt_list_t( const lt_list_t& r )
+        :
+            my_t_impl( r), mpPrev(NULL), mpNext(NULL)
+    {
+    }
+    virtual ~lt_list_t()
+    {
+        if (mpPrev)
+            mpPrev->mpNext = mpNext;
+        if (mpNext)
+            mpNext->mpPrev = mpPrev;
+    }
+};
+
+static lt_pointer_t lt_list_value( const lt_list_t* p )
+{
+    // Assuming only char* here.
+    return p ? p->mpStr : NULL;
+}
+
+static const lt_list_t* lt_list_next( const lt_list_t* p )
+{
+    return p ? p->mpNext : NULL;
+}
+
+static lt_list_t* my_copyList( const lt_list_t * pList )
+{
+    lt_list_t* pNewList = NULL;
+    lt_list_t* pLast = NULL;
+    while (pList)
+    {
+        lt_list_t* p = new lt_list_t( *pList);
+        if (!pNewList)
+            pNewList = p;
+        if (pLast)
+        {
+            pLast->mpNext = p;
+            p->mpPrev = pLast;
+        }
+        pLast = p;
+        pList = pList->mpNext;
+    }
+    return pNewList;
+}
+
+static void my_unrefList( lt_list_t* pList )
+{
+    while (pList)
+    {
+        lt_list_t* pNext = pList->mpNext;
+        pList->decRef();
+        pList = pNext;
+    }
+}
+
 struct lt_tag_t : public my_t_impl
 {
     lt_lang_t   maLanguage;
     lt_script_t maScript;
     lt_region_t maRegion;
-    explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion() {}
+    lt_list_t*  mpVariants;
+    explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), mpVariants(NULL) {}
     virtual ~lt_tag_t() {}
     explicit lt_tag_t( const lt_tag_t& r )
         :
             my_t_impl( r),
             maLanguage( r.maLanguage),
             maScript( r.maScript),
-            maRegion( r.maRegion)
+            maRegion( r.maRegion),
+            mpVariants( my_copyList( r.mpVariants))
     {
     }
     lt_tag_t& operator=( const lt_tag_t& r )
@@ -157,6 +227,8 @@ struct lt_tag_t : public my_t_impl
         maLanguage = r.maLanguage;
         maScript = r.maScript;
         maRegion = r.maRegion;
+        my_unrefList( mpVariants);
+        mpVariants = my_copyList( r.mpVariants);
         return *this;
     }
     void assign( const char* str )
@@ -164,6 +236,8 @@ struct lt_tag_t : public my_t_impl
         maLanguage.zero();
         maScript.zero();
         maRegion.zero();
+        my_unrefList( mpVariants);
+        mpVariants = NULL;
         my_t_impl::assign( str);
     }
 };
@@ -206,6 +280,7 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
     if (!tag_string)
         return 0;
     // In case we supported other subtags this would get more complicated.
+    /* TODO: variants */
     my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, NULL };
     my_t_impl** ppSub = &aSubtags[0];
     const char* pStart = tag_string;
@@ -369,6 +444,11 @@ static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
     return tag && tag->maRegion.mpStr ? &tag->maRegion : NULL;
 }
 
+static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
+{
+    return tag ? tag->mpVariants : NULL;
+}
+
 static const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
     return lang ? lang->mpStr : NULL;
@@ -382,6 +462,11 @@ static const char *lt_script_get_tag(const lt_script_t *script)
 static const char *lt_region_get_tag(const lt_region_t *region)
 {
     return region ? region->mpStr : NULL;
+}
+
+static const char *lt_variant_get_tag(const lt_variant_t *variant)
+{
+    return variant ? variant->mpStr : NULL;
 }
 
 #ifdef erDEBUG
