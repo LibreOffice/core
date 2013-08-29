@@ -401,8 +401,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
 
-    UpdateVisibleRange();
-
     if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
         return;
                     // unsichtbar

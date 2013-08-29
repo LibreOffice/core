@@ -439,6 +439,8 @@ void ScTabView::UpdateScrollBars()
         ScRange aVisible( nPosX, nPosY, nTab, nEndX, nEndY, nTab );
         if ( pDoc->SetVisibleSpellRange( aVisible ) )
             SC_MOD()->AnythingChanged();                // if visible area has changed
+
+        UpdateVisibleRange();
     }
 }
 
