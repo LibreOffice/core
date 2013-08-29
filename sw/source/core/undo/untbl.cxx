@@ -2088,8 +2088,8 @@ CHECKTABLE(pTableNd->GetTable())
 CHECKTABLE(pTableNd->GetTable())
     ClearFEShellTabCols();
 
-    SwTableFmt::AssignFormatParents( (SwTableFmt*)pTblNd->GetTable().GetTableFmt()->GetRegisteredIn(),
-                                     pTblNd->GetTable() );
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)pTableNd->GetTable().GetFrameFormat()->GetRegisteredIn(),
+                                     pTableNd->GetTable() );
 }
 
 void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -2956,6 +2956,12 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
             pTableNd->GetTable().RestoreRowSpan( *mpSaveRowSpan );
     }
     ClearFEShellTabCols();
+
+    pTableNd = rIdx.GetNode().FindTableNode();
+    if( pTableNd )
+        SwTableFormat::AssignFormatParents( (SwTableFormat*)pTableNd->GetTable().
+                                          GetFrameFormat()->GetRegisteredIn(),
+                                          pTableNd->GetTable() );
 }
 
 void SwUndoSplitTable::RedoImpl(::sw::UndoRedoContext & rContext)

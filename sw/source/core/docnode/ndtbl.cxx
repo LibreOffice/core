@@ -2128,7 +2128,7 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
             delete pUndo;
     }
 
-    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTbl.GetTableFmt()->GetRegisteredIn(), rTbl );
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(), rTable );
 
     return bRet;
 }
@@ -2235,7 +2235,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
         getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
 
-    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTable.GetTableFmt()->GetRegisteredIn(),
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(),
                                      rTable );
 
     GetIDocumentUndoRedo().EndUndo( UNDO_TABLE_MERGE, NULL );
@@ -3168,6 +3168,9 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
 
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( rTable.GetFrameFormat()->GetName() );
+
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(), rTable );
+    SwTableFormat::AssignFormatParents( (SwTableFormat*)rTable.GetFrameFormat()->GetRegisteredIn(), pNew->GetTable() );
 
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 
