@@ -521,7 +521,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MANX,                   "gv", "GB" },
     { LANGUAGE_USER_ARAGONESE,              "an", "ES" },
     { LANGUAGE_USER_KEYID,                 "qtz", ""   },   // key id pseudolanguage used for UI testing
-    { LANGUAGE_USER_PALI_LATIN,            "pli", ""   },   // Pali with Latin script
+    { LANGUAGE_USER_PALI_LATIN,             "pi", ""   },   // Pali with Latin script, ISO 639-1
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""   },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat
     { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN" },
     { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU" },
     { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU" },
