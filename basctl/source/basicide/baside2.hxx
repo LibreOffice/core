@@ -529,7 +529,7 @@ public:
     void ClearListBox();
     void SetTextSelection( const TextSelection& aSel );
     const TextSelection& GetTextSelection() const;
-    void ResizeListBox();
+    void ResizeAndPositionListBox();
     void SelectFirstEntry(); //selects first entry in ListBox
     void ClearAndHide();
     /*
