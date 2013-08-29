@@ -36,7 +36,7 @@ public:
             TYPEINFO();
             XFillColorItem() {}
             XFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
-            XFillColorItem(const String& rName, const Color& rTheColor);
+            XFillColorItem(const OUString& rName, const Color& rTheColor);
             XFillColorItem(SvStream& rIn);
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;

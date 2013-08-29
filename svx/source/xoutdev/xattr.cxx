@@ -2352,7 +2352,7 @@ XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
 {
 }
 
-XFillColorItem::XFillColorItem(const XubString& rName, const Color& rTheColor) :
+XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
     XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
 {
 }
@@ -2936,7 +2936,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
     XFillGradientItem   ( rName, rGradient ),
     bEnabled            ( bEnable )
 {
@@ -3057,7 +3057,7 @@ bool XHatch::operator==(const XHatch& rHatch) const
 
 TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
-XFillHatchItem::XFillHatchItem(const XubString& rName,
+XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
     NameOrIndex(XATTR_FILLHATCH, rName),
     aHatch(rTheHatch)
@@ -3588,7 +3588,7 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
 
-XFormTextShadowColorItem::XFormTextShadowColorItem(const XubString& rName,
+XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
                                                      const Color& rTheColor) :
     XColorItem(XATTR_FORMTXTSHDWCOLOR, rName, rTheColor)
 {

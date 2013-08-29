@@ -37,7 +37,7 @@ public:
                             TYPEINFO();
 
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem(const String& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );
+                            XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, sal_Bool bEnable = sal_True );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 

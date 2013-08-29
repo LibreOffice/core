@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC XFormTextShadowColorItem : public XColorItem
 public:
             TYPEINFO();
             XFormTextShadowColorItem() {}
-            XFormTextShadowColorItem(const String& rName, const Color& rTheColor);
+            XFormTextShadowColorItem(const OUString& rName, const Color& rTheColor);
             XFormTextShadowColorItem(SvStream& rIn);
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
