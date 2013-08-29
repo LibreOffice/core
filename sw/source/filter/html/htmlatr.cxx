@@ -2111,9 +2111,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
             if( pBorderLine )
             {
-                sal_uInt16 nWidth = pBorderLine->GetOutWidth() +
-                                pBorderLine->GetInWidth() +
-                                pBorderLine->GetDistance();
+                sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size)
                     .append('=');
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
