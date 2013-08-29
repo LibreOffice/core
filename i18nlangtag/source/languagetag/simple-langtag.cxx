@@ -95,7 +95,7 @@ struct my_t_impl : public my_ref
         else
             mpStr = NULL;
     }
-    void append( const char* str, const char* stop )
+    virtual void append( const char* str, const char* stop )
     {
         if (str && str < stop)
         {
@@ -110,7 +110,7 @@ struct my_t_impl : public my_ref
             mpStr = p;
         }
     }
-    void zero()
+    virtual void zero()
     {
         g_free( mpStr);
         mpStr = NULL;
@@ -162,8 +162,9 @@ struct lt_list_t : public my_t_impl
 
 static lt_pointer_t lt_list_value( const lt_list_t* p )
 {
-    // Assuming only char* here.
-    return p ? p->mpStr : NULL;
+    // This may look odd, but in this implementation the list element itself
+    // holds the char* mpStr to be obtained with lt_variant_get_tag()
+    return static_cast<lt_pointer_t>(const_cast<lt_list_t*>(p));
 }
 
 static const lt_list_t* lt_list_next( const lt_list_t* p )
@@ -201,24 +202,72 @@ static void my_unrefList( lt_list_t* pList )
     }
 }
 
+static void my_appendToList( lt_list_t** ppList, lt_list_t* pEntry )
+{
+    if (ppList)
+    {
+        if (!*ppList)
+            *ppList = pEntry;
+        else
+        {
+            lt_list_t* pThat = *ppList;
+            for (lt_list_t* pNext = pThat->mpNext; pNext; pNext = pThat->mpNext)
+                pThat = pNext;
+            pThat->mpNext = pEntry;
+            pEntry->mpPrev = pThat;
+        }
+    }
+}
+
+// my_t_impl has a superfluous mpStr here, but simplifies things much in the
+// parser.
+struct my_t_list : public my_t_impl
+{
+    lt_list_t* mpList;
+    explicit my_t_list() : my_t_impl(), mpList(NULL) {}
+    explicit my_t_list( const my_t_list& r ) : my_t_impl( r), mpList( my_copyList( r.mpList)) {}
+    virtual ~my_t_list()
+    {
+        my_unrefList( mpList);
+    }
+    my_t_list& operator=( const my_t_list& r )
+    {
+        if (this == &r)
+            return *this;
+        my_t_impl::operator=( r);
+        lt_list_t* pList = my_copyList( r.mpList);
+        my_unrefList( mpList);
+        mpList = pList;
+    }
+    virtual void append( const char* str, const char* stop )
+    {
+        lt_list_t* p = new lt_list_t;
+        p->assign( str, stop);
+        my_appendToList( &mpList, p);
+    }
+    virtual void zero()
+    {
+        my_t_impl::zero();
+        my_unrefList( mpList);
+        mpList = NULL;
+    }
+};
+
 struct lt_tag_t : public my_t_impl
 {
     lt_lang_t   maLanguage;
     lt_script_t maScript;
     lt_region_t maRegion;
-    lt_list_t*  mpVariants;
-    explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), mpVariants(NULL) {}
-    virtual ~lt_tag_t()
-    {
-        my_unrefList( mpVariants);
-    }
+    my_t_list   maVariants;
+    explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), maVariants() {}
+    virtual ~lt_tag_t() {}
     explicit lt_tag_t( const lt_tag_t& r )
         :
             my_t_impl( r),
             maLanguage( r.maLanguage),
             maScript( r.maScript),
             maRegion( r.maRegion),
-            mpVariants( my_copyList( r.mpVariants))
+            maVariants( r.maVariants)
     {
     }
     lt_tag_t& operator=( const lt_tag_t& r )
@@ -229,8 +278,7 @@ struct lt_tag_t : public my_t_impl
         maLanguage = r.maLanguage;
         maScript = r.maScript;
         maRegion = r.maRegion;
-        my_unrefList( mpVariants);
-        mpVariants = my_copyList( r.mpVariants);
+        maVariants = r.maVariants;
         return *this;
     }
     void assign( const char* str )
@@ -238,8 +286,7 @@ struct lt_tag_t : public my_t_impl
         maLanguage.zero();
         maScript.zero();
         maRegion.zero();
-        my_unrefList( mpVariants);
-        mpVariants = NULL;
+        maVariants.zero();
         my_t_impl::assign( str);
     }
 };
@@ -282,8 +329,7 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
     if (!tag_string)
         return 0;
     // In case we supported other subtags this would get more complicated.
-    /* TODO: variants */
-    my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, NULL };
+    my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, &tag->maVariants, NULL };
     my_t_impl** ppSub = &aSubtags[0];
     const char* pStart = tag_string;
     const char* p = pStart;
@@ -369,10 +415,13 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                 {
                     case 4:
                         // script subtag, or a (DIGIT 3alphanum) variant with
-                        // no script and no region in which case we stop
-                        // parsing.
+                        // no script and no region
                         if ('0' <= *pStart && *pStart <= '9')
-                            ppSub = NULL;
+                        {
+                            ppSub += 2; // &tag->maVariants XXX watch this when inserting fields
+                            --p;
+                            continue;   // for
+                        }
                         else
                             (*ppSub++)->assign( pStart, p);
                         break;
@@ -404,9 +453,11 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                     case 6:
                     case 7:
                     case 8:
-                        // script omitted, region omitted, variant subtag, stop
-                        // parsing.
-                        ppSub = NULL;
+                        // script omitted, region omitted, variant subtag
+                        ppSub += 2; // &tag->maVariants XXX watch this when inserting fields
+                        --p;
+                        continue;   // for
+                        break;
                     default:
                         return 0;   // bad
                 }
@@ -416,7 +467,35 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                 if (nLen == 2 || nLen == 3)
                     (*ppSub++)->assign( pStart, p);
                 else
-                    return 0;   // bad
+                {
+                    // advance to variants
+                    ++ppSub;
+                    --p;
+                    continue;   // for
+                }
+            }
+            else if (*ppSub == &tag->maVariants)
+            {
+                // Stuff the remainder into variants, might not be correct, but ...
+                switch (nLen)
+                {
+                    case 4:
+                        // a (DIGIT 3alphanum) variant
+                        if ('0' <= *pStart && *pStart <= '9')
+                            ;   // nothing
+                        else
+                            return 0;   // bad
+                        break;
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        ;   // nothing, variant
+                        break;
+                    default:
+                        return 0;   // bad
+                }
+                (*ppSub)->append( pStart, p);
             }
             pStart = p+1;
         }
@@ -448,7 +527,7 @@ static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
 
 static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
 {
-    return tag ? tag->mpVariants : NULL;
+    return tag ? tag->maVariants.mpList : NULL;
 }
 
 static const char *lt_lang_get_tag(const lt_lang_t *lang)
