@@ -114,7 +114,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
         }
         else if ( nSID != SID_DASH_LIST )
         {
-        // no or ambiguous status
+            // no or ambiguous status
             pBox->SetNoSelection();
         }
     }
@@ -131,9 +131,9 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
 
-    // Since the timer can strike unexpectedly, it may happen that
-    // the LB is not yet filled. A ClearCache() on the control
-    // in DelayHdl () was unsuccessful.
+        // Since the timer can strike unexpectedly, it may happen that
+        // the LB is not yet filled. A ClearCache() on the control
+        // in DelayHdl () was unsuccessful.
         if( pBox->GetEntryCount() == 0 )
             pBox->FillControl();
 
@@ -175,7 +175,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 
     if ( pState && ( pState->ISA( SvxDashListItem ) ) )
     {
-    // The list of line styles has changed
+        // The list of line styles has changed
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
 
@@ -242,8 +242,8 @@ void SvxLineWidthToolBoxControl::StateChanged(
             {
                 DBG_ASSERT( pState->ISA(XLineWidthItem), "wrong ItemType" );
 
-        // Core-Unit handed over to MetricField
-        // Should not happen in CreateItemWin ()!
+                // Core-Unit handed over to MetricField
+                // Should not happen in CreateItemWin ()!
                 SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM; // CD!!! GetCoreMetric();
                 pFld->SetCoreUnit( eUnit );
 
@@ -325,7 +325,7 @@ void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
 
         DBG_ASSERT( pBox, "Window not found" );
 
-    // The list of colors (ColorTable) has changed:
+        // The list of colors (ColorTable) has changed:
         ::Color aTmpColor( pBox->GetSelectEntryColor() );
         pBox->Clear();
         pBox->Fill( ( (SvxColorListItem*)pState )->GetColorList() );
@@ -501,8 +501,8 @@ void SvxLineEndWindow::FillValueSet()
 
         long nCount = pLineEndList->Count();
 
-    // First entry: no line end.
-    // An entry is temporarly added to get the UI bitmap
+        // First entry: no line end.
+        // An entry is temporarly added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
         pLineEndList->Insert( new XLineEndEntry( aNothing, SVX_RESSTR( RID_SVXSTR_NONE ) ) );
         pEntry = pLineEndList->GetLineEnd( nCount );
@@ -633,7 +633,7 @@ void SvxLineEndWindow::StateChanged(
 {
     if ( nSID == SID_LINEEND_LIST )
     {
-    // The list of line ends (LineEndList) has changed
+        // The list of line ends (LineEndList) has changed
         if ( pState && pState->ISA( SvxLineEndListItem ))
         {
             pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
