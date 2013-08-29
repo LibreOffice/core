@@ -2251,9 +2251,9 @@ void ScInputHandler::UpdateFormulaMode()
     SfxApplication* pSfxApp = SFX_APP();
 
     if ( pEngine->GetParagraphCount() == 1 &&
-         ( pEngine->GetText(0).GetChar(0) == '=' ||
-           pEngine->GetText(0).GetChar(0) == '+' ||
-           pEngine->GetText(0).GetChar(0) == '-' ) &&
+         ( pEngine->GetText(0)[0] == '=' ||
+           pEngine->GetText(0)[0] == '+' ||
+           pEngine->GetText(0)[0] == '-' ) &&
          !bProtected )
     {
         if (!bFormulaMode)
@@ -2408,9 +2408,9 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
             }
         }
 
-        sal_Int32 nPara    = pEngine->GetParagraphCount()-1;
-        xub_StrLen nLen = pEngine->GetText(nPara).Len();
-        sal_uInt16 nCount   = pEngine->GetViewCount();
+        sal_Int32 nPara = pEngine->GetParagraphCount()-1;
+        sal_Int32 nLen = pEngine->GetText(nPara).getLength();
+        sal_uInt16 nCount = pEngine->GetViewCount();
 
         for (sal_uInt16 i=0; i<nCount; i++)
         {
