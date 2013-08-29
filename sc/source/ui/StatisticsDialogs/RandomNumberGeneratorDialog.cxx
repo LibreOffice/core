@@ -116,9 +116,8 @@ void ScRandomNumberGeneratorDialog::Init()
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
-    OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format( aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails );
+    OUString aCurrentString(mInputRange.Format(SCR_ABS_3D, mDocument, mAddressDetails));
     mpInputRangeEdit->SetText( aCurrentString );
 }
 
@@ -154,8 +153,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 
         mInputRange = rReferenceRange;
 
-        String aReferenceString;
-        mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
+        OUString aReferenceString(mInputRange.Format(SCR_ABS_3D, pDocument, mAddressDetails));
         mpInputRangeEdit->SetRefString( aReferenceString );
     }
 }

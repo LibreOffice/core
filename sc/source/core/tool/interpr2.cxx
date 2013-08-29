@@ -2407,17 +2407,17 @@ static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rb
 
 void ScInterpreter::ScArabic()
 {
-    String aRoman( GetString() );
+    OUString aRoman( GetString() );
     if( nGlobalError )
         PushError( nGlobalError);
     else
     {
-        aRoman.ToUpperAscii();
+        aRoman = aRoman.toAsciiUpperCase();
 
         sal_uInt16 nValue = 0;
         sal_uInt16 nValidRest = 3999;
-        sal_uInt16 nCharIndex = 0;
-        sal_uInt16 nCharCount = aRoman.Len();
+        sal_Int32 nCharIndex = 0;
+        sal_Int32 nCharCount = aRoman.getLength();
         bool bValid = true;
 
         while( bValid && (nCharIndex < nCharCount) )
@@ -2425,11 +2425,11 @@ void ScInterpreter::ScArabic()
             sal_uInt16 nDigit1 = 0;
             sal_uInt16 nDigit2 = 0;
             bool bIsDec1 = false;
-            bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex ), nDigit1, bIsDec1 );
+            bValid = lcl_GetArabicValue( aRoman[nCharIndex], nDigit1, bIsDec1 );
             if( bValid && (nCharIndex + 1 < nCharCount) )
             {
                 bool bIsDec2 = false;
-                bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex + 1 ), nDigit2, bIsDec2 );
+                bValid = lcl_GetArabicValue( aRoman[nCharIndex + 1], nDigit2, bIsDec2 );
             }
             if( bValid )
             {

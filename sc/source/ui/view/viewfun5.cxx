@@ -392,7 +392,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             else
             {
                 ScAddress aCellPos( nPosX,nPosY,nTab );
-                aCellPos.Format( sTarget, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+                sTarget = aCellPos.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 

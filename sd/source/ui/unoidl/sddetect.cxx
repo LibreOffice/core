@@ -361,12 +361,12 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                             OUString aStreamName("PowerPoint Document");
                             if ( aStorage->IsStream( aStreamName ) && SvtModuleOptions().IsImpress() )
                             {
-                                String aFileName(aMedium.GetName());
-                                aFileName.ToUpperAscii();
+                                OUString aFileName(aMedium.GetName());
+                                aFileName = aFileName.toAsciiUpperCase();
 
-                                if( aFileName.SearchAscii( ".POT" ) != STRING_NOTFOUND )
+                                if( aFileName.indexOf( ".POT" ) != -1 )
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97Template );
-                                else if( aFileName.SearchAscii( ".PPS" ) != STRING_NOTFOUND )
+                                else if( aFileName.indexOf( ".PPS" ) != -1 )
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97AutoPlay );
                                 else
                                     pFilter = SfxFilter::GetFilterByName( pFilterPowerPoint97);

@@ -84,8 +84,6 @@ ScSolverDlg::~ScSolverDlg()
 
 void ScSolverDlg::Init()
 {
-    String          aStr;
-
     m_pBtnOk->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
     m_pBtnCancel->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
 
@@ -102,7 +100,7 @@ void ScSolverDlg::Init()
     m_pEdVariableCell->SetLoseFocusHdl ( aLink );
     m_pRBVariableCell->SetLoseFocusHdl ( aLink );
 
-    theFormulaCell.Format( aStr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
+    OUString aStr(theFormulaCell.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
 
     m_pEdFormulaCell->SetText( aStr );
     m_pEdFormulaCell->GrabFocus();
@@ -142,13 +140,12 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
-        String      aStr;
         ScAddress   aAdr = rRef.aStart;
         sal_uInt16      nFmt = ( aAdr.Tab() == nCurTab )
                                 ? SCA_ABS
                                 : SCA_ABS_3D;
 
-        aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
+        OUString aStr(aAdr.Format(nFmt, pDocP, pDocP->GetAddressConvention()));
         pEdActive->SetRefString( aStr );
 
         if ( pEdActive == m_pEdFormulaCell )

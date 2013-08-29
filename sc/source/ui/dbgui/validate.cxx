@@ -88,8 +88,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 
     if ( m_pRefEdit )
     {
-        OUString  aStr;
-        rRange.Format( aStr, SCR_ABS_3D, pDoc );
+        OUString aStr(rRange.Format(SCR_ABS_3D, pDoc));
         m_pRefEdit->SetRefString( aStr );
     }
 }

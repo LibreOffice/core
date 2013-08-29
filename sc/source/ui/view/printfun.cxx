@@ -1874,8 +1874,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
                     {
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ), 0 );
 
-                        String aMarkStr;
-                        rPos.Format( aMarkStr, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
+                        String aMarkStr(rPos.Format(SCA_VALID, pDoc, pDoc->GetAddressConvention()));
                         aMarkStr += ':';
 
                         //  cell position also via EditEngine, for correct positioning

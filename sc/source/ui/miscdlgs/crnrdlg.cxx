@@ -258,8 +258,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
     if ( bValid )
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        String aStr;
-        theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
+        OUString aStr(theCurArea.Format(SCR_ABS_3D, pDoc, eConv));
 
         if(bRef)
             pEdAssign->SetRefString( aStr );
@@ -267,7 +266,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
             pEdAssign->SetText( aStr );
 
         pEdAssign->SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
-        theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
+        aStr = theCurData.Format(SCR_ABS_3D, pDoc, eConv);
 
         if(bRef)
             pEdAssign2->SetRefString( aStr );
@@ -361,8 +360,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,sal_Bool
             }
         }
     }
-    String aStr;
-    theCurData.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+    OUString aStr(theCurData.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
 
     if(bRef)
         pEdAssign2->SetRefString( aStr );
@@ -512,7 +510,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(ppSortArray[j]->GetRange(0));
-            aRange.Format( aString, SCR_ABS_3D, pDoc, aDetails );
+            aString = aRange.Format(SCR_ABS_3D, pDoc, aDetails);
 
             //@008 Hole Bereichsparameter aus Dok
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -559,7 +557,7 @@ void ScColRowNameRangesDlg::UpdateNames()
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(ppSortArray[j]->GetRange(0));
-            aRange.Format( aString, SCR_ABS_3D, pDoc, aDetails );
+            aString = aRange.Format(SCR_ABS_3D, pDoc, aDetails);
 
             //@008 Ab hier baue String fuer Zeilen
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -625,16 +623,15 @@ void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, sal_Bool bCo
     if ( bFound )
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        String aStr;
         theCurArea = rRange;
-        theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
+        OUString aStr(theCurArea.Format(SCR_ABS_3D, pDoc, eConv));
         pEdAssign->SetText( aStr );
         pBtnAdd->Disable();
         pBtnRemove->Enable();
         pBtnColHead->Check( bColName );
         pBtnRowHead->Check( !bColName );
         theCurData = pPair->GetRange(1);
-        theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
+        aStr = theCurData.Format(SCR_ABS_3D, pDoc, eConv);
         pEdAssign2->SetText( aStr );
     }
     else
@@ -1076,8 +1073,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
         if ( theCurArea.aStart.Row() == 0 && theCurArea.aEnd.Row() == MAXROW )
         {
             theCurArea.aEnd.SetRow( MAXROW - 1 );
-            String aStr;
-            theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+            OUString aStr(theCurArea.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
             pEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
@@ -1114,8 +1110,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
         if ( theCurArea.aStart.Col() == 0 && theCurArea.aEnd.Col() == MAXCOL )
         {
             theCurArea.aEnd.SetCol( MAXCOL - 1 );
-            String aStr;
-            theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+            OUString aStr(theCurArea.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
             pEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );

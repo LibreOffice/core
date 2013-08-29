@@ -225,9 +225,9 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
 #if 0
     // MATCH function should alwayse return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
     // To fix this issue in safe, current solution is to convert this array to a double value just for MATCH function.
-    String aUpper( FunctionName );
+    OUString aUpper( FunctionName.toAsciiUpperCase() );
     ScCompiler aCompiler( NULL, ScAddress() );
-    OpCode eOp = aCompiler.GetEnglishOpCode( aUpper.ToUpperAscii() );
+    OpCode eOp = aCompiler.GetEnglishOpCode( aUpper );
     if( eOp == ocMatch )
     {
         double fVal = 0.0;

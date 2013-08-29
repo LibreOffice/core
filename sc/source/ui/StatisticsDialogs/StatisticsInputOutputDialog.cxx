@@ -111,9 +111,8 @@ void ScStatisticsInputOutputDialog::Init()
 
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
 {
-    OUString aCurrentString;
     mViewData->GetSimpleArea(mInputRange);
-    mInputRange.Format(aCurrentString, SCR_ABS_3D, mDocument, mAddressDetails);
+    OUString aCurrentString(mInputRange.Format(SCR_ABS_3D, mDocument, mAddressDetails));
     mpInputRangeEdit->SetText(aCurrentString);
 }
 
@@ -139,12 +138,12 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         if ( rReferenceRange.aStart != rReferenceRange.aEnd )
             RefInputStart( mpActiveEdit );
 
-        String aReferenceString;
+        OUString aReferenceString;
 
         if ( mpActiveEdit == mpInputRangeEdit )
         {
             mInputRange = rReferenceRange;
-            mInputRange.Format( aReferenceString, SCR_ABS_3D, pDocument, mAddressDetails );
+            aReferenceString = mInputRange.Format(SCR_ABS_3D, pDocument, mAddressDetails);
             mpInputRangeEdit->SetRefString( aReferenceString );
         }
         else if ( mpActiveEdit == mpOutputRangeEdit )
@@ -152,7 +151,7 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
             mOutputAddress = rReferenceRange.aStart;
 
             sal_uInt16 nFormat = ( mOutputAddress.Tab() == mCurrentAddress.Tab() ) ? SCA_ABS : SCA_ABS_3D;
-            mOutputAddress.Format( aReferenceString, nFormat, pDocument, pDocument->GetAddressConvention() );
+            aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
 
             // Enable OK, Cancel if output range is set

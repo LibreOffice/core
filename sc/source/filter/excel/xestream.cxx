@@ -751,8 +751,7 @@ OString XclXmlUtils::ToOString( const String& s )
 
 OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
-    String sAddress;
-    rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
+    OUString sAddress(rAddress.Format(SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
     return ToOString( sAddress );
 }
 
@@ -764,15 +763,14 @@ OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 
 OString XclXmlUtils::ToOString( const ScRange& rRange )
 {
-    String sRange;
-    rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
+    OUString sRange(rRange.Format(SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
     return ToOString( sRange );
 }
 
 OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     String s;
-    rRangeList.Format( s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ' );
+    rRangeList.Format(s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ');
     return ToOString( s );
 }
 

@@ -3194,8 +3194,7 @@ namespace {
 
 bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 {
-    OUString aStr;
-    rPos.Format(aStr, SCA_VALID);
+    OUString aStr(rPos.Format(SCA_VALID));
     const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
     {
@@ -3205,8 +3204,7 @@ bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
 
     if (pFC->aPos != rPos)
     {
-        OUString aStr2;
-        pFC->aPos.Format(aStr2, SCA_VALID);
+        OUString aStr2(pFC->aPos.Format(SCA_VALID));
         cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
         return false;
     }
@@ -3224,8 +3222,7 @@ void checkFormulaPositions(ScDocument& rDoc, const ScAddress& rPos, const SCROW*
 
         if (!checkFormulaPosition(rDoc, aPos))
         {
-            OUString aStr;
-            aPos.Format(aStr, SCA_VALID);
+            OUString aStr(aPos.Format(SCA_VALID));
             std::ostringstream os;
             os << "Formula cell position failed at " << aStr;
             CPPUNIT_FAIL(os.str().c_str());

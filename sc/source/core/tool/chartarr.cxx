@@ -279,7 +279,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
         for (nCol=0; nCol<nColCount; nCol++)
         {
-            OUString aString, aColStr;
+            OUString aString;
             if (HasColHeaders())
                 aString = pDocument->GetString(aCols[nCol], nStrRow, nTab1);
             if (aString.isEmpty())
@@ -289,8 +289,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
                 aBuf.append(sal_Unicode(' '));
 
                 ScAddress aPos( aCols[ nCol ], 0, 0 );
-                aPos.Format( aColStr, SCA_VALID_COL, NULL );
-                aBuf.append(aColStr);
+                aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
 
                 aString = aBuf.makeStringAndClear();
             }
@@ -399,7 +398,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         SCCOL nPosCol = 0;
         for ( nCol = 0; nCol < nColCount; nCol++ )
         {
-            OUString aString, aColStr;
+            OUString aString;
             const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
             if ( HasColHeaders() && pPos )
                 aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
@@ -413,8 +412,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 else
                     nPosCol++;
                 ScAddress aPos( nPosCol - 1, 0, 0 );
-                aPos.Format( aColStr, SCA_VALID_COL, NULL );
-                aBuf.append(aColStr);
+                aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
                 aString = aBuf.makeStringAndClear();
             }
             pMemChart->SetColText( static_cast<short>(nCol), aString);

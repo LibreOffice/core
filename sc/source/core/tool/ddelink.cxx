@@ -129,23 +129,23 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
         return SUCCESS;
 
-    String aLinkStr;
+    OUString aLinkStr;
     ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
     aLinkStr = convertLineEnd(aLinkStr, LINEEND_LF);
 
     //  wenn String mit Zeilenende aufhoert, streichen:
 
-    xub_StrLen nLen = aLinkStr.Len();
-    if (nLen && aLinkStr.GetChar(nLen-1) == '\n')
-        aLinkStr.Erase(nLen-1);
+    sal_Int32 nLen = aLinkStr.getLength();
+    if (nLen && aLinkStr[nLen-1] == '\n')
+        aLinkStr = aLinkStr.copy(0, nLen-1);
 
     String aLine;
     SCSIZE nCols = 1;       // Leerstring -> eine leere Zelle
     SCSIZE nRows = 1;
-    if (aLinkStr.Len())
+    if (!aLinkStr.isEmpty())
     {
         nRows = static_cast<SCSIZE>(comphelper::string::getTokenCount(aLinkStr, '\n'));
-        aLine = aLinkStr.GetToken( 0, '\n' );
+        aLine = aLinkStr.getToken( 0, '\n' );
         if (aLine.Len())
             nCols = static_cast<SCSIZE>(comphelper::string::getTokenCount(aLine, '\t'));
     }
@@ -178,7 +178,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         String aEntry;
         for (SCSIZE nR=0; nR<nRows; nR++)
         {
-            aLine = aLinkStr.GetToken( (xub_StrLen) nR, '\n' );
+            aLine = aLinkStr.getToken( (sal_Int32) nR, '\n' );
             for (SCSIZE nC=0; nC<nCols; nC++)
             {
                 aEntry = aLine.GetToken( (xub_StrLen) nC, '\t' );

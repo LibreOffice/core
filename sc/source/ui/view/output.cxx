@@ -2449,9 +2449,8 @@ void ScOutputData::AddPDFNotes()
                         const ScPostIt* pNote = mpDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY);
 
                         // Note title is the cell address (as on printed note pages)
-                        String aTitle;
                         ScAddress aAddress( nMergeX, nMergeY, nTab );
-                        aAddress.Format( aTitle, SCA_VALID, mpDoc, mpDoc->GetAddressConvention() );
+                        OUString aTitle(aAddress.Format(SCA_VALID, mpDoc, mpDoc->GetAddressConvention()));
 
                         // Content has to be a simple string without line breaks
                         String aContent = pNote->GetText();

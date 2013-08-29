@@ -114,7 +114,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                aRange.Format( aRangeString, SCR_ABS_3D, pScDoc );
+                aRangeString = aRange.Format(SCR_ABS_3D, pScDoc);
             }
         }
     }

@@ -249,15 +249,15 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     else if ( aNameStr.EqualsAscii( SC_UNONAME_UIREPR ) )
     {
         //  generate UI representation string - include sheet only if different from ref sheet
-        String aFormatStr;
+        OUString aFormatStr;
         sal_uInt16 nFlags = SCA_VALID;
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= SCA_TAB_3D;
         if ( bIsRange )
-            aRange.Format( aFormatStr, nFlags, pDoc );
+            aFormatStr = aRange.Format(nFlags, pDoc);
         else
-            aRange.aStart.Format( aFormatStr, nFlags, pDoc );
-        aRet <<= OUString( aFormatStr );
+            aFormatStr = aRange.aStart.Format(nFlags, pDoc);
+        aRet <<= aFormatStr;
     }
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
@@ -265,17 +265,15 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
-        String aFormatStr;
-        aRange.aStart.Format( aFormatStr, SCA_VALID | SCA_TAB_3D, pDoc, eConv );
+        String aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, pDoc, eConv));
         if ( bIsRange )
         {
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr.Append( (sal_Unicode) ':' );
-            String aSecond;
             sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
-            aRange.aEnd.Format( aSecond, nFlags, pDoc, eConv );
+            OUString aSecond(aRange.aEnd.Format(nFlags, pDoc, eConv));
             aFormatStr.Append( aSecond );
         }
         aRet <<= OUString( aFormatStr );

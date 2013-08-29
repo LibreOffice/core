@@ -92,7 +92,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 String ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return UseNumericHeader()
-        ? String(OUString::number(nEntryNo + 1)) //FIXME remove String again
+        ? OUString::number(nEntryNo + 1) //FIXME remove String again
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 

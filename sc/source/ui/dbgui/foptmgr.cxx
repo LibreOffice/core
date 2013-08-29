@@ -111,7 +111,7 @@ void ScFilterOptionsMgr::Init()
         OUString   theDbName(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
-        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
+        theAreaStr = theCurArea.Format(SCR_ABS_3D, pDoc, eConv);
 
         // Zielbereichsliste fuellen
 
@@ -121,12 +121,11 @@ void ScFilterOptionsMgr::Init()
         ScAreaNameIterator aIter( pDoc );
         String aName;
         ScRange aRange;
-        String aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             sal_uInt16 nInsert = pLbCopyArea->InsertEntry( aName );
 
-            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
+            OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
             pLbCopyArea->SetEntryData( nInsert, new String( aRefStr ) );
         }
 
@@ -177,12 +176,11 @@ void ScFilterOptionsMgr::Init()
 
         if ( !rQueryData.bInplace )
         {
-            String aString;
-
-            ScAddress( rQueryData.nDestCol,
-                       rQueryData.nDestRow,
-                       rQueryData.nDestTab
-                     ).Format( aString, SCA_ABS_3D, pDoc, eConv );
+            OUString aString =
+                ScAddress( rQueryData.nDestCol,
+                           rQueryData.nDestRow,
+                           rQueryData.nDestTab
+                         ).Format(SCA_ABS_3D, pDoc, eConv);
 
             pBtnCopyResult->Check( sal_True );
             pEdCopyArea->SetText( aString );

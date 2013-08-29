@@ -444,14 +444,14 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
 
 //------------------------------------------------------------------------
 
-sal_Bool ScByteSequenceToString::GetString( String& rString, const uno::Any& rAny,
+sal_Bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
                                         sal_uInt16 nEncoding )
 {
     uno::Sequence<sal_Int8> aSeq;
     if ( rAny >>= aSeq )
     {
-        rString = String( (const sal_Char*)aSeq.getConstArray(),
-                            (xub_StrLen)aSeq.getLength(), nEncoding );
+        rString = OUString( (const sal_Char*)aSeq.getConstArray(),
+                            aSeq.getLength(), nEncoding );
         rString = comphelper::string::stripEnd(rString, 0);
         return sal_True;
     }

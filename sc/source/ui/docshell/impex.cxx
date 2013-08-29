@@ -448,17 +448,17 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
         if( aDocName.Len() )
         {
             // Always use Calc A1 syntax for paste link.
-            String aRefName;
+            OUString aRefName;
             sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
             if( bSingle )
-                aRange.aStart.Format( aRefName, nFlags, pDoc, formula::FormulaGrammar::CONV_OOO );
+                aRefName = aRange.aStart.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             else
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
                     nFlags |= SCA_TAB2_3D;
-                aRange.Format( aRefName, nFlags, pDoc, formula::FormulaGrammar::CONV_OOO );
+                aRefName = aRange.Format(nFlags, pDoc, formula::FormulaGrammar::CONV_OOO);
             }
-            String aAppName = Application::GetAppName();
+            OUString aAppName = Application::GetAppName();
 
             // extra bits are used to tell the client to prefer external
             // reference link.

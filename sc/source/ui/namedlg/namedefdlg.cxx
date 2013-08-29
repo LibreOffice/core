@@ -78,12 +78,11 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
 
     m_pBtnAdd->Disable(); // empty name is invalid
 
-    String aAreaStr;
     ScRange aRange;
 
     pViewData->GetSimpleArea( aRange );
-    aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
-            ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
+    OUString aAreaStr(aRange.Format(ABS_DREF3D, mpDoc,
+            ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0)));
 
     m_pEdRange->SetText( aAreaStr );
 
@@ -288,9 +287,8 @@ void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(m_pEdRange);
-        String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDocP,
-                ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
+        OUString aRefStr(rRef.Format(ABS_DREF3D, pDocP,
+                ScAddress::Details(pDocP->GetAddressConvention(), 0, 0)));
         m_pEdRange->SetRefString( aRefStr );
     }
 }

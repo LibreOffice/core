@@ -113,7 +113,7 @@ void ScDescriptiveStatisticsDialog::CalculateInputAndWriteToOutput( )
                 ScAddress(inCol, mInputRange.aEnd.Row(), inTab)
             );
 
-            aColumnRange.Format( aReferenceString, SCR_ABS, mDocument, mAddressDetails );
+            aReferenceString = aColumnRange.Format(SCR_ABS, mDocument, mAddressDetails);
             OUString aFormulaString;
             OUString aFormulaTemplate;
 

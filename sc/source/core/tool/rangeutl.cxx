@@ -676,8 +676,7 @@ void ScRangeStringConverter::GetStringFromAddress(
 {
     if (pDocument && pDocument->HasTable(rAddress.Tab()))
     {
-        String sAddress;
-        rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
+        OUString sAddress(rAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
         AssignString( rString, sAddress, bAppendStr, cSeparator );
     }
 }
@@ -695,10 +694,8 @@ void ScRangeStringConverter::GetStringFromRange(
     {
         ScAddress aStartAddress( rRange.aStart );
         ScAddress aEndAddress( rRange.aEnd );
-        String sStartAddress;
-        String sEndAddress;
-        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
-        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
+        OUString sStartAddress(aStartAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
+        OUString sEndAddress(aEndAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
         OUString sOUStartAddress( sStartAddress );
         sOUStartAddress += OUString(':');
         sOUStartAddress += OUString( sEndAddress );
@@ -811,14 +808,12 @@ static void lcl_appendCellAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo.maTabName);
         rBuf.append(sal_Unicode('.'));
 
-        String aAddr;
-        rCell.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
+        OUString aAddr(rCell.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
     else
     {
-        String aAddr;
-        rCell.Format(aAddr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
+        OUString aAddr(rCell.Format(SCA_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }
@@ -846,8 +841,7 @@ static void lcl_appendCellRangeAddress(
         ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append(sal_Unicode('.'));
 
-        String aAddr;
-        rCell1.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
+        OUString aAddr(rCell1.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
         rBuf.appendAscii(":");
@@ -859,7 +853,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append(sal_Unicode('.'));
         }
 
-        rCell2.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
+        aAddr = rCell2.Format(SCA_ABS, NULL, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -867,8 +861,7 @@ static void lcl_appendCellRangeAddress(
         ScRange aRange;
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
-        String aAddr;
-        aRange.Format(aAddr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention());
+        OUString aAddr(aRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
     }
 }

@@ -58,8 +58,7 @@ OUString lclCreateMultiParameterFormula(
     OUString aResult;
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
-        OUString aRangeString;
-        aRangeList[i]->Format( aRangeString, SCR_ABS, pDocument, aAddressDetails );
+        OUString aRangeString(aRangeList[i]->Format(SCR_ABS, pDocument, aAddressDetails));
         OUString aFormulaString = aFormulaTemplate.replaceAll(aWildcard, aRangeString);
         aResult += aFormulaString;
         if(i != aRangeList.size() - 1) // Not Last
@@ -138,7 +137,7 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
             );
             aRangeList.Append(aColumnRange);
 
-            aColumnRange.Format( aReferenceString, SCR_ABS, mDocument, mAddressDetails );
+            aReferenceString = aColumnRange.Format(SCR_ABS, mDocument, mAddressDetails);
             OUString aFormulaString;
             OUString aFormulaTemplate;
 
@@ -176,12 +175,10 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
 
             // Sum of Squares
             aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aReferenceTotal;
-            OUString aReferenceWithin;
             ScAddress aAddressTotal(outCol, outRow+2, outTab);
-            aAddressTotal.Format( aReferenceTotal, SCR_ABS, mDocument, mAddressDetails );
+            OUString aReferenceTotal(aAddressTotal.Format(SCR_ABS, mDocument, mAddressDetails));
             ScAddress aAddressWithin(outCol, outRow+1, outTab);
-            aAddressWithin.Format( aReferenceWithin, SCR_ABS, mDocument, mAddressDetails );
+            OUString aReferenceWithin(aAddressWithin.Format(SCR_ABS, mDocument, mAddressDetails));
             OUString aFormulaString = "=" + aReferenceTotal + "-" + aReferenceWithin;
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
             outCol++;
@@ -189,18 +186,16 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
             // Degree of freedom
             aAddress = ScAddress(outCol, outRow, outTab);
             aAddressTotal = ScAddress(outCol, outRow+2, outTab);
-            aAddressTotal.Format( aReferenceTotal, SCR_ABS, mDocument, mAddressDetails );
+            aReferenceTotal = aAddressTotal.Format(SCR_ABS, mDocument, mAddressDetails);
             aAddressWithin = ScAddress(outCol, outRow+1, outTab);
-            aAddressWithin.Format( aReferenceWithin, SCR_ABS, mDocument, mAddressDetails );
+            aReferenceWithin = aAddressWithin.Format(SCR_ABS, mDocument, mAddressDetails);
             aFormulaString = "=" + aReferenceTotal + "-" + aReferenceWithin;
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
             outCol++;
 
             // MS
-            OUString aSSRef;
-            ScAddress(outCol-2, outRow, outTab).Format( aSSRef, SCR_ABS, mDocument, mAddressDetails );
-            OUString aDFRef;
-            ScAddress(outCol-1, outRow, outTab).Format( aDFRef, SCR_ABS, mDocument, mAddressDetails );
+            OUString aSSRef(ScAddress(outCol-2, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
+            OUString aDFRef(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
             aFormulaString = "=" + aSSRef + "/" + aDFRef;
             aAddress = ScAddress(outCol, outRow, outTab);
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
@@ -208,22 +203,17 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
 
             // F
             aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aMSBetween;
-            ScAddress(outCol-1, outRow, outTab).Format( aMSBetween, SCR_ABS, mDocument, mAddressDetails );
-            OUString aMSWithin;
-            ScAddress(outCol-1, outRow+1, outTab).Format( aMSWithin, SCR_ABS, mDocument, mAddressDetails );
+            OUString aMSBetween(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
+            OUString aMSWithin(ScAddress(outCol-1, outRow+1, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
             aFormulaString = "=" + aMSBetween + "/" + aMSWithin;
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
             outCol++;
 
             // P-value
             aAddress = ScAddress(outCol, outRow, outTab);
-            OUString aFValue;
-            ScAddress(outCol-1, outRow, outTab).Format( aFValue, SCR_ABS, mDocument, mAddressDetails );
-            OUString aDFBetween;
-            ScAddress(outCol-3, outRow, outTab).Format( aDFBetween, SCR_ABS, mDocument, mAddressDetails );
-            OUString aDFWithin;
-            ScAddress(outCol-3, outRow+1, outTab).Format( aDFWithin, SCR_ABS, mDocument, mAddressDetails );
+            OUString aFValue(ScAddress(outCol-1, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
+            OUString aDFBetween(ScAddress(outCol-3, outRow, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
+            OUString aDFWithin(ScAddress(outCol-3, outRow+1, outTab).Format(SCR_ABS, mDocument, mAddressDetails));
             aFormulaString = "=FDIST("+ aFValue + ";" + aDFBetween + ";" + aDFWithin + ")";
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);
             outCol++;
@@ -265,12 +255,10 @@ void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
             outCol++;
 
             // MS
-            OUString aSSRef;
-            OUString aDFRef;
             ScAddress aAddressSS(outCol-2, outRow, outTab);
-            aAddressSS.Format( aSSRef, SCR_ABS, mDocument, mAddressDetails );
+            OUString aSSRef(aAddressSS.Format(SCR_ABS, mDocument, mAddressDetails));
             ScAddress aAddressDF(outCol-1, outRow, outTab);
-            aAddressDF.Format( aDFRef, SCR_ABS, mDocument, mAddressDetails );
+            OUString aDFRef(aAddressDF.Format(SCR_ABS, mDocument, mAddressDetails));
             OUString aFormulaString = "=" + aSSRef + "/" + aDFRef;
             aAddress = ScAddress(outCol, outRow, outTab);
             pDocShell->GetDocFunc().SetFormulaCell(aAddress, new ScFormulaCell(mDocument, aAddress, aFormulaString), true);

@@ -293,30 +293,6 @@ STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
     return *this;
 }
 
-STRING& STRING::ToUpperAscii()
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nLen = mpData->mnLen;
-    STRCODE*    pStr = mpData->maStr;
-    while ( nIndex < nLen )
-    {
-        // convert char if between 'a' and 'z'
-        if ( (*pStr >= 97) && (*pStr <= 122) )
-        {
-            // allocate string of new size
-            pStr = ImplCopyStringData( pStr );
-            *pStr -= 32;
-        }
-
-        ++pStr,
-        ++nIndex;
-    }
-
-    return *this;
-}
-
 StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

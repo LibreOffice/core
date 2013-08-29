@@ -472,12 +472,12 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
         Window* pPrev = mpFrameSel->GetWindow( WINDOW_PREV );
         if(pPrev && WINDOW_FIXEDTEXT == pPrev->GetType())
         {
-            String sText = pPrev->GetText();
-            xub_StrLen nFound = sText.Search( MNEMONIC_CHAR );
-            if(STRING_NOTFOUND != nFound && ++nFound < sText.Len())
+            OUString sText = pPrev->GetText();
+            sal_Int32 nFound = sText.indexOf(MNEMONIC_CHAR);
+            if(-1 != nFound && ++nFound < sText.getLength())
             {
-                sText.ToUpperAscii();
-                sal_Unicode cChar = sText.GetChar(nFound);
+                sText = sText.toAsciiUpperCase();
+                sal_Unicode cChar = sText[nFound];
                 AwtKeyEvent aEvent;
 
                 aEvent.KeyCode = 0;

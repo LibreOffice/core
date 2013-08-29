@@ -206,9 +206,8 @@ sal_Bool ScValidationData::DoScript( const ScAddress& rPos, const String& rInput
         aParams[0] = ::com::sun::star::uno::makeAny( OUString( aValStr ) );
 
     //  2) Position der Zelle
-    String aPosStr;
-    rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention() );
-    aParams[1] = ::com::sun::star::uno::makeAny( OUString( aPosStr ) );
+    OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
+    aParams[1] = ::com::sun::star::uno::makeAny(aPosStr);
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running
@@ -329,8 +328,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             refPar->Get(1)->PutString( aValStr );
 
         //  2) Position der Zelle
-        String aPosStr;
-        rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention() );
+        OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
         refPar->Get(2)->PutString( aPosStr );
 
         //  use link-update flag to prevent closing the document

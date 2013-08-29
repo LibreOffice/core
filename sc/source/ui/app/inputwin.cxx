@@ -2393,8 +2393,7 @@ void ScPosWnd::DoEnter()
                     {
                         ScRangeName aNewRanges( *pNames );
                         ScAddress aCursor( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-                        String aContent;
-                        aSelection.Format( aContent, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+                        OUString aContent(aSelection.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
                         ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
                         {
@@ -2420,7 +2419,7 @@ void ScPosWnd::DoEnter()
                         // be in Calc A1 format.  Convert the text.
                         ScRange aRange(0,0,pViewData->GetTabNo());
                         aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
-                        aRange.Format(aText, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+                        aText = aRange.Format(SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
                     }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );

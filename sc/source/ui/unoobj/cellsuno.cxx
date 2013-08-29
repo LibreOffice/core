@@ -4481,7 +4481,7 @@ static sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDo
         ScDocument* pDoc = pDocSh->GetDocument();
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            rRanges[ i ]->Format( aRangeStr, SCA_VALID | SCA_TAB_3D, pDoc );
+            aRangeStr = rRanges[ i ]->Format(SCA_VALID | SCA_TAB_3D, pDoc);
             if ( aRangeStr == rName )
             {
                 rIndex = i;
@@ -4683,7 +4683,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
             if (m_pImpl->m_aNamedEntries.empty() ||
                 !lcl_FindEntryName(m_pImpl->m_aNamedEntries, aRange, aRangeStr))
             {
-                aRange.Format( aRangeStr, SCA_VALID | SCA_TAB_3D, pDoc );
+                aRangeStr = aRange.Format(SCA_VALID | SCA_TAB_3D, pDoc);
             }
             pAry[i] = aRangeStr;
         }

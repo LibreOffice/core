@@ -137,14 +137,13 @@ static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortPar
         ( rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row() ) )
     {
         sal_uInt16 nFmt = SCA_VALID;
-        String aExtendStr,aCurrentStr;
 
         pTabViewShell->AddHighlightRange( aExternalRange,Color( COL_LIGHTBLUE ) );
         ScRange rExtendRange( aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), nTab, aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row(), nTab );
-        rExtendRange.Format( aExtendStr, nFmt, pDoc );
+        OUString aExtendStr(rExtendRange.Format(nFmt, pDoc));
 
         ScRange rCurrentRange( rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab );
-        rCurrentRange.Format( aCurrentStr, nFmt, pDoc );
+        OUString aCurrentStr(rCurrentRange.Format(nFmt, pDoc));
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");

@@ -158,7 +158,7 @@ public:
     sal_uInt16          GetCreateNameFlags();
     void            InsertNameList();
     sal_Bool            InsertName( const String& rName, const String& rSymbol,
-                                const String& rType );
+                                const OUString& rType );
 
     void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
                                         sal_Bool bRecord = sal_True );

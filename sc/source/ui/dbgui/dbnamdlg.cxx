@@ -202,7 +202,7 @@ void ScDbNameDlg::Init()
         theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
                               ScAddress( nEndCol,   nEndRow,   nEndTab ) );
 
-        theCurArea.Format( theAreaStr, ABS_DREF3D, pDoc, aAddrDetails );
+        theAreaStr = theCurArea.Format(ABS_DREF3D, pDoc, aAddrDetails);
 
         if ( pDBColl )
         {
@@ -279,8 +279,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         theCurArea = rRef;
 
-        String aRefStr;
-        theCurArea.Format( aRefStr, ABS_DREF3D, pDocP, aAddrDetails );
+        OUString aRefStr(theCurArea.Format(ABS_DREF3D, pDocP, aAddrDetails));
         m_pEdAssign->SetRefString( aRefStr );
         m_pOptions->Enable();
         m_pBtnAdd->Enable();
@@ -358,8 +357,7 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        OUString theArea;
-        theCurArea.Format( theArea, ABS_DREF3D, pDoc, aAddrDetails );
+        OUString theArea(theCurArea.Format(ABS_DREF3D, pDoc, aAddrDetails));
         m_pEdAssign->SetText( theArea );
         m_pBtnAdd->SetText( aStrModify );
         m_pBtnHeader->Check( pData->HasHeader() );

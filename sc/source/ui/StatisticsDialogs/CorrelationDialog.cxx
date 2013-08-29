@@ -126,8 +126,6 @@ void ScCorrelationDialog::CalculateInputAndWriteToOutput( )
 void ScCorrelationDialog::WriteCorrelationFormulas(ScAddress aOutputAddress, ScRangeList aRangeList)
 {
     ScDocShell* pDocShell = mViewData->GetDocShell();
-    OUString aColumnString1;
-    OUString aColumnString2;
     ScAddress aAddress;
 
     SCTAB outTab = aOutputAddress.Tab();
@@ -142,8 +140,8 @@ void ScCorrelationDialog::WriteCorrelationFormulas(ScAddress aOutputAddress, ScR
         {
             if (j >= i)
             {
-                aRangeList[i]->Format( aColumnString1, SCR_ABS, mDocument, mAddressDetails );
-                aRangeList[j]->Format( aColumnString2, SCR_ABS, mDocument, mAddressDetails );
+                OUString aColumnString1(aRangeList[i]->Format(SCR_ABS, mDocument, mAddressDetails));
+                OUString aColumnString2(aRangeList[j]->Format(SCR_ABS, mDocument, mAddressDetails));
 
                 aAddress = ScAddress(outCol, outRow, outTab);
                 aFormulaString = lclCorrelTemplate.replaceAll(lclWildcardColumn1, aColumnString1);

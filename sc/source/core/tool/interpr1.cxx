@@ -2413,8 +2413,7 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "ADDRESS" ) )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
-                OUString aStr;
-                aCellPos.Format( aStr, nFlags, pDok, pDok->GetAddressConvention() );
+                OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
             else if( aInfoType.EqualsAscii( "FILENAME" ) )
@@ -2448,13 +2447,13 @@ void ScInterpreter::ScCell()
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
                 OUStringBuffer aFuncResult;
-                OUString aCellStr;
+                OUString aCellStr =
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
-                    aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
+                    (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
                 aFuncResult.append(sal_Unicode(':'));
-                aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
-                                 NULL, pDok->GetAddressConvention() );
+                aCellStr = aCellPos.Format((SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
+                                 NULL, pDok->GetAddressConvention());
                 aFuncResult.append(aCellStr);
                 PushString( aFuncResult.makeStringAndClear() );
             }
@@ -7352,10 +7351,9 @@ void ScInterpreter::ScAddressFunc()
         return;
     }
 
-    String aRefStr;
     const ScAddress::Details aDetails( eConv, aPos );
     const ScAddress aAdr( nCol, nRow, 0);
-    aAdr.Format( aRefStr, nFlags, pDok, aDetails );
+    OUString aRefStr(aAdr.Format(nFlags, pDok, aDetails));
 
     if( nParamCount >= 5 && sTabStr.Len() )
     {

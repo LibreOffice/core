@@ -593,7 +593,6 @@ void ScTabPageSortOptions::Init()
 
     if ( pViewData && pDoc )
     {
-        String          theArea;
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         const SCTAB     nCurTab     = pViewData->GetTabNo();
         OUString          theDbName   = OUString(STR_DB_LOCAL_NONAME);
@@ -606,12 +605,11 @@ void ScTabPageSortOptions::Init()
         ScAreaNameIterator aIter( pDoc );
         OUString aName;
         ScRange aRange;
-        OUString aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             sal_uInt16 nInsert = m_pLbOutPos->InsertEntry( aName );
 
-            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
+            OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
             m_pLbOutPos->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
@@ -621,9 +619,10 @@ void ScTabPageSortOptions::Init()
         // Check whether the field that is passed on is a database field:
 
         ScAddress aScAddress( aSortData.nCol1, aSortData.nRow1, nCurTab );
-        ScRange( aScAddress,
+        String theArea =
+            ScRange( aScAddress,
                  ScAddress( aSortData.nCol2, aSortData.nRow2, nCurTab )
-               ).Format( theArea, SCR_ABS, pDoc, eConv );
+               ).Format(SCR_ABS, pDoc, eConv);
 
         if ( pDBColl )
         {
@@ -705,7 +704,6 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( pDoc && !aSortData.bInplace )
     {
-        OUString aStr;
         sal_uInt16 nFormat = (aSortData.nDestTab != pViewData->GetTabNo())
                             ? SCR_ABS_3D
                             : SCR_ABS;
@@ -714,7 +712,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
                        aSortData.nDestRow,
                        aSortData.nDestTab );
 
-        theOutPos.Format( aStr, nFormat, pDoc, pDoc->GetAddressConvention() );
+        OUString aStr(theOutPos.Format(nFormat, pDoc, pDoc->GetAddressConvention()));
         m_pBtnCopyResult->Check();
         m_pLbOutPos->Enable();
         m_pEdOutPos->Enable();

@@ -39,7 +39,7 @@ enum SvxLinkInsertMode
 
 class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
 {
-    String sName;
+    OUString sName;
     String sURL;
     String sTarget;
     SvxLinkInsertMode eType;
@@ -69,8 +69,8 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    const   String& GetName() const { return sName; }
-    void    SetName(const String& rName) { sName = rName; }
+    const   OUString& GetName() const { return sName; }
+    void    SetName(const OUString& rName) { sName = rName; }
 
     const   String& GetURL() const { return sURL; }
     void    SetURL(const String& rURL) { sURL = rURL; }

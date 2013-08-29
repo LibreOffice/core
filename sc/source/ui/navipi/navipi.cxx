@@ -59,7 +59,7 @@
 // macro is sufficient since only used in ctor
 #define SCNAV_COLDIGITS     (static_cast<xub_StrLen>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
 // precomputed constant because it is used in every change of spin button field
-static const xub_StrLen SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).Len();    // A...IV...ZZZ
+static const xub_StrLen SCNAV_COLLETTERS = ::ScColToAlpha(SCNAV_MAXCOL).getLength();    // A...IV...ZZZ
 
 #define SCNAV_MAXROW        (MAXROWCOUNT)
 
@@ -168,7 +168,7 @@ void ColumnEdit::First()
 
 void ColumnEdit::Last()
 {
-    String aStr;
+    OUString aStr;
     nCol = NumToAlpha( SCNAV_MAXCOL, aStr );
     SetText( aStr );
 }
@@ -178,9 +178,9 @@ void ColumnEdit::Last()
 
 void ColumnEdit::EvalText()
 {
-    String aStrCol = GetText();
+    OUString aStrCol = GetText();
 
-    if ( aStrCol.Len() > 0 )
+    if (!aStrCol.isEmpty())
     {
         //  nKeyGroup wird bei VCL mangels KeyInput nicht mehr gesetzt
 
@@ -212,7 +212,7 @@ void ColumnEdit::ExecuteCol()
 
 void ColumnEdit::SetCol( SCCOL nColNo )
 {
-    String aStr;
+    OUString aStr;
 
     if ( nColNo == 0 )
     {
@@ -229,46 +229,46 @@ void ColumnEdit::SetCol( SCCOL nColNo )
 
 //------------------------------------------------------------------------
 
-SCCOL ColumnEdit::AlphaToNum( String& rStr )
+SCCOL ColumnEdit::AlphaToNum( OUString& rStr )
 {
     SCCOL  nColumn = 0;
 
     if ( CharClass::isAsciiAlpha( rStr) )
     {
-        rStr.ToUpperAscii();
+        rStr = rStr.toAsciiUpperCase();
 
         if (::AlphaToCol( nColumn, rStr))
             ++nColumn;
 
-        if ( (rStr.Len() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
+        if ( (rStr.getLength() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
         {
             nColumn = SCNAV_MAXCOL;
             NumToAlpha( nColumn, rStr );
         }
     }
     else
-        rStr.Erase();
+        rStr = "";
 
     return nColumn;
 }
 
 //------------------------------------------------------------------------
 
-SCCOL ColumnEdit::NumStrToAlpha( String& rStr )
+SCCOL ColumnEdit::NumStrToAlpha( OUString& rStr )
 {
     SCCOL  nColumn = 0;
 
     if ( CharClass::isAsciiNumeric(rStr) )
-        nColumn = NumToAlpha( (SCCOL)rStr.ToInt32(), rStr );
+        nColumn = NumToAlpha( (SCCOL)rStr.toInt32(), rStr );
     else
-        rStr.Erase();
+        rStr = "";
 
     return nColumn;
 }
 
 //------------------------------------------------------------------------
 
-SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, String& rStr )
+SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, OUString& rStr )
 {
     if ( nColNo > SCNAV_MAXCOL )
         nColNo = SCNAV_MAXCOL;
@@ -994,8 +994,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         ppBoundItems[0]->ClearCache();
 
         ScAddress aScAddress( nColNo, nRowNo, 0 );
-        String  aAddr;
-        aScAddress.Format( aAddr, SCA_ABS );
+        OUString aAddr(aScAddress.Format(SCA_ABS));
 
         sal_Bool bUnmark = false;
         if ( GetViewData() )

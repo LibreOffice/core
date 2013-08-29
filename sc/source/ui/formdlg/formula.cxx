@@ -408,8 +408,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 
             OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-            String aTmp;
-            rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pRefDoc );     // immer 3d
+            OUString aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pRefDoc));     // immer 3d
 
             SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
 

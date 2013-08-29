@@ -331,10 +331,9 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         ScRange aJustified = rNew;
         aJustified.Justify();           // Ref in der Formel immer richtigherum anzeigen
-        String aNewStr;
         ScDocument* pDoc = pDocView->GetViewData()->GetDocument();
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
-        aJustified.Format( aNewStr, pData->nFlags, pDoc, aAddrDetails );
+        String aNewStr(aJustified.Format(pData->nFlags, pDoc, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
 
         DataChanging();
@@ -2967,8 +2966,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-        String aTmp;
-        rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );      // immer 3d
+        String aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails));      // immer 3d
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
@@ -2983,9 +2981,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
         if ( ( rRef.aStart.Tab() != aCursorPos.Tab() ||
                 rRef.aStart.Tab() != rRef.aEnd.Tab() ) && pDoc )
-            rRef.Format( aRefStr, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );
+            aRefStr = rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails);
         else
-            rRef.Format( aRefStr, SCA_VALID, pDoc, aAddrDetails );
+            aRefStr = rRef.Format(SCA_VALID, pDoc, aAddrDetails);
     }
 
     if (pTableView || pTopView)
@@ -3573,10 +3571,10 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             {
                                 ScRange r(rSPos, rEPos);
                                 nFlags |= (nFlags << 4);
-                                r.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
+                                aPosStr = r.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
                             }
                             else
-                                aCursorPos.Format( aPosStr, SCA_VALID | nFlags, pDoc, aAddrDetails );
+                                aPosStr = aCursorPos.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
                         }
 
                         // Disable the accessible VALUE_CHANGE event

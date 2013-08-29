@@ -153,7 +153,6 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if ( pViewData && pDoc )
     {
-        OUString          theAreaStr;
         ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
                                                 theQueryData.nRow1,
                                                 nSrcTab ),
@@ -168,7 +167,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
          * Bereich um einen Datenbankbereich handelt:
          */
 
-        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+        OUString theAreaStr(theCurArea.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
 
         if ( pDBColl )
         {

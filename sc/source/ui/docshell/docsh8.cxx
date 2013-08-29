@@ -514,20 +514,21 @@ void lcl_GetColumnTypes(
         sal_Int32 nFieldLen = 0;
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
-        String aFieldName, aString;
+        String aFieldName;
+        OUString aString;
 
         // Feldname[,Type[,Width[,Prec]]]
         // Typ etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
             aString = pDoc->GetString(nCol, nFirstRow, nTab);
-            aString.ToUpperAscii();
+            aString = aString.toAsciiUpperCase();
             xub_StrLen nToken = comphelper::string::getTokenCount(aString, ',');
             if ( nToken > 1 )
             {
-                aFieldName = aString.GetToken( 0, ',' );
+                aFieldName = aString.getToken( 0, ',' );
                 aString = comphelper::string::remove(aString, ' ');
-                switch ( aString.GetToken( 1, ',' ).GetChar(0) )
+                switch ( aString.getToken( 1, ',' )[0] )
                 {
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;
@@ -559,10 +560,10 @@ void lcl_GetColumnTypes(
                 }
                 if ( bTypeDefined && !nFieldLen && nToken > 2 )
                 {
-                    nFieldLen = aString.GetToken( 2, ',' ).ToInt32();
+                    nFieldLen = aString.getToken( 2, ',' ).toInt32();
                     if ( !bPrecDefined && nToken > 3 )
                     {
-                        String aTmp( aString.GetToken( 3, ',' ) );
+                        String aTmp( aString.getToken( 3, ',' ) );
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.ToInt32();

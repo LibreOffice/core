@@ -2083,10 +2083,10 @@ long ScDocShell::DdeGetData( const OUString& rItem,
         if ( !aObj.IsRef() )
             return 0;                           // ungueltiger Bereich
 
-        if( aDdeTextFmt.GetChar(0) == 'F' )
+        if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( sal_True );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
-            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt == "SYLK" ||
+            aDdeTextFmt == "FSYLK" )
         {
             OString aData;
             if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
@@ -2100,8 +2100,8 @@ long ScDocShell::DdeGetData( const OUString& rItem,
             else
                 return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
-            aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt == "CSV" ||
+            aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
@@ -2124,26 +2124,26 @@ long ScDocShell::DdeSetData( const OUString& rItem,
         {
             if ( ScByteSequenceToString::GetString( aDdeTextFmt, rValue, osl_getThreadTextEncoding() ) )
             {
-                aDdeTextFmt.ToUpperAscii();
+                aDdeTextFmt = aDdeTextFmt.toAsciiUpperCase();
                 return 1;
             }
             return 0;
         }
         ScImportExport aObj( &aDocument, rItem );
-        if( aDdeTextFmt.GetChar(0) == 'F' )
+        if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( sal_True );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
-            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt == "SYLK" ||
+            aDdeTextFmt == "FSYLK" )
         {
-            String aData;
+            OUString aData;
             if ( ScByteSequenceToString::GetString( aData, rValue, osl_getThreadTextEncoding() ) )
             {
                 return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK ) ? 1 : 0;
             }
             return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
-            aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt == "CSV" ||
+            aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
         return aObj.ImportData( rMimeType, rValue ) ? 1 : 0;
     }

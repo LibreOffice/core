@@ -807,27 +807,27 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pFileFlagsItem, SfxStringItem, SID_OPTIONS, sal_False);
     if ( pFileFlagsItem )
     {
-        String aFileFlags = pFileFlagsItem->GetValue();
-        aFileFlags.ToUpperAscii();
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0054 ) )               // T = 54h
+        OUString aFileFlags = pFileFlagsItem->GetValue();
+        aFileFlags = aFileFlags.toAsciiUpperCase();
+        if ( -1 != aFileFlags.indexOf( 0x0054 ) )               // T = 54h
         {
             rReq.RemoveItem( SID_TEMPLATE );
             rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_True ) );
         }
 
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0048 ) )               // H = 48h
+        if ( -1 != aFileFlags.indexOf( 0x0048 ) )               // H = 48h
         {
             rReq.RemoveItem( SID_HIDDEN );
             rReq.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
         }
 
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0052 ) )               // R = 52h
+        if ( -1 != aFileFlags.indexOf( 0x0052 ) )               // R = 52h
         {
             rReq.RemoveItem( SID_DOC_READONLY );
             rReq.AppendItem( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
         }
 
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0042 ) )               // B = 42h
+        if ( -1 != aFileFlags.indexOf( 0x0042 ) )               // B = 42h
         {
             rReq.RemoveItem( SID_PREVIEW );
             rReq.AppendItem( SfxBoolItem( SID_PREVIEW, sal_True ) );

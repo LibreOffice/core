@@ -175,7 +175,6 @@ public:
     SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
 
     const OUString& GetKey()  const { return aKey; }
-    // TODO: ToUpperAscii -> ???
     void SetKey( const OUString& rKey ) { aKey = rKey.toAsciiUpperCase(); }
 
     friend sal_Bool operator==( const SvxCSS1MapEntry& rE1,

@@ -481,10 +481,8 @@ SfxItemPresentation ScRangeItem::GetPresentation
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            String aText;
             /* Always use OOo:A1 format */
-            aRange.Format( aText );
-            rText += aText;
+            rText += aRange.Format();
         }
         break;
 

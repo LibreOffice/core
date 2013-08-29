@@ -198,16 +198,16 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 rSh.GetFlyFrmAttr( aSet );
                 SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
 
-                String sOldName(rHLinkItem.GetName());
-                String sFlyName(rSh.GetFlyName());
-                if (sOldName.ToUpperAscii() != sFlyName.ToUpperAscii())
+                OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
+                OUString sFlyName(rSh.GetFlyName().toAsciiUpperCase());
+                if (sOldName != sFlyName)
                 {
-                    String sName(sOldName);
+                    OUString sName(sOldName);
                     sal_uInt16 i = 1;
                     while (rSh.FindFlyByName(sName))
                     {
                         sName = sOldName;
-                        sName += '_';
+                        sName += "_";
                         sName += OUString::number(i++);
                     }
                     rSh.SetFlyName(sName);

@@ -2757,7 +2757,7 @@ void ScViewFunc::ChangeIndent( sal_Bool bIncrement )
 }
 
 sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
-                                const String& rType )
+                                const OUString& rType )
 {
     //  Type = P,R,C,F (and combinations)
     //! undo...
@@ -2772,8 +2772,7 @@ sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
     ScRangeData* pNewEntry = new ScRangeData( pDoc, rName, rSymbol,
             ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
                 nTab), nType );
-    String aUpType = rType;
-    aUpType.ToUpperAscii();
+    String aUpType = rType.toAsciiUpperCase();
     if ( aUpType.Search( 'P' ) != STRING_NOTFOUND )
         nType |= RT_PRINTAREA;
     if ( aUpType.Search( 'R' ) != STRING_NOTFOUND )

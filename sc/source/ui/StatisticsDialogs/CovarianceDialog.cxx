@@ -126,8 +126,6 @@ void ScCovarianceDialog::CalculateInputAndWriteToOutput( )
 void ScCovarianceDialog::WriteCovarianceFormulas(ScAddress aOutputAddress, ScRangeList aRangeList)
 {
     ScDocShell* pDocShell = mViewData->GetDocShell();
-    OUString aRowString1;
-    OUString aRowString2;
     ScAddress aAddress;
 
     SCTAB outTab = aOutputAddress.Tab();
@@ -142,8 +140,8 @@ void ScCovarianceDialog::WriteCovarianceFormulas(ScAddress aOutputAddress, ScRan
         {
             if (j >= i)
             {
-                aRangeList[i]->Format( aRowString1, SCR_ABS, mDocument, mAddressDetails );
-                aRangeList[j]->Format( aRowString2, SCR_ABS, mDocument, mAddressDetails );
+                OUString aRowString1(aRangeList[i]->Format(SCR_ABS, mDocument, mAddressDetails));
+                OUString aRowString2(aRangeList[j]->Format(SCR_ABS, mDocument, mAddressDetails));
 
                 aAddress = ScAddress(outCol, outRow, outTab);
                 aFormulaString = lclCovarTemplate.replaceAll(lclWildcardRow1, aRowString1);

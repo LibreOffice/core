@@ -559,9 +559,7 @@ OUString ScChangeAction::GetRefString(
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= SCA_TAB_3D;
 
-                OUString aTmp;
-                aTmpRange.Format(aTmp, nFlags, pDoc, pDoc->GetAddressConvention());
-                aBuf.append(aTmp);
+                aBuf.append(aTmpRange.Format(nFlags, pDoc, pDoc->GetAddressConvention()));
             }
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )
@@ -1593,7 +1591,7 @@ void ScChangeActionContent::GetRefString(
         ScAddress aTmpAddress( GetBigRange().aStart.MakeAddress() );
         if ( bFlag3D )
             nFlags |= SCA_TAB_3D;
-        aTmpAddress.Format( rStr, nFlags, pDoc, pDoc->GetAddressConvention() );
+        rStr = aTmpAddress.Format(nFlags, pDoc, pDoc->GetAddressConvention());
         if ( IsDeletedIn() )
         {
             // Insert the parentheses.

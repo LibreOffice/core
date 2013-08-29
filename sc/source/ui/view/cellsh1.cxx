@@ -325,17 +325,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = OUString('A');
+                    OUString aFlags('A');
 
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
-                    aFlags.ToUpperAscii();
+                    aFlags = aFlags.toAsciiUpperCase();
                     sal_Bool    bCont = sal_True;
 
-                    for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
+                    for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
                     {
-                        switch( aFlags.GetChar(i) )
+                        switch (aFlags[i])
                         {
                             case 'A': // all
                             nFlags |= IDF_ALL;
@@ -439,17 +439,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = OUString('A');
+                    OUString aFlags('A');
 
                     if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
-                    aFlags.ToUpperAscii();
+                    aFlags = aFlags.toAsciiUpperCase();
                     sal_Bool    bCont = sal_True;
 
-                    for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
+                    for (sal_Int32 i=0; bCont && i < aFlags.getLength(); ++i)
                     {
-                        switch( aFlags.GetChar(i) )
+                        switch (aFlags[i])
                         {
                             case 'A': // all
                             nFlags |= IDF_ALL;
@@ -885,9 +885,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                             if( ! rReq.IsAPI() )
                             {
-                                String  aAdrStr;
                                 ScAddress aAdr( nFillCol, nFillRow, 0 );
-                                aAdr.Format( aAdrStr, SCR_ABS, pDoc, pDoc->GetAddressConvention() );
+                                OUString  aAdrStr(aAdr.Format(SCR_ABS, pDoc, pDoc->GetAddressConvention()));
 
                                 rReq.AppendItem( SfxStringItem( FID_FILL_AUTO, aAdrStr ) );
                                 rReq.Done();
@@ -1057,13 +1056,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( pReqArgs->HasItem( SID_OUTLINE_MAKE, &pItem ) )
                     {
-                        String aCol = ((const SfxStringItem*)pItem)->GetValue();
-                        aCol.ToUpperAscii();
+                        OUString aCol = ((const SfxStringItem*)pItem)->GetValue();
+                        aCol = aCol.toAsciiUpperCase();
 
-                        switch( aCol.GetChar(0) )
+                        switch( aCol[0] )
                         {
-                            case 'R': bColumns=false; bOk = sal_True;break;
-                            case 'C': bColumns=sal_True; bOk = sal_True;break;
+                            case 'R': bColumns=false; bOk = true;break;
+                            case 'C': bColumns=true; bOk = true;break;
                         }
                     }
                 }
@@ -1119,13 +1118,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( pReqArgs->HasItem( SID_OUTLINE_REMOVE, &pItem ) )
                     {
-                        String aCol = ((const SfxStringItem*)pItem)->GetValue();
-                        aCol.ToUpperAscii();
+                        OUString aCol = ((const SfxStringItem*)pItem)->GetValue();
+                        aCol = aCol.toAsciiUpperCase();
 
-                        switch( aCol.GetChar(0) )
+                        switch (aCol[0])
                         {
-                            case 'R': bColumns=false; bOk = sal_True;break;
-                            case 'C': bColumns=sal_True; bOk = sal_True;break;
+                            case 'R': bColumns=false; bOk = true;break;
+                            case 'C': bColumns=true; bOk = true;break;
                         }
                     }
                 }
@@ -1256,17 +1255,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;
-                        String  aFlags = OUString('A');
+                        OUString aFlags('A');
 
                         if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
 
-                        aFlags.ToUpperAscii();
+                        aFlags = aFlags.toAsciiUpperCase();
                         sal_Bool    bCont = sal_True;
 
-                        for( xub_StrLen i=0 ; bCont && i<aFlags.Len() ; i++ )
+                        for (sal_Int32 i=0 ; bCont && i<aFlags.getLength(); ++i)
                         {
-                            switch( aFlags.GetChar(i) )
+                            switch (aFlags[i])
                             {
                                 case 'A': // all
                                 nFlags |= IDF_ALL;

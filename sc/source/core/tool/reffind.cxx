@@ -270,7 +270,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
         if ( nResult & SCA_VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
-            aAddr.Format(aExpr, nFlags, mpDoc, aDetails);
+            aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
 
             sal_Int32 nAbsStart = nStartPos+aResult.getLength()+aSep.getLength();
 

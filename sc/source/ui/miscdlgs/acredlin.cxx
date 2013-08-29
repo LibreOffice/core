@@ -253,8 +253,7 @@ void ScAcceptChgDlg::Init()
     if( !aChangeViewSet.GetTheRangeList().empty() )
     {
         const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
-        String aRefStr;
-        pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
+        OUString aRefStr(pRangeEntry->Format(ABS_DREF3D, pDoc));
         pTPFilter->SetRange(aRefStr);
     }
 

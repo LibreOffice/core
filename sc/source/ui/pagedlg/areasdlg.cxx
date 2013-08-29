@@ -202,7 +202,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
 
         if ( pEdPrintArea == pRefInputEdit )
         {
-            rRef.Format( aStr, SCR_ABS, pDoc, eConv );
+            aStr = rRef.Format(SCR_ABS, pDoc, eConv);
             String aVal = pEdPrintArea->GetText();
             Selection aSel = pEdPrintArea->GetSelection();
             aSel.Justify();
@@ -312,7 +312,7 @@ void ScPrintAreasDlg::Impl_Reset()
         {
             if ( aStrRange.Len() )
                 aStrRange += sep;
-            pPrintRange->Format( aOne, SCR_ABS, pDoc, eConv );
+            aOne = pPrintRange->Format(SCR_ABS, pDoc, eConv);
             aStrRange += aOne;
         }
     }
@@ -354,7 +354,7 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
         ScRange aRange;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         lcl_CheckRepeatString(aRangeStr, pDoc, pEdRepeatRow == pEd, &aRange);
-        aRange.Format(aRangeStr, SCR_ABS, pDoc, eConv);
+        aRangeStr = aRange.Format(SCR_ABS, pDoc, eConv);
     }
 
     rItem.SetValue( aRangeStr );
@@ -445,12 +445,12 @@ void ScPrintAreasDlg::Impl_FillLists()
     formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
     if ( bSimple )
-        aRange.Format( aStrRange, SCR_ABS, pDoc, eConv );
+        aStrRange = aRange.Format(SCR_ABS, pDoc, eConv);
     else
     {
         ScRangeListRef aList( new ScRangeList );
         pViewData->GetMarkData().FillRangeListWithMarks( aList, false );
-        aList->Format( aStrRange, SCR_ABS, pDoc, eConv );
+        aList->Format(aStrRange, SCR_ABS, pDoc, eConv);
     }
 
     pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new String( aStrRange ) );
@@ -477,7 +477,7 @@ void ScPrintAreasDlg::Impl_FillLists()
         {
             if (itr->second->HasType(RT_PRINTAREA))
             {
-                aRange.Format(aSymbol, SCR_ABS, pDoc, eConv);
+                aSymbol = aRange.Format(SCR_ABS, pDoc, eConv);
                 pLbPrintArea->SetEntryData(
                     pLbPrintArea->InsertEntry(aName),
                     new String(aSymbol) );
@@ -654,11 +654,10 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
     // set list box selection according to edit field
     sal_uInt16  nEntryCount = pLb->GetEntryCount();
-    String  aStrEd( pEd->GetText() );
-    String  aEdUpper = aStrEd;
-    aEdUpper.ToUpperAscii();
+    OUString aStrEd( pEd->GetText() );
+    OUString aEdUpper = aStrEd.toAsciiUpperCase();
 
-    if ( (nEntryCount > nFirstCustomPos) && aStrEd.Len() > 0 )
+    if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
     {
         sal_Bool    bFound  = false;
         String* pSymbol = NULL;
@@ -667,13 +666,13 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
             pSymbol = (String*)pLb->GetEntryData( i );
-            bFound  = ( (*pSymbol == aStrEd) || (*pSymbol == aEdUpper) );
+            bFound  = ( pSymbol->Equals(aStrEd) || pSymbol->Equals(aEdUpper) );
         }
 
         pLb->SelectEntryPos( bFound ? i-1 : nUserDefPos );
     }
     else
-        pLb->SelectEntryPos( aStrEd.Len() ? nUserDefPos : 0 );
+        pLb->SelectEntryPos( !aStrEd.isEmpty() ? nUserDefPos : 0 );
 
     return 0;
 }
@@ -878,14 +877,11 @@ static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, b
     const ScAddress& rEnd   = pRange->aEnd;
 
     const sal_uInt16 nFmt = bIsRow ? (SCA_VALID_ROW | SCA_ROW_ABSOLUTE) : (SCA_VALID_COL | SCA_COL_ABSOLUTE);
-    String aTmpStr;
-    rStart.Format(aTmpStr, nFmt, pDoc, eConv);
-    rStr += aTmpStr;
+    rStr += rStart.Format(nFmt, pDoc, eConv);
     if ((bIsRow && rStart.Row() != rEnd.Row()) || (!bIsRow && rStart.Col() != rEnd.Col()))
     {
         rStr += ScCompiler::GetNativeSymbol(ocRange);
-        rEnd.Format(aTmpStr, nFmt, pDoc, eConv);
-        rStr += aTmpStr;
+        rStr += rEnd.Format(nFmt, pDoc, eConv);
     }
 }
 

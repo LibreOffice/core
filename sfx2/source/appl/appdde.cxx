@@ -503,9 +503,9 @@ sal_Bool SfxApplication::InitializeDde()
         // Config path as a topic becauseof multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
         aOfficeLockFile.insertName( "soffice.lck" );
-        String aService( SfxDdeServiceName_Impl(
+        OUString aService( SfxDdeServiceName_Impl(
                     aOfficeLockFile.GetMainURL(INetURLObject::DECODE_TO_IURI) ) );
-        aService.ToUpperAscii();
+        aService = aService.toAsciiUpperCase();
         pAppData_Impl->pDdeService2 = new ImplDdeService( aService );
         pAppData_Impl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
         pAppData_Impl->pDdeService2->AddTopic( *pAppData_Impl->pTriggerTopic );

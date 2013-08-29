@@ -436,14 +436,13 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
         if(rRef.aStart != rRef.aEnd)
             RefInputStart(pEdit);
 
-        OUString aRefStr;
         sal_uInt16 n = 0;
         if(mpLastEdit && mpLastEdit != &maEdRange)
             n = ABS_DREF3D;
         else
             n = ABS_DREF;
 
-        rRef.Format( aRefStr, n, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
+        OUString aRefStr(rRef.Format(n, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0)));
         pEdit->SetRefString( aRefStr );
     }
 }

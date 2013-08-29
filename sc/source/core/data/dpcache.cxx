@@ -114,9 +114,7 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
         aBuf.append(sal_Unicode(' '));
 
         ScAddress aColAddr(nCol, 0, 0);
-        OUString aColStr;
-        aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
-        aBuf.append(aColStr);
+        aBuf.append(aColAddr.Format(SCA_VALID_COL, NULL));
         aDocStr = aBuf.makeStringAndClear();
     }
     return aDocStr;

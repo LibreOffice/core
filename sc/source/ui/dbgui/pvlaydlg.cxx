@@ -179,9 +179,8 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
             maEdInPos.SetText(aRangeName);
         else
         {
-            OUString aStr;
             maOldRange = p->GetSourceRange();
-            maOldRange.Format(aStr, SCR_ABS_3D, mpDoc, mpDoc->GetAddressConvention());
+            OUString aStr(maOldRange.Format(SCR_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
             maEdInPos.SetText(aStr);
         }
     }
@@ -221,14 +220,13 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         ScAreaNameIterator aIter( mpDoc );
         OUString aName;
         ScRange aRange;
-        OUString aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             if ( !aIter.WasDBName() )       // hier keine DB-Bereiche !
             {
                 sal_uInt16 nInsert = maLbOutPos.InsertEntry( aName );
 
-                aRange.aStart.Format( aRefStr, SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention() );
+                OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention()));
                 maRefStrs.push_back(new OUString(aRefStr));
                 maLbOutPos.SetEntryData(nInsert, &maRefStrs.back());
             }
@@ -248,10 +246,10 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
         if ( maPivotData.nTab != MAXTAB+1 )
         {
-            OUString aStr;
-            ScAddress( maPivotData.nCol,
-                       maPivotData.nRow,
-                       maPivotData.nTab ).Format( aStr, STD_FORMAT, mpDoc, mpDoc->GetAddressConvention() );
+            OUString aStr =
+                ScAddress( maPivotData.nCol,
+                           maPivotData.nRow,
+                           maPivotData.nTab ).Format(STD_FORMAT, mpDoc, mpDoc->GetAddressConvention());
             maEdOutPos.SetText( aStr );
             maOutputRefStr = aStr;
             EdOutModifyHdl(0);
@@ -1470,14 +1468,12 @@ void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
     if (mpRefInputEdit == &maEdInPos)
     {
-        OUString aRefStr;
-        rRef.Format( aRefStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+        OUString aRefStr(rRef.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         mpRefInputEdit->SetRefString(aRefStr);
     }
     else if (mpRefInputEdit == &maEdOutPos)
     {
-        OUString aRefStr;
-        rRef.aStart.Format( aRefStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
+        OUString aRefStr(rRef.aStart.Format(STD_FORMAT, pDoc, pDoc->GetAddressConvention()));
         mpRefInputEdit->SetRefString(aRefStr);
         maOutputRefStr = aRefStr;
         OutputPosUpdated();

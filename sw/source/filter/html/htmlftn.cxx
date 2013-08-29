@@ -190,7 +190,6 @@ void SwHTMLParser::InsertFootEndNote( const OUString& rName, sal_Bool bEndNote,
     pFootEndNoteImpl->sName = rName;
     if( pFootEndNoteImpl->sName.getLength() > 3 )
         pFootEndNoteImpl->sName = pFootEndNoteImpl->sName.copy( 0, pFootEndNoteImpl->sName.getLength() - 3 );
-    // TODO: ToUpperAscii???
     pFootEndNoteImpl->sName = pFootEndNoteImpl->sName.toAsciiUpperCase();
     pFootEndNoteImpl->bEndNote = bEndNote;
     pFootEndNoteImpl->bFixed = bFixed;
@@ -233,14 +232,13 @@ void SwHTMLParser::DeleteFootEndNoteImpl()
     pFootEndNoteImpl = 0;
 }
 
-SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
+SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 {
     SwNodeIndex *pStartNodeIdx = 0;
 
     if( pFootEndNoteImpl )
     {
-        String aName( rName );
-        aName.ToUpperAscii();
+        OUString aName(rName.toAsciiUpperCase());
 
         size_t nCount = pFootEndNoteImpl->aNames.size();
         for(size_t i = 0; i < nCount; ++i)

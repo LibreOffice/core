@@ -132,8 +132,7 @@ public:
 
     void operator() (const ScRange* p)
     {
-        String aStr;
-        p->Format(aStr, mnFlags, mpDoc, meConv);
+        OUString aStr(p->Format(mnFlags, mpDoc, meConv));
         if (mbFirst)
             mbFirst = false;
         else

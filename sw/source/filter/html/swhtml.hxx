@@ -863,7 +863,7 @@ private:
     void InsertFootEndNote( const OUString& rName, sal_Bool bEndNote, sal_Bool bFixed );
     void FinishFootEndNote();
     void InsertFootEndNoteText();
-    SwNodeIndex *GetFootEndNoteSection( const String& rName );
+    SwNodeIndex *GetFootEndNoteSection( const OUString& rName );
     void DeleteFootEndNoteImpl();
 
     xub_StrLen StripTrailingLF();

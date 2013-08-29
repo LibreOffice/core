@@ -98,7 +98,7 @@ class ScByteSequenceToString
 public:
     //  rAny must contain Sequence<sal_Int8>,
     //  may or may not contain 0-bytes at the end
-    static sal_Bool GetString( String& rString, const com::sun::star::uno::Any& rAny,
+    static sal_Bool GetString( OUString& rString, const com::sun::star::uno::Any& rAny,
                             sal_uInt16 nEncoding );
 };
 

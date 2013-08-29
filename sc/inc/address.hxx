@@ -293,9 +293,7 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
-                 const Details& rDetails = detailsOOOa1) const;
-    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
+    SC_DLLPUBLIC OUString Format( sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
@@ -494,11 +492,8 @@ public:
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
-                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
-
-    SC_DLLPUBLIC void Format( OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
-                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
+    SC_DLLPUBLIC OUString Format(sal_uInt16 = 0, const ScDocument* = NULL,
+                 const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
@@ -785,14 +780,14 @@ bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);
 
-inline void ScColToAlpha( String& rStr, SCCOL nCol)
+inline void ScColToAlpha( OUString& rStr, SCCOL nCol)
 {
     OUStringBuffer aBuf(2);
     ScColToAlpha( aBuf, nCol);
-    rStr.Append( aBuf.getStr(), static_cast<xub_StrLen>(aBuf.getLength()));
+    rStr += aBuf.makeStringAndClear();
 }
 
-inline String ScColToAlpha( SCCOL nCol )
+inline OUString ScColToAlpha( SCCOL nCol )
 {
     OUStringBuffer aBuf(2);
     ScColToAlpha( aBuf, nCol);

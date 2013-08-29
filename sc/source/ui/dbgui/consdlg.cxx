@@ -172,8 +172,8 @@ void ScConsolidateDlg::Init()
         const ScArea& rArea = *(theConsData.ppDataAreas[i] );
         if ( rArea.nTab < pDoc->GetTableCount() )
         {
-            ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
-                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( aStr,
+            aStr = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
+                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format(
                         SCR_ABS_3D, pDoc, eConv );
             pLbConsAreas->InsertEntry( aStr );
         }
@@ -181,12 +181,12 @@ void ScConsolidateDlg::Init()
 
     if ( theConsData.nTab < pDoc->GetTableCount() )
     {
-        ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
-                ).Format( aStr, SCA_ABS_3D, pDoc, eConv );
+        aStr = ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
+                ).Format( SCA_ABS_3D, pDoc, eConv );
         pEdDestArea->SetText( aStr );
     }
     else
-        pEdDestArea->SetText( EMPTY_STRING );
+        pEdDestArea->SetText(OUString());
 
     //----------------------------------------------------------
 
@@ -209,13 +209,12 @@ void ScConsolidateDlg::Init()
         pAreaData = new ScAreaData[nAreaDataCount];
 
         String aStrName;
-        String aStrArea;
         sal_uInt16 nAt = 0;
         ScRange aRange;
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            aRange.Format( aStrArea, SCA_ABS_3D, pDoc, eConv );
+            String aStrArea(aRange.Format(SCA_ABS_3D, pDoc, eConv));
             pAreaData[nAt++].Set( aStrName, aStrArea, aIter.WasDBName() );
         }
     }
@@ -223,7 +222,7 @@ void ScConsolidateDlg::Init()
     FillAreaLists();
     ModifyHdl( pEdDestArea );
     pLbDataArea->SelectEntryPos( 0 );
-    pEdDataArea->SetText( EMPTY_STRING );
+    pEdDataArea->SetText(OUString());
     pEdDataArea->GrabFocus();
 
     //aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
@@ -276,9 +275,9 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             nFmt |= SCA_TAB2_3D;
 
         if ( pRefInputEdit == pEdDataArea)
-            rRef.Format( aStr, nFmt, pDocP, eConv );
+            aStr = rRef.Format(nFmt, pDocP, eConv);
         else if ( pRefInputEdit == pEdDestArea )
-            rRef.aStart.Format( aStr, nFmt, pDocP, eConv );
+            aStr = rRef.aStart.Format(nFmt, pDocP, eConv);
 
         pRefInputEdit->SetRefString( aStr );
     }
@@ -471,9 +470,9 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
                     if ( ppAreas[i] )
                     {
                         const ScArea& rArea = *(ppAreas[i]);
-                        ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
+                        aNewArea = ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                                 rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                                ).Format( aNewArea, SCR_ABS_3D, pDoc, eConv );
+                                ).Format(SCR_ABS_3D, pDoc, eConv);
 
                         if ( pLbConsAreas->GetEntryPos( aNewArea )
                              == LISTBOX_ENTRY_NOTFOUND )

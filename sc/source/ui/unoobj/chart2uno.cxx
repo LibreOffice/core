@@ -3159,8 +3159,7 @@ public:
                     String aString = ScGlobal::GetRscString(STR_COLUMN);
                     aString += ' ';
                     ScAddress aPos( nCol, 0, 0 );
-                    String aColStr;
-                    aPos.Format( aColStr, SCA_VALID_COL, NULL );
+                    OUString aColStr(aPos.Format(SCA_VALID_COL, NULL));
                     aString += aColStr;
                     pArr[mnCount] = aString;
                 }

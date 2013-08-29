@@ -1615,26 +1615,26 @@ sal_uInt16 ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
 }
 
 static inline void
-lcl_a1_append_c ( String &r, int nCol, bool bIsAbs )
+lcl_a1_append_c ( OUString &r, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
-        r += '$';
+        r += "$";
     ScColToAlpha( r, sal::static_int_cast<SCCOL>(nCol) );
 }
 
 static inline void
-lcl_a1_append_r ( String &r, int nRow, bool bIsAbs )
+lcl_a1_append_r ( OUString &r, int nRow, bool bIsAbs )
 {
     if ( bIsAbs )
-        r += '$';
+        r += "$";
     r += OUString::number( nRow+1 );
 }
 
 static inline void
-lcl_r1c1_append_c ( String &r, int nCol, bool bIsAbs,
+lcl_r1c1_append_c ( OUString &r, int nCol, bool bIsAbs,
                     const ScAddress::Details& rDetails )
 {
-    r += 'C';
+    r += "C";
     if (bIsAbs)
     {
         r += OUString::number( nCol + 1 );
@@ -1648,10 +1648,10 @@ lcl_r1c1_append_c ( String &r, int nCol, bool bIsAbs,
     }
 }
 static inline void
-lcl_r1c1_append_r ( String &r, int nRow, bool bIsAbs,
+lcl_r1c1_append_r ( OUString &r, int nRow, bool bIsAbs,
                     const ScAddress::Details& rDetails )
 {
-    r += 'R';
+    r += "R";
     if (bIsAbs)
     {
         r += OUString::number( nRow + 1 );
@@ -1691,26 +1691,17 @@ getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
-void ScAddress::Format( OUString& r, sal_uInt16 nFlags, const ScDocument* pDoc,
+OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
                         const Details& rDetails) const
 {
-    String aStr;
-    Format(aStr, nFlags, pDoc, rDetails);
-    r = aStr;
-}
-
-void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
-                        const Details& rDetails) const
-{
-    r.Erase();
+    OUString r;
     if( nFlags & SCA_VALID )
         nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
     if( pDoc && (nFlags & SCA_VALID_TAB ) )
     {
         if ( nTab >= pDoc->GetTableCount() )
         {
-            r = ScGlobal::GetRscString( STR_NOREF_STR );
-            return;
+            return ScGlobal::GetRscString( STR_NOREF_STR );
         }
         if( nFlags & SCA_TAB_3D )
         {
@@ -1745,9 +1736,9 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
             case formula::FormulaGrammar::CONV_OOO:
                 r += aDocName;
                 if( nFlags & SCA_TAB_ABSOLUTE )
-                    r += '$';
+                    r += "$";
                 r += aTabName;
-                r += '.';
+                r += ".";
                 break;
 
             case formula::FormulaGrammar::CONV_XL_A1:
@@ -1755,12 +1746,12 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
             case formula::FormulaGrammar::CONV_XL_OOX:
                 if (aDocName.Len() > 0)
                 {
-                    r += '[';
+                    r += "[";
                     r += aDocName;
-                    r += ']';
+                    r += "]";
                 }
                 r += aTabName;
-                r += '!';
+                r += "!";
                 break;
             }
         }
@@ -1784,6 +1775,7 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_c ( r, nCol, nFlags & SCA_COL_ABSOLUTE, rDetails );
         break;
     }
+    return r;
 }
 
 static void
@@ -1819,7 +1811,7 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
 }
 
 static void
-lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
+lcl_ScRange_Format_XL_Header( OUString& r, const ScRange& rRange,
                               sal_uInt16 nFlags, const ScDocument* pDoc,
                               const ScAddress::Details& rDetails )
 {
@@ -1830,9 +1822,9 @@ lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
                           aTabName, aDocName );
         if( aDocName.Len() > 0 )
         {
-            r += '[';
+            r += "[";
             r += aDocName;
-            r += ']';
+            r += "]";
         }
         r += aTabName;
 
@@ -1840,23 +1832,22 @@ lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
         {
             lcl_Split_DocTab( pDoc, rRange.aEnd.Tab(), rDetails, nFlags,
                               aTabName, aDocName );
-            r += ':';
+            r += ":";
             r += aTabName;
         }
-        r += '!';
+        r += "!";
     }
 }
 
-void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
+OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
                       const ScAddress::Details& rDetails ) const
 {
-    r.Erase();
     if( !( nFlags & SCA_VALID ) )
     {
-        r = ScGlobal::GetRscString( STR_NOREF_STR );
-        return;
+        return ScGlobal::GetRscString( STR_NOREF_STR );
     }
 
+    OUString r;
 #define absrel_differ(nFlags, mask) (((nFlags) & (mask)) ^ (((nFlags) >> 4) & (mask)))
     switch( rDetails.eConv ) {
     default :
@@ -1864,19 +1855,18 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
         bool bOneTab = (aStart.Tab() == aEnd.Tab());
         if ( !bOneTab )
             nFlags |= SCA_TAB_3D;
-        aStart.Format( r, nFlags, pDoc, rDetails );
+        r = aStart.Format(nFlags, pDoc, rDetails);
         if( aStart != aEnd ||
             absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
             absrel_differ( nFlags, SCA_ROW_ABSOLUTE ))
         {
-            String aName;
             nFlags = ( nFlags & SCA_VALID ) | ( ( nFlags >> 4 ) & 0x070F );
             if ( bOneTab )
                 pDoc = NULL;
             else
                 nFlags |= SCA_TAB_3D;
-            aEnd.Format( aName, nFlags, pDoc, rDetails );
-            r += ':';
+            OUString aName(aEnd.Format(nFlags, pDoc, rDetails));
+            r += ":";
             r += aName;
         }
     }
@@ -1889,14 +1879,14 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
         {
             // Full col refs always require 2 rows (2:2)
             lcl_a1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE );
-            r += ':';
+            r += ":";
             lcl_a1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE );
         }
         else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
         {
             // Full row refs always require 2 cols (A:A)
             lcl_a1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE );
-            r += ':';
+            r += ":";
             lcl_a1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE );
         }
         else
@@ -1907,7 +1897,7 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ':';
+                r += ":";
                 lcl_a1_append_c ( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE );
                 lcl_a1_append_r ( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE );
             }
@@ -1921,7 +1911,7 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE, rDetails );
             if( aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ':';
+                r += ":";
                 lcl_r1c1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE, rDetails );
             }
         }
@@ -1930,7 +1920,7 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE, rDetails );
             if( aStart.Col() != aEnd.Col() ||
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE )) {
-                r += ':';
+                r += ":";
                 lcl_r1c1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE, rDetails );
             }
         }
@@ -1942,21 +1932,14 @@ void ScRange::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
                 absrel_differ( nFlags, SCA_COL_ABSOLUTE ) ||
                 aStart.Row() != aEnd.Row() ||
                 absrel_differ( nFlags, SCA_ROW_ABSOLUTE )) {
-                r += ':';
+                r += ":";
                 lcl_r1c1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE, rDetails );
                 lcl_r1c1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE, rDetails );
             }
         }
     }
 #undef  absrel_differ
-}
-
-void ScRange::Format( OUString& r, sal_uInt16 nFlags, const ScDocument* pDoc,
-                      const ScAddress::Details& rDetails ) const
-{
-    String aStr;
-    Format(aStr, nFlags, pDoc, rDetails);
-    r = aStr;
+    return r;
 }
 
 bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
@@ -1993,7 +1976,7 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 String ScAddress::GetColRowString( bool bAbsolute,
                                    const Details& rDetails ) const
 {
-    String aString;
+    OUString aString;
 
     switch( rDetails.eConv )
     {
@@ -2002,12 +1985,12 @@ String ScAddress::GetColRowString( bool bAbsolute,
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
     if (bAbsolute)
-        aString.Append( '$' );
+        aString += "$";
 
     ScColToAlpha( aString, nCol);
 
     if ( bAbsolute )
-        aString.Append( '$' );
+        aString += "$";
 
     aString += OUString::number(nRow+1);
         break;
@@ -2030,7 +2013,6 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
     if ( Tab()+1 > pDoc->GetTableCount() )
         return ScGlobal::GetRscString( STR_NOREF_STR );
 
-    String aString;
     sal_uInt16 nFlags = SCA_VALID;
     if ( nActTab != Tab() )
     {
@@ -2043,9 +2025,7 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
     if ( !bRelRow )
         nFlags |= SCA_ROW_ABSOLUTE;
 
-    aAdr.Format( aString, nFlags, pDoc, rDetails );
-
-    return aString;
+    return aAdr.Format(nFlags, pDoc, rDetails);
 }
 
 //------------------------------------------------------------------------

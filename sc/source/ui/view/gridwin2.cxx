@@ -1028,12 +1028,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                     const ScRange* pOld = pDoc->GetPrintRange( nTab, nPos );
                     if ( pOld )
                     {
-                        String aTemp;
+                        OUString aTemp;
                         if ( *pOld != aPagebreakSource )
-                            pOld->Format( aTemp, SCA_VALID );
+                            aTemp = pOld->Format(SCA_VALID);
                         else if ( !bHide )
-                            aPagebreakDrag.Format( aTemp, SCA_VALID );
-                        if (aTemp.Len())
+                            aTemp = aPagebreakDrag.Format(SCA_VALID);
+                        if (!aTemp.isEmpty())
                         {
                             if ( aNewRanges.Len() )
                                 aNewRanges += ';';
@@ -1043,7 +1043,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                 }
             }
             else if (!bHide)
-                aPagebreakDrag.Format( aNewRanges, SCA_VALID );
+                aNewRanges = aPagebreakDrag.Format(SCA_VALID);
 
             pViewFunc->SetPrintRanges( pDoc->IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, false );
         }

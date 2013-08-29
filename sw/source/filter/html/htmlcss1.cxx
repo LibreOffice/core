@@ -1949,12 +1949,11 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
     }
     if( pDir && pDir->Len() )
     {
-        String aValue( *pDir );
-        aValue.ToUpperAscii();
+        OUString aValue( *pDir );
         SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-        if( aValue.EqualsAscii( "LTR" ) )
+        if (aValue.equalsIgnoreAsciiCase("LTR"))
             eDir = FRMDIR_HORI_LEFT_TOP;
-        else if( aValue.EqualsAscii( "RTL" ) )
+        else if (aValue.equalsIgnoreAsciiCase("RTL"))
             eDir = FRMDIR_HORI_RIGHT_TOP;
 
         if( FRMDIR_ENVIRONMENT != eDir )

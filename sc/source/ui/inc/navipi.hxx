@@ -145,9 +145,9 @@ private:
 
     void    EvalText        ();
     void    ExecuteCol      ();
-    SCCOL   AlphaToNum      ( String& rStr );
-    SCCOL   NumStrToAlpha   ( String& rStr );
-    SCCOL   NumToAlpha      ( SCCOL nColNo, String& rStr );
+    SCCOL   AlphaToNum      ( OUString& rStr );
+    SCCOL   NumStrToAlpha   ( OUString& rStr );
+    SCCOL   NumToAlpha      ( SCCOL nColNo, OUString& rStr );
 };
 
 

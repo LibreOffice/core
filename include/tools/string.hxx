@@ -227,7 +227,6 @@ public:
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
     UniString&          ToLowerAscii();
-    UniString&          ToUpperAscii();
 
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;

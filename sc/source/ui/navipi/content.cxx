@@ -249,9 +249,9 @@ sal_uLong ScContentTree::GetChildIndex( SvTreeListEntry* pEntry ) const
     return nChild;
 }
 
-static String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
+static OUString lcl_GetDBAreaRange( ScDocument* pDoc, const OUString& rDBName )
 {
-    String aRet;
+    OUString aRet;
     if (pDoc)
     {
         ScDBCollection* pDbNames = pDoc->GetDBCollection();
@@ -260,7 +260,7 @@ static String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
         {
             ScRange aRange;
             pData->GetArea(aRange);
-            aRange.Format(aRet, SCR_ABS_3D, pDoc);
+            aRet = aRange.Format(SCR_ABS_3D, pDoc);
         }
     }
     return aRet;
@@ -325,9 +325,8 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
                 if( pLink )
                 {
                     ScRange aRange = pLink->GetDestArea();
-                    String aRangeStr;
                     ScDocument* pSrcDoc = GetSourceDocument();
-                    aRange.Format( aRangeStr, SCR_ABS_3D, pSrcDoc, pSrcDoc->GetAddressConvention() );
+                    OUString aRangeStr(aRange.Format(SCR_ABS_3D, pSrcDoc, pSrcDoc->GetAddressConvention()));
                     pParentWindow->SetCurrentCellStr( aRangeStr );
                 }
             }

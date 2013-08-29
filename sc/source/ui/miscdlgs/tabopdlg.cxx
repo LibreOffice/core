@@ -144,7 +144,7 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
-        String      aStr;
+        OUString      aStr;
         sal_uInt16      nFmt = ( rRef.aStart.Tab() == nCurTab )
                                 ? SCR_ABS
                                 : SCR_ABS_3D;
@@ -153,17 +153,17 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            rRef.Format( aStr, nFmt, pDocP, aDetails );
+            aStr = rRef.Format(nFmt, pDocP, aDetails);
         }
         else if ( pEdActive == &aEdRowCell )
         {
             theRowCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDocP, aDetails );
+            aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
         }
         else if ( pEdActive == &aEdColCell )
         {
             theColCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDocP, aDetails );
+            aStr = rRef.aStart.Format(nFmt, pDocP, aDetails);
         }
 
         pEdActive->SetRefString( aStr );

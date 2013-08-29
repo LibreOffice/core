@@ -85,7 +85,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 {
     ScDocument          aDocument;
 
-    String              aDdeTextFmt;
+    OUString            aDdeTextFmt;
 
     double              nPrtToScreenFactor;
     DocShell_Impl*      pImpl;
@@ -376,7 +376,7 @@ public:
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
 
-    const String& GetDdeTextFmt() const { return aDdeTextFmt; }
+    const OUString& GetDdeTextFmt() const { return aDdeTextFmt; }
 
     SfxBindings*    GetViewBindings();
 

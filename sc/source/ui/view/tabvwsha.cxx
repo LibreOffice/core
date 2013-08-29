@@ -229,8 +229,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_CURRENTCELL:
                 {
                     ScAddress aScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(), 0 );
-                    String  aAddr;
-                    aScAddress.Format( aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
+                    OUString  aAddr(aScAddress.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
                     SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
 
                     rSet.Put( aPosItem );
