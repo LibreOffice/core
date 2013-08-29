@@ -26,6 +26,7 @@
 #include <rtl/textenc.h>
 #include <editeng/svxenum.hxx>
 #include <tools/solar.h>
+#include <boost/optional.hpp>
 
 #include <swtypes.hxx>
 #include <wrtswtbl.hxx>
@@ -301,8 +302,7 @@ public:
 
     /// The style of the page numbers.
     ///
-    /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber ) = 0;
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber ) = 0;
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) = 0;

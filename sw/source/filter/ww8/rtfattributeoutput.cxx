@@ -1241,14 +1241,14 @@ void RtfAttributeOutput::SectionBiDi( bool bBiDi )
     m_rExport.Strm() << (bBiDi ? OOO_STRING_SVTOOLS_RTF_RTLSECT : OOO_STRING_SVTOOLS_RTF_LTRSECT);
 }
 
-void RtfAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
+void RtfAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    if (nPageRestartNumber > 0)
+    if ( oPageRestartNumber )
     {
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGNSTARTS);
-        m_aSectionBreaks.append((sal_Int32)nPageRestartNumber);
+        m_aSectionBreaks.append((sal_Int32)oPageRestartNumber.get());
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGNRESTART);
     }
 

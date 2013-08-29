@@ -1515,7 +1515,14 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             {
                 String sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
-                m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
+
+                //m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
+                ::boost::optional<sal_uInt16> oNumOffset = ((const SwFmtPageDesc*)pItem)->GetNumOffset();
+                if (oNumOffset)
+                    m_pPageNoNF->SetValue(oNumOffset.get());
+                else
+                    m_pPageNoNF->SetValue(0);   // ADAM Is this correct? Or should I call 'SetValue' only when 'oNumOffset' is set ?
+
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
                 if ( sPageDesc.Len() &&
