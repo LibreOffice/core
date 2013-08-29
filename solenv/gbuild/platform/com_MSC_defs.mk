@@ -266,6 +266,6 @@ gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
 
 # need windows path with backslashes here
-gb_Helper_set_ld_path := PATH="$(shell cygpath -w $(OUTDIR)/bin)"$${PATH:+:$$PATH}
+gb_Helper_set_ld_path := PATH="$(shell cygpath -w $(OUTDIR)/bin)"
 
 # vim: set noet sw=4:
