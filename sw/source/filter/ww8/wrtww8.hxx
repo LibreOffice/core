@@ -23,6 +23,7 @@
 #include <tools/solar.h>        // UINTXX
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
+#include <boost/optional.hpp>
 
 #include <map>
 #include <vector>
@@ -151,17 +152,17 @@ struct WW8_SepInfo
     const SwNode* pPDNd;
     const SwTxtNode* pNumNd;
     sal_uLong  nLnNumRestartNo;
-    sal_uInt16 nPgRestartNo;
+    ::boost::optional<sal_uInt16> oPgRestartNo;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(0)
+        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), oPgRestartNo(boost::none)
 
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt,
-        sal_uLong nLnRestart, sal_uInt16 nPgRestart = 0, const SwNode* pNd = NULL )
+        sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none, const SwNode* pNd = NULL )
         : pPageDesc( pPD ), pSectionFmt( pFmt ), pPDNd( pNd ), pNumNd( 0 ),
-          nLnNumRestartNo( nLnRestart ), nPgRestartNo( nPgRestart )
+          nLnNumRestartNo( nLnRestart ), oPgRestartNo( oPgRestart )
     {}
 
     bool IsProtected() const;

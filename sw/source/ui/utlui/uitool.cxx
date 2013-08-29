@@ -579,6 +579,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     // Page number
     if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_PARA_PAGENUM, sal_False, &pItem))
     {
+        // ADAM
         aPgDesc.SetNumOffset(((SfxUInt16Item*)pItem)->GetValue());
         bChanged = true;
     }
@@ -628,7 +629,12 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
             if( ((SwFmtPageDesc*)pItem)->GetPageDesc() )
             {
                 aName = ((SwFmtPageDesc*)pItem)->GetPageDesc()->GetName();
-                nPageNum = ((SwFmtPageDesc*)pItem)->GetNumOffset();
+                // ADAM
+                ::boost::optional<sal_uInt16> oNumOffset = ((SwFmtPageDesc*)pItem)->GetNumOffset();
+                if (oNumOffset)
+                    nPageNum = oNumOffset.get();
+                else
+                    nPageNum = 0;
             }
             rCoreSet.ClearItem( RES_PAGEDESC );
             // Page number

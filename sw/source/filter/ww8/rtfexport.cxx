@@ -1105,7 +1105,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, 
     }
 
     // numbering type
-    AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), 0);
+    AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), boost::none);
 
     pAktPageDesc = pSave;
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
