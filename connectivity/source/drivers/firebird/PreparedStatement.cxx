@@ -331,7 +331,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
 }
 
 template <typename T>
-void OPreparedStatement::setValue(sal_Int32 nIndex, T nValue, ISC_SHORT nType)
+void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     throw(SQLException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
@@ -380,13 +380,13 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 nIndex, sal_Int64 nValue)
 void SAL_CALL OPreparedStatement::setFloat(sal_Int32 nIndex, float nValue)
     throw(SQLException, RuntimeException)
 {
-    setValue< sal_Int64 >(nIndex, nValue, SQL_FLOAT);
+    setValue< float >(nIndex, nValue, SQL_FLOAT);
 }
 
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 nIndex, double nValue)
     throw(SQLException, RuntimeException)
 {
-    setValue< sal_Int64 >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
+    setValue< double >(nIndex, nValue, SQL_DOUBLE); // TODO: SQL_D_FLOAT?
 }
 
 // -------------------------------------------------------------------------
