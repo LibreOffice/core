@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
 
     XPropertyListRef pList = GetList();
 
-    if( pList->GetName().Len() )
+    if( !pList->GetName().isEmpty() )
     {
         aFile.Append( pList->GetName() );
 

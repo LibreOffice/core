@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pGradientList->GetName().Len() )
+    if( !pGradientList->GetName().isEmpty() )
     {
         aFile.Append( pGradientList->GetName() );
 

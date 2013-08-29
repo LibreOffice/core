@@ -845,7 +845,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pBitmapList->GetName().Len() )
+    if( !pBitmapList->GetName().isEmpty() )
     {
         aFile.Append( pBitmapList->GetName() );
 

@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pDashList->GetName().Len() )
+    if( !pDashList->GetName().isEmpty() )
     {
         aFile.Append( pDashList->GetName() );
 

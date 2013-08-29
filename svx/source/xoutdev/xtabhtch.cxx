@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-XHatchList::XHatchList(const String& rPath)
+XHatchList::XHatchList(const OUString& rPath)
   : XPropertyList( XHATCH_LIST, rPath )
 {
 }

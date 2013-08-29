@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-XDashList::XDashList(const String& rPath)
+XDashList::XDashList(const OUString& rPath)
     : XPropertyList(XDASH_LIST, rPath)
     , maBitmapSolidLine()
     , maStringSolidLine()
@@ -202,9 +202,9 @@ Bitmap XDashList::GetBitmapForUISolidLine() const
     return maBitmapSolidLine;
 }
 
-String XDashList::GetStringForUiSolidLine() const
+OUString XDashList::GetStringForUiSolidLine() const
 {
-    if(!maStringSolidLine.Len())
+    if(maStringSolidLine.isEmpty())
     {
         const_cast< XDashList* >(this)->maStringSolidLine = ResId(RID_SVXSTR_SOLID, DIALOG_MGR()).toString();
     }
@@ -212,9 +212,9 @@ String XDashList::GetStringForUiSolidLine() const
     return maStringSolidLine;
 }
 
-String XDashList::GetStringForUiNoLine() const
+OUString XDashList::GetStringForUiNoLine() const
 {
-    if(!maStringNoLine.Len())
+    if(maStringNoLine.isEmpty())
     {
         // formally was RID_SVXSTR_INVISIBLE, but tomake equal
         // everywhere, use RID_SVXSTR_NONE

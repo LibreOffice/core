@@ -34,7 +34,7 @@
 
 using namespace com::sun::star;
 
-XGradientList::XGradientList( const String& rPath )
+XGradientList::XGradientList( const OUString& rPath )
 :   XPropertyList( XGRADIENT_LIST, rPath )
 {
 }

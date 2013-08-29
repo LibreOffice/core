@@ -38,7 +38,7 @@ Color RGB_Color( ColorData nColorName )
 
 // class XColorEntry
 
-XColorEntry::XColorEntry(const Color& rColor, const String& rName)
+XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
     aColor(rColor)
 {
@@ -52,7 +52,7 @@ aColor(rOther.aColor)
 
 // class XLineEndEntry
 
-XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
+XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
     aB2DPolyPolygon(rB2DPolyPolygon)
 {
@@ -66,7 +66,7 @@ XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 
 // class XDashEntry
 
-XDashEntry::XDashEntry(const XDash& rDash, const String& rName)
+XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 :   XPropertyEntry(rName),
     aDash(rDash)
 {
@@ -80,7 +80,7 @@ aDash(rOther.aDash)
 
 // class XHatchEntry
 
-XHatchEntry::XHatchEntry(const XHatch& rHatch, const String& rName)
+XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 :   XPropertyEntry(rName),
     aHatch(rHatch)
 {
@@ -94,7 +94,7 @@ XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 
 // class XGradientEntry
 
-XGradientEntry::XGradientEntry(const XGradient& rGradient, const String& rName)
+XGradientEntry::XGradientEntry(const XGradient& rGradient, const OUString& rName)
 :   XPropertyEntry(rName),
     aGradient(rGradient)
 {
@@ -108,7 +108,7 @@ XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
 
 // class XBitmapEntry
 
-XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName)
 :   XPropertyEntry(rName),
     maGraphicObject(rGraphicObject)
 {
@@ -122,7 +122,7 @@ XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
-    const String& rPath
+    const OUString& rPath
 ) : meType           ( type ),
     maName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
     maPath           ( rPath ),
@@ -222,9 +222,9 @@ XPropertyEntry* XPropertyList::Remove( long nIndex )
     return pEntry;
 }
 
-void XPropertyList::SetName( const String& rString )
+void XPropertyList::SetName( const OUString& rString )
 {
-    if(rString.Len())
+    if(!rString.isEmpty())
     {
         maName = rString;
     }
@@ -240,7 +240,7 @@ bool XPropertyList::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !maPath.Len(), "invalid URL" );
+            DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
             return false;
         }
 
@@ -271,7 +271,7 @@ bool XPropertyList::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !maPath.Len(), "invalid URL" );
+        DBG_ASSERT( maPath.isEmpty(), "invalid URL" );
         return false;
     }
 
@@ -292,7 +292,7 @@ bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
 }
 
 XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
-                                                    const String& rPath )
+                                                    const OUString& rPath )
 {
     XPropertyListRef pRet;
 

@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pLineEndList->GetName().Len() )
+    if( !pLineEndList->GetName().isEmpty() )
     {
         aFile.Append( pLineEndList->GetName() );
 
