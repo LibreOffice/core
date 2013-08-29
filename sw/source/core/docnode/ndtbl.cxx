@@ -3390,6 +3390,9 @@ sal_Bool SwDoc::MergeTable( const SwPosition& rPos, sal_Bool bWithPrev, sal_uInt
     if( !pDelTblNd )
         return sal_False;
 
+    SwTableFmt* pStyle = (SwTableFmt*)pTblNd->GetTable().GetTableFmt()->GetRegisteredIn();
+    SwTable& rTable = (bWithPrev ? pDelTblNd : pTblNd)->GetTable();
+
     if( pTblNd->GetTable().ISA( SwDDETable ) ||
         pDelTblNd->GetTable().ISA( SwDDETable ))
         return sal_False;
@@ -3427,6 +3430,8 @@ sal_Bool SwDoc::MergeTable( const SwPosition& rPos, sal_Bool bWithPrev, sal_uInt
     }
     if( bRet )
     {
+        SwTableFmt::AssignFormatParents( pStyle, rTable );
+
         SetModified();
         SetFieldsDirty( true, NULL, 0 );
     }
