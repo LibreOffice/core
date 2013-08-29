@@ -790,9 +790,9 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 
         // put a space before a new command if not in the beginning of a line
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
-            pEditView->InsertText(" " + aText);
-        else
-            pEditView->InsertText(aText);
+            aText = " " + aText;
+
+        pEditView->InsertText(aText);
 
         // Remember start of the selection and move the cursor there afterwards.
         aSelection.nEndPara = aSelection.nStartPara;
