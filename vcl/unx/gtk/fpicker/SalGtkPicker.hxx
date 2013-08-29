@@ -64,8 +64,6 @@ class SalGtkPicker
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
         OUString getResString( sal_Int32 aId );
-    private:
-        void setGtkLanguage();
 };
 
 class GdkThreadLock

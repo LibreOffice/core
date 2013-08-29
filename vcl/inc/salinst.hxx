@@ -65,6 +65,9 @@ public:
     SalInstance() {}
     virtual ~SalInstance();
 
+    //called directly after Application::Init
+    virtual void            AfterAppInit() {}
+
     // Frame
     // DisplayName for Unix ???
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) = 0;

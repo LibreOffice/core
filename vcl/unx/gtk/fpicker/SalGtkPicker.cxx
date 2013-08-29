@@ -172,27 +172,9 @@ gint RunDialog::run()
     return nStatus;
 }
 
-// FIXME: this is pretty nasty ... we try to tell gtk+'s
-// gettext the locale it should use via the environment
-void SalGtkPicker::setGtkLanguage()
-{
-    static bool bSet = false;
-    if (bSet)
-        return;
-
-    OUString aLocaleString( Application::GetSettings().GetUILanguageTag().getGlibcLocaleString( ".UTF-8"));
-    if (!aLocaleString.isEmpty())
-    {
-        OUString envVar( "LANGUAGE" );
-        osl_setEnvironment( envVar.pData, aLocaleString.pData );
-    }
-    bSet = true;
-}
-
 SalGtkPicker::SalGtkPicker( const uno::Reference<uno::XComponentContext>& xContext )
     : m_pDialog( 0 ), m_xContext( xContext )
 {
-    setGtkLanguage();
 }
 
 SalGtkPicker::~SalGtkPicker()

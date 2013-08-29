@@ -66,7 +66,8 @@ class GtkInstance : public X11SalInstance
 public:
             GtkInstance( SalYieldMutex* pMutex );
     virtual ~GtkInstance();
-    void    Init();
+    void    EnsureInit();
+    virtual void AfterAppInit();
 
     virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
@@ -110,6 +111,7 @@ public:
   private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
+    bool                        bNeedsInit;
 
     mutable boost::shared_ptr<vcl::unx::GtkPrintWrapper> m_pPrintWrapper;
 };

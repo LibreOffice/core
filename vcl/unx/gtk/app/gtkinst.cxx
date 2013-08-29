@@ -21,6 +21,7 @@
 #include <stack>
 #include <string.h>
 #include <osl/module.h>
+#include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/salobj.h>
@@ -122,14 +123,8 @@ extern "C"
         fprintf( stderr, "creating GtkSalInstance 0x%p\n", pInstance );
 #endif
 
-        // initialize SalData
-        GtkData *pSalData = new GtkData( pInstance );
-        pSalData->Init();
-        pSalData->initNWF();
-
-        pInstance->Init();
-
-        InitAtkBridge();
+        //Create SalData, this does not leak
+        /*GtkData *pSalData =*/ new GtkData( pInstance );
 
         return pInstance;
     }
@@ -172,13 +167,37 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 #else
     : X11SalInstance( pMutex )
 #endif
+    , bNeedsInit(true)
 {
 }
 
-// This has to happen after gtk_init has been called by saldata.cxx's
-// Init or our handlers just get clobbered.
-void GtkInstance::Init()
+//We want to defer initializing gtk until we are after uno has been
+//bootstrapped so we can ask the config what the UI language is so that we can
+//force that in as $LANGUAGE to get gtk to render widgets RTL if we have a RTL
+//UI in a LTR locale
+void GtkInstance::AfterAppInit()
 {
+    OUString aLocaleString(Application::GetSettings().GetUILanguageTag().getGlibcLocaleString(".UTF-8"));
+    if (!aLocaleString.isEmpty())
+    {
+        OUString envVar("LANGUAGE");
+        osl_setEnvironment(envVar.pData, aLocaleString.pData);
+    }
+    EnsureInit();
+}
+
+void GtkInstance::EnsureInit()
+{
+    if (!bNeedsInit)
+        return;
+    // initialize SalData
+    GtkData *pSalData = GetGtkSalData();
+    pSalData->Init();
+    pSalData->initNWF();
+
+    InitAtkBridge();
+
+    bNeedsInit = false;
 }
 
 GtkInstance::~GtkInstance()
@@ -190,16 +209,19 @@ GtkInstance::~GtkInstance()
 
 SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
+    EnsureInit();
     return new GtkSalFrame( pParent, nStyle );
 }
 
 SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong )
 {
+    EnsureInit();
     return new GtkSalFrame( pParentData );
 }
 
 SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
+    EnsureInit();
 #if !GTK_CHECK_VERSION(3,0,0)
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case
@@ -221,6 +243,7 @@ extern "C"
 
 void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {
+    EnsureInit();
     OString sGtkURL;
     rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
     if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || !rFileUrl.startsWith( "file://" ))
@@ -258,6 +281,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     ImplJobSetup* pSetupData )
 {
+    EnsureInit();
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
@@ -271,6 +295,7 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
 
 SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
+    EnsureInit();
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
     mbPrinterInit = true;
     return new GtkSalPrinter( pInfoPrinter );
@@ -333,6 +358,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     sal_uInt16 nBitCount,
                                                     const SystemGraphicsData *pGd )
 {
+    EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)
     (void)pG; (void) pGd;
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
@@ -345,6 +371,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
 
 SalBitmap* GtkInstance::CreateSalBitmap()
 {
+    EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)
     return new SvpSalBitmap();
 #else
@@ -356,6 +383,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
+    EnsureInit();
     GtkSalMenu* pSalMenu = new GtkSalMenu( bMenuBar );
     pSalMenu->SetMenu( pVCLMenu );
     return pSalMenu;
@@ -363,16 +391,19 @@ SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 
 void GtkInstance::DestroyMenu( SalMenu* pMenu )
 {
+    EnsureInit();
     delete pMenu;
 }
 
 SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* pItemData )
 {
+    EnsureInit();
     return new GtkSalMenuItem( pItemData );
 }
 
 void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
 {
+    EnsureInit();
     delete pItem;
 }
 
@@ -387,6 +418,7 @@ void         GtkInstance::DestroyMenuItem( SalMenuItem* )        {}
 
 SalTimer* GtkInstance::CreateSalTimer()
 {
+    EnsureInit();
     GtkSalTimer *pTimer = new GtkSalTimer();
     m_aTimers.push_back( pTimer );
     return pTimer;
@@ -394,6 +426,7 @@ SalTimer* GtkInstance::CreateSalTimer()
 
 void GtkInstance::RemoveTimer (SalTimer *pTimer)
 {
+    EnsureInit();
     std::vector<GtkSalTimer *>::iterator it;
     it = std::find( m_aTimers.begin(), m_aTimers.end(), pTimer );
     if( it != m_aTimers.end() )
@@ -402,11 +435,13 @@ void GtkInstance::RemoveTimer (SalTimer *pTimer)
 
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    EnsureInit();
     GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }
 
 bool GtkInstance::IsTimerExpired()
 {
+    EnsureInit();
     for( std::vector<GtkSalTimer *>::iterator it = m_aTimers.begin();
          it != m_aTimers.end(); ++it )
         if( (*it)->Expired() )
@@ -417,6 +452,7 @@ bool GtkInstance::IsTimerExpired()
 
 bool GtkInstance::AnyInput( sal_uInt16 nType )
 {
+    EnsureInit();
     if( (nType & VCL_INPUT_TIMER) && IsTimerExpired() )
         return true;
 #if !GTK_CHECK_VERSION(3,0,0)
@@ -455,6 +491,7 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
 
 GenPspGraphics *GtkInstance::CreatePrintGraphics()
 {
+    EnsureInit();
     return new GenPspGraphics();
 }
 

@@ -282,6 +282,8 @@ bool InitVCL()
         // soffice/sfx implementation creates the global service manager
         pSVData->mpApp->Init();
 
+    pSVData->mpDefInst->AfterAppInit();
+
     // Fetch AppFileName and make it absolute before the workdir changes...
     OUString aExeFileName;
     osl_getExecutableFile( &aExeFileName.pData );
