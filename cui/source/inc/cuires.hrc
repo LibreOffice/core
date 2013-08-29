@@ -422,11 +422,6 @@
 #define RID_SVXSTR_DEL_SPACES_AT_STT_END                    (RID_SVX_START + 1223)
 #define RID_SVXSTR_DEL_SPACES_BETWEEN_LINES                 (RID_SVX_START + 1224)
 
-// from optlingu.src
-#define STR_NUM_PRE_BREAK_DLG                               (RID_SVX_START + 1225)
-#define STR_NUM_POST_BREAK_DLG                              (RID_SVX_START + 1226)
-#define STR_NUM_MIN_WORDLEN_DLG                             (RID_SVX_START + 1227)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -306,53 +306,6 @@ void BrwStringDic_Impl::Paint(
     rDev.SetFont( aOldFont );
 }
 
-class OptionsBreakSet : public ModalDialog
-{
-    VclFrame*       m_pBeforeFrame;
-    VclFrame*       m_pAfterFrame;
-    VclFrame*       m_pMinimalFrame;
-    NumericField*   m_pBreakNF;
-
-public:
-    OptionsBreakSet(Window* pParent, int nRID) :
-        ModalDialog(pParent, "BreakNumberOption", "cui/ui/breaknumberoption.ui")
-    {
-        get( m_pBeforeFrame, "beforeframe");
-        get( m_pAfterFrame, "afterframe");
-        get( m_pMinimalFrame, "miniframe");
-        get( m_pBreakNF, "breaknumber");
-
-        DBG_ASSERT( STR_NUM_PRE_BREAK_DLG   == nRID ||
-                    STR_NUM_POST_BREAK_DLG  == nRID ||
-                    STR_NUM_MIN_WORDLEN_DLG == nRID, "unexpected RID" );
-
-        if ( nRID != -1 )
-        {
-            if( nRID == STR_NUM_PRE_BREAK_DLG )
-            {
-                m_pAfterFrame  ->Hide();
-                m_pMinimalFrame->Hide();
-            }
-            if( nRID == STR_NUM_POST_BREAK_DLG )
-            {
-                m_pBeforeFrame ->Hide();
-                m_pMinimalFrame->Hide();
-            }
-            if( nRID == STR_NUM_MIN_WORDLEN_DLG )
-            {
-                m_pAfterFrame ->Hide();
-                m_pBeforeFrame->Hide();
-            }
-        }
-    }
-
-    NumericField&   GetNumericFld()
-    {
-        return *m_pBreakNF;
-    }
-};
-
-
 /*--------------------------------------------------
     Entry IDs for options listbox of dialog
 --------------------------------------------------*/
@@ -387,12 +340,54 @@ static const char * aEidToPropName[] =
     UPN_IS_HYPH_SPECIAL             // EID_HYPH_SPECIAL
 };
 
-
-static inline String lcl_GetPropertyName( EID_OPTIONS eEntryId )
+static inline OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
     DBG_ASSERT( (unsigned int) eEntryId < SAL_N_ELEMENTS(aEidToPropName), "index out of range" );
     return OUString::createFromAscii( aEidToPropName[ (int) eEntryId ] );
 }
+
+class OptionsBreakSet : public ModalDialog
+{
+    VclFrame*       m_pBeforeFrame;
+    VclFrame*       m_pAfterFrame;
+    VclFrame*       m_pMinimalFrame;
+    NumericField*   m_pBreakNF;
+
+public:
+    OptionsBreakSet(Window* pParent, sal_uInt16 nRID)
+        : ModalDialog(pParent, "BreakNumberOption",
+            "cui/ui/breaknumberoption.ui")
+    {
+        get(m_pBeforeFrame, "beforeframe");
+        get(m_pAfterFrame, "afterframe");
+        get(m_pMinimalFrame, "miniframe");
+
+        assert(EID_NUM_PRE_BREAK == nRID ||
+               EID_NUM_POST_BREAK == nRID ||
+               EID_NUM_MIN_WORDLEN == nRID); //unexpected ID
+
+        if (nRID == EID_NUM_PRE_BREAK)
+        {
+            m_pBeforeFrame->Show();
+            get(m_pBreakNF, "beforebreak");
+        }
+        else if(nRID == EID_NUM_POST_BREAK)
+        {
+            m_pAfterFrame->Show();
+            get(m_pBreakNF, "afterbreak");
+        }
+        else if(nRID == EID_NUM_MIN_WORDLEN)
+        {
+            m_pMinimalFrame->Show();
+            get(m_pBreakNF, "wordlength");
+        }
+    }
+
+    NumericField&   GetNumericFld()
+    {
+        return *m_pBreakNF;
+    }
+};
 
 // class OptionsUserData -------------------------------------------------
 
@@ -1788,16 +1783,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             OptionsUserData aData( (sal_uLong)pEntry->GetUserData() );
             if(aData.HasNumericValue())
             {
-                int nRID = -1;
-                switch (aData.GetEntryId())
-                {
-                    case EID_NUM_PRE_BREAK  : nRID = STR_NUM_PRE_BREAK_DLG; break;
-                    case EID_NUM_POST_BREAK : nRID = STR_NUM_POST_BREAK_DLG; break;
-                    case EID_NUM_MIN_WORDLEN: nRID = STR_NUM_MIN_WORDLEN_DLG; break;
-                    default:
-                        OSL_FAIL( "unexpected case" );
-                }
-
+                sal_uInt16 nRID = aData.GetEntryId();
                 OptionsBreakSet aDlg( this, nRID );
                 aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg.Execute() )

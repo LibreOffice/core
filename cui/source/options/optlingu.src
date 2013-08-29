@@ -129,21 +129,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
 };
 
-// Strings ---------------------------------------------------------------
-
-String STR_NUM_PRE_BREAK_DLG
-{
-    Text [ en-US ] = "Characters before break";
-};
-String STR_NUM_POST_BREAK_DLG
-{
-    Text [ en-US ] = "Characters after break";
-};
-String STR_NUM_MIN_WORDLEN_DLG
-{
-    Text [ en-US ] = "Minimal word length";
-};
-
 // RID_SFXPAGE_LINGU --------------------------------------------------------
 
 TabPage RID_SFXPAGE_LINGU
