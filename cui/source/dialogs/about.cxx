@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_buildid.h>
-
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
