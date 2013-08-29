@@ -300,15 +300,11 @@ struct ScMyCell
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
 
-    OUString               sStringValue;
-    OUString               sAnnotationText;
-
     ScMyAreaLink                aAreaLink;
     ScMyShapeList               aShapeList;
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
 
-    double                      fValue;
     sal_Int32                   nValidationIndex;
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
@@ -325,11 +321,6 @@ struct ScMyCell
     bool                        bHasEmptyDatabase;
     bool                        bHasDetectiveObj;
     bool                        bHasDetectiveOp;
-
-    bool                        bIsEditCell;
-    bool                        bHasStringValue;
-    bool                        bHasDoubleValue;
-    bool                        bHasXText;
 
     bool                        bIsMatrixBase;
     bool                        bIsMatrixCovered;
