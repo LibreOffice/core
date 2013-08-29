@@ -7207,7 +7207,7 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
             break;
         default:
             OSL_ENSURE(!this, "Unknown MS Asian Typography language, report");
-            nLang = LANGUAGE_CHINESE;
+            nLang = LANGUAGE_CHINESE_SIMPLIFIED_LEGACY;
             break;
         case 0:
             //And here we have the possibility that it says 2, but its really

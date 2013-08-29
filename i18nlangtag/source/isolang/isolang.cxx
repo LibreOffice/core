@@ -104,9 +104,10 @@ struct IsoLangOtherEntry
 // locale of that language first.
 //
 // The default entry for a LangID <-> ISO mapping has to be first. For
-// conversion of legacy mappings one LangID can map to multiple ISO codes, and
-// one ISO code combination can map to multiple LangIDs. For compatibility with
-// already existing calls it can also be a sequence as follows:
+// conversion of legacy mappings one LangID can map to multiple ISO codes
+// except if the LangID is primary-only, and one ISO code combination can map
+// to multiple LangIDs. For compatibility with already existing calls it can
+// also be a sequence as follows:
 
 // LANGUAGE_ENGLISH,    "en", ""
 // LANGUAGE_ENGLISH_US, "en", "US"
@@ -130,11 +131,9 @@ struct IsoLangOtherEntry
 // to match the language, see code. A call with "en-ZZ" (not in table) would
 // still result in LANGUAGE_ENGLISH.
 
-/* erAck: 2007-07-05T20:01+0200  TODO: The entire suite's "primary language
- * only" usage and locale fall back should be cleaned up and made consistent. I
- * strongly doubt that most callers exactly expect the behavior described.
- * Currently these primary LangIDs are used literally in OOo code:
- * LANGUAGE_ENGLISH LANGUAGE_CHINESE
+/* Currently (2013-08-29) only these primary LangID are still used literally in
+ * code:
+ * LANGUAGE_ENGLISH  LANGUAGE_ARABIC_PRIMARY_ONLY
  */
 
 static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
@@ -155,9 +154,10 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PORTUGUESE_BRAZILIAN,        "pt", "BR" },
     { LANGUAGE_DANISH,                      "da", "DK" },
     { LANGUAGE_GREEK,                       "el", "GR" },
-    { LANGUAGE_CHINESE,                     "zh", ""   },
     { LANGUAGE_CHINESE_SIMPLIFIED,          "zh", "CN" },
+    { LANGUAGE_CHINESE_SIMPLIFIED_LEGACY,   "zh", "CN" },
     { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW" },
+    { LANGUAGE_CHINESE_TRADITIONAL_LEGACY,  "zh", "TW" },
     { LANGUAGE_CHINESE_HONGKONG,            "zh", "HK" },
     { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG" },
     { LANGUAGE_CHINESE_MACAU,               "zh", "MO" },

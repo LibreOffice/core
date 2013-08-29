@@ -141,14 +141,14 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_BURMESE                    0x0455
 #define LANGUAGE_CATALAN                    0x0403
 #define LANGUAGE_CHEROKEE_UNITED_STATES     0x045C
-#define LANGUAGE_CHINESE                    0x0004  /* primary only, not a locale! */
 #define LANGUAGE_CHINESE_HONGKONG           0x0C04
 #define LANGUAGE_CHINESE_MACAU              0x1404
 #define LANGUAGE_CHINESE_SIMPLIFIED         0x0804
 #define LANGUAGE_CHINESE_SINGAPORE          0x1004
 #define LANGUAGE_CHINESE_TRADITIONAL        0x0404
-/* #define LANGUAGE_CHINESE_SIMPLIFIED         0x0004 */    /* artificial political? Defined as 'zh-CHS' by MS. Primary only! */
-/* #define LANGUAGE_CHINESE_TRADITIONAL        0x7C04 */    /* artificial political? Defined as 'zh-CHT' by MS. */
+#define LANGUAGE_CHINESE_SIMPLIFIED_LEGACY  0x0004  /* MS-.NET 'zh-CHS', primary only! but maps to 'zh-CN' */
+#define LANGUAGE_CHINESE_TRADITIONAL_LEGACY 0x7C04  /* MS-.NET 'zh-CHT' */
+#define LANGUAGE_CHINESE                    LANGUAGE_CHINESE_SIMPLIFIED     /* most code uses LANGUAGE_CHINESE */
 #define LANGUAGE_CORSICAN_FRANCE            0x0483
 #define LANGUAGE_CROATIAN                   0x041A
 #define LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA 0x101A
