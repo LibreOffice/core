@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7z0\u003d",
+        "filename": "sw/source/core/crsr/findattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-29T22:19:03Z",
+      "side": 1,
+      "message": "you\u0027re right. I thought I removed that.\n\u0027is_initialized()\u0027 is indeed deprecated.\nI will fix both of your remarks. thanks.",
+      "parentUuid": "AAAAXn//71U\u003d",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//71Q\u003d",
         "filename": "sw/source/core/fields/docufld.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-08-29T15:17:02Z",
       "side": 1,
       "message": "Is this still needed? I hoped that the use of boost::optional will allow to differentiate between \"not set\" and \"set to 0\".",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7z4\u003d",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-29T22:19:03Z",
+      "side": 1,
+      "message": "This is just like all the other places that use the \u0027sal_uInt16\u0027. I didn\u0027t want to change code where I *didn\u0027t* have to, so where I could - I left it to use \u0027sal_uInt16\u0027. \nI might give it a go at changing all these places to \u0027optional\u0027 also...",
+      "parentUuid": "AAAAXn//71Q\u003d",
       "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7z8\u003d",
+        "filename": "sw/source/filter/ww8/attributeoutputbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-29T22:19:03Z",
+      "side": 1,
+      "message": "yeah, we could. good idea.",
+      "parentUuid": "AAAAXn//71M\u003d",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//71I\u003d",
         "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//70A\u003d",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-29T22:19:03Z",
+      "side": 1,
+      "message": "emmm... tried to find such a case - where did you see me change \u0027\u003e\u003d\u0027 to \u0027\u003e\u0027 ?",
+      "parentUuid": "AAAAXn//71I\u003d",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//71E\u003d",
         "filename": "sw/source/ui/utlui/uitool.cxx",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2013-08-29T15:17:02Z",
       "side": 1,
       "message": "No need for this, git blame will show you authorship automatically.",
+      "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//70E\u003d",
+        "filename": "sw/source/ui/utlui/uitool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000389
+      },
+      "writtenOn": "2013-08-29T22:19:03Z",
+      "side": 1,
+      "message": "This is just temporary so I remember to come back to this code (before submitting final version). Because I think it is problematic.",
+      "parentUuid": "AAAAXn//71E\u003d",
       "revId": "891085bf54351f89f95405bd24395eb4b295cbbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
