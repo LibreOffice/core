@@ -16,10 +16,10 @@ ScDBDataFormatting::ScDBDataFormatting():
     maSecondRowStripeStyle  ( "Default" ),
     maFirstColStripeStyle   ( "Default" ),
     maSecondColStripeStyle  ( "Default" ),
-    maFirstRowStripeSize    ( 1 ),
-    maSecondRowStripeSize   ( 1 ),
-    maFirstColStripeSize    ( 1 ),
-    maSecondColStripeSize   ( 1 ),
+    nFirstRowStripeSize    ( 1 ),
+    nSecondRowStripeSize   ( 1 ),
+    nFirstColStripeSize    ( 1 ),
+    nSecondColStripeSize   ( 1 ),
     mbBandedRows            ( false ),
     mbBandedColumns         ( false )
 {
@@ -31,6 +31,10 @@ ScDBDataFormatting::ScDBDataFormatting(const OUString& rTableStyleName, const OU
     maSecondRowStripeStyle  ( rSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rFirstColStripeStyle ),
     maSecondColStripeStyle  ( rSecondColStripeStyle ),
+    nFirstRowStripeSize     ( 1 ),
+    nSecondRowStripeSize    ( 1 ),
+    nFirstColStripeSize     ( 1 ),
+    nSecondColStripeSize    ( 1 ),
     mbBandedRows            ( bBRows ),
     mbBandedColumns         ( bBCols )
 {
@@ -42,6 +46,10 @@ ScDBDataFormatting::ScDBDataFormatting( const ScDBDataFormatting& rTableFormatDa
     maSecondRowStripeStyle  ( rTableFormatData.maSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rTableFormatData.maFirstColStripeStyle ),
     maSecondColStripeStyle  ( rTableFormatData.maSecondColStripeStyle ),
+    nFirstRowStripeSize     ( rTableFormatData.nFirstRowStripeSize ),
+    nSecondRowStripeSize    ( rTableFormatData.nSecondRowStripeSize ),
+    nFirstColStripeSize     ( rTableFormatData.nFirstColStripeSize ),
+    nSecondColStripeSize    ( rTableFormatData.nSecondColStripeSize ),
     mbBandedRows            ( rTableFormatData.mbBandedRows ),
     mbBandedColumns         ( rTableFormatData.mbBandedColumns )
 {
@@ -115,4 +123,41 @@ void ScDBDataFormatting::SetFirstColStripeStyle( const OUString& aStyleName )
 void ScDBDataFormatting::SetSecondColStripeStyle( const OUString& aStyleName )
 {
     maSecondColStripeStyle = aStyleName;
+}
+
+void ScDBDataFormatting::SetFirstRowStripeSize( sal_Int32 nSize)
+{
+    nFirstRowStripeSize = nSize;
+}
+void ScDBDataFormatting::SetSecondRowStripeSize( sal_Int32 nSize )
+{
+    nSecondRowStripeSize = nSize;
+}
+void ScDBDataFormatting::SetFirstColStripeSize( sal_Int32 nSize )
+{
+    nFirstColStripeSize = nSize;
+}
+void ScDBDataFormatting::SetSecondColStripeSize( sal_Int32 nSize )
+{
+    nSecondColStripeSize = nSize;
+}
+
+sal_Int32 ScDBDataFormatting::GetFirstRowStripeSize()
+{
+    return nFirstRowStripeSize;
+}
+
+sal_Int32 ScDBDataFormatting::GetSecondRowStripeSize()
+{
+    return nSecondRowStripeSize;
+}
+
+sal_Int32 ScDBDataFormatting::GetFirstColStripeSize()
+{
+    return nFirstColStripeSize;
+}
+
+sal_Int32 ScDBDataFormatting::GetSecondColStripeSize()
+{
+    return nSecondColStripeSize;
 }
