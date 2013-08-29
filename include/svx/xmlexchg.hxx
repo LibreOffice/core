@@ -46,11 +46,9 @@ namespace svx
 
     struct SVX_DLLPUBLIC OXFormsDescriptor {
 
-        String szName;
-        String szServiceName;
-        ::com::sun::star::uno::Reference
-            < ::com::sun::star::beans::XPropertySet >
-                xPropSet;
+        OUString szName;
+        OUString szServiceName;
+        css::uno::Reference< css::beans::XPropertySet >   xPropSet;
 
         inline OXFormsDescriptor( void ) {}
         inline OXFormsDescriptor( const OXFormsDescriptor &rhs ) { *this=rhs; }
