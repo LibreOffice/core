@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,firebird,$(FIREBIRD_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	firebird/firebird-icu.patch.1 \
+	firebird/firebird-rpath.patch.0 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\

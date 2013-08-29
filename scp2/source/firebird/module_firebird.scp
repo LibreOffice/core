@@ -23,15 +23,9 @@
 Module gid_Module_Firebird
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
-    Dirs = ();
     Files = (
-#if defined UNX && !defined MACOSX
-        File gid_File_Firebird_Lib_252,
-        File gid_File_Firebird_Lib_25,
-#endif
         File gid_File_Firebird_Lib
     );
-    Unixlinks = ();
     Styles = (HIDDEN_ROOT);
 End
 

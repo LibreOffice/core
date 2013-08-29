@@ -17,9 +17,8 @@ $(eval $(call gb_ExternalPackage_add_file,firebird,lib/ifbembed.lib,gen/firebird
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.2))
 else
-$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
-$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5))
-$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so,gen/firebird/lib/libfbembed.so))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so,gen/firebird/lib/libfbembed.so.2.5.2))
 endif
 
 # vim: set noet sw=4 ts=4:

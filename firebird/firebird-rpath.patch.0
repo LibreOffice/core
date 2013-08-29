@@ -1,0 +1,11 @@
+--- builds/posix/make.defaults
++++ builds/posix/make.defaults
+@@ -255,7 +255,7 @@
+ 
+ LIB_PLATFORM_RPATH = -Wl,-rpath,$(1)
+ ifeq ($(strip @BINRELOC_CFLAGS@),)
+-LIB_LINK_RPATH = $(call LIB_PLATFORM_RPATH,$(if $(subst intl,,$(1)),@FB_LIBDIR@,@FB_INTLDIR@))
++LIB_LINK_RPATH = $(call LIB_PLATFORM_RPATH,'$$ORIGIN')
+ else
+ LIB_LINK_RPATH = $(call LIB_PLATFORM_RPATH,'$$$$ORIGIN/../$(1)')
+ endif
