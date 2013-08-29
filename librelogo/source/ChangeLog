@@ -1,3 +1,18 @@
+2013-08-29 László Németh:
+    * fix bad selection of invisible turtle after HIDETURTLE CLEARSCREEN
+    * fix SVG cropping in LibreOffice 4.1
+    * fix vertical positions of labels in SVG export using RectangleShape
+    * fix double stroke-width attributes in SVG export
+    * LABEL supports relative positioning vector [X, Y, 'text'], where X, Y
+      0: center, eg. as the default positioning: LABEL [0, 0, 'text']
+      1: left or bottom aligned to the turtle position and angle
+     -1: right or top aligned to the turtle position and angle
+      n: n * text_width/2 or text_height/2
+    * simple SVG SMIL (animation) support using SLEEP, for example:
+      PICTURE 'animation.svg' [ CIRCLE 5 SLEEP 1000 CIRCLE 20 ]
+    * relative FORWARD (heading = y axis) with vector arg.: FORWARD [20, 10]
+    * rounded linejoint of turtle shape
+
 2013-07-15 László Németh:
     * optional named PICTURE blocks: PICTURE 'name' [ CIRCLE 5 ]
     * save PICTURE as cropped SVG file using path names, for example:

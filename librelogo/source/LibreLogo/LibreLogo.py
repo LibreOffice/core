@@ -72,6 +72,8 @@ class __Doc__:
         except:
             self.drawpage = doc.DrawPages.getByIndex(0) # Draw, Impress
         self.shapecache = {}
+        self.shapecount = itertools.count()
+        self.time = 0
         self.zoomvalue = 0
         self.initialize()
 
@@ -461,7 +463,7 @@ def __initialize__():
         _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
         if shape.LineWidth != round((1 + _.pen * 2) * __PT_TO_TWIP__ / __MM10_TO_TWIP__) and shape.LineWidth != round(__LINEWIDTH__ / __MM10_TO_TWIP__):
             _.pensize = shape.LineWidth * __MM10_TO_TWIP__
-    shape.LineJoint = __MITER__
+    shape.LineJoint = __ROUNDED__
     shape.Shadow = True
     shape.FillColor, transparence = __splitcolor__(_.areacolor)
     shape.FillTransparence = min(95, transparence)
@@ -687,12 +689,14 @@ def __checkhalt__():
 
 def __cs__(select = True):
     turtle = __getshape__(__TURTLE__)
-    if turtle:
+    visible = False
+    if turtle and turtle.Visible:
         __visible__(turtle, False)
+        visible = True
     if _.doc.CurrentController.select(_.drawpage) and \
         _.doc.CurrentController.getSelection().ImplementationName == "com.sun.star.drawing.SvxShapeCollection":
             __dispatcher__(".uno:Delete")
-    if turtle:
+    if turtle and visible:
         __visible__(turtle, True)
         if select:
             _.doc.CurrentController.select(_.drawpage)
@@ -755,7 +759,10 @@ def rotate(shapename, deg):
 def forward(n):
     if type(n) == list:
         pos = position()
-        position([pos[0] + n[0], pos[1] + n[1]])
+        angle = heading()
+        dx = n[1] * sin((pi/180) * angle) + n[0] * sin((pi/180)*(angle + 90))
+        dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90))
+        position([pos[0] + dx, pos[1] - dy])
     else:
         __go__(__TURTLE__, -n * __PT_TO_TWIP__)
 
@@ -792,6 +799,7 @@ def __draw__(d):
     _.drawpage.add(shape)
     if __group__:
         __group__.add(shape)
+        _.shapecache[next(_.shapecount)] = str(_.time)
     return shape
 
 def __zoom__():
@@ -1016,18 +1024,31 @@ def rectangle(l):
         __boxshape__("Rectangle", l)
 
 def label(st):
-    turtle = __getshape__(__TURTLE__)
-    shape = __draw__("TextShape")
-    shape.RotateAngle = turtle.RotateAngle
-    pos = turtle.getPosition()
-    pos.X = pos.X + turtle.BoundRect.Width / 2.0
-    pos.Y = pos.Y + turtle.BoundRect.Height / 2.0
-    shape.setSize(__Size__(1, 1))
+    if type(st) != type([]):
+        st = [0, 0, st]
+    # get text size 
+    shape = _.doc.createInstance( "com.sun.star.drawing.TextShape")
     shape.TextAutoGrowWidth = True
-    text(shape, st)
-    shape.setPosition(__Point__(pos.X - shape.BoundRect.Width/2, pos.Y - shape.BoundRect.Height/2))
-    __visible__(shape, True)
-    __lefthang__(shape)
+    actual = __getshape__(__ACTUAL__)
+    _.drawpage.add(shape)
+    text(shape, st[2])
+    z = shape.getSize()
+    # show text using RectangleShape (for correct SVG export)
+    ac, pc =  _.areacolor, _.pencolor
+    _.areacolor, _.pencolor = 0xff000000, 0xff000000 # invisible
+    rectangle([z.Width / (__PT_TO_TWIP__ / __MM10_TO_TWIP__), z.Height / (__PT_TO_TWIP__ / __MM10_TO_TWIP__)])
+    _.drawpage.remove(shape)
+    _.pencolor, _.areacolor = pc, ac
+    lab = __getshape__(__ACTUAL__) 
+    text(lab, st[2])
+    if st[0] != 0 or st[1] != 0:
+        pos = position()
+        angle = heading()
+        n = [st[0] * z.Width/2, st[1] * z.Height/2]
+        dx = n[1] * sin((pi/180) * angle) + n[0] * sin((pi/180)*(angle + 90))
+        dy = n[1] * cos((pi/180) * angle) + n[0] * cos((pi/180)*(angle + 90)) 
+        lab.setPosition(__Point__(round(pos[0] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ + dx - lab.BoundRect.Width/2), round(pos[1] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ - dy - lab.BoundRect.Height/2)))
+    _.shapecache[__ACTUAL__] = actual
 
 def text(shape, st):
     if shape:
@@ -1042,6 +1063,8 @@ def text(shape, st):
         c.CharFontName = _.fontfamily
 
 def sleep(t):
+    _.time = _.time + t
+    __removeshape__(__ACTUAL__)
     for i in range(int(t/__SLEEP_SLICE_IN_MILLISECONDS__)):
         __checkhalt__()
         __time__.sleep(0.5)
@@ -1204,16 +1227,31 @@ def __groupstart__(name = ""):
     __groupstack__.append(__group__)
     if name != "": # store pic name (for correct repcount)
       __groupstack__.append(name)
+      if ".SVG" == name[-4:].upper():
+          _.time = 0
+          _.shapecount = itertools.count()
     __groupstack__.append(__grouplefthang__)
     __group__ = uno.getComponentContext().ServiceManager.createInstance('com.sun.star.drawing.ShapeCollection')
     __grouplefthang__ = 0
+
+def create_svg_animation(m):
+    global _
+    if int(m.group(1)) > 2:
+        if int(m.group(1))-3 in _.shapecache:
+          t = _.shapecache[int(m.group(1))-3]
+          if t != "0":
+            return '<g id="id%s" opacity="0"><animate attributeName="opacity" from="0" to="100" begin="%sms" dur="1ms" fill="freeze"/>' % (m.group(1), t)
+    return m.group()
 
 def create_valid_svg_file(filename):
     with open(filename, "r") as f:
         s = f.read()
     s = re.sub('(?s)(<g\\sid="[^"]*)\(([^"]*)\)', '\\1\\2', s) # bad "(", ")" in xml:id
     s = re.sub('(?s)<g\\sooo:[^>]*>', '', s) # remove non standard attributes
+    s = re.sub('(?s)<defs class="EmbeddedBulletChars">.*(?=<defs class="TextEmbeddedBitmaps")', '', s) # remove unused parts
+    s = re.sub('(?s)(<path stroke-width="[^"]*"[^<]*)stroke-width="[^"]*"', '\\1', s) # double stroke-width
     s = re.sub('(?s)<svg\\s+version="1.2"', '<svg version="1.1"', s) # for W3C Validator
+    s = re.sub('<g id="id([0-9]+)">', create_svg_animation, s)
     with open(filename, 'w') as f:
         f.write(s)
 
@@ -1247,6 +1285,7 @@ def __groupend__(name = ""):
       draw = d.loadComponentFromURL("private:factory/sdraw", "_blank", 0, ())
       drawpage = draw.getDrawPages().getByIndex(0)
       __dispatcher__(".uno:Paste", (), draw)
+      __dispatcher__(".uno:FormatGroup", (), draw)
       pic = drawpage.getByIndex(0)
       pic.setPosition(__Point__((g.BoundRect.Width - g.Size.Width)//2, (g.BoundRect.Height - g.Size.Height)//2))
       drawpage.Height, drawpage.Width = g.BoundRect.Height, g.BoundRect.Width
