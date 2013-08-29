@@ -282,7 +282,8 @@ Ruler::Ruler( Window* pParent, WinBits nWinStyle ) :
     maMapMode( MAP_100TH_MM ),
     mpSaveData(new ImplRulerData),
     mpData(0),
-    mpDragData(new ImplRulerData)
+    mpDragData(new ImplRulerData),
+    mpPreviousHitTest(NULL)
 {
     ImplInit( nWinStyle );
 }
@@ -693,7 +694,7 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
 
 // -----------------------------------------------------------------------
 
-void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
+void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -701,7 +702,7 @@ void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
         return;
 
     maVirDev.SetLineColor( rStyleSettings.GetDarkShadowColor() );
-    maVirDev.SetFillColor( rStyleSettings.GetWorkspaceColor() );
+    maVirDev.SetFillColor( bIsHit ? rStyleSettings.GetDarkShadowColor() : rStyleSettings.GetWorkspaceColor() );
     maVirDev.DrawPolygon( rPoly );
 }
 
@@ -761,7 +762,18 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
                 }
             }
             if(RULER_INDENT_BORDER != nIndentStyle)
-                ImplDrawIndent( aPoly, nStyle );
+            {
+                bool bIsHit = false;
+                if(mpCurrentHitTest.get() != NULL && mpCurrentHitTest->eType == RULER_TYPE_INDENT)
+                {
+                    bIsHit = mpCurrentHitTest->nAryPos == j;
+                }
+                else if(mbDrag && meDragType == RULER_TYPE_INDENT)
+                {
+                    bIsHit = mnDragAryPos == j;
+                }
+                ImplDrawIndent( aPoly, nStyle, bIsHit );
+            }
         }
     }
 }
@@ -1174,7 +1186,7 @@ void Ruler::ImplFormat()
 
     // Draw indents
     if ( mpData->pIndents )
-        ImplDrawIndents( nVirLeft, nP2, nVirTop-1, nVirBottom+1 );
+        ImplDrawIndents( nVirLeft, nP2, nVirTop - 1, nVirBottom + 1 );
 
     // Tabs
     if ( mpData->pTabs )
@@ -1398,7 +1410,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         nX = rPos.Y();
         nY = rPos.X();
     }
-    nHitBottom = mnVirHeight+(RULER_OFF*2);
+    nHitBottom = mnVirHeight + (RULER_OFF * 2);
 
     // #i32608#
     pHitTest->nAryPos = 0;
@@ -1949,36 +1961,39 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            ImplRulerHitTest aHitTest;
+            boost::scoped_ptr<ImplRulerHitTest> pHitTest(new ImplRulerHitTest);
+            bool bHitTestResult = ImplHitTest(aMousePos, pHitTest.get());
 
             if ( nMouseClicks == 1 )
             {
-                if ( ImplHitTest( aMousePos, &aHitTest ) )
-                    ImplStartDrag( &aHitTest, nMouseModifier );
+                if ( bHitTestResult )
+                {
+                    ImplStartDrag( pHitTest.get(), nMouseModifier );
+                }
                 else
                 {
                     // Position innerhalb des Lineal-Bereiches
-                    if ( aHitTest.eType == RULER_TYPE_DONTKNOW )
+                    if ( pHitTest->eType == RULER_TYPE_DONTKNOW )
                     {
-                        mnDragPos = aHitTest.nPos;
+                        mnDragPos = pHitTest->nPos;
                         Click();
                         mnDragPos = 0;
 
                         // Nocheinmal HitTest durchfuehren, da durch den Click
                         // zum Beispiel ein neuer Tab gesetzt werden konnte
-                        if ( ImplHitTest( aMousePos, &aHitTest ) )
-                            ImplStartDrag( &aHitTest, nMouseModifier );
+                        if ( ImplHitTest(aMousePos, pHitTest.get()) )
+                            ImplStartDrag(pHitTest.get(), nMouseModifier);
                     }
                 }
             }
             else
             {
-                if ( ImplHitTest( aMousePos, &aHitTest ) )
+                if (bHitTestResult)
                 {
-                    mnDragPos    = aHitTest.nPos;
-                    mnDragAryPos = aHitTest.nAryPos;
+                    mnDragPos    = pHitTest->nPos;
+                    mnDragAryPos = pHitTest->nAryPos;
                 }
-                meDragType = aHitTest.eType;
+                meDragType = pHitTest->eType;
 
                 DoubleClick();
 
@@ -1998,32 +2013,38 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     // Gegebenenfalls Lineal updaten (damit mit den richtigen Daten
     // gearbeitet wird und die Anzeige auch zur Bearbeitung passt)
-    if ( mbFormat )
+    mpCurrentHitTest.reset(new ImplRulerHitTest);
+    if (ImplHitTest( rMEvt.GetPosPixel(), mpCurrentHitTest.get() ))
     {
-        ImplDraw();
-        mnUpdateFlags &= ~RULER_UPDATE_DRAW;
-    }
-
-    ImplRulerHitTest aHitTest;
-    if ( ImplHitTest( rMEvt.GetPosPixel(), &aHitTest ) )
-    {
-        if ( aHitTest.bSize )
+        if (mpCurrentHitTest->bSize)
         {
-            if ( mnWinStyle & WB_HORZ )
+            if (mnWinStyle & WB_HORZ)
                 ePtrStyle = POINTER_ESIZE;
             else
                 ePtrStyle = POINTER_SSIZE;
         }
-        else if ( aHitTest.bSizeBar )
+        else if (mpCurrentHitTest->bSizeBar)
         {
-            if ( mnWinStyle & WB_HORZ )
+            if (mnWinStyle & WB_HORZ)
                 ePtrStyle = POINTER_HSIZEBAR;
             else
                 ePtrStyle = POINTER_VSIZEBAR;
         }
     }
 
-    SetPointer( Pointer( ePtrStyle ) );
+    if(mpPreviousHitTest.get() != NULL && mpPreviousHitTest->eType != mpCurrentHitTest->eType)
+    {
+        mbFormat = true;
+    }
+
+    SetPointer( Pointer(ePtrStyle) );
+
+    if ( mbFormat )
+    {
+        ImplDraw();
+        mnUpdateFlags &= ~RULER_UPDATE_DRAW;
+    }
+    mpPreviousHitTest.swap(mpCurrentHitTest);
 }
 
 // -----------------------------------------------------------------------

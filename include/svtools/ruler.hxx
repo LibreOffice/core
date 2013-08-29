@@ -26,6 +26,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class MouseEvent;
 class TrackingEvent;
 class DataChangedEvent;
@@ -656,13 +658,16 @@ private:
     Link            maDoubleClickHdl;
     Link            maExtraDownHdl;
 
+    boost::scoped_ptr<ImplRulerHitTest> mpCurrentHitTest;
+    boost::scoped_ptr<ImplRulerHitTest> mpPreviousHitTest;
+
     SVT_DLLPRIVATE void ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
 
     SVT_DLLPRIVATE void ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
     SVT_DLLPRIVATE void ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle );
+    SVT_DLLPRIVATE void ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false );
     SVT_DLLPRIVATE void ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
     SVT_DLLPRIVATE void ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle );
     SVT_DLLPRIVATE void ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
@@ -679,10 +684,10 @@ private:
     SVT_DLLPRIVATE void ImplUpdate( sal_Bool bMustCalc = sal_False );
 
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_Bool ImplHitTest( const Point& rPos,
+    SVT_DLLPRIVATE sal_Bool ImplHitTest( const Point& rPosition,
                                          ImplRulerHitTest* pHitTest,
                                          sal_Bool bRequiredStyle = sal_False,
-                                        sal_uInt16 nRequiredStyle = 0 ) const;
+                                         sal_uInt16 nRequiredStyle = 0 ) const;
     SVT_DLLPRIVATE sal_Bool ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
     SVT_DLLPRIVATE sal_Bool ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
