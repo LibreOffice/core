@@ -3267,14 +3267,14 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
     return aType;
 }
 
-void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
+void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_Int16 nPageRestartNumber )
 {
     // FIXME Not called properly with page styles like "First Page"
 
     FastAttributeList* pAttr = m_pSerializer->createAttrList();
 
-    // 0 means no restart: then don't output that attribute if 0
-    if ( nPageRestartNumber > 0 )
+    // -1 means no restart: then don't output that attribute if it is negative
+    if ( nPageRestartNumber >= 0 )
        pAttr->add( FSNS( XML_w, XML_start ), OString::number( nPageRestartNumber ) );
 
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions

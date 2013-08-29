@@ -1515,7 +1515,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             {
                 String sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
-                m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
+
+                ::boost::optional<sal_uInt16> nOffset = ((const SwFmtPageDesc*)pItem)->GetNumOffset();
+                if (nOffset)
+                    m_pPageNoNF->SetValue(nOffset.get());
+                else
+                    m_pPageNoNF->SetValue(0);   // ADAM Is this correct?
+
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
                 if ( sPageDesc.Len() &&

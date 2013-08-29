@@ -38,7 +38,9 @@ namespace
             const SfxPoolItem* pItem(0);
             if (SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) && pItem)
             {
-                rPageNo = ((const SwFmtPageDesc *)pItem)->GetNumOffset();
+                ::boost::optional<sal_uInt16> nOffset = ((const SwFmtPageDesc *)pItem)->GetNumOffset();
+                if (nOffset)
+                    rPageNo = nOffset.get();
                 if (ppPageFmtDesc)
                     (*ppPageFmtDesc) = (const SwFmtPageDesc *)(pItem->Clone());
                 bRet = true;
@@ -58,8 +60,30 @@ namespace
         lcl_GetPageDesc(pSh, nDontCare, &pPageFmtDesc);
 
         //If we want a new number then set it, otherwise reuse the existing one
-        sal_uInt16 nPgNo = nNewNumber ?
-            nNewNumber : ( pPageFmtDesc ? pPageFmtDesc->GetNumOffset() : 0 );
+        sal_uInt16 nPgNo;
+        if (nNewNumber)
+        {
+            nPgNo = nNewNumber;
+        }
+        else
+        {
+            if (pPageFmtDesc)
+            {
+                ::boost::optional<sal_uInt16> nOffset = pPageFmtDesc->GetNumOffset();
+                if (nOffset)
+                {
+                    nPgNo = nOffset.get();
+                }
+                else
+                {
+                    nPgNo = 0;
+                }
+            }
+            else
+            {
+                nPgNo = 0;
+            }
+        }
 
         //If we want a new descriptior then set it, otherwise reuse the existing one
         if (!pNewDesc)

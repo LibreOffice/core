@@ -40,6 +40,7 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <crsskip.hxx>
+#include <boost/optional.hpp>
 
 
 using namespace ::com::sun::star;
@@ -61,10 +62,26 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         return ((SvxColorItem&)rItem1).GetValue().IsRGBEqual(
                                 ((SvxColorItem&)rItem2).GetValue() );
     case RES_PAGEDESC:
-        return ((SwFmtPageDesc&)rItem1).GetNumOffset() ==
-                        ((SwFmtPageDesc&)rItem2).GetNumOffset() &&
-                ((SwFmtPageDesc&)rItem1).GetPageDesc() ==
-                        ((SwFmtPageDesc&)rItem2).GetPageDesc();
+        bool bNumOffsetEqual = false;
+        ::boost::optional<sal_uInt16> nNumOffset1 = ((SwFmtPageDesc&)rItem1).GetNumOffset();
+        ::boost::optional<sal_uInt16> nNumOffset2 = ((SwFmtPageDesc&)rItem1).GetNumOffset();
+        if (nNumOffset1.is_initialized() == false && nNumOffset2.is_initialized() == false)
+        {
+            bNumOffsetEqual = true;
+        }
+        else if (nNumOffset1.is_initialized() == true && nNumOffset2.is_initialized() == true)
+        {
+            bNumOffsetEqual = nNumOffset1.get() == nNumOffset2.get();
+        }
+        else
+        {
+            bNumOffsetEqual = false;
+        }
+
+        if (bNumOffsetEqual == false)
+            return false;
+
+        return ((SwFmtPageDesc&)rItem1).GetPageDesc() == ((SwFmtPageDesc&)rItem2).GetPageDesc();
     }
     return rItem1 == rItem2;
 }

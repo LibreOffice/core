@@ -1742,7 +1742,7 @@ sal_Bool SwFrm::WannaRightPage() const
 
     const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
     const SwPageDesc *pDesc = 0;
-    sal_uInt16 nPgNum = 0;
+    ::boost::optional<sal_uInt16> nPgNum;
     if ( pFlow )
     {
         if ( pFlow->IsInTab() )
@@ -1771,7 +1771,7 @@ sal_Bool SwFrm::WannaRightPage() const
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     sal_Bool bOdd;
     if( nPgNum )
-        bOdd = (nPgNum % 2) ? sal_True : sal_False;
+        bOdd = (nPgNum.get() % 2) ? sal_True : sal_False;
     else
     {
         bOdd = pPage->OnRightPage();
@@ -1833,7 +1833,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
             continue;
 
         const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;
-        if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
+        if ( pDesc->GetNumOffset() >= 0 && pDesc->GetDefinedIn() )
         {
             const SwModify *pMod = pDesc->GetDefinedIn();
             SwVirtPageNumInfo aInfo( pPage );
@@ -1850,8 +1850,17 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
         }
     }
     if ( pFrm )
-        return nPhyPage - pFrm->GetPhyPageNum() +
-               pFrm->GetAttrSet()->GetPageDesc().GetNumOffset();
+    {
+        ::boost::optional<sal_uInt16> nOffset = pFrm->GetAttrSet()->GetPageDesc().GetNumOffset();
+        if (nOffset)
+        {
+            return nPhyPage - pFrm->GetPhyPageNum();
+        }
+        else
+        {
+            return nPhyPage - pFrm->GetPhyPageNum() + nOffset.get();
+        }
+    }
     return nPhyPage;
 }
 

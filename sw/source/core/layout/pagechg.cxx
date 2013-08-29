@@ -1277,7 +1277,8 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
         {
-            bWishedOdd = rDesc.GetNumOffset() % 2 ? true : false;
+            ::boost::optional<sal_uInt16> nOffset = rDesc.GetNumOffset();
+            bWishedOdd = (nOffset ? nOffset.get() : 0) % 2 ? true : false;
             //Die Gelegenheit nutzen wir um das Flag an der Root zu pflegen.
             pRoot->SetVirtPageNum( sal_True );
         }

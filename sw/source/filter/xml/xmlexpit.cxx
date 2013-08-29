@@ -1004,14 +1004,16 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
-                sal_Int32 const number(pPageDesc->GetNumOffset());
-                if (0 >= number)
+                ::boost::optional<sal_uInt16> nOffset = pPageDesc->GetNumOffset();
+                if (nOffset)
+                {
+                    // #i114163# positiveInteger only!
+                    sal_Int32 const number(nOffset.get());
+                    ::sax::Converter::convertNumber(aOut, number);
+                }
+                else
                 {
                     aOut.append(GetXMLToken(XML_AUTO));
-                }
-                else // #i114163# positiveInteger only!
-                {
-                    ::sax::Converter::convertNumber(aOut, number);
                 }
                 bOk = true;
             }

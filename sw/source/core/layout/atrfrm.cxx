@@ -668,7 +668,17 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
-            rVal <<= (sal_Int16)GetNumOffset();
+            {
+                ::boost::optional<sal_uInt16> nOffset = GetNumOffset();
+                if (nOffset)
+                {
+                    rVal <<= (sal_Int16)nOffset.get();
+                }
+                else
+                {
+                    rVal.clear();
+                }
+            }
             break;
 
         case MID_PAGEDESC_PAGEDESCNAME:

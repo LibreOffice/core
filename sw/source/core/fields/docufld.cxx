@@ -115,7 +115,7 @@ OUString SwPageNumberFieldType::Expand( sal_uInt32 nFmt, short nOff,
     sal_uInt32 nTmpFmt = (SVX_NUM_PAGEDESC == nFmt) ? (sal_uInt32)nNumberingType : nFmt;
     int const nTmp = nPageNumber + nOff;
 
-    if (0 >= nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMaxPage))
+    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMaxPage))
         return OUString();
 
     if( SVX_NUM_CHAR_SPECIAL == nTmpFmt )

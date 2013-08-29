@@ -897,7 +897,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
             else if( !pDesc->GetLeftFmt() )
                 nTmp = 1;
             else if( rFmtDesc.GetNumOffset() )
-                nTmp = rFmtDesc.GetNumOffset();
+                nTmp = rFmtDesc.GetNumOffset().get();
         }
     }
 

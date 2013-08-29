@@ -154,12 +154,12 @@ struct WW8_SepInfo
     sal_uInt16 nPgRestartNo;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(0)
+        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), nPgRestartNo(-1)
 
     {}
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFmt* pFmt,
-        sal_uLong nLnRestart, sal_uInt16 nPgRestart = 0, const SwNode* pNd = NULL )
+        sal_uLong nLnRestart, sal_Int16 nPgRestart = -1, const SwNode* pNd = NULL )
         : pPageDesc( pPD ), pSectionFmt( pFmt ), pPDNd( pNd ), pNumNd( 0 ),
           nLnNumRestartNo( nLnRestart ), nPgRestartNo( nPgRestart )
     {}

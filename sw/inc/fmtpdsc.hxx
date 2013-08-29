@@ -25,6 +25,7 @@
 #include <hintids.hxx>
 #include <format.hxx>
 #include <calbck.hxx>
+#include <boost/optional.hpp>
 
 class SwPageDesc;
 class SwHistory;
@@ -41,7 +42,7 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
      to set the auto-flag after copying!! */
     friend sal_Bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
                         SwHistory* );
-    sal_uInt16 nNumOffset;          ///< Offset page number.
+    ::boost::optional<sal_uInt16> nNumOffset;          ///< Offset page number.
     sal_uInt16 nDescNameIdx;        ///< SW3-Reader: stringpool-index of style name.
     SwModify* pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (CntntNode/Format). */
@@ -71,8 +72,8 @@ public:
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
 
-    sal_uInt16  GetNumOffset() const        { return nNumOffset; }
-    void    SetNumOffset( sal_uInt16 nNum ) { nNumOffset = nNum; }
+    ::boost::optional<sal_uInt16>  GetNumOffset() const        { return nNumOffset; }
+    void    SetNumOffset( ::boost::optional<sal_uInt16> nNum ) { nNumOffset = nNum; }
 
     /// Query / set where attribute is anchored.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }

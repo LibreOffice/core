@@ -524,28 +524,32 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
 
     // Get hold of PageDesc (either via FrmFmt of the first node or the initial one).
     SwPageDesc *pDesc = 0;
-    sal_uInt16 nPgNum = 1;
+    ::boost::optional<sal_uInt16> nPgNum;
 
     if ( pTblNd )
     {
         const SwFmtPageDesc &rDesc = pTblNd->GetTable().GetFrmFmt()->GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
         //#19104# respect the page number offset!!
-        bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
+        nPgNum = rDesc.GetNumOffset();
+        if (nPgNum)
+            bIsVirtPageNum = true;
     }
     else if ( pNode )
     {
         const SwFmtPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
         //#19104# respect the page number offset!!
-        bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
+        nPgNum = rDesc.GetNumOffset();
+        if (nPgNum)
+            bIsVirtPageNum = true;
     }
     else
         bIsVirtPageNum = sal_False;
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
-    const bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
-    bool bFirst = !nPgNum || 1 == nPgNum;
+    const bool bOdd = !nPgNum || 0 != ( nPgNum.get() % 2 );
+    bool bFirst = !nPgNum || 1 == nPgNum.get();
 
     // Create a page and put it in the layout
     SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, sal_False, 0 );
