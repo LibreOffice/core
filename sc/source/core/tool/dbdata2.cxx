@@ -16,14 +16,12 @@ OUString ScDBData::GetCellStyle( const ScAddress& rPos, bool bRowStripe )
     //first see if the DB Range has any DB Formatting at all
     if( !HasFormatting() )
         return OUString("Default");
+    //Check if the bRowStripe specified applies?
+    if ( bRowStripe == true && !(mpTableFormatData->GetBandedRows()) )
+        return OUString("Default");//Asked banded rows, but not banded
+    if ( bRowStripe == false && !(mpTableFormatData->GetBandedColumns()) )
+        return OUString("Default");//asked banded cols, but not banded here
     //Calculating which style sheet is applicable to the give cell begins now
-    //Create a whole row stripe map
-    std::vector< OUString > aRowStripeSeq;
-    //Create a whole column stripe map
-    std::vector< OUString > aColStripeSeq;
-    //The above two vectors represent a whole row/col stripe by
-    //using consecutive entries of stylenames into the vector
-    //just as it would look like in a rendered single stripe.
     ScDBDataFormatting aDBFormatting;
     GetTableFormatting( aDBFormatting );
     sal_Int32 i;
@@ -31,6 +29,7 @@ OUString ScDBData::GetCellStyle( const ScAddress& rPos, bool bRowStripe )
     sal_Int32 nSecondSize;
     OUString aFirstStyle;
     OUString aSecondStyle;
+    sal_Int32 nStyleIndex;
     if ( bRowStripe )
     {
         //Fill the row stripe sequence
@@ -38,65 +37,38 @@ OUString ScDBData::GetCellStyle( const ScAddress& rPos, bool bRowStripe )
         aFirstStyle = aDBFormatting.GetFirstRowStripeStyle();
         nSecondSize = aDBFormatting.GetSecondRowStripeSize();
         aSecondStyle = aDBFormatting.GetSecondRowStripeStyle();
-        for ( i = 1; i <= nFirstSize; ++i )
-        {
-            //Add the first row stripe style to the RowStripeSeq vector nFirstSize
-            //many times.
-            aRowStripeSeq.push_back( aFirstStyle );
-        }
-        for ( i = 1; i<= nSecondSize; ++i )
-        {
-            //Similarly
-            aRowStripeSeq.push_back( aSecondStyle );
-        }
     }
-    //Fill the column stripe sequence
     else
     {
+        //Fill the col stripe sequence
         nFirstSize = aDBFormatting.GetFirstColStripeSize();
         aFirstStyle = aDBFormatting.GetFirstColStripeStyle();
         nSecondSize = aDBFormatting.GetSecondColStripeSize();
         aSecondStyle = aDBFormatting.GetSecondColStripeStyle();
-        for ( i = 1; i<=nFirstSize; ++i )
-        {
-            aColStripeSeq.push_back( aFirstStyle );
-        }
-        for ( i = 1; i<=nSecondSize; ++i )
-        {
-            aColStripeSeq.push_back( aSecondStyle );
-        }
     }
-    //This approach of calculating the stripe sequence will be bad
-    //if stripe sizes are huge, they generally aren't.
-    //Now the math.
-    //We used 1-based addressing for this instead of the 0-based used in Calc
     if ( bRowStripe )
     {
-        sal_Int32 nStyleIndex = ( rPos.Row() + 1 ) % ( aRowStripeSeq.size() );
-        if ( nStyleIndex == 0 )
-        {
-            //Return the last entry in the vector
-            return aRowStripeSeq[ ( aRowStripeSeq.size() - 1 ) ];
-        }
-        else
-        {
-            //Return the nStyleIndex'th entry
-            return aRowStripeSeq[ ( nStyleIndex - 1) ];
-        }
+        nStyleIndex = ( rPos.Row() + 1 ) % ( nFirstSize + nSecondSize );
     }
     else
     {
-        sal_Int32 nStyleIndex = ( rPos.Row() + 1 ) % ( aRowStripeSeq.size() );
-        if ( nStyleIndex == 0 )
-        {
-            //Return the last entry in the vector
-            return aColStripeSeq[ ( aColStripeSeq.size() - 1 ) ];
-        }
+        nStyleIndex = ( rPos.Col() + 1 ) % ( nFirstSize + nSecondSize );
+    }
+    if ( nStyleIndex == 0 )
+    {
+        sal_Int32 nEntryNo = ( ( nFirstSize + nSecondSize ) );
+        if ( nEntryNo <= nFirstSize )
+            return aFirstStyle;
         else
-        {
-            //Return the nStyleIndex'th entry
-            return aColStripeSeq[ ( nStyleIndex - 1 ) ];
-        }
+            return aSecondStyle;
+    }
+    else
+    {
+        sal_Int32 nEntryNo = ( nStyleIndex );
+        if ( nEntryNo <= nFirstSize )
+            return aFirstStyle;
+        else
+            return aSecondStyle;
     }
 }
 
