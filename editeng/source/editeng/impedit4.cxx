@@ -1662,7 +1662,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     {
         // empty paragraph found that needs to have language and font set?
         if (bAllowImplicitChangesForNotConvertibleText &&
-            !pEditEngine->GetText( pConvInfo->aConvContinue.nPara ).Len())
+            pEditEngine->GetText( pConvInfo->aConvContinue.nPara ).isEmpty())
         {
             sal_Int32 nPara = pConvInfo->aConvContinue.nPara;
             ESelection aESel( nPara, 0, nPara, 0 );
@@ -2662,11 +2662,11 @@ sal_Bool ImpEditEngine::HasText( const SvxSearchItem& rSearchItem )
     return ImpSearch( aTmpItem, aDummySel, aStartPaM, aFoundSel );
 }
 
-void ImpEditEngine::SetAutoCompleteText( const String& rStr, sal_Bool bClearTipWindow )
+void ImpEditEngine::SetAutoCompleteText(const OUString& rStr, bool bClearTipWindow)
 {
     aAutoCompleteText = rStr;
     if ( bClearTipWindow && pActiveView )
-        Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), String(), 0 );
+        Help::ShowQuickHelp( pActiveView->GetWindow(), Rectangle(), OUString(), 0 );
 }
 
 namespace

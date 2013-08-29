@@ -618,7 +618,7 @@ OUString EditEngine::GetText( LineEnd eEnd ) const
     return pImpEditEngine->GetEditDoc().GetText( eEnd );
 }
 
-XubString EditEngine::GetText( const ESelection& rESelection, const LineEnd eEnd ) const
+OUString EditEngine::GetText( const ESelection& rESelection, const LineEnd eEnd ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection aSel( pImpEditEngine->CreateSel( rESelection ) );
@@ -689,7 +689,7 @@ sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const
      return nHeight;
 }
 
-XubString EditEngine::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
+OUString EditEngine::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
 {
     ESelection aESel( nPara, nIndex, nPara, nIndex );
     EditSelection aSel( pImpEditEngine->CreateSel( aESel ) );
@@ -1038,9 +1038,9 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     DBG_ASSERT( !aCurSel.IsInvalid(), "Blinde Selection in EditEngine::PostKeyEvent" );
 
-    String aAutoText( pImpEditEngine->GetAutoCompleteText() );
-    if ( pImpEditEngine->GetAutoCompleteText().Len() )
-        pImpEditEngine->SetAutoCompleteText( String(), sal_True );
+    OUString aAutoText( pImpEditEngine->GetAutoCompleteText() );
+    if (!pImpEditEngine->GetAutoCompleteText().isEmpty())
+        pImpEditEngine->SetAutoCompleteText(OUString(), true);
 
     sal_uInt16 nCode = rKeyEvent.GetKeyCode().GetCode();
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
@@ -1295,7 +1295,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         }
                         else
                         {
-                            if ( !aAutoText.Len() )
+                            if (aAutoText.isEmpty())
                             {
                                 if ( pImpEditEngine->GetStatus().DoAutoCorrect() )
                                     aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
@@ -1703,10 +1703,10 @@ sal_uInt16 EditEngine::GetTextLen( sal_Int32 nPara ) const
     return 0;
 }
 
-XubString EditEngine::GetText( sal_Int32 nPara ) const
+OUString EditEngine::GetText( sal_Int32 nPara ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    XubString aStr;
+    OUString aStr;
     if ( 0 <= nPara && nPara < pImpEditEngine->GetEditDoc().Count() )
         aStr = pImpEditEngine->GetEditDoc().GetParaAsString( nPara );
     return aStr;
@@ -1773,7 +1773,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
     pImpEditEngine->FormatAndUpdate();
 }
 
-void EditEngine::InsertParagraph( sal_Int32 nPara, const XubString& rTxt )
+void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     if ( nPara > GetParagraphCount() )
@@ -1792,7 +1792,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const XubString& rTxt )
     pImpEditEngine->FormatAndUpdate();
 }
 
-void EditEngine::SetText( sal_Int32 nPara, const XubString& rTxt )
+void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection* pSel = pImpEditEngine->SelectParagraph( nPara );
@@ -2145,7 +2145,7 @@ void EditEngine::QuickMarkInvalid( const ESelection& rSel )
     }
 }
 
-void EditEngine::QuickInsertText( const XubString& rText, const ESelection& rSel )
+void EditEngine::QuickInsertText(const OUString& rText, const ESelection& rSel)
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
@@ -2663,7 +2663,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
 OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    XubString aComment;
+    OUString aComment;
     switch ( nId )
     {
         case EDITUNDO_REMOVECHARS:

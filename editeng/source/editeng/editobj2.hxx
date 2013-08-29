@@ -184,8 +184,8 @@ private:
     bool                    bVertical:1;
     bool                    bStoreUnicodeStrings:1;
 
-    bool ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
-                               const String& rNewName, SfxStyleFamily eNewFamily );
+    bool ImpChangeStyleSheets( const OUString& rOldName, SfxStyleFamily eOldFamily,
+                               const OUString& rNewName, SfxStyleFamily eNewFamily );
 
 public:
     void StoreData( SvStream& rOStream ) const;

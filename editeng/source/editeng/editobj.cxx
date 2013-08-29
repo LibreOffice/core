@@ -988,8 +988,8 @@ void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, c
 }
 
 bool EditTextObjectImpl::ImpChangeStyleSheets(
-                    const XubString& rOldName, SfxStyleFamily eOldFamily,
-                    const XubString& rNewName, SfxStyleFamily eNewFamily )
+                    const OUString& rOldName, SfxStyleFamily eOldFamily,
+                    const OUString& rNewName, SfxStyleFamily eNewFamily )
 {
     const size_t nParagraphs = aContents.size();
     bool bChanges = false;

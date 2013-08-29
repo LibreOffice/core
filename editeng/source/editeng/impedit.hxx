@@ -438,7 +438,7 @@ private:
 
     ConvInfo *          pConvInfo;
 
-    XubString           aAutoCompleteText;
+    OUString            aAutoCompleteText;
 
     InternalEditStatus  aStatus;
 
@@ -550,7 +550,7 @@ private:
     void                ImpRemoveParagraph( sal_Int32 nPara );
     EditSelection       ImpMoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
 
-    EditPaM             ImpFastInsertText( EditPaM aPaM, const String& rStr );
+    EditPaM             ImpFastInsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM             ImpFastInsertParagraph( sal_Int32 nPara );
 
     sal_Bool            ImpCheckRefMapMode();
@@ -727,7 +727,7 @@ public:
     void                    Command( const CommandEvent& rCEvt, EditView* pView );
 
     EditSelectionEngine&    GetSelEngine() { return aSelEngine; }
-    XubString               GetSelected( const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF ) const;
+    OUString                GetSelected( const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF ) const;
 
     const SfxItemSet&       GetEmptyItemSet();
 
@@ -751,7 +751,7 @@ public:
     bool                IsFormatted() const { return bFormatted; }
     bool                IsFormatting() const { return bIsFormatting; }
 
-    void            SetText( const String& rText );
+    void            SetText(const OUString& rText);
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
     EditPaM         InsertText(const EditSelection& aCurEditSelection, const String& rStr);
@@ -969,8 +969,8 @@ public:
     void                StartOnlineSpellTimer()     { aOnlineSpellTimer.Start(); }
     void                StopOnlineSpellTimer()      { aOnlineSpellTimer.Stop(); }
 
-    const XubString&    GetAutoCompleteText() const { return aAutoCompleteText; }
-    void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
+    const OUString&     GetAutoCompleteText() const { return aAutoCompleteText; }
+    void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
 
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
     short               ReplaceTextOnly( ContentNode* pNode, sal_uInt16 nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );

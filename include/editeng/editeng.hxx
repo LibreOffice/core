@@ -245,13 +245,13 @@ public:
     void            SetMaxAutoPaperSize( const Size& rSz );
 
     OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
-    String          GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
+    OUString        GetText( const ESelection& rSelection, const LineEnd eEnd = LINEEND_LF ) const;
     sal_uInt32      GetTextLen() const;
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
 
-    String          GetText( sal_Int32 nParagraph ) const;
+    OUString        GetText( sal_Int32 nParagraph ) const;
     xub_StrLen      GetTextLen( sal_Int32 nParagraph ) const;
     sal_uInt32      GetTextHeight( sal_Int32 nParagraph ) const;
 
@@ -267,7 +267,7 @@ public:
     EPosition       FindDocPosition( const Point& rDocPos ) const;
     Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
 
-    String          GetWord( sal_Int32 nPara, xub_StrLen nIndex );
+    OUString        GetWord(sal_Int32 nPara, xub_StrLen nIndex);
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
 
@@ -279,11 +279,11 @@ public:
     EditTextObject* CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
 
-    void            RemoveParagraph( sal_Int32 nPara );
-    void            InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj );
-    void            InsertParagraph( sal_Int32 nPara, const String& rText);
+    void            RemoveParagraph(sal_Int32 nPara);
+    void            InsertParagraph(sal_Int32 nPara, const EditTextObject& rTxtObj);
+    void            InsertParagraph(sal_Int32 nPara, const OUString& rText);
 
-    void            SetText( sal_Int32 nPara, const String& rText);
+    void            SetText(sal_Int32 nPara, const OUString& rText);
 
     virtual void                SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
     virtual const SfxItemSet&   GetParaAttribs( sal_Int32 nPara ) const;
@@ -367,7 +367,7 @@ public:
     void            QuickFormatDoc( sal_Bool bFull = sal_False );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
-    void            QuickInsertText( const String& rText, const ESelection& rSel );
+    void            QuickInsertText(const OUString& rText, const ESelection& rSel);
     void            QuickDelete( const ESelection& rSel );
     void            QuickMarkToBeRepainted( sal_Int32 nPara );
 

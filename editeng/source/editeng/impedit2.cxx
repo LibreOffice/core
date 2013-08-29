@@ -265,9 +265,9 @@ EditPaM ImpEditEngine::DeleteSelected( EditSelection aSel )
     return aPaM;
 }
 
-XubString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eEnd  ) const
+OUString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eEnd  ) const
 {
-    XubString aText;
+    OUString aText;
     if ( !rSel.HasRange() )
         return aText;
 
@@ -308,7 +308,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
 
-    if ( GetAutoCompleteText().Len() )
+    if (!GetAutoCompleteText().isEmpty())
         SetAutoCompleteText( String(), sal_True );
 
     GetSelEngine().SelMouseButtonDown( rMEvt );
@@ -645,7 +645,7 @@ EditPaM ImpEditEngine::RemoveText()
 }
 
 
-void ImpEditEngine::SetText( const XubString& rText )
+void ImpEditEngine::SetText(const OUString& rText)
 {
     // RemoveText deletes the undo list!
     EditPaM aStartPaM = RemoveText();
@@ -655,7 +655,7 @@ void ImpEditEngine::SetText( const XubString& rText )
 
     EditSelection aEmptySel( aStartPaM, aStartPaM );
     EditPaM aPaM = aStartPaM;
-    if ( rText.Len() )
+    if (!rText.isEmpty())
         aPaM = ImpInsertText( aEmptySel, rText );
 
     for (size_t nView = 0; nView < aEditViews.size(); ++nView)
@@ -665,7 +665,7 @@ void ImpEditEngine::SetText( const XubString& rText )
         pView->pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
         //  If no text then also no Format&Update
         // => The text remains.
-        if ( !rText.Len() && GetUpdateMode() )
+        if (rText.isEmpty() && GetUpdateMode())
         {
             Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
                                 Size( aPaperSize.Width(), nCurTextHeight ) );
@@ -673,7 +673,7 @@ void ImpEditEngine::SetText( const XubString& rText )
             pView->GetWindow()->Invalidate( aTmpRect );
         }
     }
-    if( !rText.Len() ) {    // otherwise it must be invalidated later, !bFormatted is enough.
+    if (rText.isEmpty()) {    // otherwise it must be invalidated later, !bFormatted is enough.
         nCurTextHeight = 0;
         nCurTextHeightNTP = 0;
     }
@@ -2739,13 +2739,13 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const String&
     return aPaM;
 }
 
-EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const XubString& rStr )
+EditPaM ImpEditEngine::ImpFastInsertText( EditPaM aPaM, const OUString& rStr )
 {
-    OSL_ENSURE( rStr.Search( 0x0A ) == STRING_NOTFOUND, "FastInsertText: Newline not allowed! ");
-    OSL_ENSURE( rStr.Search( 0x0D ) == STRING_NOTFOUND, "FastInsertText: Newline not allowed! ");
-    OSL_ENSURE( rStr.Search( '\t' ) == STRING_NOTFOUND, "FastInsertText: Newline not allowed! ");
+    OSL_ENSURE( rStr.indexOf( 0x0A ) == -1, "FastInsertText: Newline not allowed! ");
+    OSL_ENSURE( rStr.indexOf( 0x0D ) == -1, "FastInsertText: Newline not allowed! ");
+    OSL_ENSURE( rStr.indexOf( '\t' ) == -1, "FastInsertText: Newline not allowed! ");
 
-    if ( ( aPaM.GetNode()->Len() + rStr.Len() ) < MAXCHARSINPARA )
+    if ( ( aPaM.GetNode()->Len() + rStr.getLength() ) < MAXCHARSINPARA )
     {
         if ( IsUndoEnabled() && !IsInUndo() )
             InsertUndo(new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), rStr));
@@ -3436,7 +3436,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     uno::Reference< datatransfer::XTransferable > xDataObj;
     xDataObj = pDataObj;
 
-    XubString aText(convertLineEnd(GetSelected(aSelection), GetSystemLineEnd())); // System specific
+    OUString aText(convertLineEnd(GetSelected(aSelection), GetSystemLineEnd())); // System specific
     pDataObj->GetString() = aText;
 
     SvxFontItem::EnableStoreUnicodeNames( sal_True );

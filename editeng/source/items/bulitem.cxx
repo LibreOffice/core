@@ -368,7 +368,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 
 //------------------------------------------------------------------------
 
-XubString SvxBulletItem::GetFullText() const
+OUString SvxBulletItem::GetFullText() const
 {
     XubString aStr( aPrevText );
     aStr += cSymbol;

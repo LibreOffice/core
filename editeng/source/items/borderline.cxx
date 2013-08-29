@@ -613,7 +613,7 @@ Color SvxBorderLine::GetColorGap( ) const
 
 // -----------------------------------------------------------------------
 
-XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
+OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       SfxMapUnit eDestUnit,
                                       const IntlWrapper* pIntl,
                                       sal_Bool bMetricStr) const

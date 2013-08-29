@@ -89,7 +89,7 @@ public:
     virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const;
     virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const;
 
-    String              GetFullText() const;
+    OUString            GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
     String              GetPrevText() const { return aPrevText; }
     String              GetFollowText() const { return aFollowText; }

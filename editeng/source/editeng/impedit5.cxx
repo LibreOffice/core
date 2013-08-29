@@ -72,11 +72,11 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
     {
         if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
         {
-            XubString aPrevStyleName;
+            OUString aPrevStyleName;
             if ( pCurStyle )
                 aPrevStyleName = pCurStyle->GetName();
 
-            XubString aNewStyleName;
+            OUString aNewStyleName;
             if ( pStyle )
                 aNewStyleName = pStyle->GetName();
 
