@@ -7,7 +7,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.codes firebird/builds/posix/Makef
  $(BIN)/codes$(EXEC_EXT): $(CODES_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
 -
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  # Rebuild ids.h
  $(SRC_ROOT)/include/gen/ids.h:	$(SRC_ROOT)/misc/ids.m $(SRC_ROOT)/jrd/relations.h
@@ -18,7 +18,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.examples firebird/builds/posix/Ma
  
  $(EXAMPLES_DEST)/empbuild$(EXEC_EXT): $(EMPBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
  	$(EXE_LINK) $(LINK_OPTS) $(EMPBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  $(EXAMPLES_DEST)/empbuild.c:	$(EXAMPLES_DEST)/empbuild.fdb $(EXAMPLES_DEST)/empbuild.e
  
@@ -26,10 +26,20 @@ diff -ur firebird.org/builds/posix/Makefile.in.examples firebird/builds/posix/Ma
  
  $(EXAMPLES_DEST)/intlbld$(EXEC_EXT): $(INTLBLD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
  	$(EXE_LINK) $(LINK_OPTS) $(INTLBLD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  $(EXAMPLES_DEST)/intlbld.c:	$(EXAMPLES_DEST)/intlbuild.fdb $(EXAMPLES_DEST)/intlbld.e
  
+--- firebird.org/builds/posix/Makefile.in.libfbembed
++++ firebird/builds/posix/Makefile.in.libfbembed
+@@ -63,6 +63,7 @@
+ 
+ $(LIBFBEMBED_SO): $(LIBFBEMBED_Objects) $(SERVER_Objects) $(COMMON_Objects)
+ 	$(LINK_EMBED) -o $@ $^ $(LINK_EMBED_LIBS)
++	$(CHANGE_INSTALL_NAMES_SHL) $@
+ 
+ $(LIBFBEMBED_SOBASENAME): $(LIBFBEMBED_SO)
+ 	(cd $(LIB) && $(LN) -f $(SharedLibraryName) $(SharedLibrarySoName) )
 diff -ur firebird.org/builds/posix/Makefile.in.msgs firebird/builds/posix/Makefile.in.msgs
 --- firebird.org/builds/posix/Makefile.in.msgs	2013-07-12 20:55:46.000000000 +0200
 +++ firebird/builds/posix/Makefile.in.msgs	2013-07-15 11:37:17.000000000 +0200
@@ -37,7 +47,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.msgs firebird/builds/posix/Makefi
  $(BUILD_FILE):	$(BUILD_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $(BUILD_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  
  enter_messages : $(ENTER_MESSAGES)
@@ -45,7 +55,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.msgs firebird/builds/posix/Makefi
  $(ENTER_MESSAGES):	$(ENTER_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $(ENTER_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  
  modify_messages: $(MODIFY_MESSAGES) 
@@ -53,7 +63,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.msgs firebird/builds/posix/Makefi
  $(MODIFY_MESSAGES):	$(MODIFY_Objects) $(LIBFBSTATIC_A) 
  	$(STATICEXE_LINK) $(LINK_OPTS) $(MODIFY_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  
  change_messages: $(CHANGE_MESSAGES)
@@ -61,7 +71,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.msgs firebird/builds/posix/Makefi
  $(CHANGE_MESSAGES):	$(CHANGE_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $(CHANGE_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LINK_LIBS) $(ICU_LIBS)
  	$(CHMOD_7) $@
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  
  
@@ -72,7 +82,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.static.createdb firebird/builds/p
  
  $(CREATE_DB):	$(CREATEDB_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
-+	$(CHANGE_INSTALL_NAMES) $(CREATE_DB)
++	$(CHANGE_INSTALL_NAMES_APP) $(CREATE_DB)
  
  
  include $(ROOT)/gen/make.shared.targets
@@ -84,7 +94,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.static.gbak firebird/builds/posix
  $(GBAK_STATIC) : $(AllObjects) $(LIBFBSTATIC_A) 
  	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
 -
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  include $(ROOT)/gen/make.shared.targets
  
@@ -95,7 +105,7 @@ diff -ur firebird.org/builds/posix/Makefile.in.static.gpre firebird/builds/posix
  $(GPRE_STATIC):	$(GPRESTATIC_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A)
  	$(STATICEXE_LINK) $(LINK_OPTS) $^ -o $@ -L$(LIB) $(LINK_LIBS) $(ICU_LIBS)
  	-$(RM) $(GPRE_CURRENT)
-+	$(CHANGE_INSTALL_NAMES) $(GPRE_STATIC)
++	$(CHANGE_INSTALL_NAMES_APP) $(GPRE_STATIC)
  	(cd $(@D); $(LN) $(@F) $(notdir $(GPRE_CURRENT)))
  
  
@@ -107,9 +117,37 @@ diff -ur firebird.org/builds/posix/Makefile.in.static.isql firebird/builds/posix
  $(ISQL_STATIC):	$(ISQL_Objects) $(COMMON_Objects) $(LIBFBSTATIC_A) 
  	$(STATICEXE_LINK) $(LINK_OPTS) $(ISQL_Objects) $(COMMON_Objects) -o $@ -L$(LIB) -lfbstatic $(LIBEDITLINE) $(LINK_LIBS) $(ICU_LIBS)
 -
-+	$(CHANGE_INSTALL_NAMES) $@
++	$(CHANGE_INSTALL_NAMES_APP) $@
  
  include $(ROOT)/gen/make.shared.targets
+ 
+--- firebird.org/builds/posix/darwin.defaults
++++ firebird/builds/posix/darwin.defaults
+@@ -32,17 +32,17 @@
+ LINK_EMPTY_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/empty.darwin.vers
+ LINK_FIREBIRD_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/firebird.darwin.vers
+ 
+-LIB_LINK_RPATH:=-install_name /Library/Frameworks/Firebird.framework/Versions/A/Libraries/
+-LIB_EMBED_LINK_OPTIONS:=-install_name /Library/Frameworks/Firebird.framework/Versions/A/Firebird
+-LIB_CLIENT_LINK_OPTIONS:=-install_name /Library/Frameworks/Firebird.framework/Versions/A/Firebird
+-FBEMBED_LINK:=-F../gen/firebird -framework Firebird -L$(LIB) -lfbembed $(ICU_LIBS)
++LIB_LINK_RPATH:=
++LIB_EMBED_LINK_OPTIONS:=-install_name @loader_path/libfbembed.dylib
++LIB_CLIENT_LINK_OPTIONS:=
++FBEMBED_LINK:=-L$(LIB) -lfbembed $(ICU_LIBS)
+ PLATFORM_FALLBACK=os/posix
+ 
+-PLAT_CLASSIC_PRE_TARGET=darwin_setup_framework
+-PLAT_CLASSIC_POST_TARGET=darwin_finish_cs_framework
++PLAT_CLASSIC_PRE_TARGET=
++PLAT_CLASSIC_POST_TARGET=
+ 
+-PLAT_SUPER_PRE_TARGET=darwin_setup_framework
+-PLAT_SUPER_POST_TRAGET=darwin_finish_ss_framework
++PLAT_SUPER_PRE_TARGET=
++PLAT_SUPER_POST_TRAGET=
+ 
+ PLATFORM_POSTBUILD_TARGET=darwin_postbuild_target
  
 diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.darwin
 --- firebird.org/builds/posix/postfix.darwin	2013-07-12 20:55:46.000000000 +0200
@@ -140,6 +178,15 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  	mkdir -p $(FB_FW)/Resources/doc
 --- firebird.org/builds/posix/prefix.darwin_i386
 +++ firebird/builds/posix/prefix.darwin_i386
+@@ -19,7 +19,7 @@
+ # 4. for  CFLAGS, CXXFLAGS, LDFLAGS export '-m32 -arch i386'
+ # 5. export MACOSX_DEPLOYMENT_TARGET=10.6
+ 
+-DYLD_LIBRARY_PATH=$(FIREBIRD)/lib
++DYLD_LIBRARY_PATH:=$(FIREBIRD)/lib:$(DYLD_LIBRARY_PATH)
+ export DYLD_LIBRARY_PATH
+ 
+ MACOSX_DEPLOYMENT_TARGET=10.6
 @@ -32,8 +32,8 @@
  
  OS_ServerFiles=inet_server.cpp
@@ -153,6 +200,15 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
 --- firebird.org/builds/posix/prefix.darwin_x86_64
 +++ firebird/builds/posix/prefix.darwin_x86_64
+@@ -19,7 +19,7 @@
+ #
+ # Default build from 10.6
+ 
+-DYLD_LIBRARY_PATH=$(FIREBIRD)/lib
++DYLD_LIBRARY_PATH:=$(FIREBIRD)/lib:$(DYLD_LIBRARY_PATH)
+ export DYLD_LIBRARY_PATH
+ 
+ MACOSX_DEPLOYMENT_TARGET=10.6
 @@ -27,8 +27,8 @@
  
  OS_ServerFiles=inet_server.cpp
