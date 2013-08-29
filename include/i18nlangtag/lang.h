@@ -249,7 +249,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_LITHUANIAN_CLASSIC         0x0827
 #define LANGUAGE_LUXEMBOURGISH_LUXEMBOURG   0x046E  /* obsoletes LANGUAGE_USER_LUXEMBOURGISH 0x0630 */
 #define LANGUAGE_MACEDONIAN                 0x042F
-#define LANGUAGE_MALAY                      0x003E  /* primary only, not a locale! */
 #define LANGUAGE_MALAYALAM                  0x044C  /* in India */
 #define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
 #define LANGUAGE_MALAY_MALAYSIA             0x043E

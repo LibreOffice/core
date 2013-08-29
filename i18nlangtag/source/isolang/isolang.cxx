@@ -134,7 +134,7 @@ struct IsoLangOtherEntry
  * only" usage and locale fall back should be cleaned up and made consistent. I
  * strongly doubt that most callers exactly expect the behavior described.
  * Currently these primary LangIDs are used literally in OOo code:
- * LANGUAGE_ENGLISH LANGUAGE_CHINESE LANGUAGE_MALAY
+ * LANGUAGE_ENGLISH LANGUAGE_CHINESE
  * LANGUAGE_AZERI LANGUAGE_URDU LANGUAGE_KASHMIRI
  */
 
@@ -265,7 +265,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_VIETNAMESE,                  "vi", "VN" },
     { LANGUAGE_LATVIAN,                     "lv", "LV" },
     { LANGUAGE_MACEDONIAN,                  "mk", "MK" },
-    { LANGUAGE_MALAY,                       "ms", ""   },
     { LANGUAGE_MALAY_MALAYSIA,              "ms", "MY" },
     { LANGUAGE_MALAY_BRUNEI_DARUSSALAM,     "ms", "BN" },
     { LANGUAGE_ENGLISH_MALAYSIA,            "en", "MY" },
