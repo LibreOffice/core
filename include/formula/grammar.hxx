@@ -186,6 +186,7 @@ public:
             case GRAM_NATIVE_XL_R1C1 :
             case GRAM_ENGLISH_XL_A1  :
             case GRAM_ENGLISH_XL_R1C1:
+            case GRAM_ENGLISH_XL_OOX :
                 return true;
             default:
                 return extractFormulaLanguage( eGrammar) == GRAM_EXTERNAL;
