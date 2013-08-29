@@ -28,6 +28,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <propertyids.hxx>
+#include <time.h>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -410,15 +411,22 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 nIndex, const DateTime& rTimestamp)
+    throw(SQLException, RuntimeException)
 {
-    (void) parameterIndex;
-    (void) aVal;
-    ::osl::MutexGuard aGuard( m_pConnection->getMutex() );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    struct tm aCTime;
+    aCTime.tm_sec = rTimestamp.Seconds;
+    aCTime.tm_min = rTimestamp.Minutes;
+    aCTime.tm_hour = rTimestamp.Hours;
+    aCTime.tm_mday = rTimestamp.Day;
+    aCTime.tm_mon = rTimestamp.Month;
+    aCTime.tm_year = rTimestamp.Year;
 
+    ISC_TIMESTAMP aISCTimestamp;
+    isc_encode_timestamp(&aCTime, &aISCTimestamp);
+
+    setValue< ISC_TIMESTAMP >(nIndex, aISCTimestamp, SQL_TIMESTAMP);
 }
 // -------------------------------------------------------------------------
 
