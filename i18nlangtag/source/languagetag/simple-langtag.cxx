@@ -208,7 +208,10 @@ struct lt_tag_t : public my_t_impl
     lt_region_t maRegion;
     lt_list_t*  mpVariants;
     explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), mpVariants(NULL) {}
-    virtual ~lt_tag_t() {}
+    virtual ~lt_tag_t()
+    {
+        my_unrefList( mpVariants);
+    }
     explicit lt_tag_t( const lt_tag_t& r )
         :
             my_t_impl( r),
