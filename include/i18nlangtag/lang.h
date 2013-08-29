@@ -126,7 +126,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_ARABIC_PRIMARY_ONLY        0x0001  /* primary only, not a locale! */
 #define LANGUAGE_ARMENIAN                   0x042B
 #define LANGUAGE_ASSAMESE                   0x044D
-#define LANGUAGE_AZERI                      0x002C  /* primary only, not a locale! */
 #define LANGUAGE_AZERI_CYRILLIC             0x082C
 #define LANGUAGE_AZERI_LATIN                0x042C
 #define LANGUAGE_BASHKIR_RUSSIA             0x046D
