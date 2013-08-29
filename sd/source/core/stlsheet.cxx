@@ -1281,7 +1281,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINEDASH:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rStyleSet.GetItem((sal_uInt16)pEntry->nWID);
-                    if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
+                    if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
             }

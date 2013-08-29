@@ -2131,7 +2131,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_LINEDASH:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                    if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
+                    if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
                 break;

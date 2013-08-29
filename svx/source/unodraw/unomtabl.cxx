@@ -347,7 +347,7 @@ static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set<
     {
         NameOrIndex* pItem = (NameOrIndex*)pPool->GetItem2( nWhich, nSurrogate );
 
-        if( pItem == NULL || pItem->GetName().Len() == 0 )
+        if( pItem == NULL || pItem->GetName().isEmpty() )
             continue;
 
         OUString aName = SvxUnogetApiNameForItem(XATTR_LINEEND, pItem->GetName());
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     for( nSurrogate = 0; nSurrogate < nStartCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINESTART, nSurrogate);
-        if( pItem && pItem->GetName().Len() != 0 )
+        if( pItem && !pItem->GetName().isEmpty() )
             return sal_True;
     }
 
@@ -443,7 +443,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
     for( nSurrogate = 0; nSurrogate < nEndCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem2( XATTR_LINEEND, nSurrogate);
-        if( pItem && pItem->GetName().Len() != 0 )
+        if( pItem && !pItem->GetName().isEmpty() )
             return sal_True;
     }
 

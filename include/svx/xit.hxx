@@ -47,7 +47,7 @@ public:
             NameOrIndex() { nPalIndex = -1; }
             NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex);
             NameOrIndex(sal_uInt16 nWhich,
-                        const String& rName= String());
+                        const OUString& rName = OUString());
             NameOrIndex(sal_uInt16 nWhich, SvStream& rIn);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            ~NameOrIndex() {};
@@ -57,18 +57,18 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
-            String       GetName() const              { return GetValue();   }
-            void         SetName(const String& rName) { SetValue(rName);     }
-            sal_Int32        GetIndex() const             { return nPalIndex;    }
+            OUString     GetName() const              { return GetValue();   }
+            void         SetName(const OUString& rName) { SetValue(rName);     }
+            sal_Int32    GetIndex() const             { return nPalIndex;    }
             void         SetIndex(sal_Int32 nIndex)        { nPalIndex = nIndex;  }
-            sal_Bool         IsIndex() const          { return (nPalIndex >= 0); }
+            sal_Bool     IsIndex() const          { return (nPalIndex >= 0); }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.
         Argument pPool2 can be null.
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
-    static String CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults );
+    static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults );
 };
 
 #endif

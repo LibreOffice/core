@@ -86,7 +86,7 @@ NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
 {
 }
 
-NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const XubString& rName) :
+NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, const OUString& rName) :
     SfxStringItem(_nWhich, rName),
     nPalIndex(-1)
 {
@@ -133,7 +133,7 @@ SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults )
+OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults )
 {
     bool bForceNew = false;
 
@@ -158,7 +158,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                 if( !pCompareValueFunc( pItem, pCheckItem ) )
                 {
                     // same name but different value, we need a new name for this item
-                    aUniqueName = String();
+                    aUniqueName = "";
                     bForceNew = true;
                 }
                 break;
@@ -236,14 +236,14 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
             {
                 pItem = (NameOrIndex*)pPool1->GetItem2( nWhich, nSurrogate );
 
-                if( pItem && pItem->GetName().Len() )
+                if( pItem && !pItem->GetName().isEmpty() )
                 {
                     if( !bForceNew && pCompareValueFunc( pItem, pCheckItem ) )
                         return pItem->GetName();
 
-                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    if( pItem->GetName().startsWith( aUser ) )
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        sal_Int32 nThisIndex = pItem->GetName().copy( aUser.Len() ).toInt32();
                         if( nThisIndex >= nUserIndex )
                             nUserIndex = nThisIndex + 1;
                     }
@@ -1558,7 +1558,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 {
                     const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
 
-                    if( pItem && pItem->GetName().Len() )
+                    if( pItem && !pItem->GetName().isEmpty() )
                     {
                         if( !bForceNew && pItem->GetLineStartValue() == pLineStartItem->GetLineStartValue() )
                         {
@@ -1567,9 +1567,9 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                             break;
                         }
 
-                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        if( pItem->GetName().startsWith( aUser ) )
                         {
-                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            sal_Int32 nThisIndex = pItem->GetName().copy( aUser.Len() ).toInt32();
                             if( nThisIndex >= nUserIndex )
                                 nUserIndex = nThisIndex + 1;
                         }
@@ -1581,7 +1581,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 {
                     const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
 
-                    if( pItem && pItem->GetName().Len() )
+                    if( pItem && !pItem->GetName().isEmpty() )
                     {
                         if( !bForceNew && pItem->GetLineEndValue() == pLineStartItem->GetLineStartValue() )
                         {
@@ -1590,9 +1590,9 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                             break;
                         }
 
-                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        if( pItem->GetName().startsWith( aUser ) )
                         {
-                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            sal_Int32 nThisIndex = pItem->GetName().copy( aUser.Len() ).toInt32();
                             if( nThisIndex >= nUserIndex )
                                 nUserIndex = nThisIndex + 1;
                         }
@@ -1847,7 +1847,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 {
                     const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
 
-                    if( pItem && pItem->GetName().Len() )
+                    if( pItem && !pItem->GetName().isEmpty() )
                     {
                         if( !bForceNew && pItem->GetLineStartValue() == pLineEndItem->GetLineEndValue() )
                         {
@@ -1856,9 +1856,9 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                             break;
                         }
 
-                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        if( pItem->GetName().startsWith( aUser ) )
                         {
-                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            sal_Int32 nThisIndex = pItem->GetName().copy( aUser.Len() ).toInt32();
                             if( nThisIndex >= nUserIndex )
                                 nUserIndex = nThisIndex + 1;
                         }
@@ -1870,7 +1870,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 {
                     const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
 
-                    if( pItem && pItem->GetName().Len() )
+                    if( pItem && !pItem->GetName().isEmpty() )
                     {
                         if( !bForceNew && pItem->GetLineEndValue() == pLineEndItem->GetLineEndValue() )
                         {
@@ -1879,9 +1879,9 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                             break;
                         }
 
-                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        if( pItem->GetName().startsWith( aUser ) )
                         {
-                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            sal_Int32 nThisIndex = pItem->GetName().copy( aUser.Len() ).toInt32();
                             if( nThisIndex >= nUserIndex )
                                 nUserIndex = nThisIndex + 1;
                         }
@@ -3025,7 +3025,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     else
     {
         // #85953# if disabled, force name to empty string
-        if(GetName().Len())
+        if( !GetName().isEmpty() )
         {
             return new XFillFloatTransparenceItem(String(), GetGradientValue(), sal_False);
         }

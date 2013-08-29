@@ -53,7 +53,7 @@ SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
 
 bool SvxUnoNameItemTable::isValid( const NameOrIndex* pItem ) const
 {
-    return pItem && (pItem->GetName().Len() != 0);
+    return pItem && !pItem->GetName().isEmpty();
 }
 
 void SvxUnoNameItemTable::dispose()

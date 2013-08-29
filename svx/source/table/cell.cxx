@@ -1444,7 +1444,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINEDASH:
                     {
                         NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                        if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
+                        if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
                     break;
