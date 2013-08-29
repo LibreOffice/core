@@ -3405,9 +3405,12 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     if( !pDelTableNd )
         return false;
 
+    SwTableFormat* pStyle = (SwTableFormat*)pTableNd->GetTable().GetFrameFormat()->GetRegisteredIn();
+    SwTable& rTable = (bWithPrev ? pDelTableNd : pTableNd)->GetTable();
+
     if( pTableNd->GetTable().ISA( SwDDETable ) ||
         pDelTableNd->GetTable().ISA( SwDDETable ))
-        return false;
+        return sal_False;
 
     // Delete HTML Layout
     pTableNd->GetTable().SetHTMLTableLayout( 0 );
@@ -3442,6 +3445,8 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     }
     if( bRet )
     {
+        SwTableFormat::AssignFormatParents( pStyle, rTable );
+
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
     }
