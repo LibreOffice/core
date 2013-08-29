@@ -360,6 +360,8 @@
 #define SID_STYLE_UPDATE_BY_EXAMPLE         (SID_SFX_START + 556)
 #define SID_STYLE_DRAGHIERARCHIE            (SID_SFX_START + 565)
 #define SID_STYLE_MASK                      (SID_SFX_START + 562)
+#define SID_STYLE_PREVIEW                   (SID_SFX_START + 567)
+#define SID_STYLE_END_PREVIEW               (SID_SFX_START + 568)
 #define SID_STYLE_HIDE                      (SID_SFX_START + 1603)
 #define SID_STYLE_SHOW                      (SID_SFX_START + 1604)
 #define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)

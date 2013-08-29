@@ -1574,11 +1574,15 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         pPattern = mpDoc->GetPattern( nCellX, nCellY, nTab );
                         pCondSet = mpDoc->GetCondResult( nCellX, nCellY, nTab );
                     }
-                    if ( mpDoc->GetPreviewFont() )
+                    if ( mpDoc->GetPreviewFont() || mpDoc->GetPreviewCellStyle() )
                     {
                         aAltPatterns.push_back(new ScPatternAttr(*pPattern));
                         ScPatternAttr* pAltPattern = &aAltPatterns.back();
-                        if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab ) )
+                        if (  ScStyleSheet* pPreviewStyle = mpDoc->GetPreviewCellStyle( nCellX, nCellY, nTab ) )
+                        {
+                            pAltPattern->SetStyleSheet(pPreviewStyle);
+                        }
+                        else if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab ) )
                         {
                             const SfxPoolItem* pItem;
                             if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
@@ -2238,7 +2242,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     meVerJustMethod( lcl_GetValue<SvxJustifyMethodItem, SvxCellJustifyMethod>(*pPattern, ATTR_VER_JUSTIFY_METHOD, pCondSet) ),
     meOrient( pPattern->GetCellOrientation(pCondSet) ),
     mnArrY(0),
-    mnX(0), mnY(0), mnCellX(0), mnCellY(0),
+    mnX(0), mnY(0), mnCellX(0), mnCellY(0), mnTab(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
     mbBreak( (meHorJust == SVX_HOR_JUSTIFY_BLOCK) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
     mbCellIsValue(bCellIsValue),
@@ -2252,6 +2256,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpPreviewFontSet(NULL),
     mpOldPattern(NULL),
     mpOldCondSet(NULL),
+    mpOldPreviewFontSet(NULL),
     mpThisRowInfo(NULL)
 {}
 
@@ -2305,7 +2310,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     // syntax highlighting mode is ignored here
     // StringDiffer doesn't look at hyphenate, language items
 
-    if (mpPattern == mpOldPattern && mpCondSet == mpOldCondSet && !mpPreviewFontSet)
+    if (mpPattern == mpOldPattern && mpCondSet == mpOldCondSet && mpPreviewFontSet == mpOldPreviewFontSet )
         return;
 
     sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -2339,6 +2344,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     mpEngine->SetDefaults( pSet );
     mpOldPattern = mpPattern;
     mpOldCondSet = mpCondSet;
+    mpOldPreviewFontSet = mpPreviewFontSet;
 
     sal_uLong nControl = mpEngine->GetControlWord();
     if (meOrient == SVX_ORIENTATION_STACKED)
@@ -4498,6 +4504,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
+    const SfxItemSet*    pOldPreviewFontSet = NULL;
     ScRefCellValue aCell;
 
     long nInitPosX = nScrX;
@@ -4525,6 +4532,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
             long nPosX = 0;
             for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
             {
+                std::auto_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -4597,6 +4605,15 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                     }
                     if (bDoCell)
                     {
+                        if ( mpDoc->GetPreviewCellStyle() )
+                        {
+                            if ( ScStyleSheet* pPreviewStyle = mpDoc->GetPreviewCellStyle( nCellX, nCellY, nTab ) )
+                            {
+                                pPreviewPattr.reset( new ScPatternAttr(*pPattern) );
+                                pPreviewPattr->SetStyleSheet(pPreviewStyle);
+                                pPattern = const_cast<ScPatternAttr*>(pPreviewPattr.get());
+                            }
+                        }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );
                         if (!pEngine)
                             pEngine = CreateOutputEditEngine();
@@ -4617,12 +4634,15 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mnY = nY;
                         aParam.mnCellX = nCellX;
                         aParam.mnCellY = nCellY;
+                        aParam.mnTab = nTab;
                         aParam.mnPosX = nPosX;
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;
                         aParam.mpPreviewFontSet = pPreviewFontSet;
+                        aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
+                        aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
                         if (aParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT)
                         {
@@ -4648,6 +4668,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         // Retrieve parameters for next iteration.
                         pOldPattern = aParam.mpOldPattern;
                         pOldCondSet = aParam.mpOldCondSet;
+                        pOldPreviewFontSet = aParam.mpOldPreviewFontSet;
                         bHyphenatorSet = aParam.mbHyphenatorSet;
                     }
                 }

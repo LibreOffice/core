@@ -62,6 +62,8 @@ interface FormatForSelection
     SID_STYLE_DELETE            [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_HIDE              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_SHOW              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_PREVIEW           [ ExecMethod = ExecuteStyle; ]
+    SID_STYLE_END_PREVIEW           [ ExecMethod = ExecuteStyle; ]
     // } Slot's die in der DrawShell disabled werden.
 
     SID_ATTR_ALIGN_HOR_JUSTIFY    [ ExecMethod = ExecuteAlignment; StateMethod = GetAttrState; ]

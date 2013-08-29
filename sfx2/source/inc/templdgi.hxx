@@ -94,7 +94,7 @@ class SfxCommonTemplateDialog_Impl : public SfxListener
 private:
     class DeletionWatcher;
     friend class DeletionWatcher;
-
+    bool mbIgnoreSelect;
     class ISfxTemplateCommon_Impl : public ISfxTemplateCommon
     {
     private:

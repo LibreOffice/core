@@ -830,7 +830,7 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
 // Constructor
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW, bool ) :
-
+    mbIgnoreSelect( false ),
     aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
     pWindow                 ( pW ),
@@ -1047,6 +1047,9 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
     OUString aEmpty;
+    Execute_Impl(SID_STYLE_END_PREVIEW,
+        String(), String(),
+        0, 0, 0, 0 );
     if ( bIsWater )
         Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
     GetWindow()->Hide();
@@ -1425,6 +1428,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             OUString aStyle;
             if(pState)
                 aStyle = pState->GetStyleName();
+            mbIgnoreSelect = true; // in case we get a selection change
+            // in anycase we should stop any preview
+            Execute_Impl(SID_STYLE_END_PREVIEW,
+            String(), String(),
+            0, 0, 0, 0 );
+
             SelectStyle(aStyle);
             EnableDelete();
         }
@@ -2319,7 +2328,24 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
         EnableDelete();
     }
     if( pListBox )
+    {
         SelectStyle( pListBox->GetEntryText( pListBox->GetHdlEntry() ));
+        sal_uInt16 nModifier = aFmtLb.GetModifier();
+        if ( mbIgnoreSelect )
+        {
+            Execute_Impl(SID_STYLE_END_PREVIEW,
+            String(), String(),
+            0, 0, 0, 0 );
+            mbIgnoreSelect = false;
+        }
+        else
+        {
+            Execute_Impl(SID_STYLE_PREVIEW,
+                     GetSelectedEntry(), String(),
+                     ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
+                     0, 0, &nModifier );
+        }
+    }
 
     return 0;
 }

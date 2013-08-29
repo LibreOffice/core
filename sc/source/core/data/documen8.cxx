@@ -822,7 +822,18 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
             }
 
             const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-            pPattern->FillEditItemSet( pDefaults );
+            if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
+            {
+                ScPatternAttr* pPreviewPattern = new ScPatternAttr( *pPattern );
+                pPreviewPattern->SetStyleSheet(pPreviewStyle);
+                pPreviewPattern->FillEditItemSet( pDefaults );
+                delete pPreviewPattern;
+            }
+            else
+            {
+                SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
+                pPattern->FillEditItemSet( pDefaults, pFontSet );
+            }
             pEngine->SetDefaults( pDefaults, false );               //! noetig ?
 
             sal_uInt16 nCellLang = ((const SvxLanguageItem&)
@@ -1669,9 +1680,19 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
                     SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                    pPattern->FillEditItemSet( pDefaults );
-                    pEngine->SetDefaults( pDefaults, true );
-
+                    if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
+                    {
+                        ScPatternAttr* pPreviewPattern = new ScPatternAttr( *pPattern );
+                        pPreviewPattern->SetStyleSheet(pPreviewStyle);
+                        pPreviewPattern->FillEditItemSet( pDefaults );
+                        delete pPreviewPattern;
+                    }
+                    else
+                    {
+                        SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
+                        pPattern->FillEditItemSet( pDefaults, pFontSet );
+                    }
+                    pEngine->SetDefaults( pDefaults,  true );
                     if (aCell.meType == CELLTYPE_STRING)
                         pEngine->SetText(*aCell.mpString);
                     else if (aCell.mpEditText)

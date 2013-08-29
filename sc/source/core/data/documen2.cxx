@@ -156,7 +156,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pAutoNameCache( NULL ),
         pLookupCacheMapImpl( NULL ),
         pPreviewFont( NULL ),
-        pPreviewSelection( NULL ),
+        pPreviewCellStyle( NULL ),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
@@ -437,6 +437,7 @@ ScDocument::~ScDocument()
     delete pScriptTypeData;
     delete pRecursionHelper;
 
+    delete pPreviewFont;
     OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );
 }
 
@@ -1205,21 +1206,14 @@ void ScDocument::SetPreviewFont( SfxItemSet* pFont )
     pPreviewFont = pFont;
 }
 
-const ScMarkData& ScDocument::GetPreviewSelection()
+const ScMarkData ScDocument::GetPreviewSelection()
 {
-    if ( !pPreviewSelection )
-        pPreviewSelection = new ScMarkData();
-
-    return *pPreviewSelection;
+    return maPreviewSelection;
 }
 
 void  ScDocument::SetPreviewSelection( ScMarkData& rSel )
 {
-    // yeuch, why do I have a pointer here ???? ( other problems
-    // to fix right now though )
-    if ( !pPreviewSelection )
-        pPreviewSelection = new ScMarkData();
-    *pPreviewSelection = rSel;
+    maPreviewSelection = rSel;
 }
 
 SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -1227,10 +1221,19 @@ SfxItemSet* ScDocument::GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab )
     SfxItemSet* pRet = NULL;
     if ( pPreviewFont )
     {
-        if ( GetPreviewSelection().IsCellMarked( nCol, nRow ) && GetPreviewSelection().GetFirstSelected() == nTab )
+        ScMarkData aSel = GetPreviewSelection();
+        if ( aSel.IsCellMarked( nCol, nRow ) && aSel.GetFirstSelected() == nTab )
             pRet = pPreviewFont;
     }
     return pRet;
 }
 
+ScStyleSheet* ScDocument::GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab )
+{
+    ScStyleSheet* pRet = NULL;
+    ScMarkData aSel = GetPreviewSelection();
+    if ( pPreviewCellStyle && aSel.IsCellMarked( nCol, nRow ) && aSel.GetFirstSelected() == nTab  )
+        pRet = pPreviewCellStyle;
+    return pRet;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1354,16 +1354,13 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     ScMarkData aMultiMark( pViewData->GetMarkData() );
     aMultiMark.SetMarking( false );
     aMultiMark.MarkToMulti();
-
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
     sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
-
     if ( !aMultiMark.IsMultiMarked() )
         return;
-
     ScRange aMultiRange;
     aMultiMark.GetMultiMarkArea( aMultiRange );
     SCCOL nX1 = aMultiRange.aStart.Col();

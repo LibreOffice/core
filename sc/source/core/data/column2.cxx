@@ -349,8 +349,18 @@ long ScColumn::GetNeededSize(
         pEngine->SetRefDevice( pDev );
         pDocument->ApplyAsianEditSettings( *pEngine );
         SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
-        pPattern->FillEditItemSet( pSet, pCondSet );
-
+        if ( ScStyleSheet* pPreviewStyle = pDocument->GetPreviewCellStyle( nCol, nRow, nTab ) )
+        {
+            ScPatternAttr* pPreviewPattern = new ScPatternAttr( *pPattern );
+            pPreviewPattern->SetStyleSheet(pPreviewStyle);
+            pPreviewPattern->FillEditItemSet( pSet, pCondSet );
+            delete pPreviewPattern;
+        }
+        else
+        {
+            SfxItemSet* pFontSet = pDocument->GetPreviewFont( nCol, nRow, nTab );
+            pPattern->FillEditItemSet( pSet, pFontSet ? pFontSet : pCondSet );
+        }
 //          no longer needed, are setted with the text (is faster)
 //          pEngine->SetDefaults( pSet );
 
@@ -757,8 +767,18 @@ void ScColumn::GetOptimalHeight(
     //  with conditional formatting, always consider the individual cells
 
     const ScPatternAttr* pPattern = aIter.Next(nStart,nEnd);
+    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
     while ( pPattern )
     {
+        // GetOptimalHeight called for preview style needs to
+        // use really use the style
+        if ( ScStyleSheet* pStyle = pDocument->GetPreviewCellStyle( nCol, nStartRow, nTab ) )
+        {
+            aAltPatterns.push_back( new ScPatternAttr( *pPattern ) );
+            ScPatternAttr* pModifiedPatt = &aAltPatterns.back();
+            pModifiedPatt->SetStyleSheet( pStyle );
+            pPattern = pModifiedPatt;
+        }
         const ScMergeAttr*      pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
         const ScMergeFlagAttr*  pFlag = (const ScMergeFlagAttr*)&pPattern->GetItem(ATTR_MERGE_FLAG);
         if ( pMerge->GetRowMerge() > 1 || pFlag->IsOverlapped() )

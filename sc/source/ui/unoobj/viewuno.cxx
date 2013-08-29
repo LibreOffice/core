@@ -1748,6 +1748,14 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
 
 void ScTabViewObj::SelectionChanged()
 {
+    // Selection changed so end any style preview
+    // Note: executing this slot through the dispatcher
+    // will cause the style dialog to be raised so we go
+    // direct here
+    ScFormatShell aShell( GetViewShell()->GetViewData() );
+    SfxAllItemSet reqList( SFX_APP()->GetPool() );
+    SfxRequest aReq( SID_STYLE_END_PREVIEW, 0, reqList );
+    aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     BOOST_FOREACH(const XSelectionChangeListenerUnoRef rListener, aSelectionChgListeners)

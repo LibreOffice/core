@@ -226,6 +226,7 @@ void ScDocument::FillInfo(
     bool bAnyMerged = false;
     bool bAnyShadow = false;
     bool bAnyCondition = false;
+    bool bAnyPreview = false;
 
     bool bTabProtect = IsTabProtected(nTab);
 
@@ -505,6 +506,8 @@ void ScDocument::FillInfo(
                             bool bRowHidden = RowHidden(nCurRow, nTab, NULL, &nLastHiddenRow);
                             if ( nArrRow==0 || !bRowHidden )
                             {
+                                if ( GetPreviewCellStyle( nX, nCurRow, nTab  ) != NULL )
+                                    bAnyPreview = true;
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
                                     pThisRowInfo->bEmptyBack = false;
@@ -677,15 +680,30 @@ void ScDocument::FillInfo(
         pCondFormList->endRendering();
     //-------------------------------------------------------------------------
     //  bedingte Formatierung auswerten
-
-    if (bAnyCondition)
+    ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
+    // favour preview over condition
+    if (bAnyCondition || bAnyPreview)
     {
         for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
             for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // links und rechts einer mehr
             {
                 CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
-                const SfxItemSet* pCondSet = pInfo->pConditionSet;
+                SCCOL nCol = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;
+                ScPatternAttr* pModifiedPatt = NULL;
+
+                if ( ValidCol(nCol) && pRowInfo[nArrRow].nRowNo <= MAXROW )
+                {
+                    if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, pRowInfo[nArrRow].nRowNo, nTab ) )
+                    {
+                        aAltPatterns.push_back( new ScPatternAttr( *pInfo->pPatternAttr ) );
+                        pModifiedPatt = &aAltPatterns.back();
+                        pModifiedPatt->SetStyleSheet( pPreviewStyle );
+                    }
+                }
+                // favour preview over condition
+                const SfxItemSet* pCondSet = pModifiedPatt ? &pModifiedPatt->GetItemSet() : pInfo->pConditionSet;
+
                 if (pCondSet)
                 {
                     const SfxPoolItem* pItem;
@@ -713,7 +731,7 @@ void ScDocument::FillInfo(
                         bAnyShadow = true;
                     }
                 }
-                if(pInfo->pColorScale)
+                if( bAnyCondition && pInfo->pColorScale)
                 {
                     pRowInfo[nArrRow].bEmptyBack = false;
                     pInfo->pBackground = new SvxBrushItem(*pInfo->pColorScale, ATTR_BACKGROUND);

@@ -6390,6 +6390,53 @@ SfxVoidItem StoreModuleSource SID_BASICIDE_STOREMODULESOURCE
     GroupId = GID_MACRO;
 ]
 
+SfxVoidItem StyleEndPreview SID_STYLE_END_PREVIEW
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TEMPLATE;
+]
+
+SfxVoidItem StylePreview SID_STYLE_PREVIEW
+(SfxStringItem ParamName SID_STYLE_PREVIEW,SfxUInt16Item FamilyType SID_STYLE_FAMILY)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TEMPLATE;
+]
+
 //--------------------------------------------------------------------------
 SfxTemplateItem StyleApplyState SID_STYLE_APPLY
 [

@@ -267,8 +267,68 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     ScModule*           pScMod      = SC_MOD();
     String              aRefName;
     bool                bUndo       = pDoc->IsUndoEnabled();
+    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
 
-    if (   (nSlotId == SID_STYLE_NEW)
+    if ( (nSlotId == SID_STYLE_PREVIEW)
+        || (nSlotId ==  SID_STYLE_END_PREVIEW) )
+    {
+        if (nSlotId == SID_STYLE_PREVIEW)
+        {
+            SfxStyleFamily eFamily = SFX_STYLE_FAMILY_PARA;
+            const SfxPoolItem* pFamItem;
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, sal_True, &pFamItem ) )
+                eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
+            const SfxPoolItem* pNameItem;
+            OUString aStyleName;
+            if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( nSlotId, sal_True, &pNameItem ))
+                aStyleName  = ((const SfxStringItem*)pNameItem)->GetValue();
+            if ( eFamily == SFX_STYLE_FAMILY_PARA ) // CellStyles
+            {
+                ScMarkData aFuncMark( pViewData->GetMarkData() );
+                ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+                aFuncMark.MarkToMulti();
+
+                if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
+                {
+                    SCCOL nCol = pViewData->GetCurX();
+                    SCROW nRow = pViewData->GetCurY();
+                    SCTAB nTab = pViewData->GetTabNo();
+                    ScRange aRange( nCol, nRow, nTab );
+                    aFuncMark.SetMarkArea( aRange );
+                }
+                pDoc->SetPreviewSelection( aFuncMark );
+                ScStyleSheet* pPreviewStyle = static_cast<ScStyleSheet*>( pStylePool->Find( aStyleName, eFamily ) );
+                pDoc->SetPreviewCellStyle( pPreviewStyle  );
+                ScPatternAttr aAttr( *pDoc->GetSelectionPattern( aFuncMark ) );
+                aAttr.SetStyleSheet( pPreviewStyle );
+
+                SfxItemSet aItemSet( GetPool() );
+
+                ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
+                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+                rNewSet.Put( aItemSet, false );
+
+                pDoc->ApplySelectionPattern( aNewAttrs, pDoc->GetPreviewSelection() );
+                pTabViewShell->UpdateSelectionArea( aFuncMark, &aAttr );
+            }
+        }
+        else
+        {
+            ScPatternAttr aAttr( *pDoc->GetSelectionPattern( pDoc->GetPreviewSelection() ) );
+            if ( ScStyleSheet* pPreviewStyle = pDoc->GetPreviewCellStyle() )
+                aAttr.SetStyleSheet( pPreviewStyle );
+            pDoc->SetPreviewCellStyle(NULL);
+
+            SfxItemSet aItemSet( GetPool() );
+
+            ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
+            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+            rNewSet.Put( aItemSet, false );
+            pDoc->ApplySelectionPattern( aNewAttrs, pDoc->GetPreviewSelection() );
+            pTabViewShell->UpdateSelectionArea(  pDoc->GetPreviewSelection(), &aAttr );
+        }
+    }
+    else if (   (nSlotId == SID_STYLE_NEW)
         || (nSlotId == SID_STYLE_EDIT)
         || (nSlotId == SID_STYLE_DELETE)
         || (nSlotId == SID_STYLE_HIDE)
@@ -279,7 +339,6 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         || (nSlotId == SID_STYLE_NEW_BY_EXAMPLE)
         || (nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE) )
     {
-        SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
         SfxStyleSheetBase*      pStyleSheet = NULL;
 
         bool bStyleToMarked = false;

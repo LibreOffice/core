@@ -81,6 +81,7 @@ private:
         SCROW                   mnY;
         SCCOL                   mnCellX;
         SCROW                   mnCellY;
+        SCTAB                   mnTab;
         long                    mnPosX;
         long                    mnPosY;
         long                    mnInitPosX;
@@ -97,6 +98,7 @@ private:
         const SfxItemSet*       mpPreviewFontSet;
         const ScPatternAttr*    mpOldPattern;
         const SfxItemSet*       mpOldCondSet;
+        const SfxItemSet*       mpOldPreviewFontSet;
         const RowInfo*          mpThisRowInfo;
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
