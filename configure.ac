@@ -12115,7 +12115,7 @@ if test -n "$with_extra_buildid" -a "$with_extra_buildid" != "yes" ; then
 else
     AC_MSG_RESULT([not set])
 fi
-AC_SUBST(EXTRA_BUILDID)
+AC_DEFINE_UNQUOTED([EXTRA_BUILDID], ["$EXTRA_BUILDID"])
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])
@@ -12539,6 +12539,7 @@ if test -f config_host.mk; then
 fi
 
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
+AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])

@@ -23,7 +23,6 @@ $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_TDE)),-DENABLE_TDE) \
     $(if $(filter TRUE,$(ENABLE_KDE)),-DENABLE_KDE) \
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
-    $(if $(EXTRA_BUILDID),-DEXTRA_BUILDID=\""$(EXTRA_BUILDID)"\") \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,cui,\
