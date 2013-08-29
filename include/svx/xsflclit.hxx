@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 public:
             TYPEINFO();
             SVX_DLLPRIVATE XSecondaryFillColorItem() {}
-            XSecondaryFillColorItem(const String& rName, const Color& rTheColor);
+            XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
             SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
