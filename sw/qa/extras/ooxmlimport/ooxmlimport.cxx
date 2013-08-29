@@ -129,6 +129,7 @@ public:
     void testTableAutoColumnFixedSize();
     void testTableFloating();
     void testTableAutoNested();
+    void testTableStyleParprop();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -223,6 +224,7 @@ void Test::run()
         {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
         {"table-floating.docx", &Test::testTableFloating},
         {"table-auto-nested.docx", &Test::testTableAutoNested},
+        {"table-style-parprop.docx", &Test::testTableStyleParprop},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1581,6 +1583,15 @@ void Test::testTableAutoNested()
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // This was 115596, i.e. the width of the outer table was too large.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23051), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
+}
+
+void Test::testTableStyleParprop()
+{
+    // The problem was that w:spacing's w:after=0 (a paragraph property) wasn't imported from table style.
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 353, the document default, i.e. paragraph property from table style had no effect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
