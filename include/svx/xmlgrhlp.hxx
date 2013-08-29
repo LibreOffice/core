@@ -74,12 +74,14 @@ private:
     SVX_DLLPRIVATE sal_Bool                 ImplGetStreamNames( const OUString& rURLStr,
                                                     OUString& rPictureStorageName,
                                                     OUString& rPictureStreamName );
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const OUString& rPictureStorageName );
-    SVX_DLLPRIVATE SvxGraphicHelperStream_Impl ImplGetGraphicStream( const OUString& rPictureStorageName,
+    SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage >
+                                            ImplGetGraphicStorage( const OUString& rPictureStorageName );
+    SVX_DLLPRIVATE SvxGraphicHelperStream_Impl
+                                            ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                       const OUString& rPictureStreamName,
                                                       sal_Bool bTruncate );
-    SVX_DLLPRIVATE String                      ImplGetGraphicMimeType( const String& rFileName ) const;
-    SVX_DLLPRIVATE Graphic                      ImplReadGraphic( const OUString& rPictureStorageName,
+    SVX_DLLPRIVATE OUString                 ImplGetGraphicMimeType( const OUString& rFileName ) const;
+    SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
                                                  const OUString& rPictureStreamName );
     SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const OUString& rPictureStorageName,
                                                   const OUString& rPictureStreamName,

@@ -455,7 +455,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     return aRet;
 }
 
-String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) const
+OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName ) const
 {
     struct XMLGraphicMimeTypeMapper
     {
@@ -472,16 +472,16 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
         { "svg", "image/svg+xml" }
     };
 
-    String aMimeType;
+    OUString aMimeType;
 
-    if( ( rFileName.Len() >= 4 ) && ( rFileName.GetChar( rFileName.Len() - 4 ) == '.' ) )
+    if( ( rFileName.getLength() >= 4 ) && ( rFileName[ rFileName.getLength() - 4 ] == '.' ) )
     {
-        const OString aExt(OUStringToOString(rFileName.Copy(rFileName.Len() - 3),
+        const OString aExt(OUStringToOString(rFileName.copy(rFileName.getLength() - 3),
             RTL_TEXTENCODING_ASCII_US));
 
-        for( long i = 0, nCount = sizeof (aMapper) / sizeof (aMapper[0]); ( i < nCount ) && !aMimeType.Len(); i++ )
-            if( aExt.getStr() == aMapper[ i ].pExt )
-                aMimeType = String( aMapper[ i ].pMimeType, RTL_TEXTENCODING_ASCII_US );
+        for( long i = 0, nCount = sizeof (aMapper) / sizeof (aMapper[0]); ( i < nCount ) && aMimeType.isEmpty(); i++ )
+            if( strcmp(aExt.getStr(), aMapper[ i ].pExt) == 0 )
+                aMimeType = OUString( aMapper[ i ].pMimeType, strlen( aMapper[ i ].pMimeType ), RTL_TEXTENCODING_ASCII_US );
     }
 
     return aMimeType;
