@@ -716,11 +716,11 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
-        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding)));
+        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding,false)));
 
     // CELLSPACING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing)));
+        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing,false)));
 
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
@@ -792,7 +792,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             if( bRel )
                 sOutStr.append(static_cast<sal_Int32>(nWidth)).append('*');
             else
-                sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth)));
+                sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth,false)));
             sOutStr.append('>');
             rWrt.Strm() << sOutStr.makeStringAndClear().getStr();
 

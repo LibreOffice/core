@@ -2092,7 +2092,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width)
                     .append('=');
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight) );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) );
 
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align)
                     .append('=');
@@ -2115,7 +2115,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size)
                     .append('=');
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth) );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) );
 
                 const Color& rBorderColor = pBorderLine->GetColor();
                 if( !rBorderColor.IsRGBEqual( Color(COL_GRAY) ) )
@@ -2613,12 +2613,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 }
 
 
-sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal ) const
+sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
 {
     if( Application::GetDefaultDevice() && nVal )
     {
-        nVal = Application::GetDefaultDevice()->LogicToPixel(
-                    Size( nVal, nVal ), MapMode( MAP_TWIP ) ).Width();
+        Size aSz( bVert ? 0 : nVal, bVert ? nVal : 0 );
+        aSz = Application::GetDefaultDevice()->LogicToPixel(aSz, MapMode( MAP_TWIP ));
+        nVal = bVert ? aSz.Height() : aSz.Width();
         if( !nVal )     // wo ein Twip ist sollte auch ein Pixel sein
             nVal = 1;
     }

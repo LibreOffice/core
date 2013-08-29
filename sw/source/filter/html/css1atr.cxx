@@ -454,16 +454,7 @@ void SwHTMLWriter::OutCSS1_UnitProperty( const sal_Char *pProp, long nVal )
 void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
                                           sal_Bool bVert )
 {
-    if( nVal && Application::GetDefaultDevice() )
-    {
-        Size aSz( bVert ? 0 : nVal, bVert ? nVal : 0 );
-        aSz = Application::GetDefaultDevice()->LogicToPixel( aSz, MapMode( MAP_TWIP) );
-        nVal = bVert ? aSz.Height() : aSz.Width();
-        if( !nVal )
-            nVal = 1;
-    }
-
-    OString sOut(OString::number(nVal) + sCSS1_UNIT_px);
+    OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
     OutCSS1_PropertyAscii(pProp, sOut);
 }
 

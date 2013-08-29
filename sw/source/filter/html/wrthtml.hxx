@@ -490,7 +490,7 @@ public:
     SwPaM* GetEndPaM() { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam ) { pOrigPam = pPam; }
 
-    sal_uInt32 ToPixel( sal_uInt32 nVal ) const;
+    sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert ) const;
 
     sal_uInt16 GuessFrmType( const SwFrmFmt& rFrmFmt,
                          const SdrObject*& rpStrObj );
