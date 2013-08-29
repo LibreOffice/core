@@ -92,20 +92,22 @@ Contrôle Distant</string>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="3128" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f2u-bG-5ak">
-                                <rect key="frame" x="79" y="93" width="163" height="81"/>
+                                <rect key="frame" x="79" y="49" width="163" height="81"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="73"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Veuillez entrer le code ci-dessus dans le fenêtre Impress - Slide Show - Impress Remote" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upW-oF-qOa">
-                                <rect key="frame" x="29" y="208" width="271" height="65"/>
+                                <rect key="frame" x="29" y="419" width="271" height="65"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
                                 <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="WTPairingScreenshot.png" id="4cX-m9-dNc">
-                                <rect key="frame" x="6" y="345" width="309" height="134"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <rect key="frame" x="6" y="138" width="309" height="196"/>
+                                <autoresizingMask key="autoresizingMask"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -526,7 +528,7 @@ Contrôle Distant</string>
     </scenes>
     <resources>
         <image name="Default-568h.png" width="640" height="1136"/>
-        <image name="WTPairingScreenshot.png" width="481" height="199"/>
+        <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
         <image name="ic_launcher.png" width="16" height="16"/>
         <image name="pointer.png" width="143" height="147"/>
