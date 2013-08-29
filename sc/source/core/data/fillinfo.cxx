@@ -41,6 +41,7 @@
 #include "stlpool.hxx"
 #include "cellvalue.hxx"
 #include "mtvcellfunc.hxx"
+#include "dbdata.hxx"
 
 const sal_uInt16 ROWINFO_MAX = 1024;
 
@@ -536,6 +537,39 @@ void ScDocument::FillInfo(
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
                                     pThisRowInfo->bEmptyBack = false;
                                 }
+
+                                //Exp Code
+                                //Overwrite this pBackground value
+                                //Get cell style for this cell
+                                if ( pDBCollection )
+                                {
+                                    ScDBCollection::NamedDBs& aNamedDBs = pDBCollection->getNamedDBs();
+                                    ScDBData* pDBData = pDBCollection->GetDBAtCursor( nX, nCurRow, nTab, false );
+                                    if ( pDBData && pDBData->HasFormatting() )
+                                    {
+                                        ScDBDataFormatting aDBFormatting;
+                                        pDBData->GetTableFormatting( aDBFormatting );
+                                        //Getting the applicable cell style name
+                                        //First for banded columns/lowest priority
+                                        OUString aCellStyleName;
+                                        if ( aDBFormatting.GetBandedColumns() )
+                                            aCellStyleName = pDBData->GetCellStyle( ScAddress( nX, nCurRow, nTab ), false );
+                                        //Second for banded rows/highest priority
+                                        if ( aDBFormatting.GetBandedRows() )
+                                            aCellStyleName = pDBData->GetCellStyle( ScAddress( nX, nCurRow, nTab ), true );
+                                        if ( !aCellStyleName.isEmpty() )
+                                        {
+                                            SfxStyleSheetBase* pStyleSheet = pStlPool->Find(aCellStyleName, SFX_STYLE_FAMILY_PARA );
+                                            if ( pStyleSheet )
+                                            {
+                                                SfxItemSet aStyleSheetItemSet = pStyleSheet->GetItemSet();
+                                                pInfo->pBackground = ( const SvxBrushItem * )aStyleSheetItemSet.GetItem( ATTR_BACKGROUND );
+                                            }
+                                        }
+                                    }
+                                }
+                                //From the style get the SfxItemSet
+                                //Exp Code ends
 
                                 if ( bContainsCondFormat )
                                 {
