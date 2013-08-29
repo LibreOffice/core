@@ -577,8 +577,10 @@ void ScHTMLExport::WriteBody()
             {
                 // Save graphic as (JPG) file
                 aGrfNm = aStreamPath;
-                sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                    String("JPG"), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                OUString aTmp(aGrfNm);
+                sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aTmp,
+                    OUString("JPG"), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                aGrfNm = aTmp;
                 if( !nErr ) // Contains errors, as we have nothing to output
                 {
                     aGrfNm = URIHelper::SmartRel2Abs(

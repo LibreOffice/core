@@ -190,10 +190,10 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
         if( aStreamPath.Len() > 0 )
         {
             // Save as a PNG
-            String aGrfNm( aStreamPath );
+            OUString aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                String( "PNG" ), nXOutFlags );
+                OUString( "PNG" ), nXOutFlags );
 
             // If it worked, create a URL for the IMG tag
             if( !nErr )

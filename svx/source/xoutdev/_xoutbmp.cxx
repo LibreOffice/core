@@ -113,8 +113,8 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nM
     return aRetGraphic;
 }
 
-sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
-                                 const String& rFilterName, const sal_uIntPtr nFlags,
+sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
+                                 const OUString& rFilterName, const sal_uIntPtr nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
@@ -147,7 +147,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
         if(aSvgDataPtr.get()
             && aSvgDataPtr->getSvgDataArrayLength()
-            && rFilterName.EqualsIgnoreCaseAscii("svg"))
+            && rFilterName.equalsIgnoreAsciiCase("svg"))
         {
             if(!(nFlags & XOUTBMP_DONT_ADD_EXTENSION))
             {

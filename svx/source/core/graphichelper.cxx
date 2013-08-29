@@ -187,9 +187,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
             }
             OUString aFilter( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
-            String aFilterString( aFilter );
-            String aPathString( sPath );
-            XOutBitmap::WriteGraphic( rGraphic, aPathString, aFilterString,
+            XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
                                         XOUTBMP_DONT_EXPAND_FILENAME |
                                         XOUTBMP_DONT_ADD_EXTENSION |
                                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
