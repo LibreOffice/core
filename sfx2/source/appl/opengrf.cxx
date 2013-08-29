@@ -121,7 +121,7 @@ short SvxOpenGraphicDialog::Execute()
             INetURLObject aObj( GetPath() );
 
             // check whether we can load the graphic
-            String  aCurFilter( GetCurrentFilter() );
+            OUString  aCurFilter( GetCurrentFilter() );
             sal_uInt16  nFormatNum = rFilter.GetImportFormatNumber( aCurFilter );
             sal_uInt16  nRetFormat = 0;
             sal_uInt16  nFound = USHRT_MAX;
@@ -167,7 +167,7 @@ short SvxOpenGraphicDialog::Execute()
                 // setup appropriate filter (so next time, it will work)
                 if( rFilter.GetImportFormatCount() )
                 {
-                    String  aFormatName(rFilter.GetImportFormatName(nFound));
+                    OUString  aFormatName(rFilter.GetImportFormatName(nFound));
                     SetCurrentFilter(aFormatName);
                 }
 

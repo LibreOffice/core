@@ -243,8 +243,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( !pItem )
         {
 #ifdef DBG_UTIL
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                "No creator method for item: "));
+            OStringBuffer aStr("No creator method for item: ");
             aStr.append(static_cast<sal_Int32>(nSlotId));
             OSL_FAIL(aStr.getStr());
 #endif
@@ -257,8 +256,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         sal_uInt16 nSubCount = pType->nAttribs;
 
         const beans::PropertyValue& rProp = pPropsVal[0];
-        String aName = rProp.Name;
-        if ( nCount == 1 && aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
+        OUString aName = rProp.Name;
+        if ( nCount == 1 && aName == OUString( pSlot->pUnoName, strlen( pSlot->pUnoName ), RTL_TEXTENCODING_UTF8 ) )
         {
             // there is only one parameter and its name matches the name of the property,
             // so it's either a simple property or a complex property in one single UNO struct
@@ -268,7 +267,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
             else
             {
-                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertible: "));
+                OStringBuffer aStr("Property not convertible: ");
                 aStr.append(pSlot->pUnoName);
                 OSL_FAIL( aStr.getStr() );
             }
@@ -278,8 +277,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         else if ( nSubCount == 0 )
         {
             // for a simple property there can be only one parameter and its name *must* match
-            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property name does not match: "));
-            aStr.append(OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+            OUStringBuffer aStr("Property name does not match: ");
+            aStr.append(aName);
             OSL_FAIL( aStr.getStr() );
         }
 #endif
@@ -293,8 +292,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             // so this should be notified as a warning only
             if ( nCount != nSubCount )
             {
-                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                    "MacroPlayer: wrong number of parameters for slot: "));
+                OStringBuffer aStr("MacroPlayer: wrong number of parameters for slot: ");
                 aStr.append(static_cast<sal_Int32>(nSlotId));
                 DBG_WARNING(aStr.getStr());
             }
@@ -382,8 +380,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
-                String aName = rProp.Name;
-                if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
+                OUString aName = rProp.Name;
+                if ( aName == OUString( rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8 )  )
                 {
 #ifdef DBG_UTIL
                     ++nFoundArgs;
@@ -394,7 +392,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                     else
                     {
-                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertible: "));
+                        OStringBuffer aStr("Property not convertible: ");
                         aStr.append(rArg.pName);
                         OSL_FAIL( aStr.getStr() );
                     }
@@ -410,8 +408,8 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
-                String aName = rProp.Name;
-                if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
+                OUString aName = rProp.Name;
+                if ( aName == OUString(rArg.pName, strlen(rArg.pName), RTL_TEXTENCODING_UTF8) )
                 {
                     bAsWholeItem = sal_True;
 #ifdef DBG_UTIL
@@ -423,7 +421,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                     else
                     {
-                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Property not convertible: "));
+                        OStringBuffer aStr("Property not convertible: ");
                         aStr.append(rArg.pName);
                         OSL_FAIL( aStr.getStr() );
                     }
@@ -933,14 +931,14 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     else
     {
         // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
-        String sSlotName( "OptionsTreeDialog" );
-        String sPropName( "OptionsPageURL" );
-        if ( sSlotName.EqualsAscii( pSlot->pUnoName ) )
+        OUString sSlotName( "OptionsTreeDialog" );
+        OUString sPropName( "OptionsPageURL" );
+        if ( sSlotName == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
         {
             for ( sal_uInt16 n = 0; n < nCount; ++n )
             {
                 const PropertyValue& rProp = pPropsVal[n];
-                String sName( rProp.Name );
+                OUString sName( rProp.Name );
                 if ( sName == sPropName )
                 {
                     OUString sURL;
@@ -955,7 +953,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     if ( nFoundArgs == nCount )
     {
         // except for the "special" slots: assure that every argument was convertible
-        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("MacroPlayer: Some properties didn't match to any formal argument for slot: "));
+        OStringBuffer aStr("MacroPlayer: Some properties didn't match to any formal argument for slot: ");
         aStr.append(pSlot->pUnoName);
         DBG_WARNING( aStr.getStr() );
     }
@@ -1353,18 +1351,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT(( pType->aAttrib[n-1].nAID ) <= 127, "Member ID out of range" );
-                    String aName( OUString::createFromAscii( pSlot->pUnoName ) ) ;
-                    aName += '.';
+                    OUString aName( OUString::createFromAscii( pSlot->pUnoName ) ) ;
+                    aName += ".";
                     aName += OUString::createFromAscii( pType->aAttrib[n-1].pName ) ;
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                            "Sub item "));
+                        OStringBuffer aStr("Sub item ");
                         aStr.append(static_cast<sal_Int32>(
                             pType->aAttrib[n-1].nAID));
-                        aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                            " not convertible in slot: "));
+                        aStr.append(" not convertible in slot: ");
                         aStr.append(static_cast<sal_Int32>(nSlotId));
                         OSL_FAIL( aStr.getStr() );
                     }
@@ -1408,18 +1404,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                         nSubId |= CONVERT_TWIPS;
 
                     DBG_ASSERT((rArg.pType->aAttrib[n-1].nAID) <= 127, "Member ID out of range" );
-                    String aName( OUString::createFromAscii( rArg.pName ) ) ;
-                    aName += '.';
+                    OUString aName( OUString::createFromAscii( rArg.pName ) ) ;
+                    aName += ".";
                     aName += OUString::createFromAscii( rArg.pType->aAttrib[n-1].pName ) ;
                     pValue[nActProp].Name = aName;
                     if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
-                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
-                            "Sub item "));
+                        OStringBuffer aStr("Sub item ");
                         aStr.append(static_cast<sal_Int32>(
                             rArg.pType->aAttrib[n-1].nAID));
-                        aStr.append(RTL_CONSTASCII_STRINGPARAM(
-                            " not convertible in slot: "));
+                        aStr.append(" not convertible in slot: ");
                         aStr.append(static_cast<sal_Int32>(rArg.nSlotId));
                         OSL_FAIL(aStr.getStr());
                     }
@@ -1855,22 +1849,22 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     // 'macro:///lib.mod.proc(args)' => macro of App-BASIC
     // 'macro://[docname|.]/lib.mod.proc(args)' => macro of current or qualified document
     // 'macro://obj.method(args)' => direct API call, execute it via App-BASIC
-    String aMacro( rURL );
-    sal_uInt16 nHashPos = aMacro.Search( '/', 8 );
-    sal_uInt16 nArgsPos = aMacro.Search( '(' );
+    OUString aMacro( rURL );
+    sal_Int32 nHashPos = aMacro.indexOf( '/', 8 );
+    sal_Int32 nArgsPos = aMacro.indexOf( '(' );
     BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
 
     // should a macro function be executed ( no direct API call)?
-    if ( STRING_NOTFOUND != nHashPos && nHashPos < nArgsPos )
+    if ( -1 != nHashPos && nHashPos < nArgsPos )
     {
         // find BasicManager
         SfxObjectShell* pDoc = NULL;
-        String aBasMgrName( INetURLObject::decode(aMacro.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-        if ( !aBasMgrName.Len() )
+        OUString aBasMgrName( INetURLObject::decode(aMacro.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        if ( aBasMgrName.isEmpty() )
             pBasMgr = pAppMgr;
-        else if ( aBasMgrName.EqualsAscii(".") )
+        else if ( aBasMgrName == "." )
         {
             // current/actual document
             pDoc = pCurrent;
@@ -1898,13 +1892,13 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
             if ( pDoc )
             {
                 // security check for macros from document basic if an SFX doc is given
-                if ( !pDoc->AdjustMacroMode( String() ) )
+                if ( !pDoc->AdjustMacroMode( OUString() ) )
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
             }
             else if ( pDoc && pDoc->GetMedium() )
             {
-                pDoc->AdjustMacroMode( String() );
+                pDoc->AdjustMacroMode( OUString() );
                 SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
                 SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
                 if ( pUpdateDocItem && pMacroExecModeItem
@@ -1914,16 +1908,16 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
             }
 
             // find BASIC method
-            String aQualifiedMethod( INetURLObject::decode(aMacro.Copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-            String aArgs;
-            if ( STRING_NOTFOUND != nArgsPos )
+            OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+            OUString aArgs;
+            if ( -1 != nArgsPos )
             {
                 // remove arguments from macro name
-                aArgs = aQualifiedMethod.Copy( nArgsPos - nHashPos - 1 );
-                aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
+                aArgs = aQualifiedMethod.copy( nArgsPos - nHashPos - 1 );
+                aQualifiedMethod = aQualifiedMethod.copy( 0, nArgsPos - nHashPos - 1 );
             }
 
-            if ( pBasMgr->HasMacro( OUString(aQualifiedMethod) ) )
+            if ( pBasMgr->HasMacro( aQualifiedMethod ) )
             {
                 Any aOldThisComponent;
                 const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;
@@ -1977,7 +1971,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
     {
         // direct API call on a specified object
         OUStringBuffer aCall;
-        aCall.append('[').append(INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE,
+        aCall.append('[').append(INetURLObject::decode(aMacro.copy(6), INET_HEX_ESCAPE,
             INetURLObject::DECODE_WITH_CHARSET));
         aCall.append(']');
         pAppMgr->GetLib(0)->Execute(aCall.makeStringAndClear());

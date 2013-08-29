@@ -78,7 +78,7 @@ Image SAL_CALL GetImage(
     OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
-        sal_uInt16 nId = ( sal_uInt16 ) String(aURL).Copy(5).ToInt32();
+        sal_uInt16 nId = ( sal_uInt16 ) aURL.copy(5).toInt32();
         const SfxSlot* pSlot = 0;
         if ( xModel.is() )
         {

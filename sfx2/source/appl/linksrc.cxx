@@ -70,11 +70,11 @@ static void StartTimer( SvLinkSourceTimer ** ppTimer, SvLinkSource * pOwner,
 struct SvLinkSource_Entry_Impl
 {
     SvBaseLinkRef       xSink;
-    String              aDataMimeType;
-    sal_uInt16              nAdviseModes;
-    sal_Bool                bIsDataSink;
+    OUString            aDataMimeType;
+    sal_uInt16          nAdviseModes;
+    sal_Bool            bIsDataSink;
 
-    SvLinkSource_Entry_Impl( SvBaseLink* pLink, const String& rMimeType,
+    SvLinkSource_Entry_Impl( SvBaseLink* pLink, const OUString& rMimeType,
                                 sal_uInt16 nAdvMode )
         : xSink( pLink ), aDataMimeType( rMimeType ),
             nAdviseModes( nAdvMode ), bIsDataSink( sal_True )
@@ -171,12 +171,12 @@ SvLinkSource_Entry_Impl* SvLinkSource_EntryIter_Impl::Next()
 struct SvLinkSource_Impl
 {
     SvLinkSource_Array_Impl aArr;
-    String              aDataMimeType;
-    SvLinkSourceTimer * pTimer;
+    OUString                aDataMimeType;
+    SvLinkSourceTimer *     pTimer;
     sal_uIntPtr             nTimeout;
-    com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
-    m_xInputStreamToLoadFrom;
-    sal_Bool m_bIsReadOnly;
+    css::uno::Reference<css::io::XInputStream>
+                           m_xInputStreamToLoadFrom;
+    sal_Bool               m_bIsReadOnly;
 
     SvLinkSource_Impl() : pTimer( 0 ), nTimeout( 3000 ) {}
     ~SvLinkSource_Impl();
@@ -246,8 +246,8 @@ void SvLinkSource::SendDataChanged()
     {
         if( p->bIsDataSink )
         {
-            String sDataMimeType( pImpl->aDataMimeType );
-            if( !sDataMimeType.Len() )
+            OUString sDataMimeType( pImpl->aDataMimeType );
+            if( sDataMimeType.isEmpty() )
                 sDataMimeType = p->aDataMimeType;
 
             Any aVal;
@@ -272,7 +272,7 @@ void SvLinkSource::SendDataChanged()
         delete pImpl->pTimer;
         pImpl->pTimer = NULL;
     }
-    pImpl->aDataMimeType.Erase();
+    pImpl->aDataMimeType = "";
 }
 
 void SvLinkSource::NotifyDataChanged()

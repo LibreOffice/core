@@ -312,14 +312,14 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
         aReq.AppendItem( SfxStringItem( SID_REFERER, SFX_REFERER_USER ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );
-        String aFilter( pPick->aFilter );
+        OUString aFilter( pPick->aFilter );
         aGuard.clear();
 
-        sal_uInt16 nPos=aFilter.Search('|');
-        if( nPos != STRING_NOTFOUND )
+        sal_Int32 nPos = aFilter.indexOf('|');
+        if( nPos != -1 )
         {
-            OUString aOptions(aFilter.Copy(nPos).GetBuffer()+1);
-            aFilter.Erase( nPos );
+            OUString aOptions(aFilter.copy(nPos+1));
+            aFilter = aFilter.copy( 0, nPos );
             aReq.AppendItem( SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
         }
 

@@ -1920,7 +1920,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     }
 
 #if defined(WNT)
-    if ( aExtensions.getLength() > 240 )
+    if ( aExtensions.Len() > 240 )
         aExtensions = FILEDIALOG_FILTER_ALL;
 #endif
     sal_Bool bIsInOpenMode = isInOpenMode();

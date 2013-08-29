@@ -201,10 +201,10 @@ namespace sfx2
         "text*"       | "text*"              | "text"
         "text menu"   | "text* menu*"        | "text|menu"
     */
-    String PrepareSearchString( const String& rSearchString,
+    OUString PrepareSearchString( const OUString& rSearchString,
                                 Reference< XBreakIterator > xBreak, bool bForSearch )
     {
-        String sSearchStr;
+        OUString sSearchStr;
         sal_Int32 nStartPos = 0;
         const Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         Boundary aBoundary = xBreak->getWordBoundary(
@@ -213,22 +213,22 @@ namespace sfx2
         while ( aBoundary.startPos != aBoundary.endPos )
         {
             nStartPos = aBoundary.endPos;
-            String sSearchToken( rSearchString.Copy(
+            OUString sSearchToken( rSearchString.copy(
                 (sal_uInt16)aBoundary.startPos, (sal_uInt16)aBoundary.endPos - (sal_uInt16)aBoundary.startPos ) );
-            if ( sSearchToken.Len() > 0 && ( sSearchToken.Len() > 1 || sSearchToken.GetChar(0) != '.' ) )
+            if ( !sSearchToken.isEmpty() && ( sSearchToken.getLength() > 1 || sSearchToken[0] != '.' ) )
             {
-                if ( bForSearch && sSearchToken.GetChar( sSearchToken.Len() - 1 ) != '*' )
-                    sSearchToken += '*';
+                if ( bForSearch && sSearchToken[ sSearchToken.getLength() - 1 ] != '*' )
+                    sSearchToken += "*";
 
-                if ( sSearchToken.Len() > 1 ||
-                     ( sSearchToken.Len() > 0 && sSearchToken.GetChar( 0 ) != '*' ) )
+                if ( sSearchToken.getLength() > 1 ||
+                     ( sSearchToken.getLength() > 0 && sSearchToken[ 0 ] != '*' ) )
                 {
-                    if ( sSearchStr.Len() > 0 )
+                    if ( !sSearchStr.isEmpty() )
                     {
                         if ( bForSearch )
-                            sSearchStr += ' ';
+                            sSearchStr += " ";
                         else
-                            sSearchStr += '|';
+                            sSearchStr += "|";
                     }
                     sSearchStr += sSearchToken;
                 }
@@ -249,23 +249,20 @@ namespace sfx2
 struct IndexEntry_Impl
 {
     sal_Bool        m_bSubEntry;
-    String          m_aURL;
+    OUString        m_aURL;
 
-    IndexEntry_Impl( const String& rURL, sal_Bool bSubEntry ) :
+    IndexEntry_Impl( const OUString& rURL, sal_Bool bSubEntry ) :
         m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
 };
-
-#define NEW_ENTRY( url, bool ) \
-    (void*)(sal_uIntPtr)( new IndexEntry_Impl( url, bool ) )
 
 // struct ContentEntry_Impl ----------------------------------------------
 
 struct ContentEntry_Impl
 {
-    String      aURL;
+    OUString    aURL;
     sal_Bool    bIsFolder;
 
-    ContentEntry_Impl( const String& rURL, sal_Bool bFolder ) :
+    ContentEntry_Impl( const OUString& rURL, sal_Bool bFolder ) :
         aURL( rURL ), bIsFolder( bFolder ) {}
 };
 
@@ -352,7 +349,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
         {
             if ( pParent->GetUserData() )
             {
-                String aTmpURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
+                OUString aTmpURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
                 std::vector<OUString > aList =
                     SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
 
@@ -373,7 +370,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     else
                     {
                         pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
-                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String("TargetURL"  ) ) );
+                        Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, OUString("TargetURL"  ) ) );
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
                             pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
@@ -407,7 +404,7 @@ long ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 
 OUString ContentListBox_Impl::GetSelectEntry() const
 {
-    String aRet;
+    OUString aRet;
     SvTreeListEntry* pEntry = FirstSelected();
     if ( pEntry && !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
         aRet = ( (ContentEntry_Impl*)pEntry->GetUserData() )->aURL;
@@ -487,9 +484,9 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         Point aPos( rUDEvt.GetRect().TopLeft() );
         aPos.X() += 8;
         aPos.Y() += ( rUDEvt.GetRect().GetHeight() - rUDEvt.GetDevice()->GetTextHeight() ) / 2;
-        String aEntry( GetEntry( rUDEvt.GetItemId() ) );
-        sal_uInt16 nPos = aEntry.Search( ';' );
-        rUDEvt.GetDevice()->DrawText( aPos, ( nPos != STRING_NOTFOUND ) ? aEntry.Copy( nPos + 1 ) : aEntry );
+        OUString aEntry( GetEntry( rUDEvt.GetItemId() ) );
+        sal_Int32 nPos = aEntry.indexOf( ';' );
+        rUDEvt.GetDevice()->DrawText( aPos, ( nPos !=-1 ) ? aEntry.copy( nPos + 1 ) : aEntry );
     }
     else
         DrawEntry( rUDEvt, sal_False, sal_True, sal_True );
@@ -518,10 +515,10 @@ void IndexBox_Impl::SelectExecutableEntry()
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nOldPos = nPos;
-        String aEntryText;
+        OUString aEntryText;
         IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)GetEntryData( nPos );
         sal_uInt16 nCount = GetEntryCount();
-        while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.Len() == 0 ) )
+        while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
         {
             pEntry = (IndexEntry_Impl*)(sal_uIntPtr)GetEntryData( ++nPos );
             aEntryText = GetEntry( nPos );
@@ -588,11 +585,13 @@ namespace sfx2 {
     typedef ::boost::unordered_map< OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
+#define NEW_ENTRY( url, bool ) \
+    (void*)(sal_uIntPtr)( new IndexEntry_Impl( url, bool ) )
+
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
-    it =                                                                                            \
-    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                               \
+    it = aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                          \
     if ( ( tmp = it->second++ ) != 0 )                                                              \
-       nPos = aIndexCB.InsertEntry( aToken + OUString( append, tmp ) );                        \
+       nPos = aIndexCB.InsertEntry( aToken + OUString( append, tmp ) );                             \
     else                                                                                            \
        nPos = aIndexCB.InsertEntry( aToken )
 
@@ -837,7 +836,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 
 OUString IndexTabPage_Impl::GetSelectEntry() const
 {
-    String aRet;
+    OUString aRet;
     IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
     if ( pEntry )
         aRet = pEntry->m_aURL;
@@ -878,7 +877,7 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     if ( !sKeyword.isEmpty() )
     {
         sal_uInt16 nEntries = aIndexCB.GetEntryCount();
-        String sIndexItem;
+        OUString sIndexItem;
         const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
         for ( sal_uInt16 n = 0; n < nEntries; n++)
         {
@@ -974,20 +973,18 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     if ( aViewOpt.Exists() )
     {
-        String aUserData;
+        OUString aUserData;
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-        OUString aTemp;
-        if ( aUserItem >>= aTemp )
+        if ( aUserItem >>= aUserData )
         {
-            aUserData = String( aTemp );
-            sal_Bool bChecked = ( 1 == aUserData.GetToken(0).ToInt32() ) ? sal_True : sal_False;
+            sal_Bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? sal_True : sal_False;
             aFullWordsCB.Check( bChecked );
-            bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? sal_True : sal_False;
+            bChecked = ( 1 == aUserData.getToken(1, ';').toInt32() ) ? sal_True : sal_False;
             aScopeCB.Check( bChecked );
 
             for ( sal_uInt16 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
             {
-                String aToken = aUserData.GetToken(i, ';');
+                OUString aToken = aUserData.getToken(i, ';');
                 aSearchED.InsertEntry( INetURLObject::decode(
                     aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
@@ -1003,20 +1000,20 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     sal_Int32 nChecked = aFullWordsCB.IsChecked() ? 1 : 0;
-    String aUserData = OUString::number( nChecked );
-    aUserData += ';';
+    OUString aUserData = OUString::number( nChecked );
+    aUserData += ";";
     nChecked = aScopeCB.IsChecked() ? 1 : 0;
     aUserData += OUString::number( nChecked );
-    aUserData += ';';
+    aUserData += ";";
     sal_uInt16 nCount = std::min( aSearchED.GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         OUString aText = aSearchED.GetEntry(i);
-        aUserData += String(INetURLObject::encode(
+        aUserData += INetURLObject::encode(
             aText, INetURLObject::PART_UNO_PARAM_VALUE, '%',
-            INetURLObject::ENCODE_ALL ));
-        aUserData += ';';
+            INetURLObject::ENCODE_ALL );
+        aUserData += ";";
     }
 
     aUserData = comphelper::string::stripEnd(aUserData, ';');
@@ -1030,7 +1027,7 @@ void SearchTabPage_Impl::ClearSearchResults()
 {
     sal_uInt16 nCount = aResultsLB.GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete (String*)(sal_uIntPtr)aResultsLB.GetEntryData(i);
+        delete (OUString*)(sal_uIntPtr)aResultsLB.GetEntryData(i);
     aResultsLB.Clear();
     aResultsLB.Update();
 }
@@ -1055,8 +1052,8 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
-    String aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
-    if ( aSearchText.Len() > 0 )
+    OUString aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
+    if ( !aSearchText.isEmpty() )
     {
         EnterWait();
         ClearSearchResults();
@@ -1077,7 +1074,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
             sal_Int32 nIdx = 0;
             OUString aTitle = rRow.getToken( 0, '\t', nIdx );
             nIdx = 0;
-            String* pURL = new String( rRow.getToken( 2, '\t', nIdx ) );
+            OUString* pURL = new OUString( rRow.getToken( 2, '\t', nIdx ) );
             sal_uInt16 nPos = aResultsLB.InsertEntry( aTitle );
             aResultsLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pURL );
         }
@@ -1105,8 +1102,8 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 {
-    String aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
-    aSearchBtn.Enable( aSearchText.Len() > 0 );
+    OUString aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
+    aSearchBtn.Enable( !aSearchText.isEmpty() );
     return 0;
 }
 
@@ -1179,10 +1176,10 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
-    String aRet;
-    String* pData = (String*)(sal_uIntPtr)aResultsLB.GetEntryData( aResultsLB.GetSelectEntryPos() );
+    OUString aRet;
+    OUString* pData = (OUString*)(sal_uIntPtr)aResultsLB.GetEntryData( aResultsLB.GetSelectEntryPos() );
     if ( pData )
-        aRet = String( *pData );
+        aRet = *pData;
     return aRet;
 }
 
@@ -1251,8 +1248,8 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        String aTitle = GetEntry(i);
-        String* pURL = (String*)(sal_uIntPtr)GetEntryData(i);
+        OUString aTitle = GetEntry(i);
+        OUString* pURL = (OUString*)(sal_uIntPtr)GetEntryData(i);
         aHistOpt.AppendItem( eHELPBOOKMARKS, OUString( *pURL ), sEmpty, OUString( aTitle ), sEmpty );
         delete pURL;
     }
@@ -1277,12 +1274,12 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                 aDlg.SetTitle( GetEntry( nPos ) );
                 if ( aDlg.Execute() == RET_OK )
                 {
-                    String* pURL = (String*)(sal_uIntPtr)GetEntryData( nPos );
+                    OUString* pURL = (OUString*)(sal_uIntPtr)GetEntryData( nPos );
                     RemoveEntry( nPos );
                     OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
                     nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL, false ) );
-                    SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( *pURL ) ) );
+                    SetEntryData( nPos, (void*)(sal_uIntPtr)( new OUString( *pURL ) ) );
                     SelectEntryPos( nPos );
                     delete pURL;
                 }
@@ -1442,7 +1439,7 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    String* pData = (String*)(sal_uIntPtr)aBookmarksBox.GetEntryData( aBookmarksBox.GetSelectEntryPos() );
+    OUString* pData = (OUString*)(sal_uIntPtr)aBookmarksBox.GetEntryData( aBookmarksBox.GetSelectEntryPos() );
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1455,7 +1452,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
     sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL, false ) );
-    aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( rURL ) ) );
+    aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new OUString( rURL ) ) );
 }
 
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
@@ -1574,7 +1571,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     DELETEZ( pBPage );
 
     for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
-        delete (String*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+        delete (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
     aViewOpt.SetPageID( (sal_Int32)aTabCtrl.GetCurPageId() );
@@ -1594,7 +1591,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         OUString aTitle = rRow.getToken( 0, '\t', nIdx );
         nIdx = 0;
         OUString aURL = rRow.getToken( 2, '\t', nIdx );
-        String* pFactory = new String( INetURLObject( aURL ).GetHost() );
+        OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
         sal_uInt16 nPos = aActiveLB.InsertEntry( aTitle );
         aActiveLB.SetEntryData( nPos, (void*)(sal_uIntPtr)pFactory );
     }
@@ -1617,9 +1614,8 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
 
     for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
     {
-        String* pFactory = (String*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
-        pFactory->ToLowerAscii();
-        if ( *pFactory == pIPage->GetFactory() )
+        OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+        if ( pFactory->toAsciiLowerCase() == pIPage->GetFactory() )
         {
             if ( aActiveLB.GetSelectEntryPos() != i )
             {
@@ -1706,7 +1702,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
-    String* pFactory = (String*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
+    OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
     if ( pFactory )
     {
         String aFactory( *pFactory );
@@ -1903,7 +1899,7 @@ bool SfxHelpIndexWindow_Impl::IsValidFactory( const OUString& _rFactory )
     bool bValid = false;
     for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
     {
-        String* pFactory = (String*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
+        OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
         if ( *pFactory == _rFactory )
         {
             bValid = true;

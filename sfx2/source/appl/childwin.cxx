@@ -361,45 +361,45 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
     if ( aSeq.getLength() )
         aSeq[0].Value >>= aTmp;
 
-    String aWinData( aTmp );
+    OUString aWinData( aTmp );
     rInfo.aWinState = OUStringToOString(aWinOpt.GetWindowState(), RTL_TEXTENCODING_UTF8);
 
 
-    if ( aWinData.Len() )
+    if ( !aWinData.isEmpty() )
     {
         // Search for version ID
-        if ( aWinData.GetChar((sal_uInt16)0) != 0x0056 ) // 'V' = 56h
+        if ( aWinData[0] != 0x0056 ) // 'V' = 56h
             // A version ID, so do not use
             return;
 
         // Delete 'V'
-        aWinData.Erase(0,1);
+        aWinData = aWinData.copy(1);
 
         // Read version
         char cToken = ',';
-        sal_uInt16 nPos = aWinData.Search( cToken );
-        sal_uInt16 nActVersion = (sal_uInt16)aWinData.Copy( 0, nPos + 1 ).ToInt32();
+        sal_Int32 nPos = aWinData.indexOf( cToken );
+        sal_uInt16 nActVersion = (sal_uInt16)aWinData.copy( 0, nPos + 1 ).toInt32();
         if ( nActVersion != nVersion )
             return;
 
-        aWinData.Erase(0,nPos+1);
+        aWinData = aWinData.copy(nPos+1);
 
         // Load Visibility: is coded as a char
-        rInfo.bVisible = (aWinData.GetChar(0) == 0x0056); // 'V' = 56h
-        aWinData.Erase(0,1);
-        nPos = aWinData.Search( cToken );
-        if (nPos != STRING_NOTFOUND)
+        rInfo.bVisible = (aWinData[0] == 0x0056); // 'V' = 56h
+        aWinData = aWinData.copy(1);
+        nPos = aWinData.indexOf( cToken );
+        if (nPos != -1)
         {
-            sal_uInt16 nNextPos = aWinData.Search( cToken, 2 );
-            if ( nNextPos != STRING_NOTFOUND )
+            sal_Int32 nNextPos = aWinData.indexOf( cToken, 2 );
+            if ( nNextPos != -1 )
             {
                 // there is extra information
-                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1, nNextPos - nPos - 1 ).ToInt32();
-                aWinData.Erase( nPos, nNextPos-nPos+1 );
+                rInfo.nFlags = (sal_uInt16)aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32();
+                aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
                 rInfo.aExtraString = aWinData;
             }
             else
-                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1 ).ToInt32();
+                rInfo.nFlags = (sal_uInt16)aWinData.copy( nPos+1 ).toInt32();
         }
     }
 }

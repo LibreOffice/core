@@ -309,7 +309,7 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
                             ? rGF.GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
-    String aEmptyStr;
+    OUString aEmptyStr;
     int nRes;
 
     // To avoid that a native link is created
@@ -378,10 +378,10 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
         If the URL doesn't denote a valid (existent and accessible) file, the
         request is silently dropped.
 */
-String impl_getFilter( const String& _rURL )
+OUString impl_getFilter( const OUString& _rURL )
 {
-    String sFilter;
-    if ( _rURL.Len() == 0 )
+    OUString sFilter;
+    if ( _rURL.isEmpty() )
         return sFilter;
 
     try
@@ -458,7 +458,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 Application::SetDefDialogParent( pParent );
 
                 ::sfx2::FileDialogHelper & rFileDlg =
-                    pLink->GetInsertFileDialog( String() );
+                    pLink->GetInsertFileDialog( OUString() );
                 rFileDlg.StartExecuteModal(
                         LINK( this, SvFileObject, DialogClosedHdl ) );
             }
@@ -470,7 +470,7 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 pOldParent = Application::GetDefDialogParent();
                 Application::SetDefDialogParent( pParent );
 
-                String sFactory;
+                OUString sFactory;
                 SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
                 if ( pShell )
                     sFactory = pShell->GetFactory().GetFactoryName();
@@ -533,17 +533,17 @@ IMPL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
 
 IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
-    String sFile;
+    OUString sFile;
     Application::SetDefDialogParent( pOldParent );
 
     if ( FILETYPE_TEXT == nType || FILETYPE_OBJECT == nType )
     {
         if ( _pFileDlg && _pFileDlg->GetError() == ERRCODE_NONE )
         {
-            String sURL( _pFileDlg->GetPath() );
+            OUString sURL( _pFileDlg->GetPath() );
             sFile = sURL;
-            sFile += ::sfx2::cTokenSeparator;
-            sFile += ::sfx2::cTokenSeparator;
+            sFile += OUString(::sfx2::cTokenSeparator);
+            sFile += OUString(::sfx2::cTokenSeparator);
             sFile += impl_getFilter( sURL );
         }
     }

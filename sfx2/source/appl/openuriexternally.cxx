@@ -50,8 +50,8 @@ bool sfx2::openUriExternally(
         SolarMutexGuard g;
         ErrorBox eb(
             SfxGetpApp()->GetTopWindow(), SfxResId(MSG_ERR_NO_ABS_URI_REF));
-        String msg(eb.GetMessText());
-        msg.SearchAndReplaceAscii("$(ARG1)", uri);
+        OUString msg(eb.GetMessText());
+        msg = msg.replaceFirst("$(ARG1)", uri);
         eb.SetMessText(msg);
         eb.Execute();
     } catch (css::system::SystemShellExecuteException &) {

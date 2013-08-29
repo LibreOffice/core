@@ -1004,7 +1004,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
     {
         case SID_OPTIONS_TREEDIALOG:
         {
-            String sPageURL;
+            OUString sPageURL;
             SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_OPTIONS_PAGEURL, sal_False );
             if ( pURLItem )
                 sPageURL = pURLItem->GetValue();
@@ -1113,7 +1113,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                 pView = lcl_getBasicIDEViewFrame( pBasicIDE );
                 if ( pView )
-                    pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
+                    pView->SetName( OUString( "BASIC:1" ) );
             }
 
             if ( pView )
@@ -1240,7 +1240,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            String aLanguage;
+            OUString aLanguage;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, sal_False, &pItem) )
             {
                 aLanguage = ((SfxScriptOrganizerItem*)pItem)->getLanguage();

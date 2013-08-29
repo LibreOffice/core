@@ -228,8 +228,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         OUString* pFilter ) const
 {
     bool bRet = false;
-    const String sLNm( pLink->GetLinkSourceName() );
-    if( sLNm.Len() )
+    const OUString sLNm( pLink->GetLinkSourceName() );
+    if( !sLNm.isEmpty() )
     {
         switch( pLink->GetObjType() )
         {
@@ -238,15 +238,15 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case OBJECT_CLIENT_OLE:
                 {
                     sal_Int32 nPos = 0;
-                    String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeparator, nPos ) );
-                    String sRange( sLNm.GetToken( 0, ::sfx2::cTokenSeparator, nPos ) );
+                    OUString sFile( sLNm.getToken( 0, ::sfx2::cTokenSeparator, nPos ) );
+                    OUString sRange( sLNm.getToken( 0, ::sfx2::cTokenSeparator, nPos ) );
 
                     if( pFile )
                         *pFile = sFile;
                     if( pLinkStr )
                         *pLinkStr = sRange;
                     if( pFilter )
-                        *pFilter = sLNm.Copy( nPos );
+                        *pFilter = sLNm.copy( nPos );
 
                     if( pType )
                     {
@@ -262,16 +262,16 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case OBJECT_CLIENT_DDE:
                 {
                     sal_Int32 nTmp = 0;
-                    String sCmd( sLNm );
-                    String sServer( sCmd.GetToken( 0, cTokenSeparator, nTmp ) );
-                    String sTopic( sCmd.GetToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sCmd( sLNm );
+                    OUString sServer( sCmd.getToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sTopic( sCmd.getToken( 0, cTokenSeparator, nTmp ) );
 
                     if( pType )
                         *pType = sServer;
                     if( pFile )
                         *pFile = sTopic;
                     if( pLinkStr )
-                        *pLinkStr = sCmd.Copy( nTmp );
+                        *pLinkStr = sCmd.copy( nTmp );
                     bRet = true;
                 }
                 break;
@@ -547,7 +547,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
 
 
 // ----------------------------------------------------------------------
-String lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
+OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
     OUString sRet;
     INetURLObject aURL( rTopic );
@@ -555,7 +555,7 @@ String lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
         utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rBaseURL, sRet );
     if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
-    return String(sRet);
+    return sRet;
 }
 
 sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
@@ -582,7 +582,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
                 nUpdateMode = pItem->GetValue();
         }
 
-        String sNmURL(aCC.lowercase(lcl_DDE_RelToAbs(sTopic, sReferer)));
+        OUString sNmURL(aCC.lowercase(lcl_DDE_RelToAbs(sTopic, sReferer)));
 
         if ( !pShell )
         {
@@ -590,10 +590,10 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             pShell = SfxObjectShell::GetFirst( &aType, sal_False );
         }
 
-        String sTmp;
+        OUString sTmp;
         while( pShell )
         {
-            if( !sTmp.Len() )
+            if( sTmp.isEmpty() )
             {
                 sTmp = pShell->GetTitle( SFX_TITLE_FULLNAME );
                 sTmp = lcl_DDE_RelToAbs(sTmp, sReferer );
@@ -615,7 +615,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             else
                 pShell = SfxObjectShell::GetNext( *pShell, &aType, sal_False );
 
-            sTmp.Erase();
+            sTmp = "";
         }
     }
 

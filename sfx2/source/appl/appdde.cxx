@@ -77,7 +77,7 @@ public:
 //--------------------------------------------------------------------
 namespace
 {
-    sal_Bool lcl_IsDocument( const String& rContent )
+    sal_Bool lcl_IsDocument( const OUString& rContent )
     {
         using namespace com::sun::star;
 
@@ -122,14 +122,14 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
     // First only loop over the ObjectShells to find those
     // with the specific name:
     sal_Bool bRet = sal_False;
-    String sNm( rNm );
-    sNm.ToLowerAscii();
+    OUString sNm( rNm );
+    sNm = sNm.toAsciiLowerCase();
     TypeId aType( TYPE(SfxObjectShell) );
     SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
     while( pShell )
     {
-        String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
-        sTmp.ToLowerAscii();
+        OUString sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
+        sTmp = sTmp.toAsciiLowerCase();
         if( sTmp == sNm )
         {
             SFX_APP()->AddDdeTopic( pShell );
@@ -531,7 +531,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
         return;
 
     // prevent double submit
-    String sShellNm;
+    OUString sShellNm;
     sal_Bool bFnd = sal_False;
     for (size_t n = pAppData_Impl->pDocTopics->size(); n;)
     {
@@ -541,10 +541,10 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
             if( !bFnd )
             {
                 bFnd = sal_True;
-                (sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME)).ToLowerAscii();
+                sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME).toAsciiLowerCase();
             }
-            String sNm( (*pAppData_Impl->pDocTopics)[ n ]->GetName() );
-            if( sShellNm == sNm.ToLowerAscii() )
+            OUString sNm( (*pAppData_Impl->pDocTopics)[ n ]->GetName() );
+            if( sShellNm == sNm.toAsciiLowerCase() )
                 return ;
         }
     }
@@ -594,7 +594,7 @@ bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
 //--------------------------------------------------------------------
 DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
-    String sMimeType( SotExchange::GetFormatMimeType( nFormat ));
+    OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
     long nRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
     if( nRet && aValue.hasValue() && ( aValue >>= aSeq ) )
@@ -615,7 +615,7 @@ bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
     {
         ::com::sun::star::uno::Any aValue;
         aValue <<= aSeq;
-        String sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
+        OUString sMimeType( SotExchange::GetFormatMimeType( pData->GetFormat() ));
         bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
     }
     else

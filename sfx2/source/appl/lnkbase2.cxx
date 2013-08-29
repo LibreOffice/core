@@ -40,7 +40,7 @@ namespace sfx2
 
 TYPEINIT0( SvBaseLink )
 
-static DdeTopic* FindTopic( const String &, sal_uInt16* = 0 );
+static DdeTopic* FindTopic( const OUString &, sal_uInt16* = 0 );
 
 class  ImplDdeItem;
 
@@ -102,7 +102,7 @@ class ImplDdeItem : public DdeGetPutItem
     sal_Bool bIsValidData : 1;
     sal_Bool bIsInDTOR : 1;
 public:
-    ImplDdeItem( SvBaseLink& rLink, const String& rStr )
+    ImplDdeItem( SvBaseLink& rLink, const OUString& rStr )
         : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( sal_False ),
         bIsInDTOR( sal_False )
     {}
@@ -173,8 +173,8 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
         {
             // then we have it all together
             // MM_TODO how do I get the name
-            String aStr = aLinkName; // xLinkName->GetDisplayName();
-            aStr = aStr.Copy( nItemStt );
+            OUString aStr = aLinkName; // xLinkName->GetDisplayName();
+            aStr = aStr.copy( nItemStt );
             pImplData->DDEType.pItem = new ImplDdeItem( *this, aStr );
             pTopic->InsertItem( pImplData->DDEType.pItem );
 
@@ -206,12 +206,12 @@ SvBaseLink::~SvBaseLink()
 
 IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
 {
-    String sNewName;
+    OUString sNewName;
     if ( _pNewName )
         sNewName = *_pNewName;
     if ( !ExecuteEdit( sNewName ) )
-        sNewName.Erase();
-    bWasLastEditOK = ( sNewName.Len() > 0 );
+        sNewName = "";
+    bWasLastEditOK = !sNewName.isEmpty();
     if ( pImpl->m_aEndEditLink.IsSet() )
         pImpl->m_aEndEditLink.Call( this );
     return 0;
@@ -308,7 +308,7 @@ sal_Bool SvBaseLink::Update()
         if( xObj.Is() )
         {
             xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
-            String sMimeType( SotExchange::GetFormatMimeType(
+            OUString sMimeType( SotExchange::GetFormatMimeType(
                             pImplData->ClientType.nCntntType ));
             Any aData;
 
@@ -467,7 +467,7 @@ void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
 
     if ( !bAsync )
     {
-        ExecuteEdit( String() );
+        ExecuteEdit( OUString() );
         bWasLastEditOK = sal_False;
         if ( pImpl->m_aEndEditLink.IsSet() )
             pImpl->m_aEndEditLink.Call( this );
@@ -546,7 +546,7 @@ DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
             return &aData;
 
         Any aValue;
-        String sMimeType( SotExchange::GetFormatMimeType( nFormat ));
+        OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
         if( pLink->GetObj()->GetData( aValue, sMimeType ) )
         {
             if( aValue >>= aSeq )
@@ -596,14 +596,14 @@ void ImplDdeItem::AdviseLoop( bool bOpen )
 }
 
 
-static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
+static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
 {
-    if( 0 == rLinkName.Len() )
+    if( rLinkName.isEmpty() )
         return 0;
 
-    String sNm( rLinkName );
+    OUString sNm( rLinkName );
     sal_Int32 nTokenPos = 0;
-    OUString sService( sNm.GetToken( 0, cTokenSeparator, nTokenPos ) );
+    OUString sService( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
 
     DdeServices& rSvc = DdeService::GetServices();
     for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
@@ -612,7 +612,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
         if( pService->GetName() == sService )
         {
             // then we search for the Topic
-            OUString sTopic( sNm.GetToken( 0, cTokenSeparator, nTokenPos ) );
+            OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
 

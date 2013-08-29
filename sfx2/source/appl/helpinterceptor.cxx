@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
-extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
+extern void AppendConfigToken_Impl( OUString& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
 
 // class HelpInterceptor_Impl --------------------------------------------
 
@@ -235,8 +235,8 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException )
 {
-    sal_Bool bBack = ( String( ".uno:Backward" ) == String( aURL.Complete ) );
-    if ( bBack || String( ".uno:Forward" ) == String( aURL.Complete ) )
+    sal_Bool bBack = ( OUString( ".uno:Backward" ) == OUString( aURL.Complete ) );
+    if ( bBack || OUString( ".uno:Forward" ) == OUString( aURL.Complete ) )
     {
         if ( m_pHistory )
         {

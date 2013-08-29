@@ -68,7 +68,7 @@ class SvDDELinkEditDialog : public ModalDialog
     DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
 public:
     SvDDELinkEditDialog( Window* pParent, SvBaseLink* );
-    String GetCmd() const;
+    OUString GetCmd() const;
 };
 
 SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
@@ -99,7 +99,7 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
     aOKButton1.Enable( !sServer.isEmpty() && !sTopic.isEmpty() && !sItem.isEmpty() );
 }
 
-String SvDDELinkEditDialog::GetCmd() const
+OUString SvDDELinkEditDialog::GetCmd() const
 {
     OUString sCmd( aEdDdeApp.GetText() ), sRet;
     ::sfx2::MakeLnkName( sRet, &sCmd, aEdDdeTopic.GetText(), aEdDdeItem.GetText() );
@@ -138,8 +138,8 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
     if( pConnection->GetError() )  // then we try once more
     {
-        String sServer( pConnection->GetServiceName() );
-        String sTopic( pConnection->GetTopicName() );
+        OUString sServer( pConnection->GetServiceName() );
+        OUString sTopic( pConnection->GetTopicName() );
 
         delete pConnection;
         pConnection = new DdeConnection( sServer, sTopic );
@@ -309,7 +309,7 @@ void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link
     SvDDELinkEditDialog aDlg( pParent, pBaseLink );
     if ( RET_OK == aDlg.Execute() && rEndEditHdl.IsSet() )
     {
-        String sCommand = aDlg.GetCmd();
+        OUString sCommand = aDlg.GetCmd();
         rEndEditHdl.Call( &sCommand );
     }
 }

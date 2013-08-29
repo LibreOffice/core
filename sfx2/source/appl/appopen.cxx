@@ -398,7 +398,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
 
                xDoc->GetStorage()->copyToStorage( xTempStorage );
 
-            if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
+            if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, OUString() ) ) )
                 throw uno::RuntimeException();
         }
         catch( uno::Exception& )
@@ -410,10 +410,10 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
             return ERRCODE_SFX_GENERAL;
         }
 
-        SetTemplate_Impl( rFileName, String(), xDoc );
+        SetTemplate_Impl( rFileName, OUString(), xDoc );
     }
     else
-        SetTemplate_Impl( rFileName, String(), xDoc );
+        SetTemplate_Impl( rFileName, OUString(), xDoc );
 
     xDoc->SetNoName();
     xDoc->InvalidateName();
@@ -444,7 +444,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
     SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
-    String aFactName;
+    OUString aFactName;
     if ( pFactoryItem )
         aFactName = pFactoryItem->GetValue();
    else
@@ -452,7 +452,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 
 
     SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-    String aFact = OUString("private:factory/");
+    OUString aFact("private:factory/");
     aFact += aFactName;
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
@@ -614,7 +614,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
     if ( pFileNameItem )
     {
-        String aCommand( pFileNameItem->GetValue() );
+        OUString aCommand( pFileNameItem->GetValue() );
         const SfxSlot* pSlot = GetInterface()->GetSlot( aCommand );
         if ( pSlot )
         {
@@ -622,10 +622,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
         else
         {
-            sal_Int32 nIndex = aCommand.SearchAscii("slot:");
-            if ( !nIndex )
+            sal_Int32 nIndex = aCommand.indexOf("slot:");
+            if ( nIndex == 0 )
             {
-                sal_uInt16 nSlotId = (sal_uInt16) String( aCommand, 5, aCommand.Len()-5 ).ToInt32();
+                sal_uInt16 nSlotId = (sal_uInt16) aCommand.copy(5).toInt32();
                 if ( nSlotId == SID_OPENDOC )
                     pFileNameItem = NULL;
             }
@@ -654,7 +654,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pSystemDialogItem )
             nDialog = pSystemDialogItem->GetValue() ? SFX2_IMPL_DIALOG_SYSTEM : SFX2_IMPL_DIALOG_OOO;
 
-        String sStandardDir;
+        OUString sStandardDir;
 
         SFX_REQUEST_ARG( rReq, pStandardDirItem, SfxStringItem, SID_STANDARD_DIR, sal_False );
         if ( pStandardDirItem )
@@ -797,7 +797,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, sal_False );
-    String aFileName = pFileName->GetValue();
+    OUString aFileName = pFileName->GetValue();
 
     OUString aReferer;
     SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, sal_False );
@@ -837,7 +837,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     // Mark without URL cannot be handled by hyperlink code
-    if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
+    if ( bHyperlinkUsed && !aFileName.isEmpty() && aFileName[0] != '#' )
     {
         Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
@@ -1064,12 +1064,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // make URL ready
         SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_FILE_NAME, sal_False );
         aFileName = pURLItem->GetValue();
-        if( aFileName.Len() && aFileName.GetChar(0) == '#' ) // Mark without URL
+        if( !aFileName.isEmpty() && aFileName[0] == '#' ) // Mark without URL
         {
             SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : 0;
             if ( !pView )
                 pView = SfxViewFrame::Current();
-            pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
+            pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
             rReq.SetReturnValue( SfxViewFrameItem( 0, pView ) );
             return;
         }
