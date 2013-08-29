@@ -597,7 +597,6 @@ void ScMyDetectiveOpContainer::Sort()
 ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
-    fValue(0.0),
     nValidationIndex(-1),
     bIsAutoStyle( false ),
     bHasShape( false ),
@@ -607,10 +606,6 @@ ScMyCell::ScMyCell() :
     bHasEmptyDatabase( false ),
     bHasDetectiveObj( false ),
     bHasDetectiveOp( false ),
-    bIsEditCell( false ),
-    bHasStringValue( false ),
-    bHasDoubleValue( false ),
-    bHasXText( false ),
     bIsMatrixBase( false ),
     bIsMatrixCovered( false ),
     bHasAnnotation( false )
@@ -683,10 +678,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
 {
     rMyCell.maBaseCell.clear();
     rMyCell.aCellAddress = rAddress;
-    rMyCell.bHasStringValue = false;
-    rMyCell.bHasDoubleValue = false;
-    rMyCell.bHasXText = false;
-    rMyCell.bIsEditCell = false;
+
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
     {
         mpCell = mpCellItr->GetNext(nCellCol, nCellRow);
@@ -738,8 +730,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
             uno::Reference<text::XSimpleText> xSimpleText(aCell.xAnnotation, uno::UNO_QUERY);
             if (aCell.xAnnotation.is() && xSimpleText.is())
             {
-                aCell.sAnnotationText = xSimpleText->getString();
-                if (!aCell.sAnnotationText.isEmpty())
+                if (!xSimpleText->getString().isEmpty())
                     aCell.bHasAnnotation = true;
             }
             aAnnotations.erase(aItr);

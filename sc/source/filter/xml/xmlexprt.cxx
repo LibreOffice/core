@@ -2864,15 +2864,6 @@ bool ScXMLExport::IsMatrix (const ScAddress& aCell,
     return false;
 }
 
-void ScXMLExport::GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const
-{
-    if (!rMyCell.bHasStringValue)
-    {
-        rMyCell.sStringValue = ScCellObj::GetOutputString_Impl(pDoc, aPos);
-        rMyCell.bHasStringValue = true;
-    }
-}
-
 void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadsheet>& xTable)
 {
     if (!xTable.is())
@@ -3223,33 +3214,28 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_VALUE :
             {
-                if (!aCell.bHasDoubleValue)
-                {
-                    aCell.fValue = pDoc->GetValue( aCellPos );
-                    aCell.bHasDoubleValue = true;
-                }
+                double fValue = aCell.maBaseCell.getValue();
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                    aCell.nNumberFormat, aCell.fValue);
+                    aCell.nNumberFormat, fValue);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            aCell.nNumberFormat, aCell.fValue, false, XML_NAMESPACE_CALC_EXT, false);
+                            aCell.nNumberFormat, fValue, false, XML_NAMESPACE_CALC_EXT, false);
             }
             break;
         case table::CellContentType_TEXT :
             {
-                GetCellText(aCell, aCellPos);
                 OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
+                OUString sCellString(aCell.maBaseCell.getString(pDoc));
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sFormula, aCell.sStringValue, true, true);
+                        sFormula, sCellString, true, true);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            sFormula, aCell.sStringValue, false, true, XML_NAMESPACE_CALC_EXT);
+                            sFormula, sCellString, false, true, XML_NAMESPACE_CALC_EXT);
             }
             break;
         case table::CellContentType_FORMULA :
             {
-                ScRefCellValue aCellVal;
-                aCellVal.assign(*pDoc, aCellPos);
+                ScRefCellValue aCellVal = aCell.maBaseCell;
                 if (aCellVal.meType == CELLTYPE_FORMULA)
                 {
                     OUStringBuffer sFormula;
@@ -3271,9 +3257,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     }
                     if (pFormulaCell->GetErrCode())
                     {
-                        GetCellText(aCell, aCellPos);
                         AddAttribute(sAttrValueType, XML_STRING);
-                        AddAttribute(sAttrStringValue, aCell.sStringValue);
+                        AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));
                         if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                         {
                             //export calcext:value-type="error"
@@ -3298,11 +3283,10 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     }
                     else
                     {
-                        GetCellText(aCell, aCellPos);
-                        if (!aCell.sStringValue.isEmpty())
+                        if (!aCell.maBaseCell.getString(pDoc).isEmpty())
                         {
                             AddAttribute(sAttrValueType, XML_STRING);
-                            AddAttribute(sAttrStringValue, aCell.sStringValue);
+                            AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));
                             if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                             {
                                 AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
@@ -3354,8 +3338,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         {
             SvXMLElementExport aElemP(*this, sElemP, true, false);
             bool bPrevCharWasSpace(true);
-            GetCellText(aCell, aCellPos);
-            GetTextParagraphExport()->exportText(aCell.sStringValue, bPrevCharWasSpace);
+            GetTextParagraphExport()->exportText(aCell.maBaseCell.getString(pDoc), bPrevCharWasSpace);
         }
     }
     WriteShapes(aCell);
@@ -3836,20 +3819,10 @@ bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                         break;
                     case table::CellContentType_VALUE :
                         {
-                            if(!aCell1.bHasDoubleValue)
-                            {
-                                aCell1.fValue = pDoc->GetValue( aCellPos1 );
-                                aCell1.bHasDoubleValue = true;
-                            }
-                            if (!aCell2.bHasDoubleValue)
-                            {
-                                aCell2.fValue = pDoc->GetValue( aCellPos2 );
-                                aCell2.bHasDoubleValue = true;
-                            }
                             // #i29101# number format may be different from column default styles,
                             // but can lead to different value types, so it must also be compared
                             bIsEqual = (aCell1.nNumberFormat == aCell2.nNumberFormat) &&
-                                       (aCell1.fValue == aCell2.fValue);
+                                       (aCell1.maBaseCell.getValue() == aCell2.maBaseCell.getValue());
                         }
                         break;
                     case table::CellContentType_TEXT :
@@ -3858,10 +3831,7 @@ bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                                 bIsEqual = false;
                             else
                             {
-                                GetCellText(aCell1, aCellPos1);
-                                GetCellText(aCell2, aCellPos2);
-                                bIsEqual = (aCell1.sStringValue == aCell2.sStringValue) &&
-                                    (lcl_GetRawString(pDoc, aCellPos1) == lcl_GetRawString(pDoc, aCellPos2));
+                                bIsEqual = (aCell1.maBaseCell.getString(pDoc) == aCell2.maBaseCell.getString(pDoc));
                             }
                         }
                         break;
