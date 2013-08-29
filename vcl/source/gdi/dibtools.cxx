@@ -382,12 +382,12 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
     while ( !bEndDecoding && ( nY >= 0L ) );
 }
 
-bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown)
+bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown, bool& rAlphaUsed)
 {
     const sal_uLong nAlignedWidth = AlignedWidth4Bytes(rHeader.nWidth * rHeader.nBitCount);
-    sal_uInt32 nRMask(0);
-    sal_uInt32 nGMask(0);
-    sal_uInt32 nBMask(0);
+    sal_uInt32 nRMask(( rHeader.nBitCount == 16 ) ? 0x00007c00UL : 0x00ff0000UL);
+    sal_uInt32 nGMask(( rHeader.nBitCount == 16 ) ? 0x000003e0UL : 0x0000ff00UL);
+    sal_uInt32 nBMask(( rHeader.nBitCount == 16 ) ? 0x0000001fUL : 0x000000ffUL);
     bool bNative(false);
     bool bTCMask(!pAccAlpha && ((16 == rHeader.nBitCount) || (32 == rHeader.nBitCount)));
     bool bRLE((RLE_8 == rHeader.nCompression && 8 == rHeader.nBitCount) || (RLE_4 == rHeader.nCompression && 4 == rHeader.nBitCount));
@@ -424,21 +424,12 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     else
     {
         // Read color mask
-        if(bTCMask)
+        if(bTCMask && BITFIELDS == rHeader.nCompression)
         {
-            if(BITFIELDS == rHeader.nCompression)
-            {
-                rIStm.SeekRel( -12L );
-                rIStm >> nRMask;
-                rIStm >> nGMask;
-                rIStm >> nBMask;
-            }
-            else
-            {
-                nRMask = ( rHeader.nBitCount == 16 ) ? 0x00007c00UL : 0x00ff0000UL;
-                nGMask = ( rHeader.nBitCount == 16 ) ? 0x000003e0UL : 0x0000ff00UL;
-                nBMask = ( rHeader.nBitCount == 16 ) ? 0x0000001fUL : 0x000000ffUL;
-            }
+            rIStm.SeekRel( -12L );
+            rIStm >> nRMask;
+            rIStm >> nGMask;
+            rIStm >> nBMask;
         }
 
         if(bRLE)
@@ -595,6 +586,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                                 aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, (sal_uInt8*) pTmp32++ );
                                 rAcc.SetPixel( nY, nX, aColor );
                                 pAccAlpha->SetPixelIndex(nY, nX, sal_uInt8(0xff) - aAlpha);
+                                rAlphaUsed |= bool(0xff != aAlpha);
                             }
                         }
                     }
@@ -719,6 +711,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             }
 
             // read bits
+            bool bAlphaUsed(false);
+
             if(!pIStm->GetError())
             {
                 if(nOffset)
@@ -726,7 +720,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                     pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
                 }
 
-                bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown);
+                bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed);
 
                 if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
                 {
@@ -752,6 +746,11 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             if(bAlphaPossible)
             {
                 aNewBmpAlpha.ReleaseAccess(pAccAlpha);
+
+                if(!bAlphaUsed)
+                {
+                    bAlphaPossible = false;
+                }
             }
 
             if(bRet)
@@ -1227,7 +1226,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     if(pAccAlpha) // only write DIBV5 when asked to do so
     {
         aHeader.nV5CSType = 0x57696E20; // LCS_WINDOWS_COLOR_SPACE
-        aHeader.nV5Intent = 0x00000008; // LCS_GM_ABS_COLORIMETRIC
+        aHeader.nV5Intent = 0x00000004; // LCS_GM_IMAGES
 
         rOStm << aHeader.nV5RedMask;
         rOStm << aHeader.nV5GreenMask;
