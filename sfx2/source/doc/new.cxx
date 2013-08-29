@@ -286,7 +286,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     aTemplateLb.Clear();
     OUString aSel = aRegionLb.GetSelectEntry();
     sal_Int32 nc = aSel.indexOf('(');
-    if (nc != -1)
+    if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD).toString() ) == 0 )
         aTemplateLb.InsertEntry(aNone);
@@ -374,7 +374,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
     sal_uInt16 nEntry = aTemplateLb.GetSelectEntryPos();
     OUString aSel = aRegionLb.GetSelectEntry();
     sal_Int32 nc = aSel.indexOf('(');
-    if (nc!= -1)
+    if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD).toString()) != 0 )
         nEntry++;
