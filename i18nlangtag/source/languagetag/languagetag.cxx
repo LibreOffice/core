@@ -666,9 +666,6 @@ void LanguageTag::convertBcp47ToLang()
     }
     else
     {
-        /* FIXME: this is temporary. If we support locales that consist not
-         * only of language and country, e.g. added script, this probably needs
-         * to be adapted. */
         if (!mbInitializedLocale)
             convertBcp47ToLocale();
         convertLocaleToLang();
@@ -692,9 +689,6 @@ void LanguageTag::convertLangToLocale()
 
 void LanguageTag::convertLangToBcp47()
 {
-    /* FIXME: this is temporary. If we support locales that consist not only of
-     * language and country, e.g. added script, this probably needs to be
-     * adapted. */
     if (!mbInitializedLocale)
         convertLangToLocale();
     convertLocaleToBcp47();
@@ -1464,9 +1458,6 @@ com::sun::star::lang::Locale LanguageTag::convertToLocale( LanguageType nLangID,
     if (!bResolveSystem && lcl_isSystem( nLangID))
         return lang::Locale();
 
-    /* FIXME: this is temporary until code base is converted to not use
-     * MsLangId::convert...() anymore. After that, proper new method has to be
-     * implemented to allow I18NLANGTAG_QLT and script tag and such. */
     return MsLangId::Conversion::convertLanguageToLocale( nLangID, bResolveSystem);
 }
 
@@ -1477,9 +1468,6 @@ LanguageType LanguageTag::convertToLanguageType( const com::sun::star::lang::Loc
     if (rLocale.Language.isEmpty() && !bResolveSystem)
         return LANGUAGE_SYSTEM;
 
-    /* FIXME: this is temporary until code base is converted to not use
-     * MsLangId::convert...() anymore. After that, proper new method has to
-     * be implemented to allow I18NLANGTAG_QLT and sript tag and such. */
     return MsLangId::Conversion::convertLocaleToLanguage( rLocale);
 }
 
