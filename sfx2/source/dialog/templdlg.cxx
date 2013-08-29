@@ -1050,7 +1050,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     Execute_Impl(SID_STYLE_END_PREVIEW,
         String(), String(),
         0, 0, 0, 0 );
-#if STYLESPREVIEW
+#if defined STYLESPREVIEW
     Execute_Impl(SID_STYLE_END_PREVIEW,
         String(), String(),
         0, 0, 0, 0 );
@@ -1433,7 +1433,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             OUString aStyle;
             if(pState)
                 aStyle = pState->GetStyleName();
-#if STYLESPREVIEW
+#if defined STYLESPREVIEW
             mbIgnoreSelect = true; // in case we get a selection change
             // in anycase we should stop any preview
             Execute_Impl(SID_STYLE_END_PREVIEW,
@@ -2336,7 +2336,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     if( pListBox )
     {
         SelectStyle( pListBox->GetEntryText( pListBox->GetHdlEntry() ));
-#if STYLESPREVIEW
+#if defined STYLESPREVIEW
         sal_uInt16 nModifier = aFmtLb.GetModifier();
         if ( mbIgnoreSelect )
         {
