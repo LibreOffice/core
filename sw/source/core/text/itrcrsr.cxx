@@ -945,8 +945,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                     nX -= pCurrPart->GetFont().GetRightBorderSpace();
                                 }
                             }
-                            else if( pPor->InTxtGrp() &&
-                                     !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithNext())
+                            else if( !pPor->GetJoinBorderWithNext())
                             {
                                 nX -= GetInfo().GetFont()->GetRightBorderSpace();
                             }
@@ -1664,7 +1663,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nX = std::max(0, nX - nSumBorderWidth);
                 }
                 // Shift the offset with the left border width
-                else if( !static_cast<const SwTxtPortion*>(pPor)->GetJoinBorderWithPrev() )
+                else if( !pPor->GetJoinBorderWithPrev() )
                 {
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }

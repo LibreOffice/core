@@ -72,6 +72,8 @@ protected:
     SwLinePortion();
 private:
     MSHORT nWhichPor;       // Who's who?
+    bool m_bJoinBorderWithPrev;
+    bool m_bJoinBorderWithNext;
 
     void _Truncate();
 
@@ -186,6 +188,11 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
+    bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
+    bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
+    void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
+    void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
+
     OUTPUT_OPERATOR
 };
 
@@ -200,6 +207,8 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     nLineLength = rPortion.nLineLength;
     nAscent = rPortion.nAscent;
     nWhichPor = rPortion.nWhichPor;
+    m_bJoinBorderWithPrev = rPortion.m_bJoinBorderWithPrev;
+    m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
     return *this;
 }
 
@@ -216,7 +225,9 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     pPortion( 0 ),
     nLineLength( rPortion.nLineLength ),
     nAscent( rPortion.nAscent ),
-    nWhichPor( rPortion.nWhichPor )
+    nWhichPor( rPortion.nWhichPor ),
+    m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
+    m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext )
 {
 }
 

@@ -76,7 +76,9 @@ KSHORT SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
 SwLinePortion::SwLinePortion( ) :
     pPortion( NULL ),
     nLineLength( 0 ),
-    nAscent( 0 )
+    nAscent( 0 ),
+    m_bJoinBorderWithPrev(false),
+    m_bJoinBorderWithNext(false)
 {
 }
 

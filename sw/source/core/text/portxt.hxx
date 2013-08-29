@@ -36,11 +36,8 @@ class SwTxtPortion : public SwLinePortion
     void BreakUnderflow( SwTxtFormatInfo &rInf );
     sal_Bool _Format( SwTxtFormatInfo &rInf );
 
-    bool m_bJoinBorderWithPrev;
-    bool m_bJoinBorderWithNext;
-
 public:
-    inline SwTxtPortion(): m_bJoinBorderWithPrev(false), m_bJoinBorderWithNext(false) { SetWhichPor( POR_TXT ); }
+    inline SwTxtPortion(){ SetWhichPor( POR_TXT ); }
     SwTxtPortion( const SwLinePortion &rPortion );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -57,12 +54,6 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
-
-    bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
-    bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
-
-    void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
-    void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtPortion)

@@ -440,7 +440,7 @@ public:
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
-    void DrawBorder( const SwTxtPortion &rPor ) const;
+    void DrawBorder( const SwLinePortion &rPor ) const;
 
     void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;
 

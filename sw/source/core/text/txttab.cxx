@@ -575,6 +575,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< SwFontSave > pSave( 0 );
     SAL_WNODEPRECATED_DECLARATIONS_POP
+    bool bAfterNumbering = false;
     if ( GetLen() == 0 )
     {
         const SwLinePortion* pPrevPortion =
@@ -586,9 +587,12 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             const SwFont* pNumberPortionFont =
                     static_cast<const SwNumberPortion*>(pPrevPortion)->GetFont();
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
+            bAfterNumbering = true;
         }
     }
     rInf.DrawBackBrush( *this );
+    if( !bAfterNumbering )
+        rInf.DrawBorder( *this );
 
     // do we have to repaint a post it portion?
     if( rInf.OnWin() && pPortion && !pPortion->Width() )

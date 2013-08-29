@@ -707,8 +707,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         rInf.SetFull( bFull );
 
-        if( pPor->InTxtGrp() && !pPor->IsDropPortion() )
-            MergeCharacterBorder(*static_cast<SwTxtPortion*>(pPor), rInf);
+        if( !pPor->IsDropPortion() )
+            MergeCharacterBorder(*pPor, rInf);
 
         // Restportions from fields with multiple lines don't yet have the right ascent
         if ( !pPor->GetLen() && !pPor->IsFlyPortion()
@@ -2631,20 +2631,19 @@ void SwTxtFormatter::MergeCharacterBorder( SwDropPortion& rPortion )
     }
 }
 
-void SwTxtFormatter::MergeCharacterBorder( SwTxtPortion& rPortion, SwTxtFormatInfo& rInf )
+void SwTxtFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwTxtFormatInfo& rInf )
 {
-
     const SwFont aCurFont = *rInf.GetFont();
     if( aCurFont.HasBorder() )
     {
         // The current portion isn't inserted into the portion chain yet, so the info's
         // last portion will be the previous one
-        if( rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
-            rInf.GetLast() != &rPortion && // For para portion (special case)
-            static_cast<SwTxtPortion*>(rInf.GetLast())->GetJoinBorderWithNext())
+        if( rInf.GetLast() && rInf.GetLast() != &rPortion && // For para portion (special case)
+            rInf.GetLast()->GetJoinBorderWithNext())
         {
             rPortion.SetJoinBorderWithPrev(true);
-            rPortion.Width(rPortion.Width() - aCurFont.GetLeftBorderSpace());
+            if( rPortion.InTxtGrp() && rPortion.Width() > aCurFont.GetLeftBorderSpace() )
+                rPortion.Width(rPortion.Width() - aCurFont.GetLeftBorderSpace());
         }
         else
         {
@@ -2655,14 +2654,15 @@ void SwTxtFormatter::MergeCharacterBorder( SwTxtPortion& rPortion, SwTxtFormatIn
         // Get next portion's font
         bool bSeek = false;
         if( !rInf.IsFull() // Last portion of the line (in case of line break)
-            && rInf.GetIdx() + rInf.GetLen() != rInf.GetTxt().getLength() ) // Last portion of the paragraph
-            bSeek = Seek(rInf.GetIdx() + rInf.GetLen());
+            && rInf.GetIdx() + rPortion.GetLen() != rInf.GetTxt().getLength() ) // Last portion of the paragraph
+            bSeek = Seek(rInf.GetIdx() + rPortion.GetLen());
 
         // If next portion has the same font then merge
         if( bSeek && GetFnt()->HasBorder() && ::lcl_HasSameBorder(aCurFont, *GetFnt()) )
         {
             rPortion.SetJoinBorderWithNext(true);
-            rPortion.Width(rPortion.Width() - aCurFont.GetRightBorderSpace());
+            if( rPortion.InTxtGrp() && rPortion.Width() > aCurFont.GetRightBorderSpace() )
+                rPortion.Width(rPortion.Width() - aCurFont.GetRightBorderSpace());
         }
         // If this is the last portion of the merge group than make the real height merge
         else

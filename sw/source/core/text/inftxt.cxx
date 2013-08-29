@@ -1185,7 +1185,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTxtPaintInfo::DrawBorder( const SwTxtPortion &rPor ) const
+void SwTxtPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
 {
     SwRect aDrawArea;
     CalcRect( rPor, &aDrawArea );

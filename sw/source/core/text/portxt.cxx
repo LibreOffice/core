@@ -219,12 +219,6 @@ SwTxtPortion::SwTxtPortion( const SwLinePortion &rPortion )
   : SwLinePortion( rPortion )
 {
     SetWhichPor( POR_TXT );
-    if( rPortion.InTxtGrp() )
-    {
-        const SwTxtPortion& rPor = static_cast<const SwTxtPortion&>(rPortion);
-        m_bJoinBorderWithPrev = rPor.m_bJoinBorderWithPrev;
-        m_bJoinBorderWithNext = rPor.m_bJoinBorderWithNext;
-    }
 }
 
 /*************************************************************************
@@ -544,9 +538,9 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
     SwPosSize aSize = rInf.GetTxtSize();
-    if( !m_bJoinBorderWithPrev )
+    if( !GetJoinBorderWithPrev() )
         aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace() );
-    if( !m_bJoinBorderWithNext )
+    if( !GetJoinBorderWithNext() )
         aSize.Width(aSize.Width() + rInf.GetFont()->GetRightBorderSpace() );
 
     aSize.Height(aSize.Height() +
