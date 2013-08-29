@@ -25,6 +25,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/bitmaptabpage \
 	cui/uiconfig/ui/borderpage \
+	cui/uiconfig/ui/breaknumberoption \
 	cui/uiconfig/ui/cellalignment \
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/colorpage \

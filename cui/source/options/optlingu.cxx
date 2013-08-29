@@ -308,29 +308,48 @@ void BrwStringDic_Impl::Paint(
 
 class OptionsBreakSet : public ModalDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    FixedLine       aValFL;
-    NumericField    aValNF;
+    VclFrame*       m_pBeforeFrame;
+    VclFrame*       m_pAfterFrame;
+    VclFrame*       m_pMinimalFrame;
+    NumericField*   m_pBreakNF;
 
 public:
     OptionsBreakSet(Window* pParent, int nRID) :
-            ModalDialog(pParent, CUI_RES(RID_SVXDLG_LNG_ED_NUM_PREBREAK )),
-            aOKPB       (this, CUI_RES(BT_OK_PREBREAK)),
-            aCancelPB   (this, CUI_RES(BT_CANCEL_PREBREAK)),
-            aValFL      (this, CUI_RES(FL_NUMVAL_PREBREAK)),
-            aValNF      (this, CUI_RES(ED_PREBREAK))
+        ModalDialog(pParent, "BreakNumberOption", "cui/ui/breaknumberoption.ui")
     {
+        get( m_pBeforeFrame, "beforeframe");
+        get( m_pAfterFrame, "afterframe");
+        get( m_pMinimalFrame, "miniframe");
+        get( m_pBreakNF, "breaknumber");
+
         DBG_ASSERT( STR_NUM_PRE_BREAK_DLG   == nRID ||
                     STR_NUM_POST_BREAK_DLG  == nRID ||
                     STR_NUM_MIN_WORDLEN_DLG == nRID, "unexpected RID" );
 
-        if (nRID != -1)
-            aValFL.SetText( String( CUI_RES(nRID) ) );
-        FreeResource();
+        if ( nRID != -1 )
+        {
+            if( nRID == STR_NUM_PRE_BREAK_DLG )
+            {
+                m_pAfterFrame  ->Hide();
+                m_pMinimalFrame->Hide();
+            }
+            if( nRID == STR_NUM_POST_BREAK_DLG )
+            {
+                m_pBeforeFrame ->Hide();
+                m_pMinimalFrame->Hide();
+            }
+            if( nRID == STR_NUM_MIN_WORDLEN_DLG )
+            {
+                m_pAfterFrame ->Hide();
+                m_pBeforeFrame->Hide();
+            }
+        }
     }
 
-    NumericField&   GetNumericFld() { return aValNF; }
+    NumericField&   GetNumericFld()
+    {
+        return *m_pBreakNF;
+    }
 };
 
 

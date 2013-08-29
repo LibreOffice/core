@@ -38,10 +38,6 @@
 #define STR_HYPH_SPECIAL        212
 #define STR_NUM_MIN_WORDLEN     213
 
-#define STR_NUM_PRE_BREAK_DLG   214
-#define STR_NUM_POST_BREAK_DLG  215
-#define STR_NUM_MIN_WORDLEN_DLG 216
-
 #define STR_GRAMMAR_AUTO        217
 
 #define PB_OK                               70
@@ -52,10 +48,6 @@
 #define ST_THES                             84
 #define ST_GRAMMAR                          85
 
-#define FL_NUMVAL_PREBREAK                  305
-#define BT_OK_PREBREAK                      306
-#define BT_CANCEL_PREBREAK                  307
-#define ED_PREBREAK                         308
 #define PB_EDIT_MODULES_PRIO_UP             309
 #define PB_EDIT_MODULES_PRIO_DOWN           310
 #define PB_EDIT_MODULES_PRIO_BACK           311

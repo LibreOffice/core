@@ -129,59 +129,19 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
 };
 
-// RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
+// Strings ---------------------------------------------------------------
 
-ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
+String STR_NUM_PRE_BREAK_DLG
 {
-    HelpID = HID_LNGDLG_NUM_PREBREAK ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Size = MAP_APPFONT ( 155 , 43 ) ;
-    Text [ en-US ] = "Hyphenation";
-        FixedLine FL_NUMVAL_PREBREAK
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 87 , 8 ) ;
-    };
-    OKButton BT_OK_PREBREAK
-    {
-        Pos = MAP_APPFONT ( 99 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BT_CANCEL_PREBREAK
-    {
-        Pos = MAP_APPFONT ( 99 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    NumericField ED_PREBREAK
-    {
-        HelpID = "cui:NumericField:RID_SVXDLG_LNG_ED_NUM_PREBREAK:ED_PREBREAK";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14 ) ;
-        Size = MAP_APPFONT ( 31 , 12 ) ;
-        Left = TRUE ;
-        Minimum = 2 ;
-        Maximum = 9 ;
-        Last = 9 ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1;
-    };
-    String STR_NUM_PRE_BREAK_DLG
-    {
-        Text [ en-US ] = "Characters before break";
-    };
-    String STR_NUM_POST_BREAK_DLG
-    {
-        Text [ en-US ] = "Characters after break";
-    };
-    String STR_NUM_MIN_WORDLEN_DLG
-    {
-        Text [ en-US ] = "Minimal word length";
-    };
+    Text [ en-US ] = "Characters before break";
+};
+String STR_NUM_POST_BREAK_DLG
+{
+    Text [ en-US ] = "Characters after break";
+};
+String STR_NUM_MIN_WORDLEN_DLG
+{
+    Text [ en-US ] = "Minimal word length";
 };
 
 // RID_SFXPAGE_LINGU --------------------------------------------------------
