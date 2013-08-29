@@ -153,9 +153,17 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
     {
         // Still resolve LANGUAGE_DONTKNOW if resolving is not requested,
         // but not LANGUAGE_SYSTEM or others.
+        LanguageType nOrigLang = nLang;
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
         convertLanguageToLocaleImpl( nLang, aLocale);
+        if (bResolveSystem && aLocale.Language.isEmpty() && simplifySystemLanguages( nOrigLang) == LANGUAGE_SYSTEM)
+        {
+            // None found but resolve requested, last resort is "en-US".
+            aLocale.Language = "en";
+            aLocale.Country  = "US";
+            aLocale.Variant  = OUString();
+        }
     }
     return aLocale;
 }
