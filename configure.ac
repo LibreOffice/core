@@ -11853,15 +11853,17 @@ else
 fi
 AC_SUBST(STARTCENTER_SPACE_BITMAP)
 
-EXTRA_BUILDID=
 AC_MSG_CHECKING([for extra build ID])
 if test -n "$with_extra_buildid" -a "$with_extra_buildid" != "yes" ; then
     EXTRA_BUILDID="$with_extra_buildid"
+fi
+# in tinderboxes, it is easier to set EXTRA_BUILDID via the environment variable instead of configure switch
+if test -n "$EXTRA_BUILDID" ; then
     AC_MSG_RESULT([$EXTRA_BUILDID])
 else
     AC_MSG_RESULT([not set])
 fi
-AC_SUBST(EXTRA_BUILDID)
+AC_DEFINE_UNQUOTED([EXTRA_BUILDID], ["$EXTRA_BUILDID"])
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])
@@ -12273,6 +12275,7 @@ else
 fi
 
 AC_CONFIG_FILES([config_host.mk])
+AC_CONFIG_HEADERS([config/config_buildid.h])
 AC_CONFIG_HEADERS([config/config_version.h])
 AC_OUTPUT
 

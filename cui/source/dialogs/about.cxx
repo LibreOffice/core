@@ -48,6 +48,7 @@
 #include <sfx2/sfxcommands.h>
 #include "about.hxx"
 #include "about.hrc"
+#include <config_buildid.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -474,10 +475,11 @@ rtl::OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
-#ifdef EXTRA_BUILDID
-    sVersion += "\n";
-    sVersion += EXTRA_BUILDID;
-#endif
+    if (strlen(EXTRA_BUILDID) > 0)
+    {
+        sVersion += "\n";
+        sVersion += EXTRA_BUILDID;
+    }
 
     return sVersion;
 }
