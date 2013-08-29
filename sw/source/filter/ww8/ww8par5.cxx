@@ -95,8 +95,7 @@ using namespace nsSwDocInfoSubType;
 class WW8ReadFieldParams
 {
 private:
-    OUString aData;
-    sal_Int32 nLen;
+    const OUString aData;
     sal_Int32 nFnd;
     sal_Int32 nNext;
     sal_Int32 nSavPtr;
@@ -117,7 +116,6 @@ public:
 
 WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
     : aData( _rData )
-    , nLen( _rData.getLength() )
     , nFnd( 0 )
     , nNext( 0 )
     , nSavPtr( 0 )
@@ -127,6 +125,8 @@ WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
         Anfuehrungszeichen oder einem Backslash suchen, damit der Feldbefehl
         (also INCLUDEPICTURE bzw EINFUeGENGRAFIK bzw ...) ueberlesen wird
     */
+    const sal_Int32 nLen = aData.getLength();
+
     while ( nNext<nLen && aData[nNext]==' ' )
         ++nNext;
 
@@ -168,7 +168,7 @@ sal_Int32 WW8ReadFieldParams::GoToTokenParam()
 // ret: -2: NOT a '\' parameter but normal Text
 sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 {
-    if ( nNext<0 || nNext>=nLen )
+    if ( nNext<0 || nNext>=aData.getLength() )
         return -1;
 
     nFnd = FindNextStringPiece(nNext);
@@ -177,7 +177,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 
     nSavPtr = nNext;
 
-    if ( aData[nFnd]=='\\' && nFnd+1<nLen && aData[nFnd+1]!='\\' )
+    if ( aData[nFnd]=='\\' && nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' )
     {
         const sal_Int32 nRet = aData[++nFnd];
         nNext = ++nFnd;             // und dahinter setzen
@@ -202,6 +202,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 //
 sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
+    const sal_Int32 nLen = aData.getLength();
     sal_Int32  n = nStart<0  ? nFnd : nStart;  // Anfang
     sal_Int32 n2;          // Ende
 
