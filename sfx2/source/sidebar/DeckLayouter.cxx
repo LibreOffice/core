@@ -257,6 +257,7 @@ sal_Int32 DeckLayouter::PlacePanels (
 
             // Place the panel.
             rPanel.setPosSizePixel(0, nY, nWidth, nPanelHeight);
+            rPanel.Invalidate();
 
             nY += nPanelHeight;
         }
