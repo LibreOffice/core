@@ -1177,8 +1177,9 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
-            rPD.GetNumOffset(), &rNd );
+
+    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo, rPD.GetNumOffset(), &rNd );
+
     aSects.push_back( aI );
     NeedsDocumentProtected( aI );
 }
@@ -1502,7 +1503,7 @@ void WW8AttributeOutput::SectionBiDi( bool bBiDi )
     }
 }
 
-void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
+void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber )
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );
@@ -1512,7 +1513,7 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
         m_rWW8Export.pO->push_back( 147 );
     m_rWW8Export.pO->push_back( nb );
 
-    if ( nPageRestartNumber )
+    if ( oPageRestartNumber )
     {
         // sprmSFPgnRestart
         if ( m_rWW8Export.bWrtWW8 )
@@ -1526,7 +1527,7 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgnStart );
         else
             m_rWW8Export.pO->push_back( 161 );
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPageRestartNumber );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, oPageRestartNumber.get() );
     }
 }
 
@@ -1793,7 +1794,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         pISet = pOldI;
 
         // then the rest of the settings from PageDesc
-        AttrOutput().SectionPageNumbering( pPd->GetNumType().GetNumberingType(), rSepInfo.nPgRestartNo );
+        AttrOutput().SectionPageNumbering( pPd->GetNumType().GetNumberingType(), rSepInfo.oPgRestartNo );
 
         // werden es nur linke oder nur rechte Seiten?
         if ( 2 == nBreakCode )

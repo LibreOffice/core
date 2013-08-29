@@ -525,17 +525,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_INSERT_BREAK_DLG:
         {
-            sal_uInt16 nKind=0, nPageNumber=0;
+            sal_uInt16 nKind=0;
+            ::boost::optional<sal_uInt16> oPageNumber;
             OUString aTemplateName;
             if ( pItem )
             {
                 nKind = ((SfxInt16Item*)pItem)->GetValue();
                 SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , sal_False );
                 SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , sal_False );
+                SFX_REQUEST_ARG( rReq, pIsNumberFilled, SfxBoolItem, FN_PARAM_3, sal_False );
                 if ( pTemplate )
                     aTemplateName = pTemplate->GetValue();
-                if ( pNumber )
-                    nPageNumber = pNumber->GetValue();
+                if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )
+                    oPageNumber = pNumber->GetValue();
             }
             else
             {
@@ -548,10 +550,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     nKind = pDlg->GetKind();
                     aTemplateName = pDlg->GetTemplateName();
-                    nPageNumber = pDlg->GetPageNumber();
-                    rReq.AppendItem( SfxInt16Item( FN_INSERT_BREAK_DLG, nKind ) );
-                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_2, nPageNumber ) );
+                    oPageNumber = pDlg->GetPageNumber();
+
+                    sal_Bool bIsNumberFilled = sal_False;
+                    sal_uInt16 nPageNumber = 0;
+
+                    if (oPageNumber)
+                    {
+                        bIsNumberFilled = sal_True;
+                        nPageNumber = oPageNumber.get();
+                    }
+
+                    rReq.AppendItem( SfxInt16Item ( FN_INSERT_BREAK_DLG, nKind ) );
                     rReq.AppendItem( SfxStringItem( FN_PARAM_1, aTemplateName ) );
+                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_2, nPageNumber ) );
+                    rReq.AppendItem( SfxBoolItem  ( FN_PARAM_3, bIsNumberFilled ) );
                     rReq.Done();
                 }
                 else
@@ -569,7 +582,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.StartAllAction();
                     if( !aTemplateName.isEmpty() )
-                        rWrtSh.InsertPageBreak( &aTemplateName, nPageNumber );
+                        rWrtSh.InsertPageBreak( &aTemplateName, oPageNumber );
                     else
                         rWrtSh.InsertPageBreak();
                     rWrtSh.EndAllAction();

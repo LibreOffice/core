@@ -218,7 +218,7 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
     return pDlg->GetKind();
 }
 
-sal_uInt16 AbstractSwBreakDlg_Impl:: GetPageNumber()
+::boost::optional<sal_uInt16> AbstractSwBreakDlg_Impl:: GetPageNumber()
 {
     return pDlg->GetPageNumber();
 }

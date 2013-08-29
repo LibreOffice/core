@@ -302,7 +302,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                 pSh->SetTblAttr( aBreakSet );
             }
             else
-                pSh->InsertPageBreak(0, sal_False);
+                pSh->InsertPageBreak(0, boost::none);
             pSh->SttEndDoc(sal_True);
         }
         else

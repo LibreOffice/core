@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include "itabenum.hxx"
+#include <boost/optional.hpp>
 
 class SfxViewFrame;
 class SfxBindings;
@@ -205,9 +206,9 @@ public:
 class AbstractSwBreakDlg : public VclAbstractDialog
 {
 public:
-    virtual OUString    GetTemplateName() = 0;
-    virtual sal_uInt16  GetKind() = 0;
-    virtual sal_uInt16  GetPageNumber() = 0;
+    virtual OUString                        GetTemplateName() = 0;
+    virtual sal_uInt16                      GetKind() = 0;
+    virtual ::boost::optional<sal_uInt16>   GetPageNumber() = 0;
 
 };
 

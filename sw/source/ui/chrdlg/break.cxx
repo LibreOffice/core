@@ -49,7 +49,11 @@ void SwBreakDlg::Apply()
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = m_pPageCollBox->GetSelectEntry();
-            nPgNum = m_pPageNumBox->IsChecked() ? (sal_uInt16)m_pPageNumEdit->GetValue() : 0;
+            oPgNum = boost::none;
+            if (m_pPageNumBox->IsChecked())
+            {
+                oPgNum = (sal_uInt16)m_pPageNumEdit->GetValue();
+            }
         }
     }
 }
@@ -129,7 +133,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
     : SvxStandardDialog(pParent, "BreakDialog", "modules/swriter/ui/insertbreak.ui")
     , rSh(rS)
     , nKind(0)
-    , nPgNum(0)
+    , oPgNum(boost::none)
     , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
     get(m_pLineBtn, "linerb");

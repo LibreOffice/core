@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -29,6 +30,8 @@
 
 #include <vcl/field.hxx>
 
+#include <boost/optional.hpp>
+
 class SwWrtShell;
 
 class SwBreakDlg: public SvxStandardDialog
@@ -44,7 +47,7 @@ class SwBreakDlg: public SvxStandardDialog
 
     OUString        aTemplate;
     sal_uInt16      nKind;
-    sal_uInt16      nPgNum;
+    ::boost::optional<sal_uInt16>      oPgNum;
 
     sal_Bool            bHtmlMode;
 
@@ -64,7 +67,7 @@ public:
 
     OUString    GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }
-    sal_uInt16  GetPageNumber() { return nPgNum; }
+    ::boost::optional<sal_uInt16>  GetPageNumber() { return oPgNum; }
 };
 
 #endif

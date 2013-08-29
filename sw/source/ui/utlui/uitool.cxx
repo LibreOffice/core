@@ -619,7 +619,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
     const SfxPoolItem* pItem = 0;
     OUString aName;
-    sal_uInt16 nPageNum = 0;
+    ::boost::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
     switch( rCoreSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
     {
@@ -628,7 +628,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
             if( ((SwFmtPageDesc*)pItem)->GetPageDesc() )
             {
                 aName = ((SwFmtPageDesc*)pItem)->GetPageDesc()->GetName();
-                nPageNum = ((SwFmtPageDesc*)pItem)->GetNumOffset();
+                oNumOffset = ((SwFmtPageDesc*)pItem)->GetNumOffset();
             }
             rCoreSet.ClearItem( RES_PAGEDESC );
             // Page number
@@ -641,8 +641,12 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     default:
         bPut = false;
     }
-    SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, nPageNum );
-    rCoreSet.Put( aPageNum );
+
+    if (oNumOffset)
+    {
+        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, oNumOffset.get() );
+        rCoreSet.Put( aPageNum );
+    }
 
     if(bPut)
         rCoreSet.Put( SvxPageModelItem( aName, sal_True, SID_ATTR_PARA_MODEL ) );

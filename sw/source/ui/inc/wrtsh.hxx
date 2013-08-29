@@ -26,6 +26,7 @@
 #include <swurl.hxx>
 #include <IMark.hxx>
 #include "navmgr.hxx"
+#include <boost/optional.hpp>
 
 class Window;
 class SbxArray;
@@ -294,7 +295,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                     sal_Bool bRule = sal_False );
 
     void    InsertByWord( const OUString & );
-    void    InsertPageBreak(const OUString *pPageDesc = 0, sal_uInt16 nPgNum = 0 );
+    void    InsertPageBreak(const OUString *pPageDesc = 0, ::boost::optional<sal_uInt16> pPgNum = boost::none );
     void    InsertLineBreak();
     void    InsertColumnBreak();
     void    InsertFootnote(const OUString &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );

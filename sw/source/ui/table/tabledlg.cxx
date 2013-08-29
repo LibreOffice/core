@@ -1515,7 +1515,14 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             {
                 OUString sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
-                m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
+
+                //m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
+                ::boost::optional<sal_uInt16> oNumOffset = ((const SwFmtPageDesc*)pItem)->GetNumOffset();
+                if (oNumOffset)
+                    m_pPageNoNF->SetValue(oNumOffset.get());
+                else
+                    m_pPageNoNF->Enable(sal_False);
+
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
                 if ( !sPageDesc.isEmpty() &&

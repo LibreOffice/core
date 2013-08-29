@@ -824,7 +824,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 // Insert hard page break;
 // Selections will be overwritten
 
-void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, sal_uInt16 nPgNum )
+void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, ::boost::optional<sal_uInt16> oPgNum )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -846,7 +846,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, sal_uInt16 nPgNum )
         if( pDesc )
         {
             SwFmtPageDesc aDesc( pDesc );
-            aDesc.SetNumOffset( nPgNum );
+            aDesc.SetNumOffset( oPgNum );
             SetAttr( aDesc );
         }
         else
