@@ -1544,15 +1544,19 @@ void ScTabView::UpdateShow()
     //! neue Gridwindows eintragen
 }
 
-void ScTabView::UpdateVisibleRange()
+bool ScTabView::UpdateVisibleRange()
 {
+    bool bChanged = false;
     for (int i = 0; i < 4; ++i)
     {
         if (!pGridWin[i] || !pGridWin[i]->IsVisible())
             continue;
 
-        pGridWin[i]->UpdateVisibleRange();
+        if (pGridWin[i]->UpdateVisibleRange())
+            bChanged = true;
     }
+
+    return bChanged;
 }
 
 // ---  Splitter  --------------------------------------------------------

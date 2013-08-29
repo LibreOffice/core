@@ -213,7 +213,7 @@ protected:
 
     void            ZoomChanged();
     void            UpdateShow();
-    void            UpdateVisibleRange();
+    bool            UpdateVisibleRange();
     void            GetBorderSize( SvBorder& rBorder, const Size& rSize );
 
     void            ResetDrawDragMode();

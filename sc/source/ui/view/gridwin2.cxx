@@ -594,7 +594,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aFunc.UpdatePivotTable(*pDPObj, true, false);
 }
 
-void ScGridWindow::UpdateVisibleRange()
+bool ScGridWindow::UpdateVisibleRange()
 {
     SCCOL nPosX = pViewData->GetPosX(eHWhich);
     SCROW nPosY = pViewData->GetPosY(eVWhich);
@@ -604,10 +604,7 @@ void ScGridWindow::UpdateVisibleRange()
     if (nYBottom > MAXROW) nYBottom = MAXROW;
 
     // Store the current visible range.
-    maVisibleRange.mnCol1 = nPosX;
-    maVisibleRange.mnCol2 = nXRight;
-    maVisibleRange.mnRow1 = nPosY;
-    maVisibleRange.mnRow2 = nYBottom;
+    return maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )

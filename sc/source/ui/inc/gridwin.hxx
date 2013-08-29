@@ -119,6 +119,7 @@ private:
         VisibleRange();
 
         bool isInside(SCCOL nCol, SCROW nRow) const;
+        bool set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
     VisibleRange maVisibleRange;
 
@@ -374,7 +375,7 @@ public:
     void            CheckNeedsRepaint();
 
     void            UpdateDPFromFieldPopupMenu();
-    void            UpdateVisibleRange();
+    bool            UpdateVisibleRange();
 
     void            SetInRefMode( bool bRefMode );
 

@@ -177,6 +177,18 @@ bool ScGridWindow::VisibleRange::isInside(SCCOL nCol, SCROW nRow) const
     return mnCol1 <= nCol && nCol <= mnCol2 && mnRow1 <= nRow && nRow <= mnRow2;
 }
 
+bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    bool bChanged = mnCol1 != nCol1 || mnRow1 != nRow1 || mnCol2 != nCol2 || mnRow2 != nRow2;
+
+    mnCol1 = nCol1;
+    mnRow1 = nRow1;
+    mnCol2 = nCol2;
+    mnRow2 = nRow2;
+
+    return bChanged;
+}
+
 // ============================================================================
 
 class ScFilterListBox : public ListBox
