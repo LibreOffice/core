@@ -41,7 +41,7 @@ End
 
 File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "cli_oootypes.dll";
     Dir = gid_Brand_Dir_Program;
     Assemblyname = "cli_oootypes";
@@ -57,7 +57,7 @@ End
 #if defined _MSC_VER
 File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "${CLI_OOOTYPES_POLICY_ASSEMBLY}.dll";
     Dir = gid_Brand_Dir_Program;
     Assemblyname = "${CLI_OOOTYPES_POLICY_ASSEMBLY}";
@@ -74,7 +74,7 @@ End
 
 File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSIGNCOMPOMENT);
     Name = "cli_oootypes.config";
     Dir = gid_Brand_Dir_Program;
     AssignComponent = gid_File_Lib_Policy_Cli_Oootypes_Assembly;
@@ -509,7 +509,7 @@ End
 
 File gid_File_Lib_sn_tools
     LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = SCP2_OOO_LIB_DIR;
     Name = "sn_tools.dll";
 End

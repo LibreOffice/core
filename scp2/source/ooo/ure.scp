@@ -304,7 +304,7 @@ End
 
 File gid_File_Dl_Cli_Ure_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "cli_ure.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "cli_ure";
@@ -317,7 +317,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Ure_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "${CLI_URE_POLICY_ASSEMBLY}.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "${CLI_URE_POLICY_ASSEMBLY}";
@@ -330,7 +330,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Ure_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSIGNCOMPOMENT);
     Name = "cli_ure.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Ure_Assembly;
@@ -338,7 +338,7 @@ End
 
 File gid_File_Dl_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "cli_basetypes.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "cli_basetypes";
@@ -351,7 +351,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "${CLI_BASETYPES_POLICY_ASSEMBLY}.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "${CLI_BASETYPES_POLICY_ASSEMBLY}";
@@ -364,7 +364,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Basetypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSIGNCOMPOMENT);
     Name = "cli_basetypes.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Basetypes_Assembly;
@@ -372,7 +372,7 @@ End
 
 File gid_File_Dl_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "cli_uretypes.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "cli_uretypes";
@@ -385,7 +385,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "${CLI_URETYPES_POLICY_ASSEMBLY}.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "${CLI_URETYPES_POLICY_ASSEMBLY}";
@@ -398,7 +398,7 @@ End
 
 File gid_File_Dl_Policy_Cli_Uretypes_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSIGNCOMPOMENT);
     Name = "cli_uretypes.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Dl_Policy_Cli_Uretypes_Assembly;
@@ -406,7 +406,7 @@ End
 
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "assembly/cli_cppuhelper.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "cli_cppuhelper";
@@ -419,7 +419,7 @@ End
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSEMBLY);
     Name = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}.dll";
     Dir = SCP2_URE_DL_DIR;
     Assemblyname = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}";
@@ -432,7 +432,7 @@ End
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Styles = (PACKED, ASSIGNCOMPOMENT);
     Name = "cli_cppuhelper.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
