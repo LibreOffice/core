@@ -161,7 +161,6 @@
 #define RID_SVXDLG_JAVA_CLASSPATH           (RID_SVX_START + 255)
 #define RID_SVXERR_JRE_NOT_RECOGNIZED       (RID_SVX_START + 256)
 #define RID_SVXERR_JRE_FAILED_VERSION       (RID_SVX_START + 257)
-#define RID_SVXDLG_LNG_ED_NUM_PREBREAK      (RID_SVX_START +  830)
 #define RID_SVXDLG_EDIT_MODULES             (RID_SVX_START +  831)
 #define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
 #define RID_SVXBMP_LOCK                     (RID_SVX_START + 118)
@@ -422,6 +421,11 @@
 #define RID_SVXSTR_REPLACE_TEMPLATES                        (RID_SVX_START + 1222)
 #define RID_SVXSTR_DEL_SPACES_AT_STT_END                    (RID_SVX_START + 1223)
 #define RID_SVXSTR_DEL_SPACES_BETWEEN_LINES                 (RID_SVX_START + 1224)
+
+// from optlingu.src
+#define STR_NUM_PRE_BREAK_DLG                               (RID_SVX_START + 1225)
+#define STR_NUM_POST_BREAK_DLG                              (RID_SVX_START + 1226)
+#define STR_NUM_MIN_WORDLEN_DLG                             (RID_SVX_START + 1227)
 
 #endif
 
