@@ -550,7 +550,7 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)rCpy.GetPageDesc() ),
-    nNumOffset( rCpy.nNumOffset ),
+    oNumOffset( rCpy.oNumOffset ),
     nDescNameIdx( rCpy.nDescNameIdx ),
     pDefinedIn( 0 )
 {
@@ -559,7 +559,7 @@ SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
 SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)pDesc ),
-    nNumOffset( 0 ),
+    oNumOffset( boost::none ),
     nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
     pDefinedIn( 0 )
 {
@@ -569,7 +569,7 @@ SwFmtPageDesc &SwFmtPageDesc::operator=(const SwFmtPageDesc &rCpy)
 {
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
-    nNumOffset = rCpy.nNumOffset;
+    oNumOffset = rCpy.oNumOffset;
     nDescNameIdx = rCpy.nDescNameIdx;
     pDefinedIn = 0;
 
@@ -587,7 +587,7 @@ int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
-            ( nNumOffset == ((SwFmtPageDesc&)rAttr).nNumOffset ) &&
+            ( oNumOffset == ((SwFmtPageDesc&)rAttr).oNumOffset ) &&
             ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
 }
 
@@ -668,7 +668,17 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
-            rVal <<= (sal_Int16)GetNumOffset();
+            {
+                ::boost::optional<sal_uInt16> oOffset = GetNumOffset();
+                if (oOffset)
+                {
+                    rVal <<= (sal_Int16)oOffset.get();
+                }
+                else
+                {
+                    rVal.clear();
+                }
+            }
             break;
 
         case MID_PAGEDESC_PAGEDESCNAME:
