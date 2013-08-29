@@ -27,7 +27,8 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest) : \
 $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo "$(call gb_Executable_get_target_for_build,uno)" \
+		echo $(if $(filter MACOSX,$(OS)), "$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib") \
+		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.CppTestObject" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		"--singleaccept" \
@@ -58,7 +59,7 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		echo "JAVA_HOME=$(JAVA_HOME)" \
-		"LD_LIBRARY_PATH=$(OUTDIR)/lib" \
+		"$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib" \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest" \
 		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR))" \
@@ -72,7 +73,8 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		echo "$(call gb_Executable_get_target_for_build,uno)" \
+		echo $(if $(filter MACOSX,$(OS)), "$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib") \
+		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest --" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR))" \
