@@ -26,7 +26,6 @@ $(eval $(call gb_Jar_add_sourcefiles,juh,\
     javaunohelper/com/sun/star/comp/helper/ComponentContext \
     javaunohelper/com/sun/star/comp/helper/ComponentContextEntry \
     javaunohelper/com/sun/star/comp/helper/SharedLibraryLoader \
-    javaunohelper/com/sun/star/comp/helper/UnoInfo \
     javaunohelper/com/sun/star/lib/uno/adapter/ByteArrayToXInputStreamAdapter \
     javaunohelper/com/sun/star/lib/uno/adapter/InputStreamToXInputStreamAdapter \
     javaunohelper/com/sun/star/lib/uno/adapter/OutputStreamToXOutputStreamAdapter \

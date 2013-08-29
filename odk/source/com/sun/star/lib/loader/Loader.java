@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
@@ -137,10 +136,6 @@ public final class Loader {
      * @return the customized class loader
      */
     public static synchronized ClassLoader getCustomLoader() {
-
-        final String CLASSESDIR = "classes";
-        final String JUHJAR = "juh.jar";
-
         if ( m_Loader == null ) {
 
             // get the urls from which to load classes and resources
@@ -164,50 +159,7 @@ public final class Loader {
             // from the UNO installation
             String path = InstallationFinder.getPath();
             if ( path != null ) {
-                File fClassesDir = new File( path, CLASSESDIR );
-                File fJuh = new File( fClassesDir, JUHJAR );
-                if ( fJuh.exists() ) {
-                    URL[] clurls = new URL[1];
-                    try {
-                        clurls[0] = fJuh.toURI().toURL();
-                        ClassLoader cl = new CustomURLClassLoader( clurls );
-                        Class c = cl.loadClass(
-                            "com.sun.star.comp.helper.UnoInfo" );
-                        Method m = c.getMethod( "getJars", (Class[]) null );
-                        URL[] jarurls = (URL[]) m.invoke(
-                            null, (Object[]) null );
-                        for ( int i = 0; i < jarurls.length; i++ ) {
-                            vec.add( jarurls[i] );
-                        }
-                    } catch ( MalformedURLException e ) {
-                        // don't add the UNO jar files to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: cannot add UNO jar files: " + e );
-                    } catch ( ClassNotFoundException e ) {
-                        // don't add the UNO jar files to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: cannot add UNO jar files: " + e );
-                    } catch ( NoSuchMethodException e ) {
-                        // don't add the UNO jar files to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: cannot add UNO jar files: " + e );
-                    } catch ( IllegalAccessException e ) {
-                        // don't add the UNO jar files to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: cannot add UNO jar files: " + e );
-                    } catch ( InvocationTargetException e ) {
-                        // don't add the UNO jar files to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: cannot add UNO jar files: " + e );
-                    }
-                } else {
-                    callUnoinfo(path, vec);
-                }
+                callUnoinfo(path, vec);
             } else {
                 System.err.println( "com.sun.star.lib.loader.Loader::" +
                     "getCustomLoader: no UNO installation found!" );

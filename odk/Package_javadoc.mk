@@ -19,13 +19,11 @@ $(eval $(call gb_Package_add_files_with_dir,odk_javadoc,$(gb_Package_SDKDIRNAME)
 	com/sun/star/comp/helper/ComponentContext.html \
 	com/sun/star/comp/helper/ComponentContextEntry.html \
 	com/sun/star/comp/helper/SharedLibraryLoader.html \
-	com/sun/star/comp/helper/UnoInfo.html \
 	com/sun/star/comp/helper/class-use/Bootstrap.html \
 	com/sun/star/comp/helper/class-use/BootstrapException.html \
 	com/sun/star/comp/helper/class-use/ComponentContext.html \
 	com/sun/star/comp/helper/class-use/ComponentContextEntry.html \
 	com/sun/star/comp/helper/class-use/SharedLibraryLoader.html \
-	com/sun/star/comp/helper/class-use/UnoInfo.html \
 	com/sun/star/comp/helper/package-frame.html \
 	com/sun/star/comp/helper/package-summary.html \
 	com/sun/star/comp/helper/package-tree.html \
