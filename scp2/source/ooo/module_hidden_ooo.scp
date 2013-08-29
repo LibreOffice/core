@@ -207,7 +207,12 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_I18n,
 	gid_File_Lib_Accessbridge,
 	gid_File_Lib_Dl,
+	gid_File_Lib_sn_tools,
     GID_FILE_LIB_WPD,
+	gid_File_Lib_Reg4allmsdoc,
+	gid_File_Lib_Qslnkmsi,
+	gid_File_Lib_Sdqsmsi,
+	gid_File_Lib_Instooofiltmsi,
 	gid_File_Lib_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Config);
