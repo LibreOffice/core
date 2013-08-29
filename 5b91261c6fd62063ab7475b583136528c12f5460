@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//75Q\u003d",
+        "filename": "sw/source/core/text/frmcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-29T08:19:31Z",
+      "side": 1,
+      "message": "Since SwDrawTextInfo constructor has \"const OUString \u0026rSt\" as 4th parameter, you can just pass \"  \" here, and also remove the unused aTmp definition above.\nI\u0027m not sure about the RTL_TEXTENCODING_MS_1252 thing, though, even if I expect it not to be a problem for a string of whitespaces.",
+      "revId": "5b91261c6fd62063ab7475b583136528c12f5460",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//74c\u003d",
+        "filename": "sw/source/core/text/guess.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-08-29T08:19:31Z",
+      "side": 1,
+      "message": "What I would do here is just\n\nOUString aTxt \u003d rInf.GetTxt().copy(aBound.startPos, aBound.endPos-aBound.startPos);\n\nand remove nWordLen completely, so that no xub_StrLen thing is involved in aTxt construction.",
+      "revId": "5b91261c6fd62063ab7475b583136528c12f5460",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
