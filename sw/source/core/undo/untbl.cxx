@@ -2087,6 +2087,9 @@ CHECKTABLE(pTableNd->GetTable())
 
 CHECKTABLE(pTableNd->GetTable())
     ClearFEShellTabCols();
+
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)pTblNd->GetTable().GetTableFmt()->GetRegisteredIn(),
+                                     pTblNd->GetTable() );
 }
 
 void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)

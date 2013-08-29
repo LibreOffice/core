@@ -2128,6 +2128,8 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
             delete pUndo;
     }
 
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTbl.GetTableFmt()->GetRegisteredIn(), rTbl );
+
     return bRet;
 }
 
@@ -2232,6 +2234,10 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
         ::ClearFEShellTabCols();
         getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
     }
+
+    SwTableFmt::AssignFormatParents( (SwTableFmt*)rTable.GetTableFmt()->GetRegisteredIn(),
+                                     rTable );
+
     GetIDocumentUndoRedo().EndUndo( UNDO_TABLE_MERGE, NULL );
     return nRet;
 }
