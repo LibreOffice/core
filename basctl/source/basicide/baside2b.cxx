@@ -874,7 +874,7 @@ void EditorWindow::SetupAndShowCodeCompleteWnd( const std::vector< OUString >& a
     }
     // show it
     pCodeCompleteWnd->Show();
-    pCodeCompleteWnd->ResizeListBox();
+    pCodeCompleteWnd->ResizeAndPositionListBox();
     pCodeCompleteWnd->SelectFirstEntry();
     // correct text selection, and set it
     aSel.GetStart().GetIndex() += 1;
@@ -2818,7 +2818,7 @@ const TextSelection& CodeCompleteWindow::GetTextSelection() const
     return aTextSelection;
 }
 
-void CodeCompleteWindow::ResizeListBox()
+void CodeCompleteWindow::ResizeAndPositionListBox()
 {
     if( pListBox->GetEntryCount() >= 1 )
     {// if there is at least one element inside
@@ -2856,9 +2856,9 @@ void CodeCompleteWindow::ResizeListBox()
             aPos.Y() -= aSize.getHeight() + nParentFontHeight + nCursorPad;
         }
 
-        if( aVisArea.BottomLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
+        if( aVisArea.TopLeft().getX() + aPos.getX() + aSize.getWidth() > aBottomPoint.getX() )
         {//clipped at the right side, move it a bit left
-            aPos.X() -= aSize.getWidth();
+            aPos.X() -= aSize.getWidth() + aVisArea.TopLeft().getX();
         }
         //set the position
         SetPosPixel( aPos );
