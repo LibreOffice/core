@@ -8523,7 +8523,7 @@ AC_MSG_CHECKING([which boost to use])
 if test "$with_system_boost" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_BOOST=YES
-    AX_BOOST_BASE
+    AX_BOOST_BASE(1.47)
     AX_BOOST_DATE_TIME
     mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
     libo_MINGW_TRY_DLL([$mingw_boost_date_time_dll])
@@ -9139,6 +9139,12 @@ if test "$enable_openssl" = "yes"; then
     if test "$with_system_openssl" = "yes"; then
         libo_MINGW_CHECK_DLL([libssl])
         libo_MINGW_CHECK_DLL([libcrypto])
+        AC_MSG_CHECKING([whether openssl supports SHA512])
+        AC_LANG_PUSH([C])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/sha.h>]],[[
+	SHA512_CTX context;
+]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, openssl too old. Need >= 0.9.8.])])
+        AC_LANG_POP(C)
     fi
 else
     AC_MSG_RESULT([yes])
