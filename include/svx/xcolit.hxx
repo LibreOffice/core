@@ -43,7 +43,7 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
             XColorItem(sal_uInt16 nWhich, const Color& rTheColor);
-            XColorItem(sal_uInt16 nWhich, const String& rName, const Color& rTheColor);
+            XColorItem(sal_uInt16 nWhich, const OUString& rName, const Color& rTheColor);
             XColorItem(sal_uInt16 nWhich, SvStream& rIn);
             XColorItem(const XColorItem& rItem);
 

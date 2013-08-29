@@ -267,7 +267,7 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheCo
 {
 }
 
-XColorItem::XColorItem(sal_uInt16 _nWhich, const XubString& rName, const Color& rTheColor) :
+XColorItem::XColorItem(sal_uInt16 _nWhich, const OUString& rName, const Color& rTheColor) :
     NameOrIndex(_nWhich, rName),
     aColor(rTheColor)
 {
