@@ -20,12 +20,6 @@ $(eval $(call gb_Library_use_external,avmediavlc,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,avmediavlc))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_defs,avmediavlc,\
-    -DWINNT \
-))
-endif
-
 $(eval $(call gb_Library_use_externals,avmediavlc,\
 	boost_headers \
 	boostsystem \
