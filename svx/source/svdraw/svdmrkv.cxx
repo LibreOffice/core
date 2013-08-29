@@ -624,33 +624,41 @@ void SdrMarkView::SetMarkHandles()
         // correct position )
         Point aGridOff = GetGridOffset();
 
-        // #i122142# for captions in TextEdit, force to FrameHdls to get the special text selection
-        if(!bFrmHdl && pMarkedObj && bSingleTextObjMark && dynamic_cast< SdrCaptionObj* >(pMarkedObj))
+        // check if text edit or ole is active and handles need to be suppressed. This may be the case
+        // when a single object is selected
+        // Using a strict return statement is okay here; no handles means *no* handles.
+        if(pMarkedObj)
         {
-            bFrmHdl = true;
+            // formally #i33755#: If TextEdit is active the EditEngine will directly paint
+            // to the window, so suppress Overlay and handles completely; a text frame for
+            // the active text edit will be painted by the repaitnt mechanism in
+            // SdrObjEditView::ImpPaintOutlinerView in this case. This needs to be reworked
+            // in the future
+            // Also formally #122142#: Pretty much the same for SdrCaptionObj's in calc.
+            if(((SdrView*)this)->IsTextEdit())
+            {
+                const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pMarkedObj);
+
+                if(pSdrTextObj && pSdrTextObj->IsInEditMode())
+                {
+                    return;
+                }
+            }
+
+            // formally #i118524#: if inplace activated OLE is selected, suppress handles
+            const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pMarkedObj);
+
+            if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
+            {
+                return;
+            }
         }
 
         if (bFrmHdl)
         {
             Rectangle aRect(GetMarkedObjRect());
-            // #i33755#
-            const bool bHideHandlesWhenInTextEdit(
-                ((SdrView*)this)->IsTextEdit()
-                && pMarkedObj
-                && pMarkedObj->ISA(SdrTextObj)
-                && ((SdrTextObj*)pMarkedObj)->IsInEditMode());
 
-            // #i118524# if inplace activated OLE is selected,
-            // suppress handles
-            bool bHideHandlesWhenOleActive(false);
-            const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pMarkedObj);
-
-            if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
-            {
-                bHideHandlesWhenOleActive = true;
-            }
-
-            if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit && !bHideHandlesWhenOleActive)
+            if(!aRect.IsEmpty())
             { // otherwise nothing is found
                 if( bSingleTextObjMark )
                 {
