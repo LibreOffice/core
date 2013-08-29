@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,embeddedobj))
 
 $(eval $(call gb_Module_add_targets,embeddedobj,\
 	Library_embobj \
-	Library_emboleobj \
+	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,Library_emboleobj) \
 ))
 
 # vim: set noet sw=4 ts=4:
