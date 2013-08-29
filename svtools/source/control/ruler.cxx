@@ -2019,9 +2019,23 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         if (mpCurrentHitTest->bSize)
         {
             if (mnWinStyle & WB_HORZ)
-                ePtrStyle = POINTER_ESIZE;
+            {
+                if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                    ePtrStyle = POINTER_TAB_SELECT_W;
+                else if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                    ePtrStyle = POINTER_TAB_SELECT_E;
+                else
+                    ePtrStyle = POINTER_ESIZE;
+            }
             else
-                ePtrStyle = POINTER_SSIZE;
+            {
+                if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                    ePtrStyle = POINTER_WINDOW_NSIZE;
+                else if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                    ePtrStyle = POINTER_WINDOW_SSIZE;
+                else
+                    ePtrStyle = POINTER_SSIZE;
+            }
         }
         else if (mpCurrentHitTest->bSizeBar)
         {
