@@ -468,7 +468,7 @@ void AbstractSearchProgress_Impl::Sync()
      pDlg->Sync();
 }
 
-void AbstractSearchProgress_Impl::SetFileType( const String& rType )
+void AbstractSearchProgress_Impl::SetFileType( const OUString& rType )
 {
      pDlg->SetFileType( rType );
 }
@@ -502,7 +502,7 @@ PLinkStub   AbstractTakeProgress_Impl::GetLinkStubCleanUpHdl()
     return TakeProgress::LinkStubCleanUpHdl;
 }
 
-String AbstractTitleDialog_Impl::GetTitle() const
+OUString AbstractTitleDialog_Impl::GetTitle() const
 {
     return pDlg->GetTitle();
 }
@@ -522,27 +522,27 @@ void VclAbstractRefreshableDialog_Impl::Sync()
      pDlg->Sync();
 }
 
-String AbstractURLDlg_Impl::GetURL() const
+OUString AbstractURLDlg_Impl::GetURL() const
 {
     return pDlg->GetURL();
 }
 
-String AbstractURLDlg_Impl::GetAltText() const
+OUString AbstractURLDlg_Impl::GetAltText() const
 {
     return pDlg->GetAltText();
 }
 
-String AbstractURLDlg_Impl::GetDesc() const
+OUString AbstractURLDlg_Impl::GetDesc() const
 {
     return pDlg->GetDesc();
 }
 
-String AbstractURLDlg_Impl::GetTarget() const
+OUString AbstractURLDlg_Impl::GetTarget() const
 {
     return pDlg->GetTarget();
 }
 
-String AbstractURLDlg_Impl::GetName() const
+OUString AbstractURLDlg_Impl::GetName() const
 {
     return pDlg->GetName();
 }
@@ -582,12 +582,12 @@ sal_Bool AbstractSvxHlinkDlgMarkWnd_Impl::ConnectToDialog( sal_Bool bDoit  )cons
     return pDlg->ConnectToDialog(bDoit);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( String aStrURL )
+void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( OUString aStrURL )
 {
     pDlg->RefreshTree(aStrURL);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( String aStrMark )
+void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( OUString aStrMark )
 {
     pDlg->SelectEntry(aStrMark);
 }
@@ -787,17 +787,17 @@ void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescriptio
     pDlg->GetDescription(rDescription);
 }
 
-void AbstractSvxMessDialog_Impl::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
+void AbstractSvxMessDialog_Impl::SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt )
 {
     pDlg->SetButtonText( nBtnId, rNewTxt );
 }
 
-String AbstractSvxMultiPathDialog_Impl::GetPath() const
+OUString AbstractSvxMultiPathDialog_Impl::GetPath() const
 {
     return pDlg->GetPath();
 }
 
-void AbstractSvxMultiPathDialog_Impl::SetPath( const String& rPath )
+void AbstractSvxMultiPathDialog_Impl::SetPath( const OUString& rPath )
 {
     pDlg->SetPath( rPath );
 }
@@ -807,27 +807,27 @@ void AbstractSvxMultiPathDialog_Impl::EnableRadioButtonMode()
     pDlg->EnableRadioButtonMode();
 }
 
-void AbstractSvxMultiPathDialog_Impl::SetTitle( const String& rNewTitle )
+void AbstractSvxMultiPathDialog_Impl::SetTitle( const OUString& rNewTitle )
 {
     pDlg->SetText( rNewTitle );
 }
 
-String AbstractSvxMultiFileDialog_Impl::GetPath() const
+OUString AbstractSvxMultiFileDialog_Impl::GetPath() const
 {
     return pDlg->GetPath();
 }
 
-void AbstractSvxMultiFileDialog_Impl::SetPath( const String& rPath )
+void AbstractSvxMultiFileDialog_Impl::SetPath( const OUString& rPath )
 {
     pDlg->SetPath( rPath );
 }
 
-String AbstractSvxMultiFileDialog_Impl::GetFiles() const
+OUString AbstractSvxMultiFileDialog_Impl::GetFiles() const
 {
     return pDlg->GetFiles();
 }
 
-void AbstractSvxMultiFileDialog_Impl::SetFiles( const String& rPath )
+void AbstractSvxMultiFileDialog_Impl::SetFiles( const OUString& rPath )
 {
     pDlg->SetFiles( rPath );
 }
@@ -842,7 +842,7 @@ void AbstractSvxMultiFileDialog_Impl::EnableRadioButtonMode()
     pDlg->EnableRadioButtonMode();
 }
 
-void AbstractSvxMultiFileDialog_Impl::SetTitle( const String& rNewTitle )
+void AbstractSvxMultiFileDialog_Impl::SetTitle( const OUString& rNewTitle )
 {
     pDlg->SetText( rNewTitle );
 }
@@ -871,7 +871,7 @@ void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link& lnk)
 {
     pDlg->SetCanceledNotFoundHdl(lnk);
 }
-void AbstractFmSearchDialog_Impl::SetActiveField(const String& strField)
+void AbstractFmSearchDialog_Impl::SetActiveField(const OUString& strField)
 {
     pDlg->SetActiveField(strField);
 }
@@ -928,15 +928,15 @@ void AbstractSvxPostItDialog_Impl::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
 {
     pDlg->EnableTravel( bNext, bPrev );
 }
-String AbstractSvxPostItDialog_Impl::GetNote()
+OUString AbstractSvxPostItDialog_Impl::GetNote()
 {
     return pDlg->GetNote();
 }
-void AbstractSvxPostItDialog_Impl::SetNote(const String& rTxt)
+void AbstractSvxPostItDialog_Impl::SetNote(const OUString& rTxt)
 {
     pDlg->SetNote( rTxt );
 }
-void AbstractSvxPostItDialog_Impl::ShowLastAuthor(const String& rAuthor, const String& rDate)
+void AbstractSvxPostItDialog_Impl::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
     pDlg->ShowLastAuthor( rAuthor, rDate );
 }
@@ -1261,7 +1261,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
 }
 
 AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( Window* pParent,
-                                            const String& rOldText)
+                                            const OUString& rOldText)
 {
    TitleDialog* pDlg = new TitleDialog( pParent, rOldText);
    return new AbstractTitleDialog_Impl( pDlg );
@@ -1283,8 +1283,8 @@ VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDia
 }
 
 AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,
-                                            const String& rURL, const String& rAltText, const String& rDescription,
-                                            const String& rTarget, const String& rName,
+                                            const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
+                                            const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList )
 {
     URLDlg* pDlg = new URLDlg( pParent, rURL, rAltText, rDescription, rTarget, rName, rTargetList);
@@ -1427,7 +1427,7 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
 }
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( Window* pParent,
-                                            const String& rName,
+                                            const OUString& rName,
                                             ::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId )
 {
@@ -1447,24 +1447,24 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
 }
 
 AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( Window* pParent,
-                                    const String& rName, const String& rDesc )
+                                    const OUString& rName, const OUString& rDesc )
 {
     SvxNameDialog* pDlg = new SvxNameDialog( pParent, rName, rDesc );
     return new AbstractSvxNameDialog_Impl( pDlg );
 }
 
-AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(Window* pParent, const String& rName )
+AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(Window* pParent, const OUString& rName )
 {
     return new AbstractSvxObjectNameDialog_Impl(new SvxObjectNameDialog(pParent, rName));
 }
 
-AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription)
+AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(Window* pParent, const OUString& rTitle, const OUString& rDescription)
 {
     return new AbstractSvxObjectTitleDescDialog_Impl(new SvxObjectTitleDescDialog(pParent, rTitle, rDescription));
 }
 
 AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window* pParent, sal_uInt32,
-                                    const String& rText, const String& rDesc, Image* pImg )
+                                    const OUString& rText, const OUString& rDesc, Image* pImg )
 {
     SvxMessDialog* pDlg = new SvxMessDialog( pParent, rText, rDesc, pImg );
     return new AbstractSvxMessDialog_Impl( pDlg );

@@ -217,8 +217,8 @@ class AbstractSearchProgress_Impl : public AbstractSearchProgress
     DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress)
     virtual void        Update() ;
     virtual void        Sync() ;
-    virtual void    SetFileType( const String& rType ) ;
-    virtual void    SetDirectory( const INetURLObject& rURL ) ;
+    virtual void        SetFileType( const OUString& rType ) ;
+    virtual void        SetDirectory( const INetURLObject& rURL ) ;
     virtual PLinkStub   GetLinkStubCleanUpHdl() ;
 
 };
@@ -238,7 +238,7 @@ class TitleDialog;
 class AbstractTitleDialog_Impl : public AbstractTitleDialog
 {
     DECL_ABSTDLG_BASE(AbstractTitleDialog_Impl,TitleDialog)
-    virtual String  GetTitle() const ;
+    virtual OUString  GetTitle() const ;
 
 };
 
@@ -265,11 +265,11 @@ class URLDlg;
 class AbstractURLDlg_Impl :public AbstractURLDlg
 {
     DECL_ABSTDLG_BASE(AbstractURLDlg_Impl,URLDlg)
-    virtual String      GetURL() const;
-    virtual String      GetAltText() const;
-    virtual String      GetDesc() const;
-    virtual String      GetTarget() const;
-    virtual String      GetName() const;
+    virtual OUString      GetURL() const;
+    virtual OUString      GetAltText() const;
+    virtual OUString      GetDesc() const;
+    virtual OUString      GetTarget() const;
+    virtual OUString      GetName() const;
 };
 
 class SvxHlinkDlgMarkWnd;
@@ -277,15 +277,15 @@ class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
 {
     DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd)
     virtual void                Hide( sal_uInt16 nFlags = 0 );
-    virtual sal_Bool                IsVisible() const ;
+    virtual sal_Bool            IsVisible() const ;
     virtual void                Invalidate( sal_uInt16 nFlags = 0 );
     virtual void                SetSizePixel( const Size& rNewSize );
     virtual Size                GetSizePixel() const;
-    virtual sal_Bool                MoveTo ( Point aNewPos )const;
-    virtual sal_Bool                ConnectToDialog( sal_Bool bDoit = sal_True )const;
-    virtual void                RefreshTree ( String aStrURL ) ;
-    virtual void                SelectEntry ( String aStrMark );
-    virtual sal_uInt16              SetError( sal_uInt16 nError) ;
+    virtual sal_Bool            MoveTo ( Point aNewPos )const;
+    virtual sal_Bool            ConnectToDialog( sal_Bool bDoit = sal_True )const;
+    virtual void                RefreshTree ( OUString aStrURL ) ;
+    virtual void                SelectEntry ( OUString aStrMark );
+    virtual sal_uInt16          SetError( sal_uInt16 nError) ;
 
 };
 
@@ -387,33 +387,33 @@ class SvxMessDialog;
 class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl,SvxMessDialog)
-    virtual void    SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt );
+    virtual void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );
 };
 
 class SvxMultiPathDialog;
 class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl,SvxMultiPathDialog)
-    virtual String          GetPath() const;
-    virtual void            SetPath( const String& rPath );
+    virtual OUString        GetPath() const;
+    virtual void            SetPath( const OUString& rPath );
     virtual void            EnableRadioButtonMode();
-    virtual void            SetTitle( const String& rNewTitle );
+    virtual void            SetTitle( const OUString& rNewTitle );
 };
 
 class SvxMultiFileDialog;
 class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl,SvxMultiFileDialog)
-    virtual String          GetFiles() const ;
-    virtual void            SetFiles( const String& rPath ) ;
+    virtual OUString        GetFiles() const ;
+    virtual void            SetFiles( const OUString& rPath ) ;
     //from SvxMultiPathDialog
-    virtual String          GetPath() const;
-    virtual void            SetPath( const String& rPath );
+    virtual OUString        GetPath() const;
+    virtual void            SetPath( const OUString& rPath );
     virtual void            SetClassPathMode();
     virtual void            EnableRadioButtonMode();
-    virtual void            SetTitle( const String& rNewTitle );
+    virtual void            SetTitle( const OUString& rNewTitle );
     //From Class Window
-    virtual void    SetHelpId( const OString& ) ;
+    virtual void            SetHelpId( const OString& ) ;
 
 };
 
@@ -431,7 +431,7 @@ class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
     DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog)
     virtual void SetFoundHandler(const Link& lnk) ;
     virtual void SetCanceledNotFoundHdl(const Link& lnk);
-    virtual void SetActiveField(const String& strField);
+    virtual void SetActiveField(const OUString& strField);
 };
 
 class GraphicFilterDialog;
@@ -489,13 +489,13 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     virtual void                SetPrevHdl( const Link& rLink ) ;
     virtual void                SetNextHdl( const Link& rLink ) ;
     virtual void                EnableTravel(sal_Bool bNext, sal_Bool bPrev) ;
-    virtual String              GetNote() ;
-    virtual void                SetNote(const String& rTxt) ;
-    virtual void                ShowLastAuthor(const String& rAuthor, const String& rDate) ;
+    virtual OUString            GetNote() ;
+    virtual void                SetNote(const OUString& rTxt) ;
+    virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) ;
     virtual void                DontChangeAuthor() ;
     virtual void                HideAuthor() ;
     virtual void                SetReadonlyPostIt(sal_Bool bDisable) ;
-    virtual sal_Bool                IsOkEnabled() const  ;
+    virtual sal_Bool            IsOkEnabled() const  ;
     virtual Window *            GetWindow();
 private:
     Link aNextHdl;
@@ -604,15 +604,15 @@ public:
                                             const INetURLObject& rStartURL);
     virtual AbstractTakeProgress * CreateTakeProgressDialog( Window* pParent );
     virtual AbstractTitleDialog * CreateTitleDialog( Window* pParent,
-                                             const String& rOldText);
+                                             const OUString& rOldText);
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,
                                             GalleryTheme* pThm);
     virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet);
     virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
-                                            const String& rURL, const String& rAltText, const String& rDescription,
-                                            const String& rTarget, const String& rName,
+                                            const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
+                                            const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList );
     virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId );
 
@@ -631,23 +631,23 @@ public:
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( Window* pParent,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl );
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( Window* pParent,
-                                            const String& rName,
+                                            const OUString& rName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
                                             sal_uInt32 nResId);
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( Window* pParent,
-                                            const String& rName, const String& rDesc );
+                                            const OUString& rName, const OUString& rDesc );
     // #i68101#
-    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(Window* pParent, const String& rName );
-    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(Window* pParent, const String& rTitle, const String& rDescription);
+    virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(Window* pParent, const OUString& rName );
+    virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(Window* pParent, const OUString& rTitle, const OUString& rDescription);
 
     virtual AbstractSvxMessDialog *         CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
-                                            const String& rText, const String& rDesc,
-                                            Image* pImg = NULL );
+                                                const OUString& rText, const OUString& rDesc,
+                                                Image* pImg = NULL );
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (Window* pParent,
-                                            SfxBindings* pBindings,
-                                            sal_uInt32 nResId);
+                                                SfxBindings* pBindings,
+                                                sal_uInt32 nResId);
     virtual AbstractFmSearchDialog*         CreateFmSearchDialog(Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
