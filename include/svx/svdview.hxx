@@ -249,7 +249,7 @@ public:
     //   - Object-specific dragging
     //   - General dragging
     // und mehr...
-    String GetStatusText();
+    OUString GetStatusText();
 
     SvtAccessibilityOptions& getAccessibilityOptions();
 

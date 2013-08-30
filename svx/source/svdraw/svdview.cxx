@@ -1163,7 +1163,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 }
 
 #define STR_NOTHING "nothing"
-XubString SdrView::GetStatusText()
+OUString SdrView::GetStatusText()
 {
     XubString aStr;
     XubString aName;
