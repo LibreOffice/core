@@ -44,7 +44,10 @@
             [self.hintImage setImage:[UIImage imageNamed:@"WTPairing"]];
             break;
         case 2:{
-            [self.image setImage:[UIImage imageNamed:@"WTcontrol"]];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+                [self.image setImage:[UIImage imageNamed:@"WTcontrol~iphone"]];
+            else
+                [self.image setImage:[UIImage imageNamed:@"WTcontrol~ipad"]];
 //            self.instructionText.text = @"Control your presentation at your fingertips!";
             self.instructionTitle.text = @"Control";
             UIImage *backgroundImage = [UIImage imageNamed:@"buttonBackground"];
