@@ -12428,7 +12428,7 @@ echo "setting up the build environment variables..."
 AC_SUBST(COMPATH)
 
 if test "$build_os" = "cygwin"; then
-    if test "$DISABLE_ACTIVEX" = "YES"; then
+    if test "$DISABLE_ACTIVEX" = "TRUE"; then
         ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
     else
