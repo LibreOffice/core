@@ -46,7 +46,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 	include/openssl/pem2.h \
 	include/openssl/pkcs12.h \
 	include/openssl/pkcs7.h \
-	include/openssl/pq_compat.h \
 	include/openssl/pqueue.h \
 	include/openssl/rand.h \
 	include/openssl/ripemd.h \
@@ -58,7 +57,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 	include/openssl/ssl23.h \
 	include/openssl/ssl3.h \
 	include/openssl/stack.h \
-	include/openssl/store.h \
 	include/openssl/symhacks.h \
 	include/openssl/tls1.h \
 	include/openssl/ui.h \
@@ -69,7 +67,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,openssl,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
-	openssl/openssl-asm-fix.patch \
 	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),openssl/openssllnx.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),openssl/opensslmingw.patch) \
 	$(if $(filter MSC,$(COM)),openssl/opensslwnt.patch) \

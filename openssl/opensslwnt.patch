@@ -81,9 +81,9 @@
  LFLAGS=$lflags
 -RSC=$rsc
 +RSC=$rsc \$(SOLARINC)
- FIPSLINK=\$(PERL) util${o}fipslink.pl
  
- AES_ASM_OBJ=$aes_asm_obj
+ # The output directory for everything intersting
+ OUT_D=$out_dir
 @@ -730,7 +735,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
@@ -108,21 +108,21 @@
      }
  
      $cc='$(CC)';
--    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
-+    $base_cflags=' -W3 -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
+-    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
++    $base_cflags=' -W3 -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -DOPENSSL_SMALL_FOOTPRINT';
      $base_cflags.=" $wcecdefs";
+     $base_cflags.=' -I$(WCECOMPAT)/include'		if (defined($ENV{'WCECOMPAT'}));
+     $base_cflags.=' -I$(PORTSDK_LIBPATH)/../../include'	if (defined($ENV{'PORTSDK_LIBPATH'}));
 -    $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
--    $dbg_clfags=' /MC /Od -DDEBUG -D_DEBUG';
+-    $dbg_cflags=' /MC /Od -DDEBUG -D_DEBUG';
 +    $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
-+    $dbg_clfags=' -MC -Od -DDEBUG -D_DEBUG';
++    $dbg_cflags=' -MC -Od -DDEBUG -D_DEBUG';
      $lflags="/nologo /opt:ref $wcelflag";
      }
  else	# Win32
      {
--    $base_cflags=' /W3 /WX /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-+    $base_cflags=' -W3 -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
-     $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
-     $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
+-    $base_cflags= " $mf_cflag";
++    $base_cflags= " $mf_cflag";
 -    my $f = $shlib || $fips ?' /MD':' /MT';
 -    $lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 -    $opt_cflags=$f.' /Ox /O2 /Ob2';
@@ -135,23 +135,14 @@
      }
  $mlflags='';
 @@ -138,7 +138,7 @@
- 	}
  
  $obj='.obj';
+ $asm_suffix='.asm';
 -$ofile="/Fo";
 +$ofile="-Fo.\\";
  
  # EXE linking stuff
  $link="link";
-@@ -298,7 +298,7 @@
- 	$tmp_def='tmp32dll_$(TARGETCPU)';
- 	}
- 
--$cflags.=" /Fd$out_def";
-+$cflags.=" -Fd$out_def";
- 
- sub do_lib_rule
- 	{
 --- build/openssl-0.9.8v/ms/uplink.c
 +++ build/openssl-0.9.8v/ms/uplink.c
 @@ -1,5 +1,6 @@
