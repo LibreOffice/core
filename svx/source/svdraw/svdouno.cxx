@@ -154,7 +154,7 @@ namespace
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
-SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
+SdrUnoObj::SdrUnoObj(const OUString& rModelName, sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
@@ -163,11 +163,11 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // only an owner may create independently
-    if (rModelName.Len())
+    if (!rModelName.isEmpty())
         CreateUnoControlModel(rModelName);
 }
 
-SdrUnoObj::SdrUnoObj(const String& rModelName,
+SdrUnoObj::SdrUnoObj(const OUString& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
                      sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
@@ -178,7 +178,7 @@ SdrUnoObj::SdrUnoObj(const String& rModelName,
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
     // only an owner may create independently
-    if (rModelName.Len())
+    if (!rModelName.isEmpty())
         CreateUnoControlModel(rModelName,rxSFac);
 }
 
@@ -456,7 +456,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     }
 }
 
-void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
+void SdrUnoObj::CreateUnoControlModel(const OUString& rModelName)
 {
     DBG_ASSERT(!xUnoControlModel.is(), "model already exists");
 
@@ -464,7 +464,7 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
 
     uno::Reference< awt::XControlModel >   xModel;
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    if (aUnoControlModelTypeName.Len() )
+    if (!aUnoControlModelTypeName.isEmpty() )
     {
         xModel = uno::Reference< awt::XControlModel >(xContext->getServiceManager()->createInstanceWithContext(
             aUnoControlModelTypeName, xContext), uno::UNO_QUERY);
@@ -476,7 +476,7 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
     SetUnoControlModel(xModel);
 }
 
-void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
+void SdrUnoObj::CreateUnoControlModel(const OUString& rModelName,
                                       const uno::Reference< lang::XMultiServiceFactory >& rxSFac)
 {
     DBG_ASSERT(!xUnoControlModel.is(), "model already exists");
@@ -484,7 +484,7 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
     aUnoControlModelTypeName = rModelName;
 
     uno::Reference< awt::XControlModel >   xModel;
-    if (aUnoControlModelTypeName.Len() && rxSFac.is() )
+    if (!aUnoControlModelTypeName.isEmpty() && rxSFac.is() )
     {
         xModel = uno::Reference< awt::XControlModel >(rxSFac->createInstance(
             aUnoControlModelTypeName), uno::UNO_QUERY);

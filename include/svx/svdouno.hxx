@@ -51,23 +51,23 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 
     SdrUnoObjDataHolder*        m_pImpl;
 
-    String                      aUnoControlModelTypeName;
-    String                      aUnoControlTypeName;
+    OUString                    aUnoControlModelTypeName;
+    OUString                    aUnoControlTypeName;
     sal_Bool                        bOwnUnoControlModel;
 
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
 
 private:
-    SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName);
-    SVX_DLLPRIVATE void CreateUnoControlModel(const String& rModelName,
+    SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName);
+    SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac );
 
 public:
     TYPEINFO();
 
-    explicit SdrUnoObj(const String& rModelName, sal_Bool bOwnsModel = sal_True);
-    SdrUnoObj(const String& rModelName,
+    explicit SdrUnoObj(const OUString& rModelName, sal_Bool bOwnsModel = sal_True);
+    SdrUnoObj(const OUString& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
         sal_Bool bOwnsModel = sal_True);
     virtual ~SdrUnoObj();
@@ -128,8 +128,8 @@ public:
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer
         ) const;
 
-    const String& GetUnoControlModelTypeName() const { return aUnoControlTypeName; }
-    const String& GetUnoControlTypeName() const { return aUnoControlTypeName; }
+    const OUString& GetUnoControlModelTypeName() const { return aUnoControlTypeName; }
+    const OUString& GetUnoControlTypeName() const { return aUnoControlTypeName; }
 
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& xModel );
 
