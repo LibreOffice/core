@@ -109,12 +109,12 @@ OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
         // without trailing '\0' that's why += 1
         lItem++;
 
-        CAutoUnicodeBuffer aBuff( lItem );
+        OUString aString = OUString::number(lItem);
 
         LRESULT lRet =
             SendMessageW(
                 hwnd, CB_GETLBTEXT, aPosition,
-                reinterpret_cast<LPARAM>(&aBuff) );
+                reinterpret_cast<LPARAM>(aString.getStr()) );
 
         OSL_ASSERT( lRet != CB_ERR );
 
