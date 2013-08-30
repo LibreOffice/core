@@ -21,6 +21,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
@@ -118,9 +119,34 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         // this fills the chart again
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "CellRangeRepresentation", OUString("all") );
-        aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+
+        sal_Bool bHasCategories = sal_False;
+
+        uno::Reference< chart2::data::XDataSource > xDataSource(m_xModel, uno::UNO_QUERY);
+        if( xDataSource.is())
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(xDataSource->getDataSequences());
+            const sal_Int32 nCount( aSequences.getLength());
+            for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+            {
+                if( aSequences[nIdx].is() )
+                {
+                    uno::Reference< beans::XPropertySet > xSeqProp( aSequences[nIdx]->getValues(), uno::UNO_QUERY );
+                    OUString aRole;
+                    if  (   xSeqProp.is()
+                        &&  ( xSeqProp->getPropertyValue( "Role" ) >>= aRole )
+                        &&  aRole == "categories"
+                        )
+                    {
+                        bHasCategories = sal_True;
+                        break;
+                    }
+                }
+            }
+        }
+        aArgs.put( "HasCategories", uno::makeAny( bHasCategories ) );
 
         uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
         if ( xDataProvider.is() )
