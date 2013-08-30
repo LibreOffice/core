@@ -1006,7 +1006,7 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
       info->crop_yoffset = 0;   /* default to +0 */
     if (info->crop_xoffset >= info->output_width ||
     info->crop_yoffset >= info->output_height)
-      ERREXIT(srcinfo, JERR_BAD_CROP_SPEC);
+      ERREXIT(srcinfo, JERR_CONVERSION_NOTIMPL);
     if (info->crop_width_set == JCROP_UNSET)
       info->crop_width = info->output_width - info->crop_xoffset;
     if (info->crop_height_set == JCROP_UNSET)
@@ -1016,7 +1016,7 @@ jtransform_request_workspace (j_decompress_ptr srcinfo,
     info->crop_height <= 0 || info->crop_height > info->output_height ||
     info->crop_xoffset > info->output_width - info->crop_width ||
     info->crop_yoffset > info->output_height - info->crop_height)
-      ERREXIT(srcinfo, JERR_BAD_CROP_SPEC);
+      ERREXIT(srcinfo, JERR_CONVERSION_NOTIMPL);
     /* Convert negative crop offsets into regular offsets */
     if (info->crop_xoffset_set == JCROP_NEG)
       xoffset = info->output_width - info->crop_width - info->crop_xoffset;
