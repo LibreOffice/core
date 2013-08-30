@@ -113,7 +113,7 @@ static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_100TH_MM,       1000,   250,    500,   1000,    1000, 3, " cm"    }, // CM
 { MAP_MM,             1000,   250,    500,   1000,   10000, 4, " m"     }, // M
 { MAP_CM,           100000, 25000,  50000, 100000,  100000, 6, " km"    }, // KM
-{ MAP_100TH_INCH,      100,    10,     50,    100,    2540, 3, "\""     }, // INCH
+{ MAP_1000TH_INCH,    1000,   125,    500,   1000,   25400, 3, "\""     }, // INCH
 { MAP_100TH_INCH,     1200,   120,    600,   1200,   30480, 3, "'"      }, // FOOT
 { MAP_10TH_INCH,    633600, 63360, 316800, 633600, 1609344, 4, " miles" }, // MILE
 { MAP_POINT,             1,    12,     12,     36,     353, 2, " pt"    }, // POINT
