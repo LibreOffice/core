@@ -361,10 +361,11 @@ bool OResultSet::isNull(sal_Int32 columnIndex)
 template <typename T>
 T OResultSet::retrieveValue(sal_Int32 columnIndex)
 {
+    // TODO: check we have the right type.
     if ((m_bWasNull = isNull(columnIndex)))
         return 0;
 
-    return *m_pSqlda->sqlvar[columnIndex-1].sqldata;
+    return *((T*) m_pSqlda->sqlvar[columnIndex-1].sqldata);
 }
 
 template <>
