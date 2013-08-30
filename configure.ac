@@ -2690,8 +2690,7 @@ if test $_os = Darwin; then
                     AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
                 fi
                 # Use libc++ instead of libstdc++ when possible
-                # and also compile as C++11
-                stdlib="-std=c++11 -stdlib=libc++"
+                stdlib=-stdlib=libc++
                 CPP_LIBRARY="LIBCPP"
             fi
             if test "$ENABLE_LTO" = TRUE; then
@@ -5956,28 +5955,22 @@ if test "$COM" = MSC; then
 elif test "$GCC" = "yes"; then
     CXXFLAGS_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++11])
-    if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
-        : Already set CXX to contain -std=c++11
-        HAVE_CXX11=TRUE
-        AC_MSG_RESULT(yes)
-    else
-        for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
-            save_CXXFLAGS=$CXXFLAGS
-            CXXFLAGS="$CXXFLAGS $flag -Werror"
-            AC_LANG_PUSH([C++])
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
-            AC_LANG_POP([C++])
-            CXXFLAGS=$save_CXXFLAGS
-            if test -n "$CXXFLAGS_CXX11"; then
-                HAVE_CXX11=TRUE
-                break
-            fi
-        done
-        if test "$HAVE_CXX11" = TRUE; then
-            AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
-        else
-            AC_MSG_RESULT(no)
+    for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS $flag -Werror"
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
+        AC_LANG_POP([C++])
+        CXXFLAGS=$save_CXXFLAGS
+        if test -n "$CXXFLAGS_CXX11"; then
+            HAVE_CXX11=TRUE
+            break
         fi
+    done
+    if test "$HAVE_CXX11" = TRUE; then
+        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
+    else
+        AC_MSG_RESULT(no)
     fi
 fi
 
