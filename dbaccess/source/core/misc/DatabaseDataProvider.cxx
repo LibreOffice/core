@@ -245,7 +245,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
     ::comphelper::NamedValueCollection aArguments;
     aArguments.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
     aArguments.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
-    // internal data always contains labels and categories
+    // internal data always contains labels
     aArguments.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
 
     sal_Bool bHasCategories = sal_False;
