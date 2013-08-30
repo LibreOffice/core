@@ -226,7 +226,7 @@ void SdrTextObj::FitFrameToTextSize()
     }
 }
 
-void SdrTextObj::NbcSetText(const XubString& rStr)
+void SdrTextObj::NbcSetText(const OUString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
@@ -240,7 +240,7 @@ void SdrTextObj::NbcSetText(const XubString& rStr)
     bTextSizeDirty=sal_False;
 }
 
-void SdrTextObj::SetText(const XubString& rStr)
+void SdrTextObj::SetText(const OUString& rStr)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     NbcSetText(rStr);
@@ -249,7 +249,7 @@ void SdrTextObj::SetText(const XubString& rStr)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrTextObj::NbcSetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
+void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
@@ -263,7 +263,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const String& rBaseURL, sal_uInt16
     bTextSizeDirty=sal_False;
 }
 
-void SdrTextObj::SetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
+void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     NbcSetText(rInput,rBaseURL,eFormat);

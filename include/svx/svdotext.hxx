@@ -319,11 +319,11 @@ public:
     // werden, um eine Datei in ein Textobjekt zu laden (ohne Verknuepfung).
     // TextLinks koennen nicht editiert werden (allenfalls spaeter mal ReadOnly).
     // Eine Attributierung kann nur am Textrahmen vollzogen werden.
-    void SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
+    void SetTextLink(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
     void ReleaseTextLink();
     bool IsLinkedText() const { return pPlusData!=NULL && GetLinkUserData()!=NULL; }
     bool ReloadLinkedText(bool bForceLoad = false);
-    bool LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
+    bool LoadText(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
 
     virtual bool AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
@@ -362,10 +362,10 @@ public:
 
     void SetDisableAutoWidthOnDragging(bool bOn) { bDisableAutoWidthOnDragging=bOn; }
     bool IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
-    void NbcSetText(const String& rStr);
-    void SetText(const String& rStr);
-    void NbcSetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
-    void SetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
+    void NbcSetText(const OUString& rStr);
+    void SetText(const OUString& rStr);
+    void NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
+    void SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
 
     // FitToSize und Fontwork wird bei GetTextSize() nicht berueksichtigt!
     virtual const Size& GetTextSize() const;

@@ -129,7 +129,7 @@ SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
 }
 
 
-void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet)
+void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet)
 {
     if(eCharSet == RTL_TEXTENCODING_DONTKNOW)
         eCharSet = osl_getThreadTextEncoding();
@@ -205,7 +205,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
     return bRet;
 }
 
-bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
+bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     bool            bRet = false;
