@@ -87,7 +87,7 @@ namespace osl {
                              sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
                              sal_uInt32 nDefault)
         {
-            int nItems = rStrings.size();
+            size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
             std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
@@ -117,7 +117,7 @@ namespace osl {
                             sal_uInt32 nFirstId, const std::list< rtl::OString >& rStrings,
                             sal_uInt32 nValue)
         {
-            int nItems = rStrings.size();
+            size_t nItems = rStrings.size();
             const sal_Char** pStrings = new const sal_Char*[ nItems+1 ];
             std::list< rtl::OString >::const_iterator it = rStrings.begin();
             nItems = 0;
@@ -152,12 +152,12 @@ namespace osl {
             std::list< rtl::OString > aEntries;
 
             // count buffer size necessary
-            int n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
+            size_t n = osl_getProfileSectionEntries( profile, rSection.getStr(), NULL, 0 );
             if( n > 1 )
             {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
                 osl_getProfileSectionEntries( profile, rSection.getStr(), pBuf, n+1 );
-                int nLen;
+                size_t nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aEntries.push_back( rtl::OString( pBuf+n ) );
                 delete pBuf;
@@ -174,12 +174,12 @@ namespace osl {
             std::list< rtl::OString > aSections;
 
             // count buffer size necessary
-            int n = osl_getProfileSections( profile, NULL, 0 );
+            size_t n = osl_getProfileSections( profile, NULL, 0 );
             if( n > 1 )
             {
                 sal_Char* pBuf = new sal_Char[ n+1 ];
                 osl_getProfileSections( profile, pBuf, n+1 );
-                int nLen;
+                size_t nLen;
                 for( n = 0; ( nLen = strlen( pBuf+n ) ); n += nLen+1 )
                     aSections.push_back( rtl::OString( pBuf+n ) );
                 delete pBuf;
