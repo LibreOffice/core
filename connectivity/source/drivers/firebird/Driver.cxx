@@ -61,14 +61,15 @@ const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 FirebirdDriver::FirebirdDriver()
     : ODriver_BASE(m_aMutex)
 {
-    OUString sTmpDir;
-    ::osl::FileBase::getTempDirURL(sTmpDir);
+    OUString sTmpDirURL, sTmpDirPath;
+    ::osl::FileBase::getTempDirURL(sTmpDirURL);
+    ::osl::FileBase::getSystemPathFromFileURL(sTmpDirURL, sTmpDirPath);
 
     // Overrides firebird's default of /tmp or c:\temp
-    osl_setEnvironment(our_sFirebirdTmpVar.pData, sTmpDir.pData);
+    osl_setEnvironment(our_sFirebirdTmpVar.pData, sTmpDirPath.pData);
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
-    sTmpDir += "/firebird";
-    osl_setEnvironment(our_sFirebirdLockVar.pData, sTmpDir.pData);
+    sTmpDirPath += "/firebird";
+    osl_setEnvironment(our_sFirebirdLockVar.pData, sTmpDirPath.pData);
 }
 
 void FirebirdDriver::disposing()
