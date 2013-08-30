@@ -151,13 +151,6 @@ gb_CFLAGS := \
 	-Zc:wchar_t- \
 	-Zm500 \
 
-ifeq ($(CPUNAME),X86_64)
-
-gb_CFLAGS += \
-	-wd4267 \
-
-endif
-
 gb_CXXFLAGS := \
 	-Gd \
 	-GR \
@@ -200,6 +193,13 @@ endif
 ifeq ($(VCVER),100)
 
 # (none currently)
+
+endif
+
+ifeq ($(CPUNAME),X86_64)
+
+gb_CXXFLAGS += \
+	-wd4267 \
 
 endif
 
