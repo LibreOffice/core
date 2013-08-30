@@ -98,7 +98,7 @@
 int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
-int work_dir_len;
+size_t work_dir_len;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
