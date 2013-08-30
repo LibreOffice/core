@@ -33,7 +33,6 @@ class SdrObject;
 class SdrPage;
 class SvxNumBulletItem;
 class SfxItemPool;
-class String;
 
 /**
  * Creates a StarOffice API wrapper with the given type and inventor
