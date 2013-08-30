@@ -146,6 +146,9 @@ SalSystem *IosSalInstance::CreateSalSystem()
 
 class IosSalFrame : public SvpSalFrame
 {
+private:
+    basegfx::B2IBox m_DamagedRect;
+
 public:
     IosSalFrame( IosSalInstance *pInstance,
                      SalFrame           *pParent,
@@ -176,7 +179,7 @@ public:
         if (rDamageRect.isEmpty())
             return;
 
-        IosSalInstance::getInstance()->damaged( this, rDamageRect );
+        m_DamagedRect.expand(rDamageRect);
     }
 
     virtual void UpdateSettings( AllSettings &rSettings )
@@ -198,6 +201,16 @@ public:
         aStyleSet.SetGroupFont( aFont );
 
         rSettings.SetStyleSettings( aStyleSet );
+    }
+
+    virtual void Flush()
+    {
+        IosSalInstance::getInstance()->damaged( this, m_DamagedRect );
+    }
+
+    void resetDamaged()
+    {
+        m_DamagedRect.reset();
     }
 };
 
@@ -322,7 +335,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
          it != getFrames().end();
          it++ ) {
-        SvpSalFrame *pFrame = static_cast<SvpSalFrame *>(*it);
+        IosSalFrame *pFrame = static_cast<IosSalFrame *>(*it);
         SalFrameGeometry aGeom = pFrame->GetGeometry();
         CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
         if ( pFrame->IsVisible() &&
@@ -344,6 +357,8 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                                false,
                                kCGRenderingIntentDefault );
             CGContextDrawImage( arg->context, bbox, image );
+
+            pFrame->resetDamaged();
         }
     }
 
