@@ -739,22 +739,10 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( Window
 AbstractSwInsertDBColAutoPilot* SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
         uno::Reference< sdbc::XDataSource> rxSource,
         uno::Reference<sdbcx::XColumnsSupplier> xColSupp,
-        const SwDBData& rData,  int nResId)
+        const SwDBData& rData)
 {
-    SwInsertDBColAutoPilot* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_AP_INSERT_DB_SEL :
-            pDlg = new SwInsertDBColAutoPilot( rView, rxSource, xColSupp, rData );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwInsertDBColAutoPilot_Impl( pDlg );
-    return 0;
+    SwInsertDBColAutoPilot* pDlg = new SwInsertDBColAutoPilot( rView, rxSource, xColSupp, rData );
+    return new AbstractSwInsertDBColAutoPilot_Impl( pDlg );
 }
 
 SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh)

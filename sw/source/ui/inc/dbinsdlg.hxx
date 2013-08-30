@@ -25,6 +25,7 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -88,46 +89,38 @@ public:
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 {
-    FixedText       aFtInsertData;
-    RadioButton     aRbAsTable;
-    RadioButton     aRbAsField;
-    RadioButton     aRbAsText;
+    RadioButton*    m_pRbAsTable;
+    RadioButton*    m_pRbAsField;
+    RadioButton*    m_pRbAsText;
 
-    FixedLine       aFlHead;
-    FixedText       aFtDbColumn;
+    VclFrame*       m_pHeadFrame;
 
-    ListBox         aLbTblDbColumn;
-    ListBox         aLbTxtDbColumn;
+    ListBox*        m_pLbTblDbColumn;
+    ListBox*        m_pLbTxtDbColumn;
 
-    FixedLine       aFlFormat;
-    RadioButton     aRbDbFmtFromDb;
-    RadioButton     aRbDbFmtFromUsr;
-    NumFormatListBox aLbDbFmtFromUsr;
+    VclFrame*       m_pFormatFrame;
+    RadioButton*    m_pRbDbFmtFromDb;
+    RadioButton*    m_pRbDbFmtFromUsr;
+    NumFormatListBox* m_pLbDbFmtFromUsr;
 
     /* ----- Page Text/Field ------- */
-    ImageButton     aIbDbcolToEdit;
-    MultiLineEdit   aEdDbText;
-    FixedText       aFtDbParaColl;
-    ListBox         aLbDbParaColl;
+    PushButton*     m_pIbDbcolToEdit;
+    VclMultiLineEdit* m_pEdDbText;
+    FixedText*      m_pFtDbParaColl;
+    ListBox*        m_pLbDbParaColl;
 
     /* ----- Page Table ------------ */
-    ImageButton     aIbDbcolAllTo;
-    ImageButton     aIbDbcolOneTo;
-    ImageButton     aIbDbcolOneFrom;
-    ImageButton     aIbDbcolAllFrom;
-    FixedText       aFtTableCol;
-    ListBox         aLbTableCol;
-    CheckBox        aCbTableHeadon;
-    RadioButton     aRbHeadlColnms;
-    RadioButton     aRbHeadlEmpty;
-    PushButton      aPbTblFormat;
-    PushButton      aPbTblAutofmt;
-
-    OKButton        aBtOk;
-    CancelButton    aBtCancel;
-    HelpButton      aBtHelp;
-
-    FixedLine       aFlBottom;
+    PushButton*     m_pIbDbcolAllTo;
+    PushButton*     m_pIbDbcolOneTo;
+    PushButton*     m_pIbDbcolOneFrom;
+    PushButton*     m_pIbDbcolAllFrom;
+    FixedText*      m_pFtTableCol;
+    ListBox*        m_pLbTableCol;
+    CheckBox*       m_pCbTableHeadon;
+    RadioButton*    m_pRbHeadlColnms;
+    RadioButton*    m_pRbHeadlEmpty;
+    PushButton*     m_pPbTblFormat;
+    PushButton*     m_pPbTblAutofmt;
 
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;

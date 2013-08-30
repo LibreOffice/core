@@ -302,7 +302,6 @@
 
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 
-#define HID_AP_INSERT_DB_SEL                                    "SW_HID_AP_INSERT_DB_SEL"
 #define HID_NUM_RESET                                           "SW_HID_NUM_RESET"
 
 #define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"

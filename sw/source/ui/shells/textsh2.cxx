@@ -263,11 +263,10 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot( pThis->GetView(),
+            ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(pThis->GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
-                                                                                                aDBData,
-                                                                                                DLG_AP_INSERT_DB_SEL ));
+                                                                                                aDBData));
             if( RET_OK == pDlg->Execute() )
             {
                 Reference <XResultSet> xResSet = pDBStruct->xCursor;

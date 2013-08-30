@@ -2567,8 +2567,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     AbstractSwInsertDBColAutoPilot* pDlg = pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
-                                                                                aDBData,
-                                                                                DLG_AP_INSERT_DB_SEL );
+                                                                                aDBData );
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute() )
     {

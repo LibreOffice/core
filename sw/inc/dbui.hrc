@@ -24,8 +24,6 @@
 
 // Dialoge --------------------------------------------------------------------
 
-#define DLG_AP_INSERT_DB_SEL    (RC_DBUI_BEGIN + 2)
-
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
 #define DLG_MM_DOCSELECT_PAGE       (RC_DBUI_BEGIN + 4)
 #define DLG_MM_OUTPUTTYPE_PAGE      (RC_DBUI_BEGIN + 5)

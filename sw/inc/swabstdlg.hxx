@@ -344,10 +344,10 @@ public:
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable) = 0; //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId) = 0; //add for SwCaptionDialog
 
-    virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
+    virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot(SwView& rView, // add for SwInsertDBColAutoPilot
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> xColSupp,
-        const SwDBData& rData,  int nResId) = 0;
+        const SwDBData& rData) = 0;
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh) = 0;//add for  SwFootNoteOptionDlg
 
     //add for DropDownFieldDialog

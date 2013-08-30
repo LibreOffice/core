@@ -116,6 +116,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
 	sw/uiconfig/swriter/ui/insertcaption \
+	sw/uiconfig/swriter/ui/insertdbcolumnsdialog \
 	sw/uiconfig/swriter/ui/insertfootnote \
 	sw/uiconfig/swriter/ui/insertsectiondialog \
 	sw/uiconfig/swriter/ui/insertscript \

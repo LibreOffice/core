@@ -74,7 +74,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/addresslistdialog.src \
     sw/source/ui/dbui/createaddresslistdialog.src \
     sw/source/ui/dbui/customizeaddresslistdialog.src \
-    sw/source/ui/dbui/dbinsdlg.src \
     sw/source/ui/dbui/dbtablepreviewdialog.src \
     sw/source/ui/dbui/dbui.src \
     sw/source/ui/dbui/mailmergechildwindow.src \
