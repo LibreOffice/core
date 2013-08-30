@@ -1705,10 +1705,10 @@ AC_ARG_WITH(help,
          can be used to bundle only the common part, .e.g help-specific icons.
          This is useful when you build the helpcontent separately.])
     [
-                          Usage:     --with-help	build the entire local help
-                        	     --without-help     no local help (default)
-                        	     --with-help=common bundle common files for the local
-                        	                        help but do not build the whole help
+                          Usage:     --with-help    build the entire local help
+                                 --without-help     no local help (default)
+                                 --with-help=common bundle common files for the local
+                                                    help but do not build the whole help
     ],
 ,)
 
@@ -4643,11 +4643,11 @@ if test -n "$with_help" -a "$with_help" != "no" -a $_os != iOS -a $_os != Androi
     BUILD_TYPE="$BUILD_TYPE HELP"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
     if test "$with_help" = "common" ; then
-	HELP_COMMON_ONLY=TRUE
-	AC_MSG_RESULT([common only])
+        HELP_COMMON_ONLY=TRUE
+        AC_MSG_RESULT([common only])
     else
-	SCPDEFS="$SCPDEFS -DWITH_HELP"
-	AC_MSG_RESULT([yes])
+        SCPDEFS="$SCPDEFS -DWITH_HELP"
+        AC_MSG_RESULT([yes])
     fi
 else
     AC_MSG_RESULT([no])
@@ -9142,7 +9142,7 @@ if test "$enable_openssl" = "yes"; then
         AC_MSG_CHECKING([whether openssl supports SHA512])
         AC_LANG_PUSH([C])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/sha.h>]],[[
-	SHA512_CTX context;
+            SHA512_CTX context;
 ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, openssl too old. Need >= 0.9.8.])])
         AC_LANG_POP(C)
     fi
