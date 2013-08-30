@@ -17,41 +17,25 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">res/ods_32_8.png</property>
   </object>
-  <object class="GtkImage" id="database_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_32_8.png</property>
-  </object>
   <object class="GtkImage" id="database_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odb_32_8.png</property>
   </object>
-  <object class="GtkImage" id="draw_image">
+  <object class="GtkImage" id="database_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_32_8.png</property>
+    <property name="pixbuf">res/odb_32_8.png</property>
   </object>
   <object class="GtkImage" id="draw_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odg_32_8.png</property>
   </object>
-  <object class="GtkImage" id="extension_image">
+  <object class="GtkImage" id="draw_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/extension.png</property>
-  </object>
-  <object class="GtkImage" id="impress_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">New Presentation</property>
-    <property name="pixbuf">res/odp_32_8.png</property>
-  </object>
-  <object class="GtkImage" id="info_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/info_26.png</property>
+    <property name="pixbuf">res/odg_32_8.png</property>
   </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
@@ -218,6 +202,7 @@
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="writer">
                         <property name="label" translatable="yes">New Document</property>
@@ -234,13 +219,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label9">
+                      <object class="GtkButton" id="show_writer_recent">
+                        <property name="label" translatable="yes">Show Recent</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -254,21 +240,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="show_writer_recent">
-                        <property name="label" translatable="yes">Show Recent</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
+                        <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -351,6 +323,7 @@
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="calc">
                         <property name="label" translatable="yes">New Spreadsheet</property>
@@ -367,19 +340,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="show_calc_template">
                         <property name="label" translatable="yes">Show Templates</property>
                         <property name="visible">True</property>
@@ -387,7 +347,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
+                        <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -401,7 +361,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">3</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -484,6 +444,7 @@
                   <object class="GtkGrid" id="grid9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="impress">
                         <property name="label" translatable="yes">New Presentation</property>
@@ -500,19 +461,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="show_impress_template">
                         <property name="label" translatable="yes">Show Templates</property>
                         <property name="visible">True</property>
@@ -520,7 +468,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
+                        <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -534,7 +482,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">3</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -617,6 +565,7 @@
                   <object class="GtkGrid" id="grid11">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkButton" id="draw">
                         <property name="label" translatable="yes">New Drawing</property>
@@ -633,19 +582,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="show_draw_template">
                         <property name="label" translatable="yes">Show Templates</property>
                         <property name="visible">True</property>
@@ -653,7 +589,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">2</property>
+                        <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -667,7 +603,7 @@
                         <property name="receives_default">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">3</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
@@ -870,52 +806,6 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid" id="grid3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="row_spacing">12</property>
-            <property name="column_spacing">12</property>
-            <property name="column_homogeneous">True</property>
-            <child>
-              <object class="GtkButton" id="open">
-                <property name="label" translatable="yes">Open</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">open_image</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="templates">
-                <property name="label" translatable="yes">Templates</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">templates_image</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
             <property name="top_attach">1</property>
             <property name="width">1</property>
             <property name="height">1</property>
@@ -928,54 +818,6 @@
             <property name="hexpand">True</property>
             <property name="row_spacing">12</property>
             <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkButton" id="info">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Get more information about %PRODUCTNAME</property>
-                <property name="image">info_image</property>
-                <property name="relief">none</property>
-              </object>
-              <packing>
-                <property name="left_attach">4</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="extension">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Add new features to %PRODUCTNAME</property>
-                <property name="image">extension_image</property>
-                <property name="relief">none</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="add_temp">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Get more templates for %PRODUCTNAME</property>
-                <property name="image">add_temp_image</property>
-                <property name="relief">none</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkLabel" id="label16">
                 <property name="visible">True</property>
@@ -1002,6 +844,100 @@
                 <property name="height">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkGrid" id="grid3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="column_spacing">12</property>
+                <child>
+                  <object class="GtkButton" id="open">
+                    <property name="label" translatable="yes">Open</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">open_image</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="templates">
+                    <property name="label" translatable="yes">Templates</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">templates_image</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="add_temp">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Get more templates for %PRODUCTNAME</property>
+                    <property name="tooltip_text" translatable="yes">Get more templates for %PRODUCTNAME</property>
+                    <property name="image">add_temp_image</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="extension">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Add new features to %PRODUCTNAME</property>
+                    <property name="tooltip_text" translatable="yes">Add new features to %PRODUCTNAME</property>
+                    <property name="image">extension_image</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">3</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="info">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Get more information about %PRODUCTNAME</property>
+                    <property name="tooltip_text" translatable="yes">Get more information about %PRODUCTNAME</property>
+                    <property name="image">info_image</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -1018,10 +954,26 @@
       </packing>
     </child>
   </object>
+  <object class="GtkImage" id="extension_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/extension.png</property>
+  </object>
+  <object class="GtkImage" id="impress_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="tooltip_text" translatable="yes">New Presentation</property>
+    <property name="pixbuf">res/odp_32_8.png</property>
+  </object>
   <object class="GtkImage" id="impress_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odp_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="info_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">framework/res/info_26.png</property>
   </object>
   <object class="GtkImage" id="math_all_image">
     <property name="visible">True</property>
@@ -1043,12 +995,12 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">framework/res/templates_32.png</property>
   </object>
-  <object class="GtkImage" id="writer_image">
+  <object class="GtkImage" id="writer_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odt_32_8.png</property>
   </object>
-  <object class="GtkImage" id="writer_all_image">
+  <object class="GtkImage" id="writer_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">res/odt_32_8.png</property>
