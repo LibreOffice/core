@@ -363,7 +363,7 @@ T OResultSet::retrieveValue(sal_Int32 columnIndex)
 {
     // TODO: check we have the right type.
     if ((m_bWasNull = isNull(columnIndex)))
-        return 0;
+        return T();
 
     return *((T*) m_pSqlda->sqlvar[columnIndex-1].sqldata);
 }
@@ -401,6 +401,7 @@ OUString OResultSet::retrieveValue(sal_Int32 columnIndex)
 template <>
 ISC_QUAD* OResultSet::retrieveValue(sal_Int32 columnIndex)
 {
+    // TODO: this is probably wrong
     if ((m_bWasNull = isNull(columnIndex)))
         return 0;
     return (ISC_QUAD*) m_pSqlda->sqlvar[columnIndex-1].sqldata;
@@ -505,11 +506,18 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
     return Time(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
 }
 
-DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)
+    throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    return DateTime(); // TODO: implement
-//     return safelyRetrieveValue(columnIndex);
+    ISC_TIMESTAMP aISCTimestamp = safelyRetrieveValue< ISC_TIMESTAMP >(nIndex);
+
+    struct tm aCTime;
+    isc_decode_timestamp(&aISCTimestamp, &aCTime);
+
+    // first field is nanoseconds -- not supported in firebird or struct tm.
+    // last field denotes UTC (true) or unknown (false)
+    return DateTime(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, aCTime.tm_mday,
+                    aCTime.tm_mon, aCTime.tm_year, false);
 }
 
 // -------------------------------------------------------------------------
