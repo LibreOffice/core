@@ -70,8 +70,8 @@ public:
 private:
     WrapPolygon::Pointer_t mpPolygon;
 
-    sal_uInt32 mnX;
-    sal_uInt32 mnY;
+    sal_Int32 mnX;
+    sal_Int32 mnY;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
