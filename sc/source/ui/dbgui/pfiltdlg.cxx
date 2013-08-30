@@ -167,8 +167,6 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
          * Bereich um einen Datenbankbereich handelt:
          */
 
-        OUString theAreaStr(theCurArea.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
-
         if ( pDBColl )
         {
             ScAddress&  rStart  = theCurArea.aStart;
