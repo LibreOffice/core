@@ -1106,6 +1106,7 @@ bool ScDocFunc::SetCellText(
     const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )
 {
+    bool bSet = false;
     if ( bInterpret )
     {
         if ( bEnglish )
@@ -1122,13 +1123,13 @@ bool ScDocFunc::SetCellText(
             switch (aRes.meType)
             {
                 case ScInputStringType::Formula:
-                    SetFormulaCell(rPos, new ScFormulaCell(pDoc, rPos, aRes.maText, eGrammar), !bApi);
+                    bSet = SetFormulaCell(rPos, new ScFormulaCell(pDoc, rPos, aRes.maText, eGrammar), !bApi);
                 break;
                 case ScInputStringType::Number:
-                    SetValueCell(rPos, aRes.mfValue, !bApi);
+                    bSet = SetValueCell(rPos, aRes.mfValue, !bApi);
                 break;
                 case ScInputStringType::Text:
-                    SetStringOrEditCell(rPos, aRes.maText, !bApi);
+                    bSet = SetStringOrEditCell(rPos, aRes.maText, !bApi);
                 break;
                 default:
                     ;
@@ -1138,11 +1139,15 @@ bool ScDocFunc::SetCellText(
     }
     else if (!rText.isEmpty())
     {
-        SetStringOrEditCell(rPos, rText, !bApi);
+        bSet = SetStringOrEditCell(rPos, rText, !bApi);
     }
 
-    bool bNumFmtSet = false;
-    return SetNormalString( bNumFmtSet, rPos, rText, bApi );
+    if (!bSet)
+    {
+        bool bNumFmtSet = false;
+        bSet = SetNormalString( bNumFmtSet, rPos, rText, bApi );
+    }
+    return bSet;
 }
 
 //------------------------------------------------------------------------
