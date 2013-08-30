@@ -332,6 +332,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD" },   // Democratic Republic Of Congo
     { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA" },
     { LANGUAGE_FRENCH_REUNION,              "fr", "RE" },
+    { LANGUAGE_FRENCH,                      "fr", ""   },   // needed as a catcher before other "fr" entries!
     { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""   },
     { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""   },   // unknown ISO country code
     { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL" },
