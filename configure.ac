@@ -6528,13 +6528,13 @@ if test "$ENABLE_JAVA" != ""; then
 
         if test -z "$with_jdk_home"; then
             # Currently only auto-detects 32-bit JDK
-                        for ver in 1.7 1.6 1.5 1.4 1.3; do
-                        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
-                        if test -n "$regvalue"; then
-                                _jdk_home=$regvalue
-                                break
-                        fi
-                        done
+            for ver in 1.7 1.6 1.5 1.4 1.3; do
+               reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+               if test -n "$regvalue"; then
+                   _jdk_home=$regvalue
+                   break
+               fi
+            done
             if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
                 with_jdk_home="$_jdk_home"
                 howfound="found automatically"
