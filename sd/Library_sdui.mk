@@ -15,12 +15,12 @@ $(eval $(call gb_Library_set_include,sdui,\
     -I$(SRCDIR)/sd/source/ui/inc \
 ))
 
-ifeq ($(ENABLE_SDREMOTE),YES)
+ifeq ($(ENABLE_SDREMOTE),TRUE)
 $(eval $(call gb_Library_add_defs,sdui,\
     -DENABLE_SDREMOTE \
 ))
 
-ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),YES)
+ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),TRUE)
 $(eval $(call gb_Library_add_defs,sdui,\
     -DENABLE_SDREMOTE_BLUETOOTH \
 ))
