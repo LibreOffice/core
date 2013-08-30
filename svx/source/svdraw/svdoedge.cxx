@@ -1944,13 +1944,13 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
        return true;
 }
 
-String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
     if(bCreateComment)
     {
-        return String();
+        return OUString();
     }
     else
     {

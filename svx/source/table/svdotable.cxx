@@ -2348,7 +2348,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
     return bRet;
 }
 
-String SdrTableObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrTableObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     return SdrTextObj::getSpecialDragComment( rDrag );
 }

@@ -427,13 +427,13 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
     }
 }
 
-String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
     if(bCreateComment)
     {
-        return String();
+        return OUString();
     }
     else
     {

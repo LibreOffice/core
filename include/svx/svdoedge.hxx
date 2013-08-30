@@ -257,7 +257,7 @@ public:
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
-    virtual String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    virtual OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const;

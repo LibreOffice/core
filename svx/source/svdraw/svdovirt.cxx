@@ -323,7 +323,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::getSpecialDragPoly(const SdrDragStat& rDrag)
     // TODO: we don't handle offsets yet!
 }
 
-String SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrVirtObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     return rRefObj.getSpecialDragComment(rDrag);
 }

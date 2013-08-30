@@ -899,10 +899,9 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
     return true;
 }
 
-String SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
+OUString SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
-    XubString aStr;
-    return aStr;
+    return OUString();
 }
 
 void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const

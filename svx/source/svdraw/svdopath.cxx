@@ -2171,9 +2171,9 @@ bool SdrPathObj::applySpecialDrag(SdrDragStat& rDrag)
     return bRetval;
 }
 
-String SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    String aRetval;
+    OUString aRetval;
 
     if(mpDAC)
     {

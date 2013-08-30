@@ -558,7 +558,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
     }
 }
 
-String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 

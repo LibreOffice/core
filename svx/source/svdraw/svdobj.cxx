@@ -1407,9 +1407,9 @@ bool SdrObject::applySpecialDrag(SdrDragStat& rDrag)
     return true;
 }
 
-String SdrObject::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
+OUString SdrObject::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
 {
-    return String();
+    return OUString();
 }
 
 basegfx::B2DPolyPolygon SdrObject::getSpecialDragPoly(const SdrDragStat& /*rDrag*/) const

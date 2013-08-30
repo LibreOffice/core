@@ -381,7 +381,7 @@ bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
     }
 }
 
-String SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
