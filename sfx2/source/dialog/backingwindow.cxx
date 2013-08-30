@@ -277,25 +277,14 @@ void BackingWindow::initControls()
     setupExternalLink( mpInfoButton );
     setupExternalLink( mpTplRepButton );
 
-    mpShowWriterTemplateButton  ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowCalcTemplateButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowImpressTemplateButton ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowDrawTemplateButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-
-    mpShowWriterRecentButton    ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowCalcRecentButton      ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowImpressRecentButton   ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    mpShowDrawRecentButton      ->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-
-    mpShowWriterRecentButton    ->Hide();
-    mpShowCalcRecentButton      ->Hide();
-    mpShowImpressRecentButton   ->Hide();
-    mpShowDrawRecentButton      ->Hide();
-
-    setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER );
-    setupTemplateView( mpCalcTemplateThumbnails,    FILTER_APP_CALC );
-    setupTemplateView( mpImpressTemplateThumbnails, FILTER_APP_IMPRESS );
-    setupTemplateView( mpDrawTemplateThumbnails,    FILTER_APP_DRAW );
+    setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER,
+                       mpShowWriterRecentButton,    mpShowWriterTemplateButton );
+    setupTemplateView( mpCalcTemplateThumbnails,    FILTER_APP_CALC,
+                       mpShowCalcRecentButton,      mpShowCalcTemplateButton );
+    setupTemplateView( mpImpressTemplateThumbnails, FILTER_APP_IMPRESS,
+                       mpShowImpressRecentButton,   mpShowImpressTemplateButton );
+    setupTemplateView( mpDrawTemplateThumbnails,    FILTER_APP_DRAW,
+                       mpShowDrawRecentButton,      mpShowDrawTemplateButton );
 
     Resize();
 }
@@ -331,8 +320,10 @@ void BackingWindow::setupButton( PushButton* pButton )
     pButton->SetControlFont( aFont );
 }
 
-void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter )
+void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
+                                       PushButton* pRecentButton, PushButton* pTemplateButton )
 {
+    // setup view
     pView->SetStyle(pView->GetStyle() | WB_VSCROLL);
     pView->setItemMaxTextLength(nTemplateItemMaxTextLength);
 
@@ -343,6 +334,23 @@ void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICAT
     pView->Hide(); // hidden by default
     pView->showRootRegion();
     pView->setOpenTemplateHdl( LINK( this, BackingWindow, OpenTemplateHdl ) );
+
+    // setup buttons
+    pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+
+    // button text - slighly larger font than normal labels on the texts
+    Font aFont;
+    aFont.SetSize( Size( 0, 11 ) );
+    aFont.SetWeight( WEIGHT_NORMAL );
+
+    pRecentButton->SetFont( aFont );
+    pRecentButton->SetControlFont( aFont );
+
+    pTemplateButton->SetFont( aFont );
+    pTemplateButton->SetControlFont( aFont );
+
+    pRecentButton->Hide();  // hidden by default
 }
 
 void BackingWindow::setupExternalLink( PushButton* pButton )

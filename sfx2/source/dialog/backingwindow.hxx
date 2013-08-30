@@ -107,7 +107,8 @@ class BackingWindow
         const OUString& rURL, const std::set<OUString>& rURLS, SvtModuleOptions& rOpt,
         SvtModuleOptions::EModule eMod );
     void setupButton( PushButton* pButton );
-    void setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter );
+    void setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
+                            PushButton* pRecentButton, PushButton* pTemplateButton );
     void setupExternalLink( PushButton* pButton );
 
     void dispatchURL( const OUString& i_rURL,
