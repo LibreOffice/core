@@ -10589,7 +10589,7 @@ AC_SUBST(COMMONS_LOGGING_JAR)
 AC_MSG_CHECKING([whether to build support for scripts in BeanShell])
 if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_BEANSHELL=YES
+   ENABLE_SCRIPTING_BEANSHELL=TRUE
 
    dnl ===================================================================
    dnl Check for system beanshell
@@ -10610,7 +10610,7 @@ if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
    fi
 else
    AC_MSG_RESULT([no])
-   ENABLE_SCRIPTING_BEANSHELL=NO
+   ENABLE_SCRIPTING_BEANSHELL=
    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_BEANSHELL"
 fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
@@ -10621,7 +10621,7 @@ AC_SUBST(BSH_JAR)
 AC_MSG_CHECKING([whether to build support for scripts in JavaScript])
 if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
    AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_JAVASCRIPT=YES
+   ENABLE_SCRIPTING_JAVASCRIPT=TRUE
 
    dnl ===================================================================
    dnl Check for system rhino
@@ -10642,7 +10642,7 @@ if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
    fi
 else
    AC_MSG_RESULT([no])
-   ENABLE_SCRIPTING_JAVASCRIPT=NO
+   ENABLE_SCRIPTING_JAVASCRIPT=
    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_JAVASCRIPT"
 fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)

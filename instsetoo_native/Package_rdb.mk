@@ -16,8 +16,8 @@ $(eval $(call gb_Package_add_files,instsetoo_native_rdb,$(gb_PROGRAMDIRNAME)/ser
 	$(call gb_Helper_optional,POSTGRESQL,$(if $(filter YES,$(BUILD_POSTGRESQL_SDBC)),xml/postgresql-sdbc.rdb)) \
 	$(if $(filter TRUE,$(DISABLE_SCRIPTING)),,\
 		$(if $(ENABLE_JAVA),\
-			$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),xml/scriptproviderforbeanshell.rdb) \
-			$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),xml/scriptproviderforjavascript.rdb) \
+			$(if $(ENABLE_SCRIPTING_BEANSHELL),xml/scriptproviderforbeanshell.rdb) \
+			$(if $(ENABLE_SCRIPTING_JAVASCRIPT),xml/scriptproviderforjavascript.rdb) \
 		) \
 	) \
 ))

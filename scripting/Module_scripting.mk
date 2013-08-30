@@ -17,12 +17,12 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		Jar_Highlight \
 		Jar_MemoryUsage \
 		Jar_ScriptFramework \
-		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
+		$(if $(ENABLE_SCRIPTING_BEANSHELL),\
 			Jar_ScriptProviderForBeanShell \
 			Rdb_scriptproviderforbeanshell \
 		) \
 		Jar_ScriptProviderForJava \
-		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
+		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),\
 			Jar_ScriptProviderForJavaScript \
 			Rdb_scriptproviderforjavascript \
 		) \
