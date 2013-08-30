@@ -36,7 +36,7 @@ class FontCharMap;
 class Subset
 {
 public:
-    Subset( sal_UCS4 nMin, sal_UCS4 nMax, const String& aName )
+    Subset( sal_UCS4 nMin, sal_UCS4 nMax, const OUString& aName )
     : mnRangeMin(nMin), mnRangeMax(nMax), maRangeName(aName)
     {}
 
@@ -44,12 +44,12 @@ public:
 
     sal_UCS4        GetRangeMin() const { return mnRangeMin;}
     sal_UCS4        GetRangeMax() const { return mnRangeMax;}
-    const String    GetName()     const { return maRangeName;}
+    const OUString  GetName()     const { return maRangeName;}
 
 private:
     sal_UCS4        mnRangeMin;
     sal_UCS4        mnRangeMax;
-    String          maRangeName;
+    OUString        maRangeName;
 };
 
 inline bool operator<(const Subset &rLHS, const Subset &rRHS)
