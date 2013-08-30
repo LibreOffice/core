@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "openclwrapper.hxx"
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
 #include "sal/config.h"
 #include "random.hxx"
+#include "openclwrapper.hxx"
 #include "oclkernels.hxx"
 #ifdef SAL_WIN32
 #include <Windows.h>
 #endif
-//#define USE_KERNEL_FILE
-
+//#define USE_MAP_BUFFER
+using namespace std;
 GPUEnv OpenclDevice::gpuEnv;
 int OpenclDevice::isInited =0;
 
@@ -44,9 +44,9 @@ int OpenclDevice::isInited =0;
 HINSTANCE HOpenclDll = NULL;
 void * OpenclDll = NULL;
 
-int OpenclDevice::LoadOpencl()
+int OpenclDevice::loadOpencl()
 {
-    //fprintf(stderr, " LoadOpenclDllxx... \n");
+    //fprintf(stderr, " loadOpenclDllxx... \n");
     OpenclDll = static_cast<HINSTANCE>( HOpenclDll );
     OpenclDll = LoadLibrary( OPENCL_DLL_NAME );
     if ( !static_cast<HINSTANCE>( OpenclDll ) )
@@ -59,7 +59,7 @@ int OpenclDevice::LoadOpencl()
     return OCLSUCCESS;
 }
 
-void OpenclDevice::FreeOpenclDll()
+void OpenclDevice::freeOpenclDll()
 {
     fprintf(stderr, " Free opencllo.dll ... \n");
     if ( !static_cast<HINSTANCE>( OpenclDll ) )
@@ -67,39 +67,39 @@ void OpenclDevice::FreeOpenclDll()
 }
 #endif
 
-int OpenclDevice::InitEnv()
+int OpenclDevice::initEnv()
 {
 #ifdef SAL_WIN32
     while( 1 )
     {
-        if( 1 == LoadOpencl() )
+        if( 1 == loadOpencl() )
             break;
     }
 #endif
-    InitOpenclRunEnv( 0 );
+    initOpenclRunEnv( 0 );
     return 1;
 }
 
-int OpenclDevice::ReleaseOpenclRunEnv()
+int OpenclDevice::releaseOpenclRunEnv()
 {
-    ReleaseOpenclEnv( &gpuEnv );
+    releaseOpenclEnv( &gpuEnv );
 #ifdef SAL_WIN32
-    FreeOpenclDll();
+    freeOpenclDll();
 #endif
     return 1;
 }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
-inline int OpenclDevice::AddKernelConfig( int kCount, const char *kName )
+inline int OpenclDevice::addKernelConfig( int kCount, const char *kName )
 {
     if ( kCount < 1 )
-        fprintf(stderr,"Error: ( KCount < 1 )" SAL_DETAIL_WHERE "AddKernelConfig\n" );
+        fprintf(stderr,"Error: ( KCount < 1 )" SAL_DETAIL_WHERE "addKernelConfig\n" );
     strcpy( gpuEnv.mArrykernelNames[kCount-1], kName );
     gpuEnv.mnKernelCount++;
     return 0;
 }
 
-int OpenclDevice::RegistOpenclKernel()
+int OpenclDevice::registOpenclKernel()
 {
     if ( !gpuEnv.mnIsUserCreated )
         memset( &gpuEnv, 0, sizeof(gpuEnv) );
@@ -107,37 +107,58 @@ int OpenclDevice::RegistOpenclKernel()
     gpuEnv.mnFileCount = 0; //argc;
     gpuEnv.mnKernelCount = 0UL;
 
-    AddKernelConfig( 1, (const char*) "oclFormulaMin" );
-    AddKernelConfig( 2, (const char*) "oclFormulaMax" );
-    AddKernelConfig( 3, (const char*) "oclFormulaSum" );
-    AddKernelConfig( 4, (const char*) "oclFormulaCount" );
-    AddKernelConfig( 5, (const char*) "oclFormulaAverage" );
-    AddKernelConfig( 6, (const char*) "oclFormulaSumproduct" );
-    AddKernelConfig( 7, (const char*) "oclFormulaMtxInv" );
+    addKernelConfig( 1, (const char*) "oclFormulaMin" );
+    addKernelConfig( 2, (const char*) "oclFormulaMax" );
+    addKernelConfig( 3, (const char*) "oclFormulaSum" );
+    addKernelConfig( 4, (const char*) "oclFormulaCount" );
+    addKernelConfig( 5, (const char*) "oclFormulaAverage" );
+    addKernelConfig( 6, (const char*) "oclFormulaSumproduct" );
+    addKernelConfig( 7, (const char*) "oclFormulaMtxInv" );
 
-    AddKernelConfig( 8, (const char*) "oclSignedAdd" );
-    AddKernelConfig( 9, (const char*) "oclSignedSub" );
-    AddKernelConfig( 10, (const char*) "oclSignedMul" );
-    AddKernelConfig( 11, (const char*) "oclSignedDiv" );
-    AddKernelConfig( 12, (const char*) "oclAverageDelta" );
-    AddKernelConfig( 13, (const char*) "oclMaxDelta" );
-    AddKernelConfig( 14, (const char*) "oclMinDelta" );
-    AddKernelConfig( 15, (const char*) "oclSubDelta" );
-    AddKernelConfig( 16, (const char*) "oclLUDecomposition" );
+    addKernelConfig( 8, (const char*) "oclSignedAdd" );
+    addKernelConfig( 9, (const char*) "oclSignedSub" );
+    addKernelConfig( 10, (const char*) "oclSignedMul" );
+    addKernelConfig( 11, (const char*) "oclSignedDiv" );
+    addKernelConfig( 12, (const char*) "oclAverageDelta" );
+    addKernelConfig( 13, (const char*) "oclMaxDelta" );
+    addKernelConfig( 14, (const char*) "oclMinDelta" );
+    addKernelConfig( 15, (const char*) "oclSubDelta" );
+    addKernelConfig( 16, (const char*) "oclLUDecomposition" );
+    addKernelConfig( 17, (const char*) "oclAverageDeltaRPN" );
+    addKernelConfig( 18, (const char*) "oclMaxDeltaRPN" );
+    addKernelConfig( 19, (const char*) "oclMinDeltaRPN" );
+    addKernelConfig( 20, (const char*) "oclMoreColArithmeticOperator" );
+    addKernelConfig( 21, (const char*) "oclColumnH" );
+    addKernelConfig( 22, (const char*) "oclColumnL" );
+    addKernelConfig( 23, (const char*) "oclColumnN" );
+    addKernelConfig( 24, (const char*) "oclColumnJ" );
+    addKernelConfig( 25, (const char*) "oclMaxSub" );
+    addKernelConfig( 26, (const char*) "oclAverageSub" );
+    addKernelConfig( 27, (const char*) "oclMinSub" );
+    addKernelConfig( 28, (const char*) "oclMaxAdd" );
+    addKernelConfig( 29, (const char*) "oclAverageAdd" );
+    addKernelConfig( 30, (const char*) "oclMinAdd" );
+    addKernelConfig( 31, (const char*) "oclMaxMul" );
+    addKernelConfig( 32, (const char*) "oclAverageMul" );
+    addKernelConfig( 33, (const char*) "oclMinMul" );
+    addKernelConfig( 34, (const char*) "oclMaxDiv" );
+    addKernelConfig( 35, (const char*) "oclAverageDiv" );
+    addKernelConfig( 36, (const char*) "oclMinDiv" );
+    addKernelConfig( 37, (const char*) "oclSub" );// for svDouble type
     return 0;
 }
 
 OpenclDevice::OpenclDevice()
 {
-    //InitEnv();
+    //initEnv();
 }
 
 OpenclDevice::~OpenclDevice()
 {
-    //ReleaseOpenclRunEnv();
+    //releaseOpenclRunEnv();
 }
 
-int OpenclDevice::SetKernelEnv( KernelEnv *envInfo )
+int OpenclDevice::setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
     envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue;
@@ -146,12 +167,12 @@ int OpenclDevice::SetKernelEnv( KernelEnv *envInfo )
     return 1;
 }
 
-int OpenclDevice::CheckKernelName( KernelEnv *envInfo, const char *kernelName )
+int OpenclDevice::checkKernelName( KernelEnv *envInfo, const char *kernelName )
 {
-    //printf("CheckKernelName,total count of kernels...%d\n", gpuEnv.kernelCount);
+    //printf("checkKernelName,total count of kernels...%d\n", gpuEnv.kernelCount);
     int kCount;
     int nFlag = 0;
-    for ( kCount = 0; kCount < gpuEnv.mnKernelCount; kCount++ )
+    for ( kCount=0; kCount < gpuEnv.mnKernelCount; kCount++ )
     {
         if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[kCount]) == 0 )
         {
@@ -174,7 +195,7 @@ int OpenclDevice::CheckKernelName( KernelEnv *envInfo, const char *kernelName )
     return 1;
 }
 
-int OpenclDevice::ConvertToString( const char *filename, char **source )
+int OpenclDevice::convertToString( const char *filename, char **source )
 {
     int file_size;
     size_t result;
@@ -211,7 +232,7 @@ int OpenclDevice::ConvertToString( const char *filename, char **source )
     return 0;
 }
 
-int OpenclDevice::BinaryGenerated( const char * clFileName, FILE ** fhandle )
+int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
 {
     unsigned int i = 0;
     cl_int clStatus;
@@ -219,16 +240,28 @@ int OpenclDevice::BinaryGenerated( const char * clFileName, FILE ** fhandle )
     char *str = NULL;
     FILE *fd = NULL;
     cl_uint numDevices=0;
-    clStatus = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
-                              CL_DEVICE_TYPE_GPU, // device_type
-                              0, // num_entries
-                              NULL, // devices ID
-                              &numDevices);
+    if ( getenv("SC_OPENCLCPU") )
+    {
+        clStatus = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
+                                  CL_DEVICE_TYPE_CPU,  // device_type for CPU device
+                                  0,                   // num_entries
+                                  NULL,                // devices ID
+                                  &numDevices);
+    }
+    else
+    {
+        clStatus = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
+                                  CL_DEVICE_TYPE_GPU,  // device_type for GPU device
+                                  0,                   // num_entries
+                                  NULL,                // devices ID
+                                  &numDevices);
+    }
+    CHECK_OPENCL( clStatus, "clGetDeviceIDs" );
     for ( i = 0; i < numDevices; i++ )
     {
+        char fileName[256] = { 0 }, cl_name[128] = { 0 };
         if ( gpuEnv.mpArryDevsID[i] != 0 )
         {
-            char fileName[256] = { 0 }, cl_name[128] = { 0 };
             char deviceName[1024];
             clStatus = clGetDeviceInfo( gpuEnv.mpArryDevsID[i], CL_DEVICE_NAME, sizeof(deviceName), deviceName, NULL );
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
@@ -248,7 +281,7 @@ int OpenclDevice::BinaryGenerated( const char * clFileName, FILE ** fhandle )
 
 }
 
-int OpenclDevice::WriteBinaryToFile( const char* fileName, const char* birary, size_t numBytes )
+int OpenclDevice::writeBinaryToFile( const char* fileName, const char* birary, size_t numBytes )
 {
     FILE *output = NULL;
     output = fopen( fileName, "wb" );
@@ -264,7 +297,7 @@ int OpenclDevice::WriteBinaryToFile( const char* fileName, const char* birary, s
 
 }
 
-int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * clFileName )
+int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
     unsigned int i = 0;
     cl_int clStatus;
@@ -307,12 +340,6 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
             binaries[i] = (char*) malloc( sizeof(char) * binarySizes[i] );
             if ( binaries[i] == NULL )
             {
-                for ( unsigned int j = 0; j < i ; j++)
-                {
-                    if (binaries[j])
-                        free(binaries[j]);
-                }
-                free(binaries);
                 return 0;
             }
         }
@@ -329,9 +356,10 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
     /* dump out each binary into its own separate file. */
     for ( i = 0; i < numDevices; i++ )
     {
+        char fileName[256] = { 0 }, cl_name[128] = { 0 };
+
         if ( binarySizes[i] != 0 )
         {
-            char fileName[256] = { 0 }, cl_name[128] = { 0 };
             char deviceName[1024];
             clStatus = clGetDeviceInfo(mpArryDevsID[i], CL_DEVICE_NAME,
                            sizeof(deviceName), deviceName, NULL);
@@ -342,7 +370,7 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
             cl_name[str - clFileName] = '\0';
             sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
 
-            if ( !WriteBinaryToFile( fileName, binaries[i], binarySizes[i] ) )
+            if ( !writeBinaryToFile( fileName, binaries[i], binarySizes[i] ) )
             {
                 printf("opencl-wrapper: write binary[%s] failds\n", fileName);
                 return 0;
@@ -381,7 +409,7 @@ int OpenclDevice::GeneratBinFromKernelSource( cl_program program, const char * c
     return 1;
 }
 
-int OpenclDevice::InitOpenclAttr( OpenCLEnv * env )
+int OpenclDevice::initOpenclAttr( OpenCLEnv * env )
 {
     if ( gpuEnv.mnIsUserCreated )
         return 1;
@@ -396,7 +424,7 @@ int OpenclDevice::InitOpenclAttr( OpenCLEnv * env )
     return 0;
 }
 
-int OpenclDevice::CreateKernel( char * kernelname, KernelEnv * env )
+int OpenclDevice::createKernel( char * kernelname, KernelEnv * env )
 {
     int clStatus;
 
@@ -406,13 +434,13 @@ int OpenclDevice::CreateKernel( char * kernelname, KernelEnv * env )
     return clStatus != CL_SUCCESS ? 1 : 0;
 }
 
-int OpenclDevice::ReleaseKernel( KernelEnv * env )
+int OpenclDevice::releaseKernel( KernelEnv * env )
 {
     int clStatus = clReleaseKernel( env->mpkKernel );
     return clStatus != CL_SUCCESS ? 1 : 0;
 }
 
-int OpenclDevice::ReleaseOpenclEnv( GPUEnv *gpuInfo )
+int OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
 {
     int i = 0;
     int clStatus = 0;
@@ -447,18 +475,18 @@ int OpenclDevice::ReleaseOpenclEnv( GPUEnv *gpuInfo )
     return 1;
 }
 
-int OpenclDevice::RunKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata )
+int OpenclDevice::runKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata )
 {
-    printf("oclwrapper:RunKernel_wrapper...\n");
-    if ( RegisterKernelWrapper( kernelName, function ) != 1 )
+    printf("oclwrapper:runKernel_wrapper...\n");
+    if ( registerKernelWrapper( kernelName, function ) != 1 )
     {
-        fprintf(stderr, "Error:RunKernel_wrapper:RegisterKernelWrapper fail!\n");
+        fprintf(stderr, "Error:runKernel_wrapper:registerKernelWrapper fail!\n");
         return -1;
     }
-    return ( RunKernel( kernelName, usrdata ) );
+    return ( runKernel( kernelName, usrdata ) );
 }
 
-int OpenclDevice::CachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName )
+int OpenclDevice::cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName )
 {
     int i;
     for ( i = 0; i < gpuEnvCached->mnFileCount; i++ )
@@ -475,19 +503,20 @@ int OpenclDevice::CachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * cl
     return 0;
 }
 
-int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
+int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 {
     cl_int clStatus = 0;
     size_t length;
-    char *binary;
+    char *buildLog = NULL, *binary;
     const char *source;
     size_t source_size[1];
-    int binary_status, binaryExisted, idx;
-    cl_uint numDevices;
-    FILE *fd;
+    int b_error, binary_status, binaryExisted, idx;
+    size_t numDevices;
+    cl_device_id *mpArryDevsID;
+    FILE *fd, *fd1;
     const char* filename = "kernel.cl";
-    fprintf(stderr, "CompileKernelFile ... \n");
-    if ( CachedOfKernerPrg(gpuInfo, filename) == 1 )
+    fprintf(stderr, "compileKernelFile ... \n");
+    if ( cachedOfKernerPrg(gpuInfo, filename) == 1 )
     {
         return 1;
     }
@@ -498,33 +527,31 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     source_size[0] = strlen( source );
     binaryExisted = 0;
-    if ( ( binaryExisted = BinaryGenerated( filename, &fd ) ) == 1 )
+    if ( ( binaryExisted = binaryGenerated( filename, &fd ) ) == 1 )
     {
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_NUM_DEVICES,
                        sizeof(numDevices), &numDevices, NULL );
         CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
-        cl_device_id *mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
+        mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
         if ( mpArryDevsID == NULL )
         {
             return 0;
         }
 
-        int b_error = 0;
+        b_error = 0;
         length = 0;
         b_error |= fseek( fd, 0, SEEK_END ) < 0;
         b_error |= ( length = ftell(fd) ) <= 0;
         b_error |= fseek( fd, 0, SEEK_SET ) < 0;
         if ( b_error )
         {
-            free(mpArryDevsID);
             return 0;
         }
 
         binary = (char*) malloc( length + 2 );
         if ( !binary )
         {
-            free(mpArryDevsID);
             return 0;
         }
 
@@ -537,12 +564,7 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         // grab the handles to all of the devices in the context.
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
                        sizeof( cl_device_id ) * numDevices, mpArryDevsID, NULL );
-        if (clStatus != CL_SUCCESS)
-        {
-            fprintf (stderr, "OpenCL error code is %d at " SAL_DETAIL_WHERE " when clGetContextInfo .\n", clStatus);
-            free(binary);
-            return 0;
-        }
+        CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
@@ -600,7 +622,7 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
             printf("opencl create build log fail\n");
             return 0;
         }
-        char* buildLog = (char*) malloc( length );
+        buildLog = (char*) malloc( length );
         if ( buildLog == (char*) NULL )
         {
             return 0;
@@ -618,11 +640,10 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         if ( clStatus != CL_SUCCESS )
         {
             printf("opencl program build info fail\n");
-            free(buildLog);
             return 0;
         }
 
-        FILE *fd1 = fopen( "kernel-build.log", "w+" );
+        fd1 = fopen( "kernel-build.log", "w+" );
         if ( fd1 != NULL )
         {
             fwrite( buildLog, sizeof(char), length, fd1 );
@@ -636,17 +657,17 @@ int OpenclDevice::CompileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     strcpy( gpuEnv.mArryKnelSrcFile[idx], filename );
 
     if ( binaryExisted == 0 )
-        GeneratBinFromKernelSource( gpuEnv.mpArryPrograms[idx], filename );
+        generatBinFromKernelSource( gpuEnv.mpArryPrograms[idx], filename );
 
     gpuInfo->mnFileCount += 1;
 
     return 1;
 }
 
-int OpenclDevice::GetKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function)
+int OpenclDevice::getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function)
 {
     int i;
-    //printf("----------------OpenclDevice::GetKernelEnvAndFunc\n");
+    //printf("----------------OpenclDevice::getKernelEnvAndFunc\n");
     for ( i = 0; i < gpuEnv.mnKernelCount; i++ )
     {
         if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[i]) == 0 )
@@ -662,14 +683,14 @@ int OpenclDevice::GetKernelEnvAndFunc( const char *kernelName, KernelEnv *env, c
     return 0;
 }
 
-int OpenclDevice::RunKernel( const char *kernelName, void **userdata)
+int OpenclDevice::runKernel( const char *kernelName, void **userdata)
 {
     KernelEnv kEnv;
     cl_kernel_function function;
     int status;
 
     memset( &kEnv, 0, sizeof( KernelEnv ) );
-    status = GetKernelEnvAndFunc( kernelName, &kEnv, &function );
+    status = getKernelEnvAndFunc( kernelName, &kEnv, &function );
     strcpy( kEnv.mckKernelName, kernelName );
     if ( status == 1 )
     {
@@ -680,8 +701,9 @@ int OpenclDevice::RunKernel( const char *kernelName, void **userdata)
     return 0;
 }
 
-int OpenclDevice::InitOpenclRunEnv( int argc )
+int OpenclDevice::initOpenclRunEnv( int argc )
 {
+    int status = 0;
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
         return 1;
@@ -691,9 +713,9 @@ int OpenclDevice::InitOpenclRunEnv( int argc )
 
     if ( !isInited )
     {
-        RegistOpenclKernel();
+        registOpenclKernel();
         //initialize devices, context, comand_queue
-        int status = InitOpenclRunEnv( &gpuEnv );
+        status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
             printf("init_opencl_env failed.\n");
@@ -709,36 +731,38 @@ int OpenclDevice::InitOpenclRunEnv( int argc )
         if( gpuEnv.mnKhrFp64Flag )
         {
             printf("----use khr double type in kernel----\n");
-            status = CompileKernelFile( &gpuEnv, "-D KHR_DP_EXTENSION -Dfp_t=double" );
+            status = compileKernelFile( &gpuEnv, "-D KHR_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16" );
         }
         else if( gpuEnv.mnAmdFp64Flag )
         {
             printf("----use amd double type in kernel----\n");
-            status = CompileKernelFile( &gpuEnv, "-D AMD_DP_EXTENSION -Dfp_t=double" );
+            status = compileKernelFile( &gpuEnv, "-D AMD_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16" );
         }
         else
         {
             printf("----use float type in kernel----\n");
-            status = CompileKernelFile( &gpuEnv, "-Dfp_t=float" );
+            status = compileKernelFile( &gpuEnv, "-Dfp_t=float -Dfp_t4=float4 -Dfp_t16=float16" );
         }
         if ( status == 0 || gpuEnv.mnKernelCount == 0 )
         {
-            printf("CompileKernelFile failed.\n");
+            printf("compileKernelFile failed.\n");
             return 1;
         }
-        printf("CompileKernelFile successed.\n");
+        printf("compileKernelFile successed.\n");
         isInited = 1;
     }
     return 0;
 }
 
-int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
+int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 {
     size_t length;
     cl_int clStatus;
     cl_uint numPlatforms, numDevices;
     cl_platform_id *platforms;
     cl_context_properties cps[3];
+    char platformName[256];
+    unsigned int i;
 
     // Have a look at the available platforms.
 
@@ -765,8 +789,7 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
                 return 1;
             }
 
-            char platformName[256];
-            for ( size_t i = 0; i < numPlatforms; i++ )
+            for ( i = 0; i < numPlatforms; i++ )
             {
                 clStatus = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR,
                     sizeof( platformName ), platformName, NULL );
@@ -781,13 +804,22 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
                 //if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
                 {
                     gpuInfo->mpPlatformID = platforms[i];
-
-                    clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                              CL_DEVICE_TYPE_GPU,    // device_type
-                                              0,                     // num_entries
-                                              NULL,                  // devices
-                                              &numDevices);
-
+                    if ( getenv("SC_OPENCLCPU") )
+                    {
+                        clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
+                                                  CL_DEVICE_TYPE_CPU,    // device_type for CPU device
+                                                  0,                     // num_entries
+                                                  NULL,                  // devices
+                                                  &numDevices);
+                    }
+                    else
+                    {
+                          clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
+                                                  CL_DEVICE_TYPE_GPU,      // device_type for GPU device
+                                                  0,                       // num_entries
+                                                  NULL,                    // devices
+                                                  &numDevices);
+                    }
                     if ( clStatus != CL_SUCCESS )
                         continue;
 
@@ -806,8 +838,15 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
         cps[0] = CL_CONTEXT_PLATFORM;
         cps[1] = (cl_context_properties) gpuInfo->mpPlatformID;
         cps[2] = 0;
-        // Check for GPU.
-        gpuInfo->mDevType = CL_DEVICE_TYPE_GPU;
+        // Set device type for OpenCL
+        if ( getenv("SC_OPENCLCPU") )
+        {
+            gpuInfo->mDevType = CL_DEVICE_TYPE_CPU;
+        }
+        else
+        {
+            gpuInfo->mDevType = CL_DEVICE_TYPE_GPU;
+        }
         gpuInfo->mpContext = clCreateContextFromType( cps, gpuInfo->mDevType, NULL, NULL, &clStatus );
 
         if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
@@ -845,7 +884,6 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
     }
 
     clStatus = clGetCommandQueueInfo( gpuInfo->mpCmdQueue, CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "GetCommandQueueInfo" );
     // Check device extensions for double type
     size_t aDevExtInfoSize = 0;
 
@@ -875,10 +913,10 @@ int OpenclDevice::InitOpenclRunEnv( GPUEnv *gpuInfo )
 
     return 0;
 }
-int OpenclDevice::RegisterKernelWrapper( const char *kernelName, cl_kernel_function function )
+int OpenclDevice::registerKernelWrapper( const char *kernelName, cl_kernel_function function )
 {
     int i;
-    //printf("oclwrapper:RegisterKernelWrapper...%d\n", gpuEnv.mnKernelCount);
+    //printf("oclwrapper:registerKernelWrapper...%d\n", gpuEnv.mnKernelCount);
     for ( i = 0; i < gpuEnv.mnKernelCount; i++ )
     {
         if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[i]) == 0 )
@@ -890,13 +928,13 @@ int OpenclDevice::RegisterKernelWrapper( const char *kernelName, cl_kernel_funct
     return 0;
 }
 
-void OpenclDevice::SetOpenclState( int state )
+void OpenclDevice::setOpenclState( int state )
 {
     //printf("OpenclDevice::setOpenclState...\n");
     isInited = state;
 }
 
-int OpenclDevice::GetOpenclState()
+int OpenclDevice::getOpenclState()
 {
     return isInited;
 }
@@ -906,54 +944,46 @@ OclCalc::OclCalc()
     fprintf(stderr,"OclCalc:: init opencl ...\n");
     nFormulaColSize = 0;
     nFormulaRowSize = 0;
+    nArithmeticLen = 0;
+    nFormulaLen = 0;
+    mpClmemSrcData = NULL;
+    mpClmemStartPos = NULL;
+    mpClmemEndPos = NULL;
+    mpClmemLeftData = NULL;
+    mpClmemRightData = NULL;
+    mpClmemMergeLfData = NULL;
+    mpClmemMergeRtData = NULL;
+    mpClmemMatixSumSize = NULL;
+    mpClmemeOp = NULL;
 }
 
 OclCalc::~OclCalc()
 {
+    releaseOclBuffer();
+}
+int OclCalc::releaseOclBuffer(void)
+{
+    cl_int clStatus = 0;
+    CHECK_OPENCL_RELEASE( clStatus, mpClmemSrcData );
+    CHECK_OPENCL_RELEASE( clStatus, mpClmemStartPos );
+    CHECK_OPENCL_RELEASE( clStatus, mpClmemEndPos );
+    CHECK_OPENCL_RELEASE( clStatus, mpClmemLeftData );
+    CHECK_OPENCL_RELEASE( clStatus, mpClmemRightData );
     fprintf(stderr,"OclCalc:: opencl end ...\n");
+    return 1;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-int OclCalc::CreateBuffer64Bits( double *&dpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize )
+
+int OclCalc::createBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize )
 {
     cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
+    setKernelEnv( &kEnv );
 
-    mpClmemSrcData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                            nBufferSize * sizeof(double), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemStartPos = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                             nBufferSize * sizeof(unsigned int), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemEndPos = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                             nBufferSize * sizeof(unsigned int), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-
-    dpSrcData = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemSrcData, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-                               nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL(clStatus,"clEnqueueMapBuffer");
-    clFinish(kEnv.mpkCmdQueue);
-    npStartPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemStartPos, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-                             nBufferSize * sizeof(uint), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
-    clFinish( kEnv.mpkCmdQueue );
-    npEndPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemEndPos, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-                             nBufferSize * sizeof(uint), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus,"clEnqueueMapBuffer" );
-    clFinish( kEnv.mpkCmdQueue );
-    //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
-    return 0;
-}
-
-int OclCalc::CreateBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize )
-{
-    cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
-
-    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
+    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR ),
                           nBufferSize * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
+    mpClmemRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR ),
                            nBufferSize * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus,"clCreateBuffer" );
     dpLeftData = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue,mpClmemLeftData,CL_TRUE,CL_MAP_WRITE,0,
@@ -967,54 +997,169 @@ int OclCalc::CreateBuffer64Bits( double *&dpLeftData, double *&dpRightData, int 
     //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
     return 0;
 }
-int OclCalc::CreateBuffer64Bits( double *&dpSumProMergeLfData, double *&dpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize )
+
+int OclCalc::mapAndCopy64Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize)
 {
     cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
-    mpClmemMergeLfData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                                nMatixSize * sizeof(double), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemMergeRtData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                                nMatixSize * sizeof(double), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemMatixSumSize = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-                             nMatixSize * sizeof(unsigned int), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    double * dpSrcDataMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemSrcData, CL_TRUE,CL_MAP_WRITE, 0,
+                                          nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    unsigned int *npStartPosMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemStartPos, CL_TRUE,CL_MAP_WRITE, 0,
+                                              nRowsize * sizeof(uint), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    unsigned int *npEndPosMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemEndPos, CL_TRUE, CL_MAP_WRITE, 0,
+                                            nRowsize * sizeof(uint), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for(int i=0;i<nBufferSize;i++)
+        dpSrcDataMap[i] = dpTempSrcData[i];
+    for(int i=0;i<nRowsize;i++)
+    {
+        npStartPosMap[i] = unStartPos[i];
+        npEndPosMap[i] = unEndPos[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemSrcData, dpSrcDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPosMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemEndPos, npEndPosMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+int OclCalc::mapAndCopy64Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize )
+{
+    cl_int clStatus = 0;
+    double *dpLeftDataMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    double *dpRightDataMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemRightData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nBufferSize; i++ )
+    {
+        dpLeftDataMap[i] = dpTempLeftData[i];
+        dpRightDataMap[i] = dpTempRightData[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, dpLeftDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemRightData, dpRightDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
 
-    dpSumProMergeLfData = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMergeLfData, CL_TRUE,
-                                        CL_MAP_WRITE_INVALIDATE_REGION, 0, nMatixSize * sizeof(double),
-                                        0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
-    clFinish(kEnv.mpkCmdQueue);
-    dpSumProMergeRtData = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMergeRtData, CL_TRUE,
-                                        CL_MAP_WRITE_INVALIDATE_REGION, 0, nMatixSize * sizeof(double),
-                                        0, NULL, NULL, &clStatus );
+int OclCalc::mapAndCopyArithmetic64Bits( const double *dpMoreColArithmetic, int nBufferSize )
+{
+    cl_int clStatus = 0;
+    double *dpLeftDataMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    npSumSize   = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMatixSumSize, CL_TRUE,
-                              CL_MAP_WRITE_INVALIDATE_REGION, 0, nBufferSize * sizeof(uint),
-                              0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
+    for ( int i = 0; i < nBufferSize; i++ )
+    {
+        dpLeftDataMap[i] = dpMoreColArithmetic[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, dpLeftDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+int OclCalc::mapAndCopyMoreColArithmetic64Bits( const double *dpMoreColArithmetic, int nBufferSize, uint *npeOp, uint neOpSize )
+{
+    cl_int clStatus = 0;
+    double *dpLeftDataMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    uint *dpeOpMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemeOp, CL_TRUE, CL_MAP_WRITE,
+        0, neOpSize * sizeof(uint), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nBufferSize; i++ )
+    {
+        dpLeftDataMap[i] = dpMoreColArithmetic[i];
+    }
+    for( uint i = 0; i<neOpSize; i++)
+    {
+        dpeOpMap[i] = npeOp[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, dpLeftDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemeOp, dpeOpMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+
+int OclCalc::createFormulaBuf64Bits( int nBufferSize, int rowSize )
+{
+    cl_int clStatus = 0;
+    setKernelEnv( &kEnv );
+    mpClmemSrcData   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(double), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    nFormulaLen = nBufferSize;
+    mpClmemStartPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        rowSize * sizeof(unsigned int), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    mpClmemEndPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        rowSize * sizeof(unsigned int), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
     return 0;
 }
-int OclCalc::OclHostArithmeticOperator64Bits( const char* aKernelName, double *fpLeftData, double *fpRightData, double *&rResult,int nRowSize )
+
+int OclCalc::createArithmeticOptBuf64Bits( int nBufferSize )
+{
+    cl_int clStatus = 0;
+    nArithmeticLen = nBufferSize;
+    setKernelEnv( &kEnv );
+    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(double), NULL, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    mpClmemRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(double), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 0;
+}
+
+int OclCalc::createMoreColArithmeticBuf64Bits( int nBufferSize, int neOpSize )
+{
+    cl_int clStatus = 0;
+    nArithmeticLen = nBufferSize;
+    setKernelEnv( &kEnv );
+    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(double), NULL, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    mpClmemeOp = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        neOpSize * sizeof(uint), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 0;
+
+}
+
+int OclCalc::oclHostArithmeticOperator64Bits( const char* aKernelName, double *&rResult,int nRowSize )
 {
     cl_int clStatus = 0;
     size_t global_work_size[1];
-    CheckKernelName( &kEnv, aKernelName );
+    checkKernelName( &kEnv, aKernelName );
 
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, fpLeftData, 0, NULL, NULL );
-    CHECK_OPENCL(clStatus,"clEnqueueUnmapMemObject");
-    clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemRightData, fpRightData, 0, NULL, NULL );
-    CHECK_OPENCL(clStatus,"clEnqueueUnmapMemObject");
-    clFinish( kEnv.mpkCmdQueue );
-
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE,
                           nRowSize * sizeof(double), NULL, &clStatus);
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
@@ -1032,9 +1177,11 @@ int OclCalc::OclHostArithmeticOperator64Bits( const char* aKernelName, double *f
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
 
-    rResult = (double *) clEnqueueMapBuffer( kEnv.mpkCmdQueue, clResult, CL_TRUE,CL_MAP_READ,
+    double *dpOutPut = (double *) clEnqueueMapBuffer( kEnv.mpkCmdQueue, clResult, CL_TRUE,CL_MAP_READ,
                             0, nRowSize*sizeof(double), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    for ( int i = 0; i < nRowSize; i++ )
+        rResult[i] = dpOutPut[i];
     clFinish( kEnv.mpkCmdQueue );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clResult, rResult, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
@@ -1043,31 +1190,163 @@ int OclCalc::OclHostArithmeticOperator64Bits( const char* aKernelName, double *f
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
-    clStatus = clReleaseMemObject( mpClmemLeftData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject");
-    clStatus = clReleaseMemObject( mpClmemRightData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseMemObject( clResult );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     return 0;
 }
 
-int OclCalc::OclHostFormulaStatistics64Bits( const char* aKernelName, double *fpSrcData, uint *npStartPos, uint *npEndPos, double *&output, int size )
+int OclCalc::oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize )
 {
     cl_int clStatus = 0;
     size_t global_work_size[1];
-    CheckKernelName( &kEnv, aKernelName );
+    const char *aKernelName = "oclMoreColArithmeticOperator";
+    checkKernelName( &kEnv,aKernelName );
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(double), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_int), (void *)&nDataSize  );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&mpClmemeOp );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 3, sizeof(cl_int), (void *)&neOpSize );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 4, sizeof(cl_mem), (void *)&clResult );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    global_work_size[0] = nRowSize;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1,
+        NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+    double * hostMapResult = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clResult, CL_TRUE, CL_MAP_READ, 0,
+        nRowSize*sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nRowSize; i++)
+        rResult[i] = hostMapResult[i]; // from gpu float type to cpu double type
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clResult, hostMapResult, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clStatus = clFinish(kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel(kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clResult );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+
+}
+
+int OclCalc::oclHostArithmeticStash64Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    setKernelEnv( &kEnv );
+    checkKernelName( &kEnv, aKernelName );
+
+    cl_mem clLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+    nRowSize * sizeof(double), (void *)dpLeftData, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        nRowSize * sizeof(double), (void *)dpRightData, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE,
+                          nRowSize * sizeof(double), NULL, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&clLeftData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&clRightData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&clResult );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+
+    global_work_size[0] = nRowSize;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1,
+                   NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue, clResult, CL_TRUE, 0, nRowSize * sizeof(double), (double *)rResult, 0, NULL, NULL);
+    CHECK_OPENCL( clStatus, "clEnqueueReadBuffer" );
+
+    clStatus = clFinish( kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel( kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clResult );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clLeftData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clRightData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+}
+
+int OclCalc::oclHostFormulaStash64Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    setKernelEnv( &kEnv );
+    checkKernelName( &kEnv, aKernelName );
+    cl_mem clSrcData   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        nBufferSize * sizeof(double), (void *)dpSrcData, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+     cl_mem clStartPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        size * sizeof(unsigned int), (void *)nStartPos, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clEndPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        size * sizeof(unsigned int), (void *)nEndPos, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemSrcData, fpSrcData, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(double), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem),(void *)&clSrcData);
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&clStartPos );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&clEndPos );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 3, sizeof(cl_mem), (void *)&outputCl );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    global_work_size[0] = size;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPos, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    clFinish(kEnv.mpkCmdQueue);
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemEndPos, npEndPos, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject");
+
+    clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue, outputCl, CL_TRUE, 0, size * sizeof(double), (double *)output, 0, NULL, NULL);
+    CHECK_OPENCL( clStatus, "clReadBuffer" );
     clFinish( kEnv.mpkCmdQueue );
+    clStatus = clFinish(kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel( kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( outputCl );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clSrcData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clStartPos );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clEndPos );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+}
+
+int OclCalc::oclHostFormulaStatistics64Bits( const char* aKernelName, double *&output, int size )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    checkKernelName( &kEnv, aKernelName );
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
     cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem),(void *)&mpClmemSrcData);
@@ -1082,8 +1361,14 @@ int OclCalc::OclHostFormulaStatistics64Bits( const char* aKernelName, double *fp
     clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
-    output = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, outputCl, CL_TRUE, CL_MAP_READ,
-        0, size*sizeof(double), 0, NULL, NULL, &clStatus );
+    double *dpOutPut = (double *) clEnqueueMapBuffer( kEnv.mpkCmdQueue, outputCl, CL_TRUE,CL_MAP_READ,
+                            0, size*sizeof(double), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    for ( int i = 0; i < size; i++ )
+    {
+        output[i] = dpOutPut[i];
+    }
+
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, outputCl, output, 0, NULL, NULL );
@@ -1092,21 +1377,15 @@ int OclCalc::OclHostFormulaStatistics64Bits( const char* aKernelName, double *fp
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
-    clStatus = clReleaseMemObject(mpClmemSrcData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject(mpClmemStartPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemEndPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseMemObject( outputCl );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     return 0;
 }
 
-int OclCalc::OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize )
+int OclCalc::oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize )
 {
     const char *cpKernelName = "oclFormulaCount";
-    CheckKernelName( &kEnv, cpKernelName );
+    checkKernelName( &kEnv, cpKernelName );
     cl_int clStatus;
     size_t global_work_size[1];
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
@@ -1141,12 +1420,6 @@ int OclCalc::OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
-    clStatus = clReleaseMemObject( mpClmemSrcData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemStartPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemEndPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseMemObject( clpOutput );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     return 0;
@@ -1157,14 +1430,14 @@ int OclCalc::OclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double
  *save the npStart array eg:a4-a8;b10-b14,the npStart will store a4,b10,and the npEnd will store a8,b14 range.So it can if(i +1)%2 to judge
  * the a cloumn or b cloumn npStart range.so as b bolumn.
  */
-int OclCalc::OclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, double *dpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize )
+int OclCalc::oclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, double *dpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize )
 {
     cl_int clStatus;
     size_t global_work_size[1];
     memset(dpOutput,0,nSize);
     const char *cpFirstKernelName = "oclSignedMul";
     const char *cpSecondKernelName = "oclFormulaSumproduct";
-    CheckKernelName( &kEnv, cpFirstKernelName );
+    checkKernelName( &kEnv, cpFirstKernelName );
     kEnv.mpkKernel = clCreateKernel(kEnv.mpkProgram,kEnv.mckKernelName,&clStatus);
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemMergeLfData, dpSumProMergeLfData, 0, NULL, NULL );
@@ -1197,7 +1470,7 @@ int OclCalc::OclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, double
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    CheckKernelName( &kEnv, cpSecondKernelName );
+    checkKernelName( &kEnv, cpSecondKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     cl_mem clpOutput = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nSize* sizeof(double), NULL, &clStatus );
@@ -1220,11 +1493,13 @@ int OclCalc::OclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, double
         NULL, global_work_size, NULL, 0, NULL, NULL);
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
-    dpOutput = (double *)clEnqueueMapBuffer(kEnv.mpkCmdQueue, clpOutput, CL_TRUE, CL_MAP_READ, 0,
-        nSize*sizeof(double), 0, NULL, NULL, &clStatus );
+    double * outputMap = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clpOutput, CL_TRUE, CL_MAP_READ,
+        0, nSize*sizeof(double), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpOutput, dpOutput, 0, NULL, NULL );
+    for ( int i = 0; i < nSize; i++ )
+        dpOutput[i] = outputMap[i];
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpOutput, outputMap, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
     clStatus = clFinish( kEnv.mpkCmdQueue );
     CHECK_OPENCL( clStatus, "clFinish" );
@@ -1239,46 +1514,67 @@ int OclCalc::OclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, double
     return 0;
 }
 
-int OclCalc::CreateBuffer32Bits( float *&fpSrcData, uint *&npStartPos, uint *&npEndPos, int nBufferSize )
+int OclCalc::createMoreColArithmeticBuf32Bits( int nBufferSize, int neOpSize )
 {
     cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
-    mpClmemSrcData    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-            nBufferSize * sizeof(float), NULL, &clStatus );
+    nArithmeticLen = nBufferSize;
+    setKernelEnv( &kEnv );
+    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(float), NULL, &clStatus);
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemStartPos    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-            nBufferSize * sizeof(unsigned int), NULL, &clStatus );
+    mpClmemeOp = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        neOpSize * sizeof(uint), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemEndPos    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-            nBufferSize * sizeof(unsigned int), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    fpSrcData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemSrcData, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-            nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    npStartPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemStartPos, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-            nBufferSize * sizeof(uint), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
-    clFinish( kEnv.mpkCmdQueue );
-    npEndPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemEndPos, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION, 0,
-            nBufferSize * sizeof(uint), 0, NULL, NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
-    clFinish( kEnv.mpkCmdQueue );
-    //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
     return 0;
 }
 
-int OclCalc::CreateBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize )
+int OclCalc::createArithmeticOptBuf32Bits( int nBufferSize )
 {
     cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
+    setKernelEnv( &kEnv );
+    nArithmeticLen = nBufferSize;
+    mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(float), NULL, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    mpClmemRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(float), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 0;
+}
+
+int OclCalc::createFormulaBuf32Bits( int nBufferSize, int rowSize )
+{
+    cl_int clStatus = 0;
+    setKernelEnv( &kEnv );
+    nFormulaLen = nBufferSize;
+
+    mpClmemSrcData    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        nBufferSize * sizeof(float), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    mpClmemStartPos    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        rowSize * sizeof(unsigned int), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    mpClmemEndPos    = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+        rowSize * sizeof(unsigned int), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 0;
+}
+
+int OclCalc::createBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize )
+{
+    cl_int clStatus = 0;
+    setKernelEnv( &kEnv );
     mpClmemLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
             nBufferSize * sizeof(float), NULL, &clStatus);
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     mpClmemRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
         nBufferSize * sizeof(unsigned int), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    fpLeftData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE_INVALIDATE_REGION,
+    fpLeftData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE,CL_MAP_WRITE_INVALIDATE_REGION,
         0, nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
@@ -1289,48 +1585,120 @@ int OclCalc::CreateBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nB
     //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
     return 0;
 }
-int OclCalc::CreateBuffer32Bits( float *&fpSumProMergeLfData, float *&fpSumProMergeRtData, uint *&npSumSize, int nMatixSize, int nBufferSize )
+
+int OclCalc::mapAndCopy32Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize)
 {
     cl_int clStatus = 0;
-    SetKernelEnv( &kEnv );
-    mpClmemMergeLfData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-        nMatixSize * sizeof(float), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemMergeRtData = clCreateBuffer(kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-        nMatixSize * sizeof(float), NULL, &clStatus);
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    mpClmemMatixSumSize = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
-        nMatixSize * sizeof(unsigned int), NULL, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateBuffer" );
-    fpSumProMergeLfData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMergeLfData, CL_TRUE,
-        CL_MAP_WRITE_INVALIDATE_REGION, 0, nMatixSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    float *fpSrcData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemSrcData, CL_TRUE, CL_MAP_WRITE, 0,
+            nBufferSize * sizeof(float) , 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    fpSumProMergeRtData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMergeRtData, CL_TRUE,
-        CL_MAP_WRITE_INVALIDATE_REGION, 0, nMatixSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    unsigned int *npStartPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemStartPos, CL_TRUE, CL_MAP_WRITE, 0,
+            nRowsize * sizeof(uint), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    npSumSize   = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemMatixSumSize, CL_TRUE,
-        CL_MAP_WRITE_INVALIDATE_REGION, 0, nBufferSize * sizeof(uint), 0, NULL, NULL, &clStatus );
+    unsigned int *npEndPos = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemEndPos, CL_TRUE, CL_MAP_WRITE, 0,
+            nRowsize * sizeof(uint), 0, NULL, NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     clFinish( kEnv.mpkCmdQueue );
-    //printf("In CreateBuffer, pptrr is %d,%d,%d\n",fpSrcData,npStartPos,npEndPos);
-    return 0;
+    for(int i=0;i<nBufferSize;i++)
+    {
+        fpSrcData[i] = (float)dpTempSrcData[i];
+    }
+    for(int i=0;i<nRowsize;i++)
+    {
+        npStartPos[i] = unStartPos[i];
+        npEndPos[i] = unEndPos[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemSrcData, fpSrcData, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPos, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemEndPos, npEndPos, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
 }
 
-int OclCalc::OclHostArithmeticOperator32Bits( const char* aKernelName, float *fpLeftData, float *fpRightData, double *rResult, int nRowSize )
+int OclCalc::mapAndCopy32Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize )
 {
     cl_int clStatus = 0;
-    size_t global_work_size[1];
-    CheckKernelName( &kEnv,aKernelName );
-    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    float *fpLeftData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    float *fpRightData = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemRightData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for(int i=0;i<nBufferSize;i++)
+    {
+        fpLeftData[i] = (float)dpTempLeftData[i];
+        fpRightData[i] = (float)dpTempRightData[i];
+    }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, fpLeftData, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
     clFinish( kEnv.mpkCmdQueue );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemRightData, fpRightData, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
     clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+int OclCalc::mapAndCopyArithmetic32Bits( const double *dpMoreColArithmetic, int nBufferSize )
+{
+    cl_int clStatus = 0;
+    float *dpLeftDataMap = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nBufferSize; i++ )
+    {
+        dpLeftDataMap[i] = (float)dpMoreColArithmetic[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, dpLeftDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+int OclCalc::mapAndCopyMoreColArithmetic32Bits( const double *dpMoreColArithmetic, int nBufferSize, uint *npeOp, uint neOpSize )
+{
+    cl_int clStatus = 0;
+    float *fpLeftDataMap = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemLeftData, CL_TRUE, CL_MAP_WRITE,
+        0, nBufferSize * sizeof(float), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    uint *dpeOpMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, mpClmemeOp, CL_TRUE, CL_MAP_WRITE,
+        0, neOpSize * sizeof(uint), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nBufferSize; i++ )
+    {
+        fpLeftDataMap[i] = (float)dpMoreColArithmetic[i];
+    }
+    for( uint i = 0; i<neOpSize; i++ )
+    {
+        dpeOpMap[i] = npeOp[i];
+    }
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, fpLeftDataMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemeOp, dpeOpMap, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clFinish( kEnv.mpkCmdQueue );
+    return 1;
+}
+
+int OclCalc::oclHostArithmeticOperator32Bits( const char* aKernelName,double *rResult, int nRowSize )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+
+    checkKernelName( &kEnv,aKernelName );
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
@@ -1356,31 +1724,61 @@ int OclCalc::OclHostArithmeticOperator32Bits( const char* aKernelName, float *fp
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel(kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
-    clStatus = clReleaseMemObject(mpClmemLeftData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemRightData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseMemObject( clResult );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     return 0;
 }
 
-int OclCalc::OclHostFormulaStatistics32Bits(const char* aKernelName,float *fpSrcData,uint *npStartPos,uint *npEndPos,double *output,int size)
+int OclCalc::oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize )
 {
     cl_int clStatus = 0;
     size_t global_work_size[1];
-    CheckKernelName( &kEnv, aKernelName );
+    const char *aKernelName = "oclMoreColArithmeticOperator";
+    checkKernelName( &kEnv,aKernelName );
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(float), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_int), (void *)&nDataSize  );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&mpClmemeOp );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 3, sizeof(cl_int), (void *)&neOpSize );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 4, sizeof(cl_mem), (void *)&clResult );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    global_work_size[0] = nRowSize;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1,
+        NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+    float * hostMapResult = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clResult, CL_TRUE, CL_MAP_READ, 0,
+        nRowSize*sizeof(float), 0, NULL, NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    clFinish( kEnv.mpkCmdQueue );
+    for ( int i = 0; i < nRowSize; i++)
+        rResult[i] = hostMapResult[i]; // from gpu float type to cpu double type
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clResult, hostMapResult, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+    clStatus = clFinish(kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel(kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clResult );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+}
+
+int OclCalc::oclHostFormulaStatistics32Bits(const char* aKernelName,double *output,int size)
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    checkKernelName( &kEnv, aKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemSrcData, fpSrcData, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPos, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    clFinish( kEnv.mpkCmdQueue );
-    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemEndPos, npEndPos, 0, NULL, NULL );
-    CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    clFinish( kEnv.mpkCmdQueue );
+
     cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemSrcData );
@@ -1407,21 +1805,141 @@ int OclCalc::OclHostFormulaStatistics32Bits(const char* aKernelName,float *fpSrc
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
-    clStatus = clReleaseMemObject( mpClmemSrcData );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemStartPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    clStatus = clReleaseMemObject( mpClmemEndPos );
-    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseMemObject( outputCl );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     return 0;
 }
 
-int OclCalc::OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize )
+int OclCalc::oclHostArithmeticStash32Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    setKernelEnv( &kEnv );
+    checkKernelName( &kEnv, aKernelName );
+    float *fpLeftData = (float *)malloc( sizeof(float) * nRowSize );
+    float *fpRightData = (float *)malloc( sizeof(float) * nRowSize );
+    float *fpResult = (float *)malloc( sizeof(float) * nRowSize );
+    for(int i=0;i<nRowSize;i++)
+    {
+        fpLeftData[i] = (float)dpLeftData[i];
+        fpRightData[i] = (float)dpRightData[i];
+    }
+    cl_mem clLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        nRowSize * sizeof(float), (void *)fpLeftData, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clRightData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
+        nRowSize * sizeof(float), (void *)fpRightData, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE,
+                          nRowSize * sizeof(float), NULL, &clStatus);
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&clLeftData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&clRightData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&clResult );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+
+    global_work_size[0] = nRowSize;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1,
+                   NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue, clResult, CL_TRUE, 0, nRowSize * sizeof(float), (float *)fpResult, 0, NULL, NULL);
+    CHECK_OPENCL( clStatus, "clEnqueueReadBuffer" );
+    for(int i=0;i<nRowSize;i++)
+        rResult[i] = (double)fpResult[i];
+    if(fpResult)
+    {
+        free(fpResult);
+        fpResult = NULL;
+    }
+    clStatus = clFinish( kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel( kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clResult );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clLeftData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clRightData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+}
+
+int OclCalc::oclHostFormulaStash32Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size )
+{
+    cl_int clStatus = 0;
+    size_t global_work_size[1];
+    setKernelEnv( &kEnv );
+    checkKernelName( &kEnv, aKernelName );
+    float *fpSrcData = (float *)malloc( sizeof(float) * nBufferSize );
+    float *fpResult = (float *)malloc( sizeof(float) * size );
+    for(int i=0;i<nBufferSize;i++)
+        fpSrcData[i] = (float)dpSrcData[i];
+    cl_mem clSrcData   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_COPY_HOST_PTR),
+        nBufferSize * sizeof(float), (void *)fpSrcData, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+     cl_mem clStartPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_COPY_HOST_PTR),
+        size * sizeof(unsigned int), (void *)nStartPos, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clEndPos   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_COPY_HOST_PTR),
+        size * sizeof(unsigned int), (void *)nEndPos, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+    cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(double), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem),(void *)&clSrcData);
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&clStartPos );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&clEndPos );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kEnv.mpkKernel, 3, sizeof(cl_mem), (void *)&outputCl );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    global_work_size[0] = size;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue, outputCl, CL_TRUE, 0, size * sizeof(float), (double *)fpResult, 0, NULL, NULL);
+    CHECK_OPENCL( clStatus, "clReadBuffer" );
+    for(int i = 0;i<size;i++)
+        output[i] = (float)fpResult[i];
+    clFinish( kEnv.mpkCmdQueue );
+    if(fpResult)
+    {
+        free(fpResult);
+    fpResult = NULL;
+    }
+    clStatus = clFinish(kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel( kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( outputCl );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clSrcData );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clStartPos );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    clStatus = clReleaseMemObject( clEndPos );
+    CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    return 0;
+}
+
+int OclCalc::oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize )
 {
     const char *cpKernelName = "oclFormulaCount";
-    CheckKernelName( &kEnv, cpKernelName );
+    checkKernelName( &kEnv, cpKernelName );
     cl_int clStatus;
     size_t global_work_size[1];
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
@@ -1470,14 +1988,14 @@ int OclCalc::OclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double
 }
 
 //sumproduct
-int OclCalc::OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize )
+int OclCalc::oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize )
 {
     cl_int clStatus;
     size_t global_work_size[1];
     memset(dpOutput,0,nSize);
     const char *cpFirstKernelName = "oclSignedMul";
     const char *cpSecondKernelName = "oclFormulaSumproduct";
-    CheckKernelName( &kEnv, cpFirstKernelName );
+    checkKernelName( &kEnv, cpFirstKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemMergeLfData, fpSumProMergeLfData, 0, NULL, NULL );
@@ -1508,7 +2026,7 @@ int OclCalc::OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
-    CheckKernelName( &kEnv,cpSecondKernelName );
+    checkKernelName( &kEnv,cpSecondKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kEnv.mckKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     cl_mem clpOutput = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nSize* sizeof(float), NULL, &clStatus );
@@ -1556,12 +2074,13 @@ int OclCalc::OclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *
 static cl_mem allocateDoubleBuffer( KernelEnv &rEnv, const double *_pValues, size_t nElements, cl_int *pStatus )
 {
     // Ugh - horrible redundant copying ...
-    cl_mem xValues = clCreateBuffer( rEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+    cl_mem xValues = clCreateBuffer( rEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
         nElements * sizeof(double), NULL, pStatus);
     double *pValues = (double *)clEnqueueMapBuffer( rEnv.mpkCmdQueue, xValues, CL_TRUE, CL_MAP_WRITE, 0,
         nElements * sizeof(double), 0, NULL, NULL, NULL);
     clFinish(rEnv.mpkCmdQueue);
-    memcpy( pValues, _pValues, nElements*sizeof(double) );
+    for ( int i = 0; i < (int)nElements; i++ )
+        pValues[i] = _pValues[i];
     clEnqueueUnmapMemObject( rEnv.mpkCmdQueue, xValues, pValues, 0, NULL, NULL );
     clFinish( rEnv.mpkCmdQueue );
     return xValues;
@@ -1570,7 +2089,7 @@ static cl_mem allocateDoubleBuffer( KernelEnv &rEnv, const double *_pValues, siz
 static cl_mem allocateFloatBuffer( KernelEnv &rEnv, const double *_pValues, size_t nElements, cl_int *pStatus )
 {
     // Ugh - horrible redundant copying ...
-    cl_mem xValues = clCreateBuffer( rEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE),
+    cl_mem xValues = clCreateBuffer( rEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
         nElements * sizeof(float), NULL, pStatus);
     float *pValues = (float *)clEnqueueMapBuffer( rEnv.mpkCmdQueue, xValues, CL_TRUE, CL_MAP_WRITE, 0,
         nElements * sizeof(float), 0, NULL, NULL, NULL );
@@ -1583,9 +2102,185 @@ static cl_mem allocateFloatBuffer( KernelEnv &rEnv, const double *_pValues, size
     return xValues;
 }
 
-double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double del )
+int OclCalc::oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle, size_t nSrcDataSize,size_t nElements, double del ,uint *nStartPos,uint *nEndPos,double *dpResult)
 {
-    SetKernelEnv( &kEnv );
+    setKernelEnv( &kEnv );
+
+    char kernelName[256] = "";
+    double delta = del;
+    bool subFlag = false;
+    strcat(kernelName,"ocl");
+    for ( size_t i = 0; i < eOpNum; i++ )
+    {
+        switch ( eOp[i] )
+        {
+        case ocAdd:
+            strcat(kernelName,"Add");
+            break;
+        case ocSub:
+            strcat(kernelName,"Sub");
+            break;
+        case ocMul:
+            strcat(kernelName,"Mul");
+            break;
+        case ocDiv:
+            strcat(kernelName,"Div");
+            break;
+        case ocMax:
+            strcat(kernelName,"Max");
+            break;
+        case ocMin:
+            strcat(kernelName,"Min");
+            break;
+        case ocAverage:
+            strcat(kernelName,"Average");
+            break;
+        default:
+            assert( false );
+            break;
+        }
+    }
+    checkKernelName( &kEnv, kernelName );
+    cl_int clStatus;
+    size_t global_work_size[1];
+    if ( ( eOpNum == 1 ) && ( eOp[0] == ocSub ) )
+        subFlag = true;
+
+    kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, kernelName, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateKernel" );
+
+    cl_mem valuesCl = NULL, subtractCl = NULL, outputCl = NULL, startPosCL = NULL, endPosCL = NULL;
+
+    if(!subFlag)
+    {
+        startPosCL = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
+            nElements * sizeof(unsigned int), NULL, &clStatus );
+        CHECK_OPENCL( clStatus, "clCreateBuffer" );
+        endPosCL = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR),
+            nElements * sizeof(unsigned int), NULL, &clStatus );
+        CHECK_OPENCL( clStatus, "clCreateBuffer" );
+        unsigned int *npStartPosMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, startPosCL, CL_TRUE, CL_MAP_WRITE, 0,
+            nElements * sizeof(uint), 0, NULL, NULL, &clStatus );
+        CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+        clFinish( kEnv.mpkCmdQueue );
+        unsigned int *npEndPosMap = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, endPosCL, CL_TRUE, CL_MAP_WRITE, 0,
+            nElements * sizeof(uint), 0, NULL, NULL, &clStatus );
+        CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+        clFinish( kEnv.mpkCmdQueue );
+
+        for(uint i=0;i<nElements;i++)
+        {
+            npStartPosMap[i]=nStartPos[i];
+            npEndPosMap[i]=nEndPos[i];
+        }
+        clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, startPosCL, npStartPosMap, 0, NULL, NULL );
+        CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+        clFinish( kEnv.mpkCmdQueue );
+        clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, endPosCL, npEndPosMap, 0, NULL, NULL );
+        CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
+
+        if ( gpuEnv.mnKhrFp64Flag || gpuEnv.mnAmdFp64Flag )
+        {
+            valuesCl = allocateDoubleBuffer( kEnv, pOpArray, nSrcDataSize, &clStatus );
+            subtractCl = allocateDoubleBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
+            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nElements * sizeof(double), NULL, &clStatus );
+        }
+        else
+        {
+            valuesCl = allocateFloatBuffer( kEnv, pOpArray, nSrcDataSize, &clStatus );
+            subtractCl = allocateFloatBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
+            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE , nElements * sizeof(float), NULL, &clStatus);
+        }
+        CHECK_OPENCL( clStatus, "clCreateBuffer" );
+
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&valuesCl );
+        CHECK_OPENCL( clStatus, "clSetKernelArg");
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&subtractCl );
+        CHECK_OPENCL( clStatus, "clSetKernelArg");
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&startPosCL );
+        CHECK_OPENCL( clStatus, "clSetKernelArg" );
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 3, sizeof(cl_mem), (void *)&endPosCL );
+        CHECK_OPENCL( clStatus, "clSetKernelArg" );
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 4, sizeof(cl_mem), (void *)&outputCl );
+        CHECK_OPENCL( clStatus, "clSetKernelArg" );
+
+        fprintf( stderr, "prior to enqueue range kernel\n" );
+    }
+    else
+    {
+        if ( gpuEnv.mnKhrFp64Flag || gpuEnv.mnAmdFp64Flag )
+       {
+             subtractCl = allocateDoubleBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
+             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(double), NULL, &clStatus );
+             clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_double), (void *)&delta );
+             CHECK_OPENCL( clStatus, "clSetKernelArg");
+        }
+        else
+       {
+             float fTmp = (float)delta;
+             subtractCl = allocateFloatBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
+             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(float), NULL, &clStatus );
+             clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_float), (void *)&fTmp );
+             CHECK_OPENCL( clStatus, "clSetKernelArg");
+        }
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 1, sizeof(cl_mem), (void *)&subtractCl );
+        CHECK_OPENCL( clStatus, "clSetKernelArg");
+        clStatus = clSetKernelArg( kEnv.mpkKernel, 2, sizeof(cl_mem), (void *)&outputCl );
+        CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    }
+    global_work_size[0] = nElements;
+    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kEnv.mpkKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
+    CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
+    clFinish( kEnv.mpkCmdQueue );
+
+    if ( gpuEnv.mnKhrFp64Flag || gpuEnv.mnAmdFp64Flag )
+    {
+        clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue,
+                                       outputCl,
+                                       CL_TRUE,0,
+                                       nElements * sizeof(double),
+                                       (void *)dpResult,0,NULL,NULL);
+        CHECK_OPENCL( clStatus, "clEnqueueReadBuffer" );
+        clFinish( kEnv.mpkCmdQueue );
+    }
+    else
+    {
+        float *afBuffer = new float[nElements];
+        if ( !afBuffer )
+            return -1;
+        clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue,
+                                       outputCl,
+                                       CL_TRUE,0,
+                                       nElements * sizeof(float),
+                                       (void *)afBuffer,0,NULL,NULL);
+        CHECK_OPENCL( clStatus, "clEnqueueReadBuffer" );
+        clFinish( kEnv.mpkCmdQueue );
+        for ( size_t i = 0; i < nElements; i++ )
+        {
+            dpResult[i] = (double)afBuffer[i];
+        }
+        if ( !afBuffer )
+            delete [] afBuffer;
+    }
+
+    clStatus = clFinish( kEnv.mpkCmdQueue );
+    CHECK_OPENCL( clStatus, "clFinish" );
+    clStatus = clReleaseKernel( kEnv.mpkKernel );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+
+    CHECK_OPENCL_RELEASE( clStatus, valuesCl );
+    CHECK_OPENCL_RELEASE( clStatus, subtractCl );
+    CHECK_OPENCL_RELEASE( clStatus, outputCl );
+    CHECK_OPENCL_RELEASE( clStatus, startPosCL );
+    CHECK_OPENCL_RELEASE( clStatus, endPosCL );
+
+    fprintf( stderr, "completed opencl operation\n" );
+
+    return 0;
+}
+double *OclCalc::oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double del )
+{
+    setKernelEnv( &kEnv );
 
     // select a kernel: cut & paste coding is utterly evil.
     const char *kernelName = NULL;
@@ -1613,7 +2308,7 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
     default:
         assert( false );
     }
-    CheckKernelName( &kEnv, kernelName );
+    checkKernelName( &kEnv, kernelName );
 
     cl_int clStatus;
     size_t global_work_size[1];
@@ -1637,13 +2332,13 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
         {
             valuesCl = allocateDoubleBuffer( kEnv, pOpArray, nElements, &clStatus );
             subtractCl = allocateDoubleBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
-            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nElements * sizeof(double), NULL, &clStatus );
+            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(double), NULL, &clStatus );
         }
         else
         {
             valuesCl = allocateFloatBuffer( kEnv, pOpArray, nElements, &clStatus );
             subtractCl = allocateFloatBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
-            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nElements * sizeof(float), NULL, &clStatus);
+            outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(float), NULL, &clStatus);
         }
         CHECK_OPENCL( clStatus, "clCreateBuffer" );
 
@@ -1668,7 +2363,7 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
         if ( gpuEnv.mnKhrFp64Flag || gpuEnv.mnAmdFp64Flag )
        {
              subtractCl = allocateDoubleBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
-             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nElements * sizeof(double), NULL, &clStatus );
+             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(double), NULL, &clStatus );
              clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_double), (void *)&delta );
              CHECK_OPENCL( clStatus, "clSetKernelArg");
         }
@@ -1676,7 +2371,7 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
        {
              float fTmp = (float)delta;
              subtractCl = allocateFloatBuffer( kEnv, pSubtractSingle, nElements, &clStatus );
-             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nElements * sizeof(float), NULL, &clStatus );
+             outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, nElements * sizeof(float), NULL, &clStatus );
              clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_float), (void *)&fTmp );
              CHECK_OPENCL( clStatus, "clSetKernelArg");
         }
@@ -1695,28 +2390,34 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
         return NULL; // leak.
     if ( gpuEnv.mnKhrFp64Flag || gpuEnv.mnAmdFp64Flag )
     {
-        double *pOutput = (double *)clEnqueueMapBuffer(kEnv.mpkCmdQueue,outputCl,CL_TRUE,
-            CL_MAP_READ,0,nElements*sizeof(double), 0,NULL,NULL,NULL);
-        clFinish(kEnv.mpkCmdQueue);
-        memcpy( pResult, pOutput, nElements * sizeof(double) );
-        clEnqueueUnmapMemObject(kEnv.mpkCmdQueue,outputCl,pResult,0,NULL,NULL);
-        clFinish(kEnv.mpkCmdQueue);
+        clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue,
+                                       outputCl,
+                                       CL_TRUE,0,
+                                       nElements * sizeof(double),
+                                       (void *)pResult,0,NULL,NULL);
     }
     else
     {
-        float *pOutput = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, outputCl, CL_TRUE,
-            CL_MAP_READ, 0, nElements*sizeof(float), 0, NULL, NULL, NULL );
-        clFinish( kEnv.mpkCmdQueue );
+        float *afBuffer = new float[nElements];
+        if ( !afBuffer )
+            return NULL;
+        clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue,
+                                       outputCl,
+                                       CL_TRUE,0,
+                                       nElements * sizeof(float),
+                                       (void *)afBuffer,0,NULL,NULL);
         for ( int i = 0; i < (int)nElements; i++ )
-            pResult[i] = (double)pOutput[i];
-        clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, outputCl, pOutput, 0, NULL, NULL );
-        clFinish( kEnv.mpkCmdQueue );
+            pResult[i] = (double)afBuffer[i];
+        if ( !afBuffer )
+            delete [] afBuffer;
     }
+    CHECK_OPENCL( clStatus, "clEnqueueReadBuffer" );
 
     clStatus = clFinish( kEnv.mpkCmdQueue );
     CHECK_OPENCL( clStatus, "clFinish" );
     clStatus = clReleaseKernel( kEnv.mpkKernel );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
+
     if ( valuesCl != NULL )
     {
         clStatus = clReleaseMemObject( valuesCl );
@@ -1737,7 +2438,7 @@ double *OclCalc::OclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
     return pResult;
 }
 
-int OclCalc::OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst,std::vector<double>&dpResult,  uint nDim )
+int OclCalc::oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst,std::vector<double>&dpResult,  uint nDim )
 {
     cl_int clStatus = 0;
     uint nMatrixSize = nDim * nDim;
@@ -1746,7 +2447,10 @@ int OclCalc::OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclM
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     cl_mem clpYData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR ), nMatrixSize * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clpNData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE ), nDim * sizeof(uint), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
     double * dpY = (double *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clpYData, CL_TRUE, CL_MAP_WRITE, 0, nMatrixSize * sizeof(double), 0, NULL,NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     memset( dpY, 0, nMatrixSize*sizeof(double) );
     memset( dpOclMatrixDst, 0, nMatrixSize*sizeof(double) );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpYData, dpY, 0, NULL, NULL );
@@ -1758,14 +2462,20 @@ int OclCalc::OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclM
         for (uint j=0;j<nDim;j++)
         {
             if ( i == j )
-                dpP[i*nDim+j]=1.0;
+                dpP[i*nDim+j] = 1.0;
             else
-                dpP[i*nDim+j]=0.0;
+                dpP[i*nDim+j] = 0.0;
         }
     }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpPData, dpP, 0, NULL, NULL );
+    uint * npDim = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clpNData, CL_TRUE, CL_MAP_WRITE, 0, nDim * sizeof(uint), 0, NULL,NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    for ( uint i = 0; i < nDim; i++ )
+        npDim[i] = nDim;
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpNData, npDim, 0, NULL, NULL );
+
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    CheckKernelName( &kEnv,aKernelName );
+    checkKernelName( &kEnv,aKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
@@ -1805,6 +2515,9 @@ int OclCalc::OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclM
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
     clStatus = clSetKernelArg( kernel_solve, 3, sizeof(cl_mem), (void *)&clpYData );
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kernel_solve, 4, sizeof(cl_mem), (void *)&clpNData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+
     clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kernel_solve, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
@@ -1819,18 +2532,23 @@ int OclCalc::OclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclM
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( mpClmemLeftData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    mpClmemLeftData = NULL;
     clStatus = clReleaseMemObject( mpClmemRightData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    mpClmemRightData = NULL;
     clStatus = clReleaseKernel( kernel_solve );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpPData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpYData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clpNData );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+
     return 0;
 }
 
-int OclCalc::OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim )
+int OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim )
 {
     cl_int clStatus = 0;
     uint nMatrixSize = nDim * nDim;
@@ -1840,7 +2558,10 @@ int OclCalc::OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     cl_mem clpYData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR ), nMatrixSize * sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
+    cl_mem clpNData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_WRITE ), nDim * sizeof(uint), NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clCreateBuffer" );
     float * fpY = (float *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clpYData, CL_TRUE, CL_MAP_WRITE, 0, nMatrixSize * sizeof(float), 0, NULL,NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
     memset( fpY, 0, nMatrixSize*sizeof(float) );
     memset( fpOclMatrixDst, 0, nMatrixSize*sizeof(float) );
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpYData, fpY, 0, NULL, NULL );
@@ -1859,7 +2580,12 @@ int OclCalc::OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpPData, fpP, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    CheckKernelName( &kEnv,aKernelName );
+    uint * npDim = (uint *)clEnqueueMapBuffer( kEnv.mpkCmdQueue, clpNData, CL_TRUE, CL_MAP_WRITE, 0, nDim * sizeof(uint), 0, NULL,NULL, &clStatus );
+    CHECK_OPENCL( clStatus, "clEnqueueMapBuffer" );
+    for ( uint i = 0; i < nDim; i++ )
+        npDim[i] = nDim;
+    clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpNData, npDim, 0, NULL, NULL );
+    checkKernelName( &kEnv,aKernelName );
     kEnv.mpkKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateKernel" );
     clStatus = clSetKernelArg( kEnv.mpkKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
@@ -1902,6 +2628,9 @@ int OclCalc::OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
     clStatus = clSetKernelArg( kernel_solve, 3, sizeof(cl_mem), (void *)&clpYData );
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
+    clStatus = clSetKernelArg( kernel_solve, 4, sizeof(cl_mem), (void *)&clpNData );
+    CHECK_OPENCL( clStatus, "clSetKernelArg" );
+
     clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kernel_solve, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
@@ -1916,13 +2645,17 @@ int OclCalc::OclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( mpClmemLeftData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    mpClmemLeftData = NULL;
     clStatus = clReleaseMemObject( mpClmemRightData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
+    mpClmemRightData = NULL;
     clStatus = clReleaseKernel( kernel_solve );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpPData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpYData );
+    CHECK_OPENCL( clStatus, "clReleaseKernel" );
+    clStatus = clReleaseMemObject( clpNData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     return 0;
 }

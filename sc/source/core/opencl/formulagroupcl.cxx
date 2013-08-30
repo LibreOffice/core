@@ -19,6 +19,10 @@
 
 #include "openclwrapper.hxx"
 
+#define SRCDATASIZE 100
+#define SINGLEARRAYLEN 100
+#define DOUBLEARRAYLEN 100
+#define SVDOUBLELEN 100
 namespace sc {
 
 // A single public entry point for a factory function:
@@ -38,30 +42,632 @@ double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
 }//dbg-t
 TimeValue aTimeBefore, aTimeAfter;
 ///////////////////////////////////////
+class SourceData
+{
+    const double *mdpSrcPtr;
+    unsigned int mnDataSize;
+    const char *mcpFormulaName;
+    unsigned int mnCol;
+    int eOp;
+public:
+    SourceData( const double *dpData, unsigned int nSize, uint nCol = 1,const char *cpFormulaName = NULL):mdpSrcPtr(dpData),mnDataSize(nSize),mcpFormulaName(cpFormulaName),mnCol(nCol)
+    {
+    }
+    SourceData():mdpSrcPtr(NULL),mnDataSize(0)
+    {
+    }
+    void setSrcPtr( const double *dpTmpDataPtr)
+    {
+        mdpSrcPtr = dpTmpDataPtr;
+    }
+    void setSrcSize( int nSize )
+    {
+        mnDataSize = nSize;
+    }
+    const double * getDouleData()
+    {
+        return mdpSrcPtr;
+    }
+    unsigned int getDataSize()
+    {
+        return mnDataSize;
+    }
+    void print()
+    {
+        for( uint i=0; i<mnDataSize; i++ )
+            printf( " The SourceData is %f and data size is %d\n",mdpSrcPtr[i],mnDataSize );
+    }
+    void printFormula()
+    {
+        printf("--------The formulaname is %s and the eOp is %d---------\n",mcpFormulaName,eOp);
+    }
+    void setFormulaName(const char *cpFormulaName)
+    {
+        this->mcpFormulaName = cpFormulaName;
+    }
+    const char *getFormulaName()
+    {
+        return mcpFormulaName;
+    }
+    void seteOp(int op)
+    {
+        this->eOp = op;
+    }
+    int geteOp()
+    {
+        return eOp;
+    }
+    int getColNum()
+    {
+        return mnCol;
+    }
+
+};
 
 class FormulaGroupInterpreterOpenCL : public FormulaGroupInterpreterSoftware
 {
+    SourceData *mSrcDataStack[SRCDATASIZE];
+    unsigned int mnStackPointer,mnDoublePtrCount;
+    uint * mnpOclStartPos;
+    uint * mnpOclEndPos;
+    SingleVectorFormula *mSingleArray[SINGLEARRAYLEN];
+    DoubleVectorFormula *mDoubleArray[DOUBLEARRAYLEN];
+    double mdpSvdouble[SVDOUBLELEN];
+    double *mdpSrcDoublePtr[SVDOUBLELEN];
+    uint mnSingleCount;
+    uint mnDoubleCount;
+    uint mnSvDoubleCount;
+    uint mnOperatorGroup[100];
+    uint mnOperatorCount;
+    char mcHostName[100];
+    uint mnPositonLen;
+    size_t mnRowSize;
 public:
     FormulaGroupInterpreterOpenCL() :
         FormulaGroupInterpreterSoftware()
     {
-        OclCalc::InitEnv();
+        mnStackPointer = 0;
+        mnpOclEndPos = NULL;
+        mnpOclStartPos = NULL;
+        mnSingleCount = 0;
+        mnDoubleCount = 0;
+        mnSvDoubleCount = 0;
+        mnOperatorCount = 0;
+        mnPositonLen = 0;
+        mnDoublePtrCount = 0;
+        OclCalc::initEnv();
     }
     virtual ~FormulaGroupInterpreterOpenCL()
     {
-        OclCalc::ReleaseOpenclRunEnv();
+        OclCalc::releaseOpenclRunEnv();
     }
 
-    virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
-    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos,
-                           const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
+    virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
+    virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
+                           const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
+    void collectDoublePointers( double *temp )
+    {
+        if( mnDoublePtrCount < SRCDATASIZE )
+        {
+            mdpSrcDoublePtr[mnDoublePtrCount++] = temp;
+        }
+        else
+        {
+            printf( "The mdpSrcDoublePtr is full now.\n" );
+            double *dtmp = NULL;
+            if ( (dtmp = mdpSrcDoublePtr[--mnDoublePtrCount]) != NULL )
+            {
+                free( dtmp );
+                dtmp = NULL;
+            }
+        }
+    }
+
+    void freeDoublePointers()
+    {
+        while( mnDoublePtrCount > 0 )
+        {
+            double *dtmp = NULL;
+            if ( (dtmp = mdpSrcDoublePtr[--mnDoublePtrCount]) != NULL )
+            {
+                free( dtmp );
+                dtmp = NULL;
+            }
+        }
+    }
+
+
+    void srdDataPush( SourceData *temp )
+    {
+        if( mnStackPointer < SRCDATASIZE )
+        {
+            mSrcDataStack[mnStackPointer++] = temp;
+        }
+        else
+            printf( "The stack is full now.\n" );
+    }
+    SourceData *srdDataPop( void )
+    {
+        if( mnStackPointer <= 0 )
+        {
+            printf( "The stack was empty\n" );
+            return NULL;
+        }
+        return mSrcDataStack[--mnStackPointer];
+    }
+    unsigned int getDataSize()
+    {
+        return mnStackPointer;
+    }
+    void printStackInfo()
+    {
+        printf( "/********The stack size is %d*********\\\n",mnStackPointer );
+        for ( int i = mnStackPointer - 1; i >= 0; i-- )
+            mSrcDataStack[i]->print();
+    }
+    bool getPosition(const ScTokenArray& rCode,const ScFormulaCellGroupRef& xGroup,uint nRowSize,uint *&npOclStartPos,uint *&npOclEndPos,uint *nPositonLen);
+    bool chooseFunction(OclCalc &ocl_calc,double *&dpResult);
+    bool isStockHistory();
+    bool isGroundWater();
+};
+bool FormulaGroupInterpreterOpenCL::getPosition(const ScTokenArray& rCode,const ScFormulaCellGroupRef& xGroup,uint nRowSize,uint *&npOclStartPos,uint *&npOclEndPos,uint *nPositonLen)
+{
+        uint nColPosition = 0;
+        ScTokenArray * rCodePos = rCode.Clone();
+        static int nCountPosSize = nRowSize;
+        bool isAllocFormulaOclBuf = true;
+        for ( const formula::FormulaToken* p = rCodePos->First(); p; p = rCodePos->Next() )
+        {
+            switch ( p->GetType() )
+            {
+                case formula::svDoubleVectorRef:
+                {
+                    nColPosition++;
+                    break;
+                }
+            }
+        }
+        int nPositionSize = nColPosition * nRowSize;
+        npOclStartPos = (unsigned int*) malloc( nPositionSize * sizeof(unsigned int) );
+        npOclEndPos = (unsigned int*) malloc( nPositionSize * sizeof(unsigned int) );
+        if ( nCountPosSize < nPositionSize )
+        {
+            nCountPosSize = nPositionSize;
+            isAllocFormulaOclBuf = false;
+        }
+        for ( sal_Int32 i = 0; i < xGroup->mnLength; ++i )
+        {
+            ScTokenArray * rCodeTemp = rCode.Clone();
+            int j = 0;
+            for ( const formula::FormulaToken* p = rCodeTemp->First(); p; p = rCodeTemp->Next() )
+            {
+                switch (p->GetType())
+                {
+                    case formula::svDoubleVectorRef:
+                    {
+                        const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
+                        size_t nRowStart = p2->IsStartFixed() ? 0 : i;
+                        size_t nRowEnd = p2->GetRefRowSize() - 1;
+                        if (!p2->IsEndFixed())
+                            nRowEnd += i;
+                        npOclStartPos[j*nRowSize+i] = nRowStart;//record the start position
+                        npOclEndPos[j*nRowSize+i] = nRowEnd;//record the end position
+                        j++;
+                    }
+                }
+            }
+        }
+        *nPositonLen = nPositionSize;
+        //Now the pos array is 0 1 2 3 4 5  0 1 2 3 4 5;
+        return isAllocFormulaOclBuf;
+}
+
+bool FormulaGroupInterpreterOpenCL::isStockHistory()
+{
+    bool isHistory = false;
+    if( (mnOperatorGroup[0]== 224) && (mnOperatorGroup[1]== 227) && (mnOperatorGroup[2]== 41) && (mnOperatorGroup[3]== 43) && (mnOperatorGroup[4]== 41) )
+    {
+        strcpy(mcHostName,"OclOperationColumnN");
+        isHistory = true;
+    }
+    else if( (mnOperatorGroup[0] == 226) && (mnOperatorGroup[1] == 42) )
+    {
+        strcpy(mcHostName,"OclOperationColumnH");
+        isHistory = true;
+    }
+    else if((mnOperatorGroup[0] == 213) && (mnOperatorGroup[1] == 43) && (mnOperatorGroup[2] == 42) )
+    {
+        strcpy(mcHostName,"OclOperationColumnJ");
+        isHistory = true;
+    }
+    return isHistory;
+}
+
+bool FormulaGroupInterpreterOpenCL::isGroundWater()
+{
+    bool GroundWater=false;
+
+    if((mnOperatorGroup[0] == ocAverage && 1 == mnSingleCount )||(mnOperatorGroup[0] == ocMax && 1 == mnSingleCount )||
+        (mnOperatorGroup[0] == ocMin && 1 == mnSingleCount )||(mnOperatorGroup[0] == ocSub && mnSvDoubleCount==1))
+    {
+        GroundWater = true;
+    }
+    return GroundWater;
+}
+
+bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&dpResult )
+{
+    const double * dpOclSrcData = NULL;
+    unsigned int nSrcDataSize = 0;
+    const double *dpLeftData = NULL;
+    const double *dpRightData = NULL;
+    if((mnOperatorGroup[0] == ocAverage && 1 == mnSingleCount )||(mnOperatorGroup[0] == ocMax && 1 == mnSingleCount )||
+        (mnOperatorGroup[0] == ocMin && 1 == mnSingleCount )||(mnOperatorGroup[0] == ocSub && mnSvDoubleCount==1))
+    {
+        double delta = 0.0;
+        const double *pArrayToSubtractOneElementFrom;
+        const double *pGroundWaterDataArray;
+        uint nSrcData = 0;
+        if( mnSvDoubleCount!=1 )
+        {
+            pArrayToSubtractOneElementFrom= mSingleArray[0]->mdpInputLeftData;
+            pGroundWaterDataArray= mDoubleArray[0]->mdpInputData;
+            nSrcData = mDoubleArray[0]->mnInputDataSize;
+        }
+        else
+        {
+            pArrayToSubtractOneElementFrom= mSingleArray[0]->mdpInputLeftData;
+            pGroundWaterDataArray=NULL;
+            delta = mdpSvdouble[0];
+        }
+        ocl_calc.oclGroundWaterGroup( mnOperatorGroup,mnOperatorCount,pGroundWaterDataArray,pArrayToSubtractOneElementFrom,nSrcData,mnRowSize,delta,mnpOclStartPos,mnpOclEndPos,dpResult);
+    }
+    else if( isStockHistory() )
+    {
+        return false;
+    }
+    else if(((mnSvDoubleCount==0)&&(mnSingleCount==0)&&(mnDoubleCount==1)) &&
+            ((mnOperatorGroup[0] == ocAverage)||(mnOperatorGroup[0] == ocMax)||(mnOperatorGroup[0] == ocMin)))
+    {
+        if(mnOperatorGroup[0] == ocAverage)
+            strcpy(mcHostName,"oclFormulaAverage");
+        if(mnOperatorGroup[0] == ocMax)
+            strcpy(mcHostName,"oclFormulaMax");
+        if(mnOperatorGroup[0] == ocMin)
+            strcpy(mcHostName,"oclFormulaMin");
+        DoubleVectorFormula * doubleTemp = mDoubleArray[--mnDoubleCount];
+        nSrcDataSize = doubleTemp->mnInputDataSize;
+        dpOclSrcData = doubleTemp->mdpInputData;
+        if ( ocl_calc.getOpenclState())
+        {
+            if ( ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
+            {
+                ocl_calc.createFormulaBuf64Bits( nSrcDataSize, mnRowSize );
+                ocl_calc.mapAndCopy64Bits( dpOclSrcData,mnpOclStartPos,mnpOclEndPos,nSrcDataSize,mnRowSize );
+                ocl_calc.oclHostFormulaStatistics64Bits( mcHostName, dpResult, mnRowSize );
+            }
+            else
+            {
+                ocl_calc.createFormulaBuf32Bits( nSrcDataSize, mnPositonLen );
+                ocl_calc.mapAndCopy32Bits( dpOclSrcData, mnpOclStartPos, mnpOclEndPos, nSrcDataSize, mnRowSize);
+                ocl_calc.oclHostFormulaStatistics32Bits( mcHostName, dpResult, mnRowSize );
+            }
+        }
+    }
+    else if((mnSvDoubleCount==0)&&(mnSingleCount==1)&&(mnDoubleCount==0))
+    {
+        dpLeftData = mSingleArray[0]->mdpInputLeftData;
+        dpRightData =  mSingleArray[0]->mdpInputRightData;
+        if(mnOperatorGroup[0] == ocAdd)
+            strcpy(mcHostName,"oclSignedAdd");
+        if(mnOperatorGroup[0] == ocSub)
+            strcpy(mcHostName,"oclSignedSub");
+        if(mnOperatorGroup[0] == ocMul)
+            strcpy(mcHostName,"oclSignedMul");
+        if(mnOperatorGroup[0] == ocDiv)
+            strcpy(mcHostName,"oclSignedDiv");
+        if ( ocl_calc.getOpenclState())
+        {
+            if ( ocl_calc.gpuEnv.mnKhrFp64Flag == 1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
+            {
+                ocl_calc.createArithmeticOptBuf64Bits( mnRowSize );
+                ocl_calc.mapAndCopy64Bits(dpLeftData,dpRightData,mnRowSize);
+                ocl_calc.oclHostArithmeticOperator64Bits( mcHostName,dpResult,mnRowSize );
+            }
+            else
+            {
+                ocl_calc.createArithmeticOptBuf32Bits( mnRowSize );
+                ocl_calc.mapAndCopy32Bits(dpLeftData,dpRightData,mnRowSize);
+                ocl_calc.oclHostArithmeticOperator32Bits( mcHostName,dpResult,mnRowSize );
+            }
+        }
+    }
+    else if( (mnSingleCount>1) && (mnSvDoubleCount==0) && (mnDoubleCount==0) )
+    {
+        const double* dpArray[100] = {};
+        int j=0;
+        for( uint i = 0; i < mnSingleCount; i++ )
+        {
+            dpArray[j++] = mSingleArray[i]->mdpInputLeftData;
+            if( NULL != mSingleArray[i]->mdpInputRightData )
+                dpArray[j++] = mSingleArray[i]->mdpInputRightData;
+        }
+        double *dpMoreColArithmetic = (double *)malloc( sizeof(double) * j * mnRowSize );
+        if( NULL == dpMoreColArithmetic )
+        {
+            printf("Memory alloc error!\n");
+            return false;
+        }
+        for( uint i = 0; i < j*mnRowSize; i++ )
+        {
+            dpMoreColArithmetic[i] = dpArray[i/mnRowSize][i%mnRowSize];
+        }
+        if ( ocl_calc.getOpenclState())
+        {
+            if ( ocl_calc.gpuEnv.mnKhrFp64Flag == 1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
+            {
+                ocl_calc.createMoreColArithmeticBuf64Bits( j * mnRowSize, mnOperatorCount );
+                ocl_calc.mapAndCopyMoreColArithmetic64Bits( dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount );
+                ocl_calc.oclMoreColHostArithmeticOperator64Bits( mnRowSize, mnOperatorCount, dpResult,mnRowSize );
+            }
+            else
+            {
+                ocl_calc.createMoreColArithmeticBuf32Bits( j* mnRowSize, mnOperatorCount );
+                ocl_calc.mapAndCopyMoreColArithmetic32Bits(dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount);
+                ocl_calc.oclMoreColHostArithmeticOperator32Bits( mnRowSize, mnOperatorCount, dpResult, mnRowSize );
+            }
+        }
+    }
+    else
+    {
+        return false;
+    }
+    return true;
+}
+
+class agency
+{
+public:
+    double *calculate(int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOclStartPos,uint *npOclEndPos,FormulaGroupInterpreterOpenCL *formulaInterprt);
 };
 
-ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
+double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOclStartPos,uint *npOclEndPos,FormulaGroupInterpreterOpenCL *formulaInterprt)
+{
+    const double *dpLeftData = NULL;
+    const double *dpRightData = NULL;
+    const double *dpOclSrcData=NULL;
+    if ( ocl_calc.gpuEnv.mnKhrFp64Flag == 1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
+    {
+        switch( nOclOp )
+        {
+            case ocAdd:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset(rResult,0,rowSize);
+                ocl_calc.oclHostArithmeticStash64Bits( "oclSignedAdd",dpLeftData,dpRightData,rResult,temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                break;
+            }
+            case ocSub:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = ( double * )malloc( sizeof(double) * nDataSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostArithmeticStash64Bits( "oclSignedSub",dpLeftData,dpRightData,rResult,temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData(rResult,nDataSize) );
+                break;
+            }
+            case ocMul:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostArithmeticStash64Bits( "oclSignedMul",dpLeftData,dpRightData,rResult,temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                break;
+            }
+            case ocDiv:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = ( double * )malloc( sizeof(double) * nDataSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostArithmeticStash64Bits( "oclSignedDiv",dpLeftData,dpRightData,rResult,temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                break;
+            }
+            case ocMax:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * rowSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostFormulaStash64Bits( "oclFormulaMax",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,nDataSize,rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
+                break;
+            }
+            case ocMin:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * rowSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostFormulaStash64Bits( "oclFormulaMin",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,nDataSize,rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
+                break;
+            }
+            case ocAverage:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * rowSize );
+                memset( rResult,0,rowSize );
+                ocl_calc.oclHostFormulaStash64Bits( "oclFormulaAverage",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,nDataSize,rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
+                break;
+            }
+            default:
+                fprintf( stderr,"No OpenCL function for this calculation.\n" );
+                break;
+        }
+    }
+    else
+    {
+        switch( nOclOp )
+        {
+            case ocAdd:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset(rResult,0,rowSize);
+                ocl_calc.oclHostArithmeticStash32Bits( "oclSignedAdd", dpLeftData, dpRightData, rResult, temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData(rResult, nDataSize) );
+                break;
+            }
+            case ocSub:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset( rResult, 0, rowSize );
+                ocl_calc.oclHostArithmeticStash32Bits( "oclSignedSub", dpLeftData, dpRightData, rResult, temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                break;
+            }
+            case ocMul:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc(sizeof(double) * nDataSize );
+                memset( rResult, 0, rowSize );
+                ocl_calc.oclHostArithmeticStash32Bits( "oclSignedMul", dpLeftData, dpRightData, rResult, temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData( rResult, nDataSize ) );
+                break;
+            }
+            case ocDiv:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                SourceData *temp2 = formulaInterprt->srdDataPop();
+                nDataSize = temp2->getDataSize();
+                dpLeftData = temp2->getDouleData();
+                dpRightData = temp->getDouleData();
+                nDataSize = temp2->getDataSize();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset( rResult, 0, rowSize );
+                ocl_calc.oclHostArithmeticStash32Bits( "oclSignedDiv", dpLeftData, dpRightData, rResult, temp->getDataSize() );
+                formulaInterprt->srdDataPush( new SourceData(rResult, nDataSize) );
+                break;
+            }
+            case ocMax:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc(sizeof(double) * nDataSize );
+                memset(rResult,0,rowSize);
+                ocl_calc.oclHostFormulaStash32Bits( "oclFormulaMax", dpOclSrcData, npOclStartPos, npOclEndPos, rResult,nDataSize, rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult, rowSize ) );
+                break;
+            }
+            case ocMin:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset( rResult, 0, rowSize );
+                ocl_calc.oclHostFormulaStash32Bits( "oclFormulaMin", dpOclSrcData, npOclStartPos, npOclEndPos, rResult, nDataSize, rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult, rowSize) );
+                break;
+            }
+            case ocAverage:
+            {
+                unsigned int nDataSize = 0;
+                SourceData *temp = formulaInterprt->srdDataPop();
+                nDataSize = temp->getDataSize();
+                dpOclSrcData = temp->getDouleData();
+                double *rResult = NULL; // Point to the output data from GPU
+                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                memset( rResult, 0, rowSize);
+                ocl_calc.oclHostFormulaStash32Bits( "oclFormulaAverage", dpOclSrcData, npOclStartPos, npOclEndPos, rResult, nDataSize, rowSize );
+                formulaInterprt->srdDataPush( new SourceData( rResult, rowSize) );
+                break;
+            }
+            default:
+                fprintf(stderr,"No OpenCL function for this calculation.\n");
+                break;
+        }
+    }
+    return NULL;
+}
+
+ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& rMat )
 {
     SCSIZE nC, nR;
-    rMat.GetDimensions(nC, nR);
-    if (nC != nR || nC == 0)
+    rMat.GetDimensions( nC, nR );
+    if ( nC != nR || nC == 0 )
         // Input matrix must be square. Return an empty matrix on failure and
         // the caller will calculate it via CPU.
         return ScMatrixRef();
@@ -70,29 +676,30 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
     // the last, chained together in a single array.
     std::vector<double> aDoubles;
     rMat.GetDoubleArray(aDoubles);
+
     float * fpOclMatrixSrc = NULL;
     float * fpOclMatrixDst = NULL;
     double * dpOclMatrixSrc = NULL;
     double * dpOclMatrixDst = NULL;
     uint nMatrixSize = nC * nR;
     static OclCalc aOclCalc;
-    if ( aOclCalc.GetOpenclState() )
+    if ( aOclCalc.getOpenclState() )
     {
         if ( aOclCalc.gpuEnv.mnKhrFp64Flag == 1 || aOclCalc.gpuEnv.mnAmdFp64Flag == 1 )
         {
-            aOclCalc.CreateBuffer64Bits( dpOclMatrixSrc, dpOclMatrixDst, nMatrixSize );
+            aOclCalc.createBuffer64Bits( dpOclMatrixSrc, dpOclMatrixDst, nMatrixSize );
             for ( uint i = 0; i < nC; i++ )
                 for ( uint j = 0; j < nR; j++ )
                     dpOclMatrixSrc[i*nC+j] = aDoubles[j*nR+i];
-            aOclCalc.OclHostMatrixInverse64Bits( "oclFormulaMtxInv", dpOclMatrixSrc, dpOclMatrixDst,aDoubles, nR );
+            aOclCalc.oclHostMatrixInverse64Bits( "oclFormulaMtxInv", dpOclMatrixSrc, dpOclMatrixDst,aDoubles, nR );
         }
         else
         {
-            aOclCalc.CreateBuffer32Bits( fpOclMatrixSrc, fpOclMatrixDst, nMatrixSize );
+            aOclCalc.createBuffer32Bits( fpOclMatrixSrc, fpOclMatrixDst, nMatrixSize );
             for ( uint i = 0; i < nC; i++ )
                 for ( uint j = 0; j < nR; j++ )
                     fpOclMatrixSrc[i*nC+j] = (float) aDoubles[j*nR+i];
-            aOclCalc.OclHostMatrixInverse32Bits( "oclFormulaMtxInv", fpOclMatrixSrc, fpOclMatrixDst, aDoubles, nR );
+            aOclCalc.oclHostMatrixInverse32Bits( "oclFormulaMtxInv", fpOclMatrixSrc, fpOclMatrixDst, aDoubles, nR );
         }
     }
 
@@ -111,374 +718,242 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix(const ScMatrix& rMat)
 #else
     // Another way is to put the values one column at a time.
     const double* p = &aDoubles[0];
-    for (SCSIZE i = 0; i < nC; ++i)
+    for( SCSIZE i = 0; i < nC; ++i )
     {
-        xInv->PutDouble(p, nR, i, 0);
+        xInv->PutDouble( p, nR, i, 0 );
         p += nR;
     }
 #endif
 
     return xInv;
 }
-
-bool FormulaGroupInterpreterOpenCL::interpret(ScDocument& rDoc, const ScAddress& rTopPos,
-                                              const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode)
+bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress& rTopPos,
+                                        const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode )
 {
-    generateRPNCode(rDoc, rTopPos, rCode);
-
-    size_t rowSize = xGroup->mnLength;
-    fprintf(stderr,"rowSize at begin is ...%ld.\n",(long)rowSize);
+    generateRPNCode( rDoc, rTopPos, rCode );
+    mnRowSize = xGroup->mnLength;
+    fprintf( stderr,"mnRowSize at begin is ...%ld.\n",(long)mnRowSize );
     // The row quantity can be gotten from p2->GetArrayLength()
-    uint nCount1 = 0, nCount2 = 0, nCount3 = 0;
     int nOclOp = 0;
-    double *rResult = NULL; // Point to the output data from GPU
-    rResult = (double *)malloc(sizeof(double) * rowSize*2);// For 2 columns(B,C)
-    if(NULL==rResult)
-    {
-        printf("malloc err\n");
-        return false;
-    }
-    memset(rResult,0,rowSize);
-    float * fpOclSrcData = NULL; // Point to the input data from CPU
-    double * dpOclSrcData = NULL;
-    uint * npOclStartPos = NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
-    uint * npOclEndPos   = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
-    float * fpLeftData   = NULL; // Left input for binary operator(+,-,*,/),for example,(=leftData+rightData)
-    float * fpRightData  = NULL; // Right input for binary operator(+,-,*,/),for example,(=leftData/rightData)
-                                 // The rightData can't be zero for "/"
-    double * dpLeftData = NULL;
-    double * dpRightData = NULL;
-
-    float * fpSaveData=NULL;            //It is a temp pointer point the preparing memory;
-    float * fpSumProMergeLfData = NULL; //It merge the more col to one col is the left operator
-    float * fpSumProMergeRtData = NULL; //It merge the more col to one col is the right operator
-    double * dpSaveData=NULL;
-    double * dpSumProMergeLfData = NULL;
-    double * dpSumProMergeRtData = NULL;
-    uint * npSumSize=NULL;      //It is a array to save the matix sizt(col *row)
-    int nSumproductSize=0;      //It is the merge array size
-    bool aIsAlloc=false;        //It is a flag to judge the fpSumProMergeLfData existed
-    unsigned int nCountMatix=0; //It is a count to save the calculate times
+    const double * dpOclSrcData = NULL;
+    const double * dpBinaryData = NULL;
     static OclCalc ocl_calc;
-    bool isSumProduct=false;
-    if(ocl_calc.GetOpenclState())
-    {
-        // Don't know how large the size will be applied previously, so create them as the rowSize or 65536
-        // Don't know which formulae will be used previously, so create buffers for different formulae used probably
-        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
-        {
-            ocl_calc.CreateBuffer64Bits(dpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
-            ocl_calc.CreateBuffer64Bits(dpLeftData,dpRightData,rowSize);
-        }
-        else
-        {
-            ocl_calc.CreateBuffer32Bits(fpOclSrcData,npOclStartPos,npOclEndPos,rowSize);
-            ocl_calc.CreateBuffer32Bits(fpLeftData,fpRightData,rowSize);
-        }
-        //printf("pptrr is %d,%d,%d\n",fpOclSrcData,npOclStartPos,npOclEndPos);
-    }
-///////////////////////////////////////////////////////////////////////////////////////////
+    unsigned int nSrcDataSize = 0;
 
-    // Until we implement group calculation for real, decompose the group into
-    // individual formula token arrays for individual calculation.
-    ScAddress aTmpPos = rTopPos;
-    for (sal_Int32 i = 0; i < xGroup->mnLength; ++i)
+    const double *dpResult = NULL;
+    double *pResult = (double *)malloc(sizeof(double) * mnRowSize);
+    double *dpSvDouble = NULL;
+    bool isSample = false;
+
+    mnSingleCount = 0;
+    mnDoubleCount = 0;
+    mnSvDoubleCount = 0;
+    mnOperatorCount = 0;
+    mnPositonLen = 0;
+    if ( ocl_calc.getOpenclState() )
     {
-        aTmpPos.SetRow(xGroup->mnStart + i);
-        ScTokenArray aCode2;
-        for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
+        getPosition(rCode,xGroup,mnRowSize,mnpOclStartPos,mnpOclEndPos,&mnPositonLen);
+        const formula::FormulaToken* p = rCode.FirstRPN();
+
+        bool isSingle = false;
+        int nCountNum=0;
+        do
         {
-            switch (p->GetType())
+            if ( ocPush != p->GetOpCode())
             {
-                case formula::svSingleVectorRef:
-                {
-                    const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
-                    const double* pArray = p2->GetArray();
-                    aCode2.AddDouble(static_cast<size_t>(i) < p2->GetArrayLength() ? pArray[i] : 0.0);
-                }
-                break;
-                case formula::svDoubleVectorRef:
-                {
-                    const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    const std::vector<const double*>& rArrays = p2->GetArrays();
-                    size_t nColSize = rArrays.size();
-                    size_t nRowStart = p2->IsStartFixed() ? 0 : i;
-                    size_t nRowEnd = p2->GetRefRowSize() - 1;
-                    if (!p2->IsEndFixed())
-                        nRowEnd += i;
-                    size_t nRowSize = nRowEnd - nRowStart + 1;
-                    //store the a matix`s rowsize and colsize,use it to calculate the matix`s size
-                    ocl_calc.nFormulaRowSize = nRowSize;
-                    ocl_calc.nFormulaColSize = nColSize;
-                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
-                    if(ocl_calc.GetOpenclState())
-                    {
-                        npOclStartPos[i] = nRowStart; // record the start position
-                        npOclEndPos[i]   = nRowEnd;   // record the end position
-                    }
-                    int nTempOpcode;
-                    const formula::FormulaToken* pTemp = p;
-                    pTemp=aCode2.Next();
-                    nTempOpcode=pTemp->GetOpCode();
-                    while(1)
-                    {
-                        nTempOpcode=pTemp->GetOpCode();
-                        if(nTempOpcode!=ocOpen && nTempOpcode!=ocPush)
-                            break;
-                         pTemp=aCode2.Next();
-                    }
-                    if((!aIsAlloc) && (ocl_calc.GetOpenclState())&& (nTempOpcode == ocSumProduct))
-                    {
-                        //nColSize * rowSize is the data size , but except the the head of data will use less the nRowSize
-                        //the other all use nRowSize times . and it must aligen so add nRowSize-1.
-                        nSumproductSize = nRowSize+nColSize * rowSize*nRowSize-1;
-                        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
-                            ocl_calc.CreateBuffer64Bits(dpSumProMergeLfData,dpSumProMergeRtData,npSumSize,nSumproductSize,rowSize);
-                        else
-                            ocl_calc.CreateBuffer32Bits(fpSumProMergeLfData,fpSumProMergeRtData,npSumSize,nSumproductSize,rowSize);
-                        aIsAlloc = true;
-                        isSumProduct=true;
-                    }
-                    if(isSumProduct)
-                    {
-                        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
-                        {
-                            if(nCountMatix%2==0)
-                                dpSaveData = dpSumProMergeLfData;
-                            else
-                                dpSaveData = dpSumProMergeRtData;
-                        }
-                        else
-                        {
-                            if(nCountMatix%2==0)
-                                fpSaveData = fpSumProMergeLfData;
-                            else
-                                fpSaveData = fpSumProMergeRtData;
-                        }
-                    }
-                    for (size_t nCol = 0; nCol < nColSize; ++nCol)
-                    {
-                        const double* pArray = rArrays[nCol];
-                        if( NULL==pArray )
-                        {
-                            fprintf(stderr,"Error: pArray is NULL!\n");
-                            free(rResult);
-                            return false;
-                        }
-                        if(ocl_calc.GetOpenclState())
-                        {
-                            for( size_t u=nRowStart; u<=nRowEnd; u++ )
-                            {
-                                if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
-                                {
-                                    dpOclSrcData[u] = pArray[u];
-                                    //fprintf(stderr,"dpOclSrcData[%d] is %f.\n",u,dpOclSrcData[u]);
-                                    if(isSumProduct)
-                                        dpSaveData[u+nRowSize*nCol + nRowStart* nColSize * nRowSize-nRowStart] = pArray[u];
-                                }
-                                else
-                                {
-                                    // Many video cards can't support double type in kernel, so need transfer the double to float
-                                    fpOclSrcData[u] = (float)pArray[u];
-                                    //fprintf(stderr,"fpOclSrcData[%d] is %f.\n",u,fpOclSrcData[u]);
-                                    if(isSumProduct)
-                                        fpSaveData[u+nRowSize*nCol + nRowStart* nColSize * nRowSize-nRowStart] = (float)pArray[u];
-                                }
-                            }
-                        }
-
-                        for (size_t nRow = 0; nRow < nRowSize; ++nRow)
-                        {
-                            if (nRowStart + nRow < p2->GetArrayLength())
-                            {
-                                double fVal = pArray[nRowStart+nRow];
-                                pMat->PutDouble(fVal, nCol, nRow);
-                            }
-                        }
-                    }
-
-                    ScMatrixToken aTok(pMat);
-                    aCode2.AddToken(aTok);
-                    if(isSumProduct)
-                    {
-                        npSumSize[nCountMatix/2] =nRowSize*nColSize;
-                        nCountMatix++;
-                    }
-                }
-                break;
-                default:
-                    aCode2.AddToken(*p);
+                nOclOp = p->GetOpCode();
+                mnOperatorGroup[mnOperatorCount++] = nOclOp;
             }
-        }
-
-        ScFormulaCell* pDest = rDoc.GetFormulaCell(aTmpPos);
-        if (!pDest)
-        {
-            free(rResult);
-            return false;
-        }
-        if(ocl_calc.GetOpenclState())
-        {
-            const formula::FormulaToken *pCur = aCode2.First();
-            aCode2.Reset();
-            while( ( pCur = aCode2.Next() ) != NULL )
+            else if( ocPush == p->GetOpCode() && formula::svSingleVectorRef == p->GetType() )
             {
-                OpCode eOp = pCur->GetOpCode();
-                if(eOp==0)
+                mnSingleCount++;
+            }
+            if ( ocPush == p->GetOpCode() && formula::svDouble == p->GetType() )
+            {
+                mnSvDoubleCount++;
+            }
+        } while ( NULL != ( p = rCode.NextRPN() ) );
+        if( isGroundWater() )
+        {
+            isSample = true;
+        }
+        mnOperatorCount = 0;
+        mnSingleCount = 0;
+        mnSvDoubleCount = 0;
+        p = rCode.FirstRPN();
+        if(isSample)
+        {
+            do
+            {
+                if ( ocPush == p->GetOpCode() && formula::svDouble == p->GetType() )
                 {
-                    if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
+                    mdpSvdouble[mnSvDoubleCount++] = p->GetDouble();
+                }
+                else if( ocPush == p->GetOpCode() && formula::svDoubleVectorRef == p->GetType())
+                {
+                    const formula::DoubleVectorRefToken* pDvr = static_cast< const formula::DoubleVectorRefToken* >( p );
+                    const std::vector< const double* >& rArrays = pDvr->GetArrays();
+                    uint rArraysSize = rArrays.size();
+                    int nMoreColSize = 0;
+                    DoubleVectorFormula *SvDoubleTemp = new DoubleVectorFormula();
+                    if( rArraysSize > 1 )
                     {
-                        if(nCount3%2==0)
-                            dpLeftData[nCount1++] = pCur->GetDouble();
-                        else
-                            dpRightData[nCount2++] = pCur->GetDouble();
-                        nCount3++;
+                        double *dpMoreColData = NULL;
+                        for ( uint loop=0; loop < rArraysSize; loop++ )
+                        {
+                            dpOclSrcData = rArrays[loop];
+                            nSrcDataSize = pDvr->GetArrayLength();
+                            nMoreColSize += nSrcDataSize;
+                            dpMoreColData = (double *) realloc(dpMoreColData,nMoreColSize * sizeof(double));
+                            for ( uint j = nMoreColSize - nSrcDataSize, i = 0; i < nSrcDataSize; i++, j++ )
+                            {
+                                dpMoreColData[j] = dpOclSrcData[i];
+                            }
+                        }
+                        dpOclSrcData = dpMoreColData;
+                        nSrcDataSize = nMoreColSize;
                     }
                     else
                     {
-                        if(nCount3%2==0)
-                            fpLeftData[nCount1++] = (float)pCur->GetDouble();
-                        else
-                            fpRightData[nCount2++] = (float)pCur->GetDouble();
-                        nCount3++;
+                        dpOclSrcData = rArrays[0];
+                        nSrcDataSize = pDvr->GetArrayLength();
+                        SvDoubleTemp->mdpInputData = dpOclSrcData;
+                        SvDoubleTemp->mnInputDataSize = nSrcDataSize;
+                        SvDoubleTemp->mnInputStartPosition = mnpOclStartPos[nCountNum*mnRowSize];
+                        SvDoubleTemp->mnInputEndPosition = mnpOclEndPos[nCountNum*mnRowSize];
+                        SvDoubleTemp->mnInputStartOffset = mnpOclStartPos[nCountNum*mnRowSize+1]-mnpOclStartPos[nCountNum*mnRowSize];
+                        SvDoubleTemp->mnInputEndOffset = mnpOclEndPos[nCountNum*mnRowSize+1]-mnpOclEndPos[nCountNum*mnRowSize];
+                        mDoubleArray[mnDoubleCount++] = SvDoubleTemp;
+                        nCountNum++;
                     }
                 }
-                else if( eOp!=ocOpen && eOp!=ocClose &&eOp != ocSep)
-                    nOclOp = eOp;
-
-//              if(count1>0){//dbg
-//                  fprintf(stderr,"leftData is %f.\n",fpLeftData[count1-1]);
-//                  count1--;
-//              }
-//              if(count2>0){//dbg
-//                  fprintf(stderr,"rightData is %f.\n",fpRightData[count2-1]);
-//                  count2--;
-//              }
-            }
-        }
-
-        if(!getenv("SC_GPU")||!ocl_calc.GetOpenclState())
-        {
-            //fprintf(stderr,"ccCPU flow...\n\n");
-            generateRPNCode(rDoc, aTmpPos, aCode2);
-            ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
-            aInterpreter.Interpret();
-            pDest->SetResultToken(aInterpreter.GetResultToken().get());
-            pDest->ResetDirty();
-            pDest->SetChanged(true);
-        }
-    } // for loop end (xGroup->mnLength)
-
-    // For GPU calculation
-    if(getenv("SC_GPU")&&ocl_calc.GetOpenclState())
-    {
-        fprintf(stderr,"ggGPU flow...\n\n");
-        printf(" oclOp is... %d\n",nOclOp);
-        osl_getSystemTime(&aTimeBefore); //timer
-        if(ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag==1)
-        {
-            fprintf(stderr,"ggGPU double precision flow...\n\n");
-            //double precision
-            switch(nOclOp)
-            {
-                case ocAdd:
-                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedAdd",dpLeftData,dpRightData,rResult,nCount1);
-                    break;
-                case ocSub:
-                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedSub",dpLeftData,dpRightData,rResult,nCount1);
-                    break;
-                case ocMul:
-                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedMul",dpLeftData,dpRightData,rResult,nCount1);
-                    break;
-                case ocDiv:
-                    ocl_calc.OclHostArithmeticOperator64Bits("oclSignedDiv",dpLeftData,dpRightData,rResult,nCount1);
-                    break;
-                case ocMax:
-                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaMax",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocMin:
-                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaMin",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocAverage:
-                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaAverage",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocSum:
-                    ocl_calc.OclHostFormulaStatistics64Bits("oclFormulaSum",dpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocCount:
-                    ocl_calc.OclHostFormulaCount64Bits(npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocSumProduct:
-                    ocl_calc.OclHostFormulaSumProduct64Bits(dpSumProMergeLfData,dpSumProMergeRtData,npSumSize,rResult,rowSize);
-                    break;
-                default:
-                    fprintf(stderr,"No OpenCL function for this calculation.\n");
-                    break;
-              }
+                else if( ocPush == p->GetOpCode() && formula::svSingleVectorRef == p->GetType() )
+                {
+                    const formula::SingleVectorRefToken* pSvr = static_cast<const formula::SingleVectorRefToken*>( p );
+                    dpBinaryData = pSvr->GetArray();
+                    uint nArrayLen = pSvr->GetArrayLength();
+                    SingleVectorFormula *SignleTemp = new SingleVectorFormula() ;
+                    if(isSingle)
+                    {
+                        SignleTemp = mSingleArray[--mnSingleCount];
+                        SignleTemp->mdpInputRightData = dpBinaryData;
+                        SignleTemp->mnInputRightDataSize = nArrayLen;
+                        SignleTemp->mnInputRightStartPosition = 0;
+                        SignleTemp->mnInputRightOffset = 0;
+                        isSingle = false;
+                    }
+                    else
+                    {
+                        SignleTemp = new SingleVectorFormula();
+                        SignleTemp->mdpInputLeftData = dpBinaryData;
+                        SignleTemp->mnInputLeftDataSize = nArrayLen;
+                        SignleTemp->mdpInputRightData = NULL;
+                        SignleTemp->mnInputRightDataSize = 0;
+                        SignleTemp->mnInputLeftStartPosition = 0;
+                        SignleTemp->mnInputLeftOffset = 0;
+                        isSingle = true;
+                    }
+                    mSingleArray[mnSingleCount++] = SignleTemp;
+                }
+                else
+                {
+                    nOclOp = p->GetOpCode();
+                    mnOperatorGroup[mnOperatorCount++] = nOclOp;
+                }
+            } while ( NULL != ( p = rCode.NextRPN() ) );
+            if ( !chooseFunction( ocl_calc, pResult ) )
+                return false;
+            else
+                dpResult = pResult;
         }
         else
         {
-            fprintf(stderr,"ggGPU float precision flow...\n\n");
-            //float precision
-            switch(nOclOp)
+            agency aChooseAction;
+
+            do
             {
-                case ocAdd:
-                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedAdd",fpLeftData,fpRightData,rResult,nCount1);
-                    break;
-                case ocSub:
-                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedSub",fpLeftData,fpRightData,rResult,nCount1);
-                    break;
-                case ocMul:
-                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedMul",fpLeftData,fpRightData,rResult,nCount1);
-                    break;
-                case ocDiv:
-                    ocl_calc.OclHostArithmeticOperator32Bits("oclSignedDiv",fpLeftData,fpRightData,rResult,nCount1);
-                    break;
-                case ocMax:
-                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaMax",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocMin:
-                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaMin",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocAverage:
-                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaAverage",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocSum:
-                    ocl_calc.OclHostFormulaStatistics32Bits("oclFormulaSum",fpOclSrcData,npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocCount:
-                    ocl_calc.OclHostFormulaCount32Bits(npOclStartPos,npOclEndPos,rResult,rowSize);
-                    break;
-                case ocSumProduct:
-                    ocl_calc.OclHostFormulaSumProduct32Bits(fpSumProMergeLfData,fpSumProMergeRtData,npSumSize,rResult,rowSize);
-                    break;
-                default:
-                    fprintf(stderr,"No OpenCL function for this calculation.\n");
-                    break;
-              }
+                if ( ocPush == p->GetOpCode() && formula::svDouble == p->GetType() )
+                {
+                    dpSvDouble = (double *) malloc( sizeof(double ) * mnRowSize );
+                    double dTempValue = p->GetDouble();
+                    for ( uint i = 0; i < mnRowSize; i++ )
+                        dpSvDouble[i] = dTempValue;
+                    srdDataPush( new SourceData( dpSvDouble, mnRowSize ) );
+                    collectDoublePointers( dpSvDouble );
+                }
+                else if( ocPush == p->GetOpCode() && formula::svDoubleVectorRef == p->GetType())
+                {
+                    const formula::DoubleVectorRefToken* pDvr = static_cast< const formula::DoubleVectorRefToken* >( p );
+                    const std::vector< const double* >& rArrays = pDvr->GetArrays();
+                    unsigned int rArraysSize = rArrays.size();
+                    int nMoreColSize = 0;
+                    if(rArraysSize > 1)
+                    {
+                        double *dpMoreColData = NULL;
+                        for( uint loop=0; loop < rArraysSize; loop++ )
+                        {
+                            dpOclSrcData = rArrays[loop];
+                            nSrcDataSize = pDvr->GetArrayLength();
+                            nMoreColSize += nSrcDataSize;
+                            dpMoreColData = (double *) realloc(dpMoreColData,nMoreColSize * sizeof(double));
+                            for(uint j=nMoreColSize-nSrcDataSize,i=0;i<nSrcDataSize;i++,j++)
+                            {
+                                dpMoreColData[j] = dpOclSrcData[i];
+                            }
+                        }
+                        dpOclSrcData = dpMoreColData;
+                        nSrcDataSize = nMoreColSize;
+                        collectDoublePointers( dpMoreColData );
+                    }
+                    else
+                    {
+                        dpOclSrcData = rArrays[0];
+                        nSrcDataSize = pDvr->GetArrayLength();
+                    }
+                    srdDataPush( new SourceData( dpOclSrcData,nSrcDataSize,rArraysSize ) );
+                }
+                else if( ocPush == p->GetOpCode() && formula::svSingleVectorRef == p->GetType() )
+                {
+                    const formula::SingleVectorRefToken* pSvr = static_cast<const formula::SingleVectorRefToken*>( p );
+                    dpBinaryData = pSvr->GetArray();
+                    nSrcDataSize = pSvr->GetArrayLength();
+                    srdDataPush( new SourceData( dpBinaryData, nSrcDataSize ) );
+                }
+                else
+                {
+                    nOclOp = p->GetOpCode();
+                    aChooseAction.calculate(nOclOp,mnRowSize,ocl_calc,mnpOclStartPos,mnpOclEndPos,this);
+                    mnSingleCount = 0;
+                    mnDoubleCount = 0;
+                    mnSvDoubleCount = 0;
+                    mnOperatorCount = 0;
+                    mnPositonLen = 0;
+                }
+            } while ( NULL != ( p = rCode.NextRPN() ) );
+            SourceData * sResult = srdDataPop();
+            dpResult = sResult->getDouleData();
         }
-
-        /////////////////////////////////////////////////////
-        osl_getSystemTime(&aTimeAfter);
-        double diff = getTimeDiff(aTimeAfter, aTimeBefore);
-        //if (diff >= 1.0)
+        rDoc.SetFormulaResults( rTopPos, dpResult, mnRowSize );
+        freeDoublePointers();
+        if ( pResult )
         {
-            fprintf(stderr,"OpenCL,diff...%f.\n",diff);
+            free( pResult );
+            pResult = NULL;
         }
-/////////////////////////////////////////////////////
-
-//rResult[i];
-//           for(sal_Int32 i = 0; i < rowSize; ++i){//dbg output results
-//               fprintf(stderr,"After GPU,rRsults[%d] is ...%f\n",i,rResult[i]);
-//           }
-
-        // Insert the double data, in rResult[i] back into the document
-        rDoc.SetFormulaResults(rTopPos, rResult, xGroup->mnLength);
-    }
-
-    free(rResult);
-
-    return true;
+        if ( mnpOclStartPos )
+        {
+            free( mnpOclStartPos );
+            mnpOclStartPos = NULL;
+        }
+        if ( mnpOclEndPos )
+        {
+            free( mnpOclEndPos );
+            mnpOclEndPos = NULL;
+        }
+        return true;
+    } // getOpenclState() End
+    else
+        return false;
 }
 
 /// Special case of formula compiler for groundwatering
@@ -489,11 +964,11 @@ public:
         FormulaGroupInterpreterSoftware()
     {
         fprintf(stderr,"\n\n ***** Groundwater Backend *****\n\n\n");
-        OclCalc::InitEnv();
+        OclCalc::initEnv();
     }
     virtual ~FormulaGroupInterpreterGroundwater()
     {
-        OclCalc::ReleaseOpenclRunEnv();
+        OclCalc::releaseOpenclRunEnv();
     }
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& /* rMat */) { return ScMatrixRef(); }
@@ -569,7 +1044,7 @@ bool FormulaGroupInterpreterGroundwater::interpretCL(ScDocument& rDoc, const ScA
 
     fprintf (stderr, "Calculate !");
 
-    double *pResult = ocl_calc.OclSimpleDeltaOperation( eOp, pGroundWaterDataArray,
+    double *pResult = ocl_calc.oclSimpleDeltaOperation( eOp, pGroundWaterDataArray,
                                                         pArrayToSubtractOneElementFrom,
                                                         (size_t) xGroup->mnLength, delta );
     RETURN_IF_FAIL(pResult != NULL, "buffer alloc / calculaton failed");
