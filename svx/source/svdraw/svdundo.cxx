@@ -203,34 +203,32 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 {
 }
 
-void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, bool bRepeat )
+OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, bool bRepeat )
 {
-    rStr = ImpGetResStr(nStrCacheID);
+    OUString rStr = ImpGetResStr(nStrCacheID);
 
-    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
+    sal_Int32 nPos = rStr.indexOf("%1");
 
-    xub_StrLen nPos = rStr.Search(aSearchString);
-
-    if(nPos != STRING_NOTFOUND)
+    if(nPos != -1)
     {
-        rStr.Erase(nPos, 2);
-
         if(bRepeat)
         {
-            rStr.Insert(ImpGetResStr(STR_ObjNameSingulPlural), nPos);
+            rStr = rStr.replaceAt(nPos, 2, ImpGetResStr(STR_ObjNameSingulPlural));
         }
         else
         {
             OUString aStr(_rForObject.TakeObjNameSingul());
-            rStr.Insert(aStr, nPos);
+            rStr = rStr.replaceAt(nPos, 2, aStr);
         }
     }
+
+    return rStr;
 }
 
-void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, bool bRepeat) const
+void SdrUndoObj::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, bool bRepeat) const
 {
     if ( pObj )
-        GetDescriptionStringForObject( *pObj, nStrCacheID, rStr, bRepeat );
+        rStr = GetDescriptionStringForObject( *pObj, nStrCacheID, bRepeat );
 }
 
 // common call method for possible change of the page when UNDO/REDO is triggered
@@ -510,7 +508,7 @@ void SdrUndoAttrObj::Redo()
 
 OUString SdrUndoAttrObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
 
     if(bStyleSheet)
     {
@@ -539,7 +537,7 @@ bool SdrUndoAttrObj::CanSdrRepeat(SdrView& rView) const
 
 OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
 
     if(bStyleSheet)
     {
@@ -575,7 +573,7 @@ void SdrUndoMoveObj::Redo()
 
 OUString SdrUndoMoveObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_EditMove,aStr);
     return aStr;
 }
@@ -592,7 +590,7 @@ bool SdrUndoMoveObj::CanSdrRepeat(SdrView& rView) const
 
 OUString SdrUndoMoveObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_EditMove,aStr,sal_True);
     return aStr;
 }
@@ -672,7 +670,7 @@ void SdrUndoGeoObj::Redo()
 
 OUString SdrUndoGeoObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_DragMethObjOwn,aStr);
     return aStr;
 }
@@ -905,7 +903,7 @@ void SdrUndoDelObj::Redo()
 
 OUString SdrUndoDelObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_EditDelete,aStr);
     return aStr;
 }
@@ -922,7 +920,7 @@ bool SdrUndoDelObj::CanSdrRepeat(SdrView& rView) const
 
 OUString SdrUndoDelObj::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_EditDelete,aStr,sal_True);
     return aStr;
 }
@@ -945,14 +943,12 @@ void SdrUndoNewObj::Redo()
 
 OUString SdrUndoNewObj::GetComment( const SdrObject& _rForObject )
 {
-    String sComment;
-    GetDescriptionStringForObject( _rForObject, STR_UndoInsertObj, sComment );
-    return sComment;
+    return GetDescriptionStringForObject( _rForObject, STR_UndoInsertObj );
 }
 
 OUString SdrUndoNewObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoInsertObj,aStr);
     return aStr;
 }
@@ -1053,7 +1049,7 @@ void SdrUndoReplaceObj::SetOldOwner(bool bNew)
 
 OUString SdrUndoCopyObj::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoCopyObj,aStr);
     return aStr;
 }
@@ -1119,7 +1115,7 @@ void SdrUndoObjOrdNum::Redo()
 
 OUString SdrUndoObjOrdNum::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoObjOrdNum,aStr);
     return aStr;
 }
@@ -1207,14 +1203,14 @@ void SdrUndoObjSetText::Redo()
 
 OUString SdrUndoObjSetText::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
     return aStr;
 }
 
 OUString SdrUndoObjSetText::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
     return aStr;
 }
@@ -1228,7 +1224,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
         const bool bUndo = rView.IsUndoEnabled();
         if( bUndo )
         {
-            XubString aStr;
+            OUString aStr;
             ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
             rView.BegUndo(aStr);
         }
@@ -1267,8 +1263,8 @@ bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
 // Undo/Redo for setting object's name (#i73249#)
 SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
                                       const ObjStrAttrType eObjStrAttr,
-                                      const String& sOldStr,
-                                      const String& sNewStr)
+                                      const OUString& sOldStr,
+                                      const OUString& sNewStr)
     : SdrUndoObj( rNewObj )
     , meObjStrAttr( eObjStrAttr )
     , msOldStr( sOldStr )
@@ -1314,15 +1310,15 @@ void SdrUndoObjStrAttr::Redo()
 
 OUString SdrUndoObjStrAttr::GetComment() const
 {
-    String aStr;
+    OUString aStr;
     switch ( meObjStrAttr )
     {
     case OBJ_NAME:
         ImpTakeDescriptionStr( STR_UndoObjName, aStr );
-        aStr += sal_Unicode(' ');
-        aStr += sal_Unicode('\'');
+        aStr += " ";
+        aStr += "\'";
         aStr += msNewStr;
-        aStr += sal_Unicode('\'');
+        aStr += "\'";
         break;
     case OBJ_TITLE:
         ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
@@ -1488,9 +1484,9 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 /*n*/, bool /*bRepeat*/) const
+void SdrUndoPage::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 /*n*/, bool /*bRepeat*/) const
 {
-    rStr=ImpGetResStr(nStrCacheID);
+    rStr = ImpGetResStr(nStrCacheID);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1572,14 +1568,14 @@ void SdrUndoDelPage::Redo()
 
 OUString SdrUndoDelPage::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0,sal_False);
     return aStr;
 }
 
 OUString SdrUndoDelPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0,sal_False);
     return aStr;
 }
@@ -1611,7 +1607,7 @@ void SdrUndoNewPage::Redo()
 
 OUString SdrUndoNewPage::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoNewPage,aStr,0,sal_False);
     return aStr;
 }
@@ -1620,14 +1616,14 @@ OUString SdrUndoNewPage::GetComment() const
 
 OUString SdrUndoCopyPage::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0,sal_False);
     return aStr;
 }
 
 OUString SdrUndoCopyPage::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0,sal_False);
     return aStr;
 }
@@ -1656,7 +1652,7 @@ void SdrUndoSetPageNum::Redo()
 
 OUString SdrUndoSetPageNum::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0,sal_False);
     return aStr;
 }
@@ -1700,7 +1696,7 @@ void SdrUndoPageRemoveMasterPage::Redo()
 
 OUString SdrUndoPageRemoveMasterPage::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr,0,sal_False);
     return aStr;
 }
@@ -1745,7 +1741,7 @@ void SdrUndoPageChangeMasterPage::Redo()
 
 OUString SdrUndoPageChangeMasterPage::GetComment() const
 {
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr,0,sal_False);
     return aStr;
 }
@@ -1820,8 +1816,8 @@ SdrUndoAction* SdrUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_
 
 SdrUndoAction* SdrUndoFactory::CreateUndoObjectStrAttr( SdrObject& rObject,
                                                         SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
-                                                        String sOldStr,
-                                                        String sNewStr )
+                                                        const OUString& sOldStr,
+                                                        const OUString& sNewStr )
 {
     return new SdrUndoObjStrAttr( rObject, eObjStrAttrType, sOldStr, sNewStr );
 }

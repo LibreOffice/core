@@ -122,9 +122,9 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, bool bRepeat = false) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, bool bRepeat = false) const;
 
-    static void GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, String& rStr, bool bRepeat = false );
+    static SAL_WARN_UNUSED_RESULT OUString GetDescriptionStringForObject( const SdrObject& _rForObject, sal_uInt16 nStrCacheID, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();
@@ -448,14 +448,14 @@ public:
 
 protected:
     const ObjStrAttrType meObjStrAttr;
-    const String msOldStr;
-    const String msNewStr;
+    const OUString msOldStr;
+    const OUString msNewStr;
 
 public:
     SdrUndoObjStrAttr( SdrObject& rNewObj,
                        const ObjStrAttrType eObjStrAttr,
-                       const String& sOldStr,
-                       const String& sNewStr);
+                       const OUString& sOldStr,
+                       const OUString& sNewStr);
 
     virtual void Undo();
     virtual void Redo();
@@ -560,7 +560,7 @@ protected:
 protected:
     SdrUndoPage(SdrPage& rNewPg);
 
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 n=0, bool bRepeat = false) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 n=0, bool bRepeat = false) const;
 };
 
 /**
@@ -752,8 +752,8 @@ public:
     // Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
     virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
-                                                    String sOldStr,
-                                                    String sNewStr );
+                                                    const OUString& sOldStr,
+                                                    const OUString& sNewStr );
 
     // Layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
