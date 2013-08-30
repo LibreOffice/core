@@ -846,9 +846,10 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         // Locale.
         sal_Int32 nIndex = 0;
         aLowerLang = rLocale.Variant.getToken( 0, '-', nIndex).toAsciiLowerCase();
-        // Cater for "x-..."
-        if (aLowerLang.getLength() == 1 && aLowerLang[0] == 'x' && nIndex > 0)
-            aLowerLang += "-" + rLocale.Variant.getToken( 0, '-', nIndex).toAsciiLowerCase();
+        // Nothing with "x-..." or "i-..." or any 1 letter in lll-CC table that
+        // follows.
+        if (aLowerLang.getLength() == 1)
+            return aLastResortFallbackEntry.getLocale();
     }
 
     // Search for locale and remember first lang-only.
