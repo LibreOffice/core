@@ -136,7 +136,6 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
     }
     else if (fetchStat == 100L) // END OF DATASET
     {
-        // TODO: shut the statement
         m_bIsAfterLastRow = true;
         return sal_False;
     }
@@ -151,12 +150,16 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException)
 
 sal_Bool SAL_CALL OResultSet::previous() throw(SQLException, RuntimeException)
 {
-    throw SQLException("Firebird doesn't support previous()", *this, OUString(), 0, Any());
+    ::dbtools::throwFunctionNotSupportedException("previous not supported in firebird",
+                                                  *this);
+    return sal_False;
 }
 
 sal_Bool SAL_CALL OResultSet::isLast() throw(SQLException, RuntimeException)
 {
-    throw SQLException("Firebird doesn't support isLast()", *this, OUString(), 0, Any());
+    ::dbtools::throwFunctionNotSupportedException("isLast not supported in firebird",
+                                                  *this);
+    return sal_False;
 }
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst() throw(SQLException, RuntimeException)
@@ -183,23 +186,24 @@ sal_Bool SAL_CALL OResultSet::isFirst() throw(SQLException, RuntimeException)
     return m_currentRow == 1 && !m_bIsAfterLastRow;
 }
 
-// Move to front
 void SAL_CALL OResultSet::beforeFirst() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if (m_currentRow != 0)
-        throw SQLException("Firebird doesn't support beforeFirst()", *this, OUString(), 0, Any());
+        ::dbtools::throwFunctionNotSupportedException("beforeFirst not supported in firebird",
+                                                      *this);
 }
-// Move to back
+
 void SAL_CALL OResultSet::afterLast() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if (!m_bIsAfterLastRow)
-        throw SQLException("Firebird doesn't support afterLast()", *this, OUString(), 0, Any());
+        ::dbtools::throwFunctionNotSupportedException("afterLast not supported in firebird",
+                                                      *this);
 }
 
 sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
@@ -213,19 +217,23 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
     }
     else if (m_currentRow == 1 && !m_bIsAfterLastRow)
     {
-        return true;
+        return sal_True;
     }
     else
     {
-           throw SQLException("Firebird doesn't support first()", *this, OUString(), 0, Any());
+        ::dbtools::throwFunctionNotSupportedException("first not supported in firebird",
+                                                      *this);
+        return sal_False;
     }
 }
 
 sal_Bool SAL_CALL OResultSet::last() throw(SQLException, RuntimeException)
 {
     // We need to iterate past the last row to know when we've passed the last
-    // row, so we can't actually move to last.
-        throw SQLException("Firebird doesn't support last()", *this, OUString(), 0, Any());
+    // row, hence we can't actually move to last.
+    ::dbtools::throwFunctionNotSupportedException("last not supported in firebird",
+                                                  *this);
+    return sal_False;
 }
 
 sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, RuntimeException)
@@ -240,8 +248,9 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, Runti
     }
     else
     {
-        throw SQLException("Firebird doesn't support retrieval of rows before the current row",
-                            *this, OUString(), 0, Any());
+        ::dbtools::throwFunctionNotSupportedException("absolute not supported in firebird",
+                                                      *this);
+        return sal_False;
     }
 }
 
@@ -261,8 +270,9 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, Runtim
     }
     else
     {
-        throw SQLException("Firebird doesn't support relative() for a negative offset",
-                           *this, OUString(), 0, Any());
+        ::dbtools::throwFunctionNotSupportedException("relative not supported in firebird",
+                                                      *this);
+        return sal_False;
     }
 }
 
@@ -419,7 +429,17 @@ T OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
 
     return retrieveValue< T >(columnIndex);
 }
-// ---- Simple Numerical types -----------------------------------------------
+
+// ---- XRow -----------------------------------------------------------------
+sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_pConnection->getMutex());
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+    return m_bWasNull;
+}
+
+// ---- XRow: Simple Numerical types ------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
@@ -475,7 +495,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
 //     return safelyRetrieveValue(columnIndex);
 }
 
-// ---- More complex types ---------------------------------------------------
+// ---- XRow: More complex types ----------------------------------------------
 OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
@@ -608,44 +628,31 @@ uno::Reference< XInterface > SAL_CALL OResultSet::getStatement()
 
     return m_xStatement;
 }
-// -------------------------------------------------------------------------
-
-sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
+//----- XResultSet: unsupported change detection methods ---------------------
+sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFunctionNotSupportedException("rowDeleted not supported in firebird",
+                                                  *this);
     return sal_False;
 }
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSet::rowInserted() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
-{
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
+    ::dbtools::throwFunctionNotSupportedException("rowInserted not supported in firebird",
+                                                  *this);
     return sal_False;
 }
 
-// -------------------------------------------------------------------------
-
-sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSet::rowUpdated() throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ::dbtools::throwFunctionNotSupportedException("rowUpdated not supported in firebird",
+                                                  *this);
+    return sal_False;
+}
 
-
-    return m_bWasNull;
+void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFunctionNotSupportedException("refreshRow not supported in firebird",
+                                                  *this);
 }
 // -------------------------------------------------------------------------
 
@@ -655,21 +662,19 @@ void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
+
+//----- XWarningsSupplier UNSUPPORTED -----------------------------------------
+void SAL_CALL OResultSet::clearWarnings() throw(SQLException, RuntimeException)
 {
-}
-// -------------------------------------------------------------------------
-Any SAL_CALL OResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
-{
-    return Any();
+    ::dbtools::throwFunctionNotSupportedException("clearWarnings not supported in firebird",
+                                                  *this);
 }
 
-void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException)
+Any SAL_CALL OResultSet::getWarnings() throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException("refreshRow not supported in firebird",
-                                                  *this,
-                                                  Any());
+    ::dbtools::throwFunctionNotSupportedException("getWarnings not supported in firebird",
+                                                  *this);
+    return Any();
 }
 
 //----- OIdPropertyArrayUsageHelper ------------------------------------------
@@ -699,7 +704,6 @@ uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet:
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
 
 // ---- XServiceInfo -----------------------------------------------------------
 OUString SAL_CALL OResultSet::getImplementationName() throw ( RuntimeException)
