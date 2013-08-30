@@ -979,16 +979,6 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
         }
     }
 
-    // there exist files with own data without a categories element but with row
-    // descriptions.  The row descriptions were used as categories even without
-    // the categories element
-    if( ! bCategoriesApplied )
-    {
-        SchXMLTools::CreateCategories(
-            xDataProv, xChartDoc, OUString("categories"),
-            0 /* nCooSysIndex */, 0 /* nDimension */ );
-    }
-
     //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
     //remove series that consist only of hidden columns
     Reference< chart2::XInternalDataProvider > xInternalDataProvider( xDataProv, uno::UNO_QUERY );
