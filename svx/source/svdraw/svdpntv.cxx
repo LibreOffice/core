@@ -529,7 +529,7 @@ bool SdrPaintView::IsLayerVisible(const OUString& rName) const
     return false;
 }
 
-void SdrPaintView::SetLayerLocked(const XubString& rName, sal_Bool bLock)
+void SdrPaintView::SetLayerLocked(const OUString& rName, sal_Bool bLock)
 {
     if(mpPageView)
     {
@@ -537,7 +537,7 @@ void SdrPaintView::SetLayerLocked(const XubString& rName, sal_Bool bLock)
     }
 }
 
-bool SdrPaintView::IsLayerLocked(const XubString& rName) const
+bool SdrPaintView::IsLayerLocked(const OUString& rName) const
 {
     if(mpPageView)
     {
@@ -547,7 +547,7 @@ bool SdrPaintView::IsLayerLocked(const XubString& rName) const
     return false;
 }
 
-void SdrPaintView::SetLayerPrintable(const XubString& rName, sal_Bool bPrn)
+void SdrPaintView::SetLayerPrintable(const OUString& rName, sal_Bool bPrn)
 {
     if(mpPageView)
     {
@@ -555,7 +555,7 @@ void SdrPaintView::SetLayerPrintable(const XubString& rName, sal_Bool bPrn)
     }
 }
 
-bool SdrPaintView::IsLayerPrintable(const XubString& rName) const
+bool SdrPaintView::IsLayerPrintable(const OUString& rName) const
 {
     if(mpPageView)
     {

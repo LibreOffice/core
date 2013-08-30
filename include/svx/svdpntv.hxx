@@ -139,8 +139,8 @@ protected:
     OutputDevice*               pDragWin;
     SfxStyleSheet*              pDefaultStyleSheet;
 
-    String                      aAktLayer;     // Aktueller Zeichenlayer
-    String                      aMeasureLayer; // Aktueller Layer fuer Bemassung
+    OUString                    aAktLayer;     // Aktueller Zeichenlayer
+    OUString                    aMeasureLayer; // Aktueller Layer fuer Bemassung
 
 //  Container                   aPagV;         // Liste von SdrPageViews
 
@@ -356,11 +356,11 @@ public:
     void SetLayerVisible(const OUString& rName, bool bShow=true);
     bool IsLayerVisible(const OUString& rName) const;
 
-    void SetLayerLocked(const String& rName, sal_Bool bLock=sal_True);
-    bool IsLayerLocked(const String& rName) const;
+    void SetLayerLocked(const OUString& rName, sal_Bool bLock=sal_True);
+    bool IsLayerLocked(const OUString& rName) const;
 
-    void SetLayerPrintable(const String& rName, sal_Bool bPrn=sal_True);
-    bool IsLayerPrintable(const String& rName) const;
+    void SetLayerPrintable(const OUString& rName, sal_Bool bPrn=sal_True);
+    bool IsLayerPrintable(const OUString& rName) const;
 
     // PrePaint call forwarded from app windows
     void PrePaint();
@@ -444,8 +444,8 @@ public:
     virtual void InvalidateOneWin(Window& rWin);
     virtual void InvalidateOneWin(Window& rWin, const Rectangle& rRect);
 
-    void SetActiveLayer(const String& rName) { aAktLayer=rName; }
-    const String&  GetActiveLayer() const { return aAktLayer; }
+    void SetActiveLayer(const OUString& rName) { aAktLayer=rName; }
+    const OUString&  GetActiveLayer() const { return aAktLayer; }
 
     // Verlassen einer betretenen Objektgruppe aller sichtbaren Seiten.
     // (wie MsDos chdir ..)

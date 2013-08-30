@@ -407,7 +407,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
     { // otherwise no side registered!
         String aLay(aAktLayer);
 
-        if(nInvent == SdrInventor && nIdent == OBJ_MEASURE && aMeasureLayer.Len())
+        if(nInvent == SdrInventor && nIdent == OBJ_MEASURE && !aMeasureLayer.isEmpty())
         {
             aLay = aMeasureLayer;
         }

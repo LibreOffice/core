@@ -84,10 +84,8 @@ public:
 
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
 
-    void SetActiveLayer(const String& rName) { aAktLayer=rName; }
-    const String& GetActiveLayer() const { return aAktLayer; }
-    void SetMeasureLayer(const String& rName) { aMeasureLayer=rName; }
-    const String& GetMeasureLayer() const { return aMeasureLayer; }
+    void SetMeasureLayer(const OUString& rName) { aMeasureLayer=rName; }
+    const OUString& GetMeasureLayer() const { return aMeasureLayer; }
 
     // If the MeasureLayer is not set (empty string), then use the active layer for measuring.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }
