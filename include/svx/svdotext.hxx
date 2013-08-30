@@ -474,7 +474,7 @@ public:
     virtual void ReformatText();
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
-        bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
+        bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, OUString& rRet) const;
 
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 

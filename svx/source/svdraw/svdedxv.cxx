@@ -475,8 +475,8 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
 IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
 {
     bool bOk=false;
-    String& rStr=pFI->GetRepresentation();
-    rStr.Erase();
+    OUString& rStr=pFI->GetRepresentation();
+    rStr = "";
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
     if (pTextObj!=NULL) {
         Color* pTxtCol=NULL;
@@ -499,7 +499,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
     Link aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet()) {
         aDrawOutlLink.Call(pFI);
-        bOk = (sal_Bool)rStr.Len();
+        bOk = !rStr.isEmpty();
     }
     if (!bOk && aOldCalcFieldValueLink.IsSet()) {
         return aOldCalcFieldValueLink.Call(pFI);

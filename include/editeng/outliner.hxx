@@ -505,7 +505,7 @@ private:
     Color*              pTxtColor;
     Color*              pFldColor;
 
-    String              aRepresentation;
+    OUString            aRepresentation;
 
     sal_Int32           nPara;
     xub_StrLen          nPos;
@@ -551,9 +551,9 @@ public:
     sal_Bool            IsSimpleClick() const { return bSimpleClick; }
     void            SetSimpleClick( sal_Bool bSimple ) { bSimpleClick = bSimple; }
 
-    const String&       GetRepresentation() const                { return aRepresentation; }
-    String&             GetRepresentation()                      { return aRepresentation; }
-    void                SetRepresentation( const String& rStr )  { aRepresentation = rStr; }
+    const OUString&     GetRepresentation() const                { return aRepresentation; }
+    OUString&           GetRepresentation()                      { return aRepresentation; }
+    void                SetRepresentation( const OUString& rStr ){ aRepresentation = rStr; }
 
     void            SetSdrPage( SdrPage* pPage ) { mpSdrPage = pPage; }
     SdrPage*        GetSdrPage() const { return mpSdrPage; }

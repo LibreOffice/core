@@ -145,7 +145,7 @@ public:
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
-        bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
+        bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, OUString& rRet) const;
 
     // #i97878#
     virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
