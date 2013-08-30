@@ -2973,7 +2973,8 @@ dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
 
-reg_get_value()
+# Get a value from the 32-bit side of the Registry
+reg_get_value_32()
 {
     # Return value: $regvalue
     unset regvalue
@@ -2984,6 +2985,17 @@ reg_get_value()
     fi
 }
 
+# Get a value from the 64-bit side of the Registry
+reg_get_value_64()
+{
+    # Return value: $regvalue
+    unset regvalue
+    _regvalue=`cat "/proc/registry64/$1" 2> /dev/null`
+
+    if test $? -eq 0; then
+        regvalue=$_regvalue
+    fi
+}
 
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
@@ -3250,12 +3262,12 @@ find_msvs()
     vs_versions_to_check "$1"
 
     for ver in $vsversions; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
         if test -n "$regvalue"; then
             vstest=$regvalue
             break
         fi
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
         if test -n "$regvalue"; then
             vstest=$regvalue
             break
@@ -3274,12 +3286,12 @@ find_msvc()
     vs_versions_to_check "$1"
 
     for ver in $vsversions; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
             break
         fi
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
             break
@@ -4999,7 +5011,7 @@ find_csc()
 
     unset csctest
 
-    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
     if test -n "$regvalue"; then
         csctest=$regvalue
         return
@@ -5013,7 +5025,7 @@ find_al()
     unset altest
 
     for x in `ls /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
             return
@@ -5028,7 +5040,7 @@ find_dotnetsdk()
     unset frametest
 
     for ver in 1.1 2.0; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
         if test -n "$regvalue"; then
             frametest=$regvalue
             return
@@ -5046,14 +5058,14 @@ find_winsdk_version()
     # Why we look for them in this particular order I don't know. But OTOH I
     case "$1" in
     6.0*|7.*)
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             return
         fi
         ;;
     8.*)
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             return
@@ -5086,7 +5098,7 @@ find_winsdk()
 find_msms()
 {
     for ver in 10.0 11.0; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
                 msmdir=$regvalue
@@ -6519,17 +6531,14 @@ if test "$ENABLE_JAVA" != ""; then
     # Windows-specific tests
     if test "$build_os" = "cygwin"; then
         if test "$BITNESS_OVERRIDE" = 64; then
-            bitness="64-bit"
-            otherbitness="32-bit"
+            bitness=64
         else
-            bitness="32-bit"
-            otherbitness="64-bit"
+            bitness=32
         fi
 
         if test -z "$with_jdk_home"; then
-            # Currently only auto-detects 32-bit JDK
             for ver in 1.7 1.6; do
-               reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
+               reg_get_value_$bitness "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Development Kit/$ver/JavaHome"
                if test -n "$regvalue"; then
                    _jdk_home=$regvalue
                    break
@@ -6539,7 +6548,7 @@ if test "$ENABLE_JAVA" != ""; then
                 with_jdk_home="$_jdk_home"
                 howfound="found automatically"
             else
-                AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $bitness JDK])
+                AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $bitness-bit JDK])
             fi
         else
             test "$build_os" = "cygwin" && with_jdk_home=`cygpath -u "$with_jdk_home"`
