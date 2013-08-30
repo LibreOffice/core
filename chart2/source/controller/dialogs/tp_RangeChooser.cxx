@@ -324,7 +324,7 @@ bool RangeChooserTabPage::isValid()
         m_aRB_Columns.Enable( bIsValid );
         m_aCB_FirstRowAsLabel.Enable( bIsValid );
         m_aCB_FirstColumnAsLabel.Enable( bIsValid );
-}
+    }
     sal_Bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
     lcl_ShowChooserButton( m_aIB_Range, m_aED_Range, bShowIB );
 
