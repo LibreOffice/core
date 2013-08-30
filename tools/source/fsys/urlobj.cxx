@@ -1732,7 +1732,11 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             // Detect cases where a relative input could not be made absolute
             // because the given base URL is broken (most probably because it is
             // empty):
-            OSL_ASSERT(!HasError());
+            SAL_WARN_IF(
+                HasError(), "tools.urlobj",
+                "cannot make <" << rTheRelURIRef
+                    << "> absolute against broken base <"
+                    << GetMainURL(NO_DECODE) << ">");
             rWasAbsolute = false;
             return false;
         }
@@ -1859,7 +1863,11 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         // Detect cases where a relative input could not be made absolute
         // because the given base URL is broken (most probably because it is
         // empty):
-        OSL_ASSERT(!HasError());
+        SAL_WARN_IF(
+            HasError(), "tools.urlobj",
+            "cannot make <" << rTheRelURIRef
+                << "> absolute against broken base <" << GetMainURL(NO_DECODE)
+                << ">");
         rWasAbsolute = false;
         return false;
     }

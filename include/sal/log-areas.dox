@@ -272,6 +272,7 @@ certain functionality.
 @li @c tools.memtools
 @li @c tools.rc - resource manager
 @li @c tools.stream - SvStream class
+@li @c tools.urlobj - INetURLObject class
 
 @section ucb
 
