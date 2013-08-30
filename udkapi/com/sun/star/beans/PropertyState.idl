@@ -42,7 +42,7 @@ published enum PropertyState
     /** The value of the property is stored in the PropertySet itself.
 
         <p>The property value must be available and of the specified type.
-        If the #PropertyAttribute field in the struct
+        If the PropertyAttribute field in the struct
         Property contains PropertyAttribute::MAYBEVOID,
         then the value may be void. </p>
      */
@@ -51,11 +51,11 @@ published enum PropertyState
 
     /** The value of the property is available from a master (e.g., template).
 
-        <p>The #PropertyAttribute field in the struct
+        <p>The PropertyAttribute field in the struct
         Property must contain the
         PropertyAttribute::MAYBEDEFAULT flag. The property
         value must be available and of the specified type. If the
-        #PropertyAttribute field in the struct Property
+        PropertyAttribute field in the struct Property
         contains PropertyAttribute::MAYBEVOID, then the
         value may be void. </p>
      */
@@ -65,7 +65,7 @@ published enum PropertyState
     /** The value of the property is only a recommendation because there
         are multiple values for this property (e.g., from a multi selection).
 
-        <p>The #PropertyAttribute field in the struct
+        <p>The PropertyAttribute field in the struct
         Property must contain the
         PropertyAttribute::MAYBEAMBIGUOUS flag. The
         property value must be available and of the specified type.
