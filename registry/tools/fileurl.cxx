@@ -40,7 +40,7 @@ namespace registry
 namespace tools
 {
 
-OUString convertToFileUrl(char const * filename, size_t length)
+OUString convertToFileUrl(char const * filename, sal_Int32 length)
 {
     OUString const uFileName(filename, length, osl_getThreadTextEncoding());
     if (strncmp(filename, "file://", 7) == 0)
