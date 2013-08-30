@@ -26,6 +26,21 @@ class CuiAboutConfigTabPage;
 class CuiAboutConfigValueDialog;
 struct Prop_Impl;
 
+class CuiCustomMultilineEdit : public Edit
+{
+private:
+    bool bNumericOnly;
+public:
+    CuiCustomMultilineEdit( Window* pParent, WinBits nStyle )
+        : Edit( pParent, nStyle )
+        , bNumericOnly(false)
+    {}
+
+    virtual void KeyInput( const KeyEvent& rKeyEvent );
+    //virtual void Modify();
+    void setBehaviour( bool bNumeric, int nLengthLimit);
+};
+
 class CuiAboutConfigTabPage : public SfxTabPage
 {
 private:
@@ -33,13 +48,11 @@ private:
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
-    //std::vector< com::sun::star::beans::NamedValue > VectorOfModified;
     std::vector< Prop_Impl* > VectorOfModified;
 
     ::svx::OptHeaderTabListBox* pPrefBox;
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
     ~CuiAboutConfigTabPage();
-    //void AddToModifiedVector( com::sun::star::beans::NamedValue& rProp );
     void AddToModifiedVector( Prop_Impl* rProp );
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
@@ -57,10 +70,10 @@ public:
 class CuiAboutConfigValueDialog : public ModalDialog
 {
 private:
-    VclMultiLineEdit*    m_pEDValue;
+    CuiCustomMultilineEdit*    m_pEDValue;
 
 public:
-    CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue );
+    CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue , int limit = 0);
     ~CuiAboutConfigValueDialog();
 
     OUString getValue()
