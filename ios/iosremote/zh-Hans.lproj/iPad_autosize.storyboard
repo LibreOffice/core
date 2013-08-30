@@ -43,7 +43,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="连接" id="wYh-MF-Ao6">
-                        <barButtonItem key="leftBarButtonItem" title="Help" id="JjD-di-uqV">
+                        <barButtonItem key="leftBarButtonItem" title="帮助" id="JjD-di-uqV">
                             <connections>
                                 <segue destination="Grm-Od-s6s" kind="push" id="YbL-aj-gxv"/>
                             </connections>
@@ -75,23 +75,23 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="3128" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bp1-Dv-nt4">
-                                <rect key="frame" x="159" y="71" width="223" height="118"/>
+                                <rect key="frame" x="164" y="66" width="223" height="118"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="100"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="请将以上pin码输入到LibreOffice Impress - 幻灯片播放 - Impress远程 中" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9zr-53-YfP">
-                                <rect key="frame" x="110" y="239" width="320" height="94"/>
+                                <rect key="frame" x="115" y="442" width="320" height="94"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
                                 <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="等待LibreOffice Impress的配对..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VVO-s2-eCV">
-                                <rect key="frame" x="109" y="391" width="322" height="57"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="WTPairingScreenshot.png" id="iaB-Jl-mwG">
+                                <rect key="frame" x="80" y="192" width="381" height="242"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -99,7 +99,6 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <connections>
                         <outlet property="pinLabel" destination="Bp1-Dv-nt4" id="6xd-P5-J5U"/>
-                        <outlet property="statusLabel" destination="VVO-s2-eCV" id="Uhy-iy-HAW"/>
                         <segue destination="B8g-8S-pgn" kind="push" identifier="pinValidated" id="gCy-Mv-VrC"/>
                     </connections>
                 </viewController>
@@ -513,6 +512,7 @@
     </scenes>
     <resources>
         <image name="Default.png" width="320" height="480"/>
+        <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
         <image name="gear.png" width="55" height="35"/>
         <image name="gear_pressed" width="16" height="16"/>
@@ -527,7 +527,9 @@
         <class className="BasePresentationViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
             <relationships>
+                <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
@@ -607,7 +609,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="XCJ-4d-eG4"/>
         <segue reference="YbL-aj-gxv"/>
+        <segue reference="gCy-Mv-VrC"/>
     </inferredMetricsTieBreakers>
 </document>
