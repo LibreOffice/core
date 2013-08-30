@@ -198,15 +198,16 @@ private:
 
     SfxStyleSheetBasePool*              pStyleSheetPool;
     SfxStyleControllerItem_Impl*        pBoundItems [MAX_FAMILIES];
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xBoundItems[MAX_FAMILIES];
+    css::uno::Reference< css::lang::XComponent >
+                                        m_xBoundItems[MAX_FAMILIES];
     SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
-    sal_uInt16                              nActFamily; // Id in the ToolBox = Position - 1
-    String                              aCurSel;
+    sal_uInt16                          nActFamily; // Id in the ToolBox = Position - 1
+    OUString                            aCurSel;
     Impl*                               pImpl;
 
     SVX_DLLPRIVATE void Update();
     SVX_DLLPRIVATE void FillStyleBox();
-    SVX_DLLPRIVATE void     SelectStyle( const String& rStyleName );
+    SVX_DLLPRIVATE void     SelectStyle( const OUString& rStyleName );
 
 friend class SfxStyleControllerItem_Impl;
 

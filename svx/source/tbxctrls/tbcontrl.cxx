@@ -2048,20 +2048,18 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
 // -----------------------------------------------------------------------
 
-void SvxStyleToolBoxControl::SelectStyle( const String& rStyleName )
+void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 {
     SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pBox, "Control not found!" );
 
     if ( pBox )
     {
-//      String aStrSel( pBox->GetSelectEntry() );
-        String aStrSel( pBox->GetText() );
+        OUString aStrSel( pBox->GetText() );
 
-        if ( rStyleName.Len() > 0 )
+        if ( !rStyleName.isEmpty() )
         {
             if ( rStyleName != aStrSel )
-//              pBox->SelectEntry( rStyleName );
                 pBox->SetText( rStyleName );
         }
         else
