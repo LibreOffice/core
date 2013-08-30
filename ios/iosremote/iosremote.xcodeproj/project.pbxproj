@@ -105,6 +105,8 @@
 		8CAD659C17A3EFE700CFB661 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAD659817A3EFE700CFB661 /* arrow_right.png */; };
 		8CAD659D17A3EFE700CFB661 /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAD659917A3EFE700CFB661 /* arrow_right@2x.png */; };
 		8CAD65A017A3F76300CFB661 /* slideShowSwipeInList_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */; };
+		8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */; };
+		8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */; };
 		8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */; };
 		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */; };
 		8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */; };
@@ -117,7 +119,6 @@
 		8CD6EC8217CF40200071827A /* WTconnecting.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC8117CF40200071827A /* WTconnecting.png */; };
 		8CD6EC8417CF46930071827A /* WTPairing.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC8317CF46930071827A /* WTPairing.png */; };
 		8CD6EC8817CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC8717CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib */; };
-		8CD6EC8A17CF67300071827A /* WTcontrol.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC8917CF67300071827A /* WTcontrol.png */; };
 		BE9EBD071765BF0800283FD2 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9EBD061765BF0800283FD2 /* CoreImage.framework */; };
 /* End PBXBuildFile section */
 
@@ -272,6 +273,8 @@
 		8CAD659917A3EFE700CFB661 /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow_right@2x.png"; path = "iosremote/arrow_right@2x.png"; sourceTree = "<group>"; };
 		8CAD659E17A3F76300CFB661 /* slideShowSwipeInList_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShowSwipeInList_ipad.h; path = iosremote/slideShowSwipeInList_ipad.h; sourceTree = "<group>"; };
 		8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowSwipeInList_ipad.m; path = iosremote/slideShowSwipeInList_ipad.m; sourceTree = "<group>"; };
+		8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~ipad.png"; path = "iosremote/WTcontrol~ipad.png"; sourceTree = "<group>"; };
+		8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~iphone.png"; path = "iosremote/WTcontrol~iphone.png"; sourceTree = "<group>"; };
 		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/WalkThroughPageViewController.h; sourceTree = "<group>"; };
 		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/WalkThroughPageViewController.m; sourceTree = "<group>"; };
 		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
@@ -286,7 +289,6 @@
 		8CD6EC8117CF40200071827A /* WTconnecting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTconnecting.png; path = iosremote/WTconnecting.png; sourceTree = "<group>"; };
 		8CD6EC8317CF46930071827A /* WTPairing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTPairing.png; path = iosremote/WTPairing.png; sourceTree = "<group>"; };
 		8CD6EC8717CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewMainImageController.xib; path = iosremote/WalkThroughPageViewMainImageController.xib; sourceTree = "<group>"; };
-		8CD6EC8917CF67300071827A /* WTcontrol.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTcontrol.png; path = iosremote/WTcontrol.png; sourceTree = "<group>"; };
 		BE9EBD061765BF0800283FD2 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -413,8 +415,9 @@
 		8C06B31917B7EC62002F5CF8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */,
+				8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */,
 				8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */,
-				8CD6EC8917CF67300071827A /* WTcontrol.png */,
 				8CD6EC8317CF46930071827A /* WTPairing.png */,
 				8CD6EC8117CF40200071827A /* WTconnecting.png */,
 				8CD6EC7F17CF35A70071827A /* WTConnectionHotspot.png */,
@@ -782,8 +785,9 @@
 				8CD6EC8217CF40200071827A /* WTconnecting.png in Resources */,
 				8CD6EC8417CF46930071827A /* WTPairing.png in Resources */,
 				8CD6EC8817CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib in Resources */,
-				8CD6EC8A17CF67300071827A /* WTcontrol.png in Resources */,
 				8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */,
+				8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */,
+				8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
