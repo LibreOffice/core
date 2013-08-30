@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7xw\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "Typo.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7xo\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "It\u0027s better to do\n\nScRefCellValue aCell;\naCell.assign(*pDoc, ScAddress(0,2,0));\n\nthen check its type being CELLTYPE_STRING *and* check its value from aCell. This way we can check against the cell type not being CELLTYPE_EDIT. GetString() will happily return OUString value from any cell type, which reduces the strictness of the test.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7xk\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "A better way to check if a cell is empty is to call GetCellType() and check against CELLTYPE_NONE.  If it\u0027s empty, the cell type should be CELLTYPE_NONE.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7xg\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "This test is redundant.  Just checking the cell type should be sufficient.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7xc\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "Here, you need to use ScRefCellValue to make sure the cell type is CELLTYPE_STRING.  The above test will pass even if the cell is a value cell.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7xY\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-08-30T17:49:06Z",
+      "side": 1,
+      "message": "This test is redundant.",
+      "revId": "6f67b89d9ed663485aca508f4dbe936bfd6315bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
