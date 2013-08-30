@@ -91,7 +91,7 @@ public:
                             sal_uInt16 nPos = LISTBOX_APPEND );
 
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
-                            const String& rEntry,
+                            const OUString& rEntry,
                             sal_uInt16 nPos = LISTBOX_APPEND );
 
     void                SelectTextEncoding( const rtl_TextEncoding nEnc,
@@ -99,7 +99,7 @@ public:
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
 
-    const String&       GetSelectTextString() const;
+    const OUString&     GetSelectTextString() const;
 };
 
 #endif

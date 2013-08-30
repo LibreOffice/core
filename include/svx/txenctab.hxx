@@ -36,7 +36,7 @@ public:
     ~SvxTextEncodingTable();
 
     const OUString GetTextString( const rtl_TextEncoding nEnc ) const;
-    rtl_TextEncoding    GetTextEncoding( const String& rStr ) const;
+    rtl_TextEncoding    GetTextEncoding( const OUString& rStr ) const;
 };
 
 
