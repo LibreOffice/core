@@ -1694,6 +1694,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
     SotStorageStreamRef xStm;
     DataFlavor aSubstFlavor;
     bool bRet(GetSotStorageStream(rFlavor, xStm));
+    bool bSuppressPNG(false); // #122982# If PNG stream not accessed, but BMP one, suppress trying to load PNG
 
     if(!bRet && HasFormat(SOT_FORMATSTR_ID_PNG) && SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aSubstFlavor))
     {
@@ -1705,18 +1706,20 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
     {
         // when no direct success, try if BMP is available
         bRet = GetSotStorageStream(aSubstFlavor, xStm);
+        bSuppressPNG = bRet;
     }
 
     if(bRet)
     {
-        if(rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
+        if(!bSuppressPNG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // it's a PNG, import to BitmapEx
             ::vcl::PNGReader aPNGReader(*xStm);
 
             rBmpEx = aPNGReader.Read();
         }
-        else
+
+        if(rBmpEx.IsEmpty())
         {
             Bitmap aBitmap;
             Bitmap aMask;
@@ -1734,7 +1737,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
             }
         }
 
-        bRet = (ERRCODE_NONE == xStm->GetError());
+        bRet = (ERRCODE_NONE == xStm->GetError() && !rBmpEx.IsEmpty());
 
         /* SJ: #110748# At the moment we are having problems with DDB inserted as DIB. The
            problem is, that some graphics are inserted much too big because the nXPelsPerMeter
