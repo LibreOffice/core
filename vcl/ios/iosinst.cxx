@@ -332,14 +332,16 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
     rc = pthread_mutex_lock( &m_aRenderMutex );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
 
-    for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
-         it != getFrames().end();
+    CGRect invalidRect = arg->rect;
+
+    for( std::list< SalFrame* >::const_reverse_iterator it = getFrames().rbegin();
+         it != getFrames().rend();
          it++ ) {
         IosSalFrame *pFrame = static_cast<IosSalFrame *>(*it);
         SalFrameGeometry aGeom = pFrame->GetGeometry();
         CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
         if ( pFrame->IsVisible() &&
-             CGRectIntersectsRect( arg->rect, bbox ) ) {
+             CGRectIntersectsRect( invalidRect, bbox ) ) {
 
             const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
             CGDataProviderRef provider =
@@ -357,6 +359,12 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                                false,
                                kCGRenderingIntentDefault );
             CGContextDrawImage( arg->context, bbox, image );
+
+            // if current frame covers the whole invalidRect then break
+            if (CGRectEqualToRect(CGRectIntersection(invalidRect, bbox), invalidRect))
+            {
+                break;
+            }
 
             pFrame->resetDamaged();
         }
