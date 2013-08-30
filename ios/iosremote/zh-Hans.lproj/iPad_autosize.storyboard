@@ -43,6 +43,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="连接" id="wYh-MF-Ao6">
+                        <barButtonItem key="leftBarButtonItem" title="Help" id="JjD-di-uqV">
+                            <connections>
+                                <segue destination="Grm-Od-s6s" kind="push" id="YbL-aj-gxv"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add.png" id="pU6-XF-laS">
                             <connections>
                                 <segue destination="65c-5D-pB7" kind="push" identifier="create_new_server" id="ORn-0W-dHd"/>
@@ -54,6 +59,7 @@
                         <outlet property="serverTable" destination="0vt-Sx-o55" id="Szp-pH-0rk"/>
                         <segue destination="m26-i1-eiL" kind="push" identifier="pinValidation" id="yUv-cB-P15"/>
                         <segue destination="B8g-8S-pgn" kind="push" identifier="SlideShowPreview" id="XCJ-4d-eG4"/>
+                        <segue destination="Grm-Od-s6s" kind="push" identifier="howtoSegue" id="hRz-3h-McA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KBf-aZ-Hhk" sceneMemberID="firstResponder"/>
@@ -488,6 +494,22 @@
             </objects>
             <point key="canvasLocation" x="-636" y="-1374"/>
         </scene>
+        <!--Walk Through Container View Controller-->
+        <scene sceneID="wTs-Zb-aUa">
+            <objects>
+                <viewController id="Grm-Od-s6s" customClass="WalkThroughContainerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LWc-xb-hIj">
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="2hX-NQ-pfJ"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EWl-Cj-qdi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="246" y="-235"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Default.png" width="320" height="480"/>
@@ -505,9 +527,7 @@
         <class className="BasePresentationViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
             <relationships>
-                <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
-                <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
@@ -531,6 +551,9 @@
         </class>
         <class className="MainSplitViewController" superclassName="UISplitViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MainSplitViewController.h"/>
+        </class>
+        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
         </class>
         <class className="autoDismissKeyboardNavigationViewController" superclassName="LibONavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/autoDismissKeyboardNavigationViewController.h"/>
@@ -585,5 +608,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="XCJ-4d-eG4"/>
+        <segue reference="YbL-aj-gxv"/>
     </inferredMetricsTieBreakers>
 </document>

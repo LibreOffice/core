@@ -31,8 +31,8 @@
     switch (self.index) {
         case 0:
             [self.image setImage:[UIImage imageNamed:@"WTconnection"]];
-            self.instructionText.text = @"Connect your iOS device and your computer to the same WiFi network.";
-            self.instructionHint.text = @"Or create a personal hotspot on your computer or your iPhone if no local WiFi network is available.";
+            self.instructionText.text = @"Connect your devices to the same WiFi network.";
+            self.instructionHint.text = @"Create a personal hotspot on your iPhone if needed.";
             self.instructionTitle.text = @"Connection";
             [self.hintImage setImage:[UIImage imageNamed:@"WTConnectionHotspot"]];
             break;
