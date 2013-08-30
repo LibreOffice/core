@@ -496,14 +496,6 @@ FreetypeManager::FreetypeManager()
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
-    // Freetype <= 2.0.9 does not have FT_Library_Version().
-    // Using dl_sym() instead of osl_getSymbol() because latter
-    // isn't designed to work with oslModule=NULL
-    void (*pFTLibraryVersion)(FT_Library library,
-        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
-    pFTLibraryVersion = (void (*)(FT_Library library,
-        FT_Int *amajor, FT_Int *aminor, FT_Int *apatch))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Library_Version" );
-
     pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_New_Size" );
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
@@ -513,8 +505,7 @@ FreetypeManager::FreetypeManager()
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
     FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
-    if( pFTLibraryVersion )
-        pFTLibraryVersion( aLibFT, &nMajor, &nMinor, &nPatch );
+    FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
     nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
     // disable artificial emboldening with the Freetype API for older versions
