@@ -17,95 +17,109 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
+#include <cassert>
+#include <new>
 #include <stdio.h>
 #include <string.h>
+#include <typeinfo>
+
 #include <dlfcn.h>
-
-#include <cxxabi.h>
-#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
-#define _GLIBCXX_CDTOR_CALLABI
-#endif
-
-#include <boost/unordered_map.hpp>
-
-#include <sal/log.hxx>
-#include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-
-#include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include <typelib/typedescription.hxx>
-#include <uno/any2.h>
-
-#include "share.hxx"
-
-
-using namespace ::std;
-using namespace ::osl;
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::__cxxabiv1;
-
-
-namespace CPPU_CURRENT_NAMESPACE
-{
-
-#ifndef _LIBCPP_VERSION
-
-#if MACOSX_SDK_VERSION >= 1070
 
 // MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h defined
 // __cxxabiv1::__class_type_info and __cxxabiv1::__si_class_type_info but
-// MacOSX10.7.sdk/usr/include/cxxabi.h no longer does, so instances of those
-// classes need to be created manually:
+// MacOSX10.7.sdk/usr/include/cxxabi.h no longer does:
+#if MACOSX_SDK_VERSION < 1070
+#include <cxxabi.h>
+#endif
 
-// std::type_info defined in <typeinfo> offers a protected ctor:
-struct FAKE_type_info: public std::type_info {
-    FAKE_type_info(char const * name): type_info(name) {}
+#include "boost/static_assert.hpp"
+#include "boost/unordered_map.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/genfunc.hxx"
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "typelib/typedescription.h"
+#include "uno/any2.h"
+
+#include "share.hxx"
+
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
+
+namespace CPPU_CURRENT_NAMESPACE {
+
+namespace {
+
+struct Fake_type_info {
+    virtual ~Fake_type_info() {}
+    char const * name;
 };
 
-// Modeled after __cxxabiv1::__si_class_type_info defined in
-// MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h (i.e.,
-// abi::__si_class_type_info documented at
-// <http://www.codesourcery.com/public/cxx-abi/abi.html#rtti>):
-struct FAKE_si_class_type_info: public FAKE_type_info {
-    FAKE_si_class_type_info(char const * name, std::type_info const * theBase):
-        FAKE_type_info(name), base(theBase) {}
+struct Fake_class_type_info: Fake_type_info {};
 
-    std::type_info const * base;
-        // actually a __cxxabiv1::__class_type_info pointer
+#if MACOSX_SDK_VERSION < 1070
+BOOST_STATIC_ASSERT(
+    sizeof (Fake_class_type_info) == sizeof (__cxxabiv1::__class_type_info));
+#endif
+
+struct Fake_si_class_type_info: Fake_class_type_info {
+    void const * base;
 };
+
+#if MACOSX_SDK_VERSION < 1070
+BOOST_STATIC_ASSERT(
+    sizeof (Fake_si_class_type_info)
+    == sizeof (__cxxabiv1::__si_class_type_info));
+#endif
 
 struct Base {};
 struct Derived: Base {};
 
-std::type_info * create_FAKE_class_type_info(char const * name) {
-    std::type_info * p = new FAKE_type_info(name);
-        // cxxabiv1::__class_type_info has no data members in addition to
-        // std::type_info
-    *reinterpret_cast< void ** >(p) = *reinterpret_cast< void * const * >(
+std::type_info * createFake_class_type_info(char const * name) {
+    char * buf = new char[sizeof (Fake_class_type_info)];
+#if MACOSX_SDK_VERSION < 1070
+    assert(
+        dynamic_cast<__cxxabiv1::__class_type_info const *>(&typeid(Base))
+        != 0);
+#endif
+    *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Base));
-        // copy correct __cxxabiv1::__class_type_info vtable into place
-    return p;
+        // copy __cxxabiv1::__class_type_info vtable into place
+    Fake_class_type_info * fake = reinterpret_cast<Fake_class_type_info *>(buf);
+    fake->name = name;
+    return reinterpret_cast<std::type_info *>(
+        static_cast<Fake_type_info *>(fake));
 }
 
-std::type_info * create_FAKE_si_class_type_info(
+std::type_info * createFake_si_class_type_info(
     char const * name, std::type_info const * base)
 {
-    std::type_info * p = new FAKE_si_class_type_info(name, base);
-    *reinterpret_cast< void ** >(p) = *reinterpret_cast< void * const * >(
+    char * buf = new char[sizeof (Fake_si_class_type_info)];
+#if MACOSX_SDK_VERSION < 1070
+    assert(
+        dynamic_cast<__cxxabiv1::__si_class_type_info const *>(&typeid(Derived))
+        != 0);
+#endif
+    *reinterpret_cast<void **>(buf) = *reinterpret_cast<void * const *>(
         &typeid(Derived));
-        // copy correct __cxxabiv1::__si_class_type_info vtable into place
-    return p;
+        // copy __cxxabiv1::__si_class_type_info vtable into place
+    Fake_si_class_type_info * fake
+        = reinterpret_cast<Fake_si_class_type_info *>(buf);
+    fake->name = name;
+    fake->base = base;
+    return reinterpret_cast<std::type_info *>(
+        static_cast<Fake_type_info *>(fake));
 }
 
-#endif
+}
 
-#endif
+void dummy_can_throw_anything( char const * )
+{
+}
 
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
@@ -148,7 +162,7 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 //==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
@@ -160,15 +174,11 @@ public:
     RTTI() SAL_THROW(());
     ~RTTI() SAL_THROW(());
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    std::type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW(())
-#if defined(FREEBSD) && __FreeBSD_version < 702104
-    : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
-#else
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
-#endif
 {
 }
 //__________________________________________________________________________________________________
@@ -178,9 +188,9 @@ RTTI::~RTTI() SAL_THROW(())
 }
 
 //__________________________________________________________________________________________________
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
-    type_info * rtti;
+    std::type_info * rtti;
 
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
@@ -203,17 +213,15 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-#if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
-        rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
-#else
-        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
-#endif
+        rtti = (std::type_info *)dlsym( m_hApp, symName.getStr() );
 
         if (rtti)
         {
-            pair< t_rtti_map::iterator, bool > insertion (
+            std::pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in rtti map" );
+            SAL_WARN_IF( !insertion.second,
+                         "bridges",
+                         "inserting new rtti failed" );
         }
         else
         {
@@ -221,44 +229,33 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
             {
-#ifndef _LIBCPP_VERSION
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
-                char const * rttiName = symName.getStr() +4;
+                char * rttiName = strdup(symName.getStr() + 4);
+                if (rttiName == 0) {
+                    throw std::bad_alloc();
+                }
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr,"generated rtti for %s\n", rttiName );
 #endif
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
-                    type_info * base_rtti = getRTTI(
+                    std::type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
-#if MACOSX_SDK_VERSION < 1070
-                    rtti = new __si_class_type_info(
-                        strdup( rttiName ), (__class_type_info *)base_rtti );
-#else
-                    rtti = create_FAKE_si_class_type_info(
-                        strdup( rttiName ), base_rtti );
-#endif
+                    rtti = createFake_si_class_type_info(rttiName, base_rtti);
                 }
                 else
                 {
-                    // this class has no base class
-#if MACOSX_SDK_VERSION < 1070
-                    rtti = new __class_type_info( strdup( rttiName ) );
-#else
-                    rtti = create_FAKE_class_type_info( strdup( rttiName ) );
-#endif
+                    rtti = createFake_class_type_info(rttiName);
                 }
 
-                pair< t_rtti_map::iterator, bool > insertion (
+                std::pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-                SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
-#else
-                OSL_FAIL("Cannot generate type_infos with libc++, sigh");
-                return NULL;
-#endif
+                SAL_WARN_IF( !insertion.second,
+                             "bridges",
+                             "inserting new generated rtti failed" );
             }
             else // taking already generated rtti
             {
@@ -274,10 +271,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
-
 //--------------------------------------------------------------------------------------------------
-extern "C" {
-static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
+static void deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
     typelib_TypeDescription * pTD = 0;
@@ -289,12 +284,6 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
         ::uno_destructData( pExc, pTD, cpp_release );
         ::typelib_typedescription_release( pTD );
     }
-}
-}
-
-namespace
-{
-    struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
 //==================================================================================================
@@ -308,7 +297,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
 #endif
     void * pCppExc;
-    type_info * rtti;
+    std::type_info * rtti;
 
     {
     // construct cpp exception object
@@ -328,7 +317,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
-
     // avoiding locked counts
     static RTTI * s_rtti = 0;
     if (! s_rtti)
@@ -344,7 +332,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 #endif
         }
     }
-	rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    rtti = s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)
