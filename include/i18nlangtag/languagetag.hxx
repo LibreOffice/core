@@ -79,14 +79,6 @@ public:
     explicit LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
                           const OUString& rScript, const OUString& rCountry );
 
-    /** Init LanguageTag with language and country strings.
-
-        This is a convenience ctor for places that so far use only language and
-        country to replace the MsLangId::convert...IsoNames...() calls. Avoid
-        use in new code.
-     */
-    explicit LanguageTag( const OUString& rLanguage, const OUString& rCountry );
-
     /** Init LanguageTag with rtl_Locale.
 
         This is a convenience ctor.
