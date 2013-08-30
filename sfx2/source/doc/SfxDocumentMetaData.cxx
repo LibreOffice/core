@@ -651,15 +651,13 @@ SfxDocumentMetaData::getURLProperties(
 {
     css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
-        OUString dburl("DocumentBaseURL");
-        OUString hdn("HierarchicalDocumentName");
         for (sal_Int32 i = 0; i < i_rMedium.getLength(); ++i) {
-            if (i_rMedium[i].Name.equals(dburl)) {
+            if (i_rMedium[i].Name == "DocumentBaseURL") {
                 xPropArg->addProperty(
                     OUString("BaseURI"),
                     css::beans::PropertyAttribute::MAYBEVOID,
                     i_rMedium[i].Value);
-            } else if (i_rMedium[i].Name.equals(hdn)) {
+            } else if (i_rMedium[i].Name == "HierarchicalDocumentName") {
                 xPropArg->addProperty(
                     OUString("StreamRelPath"),
                     css::beans::PropertyAttribute::MAYBEVOID,
