@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Module_Module,swext))
 
-ifeq ($(ENABLE_MEDIAWIKI),YES)
+ifeq ($(ENABLE_MEDIAWIKI),TRUE)
 $(eval $(call gb_Module_add_targets,swext,\
 	Jar_mediawiki \
 	Configuration_mediawiki \

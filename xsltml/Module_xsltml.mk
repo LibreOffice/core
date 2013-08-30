@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,xsltml))
 
-ifeq ($(ENABLE_MEDIAWIKI),YES)
+ifeq ($(ENABLE_MEDIAWIKI),TRUE)
 
 $(eval $(call gb_Module_add_targets,xsltml,\
 	ExternalPackage_xsltml \

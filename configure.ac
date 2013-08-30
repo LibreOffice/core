@@ -10281,19 +10281,19 @@ AC_SUBST(POPPLER_LIBS)
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
-    ENABLE_MEDIAWIKI=YES
+    ENABLE_MEDIAWIKI=TRUE
     BUILD_TYPE="$BUILD_TYPE XSLTML"
     if test  "x$with_java" = "xno"; then
         AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
     fi
 else
     AC_MSG_RESULT([no])
-    ENABLE_MEDIAWIKI=NO
+    ENABLE_MEDIAWIKI=
     SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
-if test "$ENABLE_MEDIAWIKI" = "YES"; then
+if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
     AC_MSG_CHECKING([which Servlet API Jar to use])
     if test "$with_system_servlet_api" = "yes"; then
         AC_MSG_RESULT([external])
@@ -10506,12 +10506,12 @@ AC_SUBST(LIBSERIALIZER_JAR)
 
 # this has to be here because both the Wiki Publisher and the SRB use
 # commons-logging
-if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
+if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
     AC_MSG_CHECKING([which Apache commons-* libs to use])
     if test "$with_system_apache_commons" = "yes"; then
         SYSTEM_APACHE_COMMONS=YES
         AC_MSG_RESULT([external])
-        if test "$ENABLE_MEDIAWIKI" = "YES"; then
+        if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
             if test -z $COMMONS_CODEC_JAR; then
                 AC_CHECK_FILE(/usr/share/java/commons-codec-1.6.jar,
                     [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.6.jar ],
@@ -10557,7 +10557,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
                     [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
             fi
         fi
-        if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
+        if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             if test -z $COMMONS_LOGGING_JAR; then
                 AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar,
                    [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
@@ -11800,7 +11800,7 @@ EOF
         AC_MSG_ERROR([no, you need at least Ant >= $ant_minver])
     fi
 
-    if test "$ENABLE_MEDIAWIKI" = "YES"; then
+    if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
         AC_MSG_CHECKING([whether Ant supports mapper type="regexp"])
         rm -rf confdir
         mkdir confdir
