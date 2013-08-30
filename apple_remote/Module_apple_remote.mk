@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,apple_remote))
 
 ifeq ($(OS),MACOSX)
-ifneq ($(ENABLE_MACOSX_SANDBOX),YES)
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_Module_add_targets,apple_remote,\
     Library_AppleRemote \
 ))

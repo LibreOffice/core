@@ -68,7 +68,7 @@ done
 #
 # At this stage we also attach the entitlements in the sandboxing case
 
-if test $ENABLE_MACOSX_SANDBOX = YES; then
+if test $ENABLE_MACOSX_SANDBOX = TRUE; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
