@@ -7568,6 +7568,7 @@ void Window::Update()
          }
 
         pUpdateWindow->ImplCallPaint( NULL, pUpdateWindow->mpWindowImpl->mnPaintFlags );
+        bFlush = sal_True;
     }
 
     if ( bFlush )
