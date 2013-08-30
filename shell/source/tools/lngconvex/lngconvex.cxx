@@ -330,7 +330,7 @@ void add_group_entries(
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = LanguageTag(
                 OStringToOUString( myiso_lang.language(), RTL_TEXTENCODING_UTF8),
-                OStringToOUString( myiso_lang.country(), RTL_TEXTENCODING_UTF8)).getLanguageType();
+                OStringToOUString( myiso_lang.country(), RTL_TEXTENCODING_UTF8)).makeFallback().getLanguageType();
         if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
