@@ -83,7 +83,6 @@
                                                             otherButtonTitles:NSLocalizedString(@"Help", nil), nil];
                     [message show];
                 });
-                [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
                 [(server_list_vc *)self.delegate startSearching];
             } else {
                 [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
