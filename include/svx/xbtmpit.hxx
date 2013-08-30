@@ -44,7 +44,7 @@ private:
 public:
             TYPEINFO();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
-            XFillBitmapItem(const String& rName, const GraphicObject& rGraphicObject);
+            XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject);
             XFillBitmapItem(SfxItemPool* pPool, const GraphicObject& rGraphicObject);
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );

@@ -201,7 +201,7 @@ void XOBitmap::Array2Bitmap()
 
 TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
-XFillBitmapItem::XFillBitmapItem(const XubString& rName, const GraphicObject& rGraphicObject)
+XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject)
 :   NameOrIndex(XATTR_FILLBITMAP, rName),
     maGraphicObject(rGraphicObject)
 {
