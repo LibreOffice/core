@@ -29,6 +29,8 @@
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
 #include "editutil.hxx"
+#include "scopetools.hxx"
+#include "cellvalue.hxx"
 
 #include "svx/svdoole2.hxx"
 #include "tabprotection.hxx"
@@ -64,6 +66,8 @@ public:
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
 
+    void testCellValuesExportODS();
+
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
     void testFormulaReferenceXLS();
@@ -81,6 +85,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
+    CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -562,6 +567,81 @@ void ScExportTest::testRichTextExportODS()
     CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
 
     xNewDocSh3->DoClose();
+}
+
+void ScExportTest::testCellValuesExportODS()
+{
+    // Start with an empty document
+    ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS);
+    ScDocument* pDoc = xOrigDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
+
+    // set a value double
+    pDoc->SetValue(ScAddress(0,0,0), 2.0); // A1
+
+    // set a formula
+    pDoc->SetValue(ScAddress(2,0,0), 3.0); // C1
+    pDoc->SetValue(ScAddress(3,0,0), 3); // D1
+    pDoc->SetString(ScAddress(4,0,0), "=10*C1/4"); // E1
+    pDoc->SetValue(ScAddress(5,0,0), 3.0); // F1
+    pDoc->SetString(ScAddress(7,0,0), "=SUM(C1:F1)"); //H1
+
+    // set a string
+    pDoc->SetString(ScAddress(0,2,0), "a simple line"); //A3
+
+    // set a digit string
+    pDoc->SetString(ScAddress(0,4,0), "'12"); //A5
+    // set a contiguous value
+    pDoc->SetValue(ScAddress(0,5,0), 12.0); //A6
+    // set acontiguous string
+    pDoc->SetString(ScAddress(0,6,0), "a string"); //A7
+    // set a contiguous formula
+    pDoc->SetString(ScAddress(0,7,0), "=$A$6"); //A8
+
+    // save and reload
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
+    xOrigDocSh->DoClose();
+    CPPUNIT_ASSERT(xNewDocSh.Is());
+    pDoc = xNewDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
+
+    // check value
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(3,0,0));
+    CPPUNIT_ASSERT_EQUAL(7.5, pDoc->GetValue(4,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(5,0,0));
+
+    // check formula
+    if (!checkFormula(*pDoc, ScAddress(4,0,0), "10*C1/4"))
+        CPPUNIT_FAIL("Wrong formula =10*C1/4");
+    if (!checkFormula(*pDoc, ScAddress(7,0,0), "SUM(C1:F1)"))
+        CPPUNIT_FAIL("Wrong formula =SUM(C1:F1)");
+    CPPUNIT_ASSERT_EQUAL(16.5, pDoc->GetValue(7,0,0));
+
+    // check string
+    ScRefCellValue aCell;
+    aCell.assign(*pDoc, ScAddress(0,2,0));
+    CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType );
+
+    // check for an empty cell
+    aCell.assign(*pDoc, ScAddress(0,3,0));
+    CPPUNIT_ASSERT_EQUAL( CELLTYPE_NONE, aCell.meType);
+
+    // check a digit string
+    aCell.assign(*pDoc, ScAddress(0,4,0));
+    CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType);
+
+    //check contiguous values
+    CPPUNIT_ASSERT_EQUAL( 12.0, pDoc->GetValue(0,5,0) );
+    CPPUNIT_ASSERT_EQUAL( OUString("a string"), pDoc->GetString(0,6,0) );
+    if (!checkFormula(*pDoc, ScAddress(0,7,0), "$A$6"))
+        CPPUNIT_FAIL("Wrong formula =$A$6");
+    CPPUNIT_ASSERT_EQUAL( pDoc->GetValue(0,5,0), pDoc->GetValue(0,7,0) );
+
+    xNewDocSh->DoClose();
 }
 
 namespace {
