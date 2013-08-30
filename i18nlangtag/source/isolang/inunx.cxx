@@ -99,7 +99,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 
             if ( osl_getProcessLocale(&procLocale) == osl_Process_E_None )
             {
-                nLang = LanguageTag( *procLocale ).getLanguageType();
+                nLang = LanguageTag( *procLocale ).makeFallback().getLanguageType();
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 rSystemLanguage = nLang;
 #ifdef DEBUG
