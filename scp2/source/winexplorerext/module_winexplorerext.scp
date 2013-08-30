@@ -17,6 +17,7 @@
  */
 
 #include "macros.inc"
+#include "AutoInstall/winexplorerextbinarytable"
 
 Module gid_Module_Optional_Winexplorerext
     MOD_NAME_DESC ( MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS );
@@ -25,10 +26,10 @@ Module gid_Module_Optional_Winexplorerext
     Minimal = YES;
     ParentID = gid_Module_Optional;
     Dirs = (gid_Dir_Shlxthdl);
-    Files = (gid_File_Lib_Shlxthdl,
+    Files = (auto_winexplorerextbinarytable_ALL
+             gid_File_Lib_Shlxthdl,
              gid_File_Lib_OOoFilt,
              gid_File_Lib_PropertyHdl,
-             gid_File_Lib_Shlxtmsi,
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
 End
 

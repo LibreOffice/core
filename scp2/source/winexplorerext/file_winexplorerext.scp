@@ -80,13 +80,6 @@ End
 
 #endif
 
-File gid_File_Lib_Shlxtmsi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "shlxtmsi.dll";
-End
-
 #ifdef BUILD_X64
 
 #if defined(WITH_VC100_REDIST)

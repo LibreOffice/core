@@ -569,24 +569,38 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
+	$(if $(DISABLE_ACTIVEX),,\
+		regactivex \
+	) \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
+	$(if $(WINDOWS_SDK_HOME),\
+		instooofiltmsi \
+		qslnkmsi \
+		reg4allmsdoc \
+		sdqsmsi \
+		sellangmsi \
+		sn_tools \
+	) \
+))
+
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,winexplorerextbinarytable, \
+	shlxtmsi \
+))
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	fop \
-	instooofiltmsi \
 	jfregca \
 	ooofilt \
 	ooofilt_x64 \
 	propertyhdl \
 	propertyhdl_x64 \
-	qslnkmsi \
-	reg4allmsdoc \
-	regactivex \
 	regpatchactivex \
-	sdqsmsi \
-	sellangmsi \
 	shlxthdl \
 	shlxthdl_x64 \
-	shlxtmsi \
-	sn_tools \
 	so_activex \
 	so_activex_x64 \
 	sysdtrans \

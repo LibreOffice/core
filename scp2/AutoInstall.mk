@@ -9,6 +9,7 @@
 
 $(eval $(call gb_AutoInstall_AutoInstall))
 
+$(eval $(call gb_AutoInstall_add_module,activexbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,calc,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,gnome,LIBO_LIB_FILE))
@@ -18,8 +19,10 @@ $(eval $(call gb_AutoInstall_add_module,kde,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,math,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,onlineupdate,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,ooo,LIBO_LIB_FILE,LIBO_EXECUTABLE))
+$(eval $(call gb_AutoInstall_add_module,ooobinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,tde,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 
 # vim: set noet sw=4 ts=4:

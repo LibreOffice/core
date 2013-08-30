@@ -37,11 +37,4 @@ End
 	End
 #endif
 
-File gid_File_Lib_Regactivex_Msi
-    LIB_FILE_BODY;
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "regactivex.dll";
-End
-
 #endif // WITH_ACTIVEX_COMPONENT

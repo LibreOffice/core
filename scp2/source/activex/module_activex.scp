@@ -17,6 +17,7 @@
  */
 
 #include "macros.inc"
+#include "AutoInstall/activexbinarytable"
 
 #ifdef WITH_ACTIVEX_COMPONENT
 
@@ -27,7 +28,10 @@ Module gid_Module_Optional_Activexcontrol
     Default = NO;
     Minimal = NO;
     ParentID = gid_Module_Optional;
-    Files = (gid_File_Lib_Soactivex, gid_File_Lib_Soactivex64, gid_File_Lib_Regactivex_Msi, gid_File_Lib_Regpatchactivex_Msi);
+    Files = (auto_activexbinarytable_ALL
+        gid_File_Lib_Soactivex,
+        gid_File_Lib_Soactivex64,
+        gid_File_Lib_Regpatchactivex_Msi);
 End
 
 #endif // WITH_ACTIVEX_COMPONENT
