@@ -828,13 +828,13 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         {
             // Check for country only if there is more than lll-Ssss-CC in tag
             // string, else we would had matched it already.
-            if (!rLocale.Country.isEmpty() && rLocale.Variant.getLength() > 11)
+            if (!aUpperCountry.isEmpty() && rLocale.Variant.getLength() > 11)
             {
                 for (const IsoLanguageScriptCountryEntry* pScriptEntry = pFirstScript;
                         pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
                 {
-                    if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant) &&
-                            rLocale.Country.equalsIgnoreAsciiCaseAscii( pScriptEntry->maCountry))
+                    if (aUpperCountry.equalsAscii( pScriptEntry->maCountry) &&
+                            pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
                         return pScriptEntry->getLocale();
                 }
             }
