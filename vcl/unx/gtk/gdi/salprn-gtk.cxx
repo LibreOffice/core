@@ -151,14 +151,14 @@ GtkSalPrinter_Impl::~GtkSalPrinter_Impl()
 namespace
 {
 
-GtkInstance const&
+static GtkInstance const&
 lcl_getGtkSalInstance()
 {
     // we _know_ this is GtkInstance
     return *static_cast<GtkInstance*>(GetGtkSalData()->m_pInstance);
 }
 
-bool
+static bool
 lcl_useSystemPrintDialog()
 {
     return officecfg::Office::Common::Misc::UseSystemPrintDialog::get()
@@ -320,7 +320,7 @@ GtkSalPrinter::EndJob()
 namespace
 {
 
-void
+static void
 lcl_setHelpText(
         GtkWidget* const io_pWidget,
         const uno::Sequence<OUString>& i_rHelpTexts,
@@ -367,7 +367,7 @@ lcl_makeFrame(
     return pFrame;
 }
 
-void
+static void
 lcl_extractHelpTextsOrIds(
         const beans::PropertyValue& rEntry,
         uno::Sequence<OUString>& rHelpStrings)
@@ -383,7 +383,7 @@ lcl_extractHelpTextsOrIds(
     }
 }
 
-GtkWidget*
+static GtkWidget*
 lcl_combo_box_text_new()
 {
 #if GTK_CHECK_VERSION(3,0,0)
@@ -393,7 +393,7 @@ lcl_combo_box_text_new()
 #endif
 }
 
-void
+static void
 lcl_combo_box_text_append(GtkWidget* const pWidget, gchar const* const pText)
 {
 #if GTK_CHECK_VERSION(3,0,0)
