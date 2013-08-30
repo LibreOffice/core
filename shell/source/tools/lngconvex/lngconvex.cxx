@@ -459,7 +459,7 @@ void start_language_section(
 
     LanguageType ltype = LanguageTag(
             OStringToOUString( iso_lang.language(), RTL_TEXTENCODING_UTF8),
-            OStringToOUString( iso_lang.country(), RTL_TEXTENCODING_UTF8)).getLanguageType();
+            OStringToOUString( iso_lang.country(), RTL_TEXTENCODING_UTF8)).makeFallback().getLanguageType();
 
     char buff[10];
     int primLangID = PRIMARYLANGID(ltype);
