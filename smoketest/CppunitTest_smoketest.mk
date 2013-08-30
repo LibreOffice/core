@@ -32,7 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
 
 $(eval $(call gb_CppunitTest_use_ure,smoketest))
 
-ifeq ($(ENABLE_MACOSX_SANDBOX),YES)
+ifeq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 userinstallation=$(shell $(gb_DEVINSTALLROOT)/MacOS/soffice --nstemporarydirectory)
 else
 userinstallation=$(WORKDIR)/CustomTarget/smoketest

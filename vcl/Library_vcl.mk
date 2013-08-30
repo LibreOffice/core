@@ -450,7 +450,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     CoreFoundation \
 ))
 
-ifneq ($(ENABLE_MACOSX_SANDBOX),YES)
+ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
 $(eval $(call gb_Library_use_libraries,vcl,\
     AppleRemote \
 ))

@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_check_targets,smoketest,\
 ))
 endif
 
-ifneq (MACOSX/YES,$(OS)/$(ENABLE_MACOSX_SANDBOX))
+ifneq (MACOSX/TRUE,$(OS)/$(ENABLE_MACOSX_SANDBOX))
 $(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
 	CppunitTest_smoketest \
 ))

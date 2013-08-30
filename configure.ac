@@ -2781,7 +2781,7 @@ if test $_os = Darwin; then
     elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
-        ENABLE_MACOSX_SANDBOX=YES
+        ENABLE_MACOSX_SANDBOX=TRUE
         AC_DEFINE(HAVE_FEATURE_MACOSX_SANDBOX)
         AC_MSG_RESULT([yes])
     else
@@ -2853,7 +2853,7 @@ fi
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
-if test \( -z "$enable_readonly_installset" -a "$ENABLE_MACOSX_SANDBOX" = YES \) -o \
+if test \( -z "$enable_readonly_installset" -a "$ENABLE_MACOSX_SANDBOX" = TRUE \) -o \
         "$enable_extensions" != yes; then
     enable_readonly_installset=yes
 fi
