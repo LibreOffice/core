@@ -54,7 +54,7 @@ private:
     basegfx::BColor                 maColor;
 
     // discrete line width
-    double                          mfLogicLineWidth;
+    double                          mfDiscreteLineWidth;
 
     // bitfield
     bool                            mbShadow : 1;
@@ -70,7 +70,7 @@ public:
                      const basegfx::B2DPolygon& rLineTop,
                      AnchorState aAnchorState,
                      const basegfx::BColor& rColor,
-                     double fLogicLineWidth,
+                     double fDiscreteLineWidth,
                      bool bShadow,
                      bool bLineSolid )
     :   drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D(),
@@ -79,7 +79,7 @@ public:
         maLineTop(rLineTop),
         maAnchorState(aAnchorState),
         maColor(rColor),
-        mfLogicLineWidth(fLogicLineWidth),
+        mfDiscreteLineWidth(fDiscreteLineWidth),
         mbShadow(bShadow),
         mbLineSolid(bLineSolid)
     {}
@@ -90,7 +90,7 @@ public:
     const basegfx::B2DPolygon& getLineTop() const { return maLineTop; }
     AnchorState getAnchorState() const { return maAnchorState; }
     const basegfx::BColor& getColor() const { return maColor; }
-    double getLogicLineWidth() const { return mfLogicLineWidth; }
+    double getDiscreteLineWidth() const { return mfDiscreteLineWidth; }
     bool getShadow() const { return mbShadow; }
     bool getLineSolid() const { return mbLineSolid; }
 
@@ -117,14 +117,15 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aTriangle);
     }
 
+    // prepare view-independent LineWidth and color
+    const drawinglayer::attribute::LineAttribute aLineAttribute(
+        getColor(),
+        getDiscreteLineWidth() * getDiscreteUnit());
+
     if ( AS_ALL == maAnchorState ||
          AS_START == maAnchorState )
     {
         // create line start
-        const drawinglayer::attribute::LineAttribute aLineAttribute(
-            getColor(),
-            getLogicLineWidth() / (basegfx::fTools::equalZero(getDiscreteUnit()) ? 1.0 : getDiscreteUnit()));
-
         if(getLineSolid())
         {
             const drawinglayer::primitive2d::Primitive2DReference aSolidLine(
@@ -203,10 +204,6 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
     {
         // LineTop has to be created, too, but uses no shadow, so add after
         // the other parts are created
-        const drawinglayer::attribute::LineAttribute aLineAttribute(
-            getColor(),
-            getLogicLineWidth() / (basegfx::fTools::equalZero(getDiscreteUnit()) ? 1.0 : getDiscreteUnit()));
-
         const drawinglayer::primitive2d::Primitive2DReference aLineTop(
             new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                 getLineTop(),
@@ -229,7 +226,7 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
             && getLineTop() == rCompare.getLineTop()
             && getAnchorState() == rCompare.getAnchorState()
             && getColor() == rCompare.getColor()
-            && getLogicLineWidth() == rCompare.getLogicLineWidth()
+            && getDiscreteLineWidth() == rCompare.getDiscreteLineWidth()
             && getShadow() == rCompare.getShadow()
             && getLineSolid() == rCompare.getLineSolid());
     }
@@ -356,13 +353,14 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorOverlayObject::createOverla
 {
     implEnsureGeometry();
 
+    static double aDiscreteLineWidth(1.6);
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new AnchorPrimitive( maTriangle,
                              maLine,
                              maLineTop,
                              GetAnchorState(),
                              getBaseColor().getBColor(),
-                             ANCHORLINE_WIDTH * 15.0,
+                             ANCHORLINE_WIDTH * aDiscreteLineWidth,
                              getShadowedEffect(),
                              getLineSolid()) );
 
