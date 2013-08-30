@@ -22,6 +22,8 @@
 namespace writerfilter {
 namespace resourcemodel {
 
+// Stein's binary GCD for non-negative integers
+// https://en.wikipedia.org/wiki/Binary_GCD_algorithm
 sal_uInt32 gcd(sal_uInt32 a, sal_uInt32 b)
 {
     if (a == 0 || b == 0)
@@ -77,7 +79,7 @@ Fraction::~Fraction()
 
 void Fraction::init(sal_Int32 nNumerator, sal_Int32 nDenominator)
 {
-    sal_uInt32 nGCD = gcd(nNumerator, nDenominator);
+    sal_uInt32 nGCD = gcd(abs(nNumerator), abs(nDenominator));
 
     mnNumerator = nNumerator/ nGCD;
     mnDenominator = nDenominator / nGCD;
