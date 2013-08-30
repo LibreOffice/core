@@ -885,6 +885,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
 
+    bool bCategoriesApplied = false;
     // translate ranges (using the map created before)
     for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin());
          aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
@@ -916,6 +917,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     if( lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                     {
                         if( aLSeqIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                            bCategoriesApplied = true;
                     }
                     else
                     {
@@ -928,6 +930,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
+                            bCategoriesApplied = true;
                         }
                         else
                         {
