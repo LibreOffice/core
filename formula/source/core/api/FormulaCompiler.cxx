@@ -628,8 +628,8 @@ void lcl_fillNativeSymbols(FormulaCompiler::NonConstOpCodeMapPtr& _xMap,bool _de
     {
         // Core
         s_SymbolMap.reset( new FormulaCompiler::OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
-        OModuleClient aModuleClient;
-        OpCodeList aOpCodeListNative( RID_STRLIST_FUNCTION_NAMES, s_SymbolMap );
+        OModuleClient aModuleClient;                                             //fdo50118  what's the use of this line (removing seems to have no negative effect)?
+        OpCodeList aOpCodeListNative( RID_STRLIST_FUNCTION_NAMES, s_SymbolMap ); //fdo50118 what's the use of this line (it can't be removed)?
         // No AddInMap for native core mapping.
     } // if ( !s_SymbolMap.get() )
     _xMap = s_SymbolMap;
@@ -693,8 +693,8 @@ void FormulaCompiler::loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _
     {
         // not Core
         _xMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, _eGrammar != FormulaGrammar::GRAM_ODFF, _eGrammar ));
-        OModuleClient aModuleClient;
-        OpCodeList aOpCodeList( _nSymbols, _xMap );
+        OModuleClient aModuleClient;                 //fdo50118 what's the use of this line (removing seems to have no negative effect)?
+        OpCodeList aOpCodeList( _nSymbols, _xMap );  //fdo50118 what's the use of this line (it can't be removed)?
 
         fillFromAddInMap( _xMap, _eGrammar);
         // Fill from collection for AddIns not already present.
@@ -1772,8 +1772,8 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
                 }
                 if (!bMapped && !mxSymbols->isEnglish())
                         LocalizeString( aAddIn );
-                    rBuffer.append(aAddIn);
-                }
+                rBuffer.append(aAddIn);
+            }
             break;
             case svError:
                 AppendErrorConstant( rBuffer, t->GetError());

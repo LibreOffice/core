@@ -272,7 +272,7 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
             nFormulaCodeInTree -= nRPN;
         else
         {
-            OSL_FAIL( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" );
+            OSL_FAIL( "RemoveFromFormulaTree: nFormulaCodeInTree < nRPN" ); //fdo50118 why is this? when opening a document with add-in functions, the messages appears for every function used in the document.
             nFormulaCodeInTree = 0;
         }
     }

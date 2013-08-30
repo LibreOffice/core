@@ -49,6 +49,7 @@
 #include "scmod.hxx"
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
+#include "formulaopt.hxx"  //fdo50118
 
 using namespace com::sun::star;
 
@@ -321,6 +322,7 @@ void ScUnoAddInCollection::Initialize()
 
     bInitialized = true;        // with or without functions
 }
+
 // -----------------------------------------------------------------------------
 
 static sal_uInt16 lcl_GetCategory( const OUString& rName )
@@ -757,8 +759,18 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     uno::Reference<lang::XServiceName> xName( xInterface, uno::UNO_QUERY );
     if ( xAddIn.is() && xName.is() )
     {
-        //  AddIns must use the language for which the office is installed
-        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
+        // fdo50118 when GetUseEnglishFunctionName() returns true, set the locale to en-US to get English function names
+        lang::Locale aLocale;
+        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
+        {
+            aLocale.Language = "en";
+            aLocale.Country = "US";
+            aLocale.Variant = "";
+        }
+        else
+        {
+            aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        }
         xAddIn->setLocale( aLocale );
 
         OUString aServiceName( xName->getServiceName() );
@@ -1010,6 +1022,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                             const OUString& rServiceName )
 {
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
+    //fdo50118 this code will have to be changed too, like in  ReadFromAddIn()
     if ( xLoc.is() )        // optional in new add-ins
     {
         lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
