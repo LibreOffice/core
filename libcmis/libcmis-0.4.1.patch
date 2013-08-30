@@ -1,0 +1,95 @@
+diff --git src/libcmis/json-utils.cxx src/libcmis/json-utils.cxx
+index b537a09..b4e037d 100644
+--- src/libcmis/json-utils.cxx
++++ src/libcmis/json-utils.cxx
+@@ -213,48 +213,54 @@ Json::Type Json::parseType( )
+ {
+     Type type = json_string;
+     string str = toString( );
+-    boost::posix_time::ptime time = libcmis::parseDateTime( str );
+-    if ( !time.is_not_a_date_time( ) )
+-        type = json_datetime;
+-    else
++    if ( str.empty( ) )
++        return type;
++    try 
+     {
+-        Type backupType = type;
+-        type = json_bool;
+-        try
+-        {
+-            parseBool( str );
+-        }
+-        catch (...)
++        boost::posix_time::ptime time = libcmis::parseDateTime( str );
++        if ( !time.is_not_a_date_time( ) )
++            return json_datetime;
++    }
++    catch (...)
++    {
++        // Try other types
++    }
++    Type backupType = type;
++    type = json_bool;
++    try
++    {
++        parseBool( str );
++    }
++    catch (...)
++    {
++        type = backupType;
++    }
++    if ( type != json_bool )
++    {
++        if ( str.find('.') == string::npos )
+         {
+-            type = backupType;
++            backupType = type;
++            type = json_int;
++            try
++            {
++                parseInteger( str );
++            }
++            catch(...) 
++            { 
++                type = backupType;
++            }
+         }
+-        if ( type != json_bool )
++        else
+         {
+-            if ( str.find('.') == string::npos )
++            backupType = type;
++            type = json_double;
++            try
+             {
+-                backupType = type;
+-                type = json_int;
+-                try
+-                {
+-                    parseInteger( str );
+-                }
+-                catch(...) 
+-                { 
+-                    type = backupType;
+-                }
++                parseDouble( str );
+             }
+-            else
+-            {
+-                backupType = type;
+-                type = json_double;
+-                try
+-                {
+-                    parseDouble( str );
+-                }
+-                catch(...) 
+-                { 
+-                    type = backupType;
+-                }
++            catch(...) 
++            { 
++                type = backupType;
+             }
+         }
+     }

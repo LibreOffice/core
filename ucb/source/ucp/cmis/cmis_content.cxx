@@ -171,7 +171,7 @@ namespace
         bool bMultiValued = prop.MultiValued;
         bool bOpenChoice = prop.OpenChoice;
         uno::Any value = prop.Value;
-        libcmis::PropertyType::Type type;
+        libcmis::PropertyType::Type type = libcmis::PropertyType::String;
         if ( prop.Type == CMIS_TYPE_STRING )
             type = libcmis::PropertyType::String;
         else if ( prop.Type == CMIS_TYPE_BOOL )
