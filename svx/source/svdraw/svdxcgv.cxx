@@ -165,7 +165,7 @@ sal_Bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjL
     return sal_True;
 }
 
-sal_Bool SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+sal_Bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
