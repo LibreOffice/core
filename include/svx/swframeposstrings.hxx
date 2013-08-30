@@ -80,7 +80,7 @@ public:
 
         STR_MAX
     };
-    const String& GetString(StringId eId);
+    const OUString& GetString(StringId eId);
 };
 #endif
 

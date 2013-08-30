@@ -26,7 +26,7 @@
 class SvxSwFramePosString_Impl : public Resource
 {
     friend class SvxSwFramePosString;
-    String aStrings[SvxSwFramePosString::STR_MAX];
+    OUString aStrings[SvxSwFramePosString::STR_MAX];
 public:
     SvxSwFramePosString_Impl();
 };
@@ -51,7 +51,7 @@ SvxSwFramePosString::~SvxSwFramePosString()
     delete pImpl;
 }
 
-const String& SvxSwFramePosString::GetString(StringId eId)
+const OUString& SvxSwFramePosString::GetString(StringId eId)
 {
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
     if(!(eId >= 0 && eId < STR_MAX))
