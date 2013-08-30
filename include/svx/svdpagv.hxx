@@ -198,11 +198,11 @@ public:
     void SetLayerVisible(const OUString& rName, bool bShow = true) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
     bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
-    void SetLayerLocked(const String& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
-    sal_Bool IsLayerLocked(const String& rName) const { return IsLayer(rName,aLayerLock); }
+    void SetLayerLocked(const OUString& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
+    sal_Bool IsLayerLocked(const OUString& rName) const { return IsLayer(rName,aLayerLock); }
 
-    void SetLayerPrintable(const String& rName, sal_Bool bPrn = sal_True) { SetLayer(rName, aLayerPrn, bPrn); }
-    sal_Bool IsLayerPrintable(const String& rName) const { return IsLayer(rName, aLayerPrn); }
+    void SetLayerPrintable(const OUString& rName, sal_Bool bPrn = sal_True) { SetLayer(rName, aLayerPrn, bPrn); }
+    sal_Bool IsLayerPrintable(const OUString& rName) const { return IsLayer(rName, aLayerPrn); }
 
     // PV stellt eine RefPage oder eine SubList eines RefObj dar oder Model ist ReadOnly
     sal_Bool IsReadOnly() const;
