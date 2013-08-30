@@ -25,7 +25,6 @@
 #include "sdresid.hxx"
 #include "pres.hxx"
 #include "sddllapi.h"
-#include <tools/string.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
@@ -128,7 +127,7 @@ protected:
     Image                   maImgGraphic;
     sal_Bool                mbLinkableSelected;
     sal_Bool                mbDragEnabled;
-    String                  maDocName;
+    OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
     ::sd::DrawDocShell*     mpDropDocSh;
     SdNavigatorWin*         mpDropNavWin;
@@ -159,7 +158,7 @@ protected:
             whether a name is created.  When a name is created then this
             name is not stored in the object.
     */
-    String GetObjectName (
+    OUString GetObjectName (
         const SdrObject* pObject,
         const bool bCreate = true) const;
     void                    CloseBookmarkDoc();
@@ -189,14 +188,14 @@ public:
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
-    void                    Fill( const SdDrawDocument*, sal_Bool bAllPages, const String& rDocName );
-    void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
+    void                    Fill( const SdDrawDocument*, sal_Bool bAllPages, const OUString& rDocName );
+    void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
     sal_Bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    sal_Bool                    HasSelectedChildren( const String& rName );
-    sal_Bool                    SelectEntry( const String& rName );
-    String                  GetSelectEntry();
+    sal_Bool                    HasSelectedChildren( const OUString& rName );
+    sal_Bool                    SelectEntry( const OUString& rName );
+    OUString                GetSelectEntry();
 
     /** return selected entries
           nDepth == 0 -> pages

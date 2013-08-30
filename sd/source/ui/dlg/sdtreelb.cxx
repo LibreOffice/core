@@ -253,27 +253,27 @@ SdPageObjsTLB::~SdPageObjsTLB()
         delete mpMedium;
 }
 
-String SdPageObjsTLB::GetObjectName(
+OUString SdPageObjsTLB::GetObjectName(
     const SdrObject* pObject,
     const bool bCreate) const
 {
-    String aRet;
+    OUString aRet;
 
     if ( pObject )
     {
         aRet = pObject->GetName();
 
-        if( !aRet.Len() && pObject->ISA( SdrOle2Obj ) )
+        if (aRet.isEmpty() && pObject->ISA(SdrOle2Obj))
             aRet = static_cast< const SdrOle2Obj* >( pObject )->GetPersistName();
     }
 
     if (bCreate
         && mbShowAllShapes
-        && aRet.Len() == 0
+        && aRet.isEmpty()
         && pObject!=NULL)
     {
         aRet = SD_RESSTR(STR_NAVIGATOR_SHAPE_BASE_NAME);
-        aRet.SearchAndReplaceAscii("%1", OUString::number(pObject->GetOrdNum() + 1));
+        aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
     }
 
     return aRet;
@@ -282,14 +282,14 @@ String SdPageObjsTLB::GetObjectName(
 /**
  * select a entry in TreeLB
  */
-sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
+sal_Bool SdPageObjsTLB::SelectEntry( const OUString& rName )
 {
     sal_Bool bFound = sal_False;
 
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         SvTreeListEntry* pEntry = NULL;
-        String aTmp;
+        OUString aTmp;
 
         for( pEntry = First(); pEntry && !bFound; pEntry = Next( pEntry ) )
         {
@@ -307,15 +307,15 @@ sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
 /**
  * @return true if children of the specified string are selected
  */
-sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
+sal_Bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
 {
     sal_Bool bFound  = sal_False;
     sal_Bool bChildren = sal_False;
 
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         SvTreeListEntry* pEntry = NULL;
-        String aTmp;
+        OUString aTmp;
 
         for( pEntry = First(); pEntry && !bFound; pEntry = Next( pEntry ) )
         {
@@ -338,9 +338,9 @@ sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
  * Fill TreeLB with pages and objects
  */
 void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
-                          const String& rDocName)
+                          const OUString& rDocName)
 {
-    String aSelection;
+    OUString aSelection;
     if( GetSelectionCount() > 0 )
     {
         aSelection = GetSelectEntry();
@@ -389,7 +389,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
             nPage++;
         }
     }
-    if( aSelection.Len() )
+    if( !aSelection.isEmpty() )
         SelectEntry( aSelection );
 }
 
@@ -397,7 +397,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
  * We insert only the first entry. Children are created on demand.
  */
 void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
-                          const String& rDocName )
+                          const OUString& rDocName )
 {
     mpDoc = pInDoc;
 
@@ -456,9 +456,9 @@ void SdPageObjsTLB::AddShapeList (
         OSL_ASSERT(pObj!=NULL);
 
         // Get the shape name.
-        String aStr (GetObjectName( pObj ) );
+        OUString aStr (GetObjectName( pObj ) );
 
-        if( aStr.Len() )
+        if( !aStr.isEmpty() )
         {
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
@@ -566,7 +566,7 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     SdrObject*   pObj = NULL;
     SdPage*      pPage = NULL;
     SvTreeListEntry* pEntry = First();
-    String       aName;
+    OUString     aName;
 
     // compare all pages including the objects
     sal_uInt16 nPage = 0;
@@ -595,9 +595,9 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
             {
                 pObj = aIter.Next();
 
-                const String aObjectName( GetObjectName( pObj ) );
+                const OUString aObjectName( GetObjectName( pObj ) );
 
-                if( aObjectName.Len() )
+                if( !aObjectName.isEmpty() )
                 {
                     if( !pEntry )
                         return( sal_False );
@@ -621,7 +621,7 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 /**
  * @return selected string
  */
-String SdPageObjsTLB::GetSelectEntry()
+OUString SdPageObjsTLB::GetSelectEntry()
 {
     return( GetEntryText( GetCurEntry() ) );
 }
@@ -685,8 +685,8 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                     while( aIter.IsMore() )
                     {
                         pObj = aIter.Next();
-                        String aStr( GetObjectName( pObj ) );
-                        if( aStr.Len() )
+                        OUString aStr( GetObjectName( pObj ) );
+                        if( !aStr.isEmpty() )
                         {
                             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
@@ -910,11 +910,10 @@ void SdPageObjsTLB::DoDrag()
     if( mpDropNavWin )
     {
         ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
-        String aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INET_PROT_FILE ).GetMainURL( INetURLObject::NO_DECODE );
+        OUString aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INET_PROT_FILE ).GetMainURL( INetURLObject::NO_DECODE );
         NavigatorDragType   eDragType = mpDropNavWin->GetNavigatorDragType();
 
-        aURL.Append( '#' );
-        aURL.Append( GetSelectEntry() );
+        aURL += "#" + GetSelectEntry();
 
         INetBookmark    aBookmark( aURL, GetSelectEntry() );
         sal_Int8        nDNDActions = DND_ACTION_COPYMOVE;
@@ -967,7 +966,7 @@ void SdPageObjsTLB::DoDrag()
             // For shapes without a user supplied name (the automatically
             // created name does not count), a different drag and drop technique
             // is used.
-            if (GetObjectName(pObject, false).Len() == 0)
+            if (GetObjectName(pObject, false).isEmpty())
             {
                 AddShapeToTransferable(*pTransferable, *pObject);
                 pTransferable->SetView(pView);
@@ -1291,7 +1290,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
     if (pDocShell != NULL)
         aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else
-        aObjectDescriptor.maDisplayName = String();
+        aObjectDescriptor.maDisplayName = OUString();
     aObjectDescriptor.mbCanLink = sal_False;
 
     rTransferable.SetStartPos(aDragPos);
