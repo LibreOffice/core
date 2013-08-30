@@ -172,10 +172,10 @@ DWORD WINAPI InputThread( LPVOID pParam )
     WideCharToMultiByte(
         GetConsoleCP(), 0, L"\r\n", 2, mbBuff, cNewLine, NULL, NULL);
 
-    const size_t dwBufferSize = 256;
+    const DWORD dwBufferSize = 256;
     char* readBuf = (char*) malloc(dwBufferSize);
     int readAll = 0;
-    size_t curBufSize = dwBufferSize;
+    DWORD curBufSize = dwBufferSize;
 
     while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ),
                       readBuf + readAll,
