@@ -10230,11 +10230,11 @@ AC_SUBST(ENABLE_OPENCL)
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
 if test "x$enable_ext_presenter_minimizer" != "xno" -a "x$enable_extension_integration" != "xno"; then
     AC_MSG_RESULT([yes])
-    ENABLE_MINIMIZER=YES
+    ENABLE_MINIMIZER=TRUE
+    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MINIMIZER"
 else
     AC_MSG_RESULT([no])
-    ENABLE_MINIMIZER=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
+    ENABLE_MINIMIZER=
 fi
 AC_SUBST(ENABLE_MINIMIZER)
 

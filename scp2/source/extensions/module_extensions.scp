@@ -33,7 +33,7 @@ End
 
 /* ** Presentation Minimizer ** */
 
-#ifndef WITHOUT_EXTENSION_MINIMIZER
+#ifdef WITH_EXTENSION_MINIMIZER
 Module gid_Module_Optional_Extensions_MINIMIZER
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MINIMIZER);
