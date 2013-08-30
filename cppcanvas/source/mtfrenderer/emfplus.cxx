@@ -865,6 +865,9 @@ namespace cppcanvas
             x -= nFrameLeft;
             y -= nFrameTop;
 
+            x *= aBaseTransform.eM11;
+            y *= aBaseTransform.eM22;
+
             return ::basegfx::B2DPoint (x, y);
         }
 
@@ -876,6 +879,9 @@ namespace cppcanvas
             h = iwidth*aWorldTransform.eM12 + iheight*aWorldTransform.eM22;
 
             MapToDevice (w, h);
+
+            w *= aBaseTransform.eM11;
+            h *= aBaseTransform.eM22;
 
             return ::basegfx::B2DSize (w, h);
         }
@@ -927,6 +933,7 @@ namespace cppcanvas
 
                     ::basegfx::B2DHomMatrix aTextureTransformation;
                     ::basegfx::B2DHomMatrix aWorldTransformation;
+                    ::basegfx::B2DHomMatrix aBaseTransformation;
                     rendering::Texture aTexture;
 
                     aWorldTransformation.set (0, 0, aWorldTransform.eM11);
@@ -935,6 +942,13 @@ namespace cppcanvas
                     aWorldTransformation.set (1, 0, aWorldTransform.eM12);
                     aWorldTransformation.set (1, 1, aWorldTransform.eM22);
                     aWorldTransformation.set (1, 2, aWorldTransform.eDy);
+
+                    aBaseTransformation.set (0, 0, aBaseTransform.eM11);
+                    aBaseTransformation.set (0, 1, aBaseTransform.eM21);
+                    aBaseTransformation.set (0, 2, aBaseTransform.eDx);
+                    aBaseTransformation.set (1, 0, aBaseTransform.eM12);
+                    aBaseTransformation.set (1, 1, aBaseTransform.eM22);
+                    aBaseTransformation.set (1, 2, aBaseTransform.eDy);
 
                     if (brush->type == 4) {
                         aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
@@ -962,6 +976,7 @@ namespace cppcanvas
                     aTextureTransformation.scale (100.0*nMmX/nPixX, 100.0*nMmY/nPixY);
                     aTextureTransformation.translate (-nFrameLeft, -nFrameTop);
                     aTextureTransformation *= rState.mapModeTransform;
+                    aTextureTransformation *= aBaseTransformation;
 
                     aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
                     aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;

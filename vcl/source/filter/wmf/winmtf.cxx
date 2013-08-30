@@ -2233,13 +2233,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
 
     SvMemoryStream mem;
-    sal_Int32 nDevLeft, nDevRight, nDevTop, nDevBottom;
     sal_Int32 nLeft, nRight, nTop, nBottom;
-
-    nDevLeft = mrclBounds.Left();
-    nDevRight = mrclBounds.Right();
-    nDevTop = mrclBounds.Top();
-    nDevBottom = mrclBounds.Bottom();
 
     nLeft = mrclFrame.Left();
     nTop = mrclFrame.Top();
@@ -2247,9 +2241,17 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     nBottom = mrclFrame.Bottom();
 
     // emf header info
-    mem << nDevLeft << nDevTop << nDevRight << nDevBottom;
     mem << nLeft << nTop << nRight << nBottom;
     mem << mnPixX << mnPixY << mnMillX << mnMillY;
+
+    float one, zero;
+
+    one = 1;
+    zero = 0;
+
+    // add transformation matrix to be used in vcl's metaact.cxx for
+    // rotate and scale operations
+    mem << one << zero << zero << one << zero << zero;
 
     // need to flush the stream, otherwise GetEndOfData will return 0
     // on windows where the function parameters are probably resolved in reverse order

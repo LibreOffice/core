@@ -286,6 +286,7 @@ static float GetSwapFloat( SvStream& rSt )
             ActionVector maActions;
 
             /* EMF+ */
+            XForm           aBaseTransform;
             XForm           aWorldTransform;
             EMFPObject*     aObjects [256];
             float           fPageScale;
@@ -294,10 +295,6 @@ static float GetSwapFloat( SvStream& rSt )
             sal_Int32       nHDPI;
             sal_Int32       nVDPI;
             /* EMF+ emf header info */
-            sal_Int32       nBoundsLeft;
-            sal_Int32       nBoundsTop;
-            sal_Int32       nBoundsRight;
-            sal_Int32       nBoundsBottom;
             sal_Int32       nFrameLeft;
             sal_Int32       nFrameTop;
             sal_Int32       nFrameRight;
