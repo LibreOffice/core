@@ -873,6 +873,35 @@ bool SvpSalGraphics::CheckContext()
         CGContextScaleCTM( mrContext, 1, -1 );
     }
 
+
+    if (mrContext)
+    {
+        RectangleVector aRectangles;
+        m_aClipRegion.GetRegionRectangles(aRectangles);
+
+        CGContextBeginPath( mrContext );
+
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        {
+            const long nW(aRectIter->Right() - aRectIter->Left() + 1); // uses +1 logic in original
+
+            if(nW)
+            {
+                const long nH(aRectIter->Bottom() - aRectIter->Top() + 1); // uses +1 logic in original
+
+                if(nH)
+                {
+                    CGRect aRect = {{ (CGFloat) aRectIter->Left(), (CGFloat) aRectIter->Top() }, { (CGFloat) nW, (CGFloat) nH }};
+                    CGContextAddRect( mrContext, aRect );
+                }
+            }
+        }
+
+        CGContextClip(mrContext);
+
+    }
+
+
     SAL_INFO( "vcl.ios", "CheckContext: context=" << mrContext );
 
     return ( mrContext != NULL );
