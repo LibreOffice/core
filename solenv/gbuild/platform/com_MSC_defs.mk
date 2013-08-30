@@ -87,6 +87,8 @@ gb_AFLAGS := $(AFLAGS)
 # C4251: 'identifier' : class 'type' needs to have dll-interface to be
 #   used by clients of class 'type2'
 
+# C4267: conversion from 'size_t' to 'type', possible loss of data
+
 # C4275: non-DLL-interface classkey 'identifier' used as base for
 #   DLL-interface classkey 'identifier'
 
@@ -148,6 +150,13 @@ gb_CFLAGS := \
 	-wd4800 \
 	-Zc:wchar_t- \
 	-Zm500 \
+
+ifeq ($(CPUNAME),X86_64)
+
+gb_CFLAGS += \
+	-wd4267 \
+
+endif
 
 gb_CXXFLAGS := \
 	-Gd \
