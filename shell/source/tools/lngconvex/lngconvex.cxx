@@ -162,43 +162,24 @@ public:
     iso_lang_identifier() {};
 
     iso_lang_identifier(const OString& str) :
-        lang_(str)
-    { init(); }
+        maBcp47(str)
+    { }
 
     iso_lang_identifier(const std::string& str) :
-        lang_(str.c_str())
-    { init(); }
+        maBcp47(str.c_str())
+    { }
 
-    OString language() const
-    { return lang_; }
-
-    OString country() const
-    { return country_; }
+    OUString make_OUString() const
+    { return OStringToOUString( maBcp47, RTL_TEXTENCODING_ASCII_US); }
 
     OString make_OString() const
-    { return lang_ + "-" + country_; }
+    { return maBcp47; }
 
     std::string make_std_string() const
-    {
-        OString tmp(lang_ + "-" + country_);
-        return tmp.getStr();
-    }
+    { return maBcp47.getStr(); }
 
 private:
-    void init()
-    {
-        sal_Int32 idx = lang_.indexOf('-');
-
-        if (idx > -1)
-        {
-            country_ = lang_.copy(idx + 1);
-            lang_ = lang_.copy(0, idx);
-        }
-    }
-
-private:
-    OString lang_;
-    OString country_;
+    OString maBcp47;
 };
 
 /** Convert a OUString to the MS resource
@@ -328,9 +309,7 @@ void add_group_entries(
         OString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
         OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
-        LanguageType ltype = LanguageTag(
-                OStringToOUString( myiso_lang.language(), RTL_TEXTENCODING_UTF8),
-                OStringToOUString( myiso_lang.country(), RTL_TEXTENCODING_UTF8)).makeFallback().getLanguageType();
+        LanguageType ltype = LanguageTag( myiso_lang.make_OUString()).makeFallback().getLanguageType();
         if(  ( ltype & 0x0200 ) == 0 && map[ ltype ].empty()  )
         {
             Substitutor.set_language(iso_lang_identifier(iso_lang));
@@ -457,9 +436,7 @@ void start_language_section(
 
     std::string lang_section("LANGUAGE ");
 
-    LanguageType ltype = LanguageTag(
-            OStringToOUString( iso_lang.language(), RTL_TEXTENCODING_UTF8),
-            OStringToOUString( iso_lang.country(), RTL_TEXTENCODING_UTF8)).makeFallback().getLanguageType();
+    LanguageType ltype = LanguageTag( iso_lang.make_OUString()).makeFallback().getLanguageType();
 
     char buff[10];
     int primLangID = PRIMARYLANGID(ltype);
