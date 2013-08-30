@@ -419,7 +419,6 @@ void Test::testSharedFormulasCopyPaste()
 
     // Paste them to C2:C10.
     ScRange aDestRange(2,1,0,2,9,0);
-    OUString aRS(aDestRange.Format(SCR_ABS));
     pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
     aPos.SetCol(2);
     aPos.SetRow(1);
