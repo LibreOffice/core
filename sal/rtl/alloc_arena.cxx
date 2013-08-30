@@ -452,7 +452,7 @@ rtl_arena_segment_alloc (
         }
 
         /* roundup to next power of 2 */
-        size = (1UL << msb);
+        size = (((sal_Size)1) << msb);
     }
 
     index = lowbit(RTL_MEMORY_P2ALIGN(arena->m_freelist_bitmap, size));
@@ -619,7 +619,7 @@ rtl_arena_constructor (void * obj)
         head = &(arena->m_freelist_head[i]);
         rtl_arena_segment_constructor (head);
 
-        head->m_size = (1UL << i);
+        head->m_size = (((sal_Size)1) << i);
         head->m_type = RTL_ARENA_SEGMENT_TYPE_HEAD;
     }
 
@@ -658,7 +658,7 @@ rtl_arena_destructor (void * obj)
     {
         head = &(arena->m_freelist_head[i]);
 
-        assert(head->m_size == (1UL << i));
+        assert(head->m_size == (((sal_Size)1) << i));
         assert(head->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD);
 
         rtl_arena_segment_destructor (head);
@@ -694,7 +694,7 @@ rtl_arena_activate (
         if (!RTL_MEMORY_ISP2(quantum))
         {
             /* roundup to next power of 2 */
-            quantum = (1UL << highbit(quantum));
+            quantum = (((sal_Size)1) << highbit(quantum));
         }
         quantum_cache_max = RTL_MEMORY_P2ROUNDUP(quantum_cache_max, quantum);
 

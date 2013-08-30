@@ -859,9 +859,9 @@ rtl_cache_activate (
         if (flags & RTL_CACHE_FLAG_QUANTUMCACHE)
         {
             /* next power of 2 above 3 * qcache_max */
-            if(slabsize < (1UL << highbit(3 * source->m_qcache_max)))
+            if(slabsize < (((sal_Size)1) << highbit(3 * source->m_qcache_max)))
             {
-                slabsize = (1UL << highbit(3 * source->m_qcache_max));
+                slabsize = (((sal_Size)1) << highbit(3 * source->m_qcache_max));
             }
         }
         else
@@ -875,7 +875,7 @@ rtl_cache_activate (
 
         slabsize = RTL_MEMORY_P2ROUNDUP(slabsize, source->m_quantum);
         if (!RTL_MEMORY_ISP2(slabsize))
-            slabsize = 1UL << highbit(slabsize);
+            slabsize = (((sal_Size)1) << highbit(slabsize));
         cache->m_slab_size = slabsize;
 
         if (cache->m_slab_size > source->m_quantum)
