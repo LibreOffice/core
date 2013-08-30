@@ -9887,7 +9887,7 @@ AC_SUBST(ENABLE_PACKAGEKIT)
 AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
-    ENABLE_SDREMOTE=YES
+    ENABLE_SDREMOTE=TRUE
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 
     # If not explicitly enabled or disabled, default
@@ -9909,7 +9909,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
                 AC_MSG_RESULT([yes])
-                ENABLE_SDREMOTE_BLUETOOTH=YES
+                ENABLE_SDREMOTE_BLUETOOTH=TRUE
                 dnl ===================================================================
                 dnl Check for system bluez
                 dnl ===================================================================
@@ -9924,18 +9924,18 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                 fi
             else
                 AC_MSG_RESULT([no, dbus disabled])
-                ENABLE_SDREMOTE_BLUETOOTH=NO
+                ENABLE_SDREMOTE_BLUETOOTH=
             fi
         else
             AC_MSG_RESULT([yes])
-            ENABLE_SDREMOTE_BLUETOOTH=YES
+            ENABLE_SDREMOTE_BLUETOOTH=TRUE
         fi
     else
         AC_MSG_RESULT([no])
-        ENABLE_SDREMOTE_BLUETOOTH=NO
+        ENABLE_SDREMOTE_BLUETOOTH=
     fi
 else
-    ENABLE_SDREMOTE=NO
+    ENABLE_SDREMOTE=
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE)

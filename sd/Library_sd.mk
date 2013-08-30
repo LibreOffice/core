@@ -533,7 +533,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/zoomlist \
 ))
 
-ifeq ($(ENABLE_SDREMOTE),YES)
+ifeq ($(ENABLE_SDREMOTE),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/BufferedStreamSocket \
 	sd/source/ui/remotecontrol/Communicator \
@@ -550,13 +550,13 @@ $(eval $(call gb_Library_add_objcxxobjects,sd,\
 	sd/source/ui/remotecontrol/OSXNetworkService \
 ))
 
-else
+else # OS!=MACSOX
 
 ifeq ($(ENABLE_AVAHI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/AvahiNetworkService \
 ))
-endif
+endif # ENABLE_AVAHI=TRUE
 
 $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/DiscoveryService \
@@ -577,15 +577,15 @@ $(eval $(call gb_Library_add_cobjects,sd,\
     sd/source/ui/remotecontrol/mDNSResponder/dllmain \
 ))
 
-endif
+endif # OS=WNT
 
-endif
+endif # OS!=MACOSX
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DENABLE_SDREMOTE \
 ))
 
-ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),YES)
+ifeq ($(ENABLE_SDREMOTE_BLUETOOTH),TRUE)
 
 ifneq ($(OS),MACOSX)
 
@@ -593,7 +593,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/remotecontrol/BluetoothServer \
 ))
 
-else
+else # OS!=MACOSX
 
 $(eval $(call gb_Library_add_objcxxobjects,sd,\
 	sd/source/ui/remotecontrol/BluetoothServer \
@@ -609,14 +609,14 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,sd,\
 	IOBluetooth \
 ))
 
-endif
+endif # OS!=MACOSX
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DENABLE_SDREMOTE_BLUETOOTH \
 ))
 
-endif
+endif # ENABLE_SDREMOTE_BLUETOOTH=TRUE
 
-endif
+endif # ENABLE_SDREMOTE=TRUE
 
 # vim: set noet sw=4 ts=4:
