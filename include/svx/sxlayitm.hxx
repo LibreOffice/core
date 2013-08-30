@@ -41,7 +41,7 @@ public:
 class SdrLayerNameItem: public SfxStringItem {
 public:
     SdrLayerNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_LAYERNAME); }
-    SdrLayerNameItem(const String& rStr) : SfxStringItem(SDRATTR_LAYERNAME,rStr) {}
+    SdrLayerNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_LAYERNAME,rStr) {}
     SdrLayerNameItem(SvStream& rIn)      : SfxStringItem(SDRATTR_LAYERNAME,rIn)  {}
 };
 

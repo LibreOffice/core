@@ -28,7 +28,7 @@
 class SdrObjectNameItem: public SfxStringItem {
 public:
     SdrObjectNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_OBJECTNAME); }
-    SdrObjectNameItem(const String& rStr) : SfxStringItem(SDRATTR_OBJECTNAME,rStr) {}
+    SdrObjectNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_OBJECTNAME,rStr) {}
     SdrObjectNameItem(SvStream& rIn)      : SfxStringItem(SDRATTR_OBJECTNAME,rIn)  {}
 };
 
