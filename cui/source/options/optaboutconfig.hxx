@@ -10,21 +10,36 @@
 #ifndef INCLUDED_CUI_OPTABOUTCONFIG_HXX
 #define INCLUDED_CUI_OPTABOUTCONFIG_HXX
 
-#include <sfx2/tabdlg.hxx>
-#include <svtools/simptabl.hxx>
-#include "optHeaderTabListbox.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <vcl/edit.hxx>
-#include <vector>
 
-namespace svx
-{
-    class OptHeaderTabListBox;
-}
+#include <sfx2/tabdlg.hxx>
+#include <svtools/simptabl.hxx>
+#include <vcl/edit.hxx>
+
+#include <vector>
+#include <boost/scoped_ptr.hpp>
+
+namespace svx { class OptHeaderTabListBox; }
 class CuiAboutConfigTabPage;
 class CuiAboutConfigValueDialog;
 struct Prop_Impl;
+
+class CuiCustomMultilineEdit : public Edit
+{
+private:
+    bool bNumericOnly;
+
+public:
+    CuiCustomMultilineEdit( Window* pParent, WinBits nStyle )
+        : Edit( pParent, nStyle )
+        , bNumericOnly(false)
+    {}
+
+    virtual void KeyInput( const KeyEvent& rKeyEvent );
+    //virtual void Modify();
+    void setBehaviour( bool bNumeric, int nLengthLimit);
+};
 
 class CuiAboutConfigTabPage : public SfxTabPage
 {
@@ -33,14 +48,15 @@ private:
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
-    std::vector< Prop_Impl* > VectorOfModified;
+    std::vector< Prop_Impl* > m_vectorOfModified;
+    boost::scoped_ptr< svx::OptHeaderTabListBox > m_pPrefBox;
 
-    ::svx::OptHeaderTabListBox* pPrefBox;
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
-    ~CuiAboutConfigTabPage();
     void AddToModifiedVector( Prop_Impl* rProp );
 
+    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
+
 public:
    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
 
@@ -54,11 +70,10 @@ public:
 class CuiAboutConfigValueDialog : public ModalDialog
 {
 private:
-    VclMultiLineEdit*    m_pEDValue;
+    CuiCustomMultilineEdit* m_pEDValue;
 
 public:
-    CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue );
-    ~CuiAboutConfigValueDialog();
+    CuiAboutConfigValueDialog( Window* pWindow, const OUString& rValue , int limit = 0);
 
     OUString getValue()
     {
