@@ -1983,10 +1983,10 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether build target is Release Build])
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     AC_MSG_RESULT([no])
-    ENABLE_RELEASE_BUILD="FALSE"
+    ENABLE_RELEASE_BUILD=
 else
     AC_MSG_RESULT([yes])
-    ENABLE_RELEASE_BUILD="TRUE"
+    ENABLE_RELEASE_BUILD=TRUE
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
 
@@ -5112,11 +5112,11 @@ find_msms()
     msmdir=`cygpath -d "$msmdir"`
     msmdir=`cygpath -u "$msmdir"`
     if test -z "$msmdir"; then
-        if test "$ENABLE_RELEASE_BUILD" = "FALSE" ; then
+        if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
+            AC_MSG_ERROR([Merge modules not found in $msmdir])
+        else
             AC_MSG_WARN([Merge modules not found in $msmdir])
             msmdir=""
-        else
-            AC_MSG_ERROR([Merge modules not found in $msmdir])
         fi
     else
         msms="Microsoft_VC${VCVER}_CRT_x86.msm"
@@ -11191,7 +11191,7 @@ AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
     with_theme="crystal default hicontrast oxygen tango sifr"
-    test "$ENABLE_RELEASE_BUILD" = "FALSE" && with_theme="$with_theme tango_testing"
+    test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
 WITH_THEMES=""
