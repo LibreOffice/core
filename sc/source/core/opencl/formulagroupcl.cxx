@@ -218,13 +218,9 @@ bool FormulaGroupInterpreterOpenCL::getPosition(const ScTokenArray& rCode,const 
         bool isAllocFormulaOclBuf = true;
         for ( const formula::FormulaToken* p = rCodePos->First(); p; p = rCodePos->Next() )
         {
-            switch ( p->GetType() )
+            if ( p->GetType() == formula::svDoubleVectorRef )
             {
-                case formula::svDoubleVectorRef:
-                {
-                    nColPosition++;
-                    break;
-                }
+                nColPosition++;
             }
         }
         int nPositionSize = nColPosition * nRowSize;
@@ -241,19 +237,16 @@ bool FormulaGroupInterpreterOpenCL::getPosition(const ScTokenArray& rCode,const 
             int j = 0;
             for ( const formula::FormulaToken* p = rCodeTemp->First(); p; p = rCodeTemp->Next() )
             {
-                switch (p->GetType())
+                if (p->GetType() == formula::svDoubleVectorRef)
                 {
-                    case formula::svDoubleVectorRef:
-                    {
-                        const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                        size_t nRowStart = p2->IsStartFixed() ? 0 : i;
-                        size_t nRowEnd = p2->GetRefRowSize() - 1;
-                        if (!p2->IsEndFixed())
-                            nRowEnd += i;
-                        npOclStartPos[j*nRowSize+i] = nRowStart;//record the start position
-                        npOclEndPos[j*nRowSize+i] = nRowEnd;//record the end position
-                        j++;
-                    }
+                    const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
+                    size_t nRowStart = p2->IsStartFixed() ? 0 : i;
+                    size_t nRowEnd = p2->GetRefRowSize() - 1;
+                    if (!p2->IsEndFixed())
+                        nRowEnd += i;
+                    npOclStartPos[j*nRowSize+i] = nRowStart;//record the start position
+                    npOclEndPos[j*nRowSize+i] = nRowEnd;//record the end position
+                    j++;
                 }
             }
         }
