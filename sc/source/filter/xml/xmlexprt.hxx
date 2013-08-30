@@ -176,8 +176,6 @@ class ScXMLExport : public SvXMLExport
     bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
-    void GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
-
     void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
     void WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount);
     void WriteEditCell(const EditTextObject* pText);
