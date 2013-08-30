@@ -272,18 +272,6 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             ) throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
-        /** @short  some URL parts can make trouble for opening streams (e.g. jumpmarks.)
-                    An URL should be "normalized" before its used.
-
-            @param  sURL
-                    the original URL (e.g. including a jumpmark)
-
-            @return [string]
-                    the "normalized" URL (e.g. without jumpmark)
-         */
-        COMPHELPER_DLLPRIVATE OUString impl_normalizeURL(const OUString& sURL);
-
-        //---------------------------------------
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.
 

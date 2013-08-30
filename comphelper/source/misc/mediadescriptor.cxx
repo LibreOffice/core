@@ -47,6 +47,24 @@
 
 namespace comphelper{
 
+namespace {
+
+OUString removeFragment(OUString const & uri) {
+    css::uno::Reference< css::uri::XUriReference > ref(
+        css::uri::UriReferenceFactory::create(
+            comphelper::getProcessComponentContext())->
+        parse(uri));
+    if (ref.is()) {
+        ref->clearFragment();
+        return ref->getUriReference();
+    } else {
+        SAL_WARN("comphelper", "cannot parse <" << uri << ">");
+        return uri;
+    }
+}
+
+}
+
 const OUString& MediaDescriptor::PROP_ABORTED()
 {
     static const OUString sProp("Aborted");
@@ -466,9 +484,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
             throw css::uno::Exception("Found no URL.",
                     css::uno::Reference< css::uno::XInterface >());
 
-        // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
-        OUString sNormalizedURL = impl_normalizeURL( sURL );
-        return impl_openStreamWithURL( sNormalizedURL, bLockFile );
+        return impl_openStreamWithURL( removeFragment(sURL), bLockFile );
     }
     catch(const css::uno::Exception& ex)
     {
@@ -705,40 +721,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
 
     // At least we need an input stream. The r/w stream is optional ...
     return xInputStream.is();
-}
-
-OUString MediaDescriptor::impl_normalizeURL(const OUString& sURL)
-{
-    /* Remove Jumpmarks (fragments) of an URL only here.
-       They are not part of any URL and as a result may be
-       no ucb content can be created then.
-       On the other side arguments must exists ... because
-       they are part of an URL.
-
-       Do not use the URLTransformer service here. Because
-       it parses the URL in another way. It's main part isnt enough
-       and it's complete part contains the jumpmark (fragment) parameter ...
-    */
-
-    try
-    {
-        css::uno::Reference< css::uno::XComponentContext >    xContext    = ::comphelper::getProcessComponentContext();
-        css::uno::Reference< css::uri::XUriReferenceFactory > xUriFactory = css::uri::UriReferenceFactory::create(xContext);;
-        css::uno::Reference< css::uri::XUriReference >        xUriRef     = xUriFactory->parse(sURL);
-        if (xUriRef.is())
-        {
-            xUriRef->clearFragment();
-            return xUriRef->getUriReference();
-        }
-    }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
-
-    // If an error ocurred ... return the original URL.
-    // It's a try .-)
-    return sURL;
 }
 
 } // namespace comphelper
