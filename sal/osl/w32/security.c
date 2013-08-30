@@ -661,7 +661,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
         {
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
-                rtl_string2UString( strPath, PathA, strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
+                rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
                 OSL_ASSERT(*strPath != NULL);
                 bRet = sal_True;
             }
@@ -747,7 +747,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                         if (_access(PathA, 0) < 0)
                             CreateDirectoryA(PathA, NULL);
 
-                        rtl_string2UString( strPath, PathA, strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
+                        rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
                         OSL_ASSERT(*strPath != NULL);
                         bRet = sal_True;
                     }
