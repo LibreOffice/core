@@ -18,18 +18,18 @@
 #ifndef __com_sun_star_util_EventMultiplexer_idl__
 #define __com_sun_star_util_EventMultiplexer_idl__
 
-#ifndef __com_sun_star_util_XEventMultiplexer_idl__
-#include <com/sun/star/util/XEventMultiplexer.idl>
-#endif
+// //#ifndef __com_sun_star_util_XEventMultiplexer_idl__
+// //MISSING #include <com/sun/star/util/XEventMultiplexer.idl>
+// //#endif
 
-module com {  module sun {  module star {  module util {
+// module com {  module sun {  module star {  module util {
 
-/** Multiplex generic events.
-*/
-service EventMultiplexer : com::sun::star::util::XEventMultiplexer
-{
-};
+// /** Multiplex generic events.
+// */
+// service EventMultiplexer : com::sun::star::util::XEventMultiplexer
+// {
+// };
 
-}; }; }; }; // com.sun.star.util
+// }; }; }; }; // com.sun.star.util
 
 #endif

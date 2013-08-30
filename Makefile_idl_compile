@@ -1,7 +1,3 @@
 PATHS=-I -I./udkapi/com/sun/star/util/logging/ -I. -I ./offapi -I ./udkapi -I offapi/com/sun/star/i18n/ -Ioffapi/com/sun/star/linguistic2/ -I oovbaapi
-test:
-  cpp $(PATHS) include.idl > all.idl
-
-
-
-
+testidl:
+	cpp $(PATHS) include.idl > all.idl
