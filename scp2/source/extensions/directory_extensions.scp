@@ -24,7 +24,7 @@
 
 /* ** Presentation Minimizer ** */
 
-#ifndef WITHOUT_EXTENSION_MINIMIZER
+#ifdef WITH_EXTENSION_MINIMIZER
 
 Directory gid_Brand_Dir_Share_Extensions_Presentation_Minimizer
 	ParentID = gid_Brand_Dir_Share_Extensions;

@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Library_PresenterScreen \
 ))
 
-ifeq ($(ENABLE_MINIMIZER),YES)
+ifeq ($(ENABLE_MINIMIZER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_minimizer \
     Extension_minimizer \

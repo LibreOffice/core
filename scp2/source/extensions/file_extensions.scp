@@ -24,7 +24,7 @@
 
 /* ** Presentation Minimizer ** */
 
-#ifndef WITHOUT_EXTENSION_MINIMIZER
+#ifdef WITH_EXTENSION_MINIMIZER
 
 File gid_File_Oxt_Presentation_Minimizer
     TXT_FILE_BODY;
