@@ -3164,31 +3164,31 @@ XclExpTableStyle::XclExpTableStyle( const XclExpRoot& rRoot, ScDBDataFormatting&
     //Keep adding table style elements
     OUString aStyleString;
     OUString aElementType;
-    int aiDxfId;
+    sal_Int32 nDxfId;
     if( !(aStyleString = maTableStyle.GetFirstRowStripeStyle()).isEmpty() )
     {
         //Resolve this string style sheet name to a dxf id
-        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        nDxfId = rDxfs.GetDxfId( aStyleString );
         aElementType = "firstRowStripe";
-        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, maTableStyle.GetFirstRowStripeSize(), nDxfId ) );
     }
     if( !(aStyleString = maTableStyle.GetSecondRowStripeStyle()).isEmpty() )
     {
-        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        nDxfId = rDxfs.GetDxfId( aStyleString );
         aElementType = "secondRowStripe";
-        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, maTableStyle.GetSecondRowStripeSize(), nDxfId ) );
     }
     if( !(aStyleString = maTableStyle.GetFirstColStripeStyle()).isEmpty() )
     {
-        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        nDxfId = rDxfs.GetDxfId( aStyleString );
         aElementType = "firstColumnStripe";
-        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, maTableStyle.GetFirstColStripeSize(), nDxfId ) );
     }
     if( !(aStyleString = maTableStyle.GetSecondColStripeStyle()).isEmpty() )
     {
-        aiDxfId = rDxfs.GetDxfId( aStyleString );
+        nDxfId = rDxfs.GetDxfId( aStyleString );
         aElementType = "secondColumnStripe";
-        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, 1, aiDxfId ) );
+        maStyleElementContainer.push_back( new XclExpTableStyleElement( rRoot, aElementType, maTableStyle.GetSecondColStripeSize(), nDxfId ) );
     }
     miCount = maStyleElementContainer.size();
 }
