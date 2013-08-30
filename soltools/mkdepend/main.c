@@ -482,7 +482,7 @@ struct filepointer *getfile(file)
     struct stat st;
     off_t       size_backup;
     ssize_t     bytes_read;
-    size_t      malloc_size;
+    unsigned    malloc_size;
 
     content = (struct filepointer *)malloc(sizeof(struct filepointer));
     if ((fd = open(file, O_RDONLY)) < 0) {
@@ -495,13 +495,13 @@ struct filepointer *getfile(file)
 
     size_backup = st.st_size;
     malloc_size = size_backup;
-    /* Since off_t is larger than size_t, need to test for
+    /* Since off_t usually is larger than unsigned, need to test for
      * truncation.
      */
     if ( (off_t)malloc_size != size_backup )
     {
         close( fd );
-        warning("makedepend:  File \"%s\" size larger than can fit in size_t.  Cannot allocate memory for contents.\n", file);
+        warning("makedepend:  File \"%s\" is too large.\n", file);
         content->f_p = content->f_base = content->f_end = (char *)malloc(1);
         *content->f_p = '\0';
         return(content);
