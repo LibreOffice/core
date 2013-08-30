@@ -43,7 +43,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Connecter" id="wYh-MF-Ao6">
-                        <barButtonItem key="leftBarButtonItem" title="Help" id="JjD-di-uqV">
+                        <barButtonItem key="leftBarButtonItem" title="Aide" id="JjD-di-uqV">
                             <connections>
                                 <segue destination="Grm-Od-s6s" kind="push" id="YbL-aj-gxv"/>
                             </connections>
@@ -386,7 +386,7 @@
                             <view alpha="0.50000000000000011" contentMode="scaleToFill" id="jX5-gj-cqE">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.89411764709999997" green="0.43529411759999997" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.95294117647058818" green="0.54008895985401462" blue="0.070588235294117646" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>

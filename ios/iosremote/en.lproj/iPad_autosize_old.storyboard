@@ -174,8 +174,8 @@
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Title of the presentation(TODO)" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JEW-I6-sw5">
                                             <rect key="frame" x="20" y="20" width="500" height="168"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="27"/>
+                                            <color key="textColor" red="0.21176470589999999" green="0.81568627449999997" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -386,7 +386,7 @@
                             <view alpha="0.50000000000000011" contentMode="scaleToFill" id="jX5-gj-cqE">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.89411764709999997" green="0.43529411759999997" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.95294117647058818" green="0.54008895985401462" blue="0.070588235294117646" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>

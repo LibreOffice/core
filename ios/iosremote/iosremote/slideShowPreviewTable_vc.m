@@ -112,7 +112,7 @@
             _startButton.frame = CGRectMake(145.0, 30.0, 160.0, 40.0);
         } else {
             self.modalViewController.view.backgroundColor = [UIColor clearColor];
-            _startButton.frame = CGRectMake(30.0, 50.0, 470.0, 40.0);
+            _startButton.frame = CGRectMake(260.0, 50.0, 180.0, 40.0);
         }
         [_startButton setTitle:NSLocalizedString(@"Start Presentation", nil) forState:UIControlStateNormal];
         [_startButton setTitleColor:kTintColor forState:UIControlStateNormal];
