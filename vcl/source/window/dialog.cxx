@@ -1256,7 +1256,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
 
 void Dialog::queue_layout()
 {
-    if (hasPendingLayout())
+    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
         return;
     if (IsInClose())
         return;
