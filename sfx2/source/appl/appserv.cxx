@@ -601,6 +601,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_ZOOM_ENTIRE_PAGE:
         case SID_ZOOM_PAGE_WIDTH:
         {
+            SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+            if (!pCurrentShell)
+                return;
+
             // make sure aZoom is initialized with a proper value if SetType
             // doesn't work
             SvxZoomItem aZoom( SVX_ZOOM_PERCENT, 100 );
@@ -633,7 +637,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
             }
 
-            SfxViewFrame::Current()->GetDispatcher()->Execute(SID_ATTR_ZOOM, SFX_CALLMODE_ASYNCHRON, &aZoom, 0L);
+            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SFX_CALLMODE_ASYNCHRON, &aZoom, 0L);
 
             break;
         }
