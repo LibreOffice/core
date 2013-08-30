@@ -27,6 +27,7 @@
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <time.h>
 #include <TConnection.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -479,11 +480,28 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
     return safelyRetrieveValue< OUString >(columnIndex);
 }
 
-Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
+    throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    return Time();
-//     return safelyRetrieveValue(columnIndex);
+    ISC_DATE aISCDate = safelyRetrieveValue< ISC_DATE >(nIndex);
+
+    struct tm aCTime;
+    isc_decode_sql_date(&aISCDate, &aCTime);
+
+    return Date(aCTime.tm_mday, aCTime.tm_mon, aCTime.tm_year);
+}
+
+Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
+    throw(SQLException, RuntimeException)
+{
+    ISC_TIME aISCTime = safelyRetrieveValue< ISC_TIME >(nIndex);
+
+    struct tm aCTime;
+    isc_decode_sql_time(&aISCTime, &aCTime);
+
+    // first field is nanoseconds -- not supported in firebird or struct tm.
+    // last field denotes UTC (true) or unknown (false)
+    return Time(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
 }
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -493,12 +511,6 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
 //     return safelyRetrieveValue(columnIndex);
 }
 
-Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
-{
-    (void) columnIndex;
-    return Date(); // TODO: implement
-//     return safelyRetrieveValue(columnIndex);
-}
 // -------------------------------------------------------------------------
 uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
