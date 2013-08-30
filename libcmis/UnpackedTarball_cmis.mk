@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cmis,$(CMIS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,cmis,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,cmis,libcmis/libcmis-0.4.1.patch))
+
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_add_patches,cmis,libcmis/boost-win.patch))
 endif
