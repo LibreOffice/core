@@ -61,6 +61,7 @@
 #include <poolfmt.hrc>
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
+#include <SwStyleNameMapper.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -336,8 +337,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     if( !nResId )
         return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
-    ResId aResId( nResId + nId, *pSwResMgr );
-    String aNm( aResId );
+    String aNm;
+    aNm = SwStyleNameMapper::GetProgName( nId, aNm );
 
     // A Set for all to-be-set Attributes
     SwAttrSet aSet( GetAttrPool(), aTxtFmtCollSetRange );
@@ -1119,8 +1120,8 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
                 return pNewFmt;
             }
 
-    ResId aResId( nRCId + nId, *pSwResMgr );
-    String aNm( aResId );
+    String aNm;
+    aNm = SwStyleNameMapper::GetProgName( nId, aNm );
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
     {
@@ -1426,8 +1427,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
     SwPageDesc* pNewPgDsc = 0;
     {
-        const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
-        const String aNm( aResId );
+        String aNm;
+        aNm = SwStyleNameMapper::GetProgName( nId, aNm );
         const bool bIsModified = IsModified();
 
         sal_uInt16 nPageDescIdx = 0;
@@ -1615,8 +1616,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
-    String aNm( aResId );
+    String aNm;
+    aNm = SwStyleNameMapper::GetProgName( nId, aNm );
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
 

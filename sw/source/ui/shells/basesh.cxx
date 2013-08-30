@@ -2555,7 +2555,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 rSh.MoveTable( fnTablePrev, fnTableStart );
 
                 if( aTableName.Len() && !rSh.GetTblStyle( aTableName ) )
-                    rSh.GetTableFmt()->SetName( aTableName );
+                    rSh.GetTableFmt()->SetInternalName( aTableName );
 
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);

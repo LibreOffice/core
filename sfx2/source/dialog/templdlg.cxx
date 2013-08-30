@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
+#include <svtools/treelistentry.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -555,7 +556,8 @@ void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
     {
         if(IsExpanded(pEntry))
         {
-            rEntries.push_back(GetEntryText(pEntry));
+            StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+            rEntries.push_back(pStylesEntry->GetInternalName());
         }
     }
 }
@@ -627,8 +629,10 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
 {
     if(!pTarget || !pEntry)
         return sal_False;
-    aParent = GetEntryText(pTarget);
-    aStyle  = GetEntryText(pEntry);
+    StylesTreeListEntry* pStylesTarget = static_cast< StylesTreeListEntry* >(pTarget);
+    StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >(pEntry);
+    aParent = pStylesTarget->GetInternalName();
+    aStyle  = pStylesEntry->GetInternalName();
     const sal_Bool bRet = (sal_Bool)aDropLink.Call(this);
     rpNewParent = pTarget;
     lPos=0;
@@ -707,12 +711,13 @@ struct StyleTree_Impl
 {
     OUString aName;
     OUString aParent;
+    OUString aInternalName;
     StyleTreeArr_Impl *pChildren;
     sal_Bool bIsExpanded;
     sal_Bool HasParent() const { return !aParent.isEmpty(); }
 
-    StyleTree_Impl(const OUString &rName, const OUString &rParent):
-        aName(rName), aParent(rParent), pChildren(0), bIsExpanded(0) {}
+    StyleTree_Impl(const OUString &rName, const OUString &rParent, const OUString &rInternalName):
+        aName(rName), aParent(rParent),aInternalName(rInternalName), pChildren(0), bIsExpanded(0) {}
     ~StyleTree_Impl();
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
     sal_uIntPtr Count();
@@ -774,12 +779,12 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
             for(sal_uInt16 j = 0; j < nCount; ++j)
             {
                 StyleTree_Impl* pCmp = rArr[j];
-                if(pCmp->aName == pEntry->aParent)
+                if(pCmp->aInternalName == pEntry->aParent)
                 {
                     // Paste initial filter
                     sal_uInt16 nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                             aSorter.compare((*pCmp->pChildren)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
+                             aSorter.compare((*pCmp->pChildren)[nPos]->aInternalName, pEntry->aInternalName) < 0 ; nPos++)
                     {};
                     pCmp->Put(pEntry,nPos);
                     break;
@@ -819,7 +824,10 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
                                  const ExpandedEntries_t& rEntries,
                                  SvTreeListEntry* pParent = 0)
 {
-    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
+    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent,
+            sal_False, LIST_APPEND, &pEntry->aInternalName);
+    StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pNewEntry );
+    pStylesEntry->SetInternalName( pEntry->aInternalName );
     const sal_uInt16 nCount = pEntry->pChildren ? pEntry->pChildren->size() : 0;
     for(sal_uInt16 i = 0; i < nCount; ++i)
         FillBox_Impl(pBox, (*pEntry->pChildren)[i], rEntries, pNewEntry);
@@ -1152,15 +1160,17 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
         if ( !rStr.isEmpty() )
         {
             SvTreeListEntry* pEntry = pTreeBox->First();
-            while ( pEntry )
+            StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+            while ( pStylesEntry )
             {
-                if ( pTreeBox->GetEntryText( pEntry ) == rStr )
+                if ( pStylesEntry->GetInternalName() == rStr )
                 {
                     pTreeBox->MakeVisible( pEntry );
                     pTreeBox->Select( pEntry );
                     return;
                 }
                 pEntry = pTreeBox->Next( pEntry );
+                pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
             }
         }
         else
@@ -1172,8 +1182,12 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
         if ( bSelect )
         {
             SvTreeListEntry* pEntry = (SvTreeListEntry*)aFmtLb.FirstVisible();
-            while ( pEntry && aFmtLb.GetEntryText( pEntry ) != rStr )
+            StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+            while ( pEntry && pStylesEntry->GetInternalName() != rStr )
+            {
                 pEntry = (SvTreeListEntry*)aFmtLb.NextVisible( pEntry );
+                pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+            }
             if ( !pEntry )
                 bSelect = sal_False;
             else
@@ -1204,18 +1218,16 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
 OUString SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
 {
     OUString aRet;
+    SvTreeListEntry* pEntry = NULL;
     if ( pTreeBox )
-    {
-        SvTreeListEntry* pEntry = pTreeBox->FirstSelected();
-        if ( pEntry )
-            aRet = pTreeBox->GetEntryText( pEntry );
-    }
+        pEntry = pTreeBox->FirstSelected();
     else
-    {
-        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
-        if ( pEntry )
-            aRet = aFmtLb.GetEntryText( pEntry );
-    }
+        pEntry = aFmtLb.FirstSelected();
+
+    StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+    if ( pStylesEntry )
+        aRet = pStylesEntry->GetInternalName();
+
     return aRet;
 }
 
@@ -1255,7 +1267,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         while(pStyle)
         {
             StyleTree_Impl* pNew =
-                new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
+                new StyleTree_Impl(pStyle->GetDisplayName(), pStyle->GetParent(), pStyle->GetName());
             aArr.push_back(pNew);
             pStyle = pStyleSheetPool->Next();
         }
@@ -1279,7 +1291,8 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
 
         for ( SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next( pEntry ) )
         {
-            if ( IsExpanded_Impl( aEntries, pTreeBox->GetEntryText( pEntry ) ) )
+            StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pEntry );
+            if ( pStylesEntry && IsExpanded_Impl( aEntries, pStylesEntry->GetInternalName() ) )
                 pTreeBox->Expand( pEntry );
         }
 
@@ -1393,6 +1406,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
             SvTreeListEntry* pEntry = aFmtLb.First();
             std::vector<OUString> aStrings;
+            std::vector<OUString> aDisplayNames;
 
             comphelper::string::NaturalStringSorter aSorter(
                 ::comphelper::getProcessComponentContext(),
@@ -1402,16 +1416,17 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             {
                 //Bubblesort
                 size_t nPos;
-                for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
+                for(nPos = aDisplayNames.size(); nPos && aSorter.compare(aDisplayNames[nPos-1], pStyle->GetName()) > 0; --nPos)
                 {};
                 aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
+                aDisplayNames.insert(aDisplayNames.begin() + nPos, pStyle->GetDisplayName());
                 pStyle = pStyleSheetPool->Next();
             }
 
             size_t nCount = aStrings.size();
             size_t nPos = 0;
             while(nPos < nCount && pEntry &&
-                  aStrings[nPos] == OUString(aFmtLb.GetEntryText(pEntry)))
+                  aDisplayNames[nPos] == OUString(aFmtLb.GetEntryText(pEntry)))
             {
                 ++nPos;
                 pEntry = aFmtLb.Next( pEntry );
@@ -1424,7 +1439,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 aFmtLb.Clear();
 
                 for(nPos = 0; nPos < nCount; ++nPos)
-                    aFmtLb.InsertEntry(aStrings[nPos], 0, sal_False, nPos);
+                {
+                    SvTreeListEntry* pNewEntry = aFmtLb.InsertEntry(aDisplayNames[nPos], 0, sal_False, nPos);
+                    StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pNewEntry );
+                    if ( pStylesEntry )
+                        pStylesEntry->SetInternalName( aStrings[nPos] );
+                }
 
                 aFmtLb.SetUpdateMode(true);
             }
@@ -2141,19 +2161,17 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
         std::vector<SvTreeListEntry*> aList;
         SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+        StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry * >( pEntry );
         const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
         OUString aMsg = SfxResId(STR_DELETE_STYLE_USED).toString();
         aMsg += SfxResId(STR_DELETE_STYLE).toString();
 
-        while (pEntry)
+        while (pStylesEntry)
         {
             aList.push_back( pEntry );
             // check the style is used or not
-            if (pTreeBox)
-                aRet = pTreeBox->GetEntryText( pEntry );
-            else
-                aRet = aFmtLb.GetEntryText( pEntry );
+            aRet = pStylesEntry->GetInternalName( );
 
             const OUString aTemplName( aRet );
 
@@ -2168,6 +2186,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             }
 
             pEntry = aFmtLb.NextSelected( pEntry );
+            pStylesEntry = static_cast< StylesTreeListEntry * >( pEntry );
         }
 
         bool aApproved = 0;
@@ -2190,10 +2209,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
             for (; it != itEnd; ++it)
             {
-                if (pTreeBox)
-                    aRet = pTreeBox->GetEntryText( *it );
-                else
-                    aRet = aFmtLb.GetEntryText( *it );
+                pStylesEntry = static_cast< StylesTreeListEntry* >( *it );
+                aRet = pStylesEntry->GetInternalName( );
 
                 const OUString aTemplName( aRet );
                 PrepareDeleteAction();
@@ -2335,7 +2352,8 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     }
     if( pListBox )
     {
-        SelectStyle( pListBox->GetEntryText( pListBox->GetHdlEntry() ));
+        StylesTreeListEntry* pStylesEntry = static_cast< StylesTreeListEntry* >( pListBox->GetHdlEntry());
+        SelectStyle( pStylesEntry->GetInternalName() );
 #if defined STYLESPREVIEW
         sal_uInt16 nModifier = aFmtLb.GetModifier();
         if ( mbIgnoreSelect )
@@ -2348,7 +2366,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
         else
         {
             Execute_Impl(SID_STYLE_PREVIEW,
-                     GetSelectedEntry(), String(),
+                     pListBox->GetInternalName(), String(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      0, 0, &nModifier );
         }
@@ -2949,6 +2967,11 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
      return rParent.aFmtLb.ExecuteDrop(rEvt);
+}
+
+SvTreeListEntry* StylesTreeListBox::CreateEntry() const
+{
+    return new StylesTreeListEntry;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -202,7 +202,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rCharStyleName );
         if( !pCFmt )
         {
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
+            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromProgName( rCharStyleName,
                                             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             pCFmt = nId != USHRT_MAX
                         ? pDoc->GetCharFmtFromPool( nId )

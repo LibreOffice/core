@@ -162,11 +162,16 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
     const SwCharFmt* pCharFmt = pInf->GetCharFmt(
                         *pSh->GetView().GetDocShell()->GetDoc());
-    m_pFtnCharTextTemplBox->SelectEntry(pCharFmt->GetName());
+
+    sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( pCharFmt->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+    String sStyleDisplayName = SwStyleNameMapper::GetUIName( nPoolId, pCharFmt->GetName() );
+    m_pFtnCharTextTemplBox->SelectEntry(sStyleDisplayName);
     m_pFtnCharTextTemplBox->SaveValue();
 
     pCharFmt = pInf->GetAnchorCharFmt( *pSh->GetDoc() );
-    m_pFtnCharAnchorTemplBox->SelectEntry( pCharFmt->GetName() );
+    nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( pCharFmt->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+    sStyleDisplayName = SwStyleNameMapper::GetUIName( nPoolId, pCharFmt->GetName() );
+    m_pFtnCharAnchorTemplBox->SelectEntry( sStyleDisplayName );
     m_pFtnCharAnchorTemplBox->SaveValue();
 
         // styles   special regions
@@ -204,17 +209,24 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // page
     for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
-        m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
+    {
+        sal_uInt16 nPos = m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
+        m_pPageTemplBox->SetEntryData( nPos, (void*) i );
+    }
 
     sal_uInt16 nCount = pSh->GetPageDescCnt();
     for(i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
         if(LISTBOX_ENTRY_NOTFOUND == m_pPageTemplBox->GetEntryPos(rPageDesc.GetName()))
-            m_pPageTemplBox->InsertEntry(rPageDesc.GetName());
+        {
+            sal_uInt16 nPos = m_pPageTemplBox->InsertEntry(rPageDesc.GetName());
+            m_pPageTemplBox->SetEntryData( nPos, (void*) USHRT_MAX);
+        }
     }
 
-    m_pPageTemplBox->SelectEntry( pInf->GetPageDesc( *pSh->GetDoc() )->GetName());
+    OUString sDisplayName = SwStyleNameMapper::GetUIName( pInf->GetPageDesc( *pSh->GetDoc( ) )->GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
+    m_pPageTemplBox->SelectEntry( sDisplayName );
     delete pInf;
 }
 
@@ -366,13 +378,20 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     pInf->SetPrefix(m_pPrefixED->GetText().replaceAll("\\t", "\t"));
     pInf->SetSuffix(m_pSuffixED->GetText().replaceAll("\\t", "\t"));
 
-    pInf->SetCharFmt( lcl_GetCharFormat( pSh,
-                        m_pFtnCharTextTemplBox->GetSelectEntry() ) );
-    pInf->SetAnchorCharFmt( lcl_GetCharFormat( pSh,
-                        m_pFtnCharAnchorTemplBox->GetSelectEntry() ) );
+    sal_uInt16 nPos = m_pFtnCharTextTemplBox->GetSelectEntryPos();
+    sal_IntPtr nPoolId = ( sal_IntPtr )m_pFtnCharTextTemplBox->GetEntryData( nPos );
+    OUString sCharFmtName = m_pFtnCharTextTemplBox->GetSelectEntry( );
+    sCharFmtName = SwStyleNameMapper::GetProgName( (sal_uInt16)nPoolId, sCharFmtName );
+    pInf->SetCharFmt( lcl_GetCharFormat( pSh, sCharFmtName ) );
+
+    nPos = m_pFtnCharAnchorTemplBox->GetSelectEntryPos();
+    nPoolId = ( sal_IntPtr )m_pFtnCharAnchorTemplBox->GetEntryData( nPos );
+    sCharFmtName = m_pFtnCharAnchorTemplBox->GetSelectEntry( );
+    sCharFmtName = SwStyleNameMapper::GetProgName( (sal_uInt16)nPoolId, sCharFmtName );
+    pInf->SetAnchorCharFmt( lcl_GetCharFormat( pSh, sCharFmtName ) );
 
     // paragraph template
-    sal_uInt16 nPos = m_pParaTemplBox->GetSelectEntryPos();
+    nPos = m_pParaTemplBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const String aFmtName( m_pParaTemplBox->GetSelectEntry() );
@@ -382,8 +401,11 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     }
 
     // page template
-    pInf->ChgPageDesc( pSh->FindPageDescByName(
-                                m_pPageTemplBox->GetSelectEntry(), sal_True ) );
+    nPos = m_pPageTemplBox->GetSelectEntryPos();
+    nPoolId = ( sal_IntPtr )m_pPageTemplBox->GetEntryData( nPos );
+    OUString sFmtName = m_pPageTemplBox->GetSelectEntry( );
+    sFmtName = SwStyleNameMapper::GetProgName( (sal_uInt16)nPoolId, sFmtName );
+    pInf->ChgPageDesc( pSh->FindPageDescByName( sFmtName, sal_True ) );
 
     if ( bEndNote )
     {

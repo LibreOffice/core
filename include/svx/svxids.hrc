@@ -905,6 +905,8 @@
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
 
+#define SID_CHAR_FMT_LIST_BOX_INTERNAL                  (SID_SVX_START+1092)
+
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)

@@ -26,6 +26,7 @@ class SfxTemplateControllerItem;
 #include <vcl/lstbox.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/treelistbox.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svl/eitem.hxx>
 
 #include <rsc/rscsfx.hxx>
@@ -49,9 +50,37 @@ class SfxDockingWindow;
 
 namespace com { namespace sun { namespace star { namespace frame { class XModuleManager2; } } } }
 
+class StylesTreeListEntry : public SvTreeListEntry
+{
+    friend class StylesTreeListBox;
+
+    OUString m_aInternalName;
+
+public:
+    StylesTreeListEntry() :
+        SvTreeListEntry() {}
+    StylesTreeListEntry(const StylesTreeListEntry& r) :
+        SvTreeListEntry( r ), m_aInternalName( r.m_aInternalName ) { }
+    virtual ~StylesTreeListEntry() { }
+
+    rtl::OUString GetInternalName( ) const { return m_aInternalName; }
+    void SetInternalName( rtl::OUString aName ) { m_aInternalName = aName; }
+};
+
+class StylesTreeListBox : public SvTreeListBox
+{
+public:
+    StylesTreeListBox( Window* pParent, const ResId& rId ) :
+        SvTreeListBox( pParent, rId ) {}
+    StylesTreeListBox( Window* pParent, WinBits nWinBits ) :
+        SvTreeListBox( pParent, nWinBits ) {}
+
+    virtual SvTreeListEntry* CreateEntry() const;
+};
+
 // class DropListBox_Impl ------------------------------------------------
 
-class DropListBox_Impl : public SvTreeListBox
+class DropListBox_Impl : public StylesTreeListBox
 {
 private:
     DECL_LINK(OnAsyncExecuteDrop, void *);
@@ -62,9 +91,9 @@ protected:
 
 public:
     DropListBox_Impl( Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, rId ), pDialog( pD ) {}
+        StylesTreeListBox( pParent, rId ), pDialog( pD ) {}
     DropListBox_Impl( Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD ) :
-        SvTreeListBox( pParent, nWinBits ), pDialog( pD ) {}
+        StylesTreeListBox( pParent, nWinBits ), pDialog( pD ) {}
 
     virtual void     MouseButtonDown( const MouseEvent& rMEvt );
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );

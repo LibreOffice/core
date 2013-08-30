@@ -307,7 +307,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
     const SwTable* pTbl = rDoc.InsertTable( aInsTblOpts, aPos, nRows, nCols,
                                             nAdjust,
                                             pAutoFmt, pColWidth );
-    ((SwFrmFmt*)pTbl->GetFrmFmt())->SetName( sTblNm );
+    ((SwFrmFmt*)pTbl->GetFrmFmt())->SetInternalName( sTblNm );
     SwTableNode* pTblNode = (SwTableNode*)rDoc.GetNodes()[nSttNode]->GetTableNode();
 
     if( pDDEFldType )
@@ -798,7 +798,7 @@ void SwUndoTxtToTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
                 aInsTblOpts, rPam, cTrenner, nAdjust, pAutoFmt );
-    ((SwFrmFmt*)pTable->GetFrmFmt())->SetName( sTblNm );
+    ((SwFrmFmt*)pTable->GetFrmFmt())->SetInternalName( sTblNm );
 }
 
 void SwUndoTxtToTbl::RepeatImpl(::sw::RepeatContext & rContext)
@@ -3008,13 +3008,13 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     if( bWithPrev )
     {
         // move name
-        pNew->GetTable().GetFrmFmt()->SetName( pTbl->GetFrmFmt()->GetName() );
+        pNew->GetTable().GetFrmFmt()->SetInternalName( pTbl->GetFrmFmt()->GetName() );
         pSavHdl->RestoreAttr( pNew->GetTable() );
     }
     else
         pTbl = &pNew->GetTable();
 
-    pTbl->GetFrmFmt()->SetName( aName );
+    pTbl->GetFrmFmt()->SetInternalName( aName );
     pSavTbl->RestoreAttr( *pTbl );
 
     if( pHistory )

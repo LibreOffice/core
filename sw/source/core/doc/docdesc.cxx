@@ -372,7 +372,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     pDesc->ChgFirstShare( rChged.IsFirstShared() );
 
     if ( pDesc->GetName() != rChged.GetName() )
-        pDesc->SetName( rChged.GetName() );
+        pDesc->SetInternalName( rChged.GetName() );
 
     // A RegisterChange is triggered, if necessary
     pDesc->SetRegisterFmtColl( rChged.GetRegisterFmtColl() );
@@ -540,7 +540,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     if( pCpy )
     {
         pNew = new SwPageDesc( *pCpy );
-        pNew->SetName( rName );
+        pNew->SetInternalName( rName );
         if( rName != pCpy->GetName() )
         {
             pNew->SetPoolFmtId( USHRT_MAX );

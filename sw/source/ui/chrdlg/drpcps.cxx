@@ -46,6 +46,7 @@
 #include "paratr.hxx"
 #include "uitool.hxx"
 #include "charfmt.hxx"
+#include "SwStyleNameMapper.hxx"
 
 #include "chrdlg.hrc"
 
@@ -296,8 +297,11 @@ void SwDropCapsPict::UpdatePaintSettings( void )
         else
         {
             // query Font at character template
-            SwCharFmt *pFmt = mpPage->rSh.GetCharStyle(
-                                    mpPage->m_pTemplateBox->GetSelectEntry(),
+            sal_uInt16 nPos = mpPage->m_pTemplateBox->GetSelectEntryPos( );
+            sal_IntPtr nPoolId = (sal_IntPtr)mpPage->m_pTemplateBox->GetEntryData( nPos );
+            OUString sInternalName = SwStyleNameMapper::GetProgName( nPoolId,
+                    mpPage->m_pTemplateBox->GetSelectEntry() );
+            SwCharFmt *pFmt = mpPage->rSh.GetCharStyle(sInternalName,
                                     SwWrtShell::GETSTYLE_CREATEANY );
             OSL_ENSURE(pFmt, "character style doesn't exist!");
             const SvxFontItem &rFmtFont = pFmt->GetFont();
@@ -644,7 +648,11 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
     // Reset format
     m_pTemplateBox->SelectEntryPos(0);
     if (aFmtDrop.GetCharFmt())
-        m_pTemplateBox->SelectEntry(aFmtDrop.GetCharFmt()->GetName());
+    {
+        OUString sDisplayName = SwStyleNameMapper::GetUIName(aFmtDrop.GetCharFmt()->GetName(),
+                                                             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        m_pTemplateBox->SelectEntry(sDisplayName);
+    }
 
     // Enable controls
     m_pDropCapsBox->Check(aFmtDrop.GetLines() > 1);
@@ -814,7 +822,12 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
             // template
             if (m_pTemplateBox->GetSelectEntryPos())
-                aFmt.SetCharFmt(rSh.GetCharStyle(m_pTemplateBox->GetSelectEntry()));
+            {
+                sal_uInt16 nPos = m_pTemplateBox->GetSelectEntryPos();
+                sal_IntPtr nPoolId = (sal_IntPtr)m_pTemplateBox->GetEntryData(nPos);
+                OUString sInternalName = SwStyleNameMapper::GetProgName(nPoolId, m_pTemplateBox->GetSelectEntry());
+                aFmt.SetCharFmt(rSh.GetCharStyle(sInternalName));
+            }
         }
         else
         {

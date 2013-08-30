@@ -1445,7 +1445,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         pTableNode = pTbl->GetTableNode();
         OSL_ENSURE( pTableNode, "table node missing" );
 
-        pTblFrmFmt->SetName( sTblName );
+        pTblFrmFmt->SetInternalName( sTblName );
 
         SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
         pBox1 = pLine1->GetTabBoxes()[0U];

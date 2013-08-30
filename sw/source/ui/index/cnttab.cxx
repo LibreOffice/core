@@ -552,13 +552,24 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
         return sal_True;
 
-    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromProgName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
         ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
         return sal_True;
 
     return sal_False;
 }
+
+class SwIndexTreeEntry : public SvTreeListEntry
+{
+    OUString m_sName;
+
+    public:
+        SwIndexTreeEntry( ) : m_sName( ) { }
+
+        void SetInternalName( const OUString& rName ) { m_sName = rName; }
+        OUString GetInternalName( ) { return m_sName; }
+};
 
 class SwIndexTreeLB : public SvTreeListBox
 {
@@ -570,6 +581,8 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     void            SetHeaderBar(const HeaderBar* pHB) {pHeaderBar = pHB;}
+
+    virtual SvTreeListEntry* CreateEntry() const;
 };
 
 sal_IntPtr SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
@@ -618,6 +631,11 @@ void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
     }
     if(!bChanged)
         SvTreeListBox::KeyInput(rKEvt);
+}
+
+SvTreeListEntry* SwIndexTreeLB::CreateEntry() const
+{
+    return new SwIndexTreeEntry( );
 }
 
 class SwHeaderTree : public Control
@@ -727,8 +745,12 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         for(sal_uInt16 nToken = 0; nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER); nToken++)
         {
             String sTmp(sStyles.GetToken(nToken, TOX_STYLE_DELIMITER));
-            SvTreeListEntry* pEntry = rTLB.InsertEntry(sTmp);
+            OUString sDisplayName = SwStyleNameMapper::GetUIName(sTmp,
+                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+            SvTreeListEntry* pEntry = rTLB.InsertEntry(sDisplayName);
             pEntry->SetUserData(reinterpret_cast<void*>(i));
+            SwIndexTreeEntry* pIndexEntry = dynamic_cast< SwIndexTreeEntry * >(pEntry);
+            pIndexEntry->SetInternalName(sTmp);
         }
     }
     // now the other styles
@@ -745,14 +767,20 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         const OUString aName = pColl->GetName();
         if (!aName.isEmpty())
         {
+            OUString sDisplayName = SwStyleNameMapper::GetUIName(aName,
+                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+
             SvTreeListEntry* pEntry = rTLB.First();
-            while (pEntry && rTLB.GetEntryText(pEntry)!=aName)
+            while (pEntry && rTLB.GetEntryText(pEntry)!=sDisplayName)
             {
                 pEntry = rTLB.Next(pEntry);
             }
             if (!pEntry)
             {
-                rTLB.InsertEntry(aName)->SetUserData((void*)USHRT_MAX);
+                pEntry = rTLB.InsertEntry(sDisplayName);
+                pEntry->SetUserData((void*)USHRT_MAX);
+                SwIndexTreeEntry* pIndexEntry = dynamic_cast< SwIndexTreeEntry * >(pEntry);
+                pIndexEntry->SetInternalName(aName);
             }
         }
     }
@@ -772,10 +800,11 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
     SvTreeListEntry* pEntry = rTLB.First();
     while(pEntry)
     {
+        SwIndexTreeEntry* pIndexEntry = dynamic_cast< SwIndexTreeEntry * > (pEntry);
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(nLevel != USHRT_MAX)
         {
-            String sName(rTLB.GetEntryText(pEntry));
+            String sName(pIndexEntry->GetInternalName());
             if(pStyleArr[nLevel].Len())
                 pStyleArr[nLevel] += TOX_STYLE_DELIMITER;
             pStyleArr[nLevel] += sName;
@@ -1954,13 +1983,18 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
     {
         SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
         String sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
-        if(sMainEntryCharStyle.Len())
+        sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( sMainEntryCharStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        String sStyleDisplayName = SwStyleNameMapper::GetUIName( nPoolId, sMainEntryCharStyle );
+        if(sStyleDisplayName.Len())
         {
             if( LISTBOX_ENTRY_NOTFOUND ==
-                    m_pMainEntryStyleLB->GetEntryPos(sMainEntryCharStyle))
-                m_pMainEntryStyleLB->InsertEntry(
-                        sMainEntryCharStyle);
-            m_pMainEntryStyleLB->SelectEntry(sMainEntryCharStyle);
+                    m_pMainEntryStyleLB->GetEntryPos(sStyleDisplayName))
+            {
+                sal_uInt16 nPos = m_pMainEntryStyleLB->InsertEntry(
+                        sStyleDisplayName);
+                m_pMainEntryStyleLB->SetEntryData(nPos, (void*)nPoolId);
+            }
+            m_pMainEntryStyleLB->SelectEntry(sStyleDisplayName);
         }
         else
             m_pMainEntryStyleLB->SelectEntry(sNoCharStyle);
@@ -2086,6 +2120,10 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     if(TOX_INDEX == aLastTOXType.eType)
     {
         String sTemp(m_pMainEntryStyleLB->GetSelectEntry());
+        sal_uInt16 nPos = m_pMainEntryStyleLB->GetSelectEntryPos();
+        sal_IntPtr nPoolId = (sal_IntPtr) m_pMainEntryStyleLB->GetEntryData(nPos);
+        if (nPoolId != USHRT_MAX)
+            sTemp = SwStyleNameMapper::GetProgName( (sal_uInt16)nPoolId, sTemp );
         rDesc.SetMainEntryCharStyle(sNoCharStyle == sTemp ? aEmptyStr : sTemp);
         sal_uInt16 nIdxOptions = rDesc.GetIndexOptions() & ~nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
         if(m_pAlphaDelimCB->IsChecked())
@@ -2133,7 +2171,10 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
     {
-        SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
+        sal_uInt16 nPos = m_pCharStyleLB->GetSelectEntryPos();
+        sal_IntPtr nPoolId = (sal_IntPtr)m_pCharStyleLB->GetEntryData(nPos);
+        OUString sProgName = SwStyleNameMapper::GetProgName(nPoolId, m_pCharStyleLB->GetSelectEntry());
+        SfxStringItem aStyle(SID_STYLE_EDIT, sProgName);
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_CHAR);
         // TODO: WrtShell?
 //      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
@@ -2325,7 +2366,10 @@ IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 {
     if (!pToken->sCharStyleName.isEmpty())
-        m_pCharStyleLB->SelectEntry(pToken->sCharStyleName);
+    {
+        OUString sDisplayName = SwStyleNameMapper::GetUIName(pToken->sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+        m_pCharStyleLB->SelectEntry(sDisplayName);
+    }
     else
         m_pCharStyleLB->SelectEntry(sNoCharStyle);
 
@@ -2450,10 +2494,11 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl)
     {
+        OUString sInternalName = SwStyleNameMapper::GetProgName(nId, sEntry);
         if(WINDOW_EDIT == pCtrl->GetType())
-            ((SwTOXEdit*)pCtrl)->SetCharStyleName(sEntry, nId);
+            ((SwTOXEdit*)pCtrl)->SetCharStyleName(sInternalName, nId);
         else
-            ((SwTOXButton*)pCtrl)->SetCharStyleName(sEntry, nId);
+            ((SwTOXButton*)pCtrl)->SetCharStyleName(sInternalName, nId);
 
     }
     ModifyHdl(0);
@@ -3509,9 +3554,11 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     String aStr( SW_RES( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
+        OUString sUIName = SwStyleNameMapper::GetUIName( m_pCurrentForm->GetTemplate( 0 ),
+                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         aStr += ' ';
         aStr += aDeliStart;
-        aStr += m_pCurrentForm->GetTemplate( 0 );
+        aStr += sUIName;
         aStr += aDeliEnd;
     }
     m_pLevelLB->InsertEntry(aStr);
@@ -3531,9 +3578,12 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
+            OUString sUIName = SwStyleNameMapper::GetUIName( m_pCurrentForm->GetTemplate( i ),
+                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+
             aCpy += ' ';
             aCpy += aDeliStart;
-            aCpy += m_pCurrentForm->GetTemplate( i );
+            aCpy += sUIName;
             aCpy += aDeliEnd;
         }
         m_pLevelLB->InsertEntry( aCpy );
@@ -3546,7 +3596,13 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     for( i = 0; i < nSz; ++i )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
-            m_pParaLayLB->InsertEntry( pColl->GetName() );
+        {
+            OUString sName = SwStyleNameMapper::GetUIName( pColl->GetName(),
+                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+            sal_uInt16 nPos = m_pParaLayLB->InsertEntry( sName );
+            sal_IntPtr nPoolId = pColl->GetPoolFmtId();
+            m_pParaLayLB->SetEntryData( nPos, (void*)nPoolId );
+        }
 
     // query pool collections and set them for the directory
     for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
@@ -3554,7 +3610,13 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         aStr = m_pCurrentForm->GetTemplate( i );
         if( aStr.Len() &&
             LISTBOX_ENTRY_NOTFOUND == m_pParaLayLB->GetEntryPos( aStr ))
-            m_pParaLayLB->InsertEntry( aStr );
+        {
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( aStr,
+                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+            OUString sUIName = SwStyleNameMapper::GetUIName( nPoolId, aStr );
+            sal_uInt16 nPos = m_pParaLayLB->InsertEntry( sUIName );
+            m_pParaLayLB->SetEntryData( nPos, (void*)nPoolId );
+        }
     }
 
     EnableSelectHdl(m_pParaLayLB);
@@ -3576,7 +3638,11 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
     {
-        SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectEntry());
+        sal_uInt16 nPos = m_pParaLayLB->GetSelectEntryPos();
+        OUString sName = m_pParaLayLB->GetSelectEntry();
+        sal_IntPtr nPoolId = (sal_IntPtr) m_pParaLayLB->GetEntryData(nPos);
+        sName = SwStyleNameMapper::GetProgName(nPoolId, sName);
+        SfxStringItem aStyle(SID_STYLE_EDIT, sName);
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
@@ -3606,7 +3672,11 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
         aStr += aDeliStart;
         aStr += m_pParaLayLB->GetSelectEntry();
 
-        m_pCurrentForm->SetTemplate(nLevPos, m_pParaLayLB->GetSelectEntry());
+        sal_uInt16 nPos = m_pParaLayLB->GetSelectEntryPos();
+        OUString sName = m_pParaLayLB->GetSelectEntry();
+        sal_IntPtr nPoolId = (sal_IntPtr) m_pParaLayLB->GetEntryData(nPos);
+        sName = SwStyleNameMapper::GetProgName(nPoolId, sName);
+        m_pCurrentForm->SetTemplate(nLevPos, sName);
 
         aStr += aDeliEnd;
 
@@ -3637,7 +3707,10 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 {
-    String aTmpName( m_pParaLayLB->GetSelectEntry() );
+    sal_uInt16 nPos = m_pParaLayLB->GetSelectEntryPos();
+    OUString aTmpName = m_pParaLayLB->GetSelectEntry();
+    sal_IntPtr nPoolId = (sal_IntPtr) m_pParaLayLB->GetEntryData(nPos);
+    aTmpName = SwStyleNameMapper::GetProgName(nPoolId, aTmpName);
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
 
     if(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
@@ -3655,7 +3728,10 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
     m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
-    String aTmpName(m_pParaLayLB->GetSelectEntry());
+    sal_uInt16 nPos = m_pParaLayLB->GetSelectEntryPos();
+    OUString aTmpName = m_pParaLayLB->GetSelectEntry();
+    sal_IntPtr nPoolId = (sal_IntPtr) m_pParaLayLB->GetEntryData(nPos);
+    aTmpName = SwStyleNameMapper::GetProgName(nPoolId, aTmpName);
     m_pAssignBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
                      LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectEntryPos() &&
        (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));

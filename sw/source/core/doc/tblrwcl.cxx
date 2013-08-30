@@ -2189,7 +2189,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     // Also copy Names or enforce a new unique one
     if( bCpyName )
-        pNewTbl->GetFrmFmt()->SetName( GetFrmFmt()->GetName() );
+        pNewTbl->GetFrmFmt()->SetInternalName( GetFrmFmt()->GetName() );
 
     _CpyTabFrms aCpyFmt;
     _CpyPara aPara( pTblNd, 1, aCpyFmt, bCpyNds );

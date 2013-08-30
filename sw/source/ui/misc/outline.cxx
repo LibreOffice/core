@@ -503,7 +503,11 @@ void    SwOutlineSettingsTabPage::Update()
         if(bSameCharFmt)
         {
             if(pFirstFmt)
-                m_pCharFmtLB->SelectEntry(pFirstFmt->GetName());
+            {
+                sal_uInt16 nPoolId = pFirstFmt->GetPoolFmtId();
+                OUString sDisplayName = SwStyleNameMapper::GetUIName( nPoolId, pFirstFmt->GetName() );
+                m_pCharFmtLB->SelectEntry(sDisplayName);
+            }
             else
                 m_pCharFmtLB->SelectEntry( ViewShell::GetShellRes()->aStrNone );
         }
@@ -537,7 +541,11 @@ void    SwOutlineSettingsTabPage::Update()
         m_pSuffixED->SetText(rFmt.GetSuffix());
         const SwCharFmt* pFmt = rFmt.GetCharFmt();
         if(pFmt)
-            m_pCharFmtLB->SelectEntry(pFmt->GetName());
+        {
+            sal_uInt16 nPoolId = pFmt->GetPoolFmtId();
+            OUString sDisplayName = SwStyleNameMapper::GetUIName( nPoolId, pFmt->GetName() );
+            m_pCharFmtLB->SelectEntry(sDisplayName);
+        }
         else
             m_pCharFmtLB->SelectEntry( ViewShell::GetShellRes()->aStrNone );
 
@@ -705,10 +713,14 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 
 IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 {
-    String sEntry = m_pCharFmtLB->GetSelectEntry();
+    sal_uInt16 nPos = m_pCharFmtLB->GetSelectEntryPos();
+    sal_IntPtr nPoolId = ( sal_IntPtr )m_pCharFmtLB->GetEntryData( nPos );
+    OUString sEntry = m_pCharFmtLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
     bool bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
     SwCharFmt* pFmt = 0;
+    sEntry = SwStyleNameMapper::GetProgName( nPoolId, sEntry );
+
     if(!bFormatNone)
     {
         sal_uInt16 nChCount = pSh->GetCharFmtCount();

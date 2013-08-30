@@ -206,10 +206,18 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         OUString sEntry = pINetFmt->GetVisitedFmt();
         if (sEntry.isEmpty())
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_VISIT, sEntry );
+        else
+        {
+            sEntry = SwStyleNameMapper::GetUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        }
         m_pVisitedLB->SelectEntry(sEntry);
         sEntry = pINetFmt->GetINetFmt();
         if (sEntry.isEmpty())
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_NORMAL, sEntry );
+        else
+        {
+            sEntry = SwStyleNameMapper::GetUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        }
         m_pNotVisitedLB->SelectEntry(sEntry);
 
         m_pTargetFrmLB->SetText(pINetFmt->GetTargetFrame());
@@ -249,15 +257,17 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
 
     // set valid settings first
-    String sEntry = m_pVisitedLB->GetSelectEntry();
-    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+    sal_uInt16 nPos = m_pVisitedLB->GetSelectEntryPos();
+    sal_IntPtr nId = ( sal_IntPtr )m_pVisitedLB->GetEntryData( nPos );
+    OUString sEntry = SwStyleNameMapper::GetProgName( nId, m_pVisitedLB->GetSelectEntry() );
     aINetFmt.SetVisitedFmtId(nId);
-    aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
+    aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? OUString() : sEntry);
 
-    sEntry = m_pNotVisitedLB->GetSelectEntry();
-    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+    nPos = m_pNotVisitedLB->GetSelectEntryPos();
+    nId = ( sal_IntPtr )m_pNotVisitedLB->GetEntryData( nPos );
+    sEntry = SwStyleNameMapper::GetProgName( nId, m_pNotVisitedLB->GetSelectEntry() );
     aINetFmt.SetINetFmtId( nId );
-    aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
+    aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? OUString() : sEntry);
 
     if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );

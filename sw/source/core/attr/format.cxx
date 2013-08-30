@@ -140,7 +140,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     return *this;
 }
 
-void SwFmt::SetName( const OUString& rNewName, sal_Bool bBroadcast )
+void SwFmt::SetInternalName( const OUString& rNewName, sal_Bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )

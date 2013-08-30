@@ -33,6 +33,7 @@
 #include "uitool.hxx"
 
 #include <IDocumentStylePoolAccess.hxx>
+#include <SwStyleNameMapper.hxx>
 
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     : SfxModalDialog( &pVw->GetViewFrame()->GetWindow(), "LineNumberingDialog",
@@ -75,6 +76,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
     String sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
+    sStyleName = SwStyleNameMapper::GetUIName( sStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
     const sal_uInt16 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
@@ -136,7 +138,10 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
     // char styles
-    String sCharFmtName(m_pCharStyleLB->GetSelectEntry());
+    sal_uInt16 nPos = m_pCharStyleLB->GetSelectEntryPos();
+    sal_IntPtr nPoolId = ( sal_IntPtr )m_pCharStyleLB->GetEntryData( nPos );
+    OUString sCharFmtName(m_pCharStyleLB->GetSelectEntry());
+    sCharFmtName = SwStyleNameMapper::GetProgName( nPoolId, sCharFmtName );
     SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
 
     if (!pCharFmt)

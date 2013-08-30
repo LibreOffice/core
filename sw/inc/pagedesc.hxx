@@ -160,7 +160,7 @@ protected:
 
 public:
     OUString GetName() const { return aDescName; }
-    void SetName( const OUString& rNewName ) { aDescName = rNewName; }
+    void SetInternalName( const OUString& rNewName ) { aDescName = rNewName; }
 
     sal_Bool GetLandscape() const { return bLandscape; }
     void SetLandscape( sal_Bool bNew ) { bLandscape = bNew; }

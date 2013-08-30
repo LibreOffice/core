@@ -128,7 +128,7 @@ protected:
 
 public:
     // This gets the UI Name from the programmatic name
-    static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
+    SW_DLLPUBLIC static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
     static         void FillUIName(const OUString& rName, OUString& rFillName,
                             SwGetPoolIdFromName, bool bDisambiguate = false);
 
@@ -153,7 +153,7 @@ public:
                                                        SwGetPoolIdFromName);
 
     // Get the Pool ID from the programmatic name
-    static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
+    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
                                             SwGetPoolIdFromName);
 
     // used to convert the 4 special ExtraProg/UINames for

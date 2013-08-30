@@ -19,6 +19,7 @@
 
 #include "dbinsdlg.hxx"
 
+#include <algorithm>
 #include <memory>
 
 #include <float.h>
@@ -212,6 +213,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aEdDbText( this, SW_RES( ED_DB_TEXT )),
     aFtDbParaColl( this, SW_RES( FT_DB_PARA_COLL )),
     aLbDbParaColl( this, SW_RES( LB_DB_PARA_COLL )),
+    aLbDbParaCollNames( ),
 
     aIbDbcolAllTo( this, SW_RES( IB_DBCOL_ALL_TO )),
     aIbDbcolOneTo( this, SW_RES( IB_DBCOL_ONE_TO )),
@@ -350,11 +352,13 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         SfxStyleSheetBasePool* pPool = pView->GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
         aLbDbParaColl.InsertEntry( sNoTmpl );
+        aLbDbParaCollNames.push_back( OUString() );
 
         const SfxStyleSheetBase* pBase = pPool->First();
         while( pBase )
         {
-            aLbDbParaColl.InsertEntry( pBase->GetName() );
+            sal_uInt16 nInsPos = aLbDbParaColl.InsertEntry( pBase->GetDisplayName() );
+            aLbDbParaCollNames.insert( aLbDbParaCollNames.begin() + nInsPos, pBase->GetName() );
             pBase = pPool->Next();
         }
         aLbDbParaColl.SelectEntryPos( 0 );
@@ -1196,13 +1200,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
             SwTxtFmtColl* pColl = 0;
             {
-                String sTmplNm( aLbDbParaColl.GetSelectEntry() );
+                String sTmplNm( aLbDbParaCollNames[aLbDbParaColl.GetSelectEntryPos()] );
                 if( sNoTmpl != sTmplNm )
                 {
                     pColl = rSh.FindTxtFmtCollByName( sTmplNm );
                     if( !pColl )
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromProgName( sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTxtCollFromPool( nId );
                         else
@@ -1576,7 +1580,7 @@ void SwInsertDBColAutoPilot::Commit()
     if (!sTmp.isEmpty())
         pValues[4].Value <<= sTmp;
 
-    if( sNoTmpl != (sTmp = aLbDbParaColl.GetSelectEntry()) )
+    if( sNoTmpl != (sTmp = aLbDbParaCollNames[aLbDbParaColl.GetSelectEntryPos()]) )
         pValues[5].Value <<= sTmp;
 
     if( pTAutoFmt )
@@ -1773,7 +1777,14 @@ void SwInsertDBColAutoPilot::Load()
 
             sTmp = pNewData->sTmplNm;
             if( sTmp.Len() )
-                aLbDbParaColl.SelectEntry( sTmp );
+            {
+                std::vector<OUString>::iterator it = std::find( aLbDbParaCollNames.begin(), aLbDbParaCollNames.end(), sTmp );
+                if ( it != aLbDbParaCollNames.end( ) )
+                {
+                    size_t nPos = it - aLbDbParaCollNames.begin();
+                    aLbDbParaColl.SelectEntryPos( nPos );
+                }
+            }
             else
                 aLbDbParaColl.SelectEntryPos( 0 );
 

@@ -682,7 +682,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     // removed pObject->HasSetName() usage since always returned true,
                     // also removed else-part and wrote an informing mail to Henning Brinkmann
                     // about this to clarify.
-                    pRet->SetName(pObject->GetName());
+                    pRet->SetInternalName(pObject->GetName());
 
                     // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
                     // entsprechend korrigieren (oder Eintrag loeschen)

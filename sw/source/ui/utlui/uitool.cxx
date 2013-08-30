@@ -688,11 +688,13 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
         if(bWithDefault || pBase->GetName() !=  sStandard)
         {
             sal_uInt16 nPos;
+            String sDisplayName;
+            sDisplayName = SwStyleNameMapper::GetUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             if(bSorted)
-                nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
+                nPos = InsertStringSorted(sDisplayName, rToFill, bHasOffset );
             else
-                nPos = rToFill.InsertEntry(pBase->GetName());
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                nPos = rToFill.InsertEntry(sDisplayName);
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
         pBase = pPool->Next();
@@ -705,13 +707,14 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
         if(pFmt->IsDefault())
             continue;
         const String& rName = pFmt->GetName();
-        if(rToFill.GetEntryPos(rName) == LISTBOX_ENTRY_NOTFOUND)
+        OUString sDisplayName = SwStyleNameMapper::GetUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        if(rToFill.GetEntryPos(sDisplayName) == LISTBOX_ENTRY_NOTFOUND)
         {
             sal_uInt16 nPos;
             if(bSorted)
-                nPos = InsertStringSorted(rName, rToFill, bHasOffset );
+                nPos = InsertStringSorted(sDisplayName, rToFill, bHasOffset );
             else
-                nPos = rToFill.InsertEntry(rName);
+                nPos = rToFill.InsertEntry(sDisplayName);
             sal_IntPtr nPoolId = USHRT_MAX;
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }

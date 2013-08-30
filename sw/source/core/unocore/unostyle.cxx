@@ -752,22 +752,20 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), true );
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
-        SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
+        SfxStyleSheetBase* pBase = pBasePool->Find(rName);
         if(pBase)
         {
-            uno::Reference< style::XStyle >  xStyle = _FindStyle(sStyleName);
+            uno::Reference< style::XStyle >  xStyle = _FindStyle(rName);
             if(!xStyle.is())
             {
                 xStyle = eFamily == SFX_STYLE_FAMILY_PAGE ?
-                    new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName) :
+                    new SwXPageStyle(*pBasePool, pDocShell, eFamily, rName) :
                         eFamily == SFX_STYLE_FAMILY_FRAME ?
                         new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
-                            new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
+                            new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), rName);
             }
             aRet.setValue(&xStyle, ::getCppuType((uno::Reference<style::XStyle>*)0));
         }

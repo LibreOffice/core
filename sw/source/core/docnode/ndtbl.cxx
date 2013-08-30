@@ -3577,7 +3577,7 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
         rTbl.GetFrmFmt()->LockModify();
         *rTbl.GetFrmFmt() = *rDelTbl.GetFrmFmt();
         // Also switch the Name
-        rTbl.GetFrmFmt()->SetName( rDelTbl.GetFrmFmt()->GetName() );
+        rTbl.GetFrmFmt()->SetInternalName( rDelTbl.GetFrmFmt()->GetName() );
         rTbl.GetFrmFmt()->UnlockModify();
     }
 

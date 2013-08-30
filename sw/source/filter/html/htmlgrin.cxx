@@ -702,7 +702,7 @@ IMAGE_SETEVENT:
 
     if( sHTMLGrfName.Len() )
     {
-        pFlyFmt->SetName( sHTMLGrfName );
+        pFlyFmt->SetInternalName( sHTMLGrfName );
 
         // ggfs. eine Grafik anspringen
         if( JUMPTO_GRAPHIC == eJumpTo && sHTMLGrfName == sJmpMark )

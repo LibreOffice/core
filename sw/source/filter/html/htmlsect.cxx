@@ -780,7 +780,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                                     &rItemSet );
     // Ggf. den Namen setzen
     if( rName.Len() )
-        pFlyFmt->SetName( rName );
+        pFlyFmt->SetInternalName( rName );
 
     RegisterFlyFrm( pFlyFmt );
 

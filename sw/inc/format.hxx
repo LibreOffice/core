@@ -102,8 +102,8 @@ public:
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline OUString GetName() const   { return aFmtName; }
-    void SetName( const OUString& rNewName, sal_Bool bBroadcast=sal_False );
-    inline void SetName( const sal_Char* pNewName,
+    void SetInternalName( const OUString& rNewName, sal_Bool bBroadcast=sal_False );
+    inline void SetInternalName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
 
     /// For querying the attribute array.
@@ -323,10 +323,10 @@ inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
     return aSet.Get( nWhich, bInParents );
 }
 
-inline void SwFmt::SetName( const sal_Char* pNewName,
+inline void SwFmt::SetInternalName( const sal_Char* pNewName,
                              sal_Bool bBroadcast )
 {
-    SetName(OUString::createFromAscii(pNewName), bBroadcast);
+    SetInternalName(OUString::createFromAscii(pNewName), bBroadcast);
 }
 
 inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,

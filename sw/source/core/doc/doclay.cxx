@@ -409,14 +409,14 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         if( !mbCopyIsMove || this != pSrcDoc )
         {
             if( mbInReading )
-                pDest->SetName( OUString() );
+                pDest->SetInternalName( OUString() );
             else
             {
                 // Test first if the name is already taken, if so generate a new one.
                 sal_Int8 nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
                 OUString sOld( pDest->GetName() );
-                pDest->SetName( OUString() );
+                pDest->SetInternalName( OUString() );
                 if( FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
@@ -425,7 +425,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                     default:            sOld = GetUniqueFrameName();    break;
                     }
 
-                pDest->SetName( sOld );
+                pDest->SetInternalName( sOld );
             }
         }
 
@@ -1146,9 +1146,11 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtFmtColl * pColl = NULL;
     if( pType )
     {
+        OUString sProgName = SwStyleNameMapper::GetProgName( pType->GetName(),
+                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName()==pType->GetName() )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName()==sProgName )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;
@@ -1408,7 +1410,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 SwCharFmt* pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if( !pCharFmt )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromProgName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                     pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
                 }
                 if (pCharFmt)
@@ -1700,7 +1702,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 SwCharFmt * pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if ( !pCharFmt )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromProgName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
                     pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
@@ -2001,7 +2003,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName )
             }
         sName = lcl_GetUniqueFlyName( this, nTyp );
     }
-    rFmt.SetName( sName, sal_True );
+    rFmt.SetInternalName( sName, sal_True );
     SetModified();
 }
 
@@ -2095,7 +2097,7 @@ void SwDoc::SetAllUniqueFlyNames()
                 nNum = ++nFlyNum;
                 break;
             }
-            pFlyFmt->SetName( sNm + OUString::number( nNum ));
+            pFlyFmt->SetInternalName( sNm + OUString::number( nNum ));
         }
     aArr.clear();
 

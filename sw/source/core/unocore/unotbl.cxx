@@ -3560,7 +3560,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
                 throw uno::RuntimeException();
             }
 
-        pFmt->SetName( rName );
+        pFmt->SetInternalName( rName );
 
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *pFmt->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

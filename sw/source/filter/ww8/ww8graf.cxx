@@ -155,7 +155,7 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const OUString &rFixed)
     if (mbIsDisabled || rFixed.isEmpty())
         return;
 
-    pFrmFmt->SetName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);
+    pFrmFmt->SetInternalName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);
 }
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
@@ -2679,7 +2679,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // Set frame name with object name
     if( pRetFrmFmt /*#i52825# */ && aObjName.Len() )
-        pRetFrmFmt->SetName( aObjName );
+        pRetFrmFmt->SetInternalName( aObjName );
     return AddAutoAnchor(pRetFrmFmt);
 }
 

@@ -286,14 +286,14 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             continue;
 
         // found!
-        rFrmFmt.SetName( pTestFmt->GetName() );
+        rFrmFmt.SetInternalName( pTestFmt->GetName() );
         bInsert = false;
         break;
     }
 
     if( bInsert )
     {
-        rFrmFmt.SetName( rNamePrefix + "." + OUString::number(nLine+1UL) );
+        rFrmFmt.SetInternalName( rNamePrefix + "." + OUString::number(nLine+1UL) );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrmFmt );
     }
@@ -460,7 +460,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             continue;
 
         // found!
-        rFrmFmt.SetName( pTestFmt->GetName() );
+        rFrmFmt.SetInternalName( pTestFmt->GetName() );
         bInsert = false;
         break;
     }
@@ -469,7 +469,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     {
         OUStringBuffer sBuffer( rNamePrefix.getLength() + 8UL );
         lcl_xmltble_appendBoxPrefix( sBuffer, rNamePrefix, nCol, nRow, bTop );
-        rFrmFmt.SetName( sBuffer.makeStringAndClear() );
+        rFrmFmt.SetInternalName( sBuffer.makeStringAndClear() );
         if ( i != aFormatList.end() ) ++i;
         aFormatList.insert( i, &rFrmFmt );
     }
@@ -1090,7 +1090,7 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
     {
         SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
         if( pFrmFmt && !pFrmFmt->GetName().isEmpty() )
-            pFrmFmt->SetName( OUString() );
+            pFrmFmt->SetInternalName( OUString() );
     }
 }
 

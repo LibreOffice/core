@@ -169,9 +169,9 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     }
 
     if( !bNameFound )
-        rTblFmt.SetName( rNewName, sal_True );
+        rTblFmt.SetInternalName( rNewName, sal_True );
     else
-        rTblFmt.SetName( GetUniqueTblName(), sal_True );
+        rTblFmt.SetInternalName( GetUniqueTblName(), sal_True );
 
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

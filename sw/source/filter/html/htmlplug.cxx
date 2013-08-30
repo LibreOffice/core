@@ -467,7 +467,7 @@ void SwHTMLParser::InsertEmbed()
 
     // Namen am FrmFmt setzen
     if( aName.Len() )
-        pFlyFmt->SetName( aName );
+        pFlyFmt->SetInternalName( aName );
 
     // den alternativen Text setzen
     SwNoTxtNode *pNoTxtNd =

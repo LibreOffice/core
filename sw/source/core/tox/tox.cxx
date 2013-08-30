@@ -25,7 +25,7 @@
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>
 #include <tox.hxx>
-#include <poolfmt.hrc>
+#include <poolfmt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>
@@ -282,13 +282,13 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     sal_uInt16 nPoolId;
     switch( eType )
     {
-    case TOX_INDEX:         nPoolId = STR_POOLCOLL_TOX_IDXH;    break;
-    case TOX_USER:          nPoolId = STR_POOLCOLL_TOX_USERH;   break;
-    case TOX_CONTENT:       nPoolId = STR_POOLCOLL_TOX_CNTNTH;  break;
-    case TOX_ILLUSTRATIONS: nPoolId = STR_POOLCOLL_TOX_ILLUSH;  break;
-    case TOX_OBJECTS      : nPoolId = STR_POOLCOLL_TOX_OBJECTH; break;
-    case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
-    case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
+    case TOX_INDEX:         nPoolId = RES_POOLCOLL_TOX_IDXH;    break;
+    case TOX_USER:          nPoolId = RES_POOLCOLL_TOX_USERH;   break;
+    case TOX_CONTENT:       nPoolId = RES_POOLCOLL_TOX_CNTNTH;  break;
+    case TOX_ILLUSTRATIONS: nPoolId = RES_POOLCOLL_TOX_ILLUSH;  break;
+    case TOX_OBJECTS      : nPoolId = RES_POOLCOLL_TOX_OBJECTH; break;
+    case TOX_TABLES       : nPoolId = RES_POOLCOLL_TOX_TABLESH; break;
+    case TOX_AUTHORITIES  : nPoolId = RES_POOLCOLL_TOX_AUTHORITIESH;    break;
     default:
         OSL_ENSURE( !this, "invalid TOXTyp");
         return ;
@@ -298,7 +298,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS == eType )
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
-        aLinkStt.sCharStyleName = SW_RES(STR_POOLCHR_TOXJUMP);
+        aLinkStt.sCharStyleName = SwStyleNameMapper::GetProgName(RES_POOLCHR_TOXJUMP, OUString());
         aTokens.push_back(aLinkStt);
     }
 
@@ -326,7 +326,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_CONTENT == eType || TOX_ILLUSTRATIONS == eType)
         aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
-    SetTemplate( 0, SW_RESSTR( nPoolId++ ));
+    SetTemplate( 0, SwStyleNameMapper::GetProgName( nPoolId++, OUString() ));
 
     if(TOX_INDEX == eType)
     {
@@ -339,12 +339,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 aTmpTokens.push_back(aTmpToken);
 
                 SetPattern( i, aTmpTokens );
-                SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDXBREAK    ));
+                SetTemplate( i, SwStyleNameMapper::GetProgName( RES_POOLCOLL_TOX_IDXBREAK, OUString() ));
             }
             else
             {
                 SetPattern( i, aTokens );
-                SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDX1 + i - 2 ));
+                SetTemplate( i, SwStyleNameMapper::GetProgName( RES_POOLCOLL_TOX_IDX1 + i - 2, OUString() ));
             }
         }
     }
@@ -357,12 +357,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 SetPattern( i, aTokens );
 
             if( TOX_CONTENT == eType && 6 == i )
-                nPoolId = STR_POOLCOLL_TOX_CNTNT6;
+                nPoolId = RES_POOLCOLL_TOX_CNTNT6;
             else if( TOX_USER == eType && 6 == i )
-                nPoolId = STR_POOLCOLL_TOX_USER6;
+                nPoolId = RES_POOLCOLL_TOX_USER6;
             else if( TOX_AUTHORITIES == eType )
-                nPoolId = STR_POOLCOLL_TOX_AUTHORITIES1;
-            SetTemplate( i, SW_RESSTR( nPoolId ) );
+                nPoolId = RES_POOLCOLL_TOX_AUTHORITIES1;
+            SetTemplate( i, SwStyleNameMapper::GetProgName( nPoolId, OUString() ) );
         }
 }
 

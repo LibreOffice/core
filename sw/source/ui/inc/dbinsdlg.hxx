@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace sdbcx{
@@ -109,6 +110,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     MultiLineEdit   aEdDbText;
     FixedText       aFtDbParaColl;
     ListBox         aLbDbParaColl;
+    std::vector< rtl::OUString > aLbDbParaCollNames;
 
     /* ----- Page Table ------------ */
     ImageButton     aIbDbcolAllTo;

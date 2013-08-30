@@ -520,10 +520,18 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
 
         std::vector<OUString> aList;
+        std::vector<OUString> aInternalList;
         for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-             aList.push_back( rCharFmtLB.GetEntry(j) );
+        {
+             OUString sEntry = rCharFmtLB.GetEntry(j);
+             aList.push_back( sEntry );
+             sal_IntPtr nPoolId = ( sal_IntPtr ) rCharFmtLB.GetEntryData(j);
+             OUString sProgName = SwStyleNameMapper::GetProgName( nPoolId, sEntry );
+             aInternalList.push_back( sProgName );
+        }
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
+        aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX_INTERNAL,&aInternalList ) ) ;
         FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
         aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
         rPage.PageCreated(aSet);

@@ -2565,7 +2565,7 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
         }
     }
 
-    rFmt.SetName(sNewName);
+    rFmt.SetInternalName(sNewName);
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);

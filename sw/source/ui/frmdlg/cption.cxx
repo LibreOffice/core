@@ -480,15 +480,21 @@ void SwSequenceOptionDialog::Apply()
 String  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     String sRet;
-    if(m_pLbCharStyle->GetSelectEntryPos())
-        sRet = m_pLbCharStyle->GetSelectEntry();
+    sal_uInt16 nPos = m_pLbCharStyle->GetSelectEntryPos();
+    if (nPos)
+    {
+        sal_IntPtr nPoolId = (sal_IntPtr)m_pLbCharStyle->GetEntryData(nPos);
+        sRet = SwStyleNameMapper::GetProgName(nPoolId, m_pLbCharStyle->GetSelectEntry());
+    }
     return sRet;
 }
 
 void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
 {
     m_pLbCharStyle->SelectEntryPos(0);
-    m_pLbCharStyle->SelectEntry(rStyle);
+
+    OUString sDisplayName = SwStyleNameMapper::GetUIName( rStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+    m_pLbCharStyle->SelectEntry(sDisplayName);
 }
 
 long CategoryBox::PreNotify( NotifyEvent& rNEvt )

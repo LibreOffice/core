@@ -1545,7 +1545,13 @@ void SvxNumOptionsTabPage::InitControls()
     if(bSameCharFmt)
     {
         if(sFirstCharFmt.Len())
-                m_pCharFmtLB->SelectEntry(sFirstCharFmt);
+        {
+            std::vector< OUString >::iterator it = std::find(m_aChrFmtNames.begin(), m_aChrFmtNames.end(), sFirstCharFmt);
+            if (it != m_aChrFmtNames.end())
+                m_pCharFmtLB->SelectEntryPos(it - m_aChrFmtNames.begin());
+            else
+                m_pCharFmtLB->SelectEntryPos( 0 );
+        }
         else
             m_pCharFmtLB->SelectEntryPos( 0 );
     }
@@ -2141,7 +2147,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl)
 {
     bAutomaticCharStyles = sal_False;
     sal_uInt16 nEntryPos = m_pCharFmtLB->GetSelectEntryPos();
-    String sEntry = m_pCharFmtLB->GetSelectEntry();
+    OUString sEntry = m_aChrFmtNames[nEntryPos];
     sal_uInt16 nMask = 1;
     String aEmptyStr;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -3491,6 +3497,7 @@ void SvxNumOptionsTabPage::SetModified(sal_Bool bRepaint)
 void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pInternalListItem,SfxStringListItem,SID_CHAR_FMT_LIST_BOX_INTERNAL,sal_False);
     SFX_ITEMSET_ARG (&aSet,pNumCharFmt,SfxStringItem,SID_NUM_CHAR_FMT,sal_False);
     SFX_ITEMSET_ARG (&aSet,pBulletCharFmt,SfxStringItem,SID_BULLET_CHAR_FMT,sal_False);
     SFX_ITEMSET_ARG (&aSet,pMetricItem,SfxAllEnumItem,SID_METRIC_ITEM,sal_False);
@@ -3502,9 +3509,10 @@ void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
     {
         ListBox& myCharFmtLB = GetCharFmtListBox();
         const std::vector<OUString> &aList = pListItem->GetList();
-        sal_uInt32 nCount = aList.size();;
+        sal_uInt32 nCount = aList.size();
         for(sal_uInt32 i = 0; i < nCount; i++)
             myCharFmtLB.InsertEntry(aList[i]);
+        m_aChrFmtNames = pInternalListItem->GetList();
     }
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));

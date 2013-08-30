@@ -717,7 +717,11 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         aEdDelim.SetText(pOpt->GetSeparator());
         aNumberingSeparatorED.SetText( pOpt->GetNumSeparator() );
         if(pOpt->GetCharacterStyle().Len())
-            aCharStyleLB.SelectEntry( pOpt->GetCharacterStyle() );
+        {
+            OUString sCharStyle = pOpt->GetCharacterStyle();
+            SwStyleNameMapper::GetUIName( sCharStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+            aCharStyleLB.SelectEntry( sCharStyle );
+        }
         else
             aCharStyleLB.SelectEntryPos( 0 );
         aApplyBorderCB.Enable( aCategoryBox.IsEnabled() &&
@@ -763,7 +767,12 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         if(!aCharStyleLB.GetSelectEntryPos())
             pOpt->SetCharacterStyle(aEmptyStr);
         else
-            pOpt->SetCharacterStyle(aCharStyleLB.GetSelectEntry());
+        {
+            sal_uInt16 nPos = aCharStyleLB.GetSelectEntryPos();
+            sal_IntPtr nPoolId = (sal_IntPtr) aCharStyleLB.GetEntryData(nPos);
+            OUString sName = SwStyleNameMapper::GetProgName(nPoolId, aCharStyleLB.GetSelectEntry());
+            pOpt->SetCharacterStyle(sName);
+        }
         pOpt->CopyAttributes() = aApplyBorderCB.IsChecked();
     }
 }
