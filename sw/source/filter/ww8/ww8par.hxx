@@ -23,7 +23,7 @@
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <editeng/frmdir.hxx>
-#include <fltshell.hxx>         // fuer den Attribut Stack
+#include <fltshell.hxx>
 
 #include <vector>
 #include <stack>
@@ -1263,7 +1263,7 @@ private:
                             //     the very 1st Line Numbering and ignore the rest)
 
     bool bFirstPara;        // first paragraph?
-    bool bFirstParaOfPage;//cs2c--xushanchuan add for bug11210
+    bool bFirstParaOfPage;
     bool bParaAutoBefore;
     bool bParaAutoAfter;
 

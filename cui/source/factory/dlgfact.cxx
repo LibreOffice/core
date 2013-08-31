@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "align.hxx" //add for SvxAlignmentTabPage
+#include "align.hxx"
 #include "dlgfact.hxx"
 
 #include <sfx2/basedlgs.hxx>
@@ -38,46 +38,46 @@
 #include "treeopt.hxx"
 #include "internationaloptions.hxx"
 #include "labdlg.hxx"
-#include "hangulhanjadlg.hxx" //add for HangulHanjaConversionDialog
-#include "showcols.hxx" //add for FmShowColsDialog
-#include "zoom.hxx" //add for SvxZoomDialog
-#include "cuigaldlg.hxx"        //add for Gallery 6 Dialogs and 1 TabPage
-#include "cuiimapwnd.hxx"       //add for URLDlg
-#include "hlmarkwn.hxx"     //add for SvxHlinkDlgMarkWnd
-#include "srchxtra.hxx"     //add for SvxSearchFormatDialog
-#include "transfrm.hxx" //add for SvxTransformTabDialog
-#include "bbdlg.hxx" //add for SvxBorderBackgroundDlg
-#include "cuisrchdlg.hxx" //add for SvxJSearchOptionsDialog
-#include "cuitbxform.hxx" //add for FmInputRecordNoDialog
-#include "optdict.hxx" //add for SvxNewDictionaryDialog
-#include "dlgname.hxx" //add for SvxNameDialog & SvxMessDialog
-#include "multipat.hxx" //add for SvxMultiPathDialog
-#include "multifil.hxx" //add for SvxMultiFileDialog
-#include "cuihyperdlg.hxx" //add for SvxHpLinkDlg
-#include "cuifmsearch.hxx" //add  for FmSearchDialog
-#include "cuigrfflt.hxx"    //add for GraphicFilterDialog
-#include "cuitabarea.hxx" //add for SvxAreaTabDialog
-#include "cuitabline.hxx" //add for SvxLineTabDialog
-#include "measure.hxx" //add for SvxMeasureDialog
-#include "connect.hxx" //add for SvxConnectionDialog
-#include "dbregister.hxx" // add for DatabaseRegistrationDialog
-#include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#include "hangulhanjadlg.hxx"
+#include "showcols.hxx"
+#include "zoom.hxx"
+#include "cuigaldlg.hxx"
+#include "cuiimapwnd.hxx"
+#include "hlmarkwn.hxx"
+#include "srchxtra.hxx"
+#include "transfrm.hxx"
+#include "bbdlg.hxx"
+#include "cuisrchdlg.hxx"
+#include "cuitbxform.hxx"
+#include "optdict.hxx"
+#include "dlgname.hxx"
+#include "multipat.hxx"
+#include "multifil.hxx"
+#include "cuihyperdlg.hxx"
+#include "cuifmsearch.hxx"
+#include "cuigrfflt.hxx"
+#include "cuitabarea.hxx"
+#include "cuitabline.hxx"
+#include "measure.hxx"
+#include "connect.hxx"
+#include "dbregister.hxx"
+#include "cuioptgenrl.hxx"
 #include "optasian.hxx"
 #include "insdlg.hxx"
 #include "pastedlg.hxx"
 #include "linkdlg.hxx"
 #include "SpellDialog.hxx"
-#include "cfg.hxx"    //add for SvxConfigDialog
-#include "numpages.hxx" // add for
-#include "paragrph.hxx" //add for
-#include "tabstpge.hxx" // add  for
-#include "textattr.hxx" // add for SvxTextAttrPage
-#include "backgrnd.hxx" //add for SvxBackgroundTabPage
-#include "border.hxx" //add for SvxBorderTabPage
-#include "chardlg.hxx" //add for SvxCharNamePage,SvxCharEffectsPage,SvxCharPositionPage,SvxCharTwoLinesPage
-#include "page.hxx" //add for SvxPageDescPage
-#include "postdlg.hxx" //add for SvxPostItDialog
-#include "grfpage.hxx" //add for SvxGrfCropPage
+#include "cfg.hxx"
+#include "numpages.hxx"
+#include "paragrph.hxx"
+#include "tabstpge.hxx"
+#include "textattr.hxx"
+#include "backgrnd.hxx"
+#include "border.hxx"
+#include "chardlg.hxx"
+#include "page.hxx"
+#include "postdlg.hxx"
+#include "grfpage.hxx"
 #include "scriptdlg.hxx" // for ScriptOrgDialog
 #include "selector.hxx" // for SvxScriptSelectorDialog
 #include "macropg.hxx" // for SvxMacroAssignDlg
@@ -1184,7 +1184,7 @@ AbstractFmShowColsDialog * AbstractDialogFactory_Impl::CreateFmShowColsDialog( W
     FmShowColsDialog* pDlg = new FmShowColsDialog( pParent);
     return new AbstractFmShowColsDialog_Impl( pDlg );
 }
-AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
+AbstractSvxZoomDialog * AbstractDialogFactory_Impl::CreateSvxZoomDialog( Window* pParent,
                                             const SfxItemSet& rCoreSet)
 {
     SvxZoomDialog* pDlg = new SvxZoomDialog( pParent, rCoreSet);
@@ -1206,7 +1206,7 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
    return new VclAbstractRefreshableDialog_Impl( pDlg );
 }
 
-AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog( Window* pParent,  //add for SearchProgress
+AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog( Window* pParent,
                                             const INetURLObject& rStartURL )
 {
     SearchProgress* pDlg = new SearchProgress( pParent, rStartURL);
@@ -1248,7 +1248,7 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
     return;
 }
 
-VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,  //add for SvxScriptOrgDialog
+VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,
                                             const OUString& rLanguage)
 {
     Dialog* pDlg=NULL;
@@ -1260,21 +1260,21 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
     return 0;
 }
 
-AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( Window* pParent,  //add for TitleDialog
+AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( Window* pParent,
                                             const String& rOldText)
 {
    TitleDialog* pDlg = new TitleDialog( pParent, rOldText);
    return new AbstractTitleDialog_Impl( pDlg );
 }
 
-AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( Window* pParent,  //add for SvxZoomDialog
+AbstractGalleryIdDialog * AbstractDialogFactory_Impl::CreateGalleryIdDialog( Window* pParent,
                                             GalleryTheme* pThm )
 {
    GalleryIdDialog* pDlg = new GalleryIdDialog( pParent, pThm);
    return new AbstractGalleryIdDialog_Impl( pDlg );
 }
 
-VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
+VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog( Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
@@ -1282,7 +1282,7 @@ VclAbstractDialog2 * AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDia
     return new VclAbstractDialog2_Impl( pDlg );
 }
 
-AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,  //add for URLDlg
+AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( Window* pParent,
                                             const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList )
@@ -1482,7 +1482,7 @@ AbstractSvxMultiFileDialog * AbstractDialogFactory_Impl::CreateSvxMultiFileDialo
     return new AbstractSvxMultiFileDialog_Impl( pDlg );
 }
 
-AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* pParent,  //add for SvxMultiFileDialog
+AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* pParent,
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)
 {
@@ -1501,7 +1501,7 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* p
     return 0;
 }
 
-AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
+AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
@@ -1513,7 +1513,7 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window
     return 0;
 }
 
-AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (Window* pParent,
                                             const Graphic& rGraphic,
                                             RECT_POINT eLightSource,
                                             sal_uInt32)
@@ -1553,14 +1553,14 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmo
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
-AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (Window* pParent,
                                             const Graphic& rGraphic, sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 )
 {
     GraphicFilterDialog* pDlg = new GraphicFilterSolarize( pParent, rGraphic, nGreyThreshold, bInvert );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
-AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,  //add for GraphicFilterMosaic
+AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (Window* pParent,
                                             const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight,
                                             sal_Bool bEnhanceEdges, sal_uInt32 nResId)
 {
@@ -1783,7 +1783,7 @@ CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorF
 
 DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc()
 {
-    return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
+    return SvxPostItDialog::GetRanges;
 }
 
 GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nId )

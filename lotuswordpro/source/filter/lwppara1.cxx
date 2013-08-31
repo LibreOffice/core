@@ -290,7 +290,6 @@ void LwpPara::GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering)
 /**
  * @short   override alignment
  */
-//override style, add by  1-24
 void LwpPara::OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle)
 {
     if (base)//the latter two parameter never be null
@@ -410,7 +409,6 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     delete m_pBreaks;
     m_pBreaks = pFinalBreaks.release();
 
-//add by  1/31
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (m_pBreaks->IsKeepWithNext())
     {
@@ -431,7 +429,7 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     if (m_pBreaks->IsColumnBreakBefore())
     {
         XFParaStyle* pStyle = new XFParaStyle();
-        pStyle->SetBreaks(enumXFBreakAftColumn);//tmp after, should change when layout read,note by  1/31
+        pStyle->SetBreaks(enumXFBreakAftColumn);//tmp after, should change when layout read
         m_BefColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
     }
     if (m_pBreaks->IsColumnBreakAfter())
@@ -440,7 +438,6 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
         pStyle->SetBreaks(enumXFBreakAftColumn);
         m_AftColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
     }
-//add end
 
 //  pParaStyle->ApplyBreaks(pOverStyle, &aFinalBreaks);
 }

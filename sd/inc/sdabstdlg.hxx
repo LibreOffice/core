@@ -61,20 +61,20 @@ class TabPage;
 class ViewShell;
 class SdCustomShowList;
 
-class AbstractCopyDlg : public VclAbstractDialog  //add for CopyDlg
+class AbstractCopyDlg : public VclAbstractDialog
 {
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
 };
 
-class AbstractSdCustomShowDlg : public VclAbstractDialog  //add for SdCustomShowDlg
+class AbstractSdCustomShowDlg : public VclAbstractDialog
 {
 public:
     virtual sal_Bool        IsModified() const = 0;
     virtual sal_Bool        IsCustomShow() const = 0;
 };
 
-class AbstractAssistentDlg : public VclAbstractDialog  //add for AssistentDlg
+class AbstractAssistentDlg : public VclAbstractDialog
 {
 public:
     virtual SfxObjectShellLock GetDocument() = 0;
@@ -87,14 +87,14 @@ public:
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() = 0;
 };
 
-class AbstractSdModifyFieldDlg : public VclAbstractDialog  //add for SdModifyFieldDlg
+class AbstractSdModifyFieldDlg : public VclAbstractDialog
 {
 public:
     virtual SvxFieldData*       GetField() = 0;
     virtual SfxItemSet          GetItemSet() = 0;
 };
 
-class AbstractSdSnapLineDlg : public VclAbstractDialog  //add for SdSnapLineDlg
+class AbstractSdSnapLineDlg : public VclAbstractDialog
 {
 public:
     virtual void GetAttr(SfxItemSet& rOutAttrs) = 0;
@@ -105,7 +105,7 @@ public:
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
-class AbstractSdInsertLayerDlg : public VclAbstractDialog  //add for SdInsertLayerDlg
+class AbstractSdInsertLayerDlg : public VclAbstractDialog
 {
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
@@ -113,13 +113,13 @@ public:
     virtual void    SetHelpId( const OString& rHelpId ) = 0;
 };
 
-class AbstractSdInsertPasteDlg : public VclAbstractDialog  //add for SdInsertPasteDlg
+class AbstractSdInsertPasteDlg : public VclAbstractDialog
 {
 public:
     virtual sal_Bool            IsInsertBefore() const = 0;
 };
 
-class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog  //add for SdInsertPagesObjsDlg
+class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
 {
 public:
     virtual ::Window*   GetWindow() = 0;  //this method is added for return a ::Window type pointer
@@ -128,7 +128,7 @@ public:
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const = 0;
 };
 
-class AbstractMorphDlg : public VclAbstractDialog  //add for MorphDlg
+class AbstractMorphDlg : public VclAbstractDialog
 {
 public:
     virtual void            SaveSettings() const = 0;
@@ -137,31 +137,31 @@ public:
     virtual sal_Bool            IsOrientationFade() const = 0;
 };
 
-class AbstractSdStartPresDlg : public VclAbstractDialog  //add for SdStartPresentationDlg
+class AbstractSdStartPresDlg : public VclAbstractDialog
 {
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
 };
 
-class AbstractSdPresLayoutDlg : public VclAbstractDialog  //add for SdPresLayoutDlg
+class AbstractSdPresLayoutDlg : public VclAbstractDialog
 {
 public:
     virtual void    GetAttr(SfxItemSet& rOutAttrs) = 0;
 };
 
-class AbstractSdVectorizeDlg : public VclAbstractDialog  //add for SdVectorizeDlg
+class AbstractSdVectorizeDlg : public VclAbstractDialog
 {
 public:
     virtual const GDIMetaFile&  GetGDIMetaFile() const = 0;
 };
 
-class AbstractSdPublishingDlg : public VclAbstractDialog  //add for SdPublishingDlg
+class AbstractSdPublishingDlg : public VclAbstractDialog
 {
 public:
     virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams ) = 0;
 };
 
-class AbstractHeaderFooterDialog : public VclAbstractDialog // add for HeaderFooterDialog
+class AbstractHeaderFooterDialog : public VclAbstractDialog
 {
 public:
     virtual void ApplyToAll( TabPage* pPage ) = 0;
@@ -201,12 +201,12 @@ public:
 
     virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
-                                                                  SdPage* ) = 0; // add for MasterLayoutDialog
+                                                                  SdPage* ) = 0;
 
     virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
                                                                   ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
-                                                                  SdPage* pCurrentPage ) = 0; // add for HeaderFooterDialog
+                                                                  SdPage* pCurrentPage ) = 0;
 
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() = 0;

@@ -26,9 +26,9 @@ class SdrModel;
 class SdrView;
 
 #include <svx/dstribut_enum.hxx>
-#include <svx/rectenum.hxx> //add for enum RECT_POINT
-#include <com/sun/star/container/XIndexContainer.hpp> //add for FmShowColsDialog
-#include <com/sun/star/container/XNameReplace.hpp> //add for SvxMacroAssignDlg
+#include <svx/rectenum.hxx>
+#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
 #include "svx/svxdllapi.h"
 #include <vector>
 
@@ -40,7 +40,8 @@ namespace linguistic2{
     class XThesaurus;
     class XHyphenator;
 }}}}
-class SvxSpellWrapper; //add for SvxSpellCheckDialog
+
+class SvxSpellWrapper;
 typedef SfxTabPage* (*CreateSvxDistributePage)(Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
 typedef sal_uInt16*     (*DialogGetRanges)();
 
@@ -58,20 +59,20 @@ typedef ::std::vector< OUString > TargetList;
 
 namespace svx{ class SpellDialogChildWindow;}
 
-class AbstractSvxDistributeDialog :public VclAbstractDialog  //add for SvxDistributeDialog
+class AbstractSvxDistributeDialog :public VclAbstractDialog
 {
 public:
     virtual SvxDistributeHorizontal GetDistributeHor() const = 0;
     virtual SvxDistributeVertical GetDistributeVer() const = 0;
 };
 
-class AbstractFmShowColsDialog : public VclAbstractDialog //add for FmShowColsDialog
+class AbstractFmShowColsDialog : public VclAbstractDialog
 {
  public:
      virtual void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)= 0;
 };
 
-class AbstractSvxZoomDialog : public VclAbstractDialog //add for SvxZoomDialog
+class AbstractSvxZoomDialog : public VclAbstractDialog
 {
  public:
     virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) = 0;
@@ -91,7 +92,7 @@ class AbstractSpellDialog : public VclAbstractDialog //
 
 typedef long (*PLinkStub)( void*, void* );
 
-class AbstractSearchProgress :public VclAbstractRefreshableDialog  //add for SearchProgress
+class AbstractSearchProgress :public VclAbstractRefreshableDialog
 {
 public:
     virtual void    SetFileType( const String& rType ) = 0;
@@ -99,26 +100,26 @@ public:
     virtual PLinkStub   GetLinkStubCleanUpHdl() = 0;
 };
 
-class AbstractTakeProgress :public VclAbstractRefreshableDialog  //add for TakeProgress
+class AbstractTakeProgress :public VclAbstractRefreshableDialog
 {
 public:
     virtual void    SetFile( const INetURLObject& rURL ) = 0;
     virtual PLinkStub   GetLinkStubCleanUpHdl() = 0;
 };
 
-class AbstractTitleDialog :public VclAbstractDialog  //add for TitleDialog
+class AbstractTitleDialog :public VclAbstractDialog
 {
 public:
     virtual String  GetTitle() const =0;
 };
 
-class AbstractGalleryIdDialog :public VclAbstractDialog  //add for GalleryIdDialog
+class AbstractGalleryIdDialog :public VclAbstractDialog
 {
 public:
     virtual sal_uIntPtr GetId() const =0;
 };
 
-class AbstractURLDlg :public VclAbstractDialog  //add for URLDlg
+class AbstractURLDlg :public VclAbstractDialog
 {
 public:
     virtual String      GetURL() const = 0;
@@ -128,7 +129,7 @@ public:
     virtual String      GetName() const = 0;
 };
 
-class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog  //add for SvxHlinkDlgMarkWnd
+class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
 {
 public:
     virtual sal_Bool    MoveTo ( Point aNewPos )const = 0;
@@ -152,7 +153,7 @@ public:
     virtual OUString    GetText() const =0 ;
 };
 
-class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog  //add for SvxSearchSimilarityDialog
+class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
 {
 public:
     virtual sal_uInt16  GetOther() =0 ;
@@ -161,26 +162,26 @@ public:
     virtual sal_Bool    IsRelaxed() =0 ;
 };
 
-class AbstractSvxJSearchOptionsDialog :public VclAbstractDialog  //add for SvxJSearchOptionsDialog
+class AbstractSvxJSearchOptionsDialog :public VclAbstractDialog
 {
 public:
     virtual sal_Int32           GetTransliterationFlags() const = 0;
 };
 
-class AbstractFmInputRecordNoDialog :public VclAbstractDialog  //add for FmInputRecordNoDialog
+class AbstractFmInputRecordNoDialog :public VclAbstractDialog
 {
 public:
     virtual void SetValue(long dNew) = 0;
     virtual long GetValue() const = 0;
 };
 
-class AbstractSvxNewDictionaryDialog :public VclAbstractDialog  //add for SvxNewDictionaryDialog
+class AbstractSvxNewDictionaryDialog :public VclAbstractDialog
 {
 public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
-class AbstractSvxNameDialog :public VclAbstractDialog  //add for SvxNameDialog
+class AbstractSvxNameDialog :public VclAbstractDialog
 {
 public:
     virtual void    GetName( OUString& rName ) = 0;
@@ -190,9 +191,6 @@ public:
     virtual void    SetHelpId( const OString& ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-// #i68101#
 
 class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
@@ -208,15 +206,13 @@ public:
     virtual void GetDescription(OUString& rDescription) = 0;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-class AbstractSvxMessDialog :public VclAbstractDialog  //add for SvxMessDialog
+class AbstractSvxMessDialog :public VclAbstractDialog
 {
 public:
     virtual void    SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt ) = 0;
 };
 
-class AbstractSvxMultiPathDialog :public VclAbstractDialog  //add for SvxMultiPathDialog
+class AbstractSvxMultiPathDialog :public VclAbstractDialog
 {
 public:
     virtual String          GetPath() const = 0;
@@ -225,7 +221,7 @@ public:
     virtual void            SetTitle( const String& rNewTitle ) = 0;
 };
 
-class AbstractSvxMultiFileDialog :public AbstractSvxMultiPathDialog  //add for SvxMultiFileDialog
+class AbstractSvxMultiFileDialog :public AbstractSvxMultiPathDialog
 {
 public:
     virtual String  GetFiles() const = 0;
@@ -236,27 +232,28 @@ public:
     virtual void    SetHelpId( const OString& ) = 0;
 };
 
-class AbstractSvxHpLinkDlg : public VclAbstractDialog  //add for SvxHpLinkDlg
+class AbstractSvxHpLinkDlg : public VclAbstractDialog
 {
 public:
     virtual Window*     GetWindow()  = 0;
     virtual sal_Bool    QueryClose() = 0;
 };
 
-class AbstractFmSearchDialog :public VclAbstractDialog  //add for FmSearchDialog
+class AbstractFmSearchDialog :public VclAbstractDialog
 {
 public:
     virtual void SetFoundHandler(const Link& lnk) = 0;
     virtual void SetCanceledNotFoundHdl(const Link& lnk)=0;
     virtual void SetActiveField(const String& strField)=0;
 };
-class AbstractGraphicFilterDialog :public VclAbstractDialog  //add for GraphicFilterDialog
+
+class AbstractGraphicFilterDialog :public VclAbstractDialog
 {
 public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
-class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog  //add for SvxAreaTabDialog
+class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog
 {
 };
 
@@ -265,15 +262,14 @@ class AbstractSvxTransformTabDialog : public SfxAbstractTabDialog
 public:
     virtual void SetValidateFramePosLink( const Link& rLink ) = 0;
 };
+
 class AbstractSvxCaptionDialog : public SfxAbstractTabDialog
 {
 public:
     virtual void SetValidateFramePosLink( const Link& rLink ) = 0;
 };
 
-//-------------------------------------------------------------
-
-class AbstractSvxPostItDialog :public VclAbstractDialog  //add for SvxPostItDialog
+class AbstractSvxPostItDialog :public VclAbstractDialog
 {
 public:
     virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
@@ -291,8 +287,6 @@ public:
     virtual Window *            GetWindow() = 0;
 };
 
-//-------------------------------------------------------------
-
 class SvxAbstractSplittTableDialog : public VclAbstractDialog
 {
 public:
@@ -300,8 +294,6 @@ public:
     virtual bool IsProportional() const = 0;
     virtual long GetCount() const = 0;
 };
-
-//-------------------------------------------------------------
 
 class SvxAbstractNewTableDialog : public VclAbstractDialog
 {
@@ -317,8 +309,6 @@ public:
     virtual sal_uInt16 getInsertCount() const = 0;
 };
 
-//-------------------------------------------------------------
-
 class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, public EditAbstractDialogFactory
 {
 public:
@@ -330,11 +320,11 @@ public:
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView,
-                                            SdrModel* pModel=0 ) = 0 ; //add for SvxTextTabDialog
+                                            SdrModel* pModel=0 ) = 0 ;
 
     virtual AbstractSvxCaptionDialog* CreateCaptionDialog( Window* pParent,
                                         const SdrView* pView,
-                                        sal_uInt16 nAnchorTypes = 0 ) = 0; //add for SvxCaptionTabDialog
+                                        sal_uInt16 nAnchorTypes = 0 ) = 0;
 
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
@@ -343,50 +333,50 @@ public:
 
     virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) = 0;
 
-    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
+    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,
                                             const SfxItemSet& rCoreSet )=0;
 
     virtual AbstractSpellDialog *   CreateSvxSpellDialog(Window* pParent,
                                             SfxBindings* pBindings,
                                             svx::SpellDialogChildWindow* pSpellChildWindow )=0;
 
-    virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( Window* pParent,  //add for ActualizeProgress
+    virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( Window* pParent,
                                             GalleryTheme* pThm ) = 0;
-    virtual AbstractSearchProgress * CreateSearchProgressDialog( Window* pParent,  //add for SearchProgress
+    virtual AbstractSearchProgress * CreateSearchProgressDialog( Window* pParent,
                                             const INetURLObject& rStartURL ) = 0;
     virtual AbstractTakeProgress * CreateTakeProgressDialog( Window* pParent ) = 0;
-    virtual AbstractTitleDialog * CreateTitleDialog( Window* pParent,  //add for TitleDialog
+    virtual AbstractTitleDialog * CreateTitleDialog( Window* pParent,
                                              const String& rOldText ) = 0;
-    virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,  //add for SvxZoomDialog
+    virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,
                                             GalleryTheme* pThm ) = 0;
-    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
+    virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet ) = 0;
     virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
                                             const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
                                             TargetList& rTargetList ) = 0;
-    virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) =0; //add for SvxHlinkDlgMarkWnd
+    virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) =0;
 
-    virtual SfxAbstractTabDialog* CreateTabItemDialog( Window* pParent, //add for SvxSearchFormatDialog
+    virtual SfxAbstractTabDialog* CreateTabItemDialog( Window* pParent,
                                             const SfxItemSet& rSet,
                                             sal_uInt32 nResId) = 0;
-    virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( Window* pParent,  //add for SvxSearchAttributeDialog
+    virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges)=0;
-    virtual AbstractSvxSearchSimilarityDialog * CreateSvxSearchSimilarityDialog( Window* pParent,  //add for SvxSearchSimilarityDialog
+    virtual AbstractSvxSearchSimilarityDialog * CreateSvxSearchSimilarityDialog( Window* pParent,
                                                             sal_Bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger ) = 0;
-    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg( Window* pParent, //add for SvxBorderBackgroundDlg
+    virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg( Window* pParent,
                                             const SfxItemSet& rCoreSet,
                                             sal_Bool bEnableSelector = sal_False) = 0;
-    virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent, //add for SvxTransformTabDialog
+    virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
                                                                 sal_uInt16 nAnchorTypes = 0) = 0;
-    virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( Window* pParent,  //add for SchTransformTabDialog
+    virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
                                                                 sal_uInt32 nResId,
@@ -401,9 +391,9 @@ public:
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( Window* pParent,
                                             const String& rName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1> &xSpl,
-                                            sal_uInt32 nResId) = 0;//add for SvxEditDictionaryDialog
+                                            sal_uInt32 nResId) = 0;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( Window* pParent,
-                                            const String& rName, const String& rDesc ) = 0; //add for SvxNameDialog
+                                            const String& rName, const String& rDesc ) = 0;
 
     // #i68101#
     virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(Window* pParent, const String& rName ) = 0;
@@ -411,35 +401,35 @@ public:
 
     virtual AbstractSvxMessDialog *     CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
                                             const String& rText, const String& rDesc,
-                                            Image* pImg = NULL ) = 0; //add for SvxMessDialog
+                                            Image* pImg = NULL ) = 0;
 
-    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ; //add for SvxMultiPathDialog
-    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ; //add for SvxMultiFileDialog
-    virtual AbstractSvxHpLinkDlg *  CreateSvxHpLinkDlg (Window* pParent,  //add for SvxMultiFileDialog
+    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ;
+    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ;
+    virtual AbstractSvxHpLinkDlg *  CreateSvxHpLinkDlg (Window* pParent,
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)=0;
-    virtual AbstractFmSearchDialog* CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
+    virtual AbstractFmSearchDialog* CreateFmSearchDialog(Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier)=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 RECT_POINT eLightSource, sal_uInt32 nResId )=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPosterSepia (Window* pParent,  //add for GraphicFilterPoster & GraphicFilterSepia
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPosterSepia (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 sal_uInt16 nCount,
                                                 sal_uInt32 nResId)=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,  //add for GraphicFilterSmooth
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 double nRadius, sal_uInt32 nResId)=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,  //add for GraphicFilterSolarize
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 sal_uInt8 nGreyThreshold, sal_Bool bInvert, sal_uInt32 nResId)=0;
-    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,  //add for GraphicFilterMosaic
+    virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,
                                                 const Graphic& rGraphic,
                                                 sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges, sal_uInt32 nResId)=0;
-    virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,//add for SvxAreaTabDialog
+    virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
                                                             const SdrView* pSdrView = NULL ) = 0 ;
@@ -448,23 +438,23 @@ public:
                                                                  const SdrObject* pObj = NULL,
                                                                 sal_Bool bHasObj = sal_True )=0;
     virtual VclAbstractDialog*              CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
-    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,
                                                                         sal_uInt32 nResId
                                                                         )=0;
-    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
+    virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
                                                                         sal_uInt32 nResId
                                                                         )=0;
-    virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent, //add for SvxPostItDialog
+    virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
                                                                         sal_Bool bPrevNext = sal_False) = 0;
     virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) = 0;
 
-    virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0; //  add for SvxDistributePage
-    virtual DialogGetRanges             GetDialogGetRangesFunc() = 0; //add for SvxPostItDialog
+    virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0;
+    virtual DialogGetRanges             GetDialogGetRangesFunc() = 0;
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(

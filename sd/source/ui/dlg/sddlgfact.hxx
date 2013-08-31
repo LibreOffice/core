@@ -48,14 +48,12 @@ namespace sd {
     class OutlineBulletDlg;
         class HeaderFooterDialog;
 }
-// add for BreakDlg
+
 class Dialog;
 class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
     DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
 };
-
-// add for CopyDlg
 
 class AbstractCopyDlg_Impl : public AbstractCopyDlg
 {
@@ -63,7 +61,6 @@ class AbstractCopyDlg_Impl : public AbstractCopyDlg
     virtual void    GetAttr( SfxItemSet& rOutAttrs );
 };
 
-// add for SdCustomShowDlg
 class SdCustomShowDlg;
 class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
 {
@@ -72,7 +69,6 @@ class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
     virtual sal_Bool        IsCustomShow() const ;
 };
 
-//add for SdCharDlg begin
 class SfxTabDialog;
 class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
@@ -86,10 +82,7 @@ class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const OUString& rStr );
     virtual OUString    GetText() const;
 };
-//add for SdCharDlg end
 
-
-//add for OutlineBulletDlg begin
 class SfxTabDialog;
 class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
 {
@@ -103,7 +96,6 @@ class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const OUString& rStr );
     virtual OUString    GetText() const;
 };
-//add for OutlineBulletDlg end
 
 class SdPresLayoutTemplateDlg;
 class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
@@ -119,7 +111,6 @@ class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
     virtual OUString    GetText() const;
 };
 
-// add for AssistentDlg
 class AssistentDlg;
 class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
 {
@@ -134,7 +125,6 @@ class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();
 };
 
-// add for SdModifyFieldDlg
 class SdModifyFieldDlg;
 class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
 {
@@ -143,7 +133,6 @@ class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
     virtual SfxItemSet          GetItemSet();
 };
 
-// add for SdSnapLineDlg
 class SdSnapLineDlg;
 class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
 {
@@ -156,7 +145,6 @@ class AbstractSdSnapLineDlg_Impl : public AbstractSdSnapLineDlg
     virtual void    SetText( const OUString& rStr );
 };
 
-// add for SdInsertLayerDlg
 class SdInsertLayerDlg;
 class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
 {
@@ -166,7 +154,6 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
     virtual void    SetHelpId( const OString& rHelpId ) ;
 };
 
-// add for SdInsertPasteDlg
 class SdInsertPasteDlg;
 class AbstractSdInsertPasteDlg_Impl : public AbstractSdInsertPasteDlg
 {
@@ -174,18 +161,16 @@ class AbstractSdInsertPasteDlg_Impl : public AbstractSdInsertPasteDlg
     virtual sal_Bool            IsInsertBefore() const;
 };
 
-// add for SdInsertPagesObjsDlg
 class SdInsertPagesObjsDlg;
 class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl,SdInsertPagesObjsDlg)
-    virtual ::Window *  GetWindow(); //this method is added for return a Window type pointer
+    virtual ::Window *  GetWindow();
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType );
     virtual sal_Bool        IsLink();
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const;
 };
 
-// add for MorphDlg
 class AbstractMorphDlg_Impl : public AbstractMorphDlg
 {
     DECL_ABSTDLG_BASE(AbstractMorphDlg_Impl,::sd::MorphDlg)
@@ -195,7 +180,6 @@ class AbstractMorphDlg_Impl : public AbstractMorphDlg
     virtual sal_Bool            IsOrientationFade() const ;
 };
 
-// add for SdStartPresentationDlg
 class SdStartPresentationDlg;
 class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
 {
@@ -203,7 +187,6 @@ class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
     virtual void    GetAttr( SfxItemSet& rOutAttrs );
 };
 
-// add for SdPresLayoutDlg
 class SdPresLayoutDlg;
 class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 {
@@ -211,7 +194,6 @@ class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
     virtual void    GetAttr(SfxItemSet& rOutAttrs);
 };
 
-// add for SdActionDlg
 class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
     DECL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl,SfxModalDialog)
@@ -220,7 +202,6 @@ class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
     virtual OUString    GetText() const;
 };
 
-// add for SdVectorizeDlg
 class SdVectorizeDlg;
 class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg
 {
@@ -228,7 +209,6 @@ class AbstractSdVectorizeDlg_Impl :public AbstractSdVectorizeDlg
     virtual const GDIMetaFile&  GetGDIMetaFile() const ;
 };
 
-// add for SdPublishingDlg
 class SdPublishingDlg;
 class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 {
@@ -236,7 +216,6 @@ class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
     virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams );
 };
 
-// add for HeaderFooterDialog
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 {
   DECL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl,::sd::HeaderFooterDialog)
@@ -244,7 +223,6 @@ class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
   virtual void Apply( TabPage* pPage );
   virtual void Cancel( TabPage* pPage );
 };
-//------------------------------------------------------------------------
 
 //AbstractDialogFactory_Impl implementations
 class SdAbstractDialogFactory_Impl : public SdAbstractDialogFactory
@@ -281,12 +259,12 @@ public:
 
       virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
-                                                                  SdPage* ); // add for MasterLayoutDialog
+                                                                  SdPage* );
 
     virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
                                                                   ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
-                                                                  SdPage* pCurrentPage ); // add for HeaderFooterDialog
+                                                                  SdPage* pCurrentPage );
 
     // For TabPage
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc();
