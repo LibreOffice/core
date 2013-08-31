@@ -280,7 +280,7 @@ static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
     int nIndex = nStart;
     bool bFound = false;
 
-    while ( !bFound && ( g_Extensions[nIndex] != 0 ) && ( nIndex < nEnd ) )
+    while ( !bFound && (nIndex < nEnd) && (g_Extensions[nIndex] != 0) )
     {
         bFound = ! CheckExtensionInRegistry( g_Extensions[nIndex] );
 
@@ -296,7 +296,7 @@ static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const in
 { // Check all file extensions
     int nIndex = nStart;
 
-    while ( ( g_Extensions[nIndex] != 0 ) && ( nIndex < nEnd ) )
+    while ( (nIndex < nEnd) && (g_Extensions[nIndex] != 0) )
     {
         registerForExtension( handle, nIndex++, bRegister );
     }
