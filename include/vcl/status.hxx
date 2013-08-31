@@ -136,13 +136,10 @@ public:
     void                HideItem( sal_uInt16 nItemId );
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
 
-    void                ShowItems();
-    void                HideItems();
     sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
 
     void                RedrawItem( sal_uInt16 nItemId );
 
-    void                CopyItems( const StatusBar& rStatusBar );
     void                Clear();
 
     sal_uInt16              GetItemCount() const;

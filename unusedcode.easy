@@ -3,7 +3,6 @@
 (anonymous namespace)::StringTokenizer::StringTokenizer(rtl::OUString const&, unsigned short)
 (anonymous namespace)::StringTokenizer::getNextToken()
 (anonymous namespace)::VBATest::testMiscOLEStuff()
-AffineMatrixItem::GetAffineMatrix2D() const
 BackingWindow::LinkStubWindowEventListener(void*, void*)
 Bcp47CountryEntry::getLocale() const
 BitmapReadAccess::GetColorWithFallback(long, long, BitmapColor const&) const
@@ -15,11 +14,6 @@ FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
 LanguageTag::reset(_rtl_Locale const&)
-Menu::GetItemImageAngle(unsigned short) const
-Menu::GetItemImageMirrorMode(unsigned short) const
-Menu::GetLogo() const
-Menu::SetLogo()
-Menu::SetLogo(MenuLogo const&)
 OWriteAccelatorDocumentHandler::OWriteAccelatorDocumentHandler(std::__debug::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>)
 OWriteAccelatorDocumentHandler::WriteAcceleratorDocument()
 OutputDevice::GetCanvas() const
@@ -76,10 +70,6 @@ SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
-StatusBar::CopyItems(StatusBar const&)
-StatusBar::HideItems()
-StatusBar::ShowItems()
-SvFileStream::GetFileHandle() const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
 SvpSalInstance::PostedEventsInQueue()
@@ -143,9 +133,6 @@ connectivity::file::OStatement_Base::reset()
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-dbtools::DBTypeConversion::getMsFromTime(com::sun::star::util::Time const&)
-dbtools::DBTypeConversion::toINT32(com::sun::star::util::Date const&)
-dbtools::DBTypeConversion::toINT64(com::sun::star::util::Time const&)
 drawinglayer::attribute::FontAttribute::isDefault() const
 drawinglayer::attribute::MaterialAttribute3D::isDefault() const
 drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
@@ -161,11 +148,8 @@ framework::MenuBarManager::getComponentContext()
 framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
 oox::core::Decrypt::aes128cbc(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&)
-oox::core::FilterBaseImpl::finalizeFilter()
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-oox::xls::SheetDataBuffer::writeXfIdRangeListProperties(int, int, oox::xls::ApiCellRangeList const&) const
-oox::xls::StylesBuffer::writeStyleXfToPropertySet(oox::PropertySet&, int) const
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
@@ -181,7 +165,6 @@ sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::framework::FrameworkHelper::GetPaneWindow(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::GetResource(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::RequestResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
-sd::framework::FrameworkHelper::RunOnResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, boost::function<void (bool)> const&, bool)
 sd::framework::Pane::SetWindow(Window*)
 sd::sidebar::CurrentMasterPagesSelector::NotifyHint(SfxBroadcaster&, SfxHint const&)
 sd::sidebar::LayoutMenu::GetMinimumWidth()

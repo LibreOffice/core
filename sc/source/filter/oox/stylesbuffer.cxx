@@ -3374,14 +3374,6 @@ bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
     return pBorder && pBorder->hasBorder();
 }
 
-void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const
-{
-    if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
-        pXf->writeToPropertySet( rPropSet );
-}
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

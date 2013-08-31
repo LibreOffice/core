@@ -1958,26 +1958,6 @@ Image Menu::GetItemImage( sal_uInt16 nItemId ) const
         return Image();
 }
 
-long Menu::GetItemImageAngle( sal_uInt16 nItemId ) const
-{
-    MenuItemData* pData = pItemList->GetData( nItemId );
-
-    if ( pData )
-        return pData->nItemImageAngle;
-    else
-        return 0;
-}
-
-sal_Bool Menu::GetItemImageMirrorMode( sal_uInt16 nItemId ) const
-{
-    MenuItemData* pData = pItemList->GetData( nItemId );
-
-    if ( pData )
-        return pData->bMirrorMode;
-    else
-        return sal_False;
-}
-
 void Menu::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
 {
     size_t        nPos;
@@ -3091,26 +3071,6 @@ sal_Bool Menu::HasValidEntries( sal_Bool bCheckPopups )
         }
     }
     return bValidEntries;
-}
-
-void Menu::SetLogo( const MenuLogo& rLogo )
-{
-    delete pLogo;
-    pLogo = new MenuLogo( rLogo );
-}
-
-void Menu::SetLogo()
-{
-    delete pLogo;
-    pLogo = NULL;
-}
-
-MenuLogo Menu::GetLogo() const
-{
-    MenuLogo aLogo;
-    if ( pLogo )
-        aLogo = *pLogo;
-    return aLogo;
 }
 
 void Menu::ImplKillLayoutData() const

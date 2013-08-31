@@ -296,11 +296,6 @@ bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return false;
 }
 
-const com::sun::star::geometry::AffineMatrix2D& AffineMatrixItem::GetAffineMatrix2D() const
-{
-    return maMatrix;
-}
-
 // class XLineCapItem -
 
 TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);

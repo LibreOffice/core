@@ -696,21 +696,6 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
     }
 }
 
-void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const
-{
-    StylesBuffer& rStyles = getStyles();
-    ScRangeList aList;
-    for ( ApiCellRangeList::const_iterator it = rRanges.begin(), it_end = rRanges.end(); it!=it_end; ++it )
-    {
-        ScRange* pRange = new ScRange();
-        ScUnoConversion::FillScRange( *pRange, *it );
-        aList.push_back( pRange );
-    }
-    ScMarkData aMark;
-    aMark.MarkFromRangeList( aList, false );
-    rStyles.writeCellXfToMarkData( aMark, nXfId, nNumFmtId );
-}
-
 void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
 {
     SCCOL nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();

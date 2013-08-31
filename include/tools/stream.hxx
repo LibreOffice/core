@@ -658,9 +658,7 @@ private:
     OUString        aFilename;
     sal_uInt16      nLockCounter;
     bool            bIsOpen;
-#ifdef UNX
-    sal_uInt32      GetFileHandle() const;
-#endif
+
     // Forbidden and not implemented.
     SvFileStream (const SvFileStream&);
     SvFileStream & operator= (const SvFileStream&);

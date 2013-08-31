@@ -985,8 +985,6 @@ public:
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
-    /** Writes the cell formatting attributes of the specified style XF to the passed property set. */
-    void                writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
 
     bool                hasBorder( sal_Int32 nBorderId ) const;
 private:

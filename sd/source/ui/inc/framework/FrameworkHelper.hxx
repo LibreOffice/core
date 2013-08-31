@@ -279,27 +279,6 @@ public:
         const cssu::Reference<cssdf::XResourceId>& rxResourceId,
         const Callback& rCallback);
 
-    /** Run the given callback when the specified resource has been
-        deactivated.  When the resource is not active already when
-        this method is called then rCallback is called before this
-        method returns.
-        @param rxResourceId
-            Wait for the deactivation of this resource before calling
-            rCallback.
-        @param rCallback
-            The callback to be called when the resource is
-            deactivated.
-        @param bRunOnDeactivationEnd
-            The callback is run either when the deactivation starts
-            and the callback can still access the resource or when the
-            deactivatio is complete and the resource is no longer available.
-
-    */
-    void RunOnResourceDeactivation(
-        const cssu::Reference<cssdf::XResourceId>& rxResourceId,
-        const Callback& rCallback,
-        const bool bRunOnDeactivationEnd);
-
     /** Normally the requested changes of the configuration are executed
         asynchronously.  However, there is at least one situation (searching
         with the Outliner) where the surrounding code does not cope with

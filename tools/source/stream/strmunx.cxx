@@ -331,15 +331,6 @@ SvFileStream::~SvFileStream()
         delete pInstanceData;
 }
 
-sal_uInt32 SvFileStream::GetFileHandle() const
-{
-    sal_IntPtr handle;
-    if (osl_getFileOSHandle(pInstanceData->rHandle, &handle) == osl_File_E_None)
-        return (sal_uInt32) handle;
-    else
-        return (sal_uInt32) -1;
-}
-
 sal_uInt16 SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
