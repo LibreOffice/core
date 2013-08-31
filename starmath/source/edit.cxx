@@ -421,6 +421,9 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
         bool autoClose = false;
         ESelection aSelection = pEditView->GetSelection();
+        // as we don't support RTL in Math, we need to swap values from selection when they were done
+        // in RTL form
+        aSelection.Adjust();
         OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
 
         if (selected.trim() == "<?>")
