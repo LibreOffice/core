@@ -77,4 +77,11 @@
 /moz/zipped/*.zip
 __pycache__
 
+# OSX specific
 .DS_Store
+
+# Xcode specific
+build
+project.xcworkspace
+xcuserdata
+*.xuserstate
