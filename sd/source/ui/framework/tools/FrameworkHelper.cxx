@@ -869,33 +869,6 @@ void FrameworkHelper::RunOnResourceActivation(
     }
 }
 
-
-
-
-void FrameworkHelper::RunOnResourceDeactivation(
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-    const Callback& rCallback,
-    const bool bRunOnDeactivationEnd)
-{
-    if (mxConfigurationController.is()
-        && ! mxConfigurationController->getResource(rxResourceId).is())
-    {
-        rCallback(false);
-    }
-    else
-    {
-        RunOnEvent(
-            bRunOnDeactivationEnd
-                ? msResourceDeactivationEndEvent
-                : msResourceDeactivationEvent,
-            FrameworkHelperResourceIdFilter(rxResourceId),
-            rCallback);
-    }
-}
-
-
-
-
 /** A callback that sets a flag to a specified value when the callback is
     called.
 */

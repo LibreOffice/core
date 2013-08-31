@@ -1052,56 +1052,6 @@ sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
-void StatusBar::ShowItems()
-{
-    if ( !mbVisibleItems )
-    {
-        mbVisibleItems = sal_True;
-        if ( !mbProgressMode )
-            Invalidate();
-
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWALLITEMS );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::HideItems()
-{
-    if ( mbVisibleItems )
-    {
-        mbVisibleItems = sal_False;
-        if ( !mbProgressMode )
-            Invalidate();
-
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEALLITEMS );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::CopyItems( const StatusBar& rStatusBar )
-{
-    // Alle Items entfernen
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
-    }
-    mpItemList->clear();
-
-    // Items kopieren
-    for ( size_t i = 0, n = rStatusBar.mpItemList->size(); i < n; ++i ) {
-        mpItemList->push_back( new ImplStatusItem( *(*rStatusBar.mpItemList)[ i ] ) );
-    }
-
-    mbFormat = sal_True;
-    if ( ImplIsItemUpdate() )
-        Invalidate();
-}
-
-// -----------------------------------------------------------------------
-
 void StatusBar::Clear()
 {
     // Alle Item loeschen

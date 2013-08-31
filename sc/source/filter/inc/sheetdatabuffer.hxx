@@ -181,7 +181,6 @@ private:
                             const DataTableModel& rModel ) const;
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
-    void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
     void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
     void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ::com::sun::star::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
 private:

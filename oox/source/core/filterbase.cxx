@@ -158,7 +158,6 @@ struct FilterBaseImpl
     void                setDocumentModel( const Reference< XComponent >& rxComponent ) throw( IllegalArgumentException );
 
     void                initializeFilter();
-    void                finalizeFilter();
 };
 
 // ----------------------------------------------------------------------------
@@ -195,24 +194,6 @@ void FilterBaseImpl::initializeFilter()
     {
     }
 }
-
-void FilterBaseImpl::finalizeFilter()
-{
-    try
-    {
-        // writing back the FilterData to the MediaDescriptor
-        maMediaDesc["FilterData"] = makeAny(maFilterData.getAsConstPropertyValueList());
-        // write the descriptor back to the document model (adds the passwords)
-        mxModel->attachResource( maFileUrl, maMediaDesc.getAsConstPropertyValueList() );
-        // unlock the model controllers
-        mxModel->unlockControllers();
-    }
-    catch( Exception& )
-    {
-    }
-}
-
-// ============================================================================
 
 FilterBase::FilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mxImpl( new FilterBaseImpl( rxContext ) )

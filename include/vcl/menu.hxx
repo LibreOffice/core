@@ -273,9 +273,7 @@ public:
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
-    long                GetItemImageAngle( sal_uInt16 nItemId ) const;
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
-    sal_Bool            GetItemImageMirrorMode( sal_uInt16 ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString            GetItemCommand( sal_uInt16 nItemId ) const;
@@ -304,10 +302,7 @@ public:
     void                SetSelectHdl( const Link& rLink )       { aSelectHdl = rLink; }
     const Link&         GetSelectHdl() const                    { return aSelectHdl; }
 
-    void                SetLogo( const MenuLogo& rLogo );
-    void                SetLogo();
     sal_Bool                HasLogo() const { return pLogo ? sal_True : sal_False; }
-    MenuLogo            GetLogo() const;
 
     void                AddEventListener( const Link& rEventListener );
     void                RemoveEventListener( const Link& rEventListener );

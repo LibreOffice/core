@@ -45,8 +45,6 @@ public:
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-
-    const com::sun::star::geometry::AffineMatrix2D& GetAffineMatrix2D() const;
 };
 
 #endif // _SVX_AFFINEMATRIXITEM_HXX

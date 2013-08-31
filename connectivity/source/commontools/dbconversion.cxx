@@ -136,44 +136,6 @@ namespace dbtools
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
-    sal_Int32 DBTypeConversion::toINT32(const utl::Date& rVal)
-    {
-        return ((sal_Int32)(rVal.Day%100)) +
-            (((sal_Int32)(rVal.Month%100))*100) +
-            (((sal_Int32) rVal.Year%10000)*10000);
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Int64 DBTypeConversion::toINT64(const utl::Time& rVal)
-    {
-        // normalize time
-        sal_Int32 nSeconds          = rVal.Seconds + rVal.NanoSeconds / nanoSecInSec;
-        sal_Int32 nNanoSeconds      = rVal.NanoSeconds % nanoSecInSec;
-        sal_Int32 nMinutes          = rVal.Minutes + nSeconds / secInMin;
-        nSeconds                    = nSeconds % secInMin;
-        sal_Int32 nHours            = rVal.Hours + nMinutes / minInHour;
-        nMinutes                    = nMinutes % minInHour;
-
-        // assemble time
-        return nNanoSeconds +
-               nSeconds * secMask +
-               nMinutes * minMask +
-               nHours   * hourMask;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Int32 DBTypeConversion::getMsFromTime(const utl::Time& rVal)
-    {
-        sal_Int32   nHour     = rVal.Hours;
-        sal_Int32   nMin      = rVal.Minutes;
-        sal_Int32   nSec      = rVal.Seconds;
-        sal_Int32   nNanoSec  = rVal.NanoSeconds;
-
-        return ((nHour*3600000)+(nMin*60000)+(nSec*1000)+(nNanoSec/1000000));
-    }
-
-    //------------------------------------------------------------------------------
     sal_Int64 DBTypeConversion::getNsFromTime(const utl::Time& rVal)
     {
         sal_Int32   nHour     = rVal.Hours;

@@ -110,9 +110,6 @@ namespace dbtools
         static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
 
-
-        // TODO: consider removing getMsFromTime
-        static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
         static sal_Int64 getNsFromTime(const ::com::sun::star::util::Time& rVal);
 
         static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
@@ -120,9 +117,6 @@ namespace dbtools
         static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
         static double   toDouble(const ::com::sun::star::util::Time& rVal);
         static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-
-        static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
-        static sal_Int64    toINT64(const ::com::sun::star::util::Time& rVal);
 
         static ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
         static ::com::sun::star::util::Time toTime(sal_Int64 _nVal);
