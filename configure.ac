@@ -9873,10 +9873,10 @@ AC_SUBST(DBUS_LIBS)
 AC_MSG_CHECKING([whether to enable font install via packagekit])
 if test "$ENABLE_DBUS" = "TRUE"; then
     if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
-        ENABLE_PACKAGEKIT=YES
+        ENABLE_PACKAGEKIT=TRUE
         AC_MSG_RESULT([yes])
     else
-        ENABLE_PACKAGEKIT=NO
+        ENABLE_PACKAGEKIT=
         AC_MSG_RESULT([no])
     fi
 else
