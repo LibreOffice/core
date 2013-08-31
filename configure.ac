@@ -8035,21 +8035,21 @@ AC_SUBST(PYTHON_VERSION_MINOR)
 AC_MSG_CHECKING([whether to build the MariaDB/MySQL Connector extension])
 if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     AC_MSG_RESULT([yes])
-    ENABLE_MARIADBC=YES
+    ENABLE_MARIADBC=TRUE
     MARIADBC_MAJOR=1
     MARIADBC_MINOR=0
     MARIADBC_MICRO=2
     BUILD_TYPE="$BUILD_TYPE MARIADBC"
 else
     AC_MSG_RESULT([no])
-    ENABLE_MARIADBC=NO
+    ENABLE_MARIADBC=
 fi
 AC_SUBST(ENABLE_MARIADBC)
 AC_SUBST(MARIADBC_MAJOR)
 AC_SUBST(MARIADBC_MINOR)
 AC_SUBST(MARIADBC_MICRO)
 
-if test "$ENABLE_MARIADBC" = "YES"; then
+if test "$ENABLE_MARIADBC" = "TRUE"; then
 
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MARIADBC"
 
