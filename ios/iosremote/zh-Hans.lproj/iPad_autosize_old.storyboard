@@ -365,28 +365,23 @@
                                             <action selector="stopWatchClear:" destination="VQa-vM-8pF" eventType="touchUpInside" id="aD5-Wp-WRC"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jBq-0A-D38">
+                                        <rect key="frame" x="736" y="23" width="58" height="59"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" backgroundImage="more_ipad.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="popOverUp:" destination="TYh-Hw-m1Q" eventType="touchUpInside" id="0Zm-gv-gne"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jBq-0A-D38">
-                                <rect key="frame" x="683" y="898" width="97" height="59"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" backgroundImage="gear.png">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted" backgroundImage="gear_pressed">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="popOverUp:" destination="TYh-Hw-m1Q" eventType="touchUpInside" id="0Zm-gv-gne"/>
-                                </connections>
-                            </button>
-                            <view alpha="0.50000000000000011" contentMode="scaleToFill" id="jX5-gj-cqE">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.95294117647058818" green="0.54008895985401462" blue="0.070588235294117646" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
@@ -405,7 +400,6 @@
                         <outlet property="slideNumber" destination="wWm-KR-C5L" id="Vb0-Wv-6gb"/>
                         <outlet property="startButton" destination="8iO-H3-CJ7" id="ym1-Hg-BPE"/>
                         <outlet property="timeLabel" destination="dtc-vP-agf" id="WsH-Gm-dBN"/>
-                        <outlet property="welcome_blocking_page" destination="jX5-gj-cqE" id="5dH-dT-AG4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e0y-Q9-Urg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -514,8 +508,7 @@
         <image name="Default.png" width="320" height="480"/>
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
-        <image name="gear.png" width="55" height="35"/>
-        <image name="gear_pressed" width="16" height="16"/>
+        <image name="more_ipad.png" width="60" height="60"/>
         <image name="nextButton_normal.png" width="42" height="230"/>
         <image name="nextButton_pressed.png" width="42" height="230"/>
         <image name="previousButton_normal.png" width="42" height="230"/>
@@ -527,9 +520,7 @@
         <class className="BasePresentationViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
             <relationships>
-                <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
-                <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
@@ -542,7 +533,6 @@
                 <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="welcome_blocking_page" candidateClass="UIView"/>
             </relationships>
         </class>
         <class className="EditableTableViewCell" superclassName="UITableViewCell">

@@ -107,6 +107,8 @@
 		8CAD65A017A3F76300CFB661 /* slideShowSwipeInList_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */; };
 		8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */; };
 		8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */; };
+		8CAF3DE317D1D5D700F931E5 /* more_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DE117D1D5D600F931E5 /* more_ipad.png */; };
+		8CAF3DE417D1D5D700F931E5 /* more_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */; };
 		8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */; };
 		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */; };
 		8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */; };
@@ -275,6 +277,8 @@
 		8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowSwipeInList_ipad.m; path = iosremote/slideShowSwipeInList_ipad.m; sourceTree = "<group>"; };
 		8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~ipad.png"; path = "iosremote/WTcontrol~ipad.png"; sourceTree = "<group>"; };
 		8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~iphone.png"; path = "iosremote/WTcontrol~iphone.png"; sourceTree = "<group>"; };
+		8CAF3DE117D1D5D600F931E5 /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_ipad.png; path = iosremote/more_ipad.png; sourceTree = "<group>"; };
+		8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "more_ipad@2x.png"; path = "iosremote/more_ipad@2x.png"; sourceTree = "<group>"; };
 		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/WalkThroughPageViewController.h; sourceTree = "<group>"; };
 		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/WalkThroughPageViewController.m; sourceTree = "<group>"; };
 		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
@@ -415,6 +419,8 @@
 		8C06B31917B7EC62002F5CF8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				8CAF3DE117D1D5D600F931E5 /* more_ipad.png */,
+				8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */,
 				8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */,
 				8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */,
 				8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */,
@@ -495,6 +501,7 @@
 		8C1A170217A28AB900B4BB3C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				8CD6EC6A17CBBAFF0071827A /* Views */,
 				8C1A170717A28DE800B4BB3C /* Models */,
 				8C1A170617A28DDF00B4BB3C /* Support */,
 				8C1A170517A28B0E00B4BB3C /* Library */,
@@ -516,6 +523,10 @@
 		8C1A170417A28AFD00B4BB3C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */,
+				8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */,
+				8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */,
+				8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */,
 				57FE71E11785C61300B50125 /* pinValidation_vc.h */,
 				57FE71E21785C61400B50125 /* pinValidation_vc.m */,
 				5753DD9717834D7100DB71BB /* newServer_vc.h */,
@@ -602,7 +613,6 @@
 		8C1A170917A28E6500B4BB3C /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
-				8CD6EC6A17CBBAFF0071827A /* Views */,
 				8CAD658917A2F00500CFB661 /* Controllers */,
 				57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */,
 			);
@@ -648,10 +658,6 @@
 				57701741178B0A6900B99793 /* slideShowSwipeInList_iphone.m */,
 				8CAD658A17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.h */,
 				8CAD658B17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m */,
-				8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */,
-				8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */,
-				8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */,
-				8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -788,6 +794,8 @@
 				8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */,
 				8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */,
 				8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */,
+				8CAF3DE317D1D5D700F931E5 /* more_ipad.png in Resources */,
+				8CAF3DE417D1D5D700F931E5 /* more_ipad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

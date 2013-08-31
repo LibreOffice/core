@@ -269,6 +269,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.welcome_blocking_page = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.welcome_blocking_page.backgroundColor = [UIColor orangeColor];
+    self.welcome_blocking_page.autoresizingMask = UIViewAutoresizingFlexibleHeight |
+    UIViewAutoresizingFlexibleWidth;
+    [self.view addSubview:self.welcome_blocking_page];
+    
     self.masterIsHiddenWhenLandscape = YES;
     [self.currentSlideImageView setTag:CURRENT_SLIDE_IMAGEVIEW];
     [self.NoteWebView setTag:CURRENT_SLIDE_NOTES];
@@ -475,12 +481,13 @@
 static BOOL isBlank = NO;
 #pragma mark - Popover toggle
 - (IBAction)popOverUp:(id)sender {
+    CGPoint popOverPoint = CGPointMake([self.gearButton.superview convertPoint:self.gearButton.center toView:self.view].x, [self.gearButton.superview convertPoint:self.gearButton.center toView:self.view].y - self.gearButton.frame.size.height/2);
     if (!isBlank) {
-        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
+        [PopoverView showPopoverAtPoint:popOverPoint inView:self.view withStringArray:
          [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Blank Screen", @"Popover option"), nil]
                                delegate:self];
     } else {
-        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.view withStringArray:
+        [PopoverView showPopoverAtPoint:popOverPoint inView:self.view withStringArray:
          [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Resume from blank Screen", @"Popover option"), nil]
                                delegate:self];
     }

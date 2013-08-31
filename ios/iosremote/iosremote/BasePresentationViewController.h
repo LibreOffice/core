@@ -28,7 +28,7 @@
 // Welcome page
 -(void)startConnectionModal:(id)sender;
 - (void) setWelcomePageVisible:(BOOL)visible;
-@property (weak, nonatomic) IBOutlet UIView *welcome_blocking_page;
+@property (strong, nonatomic) UIView *welcome_blocking_page;
 
 @property (weak, nonatomic) IBOutlet UITableView *horizontalTableView;
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
