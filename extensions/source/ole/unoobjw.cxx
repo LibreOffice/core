@@ -26,7 +26,6 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 
-
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ustring.hxx>
@@ -65,7 +64,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-
 #ifndef _MSC_VER
 extern "C" const GUID IID_IDispatchEx;
 #endif
@@ -76,7 +74,6 @@ boost::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);
-
 
 /* Does not throw any exceptions.
    Param pInfo can be NULL.
@@ -91,11 +88,6 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     }
 }
 
-/*****************************************************************************
-
-    class implementation: InterfaceOleWrapper_Impl
-
-*****************************************************************************/
 InterfaceOleWrapper_Impl::InterfaceOleWrapper_Impl( Reference<XMultiServiceFactory>& xFactory,
                                                     sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
         m_defaultValueType( 0),
@@ -212,7 +204,6 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
         if( ! rgdispid)
             return E_POINTER;
 
-        // ----------------------------------------
         if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
             ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
         {
@@ -231,7 +222,6 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
             return S_OK;
         }
 
-        // ----------------------------------------
         if (m_xInvocation.is() && (cNames > 0))
         {
             OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
@@ -477,6 +467,7 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
     }
     return bTypesAvailable;
 }
+
 // XBridgeSupplier2 ---------------------------------------------------
 // only bridges itself ( this instance of InterfaceOleWrapper_Impl)from UNO to IDispatch
 // If sourceModelType is UNO than any UNO interface implemented by InterfaceOleWrapper_Impl
@@ -514,7 +505,6 @@ Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
     return retAny;
 }
 
-
 // XInitialization --------------------------------------------------
 void SAL_CALL InterfaceOleWrapper_Impl::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
@@ -548,8 +538,6 @@ Reference<XInterface> InterfaceOleWrapper_Impl::createComWrapperInstance()
                             m_smgr, m_nUnoWrapperClass, m_nComWrapperClass));
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
-
-
 
 // "getType" is used in convertValueObject to map the string denoting the type
 // to an actual Type object.
@@ -642,6 +630,7 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
     }
     return ret;
 }
+
 // VisualBasic Script passes arguments as VT_VARIANT | VT_BYREF be it in or out parameter.
 // Thus we are in charge of freeing an eventual value contained by the inner VARIANT
 // Please note: VariantCopy doesn't free a VT_BYREF value
@@ -1185,9 +1174,6 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
     return ret;
 }
 
-
-
-
 STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR /*bstrName*/, DWORD /*grfdex*/, DISPID __RPC_FAR* /*pid*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
@@ -1208,7 +1194,6 @@ STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
 
     return ret;
 }
-
 
 STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByName(
     /* [in] */ BSTR /*bstr*/,
@@ -1263,12 +1248,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
     return ret;
 }
 
+// UnoObjectWrapperRemoteOpt ---------------------------------------------------
 
-/*************************************************************************
-
-    UnoObjectWrapperRemoteOpt
-
-*************************************************************************/
 UnoObjectWrapperRemoteOpt::UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory>& aFactory,
                                                      sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
 InterfaceOleWrapper_Impl( aFactory, unoWrapperClass, comWrapperClass),
@@ -1296,7 +1277,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHA
     if( ! rgdispid)
         return E_POINTER;
     HRESULT ret = E_UNEXPECTED;
-    // ----------------------------------------
+
     // _GetValueObject
     if( ! wcscmp( *rgszNames, JSCRIPT_VALUE_FUNC))
     {
@@ -1309,7 +1290,6 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHA
         return S_OK;
     }
 
-    // ----------------------------------------
     if (m_xInvocation.is() && (cNames > 0))
     {
         OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
@@ -1384,8 +1364,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                         }
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_METHOD;
-                    } //if( wFlags == DISPATCH_METHOD )
-
+                    }
                     else if( wFlags == DISPATCH_PROPERTYPUT || wFlags == DISPATCH_PROPERTYPUTREF)
                     {
                         convertDispparamsArgs(dispidMember, wFlags, pdispparams, params );
@@ -1410,7 +1389,6 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                         if( SUCCEEDED( ret ) )
                             info.flags= DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYGET;
                     }
-
                     else if( wFlags == DISPATCH_PROPERTYGET)
                     {
                         if( FAILED( ret= doGetProperty( pdispparams, pvarResult,
@@ -1593,7 +1571,6 @@ HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPA
     return S_OK;
 }
 
-
 // The returned HRESULT is only appropriate for IDispatch::Invoke
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr)
 {
@@ -1663,9 +1640,6 @@ const VARTYPE getVarType( const Any& value)
     }
     return ret;
 }
-
-
-
 
 } // end namespace
 

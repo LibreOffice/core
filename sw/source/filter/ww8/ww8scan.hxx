@@ -93,6 +93,7 @@ private:
     sal_uInt8 SprmDataOfs(sal_uInt16 nId) const;
 
     enum SprmType {L_FIX=0, L_VAR=1, L_VAR2=2};
+
 public:
     //7- ids are very different to 8+ ones
     wwSprmParser(ww::WordVersion eVersion);
@@ -192,6 +193,7 @@ private:
     long nIMax;             ///< Anzahl der Elemente
     long nIdx;              ///< Merker, wo wir gerade sind
     sal_uInt32 nStru;
+
 public:
     WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
@@ -236,6 +238,7 @@ private:
     long nRemLen;   // length of remaining SPRMs (including akt. SPRM)
 
     void UpdateMyMembers();
+
 public:
     explicit WW8SprmIter( const sal_uInt8* pSprms_, long nLen_,
         const wwSprmParser &rSprmParser);
@@ -246,6 +249,7 @@ public:
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
     const sal_uInt8* GetAktParams() const { return pAktParams; }
     sal_uInt16 GetAktId() const { return nAktId; }
+
 private:
     //No copying
     WW8SprmIter(const WW8SprmIter&);
@@ -271,6 +275,7 @@ private:
     void GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN);
 
     void MakeFailedPLCF();
+
 public:
     WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         WW8_CP nStartPos = -1);
@@ -301,10 +306,12 @@ public:
 class WW8PLCFpcd
 {
 friend class WW8PLCFpcd_Iter;
+
     sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
     sal_uInt8*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
     sal_uInt32 nStru;
+
 public:
     WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
@@ -321,6 +328,7 @@ private:
     //No copying
     WW8PLCFpcd_Iter(const WW8PLCFpcd_Iter&);
     WW8PLCFpcd_Iter& operator=(const WW8PLCFpcd_Iter&);
+
 public:
     WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, long nStartPos = -1 );
     long GetIdx() const { return nIdx; }
@@ -356,6 +364,7 @@ private:
     //No copying
     WW8PLCFx(const WW8PLCFx&);
     WW8PLCFx& operator=(const WW8PLCFx&);
+
 public:
     WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
         : meVer(eVersion), bIsSprm(bSprm), bDirty(false) {}
@@ -393,6 +402,7 @@ private:
     //No copying
     WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&);
     WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&);
+
 public:
     WW8PLCFx_PCDAttrs(ww::WordVersion eVersion, WW8PLCFx_PCD* pPLCFx_PCD,
         const WW8ScannerBase* pBase );
@@ -416,6 +426,7 @@ private:
     //No copying
     WW8PLCFx_PCD(const WW8PLCFx_PCD&);
     WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&);
+
 public:
     WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
         WW8_CP nStartCp, bool bVer67P);
@@ -485,6 +496,7 @@ public:
 
         //Fill in an Entry with sanity testing
         void FillEntry(Entry &rEntry, sal_Size nDataOffset, sal_uInt16 nLen);
+
     public:
         WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
             SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
@@ -520,6 +532,7 @@ public:
 
         const wwSprmParser &GetSprmParser() const { return maSprmParser; }
     };
+
 private:
     SvStream* pFKPStrm;         // Input-File
     SvStream* pDataStrm;        // Input-File
@@ -547,9 +560,11 @@ private:
     //No copying
     WW8PLCFx_Fc_FKP(const WW8PLCFx_Fc_FKP&);
     WW8PLCFx_Fc_FKP& operator=(const WW8PLCFx_Fc_FKP&);
+
 protected:
     ePLCFT ePLCF;
     WW8PLCFx_PCDAttrs* pPCDAttrs;
+
 public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
@@ -581,6 +596,7 @@ private:
     //No copying
     WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&);
     WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&);
+
 public:
     WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8ScannerBase& rBase,  ePLCFT ePl );
@@ -613,6 +629,7 @@ private:
     //no copying
     WW8PLCFx_SEPX(const WW8PLCFx_SEPX&);
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&);
+
 public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
@@ -642,6 +659,7 @@ private:
     //No copying
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&);
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&);
+
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
     long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
@@ -673,6 +691,7 @@ private:
     //No copying
     WW8PLCFx_FLD(const WW8PLCFx_FLD&);
     WW8PLCFx_FLD& operator=(const WW8PLCFx_FLD &);
+
 public:
     WW8PLCFx_FLD(SvStream* pSt, const WW8Fib& rMyFib, short nType);
     virtual ~WW8PLCFx_FLD();
@@ -703,6 +722,7 @@ private:
     //No copying
     WW8PLCFx_Book(const WW8PLCFx_Book&);
     WW8PLCFx_Book& operator=(const WW8PLCFx_Book&);
+
 public:
     WW8PLCFx_Book(SvStream* pTblSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book();
@@ -802,6 +822,7 @@ class WW8PLCFMan
 {
 public:
     enum WW8PLCFManLimits {MAN_ANZ_PLCF = 10};
+
 private:
     wwSprmParser maSprmParser;
     long nCpO;                      // Origin Cp -- the basis for nNewCp
@@ -834,6 +855,7 @@ private:
     void AdvSprm(short nIdx, bool bStart);
     void AdvNoSprm(short nIdx, bool bStart);
     sal_uInt16 GetId(const WW8PLCFxDesc* p ) const;
+
 public:
     WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         bool bDoingDrawTextBox = false);
@@ -937,6 +959,7 @@ private:
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
+
 public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         WW8Fib* pWwF );
@@ -1453,6 +1476,7 @@ protected:
     //No copying
     WW8Style(const WW8Style&);
     WW8Style& operator=(const WW8Style&);
+
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
     WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
@@ -1465,6 +1489,7 @@ class WW8Fonts
 protected:
     WW8_FFN* pFontA;    // Array of Pointers to Font Description
     sal_uInt16 nMax;        // Array-Size
+
 public:
     WW8Fonts( SvStream& rSt, WW8Fib& rFib );
     ~WW8Fonts() { delete[] pFontA; }
@@ -1746,6 +1771,7 @@ private:
     WW8PLCF aPLCF;
     long nTextOfs;
     short nIdxOffset;
+
 public:
     WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop );
     bool GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, long& rLen);

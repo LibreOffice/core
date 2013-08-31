@@ -25,7 +25,6 @@
 
 namespace utl
 {
-//-----------------------------------------------------------------------------
     /** provides configuration information needed for application startup.
         <p>This class handles the startup information for the office application.
            It encapsulates knowledge of how to retriev such information and how
@@ -112,9 +111,8 @@ namespace utl
         class Impl;
         static const Impl& data(); // the data related to the bootstrap.ini file
     };
-//-----------------------------------------------------------------------------
-} // namespace utl
+}
 
-#endif // _UTL_BOOTSTRAP_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

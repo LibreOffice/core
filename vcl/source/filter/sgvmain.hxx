@@ -24,7 +24,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
-
 #define UCHAR unsigned char
 
 struct PointType {
@@ -42,7 +41,6 @@ public:
     friend void DtHdOverSeek(SvStream& rInp);
 };
 
-
 struct Seitenformat {
     PointType Size;       // 0.00mm...819.175mm (Papiergr"u"ue)
     sal_Int16     RandL;      // links     Rand auf
@@ -53,7 +51,6 @@ struct Seitenformat {
     sal_uInt8      PIntens;    // erst recht Future use
 //    sal_Bool      BorderClip; // Objekte am Rand abschneiden (Schummel wg. Allignment unter NT)
 };
-
 
 #define PageSize 146
 class PageType {
@@ -72,7 +69,6 @@ public:
     UCHAR        PgName[32]; // Seitenname
     friend SvStream& operator>>(SvStream& rIStream, PageType& rPage);
 };
-
 
 enum ObjArtType {ObjStrk,ObjRect,ObjPoly,ObjCirc,ObjSpln,
                  ObjText,ObjGrup,ObjBmap,ObjVirt,ObjTxtX,ObjMaxi};
@@ -148,7 +144,6 @@ public:
     virtual void Draw(OutputDevice& rOut);
 };
 
-
 #define StrkSize 38
 class StrkType: public ObjkType {
 public:
@@ -160,7 +155,6 @@ public:
     friend SvStream& operator>>(SvStream& rIStream, StrkType& rStrk);
     virtual void Draw(OutputDevice& rOut);
 };
-
 
 #define RectSize 52
 class RectType: public ObjkType {
@@ -178,7 +172,6 @@ public:
     virtual void Draw(OutputDevice& rOut);
 };
 
-
 #define PolySize 44
 class PolyType: public ObjkType { // identisch mit Spline !
 public:
@@ -195,7 +188,6 @@ public:
 };
 #define  PolyClosBit 0x01   // Unterarten von Poly:   0: PolyLine  1: Polygon
 
-
 #define SplnSize 44
 class SplnType: public ObjkType { // identisch mit Poly !
 public:
@@ -211,7 +203,6 @@ public:
     virtual void Draw(OutputDevice& rOut);
 };
 // Unterarten von Spline: siehe Poly
-
 
 #define CircSize 52
 class CircType: public ObjkType {
@@ -232,7 +223,6 @@ public:
 #define CircSect 0x01  /*                        1: Kreissektor    */
 #define CircAbsn 0x02  /*                        2: Kreisabschnitt */
 #define CircArc  0x03  /*                        3: Kreisbogen     */
-
 
 #define TextSize 116
 class TextType: public ObjkType {
@@ -259,7 +249,6 @@ public:
 #define TextFitZBit 0x08     /* Bit3: 1=Fit2Size Zeilenweise          (2.0)       */
 #define TextDrftBit 0x04     /* Bit2: 1=DraftDraw                     (2.0)       */
 #define TextFitBits (TextFitSBit | TextFitZBit)
-
 
 enum GrafStat {NoGraf,Pic,Pcx,Hpgl,Img,Msp,Tiff,Dxf,Lot,Usr,Sgf};
 
@@ -288,7 +277,6 @@ public:
     void SetPaths( const INetURLObject rFltPath );
 };
 
-
 #define GrupSize 48
 class GrupType: public ObjkType {
 public:
@@ -303,7 +291,6 @@ public:
 //    virtual void Draw(OutputDevice& rOut);
 };
 
-
 void SetLine(ObjLineType& rLine, OutputDevice& rOut);
 void SetArea(ObjAreaType& rArea, OutputDevice& rOut);
 Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts);
@@ -311,7 +298,6 @@ void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 void RotatePoint(Point& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs);
 sal_Int16 iMulDiv(sal_Int16 a, sal_Int16 Mul, sal_Int16 Div);
 sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div);
-
 
 class SgfFontOne {
 public:
@@ -347,6 +333,5 @@ public:
 };
 
 #endif //_SGVMAIN_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

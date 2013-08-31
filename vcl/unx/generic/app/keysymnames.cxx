@@ -499,7 +499,6 @@ namespace vcl_sal {
 
         return OUString();
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

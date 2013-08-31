@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
@@ -59,10 +58,7 @@
 
 using namespace ::com::sun::star;
 
-// Debug Method
-
 // Pack columns
-
 static void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           sal_uInt16 nTotalWidth,
                           SvxColumnItem& rColItem,
@@ -102,7 +98,6 @@ static void lcl_FillSvxColumn(const SwFmtCol& rCol,
 }
 
 // Transfer ColumnItem in ColumnInfo
-
 static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           sal_uInt16 nTotalWidth,
                           SwFmtCol& rCols)
@@ -151,7 +146,6 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 }
 
 // Delete tabs
-
 static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 {
     // Delete DefTabs
@@ -169,7 +163,6 @@ static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 }
 
 // Flip page margin
-
 void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 {
     sal_uInt16 nPhyPage, nVirPage;
@@ -185,7 +178,6 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 
 // If the frame border is moved, the column separator
 // should stay in the same absolute position.
-
 static void lcl_Scale(long& nVal, long nScale)
 {
     nVal *= nScale;
@@ -233,7 +225,6 @@ void ResizeFrameCols(SwFmtCol& rCol,
 }
 
 // Here all changes to the tab bar will be shot again into the model.
-
 void SwView::ExecTabWin( SfxRequest& rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
@@ -973,7 +964,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 // Here the status of the tab bar will be determined.
 // This means that all relevant attributes at the CursorPos
 // will be submittet to the tab bar.
-
 void SwView::StateTabWin(SfxItemSet& rSet)
 {
     SwWrtShell &rSh         = GetWrtShell();

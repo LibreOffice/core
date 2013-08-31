@@ -48,20 +48,17 @@ class QuietInteraction : private ThreadHelpBase
                        , public  ::cppu::WeakImplHelper1<
                                     css::task::XInteractionHandler >
 {
-    //_____________________________________
     // member
     private:
 
         /// in case an unknown interaction was aborted - we save it for our external user!
         css::uno::Any m_aRequest;
 
-    //_____________________________________
     // uno interface
     public:
 
         // XInterface, XTypeProvider
 
-        //_________________________________
         /**
             @interface  XInteractionHandler
             @short      called from outside to handle a problem
@@ -80,11 +77,8 @@ class QuietInteraction : private ThreadHelpBase
         */
         virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException );
 
-    //_____________________________________
     // c++ interface
     public:
-
-        //_________________________________
         /**
             @short      ctor to guarantee right initialized instances of this class
             @descr      -
@@ -93,7 +87,6 @@ class QuietInteraction : private ThreadHelpBase
         */
         QuietInteraction();
 
-        //_________________________________
         /**
             @short      return the handled interaction request
             @descr      We saved any getted interaction request internaly.
@@ -109,7 +102,6 @@ class QuietInteraction : private ThreadHelpBase
         */
         css::uno::Any getRequest() const;
 
-        //_________________________________
         /**
             @short      returns information if interaction was used
             @descr      It can be useful to know the reason for a failed operation.

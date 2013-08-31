@@ -74,7 +74,6 @@
 #include "swhtml.hxx"
 #include "htmlform.hxx"
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -171,7 +170,6 @@ const sal_Char * aEventOptionTable[] =
     0
 };
 
-
 class SwHTMLForm_Impl
 {
     SwDocShell                  *pDocSh;
@@ -198,7 +196,6 @@ class SwHTMLForm_Impl
     std::vector<sal_uInt16>     aSelectedList;
 
 public:
-
     SwHTMLForm_Impl( SwDocShell *pDSh ) :
         pDocSh( pDSh ),
         pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : 0 )
@@ -278,7 +275,6 @@ const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory
     return xServiceFactory;
 }
 
-
 const uno::Reference< drawing::XDrawPage >& SwHTMLForm_Impl::GetDrawPage()
 {
     if( !xDrawPage.is() && pDocSh )
@@ -314,7 +310,6 @@ const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
     }
     return xForms;
 }
-
 
 const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
 {
@@ -375,7 +370,6 @@ class SwHTMLImageWatcher :
     void clear();
 
 public:
-
     SwHTMLImageWatcher( const uno::Reference< drawing::XShape > & rShape,
                         sal_Bool bWidth, sal_Bool bHeight );
     ~SwHTMLImageWatcher();
@@ -457,8 +451,6 @@ void SwHTMLImageWatcher::clear()
     if( xProd.is() )
         xProd->removeConsumer( xThis );
 }
-
-//------------------------------------------------------------------------------
 
 void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     throw( uno::RuntimeException )
@@ -573,14 +565,12 @@ void SwHTMLImageWatcher::setPixelsByBytes(
 {
 }
 
-
 void SwHTMLImageWatcher::setPixelsByLongs(
         sal_Int32, sal_Int32, sal_Int32, sal_Int32,
         const Sequence< sal_Int32 >&, sal_Int32, sal_Int32 )
     throw( uno::RuntimeException )
 {
 }
-
 
 void SwHTMLImageWatcher::complete( sal_Int32 Status,
         const uno::Reference< awt::XImageProducer >& )
@@ -652,7 +642,6 @@ class SwHTMLFormPendingStackData_Impl: public SwPendingStackData
     sal_Bool        bMinHeight;
 
 public:
-
     SwHTMLFormPendingStackData_Impl(
             const uno::Reference< drawing::XShape > & rShape, const Size& rTextSz,
             sal_Bool bMinW, sal_Bool bMinH ) :
@@ -2212,7 +2201,6 @@ void SwHTMLParser::EndTextArea()
 
     bTextArea = sal_False;
 }
-
 
 void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
 {

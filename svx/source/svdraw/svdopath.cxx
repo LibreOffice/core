@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <svx/svdopath.hxx>
@@ -907,7 +906,6 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
     return true;
 }
 
-
 String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     XubString aStr;
@@ -1636,7 +1634,6 @@ SdrPathObjGeoData::~SdrPathObjGeoData()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // DrawContact section
 
 sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()

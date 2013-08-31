@@ -36,20 +36,14 @@ struct SfxItemPool_Impl;
 
 DBG_NAMEEX(SfxItemPool)
 
-//====================================================================
-
 #define SFX_ITEM_POOLABLE           0x0001
 #define SFX_ITEM_NOT_POOLABLE       0x0002
-
-//====================================================================
 
 struct SfxItemInfo
 {
     sal_uInt16      _nSID;
     sal_uInt16      _nFlags;
 };
-
-//====================================================================
 
 class SfxStyleSheetIterator;
 struct SfxPoolItemArray_Impl;
@@ -64,8 +58,6 @@ protected:
     ~SfxItemPoolUser() {}
 };
 
-class SVL_DLLPUBLIC SfxItemPool
-
 /*  [Beschreibung]
 
     Die von dieser Klasse abgeleiteten Klassen dienen der Bereitstellung von
@@ -78,7 +70,7 @@ class SVL_DLLPUBLIC SfxItemPool
     beschleunigt und ein einfaches Laden und Speichern von Attributen
     bereitstellt.
 */
-
+class SVL_DLLPUBLIC SfxItemPool
 {
     friend struct SfxItemPool_Impl;
 
@@ -89,9 +81,7 @@ public:
     void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
     void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
 
-    //---------------------------------------------------------------------
 #ifndef _SFXITEMS_HXX
-
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
@@ -103,9 +93,7 @@ public:
     // fuer dflt. SfxItemSet::CTOR, setze dflt. WhichRanges
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
     const sal_uInt16*               GetFrozenIdRanges() const;
-
 #endif
-    //---------------------------------------------------------------------
 
 protected:
     static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
@@ -121,8 +109,10 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  SfxPoolItem **pDefaults = 0,
                                                  bool bLoadRefCounts = true );
+
 protected:
     virtual                         ~SfxItemPool();
+
 public:
     static void Free(SfxItemPool* pPool);
 
@@ -239,8 +229,6 @@ private:
 
     static const SfxItemPool*       pStoringPool_;
 };
-
-// --------------- Inline Implementierungen ------------------------------
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
 inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uLong n )

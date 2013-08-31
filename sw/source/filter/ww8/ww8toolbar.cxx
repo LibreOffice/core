@@ -36,6 +36,7 @@ class MSOWordCommandConvertor : public MSOCommandConvertor
 {
    IdToString msoToOOcmd;
    IdToString tcidToOOcmd;
+
 public:
     MSOWordCommandConvertor();
     virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
@@ -71,7 +72,6 @@ OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
         sResult = it->second;
     return sResult;
 }
-
 
 SwCTBWrapper::SwCTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,reserved2(0)
@@ -486,7 +486,6 @@ bool SwCTB::IsMenuToolbar()
     return tb.IsMenuToolbar();
 }
 
-
 bool SwCTB::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","SwCTB::Read() stream pos 0x" << std::hex << rS.Tell() );
@@ -758,8 +757,6 @@ SwTBC::GetCustomText()
     if ( tbcd.get() )
         sCustomText = tbcd->getGeneralInfo().CustomText();
     return sCustomText;
-
-
 }
 
 bool
@@ -887,7 +884,6 @@ bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
     return true;
 }
 
-
 bool Tcg255::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Tcg255::Read() stream pos 0x" << std::hex << rS.Tell() );
@@ -920,7 +916,6 @@ void Tcg255::Print( FILE* fp)
         (*it)->Print(fp);
     }
 }
-
 
 Tcg255SubStruct::Tcg255SubStruct( bool bReadId ) : mbReadId( bReadId ), ch(0)
 {
@@ -979,7 +974,6 @@ PlfAcd::PlfAcd( bool bReadId ) : Tcg255SubStruct( bReadId )
 {
 }
 
-
 PlfAcd::~PlfAcd()
 {
     if ( rgacd )
@@ -1003,6 +997,7 @@ bool PlfAcd::Read( SvStream &rS)
     }
     return true;
 }
+
 void PlfAcd::Print( FILE* fp )
 {
     Indent a;
@@ -1126,6 +1121,7 @@ void TcgSttbfCore::Print( FILE* fp )
     }
 
 }
+
 MacroNames::MacroNames( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,iMac( 0 )
 ,rgNames( NULL )
@@ -1174,7 +1170,6 @@ MacroName::MacroName():ibst(0)
 {
 }
 
-
 bool MacroName::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MacroName::Read() stream pos 0x" << std::hex << rS.Tell() );
@@ -1190,8 +1185,6 @@ void MacroName::Print( FILE* fp )
     indent_printf( fp,"  index - 0x%x has associated following record\n", ibst );
     xstz.Print( fp );
 }
-
-
 
 Xstz::Xstz():chTerm(0)
 {

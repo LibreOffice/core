@@ -25,9 +25,6 @@
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
 #include <vcl/bitmapex.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
 namespace basegfx {
     class BZPixelRaster;
 }
@@ -45,8 +42,6 @@ namespace drawinglayer {
 
 class ZBufferRasterConverter3D;
 class RasterPrimitive3D;
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -80,7 +75,6 @@ namespace drawinglayer
              */
             std::vector< RasterPrimitive3D >*                   mpRasterPrimitive3Ds;
 
-            //////////////////////////////////////////////////////////////////////////////
             // rasterconversions for filled and non-filled polygons
 
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const;
@@ -103,11 +97,9 @@ namespace drawinglayer
             /// get the result as bitmapEx
             BitmapEx getBitmapEx() const;
         };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    }
+}
 
-//////////////////////////////////////////////////////////////////////////////
-
-#endif //INCLUDED_DRAWINGLAYER_PROCESSOR3D_ZBUFFERPROCESSOR3D_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

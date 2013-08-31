@@ -69,7 +69,6 @@ using namespace ::com::sun::star;
 /************************************************************************
  * Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
  ***********************************************************************/
-
 void SwFont::SetBackColor( Color* pNewColor )
 {
     delete pBackColor;
@@ -468,10 +467,6 @@ void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
 
 *************************************************************************/
 
-/*************************************************************************
- *                  SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent )
- *************************************************************************/
-
 // nEsc ist der Prozentwert
 sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 {
@@ -485,10 +480,6 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
     }
     return nOrgAscent;
 }
-
-/*************************************************************************
- *                      SwFont::SetDiffFnt()
- *************************************************************************/
 
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                          const IDocumentSettingAccess *pIDocumentSettingAccess )
@@ -712,9 +703,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
-/*************************************************************************
- *                      class SwFont
- *************************************************************************/
+// SwFont
 
 SwFont::SwFont()
     : pBackColor(0)
@@ -975,29 +964,17 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     return *this;
 }
 
-/*************************************************************************
- *                      SwFont::GoMagic()
- *************************************************************************/
-
 void SwFont::GoMagic( ViewShell *pSh, sal_uInt8 nWhich )
 {
     SwFntAccess aFntAccess( aSub[nWhich].pMagic, aSub[nWhich].nFntIndex,
                             &aSub[nWhich], pSh, sal_True );
 }
 
-/*************************************************************************
- *                      SwSubFont::IsSymbol()
- *************************************************************************/
-
 sal_Bool SwSubFont::IsSymbol( ViewShell *pSh )
 {
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_False );
     return aFntAccess.Get()->IsSymbol();
 }
-
-/*************************************************************************
- *                      SwSubFont::ChgFnt()
- *************************************************************************/
 
 sal_Bool SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
 {
@@ -1015,10 +992,6 @@ sal_Bool SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
            UNDERLINE_NONE != GetOverline()  ||
            STRIKEOUT_NONE != GetStrikeout();
 }
-
-/*************************************************************************
- *                    SwFont::ChgPhysFnt()
- *************************************************************************/
 
 void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
 {
@@ -1053,7 +1026,6 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
  *     MaxDescent = Max (T1_height-T1_ascent,
  *                       T2_height-T2_ascent - (Esc * T1_height)
  *************************************************************************/
-
 sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
                               const sal_uInt16 nOldAscent  ) const
 {
@@ -1078,10 +1050,6 @@ short SwSubFont::_CheckKerning( )
     return nKernx;
 }
 
-/*************************************************************************
- *                    SwSubFont::GetAscent()
- *************************************************************************/
-
 sal_uInt16 SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nAscent;
@@ -1091,10 +1059,6 @@ sal_uInt16 SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
         nAscent = CalcEscAscent( nAscent );
     return nAscent;
 }
-
-/*************************************************************************
- *                    SwSubFont::GetHeight()
- *************************************************************************/
 
 sal_uInt16 SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
 {
@@ -1109,9 +1073,6 @@ sal_uInt16 SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
     return nHeight; // + nLeading;
 }
 
-/*************************************************************************
- *                    SwSubFont::_GetTxtSize()
- *************************************************************************/
 Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 {
     // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
@@ -1210,10 +1171,6 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 
     return aTxtSize;
 }
-
-/*************************************************************************
- *                    SwSubFont::_DrawText()
- *************************************************************************/
 
 void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 {
@@ -1431,10 +1388,6 @@ static sal_Char const sDoubleSpace[] = "  ";
     rInf.SetPos( rOld );
 }
 
-/*************************************************************************
- *                    SwSubFont::_GetCrsrOfst()
- *************************************************************************/
-
 xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
@@ -1467,10 +1420,6 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
     }
     return nCrsr;
 }
-
-/*************************************************************************
- *                    SwSubFont::CalcEsc()
- *************************************************************************/
 
 void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
@@ -1570,12 +1519,9 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
     }
 }
 
-/*************************************************************************
- *                      SwUnderlineFont::~SwUnderlineFont
- *
- * Used for the "continuous underline" feature.
- *************************************************************************/
-
+/**
+ * @note Used for the "continuous underline" feature.
+ **/
 SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, const Point& rPoint )
         : aPos( rPoint ), pFnt( &rFnt )
 {

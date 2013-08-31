@@ -19,7 +19,7 @@
 #ifndef _RSCKEY_HXX
 #define _RSCKEY_HXX
 
-/****************** C l a s s   F o r w a r d s **************************/
+// class forwards
 class RscTop;
 
 #include <rscall.h>
@@ -48,7 +48,6 @@ public:
             // true, wurde gefunden
     bool    Get( Atom nName, KEY_STRUCT * pEle );
 };
-
 
 #endif// _RSCKEY_HXX
 

@@ -201,6 +201,6 @@ public:
     sal_Int32           GetLineNumberOfCursorInSelection() const;
 };
 
-#endif // _TEXTVIEW_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

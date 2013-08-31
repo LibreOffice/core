@@ -14,6 +14,7 @@
 class Xst : public TBBase
 {
     OUString sString;
+
 public:
     Xst(){}
     bool Read(SvStream &rS);
@@ -27,6 +28,7 @@ class SwTBC : public TBBase
     TBCHeader tbch;
     boost::shared_ptr< sal_uInt32 > cid; // optional
     boost::shared_ptr<TBCData> tbcd;
+
 public:
     SwTBC();
     ~SwTBC();
@@ -50,6 +52,7 @@ class SwCTB : public TBBase
 
     SwCTB(const SwCTB&);
     SwCTB& operator = ( const SwCTB&);
+
 public:
     SwCTB();
     ~SwCTB();
@@ -71,6 +74,7 @@ class TBDelta : public TBBase
     sal_Int32 fc;
     sal_uInt16 CiTBDE; // careful of this ( endian matters etc. )
     sal_uInt16 cbTBC;
+
 public:
     TBDelta();
     ~TBDelta(){}
@@ -88,11 +92,14 @@ public:
 class Tcg255SubStruct : public TBBase
 {
 friend class Tcg255;
+
     bool mbReadId;
     Tcg255SubStruct(const Tcg255SubStruct&);
     Tcg255SubStruct& operator = ( const Tcg255SubStruct&);
+
 protected:
     sal_uInt8 ch;
+
 public:
     Tcg255SubStruct( bool bReadId );
     ~Tcg255SubStruct(){}
@@ -101,9 +108,11 @@ public:
 };
 
 class SwCTBWrapper;
+
 class Customization : public TBBase
 {
 friend class SwCTBWrapper;
+
     sal_Int32 tbidForTBD;
     sal_uInt16 reserved1;
     sal_Int16 ctbds;
@@ -112,6 +121,7 @@ friend class SwCTBWrapper;
     std::vector< TBDelta > customizationDataTBDelta;
     bool bIsDroppedMenuTB;
     bool ImportMenu( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+
 public:
     Customization( SwCTBWrapper* rapper );
     ~Customization();
@@ -143,6 +153,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     std::vector< sal_Int16 > dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
     SwCTBWrapper(const SwCTBWrapper&);
     SwCTBWrapper& operator = ( const SwCTBWrapper&);
+
 public:
     SwCTBWrapper( bool bReadId = true );
     ~SwCTBWrapper();
@@ -182,6 +193,7 @@ class PlfMcd : public Tcg255SubStruct
     std::vector<MCD> rgmcd; // array of MCD's
     PlfMcd(const PlfMcd&);
     PlfMcd& operator = ( const PlfMcd&);
+
 public:
     PlfMcd( bool bReadId = true );
     bool Read(SvStream &rS);
@@ -194,6 +206,7 @@ class Acd : public TBBase
     sal_uInt16 fciBasedOnABC; //  fciBasedOn(13 bits) A(1bit)B(1bit)C(1Bit)
     Acd(const Acd&);
     Acd& operator = ( const Acd&);
+
 public:
     Acd();
     ~Acd(){}
@@ -207,6 +220,7 @@ class PlfAcd: public Tcg255SubStruct
     Acd* rgacd;
     PlfAcd(const PlfAcd&);
     PlfAcd& operator = ( const PlfAcd&);
+
 public:
     PlfAcd( bool bReadId = true );
     ~PlfAcd();
@@ -225,6 +239,7 @@ class Kme : public TBBase
 
     Kme(const Kme&);
     Kme& operator = ( const Kme&);
+
 public:
     Kme();
     ~Kme();
@@ -238,6 +253,7 @@ class PlfKme : public Tcg255SubStruct
     Kme* rgkme;
     PlfKme(const PlfKme&);
     PlfKme& operator = ( const PlfKme&);
+
 public:
     PlfKme( bool bReadId = true );
     ~PlfKme();
@@ -254,12 +270,14 @@ struct SBBItem
     sal_uInt16 extraData;
     SBBItem() : cchData(0), extraData(0){}
 };
+
     sal_uInt16 fExtend;
     sal_uInt16 cData;
     sal_uInt16 cbExtra;
     SBBItem* dataItems;
     TcgSttbfCore(const TcgSttbfCore&);
     TcgSttbfCore& operator = ( const TcgSttbfCore&);
+
 public:
     TcgSttbfCore();
     ~TcgSttbfCore();
@@ -272,6 +290,7 @@ class TcgSttbf : public Tcg255SubStruct
     TcgSttbfCore sttbf;
     TcgSttbf(const TcgSttbf&);
     TcgSttbf& operator = ( const TcgSttbf&);
+
 public:
     TcgSttbf( bool bReadId = true );
     ~TcgSttbf(){}
@@ -286,6 +305,7 @@ class Xstz : public TBBase
 
     Xstz(const Xstz&);
     Xstz& operator = ( const Xstz&);
+
 public:
     Xstz();
     ~Xstz(){}
@@ -299,6 +319,7 @@ class MacroName : public TBBase
     Xstz xstz;
     MacroName(const MacroName&);
     MacroName& operator = ( const MacroName&);
+
 public:
     MacroName();
     ~MacroName(){}
@@ -313,6 +334,7 @@ class MacroNames : public Tcg255SubStruct
 
     MacroNames(const MacroNames&);
     MacroNames& operator = ( const MacroNames&);
+
 public:
     MacroNames( bool bReadId = true );
     ~MacroNames();
@@ -326,6 +348,7 @@ class Tcg255 : public TBBase
     Tcg255(const Tcg255&);
     Tcg255& operator = ( const Tcg255&);
     bool processSubStruct( sal_uInt8 nId, SvStream& );
+
 public:
     Tcg255();
     ~Tcg255();
@@ -340,6 +363,7 @@ class Tcg: public TBBase
     std::auto_ptr< Tcg255 > tcg;
     Tcg(const Tcg&);
     Tcg& operator = ( const Tcg&);
+
 public:
     Tcg();
     ~Tcg(){}

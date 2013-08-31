@@ -23,16 +23,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 class Window;
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
-
-    //=====================================================================
-    //= OAdminDialogInvokation
-    //=====================================================================
     /** outsourced from AdminDialogInvokationPage, 'cause this class here, in opposite to
         the page, needs exception handling to be enabled.
     */
@@ -53,11 +47,8 @@ namespace abp
 
         sal_Bool invokeAdministration( sal_Bool _bFixedType );
     };
+}
 
-//.........................................................................
-}   // namespace abp
-//.........................................................................
-
-#endif // EXTENSIONS_ABP_ADMININVOKATIONIMPL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

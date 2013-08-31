@@ -44,12 +44,7 @@ using namespace ::com::sun::star::xml::sax;
 
 #include "factory.hxx"
 
-/****
-* test szenarios :
-*
-*
-*
-****/
+// test szenarios
 
 namespace sax_test {
 
@@ -59,7 +54,7 @@ public:
     OSaxParserTest( const Reference < XMultiServiceFactory > & rFactory ) : m_rFactory( rFactory )
     {
     }
-public:
+
     virtual void SAL_CALL testInvariant(
         const OUString& TestName,
         const Reference < XInterface >& TestObject)
@@ -83,26 +78,18 @@ private:
     void testEncoding( const Reference < XParser > &rParser );
     void testPerformance( const Reference < XParser > &rParser );
 
-private:
     Sequence<Any>       m_seqExceptions;
     Sequence<OUString>      m_seqErrors;
     Sequence<OUString>      m_seqWarnings;
     Reference < XMultiServiceFactory > m_rFactory;
 };
 
-
-
-/**
-* for external binding
-*
-*
-**/
+/// @note for external binding
 Reference < XInterface > SAL_CALL OSaxParserTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OSaxParserTest *p = new OSaxParserTest( rSMgr );
     return Reference < XInterface > ( (static_cast< OWeakObject *  >(p)) );
 }
-
 
 OUString     OSaxParserTest_getServiceName( ) throw ()
 {
@@ -123,9 +110,6 @@ Sequence<OUString> OSaxParserTest_getSupportedServiceNames( ) throw ()
     return aRet;
 }
 
-
-
-
 void OSaxParserTest::testInvariant(
     const OUString& TestName,
     const Reference < XInterface >& TestObject )
@@ -137,7 +121,6 @@ void OSaxParserTest::testInvariant(
         ERROR_ASSERT( parser.is() , "XDataInputStream cannot be queried" );
     }
 }
-
 
 sal_Int32 OSaxParserTest::test(
     const OUString& TestName,
@@ -195,25 +178,20 @@ sal_Int32 OSaxParserTest::test(
     return hTestHandle;
 }
 
-
-
 sal_Bool OSaxParserTest::testPassed(void)                                       throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
-
 
 Sequence< OUString > OSaxParserTest::getErrors(void)                            throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
-
 Sequence< Any > OSaxParserTest::getErrorExceptions(void)                    throw (RuntimeException)
 {
     return m_seqExceptions;
 }
-
 
 Sequence< OUString > OSaxParserTest::getWarnings(void)                      throw (RuntimeException)
 {
@@ -261,11 +239,6 @@ Reference< XInputStream > createStreamFromFile(
     return r;
 }
 
-
-
-
-
-
 class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
@@ -276,7 +249,7 @@ public:
         m_bPrint = bPrint;
     }
 
-public: // Error handler
+    // Error handler
     virtual void SAL_CALL error(const Any& aSAXParseException) throw (SAXException, RuntimeException)
     {
         printf( "Error !\n" );
@@ -294,9 +267,7 @@ public: // Error handler
         printf( "Warning !\n" );
     }
 
-
-public: // ExtendedDocumentHandler
-
+    // ExtendedDocumentHandler
     virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException)
     {
          m_iLevel = 0;
@@ -376,6 +347,7 @@ public: // ExtendedDocumentHandler
         }
         m_iCharCount += aChars.getLength();
     }
+
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (SAXException,RuntimeException)
     {
         m_iWhitespaceCount += aWhitespaces.getLength();
@@ -445,8 +417,6 @@ public: // ExtendedDocumentHandler
 
     }
 
-
-public:
     int m_iLevel;
     int m_iElementCount;
     int m_iAttributeCount;
@@ -458,10 +428,8 @@ public:
     Reference < XLocator > m_rLocator;
 };
 
-
 void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
 {
-
     char TestString[] = "<!DOCTYPE personnel [\n"
                         "<!ENTITY testInternal \"internal Test!\">\n"
                         "<!ENTITY test SYSTEM \"external_entity.xml\">\n"
@@ -484,7 +452,6 @@ void OSaxParserTest::testSimple(    const Reference < XParser > &rParser )
 
     Sequence< sal_Int8> seqBytes( strlen( TestString ) );
     memcpy( seqBytes.getArray() , TestString , strlen( TestString ) );
-
 
     Reference< XInputStream > rInStream;
     OUString sInput;
@@ -550,7 +517,6 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
     Sequence<sal_Int8> seqBytes( strlen( TestString ) );
     memcpy( seqBytes.getArray() , TestString , strlen( TestString ) );
 
-
     Reference< XInputStream >  rInStream;
     OUString sInput;
 
@@ -604,7 +570,6 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
     Sequence<sal_Int8> seqBytes( strlen( TestString ) );
     memcpy( seqBytes.getArray() , TestString , strlen( TestString ) );
 
-
     Reference< XInputStream > rInStream;
     OUString sInput;
 
@@ -644,7 +609,6 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
 
     Reference< XInputStream > rInStream = createStreamFromFile( "testsax.xml" , m_rFactory );
     OUString sInput = OUString(  "testsax.xml"  );
-
 
     if( rParser.is() && rInStream.is() ) {
         InputSource source;
@@ -700,7 +664,6 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
 
 void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
 {
-
     Reference < XInputStream > rInStream =
         createStreamFromFile( "testPerformance.xml" , m_rFactory );
     OUString sInput = OUString(  "testperformance.xml" );
@@ -760,7 +723,8 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         }
     }
 }
-}
+} // namespace
+
 using namespace sax_test;
 
 extern "C"
@@ -798,7 +762,6 @@ sal_Bool SAL_CALL component_writeInfo(
             OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
-
     return sal_False;
 }
 
@@ -834,11 +797,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
             pRet = xRet.get();
         }
     }
-
     return pRet;
 }
 
-}
-
+} // extern C
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

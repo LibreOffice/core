@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #define WINVER 0x0500
 
 #include <string.h>
@@ -85,7 +84,6 @@
         OSL_FAIL( mes );                                                   \
     }
 #endif
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -164,8 +162,6 @@ static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
     return nStatus;
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     DWORD           i;
@@ -190,8 +186,6 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         rtl_freeMemory( pWinInfo4 );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 {
@@ -230,15 +224,12 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo->mpSysData;
     delete pInfo;
 }
 
-// -----------------------------------------------------------------------
 OUString WinSalInstance::GetDefaultPrinter()
 {
     DWORD   nChars = 0;
@@ -272,8 +263,6 @@ OUString WinSalInstance::GetDefaultPrinter()
         return OUString();
 }
 
-// =======================================================================
-
 static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                              BYTE* pOutput, const ImplJobSetup* pSetupData )
 {
@@ -287,8 +276,6 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
                                 reinterpret_cast<LPCWSTR>(pPrinter->maPortName.getStr()),
                                 nCaps, (LPWSTR)pOutput, pDevMode );
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
                                  ImplJobSetup* pSetupData, sal_Bool bDelete )
@@ -744,8 +731,6 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 }
 
-// -----------------------------------------------------------------------
-
 static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData, sal_uLong nFlags )
 {
     if ( !pSetupData || !pSetupData->mpDriverData )
@@ -1031,8 +1016,6 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 }
 
-// -----------------------------------------------------------------------
-
 static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
                                     LPCWSTR pDevice,
                                     LPDEVMODEW pDevMode )
@@ -1068,8 +1051,6 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
     return hDC;
 }
 
-// -----------------------------------------------------------------------
-
 static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
 {
     WinSalGraphics* pGraphics = new WinSalGraphics;
@@ -1083,8 +1064,6 @@ static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
     ImplSalInitGraphics( pGraphics );
     return pGraphics;
 }
-
-// -----------------------------------------------------------------------
 
 static sal_Bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
@@ -1139,14 +1118,10 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     return pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
-
-// =======================================================================
 
 WinSalInfoPrinter::WinSalInfoPrinter() :
     mpGraphics( NULL ),
@@ -1155,8 +1130,6 @@ WinSalInfoPrinter::WinSalInfoPrinter() :
 {
     m_bPapersInit = FALSE;
 }
-
-// -----------------------------------------------------------------------
 
 WinSalInfoPrinter::~WinSalInfoPrinter()
 {
@@ -1167,8 +1140,6 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
         delete mpGraphics;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
 {
@@ -1197,8 +1168,6 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     m_bPapersInit = true;
 }
 
-// -----------------------------------------------------------------------
-
 int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
     int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
@@ -1208,8 +1177,6 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     else
         return 900; // guess
 }
-
-// -----------------------------------------------------------------------
 
 SalGraphics* WinSalInfoPrinter::GetGraphics()
 {
@@ -1222,14 +1189,10 @@ SalGraphics* WinSalInfoPrinter::GetGraphics()
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalInfoPrinter::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = FALSE;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
 {
@@ -1242,16 +1205,12 @@ sal_Bool WinSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pSetupData )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool WinSalInfoPrinter::SetPrinterData( ImplJobSetup* pSetupData )
 {
     if ( !ImplTestSalJobSetup( this, pSetupData, FALSE ) )
         return FALSE;
     return ImplUpdateSalPrnIC( this, pSetupData );
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool WinSalInfoPrinter::SetData( sal_uLong nFlags, ImplJobSetup* pSetupData )
 {
@@ -1265,8 +1224,6 @@ sal_Bool WinSalInfoPrinter::SetData( sal_uLong nFlags, ImplJobSetup* pSetupData 
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 {
     DWORD nRet = ImplDeviceCaps( this, DC_BINS, NULL, pSetupData );
@@ -1275,8 +1232,6 @@ sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
     else
         return 0;
 }
-
-// -----------------------------------------------------------------------
 
 OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
 {
@@ -1294,8 +1249,6 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
 
     return aPaperBinName;
 }
-
-// -----------------------------------------------------------------------
 
 sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType )
 {
@@ -1343,8 +1296,6 @@ sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, sa
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& rOutWidth, long& rOutHeight,
                                   long& rPageOffX, long& rPageOffY,
@@ -1369,8 +1320,6 @@ SalPrinter* WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
     pPrinter->mpInfoPrinter = static_cast<WinSalInfoPrinter*>(pInfoPrinter);
     return pPrinter;
 }
-
-// -----------------------------------------------------------------------
 
 void WinSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
@@ -1419,8 +1368,6 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
     return TRUE;
 }
 
-// -----------------------------------------------------------------------
-
 static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_Bool bCollate )
 {
     LPDEVMODEW pNewDevMode = pDevMode;
@@ -1444,8 +1391,6 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_
     return pNewDevMode;
 }
 
-// -----------------------------------------------------------------------
-
 WinSalPrinter::WinSalPrinter() :
     mpGraphics( NULL ),
     mpInfoPrinter( NULL ),
@@ -1462,8 +1407,6 @@ WinSalPrinter::WinSalPrinter() :
     mpNextPrinter = pSalData->mpFirstPrinter;
     pSalData->mpFirstPrinter = this;
 }
-
-// -----------------------------------------------------------------------
 
 WinSalPrinter::~WinSalPrinter()
 {
@@ -1647,8 +1590,6 @@ sal_Bool WinSalPrinter::StartJob( const OUString* pFileName,
     return TRUE;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool WinSalPrinter::EndJob()
 {
     HDC hDC = mhDC;
@@ -1681,8 +1622,6 @@ sal_Bool WinSalPrinter::EndJob()
     return TRUE;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool WinSalPrinter::AbortJob()
 {
     mbAbort = TRUE;
@@ -1698,8 +1637,6 @@ sal_Bool WinSalPrinter::AbortJob()
 
     return TRUE;
 }
-
-// -----------------------------------------------------------------------
 
 void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
 {
@@ -1737,8 +1674,6 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJobData )
 {
@@ -1780,8 +1715,6 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool WinSalPrinter::EndPage()
 {
     HDC hDC = mhDC;
@@ -1809,8 +1742,6 @@ sal_Bool WinSalPrinter::EndPage()
         return FALSE;
     }
 }
-
-// -----------------------------------------------------------------------
 
 sal_uLong WinSalPrinter::GetErrorCode()
 {

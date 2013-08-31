@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
@@ -141,7 +140,6 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
 /*
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
-
 static sal_uInt16
 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
                                       const xub_StrLen nStt, const xub_StrLen nEnd,
@@ -177,7 +175,6 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
 /*
  * Used for spell checking. Calculates a rectangle for repaint.
  */
-
 static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart, xub_StrLen nChgEnd )
 {
     SwRect aRect;
@@ -370,7 +367,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  * 5) The attribute is outside the deletion range
  *    -> nothing to do
  */
-
 void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                         const SfxItemSet* pSet, sal_Bool bInclRefToxMark )
 {
@@ -614,7 +610,6 @@ sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
  * Wenn dieses erste Wort nur aus Whitespaces besteht, returnen wir
  * einen leeren String.
  *************************************************************************/
-
 OUString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
     assert(nPos <= m_Text.getLength()); // invalid index
@@ -1475,18 +1470,14 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 
     if( pSmartTagList )
     {
-        //
         // Update WrongList stuff
-        //
         pSmartTagList->SetInvalid( STRING_LEN, 0 );
         pNode->SetSmartTagDirty( STRING_LEN != pSmartTagList->GetBeginInv() );
 
         if( !pSmartTagList->Count() && !pNode->IsSmartTagDirty() )
             pNode->SetSmartTags( NULL );
 
-        //
         // Calculate repaint area:
-        //
 #if OSL_DEBUG_LEVEL > 1
         const sal_uInt16 nNumberOfEntriesAfterRecognize2 = pSmartTagList->Count();
         (void) nNumberOfEntriesAfterRecognize2;
@@ -1553,11 +1544,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
         pNode->SetAutoCompleteWordDirty( sal_False );
 }
 
-/*************************************************************************
- *                      SwTxtNode::Hyphenate
- *************************************************************************/
-// Findet den TxtFrm und sucht dessen CalcHyph
-
+/** Findet den TxtFrm und sucht dessen CalcHyph */
 sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     // Abkuerzung: am Absatz ist keine Sprache eingestellt:
@@ -2066,9 +2053,8 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     return true;
 }
 
-//
-// Paragraph statistics start
-//
+// Paragraph statistics start -->
+
 struct SwParaIdleData_Impl
 {
     SwWrongList* pWrong;                // for spell checking
@@ -2239,6 +2225,7 @@ bool SwTxtNode::IsWordCountDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWordCountDirty : 0;
 }
+
 void SwTxtNode::SetWrongDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
@@ -2246,10 +2233,12 @@ void SwTxtNode::SetWrongDirty( bool bNew ) const
         m_pParaIdleData_Impl->bWrongDirty = bNew;
     }
 }
+
 bool SwTxtNode::IsWrongDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWrongDirty : 0;
 }
+
 void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
@@ -2257,10 +2246,12 @@ void SwTxtNode::SetGrammarCheckDirty( bool bNew ) const
         m_pParaIdleData_Impl->bGrammarCheckDirty = bNew;
     }
 }
+
 bool SwTxtNode::IsGrammarCheckDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bGrammarCheckDirty : 0;
 }
+
 void SwTxtNode::SetSmartTagDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
@@ -2268,10 +2259,12 @@ void SwTxtNode::SetSmartTagDirty( bool bNew ) const
         m_pParaIdleData_Impl->bSmartTagDirty = bNew;
     }
 }
+
 bool SwTxtNode::IsSmartTagDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bSmartTagDirty : 0;
 }
+
 void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
 {
     if ( m_pParaIdleData_Impl )
@@ -2279,12 +2272,12 @@ void SwTxtNode::SetAutoCompleteWordDirty( bool bNew ) const
         m_pParaIdleData_Impl->bAutoComplDirty = bNew;
     }
 }
+
 bool SwTxtNode::IsAutoCompleteWordDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bAutoComplDirty : 0;
 }
-//
-// Paragraph statistics end
-//
+
+// <-- Paragraph statistics end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

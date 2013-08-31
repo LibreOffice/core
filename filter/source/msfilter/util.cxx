@@ -307,7 +307,6 @@ OString ConvertColor( const Color &rColor )
     return color;
 }
 
-
 #define IN2MM100( v )    static_cast< sal_Int32 >( (v) * 2540.0 + 0.5 )
 #define MM2MM100( v )    static_cast< sal_Int32 >( (v) * 100.0 + 0.5 )
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rtl/ustrbuf.hxx>
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/unicode.hxx>
@@ -39,7 +38,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
-
 
 Transliteration_body::Transliteration_body()
 {
@@ -71,7 +69,6 @@ Transliteration_body::transliterateRange( const OUString& str1, const OUString& 
     return ostr;
 }
 
-
 static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Unicode cChar )
 {
     sal_uInt8 nRes = nMappingType;
@@ -94,14 +91,12 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
     return nRes;
 }
 
-
 OUString SAL_CALL
 Transliteration_body::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset)
     throw(RuntimeException)
 {
-
     const sal_Unicode *in = inStr.getStr() + startPos;
 
     // Two different blocks to eliminate the if(useOffset) condition inside the
@@ -314,7 +309,6 @@ static OUString transliterate_titlecase_Impl(
     return aRes;
 }
 
-
 // this function expects to be called on a word-by-word basis,
 // namely that startPos points to the first char of the word
 OUString SAL_CALL Transliteration_titlecase::transliterate(
@@ -325,14 +319,12 @@ OUString SAL_CALL Transliteration_titlecase::transliterate(
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }
 
-
 Transliteration_sentencecase::Transliteration_sentencecase()
 {
     nMappingType = MappingTypeToTitle;  // though only to be applied to the first word...
     transliterationName = "sentence(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_sentencecase";
 }
-
 
 // this function expects to be called on a sentence-by-sentence basis,
 // namely that startPos points to the first word (NOT first char!) in the sentence
@@ -343,7 +335,6 @@ OUString SAL_CALL Transliteration_sentencecase::transliterate(
 {
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }
-
 
 } } } }
 

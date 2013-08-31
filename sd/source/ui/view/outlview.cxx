@@ -89,7 +89,6 @@ struct SdParaAndPos
 
 TYPEINIT1( OutlineView, ::sd::View );
 
-
 OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewSh)
 : ::sd::View(*rDocSh.GetDoc(), pWindow, &rOutlineViewSh)
 , mrOutlineViewShell(rOutlineViewSh)
@@ -205,26 +204,16 @@ OutlineView::~OutlineView()
     }
 }
 
-
-
-
 void OutlineView::ConnectToApplication (void)
 {
     mrOutlineViewShell.GetActiveWindow()->GrabFocus();
     Application::AddEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 
-
-
-
 void OutlineView::DisconnectFromApplication (void)
 {
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
-
-
-
-
 
 void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
@@ -248,11 +237,9 @@ void OutlineView::InvalidateSlideNumberArea()
 /**
  * Window size was changed
  */
-
 void OutlineView::AdjustPosSizePixel(const Point &,const Size &,::sd::Window*)
 {
 }
-
 
 void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 {
@@ -290,7 +277,6 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 
     ::sd::View::AddWindowToPaintView(pWin);
 }
-
 
 void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 {
@@ -337,7 +323,6 @@ OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
     }
     return (pOlView);
 }
-
 
 /**
  * Return the title before a random paragraph
@@ -981,7 +966,6 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
     return pResult;
 }
 
-
 /**
  * Look for the outline text object in one page of the model
  */
@@ -1074,7 +1058,6 @@ sal_Bool OutlineView::PrepareClose(sal_Bool)
     mrDoc.SetSelected(GetActualPage(), sal_True);
     return sal_True;
 }
-
 
 /**
  * Set attributes of the selected text
@@ -1344,8 +1327,6 @@ SfxStyleSheet* OutlineView::GetStyleSheet() const
     return pResult;
 }
 
-
-
 /**
  * Mark pages as selected / not selected
  */
@@ -1390,7 +1371,6 @@ void OutlineView::SetSelectedPages()
     }
 }
 
-
 /**
  * Set new links
  */
@@ -1412,8 +1392,6 @@ void OutlineView::SetLinks()
     mrOutliner.SetEndPasteOrDropHdl(LINK(this,OutlineView, EndPasteOrDropHdl));
 }
 
-
-
 /**
  * Restore old links
  */
@@ -1433,12 +1411,10 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetEndPasteOrDropHdl(aEmptyLink);
 }
 
-
 sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
 {
     return DND_ACTION_NONE;
 }
-
 
 sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
 {
@@ -1492,9 +1468,6 @@ IMPL_LINK_NOARG(OutlineView, AppEventListenerHdl)
     onUpdateStyleSettings();
     return 0;
 }
-
-
-
 
 IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
 {
@@ -1796,16 +1769,12 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
     return 0;
 }
 
-// --------------------------------------------------------------------
-
 void OutlineView::UpdateParagraph( sal_Int32 nPara )
 {
     SfxItemSet aNewAttrs2( mrOutliner.GetParaAttribs( nPara ) );
     aNewAttrs2.Put( maLRSpaceItem );
     mrOutliner.SetParaAttribs( nPara, aNewAttrs2 );
 }
-
-// --------------------------------------------------------------------
 
 void OutlineView::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
 {
@@ -1877,7 +1846,6 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 
 // ====================================================================
 
-
 OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
 : mrView( rView )
 {
@@ -1901,7 +1869,6 @@ OutlineViewPageChangesGuard::~OutlineViewPageChangesGuard()
     if( mpView )
         mpView->IgnoreCurrentPageChanges( false );
 }
-
 
 } // end of namespace sd
 

@@ -56,19 +56,10 @@ namespace framework{
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
-
 class OFrames   :   private ThreadHelpBase      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      standard ctor
@@ -83,13 +74,10 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
          OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
 
-        //---------------------------------------------------------------------------------------------------------
         //  XFrames
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      append frame to container
@@ -103,7 +91,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
-
         virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
@@ -118,7 +105,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
-
         virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
@@ -132,12 +118,9 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    An empty list is returned.
         *//*-*****************************************************************************************************/
-
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException );
 
-        //---------------------------------------------------------------------------------------------------------
         //  XIndexAccess
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      get count of all current frames in container
@@ -152,7 +135,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    If a lock is set, we return 0 for prevent further access!
         *//*-*****************************************************************************************************/
-
         virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
@@ -169,14 +151,11 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
             @onerror    If a lock is set, we return an empty Any!
             @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
         *//*-*****************************************************************************************************/
-
         virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw(    css::lang::IndexOutOfBoundsException    ,
                                                                                 css::lang::WrappedTargetException       ,
                                                                                 css::uno::RuntimeException              );
 
-        //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      get uno-type of all container items
@@ -190,7 +169,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
@@ -206,12 +184,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
-
         virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
 
     protected:
 
@@ -228,7 +201,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         virtual ~OFrames();
 
         /*-****************************************************************************************************//**
@@ -247,12 +219,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         virtual void impl_resetObject();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -268,14 +235,11 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
                                      const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
 
-    //-------------------------------------------------------------------------------------------------------------
     //  debug methods
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      debug-method to check incoming parameter of some other mehods of this class
@@ -294,7 +258,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
     #ifdef ENABLE_ASSERTIONS
 
     private:
-
         static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                                                                         FrameContainer*                                         pFrameContainer );
         static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
@@ -303,21 +266,18 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
-    //-------------------------------------------------------------------------------------------------------------
     //  variables
     //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
-
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct children of an XFramesSupplier
         sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
 
-};      //  class OFrames
+};
 
-}       //  namespace framework
+}
 
-#endif  //  #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

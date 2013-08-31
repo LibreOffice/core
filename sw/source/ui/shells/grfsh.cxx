@@ -66,7 +66,9 @@
 #include <popup.hrc>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
+
 #define SwGrfShell
+
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
@@ -110,6 +112,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GetView().ExecuteScan( rReq );
             break;
         }
+
         case SID_SAVE_GRAPHIC:
         {
             const Graphic *pGraphic;
@@ -122,6 +125,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+
         case SID_COMPRESS_GRAPHIC:
         {
             const Graphic* pGraphic = rSh.GetGraphic();
@@ -166,6 +170,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+
         case SID_EXTERNAL_EDIT:
         {
             // When the graphic is selected to be opened via some external tool
@@ -178,6 +183,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case FN_DRAW_WRAP_DLG:
@@ -485,26 +491,31 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 aGrfSet.Put( SwLuminanceGrf(
                             ((SfxInt16Item*)pItem)->GetValue() ));
             break;
+
         case SID_ATTR_GRAF_CONTRAST:
             if( pItem )
                 aGrfSet.Put( SwContrastGrf(
                             ((SfxInt16Item*)pItem)->GetValue() ));
             break;
+
         case SID_ATTR_GRAF_RED:
             if( pItem )
                 aGrfSet.Put( SwChannelRGrf(
                             ((SfxInt16Item*)pItem)->GetValue() ));
             break;
+
         case SID_ATTR_GRAF_GREEN:
             if( pItem )
                 aGrfSet.Put( SwChannelGGrf(
                             ((SfxInt16Item*)pItem)->GetValue() ));
             break;
+
         case SID_ATTR_GRAF_BLUE:
             if( pItem )
                 aGrfSet.Put( SwChannelBGrf(
                             ((SfxInt16Item*)pItem)->GetValue() ));
             break;
+
         case SID_ATTR_GRAF_GAMMA:
             if( pItem )
             {
@@ -512,11 +523,13 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 aGrfSet.Put( SwGammaGrf(fVal/100. ));
             }
             break;
+
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( pItem )
                 aGrfSet.Put( SwTransparencyGrf(
                     static_cast< sal_Int8 >( ( (SfxUInt16Item*)pItem )->GetValue() ) ) );
             break;
+
         case SID_ATTR_GRAF_INVERT:
             if( pItem )
                 aGrfSet.Put( SwInvertGrf(
@@ -535,6 +548,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             aToolboxAccess.toggleToolbox();
             break;
         }
+
         case SID_GRFFILTER:
         case SID_GRFFILTER_INVERT:
         case SID_GRFFILTER_SMOOTH:
@@ -565,6 +579,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         default:
             OSL_ENSURE(!this, "wrong dispatcher");
         }
+
         if( aGrfSet.Count() )
             GetShell().SetAttr( aGrfSet );
     }
@@ -594,11 +609,13 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( bParentCntProt || !bIsGrfCntnt )
                 bDisable = true;
             break;
+
         case SID_SAVE_GRAPHIC:
         case SID_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = true;
             break;
+
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
@@ -633,27 +650,30 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             }
             break;
 
-
         case SID_ATTR_GRAF_LUMINANCE:
             if( !bParentCntProt )
                 rSet.Put( SfxInt16Item( nWhich, ((SwLuminanceGrf&)
                         aCoreSet.Get(RES_GRFATR_LUMINANCE)).GetValue() ));
             break;
+
         case SID_ATTR_GRAF_CONTRAST:
             if( !bParentCntProt )
                 rSet.Put( SfxInt16Item( nWhich, ((SwContrastGrf&)
                         aCoreSet.Get(RES_GRFATR_CONTRAST)).GetValue() ));
             break;
+
         case SID_ATTR_GRAF_RED:
             if( !bParentCntProt )
                 rSet.Put( SfxInt16Item( nWhich, ((SwChannelRGrf&)
                         aCoreSet.Get(RES_GRFATR_CHANNELR)).GetValue() ));
             break;
+
         case SID_ATTR_GRAF_GREEN:
             if( !bParentCntProt )
                 rSet.Put( SfxInt16Item( nWhich, ((SwChannelGGrf&)
                         aCoreSet.Get(RES_GRFATR_CHANNELG)).GetValue() ));
             break;
+
         case SID_ATTR_GRAF_BLUE:
             if( !bParentCntProt )
                 rSet.Put( SfxInt16Item( nWhich, ((SwChannelBGrf&)
@@ -665,6 +685,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 rSet.Put( SfxUInt32Item( nWhich, static_cast< sal_uInt32 >(
                     ( (SwGammaGrf&)aCoreSet.Get( RES_GRFATR_GAMMA ) ).GetValue() * 100 ) ) );
             break;
+
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
             {
@@ -681,6 +702,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 }
             }
             break;
+
         case SID_ATTR_GRAF_INVERT:
             if( !bParentCntProt )
                 rSet.Put( SfxBoolItem( nWhich, ((SwInvertGrf&)
@@ -838,10 +860,8 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
     SetGetStateSet( 0 );
 }
 
-
 SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)
-
 {
     SetName(OUString("Graphic"));
     SetHelpId(SW_GRFSHELL);

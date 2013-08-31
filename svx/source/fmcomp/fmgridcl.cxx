@@ -87,8 +87,6 @@ using namespace ::cppu;
 using namespace ::svxform;
 using namespace ::svx;
 
-//==============================================================================
-//------------------------------------------------------------------------------
 OUString FieldServiceFromId(sal_Int32 nID)
 {
     switch (nID)
@@ -107,7 +105,6 @@ OUString FieldServiceFromId(sal_Int32 nID)
     return OUString();
 }
 
-//==============================================================================
 struct FmGridHeaderData
 {
     ODataAccessDescriptor   aDropData;
@@ -117,8 +114,6 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-//==============================================================================
-//------------------------------------------------------------------------------
 const sal_Int16 nChangeTypeOffset = 1000;
 void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, sal_Bool bDesignMode = sal_True, sal_Int16 nOffset = nChangeTypeOffset)
 {
@@ -130,7 +125,6 @@ void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNew
     rNewMenu.EnableItem(nID + nOffset, bDesignMode);
 }
 
-//------------------------------------------------------------------------------
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
         :EditBrowserHeader(pParent, nWinBits)
         ,DropTargetHelper(this)
@@ -138,18 +132,16 @@ FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
 {
 }
 
-//------------------------------------------------------------------------------
 FmGridHeader::~FmGridHeader()
 {
     delete m_pImpl;
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
 {
     return static_cast<FmGridControl*>(GetParent())->GetModelColumnPos(nId);
 }
-//---------------------------------------------------------------------------------------
+
 void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nColumnId);
@@ -165,14 +157,13 @@ void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
         }
     }
 }
-//------------------------------------------------------------------------------
+
 void FmGridHeader::Select()
 {
     EditBrowserHeader::Select();
     notifyColumnSelect(GetCurItemId());
 }
 
-//------------------------------------------------------------------------------
 void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
 {
     sal_uInt16 nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
@@ -215,7 +206,6 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
     EditBrowserHeader::RequestHelp( rHEvt );
 }
 
-//------------------------------------------------------------------------------
 sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     // drop allowed in design mode only
@@ -230,7 +220,6 @@ sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
     return DND_ACTION_NONE;
 }
 
-//------------------------------------------------------------------------------
 sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     if (!static_cast<FmGridControl*>(GetParent())->IsDesignMode())
@@ -378,7 +367,6 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_LINK;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 {
     OUString             sCommand, sFieldName,sURL;
@@ -637,7 +625,6 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
     return 1L;
 }
 
-//------------------------------------------------------------------------------
 void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)
 {
     sal_Bool bDesignMode = static_cast<FmGridControl*>(GetParent())->IsDesignMode();
@@ -784,7 +771,6 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
 enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
 
-//------------------------------------------------------------------------------
 void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
@@ -977,7 +963,6 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
 {
     // the affected col
@@ -997,7 +982,6 @@ void FmGridHeader::triggerColumnContextMenu( const ::Point& _rPreferredPos )
     PostExecuteColumnContextMenu( nColId, aContextMenu, nResult );
 }
 
-//------------------------------------------------------------------------------
 void FmGridHeader::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -1015,7 +999,6 @@ void FmGridHeader::Command(const CommandEvent& rEvt)
     }
 }
 
-//------------------------------------------------------------------------------
 FmGridControl::FmGridControl(
                 const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 Window* pParent,
@@ -1031,7 +1014,6 @@ FmGridControl::FmGridControl(
     EnableInteractiveRowHeight( );
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::Command(const CommandEvent& _rEvt)
 {
     if ( COMMAND_CONTEXTMENU == _rEvt.GetCommand() )
@@ -1058,7 +1040,6 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
 }
 
 // ::com::sun::star::beans::XPropertyChangeListener
-//------------------------------------------------------------------------------
 void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
 {
     if (evt.PropertyName == FM_PROP_ROWCOUNT)
@@ -1087,7 +1068,6 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::SetDesignMode(sal_Bool bMode)
 {
     sal_Bool bOldMode = IsDesignMode();
@@ -1124,7 +1104,6 @@ void FmGridControl::SetDesignMode(sal_Bool bMode)
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::DeleteSelectedRows()
 {
     if (!m_pSeekCursor)
@@ -1398,9 +1377,7 @@ void FmGridControl::DeleteSelectedRows()
         ActivateCell();
 }
 
-
 // XCurrentRecordListener
-//------------------------------------------------------------------------------
 void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
     SAL_INFO("svx.fmcmop", "FmGridControl::positioned");
@@ -1408,7 +1385,6 @@ void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEve
     implAdjustInSolarThread(sal_False);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FmGridControl::commit()
 {
     // Commit nur ausfuehren, wenn nicht bereits ein Update vom ::com::sun::star::form::component::GridControl ausgefuehrt
@@ -1424,7 +1400,6 @@ sal_Bool FmGridControl::commit()
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent*/)
 {
     const DbGridRowRef& xRow = GetCurrentRow();
@@ -1437,14 +1412,12 @@ void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent
 
 }
 
-//------------------------------------------------------------------------------
 BrowserHeader* FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {
     DBG_ASSERT( pParent == this, "FmGridControl::imp_CreateHeaderBar: parent?" );
     return new FmGridHeader( pParent );
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::markColumn(sal_uInt16 nId)
 {
     if (GetHeaderBar() && m_nMarkedColumnId != nId)
@@ -1466,13 +1439,11 @@ void FmGridControl::markColumn(sal_uInt16 nId)
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
 {
     return m_nMarkedColumnId == nId;
 }
 
-//------------------------------------------------------------------------------
 long FmGridControl::QueryMinimumRowHeight()
 {
     long nMinimalLogicHeight = 20; // 0.2 cm
@@ -1480,7 +1451,6 @@ long FmGridControl::QueryMinimumRowHeight()
     return CalcZoom( nMinimalPixelHeight );
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::RowHeightChanged()
 {
     DbGridControl::RowHeightChanged();
@@ -1502,7 +1472,6 @@ void FmGridControl::RowHeightChanged()
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::ColumnResized(sal_uInt16 nId)
 {
     DbGridControl::ColumnResized(nId);
@@ -1521,28 +1490,24 @@ void FmGridControl::ColumnResized(sal_uInt16 nId)
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::CellModified()
 {
     DbGridControl::CellModified();
     GetPeer()->CellModified();
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::BeginCursorAction()
 {
     DbGridControl::BeginCursorAction();
     m_pPeer->stopCursorListening();
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::EndCursorAction()
 {
     m_pPeer->startCursorListening();
     DbGridControl::EndCursorAction();
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::ColumnMoved(sal_uInt16 nId)
 {
     m_bInColumnMove = sal_True;
@@ -1584,7 +1549,6 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
     m_bInColumnMove = sal_False;
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::container::XIndexContainer >& xColumns)
 {
     // Spalten wieder neu setzen
@@ -1638,7 +1602,6 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
     SetUpdateMode(sal_True);
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::InitColumnByField(
     DbGridColumn* _pColumn, const Reference< XPropertySet >& _rxColumnModel,
     const Reference< XNameAccess >& _rxFieldsByNames, const Reference< XIndexAccess >& _rxFieldsByIndex )
@@ -1711,7 +1674,6 @@ void FmGridControl::InitColumnByField(
     _pColumn->CreateControl( nFieldPos, xField, nTypeId );
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::container::XIndexAccess >& _rxFields)
 {
     if ( !_rxFields.is() )
@@ -1736,7 +1698,6 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     }
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::HideColumn(sal_uInt16 nId)
 {
     DbGridControl::HideColumn(nId);
@@ -1752,7 +1713,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
     if (nId == m_nMarkedColumnId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColumn)
 {
     OSL_ENSURE(_pColumn,"Column can not be null!");
@@ -1768,7 +1729,6 @@ sal_Bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColu
     return bSelected;
 }
 
-//------------------------------------------------------------------------------
 void FmGridControl::ShowColumn(sal_uInt16 nId)
 {
     DbGridControl::ShowColumn(nId);
@@ -1786,7 +1746,6 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
         markColumn(nId); // ... -> mark it
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 {
     SolarMutexGuard aGuard;
@@ -1824,7 +1783,6 @@ sal_Bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
     return bAllSuccessfull;
 }
 
-//------------------------------------------------------------------------------
 Sequence< Any> FmGridControl::getSelectionBookmarks()
 {
     // lock our update so no paint-triggered seeks interfere ...
@@ -1894,7 +1852,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 
     return aBookmarks;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     OUString getColumnPropertyFromPeer(FmXGridPeer* _pPeer,sal_Int32 _nPosition,const OUString& _sPropName)
@@ -1921,6 +1879,7 @@ namespace
         return sRetText;
     }
 }
+
 // Object data and state ------------------------------------------------------
 OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
@@ -1947,7 +1906,6 @@ OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjTy
     }
     return sRetText;
 }
-// -----------------------------------------------------------------------------
 
 OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
@@ -1985,7 +1943,7 @@ OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseB
     }
     return sRetText;
 }
-// -----------------------------------------------------------------------------
+
 void FmGridControl::Select()
 {
     DbGridControl::Select();
@@ -2045,12 +2003,12 @@ void FmGridControl::Select()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 FmGridControl::GetSelectedColumn() const
 {
     return m_nCurrentSelectedColumn;
 }
-// -----------------------------------------------------------------------------
+
 void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Bool bDone = sal_False;
@@ -2096,8 +2054,5 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
     if ( !bDone )
         DbGridControl::KeyInput( rKEvt );
 }
-// -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

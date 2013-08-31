@@ -97,7 +97,6 @@ class CSS1Selector
     CSS1Selector *pNext;        // die naechste Komponente
 
 public:
-
     CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
         : eType(eTyp), aSelector( rSel ), pNext( 0 )
     {}
@@ -129,7 +128,6 @@ struct CSS1Expression
     CSS1Expression *pNext;  // die naechste Komponente
 
 public:
-
     CSS1Expression( CSS1Token eTyp, const OUString &rVal,
                     double nVal, sal_Unicode cO = 0 )
         : cOp(cO), eType(eTyp), aValue(rVal), nValue(nVal), pNext(0)
@@ -228,7 +226,6 @@ class CSS1Parser
     CSS1Expression *ParseDeclaration( OUString& rProperty );
 
 protected:
-
     void ParseStyleSheet();
 
     // Den Inhalt eines HTML-Style-Elements parsen.
@@ -254,7 +251,6 @@ protected:
                                     const CSS1Expression *pExpr );
 
 public:
-
     CSS1Parser();
     virtual ~CSS1Parser();
 
@@ -269,8 +265,6 @@ inline sal_uInt32 CSS1Parser::SetLinePos( sal_uInt32 nlPos )
     return nlOld;
 }
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

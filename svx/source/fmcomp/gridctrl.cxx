@@ -72,7 +72,6 @@ using namespace com::sun::star::accessibility;
 
 #define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID")
 
-
 #define DEFAULT_BROWSE_MODE             \
               BROWSER_COLUMNSELECTION   \
             | BROWSER_MULTISELECTION    \
@@ -89,6 +88,7 @@ public:
     RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
     {
     }
+
 private:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException )
@@ -115,12 +115,9 @@ private:
         }
     }
 };
-//==============================================================================
 
 class GridFieldValueListener;
 DECLARE_STL_MAP(sal_uInt16, GridFieldValueListener*, ::std::less<sal_uInt16>, ColumnFieldValueListeners);
-
-//==============================================================================
 
 DBG_NAME(GridFieldValueListener)
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
@@ -143,7 +140,7 @@ public:
 
     void dispose();
 };
-//------------------------------------------------------------------------------
+
 GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& _rField, sal_uInt16 _nId)
     :OPropertyChangeListener(m_aMutex)
     ,m_rParent(_rParent)
@@ -161,14 +158,12 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
     }
 }
 
-//------------------------------------------------------------------------------
 GridFieldValueListener::~GridFieldValueListener()
 {
     DBG_DTOR(GridFieldValueListener, NULL);
     dispose();
 }
 
-//------------------------------------------------------------------------------
 void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt) throw( RuntimeException )
 {
     DBG_ASSERT(m_nSuspended>=0, "GridFieldValueListener::_propertyChanged : resume > suspend !");
@@ -176,7 +171,6 @@ void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt) t
         m_rParent.FieldValueChanged(m_nId, _evt);
 }
 
-//------------------------------------------------------------------------------
 void GridFieldValueListener::dispose()
 {
     if (m_bDisposed)
@@ -196,8 +190,6 @@ void GridFieldValueListener::dispose()
     m_rParent.FieldListenerDisposing(m_nId);
 }
 
-//==============================================================================
-
 class DisposeListenerGridBridge : public FmXDisposeListener
 {
     osl::Mutex              m_aMutex;
@@ -211,11 +203,8 @@ public:
     virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) { m_rParent.disposing(_nId, _rEvent); }
 };
 
-//==============================================================================
-
 
 DBG_NAME(DisposeListenerGridBridge)
-//------------------------------------------------------------------------------
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
     :FmXDisposeListener(m_aMutex)
     ,m_rParent(_rParent)
@@ -230,7 +219,6 @@ DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, co
     }
 }
 
-//------------------------------------------------------------------------------
 DisposeListenerGridBridge::~DisposeListenerGridBridge()
 {
     if (m_pRealListener)
@@ -242,8 +230,6 @@ DisposeListenerGridBridge::~DisposeListenerGridBridge()
 
     DBG_DTOR(DisposeListenerGridBridge,NULL);
 }
-
-//==============================================================================
 
 static const sal_uInt16 ControlMap[] =
     {
@@ -259,13 +245,11 @@ static const sal_uInt16 ControlMap[] =
         0
     };
 
-//------------------------------------------------------------------------------
 sal_Bool CompareBookmark(const Any& aLeft, const Any& aRight)
 {
     return ::comphelper::compare(aLeft, aRight);
 }
 
-//==============================================================================
 class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener
 {
     DbGridControl* m_pParent;
@@ -283,7 +267,6 @@ public:
     virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException );
 };
 
-//------------------------------------------------------------------------------
 FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
     :OPropertyChangeListener(m_aMutex)
     ,m_pParent(_pParent)
@@ -292,7 +275,6 @@ FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
     DBG_ASSERT(m_pParent, "FmXGridSourcePropListener::FmXGridSourcePropListener : invalid parent !");
 }
 
-//------------------------------------------------------------------------------
 void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     DBG_ASSERT(m_nSuspended>=0, "FmXGridSourcePropListener::_propertyChanged : resume > suspend !");
@@ -300,8 +282,6 @@ void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt)
         m_pParent->DataSourcePropertyChanged(evt);
 }
 
-//==============================================================================
-//------------------------------------------------------------------------------
 DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits nStyle)
                    :NumericField(pParent, nStyle)
 {
@@ -313,7 +293,6 @@ DbGridControl::NavigationBar::AbsolutePos::AbsolutePos(Window* pParent, WinBits 
     SetStrictFormat(sal_True);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
 {
     if (rEvt.GetKeyCode() == KEY_RETURN && !GetText().isEmpty())
@@ -330,7 +309,6 @@ void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
         NumericField::KeyInput(rEvt);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
 {
     NumericField::LoseFocus();
@@ -344,7 +322,6 @@ void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 {
     if (m_bPositioning)
@@ -357,7 +334,6 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
     m_bPositioning = sal_False;
 }
 
-//------------------------------------------------------------------------------
 DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
           :Control(pParent, nStyle)
           ,m_aRecordText(this, WB_VCENTER)
@@ -437,7 +413,7 @@ namespace
         _rPos.X() += (sal_uInt16)_rSize.Width();
     }
 }
-//------------------------------------------------------------------------------
+
 sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
     // Positionierung der Controls
@@ -464,7 +440,6 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     }
 
     // Controls Groessen und Positionen setzen
-    //
     OUString aText = m_aRecordText.GetText();
     long nTextWidth = m_aRecordText.GetTextWidth(aText);
     m_aRecordText.SetPosPixel(Point(nX,nY));
@@ -507,7 +482,6 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     return nX;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
 {
     DbGridControl* pParent = (DbGridControl*)GetParent();
@@ -544,7 +518,6 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool bAll)
 {
     if (m_nCurrentPos != nCurrentPos || nCurrentPos < 0 || bAll)
@@ -575,7 +548,6 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 {
     DbGridControl* pParent = (DbGridControl*)GetParent();
@@ -630,7 +602,6 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
 {
     sal_Bool bAvailable = GetState(nWhich);
@@ -723,14 +694,12 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
         pWnd->Enable(bAvailable);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::Resize()
 {
     Control::Resize();
     ArrangeControls();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::Paint(const Rectangle& rRect)
 {
     Control::Paint(rRect);
@@ -744,7 +713,6 @@ void DbGridControl::NavigationBar::Paint(const Rectangle& rRect)
              Point(aAbsolutePos.X() + aAbsoluteSize.Width() + 1, aAbsolutePos.Y() + aAbsoluteSize.Height()));
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 {
     Control::StateChanged( nType );
@@ -794,7 +762,6 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
     }
 }
 
-//------------------------------------------------------------------------------
 DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
           :m_bIsNew(sal_False)
 {
@@ -843,7 +810,6 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
         m_eStatus = GRS_INVALID;
 }
 
-//------------------------------------------------------------------------------
 DbGridRow::~DbGridRow()
 {
     for ( size_t i = 0, n = m_aVariants.size(); i < n; ++i )
@@ -851,7 +817,6 @@ DbGridRow::~DbGridRow()
     m_aVariants.clear();
 }
 
-//------------------------------------------------------------------------------
 void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
 {
     if (pCur && pCur->Is())
@@ -901,7 +866,6 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
 }
 
 DBG_NAME(DbGridControl);
-//------------------------------------------------------------------------------
 DbGridControl::DbGridControl(
                 Reference< XComponentContext > _rxContext,
                 Window* pParent,
@@ -949,7 +913,6 @@ DbGridControl::DbGridControl(
     ImplInitWindow( InitAll );
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::InsertHandleColumn()
 {
     // Handle Column einfuegen
@@ -961,7 +924,6 @@ void DbGridControl::InsertHandleColumn()
         BrowseBox::InsertHandleColumn(0);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::Init()
 {
     BrowserHeader* pNewHeader = CreateHeaderBar(this);
@@ -974,7 +936,6 @@ void DbGridControl::Init()
     InsertHandleColumn();
 }
 
-//------------------------------------------------------------------------------
 DbGridControl::~DbGridControl()
 {
     RemoveColumns();
@@ -1010,7 +971,6 @@ DbGridControl::~DbGridControl()
     DBG_DTOR(DbGridControl,NULL);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::StateChanged( StateChangedType nType )
 {
     DbGridControl_Base::StateChanged( nType );
@@ -1048,7 +1008,6 @@ void DbGridControl::StateChanged( StateChangedType nType )
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     DbGridControl_Base::DataChanged( rDCEvt );
@@ -1060,7 +1019,6 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::Select()
 {
     DbGridControl_Base::Select();
@@ -1072,7 +1030,6 @@ void DbGridControl::Select()
         m_pGridListener->selectionChanged();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
 {
     for ( size_t i = 0; i < m_aColumns.size(); ++i )
@@ -1120,7 +1077,6 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RemoveRows(sal_Bool bNewCursor)
 {
     // Hat sich der DatenCursor verandert ?
@@ -1140,7 +1096,6 @@ void DbGridControl::RemoveRows(sal_Bool bNewCursor)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RemoveRows()
 {
     // we're going to remove all columns and all row, so deactivate the current cell
@@ -1164,7 +1119,6 @@ void DbGridControl::RemoveRows()
     m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
 {
     // Positionierung der Controls
@@ -1176,7 +1130,6 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::EnableHandle(sal_Bool bEnable)
 {
     if (m_bHandle == bEnable)
@@ -1189,7 +1142,6 @@ void DbGridControl::EnableHandle(sal_Bool bEnable)
     InsertHandleColumn();
 }
 
-//------------------------------------------------------------------------------
 namespace
 {
     bool adjustModeForScrollbars( BrowserMode& _rMode, sal_Bool _bNavigationBar, sal_Bool _bHideScrollbars )
@@ -1224,7 +1176,6 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
 {
     if (m_bNavigationBar == bEnable)
@@ -1260,7 +1211,6 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
     }
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
 {
     DBG_ASSERT(!m_xCurrentRow || !m_xCurrentRow->IsModified(),
@@ -1340,7 +1290,6 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     return m_nOptions;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
 {
     if ( m_bHideScrollbars == _bForce )
@@ -1352,7 +1301,6 @@ void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
         SetMode( m_nMode );
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
 {
     if (IsPermanentCursorEnabled() == bEnable)
@@ -1380,13 +1328,11 @@ void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
         ActivateCell();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsPermanentCursorEnabled() const
 {
     return ((m_nMode & BROWSER_CURSOR_WO_FOCUS) != 0) && ((m_nMode & BROWSER_HIDECURSOR) == 0);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_aAccess*/)
 {
     if ((GetCurColumnId() == _nColId) && IsEditing())
@@ -1396,7 +1342,6 @@ void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt16 nOpts)
 {
     if (!_xCursor.is() && !m_pDataCursor)
@@ -1632,7 +1577,6 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > ((Reference< XInterface >)*m_pSeekCursor, UNO_QUERY), 0);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RemoveColumns()
 {
     if ( IsEditing() )
@@ -1645,13 +1589,11 @@ void DbGridControl::RemoveColumns()
     DbGridControl_Base::RemoveColumns();
 }
 
-//------------------------------------------------------------------------------
 DbGridColumn* DbGridControl::CreateColumn(sal_uInt16 nId) const
 {
     return new DbGridColumn(nId, *(DbGridControl*)this);
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)
 {
     DBG_ASSERT(nId == BROWSER_INVALIDID, "DbGridControl::AppendColumn : I want to set the ID myself ...");
@@ -1691,7 +1633,6 @@ sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth,
     return nId;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
     DbGridControl_Base::RemoveColumn(nId);
@@ -1704,7 +1645,6 @@ void DbGridControl::RemoveColumn(sal_uInt16 nId)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ColumnMoved(sal_uInt16 nId)
 {
     DbGridControl_Base::ColumnMoved(nId);
@@ -1794,7 +1734,6 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     // that. It's because it took me a while to see it myself, and the whole theme (hidden cols, model col
     // positions, view col positions)  is really painful (at least for me) so the above pictures helped me a lot ;)
 
-
     DbGridColumn* temp = m_aColumns[ nOldModelPos ];
 
     DbGridColumns::iterator it = m_aColumns.begin();
@@ -1806,7 +1745,6 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     m_aColumns.insert( it, temp );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::SeekRow(long nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
@@ -1838,15 +1776,13 @@ sal_Bool DbGridControl::SeekRow(long nRow)
 
     return m_nSeekPos >= 0;
 }
-//------------------------------------------------------------------------------
+
 // Wird aufgerufen, wenn die dargestellte Datenmenge sich aendert
-//------------------------------------------------------------------------------
 void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScreen )
 {
     RecalcRows(nNewTopRow, nLinesOnScreen , sal_False);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor)
 {
     DBG_CHKTHIS( DbGridControl, NULL );
@@ -1904,7 +1840,6 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     EnablePaint(sal_True);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bool bKeepSelection)
 {
     if (nNumRows)
@@ -1925,7 +1860,6 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint, sal
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RowRemoved(long nRow, long nNumRows, sal_Bool bDoPaint)
 {
     if (nNumRows)
@@ -1945,7 +1879,6 @@ void DbGridControl::RowRemoved(long nRow, long nNumRows, sal_Bool bDoPaint)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::AdjustRows()
 {
     if (!m_pSeekCursor)
@@ -2011,7 +1944,6 @@ void DbGridControl::AdjustRows()
     m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
 }
 
-//------------------------------------------------------------------------------
 DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
 {
     if (IsFilterRow(nRow))
@@ -2036,13 +1968,11 @@ DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
         return DbGridControl_Base::CLEAN;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
 {
     DbGridControl_Base::PaintStatusCell(rDev, rRect);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     if (!IsValid(m_xPaintRow))
@@ -2062,7 +1992,6 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
     DBG_CHKTHIS( DbGridControl, NULL );
@@ -2084,7 +2013,6 @@ sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::SetCurrent(long nNewRow)
 {
     // Each movement of the datacursor must start with BeginCursorAction and end with
@@ -2170,7 +2098,6 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::CursorMoved()
 {
     DBG_CHKTHIS( DbGridControl, NULL );
@@ -2200,20 +2127,17 @@ void DbGridControl::CursorMoved()
     m_nLastRowId = GetCurRow();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::onRowChange()
 {
     // not interested in
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::onColumnChange()
 {
     if ( m_pGridListener )
         m_pGridListener->columnChanged();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::setDisplaySynchron(sal_Bool bSync)
 {
     if (bSync != m_bSynchDisplay)
@@ -2224,7 +2148,6 @@ void DbGridControl::setDisplaySynchron(sal_Bool bSync)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::AdjustDataSource(sal_Bool bFull)
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::AdjustDataSource");
@@ -2298,7 +2221,6 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     m_aBar.InvalidateAll(m_nCurrentPos, m_xCurrentRow.Is());
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 DbGridControl::AlignSeekCursor()
 {
     DBG_CHKTHIS( DbGridControl, NULL );
@@ -2350,7 +2272,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     }
     return m_nSeekPos;
 }
-//------------------------------------------------------------------------------
+
 sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
 {
     DBG_CHKTHIS( DbGridControl, NULL );
@@ -2480,14 +2402,13 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
     }
     return m_nSeekPos == nRow;
 }
-//------------------------------------------------------------------------------
+
 void DbGridControl::MoveToFirst()
 {
     if (m_pSeekCursor && (GetCurRow() != 0))
         MoveToPosition(0);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::MoveToLast()
 {
     if (!m_pSeekCursor)
@@ -2520,7 +2441,6 @@ void DbGridControl::MoveToLast()
         MoveToPosition(GetRowCount() - 1);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::MoveToPrev()
 {
     long nNewRow = std::max(GetCurRow() - 1L, 0L);
@@ -2528,7 +2448,6 @@ void DbGridControl::MoveToPrev()
         MoveToPosition(nNewRow);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::MoveToNext()
 {
     if (!m_pSeekCursor)
@@ -2571,7 +2490,6 @@ void DbGridControl::MoveToNext()
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::MoveToPosition(sal_uInt32 nPos)
 {
     if (!m_pSeekCursor)
@@ -2601,7 +2519,6 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
     m_aBar.InvalidateAll(m_nCurrentPos);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::AppendNew()
 {
     if (!m_pSeekCursor || !(m_nOptions & OPT_INSERT))
@@ -2630,7 +2547,6 @@ void DbGridControl::AppendNew()
         MoveToPosition(nNewRow - 1);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::SetDesignMode(sal_Bool bMode)
 {
     if (IsDesignMode() != bMode)
@@ -2659,7 +2575,6 @@ void DbGridControl::SetDesignMode(sal_Bool bMode)
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::SetFilterMode(sal_Bool bMode)
 {
     if (IsFilterMode() != bMode)
@@ -2693,7 +2608,7 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
             setDataSource(Reference< XRowSet > ());
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
     size_t Location = GetModelColumnPos( _nColId );
@@ -2703,7 +2618,7 @@ OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
         sRet = GetCurrentRowCellText(pColumn, m_xPaintRow);
     return sRet;
 }
-//------------------------------------------------------------------------------
+
 OUString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGridRowRef& _rRow) const
 {
     // Ausgabe des Textes fuer eine Zelle
@@ -2713,7 +2628,6 @@ OUString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGrid
     return aText;
 }
 
-//------------------------------------------------------------------------------
 sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
     if (SeekRow(nRow))
@@ -2726,7 +2640,6 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
         return 30;  //xxxx
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMenu)
 {
     sal_Bool bDelete = (m_nOptions & OPT_DELETE) && GetSelectRowCount() && !IsCurrentAppending();
@@ -2746,7 +2659,6 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMenu& /*rMenu*/, sal_uInt16 nExecutionResult)
 {
     switch (nExecutionResult)
@@ -2768,7 +2680,6 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::DataSourcePropertyChanged");
@@ -2821,7 +2732,6 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 {
     if (!m_pSeekCursor || IsResizing())
@@ -2842,7 +2752,6 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
 {
     return  (_nRow >= 0)
@@ -2851,7 +2760,6 @@ sal_Bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
         &&  (_nColId <= ColCount());
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
 {
     DBG_ASSERT(canCopyCellText(_nRow, _nColId), "DbGridControl::copyCellText: invalid call!");
@@ -2860,7 +2768,6 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
     OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
 {
     PopupMenu aContextMenu( SVX_RES( RID_SVXMNU_ROWS ) );
@@ -2873,7 +2780,6 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     // -> change this to sal_uInt32
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -2929,7 +2835,6 @@ void DbGridControl::Command(const CommandEvent& rEvt)
     }
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(DbGridControl, OnDelete, void*, /*EMPTYTAG*/ )
 {
     DBG_CHKTHIS(DbGridControl, NULL );
@@ -2938,7 +2843,6 @@ IMPL_LINK(DbGridControl, OnDelete, void*, /*EMPTYTAG*/ )
     return 0;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::DeleteSelectedRows()
 {
     DBG_ASSERT(GetSelection(), "keine selection!!!");
@@ -2947,7 +2851,6 @@ void DbGridControl::DeleteSelectedRows()
         return;
 }
 
-//------------------------------------------------------------------------------
 CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId)
 {
     if (!IsValid(m_xCurrentRow) || !IsEnabled())
@@ -2990,7 +2893,6 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
     return pReturn;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::InitController(CellControllerRef& /*rController*/, long /*nRow*/, sal_uInt16 nColumnId)
 {
     size_t Location = GetModelColumnPos(nColumnId);
@@ -2999,7 +2901,6 @@ void DbGridControl::InitController(CellControllerRef& /*rController*/, long /*nR
         pColumn->UpdateFromField(m_xCurrentRow, m_xFormatter);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::CellModified()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::CellModified");
@@ -3049,7 +2950,6 @@ void DbGridControl::CellModified()
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::Dispatch(sal_uInt16 nId)
 {
     if (nId == BROWSER_CURSORENDOFFILE)
@@ -3063,7 +2963,6 @@ void DbGridControl::Dispatch(sal_uInt16 nId)
         DbGridControl_Base::Dispatch(nId);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::Undo()
 {
     if (!IsFilterMode() && IsValid(m_xCurrentRow) && IsModified())
@@ -3127,7 +3026,6 @@ void DbGridControl::Undo()
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::resetCurrentRow()
 {
     if (IsModified())
@@ -3164,7 +3062,6 @@ void DbGridControl::resetCurrentRow()
     RowModified(GetCurRow());       // will update the current controller if affected
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::RowModified( long nRow, sal_uInt16 /*nColId*/ )
 {
     if (nRow == m_nCurrentPos && IsEditing())
@@ -3176,25 +3073,21 @@ void DbGridControl::RowModified( long nRow, sal_uInt16 /*nColId*/ )
     DbGridControl_Base::RowModified(nRow);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsModified() const
 {
     return !IsFilterMode() && IsValid(m_xCurrentRow) && (m_xCurrentRow->IsModified() || DbGridControl_Base::IsModified());
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsCurrentAppending() const
 {
     return m_xCurrentRow.Is() && m_xCurrentRow->IsNew();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsInsertionRow(long nRow) const
 {
     return (m_nOptions & OPT_INSERT) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::SaveModified()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::SaveModified");
@@ -3244,7 +3137,6 @@ sal_Bool DbGridControl::SaveModified()
     return bOK;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::SaveRow()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::SaveRow");
@@ -3318,7 +3210,6 @@ sal_Bool DbGridControl::SaveRow()
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 long DbGridControl::PreNotify(NotifyEvent& rEvt)
 {
     // keine Events der Navbar behandeln
@@ -3374,7 +3265,6 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
     }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DbGridControl::IsTabAllowed(sal_Bool bRight) const
 {
     if (bRight)
@@ -3388,7 +3278,6 @@ sal_Bool DbGridControl::IsTabAllowed(sal_Bool bRight) const
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::KeyInput( const KeyEvent& rEvt )
 {
     if (rEvt.GetKeyCode().GetFunction() == KEYFUNC_COPY)
@@ -3406,7 +3295,6 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
     DbGridControl_Base::KeyInput(rEvt);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::HideColumn(sal_uInt16 nId)
 {
     DeactivateCell();
@@ -3436,7 +3324,6 @@ void DbGridControl::HideColumn(sal_uInt16 nId)
         GoToColumnId( nNewColId );
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ShowColumn(sal_uInt16 nId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nId);
@@ -3502,7 +3389,6 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
     Invalidate();
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
 {
     if (nPos >= m_aColumns.size())
@@ -3530,7 +3416,6 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
     return pCol->GetId();
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::GetModelColumnPos( sal_uInt16 nId ) const
 {
     for ( size_t i = 0; i < m_aColumns.size(); ++i )
@@ -3540,7 +3425,6 @@ sal_uInt16 DbGridControl::GetModelColumnPos( sal_uInt16 nId ) const
     return GRID_COLUMN_NOT_FOUND;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::implAdjustInSolarThread(sal_Bool _bRows)
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::implAdjustInSolarThread");
@@ -3573,7 +3457,6 @@ void DbGridControl::implAdjustInSolarThread(sal_Bool _bRows)
     }
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat)
 {
     m_nAsynAdjustEvent = 0;
@@ -3587,7 +3470,6 @@ IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat)
     return 0L;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::BeginCursorAction()
 {
     if (m_pFieldListeners)
@@ -3607,7 +3489,6 @@ void DbGridControl::BeginCursorAction()
         m_pDataSourcePropListener->suspend();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::EndCursorAction()
 {
     if (m_pFieldListeners)
@@ -3627,7 +3508,6 @@ void DbGridControl::EndCursorAction()
         m_pDataSourcePropListener->resume();
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::ConnectToFields()
 {
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
@@ -3657,7 +3537,6 @@ void DbGridControl::ConnectToFields()
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::DisconnectFromFields()
 {
     if (!m_pFieldListeners)
@@ -3677,7 +3556,6 @@ void DbGridControl::DisconnectFromFields()
     m_pFieldListeners = NULL;
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent& /*_evt*/)
 {
     osl::MutexGuard aPreventDestruction(m_aDestructionSafety);
@@ -3714,7 +3592,6 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
     }
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 {
     ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
@@ -3736,7 +3613,6 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
     pListeners->erase(aPos);
 }
 
-//------------------------------------------------------------------------------
 void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& /*_rEvt*/)
 {
     if (_nId == 0)
@@ -3750,12 +3626,12 @@ void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& /*_rEvt*/)
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 DbGridControl::GetAccessibleControlCount() const
 {
     return DbGridControl_Base::GetAccessibleControlCount() + 1; // the navigation control
 }
-// -----------------------------------------------------------------------------
+
 Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nIndex )
 {
     Reference<XAccessible > xRet;
@@ -3767,7 +3643,7 @@ Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nInde
         xRet = DbGridControl_Base::CreateAccessibleControl( _nIndex );
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
@@ -3797,7 +3673,5 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
     }
     return DbGridControl_Base::CreateAccessibleCell( _nRow, _nColumnPos );
 }
-// -----------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

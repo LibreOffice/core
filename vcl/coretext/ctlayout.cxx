@@ -21,8 +21,6 @@
 
 #include "ctfonts.hxx"
 
-// =======================================================================
-
 class CTLayout
 :   public SalLayout
 {
@@ -71,8 +69,6 @@ private:
     mutable double  mfBaseAdv;
 };
 
-// =======================================================================
-
 CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 :   mpTextStyle( pTextStyle )
 ,   mpAttrString( NULL )
@@ -83,8 +79,6 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 {
 }
 
-// -----------------------------------------------------------------------
-
 CTLayout::~CTLayout()
 {
     if( mpCTLine )
@@ -92,8 +86,6 @@ CTLayout::~CTLayout()
     if( mpAttrString )
         CFRelease( mpAttrString );
 }
-
-// -----------------------------------------------------------------------
 
 bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
@@ -120,8 +112,6 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     return true;
 }
-
-// -----------------------------------------------------------------------
 
 void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
@@ -170,8 +160,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     mpCTLine = pNewCTLine;
     mfCachedWidth = nPixelWidth;
 }
-
-// -----------------------------------------------------------------------
 
 // When drawing right aligned text, rounding errors in the position returned by
 // GetDrawPosition() cause the right margin of the text to change whenever text
@@ -246,8 +234,6 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     // restore the original graphic context transformations
     CGContextRestoreGState( rAquaGraphics.mrContext );
 }
-
-// -----------------------------------------------------------------------
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
     sal_Int32* pGlyphAdvances, int* pCharIndexes,
@@ -358,8 +344,6 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
     return nCount;
 }
 
-// -----------------------------------------------------------------------
-
 double CTLayout::GetWidth() const
 {
     if( (mnCharCount <= 0) || !mpCTLine )
@@ -376,7 +360,6 @@ long CTLayout::GetTextWidth() const
 {
     return lrint(GetWidth());
 }
-// -----------------------------------------------------------------------
 
 long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
@@ -414,8 +397,6 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
     return nPixWidth;
 }
 
-// -----------------------------------------------------------------------
-
 int CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) const
 {
     if( !mpCTLine )
@@ -430,8 +411,6 @@ int CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) c
     nIndex += mnMinCharPos;
     return (int)nIndex;
 }
-
-// -----------------------------------------------------------------------
 
 void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 {
@@ -457,8 +436,6 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
         pCaretXArray[ 2*n+0 ] = lrint( fPos1 );
     }
 }
-
-// -----------------------------------------------------------------------
 
 bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
@@ -508,8 +485,6 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
     return true;
 }
 
-// =======================================================================
-
 // glyph fallback is supported directly by Aqua
 // so methods used only by MultiSalLayout can be dummy implementated
 bool CTLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const { return false; }
@@ -517,8 +492,6 @@ void CTLayout::InitFont() const {}
 void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
 void CTLayout::Simplify( bool /*bIsBase*/ ) {}
-
-// =======================================================================
 
 SalLayout* CTTextStyle::GetTextLayout( void ) const
 {

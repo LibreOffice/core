@@ -110,13 +110,9 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::beans::PropertyValue;
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
-
-//////////////////////////////////////////////////////////////////////////////
 
 PresentationSettings::PresentationSettings()
 :   mbAll( true ),
@@ -135,8 +131,6 @@ PresentationSettings::PresentationSettings()
 {
 }
 
-// ---------------------------------------------------------------------------
-
 PresentationSettings::PresentationSettings( const PresentationSettings& r )
 :   maPresPage( r.maPresPage ),
     mbAll( r.mbAll ),
@@ -154,8 +148,6 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
     mbStartWithNavigator( r.mbStartWithNavigator )
 {
 }
-
-// ---------------------------------------------------------------------------
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 : FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDrDocSh )
@@ -380,9 +372,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
 }
 
-
 // Destructor
-
 SdDrawDocument::~SdDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
@@ -447,11 +437,9 @@ SdDrawDocument::~SdDrawDocument()
     mpCharClass = NULL;
 }
 
-
 // This method creates a new document (SdDrawDocument) and returns a pointer to
 // said document. The drawing engine uses this method to put the document (or
 // parts of it) into the clipboard/DragServer.
-
 SdrModel* SdDrawDocument::AllocModel() const
 {
     SdDrawDocument* pNewModel = NULL;
@@ -516,7 +504,6 @@ SdrModel* SdDrawDocument::AllocModel() const
 // This method creates a new page (SdPage) and returns a pointer to said page.
 // The drawing engine uses this method to create pages (whose types it does
 // not know, as they are _derivatives_ of SdrPage) when loading.
-
 SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
     return new SdPage(*this, NULL, bMasterPage);
@@ -552,7 +539,6 @@ void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 
 // NewOrLoadCompleted is called when the document is loaded, or when it is clear
 // it won't load any more.
-
 void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 {
     if (eMode == NEW_DOC)
@@ -806,7 +792,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     return(mpOutliner);
 }
 
-
 // Internal outliner that is used to create text objects. We don't insert any
 // OutlinerViews into this outliner!
 ::sd::Outliner* SdDrawDocument::GetInternalOutliner(sal_Bool bCreateOutliner)
@@ -891,7 +876,6 @@ void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
     }
 }
 
-
 // OnlineSpelling: highlighting on/off
 uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {
@@ -913,9 +897,6 @@ SvxNumType SdDrawDocument::GetPageNumType() const
 {
     return mePageNumType;
 }
-
-
-
 
 void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
@@ -1059,4 +1040,5 @@ void SdDrawDocument::InitLayoutVector()
             maLayoutInfo.push_back( layoutlist->item(index) );
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

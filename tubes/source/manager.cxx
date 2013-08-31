@@ -55,7 +55,6 @@ struct InfoLogger
 #define INFO_LOGGER_F(s)
 #endif // SAL_LOG_INFO
 
-
 using namespace rtl;
 using namespace osl;
 
@@ -652,7 +651,6 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     return pConference;
 }
 
-
 static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 {
     /* This is a workaround for a Telepathy bug.
@@ -679,7 +677,6 @@ static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
     g_object_unref( pChannelRequest );
     g_hash_table_unref( pRequest );
 }
-
 
 /* TODO: factor out common code with startGroupSession() */
 TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )

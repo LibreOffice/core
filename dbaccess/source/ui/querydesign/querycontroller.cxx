@@ -109,6 +109,7 @@ namespace dbaui
         {
             return getSupportedServiceNames_Static();
         }
+
     public:
         OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
 

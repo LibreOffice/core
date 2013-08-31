@@ -1258,5 +1258,4 @@ IMPL_LINK_NOARG(SdrItemBrowser, SetDirtyHdl)
     return 0;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

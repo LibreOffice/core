@@ -34,15 +34,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
     class XTransferable;
 } } } }
 
-// ---------------------
-// - SotFormatStringId -
-// ---------------------
-
 typedef sal_uLong SotFormatStringId;
-
-// ----------------
-// - DataFlavorEx -
-// ----------------
 
 struct DataFlavorEx : public ::com::sun::star::datatransfer::DataFlavor
 {
@@ -65,9 +57,7 @@ typedef ::std::list< DataFlavorEx >                                 DataFlavorEx
 SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
                                       sal_uLong nId );
 
-// -------------------------
 // - Vordefinierte Formate -
-// -------------------------
 
 // Die Reihenfolge und die Werte d?rfen nicht ge?ndert werden,
 // da die Implementation sich darauf verl??t.
@@ -152,9 +142,6 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_DEST_DOC_TEXTFRAME_WEB       16
 #define EXCHG_DEST_SWDOC_FREE_AREA_WEB     17
 
-// ------------
-// - Exchange -
-// ------------
 class SvGlobalName;
 class SOT_DLLPUBLIC SotExchange
 {
@@ -204,6 +191,6 @@ public:
     static sal_uInt16 IsMath( const SvGlobalName& rName );
 };
 
-#endif // _EXCHANGE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

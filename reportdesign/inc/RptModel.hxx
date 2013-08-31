@@ -35,10 +35,6 @@ namespace reportdesign
 }
 namespace rptui
 {
-//============================================================================
-// OReportModel
-//============================================================================
-
 class OReportPage;
 class OXUndoEnvironment;
 
@@ -55,6 +51,7 @@ private:
 
     OReportModel( const OReportModel& );
     void operator=(const OReportModel& rSrcModel);
+
 public:
     TYPEINFO();
 
@@ -90,6 +87,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createShape(const OUString& aServiceSpecifier,::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rShape,sal_Int32 nOrientation = -1);
 };
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

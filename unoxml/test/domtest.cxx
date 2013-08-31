@@ -36,14 +36,12 @@
 
 #include "../source/dom/documentbuilder.hxx"
 
-
 using namespace ::DOM;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
 namespace
 {
-
 // valid xml
 static const char validTestFile[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \
@@ -373,13 +371,9 @@ struct SerializerTest : public CppUnit::TestFixture
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BasicTest, "BasicTest");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SerializerTest, "SerializerTest");
 }
-
-
-// -----------------------------------------------------------------------------
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.

@@ -20,7 +20,6 @@
 #ifndef __FRAMEWORK_UICONFIGURATION_IMAGEMANAGERIMPL_HXX_
 #define __FRAMEWORK_UICONFIGURATION_IMAGEMANAGERIMPL_HXX_
 
-
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
@@ -107,7 +106,6 @@ namespace framework
     class ImageManagerImpl : public ThreadHelpBase  // Struct for right initalization of mutex member! Must be first of baseclasses.
     {
         public:
-
             ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
                 ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
@@ -198,6 +196,6 @@ namespace framework
    };
 }
 
-#endif // __FRAMEWORK_UICONFIGURATION_IMAGEMANAGERIMPL_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,10 +56,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 
-
 namespace linguistic
 {
-
 
 //!! multi-thread safe mutex for all platforms !!
 struct LinguMutex : public rtl::Static< osl::Mutex, LinguMutex >
@@ -70,7 +68,6 @@ osl::Mutex &    GetLinguMutex()
 {
     return LinguMutex::get();
 }
-
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
@@ -83,7 +80,6 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
     return aLclDtaWrp;
 }
 
-
 LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale )
 {
     if ( rLocale.Language.isEmpty() )
@@ -91,14 +87,12 @@ LanguageType LinguLocaleToLanguage( const ::com::sun::star::lang::Locale& rLocal
     return LanguageTag::convertToLanguageType( rLocale );
 }
 
-
 ::com::sun::star::lang::Locale LinguLanguageToLocale( LanguageType nLanguage )
 {
     if (nLanguage == LANGUAGE_NONE)
         return ::com::sun::star::lang::Locale();
     return LanguageTag::convertToLocale( nLanguage);
 }
-
 
 bool LinguIsUnspecified( LanguageType nLanguage )
 {
@@ -111,7 +105,6 @@ bool LinguIsUnspecified( LanguageType nLanguage )
     }
     return false;
 }
-
 
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
@@ -151,7 +144,6 @@ sal_Int32 & IntArray2D::Value( int i, int k  )
     DBG_ASSERT( i * n2 + k < n1 * n2, "index out of range" );
     return pData[ i * n2 + k ];
 }
-
 
 sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
 {
@@ -197,8 +189,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
     }
     sal_Int32 nDist = aData.Value(nLen1, nLen2);
     return nDist;
- }
-
+}
 
 sal_Bool IsUseDicList( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
@@ -227,7 +218,6 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
     return bRes;
 }
 
-
 sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
@@ -255,7 +245,6 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
     return bRes;
 }
 
-
 static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 {
     sal_Bool bRes = sal_False;
@@ -268,7 +257,6 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
     }
     return bRes;
 }
-
 
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
@@ -318,7 +306,6 @@ uno::Reference< XDictionaryEntry > SearchDicList(
     return xEntry;
 }
 
-
 sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
 {
     if (!xDicList.is())
@@ -348,7 +335,6 @@ sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xD
 
     return bRet;
 }
-
 
 sal_uInt8 AddEntryToDic(
         uno::Reference< XDictionary >  &rxDic,
@@ -390,7 +376,6 @@ sal_uInt8 AddEntryToDic(
     return nRes;
 }
 
-
 uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( uno::Sequence< Locale > &rLocaleSeq )
 {
@@ -406,7 +391,6 @@ uno::Sequence< sal_Int16 >
 
     return aLangs;
 }
-
 
 sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
 {
@@ -437,8 +421,6 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
         *pbExist = bExists;
     return bRes;
 }
-
-
 
 static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &rRplc,
         uno::Reference< XHyphenatedWord > &rxHyphWord )
@@ -492,7 +474,6 @@ static sal_Bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUStri
     return bRes;
 }
 
-
 static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
 {
     sal_Int32 nLen = rOrigWord.getLength();
@@ -506,7 +487,6 @@ static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
     }
     return sal::static_int_cast< sal_Int16 >((0 <= i  &&  i < nLen) ? i : -1);
 }
-
 
 sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
 {
@@ -525,7 +505,6 @@ sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
     }
     return nRes;
 }
-
 
 uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         const OUString &rOrigWord,
@@ -592,22 +571,17 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
     return xRes;
 }
 
-
-
-
 static CharClass & lcl_GetCharClass()
 {
     static CharClass aCC( LanguageTag( LANGUAGE_ENGLISH_US ));
     return aCC;
 }
 
-
 osl::Mutex & lcl_GetCharClassMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;
 }
-
 
 sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
 {
@@ -646,7 +620,6 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         return CAPTYPE_UNKNOWN;
 }
 
-
 String ToLower( const String &rText, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
@@ -655,7 +628,6 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
     rCC.setLanguageTag( LanguageTag( nLanguage ));
     return rCC.lowercase( rText );
 }
-
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
 // and thus may NOT not be part of names or words like the Chinese/Japanese number characters
@@ -717,7 +689,6 @@ sal_Bool HasDigits( const OUString &rText )
     return sal_False;
 }
 
-
 sal_Bool IsNumeric( const String &rText )
 {
     sal_Bool bRes = sal_False;
@@ -738,8 +709,6 @@ sal_Bool IsNumeric( const String &rText )
     }
     return bRes;
 }
-
-
 
 uno::Reference< XLinguProperties > GetLinguProperties()
 {
@@ -771,7 +740,6 @@ uno::Reference< XDictionary > GetIgnoreAllList()
     return xRes;
 }
 
-
 AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
@@ -792,20 +760,17 @@ AppExitListener::~AppExitListener()
 {
 }
 
-
 void AppExitListener::Activate()
 {
     if (xDesktop.is())
         xDesktop->addTerminateListener( this );
 }
 
-
 void AppExitListener::Deactivate()
 {
     if (xDesktop.is())
         xDesktop->removeTerminateListener( this );
 }
-
 
 void SAL_CALL
     AppExitListener::disposing( const EventObject& rEvtSource )
@@ -819,13 +784,11 @@ void SAL_CALL
     }
 }
 
-
 void SAL_CALL
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
         throw(frame::TerminationVetoException, RuntimeException)
 {
 }
-
 
 void SAL_CALL
     AppExitListener::notifyTermination( const EventObject& rEvtSource )
@@ -838,7 +801,6 @@ void SAL_CALL
         AtExit();
     }
 }
-
 
 }   // namespace linguistic
 

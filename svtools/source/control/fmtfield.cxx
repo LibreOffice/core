@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -87,34 +86,28 @@ namespace validation
         sal_Bool implValidateNormalized( const OUString& _rText );
     };
 
-    //--------------------------------------------------------------------------
-    //..........................................................................
     static void lcl_insertStopTransition( StateTransitions& _rRow )
     {
         _rRow.insert( Transition( '_', END ) );
     }
 
-    //..........................................................................
     static void lcl_insertStartExponentTransition( StateTransitions& _rRow )
     {
         _rRow.insert( Transition( 'e', EXPONENT_START ) );
     }
 
-    //..........................................................................
     static void lcl_insertSignTransitions( StateTransitions& _rRow, const State eNextState )
     {
         _rRow.insert( Transition( '-', eNextState ) );
         _rRow.insert( Transition( '+', eNextState ) );
     }
 
-    //..........................................................................
     static void lcl_insertDigitTransitions( StateTransitions& _rRow, const State eNextState )
     {
         for ( sal_Unicode aChar = '0'; aChar <= '9'; ++aChar )
             _rRow.insert( Transition( aChar, eNextState ) );
     }
 
-    //..........................................................................
     static void lcl_insertCommonPreCommaTransitions( StateTransitions& _rRow, const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
     {
         // digits are allowed
@@ -127,7 +120,6 @@ namespace validation
         _rRow.insert( Transition( _cDecSep, DIGIT_POST_COMMA ) );
     }
 
-    //--------------------------------------------------------------------------
     NumberValidator::NumberValidator( const sal_Unicode _cThSep, const sal_Unicode _cDecSep )
         :m_cThSep( _cThSep )
         ,m_cDecSep( _cDecSep )
@@ -218,7 +210,6 @@ namespace validation
         }
     }
 
-    //--------------------------------------------------------------------------
     sal_Bool NumberValidator::implValidateNormalized( const OUString& _rText )
     {
         const sal_Unicode* pCheckPos = _rText.getStr();
@@ -258,7 +249,6 @@ namespace validation
         return ( END == eCurrentState );
     }
 
-    //--------------------------------------------------------------------------
     sal_Bool NumberValidator::isValidNumericFragment( const OUString& _rText )
     {
         if ( _rText.isEmpty() )
@@ -274,11 +264,9 @@ namespace validation
     }
 }
 
-//==============================================================================
 SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
 sal_uLong FormattedField::StaticFormatter::s_nReferences = 0;
 
-//------------------------------------------------------------------------------
 SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
 {
     if (!s_cFormatter)
@@ -292,13 +280,11 @@ SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
     return s_cFormatter;
 }
 
-//------------------------------------------------------------------------------
 FormattedField::StaticFormatter::StaticFormatter()
 {
     ++s_nReferences;
 }
 
-//------------------------------------------------------------------------------
 FormattedField::StaticFormatter::~StaticFormatter()
 {
     if (--s_nReferences == 0)
@@ -308,7 +294,6 @@ FormattedField::StaticFormatter::~StaticFormatter()
     }
 }
 
-//==============================================================================
 DBG_NAME(FormattedField);
 
 #define INIT_MEMBERS()              \
@@ -333,7 +318,6 @@ DBG_NAME(FormattedField);
     ,m_pLastOutputColor(NULL)       \
     ,m_bUseInputStringForFormatting(false)
 
-//------------------------------------------------------------------------------
 FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
     :SpinField(pParent, nStyle)
     ,INIT_MEMBERS()
@@ -347,7 +331,6 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
     }
 }
 
-//------------------------------------------------------------------------------
 FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
     :SpinField(pParent, rResId)
     ,INIT_MEMBERS()
@@ -361,13 +344,11 @@ FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFor
     }
 }
 
-//------------------------------------------------------------------------------
 FormattedField::~FormattedField()
 {
     DBG_DTOR(FormattedField, NULL);
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetText(const OUString& rStr)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -376,7 +357,6 @@ void FormattedField::SetText(const OUString& rStr)
     m_bValueDirty = sal_True;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -385,7 +365,6 @@ void FormattedField::SetText( const OUString& rStr, const Selection& rNewSelecti
     m_bValueDirty = sal_True;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetTextFormatted(const OUString& rStr)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -450,7 +429,6 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
     m_bValueDirty = sal_False;
 }
 
-//------------------------------------------------------------------------------
 OUString FormattedField::GetTextValue() const
 {
     if (m_bValueDirty)
@@ -461,7 +439,6 @@ OUString FormattedField::GetTextValue() const
     return m_sCurrentTextValue;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::EnableNotANumber( sal_Bool _bEnable )
 {
     if ( m_bEnableNaN == _bEnable )
@@ -470,7 +447,6 @@ void FormattedField::EnableNotANumber( sal_Bool _bEnable )
     m_bEnableNaN = _bEnable;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
 {
     if (_bAutomatic == m_bAutoColor)
@@ -486,7 +462,6 @@ void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
     }
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::impl_Modify(bool makeValueDirty)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -515,7 +490,6 @@ void FormattedField::impl_Modify(bool makeValueDirty)
     SpinField::Modify();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::Modify()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -523,7 +497,6 @@ void FormattedField::Modify()
     impl_Modify();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -576,7 +549,6 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
         // muss nicht stimmen, aber sicherheitshalber ...
 }
 
-//------------------------------------------------------------------------------
 long FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -585,7 +557,6 @@ long FormattedField::PreNotify(NotifyEvent& rNEvt)
     return SpinField::PreNotify(rNEvt);
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -605,7 +576,6 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
     }
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -614,7 +584,6 @@ void FormattedField::SetFormatKey(sal_uLong nFormatKey)
     FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FCT_FORMATTER : FCT_KEYONLY);
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bResetFormat)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -658,7 +627,6 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
     FormatChanged(FCT_FORMATTER);
 }
 
-//------------------------------------------------------------------------------
 OUString FormattedField::GetFormat(LanguageType& eLang) const
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -670,7 +638,6 @@ OUString FormattedField::GetFormat(LanguageType& eLang) const
     return sFormatString;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType eLang)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -690,7 +657,6 @@ sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType e
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FormattedField::GetThousandsSep() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
@@ -703,7 +669,6 @@ sal_Bool FormattedField::GetThousandsSep() const
     return bThousand;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
@@ -733,7 +698,6 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
     FormatChanged(FCT_THOUSANDSSEP);
 }
 
-//------------------------------------------------------------------------------
 sal_uInt16 FormattedField::GetDecimalDigits() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
@@ -746,7 +710,6 @@ sal_uInt16 FormattedField::GetDecimalDigits() const
     return nPrecision;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
@@ -776,7 +739,6 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     FormatChanged(FCT_PRECISION);
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -788,7 +750,6 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
     ReFormat();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::Commit()
 {
     // remember the old text
@@ -808,7 +769,6 @@ void FormattedField::Commit()
     }
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::ReFormat()
 {
     if (!IsEmptyFieldEnabled() || !GetText().isEmpty())
@@ -825,7 +785,6 @@ void FormattedField::ReFormat()
     }
 }
 
-//------------------------------------------------------------------------------
 long FormattedField::Notify(NotifyEvent& rNEvt)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -897,7 +856,6 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
     return SpinField::Notify( rNEvt );
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetMinValue(double dMin)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -909,7 +867,6 @@ void FormattedField::SetMinValue(double dMin)
     ReFormat();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetMaxValue(double dMax)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -921,7 +878,6 @@ void FormattedField::SetMaxValue(double dMax)
     ReFormat();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetTextValue(const OUString& rText)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -929,7 +885,6 @@ void FormattedField::SetTextValue(const OUString& rText)
     ReFormat();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::EnableEmptyField(sal_Bool bEnable)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -941,7 +896,6 @@ void FormattedField::EnableEmptyField(sal_Bool bEnable)
         ImplSetValue(m_dCurrentValue, sal_True);
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -986,7 +940,6 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
     DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
 
-//------------------------------------------------------------------------------
 sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1038,14 +991,12 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::SetValue(double dVal)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     ImplSetValue(dVal, m_bValueDirty);
 }
 
-//------------------------------------------------------------------------------
 double FormattedField::GetValue()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1062,7 +1013,6 @@ double FormattedField::GetValue()
     return m_dCurrentValue;
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::Up()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1074,7 +1024,6 @@ void FormattedField::Up()
     SpinField::Up();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::Down()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1085,7 +1034,6 @@ void FormattedField::Down()
     SpinField::Down();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::First()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1099,7 +1047,6 @@ void FormattedField::First()
     SpinField::First();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::Last()
 {
     DBG_CHKTHIS(FormattedField, NULL);
@@ -1113,34 +1060,27 @@ void FormattedField::Last()
     SpinField::Last();
 }
 
-//------------------------------------------------------------------------------
 void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */ )
 {
     m_bUseInputStringForFormatting = bUseInputStr;
 }
 
-//------------------------------------------------------------------------------
 bool FormattedField::IsUsingInputStringForFormatting() const
 {
     return m_bUseInputStringForFormatting;
 }
 
-
-//==============================================================================
-//------------------------------------------------------------------------------
 DoubleNumericField::~DoubleNumericField()
 {
     delete m_pNumberValidator;
 }
 
-//------------------------------------------------------------------------------
 void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 {
     ResetConformanceTester();
     FormattedField::FormatChanged(nWhat);
 }
 
-//------------------------------------------------------------------------------
 sal_Bool DoubleNumericField::CheckText(const OUString& sText) const
 {
     // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
@@ -1149,7 +1089,6 @@ sal_Bool DoubleNumericField::CheckText(const OUString& sText) const
     return m_pNumberValidator->isValidNumericFragment( sText );
 }
 
-//------------------------------------------------------------------------------
 void DoubleNumericField::ResetConformanceTester()
 {
     // the thousands and the decimal separator are language dependent
@@ -1174,10 +1113,6 @@ void DoubleNumericField::ResetConformanceTester()
     m_pNumberValidator = new validation::NumberValidator( cSeparatorThousand, cSeparatorDecimal );
 }
 
-
-//==============================================================================
-
-//------------------------------------------------------------------------------
 DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
     :FormattedField(pParent, nStyle)
     ,m_bChangingFormat(sal_False)
@@ -1189,7 +1124,6 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
     UpdateCurrencyFormat();
 }
 
-//------------------------------------------------------------------------------
 void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 {
     if (m_bChangingFormat)
@@ -1217,7 +1151,6 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
     FormattedField::FormatChanged(nWhat);
 }
 
-//------------------------------------------------------------------------------
 void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
 {
     if (m_sCurrencySymbol == rSymbol)
@@ -1228,7 +1161,6 @@ void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
     FormatChanged(FCT_CURRENCY_SYMBOL);
 }
 
-//------------------------------------------------------------------------------
 void DoubleCurrencyField::setPrependCurrSym(sal_Bool _bPrepend)
 {
     if (m_bPrependCurrSym == _bPrepend)
@@ -1239,7 +1171,6 @@ void DoubleCurrencyField::setPrependCurrSym(sal_Bool _bPrepend)
     FormatChanged(FCT_CURRSYM_POSITION);
 }
 
-//------------------------------------------------------------------------------
 void DoubleCurrencyField::UpdateCurrencyFormat()
 {
     // the old settings

@@ -53,7 +53,6 @@
 
 #include "getdigitlanguage.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
 // control support
 
 #include <com/sun/star/awt/XWindow2.hpp>
@@ -62,17 +61,12 @@
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 // for test, can be removed again
-
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
+// <- for test
 
 using namespace com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -98,15 +92,12 @@ namespace
 
         return nSteps;
     }
-} // end of anonymous namespace
-
-//////////////////////////////////////////////////////////////////////////////
+}
 
 namespace drawinglayer
 {
     namespace processor2d
     {
-        //////////////////////////////////////////////////////////////////////////////
         // UNO class usages
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::UNO_QUERY;
@@ -117,7 +108,6 @@ namespace drawinglayer
         using ::com::sun::star::awt::XWindow;
         using ::com::sun::star::awt::PosSize::POSSIZE;
 
-        //////////////////////////////////////////////////////////////////////////////
         // rendering support
 
         // directdraw of text simple portion or decorated portion primitive. When decorated, all the extra
@@ -1586,7 +1576,6 @@ namespace drawinglayer
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
         // process support
 
         VclProcessor2D::VclProcessor2D(
@@ -1607,7 +1596,7 @@ namespace drawinglayer
         VclProcessor2D::~VclProcessor2D()
         {
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

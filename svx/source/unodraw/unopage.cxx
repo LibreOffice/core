@@ -55,9 +55,7 @@ using namespace ::com::sun::star::drawing;
 #define INTERFACE_TYPE( xint ) \
     ::getCppuType((const Reference< xint >*)0)
 
-/**********************************************************************
-* class SvxDrawPage                                                   *
-**********************************************************************/
+// class SvxDrawPage                                                   *
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 DBG_NAME(SvxDrawPage)
@@ -80,7 +78,6 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
         mpView->SetDesignMode(sal_True);
 }
 
-//----------------------------------------------------------------------
 SvxDrawPage::~SvxDrawPage() throw()
 {
     DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
@@ -91,8 +88,6 @@ SvxDrawPage::~SvxDrawPage() throw()
     }
     DBG_DTOR(SvxDrawPage,NULL);
 }
-
-//----------------------------------------------------------------------
 
 // XInterface
 void SvxDrawPage::release() throw()
@@ -117,10 +112,7 @@ void SvxDrawPage::disposing() throw()
     mpPage = 0;
 }
 
-//----------------------------------------------------------------------
 // XComponent
-//----------------------------------------------------------------------
-
 void SvxDrawPage::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -177,8 +169,6 @@ void SvxDrawPage::dispose()
 
 }
 
-//----------------------------------------------------------------------
-
 void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -188,8 +178,6 @@ void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Refere
 
     mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
 }
-
-//----------------------------------------------------------------------
 
 void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -201,17 +189,10 @@ void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Ref
     mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
 }
 
-//----------------------------------------------------------------------
 // SfxListener
-//----------------------------------------------------------------------
-
 void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& /*rHint*/ )
 {
 }
-
-//----------------------------------------------------------------------
-// ::com::sun::star::drawing::XShapes
-//----------------------------------------------------------------------
 
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
@@ -251,7 +232,6 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     mpModel->SetChanged();
 }
 
-//----------------------------------------------------------------------
 void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
@@ -285,10 +265,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
         mpModel->SetChanged();
 }
 
-//----------------------------------------------------------------------
 // ::com::sun::star::container::XIndexAccess
-//----------------------------------------------------------------------
-
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
     throw( uno::RuntimeException )
 {
@@ -300,7 +277,6 @@ sal_Int32 SAL_CALL SvxDrawPage::getCount()
     return( (sal_Int32) mpPage->GetObjCount() );
 }
 
-//----------------------------------------------------------------------
 uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -320,18 +296,13 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     return makeAny(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
 }
 
-
-//----------------------------------------------------------------------
 // ::com::sun::star::container::XElementAccess
-//----------------------------------------------------------------------
-
 uno::Type SAL_CALL SvxDrawPage::getElementType()
     throw( uno::RuntimeException )
 {
     return INTERFACE_TYPE( drawing::XShape );
 }
 
-//----------------------------------------------------------------------
 sal_Bool SAL_CALL SvxDrawPage::hasElements()
     throw( uno::RuntimeException )
 {
@@ -359,10 +330,8 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------
 // ACHTUNG: _SelectObjectsInView selektiert die ::com::sun::star::drawing::Shapes nur in der angegebennen
 //         SdrPageView. Dies muss nicht die sichtbare SdrPageView sein.
-//----------------------------------------------------------------------
 void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
     DBG_ASSERT(pPageView,"SdrPageView ist NULL! [CL]");
@@ -383,10 +352,8 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
     }
 }
 
-//----------------------------------------------------------------------
 // ACHTUNG: _SelectObjectInView selektiert das Shape *nur* in der angegebennen
 //         SdrPageView. Dies muss nicht die sichtbare SdrPageView sein.
-//----------------------------------------------------------------------
 void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
 {
     DBG_ASSERT(pPageView,"SdrPageView ist NULL! [CL]");
@@ -399,7 +366,6 @@ void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xSha
     }
 }
 
-//----------------------------------------------------------------------
 Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< drawing::XShapes >& xShapes )
     throw( uno::RuntimeException )
 {
@@ -438,7 +404,6 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     return xShapeGroup;
 }
 
-//----------------------------------------------------------------------
 void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGroup )
     throw( uno::RuntimeException )
 {
@@ -465,7 +430,6 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
         mpModel->SetChanged();
 }
 
-//----------------------------------------------------------------------
 SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
 {
     sal_uInt16 nType;
@@ -562,7 +526,6 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
     return pNewObj;
 }
 
-//----------------------------------------------------------------------
 void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, const OUString& aName ) const throw()
 {
     sal_uInt32 nTempType = UHashMap::getId( aName );
@@ -602,7 +565,6 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
     }
 }
 
-//----------------------------------------------------------------------
 SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage ) throw()
 {
     SvxShape* pRet = NULL;
@@ -827,7 +789,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
     return pRet;
 }
 
-//----------------------------------------------------------------------
 Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
@@ -837,7 +798,6 @@ Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
     return xShape;
 }
 
-//----------------------------------------------------------------------
 SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
 {
     SdrObject* pObj = _CreateSdrObject( xShape );
@@ -851,9 +811,7 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
     return pObj;
 }
 
-//----------------------------------------------------------------------
 // ::com::sun::star::lang::XServiceInfo
-//----------------------------------------------------------------------
 OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeException )
 {
     return OUString("SvxDrawPage");

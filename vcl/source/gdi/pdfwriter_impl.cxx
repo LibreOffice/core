@@ -85,7 +85,6 @@
 
 using namespace vcl;
 
-
 #if (OSL_DEBUG_LEVEL < 3)
 #define COMPRESS_PAGES
 #else
@@ -836,7 +835,6 @@ static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 
     }
 }
 
-
 // appends a double. PDF does not accept exponential format, only fixed point
 static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
 {
@@ -878,7 +876,6 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrec
         }
     }
 }
-
 
 static void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey = false )
 {
@@ -1401,11 +1398,8 @@ void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, 
     double fValue   = pixelToPoint(rPoint.getX());
 
     appendDouble( fValue, rBuffer, nLog10Divisor );
-
     rBuffer.append( ' ' );
-
     fValue      = double(getHeight()) - pixelToPoint(rPoint.getY());
-
     appendDouble( fValue, rBuffer, nLog10Divisor );
 }
 
@@ -1709,10 +1703,6 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     }
     rBuffer.append( "S\n" );
 }
-
-/*
- *  class PDFWriterImpl
- */
 
  PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
                                const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc,
@@ -5532,9 +5522,7 @@ bool PDFWriterImpl::emitAnnotations()
         return false;
 
     CHECK_RETURN( emitLinkAnnotations() );
-
     CHECK_RETURN( emitNoteAnnotations() );
-
     CHECK_RETURN( emitWidgetAnnotations() );
 
     return true;
@@ -6213,7 +6201,6 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
 
 //--->i56629
 // Part of this function may be shared with method appendDest.
-//
 sal_Int32 PDFWriterImpl::emitNamedDestinations()
 {
     sal_Int32  nCount = m_aNamedDests.size();
@@ -6314,7 +6301,6 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 
 //--->i59651
 // emits the output intent dictionary
-
 sal_Int32 PDFWriterImpl::emitOutputIntent()
 {
     if( !m_bIsPDF_A1 )
@@ -8833,7 +8819,6 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound
     aPoints[12] = Point( aPoints[13].X(), aPoints[13].Y()+ky );
     aPoints[14] = Point( rRect.TopLeft().X(), rRect.TopLeft().Y()+nVertRound );
     aPoints[15] = Point( aPoints[14].X(), aPoints[14].Y()-ky );
-
 
     OStringBuffer aLine( 80 );
     m_aPages.back().appendPoint( aPoints[1], aLine );
@@ -11934,7 +11919,5 @@ void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStre
         rStream.m_bCompress = bCompress;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

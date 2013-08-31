@@ -62,8 +62,6 @@ PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
     return pItem;
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @short      initialize static member of class HandlerCache
     @descr      We use a singleton pattern to implement this handler cache.
@@ -74,8 +72,6 @@ HandlerHash* HandlerCache::m_pHandler  = NULL;
 PatternHash* HandlerCache::m_pPattern  = NULL;
 sal_Int32    HandlerCache::m_nRefCount = 0   ;
 HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short      ctor of the cache of all registered protoco handler
@@ -101,8 +97,6 @@ HandlerCache::HandlerCache()
         ++m_nRefCount;
     /* SAFE */}
 }
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short      dtor of the cache
@@ -132,8 +126,6 @@ HandlerCache::~HandlerCache()
     /* SAFE */}
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @short      dtor of the cache
     @descr      It frees all used memory. In further implementations (may if we support write access too)
@@ -154,8 +146,6 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
     return bFound;
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @short      search for a registered handler by using an URL struct
     @descr      We combine neccessary parts of this struct to a valid URL string
@@ -167,7 +157,6 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
     return search( aURL.Complete, pReturn );
 }
 
-//_________________________________________________________________________________________________________________
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
     // SAFE ->
@@ -188,8 +177,6 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     // <- SAFE
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @short      dtor of the config access class
     @descr      It opens the configuration package automaticly by using base class mechanism.
@@ -205,8 +192,6 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     lListenPaths[0] = SETNAME_HANDLER;
     EnableNotification(lListenPaths);
 }
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short      use base class mechanism to fill given structures
@@ -275,7 +260,6 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
     }
 }
 
-//_________________________________________________________________________________________________________________
 void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyNames*/)
 {
     HandlerHash* pHandler = new HandlerHash;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "connectivity/CommonTools.hxx"
 #include "diagnose_ex.h"
 #include "TConnection.hxx"
@@ -100,11 +99,8 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::form;
 using namespace connectivity;
 
-//.........................................................................
 namespace dbtools
 {
-//.........................................................................
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
@@ -112,14 +108,11 @@ namespace dbtools
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::task;
 
-//==============================================================================
-//==============================================================================
 namespace
 {
     typedef sal_Bool (SAL_CALL XDatabaseMetaData::*FMetaDataSupport)();
 }
-//==============================================================================
-//==============================================================================
+
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
                                  const Reference< XNumberFormatTypes >& _xTypes,
                                  const Locale& _rLocale)
@@ -149,7 +142,6 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
                     _rLocale);
 }
 
-//------------------------------------------------------------------
 sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                                  sal_Int32 _nScale,
                                  sal_Bool _bIsCurrency,
@@ -231,8 +223,6 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
     return nFormat;
 }
 
-//==============================================================================
-//------------------------------------------------------------------------------
 Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
 {
     Reference< XConnection> xConnection(xParent, UNO_QUERY);
@@ -245,7 +235,6 @@ Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
     return xConnection;
 }
 
-//------------------------------------------------------------------------------
 Reference< XDataSource> getDataSource_allowException(
             const OUString& _rsTitleOrPath,
             const Reference< XComponentContext >& _rxContext )
@@ -257,7 +246,6 @@ Reference< XDataSource> getDataSource_allowException(
     return Reference< XDataSource >( xDatabaseContext->getByName( _rsTitleOrPath ), UNO_QUERY );
 }
 
-//------------------------------------------------------------------------------
 Reference< XDataSource > getDataSource(
             const OUString& _rsTitleOrPath,
             const Reference< XComponentContext >& _rxContext )
@@ -275,7 +263,6 @@ Reference< XDataSource > getDataSource(
     return xDS;
 }
 
-//------------------------------------------------------------------------------
 Reference< XConnection > getConnection_allowException(
             const OUString& _rsTitleOrPath,
             const OUString& _rsUser,
@@ -321,7 +308,6 @@ Reference< XConnection > getConnection_allowException(
     return xConnection;
 }
 
-//------------------------------------------------------------------------------
 Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceName,
         const OUString& _rUser, const OUString& _rPwd, const Reference< XComponentContext>& _rxContext)
     SAL_THROW ( (SQLException) )
@@ -343,7 +329,6 @@ Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceN
     return xReturn;
 }
 
-//------------------------------------------------------------------------------
 Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) throw (RuntimeException)
 {
     Reference< XConnection> xReturn;
@@ -353,7 +338,6 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
     return xReturn;
 }
 
-//------------------------------------------------------------------------------
 // helper function which allows to implement both the connectRowset and the ensureRowSetConnection semantics
 // if connectRowset (which is deprecated) is removed, this function and one of its parameters are
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
@@ -473,7 +457,6 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
     return xConnection;
 }
 
-//------------------------------------------------------------------------------
 Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
     sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
@@ -481,26 +464,24 @@ Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, cons
     return xConnection.getTyped();
 }
 
-//------------------------------------------------------------------------------
 SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext,
     bool _bUseAutoConnectionDisposer )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
     return lcl_connectRowSet( _rxRowSet, _rxContext, true, _bUseAutoConnectionDisposer );
 }
 
-//------------------------------------------------------------------------------
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const OUString& _rName)
 {
     Reference< XComponent > xDummy;
     return getFieldsByCommandDescriptor( _rxConn, CommandType::TABLE, _rName, xDummy );
 }
-//------------------------------------------------------------------------------
+
 Reference< XNameAccess> getPrimaryKeyColumns_throw(const Any& i_aTable)
 {
     const Reference< XPropertySet > xTable(i_aTable,UNO_QUERY_THROW);
     return getPrimaryKeyColumns_throw(xTable);
 }
-//------------------------------------------------------------------------------
+
 Reference< XNameAccess> getPrimaryKeyColumns_throw(const Reference< XPropertySet >& i_xTable)
 {
     Reference<XNameAccess> xKeyColumns;
@@ -535,7 +516,6 @@ Reference< XNameAccess> getPrimaryKeyColumns_throw(const Reference< XPropertySet
     return xKeyColumns;
 }
 
-//------------------------------------------------------------------------------
 namespace
 {
     enum FieldLookupState
@@ -544,7 +524,6 @@ namespace
     };
 }
 
-//------------------------------------------------------------------------------
 Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
     const sal_Int32 _nCommandType, const OUString& _rCommand,
     Reference< XComponent >& _rxKeepFieldsAlive, SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -740,7 +719,6 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
     return xFields;
 }
 
-//------------------------------------------------------------------------------
 Sequence< OUString > getFieldNamesByCommandDescriptor( const Reference< XConnection >& _rxConnection,
     const sal_Int32 _nCommandType, const OUString& _rCommand,
     SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -761,12 +739,11 @@ Sequence< OUString > getFieldNamesByCommandDescriptor( const Reference< XConnect
     return aNames;
 }
 
-//------------------------------------------------------------------------------
 SQLContext prependContextInfo(const SQLException& _rException, const Reference< XInterface >& _rxContext, const OUString& _rContextDescription, const OUString& _rContextDetails)
 {
     return SQLContext( _rContextDescription, _rxContext, OUString(), 0, makeAny( _rException ), _rContextDetails );
 }
-//------------------------------------------------------------------------------
+
 SQLException prependErrorInfo( const SQLException& _rChainedException, const Reference< XInterface >& _rxContext,
     const OUString& _rAdditionalError, const StandardSQLState _eSQLState, const sal_Int32 _nErrorCode )
 {
@@ -775,7 +752,6 @@ SQLException prependErrorInfo( const SQLException& _rChainedException, const Ref
         _nErrorCode, makeAny( _rChainedException ) );
 }
 
-//--------------------------------------------------------------------------
 namespace
 {
     struct NameComponentSupport
@@ -836,7 +812,6 @@ namespace
     }
 }
 
-//--------------------------------------------------------------------------
 static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                 const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName,
                 sal_Bool _bQuote, EComposeRule _eComposeRule )
@@ -886,7 +861,6 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
     return aComposedName.makeStringAndClear();
 }
 
-//------------------------------------------------------------------------------
 OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta
                                , const OUString& _rName
                                , EComposeRule _eComposeRule)
@@ -896,7 +870,6 @@ OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta
     return impl_doComposeTableName( _rxMeta, sCatalog, sSchema, sTable, sal_True, _eComposeRule );
 }
 
-//------------------------------------------------------------------------------
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const OUString& _rQualifiedName, OUString& _rCatalog, OUString& _rSchema, OUString& _rName,EComposeRule _eComposeRule)
 {
     OSL_ENSURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
@@ -943,7 +916,6 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     _rName = sName;
 }
 
-//------------------------------------------------------------------------------
 Reference< XNumberFormatsSupplier> getNumberFormats(
             const Reference< XConnection>& _rxConn,
             sal_Bool _bAlloweDefault,
@@ -966,8 +938,6 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     return xReturn;
 }
 
-//==============================================================================
-//------------------------------------------------------------------------------
 void TransferFormComponentProperties(
             const Reference< XPropertySet>& xOldProps,
             const Reference< XPropertySet>& xNewProps,
@@ -1233,24 +1203,21 @@ catch(const Exception&)
 }
 }
 
-//------------------------------------------------------------------------------
 sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::INSERT) != 0));
 }
 
-//------------------------------------------------------------------------------
 sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::UPDATE) != 0));
 }
 
-//------------------------------------------------------------------------------
 sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
     return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::DELETE) != 0));
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 {
     Reference< XOfficeDatabaseDocument> xDatabaseDocument(_xParent, UNO_QUERY);
@@ -1268,7 +1235,6 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     return xDataSource;
 }
 
-//------------------------------------------------------------------------------
 Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
     SAL_THROW( ( SQLException ) )
 {
@@ -1317,7 +1283,6 @@ Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Refere
     return xComposer;
 }
 
-//------------------------------------------------------------------------------
 Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
                 const Reference< XPropertySet>& _rxRowSetProps,
                 const Reference< XComponentContext>& _rxContext)
@@ -1338,7 +1303,7 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
 
     return xReturn;
 }
-//--------------------------------------------------------------------------
+
 OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                         const OUString& _rCatalog,
                         const OUString& _rSchema,
@@ -1349,7 +1314,6 @@ OUString composeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
     return impl_doComposeTableName( _rxMetaData, _rCatalog, _rSchema, _rName, _bQuote, _eComposeRule );
 }
 
-// -----------------------------------------------------------------------------
 OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection,
     const OUString& _rCatalog, const OUString& _rSchema, const OUString& _rName )
 {
@@ -1366,7 +1330,6 @@ OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnectio
     );
 }
 
-// -----------------------------------------------------------------------------
 namespace
 {
     static void lcl_getTableNameComponents( const Reference<XPropertySet>& _xTable,
@@ -1392,7 +1355,6 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
 OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference<XPropertySet>& _xTable )
 {
     OUString sCatalog, sSchema, sName;
@@ -1401,7 +1363,6 @@ OUString composeTableNameForSelect( const Reference< XConnection >& _rxConnectio
     return composeTableNameForSelect( _rxConnection, sCatalog, sSchema, sName );
 }
 
-// -----------------------------------------------------------------------------
 OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
                                  const Reference<XPropertySet>& _xTable,
                                  EComposeRule _eComposeRule,
@@ -1421,7 +1382,7 @@ OUString composeTableName(const Reference<XDatabaseMetaData>& _xMetaData,
             _eComposeRule
         );
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 _nDataType)
 {
     sal_Int32 nSearchFlag = 0;
@@ -1441,7 +1402,6 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     return nSearchFlag;
 }
 
-// -----------------------------------------------------------------------------
 OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& _rBaseName, sal_Bool _bStartWithNumber )
 {
     ::std::set< OUString > aUsedNames;
@@ -1464,7 +1424,6 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
     return sName;
 }
 
-// -----------------------------------------------------------------------------
 OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const OUString& _rBaseName,sal_Bool _bStartWithNumber)
 {
     Sequence< OUString > aElementNames;
@@ -1476,7 +1435,6 @@ OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const OUStr
     return createUniqueName( aElementNames, _rBaseName, _bStartWithNumber );
 }
 
-// -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,
                const Reference< XWindow>& _xParent,
                const Reference< XComponentContext >& _rxContext)
@@ -1495,7 +1453,6 @@ void showError(const SQLExceptionInfo& _rInfo,
     }
 }
 
-// -------------------------------------------------------------------------
 sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
     const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
 {
@@ -1588,7 +1545,7 @@ sal_Bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
 
     return bSuccessfullyReRouted;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
 {
@@ -1697,7 +1654,6 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
     return bSuccessfullyReRouted;
 }
 
-//..................................................................
 namespace
 {
     class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess >
@@ -1749,7 +1705,6 @@ namespace
     };
 }
 
-// -----------------------------------------------------------------------------
 void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference<XParameters>& _xParameters,
                       const Reference< XConnection>& _xConnection,
@@ -1844,7 +1799,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
@@ -1855,7 +1810,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
     aVal.fill(x);
     setObjectWithInfo(_xParams,parameterIndex,aVal,sqlType,scale);
 }
-// -----------------------------------------------------------------------------
+
 void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const ::connectivity::ORowSetValue& _rValue,
@@ -1984,7 +1939,6 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
     }
 }
 
-// --------------------------------------------------------------------
 void getBoleanComparisonPredicate( const OUString& _rExpression, const sal_Bool _bValue, const sal_Int32 _nBooleanComparisonMode,
     OUStringBuffer& _out_rSQLPredicate )
 {
@@ -2028,15 +1982,10 @@ void getBoleanComparisonPredicate( const OUString& _rExpression, const sal_Bool 
     }
 }
 
-//.........................................................................
 }   // namespace dbtools
-//.........................................................................
 
-//.........................................................................
 namespace connectivity
 {
-//.........................................................................
-
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              Reference< XInterface >& _xInterface,
@@ -2083,7 +2032,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         throw DisposedException();
 
 }
-// -------------------------------------------------------------------------
+
     OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const OUString& _rVal,
@@ -2092,7 +2041,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         OUString sName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
         return find(__first,__last,sName,_rVal,_rCase);
     }
-    // -------------------------------------------------------------------------
+
     OSQLColumns::Vector::const_iterator findRealName(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const OUString& _rVal,
@@ -2101,7 +2050,7 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
         OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
         return find(__first,__last,sRealName,_rVal,_rCase);
     }
-    // -------------------------------------------------------------------------
+
     OSQLColumns::Vector::const_iterator find(   OSQLColumns::Vector::const_iterator __first,
                                         OSQLColumns::Vector::const_iterator __last,
                                         const OUString& _rProp,
@@ -2112,9 +2061,6 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
             ++__first;
         return __first;
     }
-
-// -----------------------------------------------------------------------------
 } //namespace connectivity
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

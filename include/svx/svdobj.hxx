@@ -43,9 +43,7 @@
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
+// forward declarations
 
 class SfxBroadcaster;
 class Pointer;
@@ -96,9 +94,7 @@ namespace svx
     class PropertyChangeNotifier;
 }
 
-//************************************************************
-//   Defines
-//************************************************************
+// Defines
 
 enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
                  OBJ_GRUP       = 1,  // Objektgruppe
@@ -153,10 +149,7 @@ enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // Nur verschoben, Groesse u
                       SDRUSERCALL_CHILD_INSERTED,   // Ein Child einer Gruppe hat sich veraendert
                       SDRUSERCALL_CHILD_REMOVED};   // Ein Child einer Gruppe hat sich veraendert
 
-//************************************************************
 //   Hilfsklasse SdrObjUserCall
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjUserCall
 {
 public:
@@ -165,10 +158,7 @@ public:
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjMacroHitRec
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjMacroHitRec
 {
 public:
@@ -183,7 +173,6 @@ public:
     SdrObjMacroHitRec();
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjUserData
 //
 // Anwenderdaten an einem Zeichenobjekt, z.B. applikationsspezifische Daten.
@@ -191,8 +180,6 @@ public:
 // Wer hier Daten halten will, muss sich ableiten und auch an der Factory
 // einen entsprechenden Link setzen.
 //
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
@@ -224,10 +211,7 @@ public:
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjUserDataList
-//************************************************************
-
 class SdrObjUserDataList
 {
     typedef boost::ptr_vector<SdrObjUserData> ListType;
@@ -244,13 +228,9 @@ public:
     void DeleteUserData(size_t nNum);
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjGeoData
 //
 // Alle geometrischen Daten eines beliebigen Objektes zur ??bergabe an's Undo/Redo
-//
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjGeoData
 {
 public:
@@ -269,13 +249,9 @@ public:
     virtual ~SdrObjGeoData();
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjPlusData
 //
 // Bitsack fuer DrawObjekte
-//
-//************************************************************
-
 class SdrObjPlusData
 {
     friend class                SdrObject;
@@ -299,13 +275,9 @@ public:
     void SetGluePoints(const SdrGluePointList& rPts);
 };
 
-//************************************************************
 //   Hilfsklasse SdrObjTransformInfoRec
 //
 // gibt Auskunft ueber verschiedene Eigenschaften eines ZObjects
-//
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjTransformInfoRec
 {
 public:
@@ -1087,9 +1059,6 @@ private:
     bool mbDoNotInsertIntoPageAutomatically;
 };
 
-//************************************************************
-//   SdrDummyObj
-//
 // Wer sich eigene Objekte schafft muss einen Link in der Klasse
 // SdrObjFactory setzen. Der Handler hat folgendes aussehen:
 //    void Hdl(SdrObjFactory*)
@@ -1097,9 +1066,6 @@ private:
 // nIdentifier ansehen und entsprechend mit new eine Zeichenobjektinstanz
 // erzeugen. Einen Zeiger auf diese Instanz hat er in der Membervariablen
 // pNewObj zu hinterlassen.
-//
-//************************************************************
-
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include "com/sun/star/view/XRenderable.hpp"
 
@@ -56,7 +55,6 @@ using namespace com::sun::star::uno;
 
 TYPEINIT1(SfxPrintingHint, SfxViewEventHint);
 
-// -----------------------------------------------------------------------
 class SfxPrinterController : public vcl::PrinterController, public SfxListener
 {
     Any                                     maCompleteSelection;
@@ -403,18 +401,13 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
     }
 }
 
-//====================================================================
-
-class SfxDialogExecutor_Impl
-
-/*  [Description]
-
+/**
     An instance of this class is created for the life span of the
     printer dialogue, to create in its click handler for the additions by the
     virtual method of the derived SfxViewShell generated print options dialogue
     and to cache the options set there as SfxItemSet.
 */
-
+class SfxDialogExecutor_Impl
 {
 private:
     SfxViewShell*           _pViewSh;
@@ -433,8 +426,6 @@ public:
     void                DisableHelp() { _bHelpDisabled = sal_True; }
 };
 
-//--------------------------------------------------------------------
-
 SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent ) :
 
     _pViewSh        ( pViewSh ),
@@ -444,8 +435,6 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
 {
 }
-
-//--------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 {
@@ -473,15 +462,11 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
     return 0;
 }
 
-//-------------------------------------------------------------------------
-
-SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
-
-
-/* Internal method for setting the differences between 'pNewPrinter' to the
+/**
+   Internal method for setting the differences between 'pNewPrinter' to the
    current printer. pNewPrinter is either taken over or deleted.
 */
-
+SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 {
     // get current Printer
     SfxPrinter *pDocPrinter = GetPrinter();
@@ -769,6 +754,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             rReq.Done();
             break;
         }
+
         case SID_SETUPPRINTER : // display the printer settings dialogue : File > Printer Settings...
         case SID_PRINTER_NAME : // only for recorded macros
         {
@@ -892,21 +878,15 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     }
 }
 
-//--------------------------------------------------------------------
-
 SfxPrinter* SfxViewShell::GetPrinter( sal_Bool /*bCreate*/ )
 {
     return 0;
 }
 
-//--------------------------------------------------------------------
-
 sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, sal_uInt16 /*nDiffFlags*/, bool )
 {
     return 0;
 }
-
-//--------------------------------------------------------------------
 
 SfxTabPage* SfxViewShell::CreatePrintOptionsPage
 (

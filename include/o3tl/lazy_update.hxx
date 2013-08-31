@@ -56,8 +56,6 @@ output( myValue.getOutValue() );
     /// LazyUpdate specialization can directly convert, OutputType ctor must take InputType argument
     struct LAZYUPDATE_DIRECT_TAG  {};
 
-    // -----------------------------------------------------------------------------------------------------
-
     namespace detail
     {
         /// @internal
@@ -169,10 +167,7 @@ output( myValue.getOutValue() );
         };
     }
 
-    // -----------------------------------------------------------------------------------------------------
-
     // partial specializations for the three LAZYUPDATE_* tags
-
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
                                                                          LAZYUPDATE_DIRECT_TAG> :
@@ -193,8 +188,6 @@ output( myValue.getOutValue() );
                                             detail::DefaultFunctor<InputType, OutputType> >::UNARY_CONSTRUCTOR_TAG )
         {}
     };
-
-    // -----------------------------------------------------------------------------------------------------
 
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
@@ -225,8 +218,6 @@ output( myValue.getOutValue() );
                                        OutputType (*)( InputType const& )> >(pFunc,rIn)
         {}
     };
-
-    // -----------------------------------------------------------------------------------------------------
 
     template< typename InputType, typename OutputType > class LazyUpdate<InputType,
                                                                          OutputType,
@@ -260,6 +251,6 @@ output( myValue.getOutValue() );
 
 }
 
-#endif /* INCLUDED_O3TL_LAZY_UPDATE_HXX */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

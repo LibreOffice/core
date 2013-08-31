@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - table object
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #ifndef _LWPNUMBERICFMT_HXX
 #define _LWPNUMBERICFMT_HXX
 
@@ -85,11 +82,13 @@ public:
     sal_Bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
     sal_Bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
     LwpColor GetColor();
+
 protected:
     LwpColor cColor;
     LwpAtomHolder cPrefix;
     LwpAtomHolder cSuffix;
     sal_uInt16 cSubFlags;
+
     enum // for cSubFlags
     {
         SF_OVER_PREFIX      = 0x0001,
@@ -188,6 +187,7 @@ public:
     String GetCurrencySymbol(sal_uInt16 nFormat);
     sal_Bool IsShowSpace(sal_uInt16 nFormat);
     sal_Bool IsSymbolPost(sal_uInt16 nFormat);
+
 private:
     std::map<sal_uInt16,LwpCurrencyInfo> m_aCurrencyInfo;
     void InitCurrencySymbol()
@@ -254,6 +254,7 @@ public:
     sal_Bool IsNegativeOverridden(void);
     sal_Bool IsZeroOverridden(void);
     XFStyle* Convert();
+
 private:
     LwpObjectStream * m_pObjStrm;
 
@@ -286,11 +287,13 @@ LwpNumericFormat::IsDecimalPlacesOverridden(void)
 {
     return (cFlags & NF_OVER_DECIMAL_PLACES) != 0;
 }
+
 inline sal_Bool
 LwpNumericFormat::IsNegativeOverridden(void)
 {
     return (cFlags & NF_OVER_NEGATIVE) != 0;
 }
+
 inline sal_Bool
 LwpNumericFormat::IsZeroOverridden(void)
 {
@@ -306,6 +309,7 @@ public:
     ~LwpLayoutNumerics(){}
     XFStyle* Convert();
     virtual void Read();
+
 protected:
     LwpNumericFormat cNumerics;
 };

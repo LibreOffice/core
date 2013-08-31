@@ -23,7 +23,6 @@
 
 #include <memory>
 
-
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "uno/sequence2.h"
@@ -34,7 +33,6 @@
 
 #using <cli_uretypes.dll>
 
-
 #undef VOID
 
 namespace sri = System::Runtime::InteropServices;
@@ -43,8 +41,6 @@ namespace st = System::Text;
 namespace ucss = unoidl::com::sun::star;
 
 using namespace std;
-
-
 
 namespace cli_uno
 {
@@ -62,7 +58,6 @@ inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
     p->nElements = nElements;
     return seq;
 }
-
 
 System::Object^ Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceTypeDescription *pTD) const
 {
@@ -186,7 +181,6 @@ System::Type^ loadCliType(System::String ^ unoName)
     }
     return retVal;
 }
-
 
 System::Type^ mapUnoType(typelib_TypeDescription const * pTD)
 {
@@ -530,9 +524,6 @@ System::String^ mapUnoTypeName(rtl_uString const * typeName)
     return buf->ToString();
 }
 
-
-
-
 /** For example, there is a uno type
     com.sun.star.Foo<char, long>.
     The values in the type list
@@ -544,6 +535,7 @@ inline System::String^ mapUnoPolymorphicName(System::String^ unoName)
 {
        return mapPolymorphicName(unoName, false);
 }
+
 /** For example, there is a type name such as
     com.sun.star.Foo<System.Char, System.Int32>.
     The values in the type list
@@ -714,6 +706,7 @@ OUString mapCliTypeName(System::String^ typeName)
     }
     return mapCliString(buf->ToString());
 }
+
 /** Maps uno types to dot net types.
  *  If uno_data is null then the type description is converted to System::Type
  */
@@ -1489,7 +1482,6 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
         OSL_ASSERT(0);
         throw;
     }
-
 }
 
 /**

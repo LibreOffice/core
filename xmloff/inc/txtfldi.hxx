@@ -34,22 +34,15 @@
 #include <xmloff/txtimp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
-
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace text { class XTextField; }
     namespace beans { class XPropertySet; struct PropertyValue; }
 } } }
 
-
-
 class SvXMLImport;
 class XMLTextImportHelper;
 class SvXMLTokenMap;
-
-
-
 
 enum XMLTextFieldAttrTokens
 {
@@ -114,10 +107,6 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_UNKNOWN
 };
 
-
-
-
-
 /// abstract class for text field import
 class XMLTextFieldImportContext : public SvXMLImportContext
 {
@@ -136,7 +125,6 @@ protected:
     sal_Bool bValid;                 /// whether this field is valid ?
 
 public:
-
     TYPEINFO();
 
     XMLTextFieldImportContext(
@@ -168,9 +156,7 @@ public:
         const OUString& rName,
         sal_uInt16 nToken);
 
-
 protected:
-
     /// get helper
     inline XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
 
@@ -200,8 +186,6 @@ protected:
             ::com::sun::star::beans::XPropertySet> & rPropertySet);
 };
 
-
-
 class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 {
 
@@ -213,13 +197,11 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
     const OUString sPropertyContent;
 
 protected:
-
     // variables for access in subclass
     sal_Bool bFixed;
     sal_uInt16 nElementToken;   /// token for this elment field
 
 public:
-
     TYPEINFO();
 
     XMLSenderFieldImportContext(
@@ -230,7 +212,6 @@ public:
         sal_uInt16 nToken);                     /// element token
 
 protected:
-
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
@@ -246,11 +227,9 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
 /** inherit sender field because of fixed attribute in ProcessAttributes */
 class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
 {
-
     sal_Bool bAuthorFullName;
     const OUString sServiceAuthor;
     const OUString sPropertyAuthorFullName;
@@ -258,7 +237,6 @@ class XMLAuthorFieldImportContext : public XMLSenderFieldImportContext
     const OUString sPropertyContent;
 
 public:
-
     TYPEINFO();
 
     XMLAuthorFieldImportContext(
@@ -269,7 +247,6 @@ public:
         sal_uInt16 nToken);                     /// element token
 
 protected:
-
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
@@ -281,11 +258,8 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
-
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
 {
-
     const OUString sEmpty;       /// empty string
     const OUString sServiceJumpEdit;
     const OUString sPropertyPlaceholderType;
@@ -297,7 +271,6 @@ class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
     sal_Int16 nPlaceholderType;
 
 public:
-
     TYPEINFO();
 
     XMLPlaceholderFieldImportContext(
@@ -307,7 +280,6 @@ public:
         const OUString& sLocalName);     /// element name w/o prefix
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -320,7 +292,6 @@ protected:
 
 class XMLTimeFieldImportContext : public XMLTextFieldImportContext
 {
-
 protected:
     const OUString sPropertyNumberFormat;
     const OUString sPropertyFixed;
@@ -342,7 +313,6 @@ protected:
     sal_Bool bIsDefaultLanguage;
 
 public:
-
     TYPEINFO();
 
     XMLTimeFieldImportContext(
@@ -361,14 +331,11 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
 /** import date fields (<text:date>);
     inherit from TimeField to reuse implementation */
 class XMLDateFieldImportContext : public XMLTimeFieldImportContext
 {
-
 public:
-
     TYPEINFO();
 
     XMLDateFieldImportContext(
@@ -381,7 +348,6 @@ public:
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
 };
-
 
 /** import page continuation fields (<text:page-continuation-string>) */
 class XMLPageContinuationImportContext : public XMLTextFieldImportContext
@@ -396,7 +362,6 @@ class XMLPageContinuationImportContext : public XMLTextFieldImportContext
     sal_Bool sStringOK;                 /// continuation string encountered?
 
 public:
-
     TYPEINFO();
 
     XMLPageContinuationImportContext(
@@ -404,7 +369,6 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
-
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
@@ -415,7 +379,6 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 /** import page number fields (<text:page-number>) */
 class XMLPageNumberImportContext : public XMLTextFieldImportContext
@@ -432,7 +395,6 @@ class XMLPageNumberImportContext : public XMLTextFieldImportContext
     sal_Bool sNumberFormatOK;
 
 public:
-
     TYPEINFO();
 
     XMLPageNumberImportContext(
@@ -451,7 +413,6 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 /** superclass for database fields: handle database and table names */
 class XMLDatabaseFieldImportContext : public XMLTextFieldImportContext
@@ -488,7 +449,6 @@ protected:
                                   bool bUseDisplay );
 
 public:
-
 TYPEINFO();
 
     /// process attribute values
@@ -512,7 +472,6 @@ TYPEINFO();
 class XMLDatabaseNameImportContext : public XMLDatabaseFieldImportContext
 {
 public:
-
     TYPEINFO();
 
     XMLDatabaseNameImportContext(SvXMLImport& rImport,
@@ -525,7 +484,6 @@ public:
                                    const OUString& sAttrValue );
 };
 
-
 /** import database next fields (<text:database-next>) */
 class XMLDatabaseNextImportContext : public XMLDatabaseFieldImportContext
 {
@@ -535,7 +493,6 @@ class XMLDatabaseNextImportContext : public XMLDatabaseFieldImportContext
     sal_Bool bConditionOK;
 
 protected:
-
     // for use in child classes
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
                                  XMLTextImportHelper& rHlp,
@@ -544,7 +501,6 @@ protected:
                                  const OUString& sLocalName);
 
 public:
-
     TYPEINFO();
 
     XMLDatabaseNextImportContext(SvXMLImport& rImport,
@@ -562,8 +518,6 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
-
 /** import database select fields (<text:database-select>) */
 class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
 {
@@ -572,7 +526,6 @@ class XMLDatabaseSelectImportContext : public XMLDatabaseNextImportContext
     sal_Bool bNumberOK;
 
 public:
-
     TYPEINFO();
 
     XMLDatabaseSelectImportContext(SvXMLImport& rImport,
@@ -590,7 +543,6 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
 /** import database display number fields (<text:database-row-number>) */
 class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
 {
@@ -602,7 +554,6 @@ class XMLDatabaseNumberImportContext : public XMLDatabaseFieldImportContext
     sal_Bool bValueOK;
 
 public:
-
     TYPEINFO();
 
     XMLDatabaseNumberImportContext(SvXMLImport& rImport,
@@ -620,7 +571,6 @@ public:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
 /** import docinfo fields with only fixed atribute */
 class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 {
@@ -635,7 +585,6 @@ protected:
     sal_Bool bHasContent;
 
 public:
-
     TYPEINFO();
 
     XMLSimpleDocInfoImportContext(SvXMLImport& rImport,
@@ -647,7 +596,6 @@ public:
                                   sal_Bool bAuthor);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -659,8 +607,6 @@ protected:
 
     static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
 };
-
-
 
 /** import docinfo fields with date or time attributes and numberformats */
 class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
@@ -676,7 +622,6 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
     sal_Bool bIsDefaultLanguage;
 
 public:
-
     TYPEINFO();
 
     XMLDateTimeDocInfoImportContext(SvXMLImport& rImport,
@@ -686,7 +631,6 @@ public:
                                     sal_uInt16 nToken);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -697,15 +641,12 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
-
 /** import revision field (<text:editing-cycles>) */
 class XMLRevisionDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
     const OUString sPropertyRevision;
 
 public:
-
     TYPEINFO();
 
     XMLRevisionDocInfoImportContext(SvXMLImport& rImport,
@@ -715,14 +656,11 @@ public:
                                     sal_uInt16 nToken);
 
 protected:
-
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import user docinfo field (<text:user-defined>) */
 class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
@@ -736,7 +674,6 @@ class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
     sal_Bool    bIsDefaultLanguage;
 
 public:
-
     TYPEINFO();
 
     XMLUserDocInfoImportContext(SvXMLImport& rImport,
@@ -746,7 +683,6 @@ public:
                                 sal_uInt16 nToken);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -754,8 +690,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import hidden paragraph fields (<text:hidden-paragraph>) */
 class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
@@ -767,7 +701,6 @@ class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
     sal_Bool bIsHidden;
 
 public:
-
     TYPEINFO();
 
     XMLHiddenParagraphImportContext(SvXMLImport& rImport,
@@ -776,7 +709,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -786,8 +718,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import conditional text fields (<text:conditional-text>) */
 class XMLConditionalTextImportContext : public XMLTextFieldImportContext
@@ -808,7 +738,6 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
     sal_Bool bCurrentValue;
 
 public:
-
     TYPEINFO();
 
     XMLConditionalTextImportContext(SvXMLImport& rImport,
@@ -817,7 +746,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -827,8 +755,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import conditional text fields (<text:hidden-text>) */
 class XMLHiddenTextImportContext : public XMLTextFieldImportContext
@@ -845,7 +771,6 @@ class XMLHiddenTextImportContext : public XMLTextFieldImportContext
     sal_Bool bIsHidden;
 
 public:
-
     TYPEINFO();
 
     XMLHiddenTextImportContext(SvXMLImport& rImport,
@@ -854,7 +779,6 @@ public:
                                const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -864,8 +788,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import file name fields (<text:file-name>) */
 class XMLFileNameImportContext : public XMLTextFieldImportContext
@@ -878,7 +800,6 @@ class XMLFileNameImportContext : public XMLTextFieldImportContext
     sal_Bool bFixed;
 
 public:
-
     TYPEINFO();
 
     XMLFileNameImportContext(SvXMLImport& rImport,
@@ -887,7 +808,6 @@ public:
                              const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -897,8 +817,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import document template name fields (<text:template-name>) */
 class XMLTemplateNameImportContext : public XMLTextFieldImportContext
@@ -908,7 +826,6 @@ class XMLTemplateNameImportContext : public XMLTextFieldImportContext
     sal_Int16 nFormat;
 
 public:
-
     TYPEINFO();
 
     XMLTemplateNameImportContext(SvXMLImport& rImport,
@@ -917,7 +834,6 @@ public:
                                  const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -927,7 +843,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 /** import chapter fields (<text:chapter>) */
 class XMLChapterImportContext : public XMLTextFieldImportContext
@@ -939,7 +854,6 @@ class XMLChapterImportContext : public XMLTextFieldImportContext
     sal_Int8 nLevel;
 
 public:
-
     TYPEINFO();
 
     XMLChapterImportContext(SvXMLImport& rImport,
@@ -948,7 +862,6 @@ public:
                             const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -958,8 +871,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import count fields (<text:[XXX]-count>) */
 class XMLCountFieldImportContext : public XMLTextFieldImportContext
@@ -972,7 +883,6 @@ class XMLCountFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bNumberFormatOK;
 
 public:
-
     TYPEINFO();
 
     XMLCountFieldImportContext(SvXMLImport& rImport,
@@ -982,7 +892,6 @@ public:
                                sal_uInt16 nToken);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -995,7 +904,6 @@ protected:
     static const sal_Char* MapTokenToServiceName(sal_uInt16 nToken);
 };
 
-
 /** import page variable fields (<text:get-page-variable>) */
 class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
 {
@@ -1007,7 +915,6 @@ class XMLPageVarGetFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bNumberFormatOK;
 
 public:
-
     TYPEINFO();
 
     XMLPageVarGetFieldImportContext(SvXMLImport& rImport,
@@ -1016,7 +923,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1026,7 +932,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 /** import page variable fields (<text:get-page-variable>) */
 class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
@@ -1038,7 +943,6 @@ class XMLPageVarSetFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bActive;
 
 public:
-
     TYPEINFO();
 
     XMLPageVarSetFieldImportContext(SvXMLImport& rImport,
@@ -1047,7 +951,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1058,11 +961,9 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
 /** import macro fields (<text:execute-macro>) */
 class XMLMacroFieldImportContext : public XMLTextFieldImportContext
 {
-
     const OUString sPropertyHint;
     const OUString sPropertyMacroName;
     const OUString sPropertyScriptURL;
@@ -1076,7 +977,6 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bDescriptionOK;
 
 public:
-
     TYPEINFO();
 
     XMLMacroFieldImportContext(SvXMLImport& rImport,
@@ -1085,7 +985,6 @@ public:
                                const OUString& sLocalName);
 
 protected:
-
     /// for <office:events> children
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
@@ -1102,8 +1001,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
-
 
 /** import reference fields (<text:reference-get>) */
 class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
@@ -1122,7 +1019,6 @@ class XMLReferenceFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bTypeOK;
 
 public:
-
     TYPEINFO();
 
     XMLReferenceFieldImportContext(SvXMLImport& rImport,
@@ -1132,7 +1028,6 @@ public:
                                    const OUString& sLocalName);
 
 protected:
-
     /// start element
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
@@ -1148,16 +1043,12 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
-
-
 /** import dde field declaration container (<text:dde-connection-decls>) */
 class XMLDdeFieldDeclsImportContext : public SvXMLImportContext
 {
-
     SvXMLTokenMap aTokenMap;
 
 public:
-
     TYPEINFO();
 
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport,
@@ -1169,11 +1060,7 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
-
-
 };
-
-
 
 /** import dde field declaration (<text:dde-connection-decl>) */
 class XMLDdeFieldDeclImportContext : public SvXMLImportContext
@@ -1187,7 +1074,6 @@ class XMLDdeFieldDeclImportContext : public SvXMLImportContext
     const SvXMLTokenMap& rTokenMap;
 
 public:
-
     TYPEINFO();
 
     XMLDdeFieldDeclImportContext(SvXMLImport& rImport,
@@ -1201,15 +1087,13 @@ public:
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 };
 
-
-
 /** import dde fields (<text:dde-connection>) */
 class XMLDdeFieldImportContext : public XMLTextFieldImportContext
 {
     OUString sName;
     OUString sPropertyContent;
-public:
 
+public:
     TYPEINFO();
 
     XMLDdeFieldImportContext(SvXMLImport& rImport,
@@ -1218,7 +1102,6 @@ public:
                              const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1230,16 +1113,13 @@ protected:
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
-
 };
-
 
 /** import sheet name fields (Calc) dde fields (<text:sheet-name>) */
 class XMLSheetNameImportContext : public XMLTextFieldImportContext
 {
 
 public:
-
     TYPEINFO();
 
     XMLSheetNameImportContext(SvXMLImport& rImport,
@@ -1248,7 +1128,6 @@ public:
                               const OUString& sLocalName);
 
 protected:
-
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1262,7 +1141,6 @@ protected:
 /** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
 class XMLUrlFieldImportContext : public XMLTextFieldImportContext
 {
-
     const OUString sPropertyURL;
     const OUString sPropertyTargetFrame;
     const OUString sPropertyRepresentation;
@@ -1272,7 +1150,6 @@ class XMLUrlFieldImportContext : public XMLTextFieldImportContext
     sal_Bool bFrameOK;
 
 public:
-
     TYPEINFO();
 
     XMLUrlFieldImportContext(SvXMLImport& rImport,
@@ -1281,7 +1158,6 @@ public:
                              const OUString& sLocalName);
 
 protected:
-
     /// no attributes -> empty method
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1295,13 +1171,11 @@ protected:
 /** import bibliography info fields (<text:bibliography-mark>) */
 class XMLBibliographyFieldImportContext : public XMLTextFieldImportContext
 {
-
     const OUString sPropertyFields;
 
     ::std::vector< ::com::sun::star::beans::PropertyValue> aValues;
 
 public:
-
     TYPEINFO();
 
     XMLBibliographyFieldImportContext(SvXMLImport& rImport,
@@ -1310,7 +1184,6 @@ public:
                                       const OUString& sLocalName);
 
 protected:
-
     /// process attributes (fill aValues)
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
@@ -1326,9 +1199,7 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
     static const sal_Char* MapBibliographyFieldName(OUString sName);
-
 };
-
 
 /** Import an annotation field (<text:annotation>) */
 class XMLAnnotationImportContext : public XMLTextFieldImportContext
@@ -1354,7 +1225,6 @@ class XMLAnnotationImportContext : public XMLTextFieldImportContext
     sal_uInt16 m_nToken;
 
 public:
-
     TYPEINFO();
 
     XMLAnnotationImportContext(SvXMLImport& rImport,
@@ -1364,7 +1234,6 @@ public:
                                const OUString& sLocalName);
 
 protected:
-
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1382,7 +1251,6 @@ protected:
     virtual void EndElement();
 };
 
-
 /** Import a script field (<text:script>) */
 class XMLScriptImportContext : public XMLTextFieldImportContext
 {
@@ -1397,7 +1265,6 @@ class XMLScriptImportContext : public XMLTextFieldImportContext
     sal_Bool bScriptTypeOK;
 
 public:
-
     TYPEINFO();
 
     XMLScriptImportContext(SvXMLImport& rImport,
@@ -1406,7 +1273,6 @@ public:
                            const OUString& sLocalName);
 
 protected:
-
     /// process attributes
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1421,8 +1287,8 @@ protected:
 class XMLMeasureFieldImportContext : public XMLTextFieldImportContext
 {
     sal_Int16 mnKind;
-public:
 
+public:
     TYPEINFO();
 
     XMLMeasureFieldImportContext(SvXMLImport& rImport,
@@ -1431,7 +1297,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1441,7 +1306,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 /** dropdown field (filter legacy) */
 class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
@@ -1475,7 +1339,6 @@ public:
         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1560,7 +1423,6 @@ class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
     const OUString sPropertyValue;
 
 public:
-
     TYPEINFO();
 
     XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,
@@ -1569,7 +1431,6 @@ public:
                                     const OUString& sLocalName);
 
 protected:
-
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -1579,7 +1440,6 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
-
 
 #endif
 

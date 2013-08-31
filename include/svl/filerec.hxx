@@ -20,14 +20,10 @@
 #ifndef _SFXFILEREC_HXX
 #define _SFXFILEREC_HXX
 
-//=========================================================================
-
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vector>
-
-//------------------------------------------------------------------------
 
 #define SFX_REC_PRETAG_EXT              sal_uInt8(0x00) // Pre-Tag f"ur Extended-Records
 #define SFX_REC_PRETAG_EOR              sal_uInt8(0xFF) // Pre-Tag f"ur End-Of-Records
@@ -45,13 +41,9 @@
 #define SFX_REC_TYPE_DRAWENG                0x400   // Drawing-Engine-Record
 #define SFX_REC_TYPE_EOR                    0xF00   // End-Of-Records
 
-//------------------------------------------------------------------------
-
 #define SFX_REC_HEADERSIZE_MINI     4   // Gr"o\se des Mini-Record-Headers
 #define SFX_REC_HEADERSIZE_SINGLE   4   // zzgl. HEADERSIZE_MINI => 8
 #define SFX_REC_HEADERSIZE_MULTI    6   // zzgl. HEADERSIZE_SINGLE => 14
-
-//------------------------------------------------------------------------
 
 #ifndef DBG
 #ifdef DBG_UTIL
@@ -60,8 +52,6 @@
 #define DBG(x)
 #endif
 #endif
-
-//------------------------------------------------------------------------
 
 /*  [Fileformat]
 
@@ -172,10 +162,6 @@
     High-Nibble des Typs bei Vergleichen nicht ber"ucksichtigt wird.
 */
 
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMiniRecordWriter
-
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record in einen Stream
@@ -206,7 +192,7 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
         *aRecord << aMember2;
     }
 */
-
+class SVL_DLLPUBLIC SfxMiniRecordWriter
 {
 protected:
     SvStream*       _pStream;   //  <SvStream>, in dem der Record liegt
@@ -234,10 +220,6 @@ private:
     SfxMiniRecordWriter& operator=(const SfxMiniRecordWriter&);
 };
 
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMiniRecordReader
-
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record aus einem Stream
@@ -261,7 +243,7 @@ class SVL_DLLPUBLIC SfxMiniRecordReader
         }
     }
 */
-
+class SVL_DLLPUBLIC SfxMiniRecordReader
 {
 protected:
     SvStream*           _pStream;   //  <SvStream>, aus dem gelesen wird
@@ -303,10 +285,6 @@ private:
     SfxMiniRecordReader& operator=(const SfxMiniRecordReader&);
 };
 
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
-
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
@@ -332,7 +310,7 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
     1*              sal_uInt16      Content-Tag
     SizeOfContent*  sal_uInt8       Content
 */
-
+class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 {
 protected:
                     SfxSingleRecordWriter( sal_uInt8 nRecordType,
@@ -345,10 +323,6 @@ public:
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
-
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record aus einem Stream
@@ -358,7 +332,7 @@ class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
     Es ist auch m"oglich, den Record zu "uberspringen, ohne sein internes
     Format zu kennen.
 */
-
+class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 {
 protected:
     sal_uInt16              _nRecordTag;    // Art des Gesamt-Inhalts
@@ -382,10 +356,6 @@ public:
     inline sal_uInt8        GetVersion() const;
     inline bool         HasVersion( sal_uInt16 nVersion ) const;
 };
-
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
 /*  [Beschreibung]
 
@@ -431,7 +401,7 @@ class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
         }
     }
 */
-
+class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 {
 protected:
     sal_uInt32          _nContentStartPos;  /*  Startposition des jeweiligen
@@ -454,10 +424,6 @@ public:
 
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
-
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
 /*  [Beschreibung]
 
@@ -502,7 +468,7 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
         }
     }
 */
-
+class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 {
 protected:
     std::vector<sal_uInt32> _aContentOfs;
@@ -525,10 +491,6 @@ public:
 
     virtual sal_uInt32      Close( bool bSeekToEndOfRec = true );
 };
-
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 
 /*  [Beschreibung]
 
@@ -561,7 +523,7 @@ class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
                         )
     NumberOfContents*   sal_uInt32      ( ContentOfs << 8 + Version )
 */
-
+class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 {
 public:
     inline              SfxMultiMixRecordWriter( SvStream *pStream,
@@ -574,10 +536,6 @@ public:
     void                NewContent()
                         { OSL_FAIL( "NewContent() only allowed with args" ); }
 };
-
-//------------------------------------------------------------------------
-
-class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 
 /*  [Beschreibung]
 
@@ -610,7 +568,7 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
         }
     }
 */
-
+class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 {
     sal_uInt32              _nStartPos;     //  Start-Position des Records
     sal_uInt32*             _pContentOfs;   //  Offsets der Startpositionen
@@ -637,21 +595,17 @@ public:
     inline sal_uInt32       ContentCount() const;
 };
 
-//=========================================================================
-
-inline SfxMiniRecordWriter::SfxMiniRecordWriter
-(
-    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    sal_uInt8            nTag            // Record-Tag zwischen 0x01 und 0xFE
-)
-
 /*  [Beschreibung]
 
     Legt in 'pStream' einen 'SfxMiniRecord' an, dessen Content-Gr"o\se
     nicht bekannt ist, sondern nach dam Streamen des Contents errechnet
     werden soll.
 */
-
+inline SfxMiniRecordWriter::SfxMiniRecordWriter
+(
+    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
+    sal_uInt8            nTag            // Record-Tag zwischen 0x01 und 0xFE
+)
 :   _pStream( pStream ),
     _nStartPos( pStream->Tell() ),
     _bHeaderOk(false),
@@ -663,21 +617,17 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MINI );
 }
 
-//-------------------------------------------------------------------------
+/*  [Beschreibung]
 
+    Legt in 'pStream' einen 'SfxMiniRecord' an, dessen Content-Gr"o\se
+    von vornherein bekannt ist.
+*/
 inline SfxMiniRecordWriter::SfxMiniRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
     sal_uInt8           nTag,           // Record-Tag zwischen 0x01 und 0xFE
     sal_uInt32          nSize           // Gr"o\se der Daten in Bytes
 )
-
-/*  [Beschreibung]
-
-    Legt in 'pStream' einen 'SfxMiniRecord' an, dessen Content-Gr"o\se
-    von vornherein bekannt ist.
-*/
-
 :   _pStream( pStream ),
     // _nTag( uninitialized ),
     // _nStarPos( uninitialized ),
@@ -690,39 +640,29 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
     *pStream << ( ( nTag << 24 ) | nSize );
 }
 
-//-------------------------------------------------------------------------
-
-inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
-
 /*  [Beschreibung]
 
     Der Dtor der Klasse <SfxMiniRecordWriter> schlie\st den Record
     automatisch, falls <SfxMiniRecordWriter::Close()> nicht bereits
     explizit gerufen wurde.
 */
-
+inline SfxMiniRecordWriter::~SfxMiniRecordWriter()
 {
     // wurde der Header noch nicht geschrieben oder mu\s er gepr"uft werden
     if ( !_bHeaderOk )
         Close();
 }
 
-//-------------------------------------------------------------------------
-
-inline SvStream& SfxMiniRecordWriter::operator*() const
-
 /*  [Beschreibung]
 
     Dieser Operator liefert den Stream, in dem der Record liegt.
     Der Record darf noch nicht geschlossen worden sein.
 */
-
+inline SvStream& SfxMiniRecordWriter::operator*() const
 {
     DBG_ASSERT( !_bHeaderOk, "getting Stream of closed record" );
     return *_pStream;
 }
-
-//-------------------------------------------------------------------------
 
 inline void SfxMiniRecordWriter::Reset()
 {
@@ -730,41 +670,29 @@ inline void SfxMiniRecordWriter::Reset()
     _bHeaderOk = false;
 }
 
-//=========================================================================
-
-inline SfxMiniRecordReader::~SfxMiniRecordReader()
-
 /*  [Beschreibung]
 
     Der Dtor der Klasse <SfxMiniRecordReader> positioniert den Stream
     automatisch auf die Position direkt hinter dem Record, falls nicht
     <SfxMiniRecordReader::Skip()> bereits explizit gerufen wurde.
 */
-
+inline SfxMiniRecordReader::~SfxMiniRecordReader()
 {
     // noch nicht explizit ans Ende gesprungen?
     if ( !_bSkipped )
         Skip();
 }
 
-//-------------------------------------------------------------------------
-
-inline void SfxMiniRecordReader::Skip()
-
 /*  [Beschreibung]
 
     Mit dieser Methode wird der Stream direkt hinter das Ende des Records
     positioniert.
 */
-
+inline void SfxMiniRecordReader::Skip()
 {
     _pStream->Seek(_nEofRec);
     _bSkipped = sal_True;
 }
-
-//-------------------------------------------------------------------------
-
-inline sal_uInt8 SfxMiniRecordReader::GetTag() const
 
 /*  [Beschreibung]
 
@@ -774,14 +702,10 @@ inline sal_uInt8 SfxMiniRecordReader::GetTag() const
     gesetzt. SFX_REC_PRETAG_EXT ist g"ultig, da diese extended-Records
     nur eine Erweiterung des SfxMiniRecord darstellen.
 */
-
+inline sal_uInt8 SfxMiniRecordReader::GetTag() const
 {
     return _nPreTag;
 }
-
-//-------------------------------------------------------------------------
-
-inline bool SfxMiniRecordReader::IsValid() const
 
 /*  [Beschreibung]
 
@@ -789,32 +713,24 @@ inline bool SfxMiniRecordReader::IsValid() const
     Stream konstruiert werden konnte, der Header also f"ur diesen Record-Typ
     passend war.
 */
-
+inline bool SfxMiniRecordReader::IsValid() const
 {
     return _nPreTag != SFX_REC_PRETAG_EOR;
 }
-
-//-------------------------------------------------------------------------
-
-inline SvStream& SfxMiniRecordReader::operator*() const
 
 /*  [Beschreibung]
 
     Dieser Operator liefert den Stream in dem der Record liegt.
     Die aktuelle Position des Streams mu\s innerhalb des Records liegen.
 */
-
+inline SvStream& SfxMiniRecordReader::operator*() const
 {
     DBG_ASSERT( _pStream->Tell() < _nEofRec, "read behind record" );
     return *_pStream;
 }
 
-//=========================================================================
-
-inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
-
 //  siehe <SfxMiniRecordWriter::Close(bool)>
-
+inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 {
     sal_uInt32 nRet = 0;
 
@@ -840,8 +756,6 @@ inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
     return nRet;
 }
 
-//-------------------------------------------------------------------------
-
 inline void SfxSingleRecordWriter::Reset()
 {
     _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
@@ -849,49 +763,33 @@ inline void SfxSingleRecordWriter::Reset()
     _bHeaderOk = false;
 }
 
-//=========================================================================
-
-inline sal_uInt16 SfxSingleRecordReader::GetTag() const
-
 /*  [Beschreibung]
 
     Liefert des aus dem Header gelesene Tag f"ur den Gesamt-Record.
 */
-
+inline sal_uInt16 SfxSingleRecordReader::GetTag() const
 {
     return _nRecordTag;
 }
-
-//-------------------------------------------------------------------------
-
-inline sal_uInt8 SfxSingleRecordReader::GetVersion() const
 
 /*  [Beschreibung]
 
     Liefert die Version des aus dem Stream gelesenen Records.
 */
-
+inline sal_uInt8 SfxSingleRecordReader::GetVersion() const
 {
     return _nRecordVer;
 }
-
-//-------------------------------------------------------------------------
-
-inline bool SfxSingleRecordReader::HasVersion( sal_uInt16 nVersion ) const
 
 /*  [Beschreibung]
 
     Stellt fest, ob der aus dem Stream gelese Record in der Version
     'nVersion' oder h"oher vorliegt.
 */
-
+inline bool SfxSingleRecordReader::HasVersion( sal_uInt16 nVersion ) const
 {
     return _nRecordVer >= nVersion;
 }
-
-//=========================================================================
-
-inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
 
 /*  [Beschreibung]
 
@@ -899,16 +797,12 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
     automatisch, falls <SfxMutiFixRecordWriter::Close()> nicht bereits
     explizit gerufen wurde.
 */
-
+inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
 {
     // wurde der Header noch nicht geschrieben oder mu\s er gepr"uft werden
     if ( !_bHeaderOk )
         Close();
 }
-
-//-------------------------------------------------------------------------
-
-inline void SfxMultiFixRecordWriter::NewContent()
 
 /*  [Beschreibung]
 
@@ -916,7 +810,7 @@ inline void SfxMultiFixRecordWriter::NewContent()
     Jeder, auch der 1. Record mu\s durch Aufruf dieser Methode eingeleitet
     werden.
 */
-
+inline void SfxMultiFixRecordWriter::NewContent()
 {
     #ifdef DBG_UTIL
     sal_uLong nOldStartPos;
@@ -939,28 +833,22 @@ inline void SfxMultiFixRecordWriter::NewContent()
     ++_nContentCount;
 }
 
-//=========================================================================
-
-inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter
-(
-    SvStream*       pStream,    // Stream, in dem der Record angelegt wird
-    sal_uInt16          nRecordTag, // Gesamt-Record-Art-Kennung
-    sal_uInt8           nRecordVer  // Gesamt-Record-Versions-Kennung
-)
-
 /*  [Beschreibung]
 
     Legt in 'pStream' einen 'SfxMultiMixRecord' an, f"ur dessen Contents
     je eine separate Kennung f"ur Art (Tag) und Version gespeichert wird.
     Die Gr"o\sen der einzelnen Contents werden automatisch ermittelt.
 */
-
+inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter
+(
+    SvStream*       pStream,    // Stream, in dem der Record angelegt wird
+    sal_uInt16          nRecordTag, // Gesamt-Record-Art-Kennung
+    sal_uInt8           nRecordVer  // Gesamt-Record-Versions-Kennung
+)
 :   SfxMultiVarRecordWriter( SFX_REC_TYPE_MIXTAGS,
                              pStream, nRecordTag, nRecordVer )
 {
 }
-
-//=========================================================================
 
 inline void SfxMultiFixRecordWriter::Reset()
 {
@@ -970,37 +858,25 @@ inline void SfxMultiFixRecordWriter::Reset()
     _bHeaderOk = false;
 }
 
-//=========================================================================
-
-inline sal_uInt16 SfxMultiRecordReader::GetContentTag()
-
 /*  [Beschreibung]
 
     Diese Methode liefert die Art-Kennung des zuletzt mit der Methode
     <SfxMultiRecordReder::GetContent()> ge"offneten Contents.
 */
-
+inline sal_uInt16 SfxMultiRecordReader::GetContentTag()
 {
     return _nContentTag;
 }
-
-//-------------------------------------------------------------------------
-
-inline sal_uInt8 SfxMultiRecordReader::GetContentVersion() const
 
 /*  [Beschreibung]
 
     Diese Methode liefert die Version-Kennung des zuletzt mit der Methode
     <SfxMultiRecordReder::GetContent()> ge"offneten Contents.
 */
-
+inline sal_uInt8 SfxMultiRecordReader::GetContentVersion() const
 {
     return _nContentVer;
 }
-
-//-------------------------------------------------------------------------
-
-inline bool SfxMultiRecordReader::HasContentVersion( sal_uInt16 nVersion ) const
 
 /*  [Beschreibung]
 
@@ -1008,20 +884,16 @@ inline bool SfxMultiRecordReader::HasContentVersion( sal_uInt16 nVersion ) const
     zuletzt mit der Methode <SfxMultiRecordReder::GetContent()> ge"offneten
     Contents enthalten ist.
 */
-
+inline bool SfxMultiRecordReader::HasContentVersion( sal_uInt16 nVersion ) const
 {
     return _nContentVer >= nVersion;
 }
-
-//-------------------------------------------------------------------------
-
-inline sal_uInt32 SfxMultiRecordReader::ContentCount() const
 
 /*  [Beschreibung]
 
     Diese Methode liefert die Anzahl im Record befindlichen Contents.
 */
-
+inline sal_uInt32 SfxMultiRecordReader::ContentCount() const
 {
     return _nContentCount;
 }
