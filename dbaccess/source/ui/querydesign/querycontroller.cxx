@@ -865,7 +865,6 @@ void OQueryController::impl_initialize()
     OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
-    // .........................................................................
     // . reading parameters:
 
     // legacy parameters first (later overwritten by regular parameters)
@@ -966,7 +965,6 @@ void OQueryController::impl_initialize()
         bForceInitialDesign = true;
     }
 
-    // .........................................................................
     if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;

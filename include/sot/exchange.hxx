@@ -143,6 +143,7 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_DEST_SWDOC_FREE_AREA_WEB     17
 
 class SvGlobalName;
+
 class SOT_DLLPUBLIC SotExchange
 {
 public:

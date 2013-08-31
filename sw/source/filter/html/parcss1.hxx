@@ -145,7 +145,6 @@ public:
     inline sal_Int32 GetSLength() const;
     sal_Unicode GetOp() const { return cOp; }
 
-
     sal_Bool GetURL( OUString& rURL ) const;
     sal_Bool GetColor( Color &rRGB ) const;
 

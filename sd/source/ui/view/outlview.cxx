@@ -87,6 +87,8 @@ struct SdParaAndPos
     sal_uInt16     nPos;
 };
 
+// - OutlineView -
+
 TYPEINIT1( OutlineView, ::sd::View );
 
 OutlineView::OutlineView( DrawDocShell& rDocSh, ::Window* pWindow, OutlineViewShell& rOutlineViewSh)
@@ -1844,7 +1846,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     }
 }
 
-// ====================================================================
+// - OutlineViewModelChangeGuard -
 
 OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
 : mrView( rView )
@@ -1856,6 +1858,8 @@ OutlineViewModelChangeGuard::~OutlineViewModelChangeGuard()
 {
     mrView.EndModelChange();
 }
+
+// - OutlineViewPageChangesGuard -
 
 OutlineViewPageChangesGuard::OutlineViewPageChangesGuard( OutlineView* pView )
 : mpView( pView )

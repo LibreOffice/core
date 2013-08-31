@@ -2254,7 +2254,7 @@ ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( FontSelectPattern& rF
     return pEntry;
 }
 
-// -----------------------------------------------------------------------
+// - PDFWriterImpl -
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
 {
@@ -5136,7 +5136,6 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
 bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDict )
 {
-
     // TODO: check and insert default streams
     OString aStandardAppearance;
     switch( rWidget.m_eType )
@@ -5838,6 +5837,7 @@ bool PDFWriterImpl::emitCatalog()
         else
             aLine.append( "/NeedAppearances true>>\n" );
     }
+
 //--->i59651
 //check if there is a Metadata object
     if( nOutputIntentObject )
@@ -5846,6 +5846,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( nOutputIntentObject );
         aLine.append( " 0 R]" );
     }
+
     if( nMetadataObject )
     {
         aLine.append("/Metadata ");
@@ -6408,7 +6409,6 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
 }
 
 // emits the document metadata
-//
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
     if( !m_bIsPDF_A1 )

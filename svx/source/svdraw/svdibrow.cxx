@@ -55,8 +55,6 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xtextit0.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #define ITEMBROWSER_WHICHCOL_ID 1
 #define ITEMBROWSER_STATECOL_ID 2
 #define ITEMBROWSER_TYPECOL_ID  3
@@ -71,6 +69,8 @@ enum ItemType {
     ITEM_COLOR,
     ITEM_FONT, ITEM_FONTHEIGHT, ITEM_FONTWIDTH, ITEM_FIELD
 };
+
+// - ImpItemListRow -
 
 class ImpItemListRow
 {
@@ -156,7 +156,7 @@ bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
         && nMax==rEntry.nMax);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// - ImpItemEdit -
 
 class ImpItemEdit: public Edit
 {
@@ -202,7 +202,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
         Edit::KeyInput(rKEvt);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// - _SdrItemBrowserControl -
 
 #define MYBROWSEMODE (BROWSER_THUMBDRAGGING|BROWSER_KEEPHIGHLIGHT|BROWSER_NO_HSCROLL|BROWSER_HIDECURSOR)
 
@@ -1040,7 +1040,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
     SetMode(MYBROWSEMODE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// - _SdrItemBrowserWindow -
 
 _SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
@@ -1065,7 +1065,7 @@ void _SdrItemBrowserWindow::GetFocus()
     aBrowse.GrabFocus();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// - SdrItemBrowser -
 
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     _SdrItemBrowserWindow(ImpGetViewWin(rView)),

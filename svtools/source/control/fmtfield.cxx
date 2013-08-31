@@ -983,7 +983,6 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
     if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
         return sal_False;
 
-
     if (m_bHasMin && (dNewVal<m_dMinValue))
         dNewVal = m_dMinValue;
     if (m_bHasMax && (dNewVal>m_dMaxValue))

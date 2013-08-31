@@ -73,6 +73,7 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
     const Any& getSelectionObject() const;
+
 public:
     SfxPrinterController( const boost::shared_ptr<Printer>& i_rPrinter,
                           const Any& i_rComplete,

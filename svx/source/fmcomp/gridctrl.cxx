@@ -203,7 +203,6 @@ public:
     virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) { m_rParent.disposing(_nId, _rEvent); }
 };
 
-
 DBG_NAME(DisposeListenerGridBridge)
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject, sal_Int16 _rId)
     :FmXDisposeListener(m_aMutex)
@@ -2309,7 +2308,6 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         m_nSeekPos = nRow;
     else
     {
-
         sal_Bool bSuccess=sal_False;
         long nSteps = 0;
         try

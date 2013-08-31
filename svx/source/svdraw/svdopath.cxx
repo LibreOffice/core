@@ -2134,7 +2134,7 @@ SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
     return pHdl;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// dragging
 
 bool SdrPathObj::hasSpecialDrag() const
 {
@@ -2213,7 +2213,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag)
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// creation
 
 bool SdrPathObj::BegCreate(SdrDragStat& rStat)
 {
@@ -2283,6 +2283,8 @@ void SdrPathObj::BrkCreate(SdrDragStat& rStat)
     impGetDAC().BrkCreate(rStat);
     impDeleteDAC();
 }
+
+// polygons
 
 basegfx::B2DPolyPolygon SdrPathObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {

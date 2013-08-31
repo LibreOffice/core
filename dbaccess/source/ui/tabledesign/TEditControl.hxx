@@ -80,6 +80,7 @@ namespace dbaui
         protected:
             DECL_LINK(OnInvalidate, void*);
         };
+
         friend class OTableEditorCtrl::ClipboardInvalidator;
 
         ClipboardInvalidator    m_aInvalidate;
@@ -169,6 +170,7 @@ namespace dbaui
         virtual void cut();
         virtual void copy();
         virtual void paste();
+
     private:
         DECL_LINK( StartIndexing, void* );
         DECL_LINK( DelayedCut, void* );

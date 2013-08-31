@@ -21,6 +21,7 @@
 #if _WIN32_WINNT != 0x403
 #error wrong _WIN32_WINNT
 #endif
+
 #include <stdio.h>
 #include <vector>
 #include <list>
@@ -106,7 +107,6 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
     fprintf(stderr,"[automation bridge] UnoObjToWrapperMap  contains: %i \n",
             UnoObjToWrapperMap.size());
 #endif
-
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * ppv)

@@ -90,8 +90,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
 
-// =======================================================================
-
 static char aImplWindows[] = "windows";
 static char aImplDevice[]  = "device";
 
@@ -103,8 +101,6 @@ static LPDEVMODEW SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
         pRet = ((LPDEVMODEW)((pSetupData->mpDriverData) + (pDrv->mnDriverOffset)));
     return pRet;
 }
-
-// =======================================================================
 
 static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
 {
@@ -161,6 +157,8 @@ static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
         nStatus |= QUEUE_STATUS_READY;
     return nStatus;
 }
+
+// - WinSalInstance -
 
 void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -360,8 +358,6 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
-
 static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData,
                                    sal_Bool bIn, WinSalFrame* pVisibleDlgParent )
 {
@@ -454,8 +450,6 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
 
     return TRUE;
 }
-
-// -----------------------------------------------------------------------
 
 #define DECLARE_DEVMODE( i )\
     DEVMODEW* pDevModeW = SAL_DEVMODE_W(i);\
@@ -1084,7 +1078,7 @@ static sal_Bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* p
     return TRUE;
 }
 
-// =======================================================================
+// - WinSalInstance -
 
 SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup* pSetupData )
@@ -1122,6 +1116,8 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
+
+// - WinSalInfoPrinter -
 
 WinSalInfoPrinter::WinSalInfoPrinter() :
     mpGraphics( NULL ),
@@ -1312,7 +1308,7 @@ void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     rPageHeight = GetDeviceCaps( hDC, PHYSICALHEIGHT );
 }
 
-// =======================================================================
+// - WinSalInstance -
 
 SalPrinter* WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
@@ -1325,8 +1321,6 @@ void WinSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
-
-// =======================================================================
 
 BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 {
@@ -1391,6 +1385,8 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_
     return pNewDevMode;
 }
 
+// - WinSalPrinter -
+
 WinSalPrinter::WinSalPrinter() :
     mpGraphics( NULL ),
     mpInfoPrinter( NULL ),
@@ -1440,14 +1436,10 @@ WinSalPrinter::~WinSalPrinter()
     mbValid = false;
 }
 
-// -----------------------------------------------------------------------
-
 void WinSalPrinter::markInvalid()
 {
     mbValid = false;
 }
-
-// -----------------------------------------------------------------------
 
 // need wrappers for StarTocW/A to use structured exception handling
 // since SEH does not mix with standard exception handling's cleanup

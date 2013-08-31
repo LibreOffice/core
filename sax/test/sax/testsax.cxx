@@ -135,7 +135,6 @@ sal_Int32 OSaxParserTest::test(
                 testInvariant( TestName , TestObject );
             }
             else {
-
                 Reference < XParser > parser( TestObject , UNO_QUERY );
 
                 if( 1 == hTestHandle ) {
@@ -291,7 +290,6 @@ public:
                               const Reference< XAttributeList > & xAttribs)
         throw (SAXException,RuntimeException)
     {
-
         if( m_rLocator.is() ) {
             if( m_bPrint )
             {

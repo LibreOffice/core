@@ -140,6 +140,8 @@ static void TeleManager_DBusChannelHandler(
     }
 }
 
+// - TeleManager -
+
 void TeleManager::addConference( TeleConference* pConference )
 {
     MutexGuard aGuard( GetMutex());
@@ -358,6 +360,8 @@ static void TeleManager_FileTransferHandler(
     }
 }
 
+// - TeleManagerImpl -
+
 void TeleManagerImpl::ChannelReadyHandler(
         GObject*        pSourceObject,
         GAsyncResult*   pResult,
@@ -410,6 +414,8 @@ void TeleManagerImpl::AccountManagerReadyHandler(
     mbAccountManagerReady = bPrepared;
     mbAccountManagerReadyHandlerInvoked = true;
 }
+
+// - TeleManager -
 
 bool TeleManager::init( bool bListen )
 {
@@ -854,7 +860,7 @@ void TeleManager::addSuffixToNames( const char* pName )
     pImpl->msNameSuffix = pName;
 }
 
-// ===========================================================================
+// - TeleManagerImpl -
 
 TeleManagerImpl::TeleManagerImpl()
     :
