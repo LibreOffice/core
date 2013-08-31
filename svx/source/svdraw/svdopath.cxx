@@ -78,28 +78,28 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     XPolygon                    aXP;            // section of the original polygon
     bool                        bValid;         // FALSE = too few points
     bool                        bClosed;        // closed object?
-    sal_uInt16                      nPoly;          // number of the polygon in the PolyPolygon
-    sal_uInt16                      nPnt;           // number of point in the above polygon
-    sal_uInt16                      nPntAnz;        // number of points of the polygon
-    sal_uInt16                      nPntMax;        // maximum index
+    sal_uInt16                  nPoly;          // number of the polygon in the PolyPolygon
+    sal_uInt16                  nPnt;           // number of point in the above polygon
+    sal_uInt16                  nPntAnz;        // number of points of the polygon
+    sal_uInt16                  nPntMax;        // maximum index
     bool                        bBegPnt;        // dragged point is first point of a Polyline
     bool                        bEndPnt;        // dragged point is finishing point of a Polyline
-    sal_uInt16                      nPrevPnt;       // index of previous point
-    sal_uInt16                      nNextPnt;       // index of next point
+    sal_uInt16                  nPrevPnt;       // index of previous point
+    sal_uInt16                  nNextPnt;       // index of next point
     bool                        bPrevIsBegPnt;  // previous point is first point of a Polyline
     bool                        bNextIsEndPnt;  // next point is first point of a Polyline
-    sal_uInt16                      nPrevPrevPnt;   // index of point before previous point
-    sal_uInt16                      nNextNextPnt;   // index of point after next point
+    sal_uInt16                  nPrevPrevPnt;   // index of point before previous point
+    sal_uInt16                  nNextNextPnt;   // index of point after next point
     bool                        bControl;       // point is a control point
     bool                        bIsPrevControl; // point is a control point before a support point
     bool                        bIsNextControl; // point is a control point after a support point
     bool                        bPrevIsControl; // if nPnt is a support point: a control point comes before
     bool                        bNextIsControl; // if nPnt is a support point: a control point comes after
-    sal_uInt16                      nPrevPrevPnt0;
-    sal_uInt16                      nPrevPnt0;
-    sal_uInt16                      nPnt0;
-    sal_uInt16                      nNextPnt0;
-    sal_uInt16                      nNextNextPnt0;
+    sal_uInt16                  nPrevPrevPnt0;
+    sal_uInt16                  nPrevPnt0;
+    sal_uInt16                  nPnt0;
+    sal_uInt16                  nNextPnt0;
+    sal_uInt16                  nNextNextPnt0;
     bool                        bEliminate;     // delete point? (is set by MovDrag)
 
     bool                        mbMultiPointDrag;

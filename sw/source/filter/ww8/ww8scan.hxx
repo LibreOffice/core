@@ -1569,64 +1569,64 @@ public:
     /*
         bei nFib >= 103 gehts weiter:
     */
-    sal_uInt32 fNoTabForInd                             :1; // see above in compatability options
-    sal_uInt32 fNoSpaceRaiseLower                   :1; // see above
-    sal_uInt32 fSupressSpbfAfterPageBreak   :1; // see above
-    sal_uInt32 fWrapTrailSpaces                     :1; // see above
-    sal_uInt32 fMapPrintTextColor                   :1; // see above
-    sal_uInt32 fNoColumnBalance                     :1; // see above
-    sal_uInt32 fConvMailMergeEsc                    :1; // see above
-    sal_uInt32 fSupressTopSpacing                   :1; // see above
-    sal_uInt32 fOrigWordTableRules              :1; // see above
-    sal_uInt32 fTransparentMetafiles            :1; // see above
-    sal_uInt32 fShowBreaksInFrames              :1; // see above
-    sal_uInt32 fSwapBordersFacingPgs            :1; // see above
-    sal_uInt32 fCompatabilityOptions_Unknown1_13    :1; // #i78591#
-    sal_uInt32 fExpShRtn                :1; // #i78591# and #i56856#
-    sal_uInt32 fCompatabilityOptions_Unknown1_15    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_16    :1; // #i78591#
-    sal_uInt32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
-                                                                                // of page like MacWord 5.x
-    sal_uInt32 fTruncDxaExpand                      :1; // Expand/Condense by whole number of points
-    sal_uInt32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
-    sal_uInt32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
-    sal_uInt32 fCompatabilityOptions_Unknown1_21    :1; // #i78591#
-    sal_uInt32 fMWSmallCaps : 1;    // Use larger small caps like MacWord 5.x
-    sal_uInt32 fCompatabilityOptions_Unknown1_23    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_24    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_25    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_26    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_27    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_28    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_29    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_30    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown1_31    :1; // #i78591#
-    sal_uInt32 fUsePrinterMetrics : 1;  //The magic option
+    sal_uInt32 fNoTabForInd : 1;                      // see above in compatability options
+    sal_uInt32 fNoSpaceRaiseLower : 1;                // see above
+    sal_uInt32 fSupressSpbfAfterPageBreak : 1;        // see above
+    sal_uInt32 fWrapTrailSpaces : 1;                  // see above
+    sal_uInt32 fMapPrintTextColor : 1;                // see above
+    sal_uInt32 fNoColumnBalance : 1;                  // see above
+    sal_uInt32 fConvMailMergeEsc : 1;                 // see above
+    sal_uInt32 fSupressTopSpacing : 1;                // see above
+    sal_uInt32 fOrigWordTableRules : 1;               // see above
+    sal_uInt32 fTransparentMetafiles : 1;             // see above
+    sal_uInt32 fShowBreaksInFrames : 1;               // see above
+    sal_uInt32 fSwapBordersFacingPgs : 1;             // see above
+    sal_uInt32 fCompatabilityOptions_Unknown1_13 : 1; // #i78591#
+    sal_uInt32 fExpShRtn : 1;                         // #i78591# and #i56856#
+    sal_uInt32 fCompatabilityOptions_Unknown1_15 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_16 : 1; // #i78591#
+    sal_uInt32 fSuppressTopSpacingMac5 : 1;           // Suppress extra line spacing at top
+                                                      // of page like MacWord 5.x
+    sal_uInt32 fTruncDxaExpand : 1;                    // Expand/Condense by whole number of points
+    sal_uInt32 fPrintBodyBeforeHdr : 1;               // Print body text before header/footer
+    sal_uInt32 fNoLeading : 1;                        // Don't add extra spacebetween rows of text
+    sal_uInt32 fCompatabilityOptions_Unknown1_21 : 1; // #i78591#
+    sal_uInt32 fMWSmallCaps : 1;                     // Use larger small caps like MacWord 5.x
+    sal_uInt32 fCompatabilityOptions_Unknown1_23 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_24 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_25 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_26 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_27 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_28 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_29 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_30 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown1_31 : 1; // #i78591#
+    sal_uInt32 fUsePrinterMetrics : 1;                //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
 
     /*
         bei nFib > 105 gehts weiter:
     */
-    sal_Int16   adt;                // Autoformat Document Type:
-                                    // 0 for normal.
-                                    // 1 for letter, and
-                                    // 2 for email.
-    WW8DopTypography doptypography; // see WW8STRUC.HXX
-    WW8_DOGRID        dogrid;       // see WW8STRUC.HXX
-    sal_uInt16                      :1; // reserved
-    sal_uInt16 lvl                  :4; // Which outline levels are showing in outline view
-    sal_uInt16                      :4; // reserved
-    sal_uInt16 fHtmlDoc             :1; // This file is based upon an HTML file
-    sal_uInt16                      :1; // reserved
-    sal_uInt16 fSnapBorder          :1; // Snap table and page borders to page border
-    sal_uInt16 fIncludeHeader       :1; // Place header inside page border
-    sal_uInt16 fIncludeFooter       :1; // Place footer inside page border
-    sal_uInt16 fForcePageSizePag    :1; // Are we in online view
-    sal_uInt16 fMinFontSizePag      :1; // Are we auto-promoting fonts to >= hpsZoonFontPag?
-    sal_uInt16 fHaveVersions            :1; // versioning is turned on
-    sal_uInt16 fAutoVersion             :1; // autoversioning is enabled
-    sal_uInt16 : 14;    // reserved
+    sal_Int16   adt;                  // Autoformat Document Type:
+                                      // 0 for normal.
+                                      // 1 for letter, and
+                                      // 2 for email.
+    WW8DopTypography doptypography;   // see WW8STRUC.HXX
+    WW8_DOGRID dogrid;                // see WW8STRUC.HXX
+    sal_uInt16 : 1;                   // reserved
+    sal_uInt16 lvl : 4;               // Which outline levels are showing in outline view
+    sal_uInt16 : 4;                   // reserved
+    sal_uInt16 fHtmlDoc : 1;          // This file is based upon an HTML file
+    sal_uInt16 : 1;                   // reserved
+    sal_uInt16 fSnapBorder : 1;       // Snap table and page borders to page border
+    sal_uInt16 fIncludeHeader : 1;    // Place header inside page border
+    sal_uInt16 fIncludeFooter : 1;    // Place footer inside page border
+    sal_uInt16 fForcePageSizePag : 1; // Are we in online view
+    sal_uInt16 fMinFontSizePag : 1;   // Are we auto-promoting fonts to >= hpsZoonFontPag?
+    sal_uInt16 fHaveVersions : 1;     // versioning is turned on
+    sal_uInt16 fAutoVersion : 1;      // autoversioning is enabled
+    sal_uInt16 : 14;                  // reserved
     // Skip 12 Bytes here: ASUMI
     sal_Int32 cChWS;
     sal_Int32 cChWSFtnEdn;
@@ -1640,56 +1640,56 @@ public:
     sal_Int16 hpsZoonFontPag;
     sal_Int16 dywDispPag;
 
-    sal_uInt32 fCompatabilityOptions_Unknown2_1 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_2 :1; // #i78591#
-    sal_uInt32 fDontUseHTMLAutoSpacing:1;
-    sal_uInt32 fCompatabilityOptions_Unknown2_4 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_5 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_6 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_7 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_8 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_9 :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_10    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_11    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_12    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_13    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_14    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_15    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_16    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_17    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_18    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_19    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_20    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_21    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_22    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_23    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_24    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_25    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_26    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_27    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_28    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_29    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_30    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_31    :1; // #i78591#
-    sal_uInt32 fCompatabilityOptions_Unknown2_32    :1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_1 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_2 : 1;  // #i78591#
+    sal_uInt32 fDontUseHTMLAutoSpacing : 1;
+    sal_uInt32 fCompatabilityOptions_Unknown2_4 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_5 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_6 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_7 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_8 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_9 : 1;  // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_10 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_11 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_12 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_13 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_14 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_15 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_16 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_17 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_18 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_19 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_20 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_21 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_22 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_23 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_24 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_25 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_26 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_27 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_28 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_29 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_30 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_31 : 1; // #i78591#
+    sal_uInt32 fCompatabilityOptions_Unknown2_32 : 1; // #i78591#
 
-    sal_uInt16 fUnknown3:15;
-    sal_uInt16 fUseBackGroundInAllmodes:1;
+    sal_uInt16 fUnknown3 : 15;
+    sal_uInt16 fUseBackGroundInAllmodes : 1;
 
-    sal_uInt16 fDoNotEmbedSystemFont:1;
-    sal_uInt16 fWordCompat:1;
-    sal_uInt16 fLiveRecover:1;
-    sal_uInt16 fEmbedFactoids:1;
-    sal_uInt16 fFactoidXML:1;
-    sal_uInt16 fFactoidAllDone:1;
-    sal_uInt16 fFolioPrint:1;
-    sal_uInt16 fReverseFolio:1;
-    sal_uInt16 iTextLineEnding:3;
-    sal_uInt16 fHideFcc:1;
-    sal_uInt16 fAcetateShowMarkup:1;
-    sal_uInt16 fAcetateShowAtn:1;
-    sal_uInt16 fAcetateShowInsDel:1;
-    sal_uInt16 fAcetateShowProps:1;
+    sal_uInt16 fDoNotEmbedSystemFont : 1;
+    sal_uInt16 fWordCompat : 1;
+    sal_uInt16 fLiveRecover : 1;
+    sal_uInt16 fEmbedFactoids : 1;
+    sal_uInt16 fFactoidXML : 1;
+    sal_uInt16 fFactoidAllDone : 1;
+    sal_uInt16 fFolioPrint : 1;
+    sal_uInt16 fReverseFolio : 1;
+    sal_uInt16 iTextLineEnding : 3;
+    sal_uInt16 fHideFcc : 1;
+    sal_uInt16 fAcetateShowMarkup : 1;
+    sal_uInt16 fAcetateShowAtn : 1;
+    sal_uInt16 fAcetateShowInsDel : 1;
+    sal_uInt16 fAcetateShowProps : 1;
 
     // 2. Initialisier-Dummy:
     sal_uInt8 nDataEnd;

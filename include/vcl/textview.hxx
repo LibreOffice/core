@@ -127,7 +127,7 @@ public:
 
     void                InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
 
-    sal_Bool                KeyInput( const KeyEvent& rKeyEvent );
+    sal_Bool            KeyInput( const KeyEvent& rKeyEvent );
     void                Paint( const Rectangle& rRect );
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -144,7 +144,7 @@ public:
     void                Undo();
     void                Redo();
 
-    sal_Bool                Read( SvStream& rInput );
+    sal_Bool            Read( SvStream& rInput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -153,18 +153,18 @@ public:
     Point               GetWindowPos( const Point& rDocPos ) const;
 
     void                SetInsertMode( sal_Bool bInsert );
-    sal_Bool                IsInsertMode() const;
+    sal_Bool            IsInsertMode() const;
 
     void                SetAutoIndentMode( sal_Bool bAutoIndent );
 
     void                SetReadOnly( sal_Bool bReadOnly );
-    sal_Bool                IsReadOnly() const;
+    sal_Bool            IsReadOnly() const;
 
     void                SetAutoScroll( sal_Bool bAutoScroll );
-    sal_Bool                IsAutoScroll() const;
+    sal_Bool            IsAutoScroll() const;
 
-    sal_Bool                SetCursorAtPoint( const Point& rPointPixel );
-    sal_Bool                IsSelectionAtPoint( const Point& rPointPixel );
+    sal_Bool            SetCursorAtPoint( const Point& rPointPixel );
+    sal_Bool            IsSelectionAtPoint( const Point& rPointPixel );
 
     void                SetPaintSelection( sal_Bool bPaint);
 

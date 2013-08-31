@@ -71,7 +71,7 @@ namespace dbaui
         class ClipboardInvalidator
         {
         private:
-            AutoTimer   m_aInvalidateTimer;
+            AutoTimer m_aInvalidateTimer;
             OTableEditorCtrl* m_pOwner;
 
         public:
@@ -84,7 +84,7 @@ namespace dbaui
 
         friend class OTableEditorCtrl::ClipboardInvalidator;
 
-        ClipboardInvalidator    m_aInvalidate;
+        ClipboardInvalidator m_aInvalidate;
 
     protected:
         virtual void Command( const CommandEvent& rEvt );
@@ -115,40 +115,45 @@ namespace dbaui
         virtual sal_Bool IsInsertNewAllowed( long nRow );
         virtual sal_Bool IsDeleteAllowed( long nRow );
 
-        void         ClearModified();
+        void ClearModified();
 
-        void         SetPrimaryKey( sal_Bool bSet );
-        sal_Bool         IsPrimaryKey();
+        void SetPrimaryKey( sal_Bool bSet );
+        sal_Bool IsPrimaryKey();
 
         DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
 
     public:
         OTableEditorCtrl(Window* pParentWin);
-        virtual         ~OTableEditorCtrl();
-        virtual sal_Bool    CursorMoving(long nNewRow, sal_uInt16 nNewCol);
-        virtual void    UpdateAll();
+        virtual ~OTableEditorCtrl();
+        virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+        virtual void UpdateAll();
         SfxUndoManager& GetUndoManager() const;
 
-        void            SetDescrWin( OTableFieldDescWin* pWin ){ pDescrWin = pWin; if (pDescrWin && pActRow) pDescrWin->DisplayData(pActRow->GetActFieldDescr()); }
-        sal_Bool            SaveCurRow();
-        void            SwitchType( const TOTypeInfoSP& _pType );
+        void SetDescrWin( OTableFieldDescWin* pWin )
+        {
+            pDescrWin = pWin;
+            if (pDescrWin && pActRow)
+                pDescrWin->DisplayData(pActRow->GetActFieldDescr());
+        }
+        sal_Bool SaveCurRow();
+        void SwitchType( const TOTypeInfoSP& _pType );
 
         /// force displaying of the given row
-        void            DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
+        void DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
 
-        virtual void    SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
-        virtual void    SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
+        virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
+        virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );
         virtual ::com::sun::star::uno::Any  GetCellData( long nRow, sal_uInt16 nColId );
-        virtual void    SetControlText( long nRow, sal_uInt16 nColId, const String& rText );
-        virtual String  GetControlText( long nRow, sal_uInt16 nColId );
+        virtual void SetControlText( long nRow, sal_uInt16 nColId, const String& rText );
+        virtual String GetControlText( long nRow, sal_uInt16 nColId );
 
         virtual OTableDesignView* GetView() const;
 
         ::std::vector< ::boost::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
         ::boost::shared_ptr<OTableRow>         GetActRow(){ return pActRow; }
-        void            CellModified( long nRow, sal_uInt16 nColId );
-        void            SetReadOnly( sal_Bool bRead=sal_True );
+        void CellModified( long nRow, sal_uInt16 nColId );
+        void SetReadOnly( sal_Bool bRead=sal_True );
 
         virtual void Init();
         virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
@@ -160,7 +165,7 @@ namespace dbaui
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads
-        virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual long PreNotify( NotifyEvent& rNEvt );
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed() { return IsCutAllowed(); }
