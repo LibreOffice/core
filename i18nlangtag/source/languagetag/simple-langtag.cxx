@@ -238,6 +238,7 @@ struct my_t_list : public my_t_impl
         lt_list_t* pList = my_copyList( r.mpList);
         my_unrefList( mpList);
         mpList = pList;
+        return *this;
     }
     virtual void append( const char* str, const char* stop )
     {
