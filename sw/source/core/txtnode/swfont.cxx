@@ -1532,7 +1532,7 @@ SwUnderlineFont::~SwUnderlineFont()
      delete pFnt;
 }
 
-//Helper for filters to find true lineheight of a font
+/// Helper for filters to find true lineheight of a font
 long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const OutputDevice &rOut, sal_Int16 nScript)

@@ -1992,7 +1992,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
     {
         const sal_Unicode* pStr = rInString.getStr();
         sal_Int32 nLen = rInString.getLength();
-//prepare a unicode string, encrypt it
+        //prepare a unicode string, encrypt it
         if( checkEncryptionBufferSize( nLen*2 ) )
         {
             enableStringEncryption( nInObjectNumber );
@@ -2000,7 +2000,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             sal_Int32 nChars = 2;
             *pCopy++ = 0xFE;
             *pCopy++ = 0xFF;
-// we need to prepare a byte stream from the unicode string buffer
+            // we need to prepare a byte stream from the unicode string buffer
             for( int i = 0; i < nLen; i++ )
             {
                 sal_Unicode aUnChar = pStr[i];
@@ -2008,9 +2008,9 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
                 *pCopy++ = (sal_uInt8)( aUnChar & 255 );
                 nChars += 2;
             }
-//encrypt in place
+            //encrypt in place
             rtl_cipher_encodeARCFOUR( m_aCipher, m_pEncryptionBuffer, nChars, m_pEncryptionBuffer, nChars );
-//now append, hexadecimal (appendHex), the encrypted result
+            //now append, hexadecimal (appendHex), the encrypted result
             for(int i = 0; i < nChars; i++)
                 appendHex( m_pEncryptionBuffer[i], rOutBuffer );
         }
@@ -2024,10 +2024,10 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer& rInString,
 {
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.getLength();
-//check for encryption, if ok, encrypt the string, then convert with appndLiteralString
+    //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
     if( m_aContext.Encryption.Encrypt() && checkEncryptionBufferSize( nChars ) )
     {
-//encrypt the string in a buffer, then append it
+        //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
         rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_pEncryptionBuffer, nChars );
         appendLiteralString( (const sal_Char*)m_pEncryptionBuffer, nChars, rOutBuffer );
@@ -2152,7 +2152,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         bool  buffOK = true;
         if( m_bEncryptThisStream )
         {
-/* implement the encryption part of the PDF spec encryption algorithm 3.1 */
+            /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
             if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
                                           (sal_uInt8*)pBuffer, static_cast<sal_Size>(nBytes),
@@ -4404,9 +4404,10 @@ we check in the following sequence:
             sal_Bool    bTargetHasPDFExtension = sal_False;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
             bool    bIsUNCPath = false;
-// check if the protocol is a known one, or if there is no protocol at all (on target only)
-// if there is no protocol, make the target relative to the current document directory
-// getting the needed URL information from the current document path
+
+            // check if the protocol is a known one, or if there is no protocol at all (on target only)
+            // if there is no protocol, make the target relative to the current document directory
+            // getting the needed URL information from the current document path
             if( eTargetProtocol == INET_PROT_NOT_VALID )
             {
                 if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.startsWith("\\\\\\\\"))
@@ -4420,17 +4421,17 @@ we check in the following sequence:
                                               //target document
                     aNewBase.insertName( rLink.m_aURL );
                     aTargetURL = aNewBase;//reassign the new target URL
-//recompute the target protocol, with the new URL
-//normal URL processing resumes
+                    //recompute the target protocol, with the new URL
+                    //normal URL processing resumes
                     eTargetProtocol = aTargetURL.GetProtocol();
                 }
             }
 
             OUString aFileExtension = aTargetURL.GetFileExtension();
 
-// Check if the URL ends in '/': if yes it's a directory,
-// it will be forced to a URI link.
-// possibly a malformed URI, leave it as it is, force as URI
+            // Check if the URL ends in '/': if yes it's a directory,
+            // it will be forced to a URI link.
+            // possibly a malformed URI, leave it as it is, force as URI
             if( aTargetURL.hasFinalSlash() )
                 m_aContext.DefaultLinkAction = PDFWriter::URIAction;
 
@@ -4453,14 +4454,14 @@ we check in the following sequence:
                     if( bChangeFileExtensionToPDF )
                         aTargetURL.setExtension(OUString( "pdf"  ) );
                 }
-//check if extension is pdf, see if GoToR should be forced
+                //check if extension is pdf, see if GoToR should be forced
                 bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(OUString( "pdf"  ) );
                 if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
                     nSetGoToRMode++;
             }
-//prepare the URL, if relative or not
+            //prepare the URL, if relative or not
             INetProtocol eBaseProtocol = aDocumentURL.GetProtocol();
-//queue the string common to all types of actions
+            //queue the string common to all types of actions
             aLine.append( "/A<</Type/Action/S");
             if( bIsUNCPath ) // handle Win UNC paths
             {
@@ -4473,7 +4474,7 @@ we check in the following sequence:
             {
                 bool bSetRelative = false;
                 bool bFileSpec = false;
-//check if relative file link is requested and if the protocol is 'file://'
+                //check if relative file link is requested and if the protocol is 'file://'
                 if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
                     bSetRelative = true;
 
@@ -4488,13 +4489,13 @@ we check in the following sequence:
                         aLine.append( "/URI/URI" );
                         break;
                     case PDFWriter::LaunchAction:
-// now:
-// if a launch action is requested and the hyperlink target has a fragment
-// and the target file does not have a pdf extension, or it's not a 'file:://' protocol
-// then force the uri action on it
-// This code will permit the correct opening of application on web pages, the one that
-// normally have fragments (but I may be wrong...)
-// and will force the use of URI when the protocol is not file://
+                        // now:
+                        // if a launch action is requested and the hyperlink target has a fragment
+                        // and the target file does not have a pdf extension, or it's not a 'file:://'
+                        // protocol then force the uri action on it
+                        // This code will permit the correct opening of application on web pages,
+                        // the one that normally have fragments (but I may be wrong...)
+                        // and will force the use of URI when the protocol is not file://
                         if( (!aFragment.isEmpty() && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
                         {
@@ -4508,7 +4509,8 @@ we check in the following sequence:
                         break;
                     }
                 }
-//fragment are encoded in the same way as in the named destination processing
+
+                //fragment are encoded in the same way as in the named destination processing
                 if( nSetGoToRMode )
                 {
                     //add the fragment
@@ -4528,14 +4530,14 @@ we check in the following sequence:
                 }
                 else
                 {
-// change the fragment to accommodate the bookmark (only if the file extension is PDF and
-// the requested action is of the correct type)
+                    // change the fragment to accommodate the bookmark (only if the file extension
+                    // is PDF and the requested action is of the correct type)
                     if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
                                bTargetHasPDFExtension && !aFragment.isEmpty() )
                     {
                         OStringBuffer aLineLoc( 1024 );
                         appendDestinationName( aFragment , aLineLoc );
-//substitute the fragment
+                        //substitute the fragment
                         aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
                     }
                     OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
@@ -5094,9 +5096,9 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
-//to encrypt this (el)
+    //to encrypt this (el)
     rBox.m_aMKDict = "/CA";
-//after this assignement, to m_aMKDic cannot be added anything
+    //after this assignement, to m_aMKDic cannot be added anything
     rBox.m_aMKDictCAString = "l";
 
     rBox.m_aRect = aCheckRect;
@@ -5499,7 +5501,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         {
             aLine.append( "/MK<<" );
             aLine.append( rWidget.m_aMKDict );
-//add the CA string, encrypting it
+            //add the CA string, encrypting it
             appendLiteralStringEncrypt(rWidget.m_aMKDictCAString, rWidget.m_nObject, aLine);
             aLine.append( ">>\n" );
         }
@@ -5549,16 +5551,16 @@ bool PDFWriterImpl::emitCatalog()
 
     sal_Int32 nOutlineDict = emitOutline();
 
-    //emit Output intent i59651
+    // emit Output intent i59651
     sal_Int32 nOutputIntentObject = emitOutputIntent();
 
-    //emit metadata
+    // emit metadata
     sal_Int32 nMetadataObject = emitDocumentMetadata();
 
     sal_Int32 nStructureDict = 0;
     if(m_aStructure.size() > 1)
     {
-///check if dummy structure containers are needed
+        // check if dummy structure containers are needed
         addInternalStructureContainer(m_aStructure[0]);
         nStructureDict = m_aStructure[0].m_nObject = createObject();
         emitStructure( m_aStructure[ 0 ] );
@@ -5638,7 +5640,7 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( nTreeNode );
     aLine.append( " 0 R\n" );
 //--->i56629
-//check if there are named destinations to emit (root must be inside the catalog)
+    // check if there are named destinations to emit (root must be inside the catalog)
     if( nNamedDestinationsDictionary )
     {
         aLine.append("/Dests ");
@@ -5657,7 +5659,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/PageLayout/OneColumn\n" );
             break;
         case  PDFWriter::ContinuousFacing :
-//the flag m_aContext.FirstPageLeft below is used to set the page on the left side
+            // the flag m_aContext.FirstPageLeft below is used to set the page on the left side
             aLine.append( "/PageLayout/TwoColumnRight\n" );//odd page on the right side
             break;
         }
@@ -5727,7 +5729,8 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "]\n" );
         break;
     }
-// viewer preferences, if we had some, then emit
+
+    // viewer preferences, if we had some, then emit
     if( m_aContext.HideViewerToolbar ||
         ( m_aContext.Version > PDFWriter::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle ) ||
         m_aContext.HideViewerMenubar ||
@@ -5839,7 +5842,7 @@ bool PDFWriterImpl::emitCatalog()
     }
 
 //--->i59651
-//check if there is a Metadata object
+    //check if there is a Metadata object
     if( nOutputIntentObject )
     {
         aLine.append("/OutputIntents[");
@@ -6207,12 +6210,12 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
     if( nCount <= 0 )
         return 0;//define internal error
 
-//get the object number for all the destinations
+    //get the object number for all the destinations
     sal_Int32 nObject = createObject();
 
     if( updateObject( nObject ) )
     {
-//emit the dictionary
+        //emit the dictionary
         OStringBuffer aLine( 1024 );
         aLine.append( nObject );
         aLine.append( " 0 obj\n"
@@ -6222,10 +6225,10 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
         for( nDestID = 0; nDestID < nCount; nDestID++ )
         {
             const PDFNamedDest& rDest   = m_aNamedDests[ nDestID ];
-// In order to correctly function both under an Internet browser and
-// directly with a reader (provided the reader has the feature) we
-// need to set the name of the destination the same way it will be encoded
-// in an Internet link
+            // In order to correctly function both under an Internet browser and
+            // directly with a reader (provided the reader has the feature) we
+            // need to set the name of the destination the same way it will be encoded
+            // in an Internet link
             INetURLObject aLocalURL(
                 OUString( "http://ahost.ax"  ) ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
@@ -6286,8 +6289,8 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
             }
             aLine.append( "]\n" );
         }
-//close
 
+        //close
         aLine.append( ">>\nendobj\n\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             nObject = 0;
@@ -6306,7 +6309,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     if( !m_bIsPDF_A1 )
         return 0;
 
-//emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
+    //emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
 
     OStringBuffer aLine( 1024 );
     sal_Int32 nICCObject = createObject();
@@ -6323,13 +6326,13 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( ">>\nstream\n" );
     CHECK_RETURN( updateObject( nICCObject ) );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-//get file position
+    //get file position
     sal_uInt64 nBeginStreamPos = 0;
     osl_getFilePos( m_aFile, &nBeginStreamPos );
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
     cmsHPROFILE hProfile = cmsCreate_sRGBProfile();
-//force ICC profile version 2.1
+    //force ICC profile version 2.1
     cmsSetProfileVersion(hProfile, 2.1);
     cmsUInt32Number nBytesNeeded = 0;
     cmsSaveProfileToMem(hProfile, NULL, &nBytesNeeded);
@@ -6350,7 +6353,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
         return 0 ;
     aLine.setLength( 0 );
 
-//emit the stream length   object
+    //emit the stream length   object
     CHECK_RETURN( updateObject( nStreamLengthObject ) );
     aLine.setLength( 0 );
     aLine.append( nStreamLengthObject );
@@ -6360,7 +6363,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     aLine.setLength( 0 );
 
-//emit the OutputIntent dictionary
+    //emit the OutputIntent dictionary
     sal_Int32 nOIObject = createObject();
     CHECK_RETURN( updateObject( nOIObject ) );
     aLine.append( nOIObject );
@@ -6419,23 +6422,23 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 
     if( updateObject( nObject ) )
     {
-// the following string are written in UTF-8 unicode
+        // the following string are written in UTF-8 unicode
         OStringBuffer aMetadataStream( 8192 );
 
         aMetadataStream.append( "<?xpacket begin=\"" );
-// these lines write Unicode "zero width non-breaking space character" (U+FEFF)
-// (aka byte-order mark ) used as a byte-order marker.
+        // these lines write Unicode "zero width non-breaking space character" (U+FEFF)
+        // (aka byte-order mark ) used as a byte-order marker.
         aMetadataStream.append( OUStringToOString( OUString( sal_Unicode( 0xFEFF ) ), RTL_TEXTENCODING_UTF8 ) );
         aMetadataStream.append( "\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" );
         aMetadataStream.append( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" );
         aMetadataStream.append( " <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" );
-//PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
+        //PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
         aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
         aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
         aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
         aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
         aMetadataStream.append( "  </rdf:Description>\n" );
-//... Dublin Core properties go here
+        //... Dublin Core properties go here
         if( !m_aContext.DocumentInfo.Title.isEmpty() ||
             !m_aContext.DocumentInfo.Author.isEmpty() ||
             !m_aContext.DocumentInfo.Subject.isEmpty() )
@@ -6444,7 +6447,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             aMetadataStream.append( "      xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n" );
             if( !m_aContext.DocumentInfo.Title.isEmpty() )
             {
-// this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
+                // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
                 aMetadataStream.append( "   <dc:title>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
@@ -6469,7 +6472,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             }
             if( !m_aContext.DocumentInfo.Subject.isEmpty() )
             {
-// this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
+                // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
                 aMetadataStream.append( "   <dc:description>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
@@ -6483,7 +6486,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             aMetadataStream.append( "  </rdf:Description>\n" );
         }
 
-//... PDF properties go here
+        //... PDF properties go here
         if( !m_aContext.DocumentInfo.Producer.isEmpty() ||
             !m_aContext.DocumentInfo.Keywords.isEmpty() )
         {
@@ -6518,7 +6521,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             aMetadataStream.append( OUStringToOString( aCreator , RTL_TEXTENCODING_UTF8 )  );
             aMetadataStream.append( "</xmp:CreatorTool>\n" );
         }
-//creation date
+        //creation date
         aMetadataStream.append( "   <xmp:CreateDate>" );
         aMetadataStream.append( m_aCreationMetaDateString );
         aMetadataStream.append( "</xmp:CreateDate>\n" );
@@ -6527,7 +6530,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataStream.append( " </rdf:RDF>\n" );
         aMetadataStream.append( "</x:xmpmeta>\n" );
 
-//add the padding
+        //add the padding
         for( sal_Int32 nSpaces = 1; nSpaces <= 2100; nSpaces++ )
         {
             aMetadataStream.append( " " );
@@ -6547,7 +6550,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         aMetadataObj.append( (sal_Int32) aMetadataStream.getLength() );
         aMetadataObj.append( ">>\nstream\n" );
         CHECK_RETURN( writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) );
-//emit the stream
+        //emit the stream
         CHECK_RETURN( writeBuffer( aMetadataStream.getStr(), aMetadataStream.getLength() ) );
 
         aMetadataObj.setLength( 0 );
@@ -6571,9 +6574,9 @@ bool PDFWriterImpl::emitTrailer()
 
     if( m_aContext.Encryption.Encrypt() )
     {
-//emit the security information
-//must be emitted as indirect dictionary object, since
-//Acrobat Reader 5 works only with this kind of implementation
+        //emit the security information
+        //must be emitted as indirect dictionary object, since
+        //Acrobat Reader 5 works only with this kind of implementation
         nSecObject = createObject();
 
         if( updateObject( nSecObject ) )

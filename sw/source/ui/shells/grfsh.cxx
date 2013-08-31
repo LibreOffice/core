@@ -295,12 +295,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "no dialog factory!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, false);
-            OSL_ENSURE(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "no tab dialog!");
 
             if (nSlot == FN_DRAW_WRAP_DLG)
                 pDlg->SetCurPageId("wrap");

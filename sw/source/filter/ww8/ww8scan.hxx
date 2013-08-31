@@ -1074,16 +1074,16 @@ public:
     sal_uInt16 csw;             // Count of fields in the array of "shorts"
 
     // Marke: "rgsw" Beginning of the array of shorts
-    sal_uInt16 wMagicCreated;                   // unique number Identifying the File's creator
-                                                                // 0x6A62 is the creator ID for Word and is reserved.
-                                                                // Other creators should choose a different value.
-    sal_uInt16 wMagicRevised;                   // identifies the File's last modifier
-    sal_uInt16 wMagicCreatedPrivate;  // private data
-    sal_uInt16 wMagicRevisedPrivate;    // private data
+    sal_uInt16 wMagicCreated;   // unique number Identifying the File's creator
+                                // 0x6A62 is the creator ID for Word and is reserved.
+                                // Other creators should choose a different value.
+    sal_uInt16 wMagicRevised;   // identifies the File's last modifier
+    sal_uInt16 wMagicCreatedPrivate; // private data
+    sal_uInt16 wMagicRevisedPrivate; // private data
 
-    sal_Int16  lidFE;                                   // Language id if document was written by Far East version
-                                                                // of Word (i.e. FIB.fFarEast is on)
-    sal_uInt16 clw;                                     // Number of fields in the array of longs
+    sal_Int16  lidFE; // Language id if document was written by Far East version
+                      // of Word (i.e. FIB.fFarEast is on)
+    sal_uInt16 clw; // Number of fields in the array of longs
 
     // Ende des Einschubs fuer WW8 *******************************************
 
@@ -1101,37 +1101,27 @@ public:
     WW8_CP ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
 
     // Einschub fuer WW8 *****************************************************
-    sal_Int32  pnFbpChpFirst;   // when there was insufficient memory for Word to expand
-                                                // the PLCFbte at save time, the PLCFbte is written
-                                                // to the file in a linked list of 512-byte pieces
-                                                // starting with this pn.
-    /*
-    // folgende Felder existieren zwar so in der Datei,
-    // wir benutzen jedoch unten deklarierte General-Variablen
-    // fuer Ver67 und Ver8 gemeinsam.
-    sal_Int32  pnChpFirst;      // the page number of the lowest numbered page in the
-                                                        // document that records CHPX FKP information
-    sal_Int32  cpnBteChp;           // count of CHPX FKPs recorded in file. In non-complex
-                                                        // files if the number of entries in the PLCFbteChpx
-                                                        // is less than this, the PLCFbteChpx is incomplete.
-    */
-    sal_Int32  pnFbpPapFirst;   // when there was insufficient memory for Word to expand
-                                                // the PLCFbte at save time, the PLCFbte is written to
-                                                // the file in a linked list of 512-byte pieces
-                                                // starting with this pn
+    sal_Int32  pnFbpChpFirst; // when there was insufficient memory for Word to expand
+                              // the PLCFbte at save time, the PLCFbte is written
+                              // to the file in a linked list of 512-byte pieces
+                              // starting with this pn.
+    sal_Int32  pnFbpPapFirst; // when there was insufficient memory for Word to expand
+                              // the PLCFbte at save time, the PLCFbte is written to
+                              // the file in a linked list of 512-byte pieces
+                              // starting with this pn
 
-    sal_Int32  pnFbpLvcFirst;   // when there was insufficient memory for Word to expand
-                                                // the PLCFbte at save time, the PLCFbte is written to
-                                                // the file in a linked list of 512-byte pieces
-                                                // starting with this pn
-    sal_Int32  pnLvcFirst;          // the page number of the lowest numbered page in the
-                                                // document that records LVC FKP information
-    sal_Int32  cpnBteLvc;           // count of LVC FKPs recorded in file. In non-complex
-                                                // files if the number of entries in the PLCFbtePapx is
-                                                // less than this, the PLCFbtePapx is incomplete.
+    sal_Int32  pnFbpLvcFirst; // when there was insufficient memory for Word to expand
+                              // the PLCFbte at save time, the PLCFbte is written to
+                              // the file in a linked list of 512-byte pieces
+                              // starting with this pn
+    sal_Int32  pnLvcFirst; // the page number of the lowest numbered page in the
+                           // document that records LVC FKP information
+    sal_Int32  cpnBteLvc;  // count of LVC FKPs recorded in file. In non-complex
+                           // files if the number of entries in the PLCFbtePapx is
+                           // less than this, the PLCFbtePapx is incomplete.
     sal_Int32  fcIslandFirst;   // ?
     sal_Int32  fcIslandLim;     // ?
-    sal_uInt16 cfclcb;              // Number of fields in the array of FC/LCB pairs.
+    sal_uInt16 cfclcb; // Number of fields in the array of FC/LCB pairs.
 
     // Ende des Einschubs fuer WW8 *******************************************
 
@@ -1538,28 +1528,28 @@ public:
     sal_uInt16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
     sal_uInt16 copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
 
-    sal_Int16  dxaTab;              // 720 twips    default tab width
+    sal_Int16  dxaTab;              //      720 twips - default tab width
     sal_uInt16 wSpare;              //
-    sal_uInt16 dxaHotZ;         //      width of hyphenation hot zone measured in twips
+    sal_uInt16 dxaHotZ;             //      width of hyphenation hot zone measured in twips
     sal_uInt16 cConsecHypLim;       //      number of lines allowed to have consecutive hyphens
-    sal_uInt16 wSpare2;         //      reserved
-    sal_Int32   dttmCreated;        // DTTM date and time document was created
-    sal_Int32   dttmRevised;        // DTTM date and time document was last revised
-    sal_Int32   dttmLastPrint;      // DTTM date and time document was last printed
-    sal_Int16   nRevision;          //      number of times document has been revised since its creation
-    sal_Int32   tmEdited;           //      time document was last edited
-    sal_Int32   cWords;             //      count of words tallied by last Word Count execution
-    sal_Int32   cCh;                //      count of characters tallied by last Word Count execution
-    sal_Int16   cPg;                //      count of pages tallied by last Word Count execution
-    sal_Int32   cParas;             //      count of paragraphs tallied by last Word Count execution
+    sal_uInt16 wSpare2;             //      reserved
+    sal_Int32  dttmCreated;         //      DTTM date and time document was created
+    sal_Int32  dttmRevised;         //      DTTM date and time document was last revised
+    sal_Int32  dttmLastPrint;       //      DTTM date and time document was last printed
+    sal_Int16  nRevision;           //      number of times document has been revised since its creation
+    sal_Int32  tmEdited;            //      time document was last edited
+    sal_Int32  cWords;              //      count of words tallied by last Word Count execution
+    sal_Int32  cCh;                 //      count of characters tallied by last Word Count execution
+    sal_Int16  cPg;                 //      count of pages tallied by last Word Count execution
+    sal_Int32  cParas;              //      count of paragraphs tallied by last Word Count execution
     sal_uInt16 rncEdn : 2;          //      restart endnote number code: 0 don't restart endnote numbering, 1 section, 2 page
     sal_uInt16 nEdn : 14;           //      beginning endnote number
-    sal_uInt16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
+    sal_uInt16 epc : 2;             //      endnote position code: 0 at end of section, 3 at end of document
 
     sal_uInt16 fPrintFormData : 1;  //      only print data inside of form fields
     sal_uInt16 fSaveFormData : 1;   //      only save document data that is inside of a form field.
     sal_uInt16 fShadeFormData : 1;  //      shade form fields
-    sal_uInt16 : 2;             //      reserved
+    sal_uInt16 : 2;                 //      reserved
     sal_uInt16 fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
     sal_Int32   cLines;             //      count of lines tallied by last Word Count operation
     sal_Int32   cWordsFtnEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation

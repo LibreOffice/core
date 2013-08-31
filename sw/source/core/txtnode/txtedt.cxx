@@ -137,7 +137,7 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
     return nNumOfMaskedRedlines;
 }
 
-/*
+/**
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
 static sal_uInt16
@@ -172,7 +172,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
     return nRedlinesMasked + nHiddenCharsMasked;
 }
 
-/*
+/**
  * Used for spell checking. Calculates a rectangle for repaint.
  */
 static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart, xub_StrLen nChgEnd )
@@ -293,10 +293,9 @@ static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart,
     return aRect;
 }
 
-/*
+/**
  * Used for automatic styles. Used during RstAttr.
  */
-
 static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
                                       const SfxItemSet* pSet1,
                                       sal_uInt16 nWhichId,
@@ -347,13 +346,9 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     return bRet;
 }
 
-/*
- * void SwTxtNode::RstAttr(const SwIndex &rIdx, sal_uInt16 nLen)
+/** Delete all attributes
  *
- * Deletes all attributes, starting at position rIdx, for length nLen.
- */
-
-/* 5 cases:
+ * 5 cases:
  * 1) The attribute is completely in the deletion range:
  *    -> delete it
  * 2) The end of the attribute is in the deletion range:
@@ -366,6 +361,12 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  *    -> insert new attribute from end of deletion range to old end
  * 5) The attribute is outside the deletion range
  *    -> nothing to do
+ *
+ * @param rIdx starting position
+ * @param nLen length of the deletion
+ * @param nthat ???
+ * @param pSet ???
+ * @param bInclRefToxMark ???
  */
 void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                         const SfxItemSet* pSet, sal_Bool bInclRefToxMark )
@@ -388,7 +389,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
 
     const bool bNoLen = !nMin;
 
-    // We have to remember the "new" attributes, which have
+    // We have to remember the "new" attributes, that have
     // been introduced by splitting surrounding attributes (case 4).
     // They may not be forgotten inside the "Forget" function
     //std::vector< const SwTxtAttr* > aNewAttributes;
@@ -1097,7 +1098,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         SwLanguageIterator aIter( *this, nBegin );
 
         // Implicit changes require setting new attributes, which in turn destroys
-        // the attribute sequence on which aIter iterates. We store the necessary
+        // the attribute sequence on that aIter iterates. We store the necessary
         // coordinates and apply those changes after iterating through the text.
         typedef std::pair<xub_StrLen, xub_StrLen> ImplicitChangesRange;
         std::vector<ImplicitChangesRange> aImplicitChanges;
@@ -1111,7 +1112,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
             xub_StrLen nChPos = aIter.GetChgPos();
             // the position at the end of the paragraph returns -1
-            // which becomes 65535 when converted to xub_StrLen,
+            // that becomes 65535 when converted to xub_StrLen,
             // and thus must be cut to the end of the actual string.
             if (nChPos == (xub_StrLen) -1)
             {
@@ -1368,14 +1369,12 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
     Function scans words in current text and checks them in the
     smarttag libraries. If the check returns true to bounds of the
-    recognized words are stored into a list which is used later for drawing
+    recognized words are stored into a list that is used later for drawing
     the underline.
 
-    @param SwCntntNode* pActNode
-
-    @param xub_StrLen nActPos
-
-    @return SwRect: Repaint area
+    @param pActNode ???
+    @param nActPos ???
+    @return SwRect Repaint area
 */
 SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/ )
 {
@@ -1619,12 +1618,12 @@ void SwTxtNode::TransliterateText(
         // proper thing to do.
         const sal_Int16 nWordType = WordType::ANYWORD_IGNOREWHITESPACES;
 
-        //! In order to have less trouble with changing text size, e.g. because
-        //! of ligatures or German small sz being resolved, we need to process
-        //! the text replacements from end to start.
-        //! This way the offsets for the yet to be changed words will be
-        //! left unchanged by the already replaced text.
-        //! For this we temporarily save the changes to be done in this vector
+        // In order to have less trouble with changing text size, e.g. because
+        // of ligatures or German small sz being resolved, we need to process
+        // the text replacements from end to start.
+        // This way the offsets for the yet to be changed words will be
+        // left unchanged by the already replaced text.
+        // For this we temporarily save the changes to be done in this vector
         std::vector< swTransliterationChgData >   aChanges;
         swTransliterationChgData                  aChgData;
 

@@ -2662,7 +2662,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
     switch (nExecutionResult)
     {
         case SID_FM_DELETEROWS:
-            // delete asynchron
+            // delete asynchronously
             if (m_nDeleteEvent)
                 Application::RemoveUserEvent(m_nDeleteEvent);
             m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete));
@@ -3012,7 +3012,7 @@ void DbGridControl::Undo()
             m_xCurrentRow = m_xDataRow;
 
         if (bAppending && (DbGridControl_Base::IsModified() || bDirty))
-        // remove the row
+            // remove the row
             if (m_nCurrentPos == GetRowCount() - 2)
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
                 // caused our data source form to be reset - which should be the usual case ....)
@@ -3057,7 +3057,7 @@ void DbGridControl::resetCurrentRow()
             m_xCurrentRow = m_xDataRow;
     }
 
-    RowModified(GetCurRow());       // will update the current controller if affected
+    RowModified(GetCurRow()); // will update the current controller if affected
 }
 
 void DbGridControl::RowModified( long nRow, sal_uInt16 /*nColId*/ )
@@ -3250,7 +3250,7 @@ long DbGridControl::PreNotify(NotifyEvent& rEvt)
             {
                 if ((m_nOptions & OPT_DELETE) && GetSelectRowCount())
                 {
-                    // delete asynchron
+                    // delete asynchronously
                     if (m_nDeleteEvent)
                         Application::RemoveUserEvent(m_nDeleteEvent);
                     m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete));

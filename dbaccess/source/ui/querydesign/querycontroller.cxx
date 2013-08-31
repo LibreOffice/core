@@ -865,7 +865,7 @@ void OQueryController::impl_initialize()
     OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
-    // . reading parameters:
+    // reading parameters:
 
     // legacy parameters first (later overwritten by regular parameters)
     OUString sIndependentSQLCommand;
@@ -936,7 +936,7 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
     }
 
-    // . initial design
+    // initial design
     bool bForceInitialDesign = false;
     Sequence< PropertyValue > aCurrentQueryDesignProps;
     aCurrentQueryDesignProps = rArguments.getOrDefault( "CurrentQueryDesign", aCurrentQueryDesignProps );
@@ -1119,7 +1119,7 @@ void OQueryController::setQueryComposer()
 
 sal_Bool OQueryController::Construct(Window* pParent)
 {
-    // TODO: we have to check if we should create the text- or the design- view
+    // TODO: we have to check if we should create the text view or the design view
 
     setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
 

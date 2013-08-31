@@ -61,7 +61,7 @@ public:
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
     virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
-    /** returns the numbering type that is used to format page fields in drawing shapes */
+    /** @returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const;
 
     OXUndoEnvironment&  GetUndoEnv();
@@ -75,8 +75,8 @@ public:
 
     /** returns the page which belongs to a section
     *
-    * \param _xSection
-    * \return The page or <NULL/> when no page could be found.
+    * @param _xSection
+    * @return The page or <NULL/> when no page could be found.
     */
     OReportPage* getPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 

@@ -660,7 +660,7 @@ sal_Bool FormattedField::SetFormat(const OUString& rFormatString, LanguageType e
 sal_Bool FormattedField::GetThousandsSep() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
-        "FormattedField::GetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
+        "FormattedField::GetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
@@ -672,7 +672,7 @@ sal_Bool FormattedField::GetThousandsSep() const
 void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
-        "FormattedField::SetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
+        "FormattedField::SetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
     // get the current settings
     bool bThousand, IsRed;
@@ -701,7 +701,7 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 sal_uInt16 FormattedField::GetDecimalDigits() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
-        "FormattedField::GetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
+        "FormattedField::GetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
@@ -713,7 +713,7 @@ sal_uInt16 FormattedField::GetDecimalDigits() const
 void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
-        "FormattedField::SetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
+        "FormattedField::SetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
     // get the current settings
     bool bThousand, IsRed;

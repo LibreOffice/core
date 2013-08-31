@@ -123,7 +123,6 @@ void SwOleClient::ViewChanged()
     }
     catch (const uno::Exception&)
     {
-        // this is an error
         OSL_FAIL( "Something goes wrong on requesting object size!\n" );
     }
 

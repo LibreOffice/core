@@ -62,13 +62,13 @@ inline auto_ptr< rtl_mem > seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 System::Object^ Bridge::map_uno2cli(uno_Interface * pUnoI, typelib_InterfaceTypeDescription *pTD) const
 {
     System::Object^ retVal= nullptr;
-// get oid
+    // get oid
     rtl_uString * pOid = 0;
     (*m_uno_env->getObjectIdentifier)( m_uno_env, &pOid, pUnoI );
     OSL_ASSERT( 0 != pOid );
     OUString oid(pOid, SAL_NO_ACQUIRE);
 
-    //see if the interface was already mapped
+    // see if the interface was already mapped
     System::Type^ ifaceType= mapUnoType(reinterpret_cast<typelib_TypeDescription*>(pTD));
     System::String^ sOid= mapUnoString(oid.pData);
 

@@ -47,8 +47,7 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        /** ZBufferProcessor3D class
-
+        /**
             This 3D renderer derived from DefaultProcessor3D renders all feeded primitives to a 2D
             raster bitmap using a Z-Buffer based approach. It is able to supersample and to handle
             transparent content.

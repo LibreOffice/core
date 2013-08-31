@@ -49,9 +49,7 @@ enum CSS1Token
     CSS1_HASH,
 
     CSS1_IMPORT_SYM,
-// Feature: PrintExt
-    CSS1_PAGE_SYM,
-// /Feature: PrintExt
+    CSS1_PAGE_SYM, // Feature: PrintExt
 
     CSS1_IMPORTANT_SYM,
 
@@ -74,10 +72,7 @@ enum CSS1SelectorType
     CSS1_SELTYPE_CLASS,
     CSS1_SELTYPE_ID,
     CSS1_SELTYPE_PSEUDO,
-// Feature: PrintExt
-    CSS1_SELTYPE_PAGE
-// /Feature: PrintExt
-
+    CSS1_SELTYPE_PAGE // Feature: PrintExt
 };
 
 // Die folegende Klasse beschreibt einen Simple-Selector, also
