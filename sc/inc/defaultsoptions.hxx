@@ -22,7 +22,6 @@ private:
     SCTAB nInitTabCount;             // number of Tabs for new Spreadsheet doc
     OUString aInitTabPrefix;  // The Tab prefix name in new Spreadsheet doc
 
-
 public:
     ScDefaultsOptions();
     ScDefaultsOptions( const ScDefaultsOptions& rCpy );
@@ -41,9 +40,7 @@ public:
 
 };
 
-//==================================================================
 // item for the dialog / options page
-//==================================================================
 
 class SC_DLLPUBLIC ScTpDefaultsItem : public SfxPoolItem
 {
@@ -64,9 +61,7 @@ private:
     ScDefaultsOptions theOptions;
 };
 
-//==================================================================
 // config item
-//==================================================================
 
 class ScDefaultsCfg : public ScDefaultsOptions, public utl::ConfigItem
 {

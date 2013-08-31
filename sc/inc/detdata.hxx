@@ -23,8 +23,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "global.hxx"
 
-
-//------------------------------------------------------------------------
 enum ScDetOpType
 {
     SCDETOP_ADDSUCC,
@@ -33,8 +31,6 @@ enum ScDetOpType
     SCDETOP_DELPRED,
     SCDETOP_ADDERROR
 };
-
-//------------------------------------------------------------------------
 
 class ScDetOpData
 {
@@ -57,8 +53,6 @@ public:
     int operator==      ( const ScDetOpData& r ) const
                             { return eOperation == r.eOperation && aPos == r.aPos; }
 };
-
-//------------------------------------------------------------------------
 
 //
 //  list of operators
@@ -89,8 +83,6 @@ public:
     sal_Bool    HasAddError() const     { return bHasAddError; }
     size_t      Count() const { return aDetOpDataVector.size(); }
 };
-
-
 
 #endif
 

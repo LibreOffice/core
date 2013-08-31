@@ -28,7 +28,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
 class ScUnoConversion
 {
 public:
@@ -77,7 +76,6 @@ public:
                             const ::com::sun::star::table::CellRangeAddress& rApiOuter,
                             const ::com::sun::star::table::CellRangeAddress& rApiInner );
 };
-
 
 inline void ScUnoConversion::FillScAddress(
         ScAddress& rScAddress,
@@ -167,8 +165,6 @@ inline bool ScUnoConversion::Contains(
         (rApiOuter.StartColumn <= rApiInner.StartColumn) && (rApiInner.EndColumn <= rApiOuter.EndColumn) &&
         (rApiOuter.StartRow <= rApiInner.StartRow) && (rApiInner.EndRow <= rApiOuter.EndRow);
 }
-
-//___________________________________________________________________
 
 inline sal_Bool operator==(
         const ::com::sun::star::table::CellAddress& rApiAddress1,

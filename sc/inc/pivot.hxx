@@ -33,7 +33,6 @@
     Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
-
 #ifndef SC_PIVOT_HXX
 #define SC_PIVOT_HXX
 
@@ -52,7 +51,6 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-
 struct ScDPName
 {
     OUString     maName;         ///< Original name of the dimension.
@@ -60,8 +58,6 @@ struct ScDPName
 
     explicit ScDPName(const OUString& rName, const OUString& rLayoutName);
 };
-
-// ============================================================================
 
 struct ScDPLabelData
 {

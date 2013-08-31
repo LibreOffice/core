@@ -25,8 +25,6 @@
 
 class ScDocument;
 
-// ============================================================================
-
 /** Stores the used instances of the FilterFormulaParser service
     implementations, mapped by the formula namespace they support. */
 class ScFormulaParserPool
@@ -52,8 +50,6 @@ private:
     const ScDocument&   mrDoc;
     ParserMap           maParsers;
 };
-
-// ============================================================================
 
 #endif
 

@@ -47,8 +47,6 @@ struct SvEventDescription;
 class ShapeUnoEventAccessImpl;
 class  ScMacroInfo;
 
-//------------------------------------------------------------------------
-
 //  object which aggregates all svx shape objects,
 //  to add own properties
 

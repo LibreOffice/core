@@ -25,9 +25,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-
-//-------------------------------------------------------------------------
-
 #define SC_DRAWLAYER 0x30334353     // Inventor: "SC30"
 
 // Object-Ids fuer UserData
@@ -36,8 +33,6 @@
 #define SC_UD_MACRODATA     3
 #define SC_UD_ALTOBJDATA    4
 
-//-------------------------------------------------------------------------
-
 class ScDrawObjFactory
 {
     DECL_LINK( MakeUserData, SdrObjFactory * );
@@ -45,8 +40,6 @@ public:
     ScDrawObjFactory();
    ~ScDrawObjFactory();
 };
-
-//-------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScDrawObjData : public SdrObjUserData
 {
@@ -66,8 +59,6 @@ private:
      virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
 };
 
-//-------------------------------------------------------------------------
-
 class ScIMapInfo : public SdrObjUserData
 {
     ImageMap        aImageMap;
@@ -83,8 +74,6 @@ public:
     void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const             { return aImageMap; }
 };
-
-//-------------------------------------------------------------------------
 
 class ScMacroInfo : public SdrObjUserData
 {
@@ -105,9 +94,6 @@ private:
     OUString   maHlink;
 };
 
-//-------------------------------------------------------------------------
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

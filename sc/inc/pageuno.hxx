@@ -22,8 +22,6 @@
 
 #include <svx/fmdpage.hxx>
 
-//------------------------------------------------------------------------
-
 //  SvxFmDrawPage subclass to create ScShapeObj for shapes
 
 class ScPageObj : public SvxFmDrawPage

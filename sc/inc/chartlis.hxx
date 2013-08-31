@@ -20,7 +20,6 @@
 #ifndef SC_CHARTLIS_HXX
 #define SC_CHARTLIS_HXX
 
-
 #include <vcl/timer.hxx>
 #include <svl/listener.hxx>
 #include "rangelst.hxx"
@@ -121,8 +120,6 @@ public:
     bool operator!=( const ScChartListener& r ) const;
 };
 
-// ============================================================================
-
 class ScChartHiddenRangeListener
 {
 public:
@@ -130,8 +127,6 @@ public:
     virtual ~ScChartHiddenRangeListener();
     virtual void notify() = 0;
 };
-
-// ============================================================================
 
 class ScChartListenerCollection
 {
@@ -222,7 +217,6 @@ public:
      */
     void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
-
 
 #endif
 

@@ -38,8 +38,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
-//-----------------------------------------------
-
 // constants and data types also for external modules (ScInterpreter et al)
 
 #define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
@@ -73,7 +71,6 @@
 #define SC_COMPILER_C_CHAR_ERRCONST   0x01000000  // start character of an error constant ('#')
 
 #define SC_COMPILER_FILE_TAB_SEP      '#'         // 'Doc'#Tab
-
 
 class ScDocument;
 class ScMatrix;
@@ -287,7 +284,6 @@ public:
     friend struct Convention;
 
 private:
-
 
     static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];

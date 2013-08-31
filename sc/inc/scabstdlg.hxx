@@ -62,7 +62,6 @@ public:
     virtual void                        SaveParameters() = 0;
 };
 
-
 class AbstractScAutoFormatDlg : public VclAbstractDialog  //add for ScAutoFormatDlg
 {
 public:
@@ -323,8 +322,7 @@ public:
     virtual bool IsDateConversionSet() const = 0;
 };
 
-//-------Scabstract fractory ---------------------------
-class ScAbstractDialogFactory
+//Scabstract fractoryclass ScAbstractDialogFactory
 {
 public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();

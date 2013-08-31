@@ -95,8 +95,6 @@ struct SC_DLLPUBLIC ScSetStringParam
     void setNumericInput();
 };
 
-// ============================================================================
-
 struct ScInputStringType
 {
     enum StringType { Unknown = 0, Text, Formula, Number };
@@ -138,7 +136,6 @@ public:
     static ScInputStringType parseInputString(
         SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang );
 };
-
 
 #endif
 

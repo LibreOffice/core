@@ -24,8 +24,6 @@
 #include "address.hxx"
 #include <svl/hint.hxx>
 
-// ---------------------------------------------------------------------------
-
 class ScPaintHint : public SfxHint
 {
     ScRange     aRange;
@@ -52,7 +50,6 @@ public:
     sal_Bool            GetPrintFlag() const    { return bPrint; }
 };
 
-
 class ScUpdateRefHint : public SfxHint
 {
     UpdateRefMode   eUpdateRefMode;
@@ -75,7 +72,6 @@ public:
     SCsTAB          GetDz() const           { return nDz; }
 };
 
-
 #define SC_POINTERCHANGED_NUMFMT    1
 
 class ScPointerChangedHint : public SfxHint
@@ -89,7 +85,6 @@ public:
 
     sal_uInt16          GetFlags() const            { return nFlags; }
 };
-
 
 //! move ScLinkRefreshedHint to a different file?
 
@@ -126,7 +121,6 @@ public:
     sal_uInt8               GetDdeMode() const  { return nDdeMode; }
     const ScAddress&    GetDestPos() const  { return aDestPos; }
 };
-
 
 //! move ScAutoStyleHint to a different file?
 

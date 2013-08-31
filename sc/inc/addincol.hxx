@@ -36,15 +36,12 @@
 
 #include <boost/unordered_map.hpp>
 
-
 class String;
 class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScFuncDesc;
 
-
 typedef ::boost::unordered_map< OUString, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< OUString > > ScAddInHashMap;
-
 
 enum ScAddInArgumentType
 {
@@ -61,8 +58,6 @@ enum ScAddInArgumentType
     SC_ADDINARG_CALLER,                 ///< XPropertySet
     SC_ADDINARG_VARARGS                 ///< sequence<any>
 };
-
-//------------------------------------------------------------------------
 
 struct ScAddInArgDesc
 {
@@ -135,8 +130,6 @@ public:
     void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
 };
 
-//------------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScUnoAddInCollection
 {
 private:
@@ -188,7 +181,6 @@ public:
     bool                GetCalcName( const OUString& rExcelName, OUString& rRetCalcName );
 };
 
-
 class ScUnoAddInCall
 {
 private:
@@ -237,7 +229,6 @@ public:
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>
                         GetVarRes() const       { return xVarRes; }
 };
-
 
 #endif
 

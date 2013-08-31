@@ -34,7 +34,6 @@
 #include <algorithm>
 #include <stack>
 
-
 class KeyEvent;
 class EditView;
 class SfxErrorHandler;
@@ -75,14 +74,10 @@ struct ScDragData;
 struct ScClipData;
 class ScAnyRefModalDlg;
 
-//==================================================================
-
 //      for internal Drag&Drop:
 
 #define SC_DROP_NAVIGATOR       1
 #define SC_DROP_TABLE           2
-
-//==================================================================
 
 class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
@@ -265,6 +260,5 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

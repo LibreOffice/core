@@ -20,8 +20,6 @@
 #ifndef SC_CHARTPOS_HXX
 #define SC_CHARTPOS_HXX
 
-// -----------------------------------------------------------------------
-
 #include "rangelst.hxx"
 #include <map>
 
@@ -94,7 +92,6 @@ public:
                                     }
 };
 
-
 enum ScChartGlue {
     SC_CHARTGLUE_NA,
     SC_CHARTGLUE_NONE,      // old mimic
@@ -157,7 +154,6 @@ public:
                                 }
     const ScChartPositionMap*   GetPositionMap();
 };
-
 
 #endif
 

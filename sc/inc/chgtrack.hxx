@@ -52,14 +52,12 @@ enum ScChangeActionType
     SC_CAT_REJECT
 };
 
-
 enum ScChangeActionState
 {
     SC_CAS_VIRGIN,
     SC_CAS_ACCEPTED,
     SC_CAS_REJECTED
 };
-
 
 enum ScChangeActionClipMode
 {
@@ -69,8 +67,7 @@ enum ScChangeActionClipMode
     SC_CACM_PASTE
 };
 
-// --- ScChangeActionLinkEntry ---------------------------------------------
-
+//  ScChangeActionLinkEntry
 // Inserts itself as the head of a chain (better: linked list?), or before a LinkEntry
 // on delete: automatically remove of what is linked (German original was strange...)
 // ppPrev == &previous->pNext oder address of pointer to head of linked list,
@@ -165,7 +162,7 @@ public:
     ScChangeAction*                 GetAction()         { return pAction; }
 };
 
-// --- ScChangeActionCellListEntry -----------------------------------------
+// ScChangeActionCellListEntry
 // this is only for the XML Export in the hxx
 class ScChangeActionContent;
 
@@ -193,8 +190,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 };
 
-// --- ScChangeAction -------------------------------------------------------
-
+//  ScChangeAction
 class ScChangeTrack;
 class ScChangeActionIns;
 class ScChangeActionDel;
@@ -401,9 +397,7 @@ public:
                                 const ScChangeTrack* pTrack );
 };
 
-
-// --- ScChangeActionIns ----------------------------------------------------
-
+//  ScChangeActionIns
 class ScChangeActionIns : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -432,9 +426,7 @@ public:
         OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
 };
 
-
-// --- ScChangeActionDel ----------------------------------------------------
-
+//  ScChangeActionDel
 class ScChangeActionMove;
 
 class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
@@ -482,7 +474,6 @@ public:
     short               GetCutOffFrom() const { return nCutOffFrom; }
     short               GetCutOffTo() const { return nCutOffTo; }
 };
-
 
 class ScChangeActionDel : public ScChangeAction
 {
@@ -560,9 +551,7 @@ public:
         ScChangeActionMove* pMove, short nFrom, short nTo );
 };
 
-
-// --- ScChangeActionMove ---------------------------------------------------
-
+//  ScChangeActionMove
 class ScChangeActionMove : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -632,9 +621,7 @@ public:
         OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 };
 
-
-// --- ScChangeActionContent ------------------------------------------------
-
+//  ScChangeActionContent
 enum ScChangeActionContentCellType
 {
     SC_CACCT_NONE = 0,
@@ -808,9 +795,7 @@ public:
     bool IsOldMatrixReference() const;
 };
 
-
-// --- ScChangeActionReject -------------------------------------------------
-
+//  ScChangeActionReject
 class ScChangeActionReject : public ScChangeAction
 {
     friend class ScChangeTrack;
@@ -840,9 +825,7 @@ public:
                     const OUString &sComment); // only to use in the XML import
 };
 
-
-// --- ScChangeTrack --------------------------------------------------------
-
+//  ScChangeTrack
 enum ScChangeTrackMsgType
 {
     SC_CTM_NONE,
@@ -1245,8 +1228,6 @@ public:
     void MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

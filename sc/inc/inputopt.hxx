@@ -20,10 +20,8 @@
 #ifndef SC_INPUTOPT_HXX
 #define SC_INPUTOPT_HXX
 
-
 #include <unotools/configitem.hxx>
 #include <tools/solar.h>
-
 
 class ScInputOptions
 {
@@ -73,10 +71,7 @@ public:
     const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };
 
-
-//==================================================================
 // CfgItem for input options
-//==================================================================
 
 class ScInputCfg : public ScInputOptions,
                   public utl::ConfigItem
@@ -92,7 +87,6 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
     virtual void    Commit();
 };
-
 
 #endif
 

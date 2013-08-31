@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
 } } } }
 
-
 class ScAddress;
 class ScDocument;
 class ScDPSource;
@@ -216,7 +215,6 @@ public:
     void SetInColRoot(bool bSet) { bIsInColRoot = bSet; }
 };
 
-// --------------------------------------------------------------------
 //
 //  results for a hierarchy dimension
 //
@@ -345,7 +343,6 @@ public:
 
     const ScDPSource& GetSource() const;
 };
-
 
 class ScDPResultMember
 {
@@ -504,7 +501,6 @@ public:
 };
 
 typedef std::vector<ScDPDataMember*> ScDPDataMembers;
-
 
 //  result dimension contains only members
 
@@ -665,8 +661,6 @@ public:
     const ScDPDataMember*     GetMember(long n) const;
     ScDPDataMember*     GetMember(long n);
 };
-
-// ----------------------------------------------------------------------------
 
 /**
  * This class collects visible members of each dimension and uses that

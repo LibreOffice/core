@@ -24,9 +24,7 @@
 #include <tools/solar.h>
 #include "scdllapi.h"
 
-//==================================================================
 // filter options
-//==================================================================
 
 class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
@@ -48,7 +46,6 @@ public:
 
     //  values are never modified by office
 };
-
 
 #endif
 

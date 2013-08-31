@@ -22,10 +22,7 @@
 
 #include <tools/solar.h>
 
-
-//==================================================================
 // CfgItem for navigator-state
-//==================================================================
 
 class ScNavipiCfg
 {
@@ -44,7 +41,6 @@ public:
     void    SetRootType(sal_uInt16 nNew);
     sal_uInt16  GetRootType() const         { return nRootType; }
 };
-
 
 #endif
 

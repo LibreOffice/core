@@ -23,8 +23,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-//-----------------------------------------------------------------------
-
 struct ScPageTableParam
 {
     sal_Bool    bCellContent;
@@ -72,8 +70,6 @@ struct ScPageAreaParam
     void                Reset       ();
 };
 
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
