@@ -66,10 +66,10 @@ public:
         sal_Int32 hTestHandle)
         throw ( IllegalArgumentException,RuntimeException);
 
-    virtual sal_Bool SAL_CALL testPassed(void) throw (  RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getErrors(void)               throw (RuntimeException);
-    virtual Sequence< Any > SAL_CALL getErrorExceptions(void)       throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getWarnings(void)                 throw (RuntimeException);
+    virtual sal_Bool SAL_CALL testPassed(void) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getErrors(void) throw (RuntimeException);
+    virtual Sequence< Any > SAL_CALL getErrorExceptions(void) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getWarnings(void) throw (RuntimeException);
 
 private:
     void testSimple( const Reference < XParser > &r );
@@ -78,9 +78,9 @@ private:
     void testEncoding( const Reference < XParser > &rParser );
     void testPerformance( const Reference < XParser > &rParser );
 
-    Sequence<Any>       m_seqExceptions;
-    Sequence<OUString>      m_seqErrors;
-    Sequence<OUString>      m_seqWarnings;
+    Sequence<Any> m_seqExceptions;
+    Sequence<OUString> m_seqErrors;
+    Sequence<OUString>  m_seqWarnings;
     Reference < XMultiServiceFactory > m_rFactory;
 };
 
@@ -178,22 +178,22 @@ sal_Int32 OSaxParserTest::test(
     return hTestHandle;
 }
 
-sal_Bool OSaxParserTest::testPassed(void)                                       throw (RuntimeException)
+sal_Bool OSaxParserTest::testPassed(void) throw (RuntimeException)
 {
     return m_seqErrors.getLength() == 0;
 }
 
-Sequence< OUString > OSaxParserTest::getErrors(void)                            throw (RuntimeException)
+Sequence< OUString > OSaxParserTest::getErrors(void) throw (RuntimeException)
 {
     return m_seqErrors;
 }
 
-Sequence< Any > OSaxParserTest::getErrorExceptions(void)                    throw (RuntimeException)
+Sequence< Any > OSaxParserTest::getErrorExceptions(void) throw (RuntimeException)
 {
     return m_seqExceptions;
 }
 
-Sequence< OUString > OSaxParserTest::getWarnings(void)                      throw (RuntimeException)
+Sequence< OUString > OSaxParserTest::getWarnings(void) throw (RuntimeException)
 {
     return m_seqWarnings;
 }

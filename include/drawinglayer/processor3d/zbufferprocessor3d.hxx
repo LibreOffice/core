@@ -57,23 +57,23 @@ namespace drawinglayer
         {
         private:
             /// the raster target, a Z-Buffer
-            basegfx::BZPixelRaster*                             mpBZPixelRaster;
+            basegfx::BZPixelRaster* mpBZPixelRaster;
 
             /// inverse of EyeToView for rasterconversion with evtl. Phong shading
-            basegfx::B3DHomMatrix                               maInvEyeToView;
+            basegfx::B3DHomMatrix maInvEyeToView;
 
             /// The raster converter for Z-Buffer
-            ZBufferRasterConverter3D*                           mpZBufferRasterConverter3D;
+            ZBufferRasterConverter3D* mpZBufferRasterConverter3D;
 
             /*  AA value. Defines how many oversamples will be used in X and Y. Values 0, 1
                 will switch it off while e.g. 2 will use 2x2 pixels for each pixel to create
               */
-            sal_uInt16                                          mnAntiAlialize;
+            sal_uInt16 mnAntiAlialize;
 
             /*  remembered RasterPrimitive3D's which need to be painted back to front
                 for transparent 3D parts
              */
-            std::vector< RasterPrimitive3D >*                   mpRasterPrimitive3Ds;
+            std::vector< RasterPrimitive3D >* mpRasterPrimitive3Ds;
 
             // rasterconversions for filled and non-filled polygons
 

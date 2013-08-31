@@ -263,7 +263,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     // first clear the old things
-m_xMetaData.clear();
+    m_xMetaData.clear();
     disposeResultSet();
     if(m_RecordSet.IsValid())
         m_RecordSet.Close();

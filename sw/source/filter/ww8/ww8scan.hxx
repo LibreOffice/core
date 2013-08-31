@@ -305,7 +305,7 @@ public:
 /* for Piece Table (.i.e. FastSave Table) */
 class WW8PLCFpcd
 {
-friend class WW8PLCFpcd_Iter;
+    friend class WW8PLCFpcd_Iter;
 
     sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
     sal_uInt8*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
@@ -947,15 +947,15 @@ private:
     WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Deskriptoren fuer diese
     WW8PLCFspecial*   pMagicTables;     // Break-Deskriptoren fuer diese
     WW8PLCFspecial*   pSubdocs;         // subdoc references in master document
-    sal_uInt8*             pExtendedAtrds;   // Extended ATRDs
+    sal_uInt8*        pExtendedAtrds;   // Extended ATRDs
     WW8PLCFx_Book*    pBook;            // Bookmarks
 
     WW8PLCFpcd*         pPiecePLCF; // fuer FastSave ( Basis-PLCF ohne Iterator )
     WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )
     WW8PLCFx_PCD*       pPLCFx_PCD;     // dito
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    sal_uInt8**              pPieceGrpprls;  // Attribute an Piece-Table
-    sal_uInt16              nPieceGrpprls;  // Anzahl davon
+    sal_uInt8**         pPieceGrpprls;  // Attribute an Piece-Table
+    sal_uInt16          nPieceGrpprls;  // Anzahl davon
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF );
     void DeletePieceTable();
@@ -1078,7 +1078,7 @@ public:
                                                                 // 0x6A62 is the creator ID for Word and is reserved.
                                                                 // Other creators should choose a different value.
     sal_uInt16 wMagicRevised;                   // identifies the File's last modifier
-  sal_uInt16 wMagicCreatedPrivate;  // private data
+    sal_uInt16 wMagicCreatedPrivate;  // private data
     sal_uInt16 wMagicRevisedPrivate;    // private data
 
     sal_Int16  lidFE;                                   // Language id if document was written by Far East version
@@ -1702,7 +1702,7 @@ public:
     sal_uInt16 fAcetateShowProps:1;
 
     // 2. Initialisier-Dummy:
-    sal_uInt8    nDataEnd;
+    sal_uInt8 nDataEnd;
 
     bool bUseThaiLineBreakingRules;
 
@@ -1712,6 +1712,7 @@ public:
     /* Constructs default DOP suitable for exporting */
     WW8Dop();
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
+
 public:
     sal_uInt32 GetCompatabilityOptions() const;
     void SetCompatabilityOptions(sal_uInt32 a32Bit);

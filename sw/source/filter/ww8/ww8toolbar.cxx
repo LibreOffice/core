@@ -374,8 +374,9 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                         helper.getCfgManager()->replaceSettings( sMenuBar, uno::Reference< container::XIndexAccess >( xIndexContainer, uno::UNO_QUERY_THROW ) );
                     else
                         helper.getCfgManager()->insertSettings( sMenuBar, uno::Reference< container::XIndexAccess >( xIndexContainer, uno::UNO_QUERY_THROW ) );
-        uno::Reference< ui::XUIConfigurationPersistence > xPersistence( helper.getCfgManager(), uno::UNO_QUERY_THROW );
-        xPersistence->store();
+
+                    uno::Reference< ui::XUIConfigurationPersistence > xPersistence( helper.getCfgManager(), uno::UNO_QUERY_THROW );
+                    xPersistence->store();
                 }
             }
         }

@@ -1545,10 +1545,10 @@ void Bridge::map_to_cli(
         break;
     }
     case typelib_TypeClass_TYPE:
-     {
+    {
          *cli_data= mapUnoType( *(typelib_TypeDescriptionReference * const *)uno_data );
          break;
-     }
+    }
     case typelib_TypeClass_ANY:
     {
         uno_Any const * pAny = (uno_Any const *)uno_data;
@@ -1569,7 +1569,7 @@ void Bridge::map_to_cli(
         break;
     }
     case typelib_TypeClass_ENUM:
-     {
+    {
          if (info != nullptr)
          {
              OSL_ASSERT(info->IsByRef);
@@ -1986,8 +1986,8 @@ void Bridge::map_to_cli(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
-    }
-}
-}
+    } //switch
+} // method
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

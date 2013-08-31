@@ -449,7 +449,7 @@ protected:
                                   bool bUseDisplay );
 
 public:
-TYPEINFO();
+    TYPEINFO();
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,

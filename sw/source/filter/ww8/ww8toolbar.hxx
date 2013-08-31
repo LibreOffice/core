@@ -23,6 +23,7 @@ public:
 };
 
 class SwCTBWrapper;
+
 class SwTBC : public TBBase
 {
     TBCHeader tbch;
@@ -91,7 +92,7 @@ public:
 
 class Tcg255SubStruct : public TBBase
 {
-friend class Tcg255;
+    friend class Tcg255;
 
     bool mbReadId;
     Tcg255SubStruct(const Tcg255SubStruct&);
@@ -111,7 +112,7 @@ class SwCTBWrapper;
 
 class Customization : public TBBase
 {
-friend class SwCTBWrapper;
+    friend class SwCTBWrapper;
 
     sal_Int32 tbidForTBD;
     sal_uInt16 reserved1;
@@ -263,13 +264,13 @@ public:
 
 class TcgSttbfCore : public TBBase
 {
-struct SBBItem
-{
-    sal_uInt16 cchData;
-    OUString data;
-    sal_uInt16 extraData;
-    SBBItem() : cchData(0), extraData(0){}
-};
+    struct SBBItem
+    {
+        sal_uInt16 cchData;
+        OUString data;
+        sal_uInt16 extraData;
+        SBBItem() : cchData(0), extraData(0){}
+    };
 
     sal_uInt16 fExtend;
     sal_uInt16 cData;
