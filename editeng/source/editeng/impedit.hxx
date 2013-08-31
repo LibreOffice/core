@@ -100,6 +100,10 @@ namespace svtools {
     class ColorConfig;
 }
 
+namespace editeng {
+    struct MisspellRanges;
+}
+
 struct DragAndDropInfo
 {
     Rectangle           aCurCursor;
@@ -886,6 +890,10 @@ public:
     void                SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >  &xHyph )
                             { xHyphenator = xHyph; }
+
+    void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
+    void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
+
     SpellInfo*          GetSpellInfo() const { return pSpellInfo; }
 
     void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }

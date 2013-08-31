@@ -59,6 +59,7 @@
 #include "docsh.hxx"
 #include "markdata.hxx"
 #include "stlsheet.hxx"
+#include "spellcheckcontext.hxx"
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
@@ -1443,23 +1444,23 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
-                sal_Bool bMergeEmpty = false;
+                bool bMergeEmpty = false;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                sal_Bool bEmpty = nX < nX1 || pInfo->bEmptyCellText;
+                bool bEmpty = nX < nX1 || pInfo->bEmptyCellText;
 
                 SCCOL nCellX = nX;                  // position where the cell really starts
                 SCROW nCellY = nY;
-                sal_Bool bDoCell = false;
-                sal_Bool bNeedEdit = false;
+                bool bDoCell = false;
+                bool bNeedEdit = false;
 
                 //
                 //  Part of a merged cell?
                 //
 
-                sal_Bool bOverlapped = ( pInfo->bHOverlapped || pInfo->bVOverlapped );
+                bool bOverlapped = (pInfo->bHOverlapped || pInfo->bVOverlapped);
                 if ( bOverlapped )
                 {
-                    bEmpty = sal_True;
+                    bEmpty = true;
 
                     SCCOL nOverX;                   // start of the merged cells
                     SCROW nOverY;
@@ -1471,7 +1472,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         bDoCell = sal_True;
                     }
                     else
-                        bMergeEmpty = sal_True;
+                        bMergeEmpty = true;
                 }
 
                 //
@@ -1489,7 +1490,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                          !mpDoc->HasAttrib( nTempX,nY,nTab, nX1,nY,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
                     {
                         nCellX = nTempX;
-                        bDoCell = sal_True;
+                        bDoCell = true;
                     }
                 }
 
@@ -1519,7 +1520,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                 //
 
                 if (!bEmpty)
-                    bDoCell = sal_True;
+                    bDoCell = true;
 
                 //
                 //  don't output the cell that's being edited
@@ -1553,6 +1554,14 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     else if (aCell.meType == CELLTYPE_EDIT)
                         bNeedEdit = true;
                 }
+
+                // Check if this cell is mis-spelled.
+                if (bDoCell && !bNeedEdit && aCell.meType == CELLTYPE_STRING)
+                {
+                    if (mpSpellCheckCxt && mpSpellCheckCxt->isMisspelled(nCellX, nCellY))
+                        bNeedEdit = true;
+                }
+
                 if (bDoCell && !bNeedEdit)
                 {
                     if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
@@ -2257,7 +2266,8 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mpOldPattern(NULL),
     mpOldCondSet(NULL),
     mpOldPreviewFontSet(NULL),
-    mpThisRowInfo(NULL)
+    mpThisRowInfo(NULL),
+    mpMisspellRanges(NULL)
 {}
 
 bool ScOutputData::DrawEditParam::readCellContent(
@@ -2302,6 +2312,10 @@ bool ScOutputData::DrawEditParam::readCellContent(
         if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
             lcl_SetEditColor( *mpEngine, *pColor );
     }
+
+    if (mpMisspellRanges)
+        mpEngine->SetAllMisspellRanges(*mpMisspellRanges);
+
     return true;
 }
 
@@ -4576,7 +4590,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                     }
                     else
                     {
-                        bDoCell = sal_True;
+                        bDoCell = true;
                     }
 
                     if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
@@ -4644,6 +4658,9 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
+                        if (mpSpellCheckCxt)
+                            aParam.mpMisspellRanges = mpSpellCheckCxt->getMisspellRanges(nCellX, nCellY);
+
                         if (aParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT)
                         {
                             // ignore orientation/rotation if "repeat" is active

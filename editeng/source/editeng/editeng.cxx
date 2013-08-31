@@ -2284,6 +2284,16 @@ void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
     pImpEditEngine->SetHyphenator( xHyph );
 }
 
+void EditEngine::GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const
+{
+    pImpEditEngine->GetAllMisspellRanges(rRanges);
+}
+
+void EditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges )
+{
+    pImpEditEngine->SetAllMisspellRanges(rRanges);
+}
+
 void EditEngine::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     DBG_CHKTHIS( EditEngine, 0 );

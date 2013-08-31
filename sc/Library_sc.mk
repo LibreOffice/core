@@ -592,6 +592,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/view/selectionstate \
 	sc/source/ui/view/spelldialog \
 	sc/source/ui/view/spelleng \
+	sc/source/ui/view/spellcheckcontext \
 	sc/source/ui/view/tabcont \
 	sc/source/ui/view/tabsplit \
 	sc/source/ui/view/tabview \

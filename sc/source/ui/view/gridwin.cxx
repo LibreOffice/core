@@ -27,6 +27,9 @@
 #include <editeng/editstat.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
+#include "editeng/unolingu.hxx"
+#include "editeng/langitem.hxx"
+#include "editeng/misspellrange.hxx"
 #include <svx/svdetc.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
@@ -120,6 +123,9 @@
 #include "checklistmenu.hrc"
 #include "strload.hxx"
 #include "externalrefmgr.hxx"
+#include "dociter.hxx"
+#include "hints.hxx"
+#include "spellcheckcontext.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -439,6 +445,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             mpOOHeader( NULL ),
             mpOOShrink( NULL ),
             mpAutoFillRect(static_cast<Rectangle*>(NULL)),
+            mpSpellCheckCxt(new sc::SpellCheckContext),
             pViewData( pData ),
             eWhich( eWhichPos ),
             pNoteMarker( NULL ),
@@ -5353,6 +5360,139 @@ void ScGridWindow::DrawLayerCreated()
 
     // initially create overlay objects
     ImpCreateOverlayObjects();
+}
+
+namespace {
+
+struct SpellCheckStatus
+{
+    bool mbModified;
+
+    SpellCheckStatus() : mbModified(false) {};
+
+    DECL_LINK (EventHdl, EditStatus*);
+};
+
+IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus*, pStatus)
+{
+    sal_uLong nStatus = pStatus->GetStatusWord();
+    if (nStatus & EE_STAT_WRONGWORDCHANGED)
+        mbModified = true;
+
+    return 0;
+}
+
+}
+
+bool ScGridWindow::ContinueOnlineSpelling()
+{
+    if (!mpSpellCheckCxt->maPos.isValid())
+        return false;
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+    SpellCheckStatus aStatus;
+
+    ScHorizontalCellIterator aIter(
+        pDoc, nTab, maVisibleRange.mnCol1, mpSpellCheckCxt->maPos.mnRow, maVisibleRange.mnCol2, maVisibleRange.mnRow2);
+
+    SCCOL nCol;
+    SCROW nRow;
+    ScRefCellValue* pCell = aIter.GetNext(nCol, nRow);
+    while (pCell && nRow < mpSpellCheckCxt->maPos.mnRow)
+        pCell = aIter.GetNext(nCol, nRow);
+
+    while (pCell && nCol < mpSpellCheckCxt->maPos.mnCol)
+        pCell = aIter.GetNext(nCol, nRow);
+
+    boost::scoped_ptr<ScTabEditEngine> pEngine;
+
+    // Check only up to 256 cells at a time.
+    size_t nTotalCellCount = 0;
+    size_t nTextCellCount = 0;
+    bool bChanged = false;
+
+    while (pCell)
+    {
+        ++nTotalCellCount;
+
+        CellType eType = pCell->meType;
+        if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
+        {
+            ++nTextCellCount;
+
+            if (!pEngine)
+            {
+                //  ScTabEditEngine is needed
+                //  because MapMode must be set for some old documents
+                pEngine.reset(new ScTabEditEngine(pDoc));
+                pEngine->SetControlWord(
+                    pEngine->GetControlWord() | (EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS));
+                pEngine->SetStatusEventHdl(LINK(&aStatus, SpellCheckStatus, EventHdl));
+                //  Delimiters hier wie in inputhdl.cxx !!!
+                pEngine->SetWordDelimiters(
+                            ScEditUtil::ModifyDelimiters(pEngine->GetWordDelimiters()));
+
+                uno::Reference<linguistic2::XSpellChecker1> xXSpellChecker1(LinguMgr::GetSpellChecker());
+                pEngine->SetSpeller(xXSpellChecker1);
+            }
+
+            const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
+            sal_uInt16 nCellLang =
+                static_cast<const SvxLanguageItem&>(pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
+            if (nCellLang == LANGUAGE_SYSTEM)
+                nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
+            pEngine->SetDefaultLanguage(nCellLang);
+
+            if (eType == CELLTYPE_STRING)
+                pEngine->SetText(*pCell->mpString);
+            else
+                pEngine->SetText(*pCell->mpEditText);
+
+            aStatus.mbModified = false;
+            pEngine->CompleteOnlineSpelling();
+            if (aStatus.mbModified)
+            {
+                std::vector<editeng::MisspellRanges> aRanges;
+                pEngine->GetAllMisspellRanges(aRanges);
+                if (!aRanges.empty())
+                {
+                    sc::SpellCheckContext::CellPos aPos(nCol, nRow);
+                    mpSpellCheckCxt->maMisspellCells.insert(
+                        sc::SpellCheckContext::CellMapType::value_type(aPos, aRanges));
+                }
+
+                // Broadcast for re-paint.
+                ScPaintHint aHint(ScRange(nCol, nRow, nTab), PAINT_GRID);
+                aHint.SetPrintFlag(false);
+                pDoc->GetDocumentShell()->Broadcast(aHint);
+                bChanged = true;
+            }
+        }
+
+        if (nTotalCellCount >= 255 || nTextCellCount >= 1)
+            break;
+
+        pCell = aIter.GetNext(nCol, nRow);
+    }
+
+    if (pCell)
+        // Move to the next cell position for the next iteration.
+        pCell = aIter.GetNext(nCol, nRow);
+
+    if (pCell)
+    {
+        // This will become the first cell position for the next time.
+        mpSpellCheckCxt->maPos.mnCol = nCol;
+        mpSpellCheckCxt->maPos.mnRow = nRow;
+    }
+    else
+    {
+        // No more cells to spell check.
+        mpSpellCheckCxt->maPos.setInvalid();
+    }
+
+    return bChanged;
 }
 
 // #114409#

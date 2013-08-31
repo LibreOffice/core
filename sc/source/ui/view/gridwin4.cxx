@@ -488,6 +488,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                                 &aZoomX, &aZoomY );
 
     aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
+    aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
 
     std::auto_ptr< VirtualDevice > xFmtVirtDev;
     sal_Bool bLogicText = bTextWysiwyg;                     // call DrawStrings in logic MapMode?

@@ -1391,6 +1391,40 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     return aSel;
 }
 
+void ImpEditEngine::GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const
+{
+    std::vector<editeng::MisspellRanges> aRanges;
+    const EditDoc& rDoc = GetEditDoc();
+    for (sal_Int32 i = 0, n = rDoc.Count(); i < n; ++i)
+    {
+        const ContentNode* pNode = rDoc.GetObject(i);
+        const WrongList* pWrongList = pNode->GetWrongList();
+        if (!pWrongList)
+            continue;
+
+        aRanges.push_back(editeng::MisspellRanges(i, pWrongList->GetRanges()));
+    }
+
+    aRanges.swap(rRanges);
+}
+
+void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges )
+{
+    EditDoc& rDoc = GetEditDoc();
+    std::vector<editeng::MisspellRanges>::const_iterator it = rRanges.begin(), itEnd = rRanges.end();
+    for (; it != itEnd; ++it)
+    {
+        const editeng::MisspellRanges& rParaRanges = *it;
+        ContentNode* pNode = rDoc.GetObject(rParaRanges.mnParagraph);
+        if (!pNode)
+            continue;
+
+        pNode->CreateWrongList();
+        WrongList* pWrongList = pNode->GetWrongList();
+        pWrongList->SetRanges(rParaRanges.maRanges);
+    }
+}
+
 LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPos ) const
 {
     short nScriptType = GetScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen

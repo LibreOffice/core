@@ -207,7 +207,8 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bSnapPixel( false ),
     bAnyRotated( false ),
     bAnyClipped( false ),
-    mpTargetPaintWindow(0) // #i74769# use SdrPaintWindow direct
+    mpTargetPaintWindow(NULL), // #i74769# use SdrPaintWindow direct
+    mpSpellCheckCxt(NULL)
 {
     if (pZoomX)
         aZoomX = *pZoomX;
@@ -244,6 +245,11 @@ ScOutputData::~ScOutputData()
     delete pValueColor;
     delete pTextColor;
     delete pFormulaColor;
+}
+
+void ScOutputData::SetSpellCheckContext( const sc::SpellCheckContext* pCxt )
+{
+    mpSpellCheckCxt = pCxt;
 }
 
 void ScOutputData::SetContentDevice( OutputDevice* pContentDev )

@@ -55,6 +55,9 @@ typedef std::vector<SpellPortion> SpellPortions;
 
 namespace svl { class IUndoManager; }
 namespace basegfx { class B2DPolyPolygon; }
+namespace editeng {
+    struct MisspellRanges;
+}
 
 class ImpEditEngine;
 class EditView;
@@ -397,6 +400,9 @@ public:
                     GetSpeller();
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XHyphenator >& xHyph );
+
+    void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
+    void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
 
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 

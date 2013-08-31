@@ -12,6 +12,8 @@
 
 #include "editeng/editengdllapi.h"
 
+#include <vector>
+
 namespace editeng {
 
 struct EDITENG_DLLPUBLIC MisspellRange
@@ -21,6 +23,14 @@ struct EDITENG_DLLPUBLIC MisspellRange
 
     MisspellRange();
     MisspellRange(size_t nStart, size_t nEnd);
+};
+
+struct EDITENG_DLLPUBLIC MisspellRanges
+{
+    size_t mnParagraph;
+    std::vector<MisspellRange> maRanges;
+
+    MisspellRanges(size_t nParagraph, const std::vector<MisspellRange>& rRanges);
 };
 
 }

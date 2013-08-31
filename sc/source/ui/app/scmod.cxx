@@ -1941,24 +1941,33 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
         return 0;
     }
 
-    sal_Bool bMore = false;
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
+    bool bMore = false;
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
+
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
 
         sal_Bool bLinks = pDoc->IdleCheckLinks();
         sal_Bool bWidth = pDoc->IdleCalcTextWidth();
-        sal_Bool bSpell = pDoc->ContinueOnlineSpelling();
-        if ( bSpell )
-            aSpellTimer.Start();                    // da ist noch was
 
-        bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+        bMore = bLinks || bWidth;         // ueberhaupt noch was?
 
         //  While calculating a Basic formula, a paint event may have occurred,
         //  so check the bNeedsRepaint flags for this document's views
         if (bWidth)
             lcl_CheckNeedsRepaint( pDocSh );
+    }
+
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (pViewSh)
+    {
+        bool bSpell = pViewSh->ContinueOnlineSpelling();
+        if (bSpell)
+        {
+            aSpellTimer.Start();
+            bMore = true;
+        }
     }
 
     sal_uLong nOldTime = aIdleTimer.GetTimeout();
@@ -1996,11 +2005,10 @@ IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
         return 0;                   // dann spaeter wieder...
     }
 
-    ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
-    if ( pDocSh )
+    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    if (pViewSh)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        if ( pDoc->ContinueOnlineSpelling() )
+        if (pViewSh->ContinueOnlineSpelling())
             aSpellTimer.Start();
     }
     return 0;

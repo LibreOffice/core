@@ -32,6 +32,16 @@
 #include <vector>
 #include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
+
+namespace editeng {
+    struct MisspellRanges;
+}
+
+namespace sc {
+    struct SpellCheckContext;
+}
 
 struct ScTableInfo;
 class ScDPObject;
@@ -81,8 +91,6 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     // ScFilterListBox is always used for selection list
     friend class ScFilterListBox;
 
-private:
-
     enum RfCorner
     {
         NONE,
@@ -121,9 +129,11 @@ private:
         bool isInside(SCCOL nCol, SCROW nRow) const;
         bool set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
+
     VisibleRange maVisibleRange;
 
-private:
+    boost::scoped_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
+
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
     ScHSplitPos             eHWhich;
@@ -168,7 +178,6 @@ private:
     InsCellCmd              meDragInsertMode;
 
     sal_uInt16              nCurrentPointer;
-
 
     ScDDComboBoxButton      aComboButton;
 
@@ -382,6 +391,7 @@ public:
     // #114409#
     void CursorChanged();
     void DrawLayerCreated();
+    bool ContinueOnlineSpelling();
 
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();

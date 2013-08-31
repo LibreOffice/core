@@ -520,6 +520,8 @@ public:
     void            ResetBrushDocument();
 
     void            SetInRefMode( bool bRefMode );
+
+    bool ContinueOnlineSpelling();
 };
 
 

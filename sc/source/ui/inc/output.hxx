@@ -27,6 +27,14 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
+namespace sc {
+    struct SpellCheckContext;
+}
+
+namespace editeng {
+    struct MisspellRanges;
+}
+
 class Rectangle;
 class Font;
 class OutputDevice;
@@ -40,8 +48,6 @@ class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
 class ScFieldEditEngine;
-
-// #i74769# SdrPaintWindow predefine
 class SdrPaintWindow;
 
 // ---------------------------------------------------------------------------
@@ -100,6 +106,7 @@ private:
         const SfxItemSet*       mpOldCondSet;
         const SfxItemSet*       mpOldPreviewFontSet;
         const RowInfo*          mpThisRowInfo;
+        const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
         explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
 
@@ -203,6 +210,7 @@ private:
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
+    const sc::SpellCheckContext* mpSpellCheckCxt;
 
                             // private methods
 
@@ -260,6 +268,7 @@ public:
 
                     ~ScOutputData();
 
+    void SetSpellCheckContext( const sc::SpellCheckContext* pCxt );
     void    SetContentDevice( OutputDevice* pContentDev );
 
     void    SetRefDevice( OutputDevice* pRDev ) { mpRefDevice = pFmtDevice = pRDev; }

@@ -2332,4 +2332,19 @@ void ScTabView::SetInRefMode( bool bRefMode )
         pGridWin[SC_SPLIT_TOPRIGHT]->SetInRefMode( bRefMode );
 }
 
+bool ScTabView::ContinueOnlineSpelling()
+{
+    bool bChanged = false;
+    for (int i = 0; i < 4; ++i)
+    {
+        if (!pGridWin[i] || !pGridWin[i]->IsVisible())
+            continue;
+
+        if (pGridWin[i]->ContinueOnlineSpelling())
+            bChanged = true;
+    }
+
+    return bChanged;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -429,18 +429,6 @@ void ScTabView::UpdateScrollBars()
     {
         if (UpdateVisibleRange())
             SC_MOD()->AnythingChanged();                // if visible area has changed
-
-        ScSplitPos eActive = aViewData.GetActivePart();
-        ScHSplitPos eHWhich = WhichH( eActive );
-        ScVSplitPos eVWhich = WhichV( eActive );
-        SCCOL nPosX = aViewData.GetPosX(eHWhich);
-        SCROW nPosY = aViewData.GetPosY(eVWhich);
-        SCCOL nEndX = nPosX + ( ( eHWhich == SC_SPLIT_LEFT ) ? nVisXL : nVisXR );
-        SCROW nEndY = nPosY + ( ( eVWhich == SC_SPLIT_TOP ) ? nVisYT : nVisYB );
-        if ( nEndX > MAXCOL ) nEndX = MAXCOL;
-        if ( nEndY > MAXROW ) nEndY = MAXROW;
-        ScRange aVisible( nPosX, nPosY, nTab, nEndX, nEndY, nTab );
-        pDoc->SetVisibleSpellRange(aVisible);
     }
 }
 

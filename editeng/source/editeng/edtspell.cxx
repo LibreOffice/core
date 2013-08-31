@@ -207,6 +207,16 @@ WrongList::WrongList(const WrongList& r) :
 
 WrongList::~WrongList() {}
 
+const std::vector<editeng::MisspellRange>& WrongList::GetRanges() const
+{
+    return maRanges;
+}
+
+void WrongList::SetRanges( const std::vector<editeng::MisspellRange>& rRanges )
+{
+    maRanges = rRanges;
+}
+
 bool WrongList::IsValid() const
 {
     return mnInvalidStart == Valid;
