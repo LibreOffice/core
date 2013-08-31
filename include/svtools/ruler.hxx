@@ -781,12 +781,12 @@ public:
 
     void            SetLeftFrameMargin( long nPos );
     void            SetRightFrameMargin( long nPos );
-    void            SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
-    void            SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
-    void            SetIndents( sal_uInt16 n = 0, const RulerIndent* pIndentAry = NULL );
+    void            SetLines( sal_uInt32 n = 0, const RulerLine* pLineAry = NULL );
+    void            SetBorders( sal_uInt32 n = 0, const RulerBorder* pBrdAry = NULL );
+    void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = NULL );
 
-    void            SetTabs( sal_uInt16 n = 0, const RulerTab* pTabAry = NULL );
-    sal_uInt16      GetTabCount() const;
+    void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = NULL );
+    sal_uInt32      GetTabCount() const;
     const RulerTab* GetTabs() const;
 
     static void     DrawTab( OutputDevice* pDevice, const Color &rFillColor,

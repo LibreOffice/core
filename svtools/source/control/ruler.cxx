@@ -25,6 +25,11 @@
 
 #include <svtools/ruler.hxx>
 
+#include <boost/scoped_array.hpp>
+#include <vector>
+
+using namespace std;
+
 // =======================================================================
 
 #define RULER_OFF           3
@@ -68,7 +73,7 @@
 #define RULER_UNIT_PICA     8
 #define RULER_UNIT_CHAR     9
 #define RULER_UNIT_LINE    10
-#define RULER_UNIT_COUNT    11
+#define RULER_UNIT_COUNT   11
 
 // -----------------
 // - ImplRulerData -
@@ -78,33 +83,31 @@ class ImplRulerData
     friend              class Ruler;
 
 private:
-    RulerLine*          pLines;
-    RulerBorder*        pBorders;
-    RulerIndent*        pIndents;
-    RulerTab*           pTabs;
-    long                nNullVirOff;
-    long                nRulVirOff;
-    long                nRulWidth;
-    long                nPageOff;
-    long                nPageWidth;
-    long                nNullOff;
-    long                nMargin1;
-    long                nMargin2;
-    long                nLeftFrameMargin;
-    long                nRightFrameMargin;
-    sal_uInt16              nLines;
-    sal_uInt16              nBorders;
-    sal_uInt16              nIndents;
-    sal_uInt16              nTabs;
-    sal_uInt16              nMargin1Style;
-    sal_uInt16              nMargin2Style;
-    bool                bAutoPageWidth;
-    sal_Bool                bTextRTL;
+    vector<RulerLine>    pLines;
+    vector<RulerBorder>  pBorders;
+    vector<RulerIndent>  pIndents;
+    vector<RulerTab>     pTabs;
+
+    long            nNullVirOff;
+    long            nRulVirOff;
+    long            nRulWidth;
+    long            nPageOff;
+    long            nPageWidth;
+    long            nNullOff;
+    long            nMargin1;
+    long            nMargin2;
+    long            nLeftFrameMargin;
+    long            nRightFrameMargin;
+    sal_uInt16      nMargin1Style;
+    sal_uInt16      nMargin2Style;
+    bool            bAutoPageWidth;
+    bool            bTextRTL;
 
 public:
-                        ImplRulerData();
-                        ~ImplRulerData();
-    ImplRulerData&      operator=( const ImplRulerData& rData );
+    ImplRulerData();
+    ~ImplRulerData();
+
+    ImplRulerData& operator=( const ImplRulerData& rData );
 };
 
 static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
@@ -128,34 +131,41 @@ struct ImplRulerHitTest
 {
     long        nPos;
     RulerType   eType;
-    sal_uInt16      nAryPos;
-    sal_uInt16      mnDragSize;
+    sal_uInt16  nAryPos;
+    sal_uInt16  mnDragSize;
     bool        bSize;
     bool        bSizeBar;
     bool        bExpandTest;
+
     ImplRulerHitTest() :
-        bExpandTest( false ) {}
+        bExpandTest( false )
+    {}
 };
 
 // =======================================================================
 
-ImplRulerData::ImplRulerData()
+ImplRulerData::ImplRulerData() :
+    nNullVirOff       (0),
+    nRulVirOff        (0),
+    nRulWidth         (0),
+    nPageOff          (0),
+    nPageWidth        (0),
+    nNullOff          (0),
+    nMargin1          (0),
+    nMargin2          (0),
+    nLeftFrameMargin  (0),
+    nRightFrameMargin (0),
+    nMargin1Style     (0),
+    nMargin2Style     (0),
+    bAutoPageWidth    (true), // Page width == EditWin width
+    bTextRTL          (false)
 {
-    memset( this, 0, sizeof( ImplRulerData ) );
-
-    // PageBreite == EditWinBreite
-    bAutoPageWidth   = true;
 }
 
 // -----------------------------------------------------------------------
 
 ImplRulerData::~ImplRulerData()
-{
-    delete[] pLines;
-    delete[] pBorders;
-    delete[] pIndents;
-    delete[] pTabs;
-}
+{}
 
 // -----------------------------------------------------------------------
 
@@ -164,35 +174,48 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
     if( this == &rData )
         return *this;
 
-    delete[] pLines;
-    delete[] pBorders;
-    delete[] pIndents;
-    delete[] pTabs;
+    nNullVirOff       = rData.nNullVirOff;
+    nRulVirOff        = rData.nRulVirOff;
+    nRulWidth         = rData.nRulWidth;
+    nPageOff          = rData.nPageOff;
+    nPageWidth        = rData.nPageWidth;
+    nNullOff          = rData.nNullOff;
+    nMargin1          = rData.nMargin1;
+    nMargin2          = rData.nMargin2;
+    nLeftFrameMargin  = rData.nLeftFrameMargin;
+    nRightFrameMargin = rData.nRightFrameMargin;
+    nMargin1Style     = rData.nMargin1Style;
+    nMargin2Style     = rData.nMargin2Style;
+    bAutoPageWidth    = rData.bAutoPageWidth;
+    bTextRTL          = rData.bTextRTL;
 
-    memcpy( this, &rData, sizeof( ImplRulerData ) );
+    pLines.clear();
+    pBorders.clear();
+    pIndents.clear();
+    pTabs.clear();
 
-    if ( rData.pLines )
+    if ( !rData.pLines.empty() )
     {
-        pLines = new RulerLine[nLines];
-        memcpy( pLines, rData.pLines, nLines*sizeof( RulerLine ) );
+        pLines.resize(rData.pLines.size());
+        std::copy(rData.pLines.begin(), rData.pLines.end(), pLines.begin());
     }
 
-    if ( rData.pBorders )
+    if ( !rData.pBorders.empty() )
     {
-        pBorders = new RulerBorder[nBorders];
-        memcpy( pBorders, rData.pBorders, nBorders*sizeof( RulerBorder ) );
+        pBorders.resize(rData.pBorders.size());
+        std::copy(rData.pBorders.begin(), rData.pBorders.end(), pBorders.begin());
     }
 
-    if ( rData.pIndents )
+    if ( !rData.pIndents.empty() )
     {
-        pIndents = new RulerIndent[nIndents];
-        memcpy( pIndents, rData.pIndents, nIndents*sizeof( RulerIndent ) );
+        pIndents.resize(rData.pIndents.size());
+        std::copy(rData.pIndents.begin(), rData.pIndents.end(), pIndents.begin());
     }
 
-    if ( rData.pTabs )
+    if ( !rData.pTabs.empty() )
     {
-        pTabs = new RulerTab[nTabs];
-        memcpy( pTabs, rData.pTabs, nTabs*sizeof( RulerTab ) );
+        pTabs.resize(rData.pTabs.size());
+        std::copy(rData.pTabs.begin(), rData.pTabs.end(), pTabs.begin());
     }
 
     return *this;
@@ -370,7 +393,8 @@ void Ruler::ImplVDrawText( long nX, long nY, const OUString& rText, long nMin, l
 void Ruler::ImplInvertLines( sal_Bool bErase )
 {
     // Positionslinien
-    if ( mpData->nLines && mbActive && !mbDrag && !mbFormat &&
+    if ( !mpData->pLines.empty() &&
+         mbActive && !mbDrag && !mbFormat &&
          !(mnUpdateFlags & RULER_UPDATE_LINES) )
     {
         long n;
@@ -387,9 +411,9 @@ void Ruler::ImplInvertLines( sal_Bool bErase )
             aRect.Right() = nY;
 
         // Linien ausgeben
-        for ( sal_uInt16 i = 0; i < mpData->nLines; i++ )
+        for ( sal_uInt16 i = 0; i < mpData->pLines.size(); i++ )
         {
-            n = mpData->pLines[i].nPos+nNullWinOff;
+            n = mpData->pLines[i].nPos + nNullWinOff;
             if ( (n >= nRulX1) && (n < nRulX2) )
             {
                 if ( mnWinStyle & WB_HORZ )
@@ -602,15 +626,15 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
     long    n2;
     long    nTemp1;
     long    nTemp2;
-    sal_uInt16  i;
+    sal_uInt32  i;
 
-    for ( i = 0; i < mpData->nBorders; i++ )
+    for ( i = 0; i < mpData->pBorders.size(); i++ )
     {
         if ( mpData->pBorders[i].nStyle & RULER_STYLE_INVISIBLE )
             continue;
 
-        n1 = mpData->pBorders[i].nPos+mpData->nNullVirOff;
-        n2 = n1+mpData->pBorders[i].nWidth;
+        n1 = mpData->pBorders[i].nPos + mpData->nNullVirOff;
+        n2 = n1 + mpData->pBorders[i].nWidth;
 
         if ( ((n1 >= nMin) && (n1 <= nMax)) || ((n2 >= nMin) && (n2 <= nMax)) )
         {
@@ -710,13 +734,13 @@ void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit
 
 void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
-    sal_uInt16  j;
+    sal_uInt32  j;
     long    n;
     long    nIndentHeight = (mnVirHeight/2) - 1;
     long    nIndentWidth2 = nIndentHeight-3;
     Polygon aPoly( 5 );
 
-    for ( j = 0; j < mpData->nIndents; j++ )
+    for ( j = 0; j < mpData->pIndents.size(); j++ )
     {
         if ( mpData->pIndents[j].nStyle & RULER_STYLE_INVISIBLE )
             continue;
@@ -732,23 +756,23 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
                 maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
-                ImplVDrawLine( n, nVirTop+1, n, nVirBottom-1 );
+                ImplVDrawLine( n, nVirTop + 1, n, nVirBottom - 1 );
             }
             else if ( nIndentStyle == RULER_INDENT_BOTTOM )
             {
-                aPoly.SetPoint( Point( n+0, nVirBottom-nIndentHeight ), 0 );
-                aPoly.SetPoint( Point( n-nIndentWidth2, nVirBottom-3 ), 1 );
-                aPoly.SetPoint( Point( n-nIndentWidth2, nVirBottom ), 2 );
-                aPoly.SetPoint( Point( n+nIndentWidth2, nVirBottom ), 3 );
-                aPoly.SetPoint( Point( n+nIndentWidth2, nVirBottom-3 ), 4 );
+                aPoly.SetPoint( Point( n + 0, nVirBottom - nIndentHeight ), 0 );
+                aPoly.SetPoint( Point( n - nIndentWidth2, nVirBottom - 3 ), 1 );
+                aPoly.SetPoint( Point( n - nIndentWidth2, nVirBottom ),     2 );
+                aPoly.SetPoint( Point( n + nIndentWidth2, nVirBottom ),     3 );
+                aPoly.SetPoint( Point( n + nIndentWidth2, nVirBottom - 3 ), 4 );
             }
             else
             {
-                aPoly.SetPoint( Point( n+0, nVirTop+nIndentHeight ), 0 );
-                aPoly.SetPoint( Point( n-nIndentWidth2, nVirTop+3 ), 1 );
-                aPoly.SetPoint( Point( n-nIndentWidth2, nVirTop ), 2 );
-                aPoly.SetPoint( Point( n+nIndentWidth2, nVirTop ), 3 );
-                aPoly.SetPoint( Point( n+nIndentWidth2, nVirTop+3 ), 4 );
+                aPoly.SetPoint( Point( n + 0, nVirTop+nIndentHeight ),   0 );
+                aPoly.SetPoint( Point( n - nIndentWidth2, nVirTop + 3 ), 1 );
+                aPoly.SetPoint( Point( n - nIndentWidth2, nVirTop ),     2 );
+                aPoly.SetPoint( Point( n + nIndentWidth2, nVirTop ),     3 );
+                aPoly.SetPoint( Point( n + nIndentWidth2, nVirTop + 3 ), 4 );
             }
 
             if(0 == (mnWinStyle & WB_HORZ))
@@ -918,7 +942,7 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nS
 
 void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
 {
-    for ( sal_uInt16 i = 0; i < mpData->nTabs; i++ )
+    for ( sal_uInt32 i = 0; i < mpData->pTabs.size(); i++ )
     {
         if ( mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE )
             continue;
@@ -1181,18 +1205,16 @@ void Ruler::ImplFormat()
     ImplDrawTicks( nMin, nMax, nStart, nCenter );
 
     // Draw borders
-    if ( mpData->pBorders )
+    if ( !mpData->pBorders.empty() )
         ImplDrawBorders( nVirLeft, nP2, nVirTop, nVirBottom );
 
     // Draw indents
-    if ( mpData->pIndents )
+    if ( !mpData->pIndents.empty() )
         ImplDrawIndents( nVirLeft, nP2, nVirTop - 1, nVirBottom + 1 );
 
     // Tabs
-    if ( mpData->pTabs )
-    {
+    if ( !mpData->pTabs.empty() )
         ImplDrawTabs( nVirLeft, nP2, nVirTop-1, nVirBottom+1 );
-    }
 
     // Wir haben formatiert
     mbFormat = sal_False;
@@ -1387,8 +1409,8 @@ void Ruler::ImplUpdate( sal_Bool bMustCalc )
 sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                          sal_Bool bRequireStyle, sal_uInt16 nRequiredStyle ) const
 {
-    sal_uInt16      i;
-    sal_uInt16      nStyle;
+    sal_Int32   i;
+    sal_uInt16  nStyle;
     long        nHitBottom;
     long        nX;
     long        nY;
@@ -1420,7 +1442,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
 
     // Damit ueberstehende Tabs und Einzuege mit beruecksichtigt werden
     long nXExtraOff;
-    if ( mpData->pTabs || mpData->pIndents )
+    if ( !mpData->pTabs.empty() || !mpData->pIndents.empty() )
         nXExtraOff = (mnVirHeight/2) - 4;
     else
         nXExtraOff = 0;
@@ -1442,14 +1464,14 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
 
     // Zuerst die Tabs testen
     Rectangle aRect;
-    if ( mpData->pTabs )
+    if ( !mpData->pTabs.empty() )
     {
         aRect.Bottom()  = nHitBottom;
         aRect.Top()     = aRect.Bottom()-RULER_TAB_HEIGHT-RULER_OFF;
 
-        for ( i = mpData->nTabs; i; i-- )
+        for ( i = mpData->pTabs.size() - 1; i >= 0; i-- )
         {
-            nStyle = mpData->pTabs[i-1].nStyle;
+            nStyle = mpData->pTabs[i].nStyle;
             if ( !(nStyle & RULER_STYLE_INVISIBLE) )
             {
                 nStyle &= RULER_TAB_STYLE;
@@ -1457,28 +1479,28 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                 // Default-Tabs werden nur angezeigt
                 if ( nStyle != RULER_TAB_DEFAULT )
                 {
-                    n1 = mpData->pTabs[i-1].nPos;
+                    n1 = mpData->pTabs[i].nPos;
 
                     if ( nStyle == RULER_TAB_LEFT )
                     {
-                        aRect.Left()    = n1;
-                        aRect.Right()   = n1+RULER_TAB_WIDTH-1;
+                        aRect.Left()  = n1;
+                        aRect.Right() = n1 + RULER_TAB_WIDTH - 1;
                     }
                     else if ( nStyle == RULER_TAB_RIGHT )
                     {
-                        aRect.Right()   = n1;
-                        aRect.Left()    = n1-RULER_TAB_WIDTH-1;
+                        aRect.Right() = n1;
+                        aRect.Left()  = n1 - RULER_TAB_WIDTH - 1;
                     }
                     else
                     {
-                        aRect.Left()    = n1-RULER_TAB_CWIDTH2+1;
-                        aRect.Right()   = n1-RULER_TAB_CWIDTH2+RULER_TAB_CWIDTH;
+                        aRect.Left()  = n1 - RULER_TAB_CWIDTH2 + 1;
+                        aRect.Right() = n1 - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
                     }
 
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
-                        pHitTest->eType     = RULER_TYPE_TAB;
-                        pHitTest->nAryPos   = i-1;
+                        pHitTest->eType   = RULER_TYPE_TAB;
+                        pHitTest->nAryPos = i;
                         return sal_True;
                     }
                 }
@@ -1487,12 +1509,12 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
 
     // Dann die Einzuege
-    if ( mpData->pIndents )
+    if ( !mpData->pIndents.empty() )
     {
         long nIndentHeight = (mnVirHeight/2) - 1;
         long nIndentWidth2 = nIndentHeight-3;
 
-        for ( i = mpData->nIndents; i; i-- )
+        for ( i = mpData->pIndents.size(); i; i-- )
         {
             nStyle = mpData->pIndents[i-1].nStyle;
             if ( (! bRequireStyle || nStyle == nRequiredStyle) &&
@@ -1541,7 +1563,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         nBorderTolerance++;
     }
 
-    for ( i = mpData->nBorders; i; i-- )
+    for ( i = mpData->pBorders.size(); i; i-- )
     {
         n1 = mpData->pBorders[i-1].nPos;
         n2 = n1 + mpData->pBorders[i-1].nWidth;
@@ -1634,14 +1656,14 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
 
     // Jetzt nocheinmal die Tabs testen, nur mit etwas mehr spielraum
-    if ( mpData->pTabs )
+    if ( !mpData->pTabs.empty() )
     {
         aRect.Top()     = RULER_OFF;
         aRect.Bottom()  = nHitBottom;
 
-        for ( i = mpData->nTabs; i; i-- )
+        for ( i = mpData->pTabs.size() - 1; i >= 0; i-- )
         {
-            nStyle = mpData->pTabs[i-1].nStyle;
+            nStyle = mpData->pTabs[i].nStyle;
             if ( !(nStyle & RULER_STYLE_INVISIBLE) )
             {
                 nStyle &= RULER_TAB_STYLE;
@@ -1649,22 +1671,22 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
                 // Default-Tabs werden nur angezeigt
                 if ( nStyle != RULER_TAB_DEFAULT )
                 {
-                    n1 = mpData->pTabs[i-1].nPos;
+                    n1 = mpData->pTabs[i].nPos;
 
                     if ( nStyle == RULER_TAB_LEFT )
                     {
-                        aRect.Left()    = n1;
-                        aRect.Right()   = n1+RULER_TAB_WIDTH-1;
+                        aRect.Left()  = n1;
+                        aRect.Right() = n1 + RULER_TAB_WIDTH - 1;
                     }
                     else if ( nStyle == RULER_TAB_RIGHT )
                     {
-                        aRect.Right()   = n1;
-                        aRect.Left()    = n1-RULER_TAB_WIDTH-1;
+                        aRect.Right() = n1;
+                        aRect.Left()  = n1 - RULER_TAB_WIDTH - 1;
                     }
                     else
                     {
-                        aRect.Left()    = n1-RULER_TAB_CWIDTH2+1;
-                        aRect.Right()   = n1-RULER_TAB_CWIDTH2+RULER_TAB_CWIDTH;
+                        aRect.Left()  = n1 - RULER_TAB_CWIDTH2 + 1;
+                        aRect.Right() = n1 - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
                     }
 
                     aRect.Left()--;
@@ -1672,8 +1694,8 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
 
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
-                        pHitTest->eType     = RULER_TYPE_TAB;
-                        pHitTest->nAryPos   = i-1;
+                        pHitTest->eType   = RULER_TYPE_TAB;
+                        pHitTest->nAryPos = i;
                         return sal_True;
                     }
                 }
@@ -2115,7 +2137,7 @@ void Ruler::Resize()
 
     // Hier schon Linien loeschen
     sal_Bool bVisible = IsReallyVisible();
-    if ( bVisible && mpData->nLines )
+    if ( bVisible && !mpData->pLines.empty() )
     {
         ImplInvertLines();
         mnUpdateFlags |= RULER_UPDATE_LINES;
@@ -2597,14 +2619,14 @@ void Ruler::SetMargin2( long nPos, sal_uInt16 nMarginStyle )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
+void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
 {
     // To determine if what has changed
-    if ( mpData->nLines == n )
+    if ( mpData->pLines.size() == aLineArraySize )
     {
-        sal_uInt16           i = n;
-        const RulerLine* pAry1 = mpData->pLines;
-        const RulerLine* pAry2 = pLineAry;
+        sal_uInt32           i = aLineArraySize;
+        const RulerLine* pAry1 = &mpData->pLines[0];
+        const RulerLine* pAry2 = pLineArray;
         while ( i )
         {
             if ( (pAry1->nPos   != pAry2->nPos)   ||
@@ -2630,24 +2652,22 @@ void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
         ImplInvertLines();
 
     // New data set
-    if ( !n || !pLineAry )
+    if ( !aLineArraySize || !pLineArray )
     {
-        if ( !mpData->pLines )
+        if ( mpData->pLines.empty() )
             return;
-        delete[] mpData->pLines;
-        mpData->nLines = 0;
-        mpData->pLines = NULL;
+        mpData->pLines.clear();
     }
     else
     {
-        if ( mpData->nLines != n )
+        if ( mpData->pLines.size() != aLineArraySize )
         {
-            delete[] mpData->pLines;
-            mpData->nLines = n;
-            mpData->pLines = new RulerLine[n];
+            mpData->pLines.resize(aLineArraySize);
         }
 
-        memcpy( mpData->pLines, pLineAry, n*sizeof( RulerLine ) );
+        std::copy( pLineArray,
+                   pLineArray + aLineArraySize,
+                   mpData->pLines.begin() );
 
         // Linien neu ausgeben
         if ( bMustUpdate )
@@ -2657,29 +2677,25 @@ void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
+void Ruler::SetBorders( sal_uInt32 aBorderArraySize, const RulerBorder* pBorderArray )
 {
-    if ( !n || !pBrdAry )
+    if ( !aBorderArraySize || !pBorderArray )
     {
-        if ( !mpData->pBorders )
+        if ( mpData->pBorders.empty() )
             return;
-        delete[] mpData->pBorders;
-        mpData->nBorders = 0;
-        mpData->pBorders = NULL;
+        mpData->pBorders.clear();
     }
     else
     {
-        if ( mpData->nBorders != n )
+        if ( mpData->pBorders.size() != aBorderArraySize )
         {
-            delete[] mpData->pBorders;
-            mpData->nBorders = n;
-            mpData->pBorders = new RulerBorder[n];
+            mpData->pBorders.resize(aBorderArraySize);
         }
         else
         {
-            sal_uInt16             i = n;
-            const RulerBorder* pAry1 = mpData->pBorders;
-            const RulerBorder* pAry2 = pBrdAry;
+            sal_uInt32             i = aBorderArraySize;
+            const RulerBorder* pAry1 = &mpData->pBorders[0];
+            const RulerBorder* pAry2 = pBorderArray;
             while ( i )
             {
                 if ( (pAry1->nPos   != pAry2->nPos)   ||
@@ -2693,8 +2709,9 @@ void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
             if ( !i )
                 return;
         }
-
-        memcpy( mpData->pBorders, pBrdAry, n*sizeof( RulerBorder ) );
+        std::copy( pBorderArray,
+                   pBorderArray + aBorderArraySize,
+                   mpData->pBorders.begin() );
     }
 
     ImplUpdate();
@@ -2702,30 +2719,26 @@ void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
+void Ruler::SetIndents( sal_uInt32 aIndentArraySize, const RulerIndent* pIndentArray )
 {
 
-    if ( !n || !pIndentAry )
+    if ( !aIndentArraySize || !pIndentArray )
     {
-        if ( !mpData->pIndents )
+        if ( mpData->pIndents.empty() )
             return;
-        delete[] mpData->pIndents;
-        mpData->nIndents = 0;
-        mpData->pIndents = NULL;
+        mpData->pIndents.clear();
     }
     else
     {
-        if ( mpData->nIndents != n )
+        if ( mpData->pIndents.size() != aIndentArraySize )
         {
-            delete[] mpData->pIndents;
-            mpData->nIndents = n;
-            mpData->pIndents = new RulerIndent[n];
+            mpData->pIndents.resize(aIndentArraySize);
         }
         else
         {
-            sal_uInt16             i = n;
-            const RulerIndent* pAry1 = mpData->pIndents;
-            const RulerIndent* pAry2 = pIndentAry;
+            sal_uInt32             i = aIndentArraySize;
+            const RulerIndent* pAry1 = &mpData->pIndents[0];
+            const RulerIndent* pAry2 = pIndentArray;
             while ( i )
             {
                 if ( (pAry1->nPos   != pAry2->nPos) ||
@@ -2739,7 +2752,9 @@ void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
                 return;
         }
 
-        memcpy( mpData->pIndents, pIndentAry, n*sizeof( RulerIndent ) );
+        std::copy( pIndentArray,
+                   pIndentArray + aIndentArraySize,
+                   mpData->pIndents.begin() );
     }
 
     ImplUpdate();
@@ -2747,43 +2762,41 @@ void Ruler::SetIndents( sal_uInt16 n, const RulerIndent* pIndentAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetTabs( sal_uInt16 n, const RulerTab* pTabAry )
+void Ruler::SetTabs( sal_uInt32 aTabArraySize, const RulerTab* pTabArray )
 {
-    if ( !n || !pTabAry )
+    if ( aTabArraySize == 0 || pTabArray == NULL )
     {
-        if ( !mpData->pTabs )
+        if ( mpData->pTabs.empty() )
             return;
-        delete[] mpData->pTabs;
-        mpData->nTabs = 0;
-        mpData->pTabs = NULL;
+        mpData->pTabs.clear();
     }
     else
     {
-        if ( mpData->nTabs != n )
+        if ( mpData->pTabs.size() != aTabArraySize )
         {
-            delete[] mpData->pTabs;
-            mpData->nTabs = n;
-            mpData->pTabs = new RulerTab[n];
+            mpData->pTabs.resize(aTabArraySize);
         }
         else
         {
-            sal_uInt16          i = n;
-            const RulerTab* pAry1 = mpData->pTabs;
-            const RulerTab* pAry2 = pTabAry;
+            sal_uInt32 i = aTabArraySize;
+            vector<RulerTab>::iterator aTabIterator = mpData->pTabs.begin();
+            const RulerTab* pInputArray = pTabArray;
             while ( i )
             {
-                if ( (pAry1->nPos   != pAry2->nPos) ||
-                     (pAry1->nStyle != pAry2->nStyle) )
+                RulerTab& aCurrent = *aTabIterator;
+                if ( aCurrent.nPos   != pInputArray->nPos ||
+                     aCurrent.nStyle != pInputArray->nStyle )
+                {
                     break;
-                pAry1++;
-                pAry2++;
+                }
+                aTabIterator++;
+                pInputArray++;
                 i--;
             }
             if ( !i )
                 return;
         }
-
-        memcpy( mpData->pTabs, pTabAry, n*sizeof( RulerTab ) );
+        std::copy(pTabArray, pTabArray + aTabArraySize, mpData->pTabs.begin());
     }
 
     ImplUpdate();
