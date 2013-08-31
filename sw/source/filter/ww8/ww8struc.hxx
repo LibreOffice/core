@@ -202,9 +202,9 @@ struct WW8_FFN_BASE     // Font Descriptor
 
     sal_uInt8    prg: 2;         //  0x1:03  pitch request
     sal_uInt8    fTrueType : 1;  //  0x1:04  when 1, font is a TrueType font
-                            //  0x1:08  reserved
+    sal_uInt8    _reserved1 : 1; //  0x1:08  reserved
     sal_uInt8    ff : 3;         //  0x1:70  font family id
-                            //  0x1:80  reserved
+    sal_uInt8    _reserved2 : 1; //  0x1:80  reserved
 
     short wWeight;          //  0x2     base weight of font
     sal_uInt8    chs;            //  0x4     character set identifier
