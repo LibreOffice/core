@@ -1080,17 +1080,7 @@ public:
     sal_uInt16 wMagicRevised;                   // identifies the File's last modifier
   sal_uInt16 wMagicCreatedPrivate;  // private data
     sal_uInt16 wMagicRevisedPrivate;    // private data
-    /*
-    sal_Int16  pnFbpChpFirst_W6;            // not used
-    sal_Int16  pnChpFirst_W6;                   // not used
-    sal_Int16  cpnBteChp_W6;                    // not used
-    sal_Int16  pnFbpPapFirst_W6;            // not used
-    sal_Int16  pnPapFirst_W6;                   // not used
-    sal_Int16  cpnBtePap_W6;                    // not used
-    sal_Int16  pnFbpLvcFirst_W6;            // not used
-    sal_Int16  pnLvcFirst_W6;                   // not used
-    sal_Int16  cpnBteLvc_W6;                    // not used
-    */
+
     sal_Int16  lidFE;                                   // Language id if document was written by Far East version
                                                                 // of Word (i.e. FIB.fFarEast is on)
     sal_uInt16 clw;                                     // Number of fields in the array of longs
@@ -1129,16 +1119,7 @@ public:
                                                 // the PLCFbte at save time, the PLCFbte is written to
                                                 // the file in a linked list of 512-byte pieces
                                                 // starting with this pn
-    /*
-    // folgende Felder existieren zwar so in der Datei,
-    // wir benutzen jedoch unten deklarierte General-Variablen
-    // fuer Ver67 und Ver8 gemeinsam.
-    sal_Int32  pnPapFirst;      // the page number of the lowest numbered page in the
-                                                        // document that records PAPX FKP information
-    sal_Int32  cpnBtePap;       // count of PAPX FKPs recorded in file. In non-complex
-                                                        // files if the number of entries in the PLCFbtePapx is
-                                                        // less than this, the PLCFbtePapx is incomplete.
-    */
+
     sal_Int32  pnFbpLvcFirst;   // when there was insufficient memory for Word to expand
                                                 // the PLCFbte at save time, the PLCFbte is written to
                                                 // the file in a linked list of 512-byte pieces
@@ -1281,27 +1262,6 @@ public:
 
     WW8_FC fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
     sal_Int32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
-
-    // Einschubs fuer WW67 ***************************************************
-
-    // sal_Int16 wSpare4Fib;    // Reserve, muss hier nicht deklariert werden
-
-    /*
-    // folgende Felder existieren zwar so in der Datei,
-    // wir benutzen jedoch unten deklarierte General-Variablen
-    // fuer Ver67 und Ver8 gemeinsam.
-    WW8_PN pnChpFirst;  // the page number of the lowest numbered page in
-                                                        // the document that records CHPX FKP information
-    WW8_PN pnPapFirst;  // the page number of the lowest numbered page in
-                                                        // the document that records PAPX FKP information
-
-    WW8_PN cpnBteChp;       // count of CHPX FKPs recorded in file. In non-complex
-                                                        // files if the number of entries in the PLCFbteChpx is
-                                                        // less than this, the PLCFbteChpx  is incomplete.
-    WW8_PN cpnBtePap;       // count of PAPX FKPs recorded in file. In non-complex
-                                                        // files if the number of entries in the PLCFbtePapx is
-                                                        // less than this, the PLCFbtePapx  is incomplete.
-    */
 
     // Ende des Einschubs fuer WW67 ******************************************
 
@@ -1595,12 +1555,7 @@ public:
     sal_uInt16 rncEdn : 2;          //      restart endnote number code: 0 don't restart endnote numbering, 1 section, 2 page
     sal_uInt16 nEdn : 14;           //      beginning endnote number
     sal_uInt16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
-    // sal_uInt16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
-                                //      3 Upper case Letter, 4 Lower case Letter
-                                // ersetzt durch gleichlautendes Feld unten
-    // sal_uInt16 nfcEdnRef : 4;        //      number format code for auto endnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
-                                //      3 Upper case Letter, 4 Lower case Letter
-                                // ersetzt durch gleichlautendes Feld unten
+
     sal_uInt16 fPrintFormData : 1;  //      only print data inside of form fields
     sal_uInt16 fSaveFormData : 1;   //      only save document data that is inside of a form field.
     sal_uInt16 fShadeFormData : 1;  //      shade form fields

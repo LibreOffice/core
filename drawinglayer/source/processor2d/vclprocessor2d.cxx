@@ -177,8 +177,6 @@ namespace drawinglayer
                             aFont.SetUnderline( eFontUnderline );
                             if( pTCPP->getWordLineMode() )
                                 aFont.SetWordLineMode( true );
-//TODO: ???                 if( pTCPP->getUnderlineAbove() )
-//                              aFont.SetUnderlineAbove( true );
                         }
 
                         // set Strikeout attribute

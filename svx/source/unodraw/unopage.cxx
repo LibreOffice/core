@@ -603,8 +603,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
         {
             switch( nType )
             {
-//              case OBJ_NONE:
-//                  break;
                 case OBJ_GRUP:
                     pRet = new SvxShapeGroup( pObj, mpPage );
                     break;
@@ -730,8 +728,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );
                     break;
-//              case OBJ_DUMMY:
-//                  break;
                 case OBJ_UNO:
                     pRet = new SvxShapeControl( pObj );
                     break;

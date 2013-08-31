@@ -148,12 +148,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     SQLWarning  warning;
-
-    // Reset warnings
     clearWarnings ();
-
-    // Reset the statement handle, warning and saved Resultset
-    //  reset();
 
     // Call SQLExecute
     try {
@@ -398,7 +393,6 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
-    //  setObject (parameterIndex, x, sqlType, 0);
 }
 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
@@ -449,14 +443,11 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
                 CHECK_RETURN(aParam.PutValue(aVal));
             }
         }
-            //  m_pParameters->Delete(OLEVariant(i));
     }
 }
 
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 {
-    //  clearParameters(  );
-    //  m_aBatchList.erase();
 }
 
 void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeException)

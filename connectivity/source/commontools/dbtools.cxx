@@ -2017,9 +2017,6 @@ void release(oslInterlockedCount& _refCount,
                 ::osl::MutexGuard aGuard( rBHelper.rMutex );
                 _xInterface = xParent;
             }
-
-//                  // destroy the object if xHoldAlive decrement the refcount to 0
-//                  m_pDerivedImplementation->WEAK::release();
         }
     }
     else

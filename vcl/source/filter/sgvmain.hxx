@@ -49,7 +49,6 @@ struct Seitenformat {
     sal_Int16     RandU;      // unten     dem Papier
     sal_uInt8      PColor;     // Future Use
     sal_uInt8      PIntens;    // erst recht Future use
-//    sal_Bool      BorderClip; // Objekte am Rand abschneiden (Schummel wg. Allignment unter NT)
 };
 
 #define PageSize 146
