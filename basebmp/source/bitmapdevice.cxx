@@ -91,6 +91,28 @@ operator^( RGBValue<Value, RedIndex, GreenIndex, BlueIndex> const& lhs,
 namespace basebmp
 {
 
+static const sal_uInt8 bitsPerPixel[] =
+{
+    0,  // NONE
+    1,  // ONE_BIT_MSB_GREY
+    1,  // ONE_BIT_LSB_GREY
+    1,  // ONE_BIT_MSB_PAL
+    1,  // ONE_BIT_LSB_PAL
+    4,  // FOUR_BIT_MSB_GREY
+    4,  // FOUR_BIT_LSB_GREY
+    4,  // FOUR_BIT_MSB_PAL
+    4,  // FOUR_BIT_LSB_PAL
+    8,  // EIGHT_BIT_PAL
+    8,  // EIGHT_BIT_GREY
+    16, // SIXTEEN_BIT_LSB_TC_MASK
+    16, // SIXTEEN_BIT_MSB_TC_MASK
+    24, // TWENTYFOUR_BIT_TC_MASK
+    32, // THIRTYTWO_BIT_TC_MASK_BGRA
+    32, // THIRTYTWO_BIT_TC_MASK_ARGB
+    32, // THIRTYTWO_BIT_TC_MASK_ABGR
+    32, // THIRTYTWO_BIT_TC_MASK_RGBA
+};
+
 namespace
 {
     /** Create the type for an accessor that takes the (mask,bitmap)
@@ -712,6 +734,45 @@ namespace
             damaged( rDstRect );
         }
 
+        void implDrawBitmapDirect(const BitmapDeviceSharedPtr& rSrcBitmap,
+                                  const basegfx::B2IBox&       rSrcRect,
+                                  const basegfx::B2IBox&       rDstRect)
+        {
+            sal_Int32 nSrcX = rSrcRect.getMinX();
+            sal_Int32 nSrcY = rSrcRect.getMinY();
+            sal_Int32 nSrcWidth = rSrcRect.getMaxX() - nSrcX + 1;
+            sal_Int32 nSrcHeight = rSrcRect.getMaxY() - nSrcY + 1;
+            sal_Int32 nDestX = rDstRect.getMinX();
+            sal_Int32 nDestY = rDstRect.getMinY();
+
+            char* dstBuf =  (char*)getBuffer().get();
+            char* srcBuf =  (char*)rSrcBitmap->getBuffer().get();
+            sal_Int32 dstStride =  getScanlineStride();
+            sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
+            int bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
+
+            if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
+            {
+                dstBuf += dstStride * (getBufferSize().getY() - 1);
+                srcBuf += srcStride * (getBufferSize().getY() - 1);
+                nSrcY = getBufferSize().getY() - nSrcY - nSrcHeight;
+                nDestY = getBufferSize().getY() - nDestY - nSrcHeight;
+                dstStride = -dstStride;
+                srcStride = -srcStride;
+            }
+
+            char* dstline = dstBuf + dstStride * nDestY + nDestX * bytesPerPixel;
+            char* srcline = srcBuf + srcStride * nSrcY + nSrcX * bytesPerPixel;
+            int lineBytes = nSrcWidth * bytesPerPixel;
+
+            for(; 0 < nSrcHeight; nSrcHeight--)
+            {
+                memmove(dstline, srcline, lineBytes);
+                dstline += dstStride;
+                srcline += srcStride;
+            }
+        }
+
         virtual void drawBitmap_i(const BitmapDeviceSharedPtr& rSrcBitmap,
                                   const basegfx::B2IBox&       rSrcRect,
                                   const basegfx::B2IBox&       rDstRect,
@@ -723,6 +784,10 @@ namespace
                     implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
                                    maBegin,
                                    maRawXorAccessor);
+                else if (bitsPerPixel[getScanlineFormat()] >= 8
+                         && rSrcRect.getWidth() == rDstRect.getWidth() && rSrcRect.getHeight() == rDstRect.getHeight()
+                         && rSrcBitmap->getScanlineFormat() == getScanlineFormat())
+                    implDrawBitmapDirect(rSrcBitmap, rSrcRect, rDstRect);
                 else
                     implDrawBitmap(rSrcBitmap, rSrcRect, rDstRect,
                                    maBegin,
@@ -1867,27 +1932,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         nScanlineFormat >  FORMAT_MAX )
         return BitmapDeviceSharedPtr();
 
-    static const sal_uInt8 bitsPerPixel[] =
-    {
-        0,  // NONE
-        1,  // ONE_BIT_MSB_GREY
-        1,  // ONE_BIT_LSB_GREY
-        1,  // ONE_BIT_MSB_PAL
-        1,  // ONE_BIT_LSB_PAL
-        4,  // FOUR_BIT_MSB_GREY
-        4,  // FOUR_BIT_LSB_GREY
-        4,  // FOUR_BIT_MSB_PAL
-        4,  // FOUR_BIT_LSB_PAL
-        8,  // EIGHT_BIT_PAL
-        8,  // EIGHT_BIT_GREY
-        16, // SIXTEEN_BIT_LSB_TC_MASK
-        16, // SIXTEEN_BIT_MSB_TC_MASK
-        24, // TWENTYFOUR_BIT_TC_MASK
-        32, // THIRTYTWO_BIT_TC_MASK_BGRA
-        32, // THIRTYTWO_BIT_TC_MASK_ARGB
-        32, // THIRTYTWO_BIT_TC_MASK_ABGR
-        32, // THIRTYTWO_BIT_TC_MASK_RGBA
-   };
+
 
     sal_Int32  nScanlineStride(0);
 
