@@ -1258,7 +1258,7 @@ gb_LinkTarget__use_harfbuzz :=
 
 endif # ENABLE_HARFBUZZ
 
-ifeq ($(DISABLE_OPENSSL),YES)
+ifeq ($(DISABLE_OPENSSL),TRUE)
 
 gb_ExternalProject__use_openssl:=
 gb_LinkTarget__use_openssl_headers:=
@@ -1328,7 +1328,7 @@ endif # SYSTEM_OPENSSL
 endif # DISABLE_OPENSSL
 
 
-ifeq ($(DISABLE_OPENSSL),YES)
+ifeq ($(DISABLE_OPENSSL),TRUE)
 
 define gb_LinkTarget__use_gnutls
 $(call gb_LinkTarget_set_include,$(1),\

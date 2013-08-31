@@ -78,7 +78,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/
 	LO_lib/_elementtree.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/fcntl.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/grp.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
-	$(if $(filter-out YES,$(DISABLE_OPENSSL)), \
+	$(if $(DISABLE_OPENSSL),, \
 		LO_lib/_hashlib.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	) \
 	LO_lib/_heapq.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
@@ -99,7 +99,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/
 	LO_lib/select.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/_socket.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/spwd.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
-	$(if $(filter-out YES,$(DISABLE_OPENSSL)), \
+	$(if $(DISABLE_OPENSSL),, \
 		LO_lib/_ssl.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	) \
 	LO_lib/_struct.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \

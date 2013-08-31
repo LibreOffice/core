@@ -33,15 +33,15 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			--without-readline --disable-shared --with-ldap \
-			$(if $(filter-out YES,$(DISABLE_OPENSSL)),--with-openssl) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(and $(filter YES,$(WITH_KRB5)), $(filter-out YES,$(DISABLE_OPENSSL))),--with-krb5) \
-			$(if $(and $(filter YES,$(WITH_GSSAPI)), $(filter-out YES,$(DISABLE_OPENSSL))),--with-gssapi) \
+			$(if $(DISABLE_OPENSSL),,--with-openssl \
+				$(if $(filter YES,$(WITH_KRB5)), --with-krb5) \
+				$(if $(filter YES,$(WITH_GSSAPI)),--with-gssapi)) \
 			CPPFLAGS="$(ZLIB_CFLAGS) \
 				$(if $(filter NO,$(SYSTEM_OPENLDAP)),\
 					-I$(call gb_UnpackedTarball_get_dir,openldap/include)) \
-			$(if $(and $(filter NO,$(SYSTEM_OPENSSL)), $(filter-out YES,$(DISABLE_OPENSSL))),\
-			-I$(call gb_UnpackedTarball_get_dir,openssl/include))" \
+			$(if $(DISABLE_OPENSSL),,$(if $(filter NO,$(SYSTEM_OPENSSL)),\
+			-I$(call gb_UnpackedTarball_get_dir,openssl/include)))" \
 			$(if $(filter NO,$(SYSTEM_OPENLDAP)), \
 			LDFLAGS="-L$(OUTDIR)/lib" \
 			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \

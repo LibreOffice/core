@@ -9098,7 +9098,7 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-DISABLE_OPENSSL="NO"
+DISABLE_OPENSSL=
 AC_MSG_CHECKING([whether to disable OpenSSL usage])
 if test "$enable_openssl" = "yes"; then
     AC_MSG_RESULT([no])
@@ -9139,7 +9139,7 @@ if test "$enable_openssl" = "yes"; then
     fi
 else
     AC_MSG_RESULT([yes])
-    DISABLE_OPENSSL=YES
+    DISABLE_OPENSSL=TRUE
 
     # warn that although OpenSSL is disabled, system libraries may be depending on it
     AC_MSG_WARN([OpenSSL has been disabled. No code compiled by LibO will make use of it but system librares may create indirect dependencies])

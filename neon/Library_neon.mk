@@ -61,7 +61,7 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 ))
 
 
-ifneq ($(DISABLE_OPENSSL),YES)
+ifneq ($(DISABLE_OPENSSL),TRUE)
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_openssl \
 ))
@@ -89,7 +89,7 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 ))
 
 else
-ifneq ($(DISABLE_OPENSSL),YES)
+ifneq ($(DISABLE_OPENSSL),TRUE)
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
 	UnpackedTarball/neon/src/ne_ntlm \
 ))
