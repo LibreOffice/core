@@ -645,7 +645,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
         if( bListSymbol )
         {
             FontFamily eFamily;
-            String aName;
+            OUString aName;
             FontPitch ePitch;
 
             if( GetFontParams( SVBT16ToShort( rAV.ftc ), eFamily, aName,
