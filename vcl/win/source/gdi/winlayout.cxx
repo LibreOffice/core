@@ -2047,7 +2047,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         int nMinGlyphPos, nEndGlyphPos, nOrigMinGlyphPos = rVI.mnMinGlyphPos;
         GetItemSubrange( rVI, nMinGlyphPos, nEndGlyphPos );
         i = nMinGlyphPos;
-        while( (mpOutGlyphs[i] == cDroppedGlyph) && (i < nEndGlyphPos) )
+        while( (i < nEndGlyphPos) && (mpOutGlyphs[i] == cDroppedGlyph) )
         {
             rVI.mnMinGlyphPos = ++i;
         }
