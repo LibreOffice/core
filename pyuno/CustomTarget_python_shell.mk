@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_workdir,pyuno/python_shell)/os.sh : \
 		$(SRCDIR)/pyuno/zipcore/$(if $(filter MACOSX,$(OS)),mac,nonmac).sh
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e "s/%%PYVERSION%%/$(pyuno_PYTHON_SHELL_VERSION)/g" \
-        -e "s,%%PYTHON_FRAMEWORK_RELATIVE_PATH%%,$(if $(filter YES,$(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE)),../Frameworks/),g" \
+        -e "s,%%PYTHON_FRAMEWORK_RELATIVE_PATH%%,$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),../Frameworks/),g" \
 		$< > $@
 
 # vim: set noet sw=4 ts=4:

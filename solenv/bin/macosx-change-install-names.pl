@@ -38,7 +38,7 @@
 # That latter case is useful for libraries from external modules, where the
 # external build process locates them in some sub-directory.
 
-my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'YES';
+my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'TRUE';
 
 sub action($$$)
 {

@@ -2885,7 +2885,7 @@ if test $_os = Darwin -a "$enable_canonical_installation_tree_structure" = yes; 
     LIBO_URE_LIB_FOLDER=Frameworks
     LIBO_URE_SHARE_FOLDER=Resources/ure
     LIBO_URE_SHARE_JAVA_FOLDER=Resources/java
-    ENABLE_MACOSX_MACLIKE_APP_STRUCTURE=YES
+    ENABLE_MACOSX_MACLIKE_APP_STRUCTURE=TRUE
     AC_DEFINE(HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE)
 elif test $_os = Darwin; then
     LIBO_BIN_FOLDER=MacOS
