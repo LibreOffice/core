@@ -390,7 +390,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 
 #if OSL_DEBUG_LEVEL > 1
     {
-        String sGrfNm;
+        OUString sGrfNm;
         if(GetLinkManager())
             GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
         int x = 0;
