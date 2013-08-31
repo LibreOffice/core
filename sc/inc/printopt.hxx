@@ -47,9 +47,7 @@ public:
     bool                    operator!= ( const ScPrintOptions& rOpt ) const;
 };
 
-//==================================================================
 // item for the dialog / options page
-//==================================================================
 
 class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
@@ -70,9 +68,7 @@ private:
     ScPrintOptions theOptions;
 };
 
-//==================================================================
 // config item
-//==================================================================
 
 class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
 {

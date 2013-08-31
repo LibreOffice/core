@@ -66,8 +66,6 @@ protected:
     EntriesType maEntries;
 };
 
-// ============================================================================
-
 struct ScQueryParamTable
 {
     SCCOL           nCol1;
@@ -80,8 +78,6 @@ struct ScQueryParamTable
     ScQueryParamTable(const ScQueryParamTable& r);
     virtual ~ScQueryParamTable();
 };
-
-// ============================================================================
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
@@ -101,8 +97,6 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     void            ClearDestParams();
     void            MoveToDest();
 };
-
-// ============================================================================
 
 struct ScDBQueryParamBase : public ScQueryParamBase
 {
@@ -124,8 +118,6 @@ private:
     DataType        meType;
 };
 
-// ============================================================================
-
 struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTable
 {
     ScDBQueryParamInternal();
@@ -133,8 +125,6 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
 
     virtual bool IsValidFieldIndex() const;
 };
-
-// ============================================================================
 
 struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 {

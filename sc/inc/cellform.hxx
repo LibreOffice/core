@@ -35,8 +35,6 @@ enum ScForceTextFmt {
     ftCheck                 ///< is the numberformat a textformat?
 };
 
-//------------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScCellFormat
 {
 public:
@@ -56,9 +54,6 @@ public:
         ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter,
         const ScDocument* pDoc );
 };
-
-
-
 
 #endif
 

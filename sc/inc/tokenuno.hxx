@@ -35,8 +35,6 @@
 class ScTokenArray;
 class ScDocShell;
 
-// ============================================================================
-
 class ScTokenConversion
 {
 public:
@@ -49,8 +47,6 @@ public:
                         com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );
 };
-
-// ============================================================================
 
 class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::sheet::XFormulaParser,
@@ -136,8 +132,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
-// ============================================================================
-
 class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
 {
 public:
@@ -145,8 +139,6 @@ public:
     ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler);
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
-
-// ============================================================================
 
 #endif
 

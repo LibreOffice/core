@@ -36,8 +36,6 @@ class ScDocument;
 class Rectangle;
 struct ScCaptionInitData;
 
-// ============================================================================
-
 /** Internal data for a cell annotation. */
 struct SC_DLLPUBLIC ScNoteData
 {
@@ -52,8 +50,6 @@ struct SC_DLLPUBLIC ScNoteData
     explicit            ScNoteData( bool bShown = false );
                         ~ScNoteData();
 };
-
-// ============================================================================
 
 /**
  * Additional class containing cell annotation data.
@@ -159,8 +155,6 @@ private:
     ScDocument&         mrDoc;              /// Parent document containing the note.
     mutable ScNoteData  maNoteData;         /// Note data with pointer to caption object.
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScNoteUtil
 {
@@ -305,8 +299,6 @@ public:
 
     void CreateAllNoteCaptions(SCTAB nTab);
 };
-
-// ============================================================================
 
 #endif
 

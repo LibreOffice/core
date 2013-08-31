@@ -20,8 +20,6 @@
 #ifndef SC_CHARTARR_HXX
 #define SC_CHARTARR_HXX
 
-// -----------------------------------------------------------------------
-
 #include "rangelst.hxx"
 #include "chartpos.hxx"
 

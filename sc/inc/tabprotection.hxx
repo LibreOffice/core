@@ -54,8 +54,6 @@ private:
     ~ScPassHashHelper();
 };
 
-// ============================================================================
-
 class SAL_NO_VTABLE ScPassHashProtectable
 {
 public:
@@ -75,8 +73,6 @@ public:
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual bool verifyPassword(const String& aPassText) const = 0;
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScDocProtection : public ScPassHashProtectable
 {
@@ -113,8 +109,6 @@ public:
 private:
     ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
 };
-
-// ============================================================================
 
 /** sheet protection state container
  *
@@ -172,7 +166,6 @@ public:
 private:
     ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
 };
-
 
 #endif
 

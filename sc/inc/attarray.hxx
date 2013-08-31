@@ -71,7 +71,6 @@ struct ScAttrEntry
     const ScPatternAttr*    pPattern;
 };
 
-
 class ScAttrArray
 {
 private:
@@ -190,10 +189,7 @@ public:
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 };
 
-
-//  ------------------------------------------------------------------------------
 //                              Iterator for attributes
-//  ------------------------------------------------------------------------------
 
 class ScAttrIterator
 {
@@ -206,7 +202,6 @@ public:
     inline const ScPatternAttr* Next( SCROW& rTop, SCROW& rBottom );
     SCROW               GetNextRow() const { return nRow; }
 };
-
 
 inline ScAttrIterator::ScAttrIterator( const ScAttrArray* pNewArray, SCROW nStart, SCROW nEnd ) :
     pArray( pNewArray ),
@@ -235,9 +230,6 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
     return pRet;
 }
 
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

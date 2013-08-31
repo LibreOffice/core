@@ -87,7 +87,6 @@ public:
     void                        CopyFrom( const ScCompressedArray& rArray,
                                     A nStart, A nEnd, long nSourceDy = 0 );
 
-
     // methods public for the coupled array sum methods
     /** Obtain index into entries for nPos */
     SC_DLLPUBLIC size_t                      Search( A nPos ) const;
@@ -99,7 +98,6 @@ protected:
     DataEntry*                  pData;
     A                           nMaxAccess;
 };
-
 
 template< typename A, typename D >
 void ScCompressedArray<A,D>::Reset( const D& rValue )
@@ -114,13 +112,11 @@ void ScCompressedArray<A,D>::Reset( const D& rValue )
     pData[0].nEnd = nMaxAccess;
 }
 
-
 template< typename A, typename D >
 void ScCompressedArray<A,D>::SetValue( A nPos, const D& rValue )
 {
     SetValue( nPos, nPos, rValue);
 }
-
 
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetValue( A nPos ) const
@@ -129,7 +125,6 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos ) const
     return pData[nIndex].aValue;
 }
 
-
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) const
 {
@@ -137,7 +132,6 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
     nEnd = pData[nIndex].nEnd;
     return pData[nIndex].aValue;
 }
-
 
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
@@ -149,8 +143,7 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
     return pData[nEntry].aValue;
 }
 
-// === ScBitMaskCompressedArray ==============================================
-
+//  ScBitMaskCompressedArray
 /** The data type represents bits, managable by bitwise operations.
  */
 
@@ -193,7 +186,6 @@ public:
                                     const D& rBitMask ) const;
 };
 
-
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::AndValue( A nPos, const D& rValueToAnd )
 {
@@ -202,7 +194,6 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nPos, const D& rValueToAnd )
         this->SetValue( nPos, rValue & rValueToAnd);
 }
 
-
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
 {
@@ -210,7 +201,6 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
     if ((rValue | rValueToOr) != rValue)
         this->SetValue( nPos, rValue | rValueToOr);
 }
-
 
 #endif // SC_COMPRESSEDARRAY_HXX
 

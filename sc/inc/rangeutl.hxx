@@ -31,8 +31,6 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-//------------------------------------------------------------------------
-
 class ScArea;
 class ScDocument;
 class ScRange;
@@ -41,8 +39,6 @@ class ScRangeList;
 class ScDBCollection;
 
 enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
-
-//------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScRangeUtil
 {
@@ -95,8 +91,6 @@ public:
                                   RutlNameScope eScope=RUTL_NAMES,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 };
-
-//------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScRangeStringConverter
 {
@@ -265,8 +259,6 @@ public:
     static ScRangeData* GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc);
 };
 
-//------------------------------------------------------------------------
-
 class ScArea
 {
 public:
@@ -313,7 +305,6 @@ public:
     bool Next( String& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }
 };
-
 
 #endif // SC_RANGEUTL_HXX
 

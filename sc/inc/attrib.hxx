@@ -27,8 +27,6 @@
 #include "global.hxx"
 #include "address.hxx"
 
-//------------------------------------------------------------------------
-
                                         // flags for cells hidden by merge
                                         // and control for auto filter
 #define SC_MF_HOR               0x0001
@@ -42,13 +40,10 @@
 
 #define SC_MF_ALL               0x00FF
 
-
 class EditTextObject;
 namespace editeng { class SvxBorderLine; }
 
 bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther );
-
-//------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
 {
@@ -80,8 +75,6 @@ public:
             }
 };
 
-//------------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
 {
 public:
@@ -101,7 +94,6 @@ public:
     bool HasPivotPopupButton() const;
 };
 
-//------------------------------------------------------------------------
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
 {
     bool        bProtection;    ///< protect cell
@@ -151,8 +143,6 @@ public:
             }
 };
 
-
-//----------------------------------------------------------------------------
 // ScRangeItem: manages an area of a table
 
 #define SCR_INVALID     0x01
@@ -214,9 +204,8 @@ inline ScRangeItem& ScRangeItem::operator=( const ScRangeItem &rCpy )
     return *this;
 }
 
-//----------------------------------------------------------------------------
 // ScTableListItem: manages a list of tables
-//----------------------------------------------------------------------------
+
 class ScTableListItem : public SfxPoolItem
 {
 public:
@@ -246,7 +235,6 @@ inline ScTableListItem::ScTableListItem( const sal_uInt16 nWhichP )
     : SfxPoolItem(nWhichP), nCount(0), pTabArr(NULL)
 {}
 
-//----------------------------------------------------------------------------
 // page format item: contents of header and footer
 
 #define SC_HF_LEFTAREA   1
@@ -286,8 +274,6 @@ public:
     void SetArea( EditTextObject *pNew, int nArea );
 };
 
-
-//----------------------------------------------------------------------------
 // page format item: contents of header and footer
 
 class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
@@ -311,7 +297,6 @@ public:
                                                  const IntlWrapper* pIntl = 0 ) const;
 };
 
-//----------------------------------------------------------------------------
 //
 
 class ScDoubleItem : public SfxPoolItem
@@ -336,14 +321,10 @@ private:
     double  nValue;
 };
 
-
-// ============================================================================
-
 /** Member ID for "page scale to width" value in QueryValue() and PutValue(). */
 const sal_uInt8 SC_MID_PAGE_SCALETO_WIDTH    = 1;
 /** Member ID for "page scale to height" value in QueryValue() and PutValue(). */
 const sal_uInt8 SC_MID_PAGE_SCALETO_HEIGHT   = 2;
-
 
 /** Contains the "scale to width/height" attribute in page styles. */
 class SC_DLLPUBLIC ScPageScaleToItem : public SfxPoolItem
@@ -407,8 +388,6 @@ private:
 
     std::vector<sal_uInt32> maIndex;
 };
-
-// ============================================================================
 
 #endif
 

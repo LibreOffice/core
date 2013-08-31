@@ -25,14 +25,12 @@
 //  EditEngine is not allowed to define it's own ITEMID's
 #define _EEITEMID_HXX
 
-//--------------------------
 // Item-IDs for UI-MsgPool:
-//--------------------------
 
 //! shall be moved to the below-1000 range!
 
 #define MSGPOOL_START               1100
-//--------------------------------------
+
 #define SCITEM_STRING               1100
 #define SCITEM_SEARCHDATA           1101
 #define SCITEM_SORTDATA             1102
@@ -43,12 +41,11 @@
 #define SCITEM_SOLVEDATA            1107
 #define SCITEM_USERLIST             1108
 #define SCITEM_PRINTWARN            1109
-//--------------------------------------
+
 #define MSGPOOL_END                 1109
 
-//-------------------------
 // Item-IDs for attributes:
-//-------------------------
+
 #define ATTR_STARTINDEX         100     // begin of attributes
 
 #define ATTR_PATTERN_START      100     // begin of cell-attribute-pattern
@@ -160,9 +157,8 @@
 
 #define ATTR_ENDINDEX           ATTR_HIDDEN        // end of pool-range
 
-//--------------------------------
 // Dummy Slot-IDs for dialogs
-//--------------------------------
+
 #define SID_SCATTR_PAGE_NOTES           ATTR_PAGE_NOTES
 #define SID_SCATTR_PAGE_GRID            ATTR_PAGE_GRID
 #define SID_SCATTR_PAGE_HEADERS         ATTR_PAGE_HEADERS
@@ -186,6 +182,5 @@
 #define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
 
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

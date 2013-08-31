@@ -108,8 +108,7 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 #endif
 const SCROW SCROWS64K = 65536;
 
-// === old stuff defines =====================================================
-
+//  old stuff defines
 #define MAXROW_30   8191
 
 #ifdef SC_LIMIT_ROWS
@@ -121,8 +120,7 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 #define MAXROW      W16MAXROW
 #endif
 
-// === old stuff defines end =================================================
-
+//  old stuff defines end
 inline bool ValidCol( SCCOL nCol )
 {
     return static_cast<SCCOL>(0) <= nCol && nCol <= MAXCOL;
@@ -173,8 +171,7 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
     return nTab < 0 ? 0 : (nTab > nMaxTab ? nMaxTab : nTab);
 }
 
-// === ScAddress =============================================================
-
+//  ScAddress
 // The old cell address is combined in one UINT32:
 // +---+---+-------+
 // |Tab|Col|  Row  |
@@ -216,8 +213,7 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_ABS_3D          SCA_ABS | SCA_TAB_3D
 #define SCR_ABS_3D          SCR_ABS | SCA_TAB_3D
 
-// === ScAddress =============================================================
-
+//  ScAddress
 class ScAddress
 {
 private:
@@ -389,7 +385,6 @@ inline bool ScAddress::operator>=( const ScAddress& r ) const
     return !operator<( r );
 }
 
-
 inline size_t ScAddress::hash() const
 {
     // Assume that there are not that many addresses with row > 2^16 AND column
@@ -423,8 +418,7 @@ inline bool ValidAddress( const ScAddress& rAddr )
     return ValidCol(rAddr.Col()) && ValidRow(rAddr.Row()) && ValidTab(rAddr.Tab());
 }
 
-// === ScRange ===============================================================
-
+//  ScRange
 class ScRange
 {
 public:
@@ -570,7 +564,6 @@ inline bool ScRange::In( const ScRange& r ) const
         aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
 }
 
-
 inline size_t ScRange::hashArea() const
 {
     // Assume that there are not that many ranges with identical corners so we
@@ -587,7 +580,6 @@ inline size_t ScRange::hashArea() const
         static_cast<size_t>(aEnd.Row());            // end row <= 2^15
 }
 
-
 inline size_t ScRange::hashStartColumn() const
 {
     // Assume that for the start row more lower row numbers are used so that
@@ -598,7 +590,6 @@ inline size_t ScRange::hashStartColumn() const
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
         static_cast<size_t>(aEnd.Row());
 }
-
 
 struct ScRangeHashAreaFunctor
 {
@@ -621,8 +612,7 @@ inline bool ValidRange( const ScRange& rRange )
     return ValidAddress(rRange.aStart) && ValidAddress(rRange.aEnd);
 }
 
-// === ScRangePair ===========================================================
-
+//  ScRangePair
 class ScRangePair
 {
 private:
@@ -659,8 +649,7 @@ inline int ScRangePair::operator!=( const ScRangePair& r ) const
     return !operator==( r );
 }
 
-// === ScRefAddress ==========================================================
-
+//  ScRefAddress
 class ScRefAddress
 {
             ScAddress           aAdr;
@@ -746,9 +735,7 @@ inline int ScRefAddress::operator==( const ScRefAddress& r ) const
         bRelTab == r.bRelTab;
 }
 
-// ===========================================================================
 // Global functions
-// ===========================================================================
 
 // Special values for cells always broadcasting or listening (RECALCMODE_ALWAYS
 // and the like).

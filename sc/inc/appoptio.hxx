@@ -101,10 +101,7 @@ private:
     ScOptionsUtil::KeyBindingType meKeyBindingType;
 };
 
-
-//==================================================================
 //  Config Item containing app options
-//==================================================================
 
 class ScAppCfg : public ScAppOptions
 {

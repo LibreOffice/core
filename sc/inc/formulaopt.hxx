@@ -76,9 +76,7 @@ public:
     bool               operator!= ( const ScFormulaOptions& rOpt ) const;
 };
 
-//==================================================================
 // item for the dialog / options page
-//==================================================================
 
 class SC_DLLPUBLIC ScTpFormulaItem : public SfxPoolItem
 {
@@ -99,9 +97,7 @@ private:
     ScFormulaOptions theOptions;
 };
 
-//==================================================================
 // config item
-//==================================================================
 
 class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
 {

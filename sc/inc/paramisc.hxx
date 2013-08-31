@@ -42,8 +42,6 @@ struct ScSolveParam
     sal_Bool            operator==  ( const ScSolveParam& r ) const;
 };
 
-//-----------------------------------------------------------------------
-
 struct ScTabOpParam
 {
     ScRefAddress    aRefFormulaCell;

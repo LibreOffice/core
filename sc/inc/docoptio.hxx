@@ -140,9 +140,7 @@ inline bool ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-//==================================================================
 // Item for preferences dialog - calculation
-//==================================================================
 
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
@@ -163,9 +161,7 @@ private:
     ScDocOptions theOptions;
 };
 
-//==================================================================
 //  Config Item containing document options
-//==================================================================
 
 class ScDocCfg : public ScDocOptions
 {
@@ -183,7 +179,6 @@ public:
 
     void    SetOptions( const ScDocOptions& rNew );
 };
-
 
 #endif
 

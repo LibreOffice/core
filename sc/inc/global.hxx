@@ -80,8 +80,6 @@ const sal_Unicode CHAR_RLM      = 0x200F;
 const sal_Unicode CHAR_NBHY     = 0x2011;
 const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 
-// ----------------------------------------------------------------------------
-
 #define MINDOUBLE   1.7e-307
 #define MAXDOUBLE   1.7e307
 
@@ -125,7 +123,6 @@ const SCSIZE MAXSUBTOTAL        = 3;
                                      * 0.1986cm with TeX points,
                                      * 0.1993cm with PS points. */
 
-
 #define MAX_EXTRA_WIDTH     23811   /* 42cm in TWIPS, 41.8430cm TeX, 41.9999cm PS */
 #define MAX_EXTRA_HEIGHT    23811
 #define MAX_COL_WIDTH       56693   /* 1m in TWIPS, 99.6266cm TeX, 100.0001cm PS */
@@ -160,7 +157,6 @@ namespace sc
 #define PAINT_OBJECTS       32
 #define PAINT_SIZE          64
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
-
 
                                     // flags for columns / rows
                                     // FILTERED always together with HIDDEN
@@ -221,7 +217,6 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define HASATTR_RIGHTORCENTER   8192    // right or centered logical alignment
 
 #define HASATTR_PAINTEXT        ( HASATTR_LINES | HASATTR_SHADOW | HASATTR_CONDITIONAL )
-
 
 #define EMPTY_STRING ScGlobal::GetEmptyString()
 #define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
@@ -424,7 +419,6 @@ enum ScLkUpdMode    // modes for updating links
     LM_ON_DEMAND,
     LM_UNKNOWN
 };
-
 
 // enum with values equal to old DBObject enum from sdb
 enum ScDBObject
@@ -676,7 +670,6 @@ SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const String& rString, sal
         @returns: pointer to cChar if found, else NULL
      */
 SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
-
 
     static  CharSet         GetCharsetValue( const String& rCharSet );
     static  String          GetCharsetString( CharSet eVal );

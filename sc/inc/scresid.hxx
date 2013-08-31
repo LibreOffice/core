@@ -23,8 +23,6 @@
 #include <tools/resid.hxx>
 #include "scdllapi.h"
 
-//===================================================================
-
 class SC_DLLPUBLIC ScResId : public ResId
 {
  public:
