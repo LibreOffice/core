@@ -9812,7 +9812,7 @@ dnl ===================================================================
 dnl GCONF check
 dnl ===================================================================
 
-ENABLE_GCONF=""
+ENABLE_GCONF=
 AC_MSG_CHECKING([whether to enable GConf support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "iOS" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
@@ -11104,9 +11104,9 @@ dnl ===================================================================
 dnl Test for the enabling the lockdown pieces
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable the lockdown pieces])
-ENABLE_LOCKDOWN=""
+ENABLE_LOCKDOWN=
 if test -n "$enable_lockdown" -a "$enable_lockdown" != "no"; then
-    ENABLE_LOCKDOWN=YES
+    ENABLE_LOCKDOWN=TRUE
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])

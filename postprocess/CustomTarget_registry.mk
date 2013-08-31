@@ -434,10 +434,10 @@ postprocess_DRIVERS += postgresql
 endif
 
 ifeq (unx,$(GUIBASE))
-ifneq (,$(or $(filter TRUEYES,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
+ifneq (,$(or $(filter TRUETRUE,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
 postprocess_XCDS += gnome.xcd
 postprocess_DEPS_gnome := main
-ifeq ($(ENABLE_GCONF)$(ENABLE_LOCKDOWN),TRUEYES)
+ifeq ($(ENABLE_GCONF)$(ENABLE_LOCKDOWN),TRUETRUE)
 postprocess_FILES_gnome += \
 	$(postprocess_MOD)/org/openoffice/Office/Common-gconflockdown.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Recovery-gconflockdown.xcu \

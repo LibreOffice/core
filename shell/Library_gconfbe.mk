@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Library_Library,gconfbe1))
 
-ifeq ($(ENABLE_LOCKDOWN),YES)
+ifeq ($(ENABLE_LOCKDOWN),TRUE)
 $(eval $(call gb_Library_add_defs,gconfbe1,\
 	-DENABLE_LOCKDOWN \
 ))
