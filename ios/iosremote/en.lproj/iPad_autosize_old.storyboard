@@ -508,7 +508,7 @@
         <image name="Default.png" width="320" height="480"/>
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
-        <image name="more_ipad.png" width="120" height="120"/>
+        <image name="more_ipad.png" width="60" height="60"/>
         <image name="nextButton_normal.png" width="42" height="230"/>
         <image name="nextButton_pressed.png" width="42" height="230"/>
         <image name="previousButton_normal.png" width="42" height="230"/>
@@ -520,7 +520,9 @@
         <class className="BasePresentationViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
             <relationships>
+                <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>

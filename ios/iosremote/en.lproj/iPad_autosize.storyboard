@@ -520,7 +520,9 @@
         <class className="BasePresentationViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
             <relationships>
+                <relationship kind="action" name="nextSlideAction:"/>
                 <relationship kind="action" name="popOverUp:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
                 <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
