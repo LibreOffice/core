@@ -121,7 +121,6 @@ namespace dbaui
         DECL_LINK(ControlPreNotifyHdl, NotifyEvent*);
 
     public:
-        //  TYPEINFO();
         OTableEditorCtrl(Window* pParentWin);
         virtual         ~OTableEditorCtrl();
         virtual sal_Bool    CursorMoving(long nNewRow, sal_uInt16 nNewCol);

@@ -1594,9 +1594,6 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
     showError( aInfo );
 
-    // update the title of our window
-    //updateTitle();
-
     // if we successfully saved a view we were creating, then close the designer
     if ( bSuccess && editingView() && !m_xAlterView.is() )
     {

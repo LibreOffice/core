@@ -137,7 +137,6 @@ public:
     PointType  ObjMax;     // XY-Maximum des Objekts
     sal_uInt8       Art;
     sal_uInt8       Layer;
-//    sal_uInt8       Flags;    // (Schummel f"ur Allignment unter NT)
     friend SvStream& operator>>(SvStream& rIStream, ObjkType& rObjk);
     friend sal_Bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
@@ -287,7 +286,6 @@ public:
     sal_uInt32      ChartPtr;  // Diagrammstruktur
     sal_uInt32 GetSubPtr();    // hier nur zum Checken, ob Sublist evtl. leer ist.
     friend SvStream& operator>>(SvStream& rIStream, GrupType& rGrup);
-//    virtual void Draw(OutputDevice& rOut);
 };
 
 void SetLine(ObjLineType& rLine, OutputDevice& rOut);

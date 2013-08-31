@@ -218,7 +218,6 @@ sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
         case DataType::REF:
         default:
             nFormat = _xTypes->getStandardFormat(NumberFormat::UNDEFINED, _rLocale);
-            //nFormat = NumberFormat::UNDEFINED;
     }
     return nFormat;
 }

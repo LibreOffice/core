@@ -236,7 +236,6 @@ void doTestCode()
     aClipPoly.append( basegfx::B2DPoint( 8250, 12600 ) );
     aClipPoly.append( basegfx::B2DPoint( 4500, 11100 ) );
     aClipPoly.setClosed( true );
-    //aClipPoly.flip();
     aClip.append( aClipPoly );
 
     aWriter.Push( PUSH_CLIPREGION | PUSH_FILLCOLOR );
@@ -11882,7 +11881,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         m_nSignatureObject = createObject();
         rNewWidget.m_aValue = OUString::number( m_nSignatureObject );
         rNewWidget.m_aValue += " 0 R";
-        //createDefaultSignatureAppearance( rNewWidget, rSig );
         // let's add a fake appearance
         rNewWidget.m_aAppearances[ "N" ][ "Standard" ] = new SvMemoryStream();
     }
