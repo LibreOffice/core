@@ -32,7 +32,7 @@ namespace
 #if defined( UNX )
     const char LibName[] = "libvlc.so.5";
 #elif defined( MACOS )
-    const char LibName[] = "/Applications/VLC.app/libvlc.dylib";
+    const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
 #elif defined( WNT )
     const char LibName[] = "libvlc.dll";
 
