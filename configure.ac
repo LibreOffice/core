@@ -8756,7 +8756,7 @@ if test "$with_system_npapi_headers" = "yes"; then
 else
     AC_MSG_RESULT([internal])
         dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
-        dnl ENABLE_NPAPI_INTO_BROWSER is YES
+        dnl ENABLE_NPAPI_INTO_BROWSER is TRUE
     SYSTEM_NPAPI_HEADERS=NO
 fi
 AC_SUBST(NPAPI_HEADERS_CFLAGS)
@@ -10487,7 +10487,7 @@ if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
     fi
 else
     AC_MSG_RESULT([no])
-    ENABLE_REPORTBUILDER=FALSE
+    ENABLE_REPORTBUILDER=
     SYSTEM_JFREEREPORT=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
@@ -11463,10 +11463,10 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to create MSI with LIMITUI=1 (silent install)])
 if test "$enable_silent_msi" = "" -o "$enable_silent_msi" = "no"; then
     AC_MSG_RESULT([no])
-    ENABLE_SILENT_MSI="FALSE"
+    ENABLE_SILENT_MSI=
 else
     AC_MSG_RESULT([yes])
-    ENABLE_SILENT_MSI="TRUE"
+    ENABLE_SILENT_MSI=TRUE
     SCPDEFS="$SCPDEFS -DENABLE_SILENT_MSI"
 fi
 AC_SUBST(ENABLE_SILENT_MSI)
@@ -12370,7 +12370,7 @@ if test "$enable_mpl_subset" = "yes"; then
    warn_report=false
    if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         warn_report=true
-   elif test "x$ENABLE_REPORTBUILDER" = "xTRUE"; then
+   elif test "$ENABLE_REPORTBUILDER" = "TRUE"; then
         warn_report=true
    fi
    if test "$warn_report" = "true"; then
