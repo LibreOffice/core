@@ -77,4 +77,5 @@
 /moz/zipped/*.zip
 __pycache__
 
-ios/iosremote/iosremote.xcodeproj/project.xcworkspace/xcuserdata/me.xcuserdatad/UserInterfaceState.xcuserstate
+# iOS remote control specific
+UserInterfaceState.xcuserstate
