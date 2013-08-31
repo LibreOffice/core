@@ -216,7 +216,7 @@ struct WW8_FFN_BASE     // Font Descriptor
 struct WW8_FFN : public WW8_FFN_BASE
 {
     // ab Ver8 als Unicode
-    String sFontname;// 0x6 bzw. 0x40 ab Ver8 zero terminated string that
+    OUString sFontname;// 0x6 bzw. 0x40 ab Ver8 zero terminated string that
                                         // records name of font.
                                         // Maximal size of szFfn is 65 characters.
                                         // Vorsicht: Dieses Array kann auch kleiner sein!!!

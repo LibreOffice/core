@@ -2355,11 +2355,11 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
         for ( ; i < pFonts->GetMax(); i++ )
         {
             FontFamily eFamily;
-            String aFontName;
+            OUString aFontName;
             FontPitch ePitch;
             CharSet eSrcCharSet;
             if( GetFontParams( i, eFamily, aFontName, ePitch, eSrcCharSet )
-                && aFontName.EqualsAscii("Wingdings") )
+                && aFontName=="Wingdings" )
             {
                 break;
             }

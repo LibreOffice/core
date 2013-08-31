@@ -6133,7 +6133,7 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
 };
 
 // #i43762# check font name for illegal characters
-static void lcl_checkFontname( String& sString )
+static void lcl_checkFontname( OUString& sString )
 {
     // for efficiency, we'd like to use String methods as far as possible.
     // Hence, we will:
@@ -6143,24 +6143,23 @@ static void lcl_checkFontname( String& sString )
     //    completely removed
 
     // convert all invalid chars to \u0001
-    sal_Unicode* pBuffer = sString.GetBufferAccess();
-    xub_StrLen nLen = sString.Len();
+    OUStringBuffer aBuf(sString);
+    const sal_Int32 nLen = aBuf.getLength();
     bool bFound = false;
-    for( xub_StrLen n = 0; n < nLen; n++ )
+    for ( sal_Int32 n = 0; n < nLen; ++n )
     {
-        if( pBuffer[n] < sal_Unicode( 0x20 ) )
+        if ( aBuf[n] < 0x20 )
         {
-            pBuffer[n] = sal_Unicode( 1 );
+            aBuf[n] = 1;
             bFound = true;
         }
     }
-    sString.ReleaseBufferAccess();
+    sString = aBuf.makeStringAndClear();
 
     // if anything was found, remove \u0001 + leading/trailing ';'
     if( bFound )
     {
-        sString = comphelper::string::remove(sString, 1);
-        sString = comphelper::string::strip(sString, ';');
+        sString = comphelper::string::strip(sString.replaceAll("\001", ""), ';');
     }
 }
 
@@ -6292,22 +6291,22 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
-                p->sFontname = String(pVer6->szFfn, eEnc);
+                p->sFontname = OUString(pVer6->szFfn, rtl_str_getLength(pVer6->szFfn), eEnc);
                 const sal_uInt16 maxStrSize = sizeof (pVer6->szFfn) / sizeof (pVer6->szFfn[0]);
                 if (p->ibszAlt && p->ibszAlt < maxStrSize) //don't start after end of string
                 {
-                    p->sFontname.Append(';');
-                    p->sFontname += String(pVer6->szFfn+p->ibszAlt, eEnc);
+                    const sal_Char *pAlt = pVer6->szFfn+p->ibszAlt;
+                    p->sFontname += ";" + OUString(pAlt, rtl_str_getLength(pAlt), eEnc);
                 }
                 else
                 {
                     //#i18369# if its a symbol font set Symbol as fallback
                     if (
                          RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs)
-                         && !p->sFontname.EqualsAscii("Symbol")
+                         && p->sFontname!="Symbol"
                        )
                     {
-                        p->sFontname.AppendAscii(";Symbol");
+                        p->sFontname += ";Symbol";
                     }
                 }
                 pVer6 = (WW8_FFN_Ver6*)( ((sal_uInt8*)pVer6) + pVer6->cbFfnM1 + 1 );
@@ -6371,12 +6370,11 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->sFontname = pPrimary;
                 if (p->ibszAlt && p->ibszAlt < nMaxNullTerminatedPossible)
                 {
-                    p->sFontname.Append(';');
                     sal_Unicode *pSecondary = pPrimary + p->ibszAlt;
 #ifdef OSL_BIGENDIAN
                     swapEndian(pSecondary);
 #endif
-                    p->sFontname.Append(pSecondary);
+                    p->sFontname += ";" + OUString(pSecondary);
                 }
 
                 // #i43762# check font name for illegal characters

@@ -3359,7 +3359,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
     }
 }
 bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
-    String& rName, FontPitch& rePitch, CharSet& reCharSet )
+    OUString& rName, FontPitch& rePitch, CharSet& reCharSet )
 {
     // Die Defines, aus denen diese Tabellen erzeugt werden, stehen in windows.h
     static const FontPitch ePitchA[] =
@@ -3370,14 +3370,14 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
     static const FontFamily eFamilyA[] =
     {
         FAMILY_DONTKNOW, FAMILY_ROMAN, FAMILY_SWISS, FAMILY_MODERN,
-        FAMILY_SCRIPT, FAMILY_DECORATIVE
+        FAMILY_SCRIPT, FAMILY_DECORATIVE, FAMILY_DONTKNOW, FAMILY_DONTKNOW
     };
 
     const WW8_FFN* pF = pFonts->GetFont( nFCode );  // Info dazu
     if( !pF )                                   // FontNummer unbekannt ?
         return false;                           // dann ignorieren
 
-    rName = String( pF->sFontname );
+    rName = pF->sFontname;
 
     // pF->prg : Pitch
     rePitch = ePitchA[pF->prg];
@@ -3396,62 +3396,34 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
             reCharSet = rtl_getTextEncodingFromWindowsCharset( pF->chs );
     }
 
-    // pF->ff : Family
-    sal_uInt8 b = pF->ff;
-
     // make sure Font Family Code is set correctly
     // at least for the most important fonts
     // ( might be set wrong when Doc was not created by
     //   Winword but by third party program like Applixware... )
-        /*
-        0: FAMILY_DONTKNOW
-        1: FAMILY_ROMAN
-        2: FAMILY_SWISS
-        3: FAMILY_MODERN
-        4: FAMILY_SCRIPT
-        5: FAMILY_DECORATIVE
-    */
-#define FONTNAMETAB_SZ    14
-#define MAX_FONTNAME_ROMAN 6
-    static const sal_Char
-        // first comes ROMAN
-        sFontName0[] = "\x07""Tms Rmn",
-        sFontName1[] = "\x07""Timmons",
-        sFontName2[] = "\x08""CG Times",
-        sFontName3[] = "\x08""MS Serif",
-        sFontName4[] = "\x08""Garamond",
-        sFontName5[] = "\x11""Times Roman",
-        sFontName6[] = "\x15""Times New Roman",
-        // from here SWISS --> see above: #define MAX_FONTNAME_ROMAN 6
-        sFontName7[] = "\x04""Helv",
-        sFontName8[] = "\x05""Arial",
-        sFontName9[] = "\x07""Univers",
-        sFontName10[]= "\x11""LinePrinter",
-        sFontName11[]= "\x11""Lucida Sans",
-        sFontName12[]= "\x11""Small Fonts",
-        sFontName13[]= "\x13""MS Sans Serif";
-    static const sal_Char* const aFontNameTab[ FONTNAMETAB_SZ ] =
+    if (rName.startsWithIgnoreAsciiCase("Tms Rmn") ||
+        rName.startsWithIgnoreAsciiCase("Timmons") ||
+        rName.startsWithIgnoreAsciiCase("CG Times") ||
+        rName.startsWithIgnoreAsciiCase("MS Serif") ||
+        rName.startsWithIgnoreAsciiCase("Garamond") ||
+        rName.startsWithIgnoreAsciiCase("Times Roman") ||
+        rName.startsWithIgnoreAsciiCase("Times New Roman"))
     {
-        sFontName0,  sFontName1,  sFontName2,  sFontName3,
-        sFontName4,  sFontName5,  sFontName6,  sFontName7,
-        sFontName8,  sFontName9,  sFontName10, sFontName11,
-        sFontName12, sFontName13
-    };
-
-    for( sal_uInt16 n = 0;  n < FONTNAMETAB_SZ; n++ )
-    {
-        const sal_Char* pCmp = aFontNameTab[ n ];
-        xub_StrLen nLen = *pCmp++;
-        if( rName.EqualsIgnoreCaseAscii(pCmp, 0, nLen) )
-        {
-            b = n <= MAX_FONTNAME_ROMAN ? 1 : 2;
-            break;
-        }
+        reFamily = FAMILY_ROMAN;
     }
-    if (b < (sizeof(eFamilyA)/sizeof(eFamilyA[0])))
-        reFamily = eFamilyA[b];
+    else if (rName.startsWithIgnoreAsciiCase("Helv") ||
+             rName.startsWithIgnoreAsciiCase("Arial") ||
+             rName.startsWithIgnoreAsciiCase("Univers") ||
+             rName.startsWithIgnoreAsciiCase("LinePrinter") ||
+             rName.startsWithIgnoreAsciiCase("Lucida Sans") ||
+             rName.startsWithIgnoreAsciiCase("Small Fonts") ||
+             rName.startsWithIgnoreAsciiCase("MS Sans Serif"))
+    {
+        reFamily = FAMILY_SWISS;
+    }
     else
-        reFamily = FAMILY_DONTKNOW;
+    {
+        reFamily = eFamilyA[pF->ff];
+    }
 
     return true;
 }
@@ -3460,7 +3432,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
     sal_uInt16 nWhich)
 {
     FontFamily eFamily;
-    String aName;
+    OUString aName;
     FontPitch ePitch;
     CharSet eSrcCharSet;
 
