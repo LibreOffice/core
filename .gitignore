@@ -79,3 +79,4 @@ __pycache__
 
 # iOS remote control specific
 UserInterfaceState.xcuserstate
+.DS_Store
