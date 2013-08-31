@@ -545,8 +545,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
         SpinField::SetText(rNew, aSel);
     }
 
-    m_bValueDirty = sal_True;
-        // muss nicht stimmen, aber sicherheitshalber ...
+    m_bValueDirty = sal_True; // not always necessary, but better re-evaluate for safety reasons
 }
 
 long FormattedField::PreNotify(NotifyEvent& rNEvt)
@@ -565,14 +564,15 @@ void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
     sal_Bool bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
-        ImplGetFormatter();     // damit wird ein Standard-Formatter angelegt
+        ImplGetFormatter(); // this creates a standard formatter
 
+        // It might happen that the standard formatter makes no sense here, but it takes a default
+        // format. Thus, it is possible to set one of the other standard keys (which are spanning
+        // across multiple formatters).
         m_nFormatKey = nFormatKey;
-            // kann sein, dass das in dem Standard-Formatter keinen Sinn macht, aber der nimmt dann ein Default-Format an.
-            // Auf diese Weise kann ich einfach einen der - formatteruebergreifended gleichen - Standard-Keys setzen.
+        // When calling SetFormatKey without a formatter, the key must be one of the standard values
+        // that is available for all formatters (and, thus, also in this new one).
         DBG_ASSERT(m_pFormatter->GetEntry(nFormatKey) != NULL, "FormattedField::ImplSetFormatKey : invalid format key !");
-            // Wenn SetFormatKey aufgerufen wird, ohne dass ein Formatter existiert, muss der Key einer der Standard-Werte
-            // sein, der in allen Formattern (also auch in meinem neu angelegten) vorhanden ist.
     }
 }
 
@@ -611,11 +611,11 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bReset
         sal_uInt32 nDestKey = pFormatter->TestNewString(sOldFormat);
         if (nDestKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
-            // die Sprache des neuen Formatters
+            // language of the new formatter
             const SvNumberformat* pDefaultEntry = pFormatter->GetEntry(0);
             LanguageType aNewLang = pDefaultEntry ? pDefaultEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 
-            // den alten Format-String in die neue Sprache konvertieren
+            // convert the old format string into the new language
             sal_Int32 nCheckPos;
             short nType;
             pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
@@ -863,7 +863,7 @@ void FormattedField::SetMinValue(double dMin)
 
     m_dMinValue = dMin;
     m_bHasMin = sal_True;
-    // fuer die Ueberpruefung des aktuellen Wertes an der neuen Grenze -> ImplSetValue
+    // for checking the current value at the new border -> ImplSetValue
     ReFormat();
 }
 
@@ -874,7 +874,7 @@ void FormattedField::SetMaxValue(double dMax)
 
     m_dMaxValue = dMax;
     m_bHasMax = sal_True;
-    // fuer die Ueberpruefung des aktuellen Wertes an der neuen Grenze -> ImplSetValue
+    // for checking the current value at the new border -> ImplSetValue
     ReFormat();
 }
 
@@ -915,10 +915,10 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
     OUString sNewText;
     if (ImplGetFormatter()->IsTextFormat(m_nFormatKey))
     {
-        // zuerst die Zahl als String im Standard-Format
+        // first convert the number as string in standard format
         OUString sTemp;
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
-        // dann den String entsprechend dem Text-Format
+        // than encode the string in the corresponding text format
         {
             ImplGetFormatter()->GetOutputString(sTemp, m_nFormatKey, sNewText, &m_pLastOutputColor);
         }
@@ -955,13 +955,13 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
-    sal_uInt32 nFormatKey = m_nFormatKey;   // IsNumberFormat veraendert den FormatKey ...
+    sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 
     if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
-        // damit wir in einem als Text formatierten Feld trotzdem eine Eingabe wie '1,1' erkennen ...
+        // for detection of values like "1,1" in fields that are formated as text
         nFormatKey = 0;
 
-    // Sonderbehandlung fuer %-Formatierung
+    // special treatment for percentage formatting
     if (ImplGetFormatter()->GetType(m_nFormatKey) == NUMBERFORMAT_PERCENT)
     {
         // the language of our format
@@ -973,8 +973,7 @@ sal_Bool FormattedField::ImplGetValue(double& dNewVal)
         double dTemp;
         if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
             NUMBERFORMAT_NUMBER == m_pFormatter->GetType(nTempFormat))
-            // der String entspricht einer Number-Formatierung, hat also nur kein %
-            // -> append it
+            // the string is equivalent to a number formatted one (has no % sign) -> append it
             sText += "%";
         // (with this, a input of '3' becomes '3%', which then by the formatter is translated
         // into 0.03. Without this, the formatter would give us the double 3 for an input '3',
@@ -1015,8 +1014,8 @@ double FormattedField::GetValue()
 void FormattedField::Up()
 {
     DBG_CHKTHIS(FormattedField, NULL);
+    // setValue handles under- and overflows (min/max) automatically
     SetValue(GetValue() + m_dSpinSize);
-        // das setValue handelt Bereichsueberschreitungen (min/max) automatisch
     SetModifyFlag();
     Modify();
 

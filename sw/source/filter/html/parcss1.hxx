@@ -20,7 +20,7 @@
 #ifndef _PARCSS1_HXX
 #define _PARCSS1_HXX
 
-// Die Tokens des CSS1-Parsers
+// tokens of the CSS1 parser
 enum CSS1Token
 {
     CSS1_NULL,
@@ -30,8 +30,8 @@ enum CSS1Token
     CSS1_STRING,
     CSS1_NUMBER,
     CSS1_PERCENTAGE,
-    CSS1_LENGTH,            // eine absolute Groesse in 1/100 MM
-    CSS1_PIXLENGTH,         // eine Pixel-Groesse
+    CSS1_LENGTH,    // absolute length in 1/100 MM
+    CSS1_PIXLENGTH, // length in pixels
     CSS1_EMS,
     CSS1_EMX,
     CSS1_HEXCOLOR,
@@ -57,7 +57,6 @@ enum CSS1Token
     CSS1_RGB
 };
 
-// die Zustaende des Parsers
 enum CSS1ParserState
 {
     CSS1_PAR_ACCEPTED = 0,
@@ -75,21 +74,22 @@ enum CSS1SelectorType
     CSS1_SELTYPE_PAGE // Feature: PrintExt
 };
 
-// Die folegende Klasse beschreibt einen Simple-Selector, also
-// - einen HTML-Element-Namen
-// - einen HTML-Element-Namen mit Klasse (durch '.' getrennt)
-// - eine Klasse (ohne Punkt)
-// - eine mit ID=xxx gesetzte ID aus einem HTML-Dokument
-// oder
-// - ein Pseudo-Element
-//
-// Die Simple-Sektoren werden in einer Liste zu vollstaendigen
-// Selektoren verkettet
+/** A simple selector
+ *
+ * This class represents a simple selector, e.g.
+ * - a HTML element name
+ * - a HTML element name with a class (separated by a dot)
+ * - a class (without a dot)
+ * - an ID (set with ID=xxx)
+ * - a pseudo element
+ *
+ * These simple selectors are chained in a list to complete selectors
+ */
 class CSS1Selector
 {
-    CSS1SelectorType eType;     // Art des Selektors
-    OUString aSelector;           // der Selektor selbst
-    CSS1Selector *pNext;        // die naechste Komponente
+    CSS1SelectorType eType; // the type
+    OUString aSelector;     // the selector itself
+    CSS1Selector *pNext;    // the following component
 
 public:
     CSS1Selector( CSS1SelectorType eTyp, const OUString &rSel )
@@ -105,22 +105,20 @@ public:
     const CSS1Selector *GetNext() const { return pNext; }
 };
 
-// Die folegende Klasse beschreibt einen Teil-Ausdruck einer
-// CSS1-Deklaration sie besteht aus
-//
-// - dem Typ des Ausdrucks (entspricht dem Token)
-// - dem eigentlichen Wert als String und ggf. double
-//   der double-Wert enthaelt das Vorzeichen fuer NUMBER und LENGTH
-// - und dem Operator, mit dem er mit dem *Vorganger*-Ausdruck
-//   verknuepft ist.
-//
+/** a subexpression of a CSS1 declaration
+ *
+ * It contains
+ * - the type of this expression (= token)
+ * - the value as string (and/or double, with algebraic sign for NUMBER and LENGTH)
+ * - the operator with that it is connected with the *predecessor* expression
+ */
 struct CSS1Expression
 {
-    sal_Unicode cOp;        // Art der Verkuepfung mit dem Vorgaenger
-    CSS1Token eType;        // der Typ des Wertes
-    OUString aValue;          // und sein Wert als String
-    double nValue;          // und als Zahl (TWIPs fuer LENGTH)
-    CSS1Expression *pNext;  // die naechste Komponente
+    sal_Unicode cOp; // type of the link with its predecessor
+    CSS1Token eType; // type of the expression
+    OUString aValue; // value as string
+    double nValue;   // value as number (TWIPs for LENGTH)
+    CSS1Expression *pNext; // the following component
 
 public:
     CSS1Expression( CSS1Token eTyp, const OUString &rVal,
@@ -163,58 +161,58 @@ inline sal_Int32 CSS1Expression::GetSLength() const
     return (sal_Int32)(nValue + (nValue < 0. ? -.5 : .5 ));
 }
 
-// Diese Klasse parst den Inhalt eines Style-Elements oder eine Style-Option
-// und bereitet ihn ein wenig auf.
-//
-// Das Ergebnis des Parsers wird durch die Mehtoden SelectorParsed()
-// und DeclarationParsed() an abgeleitete Parser uebergeben. Bsp:
-//
-// H1, H2 { font-weight: bold; text-align: right }
-//  |  |                    |                  |
-//  |  |                    |                  DeclP( 'text-align', 'right' )
-//  |  |                    DeclP( 'font-weight', 'bold' )
-//  |  SelP( 'H2', sal_False )
-//  SelP( 'H1', sal_True )
-//
+/** Parser of a style element/option
+ *
+ * This class parses the content of a style element or a style option and preprocesses it.
+ *
+ * The result of the parser is forwarded to derived parsers by the methods SelectorParsed()
+ * and DeclarationParsed(). Example:
+ * H1, H2 { font-weight: bold; text-align: right }
+ *  |  |                    |                  |
+ *  |  |                    |                  DeclP( 'text-align', 'right' )
+ *  |  |                    DeclP( 'font-weight', 'bold' )
+ *  |  SelP( 'H2', sal_False )
+ *  SelP( 'H1', sal_True )
+ */
 class CSS1Parser
 {
-    sal_Bool bWhiteSpace : 1;           // White-Space gelesen?
-    sal_Bool bEOF : 1;                  // Ende des "Files" ?
+    sal_Bool bWhiteSpace : 1; // read a whitespace?
+    sal_Bool bEOF : 1; // is end of "file"?
 
-    sal_Unicode cNextCh;                // naechstes Zeichen
+    sal_Unicode cNextCh; // next character
 
-    sal_Int32 nInPos;                  // aktuelle Position im Input-String
+    sal_Int32 nInPos; // current position in the input string
 
-    sal_uInt32 nlLineNr;                    // akt. Zeilen Nummer
-    sal_uInt32 nlLinePos;               // akt. Spalten Nummer
+    sal_uInt32 nlLineNr; // current row number
+    sal_uInt32 nlLinePos; // current column number
 
-    double nValue;                  // der Wert des Tokens als Zahl
+    double nValue; // value of the token as number
 
-    CSS1ParserState eState;         // der akteulle Zustand der Parsers
-    CSS1Token nToken;               // das aktuelle Token
+    CSS1ParserState eState; // current state of the parser
+    CSS1Token nToken; // the current token
 
-    OUString aIn;                     // der zu parsende String
-    OUString aToken;                  // das Token als String
+    OUString aIn; // the string to parse
+    OUString aToken; // token as string
 
-    // Parsen vorbereiten
+    /// prepare parsing
     void InitRead( const OUString& rIn );
 
-    // das naechste Zeichen holen
+    /// @returns the next character to parse
     sal_Unicode GetNextChar();
 
-    // das naechste Token holen
+    /// @returns the next token to parse
     CSS1Token GetNextToken();
 
-    // arbeitet der Parser noch?
+    /// Is the parser still working?
     sal_Bool IsParserWorking() const { return CSS1_PAR_WORKING == eState; }
 
     sal_Bool IsEOF() const { return bEOF; }
 
     sal_uInt32 IncLineNr() { return ++nlLineNr; }
     sal_uInt32 IncLinePos() { return ++nlLinePos; }
-    inline sal_uInt32 SetLinePos( sal_uInt32 nlPos );           // inline unten
+    inline sal_uInt32 SetLinePos( sal_uInt32 nlPos ); // inline declaration below
 
-    // Parsen von Teilen der Grammatik
+    // parse parts of the grammar
     void ParseRule();
     CSS1Selector *ParseSelector();
     CSS1Expression *ParseDeclaration( OUString& rProperty );
@@ -222,25 +220,40 @@ class CSS1Parser
 protected:
     void ParseStyleSheet();
 
-    // Den Inhalt eines HTML-Style-Elements parsen.
-    // Fuer jeden Selektor und jede Deklaration wird
-    // SelectorParsed() bzw. DeclarationParsed() aufgerufen.
+    /** parse the content of a HTML style element
+     *
+     * For each selector and each declaration the methods SelectorParsed()
+     * or DeclarationParsed() need to be called afterwards
+     *
+     * @param rIn the style element as string
+     * @return true if ???
+     */
     sal_Bool ParseStyleSheet( const OUString& rIn );
 
-    // Den Inhalt einer HTML-Style-Option parsen.
-    // Fuer jede Deklaration wird DeclarationParsed() aufgerufen.
+    /** parse the content of a HTML style option
+     *
+     * For each selector and each declaration the methods SelectorParsed()
+     * or DeclarationParsed() need to be called afterwards.
+     *
+     * @param rIn the style option as string
+     * @return true if ???
+     */
     sal_Bool ParseStyleOption( const OUString& rIn );
 
-    // Diese Methode wird aufgerufen, wenn ein Selektor geparsed wurde
-    // Wenn 'bFirst' gesetzt ist, beginnt mit dem Selektor eine neue
-    // Deklaration. Wird sal_True zurueckgegeben, wird der Selektor
-    // geloscht, sonst nicht.
-    // Die Implementierung dieser Methode gibt nur sal_True zuruck.
+    /** Called after a selector was parsed.
+     *
+     * @param pSelector The selector that was parsed
+     * @param bFirst if true, a new declaration starts with this selector
+     * @return If true, the selector will be deleted. (Returns always true?)
+     */
     virtual bool SelectorParsed( CSS1Selector* pSelector, bool bFirst );
 
-    // Diese Methode wird fuer jede geparsete Property aufgerufen. Wird
-    // sal_True zurueckgegeben wird der Selektor geloscht, sonst nicht.
-    // Die Implementierung dieser Methode gibt nur sal_True zuruck.
+    /** Called after a declaration or property was parsed
+     *
+     * @param rProperty The declaration/property
+     * @param pExpr ???
+     * @return If true, the declaration will be deleted. (Returns always true?)
+     */
     virtual sal_Bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr );
 

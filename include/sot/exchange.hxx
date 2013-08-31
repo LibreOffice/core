@@ -57,11 +57,10 @@ typedef ::std::list< DataFlavorEx >                                 DataFlavorEx
 SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
                                       sal_uLong nId );
 
-// - Vordefinierte Formate -
+// - predefined formats -
+// Do NOT change the order of these values as the implementation depends on them!
 
-// Die Reihenfolge und die Werte d?rfen nicht ge?ndert werden,
-// da die Implementation sich darauf verl??t.
-// Standard-Formate fuer die es auch Copy/Paste-Methoden gibt
+// stardard formats for that Copy/Paste methods exist
 #define FORMAT_STRING           1
 #define FORMAT_BITMAP           2
 #define FORMAT_GDIMETAFILE      3
@@ -69,10 +68,10 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define FORMAT_FILE             5
 #define FORMAT_FILE_LIST        6
 
-// Weitere Standardformate (diese gehen nur ueber CopyData/PasteData)
+// further formats (only via CopyData/PasteData)
 #define FORMAT_RTF              10
 
-// Source-Options
+// source options
 #define EXCHG_SOURCE_MOVEABLE       ((sal_uInt16)0x0001)
 #define EXCHG_SOURCE_COPYABLE       ((sal_uInt16)0x0002)
 #define EXCHG_SOURCE_LINKABLE       ((sal_uInt16)0x0004)
@@ -81,7 +80,7 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_SOURCE_ALL            ((sal_uInt16)0x001F)
 #define EXCHG_SOURCE_DEF_COPYABLE   ((sal_uInt16)0x0020)
 
-// Aktionen
+// actions
 #define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
 #define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE)
 #define EXCHG_IN_ACTION_DEFAULT                 EXCHG_INOUT_ACTION_NONE
@@ -123,7 +122,7 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_OUT_ACTION_FLAG_FILL              ((sal_uInt16)0x1000)
 #define EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL  ((sal_uInt16)0x2000)
 
-// Ziele
+// destinations
 #define EXCHG_DEST_DOC_OLEOBJ               1
 #define EXCHG_DEST_CHARTDOC_OLEOBJ          2
 #define EXCHG_DEST_DOC_TEXTFRAME            3
@@ -158,10 +157,8 @@ public:
     static bool         IsInternal( const SvGlobalName& );
     static sal_uLong    GetFormatIdFromMimeType( const OUString& rMimeType );
 
-    // bestimme die SotFormatStringId von dem registrierten Format
-    //JP 12.11.98: diese 3 Methoden sind ab sofort ueberfluessig, da
-    //              die ClipboardIds statisch sind und aequivalent zur
-    //              SotFormatStringId ist!
+    // determine the SotFormatStringId for the registered format
+//FIXME JP 12.11.98: this three methods are obsolete as all ClipboardIds are static and equvialent to the SotFormatStringIds!
     static SotFormatStringId GetFormatStringId( sal_uLong nFormat )
         { return nFormat; }
     static SotFormatStringId GetFormatStringId( const OUString& rName )
@@ -173,15 +170,15 @@ public:
     static sal_uInt16   GetExchangeAction(
         // XTransferable
         const DataFlavorExVector& rDataFlavorExVector,
-        // Ziel der Aktion (EXCHG_DEST_*)
+        // destination of an action (EXCHG_DEST_*)
         sal_uInt16 nDestination,
-        // Aktionen, die Quelle unterstuetzt (EXCHG_SOURCE_...)
+        // action for a source (EXCHG_SOURCE_...)
         sal_uInt16 nSourceOptions,
-        // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
+        // user action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16 nUserAction,
-        // In:- Out: Zu benutzendes Format
+        // In:- Out: format to use
         sal_uLong& rFormat,
-        // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
+        // In:- Out: default action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
         sal_uLong nOnlyTestFormat = 0,

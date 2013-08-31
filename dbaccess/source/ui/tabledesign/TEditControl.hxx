@@ -66,7 +66,8 @@ namespace dbaui
 
         sal_Bool bSaveOnMove;
         sal_Bool bReadOnly;
-        // Hilfsklasse
+
+        // helper class
         class ClipboardInvalidator
         {
         private:
@@ -98,8 +99,8 @@ namespace dbaui
         virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
 
         virtual void CellModified();
-        virtual sal_Bool SaveModified();    // wird aufgerufen vor einem Zellenwechsel
-                                        // return sal_False, verhindert Zellenwechsel
+        virtual sal_Bool SaveModified(); // is called before changing a cell (false prevents change)
+
         virtual void Undo();
         virtual void Redo();
         virtual OUString GetCellText(long nRow, sal_uInt16 nColId) const;
@@ -132,8 +133,8 @@ namespace dbaui
         sal_Bool            SaveCurRow();
         void            SwitchType( const TOTypeInfoSP& _pType );
 
+        /// force displaying of the given row
         void            DisplayData( long nRow, sal_Bool bGrabFocus = sal_True );
-            // erzwingt das Anzeigen der genannten Zeile (selbst wenn es eigentlich schon die aktuelle ist)
 
         virtual void    SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo );
         virtual void    SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rSaveData );

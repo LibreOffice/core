@@ -1331,7 +1331,7 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 
     do
     {
-        // Messages verarbeiten
+        // process messages
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
