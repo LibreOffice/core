@@ -24,7 +24,7 @@ namespace resourcemodel {
 
 // Stein's binary GCD for non-negative integers
 // https://en.wikipedia.org/wiki/Binary_GCD_algorithm
-sal_uInt32 gcd(sal_uInt32 a, sal_uInt32 b)
+static sal_uInt32 gcd(sal_uInt32 a, sal_uInt32 b)
 {
     if (a == 0 || b == 0)
         return a | b;
@@ -63,7 +63,7 @@ sal_uInt32 gcd(sal_uInt32 a, sal_uInt32 b)
     return a << nShift;
 }
 
-sal_uInt32 lcm(sal_Int32 a, sal_Int32 b)
+static sal_uInt32 lcm(sal_Int32 a, sal_Int32 b)
 {
     return abs(a * b) / gcd(abs(a), abs(b));
 }
