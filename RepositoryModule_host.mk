@@ -231,7 +231,7 @@ endif
 # order dependencies here.
 define repositorymodule_serialize1
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) \
-	:| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
+	:| $(foreach lib,$(2),$(call gb_Library_get_instdir_target,$(lib)))
 endef
 
 define repositorymodule_serialize

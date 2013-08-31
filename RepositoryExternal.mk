@@ -2859,7 +2859,7 @@ endif # SYSTEM_JFREEREPORT
 # FIXME: the library target should be for build too
 define gb_Executable__register_bestreversemap
 $(call gb_Executable_add_runtime_dependencies,bestreversemap,\
-	$(if $(filter-out ANDROID,$(OS)),$(call gb_Library_get_target,sal_textenc)) \
+	$(if $(filter-out ANDROID,$(OS)),$(call gb_Library_get_instdir_target,sal_textenc)) \
 )
 endef
 
@@ -2868,7 +2868,7 @@ endef
 # FIXME: the library target should be for build too
 define gb_Executable__register_climaker
 $(call gb_Executable_add_runtime_dependencies,climaker,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_instdir_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
@@ -2897,9 +2897,9 @@ $(call gb_Executable_add_runtime_dependencies,gengal.bin,\
 	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Configuration_get_target,registry) \
 	$(call gb_Configuration_get_target,fcfg_langpack) \
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_instdir_target,$(gb_CPPU_ENV)_uno) \
 	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)), \
-		$(call gb_Library_get_target,vclplug_svp) \
+		$(call gb_Library_get_instdir_target,vclplug_svp) \
 	) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
@@ -2938,7 +2938,7 @@ endef
 define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_ComponentTarget_get_outdir_target,sax/source/expatwrap/expwrap) \
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_instdir_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
@@ -2951,7 +2951,7 @@ endef
 # FIXME: the library target should be for build too
 define gb_Executable__register_uno
 $(call gb_Executable_add_runtime_dependencies,uno,\
-	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_instdir_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \

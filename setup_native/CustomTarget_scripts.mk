@@ -42,7 +42,7 @@ $(eval $(call gb_CustomTarget_register_targets,setup_native/scripts,\
 	getuid.so.stripped \
 ))
 
-$(scripts_WORKDIR)/getuid.so.stripped: $(call gb_Library_get_target,getuid)
+$(scripts_WORKDIR)/getuid.so.stripped: $(call gb_Library_get_instdir_target,getuid)
 	cp $< $@
 	/usr/ccs/bin/strip $@
 $(scripts_WORKDIR)/install: $(SRCDIR)/setup_native/scripts/install_solaris.sh $(scripts_WORKDIR)/getuid.so.stripped

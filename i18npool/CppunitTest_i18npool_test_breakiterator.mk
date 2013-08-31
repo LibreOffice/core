@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_components,i18npool_test_breakiterator,\
 ))
 
 $(call gb_CppunitTest_get_target,i18npool_test_breakiterator) : \
-    $(call gb_Library_get_target,dict_ja) \
-    $(call gb_Library_get_target,dict_zh)
+    $(call gb_Library_get_instdir_target,dict_ja) \
+    $(call gb_Library_get_instdir_target,dict_zh)
 
 # vim: set noet sw=4 ts=4:

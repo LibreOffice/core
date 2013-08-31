@@ -27,6 +27,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_uri,\
 
 # The test uses O(U)String capabilities that dlopen this lib
 $(call gb_CppunitTest_get_target,sal_rtl_uri) : \
-    $(call gb_Library_get_target,sal_textenc)
+    $(call gb_Library_get_instdir_target,sal_textenc)
 
 # vim: set noet sw=4 ts=4:

@@ -32,7 +32,7 @@
 
 # SdiTarget class
 gb_SdiTarget_SVIDLDEPS := $(call gb_Executable_get_runtime_dependencies,svidl)
-gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)
+gb_SdiTarget_SVIDLCOMMAND := LD_LIBRARY_PATH=$(INSTDIR)/ure/lib $(call gb_Executable_get_command,svidl)
 
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 	$(call gb_Output_announce,$*,$(true),SDI,1)

@@ -175,11 +175,10 @@ $(foreach file,$(3),$(call gb_ExtensionTarget_add_file,$(1),$(if $(strip $(2)),$
 
 endef
 
-# add a library from the solver; DO NOT use gb_Library_get_target
 define gb_ExtensionTarget_add_library
 $(call gb_ExtensionTarget_add_file,$(1),$(call gb_Library_get_runtime_filename,$(2)),\
-	$(call gb_Library_get_target,$(2)),\
-	$(gb_Helper_OUTDIRLIBDIR)/$(call gb_Library_get_runtime_filename,$(2)))
+	$(call gb_Library_get_instdir_target,$(2)),\
+	$(call gb_Library_get_instdir_target,$(2)))
 endef
 
 define gb_ExtensionTarget_add_libraries

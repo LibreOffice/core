@@ -30,9 +30,9 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 ))
 
 ifeq ($(GUIBASE),unx)
-$(call gb_Library_get_target,subsequenttest) : \
-    $(call gb_Library_get_target,desktop_detector) \
-    $(call gb_Library_get_target,vclplug_svp) \
+$(call gb_Library_get_instdir_target,subsequenttest) : \
+    $(call gb_Library_get_instdir_target,desktop_detector) \
+    $(call gb_Library_get_instdir_target,vclplug_svp) \
 
 endif
 

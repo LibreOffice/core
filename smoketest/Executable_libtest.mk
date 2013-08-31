@@ -30,9 +30,9 @@ $(eval $(call gb_Executable_add_exception_objects,libtest,\
 liblibreoffice_OWN_LD_PATH_DIR := $(gb_DEVINSTALLROOT)/program/libolib
 liblibreoffice_OWN_LD_SO := $(liblibreoffice_OWN_LD_PATH_DIR)/$(call gb_Library_get_linktargetname,libreoffice)
 
-$(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
+$(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_instdir_target,libreoffice)
 	mkdir -p $(liblibreoffice_OWN_LD_PATH_DIR)/Library
-	cp -a $(call gb_Library_get_target,libreoffice) $(liblibreoffice_OWN_LD_SO)
+	cp -a $(call gb_Library_get_instdir_target,libreoffice) $(liblibreoffice_OWN_LD_SO)
 
 run_libtest: $(liblibreoffice_OWN_LD_SO)
 	$(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(liblibreoffice_OWN_LD_PATH_DIR)/Library" \

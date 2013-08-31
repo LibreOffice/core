@@ -42,9 +42,6 @@ gb_Library_LAYER_DIRS := \
     OOO:program \
     URELIB:ure/$(notdir $(gb_Helper_OUTDIRLIBDIR))
 
-# doesn't do anything, just used for hooking up component target
-.PHONY: $(call gb_Library__get_final_target,%)
-
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
 $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
@@ -58,12 +55,13 @@ gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
 
 define gb_Library_Library
-$(call gb_Postprocess_get_target,AllLibraries) : $(call gb_Library_get_target,$(1))
+$(call gb_Postprocess_get_target,AllLibraries) : $(call gb_Library_get_instdir_target,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
-$(call gb_Library_get_target,$(1)) : SOVERSION :=
+
+$(call gb_Library_get_instdir_target,$(1)) : SOVERSION :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 
 endef
@@ -75,34 +73,13 @@ $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
-$(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
-	| $(dir $(call gb_Library_get_target,$(1))).dir
+$(call gb_Library_get_instdir_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(if $(filter $(call gb_Library_get_layer,$(1)):%,$(gb_Library_LAYER_DIRS)),\
-    $(call gb_Library__Library_package,$(1),$(call gb_Library_get_packagename,$(1)),$(call gb_Library_get_runtime_filename,$(1))) \
-)
-endif
-
-$$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
-
-endef
-
-# gb_Library__Library_package library package filename
-define gb_Library__Library_package
-$(call gb_Package_Package_internal,$(2),$(gb_Helper_OUTDIRLIBDIR))
-$(call gb_Package_set_outdir,$(2),$(INSTDIR))
-$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(3),$(3))
-
-$(call gb_Library__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
-$(call gb_Package_get_target,$(2)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
+$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_instdir_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library_get_instdir_target,$(1)))
 
 endef
 
@@ -112,7 +89,7 @@ endef
 # gb_Library_add_auxtarget library outdirauxtarget
 define gb_Library_add_auxtarget
 $(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktargetname,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2)))
-$(call gb_Library_get_target,$(1)) : $(2)
+$(call gb_Library_get_instdir_target,$(1)) : $(2)
 $(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2))
 $(2) :| $(dir $(2)).dir
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += $(2)
@@ -127,16 +104,13 @@ endef
 # gb_Library__add_soversion_link library package linkname
 define gb_Library__add_soversion_link
 $(call gb_Library_add_auxtarget,$(1),$(3))
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(notdir $(3)),$(notdir $(3)))
-endif
 
 endef
 
 define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
-$(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_packagename,$(1)),$(call gb_Library_get_target,$(1)).$(2))
+$(call gb_Library_get_instdir_target,$(1)) : SOVERSION := $(2)
+$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_packagename,$(1)),$(call gb_Library_get_instdir_target,$(1)).$(2))
 
 endef
 
@@ -151,18 +125,15 @@ endef
 # The dependency from workdir component target to outdir library should ensure
 # that gb_CppunitTest_use_component can transitively depend on the library.
 # But the component target also must be delivered, so a new phony target
-# gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
-$(call gb_Library_get_target,$(gb_Library__get_name)) : \
+$(call gb_Library_get_instdir_target,$(gb_Library__get_name)) : \
 	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(1))),\
 	  $$(call gb_Output_error,$(1) already has a component file $$(COMPONENT)))$(2)
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
 	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
-$(call gb_Library__get_final_target,$(gb_Library__get_name)) : \
+$(call gb_Library_get_instdir_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_ComponentTarget_get_target,$(2)) :| \
-	$(call gb_Library_get_target,$(gb_Library__get_name))
 $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef

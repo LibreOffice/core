@@ -241,7 +241,9 @@ gb_XcuResTarget_get_target = $(WORKDIR)/XcuResTarget/$(1)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
 
-gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
+define gb_Library_get_instdir_target
+$(INSTDIR)/$(call gb_Library_get_instdir,$(1))/$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
+endef
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))

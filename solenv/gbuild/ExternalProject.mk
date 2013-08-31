@@ -185,7 +185,7 @@ $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter 
 endif
 
 $(call gb_ExternalProject_get_preparation_target,$(1)) : \
-	$(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
+	$(foreach lib,$(2),$(call gb_Library_get_instdir_target,$(lib)))
 
 endef
 

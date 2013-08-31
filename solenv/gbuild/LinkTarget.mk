@@ -448,8 +448,13 @@ endef
 # written in gb_LinkTarget__command_dynamiclink.
 # Put this pattern rule here so it overrides the one below.
 # (this is rather ugly: because of % the functions cannot be used)
+ifeq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION)/%
 	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
+else
+$(call gb_LinkTarget_get_target,Library/%.exports) : $(call gb_LinkTarget_get_target,Library/%)
+	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
+endif
 
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
@@ -573,7 +578,7 @@ $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(call gb_LinkTarget__get_ldflags,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
@@ -612,7 +617,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OB
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
@@ -853,7 +858,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 # depend on the exports of the library, not on the library itself
 # for faster incremental builds when the ABI is unchanged
 $(call gb_LinkTarget_get_target,$(1)) : \
-	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
+	$(foreach lib,$(3),$(call gb_Library_get_instdir_target,$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
