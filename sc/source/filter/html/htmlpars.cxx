@@ -76,7 +76,6 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
         if (pClassName)
         {
             // Both element and class names given.
-
             ElemsType::iterator itrElem = maElemProps.find(aElem);
             if (itrElem == maElemProps.end())
             {
@@ -290,9 +289,8 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
         pAttributes = pObjSh->GetHeaderAttributes();
     else
     {
-        //  When not loading, set up fake http headers to force the SfxHTMLParser to use UTF8
-        //  (used when pasting from clipboard)
-
+        // When not loading, set up fake http headers to force the SfxHTMLParser to use UTF8
+        // (used when pasting from clipboard)
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
@@ -308,7 +306,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
     sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
 
     pEdit->SetImportHdl( aOldLink );
-    // Spaltenbreiten erzeugen
+    // Create column width
     Adjust();
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     sal_uInt16 nCount = pColOffset->size();
@@ -337,7 +335,7 @@ void ScHTMLLayoutParser::NewActEntry( ScEEParseEntry* pE )
     if ( pE )
     {
         if ( !pE->aSel.HasRange() )
-        {   // komplett leer, nachfolgender Text landet im gleichen Absatz!
+        {   // Completely empty, following text ends up in the same paragraph!
             pActEntry->aSel.nStartPara = pE->aSel.nEndPara;
             pActEntry->aSel.nStartPos = pE->aSel.nEndPos;
         }
@@ -355,7 +353,7 @@ void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
         pE->aSel.nEndPos = rSel.nEndPos;
     }
     else if ( rSel.nStartPara == pE->aSel.nStartPara - 1 && !pE->aSel.HasRange() )
-    {   // kein Absatz angehaengt aber leer, nichts tun
+    {   // Did not attach a paragraph, but empty, do nothing
     }
     else
     {
@@ -389,10 +387,10 @@ bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffse
     sal_uInt16 nCount = pOffset->size();
     if ( !nCount )
         return false;
-    // nPos ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
+    // nPos is the position of insertion, that's where the next higher one is (or isn't)
     if ( nPos < nCount && (((*pOffset)[nPos] - nOffsetTol) <= nOffset) )
         return true;
-    // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
+    // Not smaller than everything else? Then compare with the next lower one
     else if ( nPos && (((*pOffset)[nPos-1] + nOffsetTol) >= nOffset) )
     {
         (*pCol)--;
@@ -479,7 +477,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
 void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
     if ( ValidCol(pE->nCol) )
-    {   // wuerde sonst bei ScAddress falschen Wert erzeugen, evtl. Endlosschleife!
+    {   // Or else this would create a wrong value at ScAddress (chance for an infinite loop)!
         bool bBadCol = false;
         bool bAgain;
         ScRange aRange( pE->nCol, pE->nRow, 0,
@@ -528,7 +526,7 @@ void ScHTMLLayoutParser::Adjust()
     {
         ScEEParseEntry* pE = maList[ i ];
         if ( pE->nTab < nTab )
-        {   // Table beendet
+        {   // Table finished
             if ( !aStack.empty() )
             {
                 pS = aStack.top();
@@ -551,7 +549,7 @@ void ScHTMLLayoutParser::Adjust()
         }
         SCROW nRow = pE->nRow;
         if ( pE->nCol <= nLastCol )
-        {   // naechste Zeile
+        {   // Next row
             if ( pE->nRow < nNextRow )
                 pE->nRow = nCurRow = nNextRow;
             else
@@ -570,9 +568,9 @@ void ScHTMLLayoutParser::Adjust()
         }
         else
             pE->nRow = nCurRow;
-        nLastCol = pE->nCol;    // eingelesene Col
+        nLastCol = pE->nCol; // Read column
         if ( pE->nTab > nTab )
-        {   // neue Table
+        {   // New table
             aStack.push( new ScHTMLAdjustStackEntry(
                 nLastCol, nNextRow, nCurRow ) );
             nTab = pE->nTab;
@@ -582,7 +580,7 @@ void ScHTMLLayoutParser::Adjust()
                 if ( it != pTables->end() )
                     pTab = it->second;
             }
-            // neuer Zeilenabstand
+            // New line spacing
             SCROW nR = 0;
             if ( pTab )
             {
@@ -598,12 +596,12 @@ void ScHTMLLayoutParser::Adjust()
         if ( nTab == 0 )
             pE->nWidth = nPageWidth;
         else
-        {   // echte Table, keine Absaetze auf der Wiese
+        {   // Real table, no paragraphs on the field
             if ( pTab )
             {
                 SCROW nRowSpan = pE->nRowOverlap;
                 for ( SCROW j=0; j < nRowSpan; j++ )
-                {   // aus merged Zeilen resultierendes RowSpan
+                {   // RowSpan resulting from merged rows
                     SCROW nRows = 0;
                     InnerMap::const_iterator it = pTab->find( nRow+j );
                     if ( it != pTab->end() )
@@ -612,7 +610,7 @@ void ScHTMLLayoutParser::Adjust()
                     {
                         pE->nRowOverlap += nRows - 1;
                         if ( j == 0 )
-                        {   // merged Zeilen verschieben die naechste Zeile
+                        {   // Merged rows move the next row
                             SCROW nTmp = nCurRow + nRows;
                             if ( nNextRow < nTmp )
                                 nNextRow = nTmp;
@@ -621,7 +619,7 @@ void ScHTMLLayoutParser::Adjust()
                 }
             }
         }
-        // echte Col
+        // Real column
         SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
         SkipLocked( pE, false );
@@ -643,12 +641,12 @@ void ScHTMLLayoutParser::Adjust()
             pE->nColOverlap = (nPos > pE->nCol ? nPos - pE->nCol : 1);
         else
         {
-//2do: das muss nicht korrekt sein, ist aber..
+        //FIXME: This may not be correct, but works anyway ...
             pE->nColOverlap = 1;
         }
         xLockedList->Join( ScRange( pE->nCol, pE->nRow, 0,
             pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 ) );
-        // MaxDimensions mitfuehren
+        // Take over MaxDimensions
         SCCOL nColTmp = pE->nCol + pE->nColOverlap;
         if ( nColMax < nColTmp )
             nColMax = nColTmp;
@@ -689,7 +687,7 @@ void ScHTMLLayoutParser::SetWidths()
     if ( nColsPerRow <= 0 )
         nColsPerRow = 1;
     if ( pLocalColOffset->size() <= 2 )
-    {   // nur PageSize, es gab keine Width-Angabe
+    {   // Only PageSize, there was no width setting
         sal_uInt16 nWidth = nTableWidth / static_cast<sal_uInt16>(nColsPerRow);
         sal_uInt16 nOff = nColOffsetStart;
         pLocalColOffset->clear();
@@ -704,13 +702,13 @@ void ScHTMLLayoutParser::SetWidths()
             if ( pE->nTab == nTable )
             {
                 pE->nOffset = (sal_uInt16) (*pLocalColOffset)[pE->nCol - nColCntStart];
-                pE->nWidth = 0;     // to be recalculated later
+                pE->nWidth = 0; // to be recalculated later
             }
         }
     }
     else
-    {   // einige mit einige ohne Width
-        // wieso eigentlich kein pE ?!?
+    {   // Some without width
+        // Why actually no pE?
         if ( nFirstTableCell < maList.size() )
         {
             sal_uInt16* pOffsets = new sal_uInt16[ nColsPerRow+1 ];
@@ -840,10 +838,10 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     if ( pE->nRow == SCROW_MAX )
         pE->nRow = nRowCnt;
     SCCOL nCol = pE->nCol;
-    SkipLocked( pE );       // Spaltenverdraengung nach rechts
+    SkipLocked( pE ); // Change of columns to the right
 
     if ( nCol < pE->nCol )
-    {   // verdraengt
+    {   // Replaced
         nCol = pE->nCol - nColCntStart;
         SCCOL nCount = static_cast<SCCOL>(pLocalColOffset->size());
         if ( nCol < nCount )
@@ -866,7 +864,7 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
 {
     bInCell = false;
     if ( bTabInTabCell )
-    {   // in TableOff vom Stack geholt
+    {   // From the stack in TableOff
         bTabInTabCell = false;
         bool found = false;
         for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
@@ -879,7 +877,7 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
         }
         if ( !found )
             delete pActEntry;
-        NewActEntry( maList.back() );   // neuer freifliegender pActEntry
+        NewActEntry( maList.back() ); // New free flying pActEntry
         return ;
     }
     if ( pActEntry->nTab == 0 )
@@ -887,30 +885,30 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     Colonize( pActEntry );
     nColCnt = pActEntry->nCol + pActEntry->nColOverlap;
     if ( nMaxCol < nColCnt )
-        nMaxCol = nColCnt;          // TableStack MaxCol
+        nMaxCol = nColCnt;      // TableStack MaxCol
     if ( nColMax < nColCnt )
-        nColMax = nColCnt;      // globales MaxCol fuer ScEEParser GetDimensions!
+        nColMax = nColCnt;      // Global MaxCol for ScEEParser GetDimensions!
     EntryEnd( pActEntry, pInfo->aSelection );
     ESelection& rSel = pActEntry->aSel;
     while ( rSel.nStartPara < rSel.nEndPara
             && pEdit->GetTextLen( rSel.nStartPara ) == 0 )
-    {   // vorgehaengte Leerabsaetze strippen
+    {   // Strip preceding empty paragraphs
         rSel.nStartPara++;
     }
     while ( rSel.nEndPos == 0 && rSel.nEndPara > rSel.nStartPara )
-    {   // angehaengte Leerabsaetze strippen
+    {   // Strip successive empty paragraphs
         rSel.nEndPara--;
         rSel.nEndPos = pEdit->GetTextLen( rSel.nEndPara );
     }
     if ( rSel.nStartPara > rSel.nEndPara )
-    {   // gibt GPF in CreateTextObject
+    {   // Gives GPF in CreateTextObject
         OSL_FAIL( "CloseEntry: EditEngine ESelection Start > End" );
         rSel.nEndPara = rSel.nStartPara;
     }
     if ( rSel.HasRange() )
         pActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
     maList.push_back( pActEntry );
-    NewActEntry( pActEntry );   // neuer freifliegender pActEntry
+    NewActEntry( pActEntry ); // New free flying pActEntry
 }
 
 
@@ -961,8 +959,8 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
 }
 
 
-// Groesster Gemeinsamer Teiler nach Euklid (Kettendivision)
-// Sonderfall: 0 und irgendwas geben 1
+// Greatest common divisor (Euclid)
+// Special case: 0 and something gives 1
 static SCROW lcl_GGT( SCROW a, SCROW b )
 {
     if ( !a || !b )
@@ -978,10 +976,10 @@ static SCROW lcl_GGT( SCROW a, SCROW b )
 }
 
 
-// Kleinstes Gemeinsames Vielfaches: a * b / GGT(a,b)
+// Lowest common multiple: a * b / GGT(a,b)
 static SCROW lcl_KGV( SCROW a, SCROW b )
 {
-    if ( a > b )    // Ueberlauf unwahrscheinlicher machen
+    if ( a > b )    // Make overflow even less likely
         return (a / lcl_GGT(a,b)) * b;
     else
         return (b / lcl_GGT(a,b)) * a;
@@ -1085,7 +1083,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
 void ScHTMLLayoutParser::TableRowOn( ImportInfo* pInfo )
 {
     if ( nColCnt > nColCntStart )
-        NextRow( pInfo );       // das optionale TableRowOff war nicht
+        NextRow( pInfo ); // The optional TableRowOff wasn't there
     nColOffset = nColOffsetStart;
 }
 
@@ -1099,7 +1097,7 @@ void ScHTMLLayoutParser::TableRowOff( ImportInfo* pInfo )
 void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 {
     if ( bInCell )
-        CloseEntry( pInfo );    // aber nur wenn's auch eine war
+        CloseEntry( pInfo ); // Only if it really was one
 }
 
 
@@ -1109,7 +1107,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
-        sal_uInt16 nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
+        sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize
         Colonize( pActEntry );
         aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
@@ -1119,12 +1117,12 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         sal_uInt16 nLastWidth = nTableWidth;
         nTableWidth = GetWidth( pActEntry );
         if ( nTableWidth == nLastWidth && nMaxCol - nColCntStart > 1 )
-        {   // es muss mehr als einen geben, also kann dieser nicht alles sein
+        {   // There must be more than one, so this one cannot be enough
             nTableWidth = nLastWidth / static_cast<sal_uInt16>((nMaxCol - nColCntStart));
         }
         nLastWidth = nTableWidth;
         if ( pInfo->nToken == HTML_TABLE_ON )
-        {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
+        {   // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
             for (size_t i = 0, n = rOptions.size(); i < n; ++i)
             {
@@ -1132,7 +1130,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                 switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
-                    {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
+                    {   // Percent: of document width or outer cell
                         nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
@@ -1147,12 +1145,12 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         }
         bInCell = false;
         if ( bTabInTabCell && !(nTableWidth < nLastWidth) )
-        {   // mehrere Tabellen in einer Zelle, untereinander
+        {   // Multiple tables in one cell, underneath each other
             bTabInTabCell = false;
             NextRow( pInfo );
         }
         else
-        {   // in dieser Zelle geht's los, oder nebeneinander
+        {   // It start's in this cell or next to each other
             bTabInTabCell = false;
             nColCntStart = nColCnt;
             nColOffset = nTmpColOffset;
@@ -1162,14 +1160,14 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         ScEEParseEntry* pE = NULL;
         if (maList.size())
             pE = maList.back();
-        NewActEntry( pE );      // neuer freifliegender pActEntry
+        NewActEntry( pE ); // New free flying pActEntry
         xLockedList = new ScRangeList;
     }
     else
-    {   // einfache Table auf Dokumentebene
+    {   // Simple table at the document level
         EntryEnd( pActEntry, pInfo->aSelection );
         if ( pActEntry->aSel.HasRange() )
-        {   // noch fliegender Text
+        {   // Flying text left
             CloseEntry( pInfo );
             NextRow( pInfo );
         }
@@ -1183,7 +1181,8 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
             nOffsetTolerance = SC_HTML_OFFSET_TOLERANCE_LARGE;
         nTableWidth = 0;
         if ( pInfo->nToken == HTML_TABLE_ON )
-        {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
+        {
+            // It can still be TD or TH, if we didn't have a TABLE earlier
             const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
             for (size_t i = 0, n = rOptions.size(); i < n; ++i)
             {
@@ -1191,7 +1190,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                 switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
-                    {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
+                    {   // Percent: of document width or outer cell
                         nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
@@ -1219,14 +1218,14 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
     if ( bInCell )
         CloseEntry( pInfo );
     if ( nColCnt > nColCntStart )
-        TableRowOff( pInfo );      // das optionale TableRowOff war nicht
+        TableRowOff( pInfo ); // The optional TableRowOff wasn't
     if ( !nTableLevel )
     {
         OSL_FAIL( "dumbo doc! </TABLE> without opening <TABLE>" );
         return ;
     }
     if ( --nTableLevel > 0 )
-    {   // Table in Table beendet
+    {   // Table in Table done
         if ( !aTableStack.empty() )
         {
             ScHTMLTableStackEntry* pS = aTableStack.top();
@@ -1235,12 +1234,12 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             ScEEParseEntry* pE = pS->pCellEntry;
             SCROW nRows = nRowCnt - pS->nRowCnt;
             if ( nRows > 1 )
-            {   // Groesse der Tabelle an dieser Position eintragen
+            {   // Insert size of table at this position
                 SCROW nRow = pS->nRowCnt;
                 sal_uInt16 nTab = pS->nTable;
                 if ( !pTables )
                     pTables = new OuterMap;
-                // Hoehen der aeusseren Table
+                // Height of outer table
                 OuterMap::const_iterator it = pTables->find( nTab );
                 InnerMap* pTab1;
                 if ( it == pTables->end() )
@@ -1252,11 +1251,10 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                     pTab1 = it->second;
                 SCROW nRowSpan = pE->nRowOverlap;
                 SCROW nRowKGV;
-                SCROW nRowsPerRow1;    // aeussere Table
-                SCROW nRowsPerRow2;    // innere Table
+                SCROW nRowsPerRow1; // Outer table
+                SCROW nRowsPerRow2; // Inner table
                 if ( nRowSpan > 1 )
-                {   // KGV auf das sich aussere und innere Zeilen
-                    // abbilden lassen
+                {   // LCM to which we can map the inner and outer rows
                     nRowKGV = lcl_KGV( nRowSpan, nRows );
                     nRowsPerRow1 = nRowKGV / nRowSpan;
                     nRowsPerRow2 = nRowKGV / nRows;
@@ -1268,16 +1266,15 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                 }
                 InnerMap* pTab2 = NULL;
                 if ( nRowsPerRow2 > 1 )
-                {   // Hoehen der inneren Table
+                {   // Height of the inner table
                     pTab2 = new InnerMap;
                     (*pTables)[ nTable ] = pTab2;
                 }
-                // void* Data-Entry der Table-Class fuer das
-                // Hoehen-Mapping missbrauchen
+                // Abuse void* Data entry of the Table class for height mapping
                 if ( nRowKGV > 1 )
                 {
                     if ( nRowsPerRow1 > 1 )
-                    {   // aussen
+                    {   // Outer
                         for ( SCROW j=0; j < nRowSpan; j++ )
                         {
                             sal_uLong nRowKey = nRow + j;
@@ -1286,7 +1283,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                 (*pTab1)[ nRowKey ] = nRowsPerRow1;
                             else if ( nRowsPerRow1 > nR )
                                 (*pTab1)[ nRowKey ] = nRowsPerRow1;
-                                //2do: wie geht das noch besser?
+                            //TODO: wie geht das noch besser?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
                             {   // Platz uebrig, evtl. besser mergen
