@@ -322,7 +322,7 @@ public:
     virtual bool IsDateConversionSet() const = 0;
 };
 
-//Scabstract fractoryclass ScAbstractDialogFactory
+class ScAbstractDialogFactory
 {
 public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
