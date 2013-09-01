@@ -33,14 +33,14 @@ namespace chart
 class SchAlignmentTabPage : public SfxTabPage
 {
 private:
-    FixedLine               aFlAlign;
-    svx::DialControl        aCtrlDial;
-    FixedText               aFtRotate;
-    svx::WrapField          aNfRotate;
-    TriStateBox             aCbStacked;
-    svx::OrientationHelper  aOrientHlp;
-    FixedText               aFtTextDirection;
-    TextDirectionListBox    aLbTextDirection;
+    svx::DialControl*        m_pCtrlDial;
+    FixedText*               m_pFtRotate;
+    svx::WrapField*          m_pNfRotate;
+    TriStateBox*             m_pCbStacked;
+    svx::OrientationHelper*  m_pOrientHlp;
+    FixedText*               m_pFtTextDirection;
+    TextDirectionListBox*    m_pLbTextDirection;
+    FixedText*               m_pFtABCD;
 
 public:
     SchAlignmentTabPage(Window* pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);

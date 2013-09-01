@@ -32,6 +32,8 @@ class TextDirectionListBox : public svx::FrameDirectionListBox
 public:
     explicit            TextDirectionListBox( Window* pParent, const ResId& rResId,
                             Window* pWindow1 = 0, Window* pWindow2 = 0 );
+    explicit            TextDirectionListBox( Window* pParent,
+                            Window* pWindow1 = 0, Window* pWindow2 = 0 );
     virtual             ~TextDirectionListBox();
 };
 

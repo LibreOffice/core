@@ -22,6 +22,7 @@
 #include "Strings.hrc"
 #include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
+#include <vcl/builder.hxx>
 
 namespace chart
 {
@@ -40,6 +41,26 @@ TextDirectionListBox::TextDirectionListBox( Window* pParent, const ResId& rResId
         if( pWindow2 ) pWindow2->Hide();
     }
 }
+
+TextDirectionListBox::TextDirectionListBox( Window* pParent, Window* pWindow1, Window* pWindow2 ) :
+    svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
+{
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), FRMDIR_HORI_LEFT_TOP );
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_RTL ), FRMDIR_HORI_RIGHT_TOP );
+    InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_SUPER ), FRMDIR_ENVIRONMENT );
+
+    if( !SvtLanguageOptions().IsCTLFontEnabled() )
+    {
+        Hide();
+        if( pWindow1 ) pWindow1->Hide();
+        if( pWindow2 ) pWindow2->Hide();
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTextDirectionListBox(Window *pParent, VclBuilder::stringmap &)
+     {
+         return new TextDirectionListBox(pParent);
+     }
 
 TextDirectionListBox::~TextDirectionListBox()
 {
