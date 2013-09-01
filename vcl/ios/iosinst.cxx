@@ -403,13 +403,24 @@ void lo_tap(int x, int y)
 }
 
 extern "C"
-void lo_pan(int x, int y)
+void lo_pan(int deltaX, int deltaY)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
-        SAL_INFO( "vcl.ios", "scroll: " << "(" << x << "," << y << ")" );
-        ScrollEvent aEvent( x, y );
+        SAL_INFO( "vcl.ios", "pan delta: " << "(" << deltaX << "," << deltaY << ") ");
+        ScrollEvent aEvent( deltaX, deltaY );
         Application::PostScrollEvent(VCLEVENT_WINDOW_SCROLL, pFocus->GetWindow(), &aEvent);
+    }
+}
+
+extern "C"
+void lo_zoom(int x, int y, float scale)
+{
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        SAL_INFO( "vcl.ios", "pinch: " << "(" << scale  << ") ");
+        ZoomEvent aEvent( Point(x,y), scale);
+        Application::PostZoomEvent(VCLEVENT_WINDOW_ZOOM, pFocus->GetWindow(), &aEvent);
     }
 }
 

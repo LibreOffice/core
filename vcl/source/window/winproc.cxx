@@ -35,6 +35,7 @@
 #include <vcl/help.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/mobile.h>
 
 #include <svdata.hxx>
 #include <dbggui.hxx>
@@ -2631,14 +2632,12 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             {
             ZoomEvent* pZoomEvent = (ZoomEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
-
             aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
             aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
             aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
-
-            // Pass on the scale as a percentage of current zoom factor
-            aSalWheelMouseEvent.mnDelta = (long) (pZoomEvent->GetScale() * 100);
-
+            // Pass on the scale as a percentage * 100 of current zoom factor
+            // so to assure zoom granularity
+            aSalWheelMouseEvent.mnDelta = long(double(pZoomEvent->GetScale()) * double(MOBILE_ZOOM_SCALE_MULTIPLIER));
             // Other SalWheelMouseEvent fields ignored when the
             // scaleDirectly parameter to ImplHandleWheelEvent() is
             // true.
@@ -2649,49 +2648,18 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             {
             ScrollEvent* pScrollEvent = (ScrollEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
-
             aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
-            aSalWheelMouseEvent.mnX = 0; // ???
-            aSalWheelMouseEvent.mnY = 0;
-
-            // Note that it seems that the delta-is-pixels thing is
-            // not actually implemented. The field is just passed on
-            // but its value never tested and has no effect?
             aSalWheelMouseEvent.mbDeltaIsPixel = sal_True;
-
-            // First scroll vertically, then horizontally
-            aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetYOffset();
-
-            // No way to figure out correct amount of "lines" to
-            // scroll, and for touch devices (for which this
-            // SALEVENBT_EXTERNALSCROLL was introduced) we don't even
-            // display the scroll bars. This means that the scroll
-            // bars (which still exist as objects, all the scrolling
-            // action goes through them) apparently use some dummy
-            // default values for range, line size and page size
-            // anyway, not related to actual contents of scrolled
-            // window. This all is very broken. I really wish the
-            // delta-is-pixels feature (which would be exactly what
-            // one wants for touch devices) would work.
-            aSalWheelMouseEvent.mnScrollLines = aSalWheelMouseEvent.mnDelta;
-
-            if (aSalWheelMouseEvent.mnDelta != 0)
+            // event location holds delta values instead
+            aSalWheelMouseEvent.mnX = long(pScrollEvent->GetXOffset());
+            aSalWheelMouseEvent.mnY = long(pScrollEvent->GetYOffset());
+            aSalWheelMouseEvent.mnScrollLines = 0;
+            if (aSalWheelMouseEvent.mnX != 0 || aSalWheelMouseEvent.mnY != 0)
             {
-                aSalWheelMouseEvent.mnNotchDelta = (aSalWheelMouseEvent.mnDelta < 0) ? -1 : 1;
-                aSalWheelMouseEvent.mnCode = 0;
-                aSalWheelMouseEvent.mbHorz = sal_False;
                 nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
             }
-            aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetXOffset();
-            if (aSalWheelMouseEvent.mnDelta != 0)
-            {
-                aSalWheelMouseEvent.mnNotchDelta = (aSalWheelMouseEvent.mnDelta < 0) ? -1 : 1;
-                aSalWheelMouseEvent.mnCode = 0;
-                aSalWheelMouseEvent.mbHorz = sal_True;
-                nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
-            }
-            }
-            break;
+        }
+        break;
         case SALEVENT_QUERYCHARPOSITION:
             ImplHandleSalQueryCharPosition( pWindow, (SalQueryCharPositionEvent*)pEvent );
             break;

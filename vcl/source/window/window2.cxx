@@ -1111,6 +1111,38 @@ long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
 
 // -----------------------------------------------------------------------
 
+static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyByLineSize)
+{
+    if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
+    {
+        long nNewPos = pScrl->GetThumbPos();
+
+        if ( nN == -LONG_MAX )
+            nNewPos += pScrl->GetPageSize();
+        else if ( nN == LONG_MAX )
+            nNewPos -= pScrl->GetPageSize();
+        else
+        {
+            // allowing both chunked and continuous scrolling
+            if(isMultiplyByLineSize){
+                nN*=pScrl->GetLineSize();
+            }
+
+            const double fVal = (double)(nNewPos - nN);
+
+            if ( fVal < LONG_MIN )
+                nNewPos = LONG_MIN;
+            else if ( fVal > LONG_MAX )
+                nNewPos = LONG_MAX;
+            else
+                nNewPos = (long)fVal;
+        }
+
+        pScrl->DoScroll( nNewPos );
+    }
+
+}
+
 sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                                   ScrollBar* pHScrl, ScrollBar* pVScrl )
 {
@@ -1152,24 +1184,70 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
                 if ( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) )
                 {
-                    sal_uLong nScrollLines = pData->GetScrollLines();
-                    long nLines;
-                    if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
+                    if (!pData->IsDeltaPixel())
                     {
-                        if ( pData->GetDelta() < 0 )
-                            nLines = -LONG_MAX;
+                        sal_uLong nScrollLines = pData->GetScrollLines();
+                        long nLines;
+                        if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
+                        {
+                            if ( pData->GetDelta() < 0 )
+                                nLines = -LONG_MAX;
+                            else
+                                nLines = LONG_MAX;
+                        }
                         else
-                            nLines = LONG_MAX;
-                    }
-                    else
-                        nLines = pData->GetNotchDelta() * (long)nScrollLines;
-                    if ( nLines )
-                    {
-                        ImplHandleScroll( NULL,
+                            nLines = pData->GetNotchDelta() * (long)nScrollLines;
+                        if ( nLines )
+                        {
+                            ImplHandleScroll( NULL,
                                           0L,
                                           pData->IsHorz() ? pHScrl : pVScrl,
                                           nLines );
-                        bRet = sal_True;
+                            bRet = sal_True;
+                        }
+                    }
+                    else
+                    {
+                        // Mobile / touch scrolling section
+                        const Point & deltaPoint = rCmd.GetMousePosPixel();
+
+                        double deltaXInPixels = double(deltaPoint.X());
+                        double deltaYInPixels = double(deltaPoint.Y());
+                        
+                        double visSizeX = double(pHScrl->GetVisibleSize());
+                        double visSizeY = double(pVScrl->GetVisibleSize());
+                        
+                        Size winSize = this->GetOutputSizePixel();
+                        
+                        double ratioX = deltaXInPixels / double(winSize.getWidth());
+                        double ratioY = deltaYInPixels / double(winSize.getHeight());
+                        
+                        long deltaXInLogic = long(visSizeX * ratioX);
+                        long deltaYInLogic = long(visSizeY * ratioY);
+
+                        // Touch need to work by pixels. Did not apply this to
+                        // Android, as android code may require adaptations
+                        // to work with this scrolling code
+#ifndef IOS
+                        long lineSizeX = pHScrl->GetLineSize();
+                        long lineSizeY = pVScrl->GetLineSize();
+
+                        deltaXInLogic /= lineSizeX;
+                        deltaYInLogic /= lineSizeY;
+#endif
+
+                        if ( deltaXInLogic || deltaYInLogic )
+                        {
+#ifndef IOS
+                            bool isMultiplyByLineSize = true;
+#else
+                            bool isMultiplyByLineSize = false;
+#endif
+                            lcl_HandleScrollHelper( pHScrl, deltaXInLogic, isMultiplyByLineSize );
+                            lcl_HandleScrollHelper( pVScrl, deltaYInLogic, isMultiplyByLineSize );
+
+                            bRet = sal_True;
+                        }
                     }
                 }
             }
@@ -1197,32 +1275,7 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
 // -----------------------------------------------------------------------
 
-static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN )
-{
-    if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
-    {
-        long nNewPos = pScrl->GetThumbPos();
 
-        if ( nN == -LONG_MAX )
-            nNewPos += pScrl->GetPageSize();
-        else if ( nN == LONG_MAX )
-            nNewPos -= pScrl->GetPageSize();
-        else
-        {
-            const double fVal = (double)nNewPos - ((double)nN * pScrl->GetLineSize());
-
-            if ( fVal < LONG_MIN )
-                nNewPos = LONG_MIN;
-            else if ( fVal > LONG_MAX )
-                nNewPos = LONG_MAX;
-            else
-                nNewPos = (long)fVal;
-        }
-
-        pScrl->DoScroll( nNewPos );
-    }
-
-}
 
 // Note that when called for COMMAND_WHEEL above, despite its name,
 // pVScrl isn't necessarily the vertical scroll bar. Depending on
@@ -1233,8 +1286,8 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN )
 void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
                                ScrollBar* pVScrl, long nY )
 {
-    lcl_HandleScrollHelper( pHScrl, nX );
-    lcl_HandleScrollHelper( pVScrl, nY );
+    lcl_HandleScrollHelper( pHScrl, nX,true );
+    lcl_HandleScrollHelper( pVScrl, nY,true );
 }
 
 DockingManager* Window::GetDockingManager()

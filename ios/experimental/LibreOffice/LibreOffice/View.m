@@ -50,22 +50,58 @@
 {
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         CGPoint location = [gestureRecognizer locationInView: self];
+        
         NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
+        
         lo_tap(location.x, location.y);
+        
         [self->textView becomeFirstResponder];
-    } else
+    } else {
         NSLog(@"tapGesture: %@", gestureRecognizer);
+
+    }
 }
 
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
-        CGPoint translation = [gestureRecognizer translationInView: self];
-        NSLog(@"panGesture: pan: (%d,%d)", (int)translation.x, (int)translation.y);
-        lo_pan(translation.x, translation.y);
-    } else
-        NSLog(@"panGesture: %@", gestureRecognizer);
+    
+    static CGFloat previousX =0.0f,previousY=0.0f;
+    
+    CGPoint translation = [gestureRecognizer translationInView: self];
+    
+    if(gestureRecognizer.state != UIGestureRecognizerStateBegan){
+    
+        int deltaX = translation.x - previousX;
+        int deltaY = translation.y - previousY;
+        
+        NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
+        
+        lo_pan(deltaX, deltaY);
+    }
+    
+    previousX = translation.x;
+    previousY = translation.y;
+
 }
+
+- (void)pinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
+{
+    
+    CGPoint location = [gestureRecognizer locationInView: self];
+    
+    CGFloat scale = gestureRecognizer.scale;
+    
+    NSLog(@"pinchGesture: pinch: (%f) cords (%d,%d)", (float)scale, (int)location.x, (int)location.y );
+    
+    lo_zoom((int)location.x, (int)location.y, (float)scale);
+
+    // to reset the gesture scaling
+    if(gestureRecognizer.state==UIGestureRecognizerStateEnded){
+
+        lo_zoom(1, 1, 0.0f);
+    }
+}
+
 
 @end
 
