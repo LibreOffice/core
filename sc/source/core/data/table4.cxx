@@ -2055,12 +2055,6 @@ bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
     return false;
 }
 
-void ScTable::RemoveAutoSpellObj()
-{
-    for (SCCOL i=0; i <= MAXCOL; i++)
-        aCol[i].RemoveAutoSpellObj();
-}
-
 bool ScTable::TestTabRefAbs(SCTAB nTable) const
 {
     for (SCCOL i=0; i <= MAXCOL; i++)

@@ -431,8 +431,6 @@ public:
     bool    TestTabRefAbs(SCTAB nTable) const;
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
 
-    void        RemoveAutoSpellObj();
-
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );

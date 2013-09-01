@@ -1218,14 +1218,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 aNewOpt.SetAutoSpell( bDoAutoSpell );
                 pDoc->SetDocOptions( aNewOpt );
 
-                if (bDoAutoSpell)
-                    pDoc->SetOnlineSpellPos( ScAddress(0,0,0) );    // vorne anfangen
-                else
-                {
-                    WaitObject aWait( pDocSh->GetActiveDialogParent() );
-                    pDoc->RemoveAutoSpellObj();     //  Edit-Text-Objekte wieder zurueckwandeln
-                }
-
                 if (pViewSh)
                     pViewSh->EnableAutoSpell(bDoAutoSpell);
 

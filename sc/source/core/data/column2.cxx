@@ -1019,45 +1019,6 @@ public:
     }
 };
 
-class RemoveAutoSpellObjHandler : public StrEntries
-{
-    ScDocument* mpDoc;
-    boost::scoped_ptr<ScTabEditEngine> mpEngine;
-
-public:
-    RemoveAutoSpellObjHandler(sc::CellStoreType& rCells, ScDocument* pDoc) : StrEntries(rCells), mpDoc(pDoc) {}
-
-    void operator() (size_t nRow, EditTextObject*& pObj)
-    {
-        //  no query on HasOnlineSpellErrors, this makes it also work after loading
-
-        //  For the test on hard formatting (ScEditAttrTester), are the defaults in the
-        //  EditEngine of no importance. When the tester would later recognise the same
-        //  attributes in default and hard formatting and has to remove them, the correct
-        //  defaults must be set in the EditEngine for each cell.
-
-        //  test for attributes
-        if (!mpEngine)
-            mpEngine.reset(new ScTabEditEngine(mpDoc));
-
-        mpEngine->SetText(*pObj);
-
-        ScEditAttrTester aTester(mpEngine.get());
-        if (aTester.NeedsObject())                    // only remove spelling errors
-        {
-            // Overwrite the existing object.
-            delete pObj;
-            pObj = mpEngine->CreateTextObject();
-        }
-        else
-        {
-            // Store the string replacement for later commits.
-            OUString aText = ScEditUtil::GetSpaceDelimitedString(*mpEngine);
-            maStrEntries.push_back(StrEntry(nRow, aText));
-        }
-    }
-};
-
 class RemoveEditAttribsHandler : public StrEntries
 {
     ScDocument* mpDoc;
@@ -1136,13 +1097,6 @@ public:
     bool getTestResult() const { return mbTestResult; }
 };
 
-}
-
-void ScColumn::RemoveAutoSpellObj()
-{
-    RemoveAutoSpellObjHandler aFunc(maCells, pDocument);
-    sc::ProcessEditText(maCells, aFunc);
-    aFunc.commitStrings();
 }
 
 void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )

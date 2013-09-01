@@ -1724,17 +1724,6 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
         Advance();
 }
 
-void ScHorizontalCellIterator::RehashCol( SCCOL nCol )
-{
-    if (nCol < nStartCol || nEndCol < nCol)
-        return;
-
-    ColParam& rParam = maColPositions[nCol-nStartCol];
-    ScColumn& rCol = pDoc->maTabs[mnTab]->aCol[nCol];
-    rParam.maPos = rCol.maCells.position(mnRow).first;
-    rParam.maEnd = rCol.maCells.end();
-}
-
 ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 {
     if (!bMore)

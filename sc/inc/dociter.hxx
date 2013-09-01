@@ -440,13 +440,6 @@ public:
     /// Set a(nother) sheet and (re)init.
     void            SetTab( SCTAB nTab );
 
-    /**
-     * When modifying a cell while still in iteration, call this to re-fetch
-     * the column iterators used internally because the old iterators have
-     * been invalidated.
-     */
-    void RehashCol( SCCOL nCol );
-
 private:
     void            Advance();
 };

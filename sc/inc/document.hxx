@@ -315,9 +315,6 @@ private:
 
     ScRange             aEmbedRange;
     ScAddress           aCurTextWidthCalcPos;
-    ScAddress           aOnlineSpellPos;                // within whole document
-    ScRange             aVisSpellRange;
-    ScAddress           aVisSpellPos;                   // within aVisSpellRange (see nVisSpellState)
 
     Timer               aTrackTimer;
 
@@ -1657,9 +1654,6 @@ public:
 
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
-
-    void            RemoveAutoSpellObj();
-    void            SetOnlineSpellPos( const ScAddress& rPos );
 
     sal_uInt8           GetMacroCallMode() const     { return nMacroCallMode; }
     void            SetMacroCallMode(sal_uInt8 nNew)     { nMacroCallMode = nNew; }

@@ -308,8 +308,6 @@ public:
     void            SetPageSize( const Size& rSize );
     void            SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
 
-    void        RemoveAutoSpellObj();
-
     void        LockTable();
     void        UnlockTable();
 

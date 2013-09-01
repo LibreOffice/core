@@ -721,44 +721,6 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     return aScope.getNeedMore();
 }
 
-//------------------------------------------------------------------------
-
-class ScSpellStatus
-{
-public:
-    bool    bModified;
-
-    ScSpellStatus() : bModified(false) {};
-
-    DECL_LINK (EventHdl, EditStatus*);
-};
-
-IMPL_LINK( ScSpellStatus, EventHdl, EditStatus *, pStatus )
-{
-    sal_uLong nStatus = pStatus->GetStatusWord();
-    if ( nStatus & EE_STAT_WRONGWORDCHANGED )
-        bModified = true;
-
-    return 0;
-}
-
-void ScDocument::SetOnlineSpellPos( const ScAddress& rPos )
-{
-    aOnlineSpellPos = rPos;
-
-    //  skip visible area for aOnlineSpellPos
-    if ( aVisSpellRange.In( aOnlineSpellPos ) )
-        aOnlineSpellPos = aVisSpellRange.aEnd;
-}
-
-void ScDocument::RemoveAutoSpellObj()
-{
-    //  alle Spelling-Informationen entfernen
-
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++)
-        maTabs[nTab]->RemoveAutoSpellObj();
-}
-
 void ScDocument::RepaintRange( const ScRange& rRange )
 {
     if ( bIsVisible && pShell )
