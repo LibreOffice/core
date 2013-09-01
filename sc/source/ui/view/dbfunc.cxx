@@ -288,6 +288,8 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, sal_Bool bRecord, sal_Bool b
                             rSortParam.nDestTab );
         MarkRange( aDestRange );
     }
+
+    ResetAutoSpell();
 }
 
 //  filters
