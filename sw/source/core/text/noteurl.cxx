@@ -29,7 +29,7 @@
 SwNoteURL *pNoteURL = NULL;
 
 
-void SwNoteURL::InsertURLNote( const XubString& rURL, const XubString& rTarget,
+void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     const SwRect& rRect )
 {
     MSHORT i;

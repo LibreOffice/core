@@ -30,15 +30,15 @@ class MapMode;
 
 class SwURLNote
 {
-    String aURL;
-    String aTarget;
+    OUString aURL;
+    OUString aTarget;
     SwRect aRect;
 public:
-    SwURLNote( const String& rURL, const String& rTarget, const SwRect& rRect )
+    SwURLNote( const OUString& rURL, const OUString& rTarget, const SwRect& rRect )
     : aURL( rURL ), aTarget( rTarget ), aRect( rRect )
     {}
-    const String& GetURL()      const { return aURL; }
-    const String& GetTarget()   const { return aTarget; }
+    const OUString& GetURL()      const { return aURL; }
+    const OUString& GetTarget()   const { return aTarget; }
     const SwRect& GetRect()     const { return aRect; }
     sal_Bool operator==( const SwURLNote& rSwURLNote ) const
     { return aRect == rSwURLNote.aRect; }
@@ -52,7 +52,7 @@ class SwNoteURL
 public:
     SwNoteURL() {}
     sal_uInt16 Count() const { return aList.size(); }
-    void InsertURLNote( const String& rURL, const String& rTarget,
+    void InsertURLNote( const OUString& rURL, const OUString& rTarget,
                  const SwRect& rRect );
     const SwURLNote& GetURLNote( sal_uInt16 nPos ) const
         { return aList[ nPos ]; }
