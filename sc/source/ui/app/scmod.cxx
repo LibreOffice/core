@@ -1942,11 +1942,15 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
     }
 
     bool bMore = false;
+    bool bAutoSpell = false;
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
 
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
+        bAutoSpell = pDoc->GetDocOptions().IsAutoSpell();
+        if (pDocSh->IsReadOnly())
+            bAutoSpell = false;
 
         sal_Bool bLinks = pDoc->IdleCheckLinks();
         sal_Bool bWidth = pDoc->IdleCalcTextWidth();
@@ -1959,14 +1963,17 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
             lcl_CheckNeedsRepaint( pDocSh );
     }
 
-    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    if (pViewSh)
+    if (bAutoSpell)
     {
-        bool bSpell = pViewSh->ContinueOnlineSpelling();
-        if (bSpell)
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        if (pViewSh)
         {
-            aSpellTimer.Start();
-            bMore = true;
+            bool bSpell = pViewSh->ContinueOnlineSpelling();
+            if (bSpell)
+            {
+                aSpellTimer.Start();
+                bMore = true;
+            }
         }
     }
 

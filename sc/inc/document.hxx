@@ -1649,8 +1649,6 @@ public:
     bool            IdleCalcTextWidth();
     bool            IdleCheckLinks();
 
-    bool            ContinueOnlineSpelling();   // TRUE = found s.th.
-
     void            RepaintRange( const ScRange& rRange );
     void            RepaintRange( const ScRangeList& rRange );
 
@@ -1662,7 +1660,6 @@ public:
 
     void            RemoveAutoSpellObj();
     void            SetOnlineSpellPos( const ScAddress& rPos );
-    SC_DLLPUBLIC bool           SetVisibleSpellRange( const ScRange& rRange );  // true = changed
 
     sal_uInt8           GetMacroCallMode() const     { return nMacroCallMode; }
     void            SetMacroCallMode(sal_uInt8 nNew)     { nMacroCallMode = nNew; }
@@ -1760,8 +1757,6 @@ private:
                                         ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
                                         SCCOLROW nEndCol, SCCOLROW* pTranslate,
                                         ScProgress* pProgress, sal_uLong nProAdd );
-    bool                OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpellPos,
-                                        sal_uInt16 nMaxTest );
 
     DECL_LINK(TrackTimeHdl, void *);
 
