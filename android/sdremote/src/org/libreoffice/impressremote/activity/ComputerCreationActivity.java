@@ -14,23 +14,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 
-public class ComputerCreationActivity extends SherlockFragmentActivity implements View.OnClickListener {
+public class ComputerCreationActivity extends SherlockFragmentActivity implements View.OnClickListener, TextView.OnEditorActionListener {
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
         setContentView(R.layout.activity_computer_creation);
 
         setUpActionBar();
+        setUpKeyboard();
     }
 
     private void setUpActionBar() {
@@ -85,6 +89,7 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
 
         if (!isIpAddressValid(aIpAddress)) {
             getIpAddressEdit().setError(getText(R.string.message_ip_address_validation));
+            getIpAddressEdit().requestFocus();
             return;
         }
 
@@ -116,6 +121,19 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
         setResult(Activity.RESULT_OK, aIntent);
 
         finish();
+    }
+
+    private void setUpKeyboard() {
+        getNameEdit().setOnEditorActionListener(this);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            saveServer();
+        }
+
+        return false;
     }
 }
 
