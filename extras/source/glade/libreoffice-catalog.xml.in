@@ -332,8 +332,11 @@
     <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
                         generic-name="Rectangle Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
+    <glade-widget-class title="Frame Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Text Direction ListBox" name="chartcontrollerlo-TextDirectionListBox"
+                        generic-name="TextDirectionListBox" parent="svxlo-FrameDirectionListBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Numbering Type ListBox" name="swlo-SwNumberingTypeListBox"
                         generic-name="NumberingTypeListBox" parent="GtkComboBox"
