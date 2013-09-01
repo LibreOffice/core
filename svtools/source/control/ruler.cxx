@@ -189,15 +189,14 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
     bAutoPageWidth    = rData.bAutoPageWidth;
     bTextRTL          = rData.bTextRTL;
 
-    pLines.clear();
-    pBorders.clear();
-    pIndents.clear();
-    pTabs.clear();
-
     if ( !rData.pLines.empty() )
     {
         pLines.resize(rData.pLines.size());
         std::copy(rData.pLines.begin(), rData.pLines.end(), pLines.begin());
+    }
+    else
+    {
+        pLines.clear();
     }
 
     if ( !rData.pBorders.empty() )
@@ -205,17 +204,29 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
         pBorders.resize(rData.pBorders.size());
         std::copy(rData.pBorders.begin(), rData.pBorders.end(), pBorders.begin());
     }
+    else
+    {
+        pBorders.clear();
+    }
 
     if ( !rData.pIndents.empty() )
     {
         pIndents.resize(rData.pIndents.size());
         std::copy(rData.pIndents.begin(), rData.pIndents.end(), pIndents.begin());
     }
+    else
+    {
+        pIndents.clear();
+    }
 
     if ( !rData.pTabs.empty() )
     {
         pTabs.resize(rData.pTabs.size());
         std::copy(rData.pTabs.begin(), rData.pTabs.end(), pTabs.begin());
+    }
+    else
+    {
+        pTabs.clear();
     }
 
     return *this;
