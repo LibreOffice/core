@@ -14,6 +14,10 @@
 
 #if !HAVE_FEATURE_DESKTOP
 
+#define MOBILE_MAX_ZOOM_IN 600
+#define MOBILE_MAX_ZOOM_OUT 80
+#define MOBILE_ZOOM_SCALE_MULTIPLIER 10000
+
 // Functions to be implemented by the app-specifc upper or less
 // app-specific but platform-specific medium layer on touch-based
 // platforms. The same API is used on each such platform. There are
