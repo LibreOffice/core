@@ -24,6 +24,7 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
 
         setUpHomeButton();
+        setUpTitle();
         setUpFragment();
     }
 
@@ -31,15 +32,21 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    private void setUpTitle() {
+        String aComputerName = extractReceivedComputer().getName();
+
+        getSupportActionBar().setSubtitle(aComputerName);
+    }
+
+    private Server extractReceivedComputer() {
+        return getIntent().getParcelableExtra(Intents.Extras.SERVER);
+    }
+
     private void setUpFragment() {
         Server aComputer = extractReceivedComputer();
         Fragment aFragment = ComputerConnectionFragment.newInstance(aComputer);
 
         FragmentOperator.addFragment(this, aFragment);
-    }
-
-    private Server extractReceivedComputer() {
-        return getIntent().getParcelableExtra(Intents.Extras.SERVER);
     }
 
     @Override
