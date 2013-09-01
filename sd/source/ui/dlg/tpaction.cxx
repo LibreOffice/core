@@ -71,7 +71,7 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-#define DOCUMENT_TOKEN (sal_Unicode('#'))
+#define DOCUMENT_TOKEN '#'
 
 /**
  * Constructor of the Tab dialog: appends the pages to the dialog
@@ -91,8 +91,8 @@ SdActionDlg::SdActionDlg (
 
     SetTabPage( pNewPage );
 
-    String aStr( pNewPage->GetText() );
-    if( aStr.Len() )
+    OUString aStr( pNewPage->GetText() );
+    if( !aStr.isEmpty() )
         SetText( aStr );
 }
 
@@ -238,7 +238,7 @@ void SdTPAction::Construct()
                 embed::VerbDescriptor aVerb = aVerbs[i];
                 if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
                 {
-                    String aTmp( aVerb.VerbName );
+                    OUString aTmp( aVerb.VerbName );
                     aVerbVector.push_back( aVerb.VerbID );
                     aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
                 }
@@ -287,14 +287,14 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem( ATTR_ACTION );
 
-    String aFileName = GetEditText( sal_True );
-    if( aFileName.Len() == 0 )
+    OUString aFileName = GetEditText( sal_True );
+    if( aFileName.isEmpty() )
         rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
         if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
         {
-            String aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
+            OUString aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
             if( eCA == presentation::ClickAction_SOUND ||
                 eCA == presentation::ClickAction_DOCUMENT ||
                 eCA == presentation::ClickAction_PROGRAM )
@@ -319,7 +319,7 @@ sal_Bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 void SdTPAction::Reset( const SfxItemSet& rAttrs )
 {
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
-    String      aFileName;
+    OUString aFileName;
 
     // aLbAction
     if( rAttrs.GetItemState( ATTR_ACTION ) != SFX_ITEM_DONTCARE )
@@ -350,7 +350,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
         case presentation::ClickAction_DOCUMENT:
         {
             if( comphelper::string::getTokenCount(aFileName, DOCUMENT_TOKEN) == 2 )
-                aLbTreeDocument.SelectEntry( aFileName.GetToken( 1, DOCUMENT_TOKEN ) );
+                aLbTreeDocument.SelectEntry( aFileName.getToken( 1, DOCUMENT_TOKEN ) );
         }
         break;
 
@@ -418,13 +418,13 @@ void SdTPAction::OpenFileDialog()
     }
     else
     {
-        String aFile( GetEditText() );
+        OUString aFile( GetEditText() );
 
         if (bSound)
         {
             SdOpenSoundFileDialog   aFileDialog;
 
-            if( !aFile.Len() )
+            if( aFile.isEmpty() )
                 aFile = SvtPathOptions().GetGraphicPath();
 
             aFileDialog.SetPath( aFile );
@@ -455,7 +455,7 @@ void SdTPAction::OpenFileDialog()
             sfx2::FileDialogHelper aFileDialog(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
 
-            if (bDocument && !aFile.Len())
+            if (bDocument && aFile.isEmpty())
                 aFile = SvtPathOptions().GetWorkPath();
 
             aFileDialog.SetDisplayDirectory( aFile );
@@ -465,7 +465,7 @@ void SdTPAction::OpenFileDialog()
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
-                String (SfxResId (STR_SFX_FILTERNAME_ALL)),
+                SFX2_RESSTR(STR_SFX_FILTERNAME_ALL),
                 OUString("*.*"));
 
 
@@ -678,7 +678,7 @@ IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 {
-    String aFile( GetEditText() );
+    OUString aFile( GetEditText() );
 
     if( aFile != aLastFile )
     {
@@ -749,17 +749,17 @@ void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
 
 //------------------------------------------------------------------------
 
-void SdTPAction::SetEditText( String const & rStr )
+void SdTPAction::SetEditText( OUString const & rStr )
 {
     presentation::ClickAction   eCA = GetActualClickAction();
-    String                      aText(rStr);
+    OUString                    aText(rStr);
 
     // possibly convert URI back to system path
     switch( eCA )
     {
         case presentation::ClickAction_DOCUMENT:
             if( comphelper::string::getTokenCount(rStr, DOCUMENT_TOKEN) == 2 )
-                aText = rStr.GetToken( 0, DOCUMENT_TOKEN );
+                aText = rStr.getToken( 0, DOCUMENT_TOKEN );
 
             // fallthrough inteded
         case presentation::ClickAction_SOUND:
@@ -768,9 +768,9 @@ void SdTPAction::SetEditText( String const & rStr )
                 INetURLObject aURL( aText );
 
                 // try to convert to system path
-                String aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
+                OUString aTmpStr(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
 
-                if( aTmpStr.Len() )
+                if( !aTmpStr.isEmpty() )
                     aText = aTmpStr;    // was a system path
             }
             break;
@@ -786,7 +786,7 @@ void SdTPAction::SetEditText( String const & rStr )
             break;
         case presentation::ClickAction_VERB:
             {
-                ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.ToInt32() ) );
+                ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.toInt32() ) );
                 if( aFound != aVerbVector.end() )
                     aLbOLEAction.SelectEntryPos( static_cast< short >( aFound - aVerbVector.begin() ) );
             }
@@ -812,9 +812,9 @@ void SdTPAction::SetEditText( String const & rStr )
 
 //------------------------------------------------------------------------
 
-String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
+OUString SdTPAction::GetEditText( sal_Bool bFullDocDestination )
 {
-    String aStr;
+    OUString aStr;
     presentation::ClickAction eCA = GetActualClickAction();
 
     switch( eCA )
@@ -851,11 +851,11 @@ String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
 
     // validate file URI
     INetURLObject aURL( aStr );
-    String aBaseURL;
+    OUString aBaseURL;
     if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
         aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
 
-    if( aStr.Len() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    if( !aStr.isEmpty() && aURL.GetProtocol() == INET_PROT_NOT_VALID )
         aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl(), true, false ) );
 
     // get adjusted file name
@@ -866,11 +866,11 @@ String SdTPAction::GetEditText( sal_Bool bFullDocDestination )
         aLbTreeDocument.Control::IsVisible() &&
         aLbTreeDocument.GetSelectionCount() > 0 )
     {
-        String aTmpStr( aLbTreeDocument.GetSelectEntry() );
-        if( aTmpStr.Len() )
+        OUString aTmpStr( aLbTreeDocument.GetSelectEntry() );
+        if( !aTmpStr.isEmpty() )
         {
-            aStr.Append( DOCUMENT_TOKEN );
-            aStr.Append( aTmpStr );
+            aStr += OUString(DOCUMENT_TOKEN);
+            aStr += aTmpStr;
         }
     }
 

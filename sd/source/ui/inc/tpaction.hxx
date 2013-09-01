@@ -81,7 +81,7 @@ private:
 
     sal_Bool                    bTreeUpdated;
     std::vector<com::sun::star::presentation::ClickAction> maCurrentActions;
-    String                  aLastFile;
+    OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
 
     //------------------------------------
@@ -96,8 +96,8 @@ private:
     ::com::sun::star::presentation::ClickAction     GetActualClickAction();
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
-    void                    SetEditText( String const & rStr );
-    String                  GetEditText( sal_Bool bURL = sal_False );
+    void                    SetEditText( OUString const & rStr );
+    OUString                GetEditText( sal_Bool bURL = sal_False );
     sal_uInt16                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
