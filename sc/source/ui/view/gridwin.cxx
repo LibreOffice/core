@@ -5390,11 +5390,19 @@ bool ScGridWindow::ContinueOnlineSpelling()
         return false;
 
     ScDocument* pDoc = pViewData->GetDocument();
+    ScDPCollection* pDPs = NULL;
+    if (pDoc->HasPivotTable())
+        pDPs = pDoc->GetDPCollection();
+
     SCTAB nTab = pViewData->GetTabNo();
     SpellCheckStatus aStatus;
 
     ScHorizontalCellIterator aIter(
         pDoc, nTab, maVisibleRange.mnCol1, mpSpellCheckCxt->maPos.mnRow, maVisibleRange.mnCol2, maVisibleRange.mnRow2);
+
+    ScRangeList aPivotRanges;
+    if (pDPs)
+        aPivotRanges = pDPs->GetAllTableRanges(nTab);
 
     SCCOL nCol;
     SCROW nRow;
@@ -5415,6 +5423,16 @@ bool ScGridWindow::ContinueOnlineSpelling()
     while (pCell)
     {
         ++nTotalCellCount;
+
+        if (aPivotRanges.In(ScAddress(nCol, nRow, nTab)))
+        {
+            // Don't spell check within pivot tables.
+            if (nTotalCellCount >= 255)
+                break;
+
+            pCell = aIter.GetNext(nCol, nRow);
+            continue;
+        }
 
         CellType eType = pCell->meType;
         if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
