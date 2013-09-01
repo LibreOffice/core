@@ -36,6 +36,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/scrbar.hxx>
@@ -203,7 +204,8 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
             }
             else
             {
-                InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                MessageDialog(this, "InfoReadonlyDialog",
+                    "modules/swriter/ui/inforeadonlydialog.ui").Execute();
             }
         }
         if (bDone)

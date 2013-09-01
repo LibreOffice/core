@@ -1832,7 +1832,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                        MessageDialog(this, "InfoReadonlyDialog",
+                            "modules/swriter/ui/inforeadonlydialog.ui").Execute();
                         eKeyState = KS_End;
                     }
                     break;
@@ -1992,7 +1993,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                        MessageDialog(this, "InfoReadonlyDialog",
+                            "modules/swriter/ui/inforeadonlydialog.ui").Execute();
                         eKeyState = KS_End;
                     }
                     break;
@@ -2397,7 +2399,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else
             {
-                InfoBox( this, SW_RES( MSG_READONLY_CONTENT )).Execute();
+                MessageDialog(this, "InfoReadonlyDialog",
+                    "modules/swriter/ui/inforeadonlydialog.ui").Execute();
                 eKeyState = KS_End;
             }
         break;
