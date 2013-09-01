@@ -17,64 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
 #include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
-#include <vcl/graph.hxx>
-#include <tools/poly.hxx>
 #include <tools/helpers.hxx>
-#include <svx/contdlg.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/keepitem.hxx>
-#include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>
 #include <fmtcntnt.hxx>
 #include <fmturl.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
-#include <fmtpdsc.hxx>
 #include <fmtcnct.hxx>
 #include <layhelp.hxx>
-#include <ndtxt.hxx>
-#include <svx/svdogrp.hxx>
 #include <ndgrf.hxx>
 #include <tolayoutanchoredobjectposition.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
-#include <anchoredobject.hxx>
 #include <ndole.hxx>
 #include <swtable.hxx>
 #include <svx/svdpage.hxx>
-#include "doc.hxx"
-#include "viewsh.hxx"
 #include "layouter.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "pam.hxx"
-#include "frmatr.hxx"
 #include "viewimp.hxx"
 #include "viewopt.hxx"
 #include "dcontact.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"
-#include "flyfrm.hxx"
 #include "frmtool.hxx"
-#include "frmfmt.hxx"
 #include "hints.hxx"
-#include "swregion.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
-#include "ndnotxt.hxx"
 #include "notxtfrm.hxx"   // GetGrfArea
 #include "flyfrms.hxx"
-#include "ndindex.hxx"   // GetGrfArea
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
 #include "switerator.hxx"
