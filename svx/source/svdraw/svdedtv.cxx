@@ -102,7 +102,7 @@ SdrEditView::~SdrEditView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, sal_uInt16 nPos)
+SdrLayer* SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 {
     SdrLayerAdmin& rLA=pMod->GetLayerAdmin();
     sal_uInt16 nMax=rLA.GetLayerCount();
@@ -196,7 +196,7 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
     }
 }
 
-void SdrEditView::DeleteLayer(const XubString& rName)
+void SdrEditView::DeleteLayer(const OUString& rName)
 {
     SdrLayerAdmin& rLA = pMod->GetLayerAdmin();
     SdrLayer* pLayer = rLA.GetLayer(rName, sal_True);

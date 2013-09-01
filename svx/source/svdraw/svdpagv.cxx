@@ -612,7 +612,7 @@ void SdrPageView::AdjHdl()
     GetView().AdjustMarkHdl();
 }
 
-void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, sal_Bool bJa)
+void SdrPageView::SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa)
 {
     if(!GetPage())
         return;
@@ -623,16 +623,16 @@ void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, sal_Bool bJa)
         rBS.Set(nID, bJa);
 }
 
-sal_Bool SdrPageView::IsLayer(const XubString& rName, const SetOfByte& rBS) const
+bool SdrPageView::IsLayer(const OUString& rName, const SetOfByte& rBS) const
 {
     if(!GetPage())
-        return sal_False;
+        return false;
 
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
-    if(rName.Len())
+    if (!rName.isEmpty())
     {
-        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName, sal_True);
+        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName, true);
 
         if(SDRLAYER_NOTFOUND != nId)
         {

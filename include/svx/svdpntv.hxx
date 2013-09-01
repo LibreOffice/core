@@ -353,8 +353,8 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
-    void SetLayerVisible(const String& rName, sal_Bool bShow=sal_True);
-    bool IsLayerVisible(const String& rName) const;
+    void SetLayerVisible(const OUString& rName, bool bShow=true);
+    bool IsLayerVisible(const OUString& rName) const;
 
     void SetLayerLocked(const String& rName, sal_Bool bLock=sal_True);
     bool IsLayerLocked(const String& rName) const;

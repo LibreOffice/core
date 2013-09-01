@@ -119,8 +119,8 @@ private:
 
     void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 
-    void SetLayer(const String& rName, SetOfByte& rBS, sal_Bool bJa);
-    sal_Bool IsLayer(const String& rName, const SetOfByte& rBS) const;
+    void SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa);
+    bool IsLayer(const OUString& rName, const SetOfByte& rBS) const;
 
     // Nachsehen, ob AktGroup noch Inserted ist.
     void CheckAktGroup();
@@ -195,8 +195,8 @@ public:
     Rectangle& MarkBound() { return aMarkBound; }
     Rectangle& MarkSnap() { return aMarkSnap; }
 
-    void SetLayerVisible(const String& rName, sal_Bool bShow = sal_True) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
-    sal_Bool IsLayerVisible(const String& rName) const { return IsLayer(rName, aLayerVisi); }
+    void SetLayerVisible(const OUString& rName, bool bShow = true) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
+    bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
     void SetLayerLocked(const String& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
     sal_Bool IsLayerLocked(const String& rName) const { return IsLayer(rName,aLayerLock); }

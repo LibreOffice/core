@@ -509,17 +509,17 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 #endif
 }
 
-void SdrPaintView::SetLayerVisible(const XubString& rName, sal_Bool bShow)
+void SdrPaintView::SetLayerVisible(const OUString& rName, bool bShow)
 {
     if(mpPageView)
     {
-        mpPageView->SetLayerVisible(rName,bShow);
+        mpPageView->SetLayerVisible(rName, bShow);
     }
 
     InvalidateAllWin();
 }
 
-bool SdrPaintView::IsLayerVisible(const XubString& rName) const
+bool SdrPaintView::IsLayerVisible(const OUString& rName) const
 {
     if(mpPageView)
     {

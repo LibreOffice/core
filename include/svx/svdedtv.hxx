@@ -189,11 +189,11 @@ public:
     void AddUndoActions( std::vector< SdrUndoAction* >& );
 
     // Layerverwaltung. Mit Undo.
-    SdrLayer* InsertNewLayer(const String& rName, sal_uInt16 nPos=0xFFFF);
+    SdrLayer* InsertNewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
     // Loeschen eines Layer inkl. aller darauf befindlichen Objekte
-    void      DeleteLayer(const String& rName);
+    void      DeleteLayer(const OUString& rName);
     // Verschieben eines Layer (Layerreihenfolge aendern)
-    void      MoveLayer(const String& rName, sal_uInt16 nNewPos);
+    void      MoveLayer(const OUString& rName, sal_uInt16 nNewPos);
 
     // Markierte Objekte die ausserhalb ihrer Page liegen
     // werden ggf. einer anderen Page zugewiesen
