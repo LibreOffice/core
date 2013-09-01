@@ -248,11 +248,6 @@ String STR_FTNNOTE
     Text [ en-US ] = "Footnote: " ;
 };
 
-InfoBox MSG_READONLY_CONTENT
-{
-    Message [ en-US ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
-};
-
 String STR_TABLE_COL_ADJUST
 {
     Text [ en-US ] = "Adjust table column" ;

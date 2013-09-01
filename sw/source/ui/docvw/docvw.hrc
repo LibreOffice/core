@@ -79,8 +79,6 @@
 #define STR_DELETE_FOOTER               (RC_DOCVW_BEGIN + 26)
 #define STR_FORMAT_FOOTER               (RC_DOCVW_BEGIN + 27)
 
-#define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
-
 #define DOCVW_ACT_END   STR_SMARTTAG_CLICK
 
 #if DOCVW_ACT_END > RC_DOCVW_END
