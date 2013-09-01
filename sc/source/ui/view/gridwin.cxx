@@ -5523,6 +5523,16 @@ void ScGridWindow::EnableAutoSpell( bool bEnable )
         mpSpellCheckCxt.reset();
 }
 
+void ScGridWindow::ResetAutoSpell()
+{
+    if (mpSpellCheckCxt)
+    {
+        mpSpellCheckCxt->reset();
+        mpSpellCheckCxt->maPos.mnCol = maVisibleRange.mnCol1;
+        mpSpellCheckCxt->maPos.mnRow = maVisibleRange.mnRow1;
+    }
+}
+
 // #114409#
 void ScGridWindow::CursorChanged()
 {

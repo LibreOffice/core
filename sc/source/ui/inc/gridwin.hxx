@@ -393,6 +393,7 @@ public:
     void DrawLayerCreated();
     bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
+    void ResetAutoSpell();
 
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();

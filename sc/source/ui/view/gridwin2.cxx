@@ -607,10 +607,7 @@ bool ScGridWindow::UpdateVisibleRange()
     // Store the current visible range.
     bool bChanged = maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
     if (bChanged)
-    {
-        if (mpSpellCheckCxt)
-            mpSpellCheckCxt->reset();
-    }
+        ResetAutoSpell();
 
     return bChanged;
 }

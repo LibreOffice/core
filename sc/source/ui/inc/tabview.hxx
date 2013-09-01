@@ -523,6 +523,7 @@ public:
 
     bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
+    void ResetAutoSpell();
 };
 
 
