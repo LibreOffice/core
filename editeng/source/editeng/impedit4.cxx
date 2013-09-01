@@ -2285,6 +2285,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
         if ( pThisNodeOnly )
             pNode = pThisNodeOnly;
 
+        pNode->EnsureWrongList();
         if (!pNode->GetWrongList()->IsValid())
         {
             WrongList* pWrongList = pNode->GetWrongList();

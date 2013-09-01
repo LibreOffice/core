@@ -1732,6 +1732,12 @@ sal_Unicode ContentNode::GetChar(sal_uInt16 nPos) const
     return maString.GetChar(nPos);
 }
 
+void ContentNode::EnsureWrongList()
+{
+    if (!mpWrongList)
+        CreateWrongList();
+}
+
 WrongList* ContentNode::GetWrongList()
 {
     return mpWrongList.get();

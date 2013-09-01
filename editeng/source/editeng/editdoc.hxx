@@ -283,6 +283,7 @@ public:
 
     void            CreateDefFont();
 
+    void EnsureWrongList();
     WrongList* GetWrongList();
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
