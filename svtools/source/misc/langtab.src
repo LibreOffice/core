@@ -63,7 +63,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Arabic (Yemen)" ; LANGUAGE_ARABIC_YEMEN ; > ;
         < "Aragonese" ; LANGUAGE_USER_ARAGONESE ; > ;
         < "Armenian" ; LANGUAGE_ARMENIAN ; > ;
-        < "Assami" ; LANGUAGE_ASSAMESE ; > ;
+        < "Assamese" ; LANGUAGE_ASSAMESE ; > ;
         < "Azerbaijani Latin" ; LANGUAGE_AZERI_LATIN ; > ;
         < "Azerbaijani Cyrillic" ; LANGUAGE_AZERI_CYRILLIC ; > ;
         < "Basque" ; LANGUAGE_BASQUE ; > ;
