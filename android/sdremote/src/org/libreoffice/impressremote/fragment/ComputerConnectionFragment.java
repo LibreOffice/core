@@ -133,8 +133,8 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
 
         registerIntentsReceiver();
     }
@@ -285,8 +285,8 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
 
         unregisterIntentsReceiver();
     }
