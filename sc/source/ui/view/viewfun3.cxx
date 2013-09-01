@@ -1268,10 +1268,8 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                 true, false, bIncludeFiltered );
     }
 
-
     pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
                                        nEndCol,   nEndRow,   nEndTab );     // content after the change
-
 
         //  ggf. Autofilter-Koepfe loeschen
     if (bCutMode)
@@ -1355,6 +1353,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         nPaint, nExtFlags);
     // AdjustBlockHeight has already been called above
 
+    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aUserRange, rMark);
 
@@ -1530,6 +1529,8 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
         pUndoMgr->LeaveListAction();
     }
+
+    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aMarkedRange, aMark);
     return true;
@@ -1686,6 +1687,8 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         pUndoMgr->AddUndoAction(pUndo, false);
         pUndoMgr->LeaveListAction();
     }
+
+    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aRanges, aMark);
 
@@ -1808,6 +1811,7 @@ sal_Bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDest
 
         pDocSh->UpdateOle(GetViewData());
         SelectionChanged();
+        ResetAutoSpell();
     }
     return bSuccess;
 }

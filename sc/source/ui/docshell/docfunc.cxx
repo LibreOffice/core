@@ -2010,9 +2010,6 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             rDocShell.ErrorMessage(STR_INSERT_FULL);        // Spalte/Zeile voll
     }
 
-    if (pViewSh)
-        pViewSh->ResetAutoSpell();
-
     aModificator.SetDocumentModified();
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
@@ -2493,10 +2490,6 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, PAINT_TOP );
         }
     }
-
-    ScTabViewShell* pViewSh = rDocShell.GetBestViewShell();
-    if (pViewSh)
-        pViewSh->ResetAutoSpell();
 
     aModificator.SetDocumentModified();
 

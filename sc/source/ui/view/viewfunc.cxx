@@ -1489,6 +1489,7 @@ sal_Bool ScViewFunc::InsertCells( InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bP
         {
             pDocSh->UpdateOle(GetViewData());
             CellContentChanged();
+            ResetAutoSpell();
 
             // #i97876# Spreadsheet data changes are not notified
             ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
@@ -1552,6 +1553,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
 
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();
+        ResetAutoSpell();
 
         // #i97876# Spreadsheet data changes are not notified
         ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
@@ -1750,6 +1752,8 @@ void ScViewFunc::DeleteMulti( sal_Bool bRows, sal_Bool bRecord )
             pDocSh->PostPaint( static_cast<SCCOL>(pRanges[0]),0,nTab,
                     MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_TOP );
     }
+
+    ResetAutoSpell();
     aModificator.SetDocumentModified();
 
     CellContentChanged();
