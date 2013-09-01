@@ -20,23 +20,12 @@
 
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
-#include "cntfrm.hxx"
-#include "flyfrm.hxx"
 #include "txtfrm.hxx"
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include "viewsh.hxx"
-#include "viewimp.hxx"
-#include "pam.hxx"
-#include "frmfmt.hxx"
 #include "frmtool.hxx"
 #include "dflyobj.hxx"
 #include "hints.hxx"
-#include "ndtxt.hxx"
-#include "swundo.hxx"
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
