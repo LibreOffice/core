@@ -18,14 +18,10 @@
  */
 
 
-#include "cntfrm.hxx"
 #include "doc.hxx"
-#include "flyfrm.hxx"
 #include "frmtool.hxx"
-#include "frmfmt.hxx"
 #include "hints.hxx"
 #include <fmtornt.hxx>
-#include <fmtfsize.hxx>
 #include "txtfrm.hxx"       //fuer IsLocked()
 #include "flyfrms.hxx"
 // OD 2004-01-19 #110582#
