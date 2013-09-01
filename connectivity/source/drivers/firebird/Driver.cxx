@@ -76,7 +76,6 @@ void FirebirdDriver::disposing()
 {
     MutexGuard aGuard(m_aMutex);
 
-    // when driver will be destroied so all our connections have to be destroied as well
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -99,7 +98,6 @@ rtl::OUString FirebirdDriver::getImplementationName_Static() throw(RuntimeExcept
 
 Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static() throw (RuntimeException)
 {
-    // TODO: add com.sun.star.sdbcx.Driver once all sdbc functionality is implemented
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = OUString("com.sun.star.sdbc.Driver");
     aSNS[0] = OUString("com.sun.star.sdbcx.Driver");
@@ -143,12 +141,11 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
        throw DisposedException();
 
     if ( ! acceptsURL(url) )
-        return NULL; // TODO: throw Exception?
+        return NULL;
 
-    // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
-    Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url,info); // late constructor call which can throw exception and allows a correct dtor call when so
+    Reference< XConnection > xCon = pCon;
+    pCon->construct(url, info);
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;
