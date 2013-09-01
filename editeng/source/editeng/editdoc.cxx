@@ -1893,6 +1893,14 @@ public:
     }
 };
 
+struct ClearSpellErrorsHandler : std::unary_function<ContentNode, void>
+{
+    void operator() (ContentNode& rNode)
+    {
+        rNode.DestroyWrongList();
+    }
+};
+
 }
 
 void EditDoc::ImplDestroyContents()
@@ -2213,6 +2221,11 @@ EditPaM EditDoc::Clear()
 
     EditPaM aPaM( pNode, 0 );
     return aPaM;
+}
+
+void EditDoc::ClearSpellErrors()
+{
+    std::for_each(maContents.begin(), maContents.end(), ClearSpellErrorsHandler());
 }
 
 void EditDoc::SetModified( bool b )

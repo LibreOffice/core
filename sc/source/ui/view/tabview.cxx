@@ -2369,4 +2369,15 @@ void ScTabView::ResetAutoSpell()
     }
 }
 
+void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (!pGridWin[i])
+            continue;
+
+        pGridWin[i]->SetAutoSpellData(nPosX, nPosY, pRanges);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

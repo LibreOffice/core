@@ -2484,6 +2484,11 @@ EESpellState ImpEditEngine::HasSpellErrors()
     return EE_SPELL_ERRORFOUND;
 }
 
+void ImpEditEngine::ClearSpellErrors()
+{
+    aEditDoc.ClearSpellErrors();
+}
+
 EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 {
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );

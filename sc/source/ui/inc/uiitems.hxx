@@ -27,7 +27,12 @@
 #include "paramisc.hxx"
 #include <svl/poolitem.hxx>
 
+#include <vector>
 #include <boost/scoped_ptr.hpp>
+
+namespace editeng {
+    struct MisspellRanges;
+}
 
 class ScEditEngineDefaulter;
 class EditTextObject;
@@ -46,6 +51,7 @@ class ScInputStatusItem : public SfxPoolItem
     ScAddress           aEndPos;
     OUString            aString;
     EditTextObject*     pEditData;
+    const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
 public:
                             TYPEINFO();
@@ -77,6 +83,9 @@ public:
 
     const OUString&         GetString() const   { return aString; }
     const EditTextObject*   GetEditData() const { return pEditData; }
+
+    void SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges );
+    const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const;
 };
 
 

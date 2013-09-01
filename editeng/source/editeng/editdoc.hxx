@@ -750,6 +750,8 @@ public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
 
+    void ClearSpellErrors();
+
     bool            IsModified() const      { return bModified; }
     void            SetModified( bool b );
 

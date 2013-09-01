@@ -907,6 +907,7 @@ public:
     void DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, bool bSpellAtCursorPos = false, bool bInteruptable = true );
     EESpellState        Spell( EditView* pEditView, sal_Bool bMultipleDoc );
     EESpellState        HasSpellErrors();
+    void ClearSpellErrors();
     EESpellState        StartThesaurus( EditView* pEditView );
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >

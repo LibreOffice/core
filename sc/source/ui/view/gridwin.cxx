@@ -5533,6 +5533,17 @@ void ScGridWindow::ResetAutoSpell()
     }
 }
 
+void ScGridWindow::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
+{
+    if (!mpSpellCheckCxt)
+        return;
+
+    if (!maVisibleRange.isInside(nPosX, nPosY))
+        return;
+
+    mpSpellCheckCxt->setMisspellRanges(nPosX, nPosY, pRanges);
+}
+
 // #114409#
 void ScGridWindow::CursorChanged()
 {

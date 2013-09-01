@@ -71,6 +71,26 @@ const std::vector<editeng::MisspellRanges>* SpellCheckContext::getMisspellRanges
     return &it->second;
 }
 
+void SpellCheckContext::setMisspellRanges(
+    SCCOL nCol, SCROW nRow, const std::vector<editeng::MisspellRanges>* pRanges )
+{
+    CellPos aPos(nCol, nRow);
+    CellMapType::iterator it = maMisspellCells.find(aPos);
+
+    if (pRanges)
+    {
+        if (it == maMisspellCells.end())
+            maMisspellCells.insert(CellMapType::value_type(aPos, *pRanges));
+        else
+            it->second = *pRanges;
+    }
+    else
+    {
+        if (it != maMisspellCells.end())
+            maMisspellCells.erase(it);
+    }
+}
+
 void SpellCheckContext::reset()
 {
     maPos.reset();

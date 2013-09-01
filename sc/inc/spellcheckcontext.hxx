@@ -49,6 +49,7 @@ struct SpellCheckContext
 
     bool isMisspelled( SCCOL nCol, SCROW nRow ) const;
     const std::vector<editeng::MisspellRanges>* getMisspellRanges( SCCOL nCol, SCROW nRow ) const;
+    void setMisspellRanges( SCCOL nCol, SCROW nRow, const std::vector<editeng::MisspellRanges>* pRanges );
 
     void reset();
 };

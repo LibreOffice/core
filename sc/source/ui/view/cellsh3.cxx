@@ -232,6 +232,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 ScAddress aCursorPos = pStatusItem->GetPos();
                 String aString = pStatusItem->GetString();
                 const EditTextObject* pData = pStatusItem->GetEditData();
+
                 if (pData)
                 {
                     if (nSlot == FID_INPUTLINE_BLOCK)
@@ -285,8 +286,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         pTabViewShell->EnterMatrix( aString, pDoc->GetGrammar() );
                         rReq.Done();
                     }
-
                 }
+
+                pTabViewShell->SetAutoSpellData(
+                    aCursorPos.Col(), aCursorPos.Row(), pStatusItem->GetMisspellRanges());
 
                 //  no GrabFocus here, as otherwise on a Mac the tab jumps before the
                 //  sideview, when the input was not finished

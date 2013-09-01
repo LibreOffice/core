@@ -30,6 +30,10 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
+namespace editeng {
+    struct MisspellRanges;
+}
+
 class ScEditEngineDefaulter;
 class ScGridWindow;
 class ScOutlineWindow;
@@ -524,6 +528,7 @@ public:
     bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
+    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
 };
 
 

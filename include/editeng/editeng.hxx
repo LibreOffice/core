@@ -416,6 +416,7 @@ public:
 
     // For fast Pre-Test without view:
     EESpellState    HasSpellErrors();
+    void ClearSpellErrors();
     sal_Bool            HasText( const SvxSearchItem& rSearchItem );
 
     //initialize sentence spelling

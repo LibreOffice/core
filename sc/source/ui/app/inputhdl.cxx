@@ -38,6 +38,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include "editeng/misspellrange.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -2557,6 +2558,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         }
     }
 
+    std::vector<editeng::MisspellRanges> aMisspellRanges;
     pEngine->CompleteOnlineSpelling();
     bool bSpellErrors = !bFormulaMode && pEngine->HasOnlineSpellErrors();
     if ( bSpellErrors )
@@ -2646,7 +2648,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
         bool bAttrib = false;    // Formatierung vorhanden ?
         //  check if EditObject is needed
 
-        if ( bSpellErrors || nParCnt > 1 )
+        if (nParCnt > 1)
             bAttrib = true;
         else
         {
@@ -2683,15 +2685,15 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             //  (der Test vorher ist trotzdem noetig wegen Zell-Attributen)
         }
 
+        if (bSpellErrors)
+            pEngine->GetAllMisspellRanges(aMisspellRanges);
+
         if (bMatrix)
             bAttrib = false;
 
         if (bAttrib)
         {
-            sal_uLong nCtrl = pEngine->GetControlWord();
-            sal_uLong nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
-            if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
-                pEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
+            pEngine->ClearSpellErrors();
             pObject = pEngine->CreateTextObject();
         }
         else if (bAutoComplete)         // Gross-/Kleinschreibung anpassen
@@ -2797,6 +2799,10 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
                                      aCursorPos, aCursorPos, aCursorPos,
                                      aString, pObject );
+
+            if (!aMisspellRanges.empty())
+                aItem.SetMisspellRanges(&aMisspellRanges);
+
             const SfxPoolItem* aArgs[2];
             aArgs[0] = &aItem;
             aArgs[1] = NULL;

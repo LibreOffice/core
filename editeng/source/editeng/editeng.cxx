@@ -2327,6 +2327,11 @@ EESpellState EditEngine::HasSpellErrors()
     return pImpEditEngine->HasSpellErrors();
 }
 
+void EditEngine::ClearSpellErrors()
+{
+    pImpEditEngine->ClearSpellErrors();
+}
+
 void EditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_CHKTHIS( EditEngine, 0 );

@@ -45,28 +45,27 @@ TYPEINIT1(ScIndexHint,          SfxHint);
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------
 
-ScInputStatusItem::ScInputStatusItem( sal_uInt16 nWhichP,
-                                      const ScAddress& rCurPos,
-                                      const ScAddress& rStartPos,
-                                      const ScAddress& rEndPos,
-                                      const OUString& rString,
-                                      const EditTextObject* pData )
-    :   SfxPoolItem ( nWhichP ),
-        aCursorPos  ( rCurPos ),
-        aStartPos   ( rStartPos ),
-        aEndPos     ( rEndPos ),
-        aString     ( rString ),
-        pEditData   ( pData ? pData->Clone() : NULL )
+ScInputStatusItem::ScInputStatusItem(
+    sal_uInt16 nWhichP, const ScAddress& rCurPos, const ScAddress& rStartPos,
+    const ScAddress& rEndPos, const OUString& rString, const EditTextObject* pData ) :
+    SfxPoolItem ( nWhichP ),
+    aCursorPos  ( rCurPos ),
+    aStartPos   ( rStartPos ),
+    aEndPos     ( rEndPos ),
+    aString     ( rString ),
+    pEditData   ( pData ? pData->Clone() : NULL ),
+    mpMisspellRanges(NULL)
 {
 }
 
-ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem )
-    :   SfxPoolItem ( rItem ),
-        aCursorPos  ( rItem.aCursorPos ),
-        aStartPos   ( rItem.aStartPos ),
-        aEndPos     ( rItem.aEndPos ),
-        aString     ( rItem.aString ),
-        pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : NULL )
+ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem ) :
+    SfxPoolItem ( rItem ),
+    aCursorPos  ( rItem.aCursorPos ),
+    aStartPos   ( rItem.aStartPos ),
+    aEndPos     ( rItem.aEndPos ),
+    aString     ( rItem.aString ),
+    pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : NULL ),
+    mpMisspellRanges(rItem.mpMisspellRanges)
 {
 }
 
@@ -94,6 +93,16 @@ int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
 {
     return new ScInputStatusItem( *this );
+}
+
+void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges )
+{
+    mpMisspellRanges = pRanges;
+}
+
+const std::vector<editeng::MisspellRanges>* ScInputStatusItem::GetMisspellRanges() const
+{
+    return mpMisspellRanges;
 }
 
 //

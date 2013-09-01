@@ -394,6 +394,7 @@ public:
     bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
+    void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
 
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();
