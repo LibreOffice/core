@@ -13,7 +13,7 @@ $(eval $(call gb_Module_Module,embedserv))
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,embedserv,\
-	Library_inprocserv \
+	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,Library_inprocserv) \
 ))
 
 ifeq ($(DISABLE_ATL),)
