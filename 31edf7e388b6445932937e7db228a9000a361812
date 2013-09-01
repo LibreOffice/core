@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7uc\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "License header missing",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7uY\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "Why a global here?",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7uU\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "several issues here. First off, const ref to global / static object is ugly. if you want to avoid expensive copying, use a ptr with proper ownership transfer hints (auto_ptr, shared_ptr).\n\nthen, the name of this method does not tell me anything about what it does.\n\nand lastly, the extracted code is maybe a bit too special to sit in comphelper. why not only extract the part that does the vnd.sun.star.expand macro expansion on exactly one OUString? That also rids you of the vector prob from above.\n\nI recall 1-2 other places in all the code base using this vnd.sun.star.expand thing. can you please consolidate those to use your comphelper code, too?\n\nand have at least two separate commits / patches here; one with the objectlist changes, the other with the comphelper rework. git rebase -i, and/or git add -i is your friend when committing selectively.",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7uQ\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "if this would go in as-is (which I strongly suggest you\u0027re not) - but if it were, what is badly buggy with the above line?",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7uk\u003d",
+        "filename": "include/comphelper/configparser.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "Copyright / file header missing. For truly new content, please use TEMPLATE.SOURCECODE.HEADER option c)\n\nAlso, for new code, please use something akin COMPHELPER_SERVICEDECL_HXX_INCLUDED for include guards",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ug\u003d",
+        "filename": "include/comphelper/configparser.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-01T00:00:46Z",
+      "side": 1,
+      "message": "Why having a class here? This is not java, you can have functions at global or namespace scope. ;)",
+      "revId": "31edf7e388b6445932937e7db228a9000a361812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
