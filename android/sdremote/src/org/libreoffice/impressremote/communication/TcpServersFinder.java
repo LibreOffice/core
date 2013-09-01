@@ -32,7 +32,7 @@ import android.text.TextUtils;
 import org.libreoffice.impressremote.util.Intents;
 
 class TcpServersFinder implements ServersFinder, Runnable {
-    private static final int SEARCH_DELAY_IN_SECONDS = 10;
+    private static final int SEARCH_DELAY_IN_SECONDS = 5;
     private static final int BLOCKING_TIMEOUT_IN_SECONDS = 10;
 
     private static final int SEARCH_RESULT_BUFFER_SIZE = 1024;
