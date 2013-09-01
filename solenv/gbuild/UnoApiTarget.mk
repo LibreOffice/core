@@ -266,7 +266,7 @@ endef
 # Example:
 # If gb_UnoApiHeadersTarget_select_variant is defined as
 #
-# ifeq ($(DISABLE_DYNLOADING),YES)
+# ifeq ($(DISABLE_DYNLOADING),TRUE)
 # gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
 # else
 # gb_UnoApiHeadersTarget_select_variant = $(2)
