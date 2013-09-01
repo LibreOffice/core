@@ -347,8 +347,6 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
         virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
-        sal_uInt16 GetNumCount() const;
-        NumberSettings_Impl* GetNumSettingByIndex(sal_uInt16 nIndex) const;
         static NumberingTypeMgr* GetInstance()
         {
              if ( _instance == 0 )

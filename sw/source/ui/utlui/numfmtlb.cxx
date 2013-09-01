@@ -87,22 +87,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumFormatListBox(Window *pP
     return pListBox;
 }
 
-NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
-                                    const ResId& rResId, short nFormatType,
-                                    sal_uLong nDefFmt, sal_Bool bUsrFmts ) :
-    ListBox             ( pWin, rResId ),
-    nCurrFormatType     (-1),
-    nStdEntry           (0),
-    bOneArea            (sal_False),
-    nDefFormat          (nDefFmt),
-    pVw                 (pView),
-    pOwnFormatter       (0),
-    bShowLanguageControl(sal_False),
-    bUseAutomaticLanguage(sal_True)
-{
-    Init(nFormatType, bUsrFmts);
-}
-
 void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
 {
     SwView *pView = GetView();

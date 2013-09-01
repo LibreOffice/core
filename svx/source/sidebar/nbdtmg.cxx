@@ -1351,34 +1351,6 @@ NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr):
     //pNumSettingsArr( new NumSettingsArr_Impl ),
     pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
-    /*
-    for(sal_uInt16 i=0;i<aTypeMgr.GetNumCount();i++)
-    {
-        NumberSettings_Impl* _pSet = aTypeMgr.GetNumSettingByIndex(i);
-        if ( _pSet )
-        {
-            pNumberSettingsArr->GetObject(i)->nIndex = _pSet->nIndex;
-            pNumberSettingsArr->GetObject(i)->nIndexDefault = _pSet->nIndexDefault;
-            pNumberSettingsArr->GetObject(i)->sDescription = _pSet->sDescription;
-            pNumberSettingsArr->GetObject(i)->bIsCustomized = _pSet->bIsCustomized;
-            if ( _pSet->pNumSetting )
-            {
-                pNumberSettingsArr->GetObject(i)->pNumSetting->nNumberType = _pSet->pNumSetting->nNumberType;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->nParentNumbering = _pSet->pNumSetting->nParentNumbering;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->sPrefix = _pSet->pNumSetting->sPrefix;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->sSuffix = _pSet->pNumSetting->sSuffix;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->sBulletChar = _pSet->pNumSetting->sBulletChar;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->sBulletFont = _pSet->pNumSetting->sBulletFont;
-
-                pNumberSettingsArr->GetObject(i)->pNumSetting->eLabelFollowedBy = _pSet->pNumSetting->eLabelFollowedBy;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->nTabValue = _pSet->pNumSetting->nTabValue;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->eNumAlign = _pSet->pNumSetting->eNumAlign;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->nNumAlignAt = _pSet->pNumSetting->nNumAlignAt;
-                pNumberSettingsArr->GetObject(i)->pNumSetting->nNumIndentAt = _pSet->pNumSetting->nNumIndentAt;
-            }
-        }
-    }
-    */
     ImplLoad(OUString("standard.syb"));
 }
 
@@ -1591,23 +1563,6 @@ sal_Bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
         bRet = (*pNumberSettingsArr)[nIndex]->bIsCustomized;
 
     return bRet;
-}
-sal_uInt16 NumberingTypeMgr::GetNumCount() const
-{
-    sal_uInt16 nRet = 0;
-    if ( pNumberSettingsArr )
-        nRet = pNumberSettingsArr->size();
-
-    return nRet;
-}
-NumberSettings_Impl* NumberingTypeMgr::GetNumSettingByIndex(sal_uInt16 nIndex) const
-{
-    NumberSettings_Impl* pRet = 0;
-    if ( pNumberSettingsArr && nIndex< pNumberSettingsArr->size() )
-    {
-        pRet = (*pNumberSettingsArr)[nIndex].get();
-    }
-    return pRet;
 }
 /***************************************************************************************************
 **********************Multi-level /Outline Type lib*******************************************************

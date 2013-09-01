@@ -5,6 +5,8 @@
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 AffineMatrixItem::GetAffineMatrix2D() const
 BackingWindow::LinkStubWindowEventListener(void*, void*)
+Bcp47CountryEntry::getLocale() const
+BitmapReadAccess::GetColorWithFallback(long, long, BitmapColor const&) const
 BitmapWriteAccess::FillPolyPolygon(PolyPolygon const&)
 CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
 DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
@@ -150,7 +152,8 @@ drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
 drawinglayer::attribute::Sdr3DObjectAttribute::isDefault() const
 drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
 drawinglayer::geometry::ViewInformation2D::isDefault() const
-editeng::SectionAttribute::SectionAttribute()
+editeng::MisspellRange::MisspellRange()
+editeng::Section::Section()
 formula::DoubleVectorRefToken::GetArrayLength() const
 formula::FormulaDlg::CheckMatrix()
 formula::FormulaDlg::isUserMatrix() const
@@ -211,10 +214,9 @@ svx::sidebar::GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(unsigned short, Sfx
 svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LineWidthControl::GetValueSet()
 svx::sidebar::NumberingTypeMgr::GetNumCount() const
-svx::sidebar::NumberingTypeMgr::GetNumSettingByIndex(unsigned short) const
-svx::sidebar::NumberingTypeMgr::NumberingTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
 svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
+sw::util::HdFtDistanceGlue::EqualTopBottom(sw::util::HdFtDistanceGlue const&) const
 unoidl::UnoidlProvider::getConstant(unsigned int) const
 utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
 utl::toISO8601(com::sun::star::util::Time const&)
