@@ -34,34 +34,31 @@ namespace chart
 
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs, bool bWithRotation) :
-    SfxTabPage(pWindow, SchResId(TP_ALIGNMENT), rInAttrs),
-    aFlAlign        ( this, SchResId( FL_ALIGN ) ),
-    aCtrlDial       ( this, SchResId( CTR_DIAL ) ),
-    aFtRotate       ( this, SchResId( FT_DEGREES ) ),
-    aNfRotate       ( this, SchResId( NF_ORIENT ) ),
-    aCbStacked      ( this, SchResId( BTN_TXTSTACKED ) ),
-    aOrientHlp      ( aCtrlDial, aNfRotate, aCbStacked ),
-    aFtTextDirection( this, SchResId( FT_TEXTDIR ) ),
-    aLbTextDirection( this, SchResId( LB_TEXTDIR ), &aFtTextDirection )
+    SfxTabPage(pWindow, "TitleRotationTabPage","modules/schart/ui/titlerotationtabpage.ui", rInAttrs)
 {
-    FreeResource();
+    get(m_pCtrlDial,"dialCtrl");
+    get(m_pFtRotate,"degreeL");
+    get(m_pNfRotate,"OrientDegree");
+    get(m_pCbStacked,"stackedCB");
+    get(m_pFtTextDirection,"textdirL");
+    get(m_pLbTextDirection,"textdirLB");
+    get(m_pFtABCD,"labelABCD");
+    m_pCtrlDial->SetText(m_pFtABCD->GetText());
+    m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
 
-    aCbStacked.EnableTriState( sal_False );
-    aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
+    m_pCbStacked->EnableTriState( sal_False );
+    m_pOrientHlp->Enable( sal_True );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
 
     if( !bWithRotation )
     {
-        aOrientHlp.Hide();
-        Point aMove( 0, aCtrlDial.GetPosPixel().Y() - aFtTextDirection.GetPosPixel().Y() );
-        aFtTextDirection.SetPosPixel( aFtTextDirection.GetPosPixel() + aMove );
-        aLbTextDirection.SetPosPixel( aLbTextDirection.GetPosPixel() + aMove );
-
-        aLbTextDirection.SetHelpId( HID_SCH_TEXTDIRECTION_EQUATION );
+        m_pOrientHlp->Hide();
     }
 }
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
+    delete m_pOrientHlp;
 }
 
 SfxTabPage* SchAlignmentTabPage::Create(Window* pParent,
@@ -79,13 +76,13 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
 sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
-    bool bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
+    bool bStacked = m_pOrientHlp->GetStackedState() == STATE_CHECK;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
-    sal_Int32 nDegrees = bStacked ? 0 : aCtrlDial.GetRotation();
+    sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
-    SvxFrameDirection aDirection( aLbTextDirection.GetSelectEntryValue() );
+    SvxFrameDirection aDirection( m_pLbTextDirection->GetSelectEntryValue() );
     rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
 
     return sal_True;
@@ -96,14 +93,14 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
     const SfxPoolItem* pItem = GetItem( rInAttrs, SCHATTR_TEXT_DEGREES );
 
     sal_Int32 nDegrees = pItem ? ((const SfxInt32Item*)pItem)->GetValue() : 0;
-    aCtrlDial.SetRotation( nDegrees );
+    m_pCtrlDial->SetRotation( nDegrees );
 
     pItem = GetItem( rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
-    aOrientHlp.SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
+    m_pOrientHlp->SetStackedState( bStacked ? STATE_CHECK : STATE_NOCHECK );
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, sal_True, &pItem) == SFX_ITEM_SET)
-        aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 
 } //namespace chart
