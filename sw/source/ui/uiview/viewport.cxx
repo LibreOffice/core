@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "hintids.hxx"
 #include <vcl/help.hxx>
 #include <svx/ruler.hxx>
@@ -37,6 +39,7 @@
 #include <pagedesc.hxx>
 #include <workctrl.hxx>
 #include <crsskip.hxx>
+#include <touch/touch.h>
 
 #include <PostItMgr.hxx>
 
@@ -298,11 +301,12 @@ void SwView::SetVisArea( const Point &rPt, sal_Bool bUpdateScrollbar )
     // (fix: Bild.de, 200%) It does not work completly without alignment
     // Let's see how far we get with half BrushSize.
     Point aPt( rPt );
-//  const long nTmp = GetWrtShell().IsFrameView() ? BRUSH_SIZE/2 : BRUSH_SIZE;
-    const long nTmp = GetWrtShell().IsFrameView() ? 4 : 8;
     aPt = GetEditWin().LogicToPixel( aPt );
+#if HAVE_FEATURE_DESKTOP
+    const long nTmp = GetWrtShell().IsFrameView() ? 4 : 8;
     aPt.X() -= aPt.X() % nTmp;
     aPt.Y() -= aPt.Y() % nTmp;
+#endif
     aPt = GetEditWin().PixelToLogic( aPt );
 
     if ( aPt == m_aVisArea.TopLeft() )
@@ -1258,19 +1262,107 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     }
     else if( COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode() )
     {
-        int newZoom = 100 * (m_pWrtShell->GetViewOptions()->GetZoom() / 100.0) * (pWData->GetDelta() / 100.0);
-        SetZoom( SVX_ZOOM_PERCENT, std::max( 20, std::min( 600, newZoom ) ) );
+        // COMMAND_WHEEL_ZOOM_SCALE is de facto used only for Android and iOS, I think
+
+        // mobile touch zoom (pinch) section
+        // last location in pixels is defaulted to an illegal location
+        // (coordinates are always positive)
+        static Point lastLocationInPixels(0,0);
+        static const double NEW_ZOOM_START= -6666.66;
+        static double initialZoom = NEW_ZOOM_START;
+        static int rememberedZoom = 0;
+
+        // the target should remain the same in logic, regardless of eventual zoom
+        const Point & targetInLogic = GetEditWin().PixelToLogic(rCEvt.GetMousePosPixel());
+        double scale = double(pWData->GetDelta()) / double(MOBILE_ZOOM_SCALE_MULTIPLIER);
+
+        if( scale==0 )
+        {
+            // scale 0, means end of gesture, and zoom resets
+            rememberedZoom=0;
+        }
+        else
+        {
+            int preZoomByVCL = m_pWrtShell->GetViewOptions()->GetZoom();
+            bool isFirst = rememberedZoom != preZoomByVCL;
+
+            if( isFirst )
+            {
+                // If this is the start of a new zoom action, we take the value from VCL.
+                // Otherwise, we remeber the zoom from the previous action.
+                // This way we can be more accurate than VCL
+                initialZoom =(double) preZoomByVCL;
+            }
+
+            // each zooming event is scaling the initial zoom
+            int zoomTarget = int(initialZoom * scale);
+
+            // thresholding the zoom
+            zoomTarget = std::max( MOBILE_MAX_ZOOM_OUT, std::min( MOBILE_MAX_ZOOM_IN, zoomTarget ) );
+            long deltaX = 0, deltaY = 0;
+
+            // no point zooming if the target zoom is the same as the current zoom
+            if( zoomTarget != preZoomByVCL )
+            {
+
+                SetZoom( SVX_ZOOM_PERCENT, zoomTarget );
+
+                // getting the VCL post zoom
+                rememberedZoom = m_pWrtShell->GetViewOptions()->GetZoom();
+            }
+            else
+            {
+                rememberedZoom = preZoomByVCL;
+            }
+
+            // if there was no zoom
+            if( rememberedZoom == preZoomByVCL )
+            {
+                if( !isFirst )
+                {
+                    // If this is not the first location of the zoom, there is a valid last location.
+                    // Therefore, scroll the center of the gesture.
+                    // Explanation: without a zoom transpiring, the view will not change.
+                    // Therefore, we do a simple scrolll from screen center to screen center
+                    deltaX = rCEvt.GetMousePosPixel().X() - lastLocationInPixels.X();
+                    deltaY = rCEvt.GetMousePosPixel().Y() - lastLocationInPixels.Y();
+                }
+            }
+            else
+            {
+                // Otherwise, there was a zoom.
+                // Keep the on screen center of the pinch in the same on screen location
+                const Point & postZoomTargetInPixels = GetEditWin().LogicToPixel(targetInLogic);
+
+                deltaX = rCEvt.GetMousePosPixel().X() - postZoomTargetInPixels.X();
+                deltaY = rCEvt.GetMousePosPixel().Y() - postZoomTargetInPixels.Y();
+            }
+
+            if( (deltaX!=0) || (deltaY!=0) )
+            {
+                // Scrolling the deltaX deltaY
+                Point deltaPoint( deltaX, deltaY );
+                CommandWheelData cmd( 0, 0, 0, COMMAND_WHEEL_SCROLL, 0, 0, true);
+                CommandEvent event(deltaPoint , COMMAND_WHEEL, sal_True, &cmd );
+
+                m_pEditWin->HandleScrollCommand(event, m_pHScrollbar, m_pVScrollbar);
+            }
+
+            // store the last location
+            lastLocationInPixels = rCEvt.GetMousePosPixel();
+            }
+
         bOk = sal_True;
     }
     else
     {
-        if(pWData->GetMode()==COMMAND_WHEEL_SCROLL)
+        if( pWData->GetMode()==COMMAND_WHEEL_SCROLL )
         {
             // This influences whether quick help is shown
             m_bWheelScrollInProgress=true;
         }
 
-        if ((COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
+        if( (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()) )
         {
             if (pWData->GetDelta()<0)
                 PhyPageDown();
