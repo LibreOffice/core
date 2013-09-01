@@ -82,7 +82,7 @@ int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
              eUse       == rItem.eUse );
 }
 
-inline XubString GetUsageText( const sal_uInt16 eU )
+inline OUString GetUsageText( const sal_uInt16 eU )
 {
     switch( eU & 0x000f )
     {
@@ -90,7 +90,7 @@ inline XubString GetUsageText( const sal_uInt16 eU )
         case SVX_PAGE_RIGHT : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_RIGHT);
         case SVX_PAGE_ALL   : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_ALL);
         case SVX_PAGE_MIRROR: return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_MIRROR);
-        default:              return String();
+        default:              return OUString();
     }
 }
 
@@ -243,7 +243,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     sal_uInt16 nUse;
 
     // UNICODE: rStream >> sStr;
-    XubString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    OUString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
     rStream >> eType;
     rStream >> bLand;

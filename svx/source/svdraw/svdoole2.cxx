@@ -752,7 +752,7 @@ SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 
 // -----------------------------------------------------------------------------
 
-SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
+SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const OUString& rNewObjName, const Rectangle& rNewRect, bool bFrame_)
     : SdrRectObj(rNewRect)
     , xObjRef( rNewObjRef )
     , m_bTypeAsked(false)

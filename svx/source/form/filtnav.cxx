@@ -1024,7 +1024,7 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 class FmFilterItemsString : public SvLBoxString
 {
 public:
-    FmFilterItemsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
+    FmFilterItemsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -1085,7 +1085,7 @@ class FmFilterString : public SvLBoxString
     OUString m_aName;
 
 public:
-    FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rStr, const OUString& aName)
+    FmFilterString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr, const OUString& aName)
         :SvLBoxString(pEntry,nFlags,rStr)
         ,m_aName(aName)
     {

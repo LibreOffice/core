@@ -232,15 +232,15 @@ namespace sdr
             }
 
             // Build the text for the draft object
-            XubString aDraftText = GetGrafObject().GetFileName();
+            OUString aDraftText = GetGrafObject().GetFileName();
 
-            if(!aDraftText.Len())
+            if (aDraftText.isEmpty())
             {
                 aDraftText = GetGrafObject().GetName();
-                aDraftText.AppendAscii(" ...");
+                aDraftText += " ...";
             }
 
-            if(aDraftText.Len() && GetGrafObject().GetModel())
+            if (!aDraftText.isEmpty() && GetGrafObject().GetModel())
             {
                 // #i103255# Goal is to produce TextPrimitives which hold the given text as
                 // BlockText in the available space. It would be very tricky to do

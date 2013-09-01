@@ -914,7 +914,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
                                            &pTmpCurrencyEntry,
                                            &bTmpBanking);
 
-    XubString rShortSymbol;
+    OUString rShortSymbol;
 
     if(pCurCurrencyEntry==NULL)
     {
@@ -1559,8 +1559,8 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
 
     sal_uInt16 nStart=1;
 
-    XubString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol()));
-    aString += sal_Unicode(' ');
+    OUString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0].GetSymbol()));
+    aString += " ";
     aString += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[0].GetLanguage()));
 
     rList.push_back(aString);
@@ -1577,11 +1577,11 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
     CollatorWrapper aCollator( ::comphelper::getProcessComponentContext());
     aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0);
 
-    const String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  "));
+    const OUString aTwoSpace("  ");
 
     for(sal_uInt16 i = 1; i < nCount; ++i)
     {
-        XubString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol()));
+        OUString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i].GetBankSymbol()));
         aStr += aTwoSpace;
         aStr += ApplyLreOrRleEmbedding( rCurrencyTable[i].GetSymbol());
         aStr += aTwoSpace;
