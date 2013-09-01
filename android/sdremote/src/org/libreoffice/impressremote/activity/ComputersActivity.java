@@ -145,7 +145,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     }
 
     private int loadTabIndex() {
-        return Preferences.getApplicationStatesInstance(this).getInt("saved_tab");
+        return Preferences.getApplicationStatesInstance(this).getInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX);
     }
 
     private void setUpComputersList() {
@@ -211,7 +211,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void saveTabIndex() {
         int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
 
-        Preferences.getApplicationStatesInstance(this).setInt("saved_tab", aTabIndex);
+        Preferences.getApplicationStatesInstance(this).setInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX, aTabIndex);
     }
 }
 

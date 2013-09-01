@@ -23,6 +23,13 @@ public final class Preferences {
         public static final String APPLICATION_STATES = "application_states";
     }
 
+    public static final class Keys {
+        private Keys() {
+        }
+
+        public static final String SELECTED_COMPUTERS_TAB_INDEX = "selected_computers_tab_index";
+    }
+
     private final SharedPreferences mPreferences;
 
     public static Preferences getAuthorizedServersInstance(Context aContext) {
