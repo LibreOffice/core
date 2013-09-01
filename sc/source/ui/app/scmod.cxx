@@ -1229,10 +1229,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 if (pViewSh)
                     pViewSh->EnableAutoSpell(bDoAutoSpell);
 
-                //#92038#; don't set document modified, because this flag is no longer saved
-//              pDocSh->SetDocumentModified();
-
-                bRepaint = sal_True;            //  weil HideAutoSpell evtl. ungueltig
+                bRepaint = true;            //  weil HideAutoSpell evtl. ungueltig
                                             //! alle Views painten ???
             }
         }

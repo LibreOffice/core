@@ -428,7 +428,10 @@ void ScTabView::UpdateScrollBars()
     if ( aViewData.IsActive() )
     {
         if (UpdateVisibleRange())
+        {
             SC_MOD()->AnythingChanged();                // if visible area has changed
+            PaintGrid();
+        }
     }
 }
 

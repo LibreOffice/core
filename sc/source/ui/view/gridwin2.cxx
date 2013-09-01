@@ -605,7 +605,7 @@ bool ScGridWindow::UpdateVisibleRange()
     if (nYBottom > MAXROW) nYBottom = MAXROW;
 
     // Store the current visible range.
-    bool bChanged =  maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
+    bool bChanged = maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
     if (bChanged)
     {
         if (mpSpellCheckCxt)
