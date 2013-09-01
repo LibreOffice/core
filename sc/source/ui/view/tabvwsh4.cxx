@@ -82,6 +82,7 @@
 #include "defaultsoptions.hxx"
 #include "markdata.hxx"
 #include "preview.hxx"
+#include "docoptio.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -1475,8 +1476,9 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     SfxApplication* pSfxApp  = SFX_APP();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-
     bReadOnly = pDocSh->IsReadOnly();
+
+    EnableAutoSpell(pDoc->GetDocOptions().IsAutoSpell());
 
     SetName(OUString("View")); // fuer SBX
     Color aColBlack( COL_BLACK );

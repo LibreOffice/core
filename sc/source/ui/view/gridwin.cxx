@@ -445,7 +445,6 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             mpOOHeader( NULL ),
             mpOOShrink( NULL ),
             mpAutoFillRect(static_cast<Rectangle*>(NULL)),
-            mpSpellCheckCxt(new sc::SpellCheckContext),
             pViewData( pData ),
             eWhich( eWhichPos ),
             pNoteMarker( NULL ),
@@ -5386,6 +5385,9 @@ IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus*, pStatus)
 
 bool ScGridWindow::ContinueOnlineSpelling()
 {
+    if (!mpSpellCheckCxt)
+        return false;
+
     if (!mpSpellCheckCxt->maPos.isValid())
         return false;
 
@@ -5511,6 +5513,14 @@ bool ScGridWindow::ContinueOnlineSpelling()
     }
 
     return bChanged;
+}
+
+void ScGridWindow::EnableAutoSpell( bool bEnable )
+{
+    if (bEnable)
+        mpSpellCheckCxt.reset(new sc::SpellCheckContext);
+    else
+        mpSpellCheckCxt.reset();
 }
 
 // #114409#

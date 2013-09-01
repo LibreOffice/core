@@ -522,6 +522,7 @@ public:
     void            SetInRefMode( bool bRefMode );
 
     bool ContinueOnlineSpelling();
+    void EnableAutoSpell( bool bEnable );
 };
 
 

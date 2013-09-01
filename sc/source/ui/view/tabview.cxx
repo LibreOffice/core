@@ -2347,4 +2347,15 @@ bool ScTabView::ContinueOnlineSpelling()
     return bChanged;
 }
 
+void ScTabView::EnableAutoSpell( bool bEnable )
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        if (!pGridWin[i])
+            continue;
+
+        pGridWin[i]->EnableAutoSpell(bEnable);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

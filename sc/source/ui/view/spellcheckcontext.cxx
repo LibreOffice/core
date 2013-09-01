@@ -33,6 +33,12 @@ bool SpellCheckContext::CellPos::isValid() const
     return mnCol >= 0 && mnRow >= 0;
 }
 
+void SpellCheckContext::CellPos::reset()
+{
+    mnCol = 0;
+    mnRow = 0;
+}
+
 bool SpellCheckContext::CellPos::operator< (const CellPos& r) const
 {
     if (mnCol != r.mnCol)
@@ -63,6 +69,12 @@ const std::vector<editeng::MisspellRanges>* SpellCheckContext::getMisspellRanges
         return NULL;
 
     return &it->second;
+}
+
+void SpellCheckContext::reset()
+{
+    maPos.reset();
+    maMisspellCells.clear();
 }
 
 }

@@ -1226,6 +1226,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                     pDoc->RemoveAutoSpellObj();     //  Edit-Text-Objekte wieder zurueckwandeln
                 }
 
+                if (pViewSh)
+                    pViewSh->EnableAutoSpell(bDoAutoSpell);
+
                 //#92038#; don't set document modified, because this flag is no longer saved
 //              pDocSh->SetDocumentModified();
 

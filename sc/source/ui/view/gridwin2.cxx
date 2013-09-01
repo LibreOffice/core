@@ -40,9 +40,10 @@
 #include "checklistmenu.hrc"
 #include "strload.hxx"
 #include "userlist.hxx"
+#include "scabstdlg.hxx"
+#include "spellcheckcontext.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include "scabstdlg.hxx"
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -604,7 +605,14 @@ bool ScGridWindow::UpdateVisibleRange()
     if (nYBottom > MAXROW) nYBottom = MAXROW;
 
     // Store the current visible range.
-    return maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
+    bool bChanged =  maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
+    if (bChanged)
+    {
+        if (mpSpellCheckCxt)
+            mpSpellCheckCxt->reset();
+    }
+
+    return bChanged;
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )

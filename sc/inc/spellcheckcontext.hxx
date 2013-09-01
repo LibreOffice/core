@@ -34,6 +34,7 @@ struct SpellCheckContext
 
         void setInvalid();
         bool isValid() const;
+        void reset();
 
         bool operator< (const CellPos& r) const;
         bool operator== (const CellPos& r) const;
@@ -48,6 +49,8 @@ struct SpellCheckContext
 
     bool isMisspelled( SCCOL nCol, SCROW nRow ) const;
     const std::vector<editeng::MisspellRanges>* getMisspellRanges( SCCOL nCol, SCROW nRow ) const;
+
+    void reset();
 };
 
 }
