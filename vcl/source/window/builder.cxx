@@ -1372,6 +1372,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractStock(id, rMap);
         pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        //such parentless GtkImages are temps used to set icons on buttons
+        //default them to hidden to stop e.g. insert->index entry flicking temp
+        //full screen windows
+        if (!pParent)
+        {
+            rMap["visible"] = "false";
+        }
+
     }
     else if (name == "GtkSeparator")
     {
