@@ -189,9 +189,15 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , rParent(*pChildWindow)
 {
     m_sTitleSpellingGrammar = GetText();
+    m_sTitleSpelling = get<FixedText>("alttitleft")->GetText();
+
+    // fdo#68794 set initial title for cases where no text has been processed
+    // yet to show its language attributes
+    OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
+    SetText(sTitle.replaceFirst("$LANGUAGE ($LOCATION)", ""));
+
     m_sResumeST = get<FixedText>("resumeft")->GetText();
     m_sNoSuggestionsST = get<FixedText>("nosuggestionsft")->GetText();
-    m_sTitleSpelling = get<FixedText>("alttitleft")->GetText();
 
     get(m_pLanguageFT, "languageft");
     get(m_pLanguageLB, "languagelb");
