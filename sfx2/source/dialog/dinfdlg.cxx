@@ -2564,31 +2564,33 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
         std::vector< document::CmisProperty > changedProps;
         for ( sal_Int32 i = 0; i< aNewProps.getLength( ); ++i )
-        if ( aOldProps[i].Updatable && !aNewProps[i].Id.isEmpty( ) )
         {
-            if ( aOldProps[i].Type == CMIS_TYPE_DATETIME )
+            if ( aOldProps[i].Updatable && !aNewProps[i].Id.isEmpty( ) )
             {
-                Sequence< util::DateTime > oldValue;
-                aOldProps[i].Value >>= oldValue;
-                // We only edit hours and minutes
-                // don't compare NanoSeconds and Seconds
-                for ( sal_Int32 ii = 0; ii < oldValue.getLength( ); ++ii )
+                if ( aOldProps[i].Type == CMIS_TYPE_DATETIME )
                 {
-                    oldValue[ii].NanoSeconds = 0;
-                    oldValue[ii].Seconds = 0;
+                    Sequence< util::DateTime > oldValue;
+                    aOldProps[i].Value >>= oldValue;
+                    // We only edit hours and minutes
+                    // don't compare NanoSeconds and Seconds
+                    for ( sal_Int32 ii = 0; ii < oldValue.getLength( ); ++ii )
+                    {
+                        oldValue[ii].NanoSeconds = 0;
+                        oldValue[ii].Seconds = 0;
+                    }
+                    Sequence< util::DateTime > newValue;
+                    aNewProps[i].Value >>= newValue;
+                    if ( oldValue != newValue )
+                    {
+                        modifiedNum++;
+                        changedProps.push_back( aNewProps[i] );
+                    }
                 }
-                Sequence< util::DateTime > newValue;
-                aNewProps[i].Value >>= newValue;
-                if ( oldValue != newValue )
+                else if ( aOldProps[i].Value != aNewProps[i].Value )
                 {
                     modifiedNum++;
                     changedProps.push_back( aNewProps[i] );
                 }
-            }
-            else if ( aOldProps[i].Value != aNewProps[i].Value )
-            {
-                modifiedNum++;
-                changedProps.push_back( aNewProps[i] );
             }
         }
         Sequence< document::CmisProperty> aModifiedProps( modifiedNum );
