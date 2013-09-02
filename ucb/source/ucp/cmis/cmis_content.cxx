@@ -285,7 +285,7 @@ namespace cmis
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
                 // Initiate a CMIS session and register it as we found nothing
-                libcmis::OAuth2DataPtr oauth2Data = NULL;
+                libcmis::OAuth2DataPtr oauth2Data = 0;
                 if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     oauth2Data.reset( new libcmis::OAuth2Data(
                         GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
@@ -1106,7 +1106,7 @@ namespace cmis
             {
             }
 
-            if ( pFolder != NULL )
+            if ( pFolder != 0 )
             {
                 libcmis::ObjectPtr object;
                 map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
@@ -1790,7 +1790,7 @@ namespace cmis
         SAL_INFO( "cmisucp", "Content::getChildren() " << m_sURL );
 
         libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );
-        if ( NULL != pFolder )
+        if ( 0 != pFolder )
         {
             // Get the children from pObject
             try
