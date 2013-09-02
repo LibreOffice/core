@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7oA\u003d",
+        "filename": "comphelper/Library_comphelper.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "Can you align this with the rest of the file?",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7n8\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "this line (and a chunk of the following ones) might not needed in this file",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7n4\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "OUString is internally copy-on-write (and usually rather small \u0026 quick to copy anyway), so using auto_ptr here seems gratuitous.\n\n(I mentioned it in the other review, while it was still a vector here ;))",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7n0\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "Heh. So this is still only useful for this one single usecase in impress. if you move stuff to this module (which is used by many, many other places in LibO), it should be really generic.",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ns\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "the body of this loop really is the meat of this function, and what in my mind deserves to reside in comphelper.",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7nw\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "this overwrites aFilename each time, so only the last entry in the list will survive. not so useful.",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7no\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "just a random aside, and stylistic - treating the return statement as a function call is not idiomatic in LibO code. let\u0027s stick to plain \u0027return xFoo;\u0027",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7nk\u003d",
+        "filename": "include/comphelper/configparser.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "COMPHELPER_CONFIGPARSER_HXX_INCLUDED\n\nthe blueprint from the other file had \u003cMODULE_UPPERCASE\u003e_\u003cFILENAME\u003e_HXX_INCLUDED ;)",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ng\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "this one still misses the new $BRAND... macros",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7nc\u003d",
+        "filename": "test/Package_unittest.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-02T21:41:05Z",
+      "side": 1,
+      "message": "incidentally - did you get any hints wrt avoiding this duplication in the make system?",
+      "revId": "74e8fbd48e33145cf1d81a2416da3d77cd204422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
