@@ -83,6 +83,30 @@ ThumbnailView::~ThumbnailView()
     ImplDeleteItems();
 }
 
+void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
+{
+    if ( !mbShowTooltips )
+        return;
+
+    (void) rMEvt; // unused parameter
+    ThumbnailViewItem *pItem;
+    size_t      nItemCount = mFilteredItemList.size();
+    bool        bFound = false;
+    Point       aPoint = GetPointerState().maPos;
+
+    for ( size_t i = 0; i < nItemCount && !bFound; i++ )
+    {
+        pItem = mFilteredItemList[i];
+        if ( pItem->mbVisible && pItem->getDrawArea().IsInside(aPoint) )
+            bFound = true;
+    }
+
+    if ( bFound )
+        SetQuickHelpText(pItem->maTitle);
+    else
+        SetQuickHelpText("");
+}
+
 void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 {
     if (maFilterFunc(pItem))
@@ -110,7 +134,7 @@ void ThumbnailView::ImplInit()
     mnHeaderHeight      = 0;
     mnItemWidth         = 0;
     mnItemHeight        = 0;
-    mnItemPadding = 0;
+    mnItemPadding       = 0;
     mnVisLines          = 0;
     mnLines             = 0;
     mnFirstLine         = 0;
@@ -119,6 +143,7 @@ void ThumbnailView::ImplInit()
     mnSpacing           = 0;
     mbScroll            = false;
     mbHasVisibleItems   = false;
+    mbShowTooltips      = false;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetFieldColor();
     mpStartSelRange = mFilteredItemList.end();
@@ -1208,6 +1233,11 @@ OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
         return mFilteredItemList[nPos]->maTitle;
 
     return OUString();
+}
+
+void ThumbnailView::ShowTooltips( bool bShowTooltips )
+{
+    mbShowTooltips = bShowTooltips;
 }
 
 void ThumbnailView::SetColor( const Color& rColor )
