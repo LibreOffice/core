@@ -600,7 +600,6 @@ namespace cmis
                 }
                 else if ( rProp.Name == "TitleOnServer" )
                 {
-                    string path;
                     xRow->appendString( rProp, m_sObjectPath);
                 }
                 else if ( rProp.Name == "IsReadOnly" )
@@ -1490,8 +1489,6 @@ namespace cmis
 
     OUString Content::getParentURL( )
     {
-        OUString sRet;
-
         SAL_INFO( "ucb.ucp.cmis", "Content::getParentURL()" );
         OUString parentUrl = OUString( "/" );
         if ( m_sObjectPath == "/" )
@@ -1499,7 +1496,6 @@ namespace cmis
         else
         {
             INetURLObject aParentUrl( m_sURL );
-            string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
             aParentUrl.removeSegment( );
             return aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
         }
