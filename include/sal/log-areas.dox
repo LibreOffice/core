@@ -276,10 +276,10 @@ certain functionality.
 
 @section ucb
 
-@li @c cmisucp
 @li @c ucb
 @li @c ucb.core
 @li @c ucb.ucp
+@li @c ucb.ucp.cmis
 @li @c ucb.ucp.ext
 @li @c ucb.ucp.ftp
 @li @c ucb.ucp.gio

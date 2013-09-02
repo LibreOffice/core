@@ -51,7 +51,7 @@ namespace cmis
     {
         // Split the URL into bits
         OUString sURL = m_xIdentifier->getContentIdentifier( );
-        SAL_INFO( "cmisucp", "RepoContent::RepoContent() " << sURL );
+        SAL_INFO( "ucb.ucp.cmis", "RepoContent::RepoContent() " << sURL );
 
         m_sRepositoryId = m_aURL.getObjectPath( );
         if ( m_sRepositoryId[0] == '/' )
@@ -107,7 +107,7 @@ namespace cmis
                 else
                 {
                     xRow->appendVoid( rProp );
-                    SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
+                    SAL_INFO( "ucb.ucp.cmis", "Looking for unsupported property " << rProp.Name );
                 }
             }
             catch (const libcmis::Exception&)
@@ -164,7 +164,7 @@ namespace cmis
                 }
                 catch (const libcmis::Exception& e)
                 {
-                    SAL_INFO( "cmisucp", "Error getting repositories: " << e.what() );
+                    SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
                 }
             }
             else
@@ -256,7 +256,7 @@ namespace cmis
     {
         OUString sRet;
 
-        SAL_INFO( "cmisucp", "RepoContent::getParentURL()" );
+        SAL_INFO( "ucb.ucp.cmis", "RepoContent::getParentURL()" );
 
         // TODO Implement me
 
@@ -304,7 +304,7 @@ namespace cmis
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException )
     {
-        SAL_INFO( "cmisucp", "RepoContent::execute( ) - " << aCommand.Name );
+        SAL_INFO( "ucb.ucp.cmis", "RepoContent::execute( ) - " << aCommand.Name );
 
         uno::Any aRet;
 
@@ -333,7 +333,7 @@ namespace cmis
         }
         else
         {
-            SAL_INFO( "cmisucp", "Command not allowed" );
+            SAL_INFO( "ucb.ucp.cmis", "Command not allowed" );
         }
 
         return aRet;
@@ -341,7 +341,7 @@ namespace cmis
 
     void SAL_CALL RepoContent::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
     {
-        SAL_INFO( "cmisucp", "TODO - RepoContent::abort()" );
+        SAL_INFO( "ucb.ucp.cmis", "TODO - RepoContent::abort()" );
         // TODO Implement me
     }
 
@@ -366,7 +366,7 @@ namespace cmis
         list< uno::Reference< ucb::XContent > > result;
 
         // TODO Cache the results somehow
-        SAL_INFO( "cmisucp", "RepoContent::getChildren" );
+        SAL_INFO( "ucb.ucp.cmis", "RepoContent::getChildren" );
 
         if ( m_sRepositoryId.isEmpty( ) )
         {

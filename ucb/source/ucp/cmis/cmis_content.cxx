@@ -225,7 +225,7 @@ namespace cmis
         m_bTransient( false ),
         m_bIsFolder( false )
     {
-        SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
+        SAL_INFO( "ucb.ucp.cmis", "Content::Content() " << m_sURL );
 
         m_sObjectPath = m_aURL.getObjectPath( );
         m_sObjectId = m_aURL.getObjectId( );
@@ -243,7 +243,7 @@ namespace cmis
         m_bTransient( true ),
         m_bIsFolder( bIsFolder )
     {
-        SAL_INFO( "cmisucp", "Content::Content() " << m_sURL );
+        SAL_INFO( "ucb.ucp.cmis", "Content::Content() " << m_sURL );
 
         m_sObjectPath = m_aURL.getObjectPath( );
         m_sObjectId = m_aURL.getObjectId( );
@@ -433,7 +433,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -473,7 +473,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: "<< e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: "<< e.what( ) );
         }
 
         return updateObj;
@@ -811,7 +811,7 @@ namespace cmis
                     }
                 }
                 else
-                    SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
+                    SAL_INFO( "ucb.ucp.cmis", "Looking for unsupported property " << rProp.Name );
             }
             catch (const libcmis::Exception&)
             {
@@ -875,7 +875,7 @@ namespace cmis
                 // Note: rOpenCommand.Sink may contain an XStream
                 //       implementation. Support for this type of
                 //       sink is optional...
-                SAL_INFO( "cmisucp", "Failed to copy data to sink" );
+                SAL_INFO( "ucb.ucp.cmis", "Failed to copy data to sink" );
 
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny (ucb::UnsupportedDataSinkException
@@ -885,7 +885,7 @@ namespace cmis
             }
         }
         else
-            SAL_INFO( "cmisucp", "Open falling through ..." );
+            SAL_INFO( "ucb.ucp.cmis", "Open falling through ..." );
 
         return aRet;
     }
@@ -979,7 +979,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1045,7 +1045,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1075,7 +1075,7 @@ namespace cmis
             }
         }
 
-        SAL_INFO( "cmisucp", "TODO - Content::transfer()" );
+        SAL_INFO( "ucb.ucp.cmis", "TODO - Content::transfer()" );
     }
 
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
@@ -1256,7 +1256,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1308,7 +1308,7 @@ namespace cmis
             }
             else
             {
-                SAL_INFO( "cmisucp", "Couln't set property: " << rValue.Name );
+                SAL_INFO( "ucb.ucp.cmis", "Couln't set property: " << rValue.Name );
                 lang::IllegalAccessException e ( OUString("Property is read-only!"),
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
@@ -1324,7 +1324,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1367,7 +1367,7 @@ namespace cmis
         }
         catch ( const libcmis::Exception& e )
         {
-            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
             ucbhelper::cancelCommandExecution(
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
@@ -1492,7 +1492,7 @@ namespace cmis
     {
         OUString sRet;
 
-        SAL_INFO( "cmisucp", "Content::getParentURL()" );
+        SAL_INFO( "ucb.ucp.cmis", "Content::getParentURL()" );
         OUString parentUrl = OUString( "/" );
         if ( m_sObjectPath == "/" )
             return parentUrl;
@@ -1551,7 +1551,7 @@ namespace cmis
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException )
     {
-        SAL_INFO( "cmisucp", "Content::execute( ) - " << aCommand.Name );
+        SAL_INFO( "ucb.ucp.cmis", "Content::execute( ) - " << aCommand.Name );
         uno::Any aRet;
 
         if ( aCommand.Name == "getPropertyValues" )
@@ -1626,7 +1626,7 @@ namespace cmis
             }
             catch ( const libcmis::Exception& e )
             {
-                SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+                SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
@@ -1657,7 +1657,7 @@ namespace cmis
         }
         else
         {
-            SAL_INFO( "cmisucp", "Unknown command to execute" );
+            SAL_INFO( "ucb.ucp.cmis", "Unknown command to execute" );
 
             ucbhelper::cancelCommandExecution
                 ( uno::makeAny( ucb::UnsupportedCommandException
@@ -1671,7 +1671,7 @@ namespace cmis
 
     void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
     {
-        SAL_INFO( "cmisucp", "TODO - Content::abort()" );
+        SAL_INFO( "ucb.ucp.cmis", "TODO - Content::abort()" );
         // TODO Implement me
     }
 
@@ -1692,7 +1692,7 @@ namespace cmis
             create_document = false;
         else
         {
-            SAL_INFO( "cmisucp", "Unknown type of content to create" );
+            SAL_INFO( "ucb.ucp.cmis", "Unknown type of content to create" );
             return uno::Reference< ucb::XContent >();
         }
 
@@ -1787,7 +1787,7 @@ namespace cmis
     list< uno::Reference< ucb::XContent > > Content::getChildren( )
     {
         list< uno::Reference< ucb::XContent > > results;
-        SAL_INFO( "cmisucp", "Content::getChildren() " << m_sURL );
+        SAL_INFO( "ucb.ucp.cmis", "Content::getChildren() " << m_sURL );
 
         libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );
         if ( 0 != pFolder )
@@ -1819,7 +1819,7 @@ namespace cmis
             }
             catch ( const libcmis::Exception& e )
             {
-                SAL_INFO( "cmisucp", "Exception thrown: " << e.what() );
+                SAL_INFO( "ucb.ucp.cmis", "Exception thrown: " << e.what() );
             }
         }
 
