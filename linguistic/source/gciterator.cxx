@@ -754,13 +754,23 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
         m_xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
-    sal_Int32 nEndPosition;
+    sal_Int32 nEndPosition(0);
     sal_Int32 nTmpStartPos = nSentenceStartPos;
     do
     {
+        sal_Int32 const nPrevEndPosition(nEndPosition);
         nEndPosition = nTextLen;
         if (nTmpStartPos < nTextLen)
+        {
             nEndPosition = m_xBreakIterator->endOfSentence( rText, nTmpStartPos, rLocale );
+            if (nEndPosition <= nPrevEndPosition)
+            {
+                // fdo#68750 if there's no progress at all then presumably
+                // there's no end of sentence in this paragraph so just
+                // set the end position to end of paragraph
+                nEndPosition = nTextLen;
+            }
+        }
         if (nEndPosition < 0)
             nEndPosition = nTextLen;
 
