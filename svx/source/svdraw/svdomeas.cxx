@@ -80,7 +80,7 @@ SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 
 OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const
 {
-    String aStr;
+    OUString aStr;
     Fraction aMeasureScale(1, 1);
     sal_Bool bTextRota90(sal_False);
     sal_Bool bShowUnit(sal_False);
@@ -131,37 +131,36 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
                 if(!aFact.IsValid())
                 {
-                    aStr = String();
-                    aStr += sal_Unicode('?');
+                    aStr = "";
+                    aStr += "?";
                 }
 
                 sal_Unicode cDec(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
 
-                if(aStr.Search(cDec) != STRING_NOTFOUND)
+                if(aStr.indexOf(cDec) != -1)
                 {
-                    xub_StrLen nLen2(aStr.Len() - 1);
+                    sal_Int32 nLen2(aStr.getLength() - 1);
 
-                    while(aStr.GetChar(nLen2) == sal_Unicode('0'))
+                    while(aStr[nLen2] == '0')
                     {
-                        aStr.Erase(nLen2);
+                        aStr = aStr.copy(0, nLen2);
                         nLen2--;
                     }
 
-                    if(aStr.GetChar(nLen2) == cDec)
+                    if(aStr[nLen2] == cDec)
                     {
-                        aStr.Erase(nLen2);
+                        aStr = aStr.copy(0, nLen2);
                         nLen2--;
                     }
 
-                    if(!aStr.Len())
-                        aStr += sal_Unicode('0');
+                    if(aStr.isEmpty())
+                        aStr += "0";
                 }
             }
             else
             {
                 // if there's no Model ... (e. g. preview in dialog)
-                aStr = String();
-                aStr.AppendAscii("4711");
+                aStr = "4711";
             }
 
             break;
@@ -188,8 +187,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
         {
             if(bTextRota90)
             {
-                aStr = String();
-                aStr += sal_Unicode(' ');
+                aStr = " ";
             }
 
             break;

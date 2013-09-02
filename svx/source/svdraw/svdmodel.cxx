@@ -227,7 +227,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
     ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages(),
@@ -254,7 +254,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, boo
     ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages(),
@@ -554,7 +554,7 @@ void SdrModel::BegUndo()
     }
 }
 
-void SdrModel::BegUndo(const XubString& rComment)
+void SdrModel::BegUndo(const OUString& rComment)
 {
     if( mpImpl->mpUndoManager )
     {
@@ -572,15 +572,14 @@ void SdrModel::BegUndo(const XubString& rComment)
     }
 }
 
-void SdrModel::BegUndo(const XubString& rComment, const XubString& rObjDescr, SdrRepeatFunc eFunc)
+void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc)
 {
     if( mpImpl->mpUndoManager )
     {
-        String aComment(rComment);
-        if( aComment.Len() && rObjDescr.Len() )
+        OUString aComment(rComment);
+        if( !aComment.isEmpty() && !rObjDescr.isEmpty() )
         {
-            String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
-            aComment.SearchAndReplace(aSearchString, rObjDescr);
+            aComment = aComment.replaceFirst("%1", rObjDescr);
         }
         const String aEmpty;
         mpImpl->mpUndoManager->EnterListAction( aComment,aEmpty );
@@ -633,7 +632,7 @@ void SdrModel::EndUndo()
     }
 }
 
-void SdrModel::SetUndoComment(const XubString& rComment)
+void SdrModel::SetUndoComment(const OUString& rComment)
 {
     DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
 
@@ -650,7 +649,7 @@ void SdrModel::SetUndoComment(const XubString& rComment)
     }
 }
 
-void SdrModel::SetUndoComment(const XubString& rComment, const XubString& rObjDescr)
+void SdrModel::SetUndoComment(const OUString& rComment, const OUString& rObjDescr)
 {
     DBG_ASSERT(nUndoLevel!=0,"SdrModel::SetUndoComment(): UndoLevel is already 0!");
     if( mpImpl->mpUndoManager )
@@ -1166,7 +1165,7 @@ void SdrModel::SetUIUnit(FieldUnit eUnit, const Fraction& rScale)
     }
 }
 
-void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
+void SdrModel::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
 {
     switch(eUnit)
     {
@@ -1179,65 +1178,62 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_100TH_MM:
         {
-            rStr = OUString("/100mm");
+            rStr = "/100mm";
             break;
         }
         case FUNIT_MM     :
         {
-            rStr = OUString("mm");
+            rStr = "mm";
             break;
         }
         case FUNIT_CM     :
         {
-            rStr = OUString("cm");
+            rStr = "cm";
             break;
         }
         case FUNIT_M      :
         {
-            rStr = String();
-            rStr += sal_Unicode('m');
+            rStr = "m";
             break;
         }
         case FUNIT_KM     :
         {
-            rStr = OUString("km");
+            rStr ="km";
             break;
         }
         case FUNIT_TWIP   :
         {
-            rStr = OUString("twip");
+            rStr = "twip";
             break;
         }
         case FUNIT_POINT  :
         {
-            rStr = OUString("pt");
+            rStr = "pt";
             break;
         }
         case FUNIT_PICA   :
         {
-            rStr = OUString("pica");
+            rStr = "pica";
             break;
         }
         case FUNIT_INCH   :
         {
-            rStr = String();
-            rStr += sal_Unicode('"');
+            rStr = "\"";
             break;
         }
         case FUNIT_FOOT   :
         {
-            rStr = OUString("ft");
+            rStr = "ft";
             break;
         }
         case FUNIT_MILE   :
         {
-            rStr = OUString("mile(s)");
+            rStr = "mile(s)";
             break;
         }
         case FUNIT_PERCENT:
         {
-            rStr = String();
-            rStr += sal_Unicode('%');
+            rStr = "%";
             break;
         }
     }
@@ -1390,7 +1386,7 @@ void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar) const
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1412,10 +1408,10 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPer
     rStr = OUString::number(nMul);
 
     if(bNeg)
-        rStr.Insert(sal_Unicode('-'), 0);
+        rStr = "-" + rStr;
 
     if(!bNoPercentChar)
-        rStr += sal_Unicode('%');
+        rStr += "%";
 }
 
 void SdrModel::SetChanged(sal_Bool bFlg)

@@ -1798,7 +1798,7 @@ void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 
     if(bX || bY)
     {
-        XubString aStr;
+        OUString aStr;
 
         rStr += " (";
 

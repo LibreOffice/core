@@ -159,13 +159,13 @@ protected:
     std::vector<SdrPage*> maPages;
     Link           aUndoLink;  // Link fuer einen NotifyUndo-Handler
     Link           aIOProgressLink;
-    String         aTablePath;
+    OUString       aTablePath;
     Size           aMaxObjSize; // z.B. fuer Autogrowing Text
     Fraction       aObjUnit;   // Beschreibung der Koordinateneinheiten fuer ClipBoard, Drag&Drop, ...
     MapUnit        eObjUnit;   // see above
     FieldUnit      eUIUnit;      // Masseinheit, Masstab (z.B. 1/1000) fuer die UI (Statuszeile) wird von ImpSetUIUnit() gesetzt
     Fraction       aUIScale;     // see above
-    String         aUIUnitStr;   // see above
+    OUString       aUIUnitStr;   // see above
     Fraction       aUIUnitFact;  // see above
     int            nUIUnitKomma; // see above
 
@@ -300,9 +300,9 @@ public:
     // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
     // Wahl des Pools.
     explicit SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    explicit SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     virtual ~SdrModel();
     void ClearModel(sal_Bool bCalledFromDestructor);
 
@@ -406,14 +406,14 @@ public:
     void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
 
     const Fraction&  GetUIUnitFact() const                      { return aUIUnitFact; }
-    const String&    GetUIUnitStr() const                       { return aUIUnitStr; }
+    const OUString&  GetUIUnitStr() const                       { return aUIUnitStr; }
     int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
-    static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
+    static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void             TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
-    void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
+    void             TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.
     bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };
@@ -552,15 +552,15 @@ public:
     // Alle direkten Aktionen am SdrModel erzeugen keine UndoActions, die
     // Aktionen an der SdrView dagegen generieren solche.
     void BegUndo();                       // Undo-Klammerung auf
-    void BegUndo(const String& rComment); // Undo-Klammerung auf
-    void BegUndo(const String& rComment, const String& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // Undo-Klammerung auf
+    void BegUndo(const OUString& rComment); // Undo-Klammerung auf
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE); // Undo-Klammerung auf
     void EndUndo();                       // Undo-Klammerung zu
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
     const SdrUndoGroup* GetAktUndoGroup() const              { return pAktUndoGroup; }
     // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
-    void SetUndoComment(const String& rComment);
-    void SetUndoComment(const String& rComment, const String& rObjDescr);
+    void SetUndoComment(const OUString& rComment);
+    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
 
     // Das Undo-Management findet nur statt, wenn kein NotifyUndoAction-Handler
     // gesetzt ist.
