@@ -39,6 +39,7 @@
   <token tokenid="ooxml:trackchange"/>
   <token tokenid="ooxml:object"/>
   <token tokenid="ooxml:tblStart"/>
+  <token tokenid="ooxml:tblEnd"/>
   <token tokenid="ooxml:ffdata"/>
   <token tokenid="ooxml:starmath"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
