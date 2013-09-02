@@ -99,7 +99,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 DragMethod_RotateDiagram::~DragMethod_RotateDiagram()
 {
 }
-void DragMethod_RotateDiagram::TakeSdrDragComment(String& /*rStr*/) const
+void DragMethod_RotateDiagram::TakeSdrDragComment(OUString& /*rStr*/) const
 {
 }
 bool DragMethod_RotateDiagram::BeginSdrDrag()

@@ -1539,7 +1539,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
 
                 if( bUndo )
                 {
-                    String aStr;
+                    OUString aStr;
                     ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
@@ -1588,7 +1588,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
             {
                 if( IsUndoEnabled() )
                 {
-                    String aStr;
+                    OUString aStr;
                     ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));

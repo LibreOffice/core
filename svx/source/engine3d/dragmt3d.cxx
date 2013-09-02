@@ -120,7 +120,7 @@ E3dDragMethod::E3dDragMethod (
     }
 }
 
-void E3dDragMethod::TakeSdrDragComment(XubString& /*rStr*/) const
+void E3dDragMethod::TakeSdrDragComment(OUString& /*rStr*/) const
 {
 }
 

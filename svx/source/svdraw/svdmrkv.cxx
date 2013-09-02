@@ -1994,35 +1994,32 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal, sal_uInt16 nOpt) const
+void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, sal_uInt16 nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
-    xub_StrLen nPos = rStr.SearchAscii("%1");
+    sal_Int32 nPos = rStr.indexOf("%1");
 
-    if(nPos != STRING_NOTFOUND)
+    if(nPos != -1)
     {
-        rStr.Erase(nPos, 2);
-
         if(nOpt == IMPSDR_POINTSDESCRIPTION)
         {
-            rStr.Insert(GetDescriptionOfMarkedPoints(), nPos);
+            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedPoints());
         }
         else if(nOpt == IMPSDR_GLUEPOINTSDESCRIPTION)
         {
-            rStr.Insert(GetDescriptionOfMarkedGluePoints(), nPos);
+            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedGluePoints());
         }
         else
         {
-            rStr.Insert(GetDescriptionOfMarkedObjects(), nPos);
+            rStr = rStr.replaceAt(nPos, 2, GetDescriptionOfMarkedObjects());
         }
     }
 
-    nPos = rStr.SearchAscii("%2");
+    nPos = rStr.indexOf("%2");
 
-    if(nPos != STRING_NOTFOUND)
+    if(nPos != -1)
     {
-        rStr.Erase(nPos, 2);
-        rStr.Insert(OUString::number( nVal ), nPos);
+        rStr = rStr.replaceAt(nPos, 2, OUString::number( nVal ));
     }
 }
 

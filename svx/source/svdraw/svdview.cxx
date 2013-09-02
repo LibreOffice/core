@@ -1165,16 +1165,16 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 #define STR_NOTHING "nothing"
 OUString SdrView::GetStatusText()
 {
-    XubString aStr;
+    OUString aStr;
     XubString aName;
 
-    aStr.AppendAscii(STR_NOTHING);
+    aStr += STR_NOTHING;
 
     if (pAktCreate!=NULL)
     {
         aStr=pAktCreate->getSpecialDragComment(aDragStat);
 
-        if(!aStr.Len())
+        if(aStr.isEmpty())
         {
             aName = pAktCreate->TakeObjNameSingul();
             aStr = ImpGetResStr(STR_ViewCreateObj);
@@ -1253,17 +1253,17 @@ OUString SdrView::GetStatusText()
             if (nLen==0) bBrk=true; // to be sure
         }
 
-        aStr.SearchAndReplaceAscii("%1", OUString::number(nPar + 1));
-        aStr.SearchAndReplaceAscii("%2", OUString::number(nLin + 1));
-        aStr.SearchAndReplaceAscii("%3", OUString::number(nCol + 1));
+        aStr = aStr.replaceFirst("%1", OUString::number(nPar + 1));
+        aStr = aStr.replaceFirst("%2", OUString::number(nLin + 1));
+        aStr = aStr.replaceFirst("%3", OUString::number(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr += OUString( ", Level " );
+        aStr +=  ", Level " ;
         aStr += OUString::number( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
     }
 
-    if(aStr.EqualsAscii(STR_NOTHING))
+    if(aStr == STR_NOTHING)
     {
         if (AreObjectsMarked()) {
             ImpTakeDescriptionStr(STR_ViewMarked,aStr);
@@ -1277,19 +1277,19 @@ OUString SdrView::GetStatusText()
                 }
             }
         } else {
-            aStr.Erase();
+            aStr = "";
         }
     }
     else if(aName.Len())
     {
-        aStr.SearchAndReplaceAscii("%1", aName);
+        aStr = aStr.replaceFirst("%1", aName);
     }
 
-    if(aStr.Len())
+    if(!aStr.isEmpty())
     {
         // capitalize first letter
-        OUString aTmpStr(aStr.Copy(0, 1));
-        aStr.Replace(0, 1, aTmpStr.toAsciiUpperCase());
+        OUString aTmpStr(aStr.copy(0, 1));
+        aStr = aStr.replaceAt(0, 1, aTmpStr.toAsciiUpperCase());
     }
     return aStr;
 }

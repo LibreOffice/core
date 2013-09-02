@@ -84,7 +84,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy)
     long y1=rRect.Top();
     long w1=rRect.Right()-x1;
     long h1=rRect.Bottom()-y1;
-    XubString aStr;
+    OUString aStr;
     ImpTakeDescriptionStr(STR_EditPosSize,aStr);
     if (bCopy)
         aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -217,7 +217,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_EditResize,aStr);
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -254,7 +254,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_EditResize,aStr);
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -322,7 +322,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_EditRotate,aStr);
         if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
         BegUndo(aStr);
@@ -380,7 +380,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
 
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         Point aDif(rRef2-rRef1);
         if (aDif.X()==0) ImpTakeDescriptionStr(STR_EditMirrorHori,aStr);
         else if (aDif.Y()==0) ImpTakeDescriptionStr(STR_EditMirrorVert,aStr);
@@ -476,7 +476,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bo
 
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_EditShear,aStr);
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -593,7 +593,7 @@ void SdrEditView::CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookM
 
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(bNoContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -667,7 +667,7 @@ void SdrEditView::DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDisto
 
     if( bUndo )
     {
-        XubString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_EditDistort,aStr);
         if (bCopy)
             aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -1027,7 +1027,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
         {
-            XubString aStr;
+            OUString aStr;
             ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
             BegUndo(aStr);
         }
@@ -1207,7 +1207,7 @@ void SdrEditView::SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, sal_Bool bDo
 
         if( bUndo )
         {
-            XubString aStr;
+            OUString aStr;
             if (pStyleSheet!=NULL)
                 ImpTakeDescriptionStr(STR_EditSetStylesheet,aStr);
             else
@@ -1764,7 +1764,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_B
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
     {
-        XubString aStr(GetDescriptionOfMarkedObjects());
+        OUString aStr(GetDescriptionOfMarkedObjects());
         if (eHor==SDRHALIGN_NONE)
         {
             switch (eVert)

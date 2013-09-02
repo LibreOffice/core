@@ -155,7 +155,7 @@ protected:
     void createSdrDragEntries_GlueDrag();
 
     // old call forwarders to the SdrDragView
-    void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0) const;
+    void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0) const;
     SdrHdl*            GetDragHdl() const              { return getSdrDragView().pDragHdl; }
     SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().eDragHdl; }
     SdrDragStat&       DragStat()                      { return getSdrDragView().aDragStat; }
@@ -193,7 +193,7 @@ public:
 
     void Show();
     void Hide();
-    virtual void TakeSdrDragComment(String& rStr) const=0;
+    virtual void TakeSdrDragComment(OUString& rStr) const=0;
     virtual bool BeginSdrDrag()=0;
     virtual void MoveSdrDrag(const Point& rPnt)=0;
     virtual bool EndSdrDrag(bool bCopy)=0;
@@ -239,7 +239,7 @@ public:
     TYPEINFO();
     SdrDragMove(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -262,7 +262,7 @@ public:
     TYPEINFO();
     SdrDragResize(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -292,7 +292,7 @@ public:
     SdrDragObjOwn(SdrDragView& rNewView);
     virtual ~SdrDragObjOwn();
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);

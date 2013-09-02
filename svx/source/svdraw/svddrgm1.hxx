@@ -43,7 +43,7 @@ public:
     TYPEINFO();
     SdrDragMovHdl(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -67,7 +67,7 @@ public:
     TYPEINFO();
     SdrDragRotate(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -96,7 +96,7 @@ public:
     TYPEINFO();
     SdrDragShear(SdrDragView& rNewView,bool bSlant1);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -123,7 +123,7 @@ public:
     TYPEINFO();
     SdrDragMirror(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -151,7 +151,7 @@ public:
 
     bool IsGradient() const { return bIsGradient; }
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -201,7 +201,7 @@ public:
     TYPEINFO();
     SdrDragCrook(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -235,7 +235,7 @@ public:
     TYPEINFO();
     SdrDragDistort(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);
@@ -254,7 +254,7 @@ public:
     TYPEINFO();
     SdrDragCrop(SdrDragView& rNewView);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool EndSdrDrag(bool bCopy);
     virtual Pointer GetSdrDragPointer() const;
 };
