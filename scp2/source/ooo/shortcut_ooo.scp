@@ -18,46 +18,6 @@
 
 #include "macros.inc"
 
-#ifdef UNX
-#ifndef SYSTEM_ICU
-
-Shortcut gid_Shortcut_Lib_Icudata
-    FileID = gid_File_Lib_Icudata;
-    Dir = SCP2_OOO_LIB_DIR;
-#ifndef AIX
-    Name = STRING(CONCAT4(libicudata,UNXSUFFIX,.,ICU_MAJOR));
-#else
-    Name = "libicudata.so";
-#endif
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
-End
-
-Shortcut gid_Shortcut_Lib_Icui18n
-    FileID = gid_File_Lib_Icui18n;
-    Dir = SCP2_OOO_LIB_DIR;
-#ifndef AIX
-    Name = STRING(CONCAT4(libicui18n,UNXSUFFIX,.,ICU_MAJOR));
-#else
-    Name = "libicui18n.so";
-#endif
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
-End
-
-Shortcut gid_Shortcut_Lib_Icuuc
-    FileID = gid_File_Lib_Icuuc;
-    Dir = SCP2_OOO_LIB_DIR;
-#ifndef AIX
-    Name = STRING(CONCAT4(libicuuc,UNXSUFFIX,.,ICU_MAJOR));
-#else
-    Name = "libicuuc.so";
-#endif
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
-End
-
-#endif
-
-#endif
-
 #ifdef MACOSX
 
 #ifdef ENABLE_JAVA

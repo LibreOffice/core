@@ -196,7 +196,7 @@ End
 File gid_File_Lib_Icudata
     PACKED_LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT6(libicudata,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR));
+    Name = STRING(CONCAT4(libicudata,UNXSUFFIX,.,ICU_MAJOR));
   #else
   #ifdef MSVC_PKG_DEBUG_RUNTIME
     Name = STRING(CONCAT3(icudtd,ICU_MAJOR,.dll));
@@ -209,7 +209,7 @@ End
 File gid_File_Lib_Icui18n
     PACKED_LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT6(libicui18n,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR));
+    Name = STRING(CONCAT4(libicui18n,UNXSUFFIX,.,ICU_MAJOR));
   #else
   #ifdef MSVC_PKG_DEBUG_RUNTIME
     Name = STRING(CONCAT3(icuind,ICU_MAJOR,.dll));
@@ -222,7 +222,7 @@ End
 File gid_File_Lib_Icuuc
     PACKED_LIB_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT6(libicuuc,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR));
+    Name = STRING(CONCAT4(libicuuc,UNXSUFFIX,.,ICU_MAJOR));
   #else
   #ifdef MSVC_PKG_DEBUG_RUNTIME
     Name = STRING(CONCAT3(icuucd,ICU_MAJOR,.dll));
