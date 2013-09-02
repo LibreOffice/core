@@ -114,33 +114,18 @@ namespace vcl
     {
         if( bEnabled )
         {
-            m_pData->sCurrentSearchString += OUString(c);
-            OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
-
-            if ( m_pData->sCurrentSearchString.getLength() == 1 )
-            {   // first character in the search -> remmeber
-                m_pData->aSingleSearchChar.reset( c );
-            }
-            else if ( m_pData->sCurrentSearchString.getLength() > 1 )
-            {
-                if ( !!m_pData->aSingleSearchChar && ( *m_pData->aSingleSearchChar != c ) )
-                    // we already have a "single char", but the current one is different -> reset
-                    m_pData->aSingleSearchChar.reset();
-            }
-
-            OUString aSearchTemp( m_pData->sCurrentSearchString );
             sal_Unicode c = _keyEvent.GetCharCode();
 
             if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
             {
-                m_pData->sCurrentSearchString += c;
+                m_pData->sCurrentSearchString += OUString(c);
                 OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
-                if ( m_pData->sCurrentSearchString.Len() == 1 )
+                if ( m_pData->sCurrentSearchString.getLength() == 1 )
                 {   // first character in the search -> remmeber
                     m_pData->aSingleSearchChar.reset( c );
                 }
-                else if ( m_pData->sCurrentSearchString.Len() > 1 )
+                else if ( m_pData->sCurrentSearchString.getLength() > 1 )
                 {
                     if ( !!m_pData->aSingleSearchChar && ( *m_pData->aSingleSearchChar != c ) )
                         // we already have a "single char", but the current one is different -> reset
