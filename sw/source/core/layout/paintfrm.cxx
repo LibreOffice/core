@@ -2013,9 +2013,24 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         ///       ( background color is transparent OR
         ///         background graphic is transparent and background color is "no fill"
         ///       )
-        bool bDrawTransparent = bConsiderBackgroundTransparency &&
-                                ( ( aColor.GetTransparency() != 0) ||
-                                    bTransparentGrfWithNoFillBackgrd );
+
+        enum DrawStyle {
+            Default,
+            Transparent,
+            Gradient
+        } eDrawStyle = DrawStyle::Default;
+
+        // Gradient and transparency are mutually exclusive (need to check gradient first)
+        if (pFillStyleItem && pFillStyleItem->GetValue() == XFILL_GRADIENT && pFillGradientItem)
+        {
+            eDrawStyle = DrawStyle::Gradient;
+        }
+        else if (bConsiderBackgroundTransparency &&
+                ( ( aColor.GetTransparency() != 0) ||
+                bTransparentGrfWithNoFillBackgrd ) )
+        {
+            eDrawStyle = DrawStyle::Transparent;
+        }
 
         // #i75614# reset draw mode in high contrast mode in order to get fill color set
         const sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
@@ -2028,15 +2043,20 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         /// OD 06.08.2002 #99657# - if background region have to be drawn
         ///     transparent, set only the RGB values of the background color as
         ///     the fill color for the output device.
-        if ( bDrawTransparent )
+        switch (eDrawStyle)
         {
-            if( pOutDev->GetFillColor() != aColor.GetRGBColor() )
-                pOutDev->SetFillColor( aColor.GetRGBColor() );
-        }
-        else
-        {
-            if( pOutDev->GetFillColor() != aColor )
-                pOutDev->SetFillColor( aColor );
+            case DrawStyle::Transparent:
+            {
+                if( pOutDev->GetFillColor() != aColor.GetRGBColor() )
+                    pOutDev->SetFillColor( aColor.GetRGBColor() );
+                break;
+            }
+            default:
+            {
+                if( pOutDev->GetFillColor() != aColor )
+                    pOutDev->SetFillColor( aColor );
+                break;
+            }
         }
 
         // #i75614#
@@ -2044,57 +2064,66 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         pOutDev->SetDrawMode( nOldDrawMode );
 
         /// OD 02.09.2002 #99657#
-        if ( bDrawTransparent )
+        switch (eDrawStyle)
         {
-            /// background region have to be drawn transparent.
-            /// Thus, create a poly-polygon from the region and draw it with
-            /// the corresponding transparency precent.
-            PolyPolygon aDrawPoly( rOut.SVRect() );
-            if ( aGrf.HasArea() )
+            case DrawStyle::Transparent:
             {
-                if ( !bGrfIsTransparent )
+                /// background region have to be drawn transparent.
+                /// Thus, create a poly-polygon from the region and draw it with
+                /// the corresponding transparency precent.
+                PolyPolygon aDrawPoly( rOut.SVRect() );
+                if ( aGrf.HasArea() )
                 {
-                    /// substract area of background graphic from draw area
-                    /// OD 08.10.2002 #103898# - consider only that part of the
-                    ///     graphic area that is overlapping with draw area.
-                    SwRect aTmpGrf = aGrf;
-                    aTmpGrf.Intersection( rOut );
-                    if ( aTmpGrf.HasArea() )
+                    if ( !bGrfIsTransparent )
                     {
-                        Polygon aGrfPoly( aTmpGrf.SVRect() );
-                        aDrawPoly.Insert( aGrfPoly );
+                        /// substract area of background graphic from draw area
+                        /// OD 08.10.2002 #103898# - consider only that part of the
+                        ///     graphic area that is overlapping with draw area.
+                        SwRect aTmpGrf = aGrf;
+                        aTmpGrf.Intersection( rOut );
+                        if ( aTmpGrf.HasArea() )
+                        {
+                            Polygon aGrfPoly( aTmpGrf.SVRect() );
+                            aDrawPoly.Insert( aGrfPoly );
+                        }
                     }
+                    else
+                        bGrfBackgrdAlreadyDrawn = true;
                 }
+                /// calculate transparency percent:
+                /// ( <transparency value[0x01..0xFF]>*100 + 0x7F ) / 0xFF
+                /// If there is a background graphic with a background color "no fill"/"auto fill",
+                /// the transparency value is taken from the background graphic,
+                /// otherwise take the transparency value from the color.
+                sal_Int8 nTransparencyPercent = static_cast<sal_Int8>(
+                  (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
+                   )*100 + 0x7F)/0xFF);
+                /// draw poly-polygon transparent
+                pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
+
+                break;
+            }
+            case DrawStyle::Gradient:
+            {
+                pOutDev->DrawGradient(rOut.SVRect(), pFillGradientItem->GetGradientValue().VclGradient());
+                break;
+            }
+            case DrawStyle::Default:
+            default:
+            {
+                SwRegionRects aRegion( rOut, 4 );
+                if ( !bGrfIsTransparent )
+                    aRegion -= aGrf;
                 else
                     bGrfBackgrdAlreadyDrawn = true;
-            }
-            /// calculate transparency percent:
-            /// ( <transparency value[0x01..0xFF]>*100 + 0x7F ) / 0xFF
-            /// If there is a background graphic with a background color "no fill"/"auto fill",
-            /// the transparency value is taken from the background graphic,
-            /// otherwise take the transparency value from the color.
-            sal_Int8 nTransparencyPercent = static_cast<sal_Int8>(
-              (( bTransparentGrfWithNoFillBackgrd ? nGrfTransparency : aColor.GetTransparency()
-               )*100 + 0x7F)/0xFF);
-            /// draw poly-polygon transparent
-            pOutDev->DrawTransparent( aDrawPoly, nTransparencyPercent );
-        }
-        else if (!pFillStyleItem || pFillStyleItem->GetValue() != XFILL_GRADIENT || !pFillGradientItem)
-        {
-            SwRegionRects aRegion( rOut, 4 );
-            if ( !bGrfIsTransparent )
-                aRegion -= aGrf;
-            else
-                bGrfBackgrdAlreadyDrawn = true;
-            /// loop rectangles of background region, which has to be drawn
-            for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
-            {
-                pOutDev->DrawRect( aRegion[i].SVRect() );
+                /// loop rectangles of background region, which has to be drawn
+                for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                {
+                    pOutDev->DrawRect( aRegion[i].SVRect() );
+                }
             }
         }
-        else
-            pOutDev->DrawGradient(rOut.SVRect(), pFillGradientItem->GetGradientValue().VclGradient());
-       pOutDev ->Pop();
+        pOutDev ->Pop();
     }
 
     if( bDraw && aGrf.IsOver( rOut ) )
