@@ -1029,6 +1029,7 @@ void SmEditWindow::InsertText(const OUString& rText)
             pEditView->InsertText(rText);
         aModifyTimer.Start();
         StartCursorMove();
+        GrabFocus();
     }
 }
 
