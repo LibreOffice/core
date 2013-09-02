@@ -400,9 +400,9 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     if( NULL == SvxFmDrawPage::mpPage || !xShape.is() )
         return NULL;
 
-    String aType( xShape->getShapeType() );
-    const String aPrefix( "com.sun.star.presentation." );
-    if( aType.CompareTo( aPrefix, aPrefix.Len() ) != 0 )
+    OUString aType( xShape->getShapeType() );
+    const OUString aPrefix( "com.sun.star.presentation." );
+    if( !aType.startsWith( aPrefix ) )
     {
         SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
         if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
@@ -414,78 +414,78 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         return pObj;
     }
 
-    aType = aType.Copy( aPrefix.Len() );
+    aType = aType.copy( aPrefix.getLength() );
 
     PresObjKind eObjKind = PRESOBJ_NONE;
 
-    if( aType.EqualsAscii( "TitleTextShape" ) )
+    if( aType == "TitleTextShape" )
     {
         eObjKind = PRESOBJ_TITLE;
     }
-    else if( aType.EqualsAscii( "OutlinerShape" ) )
+    else if( aType == "OutlinerShape" )
     {
         eObjKind = PRESOBJ_OUTLINE;
     }
-    else if( aType.EqualsAscii( "SubtitleShape" ) )
+    else if( aType == "SubtitleShape" )
     {
         eObjKind = PRESOBJ_TEXT;
     }
-    else if( aType.EqualsAscii( "OLE2Shape" ) )
+    else if( aType == "OLE2Shape" )
     {
         eObjKind = PRESOBJ_OBJECT;
     }
-    else if( aType.EqualsAscii( "ChartShape" ) )
+    else if( aType == "ChartShape" )
     {
         eObjKind = PRESOBJ_CHART;
     }
-    else if( aType.EqualsAscii( "CalcShape" ) )
+    else if( aType == "CalcShape" )
     {
         eObjKind = PRESOBJ_CALC;
     }
-    else if( aType.EqualsAscii( "TableShape" ) )
+    else if( aType == "TableShape" )
     {
         eObjKind = PRESOBJ_TABLE;
     }
-    else if( aType.EqualsAscii( "GraphicObjectShape" ) )
+    else if( aType == "GraphicObjectShape" )
     {
         eObjKind = PRESOBJ_GRAPHIC;
     }
-    else if( aType.EqualsAscii( "OrgChartShape" ) )
+    else if( aType == "OrgChartShape" )
     {
         eObjKind = PRESOBJ_ORGCHART;
     }
-    else if( aType.EqualsAscii( "PageShape" ) )
+    else if( aType == "PageShape" )
     {
         if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
             eObjKind = PRESOBJ_TITLE;
         else
             eObjKind = PRESOBJ_PAGE;
     }
-    else if( aType.EqualsAscii( "NotesShape" ) )
+    else if( aType == "NotesShape" )
     {
         eObjKind = PRESOBJ_NOTES;
     }
-    else if( aType.EqualsAscii( "HandoutShape" ) )
+    else if( aType == "HandoutShape" )
     {
         eObjKind = PRESOBJ_HANDOUT;
     }
-    else if( aType.EqualsAscii( "FooterShape" ) )
+    else if( aType == "FooterShape" )
     {
         eObjKind = PRESOBJ_FOOTER;
     }
-    else if( aType.EqualsAscii( "HeaderShape" ) )
+    else if( aType == "HeaderShape" )
     {
         eObjKind = PRESOBJ_HEADER;
     }
-    else if( aType.EqualsAscii( "SlideNumberShape" ) )
+    else if( aType == "SlideNumberShape" )
     {
         eObjKind = PRESOBJ_SLIDENUMBER;
     }
-    else if( aType.EqualsAscii( "DateTimeShape" ) )
+    else if( aType == "DateTimeShape" )
     {
         eObjKind = PRESOBJ_DATETIME;
     }
-    else if( aType.EqualsAscii( "MediaShape" ) )
+    else if( aType == "MediaShape" )
     {
         eObjKind = PRESOBJ_MEDIA;
     }
@@ -1531,10 +1531,10 @@ void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
         sal_Int32 nIndex = rURL.indexOf( (sal_Unicode)'#' );
         if( nIndex != -1 )
         {
-            const String aFileName( rURL.copy( 0, nIndex ) );
-            const String aBookmarkName( SdDrawPage::getUiNameFromPageApiName( rURL.copy( nIndex+1 )  ) );
+            const OUString aFileName( rURL.copy( 0, nIndex ) );
+            const OUString aBookmarkName( SdDrawPage::getUiNameFromPageApiName( rURL.copy( nIndex+1 )  ) );
 
-            if( aFileName.Len() && aBookmarkName.Len() )
+            if( !aFileName.isEmpty() && !aBookmarkName.isEmpty() )
             {
                 static_cast<SdPage*>(SvxFmDrawPage::mpPage)->DisconnectLink();
                 static_cast<SdPage*>(SvxFmDrawPage::mpPage)->SetFileName( aFileName );
@@ -1897,10 +1897,10 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
-            String aStr( pObj->GetName() );
-            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+            OUString aStr( pObj->GetName() );
+            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
-            if( aStr.Len() )
+            if( !aStr.isEmpty() )
                 return sal_True;
         }
     }
@@ -1944,10 +1944,10 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
-            String aStr( pObj->GetName() );
-            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+            OUString aStr( pObj->GetName() );
+            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
-            if( aStr.Len() )
+            if( !aStr.isEmpty() )
                 nObjCount++;
         }
     }
@@ -1961,10 +1961,10 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         while( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();
-            String aStr( pObj->GetName() );
-            if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+            OUString aStr( pObj->GetName() );
+            if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
                 aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
-            if( aStr.Len() )
+            if( !aStr.isEmpty() )
                 *pStr++ = aStr;
         }
     }
@@ -1980,7 +1980,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != NULL;
 }
 
-SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
+SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();
     if( pPage == NULL )
@@ -1991,10 +1991,10 @@ SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
-        String aStr( pObj->GetName() );
-        if( !aStr.Len() && pObj->ISA( SdrOle2Obj ) )
+        OUString aStr( pObj->GetName() );
+        if( aStr.isEmpty() && pObj->ISA( SdrOle2Obj ) )
             aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
-        if( aStr.Len() && (aStr == rName) )
+        if( !aStr.isEmpty() && (aStr == rName) )
             return pObj;
     }
 
@@ -2157,17 +2157,16 @@ OUString getPageApiName( SdPage* pPage )
 }
 
 
-OUString getPageApiNameFromUiName( const String& rUIName )
+OUString getPageApiNameFromUiName( const OUString& rUIName )
 {
     OUString aApiName;
 
-    String aDefPageName(SdResId(STR_PAGE));
-    aDefPageName += sal_Unicode( ' ' );
+    OUString aDefPageName(SD_RESSTR(STR_PAGE) + " ");
 
-    if( rUIName.Equals( aDefPageName, 0, aDefPageName.Len() ) )
+    if( rUIName.startsWith( aDefPageName ) )
     {
         aApiName = OUString( sEmptyPageName );
-        aApiName += rUIName.Copy( aDefPageName.Len() );
+        aApiName += rUIName.copy( aDefPageName.getLength() );
     }
     else
     {
@@ -2177,17 +2176,17 @@ OUString getPageApiNameFromUiName( const String& rUIName )
     return aApiName;
 }
 
-OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
+OUString SdDrawPage::getPageApiNameFromUiName( const OUString& rUIName )
 {
     return ::getPageApiNameFromUiName( rUIName );
 }
 
-String getUiNameFromPageApiNameImpl( const OUString& rApiName )
+OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
 {
-    const String aDefPageName( sEmptyPageName );
-    if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
+    const OUString aDefPageName( sEmptyPageName );
+    if( rApiName.startsWith( aDefPageName ) )
     {
-        OUString aNumber( rApiName.copy( sizeof( sEmptyPageName ) - 1 ) );
+        OUString aNumber( rApiName.copy( aDefPageName.getLength() ) );
 
         // create the page number
         sal_Int32 nPageNumber = aNumber.toInt32();
@@ -2220,7 +2219,7 @@ String getUiNameFromPageApiNameImpl( const OUString& rApiName )
     return rApiName;
 }
 
-String SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
+OUString SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 {
     return getUiNameFromPageApiNameImpl( rApiName );
 }
@@ -2295,9 +2294,8 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         }
         else
         {
-            String aDefaultPageName( SdResId(STR_PAGE) );
-            aDefaultPageName += sal_Unicode( ' ' );
-            if( aName.compareTo( aDefaultPageName, aDefaultPageName.Len() ) == 0 )
+            OUString aDefaultPageName( SD_RESSTR(STR_PAGE) + " " );
+            if( aName.startsWith( aDefaultPageName ) )
                 aName = OUString();
         }
 
@@ -2932,8 +2930,8 @@ void SdMasterPage::setBackground( const Any& rValue )
             SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
-                String aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
-                aLayoutName.Erase(aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
+                OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
+                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
                 aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -2976,8 +2974,8 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
-                String aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
-                aLayoutName.Erase( aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
+                OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
+                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
                 aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -3068,10 +3066,8 @@ OUString SAL_CALL SdMasterPage::getName(  )
 
     if(SvxFmDrawPage::mpPage)
     {
-        String aLayoutName( GetPage()->GetLayoutName() );
-        aLayoutName = aLayoutName.Erase(aLayoutName.Search( String(SD_LT_SEPARATOR)));
-
-        return aLayoutName;
+        OUString aLayoutName( GetPage()->GetLayoutName() );
+        return aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
     }
 
     return OUString();

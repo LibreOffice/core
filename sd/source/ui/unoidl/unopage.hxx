@@ -173,8 +173,8 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SdDrawPage )
 
     static OUString getPageApiName( SdPage* pPage );
-    static OUString getPageApiNameFromUiName( const String& rUIName );
-    static String getUiNameFromPageApiName( const OUString& rApiName );
+    static OUString getPageApiNameFromUiName( const OUString& rUIName );
+    static OUString getUiNameFromPageApiName( const OUString& rApiName );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -285,7 +285,7 @@ public:
     virtual ~SdPageLinkTargets() throw();
 
     // intern
-    SdrObject* FindObject( const String& rName ) const throw();
+    SdrObject* FindObject( const OUString& rName ) const throw();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);

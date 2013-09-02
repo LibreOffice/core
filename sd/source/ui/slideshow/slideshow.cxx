@@ -68,7 +68,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing::framework;
 
-extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
+extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 
 namespace {

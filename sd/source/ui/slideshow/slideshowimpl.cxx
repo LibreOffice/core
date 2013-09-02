@@ -93,7 +93,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
 extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName );
-extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
+extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace sd
 {

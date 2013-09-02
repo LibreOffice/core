@@ -57,7 +57,7 @@ class DrawDocShell;
 }
 
 extern OUString getPageApiName( SdPage* pPage );
-extern OUString getPageApiNameFromUiName( const String& rUIName );
+extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
 /***********************************************************************
 *                                                                      *

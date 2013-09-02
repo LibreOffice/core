@@ -89,8 +89,8 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
 
-extern OUString getPageApiNameFromUiName( const String& rUIName );
-extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
+extern OUString getPageApiNameFromUiName( const OUString& rUIName );
+extern OUString getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 ///////////////////////////////////////////////////////////////////////
 
