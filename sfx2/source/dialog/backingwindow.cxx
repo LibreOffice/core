@@ -328,7 +328,8 @@ void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICAT
     pView->setItemMaxTextLength(nTemplateItemMaxTextLength);
 
     pView->setItemDimensions(nTemplateItemMaxWidth, nTemplateItemThumbnailMaxHeight,
-                              nTemplateItemMaxHeight-nTemplateItemMaxHeight, nTemplateItemPadding);
+                              nTemplateItemMaxHeight-nTemplateItemThumbnailMaxHeight,
+                              nTemplateItemPadding);
     pView->filterItems(ViewFilter_Application(eFilter));
     pView->Populate();
     pView->Hide(); // hidden by default
