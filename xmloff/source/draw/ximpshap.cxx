@@ -3426,8 +3426,9 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 void SdXMLFrameShapeContext::EndElement()
 {
     // solve if multiple image child contexts were imported
-    const SvXMLImportContext* const pSelectedContext(solveMultipleImages());
-    const SdXMLGraphicObjectShapeContext* pShapeContext( dynamic_cast<const SdXMLGraphicObjectShapeContext*>( pSelectedContext ) );
+    SvXMLImportContextRef const pSelectedContext(solveMultipleImages());
+    const SdXMLGraphicObjectShapeContext* pShapeContext(
+        dynamic_cast<const SdXMLGraphicObjectShapeContext*>(&pSelectedContext));
     if ( pShapeContext && !maShapeId.isEmpty() )
     {
         // fdo#64512 and fdo#60075 - make sure *this* shape is
