@@ -44,7 +44,7 @@ public:
     /// see imlementation for evtl. changing weights and/or adding filetypes.
     ///
     /// @returns import context of the selected image
-    const SvXMLImportContext* solveMultipleImages();
+    SvXMLImportContextRef solveMultipleImages();
 
     /// add a content to the remembered image import contexts
     void addContent(const SvXMLImportContext& rSvXMLImportContext);
