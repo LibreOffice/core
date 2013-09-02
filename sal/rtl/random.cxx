@@ -113,7 +113,7 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
     pImpl->m_hDigest = rtl_digest_create (RTL_RANDOM_DIGEST);
     if (pImpl->m_hDigest)
     {
-        oslThreadIdentifier id;
+        oslThreadIdentifier tid;
         TimeValue           tv;
         RandomData_Impl     rd;
         double              seed;
@@ -124,21 +124,21 @@ static sal_Bool __rtl_random_initPool (RandomPool_Impl *pImpl)
          */
 
         /*
-        __rtl_random_seedPool (pImpl, (sal_uInt8*)&id, sizeof(id));
+        __rtl_random_seedPool (pImpl, (sal_uInt8*)&tid, sizeof(tid));
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
         */
 
-        id = osl::Thread::getCurrentIdentifier();
-        id = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(id));
-        __rtl_random_seedPool (pImpl, (sal_uInt8*)&id, sizeof(id));
+        tid = osl::Thread::getCurrentIdentifier();
+        tid = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(tid));
+        __rtl_random_seedPool (pImpl, (sal_uInt8*)&tid, sizeof(tid));
 
         osl_getSystemTime (&tv);
         tv.Seconds = RTL_RANDOM_RNG_2(tv.Seconds);
         tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
 
-        rd.m_nX = (sal_Int16)(((id         >> 1) << 1) + 1);
+        rd.m_nX = (sal_Int16)(((tid         >> 1) << 1) + 1);
         rd.m_nY = (sal_Int16)(((tv.Seconds >> 1) << 1) + 1);
         rd.m_nZ = (sal_Int16)(((tv.Nanosec >> 1) << 1) + 1);
         __rtl_random_seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
