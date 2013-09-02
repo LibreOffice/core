@@ -285,7 +285,7 @@ namespace cmis
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
                 // Initiate a CMIS session and register it as we found nothing
-                libcmis::OAuth2DataPtr oauth2Data = 0;
+                libcmis::OAuth2DataPtr oauth2Data;
                 if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     oauth2Data.reset( new libcmis::OAuth2Data(
                         GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,

@@ -148,7 +148,7 @@ namespace cmis
                 try
                 {
                     // Create a session to get repositories
-                    libcmis::OAuth2DataPtr oauth2Data = 0;
+                    libcmis::OAuth2DataPtr oauth2Data;
 
                     libcmis::Session* session = libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
