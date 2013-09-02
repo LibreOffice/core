@@ -921,61 +921,54 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 
 SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
 
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_CLASSPATH ) ),
-
-    m_aPathLabel        ( this, CUI_RES( FT_PATH ) ),
-    m_aPathList         ( this, CUI_RES( LB_PATH ) ),
-    m_aAddArchiveBtn    ( this, CUI_RES( PB_ADDARCHIVE ) ),
-    m_aAddPathBtn       ( this, CUI_RES( PB_ADDPATH ) ),
-    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE_PATH ) ),
-    m_aButtonsLine      ( this, CUI_RES( FL_PATH_BUTTONS ) ),
-    m_aOKBtn            ( this, CUI_RES( PB_PATH_OK ) ),
-    m_aCancelBtn        ( this, CUI_RES( PB_PATH_ESC ) ),
-    m_aHelpBtn          ( this, CUI_RES( PB_PATH_HLP ) )
-
+    ModalDialog( pParent, "JavaClassPath", "cui/ui/javaclasspathdialog.ui" )
 {
-    FreeResource();
 
-    m_aAddArchiveBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
-    m_aAddPathBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
-    m_aRemoveBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
-    m_aPathList.SetSelectHdl( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
+    get( m_pPathList, "paths");
+    get( m_pAddArchiveBtn, "archive");
+    get( m_pAddPathBtn, "folder");
+    get( m_pRemoveBtn, "remove");
+
+    m_pAddArchiveBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
+    m_pAddPathBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
+    m_pPathList->SetSelectHdl( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
 
     // check if the buttons text are not too wide otherwise we have to stretch the buttons
     // and shrink the listbox
-    long nTxtWidth1 = m_aAddArchiveBtn.GetTextWidth( m_aAddArchiveBtn.GetText() );
-    long nTxtWidth2 = m_aAddPathBtn.GetTextWidth( m_aAddPathBtn.GetText() );
-    Size aBtnSz = m_aAddArchiveBtn.GetSizePixel();
+    long nTxtWidth1 = m_pAddArchiveBtn->GetTextWidth( m_pAddArchiveBtn->GetText() );
+    long nTxtWidth2 = m_pAddPathBtn->GetTextWidth( m_pAddPathBtn->GetText() );
+    Size aBtnSz = m_pAddArchiveBtn->GetSizePixel();
     if ( nTxtWidth1 > aBtnSz.Width() || nTxtWidth2 > aBtnSz.Width() )
     {
         long nW = ( nTxtWidth1 > aBtnSz.Width() ) ? nTxtWidth1 : nTxtWidth2;
         long nDelta = nW - aBtnSz.Width() + 2 * BUTTON_BORDER;
         aBtnSz.Width() += nDelta;
-        Point aBtnPnt = m_aAddArchiveBtn.GetPosPixel();
+        Point aBtnPnt = m_pAddArchiveBtn->GetPosPixel();
         aBtnPnt.X() -= nDelta;
-        m_aAddArchiveBtn.SetPosSizePixel( aBtnPnt, aBtnSz );
-        aBtnPnt = m_aAddPathBtn.GetPosPixel();
+        m_pAddArchiveBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
+        aBtnPnt = m_pAddPathBtn->GetPosPixel();
         aBtnPnt.X() -= nDelta;
-        m_aAddPathBtn.SetPosSizePixel( aBtnPnt, aBtnSz );
-        aBtnPnt = m_aRemoveBtn.GetPosPixel();
+        m_pAddPathBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
+        aBtnPnt = m_pRemoveBtn->GetPosPixel();
         aBtnPnt.X() -= nDelta;
-        m_aRemoveBtn.SetPosSizePixel( aBtnPnt, aBtnSz );
-        Size aBoxSz = m_aPathList.GetSizePixel();
+        m_pRemoveBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
+        Size aBoxSz = m_pPathList->GetSizePixel();
         aBoxSz.Width() -= nDelta;
-        m_aPathList.SetSizePixel( aBoxSz );
+        m_pPathList->SetSizePixel( aBoxSz );
     }
 
     // set initial focus to path list
-    m_aPathList.GrabFocus();
+    m_pPathList->GrabFocus();
 }
 
 // -----------------------------------------------------------------------
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    sal_uInt16 i, nCount = m_aPathList.GetEntryCount();
+    sal_uInt16 i, nCount = m_pPathList->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
-        delete static_cast< String* >( m_aPathList.GetEntryData(i) );
+        delete static_cast< String* >( m_pPathList->GetEntryData(i) );
 }
 
 // -----------------------------------------------------------------------
@@ -986,9 +979,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), OUString("*.jar;*.zip") );
     String sFolder;
-    if ( m_aPathList.GetSelectEntryCount() > 0 )
+    if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
-        INetURLObject aObj( m_aPathList.GetSelectEntry(), INetURLObject::FSYS_DETECT );
+        INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
         sFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
@@ -1001,8 +994,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            sal_uInt16 nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
-            m_aPathList.SelectEntryPos( nPos );
+            sal_uInt16 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
+            m_pPathList->SelectEntryPos( nPos );
         }
         else
         {
@@ -1023,9 +1016,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
 
     String sOldFolder;
-    if ( m_aPathList.GetSelectEntryCount() > 0 )
+    if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
-        INetURLObject aObj( m_aPathList.GetSelectEntry(), INetURLObject::FSYS_DETECT );
+        INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
         sOldFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
@@ -1038,8 +1031,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            sal_uInt16 nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
-            m_aPathList.SelectEntryPos( nPos );
+            sal_uInt16 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
+            m_pPathList->SelectEntryPos( nPos );
         }
         else
         {
@@ -1056,16 +1049,16 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl)
 {
-    sal_uInt16 nPos = m_aPathList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pPathList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        m_aPathList.RemoveEntry( nPos );
-        sal_uInt16 nCount = m_aPathList.GetEntryCount();
+        m_pPathList->RemoveEntry( nPos );
+        sal_uInt16 nCount = m_pPathList->GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
                 nPos = ( nCount - 1 );
-            m_aPathList.SelectEntryPos( nPos );
+            m_pPathList->SelectEntryPos( nPos );
         }
     }
 
@@ -1087,10 +1080,10 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 {
     bool bRet = false;
     INetURLObject aFileObj( _rPath );
-    sal_uInt16 nCount = m_aPathList.GetEntryCount();
+    sal_uInt16 nCount = m_pPathList->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        INetURLObject aOtherObj( m_aPathList.GetEntry(i), INetURLObject::FSYS_DETECT );
+        INetURLObject aOtherObj( m_pPathList->GetEntry(i), INetURLObject::FSYS_DETECT );
         if ( aOtherObj == aFileObj )
         {
             bRet = true;
@@ -1106,16 +1099,16 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 String SvxJavaClassPathDlg::GetClassPath() const
 {
     String sPath;
-    sal_uInt16 nCount = m_aPathList.GetEntryCount();
+    sal_uInt16 nCount = m_pPathList->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         if ( sPath.Len() > 0 )
             sPath += CLASSPATH_DELIMITER;
-        String* pFullPath = static_cast< String* >( m_aPathList.GetEntryData(i) );
+        String* pFullPath = static_cast< String* >( m_pPathList->GetEntryData(i) );
         if ( pFullPath )
             sPath += *pFullPath;
         else
-            sPath += m_aPathList.GetEntry(i);
+            sPath += m_pPathList->GetEntry(i);
     }
     return sPath;
 }
@@ -1126,7 +1119,7 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
 {
     if ( m_sOldPath.Len() == 0 )
         m_sOldPath = _rPath;
-    m_aPathList.Clear();
+    m_pPathList->Clear();
     xub_StrLen i;
     sal_Int32 nIdx = 0;
     xub_StrLen nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
@@ -1135,10 +1128,10 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
         String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
         String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
+        m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
     }
     // select first entry
-    m_aPathList.SelectEntryPos(0);
+    m_pPathList->SelectEntryPos(0);
     SelectHdl_Impl( NULL );
 }
 

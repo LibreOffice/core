@@ -158,16 +158,10 @@ public:
 class SvxJavaClassPathDlg : public ModalDialog
 {
 private:
-    FixedText               m_aPathLabel;
-    ListBox                 m_aPathList;
-    PushButton              m_aAddArchiveBtn;
-    PushButton              m_aAddPathBtn;
-    PushButton              m_aRemoveBtn;
-
-    FixedLine               m_aButtonsLine;
-    OKButton                m_aOKBtn;
-    CancelButton            m_aCancelBtn;
-    HelpButton              m_aHelpBtn;
+    ListBox*                 m_pPathList;
+    PushButton*              m_pAddArchiveBtn;
+    PushButton*              m_pAddPathBtn;
+    PushButton*              m_pRemoveBtn;
 
     String                  m_sOldPath;
 
@@ -178,15 +172,15 @@ private:
 
     bool                    IsPathDuplicate( const String& _rPath );
     inline void             EnableRemoveButton()
-                                { m_aRemoveBtn.Enable(
-                                    m_aPathList.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
+                                { m_pRemoveBtn->Enable(
+                                    m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
 public:
     SvxJavaClassPathDlg( Window* pParent );
     ~SvxJavaClassPathDlg();
 
     inline const String&    GetOldPath() const { return m_sOldPath; }
-    inline void             SetFocus() { m_aPathList.GrabFocus(); }
+    inline void             SetFocus() { m_pPathList->GrabFocus(); }
 
     String                  GetClassPath() const;
     void                    SetClassPath( const String& _rPath );

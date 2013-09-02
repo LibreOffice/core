@@ -37,20 +37,6 @@
 #define PB_PARAMETER_ESC    32
 #define PB_PARAMETER_HLP    33
 
-// class SvxJavaClassPathDlg ---------------------------------------------
-
-#define FT_PATH             10
-#define LB_PATH             11
-
-#define PB_ADDARCHIVE       20
-#define PB_ADDPATH          21
-#define PB_REMOVE_PATH      22
-
-#define FL_PATH_BUTTONS     30
-#define PB_PATH_OK          31
-#define PB_PATH_ESC         32
-#define PB_PATH_HLP         33
-
 #endif // #ifndef _SVX_OPTJAVA_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
