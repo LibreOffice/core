@@ -202,8 +202,12 @@ present_in_ui_langs(const char *lang)
 
 namespace {
 
+/* TODO-BCP47: unlimit this, and if possible change from '_' to '-' separator
+ * to ease things. */
+// XXX NOTE: the sizeof needs to follow what is accepted in
+// setup_native/source/packinfo/spellchecker_selection.pl
 struct InstallLocalized {
-    char lang[sizeof("xx_XX")];
+    char lang[sizeof("lll_Ssss_CC_vvvvvvvv")];
     bool install;
 };
 

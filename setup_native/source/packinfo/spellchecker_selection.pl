@@ -15,9 +15,14 @@ my $max = 0;
 
 while (<>) {
     next if /^\s*(#.*)?$/;
-    /^ \s* ([a-z]{2}(?:-[A-Z]{2})?) \s* = \s*
-       \"(EMPTY|[a-z]{2}(?:-[A-Z]{2})?(?:,[a-z]{2}(?:-[A-Z]{2})?)*)\" \s* $/x
-        or die "bad input line \"$_\"";
+    # Accept combinations of lll-Ssss-CC-vvvvvvvv
+    # XXX NOTE: when changing this also adapt
+    # setup_native/source/win32/customactions/sellang/sellang.cxx
+    # struct InstallLocalized{ char lang[sizeof(...)]; }
+    /^ \s*     ([a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2})?(?:-[a-z]{5,8})?) \s* = \s*
+       \"(EMPTY|[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2})?(?:-[a-z]{5,8})?
+            (?:,[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2})?(?:-[a-z]{5,8})?)*)\" \s* $/x
+        or die "unexpected input line \"$_\"";
     my $lang = $1;
     $lang =~ tr/-/_/;
     my $dicts = $2;
