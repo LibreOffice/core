@@ -85,26 +85,6 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
         SvtAcceleratorItemList& m_aReadAcceleratorList;
 };
 
-
-class OWriteAccelatorDocumentHandler
-{
-    public:
-        OWriteAccelatorDocumentHandler(
-            const SvtAcceleratorItemList& aWriteAcceleratorList,
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > );
-        virtual ~OWriteAccelatorDocumentHandler();
-
-        void WriteAcceleratorDocument() throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
-    private:
-        void WriteAcceleratorItem( const SvtAcceleratorConfigItem& aAcceleratorItem ) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > m_xEmptyList;
-        OUString                                         m_aAttributeType;
-        const SvtAcceleratorItemList&                           m_aWriteAcceleratorList;
-};
-
 #endif // INCLUDED_unotools_XMLACCELCFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

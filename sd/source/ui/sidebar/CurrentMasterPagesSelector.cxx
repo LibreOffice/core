@@ -318,35 +318,6 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     return 0;
 }
 
-
-
-
-void CurrentMasterPagesSelector::NotifyHint (SfxBroadcaster&, const SfxHint& rHint)
-{
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint != NULL)
-    {
-        if (pSimpleHint->GetId() == SFX_HINT_DOCCHANGED)
-        {
-            // Is the edit view visible in the center pane?
-            ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
-                ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-            if (pDrawViewShell.get() != NULL)
-            {
-                // Is the edit view in master page mode?
-                if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
-                {
-                    // Mark the currently edited master page as precious.
-                    SdPage* pCurrentMasterPage = pDrawViewShell->getCurrentPage();
-                    if (pCurrentMasterPage != NULL)
-                        pCurrentMasterPage->SetPrecious(true);
-                }
-            }
-        }
-    }
-}
-
-
 } } // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

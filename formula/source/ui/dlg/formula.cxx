@@ -1787,11 +1787,6 @@ void FormulaDlg::Update()
     m_pImpl->aTimer.Start();
 }
 
-// -----------------------------------------------------------------------------
-sal_Bool FormulaDlg::isUserMatrix() const
-{
-    return m_pImpl->bUserMatrixFlag;
-}
 void FormulaDlg::DoEnter(sal_Bool _bOk)
 {
     m_pImpl->DoEnter(_bOk);

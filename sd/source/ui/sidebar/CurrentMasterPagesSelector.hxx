@@ -78,7 +78,6 @@ private:
     virtual void LateInit (void);
 
     DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent*);
-    void NotifyHint (SfxBroadcaster&, const SfxHint& rHint);
 };
 
 } } // end of namespace sd::sidebar
