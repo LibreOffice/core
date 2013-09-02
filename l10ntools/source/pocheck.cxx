@@ -9,7 +9,11 @@
 
 #include <iostream>
 #include <map>
+#include <list>
+#include <vector>
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <osl/file.hxx>
 #include "po.hxx"
 
 // Translated style names must be unique
@@ -17,6 +21,8 @@ static void checkStyleNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
+    std::list<PoEntry*> repeatedEntries;
+
     OString aPoPath = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +
                       aLanguage + "/sw/source/ui/utlui.po";
@@ -27,32 +33,42 @@ static void checkStyleNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry aPoEntry;
-        aPoInput.readEntry(aPoEntry);
+        PoEntry* aPoEntry = new PoEntry();
+        aPoInput.readEntry(*aPoEntry);
+        bool bRepeated = false;
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry.isFuzzy() && aPoEntry.getSourceFile() == "poolfmt.src" &&
-            aPoEntry.getGroupId().startsWith("STR_POOLCOLL") )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getSourceFile() == "poolfmt.src" &&
+            aPoEntry->getGroupId().startsWith("STR_POOLCOLL") )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedStyleNames.find(aMsgStr) == aLocalizedStyleNames.end() )
                 aLocalizedStyleNames[aMsgStr] = 1;
-            else
+            else {
                 aLocalizedStyleNames[aMsgStr]++;
+                bRepeated = true;
+            }
         }
-        if( !aPoEntry.isFuzzy() && aPoEntry.getSourceFile() == "poolfmt.src" &&
-            aPoEntry.getGroupId().startsWith("STR_POOLNUMRULE") )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getSourceFile() == "poolfmt.src" &&
+            aPoEntry->getGroupId().startsWith("STR_POOLNUMRULE") )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedNumStyleNames.find(aMsgStr) == aLocalizedNumStyleNames.end() )
                 aLocalizedNumStyleNames[aMsgStr] = 1;
-            else
+            else {
                 aLocalizedNumStyleNames[aMsgStr]++;
+                bRepeated = true;
+            }
         }
+        if (bRepeated)
+            repeatedEntries.push_back(aPoEntry);
+         else
+            delete aPoEntry;
+
     }
     aPoInput.close();
 
@@ -74,6 +90,43 @@ static void checkStyleNames(OString aLanguage)
                 "\nSee STR_POOLNUMRULE_*\n\n";
         }
     }
+    aPoInput.open(aPoPath);
+    if( !aPoInput.isOpen() )
+        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+    PoOfstream aPoOutput;
+    aPoOutput.open(aPoPath+".new");
+    PoHeader aTmp("sw/source/ui/utlui");
+    aPoOutput.writeHeader(aTmp);
+    bool bAnyError = false;
+
+    for(;;)
+    {
+        PoEntry aPoEntry;
+        bool bError = false;
+        aPoInput.readEntry(aPoEntry);
+        if( aPoInput.eof() )
+            break;
+        for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
+            if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId()) {
+                bError = true;
+                break;
+            }
+        }
+        if (bError) {
+            bAnyError = true;
+        } else {
+            aPoOutput.writeEntry(aPoEntry);
+        }
+    }
+    aPoInput.close();
+    aPoOutput.close();
+    OUString aPoPathURL;
+    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    if( bAnyError )
+        osl::File::move(aPoPathURL + ".new", aPoPathURL);
+    else
+        osl::File::remove(aPoPathURL + ".new");
+
 }
 
 // Translated spreadsheet function names must be unique
@@ -81,119 +134,138 @@ static void checkFunctionNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
-    OString aPoPath = OString(getenv("SRC_ROOT")) +
+    //
+    std::list<PoEntry*> repeatedEntries;
+
+    OString aPoPaths[4];
+    OUString aPoPathURL;
+
+    aPoPaths[0] = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +
                       aLanguage +
                       "/formula/source/core/resource.po";
     PoIfstream aPoInput;
-    aPoInput.open(aPoPath);
+    aPoInput.open(aPoPaths[0]);
     if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        std::cerr << "Warning: Cannot open " << aPoPaths[0] << std::endl;
 
     for(;;)
     {
-        PoEntry aPoEntry;
-        aPoInput.readEntry(aPoEntry);
+        PoEntry* aPoEntry = new PoEntry();
+        aPoInput.readEntry(*aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_STRLIST_FUNCTION_NAMES" )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_STRLIST_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) == aLocalizedCoreFunctionNames.end() )
                 aLocalizedCoreFunctionNames[aMsgStr] = 1;
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() )
+            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-            else
+                delete aPoEntry;
+            } else {
                 aLocalizedFunctionNames[aMsgStr]++;
+                repeatedEntries.push_back(aPoEntry);
+            }
         }
     }
     aPoInput.close();
 
-    aPoPath = OString(getenv("SRC_ROOT")) +
+    aPoPaths[1] = OString(getenv("SRC_ROOT")) +
         "/translations/source/" +
         aLanguage +
         "/scaddins/source/analysis.po";
-    aPoInput.open(aPoPath);
+    aPoInput.open(aPoPaths[1]);
     if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        std::cerr << "Warning: Cannot open " << aPoPaths[1] << std::endl;
 
     for(;;)
     {
-        PoEntry aPoEntry;
-        aPoInput.readEntry(aPoEntry);
+        PoEntry* aPoEntry = new PoEntry();
+        aPoInput.readEntry(*aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_ANALYSIS_FUNCTION_NAMES" )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_ANALYSIS_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() )
+            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-            else
+                delete aPoEntry;
+            } else {
                 aLocalizedFunctionNames[aMsgStr]++;
+                repeatedEntries.push_back(aPoEntry);
+            }
         }
     }
     aPoInput.close();
 
-    aPoPath = OString(getenv("SRC_ROOT")) +
+
+    aPoPaths[2] = OString(getenv("SRC_ROOT")) +
               "/translations/source/" +
                aLanguage +
               "/scaddins/source/datefunc.po";
-    aPoInput.open(aPoPath);
+    aPoInput.open(aPoPaths[2]);
     if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        std::cerr << "Warning: Cannot open " << aPoPaths[2] << std::endl;
 
     for(;;)
     {
-        PoEntry aPoEntry;
-        aPoInput.readEntry(aPoEntry);
+        PoEntry* aPoEntry = new PoEntry();
+        aPoInput.readEntry(*aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_DATE_FUNCTION_NAMES" )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_DATE_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() )
+            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-            else
+                delete aPoEntry;
+            } else {
                 aLocalizedFunctionNames[aMsgStr]++;
+                repeatedEntries.push_back(aPoEntry);
+            }
         }
     }
     aPoInput.close();
 
-    aPoPath = OString(getenv("SRC_ROOT")) +
+    aPoPaths[3] = OString(getenv("SRC_ROOT")) +
               "/translations/source/" +
                aLanguage +
               "/scaddins/source/pricing.po";
-    aPoInput.open(aPoPath);
+    aPoInput.open(aPoPaths[3]);
     if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        std::cerr << "Warning: Cannot open " << aPoPaths[3] << std::endl;
 
     for(;;)
     {
-        PoEntry aPoEntry;
-        aPoInput.readEntry(aPoEntry);
+        PoEntry* aPoEntry = new PoEntry();
+        aPoInput.readEntry(*aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
+        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry.getMsgStr();
+            OString aMsgStr = aPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
-            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() )
+            if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-            else
+                delete aPoEntry;
+            } else {
                 aLocalizedFunctionNames[aMsgStr]++;
+                repeatedEntries.push_back(aPoEntry);
+            }
         }
     }
     aPoInput.close();
@@ -205,6 +277,56 @@ static void checkFunctionNames(OString aLanguage)
                 "Language: " << aLanguage <<
                 "\nDuplicated translation is: " << it->first << "\n\n";
         }
+    }
+    //
+    for (int i=0;i<4;i++) {
+        aPoInput.open(aPoPaths[i]);
+        if( !aPoInput.isOpen() )
+            std::cerr << "Warning: Cannot open " << aPoPaths[i] << std::endl;
+        PoOfstream aPoOutput;
+        aPoOutput.open(aPoPaths[i]+".new");
+
+        switch (i) {
+            case 0:
+                aPoOutput.writeHeader(PoHeader("formula/source/core/resource"));
+                break;
+            case 1:
+                aPoOutput.writeHeader(PoHeader("scaddins/source/analysis"));
+                break;
+            case 2:
+                aPoOutput.writeHeader(PoHeader("scaddins/source/datefunc"));
+                break;
+            case 3:
+                aPoOutput.writeHeader(PoHeader("scaddins/source/pricing"));
+        }
+        bool bAnyError = false;
+
+        for(;;)
+        {
+            PoEntry aPoEntry;
+            bool bError = false;
+            aPoInput.readEntry(aPoEntry);
+            if( aPoInput.eof() )
+                break;
+            for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
+                if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId()) {
+                    bError = true;
+                    break;
+                }
+            }
+            if (bError) {
+                bAnyError = true;
+            } else {
+                aPoOutput.writeEntry(aPoEntry);
+            }
+        }
+        aPoInput.close();
+        aPoOutput.close();
+        osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPaths[i], RTL_TEXTENCODING_UTF8), aPoPathURL);
+        if( bAnyError )
+            osl::File::move(aPoPathURL + ".new", aPoPathURL);
+        else
+            osl::File::remove(aPoPathURL + ".new");
     }
 }
 
@@ -219,8 +341,13 @@ static void checkVerticalBar(OString aLanguage)
                       "/instsetoo_native/inc_openoffice/windows/msi_languages.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
+    PoOfstream aPoOutput;
+    aPoOutput.open(aPoPath+".new");
     if( !aPoInput.isOpen() )
         std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+    PoHeader aTmp("instsetoo_native/inc_openoffice/windows/msi_languages");
+    aPoOutput.writeHeader(aTmp);
+    bool bError = false;
 
     for(;;)
     {
@@ -237,9 +364,19 @@ static void checkVerticalBar(OString aLanguage)
                 "Language: " << aLanguage << std::endl <<
                 "English:   " << aPoEntry.getMsgId() << std::endl <<
                 "Localized: " << aPoEntry.getMsgStr() << std::endl << std::endl;
+            bError = true;
         }
+        else
+            aPoOutput.writeEntry(aPoEntry);
     }
     aPoInput.close();
+    aPoOutput.close();
+    OUString aPoPathURL;
+    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    if( bError )
+        osl::File::move(aPoPathURL + ".new", aPoPathURL);
+    else
+        osl::File::remove(aPoPathURL + ".new");
 }
 
 // In starmath/source.po Math symbol names (from symbol.src)
@@ -252,8 +389,13 @@ static void checkMathSymbolNames(OString aLanguage)
                       "/starmath/source.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
+    PoOfstream aPoOutput;
+    aPoOutput.open(aPoPath+".new");
     if( !aPoInput.isOpen() )
         std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+    PoHeader aTmp("starmath/source");
+    aPoOutput.writeHeader(aTmp);
+    bool bError = false;
 
     for(;;)
     {
@@ -269,9 +411,19 @@ static void checkMathSymbolNames(OString aLanguage)
                 "Language: " << aLanguage << std::endl <<
                 "English:   " << aPoEntry.getMsgId() << std::endl <<
                 "Localized: " << aPoEntry.getMsgStr() << std::endl << std::endl;
+            bError = true;
         }
+        else
+            aPoOutput.writeEntry(aPoEntry);
     }
     aPoInput.close();
+    aPoOutput.close();
+    OUString aPoPathURL;
+    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    if( bError )
+        osl::File::move(aPoPathURL + ".new", aPoPathURL);
+    else
+        osl::File::remove(aPoPathURL + ".new");
 }
 
 int main()
