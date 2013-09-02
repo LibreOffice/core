@@ -174,7 +174,8 @@ SdrEdgeObj::SdrEdgeObj()
     bEdgeTrackUserDefined(sal_False),
     // Default is to allow default connects
     mbSuppressDefaultConnect(sal_False),
-    mbBoundRectCalculationRunning(sal_False)
+    mbBoundRectCalculationRunning(sal_False),
+    mbSuppressed(false)
 {
     bClosedObj=sal_False;
     bIsEdge=sal_True;
@@ -546,12 +547,20 @@ void SdrEdgeObj::ImpUndirtyEdgeTrack()
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
-    // #i120437# if bEdgeTrackUserDefined, do not recalculate. Also not when model locked
-    if(bEdgeTrackUserDefined || !GetModel() || GetModel()->isLocked())
+    // #i120437# if bEdgeTrackUserDefined, do not recalculate
+    if(bEdgeTrackUserDefined)
     {
         return;
     }
 
+    // #i120437# also not when model locked during import, but remember
+    if(!GetModel() || GetModel()->isLocked())
+    {
+        mbSuppressed = true;
+        return;
+    }
+
+    // #i110649#
     if(IsBoundRectCalculationRunning())
     {
         // This object is involved into another ImpRecalcEdgeTrack() call
@@ -559,20 +568,20 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // Also, do not change bEdgeTrackDirty so that it gets recalculated
         // later at the first non-looping call.
     }
-    // #i43068#
-    else if(GetModel() && GetModel()->isLocked())
-    {
-        // avoid re-layout during imports/API call sequences
-        // #i45294# but calculate EdgeTrack and secure properties there
-        mbBoundRectCalculationRunning = sal_True;
-        *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
-        ImpSetAttrToEdgeInfo();
-        bEdgeTrackDirty=sal_False;
-        mbBoundRectCalculationRunning = sal_False;
-    }
     else
     {
-        // To not run in a depth loop, use a coloring algorithm on
+        if(mbSuppressed)
+        {
+            // #i123048# If layouting was ever suppressed, it needs to be done once
+            // and the attr need to be set at EdgeInfo, else these attr *will be lost*
+            // in the following call to ImpSetEdgeInfoToAttr() sice they were never
+            // set before (!)
+            *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
+            ImpSetAttrToEdgeInfo();
+            mbSuppressed = false;
+        }
+
+        // To not run in a depth loop, use a coloring algorythm on
         // SdrEdgeObj BoundRect calculations
         mbBoundRectCalculationRunning = sal_True;
 

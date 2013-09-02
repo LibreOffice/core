@@ -182,6 +182,10 @@ protected:
     // is running, the flag is set, else it is always sal_False.
     unsigned                    mbBoundRectCalculationRunning : 1;
 
+    // #i123048# need to remember if layouting was suppressed before to get
+    // to a correct state for first real layouting
+    unsigned                    mbSuppressed : 1;
+
 public:
     // #109007#
     // Interface to default connect suppression
