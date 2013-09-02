@@ -224,10 +224,6 @@ String STR_STANDARD_STYLESHEET_NAME
 {
     Text [ en-US ] = "Default" ;
 };
-String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
-{
-    Text [ en-US ] = "The password is incorrect or the file is damaged." ;
-};
 String STR_UNDO_MOVEPAGES
 {
     Text [ en-US ] = "Move slides" ;

@@ -71,7 +71,7 @@
 #define STR_NOTES                               RID_GLOB_START+47
 #define STR_HANDOUT                             RID_GLOB_START+48
 #define STR_MASTERPAGE                          RID_GLOB_START+49
-#define STR_BAD_PASSWORD_OR_FILE_CORRUPTED      RID_GLOB_START+51
+
 #define STR_UNDO_MOVEPAGES                      RID_GLOB_START+52
 #define STR_NOT_ENOUGH_MEMORY                   RID_GLOB_START+53
 #define STR_LAYOUT_SUBTITLE                     RID_GLOB_START+54
