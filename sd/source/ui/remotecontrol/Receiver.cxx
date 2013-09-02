@@ -157,7 +157,6 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
         if (xSlideShow.is()) try
         {
-            // std::cerr << "pointer_started in the is" << std::endl;
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerVisible" ,
                             -1,
@@ -174,11 +173,9 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0].equals( "pointer_dismissed" ))
     {
-        // std::cerr << "pointer_dismissed" << std::endl;
         SolarMutexGuard aSolarGuard;
         if (xSlideShow.is()) try
         {
-            // std::cerr << "pointer_dismissed in the is" << std::endl;
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerVisible" ,
                             -1,
@@ -200,12 +197,10 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
         SAL_INFO( "sdremote", "Pointer at ("<<x<<","<<y<<")" );
         const ::com::sun::star::geometry::RealPoint2D pos(x,y);
-        // std::cerr << "Pointer at ("<<pos.X<<","<<pos.Y<<")" << std::endl;
 
         SolarMutexGuard aSolarGuard;
         if (xSlideShow.is()) try
         {
-            // std::cerr << "pointer_coordination in the is" << std::endl;
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerPosition" ,
                             -1,
