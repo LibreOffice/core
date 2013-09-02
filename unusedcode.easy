@@ -192,11 +192,8 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::F
 svx::DialControl::GetLinkedField() const
 svx::DialControl::GetModifyHdl() const
 svx::sidebar::AreaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
-svx::sidebar::BulletsTypeMgr::BulletsTypeMgr(unsigned short, SfxItemSet const*)
-svx::sidebar::GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(unsigned short, SfxItemSet const*)
 svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LineWidthControl::GetValueSet()
-svx::sidebar::NumberingTypeMgr::GetNumCount() const
 svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
 svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 sw::util::HdFtDistanceGlue::EqualTopBottom(sw::util::HdFtDistanceGlue const&) const

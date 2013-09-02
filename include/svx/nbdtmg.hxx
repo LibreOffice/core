@@ -245,7 +245,6 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         static BulletsTypeMgr* _instance;
     public:
         BulletsTypeMgr(const NBOType aType);
-        BulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg);
         BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr);
         virtual ~BulletsTypeMgr() {}
         virtual void Init();
@@ -278,7 +277,6 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
         static GraphyicBulletsTypeMgr* _instance;
     public:
         GraphyicBulletsTypeMgr(const NBOType aType);
-        GraphyicBulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg);
         GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr);
         virtual ~GraphyicBulletsTypeMgr();
         virtual void Init();

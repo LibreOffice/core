@@ -281,12 +281,6 @@ BulletsTypeMgr::BulletsTypeMgr(const NBOType aType):
     Init();
 }
 
-BulletsTypeMgr::BulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg):
-    NBOTypeMgrBase(aType,pArg)
-{
-    Init();
-}
-
 BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {
@@ -561,11 +555,6 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const NBOType aType):
     Init();
 }
 
-GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const NBOType aType,const SfxItemSet* pArg):
-    NBOTypeMgrBase(aType,pArg)
-{
-    Init();
-}
 GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {

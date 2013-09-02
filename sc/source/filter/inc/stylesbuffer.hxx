@@ -981,7 +981,6 @@ public:
     /** Writes the fill attributes of the specified fill data to the passed property map. */
     void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs = false ) const;
     void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
-    void                writeCellXfToMarkData( ::ScMarkData& rMark, sal_Int32 nXfId, sal_Int32 nNumFmtId );
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;

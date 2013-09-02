@@ -3321,12 +3321,6 @@ void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFil
         pFill->writeToPropertyMap( rPropMap );
 }
 
-void StylesBuffer::writeCellXfToMarkData( ScMarkData& rMark,  sal_Int32 nXfId, sal_Int32 nNumFmtId  )
-{
-    if( Xf* pXf = maCellXfs.get( nXfId ).get() )
-        pXf->writeToMarkData( rMark, nNumFmtId );
-}
-
 bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 )
 {
     return ( rXfModel1.mbCellXf == rXfModel2.mbCellXf &&
