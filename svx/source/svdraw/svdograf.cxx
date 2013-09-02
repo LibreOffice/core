@@ -536,10 +536,10 @@ const Size& SdrGrafObj::GetGrafPrefSize() const
     return pGraphic->GetPrefSize();
 }
 
-void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
+void SdrGrafObj::SetGrafStreamURL( const OUString& rGraphicStreamURL )
 {
     mbIsPreview = false;
-    if( !rGraphicStreamURL.Len() )
+    if( rGraphicStreamURL.isEmpty() )
     {
         pGraphic->SetUserData();
     }
@@ -553,7 +553,7 @@ void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
     }
 }
 
-String SdrGrafObj::GetGrafStreamURL() const
+OUString SdrGrafObj::GetGrafStreamURL() const
 {
     return pGraphic->GetUserData();
 }
@@ -620,7 +620,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const String& rFilterName)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rFilterName)
 {
     ImpLinkAbmeldung();
     aFileName = rFileName;

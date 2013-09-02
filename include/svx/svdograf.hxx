@@ -131,13 +131,13 @@ public:
     const MapMode&          GetGrafPrefMapMode() const;
     const Size&             GetGrafPrefSize() const;
 
-    void                    SetGrafStreamURL( const String& rGraphicStreamURL );
-    String                  GetGrafStreamURL() const;
+    void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
+    OUString                GetGrafStreamURL() const;
 
     void                    ForceSwapIn() const;
     void                    ForceSwapOut() const;
 
-    void                    SetGraphicLink(const OUString& rFileName, const String& rFilterName);
+    void                    SetGraphicLink(const OUString& rFileName, const OUString& rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
