@@ -186,6 +186,8 @@ public:
 
     virtual ~ThumbnailView ();
 
+    virtual void        MouseMove( const MouseEvent& rMEvt );
+
     void AppendItem (ThumbnailViewItem *pItem);
 
     void RemoveItem( sal_uInt16 nItemId );
@@ -229,6 +231,8 @@ public:
     void deselectItems ();
 
     OUString GetItemText( sal_uInt16 nItemId ) const;
+
+    void ShowTooltips( bool bShowTooltips );
 
     void SetColor( const Color& rColor );
 
@@ -328,6 +332,7 @@ protected:
     bool mbScroll : 1;
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
+    bool mbShowTooltips : 1;
     Color maColor;
 
     Link maItemStateHdl;
