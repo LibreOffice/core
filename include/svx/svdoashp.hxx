@@ -131,7 +131,7 @@ public:
 
 protected:
 
-    String      aName;
+    OUString      aName;
 
 public:
 
