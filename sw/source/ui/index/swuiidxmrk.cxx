@@ -84,6 +84,7 @@ using namespace ::com::sun::star;
 SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, sal_Bool bNewDlg,
     SwWrtShell& rWrtShell)
     : m_rDialog(rDialog)
+    , bDel(false)
     , bNewMark(bNewDlg)
     , bSelected(sal_False)
     , bPhoneticED0_ChangedByUser(sal_False)
