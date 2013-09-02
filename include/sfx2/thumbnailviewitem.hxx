@@ -118,6 +118,8 @@ public:
     static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
         createBorderLine (const basegfx::B2DPolygon &rPolygon);
 
+    bool isPointInside(Point aPoint);
+
 protected:
 
     Point maTextPos;

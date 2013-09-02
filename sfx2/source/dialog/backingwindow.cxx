@@ -255,6 +255,7 @@ void BackingWindow::initControls()
     // of setupModuleTab. TYPE_OTHER is always added.
     mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
     mpAllRecentThumbnails->loadRecentDocs();
+    mpAllRecentThumbnails->ShowTooltips( true );
 
     setupButton( mpWriterButton );
     setupButton( mpDrawButton );
@@ -304,6 +305,7 @@ void BackingWindow::setupModuleTab(const OString& rTabName, RecentDocsView* pRec
         mpAllRecentThumbnails-> mnFileTypes |= nFileTypes;
         pRecView->mnFileTypes |= nFileTypes;
         pRecView->loadRecentDocs();
+        pRecView->ShowTooltips( true );
     }
 }
 

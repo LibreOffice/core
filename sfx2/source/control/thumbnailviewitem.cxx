@@ -356,6 +356,14 @@ ThumbnailViewItem::createBorderLine (const basegfx::B2DPolygon& rPolygon)
     return new PolygonHairlinePrimitive2D(rPolygon, Color(186,186,186).getBColor());
 }
 
+bool ThumbnailViewItem::isPointInside(Point aPoint)
+{
+    return  maDrawArea.Top()    <= aPoint.Y() &&
+            maDrawArea.Bottom() >= aPoint.Y() &&
+            maDrawArea.Left()   <= aPoint.X() &&
+            maDrawArea.Right()  >= aPoint.X();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 
