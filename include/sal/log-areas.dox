@@ -278,7 +278,10 @@ certain functionality.
 
 @li @c cmisucp
 @li @c ucb
+@li @c ucb.core
 @li @c ucb.ucp
+@li @c ucb.ucp.ext
+@li @c ucb.ucp.ftp
 @li @c ucb.ucp.gio
 @li @c ucb.ucp.gvfs
 @li @c ucb.ucp.webdav

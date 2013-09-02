@@ -153,7 +153,7 @@ namespace ucb { namespace ucp { namespace ext
                 {
                     if ( pExtInfo->getLength() <= 0 )
                     {
-                        SAL_WARN( "ucb.ucp", "illegal extension info" );
+                        SAL_WARN( "ucb.ucp.ext", "illegal extension info" );
                         continue;
                     }
 

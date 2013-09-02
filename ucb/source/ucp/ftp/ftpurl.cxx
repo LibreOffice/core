@@ -413,7 +413,8 @@ oslFileHandle FTPURL::open()
         if(err == CURLE_OK)
         {
             oslFileError rc = osl_setFilePos( res, osl_Pos_Absolut, 0 );
-            SAL_WARN_IF(rc != osl_File_E_None, "ucb", "osl_setFilePos failed");
+            SAL_WARN_IF(rc != osl_File_E_None, "ucb.ucp.ftp",
+                    "osl_setFilePos failed");
         }
         else {
             osl_closeFile(res),res = 0;

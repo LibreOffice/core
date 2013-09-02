@@ -345,7 +345,7 @@ namespace ucb { namespace ucp { namespace ext
             // cut the root URL
             if ( !sURL.match( sRootURL, 0 ) )
             {
-                SAL_INFO( "ucb.ucp", "illegal URL structure - no root" );
+                SAL_INFO( "ucb.ucp.ext", "illegal URL structure - no root" );
                 break;
             }
 
@@ -355,7 +355,7 @@ namespace ucb { namespace ucp { namespace ext
             const OUString sSeparatedExtensionId( encodeIdentifier( m_sExtensionId ) + OUString( sal_Unicode( '/' ) ) );
             if ( !sRelativeURL.match( sSeparatedExtensionId ) )
             {
-                SAL_INFO( "ucb.ucp", "illegal URL structure - no extension ID" );
+                SAL_INFO( "ucb.ucp.ext", "illegal URL structure - no extension ID" );
                 break;
             }
 
@@ -364,7 +364,7 @@ namespace ucb { namespace ucp { namespace ext
             // cut the final slash (if any)
             if ( sRelativeURL.isEmpty() )
             {
-                SAL_INFO( "ucb.ucp", "illegal URL structure - ExtensionContent should have a level below the extension ID" );
+                SAL_INFO( "ucb.ucp.ext", "illegal URL structure - ExtensionContent should have a level below the extension ID" );
                 break;
             }
 
