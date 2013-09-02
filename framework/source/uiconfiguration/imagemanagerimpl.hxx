@@ -159,7 +159,6 @@ namespace framework
 
             typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
 
-            // private methods
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             ImageList*                                implts_getUserImageList( ImageType nImageType );
