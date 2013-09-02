@@ -69,6 +69,17 @@ Any lines in [square brackets] are optional, and should be omitted if not needed
   [Colour String]           // Colour the screen will show (default: black). Not
                             // implemented, and format hasn't yet been defined.
 
+# As of gsoc2013, these commands are extended to the existing protocol, since server-end are tolerant with unknown commands, these extensions doesn't break backward compatibility
+* pointer_started           // create a red dot on screen at initial position (x,y)
+  initial_x                 // This should be called when user first touch the screen
+  initial_y                 // note that x, y are in percentage (from 0.0 to 1.0) with respect to the slideshow size
+* pointer_dismissed         // This dismiss the pointer red dot on screen, should be called when user stop touching screen
+* pointer_coordination      // This update pointer's position to current (x,y)
+  current_x                 // note that x, y are in percentage (from 0.0 to 1.0) with respect to the slideshow size
+  current_y                 // unless screenupdater's perfomance is significantly improved, we should consider limit the update frequency on the
+                            // remote-end
+
+
 
 Status/Data (Server to Client)
 ------------------------------
@@ -90,3 +101,7 @@ Status/Data (Server to Client)
 * slide_preview         // Supplies a preview image for a slide.
   slideNumber
   image                 // A Base 64 Encoded png image.
+
+# As of gsoc2013, these commands are extended to the existing protocol, since remote-end also ignore all unknown commands (which is the case of gsoc2012 android implementation), backward compatibility is kept.
+* slideshow_info        // once paired, the server-end will send back the title of the current presentation
+  Title
