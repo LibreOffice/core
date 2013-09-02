@@ -68,7 +68,7 @@
 #include <helpid.h>
 #include <utlui.hrc>
 #include <index.hrc>
-#include <cnttab.hrc>
+#include <cnttab.hxx>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -562,10 +562,13 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 
 class SwIndexTreeLB : public SvSimpleTable
 {
+private:
 public:
-    SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
+    SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = 0);
     virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void Resize();
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    void setColSizes();
 };
 
 
@@ -573,7 +576,8 @@ SwIndexTreeLB::SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent, nBits)
 {
     HeaderBar& rStylesHB = GetTheHeaderBar();
-    rStylesHB.SetStyle(rStylesHB.GetStyle()|WB_BUTTONSTYLE|WB_TABSTOP|WB_BORDER);
+    rStylesHB.SetStyle(rStylesHB.GetStyle()|WB_BUTTONSTYLE);
+    SetStyle(GetStyle() & ~(WB_AUTOHSCROLL|WB_HSCROLL));
 }
 
 sal_IntPtr SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
@@ -625,19 +629,40 @@ void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
+void SwIndexTreeLB::Resize()
+{
+    SvSimpleTable::Resize();
+    setColSizes();
+}
+
+void SwIndexTreeLB::setColSizes()
+{
+    HeaderBar &rHB = GetTheHeaderBar();
+    if (rHB.GetItemCount() < MAXLEVEL+1)
+        return;
+
+    long nWidth = rHB.GetSizePixel().Width();
+    nWidth /= 14;
+    nWidth--;
+
+    long nTabs_Impl[MAXLEVEL+2];
+
+    nTabs_Impl[0] = MAXLEVEL+1;
+    nTabs_Impl[1] = 3 * nWidth;
+
+    for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
+        nTabs_Impl[i+1] = nTabs_Impl[i] + nWidth;
+    SvSimpleTable::SetTabs(&nTabs_Impl[0], MAP_PIXEL);
+}
+
 class SwAddStylesDlg_Impl : public SfxModalDialog
 {
-    OKButton        aOk;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
+    OKButton*       m_pOk;
 
-    FixedLine       aStylesFL;
-    SvSimpleTableContainer aHeaderTreeContainer;
-    SwIndexTreeLB   aHeaderTree;
-    ImageButton     aLeftPB;
-    ImageButton      aRightPB;
+    SwIndexTreeLB*  m_pHeaderTree;
+    PushButton*     m_pLeftPB;
+    PushButton*     m_pRightPB;
 
-    String          sHBFirst;
     String*         pStyleArr;
 
     DECL_LINK(OkHdl, void *);
@@ -650,61 +675,43 @@ public:
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
-            SwWrtShell& rWrtSh, String rStringArr[]) :
-    SfxModalDialog(pParent, SW_RES(DLG_ADD_IDX_STYLES)),
-    aOk(        this, SW_RES(PB_OK      )),
-    aCancel(    this, SW_RES(PB_CANCEL  )),
-    aHelp(      this, SW_RES(PB_HELP        )),
-
-    aStylesFL(  this, SW_RES(FL_STYLES   )),
-    aHeaderTreeContainer(this, SW_RES(TR_HEADER   )),
-    aHeaderTree(aHeaderTreeContainer),
-    aLeftPB(    this, SW_RES(PB_LEFT     )),
-    aRightPB(   this, SW_RES(PB_RIGHT    )),
-
-    sHBFirst(   SW_RES(ST_HB_FIRST)),
-    pStyleArr(rStringArr)
+            SwWrtShell& rWrtSh, String rStringArr[])
+    : SfxModalDialog(pParent, "AssignStylesDialog",
+        "modules/swriter/ui/assignstylesdialog.ui")
+    , pStyleArr(rStringArr)
 {
-    FreeResource();
+    get(m_pOk, "ok");
+    get(m_pLeftPB, "left");
+    get(m_pRightPB, "right");
+    OUString sHBFirst = get<FixedText>("notapplied")->GetText();
+    SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("styles");
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MAP_APPFONT);
+    pHeaderTreeContainer->set_width_request(aSize.Width());
+    pHeaderTreeContainer->set_height_request(aSize.Height());
+    m_pHeaderTree = new SwIndexTreeLB(*get<SvSimpleTableContainer>("styles"));
 
-    aHeaderTreeContainer.SetAccessibleRelationMemberOf(&aStylesFL);
-    aLeftPB.SetAccessibleRelationMemberOf(&aStylesFL);
-    aRightPB.SetAccessibleRelationMemberOf(&aStylesFL);
+    m_pOk->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
+    m_pLeftPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
+    m_pRightPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
 
-    aOk.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
-    aLeftPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
-    aRightPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
-
-    HeaderBar& rHB = aHeaderTree.GetTheHeaderBar();
+    HeaderBar& rHB = m_pHeaderTree->GetTheHeaderBar();
     rHB.SetEndDragHdl(LINK(this, SwAddStylesDlg_Impl, HeaderDragHdl));
-
-    long nWidth = rHB.GetSizePixel().Width();
-    nWidth /= 14;
-    nWidth--;
-
-    long nTabs_Impl[MAXLEVEL+2];
-
-    nTabs_Impl[0] = MAXLEVEL+1;
-    nTabs_Impl[1] = 3 * nWidth;
 
     OUStringBuffer sHeader(sHBFirst);
     for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
-    {
         sHeader.append("\t").append(OUString::number(i));
-        nTabs_Impl[i+1] = nTabs_Impl[i] + nWidth;
-    }
-    aHeaderTree.SvSimpleTable::SetTabs(&nTabs_Impl[0], MAP_PIXEL);
-    aHeaderTree.InsertHeaderEntry(sHeader.makeStringAndClear());
+    m_pHeaderTree->InsertHeaderEntry(sHeader.makeStringAndClear());
+    m_pHeaderTree->setColSizes();
 
-    aHeaderTree.SetStyle(aHeaderTree.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
-    aHeaderTree.GetModel()->SetSortMode(SortAscending);
+    m_pHeaderTree->SetStyle(m_pHeaderTree->GetStyle()|WB_CLIPCHILDREN|WB_SORT);
+    m_pHeaderTree->GetModel()->SetSortMode(SortAscending);
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         String sStyles(rStringArr[i]);
         for(sal_uInt16 nToken = 0; nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER); nToken++)
         {
             String sTmp(sStyles.GetToken(nToken, TOX_STYLE_DELIMITER));
-            SvTreeListEntry* pEntry = aHeaderTree.InsertEntry(sTmp);
+            SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(sTmp);
             pEntry->SetUserData(reinterpret_cast<void*>(i));
         }
     }
@@ -722,22 +729,23 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         const OUString aName = pColl->GetName();
         if (!aName.isEmpty())
         {
-            SvTreeListEntry* pEntry = aHeaderTree.First();
-            while (pEntry && aHeaderTree.GetEntryText(pEntry)!=aName)
+            SvTreeListEntry* pEntry = m_pHeaderTree->First();
+            while (pEntry && m_pHeaderTree->GetEntryText(pEntry)!=aName)
             {
-                pEntry = aHeaderTree.Next(pEntry);
+                pEntry = m_pHeaderTree->Next(pEntry);
             }
             if (!pEntry)
             {
-                aHeaderTree.InsertEntry(aName)->SetUserData((void*)USHRT_MAX);
+                m_pHeaderTree->InsertEntry(aName)->SetUserData((void*)USHRT_MAX);
             }
         }
     }
-    aHeaderTree.GetModel()->Resort();
+    m_pHeaderTree->GetModel()->Resort();
 }
 
 SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
+    delete m_pHeaderTree;
 }
 
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
@@ -745,18 +753,18 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         pStyleArr[i].Erase();
 
-    SvTreeListEntry* pEntry = aHeaderTree.First();
+    SvTreeListEntry* pEntry = m_pHeaderTree->First();
     while(pEntry)
     {
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(nLevel != USHRT_MAX)
         {
-            String sName(aHeaderTree.GetEntryText(pEntry));
+            String sName(m_pHeaderTree->GetEntryText(pEntry));
             if(pStyleArr[nLevel].Len())
                 pStyleArr[nLevel] += TOX_STYLE_DELIMITER;
             pStyleArr[nLevel] += sName;
         }
-        pEntry = aHeaderTree.Next(pEntry);
+        pEntry = m_pHeaderTree->Next(pEntry);
     }
 
     //TODO write back style names
@@ -766,14 +774,14 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
 
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
 {
-    aHeaderTree.Invalidate();
+    m_pHeaderTree->Invalidate();
     return 0;
 }
 
 IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 {
-    sal_Bool bLeft = pBtn == &aLeftPB;
-    SvTreeListEntry* pEntry = aHeaderTree.FirstSelected();
+    sal_Bool bLeft = pBtn == m_pLeftPB;
+    SvTreeListEntry* pEntry = m_pHeaderTree->FirstSelected();
     if(pEntry)
     {
         sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
@@ -792,7 +800,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
                 nLevel = 0;
         }
         pEntry->SetUserData((void*)nLevel);
-        aHeaderTree.Invalidate();
+        m_pHeaderTree->Invalidate();
     }
     return 0;
 }

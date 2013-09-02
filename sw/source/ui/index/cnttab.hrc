@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define TLB_STYLES              100
-#define FL_STYLES               101
-#define PB_OK                   102
-#define PB_CANCEL               103
-#define PB_HELP                 104
-#define TR_HEADER               109
-#define PB_LEFT                 110
-#define PB_RIGHT                111
-#define HB_STYLES               112
-#define ST_HB_FIRST             113
-
 #define TO_CONTENT          1
 #define TO_INDEX            2
 #define TO_ILLUSTRATION     4

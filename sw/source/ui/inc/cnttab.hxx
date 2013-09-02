@@ -43,6 +43,14 @@
 #define TOX_PAGE_ENTRY  2
 #define TOX_PAGE_STYLES 3
 
+#define TO_CONTENT      1
+#define TO_INDEX        2
+#define TO_ILLUSTRATION 4
+#define TO_TABLE        8
+#define TO_USER         16
+#define TO_OBJECT       32
+#define TO_AUTHORITIES  64
+
 struct CurTOXType
 {
     TOXTypes    eType;

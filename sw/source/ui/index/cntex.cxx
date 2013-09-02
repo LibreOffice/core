@@ -47,7 +47,6 @@
 #include <cmdid.h>
 #include <utlui.hrc>
 #include <index.hrc>
-#include <cnttab.hrc>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>

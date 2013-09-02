@@ -124,7 +124,6 @@
 
 #define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  77)
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)
-#define DLG_ADD_IDX_STYLES          (RC_GLOBALS_BEGIN +  94)
 //maximum: RC_GLOBALS_BEGIN +  120
 
 

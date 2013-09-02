@@ -61,6 +61,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/abstractdialog \
 	sw/uiconfig/swriter/ui/asciifilterdialog \
+	sw/uiconfig/swriter/ui/assignstylesdialog \
 	sw/uiconfig/swriter/ui/authenticationsettingsdialog \
 	sw/uiconfig/swriter/ui/autoformattable \
 	sw/uiconfig/swriter/ui/autotext \

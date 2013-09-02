@@ -19,7 +19,6 @@
 
 #include "index.hrc"
 #include "globals.hrc"
-#include "cnttab.hrc"
 #include "cmdid.h"
 #include "helpid.h"
 
@@ -164,85 +163,6 @@ TOO_OTHER       = 0x80*/
 String STR_AUTOMARK_TYPE
 {
     Text [ en-US ] = "Selection file for the alphabetical index (*.sdi)";
-};
-
-//------------------------------------------------------------------
-ModalDialog DLG_ADD_IDX_STYLES
-{
-    HelpId = HID_DLG_ADD_IDX_STYLES;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 350 , 200 ) ;
-    Moveable = TRUE ;
-    Control TR_HEADER
-    {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 273 , 164 ) ;
-        Border = TRUE;
-        TabStop = TRUE;
-    };
-    ImageButton PB_LEFT
-    {
-        HelpID = "sw:ImageButton:DLG_ADD_IDX_STYLES:PB_LEFT";
-        Pos = MAP_APPFONT ( 12 , 182 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "all_left.bmp" ;
-            };
-            MaskColor = IMAGE_MASK_COLOR ;
-        };
-        QuickHelpText [ en-US ] = "Left" ;
-    };
-    ImageButton PB_RIGHT
-    {
-        HelpID = "sw:ImageButton:DLG_ADD_IDX_STYLES:PB_RIGHT";
-        Pos = MAP_APPFONT ( 65 , 182 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "all_right.bmp" ;
-            };
-            MaskColor = IMAGE_MASK_COLOR ;
-        };
-        QuickHelpText [ en-US ] = "Right" ;
-    };
-    FixedLine FL_STYLES
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 285 , 8 ) ;
-        Text [ en-US ] = "Styl~es";
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 297 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 297 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 297 , 40 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    String  ST_HB_FIRST
-    {
-        Text [ en-US ] = "Not applied";
-    };
-    Text [ en-US ] = "Assign Styles";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
