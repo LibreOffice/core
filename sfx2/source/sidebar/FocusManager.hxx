@@ -113,9 +113,6 @@ private:
     */
     void RemoveWindow (Window& rWindow);
 
-    bool IsAnyPanelFocused (void) const;
-    bool IsAnyButtonFocused (void) const;
-
     void FocusDeckTitle (void);
     bool IsDeckTitleVisible (void) const;
     bool IsPanelTitleVisible (const sal_Int32 nPanelIndex) const;

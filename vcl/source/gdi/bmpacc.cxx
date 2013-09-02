@@ -384,19 +384,6 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
     return rFallback;
 }
 
-BitmapColor BitmapReadAccess::GetColorWithFallback( long nY, long nX, const BitmapColor& rFallback ) const
-{
-    if(mpBuffer)
-    {
-        if(nX >= 0 && nY >= 0 && nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
-        {
-            return GetColor(nY, nX);
-        }
-    }
-
-    return rFallback;
-}
-
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
             BitmapReadAccess( rBitmap, sal_True ),
             mpLineColor     ( NULL ),

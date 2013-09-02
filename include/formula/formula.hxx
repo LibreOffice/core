@@ -123,7 +123,6 @@ protected:
     void            Update(const String& _sExp);
     void            CheckMatrix();
     void            DoEnter(sal_Bool _bOk);
-    sal_Bool            isUserMatrix() const;
     const IFunctionDescription* getCurrentFunctionDescription() const;
     sal_Bool            UpdateParaWin(Selection& _rSelection);
     void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);

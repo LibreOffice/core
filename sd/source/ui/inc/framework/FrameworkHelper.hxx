@@ -243,11 +243,6 @@ public:
         const OUString& rsSidebarPanelURL,
         const bool bEnsureTaskPaneIsVisible = true);
 
-    /** Request the deactivation of the specified resource.
-    */
-    void RequestResourceDeactivation (
-        const cssu::Reference<cssdf::XResourceId>& rxResourceId);
-
     /** Process a slot call that requests a view shell change.
     */
     void HandleModeChangeSlot (

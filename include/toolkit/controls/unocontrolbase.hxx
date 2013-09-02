@@ -46,7 +46,6 @@ protected:
     sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
     sal_Int16       ImplGetPropertyValue_INT16( sal_uInt16 nProp );
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
-    sal_Int64       ImplGetPropertyValue_INT64( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );
     OUString        ImplGetPropertyValue_UString( sal_uInt16 nProp );
     ::com::sun::star::util::Date ImplGetPropertyValue_Date( sal_uInt16 nProp );

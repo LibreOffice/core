@@ -221,41 +221,6 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const Window& rWindo
     return FocusLocation(PC_None, -1);
 }
 
-
-
-
-bool FocusManager::IsAnyPanelFocused (void) const
-{
-    for (::std::vector<Panel*>::const_iterator iPanel(maPanels.begin()),iEnd(maPanels.end());
-         iPanel!=iEnd;
-         ++iPanel)
-    {
-        if ((*iPanel)->HasFocus())
-            return true;
-        else if ((*iPanel)->HasChildPathFocus())
-            return true;
-    }
-    return false;
-}
-
-
-
-
-bool FocusManager::IsAnyButtonFocused (void) const
-{
-    for (::std::vector<Button*>::const_iterator iButton(maButtons.begin()),iEnd(maButtons.end());
-         iButton!=iEnd;
-         ++iButton)
-    {
-        if ((*iButton)->HasFocus())
-            return true;
-    }
-    return false;
-}
-
-
-
-
 void FocusManager::FocusDeckTitle (void)
 {
     if (mpDeckTitleBar != NULL)

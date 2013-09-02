@@ -35,14 +35,6 @@ void DbgGUIDeInit();
 void DbgGUIStart();
 void DbgDialogTest( Window* pWindow );
 
-/** registers a named user-defined channel for emitting the diagnostic messages
-    @return
-        a unique number for this channel, which can be used for ->DbgData::nErrorOut,
-        ->DbgData::nWarningOut and ->DbgData::nTraceOut
-    @see DBG_OUT_USER_CHANNEL_0
-*/
-sal_uInt16 DbgRegisterNamedUserChannel( const OUString& _rChannelUIName, DbgPrintLine pProc );
-
 #define DBGGUI_INIT()           DbgGUIInit()
 #define DBGGUI_DEINIT()         DbgGUIDeInit()
 #define DBGGUI_START()          DbgGUIStart()
