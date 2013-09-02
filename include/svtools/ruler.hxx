@@ -592,9 +592,10 @@ struct RulerUnitData
 {
     MapUnit         eMapUnit;           // MAP_UNIT for calculaion
     long            nTickUnit;          // Unit divider
-    long            nTick1;             // Minimal step
-    long            nTick2;             // Tick half unit
-    long            nTick3;             // Tick whole unit
+    double          nTick1;             // Minimal step
+    double          nTick2;             // Tick quarter unit
+    double          nTick3;             // Tick half unit
+    double          nTick4;             // Tick whole unit
     long            n100THMM;           // 100mm Unit divider
     sal_uInt16      nUnitDigits;        // Number of digits
     sal_Char        aUnitStr[8];        // Unit string
@@ -665,7 +666,7 @@ private:
     SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawText( long nX, long nY, const OUString& rText, long nMin = LONG_MIN, long nMax = LONG_MAX );
 
-    SVT_DLLPRIVATE void ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
+    SVT_DLLPRIVATE void ImplDrawTicks( long nMin, long nMax, long nStart, long nVirTop, long nVirBottom );
     SVT_DLLPRIVATE void ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
     SVT_DLLPRIVATE void ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle, bool bIsHit = false );
     SVT_DLLPRIVATE void ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );

@@ -333,10 +333,10 @@ long SvxRuler::MakePositionSticky(long aPosition, bool aSnapToFrameMargin) const
     long aLeftFramePosition  = ConvertHPosPixel(GetLeftFrameMargin());
     long aRightFramePosition = ConvertHPosPixel(GetRightFrameMargin());
 
-    long aTick = GetCurrentRulerUnit().nTick1;
+    double aTick = GetCurrentRulerUnit().nTick1;
     long aTickPixel = pEditWin->LogicToPixel(Size(0, aTick), GetCurrentMapMode()).Height();
-    long aHalfTick = aTick / 2;
-    long aHalfTickPixel = aTickPixel / 2;
+    double aHalfTick = aTick / 2;
+    double aHalfTickPixel = aTickPixel / 2;
 
     if (aSnapToFrameMargin)
     {
@@ -354,7 +354,7 @@ long SvxRuler::MakePositionSticky(long aPosition, bool aSnapToFrameMargin) const
     long aTranslatedPosition = aPosition - aLeftFramePosition;
     // Convert position to current selected map mode
     long aPositionLogic = pEditWin->PixelToLogic(Size(0, aTranslatedPosition), GetCurrentMapMode()).Height();
-    aPositionLogic = ((aPositionLogic + aHalfTick) / aTick) * aTick;
+    aPositionLogic = std::floor((aPositionLogic + aHalfTick) / aTick) * aTick;
     // Convert back to pixels
     aPosition = pEditWin->LogicToPixel(Size(0, aPositionLogic), GetCurrentMapMode()).Height();
     // Move "coordinate system" back to original position
@@ -934,11 +934,16 @@ void SvxRuler::UpdateTabs()
 {
     if(IsDrag())
         return;
-    if(mpPagePosItem.get() && mpParaItem.get() && mpTabStopItem.get() && !mpObjectItem.get())
+
+    if( mpPagePosItem.get() &&
+        mpParaItem.get()    &&
+        mpTabStopItem.get() &&
+        !mpObjectItem.get() )
     {
         // buffer for DefaultTabStop
         // Distance last Tab <-> Right paragraph margin / DefaultTabDist
         sal_Bool bRTL = mpRulerImpl->pTextRTLItem && mpRulerImpl->pTextRTLItem->GetValue();
+
         long nLeftFrameMargin = GetLeftFrameMargin();
         long nRightFrameMargin = GetRightFrameMargin();
 
@@ -947,20 +952,20 @@ void SvxRuler::UpdateTabs()
 
         const long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
 
-        const long lLastTab =
-             mpTabStopItem->Count()?
-              ConvertHPosPixel((*mpTabStopItem.get())[mpTabStopItem->Count()-1].GetTabPos()): 0;
-        const long lPosPixel =
-            ConvertHPosPixel(lParaIndent) + lLastTab;
-        const long lRightIndent =
-            ConvertHPosPixel(nRightFrameMargin - mpParaItem->GetRight());
+        const long lLastTab = mpTabStopItem->Count()
+                                ? ConvertHPosPixel((*mpTabStopItem.get())[mpTabStopItem->Count()-1].GetTabPos())
+                                : 0;
+        const long lPosPixel = ConvertHPosPixel(lParaIndent) + lLastTab;
+        const long lRightIndent = ConvertHPosPixel(nRightFrameMargin - mpParaItem->GetRight());
+
         long nDefTabDist = ConvertHPosPixel(lDefTabDist);
+
         if( !nDefTabDist )
             nDefTabDist = 1;
-        const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent ||
-            lLastTab > lRightIndent
-                ? 0
-                : (sal_uInt16)( (lRightIndent - lPosPixel) / nDefTabDist );
+
+        const sal_uInt16 nDefTabBuf = lPosPixel > lRightIndent || lLastTab > lRightIndent
+                    ? 0
+                    : (sal_uInt16)( (lRightIndent - lPosPixel) / nDefTabDist );
 
         if(mpTabStopItem->Count() + TAB_GAP + nDefTabBuf > nTabBufSize)
         {
@@ -971,22 +976,29 @@ void SvxRuler::UpdateTabs()
 
         nTabCount = 0;
         sal_uInt16 j;
+
         //#i24363# tab stops relative to indent
         const long lRightPixMargin = ConvertSizePixel(nRightFrameMargin - nParaItemTxtLeft );
         const long lParaIndentPix = ConvertSizePixel(lParaIndent);
+
         for(j = 0; j < mpTabStopItem->Count(); ++j)
         {
-            const SvxTabStop *pTab = &(*mpTabStopItem.get())[j];
-            mpTabs[nTabCount+TAB_GAP].nPos =
-                ConvertHPosPixel(
-                (mpRulerImpl->bIsTabsRelativeToIndent ? lParaIndent : 0 ) + pTab->GetTabPos() + lAppNullOffset);
+            const SvxTabStop* pTab = &(*mpTabStopItem.get())[j];
+            if (mpRulerImpl->bIsTabsRelativeToIndent)
+                mpTabs[nTabCount + TAB_GAP].nPos =
+                    ConvertHPosPixel( lParaIndent + pTab->GetTabPos() + lAppNullOffset);
+            else
+                mpTabs[nTabCount + TAB_GAP].nPos =
+                    ConvertHPosPixel( 0 + pTab->GetTabPos() + lAppNullOffset);
+
             if(bRTL)
             {
-                mpTabs[nTabCount+TAB_GAP].nPos = lParaIndentPix + lRightPixMargin - mpTabs[nTabCount+TAB_GAP].nPos;
+                mpTabs[nTabCount + TAB_GAP].nPos = lParaIndentPix + lRightPixMargin - mpTabs[nTabCount+TAB_GAP].nPos;
             }
-            mpTabs[nTabCount+TAB_GAP].nStyle = ToSvTab_Impl(pTab->GetAdjustment());
+            mpTabs[nTabCount + TAB_GAP].nStyle = ToSvTab_Impl(pTab->GetAdjustment());
             ++nTabCount;
         }
+
         if(!mpTabStopItem->Count())
             mpTabs[0].nPos = bRTL ? lRightPixMargin : lParaIndentPix;
 
@@ -3240,7 +3252,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             PopupMenu aMenu;
             aMenu.SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
             VirtualDevice aDev;
-            const Size aSz(RULER_TAB_WIDTH+2, RULER_TAB_HEIGHT+2);
+            const Size aSz(RULER_TAB_WIDTH + 2, RULER_TAB_HEIGHT + 2);
             aDev.SetOutputSize(aSz);
             aDev.SetBackground(Wallpaper(Color(COL_WHITE)));
             Color aFillColor(aDev.GetSettings().GetStyleSettings().GetShadowColor());
@@ -3249,12 +3261,12 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             for ( sal_uInt16 i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
-                nStyle |= (sal_uInt16)(bHorz ? WB_HORZ : WB_VERT);
+                nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
                 DrawTab(&aDev, aFillColor, aPt, nStyle);
                 aMenu.InsertItem(i + 1,
                                  ResId(RID_SVXSTR_RULER_START + i, DIALOG_MGR()).toString(),
                                  Image(aDev.GetBitmap(Point(), aSz), Color(COL_WHITE)));
-                aMenu.CheckItem(i+1, i == mpTabs[mpRulerImpl->nIdx + TAB_GAP].nStyle);
+                aMenu.CheckItem(i + 1, i == mpTabs[mpRulerImpl->nIdx + TAB_GAP].nStyle);
                 aDev.SetOutputSize(aSz); // delete device
             }
             aMenu.Execute( this, rCommandEvent.GetMousePosPixel() );
@@ -3271,20 +3283,23 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             {
                 const sal_uInt16 nId = aMenu.GetItemId(i - 1);
                 aMenu.CheckItem(nId, nId == (sal_uInt16)eUnit);
-                if(bReduceMetric &&
-                        (nId == FUNIT_M ||
-                         nId == FUNIT_KM ||
-                         nId == FUNIT_FOOT ||
-                         nId == FUNIT_MILE ||
-                         nId == FUNIT_CHAR ||
-                         nId == FUNIT_LINE ))
+                if( bReduceMetric )
                 {
-                    if (( nId == FUNIT_CHAR ) && bHorz )
-                       ;
-                    else if (( nId == FUNIT_LINE ) && !bHorz )
-                       ;
-                    else
-                       aMenu.RemoveItem(i - 1);
+                    if ( nId == FUNIT_M    ||
+                         nId == FUNIT_KM   ||
+                         nId == FUNIT_FOOT ||
+                         nId == FUNIT_MILE )
+                    {
+                        aMenu.RemoveItem(i - 1);
+                    }
+                    else if (( nId == FUNIT_CHAR ) && !bHorz )
+                    {
+                        aMenu.RemoveItem(i - 1);
+                    }
+                    else if (( nId == FUNIT_LINE ) && bHorz )
+                    {
+                        aMenu.RemoveItem(i - 1);
+                    }
                 }
             }
             aMenu.Execute( this, rCommandEvent.GetMousePosPixel() );
