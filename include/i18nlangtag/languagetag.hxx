@@ -449,6 +449,7 @@ private:
     mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
     mutable OUString                        maCachedScript;     ///< cache getScript()
     mutable OUString                        maCachedCountry;    ///< cache getCountry()
+    mutable OUString                        maCachedVariants;   ///< cache getVariants()
     mutable void*                           mpImplLangtag;      ///< actually lt_tag_t pointer, encapsulated
     mutable LanguageType                    mnLangID;
     mutable Decision                        meIsValid;
@@ -462,6 +463,7 @@ private:
     mutable bool                            mbCachedLanguage    : 1;
     mutable bool                            mbCachedScript      : 1;
     mutable bool                            mbCachedCountry     : 1;
+    mutable bool                            mbCachedVariants    : 1;
             bool                            mbIsFallback        : 1;
 
     void    convertLocaleToBcp47();
@@ -489,12 +491,12 @@ private:
 
     void            resetVars();
 
-    /** Obtain Language, Script and Country via simpleExtract() and assign them
-        to the cached variables if successful.
+    /** Obtain Language, Script, Country and Variants via simpleExtract() and
+        assign them to the cached variables if successful.
 
         @return return of simpleExtract()
      */
-    bool            cacheSimpleLSC();
+    bool            cacheSimpleLSCV();
 
     static bool     isIsoLanguage( const OUString& rLanguage );
     static bool     isIsoScript( const OUString& rScript );
@@ -504,23 +506,28 @@ private:
     {
         EXTRACTED_NONE,
         EXTRACTED_LSC,
+        EXTRACTED_LV,
         EXTRACTED_X,
         EXTRACTED_X_JOKER
     };
 
-    /** Of a simple language tag of the form lll[-Ssss][-CC] (i.e. one that
-        would fulfill the isIsoODF() condition) extract the portions.
+    /** Of a language tag of the form lll[-Ssss][-CC][-vvvvvvvv] extract the
+        portions.
 
         Does not check case or content!
 
-        @return EXTRACTED_LSC if simple tag was detected, EXTRACTED_X if x-...
-        privateuse tag was detected, EXTRACTED_X_JOKER if "*" joker was
-        detected, else EXTRACTED_NONE.
+        @return EXTRACTED_LSC if simple tag was detected (i.e. one that
+                would fulfill the isIsoODF() condition),
+                EXTRACTED_LV if a tag with variant was detected,
+                EXTRACTED_X if x-... privateuse tag was detected,
+                EXTRACTED_X_JOKER if "*" joker was detected,
+                EXTRACTED_NONE else.
      */
     static Extraction   simpleExtract( const OUString& rBcp47,
                                        OUString& rLanguage,
                                        OUString& rScript,
-                                       OUString& rCountry );
+                                       OUString& rCountry,
+                                       OUString& rVariants );
 
 };
 

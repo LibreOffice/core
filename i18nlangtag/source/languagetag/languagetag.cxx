@@ -155,6 +155,7 @@ LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
+        mbCachedVariants( false),
         mbIsFallback( false)
 {
     if (bCanonicalize)
@@ -178,6 +179,7 @@ LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
+        mbCachedVariants( false),
         mbIsFallback( false)
 {
 }
@@ -198,6 +200,7 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
+        mbCachedVariants( false),
         mbIsFallback( false)
 {
 }
@@ -220,6 +223,7 @@ LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
+        mbCachedVariants( false),
         mbIsFallback( false)
 {
     if (!mbSystemLocale && !mbInitializedBcp47)
@@ -257,6 +261,7 @@ LanguageTag::LanguageTag( const rtl_Locale & rLocale )
         mbCachedLanguage( false),
         mbCachedScript( false),
         mbCachedCountry( false),
+        mbCachedVariants( false),
         mbIsFallback( false)
 {
     convertFromRtlLocale();
@@ -284,6 +289,7 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
         mbCachedLanguage( rLanguageTag.mbCachedLanguage),
         mbCachedScript( rLanguageTag.mbCachedScript),
         mbCachedCountry( rLanguageTag.mbCachedCountry),
+        mbCachedVariants( rLanguageTag.mbCachedVariants),
         mbIsFallback( rLanguageTag.mbIsFallback)
 {
     if (mpImplLangtag)
@@ -313,6 +319,7 @@ LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
     mbCachedLanguage    = rLanguageTag.mbCachedLanguage;
     mbCachedScript      = rLanguageTag.mbCachedScript;
     mbCachedCountry     = rLanguageTag.mbCachedCountry;
+    mbCachedVariants    = rLanguageTag.mbCachedVariants;
     mbIsFallback        = rLanguageTag.mbIsFallback;
     if (mpImplLangtag)
         theDataRef::get().incRef();
@@ -360,6 +367,7 @@ void LanguageTag::resetVars()
     mbCachedLanguage    = false;
     mbCachedScript      = false;
     mbCachedCountry     = false;
+    mbCachedVariants    = false;
     mbIsFallback        = false;
 }
 
@@ -441,20 +449,22 @@ bool LanguageTag::canonicalize()
                 // and want to determine if parsing it would be possible
                 // without using liblangtag just to see if it is a simple known
                 // locale.
-                OUString aLanguage, aScript, aCountry;
-                Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry);
+                OUString aLanguage, aScript, aCountry, aVariants;
+                Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry, aVariants);
                 if (eExt != EXTRACTED_NONE)
                 {
-                    if (eExt == EXTRACTED_LSC)
+                    if (eExt == EXTRACTED_LSC || eExt == EXTRACTED_LV)
                     {
                         // Rebuild bcp47 with proper casing of tags.
                         OUStringBuffer aBuf( aLanguage.getLength() + 1 + aScript.getLength() +
-                                1 + aCountry.getLength());
+                                1 + aCountry.getLength() + 1 + aVariants.getLength());
                         aBuf.append( aLanguage);
                         if (!aScript.isEmpty())
                             aBuf.append("-" + aScript);
                         if (!aCountry.isEmpty())
                             aBuf.append("-" + aCountry);
+                        if (!aVariants.isEmpty())
+                            aBuf.append("-" + aVariants);
                         OUString aStr( aBuf.makeStringAndClear());
 
                         if (maBcp47 != aStr)
@@ -749,7 +759,7 @@ OUString LanguageTag::getLanguageFromLangtag()
     }
     else
     {
-        if (mbCachedLanguage || cacheSimpleLSC())
+        if (mbCachedLanguage || cacheSimpleLSCV())
             aLanguage = maCachedLanguage;
     }
     return aLanguage;
@@ -775,7 +785,7 @@ OUString LanguageTag::getScriptFromLangtag()
     }
     else
     {
-        if (mbCachedScript || cacheSimpleLSC())
+        if (mbCachedScript || cacheSimpleLSCV())
             aScript = maCachedScript;
     }
     return aScript;
@@ -808,7 +818,7 @@ OUString LanguageTag::getRegionFromLangtag()
     }
     else
     {
-        if (mbCachedCountry || cacheSimpleLSC())
+        if (mbCachedCountry || cacheSimpleLSCV())
             aRegion = maCachedCountry;
     }
     return aRegion;
@@ -839,6 +849,11 @@ OUString LanguageTag::getVariantsFromLangtag()
                 }
             }
         }
+    }
+    else
+    {
+        if (mbCachedVariants || cacheSimpleLSCV())
+            aVariants = maCachedVariants;
     }
     return aVariants;
 }
@@ -1020,7 +1035,12 @@ OUString LanguageTag::getRegion() const
 
 OUString LanguageTag::getVariants() const
 {
-    return const_cast<LanguageTag*>(this)->getVariantsFromLangtag();
+    if (!mbCachedVariants)
+    {
+        maCachedVariants = const_cast<LanguageTag*>(this)->getVariantsFromLangtag();
+        mbCachedVariants = true;
+    }
+    return maCachedVariants;
 }
 
 
@@ -1055,16 +1075,18 @@ bool LanguageTag::hasScript() const
 }
 
 
-bool LanguageTag::cacheSimpleLSC()
+bool LanguageTag::cacheSimpleLSCV()
 {
-    OUString aLanguage, aScript, aCountry;
-    bool bRet = (simpleExtract( maBcp47, aLanguage, aScript, aCountry) == EXTRACTED_LSC);
+    OUString aLanguage, aScript, aCountry, aVariants;
+    Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry, aVariants);
+    bool bRet = (eExt == EXTRACTED_LSC || eExt == EXTRACTED_LV);
     if (bRet)
     {
         maCachedLanguage = aLanguage;
         maCachedScript   = aScript;
         maCachedCountry  = aCountry;
-        mbCachedLanguage = mbCachedScript = mbCachedCountry = true;
+        maCachedVariants = aVariants;
+        mbCachedLanguage = mbCachedScript = mbCachedCountry = mbCachedVariants = true;
     }
     return bRet;
 }
@@ -1275,11 +1297,14 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 
 // static
 LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
-        OUString& rLanguage, OUString& rScript, OUString& rCountry )
+        OUString& rLanguage, OUString& rScript, OUString& rCountry, OUString& rVariants )
 {
     Extraction eRet = EXTRACTED_NONE;
     const sal_Int32 nLen = rBcp47.getLength();
     const sal_Int32 nHyph1 = rBcp47.indexOf( '-');
+    const sal_Int32 nHyph2 = (nHyph1 < 0 ? -1 : rBcp47.indexOf( '-', nHyph1 + 1));
+    const sal_Int32 nHyph3 = (nHyph2 < 0 ? -1 : rBcp47.indexOf( '-', nHyph2 + 1));
+    const sal_Int32 nHyph4 = (nHyph3 < 0 ? -1 : rBcp47.indexOf( '-', nHyph3 + 1));
     if (nLen == 1 && rBcp47[0] == '*')              // * the dreaded jolly joker
     {
         // It's f*d up but we need to recognize this.
@@ -1290,34 +1315,96 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
         // x-... privateuse tags MUST be known to us by definition.
         eRet = EXTRACTED_X;
     }
-    else if ((nLen == 2 || nLen == 3) && nHyph1 < 0) // ll or lll
+    else if (nLen == 2 || nLen == 3)                // ll or lll
     {
-        rLanguage = rBcp47.toAsciiLowerCase();
-        rScript = rCountry = OUString();
-        eRet = EXTRACTED_LSC;
+        if (nHyph1 < 0)
+        {
+            rLanguage = rBcp47.toAsciiLowerCase();
+            rScript = rCountry = rVariants = OUString();
+            eRet = EXTRACTED_LSC;
+        }
     }
-    else if (  (nLen == 5 && nHyph1 == 2)           // ll-CC
-            || (nLen == 6 && nHyph1 == 3))          // lll-CC
+    else if (  (nHyph1 == 2 && nLen == 5)           // ll-CC
+            || (nHyph1 == 3 && nLen == 6))          // lll-CC
     {
-        rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-        rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
-        rScript = OUString();
-        eRet = EXTRACTED_LSC;
+        if (nHyph2 < 0)
+        {
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
+            rScript = rVariants = OUString();
+            eRet = EXTRACTED_LSC;
+        }
     }
-    else if (  (nHyph1 == 2 && nLen == 10)          // ll-Ssss-CC check
-            || (nHyph1 == 3 && nLen == 11))         // lll-Ssss-CC check
+    else if (  (nHyph1 == 2 && nLen ==  7)          // ll-Ssss
+            || (nHyph1 == 3 && nLen ==  8))         // lll-Ssss
     {
-        const sal_Int32 nHyph2 = rBcp47.indexOf( '-', nHyph1 + 1);
-        if (nHyph2 == nHyph1 + 5)
+        /* TODO: also accept a (DIGIT 3*ALNUM) vvvv variant instead of Ssss */
+        if (nHyph2 < 0)
+        {
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
+            rCountry  = rVariants = OUString();
+            eRet = EXTRACTED_LSC;
+        }
+    }
+    else if (  (nHyph1 == 2 && nHyph2 == 7 && nLen == 10)   // ll-Ssss-CC
+            || (nHyph1 == 3 && nHyph2 == 8 && nLen == 11))  // lll-Ssss-CC
+    {
+        if (nHyph3 < 0)
         {
             rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
             rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
             rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
+            rVariants = OUString();
             eRet = EXTRACTED_LSC;
         }
     }
+    else if (  (nHyph1 == 2 && nHyph2 == 7 && nHyph3 == 10 && nLen >= 15)   // ll-Ssss-CC-vvvv[vvvv][-...]
+            || (nHyph1 == 3 && nHyph2 == 8 && nHyph3 == 11 && nLen >= 16))  // lll-Ssss-CC-vvvv[vvvv][-...]
+    {
+        if (nHyph4 < 0 || (nHyph4 - nHyph3 > 4 && nHyph4 - nHyph3 <= 9))
+        {
+            rVariants = rBcp47.copy( nHyph3 + 1);
+            if (nHyph4 < 0 && (rVariants.getLength() < 4 || 8 < rVariants.getLength()))
+            {
+                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+                rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
+                rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
+                eRet = EXTRACTED_LV;
+            }
+        }
+    }
+    else if (  (nHyph1 == 2 && nHyph2 == 5 && nLen >= 10)   // ll-CC-vvvv[vvvv][-...]
+            || (nHyph1 == 3 && nHyph2 == 6 && nLen >= 11))  // lll-CC-vvvv[vvvv][-...]
+    {
+        if (nHyph3 < 0 || (nHyph3 - nHyph2 > 4 && nHyph3 - nHyph2 <= 9))
+        {
+            rVariants = rBcp47.copy( nHyph2 + 1);
+            if (nHyph3 < 0 && (rVariants.getLength() < 4 || 8 < rVariants.getLength()))
+            {
+                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+                rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
+                rScript   = OUString();
+                eRet = EXTRACTED_LV;
+            }
+        }
+    }
+    else if (  (nHyph1 == 2 && nLen >= 8)                   // ll-vvvvv[vvv][-...]
+            || (nHyph1 == 3 && nLen >= 9))                  // lll-vvvvv[vvv][-...]
+    {
+        if (nHyph2 < 0 || (nHyph2 - nHyph1 > 5 && nHyph2 - nHyph1 <= 9))
+        {
+            rVariants = rBcp47.copy( nHyph1 + 1);
+            if (nHyph2 < 0 && (rVariants.getLength() < 5 || 8 < rVariants.getLength()))
+            {
+                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+                rScript   = rCountry = OUString();
+                eRet = EXTRACTED_LV;
+            }
+        }
+    }
     if (eRet == EXTRACTED_NONE)
-        rLanguage = rScript = rCountry = OUString();
+        rLanguage = rScript = rCountry = rVariants = OUString();
     return eRet;
 }
 
