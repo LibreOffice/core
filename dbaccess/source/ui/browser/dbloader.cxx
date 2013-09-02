@@ -150,24 +150,6 @@ Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) thro
     return aSNS;
 }
 
-extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
-{
-    Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
-
-    // register content loader for dispatch
-    OUString aImpl("/");
-    aImpl += DBContentLoader::getImplementationName_Static();
-
-    OUString aImpltwo = aImpl;
-    aImpltwo += "/UNO/Loader";
-    Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
-    aImpltwo = aImpl;
-    aImpltwo += "/Loader";
-    Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( OUString("Pattern") );
-    xNewKey->setAsciiValue( OUString(".component:DB*") );
-}
-
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)

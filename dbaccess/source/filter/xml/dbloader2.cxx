@@ -602,20 +602,4 @@ extern "C" void SAL_CALL createRegistryInfo_DBContentLoader2()
     static ::dbaxml::OMultiInstanceAutoRegistration< ::dbaxml::DBContentLoader > aAutoRegistration;
 }
 
-extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
-{
-    Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
-
-    // register content loader for dispatch
-    OUString aImpl("/");
-    aImpl += ::dbaxml::DBContentLoader::getImplementationName_Static();
-
-    OUString aImpltwo = aImpl + "/UNO/Loader";
-    Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
-    aImpltwo = aImpl + "/Loader";
-    Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( OUString("Pattern") );
-    xNewKey->setAsciiValue( OUString("private:factory/sdatabase") );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

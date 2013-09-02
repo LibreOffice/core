@@ -35,7 +35,6 @@ extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog();
 extern "C" void SAL_CALL createRegistryInfo_OBrowser();
 extern "C" void SAL_CALL createRegistryInfo_OFormGridView();
 extern "C" void SAL_CALL createRegistryInfo_DBContentLoader();
-extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey);
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl();
