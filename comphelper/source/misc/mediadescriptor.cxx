@@ -47,24 +47,6 @@
 
 namespace comphelper{
 
-namespace {
-
-OUString removeFragment(OUString const & uri) {
-    css::uno::Reference< css::uri::XUriReference > ref(
-        css::uri::UriReferenceFactory::create(
-            comphelper::getProcessComponentContext())->
-        parse(uri));
-    if (ref.is()) {
-        ref->clearFragment();
-        return ref->getUriReference();
-    } else {
-        SAL_WARN("comphelper", "cannot parse <" << uri << ">");
-        return uri;
-    }
-}
-
-}
-
 const OUString& MediaDescriptor::PROP_ABORTED()
 {
     static const OUString sProp("Aborted");
