@@ -289,12 +289,9 @@ gb_UnoApiHeadersTarget_CPPUMAKERDEPS := $(call gb_Executable_get_runtime_depende
 gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,cppumaker)
 
 define gb_UnoApiHeadersTarget__command
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
-		$(UNOAPI_DEPS)) && \
 	$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) \
 		-Gc $(4) -O$(3) $(call gb_UnoApiTarget_get_target,$(2)) \
-		@$${RESPONSEFILE} && \
-	rm -f $${RESPONSEFILE} && \
+		 $(UNOAPI_DEPS) && \
 	touch $(1)
 
 endef
