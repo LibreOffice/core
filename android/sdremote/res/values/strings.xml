@@ -24,7 +24,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>
     <string name="button_start">Start</string>
-    <string name="button_reset">Reset</string>
+    <string name="button_remove">Remove</string>
 
     <string name="message_impress_pin_validation">Go to “Slide Show → Impress Remote” in LibreOffice Impress and enter the code.</string>
     <string name="message_connection_failed_title">Connection failed</string>

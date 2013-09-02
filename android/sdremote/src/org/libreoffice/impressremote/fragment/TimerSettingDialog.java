@@ -44,7 +44,6 @@ public class TimerSettingDialog extends SherlockDialogFragment implements TimePi
         aDialog.setTitle(R.string.title_timer);
 
         aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.button_start), this);
-        aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.button_cancel), this);
 
         return aDialog;
     }
@@ -61,10 +60,6 @@ public class TimerSettingDialog extends SherlockDialogFragment implements TimePi
     @Override
     public void onClick(DialogInterface aDialogInterface, int aButtonId) {
         getTimePickerDialog().onClick(aDialogInterface, aButtonId);
-
-        if (aButtonId != DialogInterface.BUTTON_POSITIVE) {
-            return;
-        }
 
         startTimer();
     }

@@ -16,14 +16,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.View;
 import android.widget.TimePicker;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.util.Intents;
 
-public class TimerEditingDialog extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener, DialogInterface.OnShowListener, View.OnClickListener {
+public class TimerEditingDialog extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener {
     public static final String TAG = "TIMER_EDITING";
 
     private static final boolean IS_24_HOUR_VIEW = true;
@@ -61,10 +60,7 @@ public class TimerEditingDialog extends SherlockDialogFragment implements TimePi
         aDialog.setTitle(R.string.title_timer);
 
         aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.button_save), this);
-        aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.button_cancel), this);
-        aDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_reset), this);
-
-        aDialog.setOnShowListener(this);
+        aDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.button_remove), this);
 
         return aDialog;
     }
@@ -90,27 +86,19 @@ public class TimerEditingDialog extends SherlockDialogFragment implements TimePi
     public void onClick(DialogInterface aDialogInterface, int aButtonId) {
         getTimePickerDialog().onClick(aDialogInterface, aButtonId);
 
-        switch (aButtonId) {
-            case DialogInterface.BUTTON_NEGATIVE:
-                resumeTimer();
-                break;
-
-            case DialogInterface.BUTTON_POSITIVE:
-                changeTimer();
-                break;
-
-            default:
-                break;
+        if (aButtonId == DialogInterface.BUTTON_NEUTRAL) {
+            resetTime();
         }
+
+        changeTimer();
     }
 
     private TimePickerDialog getTimePickerDialog() {
         return (TimePickerDialog) getDialog();
     }
 
-    private void resumeTimer() {
-        Intent aIntent = Intents.buildTimerResumedIntent();
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
+    private void resetTime() {
+        mMinutes = 0;
     }
 
     private void changeTimer() {
@@ -119,27 +107,15 @@ public class TimerEditingDialog extends SherlockDialogFragment implements TimePi
     }
 
     @Override
-    public void onShow(DialogInterface dialogInterface) {
-        setUpNeutralButton();
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+
+        resumeTimer();
     }
 
-    private void setUpNeutralButton() {
-        TimePickerDialog aDialog = (TimePickerDialog) getDialog();
-
-        aDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View aView) {
-        // Requires the additional listener to not close the dialog.
-
-        resetTime();
-    }
-
-    private void resetTime() {
-        TimePickerDialog aDialog = (TimePickerDialog) getDialog();
-
-        aDialog.updateTime(0, 0);
+    private void resumeTimer() {
+        Intent aIntent = Intents.buildTimerResumedIntent();
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
     }
 }
 
