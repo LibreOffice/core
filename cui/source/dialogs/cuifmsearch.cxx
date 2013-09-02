@@ -47,7 +47,6 @@ using namespace ::com::sun::star::util;
 
 #define MAX_HISTORY_ENTRIES     50
 
-//------------------------------------------------------------------------
 void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 {
     // init the engine
@@ -82,7 +81,6 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     m_pbClose.SetHelpText(String());
 }
 
-//------------------------------------------------------------------------
 FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
     const Link& lnkContextSupplier)
     :ModalDialog(pParent, CUI_RES(RID_SVXDLG_SEARCHFORM))
@@ -188,7 +186,6 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, co
         Init(fmscInitial.strUsedFields, sInitialText);
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::implMoveControls(
             Control** _ppControls,
             sal_Int32 _nControls,
@@ -208,7 +205,6 @@ void FmSearchDialog::implMoveControls(
     SetSizePixel(sz);
 }
 
-//------------------------------------------------------------------------
 FmSearchDialog::~FmSearchDialog()
 {
     if (m_aDelayedPaint.IsActive())
@@ -225,7 +221,6 @@ FmSearchDialog::~FmSearchDialog()
     delete m_pSearchEngine;
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sInitialText)
 {
     //the initialization of all the Controls
@@ -297,7 +292,6 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     FreeResource();
 }
 
-//------------------------------------------------------------------------
 sal_Bool FmSearchDialog::Close()
 {
     // If the close button is disabled and ESC is pressed in a dialog,
@@ -309,7 +303,6 @@ sal_Bool FmSearchDialog::Close()
     return ModalDialog::Close();
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
 {
     if ((pButton == &m_rbSearchForText) || (pButton == &m_rbSearchForNull) || (pButton == &m_rbSearchForNotNull))
@@ -332,7 +325,6 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
 {
     if (m_pbClose.IsEnabled())
@@ -378,7 +370,6 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
 {
     if (&m_pbApproxSettings == pButton)
@@ -425,7 +416,6 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
 {
     if ((!m_cmbSearchText.GetText().isEmpty()) || !m_rbSearchForText.IsChecked())
@@ -437,14 +427,12 @@ IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnFocusGrabbed, ComboBox*, EMPTYARG)
 {
     m_cmbSearchText.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox*, pBox)
 {
     (void) pBox; // avoid warning
@@ -454,7 +442,6 @@ IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox*, pBox)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
 {
     (void) pBox; // avoid warning
@@ -469,7 +456,6 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
     return 0;
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
 {
     sal_Bool bChecked = pBox->IsChecked();
@@ -554,7 +540,6 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     return 0;
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::InitContext(sal_Int16 nContext)
 {
     FmSearchContext fmscContext;
@@ -601,14 +586,12 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_ftRecord.SetText(OUString::number(fmscContext.xCursor->getRow()));
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox*, pBox)
 {
     InitContext(pBox->GetSelectEntryPos());
     return 0L;
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 {
     // when the controls shall be disabled their paint is turned off and then turned on again after a delay
@@ -684,7 +667,6 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
 
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
 {
     sal_Bool bSearchingForText = m_rbSearchForText.IsChecked();
@@ -708,7 +690,6 @@ void FmSearchDialog::EnableSearchForDependees(sal_Bool bEnable)
     m_cbCase.Enable                 (bEnable && bEnableRedundants);
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
 {
     Control* pAffectedControls[] = { &m_flSearchFor, &m_rbSearchForText, &m_cmbSearchText, &m_rbSearchForNull, &m_rbSearchForNotNull,
@@ -730,14 +711,12 @@ void FmSearchDialog::EnableControlPaint(sal_Bool bEnable)
         }
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint)
 {
     EnableControlPaint(sal_True);
     return 0L;
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos)
 {
     FmFoundRecordInformation friInfo;
@@ -756,7 +735,6 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
     m_cmbSearchText.GrabFocus();
 }
 
-//------------------------------------------------------------------------
 IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
 {
     SolarMutexGuard aGuard;
@@ -817,7 +795,6 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
     return 0L;
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::LoadParams()
 {
     FmSearchParams aParams(m_pConfig->getParams());
@@ -909,7 +886,6 @@ void FmSearchDialog::LoadParams()
     LINK(this, FmSearchDialog, OnClickedFieldRadios).Call(&m_rbSearchForText);
 }
 
-//------------------------------------------------------------------------
 void FmSearchDialog::SaveParams() const
 {
     if (!m_pConfig)

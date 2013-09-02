@@ -22,18 +22,12 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 
-//........................................................................
 namespace svxform
 {
-//........................................................................
-
-    // ====================================================================
-    // = struct FmSearchParams - Parameter einer Suche
-    // ====================================================================
+    // search parameters
 
     FmSearchParams::FmSearchParams()
         :nTransliterationFlags( 0 )
@@ -77,9 +71,7 @@ namespace svxform
             nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
     }
 
-    // ====================================================================
-    // = maps from ascii values to int values
-    // ====================================================================
+    // maps from ascii values to int values
 
     struct Ascii2Int16
     {
@@ -156,9 +148,7 @@ namespace svxform
         return s_pDummy;
     }
 
-    // ====================================================================
-    // = class FmSearchConfigItem - ein ConfigItem, dass sich Suchparameter merkt
-    // ====================================================================
+    // class FmSearchConfigItem - a config item that stores search parameters
 
 #define TA( c )     &c, getCppuType( &c )
 
@@ -295,8 +285,6 @@ namespace svxform
         implTranslateToConfig();
     }
 
-//........................................................................
-}   // namespace svxform
-//........................................................................
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
