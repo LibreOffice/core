@@ -1463,6 +1463,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    // List the columns in a table which are foreign keys. This is actually
+    // never used anywhere in the LO codebase currently. Retrieval from firebird
+    // requires using a 5-table join.
     SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
@@ -1473,6 +1476,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
+    // List the columns in a table (which must be primary key, or possibly just
+    // unique) that are referred to in other foreign keys. Will have a similar
+    // 5-table or so join as in getExportedKeys.
     SAL_WARN("connectivity.firebird", "Not yet implemented");
     (void) catalog;
     (void) schema;
