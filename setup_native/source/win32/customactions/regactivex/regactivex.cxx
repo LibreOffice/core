@@ -71,12 +71,6 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
 //----------------------------------------------------------
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
-    // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO       aVerInfo;
-    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-    if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
-        InstallForAllUser = TRUE;
-
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
@@ -104,12 +98,6 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 //----------------------------------------------------------
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
-    // For Win98/WinME the values should be written to the local machine
-    OSVERSIONINFO       aVerInfo;
-    aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
-    if ( GetVersionEx( &aVerInfo ) && aVerInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
-        InstallForAllUser = TRUE;
-
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
