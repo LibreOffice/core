@@ -652,28 +652,6 @@ awt::Size SdPhotoAlbumDialog::createASRSize(const awt::Size& aPicSize, const awt
     return awt::Size(resizeWidth, resizeHeight);
 }
 
-Reference< drawing::XShape > SdPhotoAlbumDialog::createXShapeFromUrl(const OUString& sUrl,
-    Reference< lang::XMultiServiceFactory > xShapeFactory,
-    Reference< graphic::XGraphicProvider> xProvider
-)
-{
-    //First, we create an XGraphic
-    ::comphelper::NamedValueCollection aMediaProperties;
-    aMediaProperties.put( "URL", OUString( sUrl ) );
-    Reference< graphic::XGraphic> xGraphic =
-        xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
-    //And then, we can create the XShape from the XGraphic
-    Reference< drawing::XShape > xShape(
-        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
-        uno::UNO_QUERY
-    );
-
-    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
-
-    return xShape; // Image loaded into XShape
-}
-
 Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OUString& sUrl,
     Reference< graphic::XGraphicProvider> xProvider
 )

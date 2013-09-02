@@ -84,10 +84,6 @@ private:
 
     awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
 
-    Reference< drawing::XShape > createXShapeFromUrl(const OUString& sUrl,
-        Reference< lang::XMultiServiceFactory > xShapeFactory,
-        Reference< graphic::XGraphicProvider> xProvider);
-
     Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         Reference< graphic::XGraphicProvider> xProvider);
 

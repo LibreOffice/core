@@ -22,18 +22,4 @@
 
 namespace { struct EmptyBPixel : public rtl::Static<basegfx::BPixel, EmptyBPixel> {}; }
 
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
-    const BPixel& BPixel::getEmptyBPixel()
-    {
-        return EmptyBPixel::get();
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-    // external operators
-
-} // end of namespace basegfx
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

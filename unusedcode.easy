@@ -5,17 +5,12 @@
 (anonymous namespace)::VBATest::testMiscOLEStuff()
 BackingWindow::LinkStubWindowEventListener(void*, void*)
 Bcp47CountryEntry::getLocale() const
-BitmapReadAccess::GetColorWithFallback(long, long, BitmapColor const&) const
-BitmapWriteAccess::FillPolyPolygon(PolyPolygon const&)
 CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
-DbgRegisterNamedUserChannel(rtl::OUString const&, void (*)(char const*))
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
 LanguageTag::reset(_rtl_Locale const&)
-OWriteAccelatorDocumentHandler::OWriteAccelatorDocumentHandler(std::__debug::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>)
-OWriteAccelatorDocumentHandler::WriteAcceleratorDocument()
 OutputDevice::GetCanvas() const
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
 OutputDevice::LogicToPixel(Region const&, MapMode const&) const
@@ -90,7 +85,6 @@ TextEngine::GetLeftMargin() const
 ThumbnailView::DeselectItem(unsigned short)
 ThumbnailView::GetItemText(unsigned short) const
 ThumbnailView::SetColor(Color const&)
-UnoControlBase::ImplGetPropertyValue_INT64(unsigned short)
 VclMultiLineEdit::SetTextSelectable(bool)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()
@@ -115,7 +109,6 @@ apitest::XText::testInsertRemoveTextContent()
 basebmp::BitmapDevice::getBufferSize() const
 basebmp::createBitmapDevice(basegfx::B2IVector const&, bool, basebmp::Format, boost::shared_array<unsigned char> const&, boost::shared_ptr<std::__debug::vector<basebmp::Color, std::allocator<basebmp::Color> > const> const&)
 basebmp::createBitmapDevice(basegfx::B2IVector const&, bool, basebmp::Format, boost::shared_ptr<std::__debug::vector<basebmp::Color, std::allocator<basebmp::Color> > const> const&)
-basegfx::BPixel::getEmptyBPixel()
 basegfx::snapToNearestMultiple(double, double)
 basegfx::snapToRange(double, double, double)
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
@@ -143,7 +136,6 @@ editeng::MisspellRange::MisspellRange()
 editeng::Section::Section()
 formula::DoubleVectorRefToken::GetArrayLength() const
 formula::FormulaDlg::CheckMatrix()
-formula::FormulaDlg::isUserMatrix() const
 framework::MenuBarManager::getComponentContext()
 framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
@@ -160,13 +152,10 @@ sc::sidebar::CellLineStyleValueSet::SetImage(Image)
 sc_apitest::main()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-sd::SdPhotoAlbumDialog::createXShapeFromUrl(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>, com::sun::star::uno::Reference<com::sun::star::graphic::XGraphicProvider>)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::framework::FrameworkHelper::GetPaneWindow(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::FrameworkHelper::GetResource(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
-sd::framework::FrameworkHelper::RequestResourceDeactivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&)
 sd::framework::Pane::SetWindow(Window*)
-sd::sidebar::CurrentMasterPagesSelector::NotifyHint(SfxBroadcaster&, SfxHint const&)
 sd::sidebar::LayoutMenu::GetMinimumWidth()
 sd::sidebar::LayoutMenu::GetPreferredSize()
 sd::sidebar::LayoutMenu::GetPreferredWidth(int)
@@ -181,8 +170,6 @@ sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*,
 sfx2::sidebar::EnumContext::EvaluateMatch(std::__debug::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
 sfx2::sidebar::EnumContext::GetApplication() const
 sfx2::sidebar::EnumContext::GetCombinedContext() const
-sfx2::sidebar::FocusManager::IsAnyButtonFocused() const
-sfx2::sidebar::FocusManager::IsAnyPanelFocused() const
 sfx2::sidebar::Paint::Set(sfx2::sidebar::Paint const&)
 sfx2::sidebar::Panel::PrintWindowTree()
 sfx2::sidebar::SidebarDockingWindow::GetChildWindow()

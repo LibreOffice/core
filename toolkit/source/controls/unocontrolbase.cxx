@@ -151,11 +151,6 @@ sal_Int32 UnoControlBase::ImplGetPropertyValue_INT32( sal_uInt16 nProp )
     return ImplGetPropertyValuePOD<sal_Int32>(nProp);
 }
 
-sal_Int64 UnoControlBase::ImplGetPropertyValue_INT64( sal_uInt16 nProp )
-{
-    return ImplGetPropertyValuePOD<sal_Int64>(nProp);
-}
-
 double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
 {
     return ImplGetPropertyValuePOD<double>(nProp);

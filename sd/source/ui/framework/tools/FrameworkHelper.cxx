@@ -666,27 +666,6 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
     return NULL;
 }
 
-
-
-
-void FrameworkHelper::RequestResourceDeactivation (const cssu::Reference<cssdf::XResourceId>& rxResourceId)
-{
-    try
-    {
-        if (mxConfigurationController.is() && rxResourceId.is())
-            mxConfigurationController->requestResourceDeactivation(rxResourceId);
-    }
-    catch (lang::DisposedException&)
-    {
-        Dispose();
-    }
-    catch (RuntimeException&)
-    {}
-}
-
-
-
-
 ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
 {
     if (mpViewURLMap->empty())

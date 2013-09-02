@@ -1785,16 +1785,6 @@ void DbgGUIStart()
     }
 }
 
-// -----------------------------------------------------------------------
-
-sal_uInt16 DbgRegisterNamedUserChannel( const OUString& _rChannelUIName, DbgPrintLine pProc )
-{
-    DbgChannelId nChannelId = DbgRegisterUserChannel( pProc );
-    UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
-    rChannels[ _rChannelUIName ] = nChannelId;
-    return nChannelId;
-}
-
 #endif // DBG_UTIL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
