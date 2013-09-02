@@ -180,17 +180,6 @@ ModalDialog DLG_ADD_IDX_STYLES
         Size = MAP_APPFONT ( 273 , 164 ) ;
         Border = TRUE;
         TabStop = TRUE;
-        Window HB_STYLES
-        {
-            Pos = MAP_APPFONT ( 0 , 0 ) ;
-            Size = MAP_APPFONT ( 273 , 20 ) ;
-        };
-        Control TLB_STYLES
-        {
-            Pos = MAP_APPFONT ( 0 , 20 ) ;
-            Size = MAP_APPFONT ( 273 , 132 ) ;
-            Border = TRUE;
-        };
     };
     ImageButton PB_LEFT
     {
