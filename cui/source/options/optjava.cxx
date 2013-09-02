@@ -52,7 +52,6 @@
 // define ----------------------------------------------------------------
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
-#define BUTTON_BORDER       2
 #define RESET_TIMEOUT       300
 
 using namespace ::com::sun::star::lang;
@@ -919,12 +918,12 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 
 // class SvxJavaClassPathDlg ---------------------------------------------
 
-SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
-
-    ModalDialog( pParent, "JavaClassPath", "cui/ui/javaclasspathdialog.ui" )
+SvxJavaClassPathDlg::SvxJavaClassPathDlg(Window* pParent)
+    : ModalDialog(pParent, "JavaClassPath", "cui/ui/javaclasspathdialog.ui")
 {
-
     get( m_pPathList, "paths");
+    m_pPathList->SetDropDownLineCount(8);
+    m_pPathList->set_width_request(m_pPathList->approximate_char_width() * 54);
     get( m_pAddArchiveBtn, "archive");
     get( m_pAddPathBtn, "folder");
     get( m_pRemoveBtn, "remove");
@@ -933,30 +932,6 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
     m_pAddPathBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
     m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
     m_pPathList->SetSelectHdl( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
-
-    // check if the buttons text are not too wide otherwise we have to stretch the buttons
-    // and shrink the listbox
-    long nTxtWidth1 = m_pAddArchiveBtn->GetTextWidth( m_pAddArchiveBtn->GetText() );
-    long nTxtWidth2 = m_pAddPathBtn->GetTextWidth( m_pAddPathBtn->GetText() );
-    Size aBtnSz = m_pAddArchiveBtn->GetSizePixel();
-    if ( nTxtWidth1 > aBtnSz.Width() || nTxtWidth2 > aBtnSz.Width() )
-    {
-        long nW = ( nTxtWidth1 > aBtnSz.Width() ) ? nTxtWidth1 : nTxtWidth2;
-        long nDelta = nW - aBtnSz.Width() + 2 * BUTTON_BORDER;
-        aBtnSz.Width() += nDelta;
-        Point aBtnPnt = m_pAddArchiveBtn->GetPosPixel();
-        aBtnPnt.X() -= nDelta;
-        m_pAddArchiveBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
-        aBtnPnt = m_pAddPathBtn->GetPosPixel();
-        aBtnPnt.X() -= nDelta;
-        m_pAddPathBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
-        aBtnPnt = m_pRemoveBtn->GetPosPixel();
-        aBtnPnt.X() -= nDelta;
-        m_pRemoveBtn->SetPosSizePixel( aBtnPnt, aBtnSz );
-        Size aBoxSz = m_pPathList->GetSizePixel();
-        aBoxSz.Width() -= nDelta;
-        m_pPathList->SetSizePixel( aBoxSz );
-    }
 
     // set initial focus to path list
     m_pPathList->GrabFocus();
