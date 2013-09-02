@@ -18,6 +18,7 @@
  */
 
 
+#include <osl/thread.h>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>

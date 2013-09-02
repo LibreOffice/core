@@ -20,7 +20,6 @@
 #define INCLUDED_unotools_PATHOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
-#include <tools/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 

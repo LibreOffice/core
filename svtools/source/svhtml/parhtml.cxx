@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>
+#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>

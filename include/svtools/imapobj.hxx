@@ -21,7 +21,6 @@
 #define _GOODIES_IMAPOBJ_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/string.hxx>
 #include <svl/macitem.hxx>
 #include <rtl/strbuf.hxx>
 

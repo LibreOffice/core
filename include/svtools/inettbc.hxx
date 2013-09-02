@@ -22,7 +22,6 @@
 
 #include "rtl/ref.hxx"
 #include "svtools/svtdllapi.h"
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/combobox.hxx>

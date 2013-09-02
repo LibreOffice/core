@@ -2036,7 +2036,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        XubString aStr( rPaM.GetNode()->Copy( rPaM.GetIndex(), nChars ) );
+        OUString aStr( rPaM.GetNode()->Copy( rPaM.GetIndex(), nChars ) );
 
         // Check whether attributes are deleted or changed:
         sal_uInt16 nStart = rPaM.GetIndex();
@@ -2895,15 +2895,15 @@ EditPaM ImpEditEngine::InsertParaBreak( EditSelection aCurSel )
     {
         sal_Int32 nPara = aEditDoc.GetPos( aPaM.GetNode() );
         OSL_ENSURE( nPara > 0, "AutoIndenting: Error!" );
-        XubString aPrevParaText( GetEditDoc().GetParaAsString( nPara-1 ) );
-        sal_uInt16 n = 0;
-        while ( ( n < aPrevParaText.Len() ) &&
-                ( ( aPrevParaText.GetChar(n) == ' ' ) || ( aPrevParaText.GetChar(n) == '\t' ) ) )
+        OUString aPrevParaText( GetEditDoc().GetParaAsString( nPara-1 ) );
+        sal_Int32 n = 0;
+        while ( ( n < aPrevParaText.getLength() ) &&
+                ( ( aPrevParaText[n] == ' ' ) || ( aPrevParaText[n] == '\t' ) ) )
         {
-            if ( aPrevParaText.GetChar(n) == '\t' )
+            if ( aPrevParaText[n] == '\t' )
                 aPaM = ImpInsertFeature( aPaM, SfxVoidItem( EE_FEATURE_TAB ) );
             else
-                aPaM = ImpInsertText( aPaM, OUString(aPrevParaText.GetChar(n)) );
+                aPaM = ImpInsertText( aPaM, OUString(aPrevParaText[n]) );
             n++;
         }
 

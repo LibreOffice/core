@@ -21,7 +21,6 @@
 #define _ICNVW_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/string.hxx>
 #include <vcl/ctrl.hxx>
 #include <tools/link.hxx>
 #include <tools/contnr.hxx>

@@ -370,10 +370,10 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 
 OUString SvxBulletItem::GetFullText() const
 {
-    XubString aStr( aPrevText );
-    aStr += cSymbol;
-    aStr += aFollowText;
-    return aStr;
+    OUStringBuffer aStr(aPrevText);
+    aStr.append(cSymbol);
+    aStr.append(aFollowText);
+    return aStr.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------

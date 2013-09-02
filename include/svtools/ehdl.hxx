@@ -25,7 +25,6 @@
 #include "svtools/svtdllapi.h"
 
 #include <tools/errinf.hxx>
-#include <tools/string.hxx>
 
 class Window;
 class ResMgr;

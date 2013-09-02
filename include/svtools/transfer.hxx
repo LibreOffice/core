@@ -23,7 +23,6 @@
 #include "svtools/svtdllapi.h"
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <sot/formats.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>

@@ -38,6 +38,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 
@@ -958,7 +959,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 SbModule* pMod = pBasicLib->FindModule( aElementName );
                 if( !pMod )
                 {
-                    pMod = pBasicLib->MakeModule( aElementName, String() );
+                    pMod = pBasicLib->MakeModule( aElementName, OUString() );
                     pBasicLib->SetModified( sal_False );
                 }
 
@@ -1077,7 +1078,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         SbModule* pMod = pBasicLib->FindModule( aElementName );
                         if( !pMod )
                         {
-                            pMod = pBasicLib->MakeModule( aElementName, String() );
+                            pMod = pBasicLib->MakeModule( aElementName, OUString() );
                             pBasicLib->SetModified( sal_False );
                         }
 

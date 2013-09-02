@@ -74,7 +74,7 @@ namespace dbaui
             //for transfor the tablename
             OUString                 sDefaultTableName;
 
-            String                          aUrl;
+            OUString                        aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
             ElementType                     nType;
             SvTreeListEntry*                    pDroppedAt;

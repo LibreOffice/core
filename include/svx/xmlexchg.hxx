@@ -21,6 +21,7 @@
 #define _SVX_XMLEXCHG_HXX_
 
 #include <svtools/transfer.hxx>
+#include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
 namespace com {

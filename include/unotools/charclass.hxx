@@ -24,7 +24,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/string.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>

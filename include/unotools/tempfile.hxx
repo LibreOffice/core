@@ -21,7 +21,6 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #define _UNOTOOLS_TEMPFILE_HXX
 
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 
 namespace utl

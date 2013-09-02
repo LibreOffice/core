@@ -22,9 +22,9 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/utility.hpp>
 #include <vector>

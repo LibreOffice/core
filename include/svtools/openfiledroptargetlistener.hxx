@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <sot/exchange.hxx>
-#include <tools/string.hxx>
 
 /** DropTargetListener that takes care of opening a file when it is dropped in the frame.
 */

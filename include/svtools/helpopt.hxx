@@ -22,7 +22,7 @@
 #include "svtools/svtdllapi.h"
 
 #include <list>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
 class SvtHelpOptions_Impl;

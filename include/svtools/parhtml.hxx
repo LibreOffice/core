@@ -22,7 +22,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <svtools/svparser.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>

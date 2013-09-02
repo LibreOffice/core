@@ -22,7 +22,6 @@
 
 #include "svtools/svtdllapi.h"
 
-#include <tools/string.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/image.hxx>
@@ -119,7 +118,7 @@ potentially not all applications [Draw,Equation,FontWork] can properly
 handle synthetic fonts. On filling, the previous name will be retained
 if possible.
 
-For DontKnow, the FontStyleBox should be filled with String(),
+For DontKnow, the FontStyleBox should be filled with OUString(),
 so it will contain a list with the default attributes. The currently
 shown style probably needs to be reset by the application.
 

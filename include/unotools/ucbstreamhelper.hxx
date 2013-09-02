@@ -45,7 +45,6 @@ namespace com
     }
 }
 
-class String;
 namespace utl
 {
     class UcbLockBytesHandler;

@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include <tools/string.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <basic/sbxvar.hxx>

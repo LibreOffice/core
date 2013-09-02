@@ -23,7 +23,6 @@
 #include "unotools/unotoolsdllapi.h"
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 namespace utl
 {

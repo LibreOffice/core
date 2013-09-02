@@ -2520,7 +2520,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
             OUString sName = xContent->getIdentifier()->getContentIdentifier();
             sal_Int32 nIndex = 0;
             sName = sName.copy(sName.getToken(0,'/',nIndex).getLength() + 1);
-            if ( m_aAsyncDrop.aUrl.Len() >= sName.getLength() && 0 == sName.compareTo(m_aAsyncDrop.aUrl,sName.getLength()) )
+            if ( m_aAsyncDrop.aUrl.getLength() >= sName.getLength() && m_aAsyncDrop.aUrl.startsWith(sName) )
             {
                 m_aAsyncDrop.aDroppedData.clear();
                 return DND_ACTION_NONE;
@@ -2530,7 +2530,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
             Reference< XHierarchicalNameAccess > xContainer(getElements(m_aAsyncDrop.nType),UNO_QUERY);
             Reference<XNameAccess> xNameAccess(xContainer,UNO_QUERY);
 
-            if ( m_aAsyncDrop.aUrl.Len() && xContainer.is() && xContainer->hasByHierarchicalName(m_aAsyncDrop.aUrl) )
+            if ( !m_aAsyncDrop.aUrl.isEmpty() && xContainer.is() && xContainer->hasByHierarchicalName(m_aAsyncDrop.aUrl) )
                 xNameAccess.set(xContainer->getByHierarchicalName(m_aAsyncDrop.aUrl),UNO_QUERY);
 
             if ( xNameAccess.is() )

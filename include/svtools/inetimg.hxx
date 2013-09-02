@@ -19,7 +19,6 @@
 #ifndef _INETIMG_HXX
 #define _INETIMG_HXX
 
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 
 class SvData;

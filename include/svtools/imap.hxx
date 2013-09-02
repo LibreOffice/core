@@ -21,7 +21,6 @@
 #define _IMAP_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 
