@@ -89,9 +89,9 @@ multiImageImportHelper::~multiImageImportHelper()
     }
 }
 
-const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
+SvXMLImportContextRef multiImageImportHelper::solveMultipleImages()
 {
-    const SvXMLImportContext* pContext(0);
+    SvXMLImportContextRef pContext;
     if(maImplContextVector.size() > 1)
     {
         // multiple child contexts were imported, decide which is the most valuable one
