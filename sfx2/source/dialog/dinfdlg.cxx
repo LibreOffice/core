@@ -2474,7 +2474,7 @@ CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
     , m_rVertScroll( m_rScrolledWindow.getVertScrollBar())
 {
     m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show( m_rScrolledWindow.GetStyle() && WB_VSCROLL);
+    m_rVertScroll.Show( m_rScrolledWindow.GetStyle() & WB_VSCROLL);
     m_rVertScroll.SetRangeMin(0);
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
@@ -2498,9 +2498,9 @@ IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 void CmisPropertiesControl::checkAutoVScroll()
 {
     WinBits nBits = m_rScrolledWindow.GetStyle();
-    if (nBits && WB_VSCROLL)
+    if (nBits & WB_VSCROLL)
         return;
-    if (nBits && WB_AUTOVSCROLL)
+    if (nBits & WB_AUTOVSCROLL)
     {
         sal_Bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
         if (bShow != m_rVertScroll.IsVisible())
