@@ -48,7 +48,7 @@ namespace
             if ( ::RegQueryValueEx( hKey, _T( "InstallDir" ), NULL, &dwType, ( LPBYTE )arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
             {
                 ::RegCloseKey( hKey );
-                return OUString::createFromAscii( arCurrent ) + "/";
+                return OUString( arCurrent, MAX_PATH, rtl_TextEncoding, RTL_TEXTENCODING_UTF8 ) + "/";
             }
 
             ::RegCloseKey( hKey );
