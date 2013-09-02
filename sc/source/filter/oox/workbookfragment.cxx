@@ -213,7 +213,8 @@ void WorkbookFragment::finalizeImport()
     // read the shared string table substream (requires finalized styles buffer)
     OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
     if( !aSstFragmentPath.isEmpty() )
-        importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) );
+        if (!importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) ))
+            importOoxFragment(new SharedStringsFragment(*this, aSstFragmentPath.replaceFirst("sharedStrings","SharedStrings")));
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
