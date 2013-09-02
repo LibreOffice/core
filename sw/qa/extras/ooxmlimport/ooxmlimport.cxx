@@ -129,6 +129,7 @@ public:
     void testBnc780044Spacing();
     void testTableAutoNested();
     void testTableStyleParprop();
+    void testTablePagebreak();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -224,6 +225,7 @@ void Test::run()
         {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
         {"table-auto-nested.docx", &Test::testTableAutoNested},
         {"table-style-parprop.docx", &Test::testTableStyleParprop},
+        {"table-pagebreak.docx", &Test::testTablePagebreak},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1517,6 +1519,15 @@ void Test::testTableStyleParprop()
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // This was 353, the document default, i.e. paragraph property from table style had no effect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+void Test::testTablePagebreak()
+{
+    // Page break inside table: should be ignored (was style::BreakType_PAGE_BEFORE before).
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, getProperty<style::BreakType>(getParagraphOrTable(2), "BreakType"));
+
+    // This one is outside the table: should not be ignored.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(3), "BreakType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -692,6 +692,15 @@ public:
 
     /// Document background color, applied to every page style.
     boost::optional<sal_Int32> m_oBackgroundColor;
+
+    /**
+     * This contains the raw table depth. m_nTableDepth > 0 is the same as
+     * getTableManager().isInTable(), unless we're in the first paragraph of a
+     * table, or first paragraph after a table, as the table manager is only
+     * updated once we ended the paragraph (and know if the para has the
+     * PFInTable SPRM or not).
+     */
+    sal_Int32 m_nTableDepth;
 };
 } //namespace dmapper
 } //namespace writerfilter

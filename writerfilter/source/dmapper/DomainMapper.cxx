@@ -3403,6 +3403,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
     }
     break;
+    case NS_ooxml::LN_tblStart:
+        m_pImpl->m_nTableDepth++;
+    break;
+    case NS_ooxml::LN_tblEnd:
+        m_pImpl->m_nTableDepth--;
+    break;
     default:
         {
 #ifdef DEBUG_DOMAINMAPPER

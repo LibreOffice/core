@@ -1957,6 +1957,16 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 {
     endAction(Element);
 
+    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    {
+        OOXMLValue::Pointer_t pVal
+            (new OOXMLIntegerValue(mnTableDepth));
+        OOXMLProperty::Pointer_t pProp
+            (new OOXMLPropertyImpl(NS_ooxml::LN_tblEnd, pVal, OOXMLPropertyImpl::SPRM));
+        pProps->add(pProp);
+    }
+    mpParserState->setCharacterProperties(pProps);
+
     mnTableDepth--;
     mpParserState->endTable();
 }
