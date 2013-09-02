@@ -976,7 +976,7 @@ static SCROW lcl_GGT( SCROW a, SCROW b )
 }
 
 
-// Lowest common multiple: a * b / GGT(a,b)
+// Lowest common multiple: a * b / GCD(a,b)
 static SCROW lcl_KGV( SCROW a, SCROW b )
 {
     if ( a > b )    // Make overflow even less likely
@@ -1107,7 +1107,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
-        sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize
+        sal_uInt16 nTmpColOffset = nColOffset; // Will be changed in Colonize()
         Colonize( pActEntry );
         aTableStack.push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
@@ -1283,17 +1283,17 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                 (*pTab1)[ nRowKey ] = nRowsPerRow1;
                             else if ( nRowsPerRow1 > nR )
                                 (*pTab1)[ nRowKey ] = nRowsPerRow1;
-                            //TODO: wie geht das noch besser?
+                            //TODO: How can we improve on this?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
-                            {   // Platz uebrig, evtl. besser mergen
+                            {   // Still some space left, merge in a better way (if possible)
                                 SCROW nAdd = nRowsPerRow1 - (nR % nRowsPerRow1);
                                 nR += nAdd;
                                 if ( (nR % nRows) == 0 )
-                                {   // nur wenn abbildbar
+                                {   // Only if representable
                                     SCROW nR2 = (*pTab1)[ nRowKey+1 ];
                                     if ( nR2 > nAdd )
-                                    {   // nur wenn wirklich Platz
+                                    {   // Only if we really have enough space
                                         (*pTab1)[ nRowKey ] = nR;
                                         (*pTab1)[ nRowKey+1 ] = nR2 - nAdd;
                                         nRowsPerRow2 = nR / nRows;
@@ -1303,9 +1303,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                         }
                     }
                     if ( nRowsPerRow2 > 1 )
-                    {   // innen
+                    {   // Inner
                         if ( !pTab2 )
-                        {   // nRowsPerRow2 kann erhoeht worden sein
+                        {   // nRowsPerRow2 could be've been incremented
                             pTab2 = new InnerMap;
                             (*pTables)[ nTable ] = pTab2;
                         }
@@ -1349,9 +1349,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                 delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
             delete pActEntry;
-            // pActEntry bleibt erstmal erhalten falls da noch 'ne Table in
-            // der gleichen Zelle aufgemacht werden sollte (in HTML ist ja
-            // alles moeglich..) und wird in CloseEntry deleted
+            // pActEntry is kept around if a table is started in the same row
+            // (anything's possible in HTML); will be deleted by CloseEntry
             pActEntry = pE;
             delete pS;
         }
@@ -1359,7 +1358,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         bInCell = true;
     }
     else
-    {   // einfache Table beendet
+    {   // Simple table finished
         SetWidths();
         nMaxCol = 0;
         nTable = 0;
@@ -1437,7 +1436,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
             *pGraphic, &rFilter, &nFormat ) )
     {
         delete pGraphic;
-        return ;        // dumm gelaufen
+        return ; // Bad luck
     }
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
@@ -1495,19 +1494,19 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
 {
     const String& rOptVal = rOption.GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
-    {   // Prozent
+    {   // Percent
         sal_uInt16 nW = (nTableWidth ? nTableWidth : (sal_uInt16) aPageSize.Width());
         return (sal_uInt16)((rOption.GetNumber() * nW) / 100);
     }
     else
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
-        {   // relativ zu was?!?
-            //todo: ColArray aller relativen Werte sammeln und dann MakeCol
+        {   // Relative to what?
+            // TODO: Collect all relative values in ColArray and then MakeCol
             return 0;
         }
         else
-            return (sal_uInt16)rOption.GetNumber();    // Pixel
+            return (sal_uInt16)rOption.GetNumber(); // Pixel
     }
 }
 
@@ -1542,7 +1541,7 @@ bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
 void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 {
     if ( IsAtBeginningOfText( pInfo ) )
-    {   // nur am Anfang des Textes, gilt dann fuer gesamte Zelle
+    {   // Only at the start of the text; applies to whole line
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
         for (size_t i = 0, n = rOptions.size(); i < n; ++i)
         {
@@ -1556,7 +1555,8 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                     sal_Int32 nPos = 0;
                     while( nPos != -1 )
                     {
-                        // Fontliste, VCL: Semikolon als Separator, HTML: Komma
+                        // Font list, VCL uses the semicolon as separator
+                        // HTML uses the comma
                         String aFName = rFace.GetToken( 0, ',', nPos );
                         aFName = comphelper::string::strip(aFName, ' ');
                         if( aFontName.Len() )
@@ -1618,7 +1618,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         {
             if ( bInTitle && !aString.isEmpty() )
             {
-                // Leerzeichen von Zeilenumbruechen raus
+                // Remove blanks from line brakes
                 aString = aString.trim();
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     mpDoc->GetDocumentShell()->GetModel(),
@@ -1638,31 +1638,31 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
             ColOn( pInfo );
         }
         break;
-        case HTML_TABLEHEADER_ON:       // oeffnet Zelle
+        case HTML_TABLEHEADER_ON:       // Opens row
         {
             if ( bInCell )
                 CloseEntry( pInfo );
-            // bInCell nicht true setzen, das macht TableDataOn
+            // Do not set bInCell to true, TableDataOn does that
             pActEntry->aItemSet.Put(
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
         }   // fall thru
-        case HTML_TABLEDATA_ON:         // oeffnet Zelle
+        case HTML_TABLEDATA_ON:         // Opens cell
         {
             TableDataOn( pInfo );
         }
         break;
         case HTML_TABLEHEADER_OFF:
-        case HTML_TABLEDATA_OFF:        // schliesst Zelle
+        case HTML_TABLEDATA_OFF:        // Closes cell
         {
             TableDataOff( pInfo );
         }
         break;
-        case HTML_TABLEROW_ON:          // vor erster Zelle in Row
+        case HTML_TABLEROW_ON:          // Before first cell in row
         {
             TableRowOn( pInfo );
         }
         break;
-        case HTML_TABLEROW_OFF:         // nach letzter Zelle in Row
+        case HTML_TABLEROW_OFF:         // After last cell in row
         {
             TableRowOff( pInfo );
         }
@@ -1678,7 +1678,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         }
         break;
         case HTML_PARABREAK_OFF:
-        {   // nach einem Image geht es vertikal weiter
+        {   // We continue vertically after an image
             if ( pActEntry->maImageList.size() > 0 )
                 pActEntry->maImageList.back().nDir = nVertical;
         }
@@ -1695,7 +1695,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_BIGPRINT_ON :
         {
-            //tpdo: aktuelle Fontgroesse merken und einen groesser
+            // TODO: Remember current font size and increase by 1
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[3], 100, ATTR_FONT_HEIGHT ) );
@@ -1703,7 +1703,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_SMALLPRINT_ON :
         {
-            //todo: aktuelle Fontgroesse merken und einen kleiner
+            // TODO: Remember current font size and decrease by 1
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[0], 100, ATTR_FONT_HEIGHT ) );
@@ -1755,7 +1755,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         }
         break;
         default:
-        {   // nLastToken nicht setzen!
+        {   // Don't set nLastToken!
             bSetLastToken = false;
         }
     }
@@ -3199,7 +3199,7 @@ public:
 
     void at_rule_name(const char* /*p*/, size_t /*n*/)
     {
-        // For now, we ignore at-rule properties.
+        // TODO: For now, we ignore at-rule properties.
     }
 
     void selector_name(const char* p_elem, size_t n_elem, const char* p_class, size_t n_class)
@@ -3263,7 +3263,7 @@ void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
     }
     catch (const orcus::css_parse_error&)
     {
-        // Parsing of CSS failed.  Do nothing for now.
+        // TODO: Parsing of CSS failed.  Do nothing for now.
     }
 }
 
