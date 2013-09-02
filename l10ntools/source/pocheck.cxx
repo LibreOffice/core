@@ -279,25 +279,40 @@ static void checkFunctionNames(OString aLanguage)
         }
     }
     //
-    for (int i=0;i<4;i++) {
+    for (int i=0;i<4;i++)
+    {
         aPoInput.open(aPoPaths[i]);
         if( !aPoInput.isOpen() )
             std::cerr << "Warning: Cannot open " << aPoPaths[i] << std::endl;
         PoOfstream aPoOutput;
         aPoOutput.open(aPoPaths[i]+".new");
 
-        switch (i) {
-            case 0:
-                aPoOutput.writeHeader(PoHeader("formula/source/core/resource"));
-                break;
-            case 1:
-                aPoOutput.writeHeader(PoHeader("scaddins/source/analysis"));
-                break;
-            case 2:
-                aPoOutput.writeHeader(PoHeader("scaddins/source/datefunc"));
-                break;
-            case 3:
-                aPoOutput.writeHeader(PoHeader("scaddins/source/pricing"));
+        switch (i)
+        {
+        case 0:
+        {
+            PoHeader hd(OString("formula/source/core/resource"));
+            aPoOutput.writeHeader(hd);
+            break;
+        }
+        case 1:
+        {
+            PoHeader hd(OString("scaddins/source/analysis"));
+            aPoOutput.writeHeader(hd);
+            break;
+        }
+        case 2:
+        {
+            PoHeader hd(OString("scaddins/source/datefunc"));
+            aPoOutput.writeHeader(hd);
+            break;
+        }
+        case 3:
+        {
+            PoHeader hd(OString("scaddins/source/pricing"));
+            aPoOutput.writeHeader(hd);
+            break;
+        }
         }
         bool bAnyError = false;
 
@@ -308,15 +323,20 @@ static void checkFunctionNames(OString aLanguage)
             aPoInput.readEntry(aPoEntry);
             if( aPoInput.eof() )
                 break;
-            for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
-                if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId()) {
+            for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it)
+            {
+                if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId())
+                {
                     bError = true;
                     break;
                 }
             }
-            if (bError) {
+            if (bError)
+            {
                 bAnyError = true;
-            } else {
+            }
+            else
+            {
                 aPoOutput.writeEntry(aPoEntry);
             }
         }
