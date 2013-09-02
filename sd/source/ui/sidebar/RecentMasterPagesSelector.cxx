@@ -116,7 +116,6 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
         if (pMasterPage != NULL)
             aCurrentNames.insert (pMasterPage->GetName());
     }
-    MasterPageObserver::MasterPageNameSet::iterator aI;
 
     // Insert the recently used master pages that are currently not used.
     RecentlyUsedMasterPages& rInstance (RecentlyUsedMasterPages::Instance());
