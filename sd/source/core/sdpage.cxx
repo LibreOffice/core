@@ -1459,10 +1459,10 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                         {
                             if(
                                 ((eKind == PRESOBJ_CHART) &&
-                                    ( pOle2->GetProgName().EqualsAscii( "StarChart" ) || pOle2->IsChart() ) )
+                                    ( pOle2->GetProgName() == "StarChart" || pOle2->IsChart() ) )
                                 ||
                                 ((eKind == PRESOBJ_CALC) &&
-                                    ( pOle2->GetProgName().EqualsAscii( "StarCalc" ) || pOle2->IsCalc() ) ) )
+                                    ( pOle2->GetProgName() == "StarCalc" || pOle2->IsCalc() ) ) )
                             {
                                 bFound = true;
                             }

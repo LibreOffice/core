@@ -675,7 +675,7 @@ class SdrOle2ObjImpl
 public:
     // TODO/LATER: do we really need this pointer?
     GraphicObject*  pGraphicObject;
-    String          aPersistName;       // name of object in persist
+    OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
     // New local var to avoid repeated loading if load of OLE2 fails
@@ -1042,7 +1042,7 @@ void SdrOle2Obj::Reconnect_Impl()
 
 void SdrOle2Obj::Connect_Impl()
 {
-    if( pModel && mpImpl->aPersistName.Len() )
+    if( pModel && !mpImpl->aPersistName.isEmpty() )
     {
         try
         {
@@ -1176,7 +1176,7 @@ void SdrOle2Obj::Disconnect()
 
 void SdrOle2Obj::RemoveListeners_Impl()
 {
-    if( xObjRef.is() && mpImpl->aPersistName.Len() )
+    if( xObjRef.is() && !mpImpl->aPersistName.isEmpty() )
     {
         try
         {
@@ -1207,7 +1207,7 @@ void SdrOle2Obj::Disconnect_Impl()
 {
     try
     {
-        if ( pModel && mpImpl->aPersistName.Len() )
+        if ( pModel && !mpImpl->aPersistName.isEmpty() )
         {
             if( pModel->IsInDestruction() )
             {
@@ -1535,9 +1535,9 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::SetPersistName( const String& rPersistName )
+void SdrOle2Obj::SetPersistName( const OUString& rPersistName )
 {
-    DBG_ASSERT( !mpImpl->aPersistName.Len(), "Persist name changed!");
+    DBG_ASSERT( mpImpl->aPersistName.isEmpty(), "Persist name changed!");
 
     mpImpl->aPersistName = rPersistName;
     mpImpl->mbLoadingOLEObjectFailed = false;
@@ -1548,14 +1548,14 @@ void SdrOle2Obj::SetPersistName( const String& rPersistName )
 
 void SdrOle2Obj::AbandonObject()
 {
-    mpImpl->aPersistName.Erase();
+    mpImpl->aPersistName = "";
     mpImpl->mbLoadingOLEObjectFailed = false;
     SetObjRef(0);
 }
 
 // -----------------------------------------------------------------------------
 
-String SdrOle2Obj::GetPersistName() const
+OUString SdrOle2Obj::GetPersistName() const
 {
     return mpImpl->aPersistName;
 }
@@ -1998,7 +1998,7 @@ sal_Bool SdrOle2Obj::Unload()
 
 void SdrOle2Obj::GetObjRef_Impl()
 {
-    if ( !xObjRef.is() && mpImpl->aPersistName.Len() && pModel && pModel->GetPersist() )
+    if ( !xObjRef.is() && !mpImpl->aPersistName.isEmpty() && pModel && pModel->GetPersist() )
     {
         // Only try loading if it did not went wrong up to now
         if(!mpImpl->mbLoadingOLEObjectFailed)

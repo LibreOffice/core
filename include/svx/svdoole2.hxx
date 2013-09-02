@@ -60,7 +60,7 @@ protected:
 
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
-    String                      aProgName;
+    OUString                    aProgName;
 
     // Due to compatibility at SdrTextObj for now
     bool                        bFrame:1;
@@ -110,13 +110,13 @@ public:
 
     // OLE object has got a separate PersistName member now;
     // !!! use ::SetPersistName( ... ) only, if you know what you do !!!
-    String      GetPersistName() const;
-    void        SetPersistName( const String& rPersistName );
+    OUString      GetPersistName() const;
+    void        SetPersistName( const OUString& rPersistName );
 
     // One can add an application name to a SdrOle2Obj, which can be queried for
     // later on (SD needs this for presentation objects).
-    void SetProgName(const String& rNam) { aProgName=rNam; }
-    const String& GetProgName() const { return aProgName; }
+    void SetProgName(const OUString& rNam) { aProgName=rNam; }
+    const OUString& GetProgName() const { return aProgName; }
     bool IsEmpty() const;
 
     void SetObjRef(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rNewObjRef);
