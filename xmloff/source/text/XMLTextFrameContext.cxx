@@ -370,6 +370,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const OUString sTextBoxServiceName;
     const OUString sGraphicServiceName;
 
+    OUString m_sOrigName;
     OUString sName;
     OUString sStyleName;
     OUString sNextName;
@@ -446,6 +447,8 @@ public:
     void SetTitle( const OUString& rTitle );
 
     void SetDesc( const OUString& rDesc );
+
+    void SetName();
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
 
@@ -901,6 +904,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             sStyleName = rValue;
             break;
         case XML_TOK_TEXT_FRAME_NAME:
+            m_sOrigName = rValue;
             sName = rValue;
             break;
         case XML_TOK_TEXT_FRAME_FRAME_NAME:
@@ -1284,6 +1288,19 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     }
 }
 
+void XMLTextFrameContext_Impl::SetName()
+{
+    Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
+    if (xNamed.is())
+    {
+        OUString const name(xNamed->getName());
+        if (name != m_sOrigName)
+        {
+            xNamed->setName(m_sOrigName);
+        }
+    }
+}
+
 // Implement Title/Description Elements UI (#i73249#)
 void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
 {
@@ -1393,13 +1410,22 @@ XMLTextFrameContext::~XMLTextFrameContext()
 void XMLTextFrameContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
-    solveMultipleImages();
+    SvXMLImportContextRef const pMultiContext(solveMultipleImages());
 
-    SvXMLImportContext *pContext = &m_xImplContext;
+    SvXMLImportContext const*const pContext =
+        (pMultiContext) ? &pMultiContext : &m_xImplContext;
     XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    assert(!pMultiContext || pImpl);
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
+
+        // fdo#68839: in case the surviving image was not the first one,
+        // it will have a counter added to its name - set the original name
+        if (pMultiContext) // do this only when necessary; esp. not for text
+        {                  // frames that may have entries in GetRenameMap()!
+            pImpl->SetName();
+        }
 
         if( !m_sTitle.isEmpty() )
         {
