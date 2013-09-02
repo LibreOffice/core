@@ -193,7 +193,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSdt(false),
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
-        m_pSdtHelper(0)
+        m_pSdtHelper(0),
+        m_nTableDepth(0)
+
 {
     appendTableManager( );
     GetBodyText();
@@ -632,6 +634,11 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
             m_bIsColumnBreakDeferred = true;
         break;
     case PAGE_BREAK:
+            // See SwWW8ImplReader::HandlePageBreakChar(), page break should be
+            // ignored inside tables.
+            if (m_nTableDepth > 0)
+                return;
+
             m_bIsPageBreakDeferred = true;
         break;
     default:
