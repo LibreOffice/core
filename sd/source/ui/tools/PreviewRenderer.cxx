@@ -100,7 +100,7 @@ PreviewRenderer::~PreviewRenderer (void)
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     const sal_Int32 nWidth,
-    const String& rSubstitutionText,
+    const OUString& rSubstitutionText,
     const bool bObeyHighContrastMode,
     const bool bDisplayPresentationObjects)
 {
@@ -129,7 +129,7 @@ Image PreviewRenderer::RenderPage (
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     Size aPixelSize,
-    const String& rSubstitutionText,
+    const OUString& rSubstitutionText,
     const bool bObeyHighContrastMode,
     const bool bDisplayPresentationObjects)
 {
@@ -167,7 +167,7 @@ Image PreviewRenderer::RenderPage (
 
 Image PreviewRenderer::RenderSubstitution (
     const Size& rPreviewPixelSize,
-    const String& rSubstitutionText)
+    const OUString& rSubstitutionText)
 {
     Image aPreview;
 
@@ -352,9 +352,9 @@ void PreviewRenderer::PaintPage (
 
 
 
-void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
+void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
 {
-    if (rSubstitutionText.Len() > 0)
+    if (!rSubstitutionText.isEmpty())
     {
         // Set the font size.
         const Font& rOriginalFont (mpPreviewDevice->GetFont());

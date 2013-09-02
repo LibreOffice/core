@@ -116,7 +116,7 @@ private:
     Size maSize;
     Color maBackgroundColor;
     Color maTextColor;
-    String msText;
+    OUString msText;
     sal_Int32 mnTop;
     sal_Int32 mnTotalHeight;
 

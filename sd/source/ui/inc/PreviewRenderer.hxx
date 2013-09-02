@@ -79,7 +79,7 @@ public:
     Image RenderPage (
         const SdPage* pPage,
         const sal_Int32 nWidth,
-        const String& sSubstitutionText,
+        const OUString& sSubstitutionText,
         const bool bObeyHighContrastMode = true,
         const bool bDisplayPresentationObjects = true);
 
@@ -104,7 +104,7 @@ public:
     Image RenderPage (
         const SdPage* pPage,
         const Size aPreviewPixelSize,
-        const String& sSubstitutionText,
+        const OUString& sSubstitutionText,
         const bool bObeyHighContrastMode = true,
         const bool bDisplayPresentationObjects = true);
 
@@ -115,7 +115,7 @@ public:
     */
     Image RenderSubstitution (
         const Size& rPreviewPixelSize,
-        const String& sSubstitutionText);
+        const OUString& sSubstitutionText);
 
     /** Scale the given bitmap by keeping its aspect ratio to the desired
         width.  Add a frame to it afterwards.
@@ -145,7 +145,7 @@ private:
     void PaintPage (
         const SdPage* pPage,
         const bool bDisplayPresentationObjects);
-    void PaintSubstitutionText (const String& rSubstitutionText);
+    void PaintSubstitutionText (const OUString& rSubstitutionText);
     void PaintFrame (void);
 
     /** Set up the map mode so that the given page is renderer into a bitmap
