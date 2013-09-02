@@ -209,6 +209,7 @@ namespace svx
         {
             // use new primitive conversion tooling
             basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
+            sal_uInt32 nMaximumQuadraticPixels(500000);
 
             if(pSize)
             {
@@ -217,6 +218,10 @@ namespace svx
                 const Size aSize100th(Application::GetDefaultDevice()->PixelToLogic(*pSize, MapMode(MAP_100TH_MM)));
 
                 aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
+
+                // when explicitely pixels are requested from the GraphicExporter, use a *very* high limit
+                // of 16gb (4096x4096 pixels), else use the default for the converters
+                nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(pSize->Width() * pSize->Height()));
             }
             else
             {
@@ -226,13 +231,42 @@ namespace svx
                 aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
             }
 
-            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange);
+            aBmpEx = convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
         }
         else
         {
             const SvtOptionsDrawinglayer aDrawinglayerOpt;
+            Size aTargetSize(0, 0);
+
+            if(pSize)
+            {
+                // #i122820# If a concrete target size in pixels is given, use it
+                aTargetSize = *pSize;
+
+                // get hairline and full bound rect to evtl. reduce given target pixel size when
+                // it is known that it will be expanded to get the right and bottom hairlines right
+                Rectangle aHairlineRect;
+                const Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
+
+                if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
+                {
+                    if(aRect.Right() == aHairlineRect.Right() || aRect.Bottom() == aHairlineRect.Bottom())
+                    {
+                        if(aTargetSize.Width())
+                        {
+                            aTargetSize.Width() -= 1;
+                        }
+
+                        if(aTargetSize.Height())
+                        {
+                            aTargetSize.Height() -= 1;
+                        }
+                    }
+                }
+            }
+
             const GraphicConversionParameters aParameters(
-                pSize ? *pSize : Size(0, 0),
+                aTargetSize,
                 true, // allow unlimited size
                 aDrawinglayerOpt.IsAntiAliasing(),
                 aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
@@ -413,26 +447,39 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
     }
 
     pVDev->SetMapMode( aMM );
-#ifdef DBG_UTIL
-    bool bAbort = !
-#endif
-        pVDev->SetOutputSize(aPageSize);
-    DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
+    bool bSuccess(false);
 
-    SdrView* pView = new SdrView(mpDoc, pVDev);
-    pView->SetPageVisible( sal_False );
-    pView->SetBordVisible( sal_False );
-    pView->SetGridVisible( sal_False );
-    pView->SetHlplVisible( sal_False );
-    pView->SetGlueVisible( sal_False );
-    pView->ShowSdrPage(pPage);
-    Region aRegion (Rectangle( aPoint, aPageSize ) );
+    // #i122820# If available, use pixel size directly
+    if(nWidthPixel && nHeightPixel)
+    {
+        bSuccess = pVDev->SetOutputSizePixel(Size(nWidthPixel, nHeightPixel));
+    }
+    else
+    {
+        bSuccess = pVDev->SetOutputSize(aPageSize);
+    }
 
-    ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
+    if(bSuccess)
+    {
+        SdrView* pView = new SdrView(mpDoc, pVDev);
+        pView->SetPageVisible( sal_False );
+        pView->SetBordVisible( sal_False );
+        pView->SetGridVisible( sal_False );
+        pView->SetHlplVisible( sal_False );
+        pView->SetGlueVisible( sal_False );
+        pView->ShowSdrPage(pPage);
+        Region aRegion (Rectangle( aPoint, aPageSize ) );
 
-    pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
+        ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-    delete pView;
+        pView->CompleteRedraw(pVDev, aRegion, &aRedirector);
+        delete pView;
+    }
+    else
+    {
+        OSL_ENSURE(false, "Could not get a VirtualDevice of requested size (!)");
+    }
+
     return pVDev;
 }
 
