@@ -128,14 +128,14 @@ End
 
 // Begin registry items for the Column handler
 
-RegistryItem gid_Regitem_Folder_shellex_ColumnHandlers_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396
+RegistryItem gid_Regitem_Folder_shellex_ColHandl_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "Folder\shellex\ColumnHandlers\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
     Value = "%PRODUCTNAME Column Handler";
 End
 
-RegistryItem gid_Regitem_Folder_shellex_ColumnHandlers_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_x64
+RegistryItem gid_Regitem_Folder_shellex_ColHandl_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
@@ -259,14 +259,14 @@ RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_x64
     Value = "OpenDocument Format Persistent Handler";
 End
 
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
+RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsReg
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
     Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
     Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
 End
 
-RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered_x64
+RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsReg_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
     ComponentCondition = "VersionNT64";
