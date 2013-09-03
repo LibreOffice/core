@@ -407,7 +407,6 @@
 #include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
-#include <svl/filerec.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemiter.hxx>

@@ -27,7 +27,6 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <poolio.hxx>
-#include <svl/filerec.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
 #include <unotools/syslocale.hxx>
