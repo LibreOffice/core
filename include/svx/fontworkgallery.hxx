@@ -94,7 +94,7 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     SdrView*            mpSdrView;
     FmFormModel*        mpModel;
 
-    String              maStrClickToAddText;
+    OUString            maStrClickToAddText;
 
     DECL_LINK( DoubleClickFavoriteHdl, void * );
     DECL_LINK( ClickOKHdl, void * );
