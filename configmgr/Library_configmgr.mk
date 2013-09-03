@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/type \
     configmgr/source/update \
     configmgr/source/valueparser \
+    $(if $(filter $(OS),WNT), configmgr/source/winreg ) \
     configmgr/source/writemodfile \
     configmgr/source/xcdparser \
     configmgr/source/xcsparser \
@@ -54,8 +55,8 @@ $(eval $(call gb_Library_use_libraries,configmgr, \
     sal \
     salhelper \
     xmlreader \
-	i18nlangtag \
-	$(gb_UWINAPI) \
+    i18nlangtag \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,configmgr,configmgr/source/configmgr))
