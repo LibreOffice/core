@@ -67,8 +67,8 @@ private:
 
     sal_uInt16      eUsage;
 
-    String      aLeftText;
-    String      aRightText;
+    OUString    aLeftText;
+    OUString    aRightText;
 
 protected:
     virtual void Paint( const Rectangle& rRect );
