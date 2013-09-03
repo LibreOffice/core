@@ -10,7 +10,6 @@
 #ifndef _SYMBOL_LOADER_HXX
 #define _SYMBOL_LOADER_HXX
 #if defined( WNT )
-# include <tchar.h>
 # include <windows.h>
 # include <winreg.h>
 #endif
@@ -40,16 +39,16 @@ namespace
     OUString GetVLCPath()
     {
         HKEY hKey;
-        TCHAR arCurrent[MAX_PATH];
+        wchar_t arCurrent[MAX_PATH];
         DWORD dwType, dwCurrentSize = sizeof( arCurrent );
 
-        if ( ::RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T( "Software\\VideoLAN\\VLC" ),
+        if ( ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"Software\\VideoLAN\\VLC",
                              0, KEY_READ, &hKey ) == ERROR_SUCCESS )
         {
-            if ( ::RegQueryValueEx( hKey, _T( "InstallDir" ), NULL, &dwType, ( LPBYTE )arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
+            if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
             {
                 ::RegCloseKey( hKey );
-                return OUString( arCurrent, strlen(arCurrent), RTL_TEXTENCODING_UTF8 ) + "/";
+                return OUString( arCurrent, wcslen(arCurrent) ) + "/";
             }
 
             ::RegCloseKey( hKey );
@@ -57,7 +56,6 @@ namespace
         return OUString();
     }
 #endif
-
 
     template<size_t N>
     bool tryLink( oslModule &aModule, const ApiMap ( &pMap )[N] )
