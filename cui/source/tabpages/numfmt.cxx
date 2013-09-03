@@ -385,10 +385,10 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     sal_uInt16                      nCatLbSelPos    = 0;
     sal_uInt16                      nFmtLbSelPos    = 0;
     LanguageType                eLangType       = LANGUAGE_DONTKNOW;
-    std::vector<String*>        aFmtEntryList;
+    std::vector<OUString>       aFmtEntryList;
     SvxNumberValueType          eValType        = SVX_VALUE_TYPE_UNDEFINED;
     double                      nValDouble      = 0;
-    String                      aValString;
+    OUString                    aValString;
 
     SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),sal_True,&pItem);
 
@@ -524,7 +524,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     FillCurrencyBox();
 
-    String aPrevString;
+    OUString aPrevString;
     Color* pDummy = NULL;
     pNumFmtShell->GetInitSettings( nCatLbSelPos, eLangType, nFmtLbSelPos,
                                    aFmtEntryList, aPrevString, pDummy );
@@ -580,8 +580,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         // everything disabled except SourceFormat checkbox
         EnableBySourceFormat_Impl();
     }
-
-    DeleteEntryList_Impl(aFmtEntryList);
 }
 
 /*************************************************************************
@@ -803,9 +801,9 @@ void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
     }
 }
 
-void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<String*>& rEntries )
+void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEntries )
 {
-    String*     pEntry;
+    OUString    aEntry;
     String      aTmpString;
     Font        aFont=m_pLbCategory->GetFont();
     size_t      i = 0;
@@ -832,16 +830,13 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<String*>& rEntr
         case CAT_ALL:
         case CAT_TEXT:
         case CAT_NUMBER:        i=1;
-                                pEntry=rEntries[0];
-                                if(pEntry!=NULL)
-                                {
-                                    if (nTmpCatPos == CAT_TEXT)
-                                        aTmpString=*pEntry;
-                                    else
-                                        aTmpString = pNumFmtShell->GetStandardName();
-                                    aPrivCat=pNumFmtShell->GetCategory4Entry(0);
-                                    m_pLbFormat->InsertFontEntry( aTmpString, aFont );
-                                }
+                                aEntry=rEntries[0];
+                                if (nTmpCatPos == CAT_TEXT)
+                                    aTmpString=aEntry;
+                                else
+                                    aTmpString = pNumFmtShell->GetStandardName();
+                                aPrivCat=pNumFmtShell->GetCategory4Entry(0);
+                                m_pLbFormat->InsertFontEntry( aTmpString, aFont );
                                 break;
 
         default:                break;
@@ -851,30 +846,28 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<String*>& rEntr
     {
         for ( ; i < rEntries.size(); ++i )
         {
-            pEntry = rEntries[i];
+            aEntry = rEntries[i];
             aPrivCat=pNumFmtShell->GetCategory4Entry( static_cast<sal_uInt16>(i) );
             if(aPrivCat!=CAT_TEXT)
             {
                 Color* pPreviewColor = NULL;
-                String aPreviewString( GetExpColorString( pPreviewColor, *pEntry, aPrivCat ) );
+                String aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
                 Font aEntryFont( m_pLbFormat->GetFont() );
                 m_pLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
             }
             else
             {
-                m_pLbFormat->InsertFontEntry(*pEntry,aFont);
+                m_pLbFormat->InsertFontEntry(aEntry,aFont);
             }
         }
     }
     m_pLbFormat->SetUpdateMode( sal_True );
-    DeleteEntryList_Impl(rEntries);
+    rEntries.clear();
 }
 
 
-void SvxNumberFormatTabPage::DeleteEntryList_Impl( std::vector<String*>& rEntries )
+void SvxNumberFormatTabPage::DeleteEntryList_Impl( std::vector<OUString>& rEntries )
 {
-    for( std::vector<String*>::const_iterator it(rEntries.begin()); it != rEntries.end(); ++it )
-        delete *it;
     rEntries.clear();
 }
 
@@ -1010,9 +1003,9 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         sal_Bool   bUpdateEdit
     )
 {
-    std::vector<String*> aEntryList;
-    short                nFmtLbSelPos = 0;
-    short                nTmpCatPos;
+    std::vector<OUString> aEntryList;
+    short                 nFmtLbSelPos = 0;
+    short                 nTmpCatPos;
 
     if(bOneAreaFlag)
     {
@@ -1044,7 +1037,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     {
         if(bUpdateEdit)
         {
-            String aFormat=*aEntryList[nFmtLbSelPos];
+            OUString aFormat=aEntryList[nFmtLbSelPos];
             m_pEdFormat->SetText(aFormat);
             m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
         }
@@ -1057,7 +1050,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
             m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
             if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
             {
-                if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).Len()==0)
+                if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
                 {
                     m_pFtComment->SetText(m_pLbCategory->GetEntry(1));
                 }
@@ -1076,7 +1069,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
             m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
             if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
             {
-                if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).Len()==0)
+                if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
                 {
                     m_pFtComment->SetText(m_pLbCategory->GetEntry(1));
                 }
@@ -1094,7 +1087,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         }
     }
 
-    DeleteEntryList_Impl( aEntryList );
+    aEntryList.clear();
 }
 
 
@@ -1197,7 +1190,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         aComment=pNumFmtShell->GetComment4Entry(nSelPos);
         if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
         {
-            if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).Len()==0)
+            if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
             {
                 aComment = m_pLbCategory->GetEntry(1);
             }
@@ -1281,9 +1274,9 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
     if (pIB == m_pIbAdd)
     {   // Also called from FillItemSet() if a temporary currency format has
         // to be added, not only if the Add button is enabled.
-        String               aFormat = m_pEdFormat->GetText();
-        std::vector<String*> aEntryList;
-        std::vector<String*> a2EntryList;
+        OUString               aFormat = m_pEdFormat->GetText();
+        std::vector<OUString> aEntryList;
+        std::vector<OUString> a2EntryList;
         sal_uInt16           nCatLbSelPos = 0;
         short                nFmtLbSelPos = SELPOS_NONE;
         xub_StrLen           nErrPos=0;
@@ -1316,12 +1309,12 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
 
             if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
             {
-                if(bAdded) DeleteEntryList_Impl(aEntryList);
+                if(bAdded) aEntryList.clear();
                 bDeleted = pNumFmtShell->RemoveFormat( aFormat,
                                                nCatLbSelPos,
                                                nFmtLbSelPos,
                                                a2EntryList);
-                if(bDeleted) DeleteEntryList_Impl(a2EntryList);
+                if(bDeleted) a2EntryList.clear();
                 m_pEdFormat->GrabFocus();
                 m_pEdFormat->SetSelection( Selection( (short)nErrPos, SELECTION_MAX ) );
                 nReturn |= nReturnOneArea;
@@ -1364,13 +1357,13 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         EditHdl_Impl(m_pEdFormat);
         nReturn = ((nReturn & nReturnOneArea) ? 0 : (nReturn & nReturnChanged));
 
-        DeleteEntryList_Impl( aEntryList );
-        DeleteEntryList_Impl( a2EntryList );
+        aEntryList.clear();
+        a2EntryList.clear();
     }
     else if (pIB == m_pIbRemove)
     {
-        String               aFormat = m_pEdFormat->GetText();
-        std::vector<String*> aEntryList;
+        OUString              aFormat = m_pEdFormat->GetText();
+        std::vector<OUString> aEntryList;
         sal_uInt16           nCatLbSelPos = 0;
         short                nFmtLbSelPos = SELPOS_NONE;
 
@@ -1384,7 +1377,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         {
             if( nFmtLbSelPos>=0 && static_cast<size_t>(nFmtLbSelPos)<aEntryList.size() )
             {
-                aFormat = *aEntryList[nFmtLbSelPos];
+                aFormat = aEntryList[nFmtLbSelPos];
             }
 
             FillFormatListBox_Impl( aEntryList );
@@ -1409,7 +1402,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         }
         EditHdl_Impl(m_pEdFormat);
 
-        DeleteEntryList_Impl( aEntryList );
+        aEntryList.clear();
     }
     else if (pIB == m_pIbInfo)
     {
@@ -1520,7 +1513,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
         || (pOptCtrl == m_pBtnNegRed)
         || (pOptCtrl == m_pBtnThousand) )
     {
-        String        aFormat;
+        OUString          aFormat;
         sal_Bool          bThousand     =    m_pBtnThousand->IsEnabled()
                                       && m_pBtnThousand->IsChecked();
         sal_Bool          bNegRed       =    m_pBtnNegRed->IsEnabled()
@@ -1632,14 +1625,14 @@ String SvxNumberFormatTabPage::GetExpColorString(
         default:                nVal=0;break;
     }
 
-    String aPreviewString;
+    OUString aPreviewString;
     pNumFmtShell->MakePrevStringFromVal( rFormatStr, aPreviewString, rpPreviewColor, nVal );
     return aPreviewString;
 }
 
 void SvxNumberFormatTabPage::MakePreviewText( const String& rFormat )
 {
-    String aPreviewString;
+    OUString aPreviewString;
     Color* pPreviewColor = NULL;
     pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
     m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
@@ -1647,7 +1640,7 @@ void SvxNumberFormatTabPage::MakePreviewText( const String& rFormat )
 
 void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
 {
-    String aPreviewString;
+    OUString aPreviewString;
     Color* pPreviewColor = NULL;
     pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
     m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );

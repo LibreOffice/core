@@ -42,19 +42,19 @@ const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
 
 
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
-                                              sal_uInt32              nFormatKey,
-                                              SvxNumberValueType eNumValType,
-                                              const String&      rNumStr )
+                                              sal_uInt32           nFormatKey,
+                                              SvxNumberValueType   eNumValType,
+                                              const OUString&      rNumStr )
 {
     return new SvxNumberFormatShell(pNumFormatter,nFormatKey,
                                     eNumValType,rNumStr );
 }
 
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
-                                              sal_uInt32                 nFormatKey,
+                                              sal_uInt32         nFormatKey,
                                               SvxNumberValueType eNumValType,
                                               double             nNumVal,
-                                              const String*      pNumStr )
+                                              const OUString*    pNumStr )
 {
     return new SvxNumberFormatShell(pNumFormatter,nFormatKey,
                                     eNumValType,nNumVal,pNumStr );
@@ -63,9 +63,9 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 // -----------------------------------------------------------------------
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
-                                            sal_uInt32              nFormatKey,
+                                            sal_uInt32          nFormatKey,
                                             SvxNumberValueType  eNumValType,
-                                            const String&       rNumStr ) :
+                                            const OUString&     rNumStr ) :
     pFormatter      ( pNumFormatter ),
     pCurFmtTable    ( NULL ),
     eValType        ( eNumValType ),
@@ -86,17 +86,17 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
         case SVX_VALUE_TYPE_NUMBER:
         case SVX_VALUE_TYPE_UNDEFINED:
         default:
-            aValStr.Erase();
+            aValStr = "";
     }
 }
 
 // -----------------------------------------------------------------------
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
-                                            sal_uInt32              nFormatKey,
+                                            sal_uInt32          nFormatKey,
                                             SvxNumberValueType  eNumValType,
                                             double              nNumVal,
-                                            const String*       pNumStr ) :
+                                            const OUString*     pNumStr ) :
     pFormatter      ( pNumFormatter ),
     pCurFmtTable    ( NULL ),
     eValType        ( eNumValType ),
@@ -147,10 +147,6 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
         for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); it != aAddList.end(); ++it )
             pFormatter->DeleteEntry( *it );
     }
-
-    for ( std::vector<String*>::const_iterator it(aCurrencyFormatList.begin());
-          it != aCurrencyFormatList.end(); ++it )
-        delete *it;
 }
 
 // -----------------------------------------------------------------------
@@ -177,7 +173,7 @@ void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt3
 
 void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
                                             short& rFmtSelPos,
-                                            std::vector<String*>& rFmtEntries )
+                                            std::vector<OUString>& rFmtEntries )
 {
     short nOldCategory = nCurCategory;
     PosToCategory_Impl( nCatLbPos, nCurCategory );
@@ -194,7 +190,7 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
 
 void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
                                             short& rFmtSelPos,
-                                            std::vector<String*>& rFmtEntries )
+                                            std::vector<OUString>& rFmtEntries )
 {
     eCurLanguage = eLangType;
     pCurFmtTable = &(pFormatter->ChangeCL( nCurCategory,
@@ -206,8 +202,8 @@ void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
 // -----------------------------------------------------------------------
 
 void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
-                                          String& rPreviewStr,
-                                          Color*& rpFontColor )
+                                          OUString&   rPreviewStr,
+                                          Color*&     rpFontColor )
 {
     if( static_cast<size_t>(nFmtLbPos) < aCurEntryList.size() )
     {
@@ -221,7 +217,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
         {
             if( static_cast<size_t>(nFmtLbPos) < aCurrencyFormatList.size() )
             {
-                MakePrevStringFromVal(*aCurrencyFormatList[nFmtLbPos],
+                MakePrevStringFromVal(aCurrencyFormatList[nFmtLbPos],
                                     rPreviewStr,rpFontColor,nValNum);
             }
         }
@@ -229,9 +225,9 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
 }
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
+bool SvxNumberFormatShell::AddFormat( OUString& rFormat, xub_StrLen& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
-                                      std::vector<String*>& rFmtEntries )
+                                      std::vector<OUString>& rFmtEntries )
 {
     bool        bInserted   = false;
     sal_uInt32  nAddKey     = pFormatter->GetEntryKey( rFormat, eCurLanguage );
@@ -303,10 +299,10 @@ bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
 
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::RemoveFormat( const String& rFormat,
+bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
                                          sal_uInt16& rCatLbSelPos,
                                          short& rFmtSelPos,
-                                         std::vector<String*>& rFmtEntries )
+                                         std::vector<OUString>& rFmtEntries )
 {
     sal_uInt32 nDelKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
@@ -339,7 +335,7 @@ bool SvxNumberFormatShell::RemoveFormat( const String& rFormat,
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::MakeFormat( String& rFormat,
+void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
                                        bool bThousand, bool bNegRed,
                                        sal_uInt16 nPrecision, sal_uInt16 nLeadingZeroes,
                                        sal_uInt16 nCurrencyPos)
@@ -347,15 +343,15 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
     if( aCurrencyFormatList.size() > static_cast<size_t>(nCurrencyPos) )
     {
         xub_StrLen rErrPos=0;
-        std::vector<String*> aFmtEList;
+        std::vector<OUString> aFmtEList;
 
-        sal_uInt32 nFound = pFormatter->TestNewString( *aCurrencyFormatList[nCurrencyPos], eCurLanguage );
+        sal_uInt32 nFound = pFormatter->TestNewString( aCurrencyFormatList[nCurrencyPos], eCurLanguage );
 
         if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             sal_uInt16 rCatLbSelPos=0;
             short  rFmtSelPos=0;
-            AddFormat( *aCurrencyFormatList[nCurrencyPos],rErrPos,rCatLbSelPos,
+            AddFormat( aCurrencyFormatList[nCurrencyPos],rErrPos,rCatLbSelPos,
                     rFmtSelPos,aFmtEList);
         }
 
@@ -366,8 +362,6 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
                                                  bThousand, bNegRed,
                                                  nPrecision, nLeadingZeroes);
         }
-        for ( std::vector<String*>::const_iterator it(aFmtEList.begin()); it != aFmtEList.end(); ++it )
-            delete *it;
     }
     else
     {
@@ -380,7 +374,7 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::GetOptions( const String&    rFormat,
+void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
                                        bool&            rThousand,
                                        bool&            rNegRed,
                                        sal_uInt16&      rPrecision,
@@ -422,9 +416,9 @@ void SvxNumberFormatShell::GetOptions( const String&    rFormat,
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
-                                              String&       rPreviewStr,
-                                              Color*&       rpFontColor )
+void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
+                                              OUString&       rPreviewStr,
+                                              Color*&         rpFontColor )
 {
     rpFontColor = NULL;
 
@@ -444,7 +438,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
 
         //  #50441# if a string was set in addition to the value, use it for text formats
         bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
-                            ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
+                            ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
         {
             OUString sTempIn(aValStr);
@@ -466,7 +460,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
 
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
+bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
 {
     sal_uInt32 nFound = pFormatter->GetEntryKey( rFmtString, eCurLanguage );
 
@@ -492,7 +486,7 @@ bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
 
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::FindEntry( const String& rFmtString, sal_uInt32* pAt /* = NULL */ )
+bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
     bool bRes=false;
     sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
@@ -525,9 +519,9 @@ bool SvxNumberFormatShell::FindEntry( const String& rFmtString, sal_uInt32* pAt 
 void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             LanguageType& rLangType,
                                             sal_uInt16& nFmtLbSelPos,
-                                            std::vector<String*>& rFmtEntries,
-                                            String& rPrevString,
-                                            Color*& rpPrevColor )
+                                            std::vector<OUString>& rFmtEntries,
+                                            OUString& rPrevString,
+                                            Color*&   rpPrevColor )
 {
     // -------------------------------------------------------------------
     // Vorbedingung: Zahlenformatierer gefunden
@@ -562,7 +556,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 
 // -----------------------------------------------------------------------
 
-short SvxNumberFormatShell::FillEntryList_Impl( std::vector<String*>& rList )
+short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
      * Rueckgabewert ist die Listenposition des aktuellen Formates.
@@ -599,7 +593,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( std::vector<String*>& rList )
     return nSelPos;
 }
 
-void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<String*>& rList,
+void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
                                                   sal_uInt16 nPrivCat,short &nSelPos )
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
@@ -609,9 +603,6 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<String*>& rList,
      */
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    for ( std::vector<String*>::const_iterator it(aCurrencyFormatList.begin());
-          it != aCurrencyFormatList.end(); ++it )
-        delete *it;
     aCurrencyFormatList.clear();
 
     if(nPrivCat==CAT_CURRENCY)
@@ -665,7 +656,7 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<String*>& rList,
     }
 }
 
-short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rList,
                                                        short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
                                                        NfIndexTableOffset eOffsetEnd)
@@ -701,21 +692,19 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<String*>& rLi
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-        String *const pStr = new String(aNewFormNInfo);
-
         if ( nNFEntry == nCurFormatKey )
         {
             nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
-        rList.push_back( pStr );
+        rList.push_back( aNewFormNInfo );
         aCurEntryList.push_back( nNFEntry );
     }
 
     return nSelPos;
 }
 
-short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& rList,
                                                         short nSelPos)
 {
     sal_uInt16  nMyType;
@@ -743,14 +732,12 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rL
             CategoryToPos_Impl(nMyCat,nMyType);
             aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-            String *const pStr = new String(aNewFormNInfo);
-
             if ( nNFEntry == nCurFormatKey )
             {
                 nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
             }
 
-            rList.push_back( pStr );
+            rList.push_back( aNewFormNInfo );
             aCurEntryList.push_back( nNFEntry );
         }
     }
@@ -758,7 +745,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rL
     return nSelPos;
 }
 
-short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& rList,
                                                         short nSelPos)
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
@@ -792,7 +779,7 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<String*>& rL
 }
 
 
-short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rList,
                                                        short nSelPos)
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
@@ -830,14 +817,12 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-        String *const pStr = new String(aNewFormNInfo);
-
         if ( nNFEntry == nCurFormatKey )
         {
             nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
-        rList.push_back( pStr );
+        rList.push_back( aNewFormNInfo );
         aCurEntryList.push_back( nNFEntry );
     }
 
@@ -873,10 +858,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
                     CategoryToPos_Impl(nMyCat,nMyType);
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-                    String *const pStr = new String(aNewFormNInfo);
-
                     if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.size();
-                    rList.push_back( pStr );
+                    rList.push_back( aNewFormNInfo );
                     aCurEntryList.push_back( nKey );
                 }
             }
@@ -886,7 +869,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
     return nSelPos;
 }
 
-short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& rList,
                                                         short nSelPos)
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
@@ -907,7 +890,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
     OUString        rSymbol;
     OUString       rBankSymbol;
 
-    std::vector<String*>    aList;
+    std::vector<OUString>   aList;
     std::vector<sal_uInt32> aKeyList;
 
     pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
@@ -992,7 +975,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
 
                 if(bInsFlag)
                 {
-                    aList.push_back( new String(aNewFormNInfo) );
+                    aList.push_back( aNewFormNInfo );
                     aKeyList.push_back( nKey );
                 }
             }
@@ -1036,9 +1019,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         size_t j;
         for( j=0; j < aList.size(); ++j )
         {
-            const String * pTestStr=aList[j];
-
-            if(*pTestStr==aInsStr)
+            if(aList[j]==aInsStr)
             {
                 bFlag = false;
                 break;
@@ -1046,7 +1027,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         }
         if(bFlag)
         {
-            rList.push_back( new String(aInsStr) );
+            rList.push_back( aInsStr );
             aCurEntryList.insert( aCurEntryList.begin() + (nPos++), NUMBERFORMAT_ENTRY_NOT_FOUND);
         }
         else
@@ -1069,7 +1050,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
 
     for( size_t i = nOldListCount; i < rList.size(); ++i )
     {
-        aCurrencyFormatList.push_back( new String(*rList[i]) );
+        aCurrencyFormatList.push_back( rList[i] );
 
         if ( nSelPos == SELPOS_NONE && bAdaptSelPos && aCurEntryList[i] == nCurFormatKey )
             nSelPos = i;
@@ -1082,7 +1063,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
 }
 
 
-short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
+short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
                                                    sal_uInt16 nPrivCat, short nSelPos )
 {
     /* Erstellen einer aktuellen Liste von Format-Eintraegen.
@@ -1126,10 +1107,8 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
                 }
                 if(bFlag)
                 {
-                    String *const pStr = new String(aNewFormNInfo);
-
                     if ( nKey == nCurFormatKey ) nSelPos = aCurEntryList.size();
-                    rList.push_back( pStr );
+                    rList.push_back( aNewFormNInfo );
                     aCurEntryList.push_back( nKey );
                 }
             }
@@ -1142,13 +1121,13 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
 
 // -----------------------------------------------------------------------
 
-void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpColor )
+void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpColor )
 {
     rpColor = NULL;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
     bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
-                        ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
+                        ( !aValStr.isEmpty() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
     if ( bUseText )
     {
@@ -1258,8 +1237,8 @@ void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos
 #************************************************************************/
 
 void SvxNumberFormatShell::MakePrevStringFromVal(
-        const String& rFormatStr,
-        String& rPreviewStr,
+        const OUString& rFormatStr,
+        OUString& rPreviewStr,
         Color*& rpFontColor,
         double  nValue)
 {
@@ -1308,10 +1287,10 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry,String aEntStr)
 #*
 #************************************************************************/
 
-String SvxNumberFormatShell::GetComment4Entry(short nEntry)
+OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
 {
     if(nEntry < 0)
-        return String();
+        return OUString();
 
     if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
@@ -1321,7 +1300,7 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
             return pNumEntry->GetComment();
     }
 
-    return String();
+    return OUString();
 }
 
 /*************************************************************************
@@ -1420,15 +1399,15 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 #*
 #************************************************************************/
 
-String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
+OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 {
     if(nEntry < 0)
-        return String();
+        return OUString();
 
     if( !aCurrencyFormatList.empty() )
     {
         if( aCurrencyFormatList.size() > static_cast<size_t>(nEntry) )
-            return *aCurrencyFormatList[nEntry];
+            return aCurrencyFormatList[nEntry];
     }
     else
     {
@@ -1438,7 +1417,7 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
         if(pNumEntry!=NULL)
             return pNumEntry->GetFormatstring();
     }
-    return String();
+    return OUString();
 }
 
 /*************************************************************************
@@ -1479,7 +1458,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     return nSelP;
 }
 
-short SvxNumberFormatShell::GetListPos4Entry( const String& rFmtString )
+short SvxNumberFormatShell::GetListPos4Entry( const OUString& rFmtString )
 {
     sal_uInt32 nAt=0;
     short nSelP=SELPOS_NONE;
@@ -1493,7 +1472,7 @@ short SvxNumberFormatShell::GetListPos4Entry( const String& rFmtString )
         {
             for( size_t i=0; i<aCurrencyFormatList.size(); i++ )
             {
-                if (rFmtString==*aCurrencyFormatList[i])
+                if (rFmtString==aCurrencyFormatList[i])
                 {
                     nSelP = static_cast<short>(i);
                     break;
@@ -1504,7 +1483,7 @@ short SvxNumberFormatShell::GetListPos4Entry( const String& rFmtString )
     return nSelP;
 }
 
-String SvxNumberFormatShell::GetStandardName() const
+OUString SvxNumberFormatShell::GetStandardName() const
 {
     return pFormatter->GetStandardName( eCurLanguage);
 }
@@ -1659,7 +1638,7 @@ void SvxNumberFormatShell::SetCurCurrencyEntry(NfCurrencyEntry* pCEntry)
     pCurCurrencyEntry=pCEntry;
 }
 
-bool SvxNumberFormatShell::IsTmpCurrencyFormat( const String& rFmtString )
+bool SvxNumberFormatShell::IsTmpCurrencyFormat( const OUString& rFmtString )
 {
     sal_uInt32 nFound;
     FindEntry(rFmtString, &nFound);
@@ -1671,7 +1650,7 @@ bool SvxNumberFormatShell::IsTmpCurrencyFormat( const String& rFmtString )
     return false;
 }
 
-sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
+sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const OUString& rFmtString )
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.size();
@@ -1695,7 +1674,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
     return (sal_uInt16) -1;
 }
 
-sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking )
+sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const OUString& rFmtString, bool &bTestBanking )
 {
     sal_uInt16 nPos=(sal_uInt16) -1;
 
@@ -1732,13 +1711,13 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
             OUString _aSymbol = pTmpCurrencyEntry->BuildSymbolString(false);
             OUString aBankSymbol = pTmpCurrencyEntry->BuildSymbolString(true);
 
-            if(rFmtString.Search(_aSymbol)!=STRING_NOTFOUND)
+            if(rFmtString.indexOf(_aSymbol) != -1)
             {
                 bTestBanking=false;
                 nPos=i;
                 break;
             }
-            else if(rFmtString.Search(aBankSymbol)!=STRING_NOTFOUND)
+            else if(rFmtString.indexOf(aBankSymbol) != -1)
             {
                 bTestBanking=true;
                 nPos=i;
