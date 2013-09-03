@@ -77,6 +77,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		&& $(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
 		$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
 			$(OPENSSL_PLATFORM) \
+			no-dso \
 			$(if $(filter ANDROID,$(OS)),\
 			shared no-idea,\
 			$(if $(filter IOS,$(OS)),no-shared no-idea,\
