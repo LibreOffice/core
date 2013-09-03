@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7jk\u003d",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-09-03T16:20:07Z",
+      "side": 1,
+      "message": "A check against CELLTYPE_EDIT is unnecessary here since we do check it against CELLTYPE_STRING right below.  A cell cannot be of two types at the same time; if it\u0027s CELLTYPE_STRING, it\u0027s never CELLTYPE_EDIT, and vise versa.",
+      "revId": "1792089b6f5e1a27607500abfd3a25c200fe3eb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
