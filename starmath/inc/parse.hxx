@@ -19,9 +19,7 @@
 #ifndef PARSE_HXX
 #define PARSE_HXX
 
-
 #include <vcl/svapp.hxx>
-#include <tools/string.hxx>
 
 #include <set>
 #include <stack>

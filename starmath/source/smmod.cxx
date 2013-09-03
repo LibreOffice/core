@@ -79,15 +79,15 @@ SmLocalizedSymbolData::~SmLocalizedSymbolData()
 }
 
 
-const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName ) const
+const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName ) const
 {
-    String aRes;
+    OUString aRes;
 
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    for (sal_uInt16 i = 0;  i < nCount  &&  aRes.isEmpty();  ++i)
     {
         if (rExportNames.GetString(i).equals(rExportName))
         {
@@ -100,15 +100,15 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
 }
 
 
-const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName ) const
+const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiName ) const
 {
-    String aRes;
+    OUString aRes;
 
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    for (sal_uInt16 i = 0;  i < nCount  &&  aRes.isEmpty();  ++i)
     {
         if (rUiNames.GetString(i).equals(rUiName))
         {
@@ -121,15 +121,15 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
 }
 
 
-const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportName ) const
+const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName ) const
 {
-    String aRes;
+    OUString aRes;
 
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    for (sal_uInt16 i = 0;  i < nCount  &&  aRes.isEmpty();  ++i)
     {
         if (rExportNames.GetString(i).equals(rExportName))
         {
@@ -142,15 +142,15 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
 }
 
 
-const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiName ) const
+const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rUiName ) const
 {
-    String aRes;
+    OUString aRes;
 
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    for (sal_uInt16 i = 0;  i < nCount  &&  aRes.isEmpty();  ++i)
     {
         if (rUiNames.GetString(i).equals(rUiName))
         {

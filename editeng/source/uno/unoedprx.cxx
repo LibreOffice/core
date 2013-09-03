@@ -455,7 +455,7 @@ sal_uInt16 SvxAccessibleTextAdapter::GetTextLen( sal_Int32 nParagraph ) const
     return static_cast< sal_uInt16 >(aIndex.GetIndex());
 }
 
-String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
+OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -601,7 +601,7 @@ sal_uInt16 SvxAccessibleTextAdapter::GetItemState( sal_Int32 nPara, sal_uInt16 n
     return mrTextForwarder->GetItemState( nPara, nWhich );
 }
 
-void SvxAccessibleTextAdapter::QuickInsertText( const String& rText, const ESelection& rSel )
+void SvxAccessibleTextAdapter::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1063,7 +1063,7 @@ sal_Bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
     return mrTextForwarder->Delete( MakeEESelection(aStartIndex, aEndIndex ) );
 }
 
-sal_Bool SvxAccessibleTextAdapter::InsertText( const String& rStr, const ESelection& rSel )
+sal_Bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESelection& rSel )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1169,7 +1169,7 @@ void SvxAccessibleTextAdapter::AppendParagraph()
     OSL_FAIL( "not implemented" );
 }
 
-xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( sal_Int32, const String &, const SfxItemSet & )
+sal_uInt16 SvxAccessibleTextAdapter::AppendTextPortion( sal_Int32, const OUString &, const SfxItemSet & )
 {
     OSL_FAIL( "not implemented" );
     return 0;

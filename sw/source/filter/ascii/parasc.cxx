@@ -57,7 +57,7 @@ class SwASCIIParser
     bool bNewDoc;
 
     sal_uLong ReadChars();
-    void InsertText( const String& rStr );
+    void InsertText( const OUString& rStr );
 
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
@@ -485,10 +485,10 @@ sal_uLong SwASCIIParser::ReadChars()
     return 0;
 }
 
-void SwASCIIParser::InsertText( const String& rStr )
+void SwASCIIParser::InsertText( const OUString& rStr )
 {
     pDoc->InsertString( *pPam, rStr );
-    pDoc->UpdateRsid( *pPam, rStr.Len() );
+    pDoc->UpdateRsid( *pPam, rStr.getLength() );
     pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
 
     if( pItemSet && g_pBreakIt && nScript != ( SCRIPTTYPE_LATIN |

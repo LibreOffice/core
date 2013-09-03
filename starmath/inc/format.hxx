@@ -90,7 +90,7 @@
 
 enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };
 
-String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
+OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
 
 class SmFormat : public SfxBroadcaster
 {

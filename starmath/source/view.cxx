@@ -1003,7 +1003,7 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 }
 
 
-Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
+Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::GetTextLineSize" );
 
@@ -1021,7 +1021,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
             if (i > 0)
                 aSize.Width() = ((aSize.Width() / TabPos) + 1) * TabPos;
 
-            OUString aText = rLine.GetToken(i, '\t');
+            OUString aText = rLine.getToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
             aText = comphelper::string::stripEnd(aText, '\t');
             aSize.Width() += rDevice.GetTextWidth(aText);
@@ -1032,7 +1032,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 }
 
 
-Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long MaxWidth)
+Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long MaxWidth)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::GetTextSize" );
 
@@ -1042,7 +1042,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
-        OUString aLine = rText.GetToken(i, '\n');
+        OUString aLine = rText.getToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
         aLine = comphelper::string::stripStart(aLine, '\n');
         aLine = comphelper::string::stripEnd(aLine, '\n');
@@ -1093,7 +1093,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
 }
 
 
-void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const String& rLine)
+void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::DrawTextLine" );
 
@@ -1109,7 +1109,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
             if (i > 0)
                 aPoint.X() = ((aPoint.X() / TabPos) + 1) * TabPos;
 
-            OUString aText = rLine.GetToken(i, '\t');
+            OUString aText = rLine.getToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
             aText = comphelper::string::stripEnd(aText, '\t');
             rDevice.DrawText(aPoint, aText);
@@ -1121,7 +1121,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 }
 
 
-void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const String& rText, sal_uInt16 MaxWidth)
+void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const OUString& rText, sal_uInt16 MaxWidth)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::DrawText" );
 
@@ -1131,7 +1131,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
-        OUString aLine = rText.GetToken(i, '\n');
+        OUString aLine = rText.getToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
         aLine = comphelper::string::stripEnd(aLine, '\n');
         aLine = comphelper::string::stripEnd(aLine, '\n');

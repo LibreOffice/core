@@ -104,7 +104,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
             // same method now for clipboard or drag&drop
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            aEditView.InsertText( rxTransferable, String(), sal_True );
+            aEditView.InsertText( rxTransferable, OUString(), sal_True );
         }
 
         sal_Int32 nParCnt = pEngine->GetParagraphCount();

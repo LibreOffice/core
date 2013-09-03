@@ -526,7 +526,7 @@ private:
 
     EditTextObject*     CreateTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 );
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial );
+    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial );
 
     EditPaM             Clear();
     EditPaM             RemoveText();
@@ -548,7 +548,7 @@ private:
     EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, bool bKeepEndingAttribs = true );
-    EditPaM             ImpInsertText(const EditSelection& aCurEditSelection, const String& rStr);
+    EditPaM             ImpInsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditPaM             ImpInsertFeature(const EditSelection& rCurSel, const SfxPoolItem& rItem);
     void                ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
     void                ImpRemoveParagraph( sal_Int32 nPara );
@@ -758,7 +758,7 @@ public:
     void            SetText(const OUString& rText);
     EditPaM         DeleteSelected( EditSelection aEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
-    EditPaM         InsertText(const EditSelection& aCurEditSelection, const String& rStr);
+    EditPaM         InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );

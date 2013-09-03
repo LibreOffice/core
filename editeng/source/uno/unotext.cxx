@@ -2208,7 +2208,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
         sal_Int32 nPara = nParaCount - 1;
         SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
-        xub_StrLen nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
+        sal_uInt16 nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
         pEditSource->UpdateData();
         xub_StrLen nEnd   = pTextForwarder->GetTextLen( nPara );
 
@@ -2441,9 +2441,9 @@ sal_uInt16 SvxDummyTextSource::GetTextLen( sal_Int32 ) const
     return 0;
 }
 
-String SvxDummyTextSource::GetText( const ESelection& ) const
+OUString SvxDummyTextSource::GetText( const ESelection& ) const
 {
-    return String();
+    return OUString();
 }
 
 SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, sal_Bool ) const
@@ -2486,7 +2486,7 @@ SfxItemPool* SvxDummyTextSource::GetPool() const
     return NULL;
 }
 
-void SvxDummyTextSource::QuickInsertText( const String&, const ESelection& )
+void SvxDummyTextSource::QuickInsertText( const OUString&, const ESelection& )
 {
 }
 
@@ -2615,7 +2615,7 @@ sal_Bool SvxDummyTextSource::Delete( const ESelection& )
     return sal_False;
 }
 
-sal_Bool SvxDummyTextSource::InsertText( const String&, const ESelection& )
+sal_Bool SvxDummyTextSource::InsertText( const OUString&, const ESelection& )
 {
     return sal_False;
 }
@@ -2629,7 +2629,7 @@ void SvxDummyTextSource::AppendParagraph()
 {
 }
 
-xub_StrLen SvxDummyTextSource::AppendTextPortion( sal_Int32, const String &, const SfxItemSet & )
+sal_uInt16 SvxDummyTextSource::AppendTextPortion( sal_Int32, const OUString &, const SfxItemSet & )
 {
     return 0;
 }

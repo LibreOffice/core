@@ -607,7 +607,7 @@ void SmXMLExport::_ExportContent()
     SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, sal_True, sal_True);
     SvXMLElementExport *pSemantics=0;
 
-    if (aText.Len())
+    if (!aText.isEmpty())
     {
         pSemantics = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
             XML_SEMANTICS, sal_True, sal_True);
@@ -615,7 +615,7 @@ void SmXMLExport::_ExportContent()
 
     ExportNodes(pTree, 0);
 
-    if (aText.Len())
+    if (!aText.isEmpty())
     {
         // Convert symbol names
         if (pDocShell)
@@ -633,7 +633,7 @@ void SmXMLExport::_ExportContent()
             OUString("StarMath 5.0"));
         SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
             XML_ANNOTATION, sal_True, sal_False);
-        GetDocHandler()->characters(OUString( aText ));
+        GetDocHandler()->characters( aText );
     }
     delete pSemantics;
 }

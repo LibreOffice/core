@@ -49,7 +49,7 @@ struct SmCfgOther;
 
 struct SmFontFormat
 {
-    String      aName;
+    OUString        aName;
     sal_Int16       nCharSet;
     sal_Int16       nFamily;
     sal_Int16       nPitch;
@@ -66,10 +66,10 @@ struct SmFontFormat
 
 struct SmFntFmtListEntry
 {
-    String          aId;
+    OUString        aId;
     SmFontFormat    aFntFmt;
 
-    SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt );
+    SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt );
 };
 
 class SmFontFormatList
@@ -85,15 +85,15 @@ public:
     SmFontFormatList();
 
     void    Clear();
-    void    AddFontFormat( const String &rFntFmtId, const SmFontFormat &rFntFmt );
-    void    RemoveFontFormat( const String &rFntFmtId );
+    void    AddFontFormat( const OUString &rFntFmtId, const SmFontFormat &rFntFmt );
+    void    RemoveFontFormat( const OUString &rFntFmtId );
 
-    const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
+    const SmFontFormat *    GetFontFormat( const OUString &rFntFmtId ) const;
     const SmFontFormat *    GetFontFormat( size_t nPos ) const;
-    const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
-    const String            GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
-    const String            GetFontFormatId( size_t nPos ) const;
-    const OUString     GetNewFontFormatId() const;
+    const OUString          GetFontFormatId( const SmFontFormat &rFntFmt ) const;
+    const OUString          GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
+    const OUString          GetFontFormatId( size_t nPos ) const;
+    const OUString          GetNewFontFormatId() const;
     size_t                  GetCount() const    { return aEntries.size(); }
 
     bool    IsModified() const          { return bModified; }

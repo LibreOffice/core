@@ -988,10 +988,10 @@ sal_uInt16 SmTextForwarder::GetTextLen( sal_Int32 nParagraph ) const
     return pEditEngine ? pEditEngine->GetTextLen( nParagraph ) : 0;
 }
 
-String SmTextForwarder::GetText( const ESelection& rSel ) const
+OUString SmTextForwarder::GetText( const ESelection& rSel ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    String aRet;
+    OUString aRet;
     if (pEditEngine)
         aRet = pEditEngine->GetText( rSel, LINEEND_LF );
     return convertLineEnd(aRet, GetSystemLineEnd());
@@ -1075,7 +1075,7 @@ void SmTextForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rLi
         pEditEngine->GetPortions( nPara, rList );
 }
 
-void SmTextForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
+void SmTextForwarder::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
@@ -1413,7 +1413,7 @@ sal_Bool SmTextForwarder::Delete( const ESelection& rSelection )
     return bRes;
 }
 
-sal_Bool SmTextForwarder::InsertText( const String& rStr, const ESelection& rSelection )
+sal_Bool SmTextForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
     sal_Bool bRes = sal_False;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1444,11 +1444,11 @@ void SmTextForwarder::AppendParagraph()
     if (pEditEngine)
     {
         sal_Int32 nParaCount = pEditEngine->GetParagraphCount();
-        pEditEngine->InsertParagraph( nParaCount, String() );
+        pEditEngine->InsertParagraph( nParaCount, OUString() );
     }
 }
 
-xub_StrLen SmTextForwarder::AppendTextPortion( sal_Int32 nPara, const String &rText, const SfxItemSet &rSet )
+sal_uInt16 SmTextForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet )
 {
     xub_StrLen nRes = 0;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();

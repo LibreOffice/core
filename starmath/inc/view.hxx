@@ -243,16 +243,16 @@ class SmViewShell: public SfxViewShell
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
-                         const String& rLine);
+                         const OUString& rLine);
     Size GetTextSize(OutputDevice& rDevice,
-                     const String& rText,
+                     const OUString& rText,
                      long          MaxWidth);
     void DrawTextLine(OutputDevice& rDevice,
                       const Point&  rPosition,
-                      const String& rLine);
+                      const OUString& rLine);
     void DrawText(OutputDevice& rDevice,
                   const Point&  rPosition,
-                  const String& rText,
+                  const OUString& rText,
                   sal_uInt16        MaxWidth);
 
     virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);

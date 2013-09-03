@@ -56,7 +56,7 @@ sal_uInt16 SvxEditEngineForwarder::GetTextLen( sal_Int32 nParagraph ) const
     return rEditEngine.GetTextLen( nParagraph );
 }
 
-String SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
+OUString SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
 {
     return convertLineEnd(rEditEngine.GetText(rSel, LINEEND_LF), GetSystemLineEnd());
 }
@@ -127,7 +127,7 @@ void SvxEditEngineForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_uInt1
     rEditEngine.GetPortions( nPara, rList );
 }
 
-void SvxEditEngineForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
+void SvxEditEngineForwarder::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     rEditEngine.QuickInsertText( rText, rSel );
 }
@@ -447,7 +447,7 @@ sal_Bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
     return sal_True;
 }
 
-sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelection& rSelection )
+sal_Bool SvxEditEngineForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
     rEditEngine.QuickInsertText( rStr, rSelection );
     rEditEngine.QuickFormatDoc();
@@ -477,9 +477,9 @@ void SvxEditEngineForwarder::AppendParagraph()
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
 }
 
-xub_StrLen SvxEditEngineForwarder::AppendTextPortion( sal_Int32 nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+sal_uInt16 SvxEditEngineForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )
 {
-    xub_StrLen nLen = 0;
+    sal_uInt16 nLen = 0;
 
     sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
     DBG_ASSERT( nPara < nParaCount, "paragraph index out of bounds" );

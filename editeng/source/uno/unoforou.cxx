@@ -63,7 +63,7 @@ sal_uInt16 SvxOutlinerForwarder::GetTextLen( sal_Int32 nParagraph ) const
     return rOutliner.GetEditEngine().GetTextLen( nParagraph );
 }
 
-String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
+OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
     //! GetText (ESelection) should probably also be in the Outliner
     // in the time beeing use as the hack for the EditEngine:
@@ -195,10 +195,10 @@ void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>
     ((EditEngine&)rOutliner.GetEditEngine()).GetPortions( nPara, rList );
 }
 
-void SvxOutlinerForwarder::QuickInsertText( const String& rText, const ESelection& rSel )
+void SvxOutlinerForwarder::QuickInsertText( const OUString& rText, const ESelection& rSel )
 {
     flushCache();
-    if( rText.Len() == 0 )
+    if( rText.isEmpty() )
     {
         rOutliner.QuickDelete( rSel );
     }
@@ -444,7 +444,7 @@ sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
     return sal_True;
 }
 
-sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection& rSelection )
+sal_Bool SvxOutlinerForwarder::InsertText( const OUString& rStr, const ESelection& rSelection )
 {
     flushCache();
     rOutliner.QuickInsertText( rStr, rSelection );
@@ -551,9 +551,9 @@ void SvxOutlinerForwarder::AppendParagraph()
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
 }
 
-xub_StrLen SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+sal_uInt16 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )
 {
-    xub_StrLen nLen = 0;
+    sal_uInt16 nLen = 0;
 
     EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
     sal_Int32 nParaCount = rEditEngine.GetParagraphCount();

@@ -600,7 +600,7 @@ sal_Bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
     return sal_True;
 }
 
-EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const String& rStr)
+EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rStr)
 {
     EditPaM aPaM = ImpInsertText( aSel, rStr );
     return aPaM;
@@ -2640,7 +2640,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
     return aPaM;
 }
 
-EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const String& rStr)
+EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUString& rStr)
 {
     UndoActionStart( EDITUNDO_INSERT );
 
@@ -3470,7 +3470,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     return xDataObj;
 }
 
-EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial )
+EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial )
 {
     EditSelection aNewSelection( rPaM );
 

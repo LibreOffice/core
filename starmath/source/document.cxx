@@ -139,7 +139,7 @@ void SmDocShell::LoadSymbols()
 }
 
 
-const String SmDocShell::GetComment() const
+const OUString SmDocShell::GetComment() const
 {
     SAL_INFO( "starmath", "starmath: SmDocShell::GetComment" );
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -402,8 +402,8 @@ EditEngine& SmDocShell::GetEditEngine()
 
         // set initial text if the document already has some...
         // (may be the case when reloading a doc)
-        String aTxt( GetText() );
-        if (aTxt.Len())
+        OUString aTxt( GetText() );
+        if (!aTxt.isEmpty())
             pEditEngine->SetText( aTxt );
 
         pEditEngine->ClearModifyFlag();
@@ -729,7 +729,7 @@ SmDocShell::~SmDocShell()
 }
 
 
-sal_Bool SmDocShell::SetData( const String& rData )
+sal_Bool SmDocShell::SetData( const OUString& rData )
 {
     SAL_INFO( "starmath", "starmath: SmDocShell::SetData" );
 
@@ -743,11 +743,11 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
     SAL_INFO( "starmath", "starmath: SmDocShell::ConvertFrom" );
 
     bool     bSuccess = false;
-    const String& rFltName = rMedium.GetFilter()->GetFilterName();
+    const OUString& rFltName = rMedium.GetFilter()->GetFilterName();
 
-    OSL_ENSURE( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
+    OSL_ENSURE( !rFltName.equals( STAROFFICE_XML ), "Wrong filter!");
 
-    if ( rFltName.EqualsAscii( MATHML_XML ) )
+    if ( rFltName.equals( MATHML_XML ) )
     {
         if (pTree)
         {
@@ -952,15 +952,15 @@ sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        const String& rFltName = pFlt->GetFilterName();
-        if(rFltName.EqualsAscii( STAROFFICE_XML ))
+        const OUString& rFltName = pFlt->GetFilterName();
+        if(rFltName.equals( STAROFFICE_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(sal_False);
             bRet = aEquation.Export(rMedium);
         }
-        else if(rFltName.EqualsAscii( MATHML_XML ))
+        else if(rFltName.equals( MATHML_XML ))
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
@@ -1406,15 +1406,15 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
-        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
-        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
+        *pFullTypeName  = OUString(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
+        *pShortTypeName = OUString(SmResId(RID_DOCUMENTSTR));
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
-        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
-        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
+        *pFullTypeName  = OUString(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
+        *pShortTypeName = OUString(SmResId(RID_DOCUMENTSTR));
     }
 }
 

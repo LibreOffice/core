@@ -192,7 +192,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
         // delete current selection by inserting empty String, so current
         // attributes become unique (sel. has to be erased anyway)
-        pOutlinerView->InsertText(String());
+        pOutlinerView->InsertText(OUString());
 
         pOutlinerView->InsertText(aString, true);
 

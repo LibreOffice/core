@@ -858,7 +858,7 @@ EditPaM EditEngine::InsertField(const EditSelection& rEditSelection, const SvxFi
     return pImpEditEngine->InsertField(rEditSelection, rFld);
 }
 
-EditPaM EditEngine::InsertText(const EditSelection& aCurEditSelection, const String& rStr)
+EditPaM EditEngine::InsertText(const EditSelection& aCurEditSelection, const OUString& rStr)
 {
     return pImpEditEngine->InsertText(aCurEditSelection, rStr);
 }
@@ -870,7 +870,7 @@ EditSelection EditEngine::InsertText(const EditTextObject& rTextObject, const Ed
 
 EditSelection EditEngine::InsertText(
     uno::Reference<datatransfer::XTransferable >& rxDataObj,
-    const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
+    const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
 {
     return pImpEditEngine->InsertText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
 }
