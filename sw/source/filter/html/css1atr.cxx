@@ -2866,7 +2866,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, (long)nHeight );
     else if( nPrcHeight )
     {
-        OString sHeight(OString(nPrcHeight) + "%");
+        OString sHeight(OString::number(nPrcHeight) + "%");
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight);
     }
 
