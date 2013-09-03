@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -54,8 +53,6 @@
 namespace configmgr {
 
 class Components;
-
-namespace {
 
 OString convertToUtf8(
     OUString const & text, sal_Int32 offset, sal_Int32 length)
@@ -510,8 +507,6 @@ void writeModifications(
                 node->getMember(i->first), i->second);
         }
     }
-}
-
 }
 
 void writeModFile(

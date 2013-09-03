@@ -66,6 +66,9 @@
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
 #include "xcsparser.hxx"
+#ifdef WNT
+#include "winreg.hxx"
+#endif
 
 namespace configmgr {
 
@@ -505,7 +508,20 @@ Components::Components(
         if ( type == "xcsxcu" ) {
             parseXcsXcuLayer(layer, url);
             layer += 2; //TODO: overflow
-        } else if ( type == "bundledext" )
+        }
+#ifdef WNT
+        else if ( type == "winreg" )
+        {
+            OUString aTempFileURL;
+            if ( dumpWindowsRegistry(aTempFileURL) )
+            {
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, data_, 0, 0, 0);
+                layer++;
+                osl::File::remove(aTempFileURL);
+            }
+        }
+#endif
+        else if ( type == "bundledext" )
         {
             parseXcsXcuIniLayer(layer, url, false);
             layer += 2; //TODO: overflow
