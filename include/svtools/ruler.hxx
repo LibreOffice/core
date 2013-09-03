@@ -482,15 +482,10 @@ Tips zur Benutzung des Lineals:
 #define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
 #define WB_STDRULER         WB_HORZ
 
-// ---------------
-// - Ruler-Types -
-// ---------------
-
 struct ImplRulerHitTest;
 
-// --------------
+
 // - Ruler-Type -
-// --------------
 
 enum RulerType { RULER_TYPE_DONTKNOW, RULER_TYPE_OUTSIDE,
                  RULER_TYPE_MARGIN1, RULER_TYPE_MARGIN2,
@@ -515,15 +510,11 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_SCROLL_1          1
 #define RULER_SCROLL_2          2
 
-// ---------------
 // - RulerMargin -
-// ---------------
 
 #define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
 
-// ---------------
 // - RulerBorder -
-// ---------------
 
 #define RULER_BORDER_SIZEABLE   ((sal_uInt16)0x0001)
 #define RULER_BORDER_MOVEABLE   ((sal_uInt16)0x0002)
@@ -534,17 +525,14 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 
 struct RulerBorder
 {
-    long    nPos;
-    long    nWidth;
+    long        nPos;
+    long        nWidth;
     sal_uInt16  nStyle;
-    //minimum/maximum position, supported for table borders/rows
-    long    nMinPos;
-    long    nMaxPos;
+    long        nMinPos; //minimum/maximum position, supported for table borders/rows
+    long        nMaxPos;
 };
 
-// ---------------
 // - RulerIndent -
-// ---------------
 
 #define RULER_INDENT_TOP        ((sal_uInt16)0x0000)
 #define RULER_INDENT_BOTTOM     ((sal_uInt16)0x0001)
@@ -557,9 +545,7 @@ struct RulerIndent
     sal_uInt16  nStyle;
 };
 
-// ------------
 // - RulerTab -
-// ------------
 
 #define RULER_TAB_LEFT          ((sal_uInt16)0x0000)
 #define RULER_TAB_RIGHT         ((sal_uInt16)0x0001)
@@ -571,16 +557,14 @@ struct RulerIndent
 
 struct RulerTab
 {
-    long    nPos;
+    long        nPos;
     sal_uInt16  nStyle;
 };
 
 #define RULER_TAB_WIDTH         7
 #define RULER_TAB_HEIGHT        6
 
-// -------------
 // - RulerLine -
-// -------------
 
 struct RulerLine
 {
@@ -601,10 +585,9 @@ struct RulerUnitData
     sal_Char        aUnitStr[8];        // Unit string
 };
 
-class ImplRulerData;
-// ---------
 // - Ruler -
-// ---------
+
+class ImplRulerData;
 
 class SVT_DLLPUBLIC Ruler : public Window
 {
@@ -809,7 +792,6 @@ public:
     void            SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
     const Link&     GetExtraDownHdl() const { return maExtraDownHdl; }
 
-    //set text direction right-to-left
     void            SetTextRTL(sal_Bool bRTL);
 
     void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
