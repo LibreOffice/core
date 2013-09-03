@@ -3089,7 +3089,7 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     if( CSS1_IDENT == pExpr->GetType() ||
         CSS1_STRING == pExpr->GetType() )
     {
-        LanguageType eLang = LanguageTag( pExpr->GetString() ).getLanguageType();
+        LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( pExpr->GetString() );
         if( LANGUAGE_DONTKNOW != eLang )
         {
             SvxLanguageItem aLang( eLang, aItemIds.nLanguage );
