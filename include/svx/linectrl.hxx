@@ -130,11 +130,11 @@ protected:
 public:
     SvxLineEndWindow( sal_uInt16 nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                      const String& rWndTitle );
+                      const OUString& rWndTitle );
     SvxLineEndWindow( sal_uInt16 nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                       Window* pParentWindow,
-                      const String& rWndTitle );
+                      const OUString& rWndTitle );
     ~SvxLineEndWindow();
 
     void            StartSelection();

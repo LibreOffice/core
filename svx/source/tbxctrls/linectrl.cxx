@@ -349,7 +349,7 @@ Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 SvxLineEndWindow::SvxLineEndWindow(
     sal_uInt16 nSlotId,
     const Reference< XFrame >& rFrame,
-    const String& rWndTitle ) :
+    const OUString& rWndTitle ) :
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
@@ -369,7 +369,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     sal_uInt16 nSlotId,
     const Reference< XFrame >& rFrame,
     Window* pParentWindow,
-    const String& rWndTitle ) :
+    const OUString& rWndTitle ) :
     SfxPopupWindow( nSlotId,
                     rFrame,
                     pParentWindow,
