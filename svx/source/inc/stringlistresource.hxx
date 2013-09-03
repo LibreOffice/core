@@ -43,21 +43,21 @@ namespace svx
         SVX_DLLPUBLIC StringListResource( const ResId& _rResId );
         SVX_DLLPUBLIC ~StringListResource();
 
-        inline void get( ::std::vector< String >& _rStrings )
+        inline void get( ::std::vector< OUString >& _rStrings )
         {
             _rStrings = m_aStrings;
         }
 
 
-        /** returns the String with a given local resource id
+        /** returns the OUString with a given local resource id
 
             @param  _nResId
                 The resource id. It will not be checked if this id exists.
 
-            @return String
+            @return OUString
                 The string.
         */
-        String getString( sal_uInt16 _nResId )
+        OUString getString( sal_uInt16 _nResId )
         {
             return ResId(_nResId, *m_pResMgr).toString();
         }
@@ -65,10 +65,10 @@ namespace svx
         size_t  size() const    { return m_aStrings.size(); }
         bool    empty() const   { return m_aStrings.empty(); }
 
-        const String& operator[]( size_t _index ) const { return m_aStrings[ _index ]; }
+        const OUString& operator[]( size_t _index ) const { return m_aStrings[ _index ]; }
 
     private:
-        ::std::vector< String > m_aStrings;
+        ::std::vector< OUString > m_aStrings;
     };
 
 //........................................................................
