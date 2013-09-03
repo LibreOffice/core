@@ -329,14 +329,14 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         const Size aSize(rRect.GetWidth(), rRect.GetHeight());
         BitmapEx aBitmapEx;
         Size aPreparedSize;
-        String aItemTextTitle;
-        String aItemTextPath;
+        OUString aItemTextTitle;
+        OUString aItemTextPath;
 
         mpTheme->GetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
 
-        if(!bNeedToCreate && !aItemTextTitle.Len())
+        if(!bNeedToCreate && aItemTextTitle.isEmpty())
         {
             bNeedToCreate = true;
         }
@@ -629,19 +629,19 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         const Size aSize(rRect.GetHeight(), rRect.GetHeight());
         BitmapEx aBitmapEx;
         Size aPreparedSize;
-        String aItemTextTitle;
-        String aItemTextPath;
+        OUString aItemTextTitle;
+        OUString aItemTextPath;
 
         mpTheme->GetPreviewBitmapExAndStrings(mnCurRow, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
 
-        if(!bNeedToCreate && GALLERY_BRWBOX_TITLE == nColumnId && !aItemTextTitle.Len())
+        if(!bNeedToCreate && GALLERY_BRWBOX_TITLE == nColumnId && aItemTextTitle.isEmpty())
         {
             bNeedToCreate = true;
         }
 
-        if(!bNeedToCreate && GALLERY_BRWBOX_PATH == nColumnId && !aItemTextPath.Len())
+        if(!bNeedToCreate && GALLERY_BRWBOX_PATH == nColumnId && aItemTextPath.isEmpty())
         {
             bNeedToCreate = true;
         }

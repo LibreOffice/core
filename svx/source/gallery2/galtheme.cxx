@@ -444,7 +444,7 @@ SgaObject* GalleryTheme::AcquireObject( size_t nPos )
 
 // ------------------------------------------------------------------------
 
-void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, String& rTitle, String& rPath) const
+void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
 {
     const GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
 
@@ -463,7 +463,7 @@ void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBit
 
 // ------------------------------------------------------------------------
 
-void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const String& rTitle, const String& rPath)
+void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
 {
     GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
 
@@ -1405,7 +1405,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
             }
         }
 
-        if ( m_aDestDir.Len() > 0 )
+        if ( !m_aDestDir.isEmpty() )
         {
             if ( aPath.SearchAndReplace(m_aDestDir, String()) != STRING_NOTFOUND )
                 bRel = m_bDestDirRelative;

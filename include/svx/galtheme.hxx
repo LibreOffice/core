@@ -50,8 +50,8 @@ struct GalleryObject
     //UI visualization buffering
     BitmapEx        maPreviewBitmapEx;
     Size            maPreparedSize;
-    String          maTitle;
-    String          maPath;
+    OUString        maTitle;
+    OUString        maPath;
 };
 
 typedef ::std::vector< GalleryObject* > GalleryObjectList;
@@ -96,7 +96,7 @@ class GalleryTheme : public SfxBroadcaster
 private:
 
     GalleryObjectList           aObjectList;
-    String                      m_aDestDir;
+    OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
@@ -148,8 +148,8 @@ public:
     const OUString&        GetRealName() const;
 
     // used for building gallery themes during compilation:
-    const String&               GetDestDir() const { return m_aDestDir; }
-    void                        SetDestDir(const String& rDestDir, bool bRelative = true)
+    const OUString&             GetDestDir() const { return m_aDestDir; }
+    void                        SetDestDir(const OUString& rDestDir, bool bRelative = true)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
 
     const INetURLObject&        GetThmURL() const;
@@ -226,8 +226,8 @@ public:
     static SVX_DLLPUBLIC void   InsertAllThemes( ListBox& rListBox );
 
     // for buffering PreviewBitmaps and strings for object and path
-    void GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, String& rTitle, String& rPath) const;
-    void SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const String& rTitle, const String& rPath);
+    void GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const;
+    void SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
 SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme );
