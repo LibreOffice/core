@@ -126,6 +126,9 @@ public:
     void testFdo46361();
     void testFdo65632();
     void testN816593();
+    void testTableAutoColumnFixedSize();
+    void testTableFloating();
+    void testTableAutoNested();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -217,6 +220,9 @@ void Test::run()
         {"fdo46361.docx", &Test::testFdo46361},
         {"fdo65632.docx", &Test::testFdo65632},
         {"n816593.docx", &Test::testN816593},
+        {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
+        {"table-floating.docx", &Test::testTableFloating},
+        {"table-auto-nested.docx", &Test::testTableAutoNested},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1537,6 +1543,44 @@ void Test::testN816593()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
+void Test::testTableAutoColumnFixedSize()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Width was not recognized during import when table size was 'auto'
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
+}
+
+void Test::testTableFloating()
+{
+    // Both the size and the position of the table was incorrect.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Second table was too wide: 16249, i.e. as wide as the first table.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11248), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // This was 0, should be the the opposite of (left margin + half of the border width).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    // Was 0 as well, should be the right margin.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(191), getProperty<sal_Int32>(xFrame, "RightMargin"));
+}
+
+void Test::testTableAutoNested()
+{
+    // This was 176, when compat option is not enabled, the auto paragraph bottom margin value was incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(494), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // This was 115596, i.e. the width of the outer table was too large.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(23051), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -38,8 +38,6 @@ namespace dmapper {
 using namespace ::com::sun::star;
 using namespace ::std;
 
-#define DEF_BORDER_DIST 190  //0,19cm
-
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
@@ -308,7 +306,7 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
 
 }
 
-TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo)
+TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = NULL;
@@ -428,7 +426,25 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aTableBorder.IsLeftLineValid = sal_True;
             // Only top level table position depends on border width
             if (rInfo.nNestLevel == 1)
-                rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
+            {
+                if (!rFrameProperties.hasElements())
+                    rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
+                else
+                {
+                    // If this is a floating table, then the position of the frame should be adjusted, instead.
+                    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
+                    {
+                        beans::PropertyValue& rPropertyValue = rFrameProperties[i];
+                        if (rPropertyValue.Name == "HoriOrientPosition")
+                        {
+                            sal_Int32 nValue = rPropertyValue.Value.get<sal_Int32>();
+                            nValue -= aLeftBorder.LineWidth * 0.5;
+                            rPropertyValue.Value <<= nValue;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
@@ -762,9 +778,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     dmapper_logger->startElement("tablehandler.endTable");
 #endif
 
+    // If we want to make this table a floating one.
+    uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
     TableInfo aTableInfo;
     aTableInfo.nNestLevel = nestedTableLevel;
-    aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo);
+    aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties);
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
 
     CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo);
@@ -779,8 +797,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     {
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
-        // If we want to make this table a floating one.
-        uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
         bool bFloating = aFrameProperties.hasElements();
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
