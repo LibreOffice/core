@@ -125,9 +125,9 @@ sal_Bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerI
     return bRet;
 }
 
-sal_Bool SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+sal_Bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
-    if(!rStr.Len())
+    if (rStr.isEmpty())
         return sal_False;
 
     Point aPos(rPos);

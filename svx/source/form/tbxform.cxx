@@ -407,11 +407,11 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     if (GetSlotId() != SID_FM_RECORD_TOTAL)
         return;
 
-    XubString aText;
+    OUString aText;
     if (pState)
         aText = ((SfxStringItem*)pState)->GetValue();
     else
-        aText = '?';
+        aText = "?";
 
     pFixedText->SetText( aText );
     pFixedText->Update();

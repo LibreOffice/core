@@ -222,7 +222,7 @@ public:
     XPropertyEntry* Remove(long nIndex);
 
     XPropertyEntry* Get(long nIndex) const;
-    long GetIndex(const String& rName) const;
+    long GetIndex(const OUString& rName) const;
     Bitmap GetUiBitmap(long nIndex) const;
 
     const String& GetName() const { return maName; }
