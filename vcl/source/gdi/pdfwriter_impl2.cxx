@@ -41,13 +41,13 @@
 
 #include <rtl/digest.h>
 
-#undef USE_PDFGRADIENTS
-
 using namespace vcl;
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+static bool lcl_canUsePDFAxialShading(const MetaGradientExAction* pAction);
 
 // -----------------------------------------------------------------------------
 
@@ -360,23 +360,37 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_GRADIENT_ACTION ):
                 {
                     const MetaGradientAction* pA = (const MetaGradientAction*) pAction;
-                    #ifdef USE_PDFGRADIENTS
-                    m_rOuterFace.DrawGradient( pA->GetRect(), pA->GetGradient() );
-                    #else
-                    const PolyPolygon         aPolyPoly( pA->GetRect() );
-                    implWriteGradient( aPolyPoly, pA->GetGradient(), pDummyVDev, i_rContext );
-                    #endif
+                    const Gradient& rGradient = pA->GetGradient();
+                    switch (rGradient.GetStyle())
+                    {
+                        case GradientStyle::GradientStyle_LINEAR:
+                        case GradientStyle::GradientStyle_AXIAL:
+                            m_rOuterFace.DrawGradient( pA->GetRect(), rGradient );
+                            break;
+                        default:
+                        {
+                            const PolyPolygon aPolyPoly( pA->GetRect() );
+                            implWriteGradient( aPolyPoly, rGradient, pDummyVDev, i_rContext );
+                            break;
+                        }
+                    }
                 }
                 break;
 
                 case( META_GRADIENTEX_ACTION ):
                 {
                     const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
-                    #ifdef USE_PDFGRADIENTS
-                    m_rOuterFace.DrawGradient( pA->GetPolyPolygon(), pA->GetGradient() );
-                    #else
-                    implWriteGradient( pA->GetPolyPolygon(), pA->GetGradient(), pDummyVDev, i_rContext );
-                    #endif
+                    const PolyPolygon aPolyPoly( pA->GetPolyPolygon() );
+                    const Gradient& rGradient = pA->GetGradient();
+
+                    if (lcl_canUsePDFAxialShading(pA))
+                    {
+                        m_rOuterFace.DrawGradient( pA->GetPolyPolygon(), rGradient );
+                    }
+                    else
+                    {
+                        implWriteGradient( pA->GetPolyPolygon(), rGradient, pDummyVDev, i_rContext );
+                    }
                 }
                 break;
 
@@ -535,11 +549,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                         if( pGradAction )
                         {
-                            #ifdef USE_PDFGRADIENTS
-                            m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
-                            #else
-                            implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );
-                            #endif
+                            if (lcl_canUsePDFAxialShading(pGradAction))
+                            {
+                                m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
+                            }
+                            else
+                            {
+                                implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );
+                            }
                         }
                     }
                     else
@@ -2037,5 +2054,62 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
 
     rtl_freeMemory( pFirstRefLine );
 }
+
+static bool lcl_canUsePDFAxialShading(const MetaGradientExAction* pAction) {
+    const Gradient& rGradient = pAction->GetGradient();
+    const PolyPolygon aPolyPoly( pAction->GetPolyPolygon() );
+
+    switch (rGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+        case GradientStyle::GradientStyle_AXIAL:
+            break;
+        default:
+            return false;
+    }
+
+    // TODO: this is currently over complicated
+    // Could probably be replaced with gradient + clipping path built using PolyPolygon
+    // Right now we limit support to PolyPolygon that can be reduced to a single rectangle
+    // (And as Polygon::IsRect only matches certain types of rectangle, we need to be
+    //  careful/hacky in the tested rectangle construction)
+    if (aPolyPoly.Count() == 1)
+    {
+        Polygon q(aPolyPoly[0]), p;
+        // Generic optimize
+        q.Optimize(POLY_OPTIMIZE_REDUCE | POLY_OPTIMIZE_NO_SAME);
+
+        // We need to figure out which point of 'q' is at bottom-left, due to the
+        // restrictive implementation of Polygon::IsRect
+        const Point aBottomLeft = q.GetBoundRect().BottomLeft();
+        int nStartIdx = 0;
+        for (int i=0, n = q.GetSize(); i<n; i++)
+        {
+            if (q[i] == aBottomLeft)
+            {
+                nStartIdx = i;
+                break;
+            }
+        }
+
+        // Keep only useful vertices (remove intermediate useless points)
+        for (int i=nStartIdx, n = q.GetSize(); i< nStartIdx + n; i++)
+        {
+            const Point& p1 = q[i % n];
+            const Point& p2 = q[( i + 1 ) % n ];
+            const Point& p3 = q[( i + 2 ) % n ];
+
+            if (p2 != (p1 + p3)/2)
+            {
+                // p2 is useful, add it
+                p.Insert(p.GetSize(), p2);
+            }
+        }
+
+        return p.IsRect();
+    }
+    return false;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
