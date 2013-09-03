@@ -103,7 +103,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/globdoc/globdoc.src \
     sw/source/ui/index/cnttab.src \
     sw/source/ui/index/idxmrk.src \
-    sw/source/ui/index/multmrk.src \
     sw/source/ui/lingu/olmenu.src \
     sw/source/ui/misc/glossary.src \
     sw/source/ui/misc/numberingtypelistbox.src \

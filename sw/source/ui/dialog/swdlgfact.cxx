@@ -1023,21 +1023,10 @@ AbstractMailMergeFieldConnectionsDlg * SwAbstractDialogFactory_Impl::CreateMailM
     return new AbstractMailMergeFieldConnectionsDlg_Impl( pDlg );
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg( int nResId,
-                                                Window* pParent, SwTOXMgr &rTOXMgr )
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(Window* pParent, SwTOXMgr &rTOXMgr)
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_MULTMRK :
-            pDlg = new SwMultiTOXMarkDlg( pParent, rTOXMgr );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SwMultiTOXMarkDlg(pParent, rTOXMgr);
+    return new VclAbstractDialog_Impl(pDlg);
 }
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResId,

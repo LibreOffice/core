@@ -469,8 +469,7 @@ public:
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 );
     virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(Window* pParent);
     virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(Window* pParent);
-    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg( int nResId,
-                                                Window* pParent, SwTOXMgr &rTOXMgr );
+    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(Window* pParent, SwTOXMgr &rTOXMgr);
     virtual SfxAbstractTabDialog*       CreateSwTabDialog( int nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pSwItemSet,

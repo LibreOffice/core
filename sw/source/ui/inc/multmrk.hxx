@@ -37,15 +37,10 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
 {
     DECL_LINK( SelectHdl, ListBox * );
 
-    FixedLine           aTOXFL;
-    FixedText           aEntryFT;
-    FixedInfo           aTextFT;
-    FixedText           aTOXFT;
-    ListBox             aTOXLB;
-    OKButton            aOkBT;
-    CancelButton        aCancelBT;
+    FixedText*         m_pTextFT;
+    ListBox*           m_pTOXLB;
 
-    SwTOXMgr           &rMgr;
+    SwTOXMgr&          rMgr;
     sal_uInt16              nPos;
 
     void                Apply();

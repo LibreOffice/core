@@ -23,41 +23,34 @@
 #include "toxmgr.hxx"
 
 #include "index.hrc"
-#include "multmrk.hrc"
 
 
-SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
-
-    SvxStandardDialog(pParent, SW_RES(DLG_MULTMRK)),
-
-    aTOXFL(this,    SW_RES(FL_TOX)),
-    aEntryFT(this,  SW_RES(FT_ENTRY)),
-    aTextFT(this,   SW_RES(FT_TEXT)),
-    aTOXFT(this,    SW_RES(FT_TOX)),
-    aTOXLB(this,    SW_RES(LB_TOX)),
-    aOkBT(this,     SW_RES(OK_BT)),
-    aCancelBT(this, SW_RES(CANCEL_BT)),
-    rMgr( rTOXMgr ),
-    nPos(0)
+SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(Window* pParent, SwTOXMgr& rTOXMgr)
+    : SvxStandardDialog(pParent, "SelectIndexDialog",
+        "modules/swriter/ui/selectindexdialog.ui")
+    , rMgr(rTOXMgr)
+    , nPos(0)
 {
-    aTOXLB.SetSelectHdl(LINK(this, SwMultiTOXMarkDlg, SelectHdl));
+    get(m_pTextFT, "type");
+    get(m_pTOXLB, "treeview");
+    m_pTOXLB->set_height_request(m_pTOXLB->GetTextHeight() * 10);
+    m_pTOXLB->set_width_request(m_pTOXLB->approximate_char_width() * 25);
+
+    m_pTOXLB->SetSelectHdl(LINK(this, SwMultiTOXMarkDlg, SelectHdl));
 
     sal_uInt16 nSize = rMgr.GetTOXMarkCount();
     for(sal_uInt16 i=0; i < nSize; ++i)
-        aTOXLB.InsertEntry(rMgr.GetTOXMark(i)->GetText());
+        m_pTOXLB->InsertEntry(rMgr.GetTOXMark(i)->GetText());
 
-    aTOXLB.SelectEntryPos(0);
-    aTextFT.SetText(rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());
-
-    FreeResource();
+    m_pTOXLB->SelectEntryPos(0);
+    m_pTextFT->SetText(rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());
 }
-
 
 IMPL_LINK_INLINE_START( SwMultiTOXMarkDlg, SelectHdl, ListBox *, pBox )
 {
     if(pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {   SwTOXMark* pMark = rMgr.GetTOXMark(pBox->GetSelectEntryPos());
-        aTextFT.SetText(pMark->GetTOXType()->GetTypeName());
+        m_pTextFT->SetText(pMark->GetTOXType()->GetTypeName());
         nPos = pBox->GetSelectEntryPos();
     }
     return 0;

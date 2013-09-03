@@ -85,8 +85,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg( DLG_MULTMRK,
-                                                        pMDI, aMgr);
+                VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg(pMDI, aMgr);
                 OSL_ENSURE(pMultDlg, "Dialogdiet fail!");
                 nRet = pMultDlg->Execute();
                 delete pMultDlg;

@@ -26,8 +26,6 @@
 
 #include "rcid.hrc"
 
-#define  DLG_MULTMRK            (RC_INDEX_BEGIN + 5)
-
 #define  STR_TITLE              (RC_INDEX_BEGIN + 6)
 #define  STR_ALPHA              (RC_INDEX_BEGIN + 7)
 #define  STR_LEVEL              (RC_INDEX_BEGIN + 8)
