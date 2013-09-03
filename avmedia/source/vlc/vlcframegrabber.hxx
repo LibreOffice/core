@@ -43,7 +43,7 @@ class VLCFrameGrabber : public FrameGrabber_BASE
     const rtl::OUString& mUrl;
     boost::shared_ptr<VLC::EventHandler> mEventHandler;
 public:
-    SAL_CALL VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url );
+    VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw ( ::com::sun::star::uno::RuntimeException );
 

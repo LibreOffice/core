@@ -18,7 +18,11 @@ namespace VLC
 {
     namespace
     {
+#if defined WNT
+        typedef __int64 libvlc_time_t;
+#else
         typedef int64_t libvlc_time_t;
+#endif
 
         void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
         libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
@@ -38,7 +42,11 @@ namespace VLC
         int ( *libvlc_video_take_snapshot ) ( libvlc_media_player_t *p_mi, unsigned num,
                                 const char *psz_filepath, unsigned int i_width,
                                 unsigned int i_height );
+#if defined WNT
+        void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
+#else
         void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
+#endif
         unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
         void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
     }
@@ -62,7 +70,11 @@ namespace VLC
             SYM_MAP( libvlc_audio_set_mute ),
             SYM_MAP( libvlc_audio_get_mute ),
             SYM_MAP( libvlc_video_take_snapshot ),
+#if defined WNT
+            SYM_MAP( libvlc_media_player_set_hwnd ),
+#else
             SYM_MAP( libvlc_media_player_set_xwindow ),
+#endif
             SYM_MAP( libvlc_media_player_has_vout ),
             SYM_MAP( libvlc_video_set_mouse_input ),
             SYM_MAP( libvlc_media_player_retain )

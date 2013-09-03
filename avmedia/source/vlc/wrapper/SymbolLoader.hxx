@@ -10,6 +10,7 @@
 #ifndef _SYMBOL_LOADER_HXX
 #define _SYMBOL_LOADER_HXX
 #if defined( WNT )
+# include <tchar.h>
 # include <windows.h>
 # include <winreg.h>
 #endif
@@ -48,11 +49,12 @@ namespace
             if ( ::RegQueryValueEx( hKey, _T( "InstallDir" ), NULL, &dwType, ( LPBYTE )arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
             {
                 ::RegCloseKey( hKey );
-                return OUString( arCurrent, MAX_PATH, rtl_TextEncoding, RTL_TEXTENCODING_UTF8 ) + "/";
+                return OUString( arCurrent, strlen(arCurrent), RTL_TEXTENCODING_UTF8 ) + "/";
             }
 
             ::RegCloseKey( hKey );
         }
+        return OUString();
     }
 #endif
 
@@ -60,7 +62,7 @@ namespace
     template<size_t N>
     bool tryLink( oslModule &aModule, const ApiMap ( &pMap )[N] )
     {
-        for (uint i = 0; i < N; ++i)
+        for (size_t i = 0; i < N; ++i)
         {
             SymbolFunc aMethod = ( SymbolFunc )osl_getFunctionSymbol
                 ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData );

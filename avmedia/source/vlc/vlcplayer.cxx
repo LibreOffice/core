@@ -167,8 +167,13 @@ namespace
         if (pEnvData == NULL)
             return -1;
 
+#if defined WNT
+        // Explicit converts from HWND to int
+        const int id = reinterpret_cast<int>( pEnvData->hWnd );
+#else
         // Explicit converts from long to int
         const int id = static_cast<int>( pEnvData->aWindow );
+#endif
 
         return id;
     }

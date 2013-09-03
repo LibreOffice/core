@@ -9,7 +9,7 @@ namespace vlc {
 const ::rtl::OUString AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Window_VLC";
 const ::rtl::OUString AVMEDIA_VLC_WINDOW_SERVICENAME = "com.sun.star.media.Window_VLC";
 
-SAL_CALL VLCWindow::VLCWindow(VLCPlayer& player)
+VLCWindow::VLCWindow(VLCPlayer& player)
     : mPlayer( player )
 {
 }

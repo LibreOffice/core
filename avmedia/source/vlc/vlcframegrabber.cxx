@@ -24,7 +24,7 @@ const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.com
 const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
 const int MSEC_IN_SEC = 1000;
 
-SAL_CALL VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url )
+VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
     , mPlayer( player )
     , mUrl( url )

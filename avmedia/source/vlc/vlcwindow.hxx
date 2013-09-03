@@ -30,7 +30,7 @@ class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPla
 {
     VLCPlayer& mPlayer;
 public:
-    SAL_CALL VLCWindow(VLCPlayer& player);
+    VLCWindow(VLCPlayer& player);
 
     void SAL_CALL update() throw (css::uno::RuntimeException);
     ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException);
