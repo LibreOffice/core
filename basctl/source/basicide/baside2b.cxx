@@ -2901,7 +2901,7 @@ UnoTypeCodeCompletetor::UnoTypeCodeCompletetor( const std::vector< OUString >& a
         if( xRefl.is() )
             xClass = xRefl->forName( sVarType );//get the base class for reflection
     }
-    catch( const Exception& ex )
+    catch( const Exception& )
     {
         bCanComplete = false;
         return;
