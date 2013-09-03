@@ -448,6 +448,19 @@ public:
      */
     static LanguageType convertToLanguageTypeWithFallback( const OUString& rBcp47 );
 
+    /** Convert BCP 47 string to Locale with fallback, convenience method.
+
+        NOTE: exists only for consistency with the other convertTo...()
+        methods, internally uses a temporary LanguageTag instance for
+        conversion so does not save anything compared to
+        LanguageTag(rBcp47).makeFallback().getLocale(bResolveSystem).
+
+        @see    makeFallback()
+
+        Always resolves an empty tag to the system locale.
+     */
+    static com::sun::star::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
+
 private:
 
     enum Decision

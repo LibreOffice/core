@@ -1640,4 +1640,11 @@ LanguageType LanguageTag::convertToLanguageTypeWithFallback( const OUString& rBc
     return LanguageTag( rBcp47).makeFallback().getLanguageType( true);
 }
 
+
+// static
+com::sun::star::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp47 )
+{
+    return LanguageTag( rBcp47).makeFallback().getLocale( true);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
