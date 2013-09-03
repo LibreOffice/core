@@ -245,7 +245,7 @@ public:
 
     void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
     void    Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
-    void    SelectEntryByList( const XGradientListRef &pList, const String& rStr,
+    void    SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
                                const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 };
 
@@ -260,7 +260,7 @@ public:
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry);
     void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos);
-    void SelectEntryByList(const XBitmapList* pList, const String& rStr);
+    void SelectEntryByList(const XBitmapList* pList, const OUString& rStr);
 
 private:
     BitmapEx        maBitmapEx;
@@ -315,7 +315,7 @@ public:
 
     void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
     void Modify(const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
-    void SelectEntryByList(const XDashList* pList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
+    void SelectEntryByList(const XDashList* pList, const OUString& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
 
