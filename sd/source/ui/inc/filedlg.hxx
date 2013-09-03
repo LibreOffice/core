@@ -21,7 +21,6 @@
 #ifndef _FILEDLG_HXX
 #define _FILEDLG_HXX
 
-#include <tools/string.hxx>
 #include <tools/errcode.hxx>
 
 #include <memory>
@@ -54,8 +53,6 @@ public:
     ErrCode                  Execute();
     OUString                 GetPath() const;
     void                     SetPath( const OUString& rPath );
-
-    String                   ReqDisplayDirectory() const;
 };
 
 #endif // _FILEDLG_HXX
