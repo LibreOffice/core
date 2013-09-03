@@ -35,8 +35,6 @@ using namespace com::sun::star::xml::sax;
 #define ATTRIBUTE_MODIFIER          "modifier"
 #define ATTRIBUTE_URL               "url"
 
-#define ATTRIBUTE_TYPE_CDATA        "CDATA"
-
 namespace {
 
 struct AttributeListImpl_impl;
