@@ -254,7 +254,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
                     throw BridgeRuntimeError(
                         "[automation bridge] convertSelfToCom\n"
                         "VariantCopy failed! Error: " +
-                        OUString::valueOf(hr));
+                        OUString::number(hr));
                 VariantClear( pvariant);
                 CoTaskMemFree( pvariant);
                 ret = true;
@@ -310,7 +310,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
         if( FAILED(hr= VariantCopyInd( &var, const_cast<VARIANTARG*>(pArg)))) // remove VT_BYREF
             throw BridgeRuntimeError(
                 "[automation bridge] UnoConversionUtilities<T>::variantToAny \n"
-                "VariantCopyInd failed for reason : " + OUString::valueOf(hr));
+                "VariantCopyInd failed for reason : " + OUString::number(hr));
         bool bHandled = convertValueObject( & var, rAny);
         if( bHandled)
             OSL_ENSURE(  rAny.getValueType() == ptype, "type in Value Object must match the type parameter");
@@ -562,15 +562,15 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             throw CannotConvertException(
                 "[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
                 "Cannot convert the value of vartype :\"" +
-                OUString::valueOf((sal_Int32) var.vt) +
+                OUString::number((sal_Int32) var.vt) +
                 "\"  to the expected UNO type of type class: " +
-                OUString::valueOf((sal_Int32) ptype.getTypeClass()),
+                OUString::number((sal_Int32) ptype.getTypeClass()),
                 0, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
 
         if (bFail)
             throw IllegalArgumentException(
                 "[automation bridge]UnoConversionUtilities<T>:variantToAny\n"
-                "The provided VARIANT of type\" " + OUString::valueOf((sal_Int32) var.vt) +
+                "The provided VARIANT of type\" " + OUString::number((sal_Int32) var.vt) +
                 "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
     }
     catch (const CannotConvertException &)
@@ -638,22 +638,22 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
                         "Cannot convert the value of type :\"" +
                         rAny.getValueTypeName() +
                         "\"  to the expected Automation type of VARTYPE: " +
-                        OUString::valueOf((sal_Int32)type),
+                        OUString::number((sal_Int32)type),
                         0, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
 
                 throw BridgeRuntimeError(
                     "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
                     "Conversion of any with " +
                     rAny.getValueType().getTypeName() +
-                    " to VARIANT with type: " + OUString::valueOf((sal_Int32) type) +
-                    " failed! Error code: " + OUString::valueOf(hr));
+                    " to VARIANT with type: " + OUString::number((sal_Int32) type) +
+                    " failed! Error code: " + OUString::number(hr));
 
             }
             if(FAILED(hr = VariantCopy(pVariant, &var)))
             {
                 throw BridgeRuntimeError(
                           "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
-                          "VariantCopy failed for reason: " + OUString::valueOf(hr));
+                          "VariantCopy failed for reason: " + OUString::number(hr));
             }
         }
     }
@@ -789,7 +789,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             {
                 throw BridgeRuntimeError(
                         "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
-                        "VariantClear failed with error:" + OUString::valueOf(hr));
+                        "VariantClear failed with error:" + OUString::number(hr));
             }
             break;
         }
@@ -1471,7 +1471,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
         if( FAILED(hr= VariantCopyInd( &var, const_cast<VARIANTARG*>(pVariant)))) // remove VT_BYREF
             throw BridgeRuntimeError(
                       "[automation bridge] UnoConversionUtilities<T>::variantToAny \n"
-                      "VariantCopyInd failed for reason : " + OUString::valueOf(hr));
+                      "VariantCopyInd failed for reason : " + OUString::number(hr));
 
         if ( ! convertValueObject( & var, rAny))
         {
@@ -2037,7 +2037,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         // put them into the passed in sequence
         for( sal_Int32 i= 0; i< length; i++)
         {
-            OUString ousIndex=OUString::valueOf( i);
+            OUString ousIndex=OUString::number( i);
             OLECHAR* sindex =  (OLECHAR*)ousIndex.getStr();
 
             if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))

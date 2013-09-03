@@ -392,7 +392,7 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
                     throw BridgeRuntimeError(
                         "[automation bridge] Could not determine "
                         "if the object has a member \"0\". Error: " +
-                        OUString::valueOf(hr));
+                        OUString::number(hr));
                 }
             }
         }
