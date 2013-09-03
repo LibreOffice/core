@@ -42,10 +42,14 @@ namespace VLC
         int ( *libvlc_video_take_snapshot ) ( libvlc_media_player_t *p_mi, unsigned num,
                                 const char *psz_filepath, unsigned int i_width,
                                 unsigned int i_height );
-#if defined WNT
+#if defined UNX
+        void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
+#elif defined MACOSX
+        void ( *libvlc_media_player_set_nsobject ) ( libvlc_media_player_t *p_mi, void *drawable );
+#elif defined WNT
         void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
 #else
-        void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
+#error unknown OS
 #endif
         unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
         void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
@@ -70,10 +74,12 @@ namespace VLC
             SYM_MAP( libvlc_audio_set_mute ),
             SYM_MAP( libvlc_audio_get_mute ),
             SYM_MAP( libvlc_video_take_snapshot ),
-#if defined WNT
-            SYM_MAP( libvlc_media_player_set_hwnd ),
-#else
+#if defined UNX
             SYM_MAP( libvlc_media_player_set_xwindow ),
+#elif defined MACOSX
+            SYM_MAP( libvlc_media_player_set_nsobject ),
+#elif defined WNT
+            SYM_MAP( libvlc_media_player_set_hwnd ),
 #endif
             SYM_MAP( libvlc_media_player_has_vout ),
             SYM_MAP( libvlc_video_set_mouse_input ),
@@ -173,13 +179,13 @@ namespace VLC
     }
 
 
-    void Player::setWindow( int id )
+    void Player::setWindow( intptr_t id )
     {
-#if defined( UNX )
-        libvlc_media_player_set_xwindow( mPlayer, id );
-#elif defined( MACOS )
+#if defined UNX
+        libvlc_media_player_set_xwindow( mPlayer, (uint32_t) id );
+#elif defined MACOSX
         libvlc_media_player_set_nsobject( mPlayer, reinterpret_cast<void*>( id ) );
-#elif defined( WNT )
+#elif defined WNT
         libvlc_media_player_set_hwnd( mPlayer, reinterpret_cast<void*>( id ) );
 #endif
     }

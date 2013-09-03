@@ -151,7 +151,7 @@ namespace
 {
     // TODO: Move this function to the common space for avoiding duplication with
     // gstreamer/gstwindow::createPlayerWindow functionality
-    int GetWindowID( const uno::Sequence< uno::Any >& arguments )
+    intptr_t GetWindowID( const uno::Sequence< uno::Any >& arguments )
     {
         if (arguments.getLength() <= 2)
             return -1;
@@ -168,14 +168,11 @@ namespace
             return -1;
 
 #if defined MACOSX
-        // Explicit converts from NSView* to int
-        const int id = reinterpret_cast<int>( pEnvData->pView );
+        const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->pView );
 #elif defined WNT
-        // Explicit converts from HWND to int
-        const int id = reinterpret_cast<int>( pEnvData->hWnd );
+        const intptr_t id = reinterpret_cast<intptr_t>( pEnvData->hWnd );
 #else
-        // Explicit converts from long to int
-        const int id = static_cast<int>( pEnvData->aWindow );
+        const intptr_t id = static_cast<intptr_t>( pEnvData->aWindow );
 #endif
 
         return id;
@@ -189,7 +186,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 
     VLCWindow * const window = new VLCWindow;
 
-    const int winID = GetWindowID( aArguments );
+    const intptr_t winID = GetWindowID( aArguments );
 
     if ( winID != -1 )
     {

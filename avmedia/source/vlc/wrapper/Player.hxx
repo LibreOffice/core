@@ -46,7 +46,7 @@ namespace VLC
         void setMute( bool mute);
         bool getMute() const;
 
-        void setWindow( int id );
+        void setWindow( intptr_t id );
 
         void takeSnapshot(const rtl::OUString& file);
 

@@ -31,7 +31,7 @@ namespace
 {
 #if defined( UNX )
     const char LibName[] = "libvlc.so.5";
-#elif defined( MACOS )
+#elif defined( MACOSX )
     const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
 #elif defined( WNT )
     const char LibName[] = "libvlc.dll";
@@ -87,7 +87,7 @@ namespace VLC
     template<size_t N>
     bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
-#if defined( UNX ) || defined( MACOS )
+#if defined( UNX ) || defined( MACOSX )
         const OUString& fullPath = OUString::createFromAscii(LibName);
 #elif defined( WNT )
         const OUString& fullPath = GetVLCPath() + OUString::createFromAscii(LibName);
