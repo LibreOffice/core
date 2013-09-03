@@ -1025,11 +1025,31 @@ void SmEditWindow::InsertText(const OUString& rText)
 
         nEndIndex += aSelection.nEndPos;
 
+        // TODO: unify this function with the InsertCommand: The do the same thing for different
+        // callers
+        OUString string(rText);
+
         // put a space before a new command if not in the beginning of a line
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
-            pEditView->InsertText(" " + rText);
+            string = " " + string;
+
+        pEditView->InsertText(string);
+
+        // Remember start of the selection and move the cursor there afterwards.
+        aSelection.nEndPara = aSelection.nStartPara;
+        if (HasMark(string))
+        {
+            aSelection.nEndPos = aSelection.nStartPos;
+            pEditView->SetSelection(aSelection);
+            SelNextMark();
+        }
         else
-            pEditView->InsertText(rText);
+        {   // set selection after inserted text
+            aSelection.nEndPos = aSelection.nStartPos + string.getLength();
+            aSelection.nStartPos = aSelection.nEndPos;
+            pEditView->SetSelection(aSelection);
+        }
+
         aModifyTimer.Start();
         StartCursorMove();
         GrabFocus();
