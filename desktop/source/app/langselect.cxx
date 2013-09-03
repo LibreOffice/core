@@ -79,7 +79,7 @@ void setMsLangIdFallback(OUString const & locale) {
     // #i32939# setting of default document language
     // See #i42730# for rules for determining source of settings
     if (!locale.isEmpty()) {
-        LanguageType type = LanguageTag::convertToLanguageType(locale);
+        LanguageType type = LanguageTag::convertToLanguageTypeWithFallback(locale);
         switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
         case SCRIPTTYPE_ASIAN:
             MsLangId::setConfiguredAsianFallback(type);
