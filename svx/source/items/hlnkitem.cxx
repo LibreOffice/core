@@ -207,8 +207,8 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 };
 
-SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& rURL,
-                                    String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
+SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, const OUString& rURL,
+                                    const OUString& rTarget, const OUString& rIntName, SvxLinkInsertMode eTyp,
                                     sal_uInt16 nEvents, SvxMacroTableDtor *pMacroTbl ):
     SfxPoolItem (_nWhich),
     sName       (rName),
@@ -294,16 +294,16 @@ bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
-            rVal <<= OUString(sIntName.GetBuffer());
+            rVal <<= sIntName;
         break;
         case MID_HLINK_TEXT   :
             rVal <<= sName;
         break;
         case MID_HLINK_URL:
-            rVal <<= OUString(sURL.GetBuffer());
+            rVal <<= sURL;
         break;
         case MID_HLINK_TARGET:
-            rVal <<= OUString(sTarget.GetBuffer());
+            rVal <<= sTarget;
         break;
         case MID_HLINK_TYPE:
             rVal <<= (sal_Int32) eType;

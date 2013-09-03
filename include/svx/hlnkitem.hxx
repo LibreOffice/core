@@ -40,11 +40,11 @@ enum SvxLinkInsertMode
 class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
 {
     OUString sName;
-    String sURL;
-    String sTarget;
+    OUString sURL;
+    OUString sTarget;
     SvxLinkInsertMode eType;
 
-    String sIntName;
+    OUString sIntName;
     SvxMacroTableDtor*  pMacroTable;
 
     sal_uInt16 nMacroEvents;
@@ -55,8 +55,8 @@ public:
     SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich), pMacroTable(NULL) { eType = HLINK_DEFAULT; nMacroEvents=0; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
-    SvxHyperlinkItem( sal_uInt16 nWhich, String& rName, String& rURL,
-                                    String& rTarget, String& rIntName,
+    SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
+                                    const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp = HLINK_FIELD,
                                     sal_uInt16 nEvents = 0,
                                     SvxMacroTableDtor *pMacroTbl =NULL );
@@ -72,14 +72,14 @@ public:
     const   OUString& GetName() const { return sName; }
     void    SetName(const OUString& rName) { sName = rName; }
 
-    const   String& GetURL() const { return sURL; }
-    void    SetURL(const String& rURL) { sURL = rURL; }
+    const   OUString& GetURL() const { return sURL; }
+    void    SetURL(const OUString& rURL) { sURL = rURL; }
 
-    const   String& GetIntName () const { return sIntName; }
-    void    SetIntName(const String& rIntName) { sIntName = rIntName; }
+    const   OUString& GetIntName () const { return sIntName; }
+    void    SetIntName(const OUString& rIntName) { sIntName = rIntName; }
 
-    const   String& GetTargetFrame() const { return sTarget; }
-    void    SetTargetFrame(const String& rTarget) { sTarget = rTarget; }
+    const   OUString& GetTargetFrame() const { return sTarget; }
+    void    SetTargetFrame(const OUString& rTarget) { sTarget = rTarget; }
 
     SvxLinkInsertMode GetInsertMode() const { return eType; }
     void    SetInsertMode( SvxLinkInsertMode eNew ) { eType = eNew; }
