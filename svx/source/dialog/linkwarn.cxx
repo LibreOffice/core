@@ -25,7 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svtools/miscopt.hxx>
 
-SvxLinkWarningDialog::SvxLinkWarningDialog( Window* pParent, const String& _rFileName ) :
+SvxLinkWarningDialog::SvxLinkWarningDialog( Window* pParent, const OUString& _rFileName ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_LINK_WARNING ) ),
     m_aQueryImage       ( this, SVX_RES( FI_QUERY ) ),
     m_aInfoText         ( this, SVX_RES( FT_INFOTEXT ) ),

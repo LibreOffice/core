@@ -38,7 +38,7 @@ private:
     void                    InitSize();
 
 public:
-             SvxLinkWarningDialog( Window* pParent, const String& _rFileName );
+             SvxLinkWarningDialog( Window* pParent, const OUString& _rFileName );
     virtual ~SvxLinkWarningDialog();
 };
 
