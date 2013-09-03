@@ -46,12 +46,7 @@
     
     [self setTitle:NSLocalizedString(@"How-to", nil)];
     
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = self.view.bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor orangeColor] CGColor], nil];
-    gradient.startPoint = CGPointMake(0.5, 0.7);
-    gradient.endPoint = CGPointMake(0.5, 1.0);
-//    [self.view.layer insertSublayer:gradient atIndex:0];
+    
 }
 
 - (void)didReceiveMemoryWarning
