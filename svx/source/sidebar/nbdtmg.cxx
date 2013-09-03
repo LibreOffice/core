@@ -171,7 +171,7 @@ void NBOTypeMgrBase::StoreBulCharFmtName_impl() {
             }
         }
 }
-String NBOTypeMgrBase::GetBulCharFmtName()
+OUString NBOTypeMgrBase::GetBulCharFmtName()
 {
     return aNumCharFmtName;
 }
@@ -477,7 +477,7 @@ sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
     return sal_True;
 }
 
-String BulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
+OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
 {
     String sRet;
     //sal_uInt16 nLength = 0;
@@ -736,7 +736,7 @@ sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex
 
     return sal_True;
 }
-String GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
+OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
 {
     String sRet;
     sal_uInt16 nLength = 0;
@@ -774,9 +774,9 @@ sal_Bool GraphyicBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 
     return bRet;
 }
-String GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
+OUString GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
 {
-    String sRet;
+    OUString sRet;
     if ( nIndex < aGrfDataLst.size() )
     {
         GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
@@ -1291,7 +1291,7 @@ sal_Bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     return sal_True;
 }
 
-String MixBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
+OUString MixBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
     String sRet;
     //sal_uInt16 nLength = 0;
@@ -1526,7 +1526,7 @@ sal_Bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
 
     return sal_True;
 }
-String NumberingTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
+OUString NumberingTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
     String sRet;
     sal_uInt16 nLength = 0;
@@ -1895,7 +1895,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
 
     return sal_True;
 }
-String OutlineTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
+OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
     String sRet;
     sal_uInt16 nLength = 0;

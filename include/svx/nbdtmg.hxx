@@ -109,7 +109,7 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
 class  SVX_DLLPUBLIC GrfBulDataRelation: public BulletsSettings
 {
     public:
-        String  sGrfName;
+        OUString    sGrfName;
         sal_uInt16  nTabIndex;
         sal_uInt16  nGallaryIndex;
         const Graphic*  pGrfObj;
@@ -185,7 +185,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         const SfxItemSet*   pSet;
         SfxMapUnit      eCoreUnit;
         //Sym3_2508    store the attributes passed from pSet
-        String          aNumCharFmtName;
+        OUString        aNumCharFmtName;
         void            StoreBulCharFmtName_impl();
         void            StoreMapUnit_impl();
 
@@ -217,14 +217,14 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0)=0;
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF)=0;
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF, sal_Bool isDefault=false,sal_Bool isResetSize=false)=0;
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false)=0;
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false)=0;
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex)=0;
         sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
         const SfxItemSet* GetItems() { return pSet;}
         //Sym3_2508    store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:
-        String GetBulCharFmtName();
+        OUString GetBulCharFmtName();
         SfxMapUnit GetMapUnit();
     protected:
         bool    bIsLoading;
@@ -251,7 +251,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         sal_Unicode GetBulChar(sal_uInt16 nIndex);
         Font GetBulCharFont(sal_uInt16 nIndex);
@@ -283,9 +283,9 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
-        String GetGrfName(sal_uInt16 nIndex);
+        OUString GetGrfName(sal_uInt16 nIndex);
         static GraphyicBulletsTypeMgr* GetInstance()
         {
              if ( _instance == 0 )
@@ -314,7 +314,7 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         static MixBulletsTypeMgr* GetInstance()
         {
@@ -343,7 +343,7 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         static NumberingTypeMgr* GetInstance()
         {
@@ -371,7 +371,7 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
-        virtual String GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
+        virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         static OutlineTypeMgr* GetInstance()
         {
