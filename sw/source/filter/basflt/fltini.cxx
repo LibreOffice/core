@@ -628,7 +628,7 @@ void SwAsciiOptions::ReadUserData( const OUString& rStr )
                 sFont = sToken;
                 break;
             case 3:         // Language
-                nLanguage = LanguageTag::convertToLanguageType( sToken );
+                nLanguage = LanguageTag::convertToLanguageTypeWithFallback( sToken );
                 break;
             }
         }
