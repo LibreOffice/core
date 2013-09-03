@@ -462,6 +462,9 @@ private:
 
     const com::sun::star::uno::Reference<
         com::sun::star::script::XTypeConverter >& getTypeConverter();
+
+    template<typename T> T rowOriginGet(
+        T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex);
 };
 
 //=========================================================================

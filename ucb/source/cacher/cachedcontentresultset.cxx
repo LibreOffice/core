@@ -42,74 +42,70 @@ using namespace cppu;
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_SIZE 256
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION FetchDirection::FORWARD
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-//define for getXXX methods of interface XRow
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+//if you change this function template please pay attention to
+//function getObject, where this is similar implemented
 
-//if you change this macro please pay attention to
-//function ::getObject, where this is similar implemented
+template<typename T> T CachedContentResultSet::rowOriginGet(
+    T (SAL_CALL css::sdbc::XRow::* f)(sal_Int32), sal_Int32 columnIndex)
+{
+    impl_EnsureNotDisposed();
+    ReacquireableGuard aGuard( m_aMutex );
+    sal_Int32 nRow = m_nRow;
+    sal_Int32 nFetchSize = m_nFetchSize;
+    sal_Int32 nFetchDirection = m_nFetchDirection;
+    if( !m_aCache.hasRow( nRow ) )
+    {
+        if( !m_aCache.hasCausedException( nRow ) )
+        {
+            if( !m_xFetchProvider.is() )
+            {
+                OSL_FAIL( "broadcaster was disposed already" );
+                throw SQLException();
+            }
+            aGuard.clear();
+            if( impl_isForwardOnly() )
+                applyPositionToOrigin( nRow );
 
-#define XROW_GETXXX( getXXX, Type )                     \
-impl_EnsureNotDisposed();                               \
-ReacquireableGuard aGuard( m_aMutex );                  \
-sal_Int32 nRow = m_nRow;                                \
-sal_Int32 nFetchSize = m_nFetchSize;                    \
-sal_Int32 nFetchDirection = m_nFetchDirection;          \
-if( !m_aCache.hasRow( nRow ) )                          \
-{                                                       \
-    if( !m_aCache.hasCausedException( nRow ) )          \
-{                                                       \
-        if( !m_xFetchProvider.is() )                    \
-        {                                               \
-            OSL_FAIL( "broadcaster was disposed already" ); \
-            throw SQLException();                       \
-        }                                               \
-        aGuard.clear();                                 \
-        if( impl_isForwardOnly() )                      \
-            applyPositionToOrigin( nRow );              \
-                                                        \
-        impl_fetchData( nRow, nFetchSize, nFetchDirection ); \
-    }                                                   \
-    aGuard.reacquire();                                 \
-    if( !m_aCache.hasRow( nRow ) )                      \
-    {                                                   \
-        m_bLastReadWasFromCache = sal_False;            \
-        aGuard.clear();                                 \
-        applyPositionToOrigin( nRow );                  \
-        impl_init_xRowOrigin();                         \
-        return m_xRowOrigin->getXXX( columnIndex );     \
-    }                                                   \
-}                                                       \
-const Any& rValue = m_aCache.getAny( nRow, columnIndex );\
-Type aRet = Type();                                     \
-m_bLastReadWasFromCache = sal_True;                     \
-m_bLastCachedReadWasNull = !( rValue >>= aRet );        \
-/* Last chance. Try type converter service... */        \
-if ( m_bLastCachedReadWasNull && rValue.hasValue() )    \
-{                                                       \
-    Reference< XTypeConverter > xConverter              \
-                                = getTypeConverter();   \
-    if ( xConverter.is() )                              \
-    {                                                   \
-        try                                             \
-        {                                               \
-            Any aConvAny = xConverter->convertTo(       \
-                rValue,                                 \
-                getCppuType( static_cast<               \
-                    const Type * >( 0 ) ) );            \
-            m_bLastCachedReadWasNull = !( aConvAny >>= aRet ); \
-        }                                               \
-        catch (const IllegalArgumentException&)         \
-        {                                               \
-        }                                               \
-        catch (const CannotConvertException&)           \
-        {                                               \
-        }                                               \
-    }                                                   \
-}                                                       \
-return aRet;
+            impl_fetchData( nRow, nFetchSize, nFetchDirection );
+        }
+        aGuard.reacquire();
+        if( !m_aCache.hasRow( nRow ) )
+        {
+            m_bLastReadWasFromCache = sal_False;
+            aGuard.clear();
+            applyPositionToOrigin( nRow );
+            impl_init_xRowOrigin();
+            return (m_xRowOrigin.get()->*f)( columnIndex );
+        }
+    }
+    const Any& rValue = m_aCache.getAny( nRow, columnIndex );
+    T aRet = T();
+    m_bLastReadWasFromCache = sal_True;
+    m_bLastCachedReadWasNull = !( rValue >>= aRet );
+    /* Last chance. Try type converter service... */
+    if ( m_bLastCachedReadWasNull && rValue.hasValue() )
+    {
+        Reference< XTypeConverter > xConverter = getTypeConverter();
+        if ( xConverter.is() )
+        {
+            try
+            {
+                Any aConvAny = xConverter->convertTo(
+                    rValue,
+                    getCppuType( static_cast<
+                                 const T * >( 0 ) ) );
+                m_bLastCachedReadWasNull = !( aConvAny >>= aRet );
+            }
+            catch (const IllegalArgumentException&)
+            {
+            }
+            catch (const CannotConvertException&)
+            {
+            }
+        }
+    }
+    return aRet;
+}
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -1924,7 +1920,7 @@ OUString SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getString, OUString );
+    return rowOriginGet<OUString>(&css::sdbc::XRow::getString, columnIndex);
 }
 
 //virtual
@@ -1933,7 +1929,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getBoolean, sal_Bool );
+    return rowOriginGet<sal_Bool>(&css::sdbc::XRow::getBoolean, columnIndex);
 }
 
 //virtual
@@ -1942,7 +1938,7 @@ sal_Int8 SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getByte, sal_Int8 );
+    return rowOriginGet<sal_Int8>(&css::sdbc::XRow::getByte, columnIndex);
 }
 
 //virtual
@@ -1951,7 +1947,7 @@ sal_Int16 SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getShort, sal_Int16 );
+    return rowOriginGet<sal_Int16>(&css::sdbc::XRow::getShort, columnIndex);
 }
 
 //virtual
@@ -1960,7 +1956,7 @@ sal_Int32 SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getInt, sal_Int32 );
+    return rowOriginGet<sal_Int32>(&css::sdbc::XRow::getInt, columnIndex);
 }
 
 //virtual
@@ -1969,7 +1965,7 @@ sal_Int64 SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getLong, sal_Int64 );
+    return rowOriginGet<sal_Int64>(&css::sdbc::XRow::getLong, columnIndex);
 }
 
 //virtual
@@ -1978,7 +1974,7 @@ float SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getFloat, float );
+    return rowOriginGet<float>(&css::sdbc::XRow::getFloat, columnIndex);
 }
 
 //virtual
@@ -1987,7 +1983,7 @@ double SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getDouble, double );
+    return rowOriginGet<double>(&css::sdbc::XRow::getDouble, columnIndex);
 }
 
 //virtual
@@ -1996,7 +1992,8 @@ Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getBytes, Sequence< sal_Int8 > );
+    return rowOriginGet< css::uno::Sequence<sal_Int8> >(
+        &css::sdbc::XRow::getBytes, columnIndex);
 }
 
 //virtual
@@ -2005,7 +2002,8 @@ Date SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getDate, Date );
+    return rowOriginGet<css::util::Date>(
+        &css::sdbc::XRow::getDate, columnIndex);
 }
 
 //virtual
@@ -2014,7 +2012,8 @@ Time SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getTime, Time );
+    return rowOriginGet<css::util::Time>(
+        &css::sdbc::XRow::getTime, columnIndex);
 }
 
 //virtual
@@ -2023,7 +2022,8 @@ DateTime SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getTimestamp, DateTime );
+    return rowOriginGet<css::util::DateTime>(
+        &css::sdbc::XRow::getTimestamp, columnIndex);
 }
 
 //virtual
@@ -2033,7 +2033,8 @@ Reference< com::sun::star::io::XInputStream >
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getBinaryStream, Reference< com::sun::star::io::XInputStream > );
+    return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
+        &css::sdbc::XRow::getBinaryStream, columnIndex);
 }
 
 //virtual
@@ -2043,7 +2044,8 @@ Reference< com::sun::star::io::XInputStream >
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getCharacterStream, Reference< com::sun::star::io::XInputStream > );
+    return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
+        &css::sdbc::XRow::getCharacterStream, columnIndex);
 }
 
 //virtual
@@ -2054,8 +2056,8 @@ Any SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    //if you change this macro please pay attention to
-    //define XROW_GETXXX, where this is similar implemented
+    //if you change this function please pay attention to
+    //function template rowOriginGet, where this is similar implemented
 
     ReacquireableGuard aGuard( m_aMutex );
     sal_Int32 nRow = m_nRow;
@@ -2098,7 +2100,8 @@ Reference< XRef > SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getRef, Reference< XRef > );
+    return rowOriginGet< css::uno::Reference<css::sdbc::XRef> >(
+        &css::sdbc::XRow::getRef, columnIndex);
 }
 
 //virtual
@@ -2107,7 +2110,8 @@ Reference< XBlob > SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getBlob, Reference< XBlob > );
+    return rowOriginGet< css::uno::Reference<css::sdbc::XBlob> >(
+        &css::sdbc::XRow::getBlob, columnIndex);
 }
 
 //virtual
@@ -2116,7 +2120,8 @@ Reference< XClob > SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getClob, Reference< XClob > );
+    return rowOriginGet< css::uno::Reference<css::sdbc::XClob> >(
+        &css::sdbc::XRow::getClob, columnIndex);
 }
 
 //virtual
@@ -2125,7 +2130,8 @@ Reference< XArray > SAL_CALL CachedContentResultSet
     throw( SQLException,
            RuntimeException )
 {
-    XROW_GETXXX( getArray, Reference< XArray > );
+    return rowOriginGet< css::uno::Reference<css::sdbc::XArray> >(
+        &css::sdbc::XRow::getArray, columnIndex);
 }
 
 //-----------------------------------------------------------------
