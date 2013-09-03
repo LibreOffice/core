@@ -1045,7 +1045,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         LanguageType aLang = LANGUAGE_DONTKNOW;
         for (sal_IntPtr i=0; i<seqInstalledLanguages.getLength(); i++)
         {
-            aLang = LanguageTag::convertToLanguageType(seqInstalledLanguages[i]);
+            aLang = LanguageTag::convertToLanguageTypeWithFallback(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
@@ -1245,7 +1245,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (!sLang.isEmpty() ?
-        LanguageTag::convertToLanguageType( sLang ) : LANGUAGE_SYSTEM);
+        LanguageTag::convertToLanguageTypeWithFallback( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
     if ( eOldLocale != eNewLocale )
     {
@@ -1407,7 +1407,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( !sLang.isEmpty() )
-        m_pLocaleSettingLB->SelectLanguage(LanguageTag::convertToLanguageType(sLang));
+        m_pLocaleSettingLB->SelectLanguage(LanguageTag::convertToLanguageTypeWithFallback(sLang));
     else
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
