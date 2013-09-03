@@ -24,7 +24,6 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 
 class PushButton;
-class String;
 namespace svt { class OFileURLControl; }
 
 #include <memory>
@@ -58,11 +57,11 @@ namespace svx
 
         /** sets the given URL at the input control, after translating it into a system path
         */
-        void    setURL( const String& _rURL );
+        void    setURL( const OUString& _rURL );
 
         /** returns the current database location, in form of an URL (not a system path)
         */
-        String  getURL() const;
+        OUString  getURL() const;
 
         /** prepares committing the database location entered in the input field
 

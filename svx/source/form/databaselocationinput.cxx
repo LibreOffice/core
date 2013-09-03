@@ -285,13 +285,13 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void DatabaseLocationInputController::setURL( const String& _rURL )
+    void DatabaseLocationInputController::setURL( const OUString& _rURL )
     {
         m_pImpl->setURL( _rURL );
     }
 
     //--------------------------------------------------------------------
-    String DatabaseLocationInputController::getURL() const
+    OUString DatabaseLocationInputController::getURL() const
     {
         return m_pImpl->getURL();
     }
