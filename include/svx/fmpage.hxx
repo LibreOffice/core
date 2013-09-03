@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;
-    String              m_sPageName;
+    OUString            m_sPageName;
     StarBASIC*          m_pBasic;
 
 public:
@@ -68,8 +68,8 @@ public:
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
 
 public:
-    const String&       GetName() const { return m_sPageName; }
-    void                SetName( const String& rName ) { m_sPageName = rName; }
+    const OUString&     GetName() const { return m_sPageName; }
+    void                SetName( const OUString& rName ) { m_sPageName = rName; }
     StarBASIC*          GetBasic() const { return m_pBasic; }
     sal_Bool            RequestHelp(
                             Window* pWin,
