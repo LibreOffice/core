@@ -36,6 +36,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -541,6 +542,52 @@ void Test::testSmartart()
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xGroupPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGrabBag(0);
+    xGroupPropertySet->getPropertyValue(OUString::createFromAscii("InteropGrabBag")) >>= aGrabBag;
+    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+
+    sal_Bool bData, bLayout, bQStyle, bColor, bDrawing = sal_False;
+    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    {
+      if (aGrabBag[i].Name == OUString::createFromAscii("OOXData"))
+      {
+        bData = sal_True;
+        uno::Reference<xml::dom::XDocument> aDataDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDataDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString::createFromAscii("OOXLayout"))
+      {
+        bLayout = sal_True;
+        uno::Reference<xml::dom::XDocument> aLayoutDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aLayoutDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString::createFromAscii("OOXStyle"))
+      {
+        bQStyle = sal_True;
+        uno::Reference<xml::dom::XDocument> aStyleDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aStyleDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString::createFromAscii("OOXColor"))
+      {
+        bColor = sal_True;
+        uno::Reference<xml::dom::XDocument> aColorDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aColorDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString::createFromAscii("OOXDrawing"))
+      {
+        bDrawing = sal_True;
+        uno::Reference<xml::dom::XDocument> aDrawingDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDrawingDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aDrawingDom.get()); // Reference not empty
+      }
+    }
+    CPPUNIT_ASSERT(bData && bLayout && bQStyle && bColor && bDrawing); // Grab Bag has all the expected elements
 
     uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
     sal_Int32 nValue(0);

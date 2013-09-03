@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <editeng/unoprnms.hxx>
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/textrun.hxx"
@@ -329,23 +330,53 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
     if( mpLayout->getNode() )
         mpLayout->getNode()->accept( aCreationVisitor );
+
+    pParentShape->setDiagramDoms( getDomsAsPropertyValues() );
+}
+
+uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
+{
+    sal_Int32 length = maMainDomMap.size();
+
+    uno::Sequence<beans::PropertyValue> aValue(length);
+    beans::PropertyValue* pValue = aValue.getArray();
+    for (DiagramDomMap::const_iterator i = maMainDomMap.begin();
+         i != maMainDomMap.end();
+         ++i)
+    {
+        pValue[0].Name = i->first;
+        pValue[0].Value = uno::makeAny(i->second);
+        ++pValue;
+    }
+
+    return aValue;
+}
+
+uno::Reference<xml::dom::XDocument> loadFragment(
+    core::XmlFilterBase& rFilter,
+    const OUString& rFragmentPath )
+{
+    // load diagramming fragments into DOM representation, that later
+    // gets serialized back to SAX events and parsed
+    return rFilter.importFragment( rFragmentPath );
 }
 
 uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
-    // load diagramming fragments into DOM representation, that later
-    // gets serialized back to SAX events and parsed
-    return rFilter.importFragment( rxHandler->getFragmentPath() );
+    return loadFragment( rFilter, rxHandler->getFragmentPath() );
 }
 
 void importFragment( core::XmlFilterBase& rFilter,
                      const uno::Reference<xml::dom::XDocument>& rXDom,
-                     const char* /*pPropName*/,
-                     const ShapePtr& /*pShape*/,
+                     const char* pDocName,
+                     const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
+    DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
+    rMainDomMap[OUString::createFromAscii(pDocName)] = rXDom;
+
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
 
@@ -371,14 +402,14 @@ void loadDiagram( ShapePtr& pShape,
     // data
     if( !rDataModelPath.isEmpty() )
     {
-        rtl::Reference< core::FragmentHandler > xRef(
-            new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
+        rtl::Reference< core::FragmentHandler > xRefDataModel(
+                new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
 
         importFragment(rFilter,
-                       loadFragment(rFilter,xRef),
-                       "DiagramData",
-                       pShape,
-                       xRef);
+                       loadFragment(rFilter,xRefDataModel),
+                       "OOXData",
+                       pDiagram,
+                       xRefDataModel);
         // Pass the info to pShape
         for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
                 aIt != aEnd; ++aIt )
@@ -391,38 +422,47 @@ void loadDiagram( ShapePtr& pShape,
         // layout
         if( !rLayoutPath.isEmpty() )
         {
-            rtl::Reference< core::FragmentHandler > xRef(
+            rtl::Reference< core::FragmentHandler > xRefLayout(
                     new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
+
             importFragment(rFilter,
-                    loadFragment(rFilter,xRef),
-                    "DiagramLayout",
-                    pShape,
-                    xRef);
+                    loadFragment(rFilter,xRefLayout),
+                    "OOXLayout",
+                    pDiagram,
+                    xRefLayout);
         }
 
         // style
         if( !rQStylePath.isEmpty() )
         {
-            rtl::Reference< core::FragmentHandler > xRef(
+            rtl::Reference< core::FragmentHandler > xRefQStyle(
                     new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
+
             importFragment(rFilter,
-                    loadFragment(rFilter,xRef),
-                    "DiagramQStyle",
-                    pShape,
-                    xRef);
+                    loadFragment(rFilter,xRefQStyle),
+                    "OOXStyle",
+                    pDiagram,
+                    xRefQStyle);
         }
 
         // colors
         if( !rColorStylePath.isEmpty() )
         {
-            rtl::Reference< core::FragmentHandler > xRef(
+            rtl::Reference< core::FragmentHandler > xRefColorStyle(
                     new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
+
             importFragment(rFilter,
-                    loadFragment(rFilter,xRef),
-                    "DiagramColorStyle",
-                    pShape,
-                    xRef);
+                    loadFragment(rFilter,xRefColorStyle),
+                    "OOXColor",
+                    pDiagram,
+                    xRefColorStyle);
         }
+    } else {
+        // We still want to add the XDocuments to the DiagramDomMap
+        DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
+        rMainDomMap[OUString::createFromAscii("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
+        rMainDomMap[OUString::createFromAscii("OOXStyle")] = loadFragment(rFilter,rQStylePath);
+        rMainDomMap[OUString::createFromAscii("OOXColor")] = loadFragment(rFilter,rColorStylePath);
     }
 
     // diagram loaded. now lump together & attach to shape
@@ -450,32 +490,32 @@ void loadDiagram( const ShapePtr& pShape,
     if( rXDataModelDom.is() )
         importFragment(rFilter,
                        rXDataModelDom,
-                       "DiagramData",
-                       pShape,
+                       "OOXData",
+                       pDiagram,
                        new DiagramDataFragmentHandler( rFilter, aEmpty, pData ));
 
     // layout
     if( rXLayoutDom.is() )
         importFragment(rFilter,
                        rXLayoutDom,
-                       "DiagramLayout",
-                       pShape,
+                       "OOXLayout",
+                       pDiagram,
                        new DiagramLayoutFragmentHandler( rFilter, aEmpty, pLayout ));
 
     // style
     if( rXQStyleDom.is() )
         importFragment(rFilter,
                        rXQStyleDom,
-                       "DiagramQStyle",
-                       pShape,
+                       "OOXStyle",
+                       pDiagram,
                        new DiagramQStylesFragmentHandler( rFilter, aEmpty, pDiagram->getStyles() ));
 
     // colors
     if( rXColorStyleDom.is() )
         importFragment(rFilter,
                        rXColorStyleDom,
-                       "DiagramColorStyle",
-                       pShape,
+                       "OOXColor",
+                       pDiagram,
                        new ColorFragmentHandler( rFilter, aEmpty, pDiagram->getColors() ));
 
     // diagram loaded. now lump together & attach to shape

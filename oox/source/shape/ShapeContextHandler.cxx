@@ -326,6 +326,15 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                     OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(*aIt));
                     oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
+
+                    uno::Sequence<beans::PropertyValue> aValue(mpShape->getDiagramDoms());
+                    sal_Int32 length = aValue.getLength();
+                    aValue.realloc(length+1);
+                    beans::PropertyValue* pValue = aValue.getArray();
+                    pValue[length].Name = OUString::createFromAscii("OOXDrawing");
+                    pValue[length].Value = uno::makeAny( mxFilterBase->importFragment( aFragmentPath ) );
+                    pShapePtr->setDiagramDoms( aValue );
+
                     pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
                     xResult = pShapePtr->getXShape();
                 }
