@@ -99,7 +99,7 @@ class SVX_DLLPUBLIC SvxMetricField : public MetricField
 {
     using Window::Update;
 
-    String          aCurTxt;
+    OUString        aCurTxt;
     SfxMapUnit      ePoolUnit;
     FieldUnit       eDlgUnit;
     Size            aLogicalSize;
