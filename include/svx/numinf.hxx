@@ -39,13 +39,13 @@ public:
     SvxNumberInfoItem( const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                        const sal_uInt16 nId  );
-    SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const String& rVal,
+    SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const OUString& rVal,
                        const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
                        const sal_uInt16 nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const String& rValueStr, const sal_uInt16 nId );
+                       const OUString& rValueStr, const sal_uInt16 nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     ~SvxNumberInfoItem();
 
@@ -60,7 +60,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
     SvNumberFormatter*      GetNumberFormatter() const { return pFormatter; }
-    const String&           GetValueString() const { return aStringVal; }
+    const OUString&         GetValueString() const { return aStringVal; }
     double                  GetValueDouble() const  { return nDoubleVal; }
 
     const sal_uInt32*       GetDelArray() const { return pDelFormatArr; }
@@ -73,7 +73,7 @@ public:
 private:
     SvNumberFormatter*  pFormatter;
     SvxNumberValueType  eValueType;
-    String              aStringVal;
+    OUString            aStringVal;
     double              nDoubleVal;
 
     sal_uInt32*         pDelFormatArr;

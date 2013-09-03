@@ -55,7 +55,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 // -----------------------------------------------------------------------
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const String& rVal, const sal_uInt16 nId ) :
+                                      const OUString& rVal, const sal_uInt16 nId ) :
 
     INIT( pNumFormatter, SVX_VALUE_TYPE_STRING, 0, rVal )
 
@@ -75,7 +75,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 // -----------------------------------------------------------------------
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const double& rVal, const String& rValueStr,
+                                      const double& rVal, const OUString& rValueStr,
                                       const sal_uInt16 nId ) :
 
     INIT( pNumFormatter, SVX_VALUE_TYPE_NUMBER, rVal, rValueStr )
