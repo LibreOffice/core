@@ -134,6 +134,7 @@ public:
     void testTableAutoNested();
     void testTableStyleParprop();
     void testTablePagebreak();
+    void testFdo68607();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -217,6 +218,7 @@ void Test::run()
         {"table-auto-nested.docx", &Test::testTableAutoNested},
         {"table-style-parprop.docx", &Test::testTableStyleParprop},
         {"table-pagebreak.docx", &Test::testTablePagebreak},
+        {"fdo68607.docx", &Test::testFdo68607},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1358,6 +1360,14 @@ void Test::testTablePagebreak()
 
     // This one is outside the table: should not be ignored.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(3), "BreakType"));
+}
+
+void Test::testFdo68607()
+{
+    // Bugdoc was 8 pages in Word, 1 in Writer due to pointlessly wrapping the
+    // table in a frame. Exact layout may depend on fonts available, etc. --
+    // but at least make sure that our table spans over multiple pages now.
+    CPPUNIT_ASSERT(getPages() > 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
