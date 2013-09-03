@@ -156,7 +156,7 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void EnableControls(bool bEnable);
 
-    void                GetCurrentText(String& rBase, String& rRuby);
+    void                GetCurrentText(OUString& rBase, OUString& rRuby);
 
     void                UpdateColors( void );
 protected:

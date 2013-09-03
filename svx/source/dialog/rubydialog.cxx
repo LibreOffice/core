@@ -503,7 +503,7 @@ void SvxRubyDialog::Update()
     ScrollHdl_Impl(m_pScrollSB);
 }
 
-void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
+void    SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
 {
     rBase = aEditArr[nCurrentEdit * 2]->GetText();
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
@@ -777,7 +777,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     SetFillColor( aSaveFont.GetFillColor() );
     DrawRect(aRect);
 
-    String sBaseText, sRubyText;
+    OUString sBaseText, sRubyText;
     m_pParentDlg->GetCurrentText(sBaseText, sRubyText);
 
     long nTextHeight = GetTextHeight();
