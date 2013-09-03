@@ -16,6 +16,7 @@
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <boost/unordered_set.hpp>
 
 //#define erDEBUG
 
@@ -46,11 +47,42 @@ struct myLtError
     ~myLtError() { if (p) lt_error_unref( p); }
 };
 
-
 // "statics" to be returned as const reference to an empty locale and string.
 namespace {
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
+}
+
+typedef ::boost::unordered_set< OUString, OUStringHash > KnownTagSet;
+namespace {
+struct theKnowns : public rtl::Static< KnownTagSet, theKnowns > {};
+struct theMutex : public rtl::Static< osl::Mutex, theMutex > {};
+}
+
+static const KnownTagSet & getKnowns()
+{
+    KnownTagSet & rKnowns = theKnowns::get();
+    if (rKnowns.empty())
+    {
+        osl::MutexGuard aGuard( theMutex::get());
+        if (rKnowns.empty())
+        {
+            ::std::vector< MsLangId::LanguagetagMapping > aDefined( MsLangId::getDefinedLanguagetags());
+            for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aDefined.begin());
+                    it != aDefined.end(); ++it)
+            {
+                // Do not use the BCP47 string here to initialize the
+                // LanguageTag because then canonicalize() would call this
+                // getKnowns() again..
+                ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings());
+                for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+                {
+                    rKnowns.insert( *fb);
+                }
+            }
+        }
+    }
+    return rKnowns;
 }
 
 
@@ -448,7 +480,7 @@ bool LanguageTag::canonicalize()
                 // Now this is getting funny.. we only have some BCP47 string
                 // and want to determine if parsing it would be possible
                 // without using liblangtag just to see if it is a simple known
-                // locale.
+                // locale or could fall back to one.
                 OUString aLanguage, aScript, aCountry, aVariants;
                 Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry, aVariants);
                 if (eExt != EXTRACTED_NONE)
@@ -512,6 +544,12 @@ bool LanguageTag::canonicalize()
                 }
                 if (mnLangID != LANGUAGE_DONTKNOW && mnLangID != LANGUAGE_SYSTEM)
                     meIsLiblangtagNeeded = DECISION_NO; // known locale
+                else
+                {
+                    const KnownTagSet& rKnowns = getKnowns();
+                    if (rKnowns.find( maBcp47) != rKnowns.end())
+                        meIsLiblangtagNeeded = DECISION_NO; // known fallback
+                }
             }
         }
         if (bTemporaryLocale)
