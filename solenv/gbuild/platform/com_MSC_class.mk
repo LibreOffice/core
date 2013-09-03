@@ -216,6 +216,10 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-dynamicbase \
 	-manifest
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Windows_PE_TARGETTYPEFLAGS += -LTCG
+endif
+
 # Library class
 
 
@@ -223,10 +227,6 @@ gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := \
 	-DLL \
 	$(gb_Windows_PE_TARGETTYPEFLAGS)
-
-ifeq ($(ENABLE_LTO),TRUE)
-gb_Library_TARGETTYPEFLAGS += -LTCG
-endif
 
 gb_Library_get_rpath :=
 
