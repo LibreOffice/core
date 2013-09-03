@@ -32,14 +32,14 @@ class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPla
 public:
     SAL_CALL VLCWindow(VLCPlayer& player);
 
-    void SAL_CALL update();
-    ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel );
-    css::media::ZoomLevel SAL_CALL getZoomLevel();
-    void SAL_CALL setPointerType( ::sal_Int32 SystemPointerType );
+    void SAL_CALL update() throw (css::uno::RuntimeException);
+    ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException);
+    css::media::ZoomLevel SAL_CALL getZoomLevel() throw (css::uno::RuntimeException);
+    void SAL_CALL setPointerType( ::sal_Int32 SystemPointerType ) throw (css::uno::RuntimeException);
 
-    ::rtl::OUString SAL_CALL getImplementationName();
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);

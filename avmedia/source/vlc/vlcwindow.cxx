@@ -14,35 +14,35 @@ SAL_CALL VLCWindow::VLCWindow(VLCPlayer& player)
 {
 }
 
-void SAL_CALL VLCWindow::update()
+void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)
 {
 }
 
-::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel )
+::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel ) throw (css::uno::RuntimeException)
 {
     return false;
 }
 
-css::media::ZoomLevel SAL_CALL VLCWindow::getZoomLevel()
+css::media::ZoomLevel SAL_CALL VLCWindow::getZoomLevel() throw (css::uno::RuntimeException)
 {
     return css::media::ZoomLevel_NOT_AVAILABLE;
 }
 
-void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 )
+void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 ) throw (css::uno::RuntimeException)
 {
 }
 
-::rtl::OUString SAL_CALL VLCWindow::getImplementationName()
+::rtl::OUString SAL_CALL VLCWindow::getImplementationName() throw (css::uno::RuntimeException)
 {
     return AVMEDIA_VLC_WINDOW_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName )
+::sal_Bool SAL_CALL VLCWindow::supportsService( const ::rtl::OUString& serviceName ) throw (css::uno::RuntimeException)
 {
     return serviceName == AVMEDIA_VLC_WINDOW_SERVICENAME;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL VLCWindow::getSupportedServiceNames()
+uno::Sequence< ::rtl::OUString > SAL_CALL VLCWindow::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     aRet[0] = AVMEDIA_VLC_WINDOW_SERVICENAME;
