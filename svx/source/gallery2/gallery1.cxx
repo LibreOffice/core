@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 // - GalleryThemeEntry -
 // ---------------------
 
-GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
+GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const OUString& rName,
                                       sal_Bool _bReadOnly, sal_Bool _bNewFile,
                                       sal_uInt32 _nId, sal_Bool _bThemeNameFromResource ) :
         nId                                     ( _nId ),
@@ -505,14 +505,14 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Gallery::HasTheme( const String& rThemeName )
+sal_Bool Gallery::HasTheme( const OUString& rThemeName )
 {
     return( ImplGetThemeEntry( rThemeName ) != NULL );
 }
 
 // ------------------------------------------------------------------------
 
-sal_Bool Gallery::CreateTheme( const String& rThemeName )
+sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
 {
     sal_Bool bRet = sal_False;
 
@@ -534,7 +534,7 @@ sal_Bool Gallery::CreateTheme( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Gallery::RenameTheme( const String& rOldName, const String& rNewName )
+sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 {
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
     sal_Bool                            bRet = sal_False;
@@ -563,7 +563,7 @@ sal_Bool Gallery::RenameTheme( const String& rOldName, const String& rNewName )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Gallery::RemoveTheme( const String& rThemeName )
+sal_Bool Gallery::RemoveTheme( const OUString& rThemeName )
 {
     GalleryThemeEntry*  pThemeEntry = ImplGetThemeEntry( rThemeName );
     sal_Bool                bRet = sal_False;
@@ -673,7 +673,7 @@ void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
 
 // ------------------------------------------------------------------------
 
-GalleryTheme* Gallery::AcquireTheme( const String& rThemeName, SfxListener& rListener )
+GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rListener )
 {
     GalleryTheme*           pTheme = NULL;
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );

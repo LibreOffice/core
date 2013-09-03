@@ -53,7 +53,7 @@ private:
 
 public:
 
-                            GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
+                            GalleryThemeEntry( const INetURLObject& rBaseURL, const OUString& rName,
                                                sal_Bool bReadOnly, sal_Bool bNewFile,
                                                sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
@@ -128,16 +128,16 @@ public:
     size_t                      GetThemeCount() const { return aThemeList.size(); }
     const GalleryThemeEntry*    GetThemeInfo( size_t nPos )
                                 { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
-    const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
+    const GalleryThemeEntry*    GetThemeInfo( const OUString& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
-    SVX_DLLPUBLIC sal_Bool      HasTheme( const String& rThemeName );
+    SVX_DLLPUBLIC sal_Bool      HasTheme( const OUString& rThemeName );
     OUString                    GetThemeName( sal_uIntPtr nThemeId ) const;
 
-    SVX_DLLPUBLIC sal_Bool      CreateTheme( const String& rThemeName );
-    sal_Bool                    RenameTheme( const String& rOldName, const String& rNewName );
-    SVX_DLLPUBLIC sal_Bool      RemoveTheme( const String& rThemeName );
+    SVX_DLLPUBLIC sal_Bool      CreateTheme( const OUString& rThemeName );
+    sal_Bool                    RenameTheme( const OUString& rOldName, const OUString& rNewName );
+    SVX_DLLPUBLIC sal_Bool      RemoveTheme( const OUString& rThemeName );
 
-    SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const String& rThemeName, SfxListener& rListener );
+    SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const OUString& rThemeName, SfxListener& rListener );
     SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:
