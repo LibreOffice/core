@@ -27,6 +27,7 @@ public:
     void testFdo60842();
     void testFdo56272();
     void testFdo55814();
+    void testFdo68839();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -50,6 +51,7 @@ void Test::run()
         {"fdo60842.odt", &Test::testFdo60842},
         {"fdo56272.odt", &Test::testFdo56272},
         {"fdo55814.odt", &Test::testFdo55814},
+        {"fdo68839.odt", &Test::testFdo68839},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -319,6 +321,39 @@ void Test::testFdo55814()
     // This was "0".
     CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
 }
+
+void lcl_CheckShape(
+    uno::Reference<drawing::XShape> const& xShape, OUString const& rExpected)
+{
+    uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xNamed.is());
+    CPPUNIT_ASSERT_EQUAL(rExpected, xNamed->getName());
+}
+
+void Test::testFdo68839()
+{
+    // check names
+    lcl_CheckShape(getShape(1), "FrameXXX");
+    lcl_CheckShape(getShape(2), "ObjectXXX");
+    lcl_CheckShape(getShape(3), "FrameY");
+    lcl_CheckShape(getShape(4), "graphicsXXX");
+    try {
+        uno::Reference<drawing::XShape> xShape = getShape(5);
+        CPPUNIT_ASSERT(!"IndexOutOfBoundsException expected");
+    } catch (lang::IndexOutOfBoundsException const&) { }
+    // check prev/next chain
+    uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame2(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(xFrame1, "ChainPrevName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameY"),
+            getProperty<OUString>(xFrame1, "ChainNextName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("FrameXXX"),
+            getProperty<OUString>(xFrame2, "ChainPrevName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(xFrame2, "ChainNextName"));
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
