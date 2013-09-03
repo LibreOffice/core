@@ -1169,6 +1169,11 @@ void SectionPropertyMap::SetFirstPaperBin( sal_Int32 nSet )
 }
 
 
+sal_Int32 SectionPropertyMap::GetPageWidth()
+{
+    return operator[](PropertyDefinition(PROP_WIDTH, false)).get<sal_Int32>();
+}
+
 StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mnCT_Spacing_line( 0 ),
     mnCT_Spacing_lineRule( 0 ),
