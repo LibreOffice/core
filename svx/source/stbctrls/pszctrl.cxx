@@ -59,29 +59,29 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
+OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
     // deliver and set the Metric of the application
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
-    String sMetric;
+    OUString sMetric;
     const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep()[0];
     sal_Int64 nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, eInUnit, eOutUnit );
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
-        sMetric += '-';
+        sMetric += "-";
     sMetric += OUString::number(nConvVal / 100);
 
     if( FUNIT_NONE != eOutUnit )
     {
-        sMetric += cSep;
+        sMetric += OUString(cSep);
         sal_Int64 nFract = nConvVal % 100;
 
         if ( nFract < 0 )
             nFract *= -1;
         if ( nFract < 10 )
-            sMetric += '0';
+            sMetric += "0";
         sMetric += OUString::number(nFract);
     }
 
