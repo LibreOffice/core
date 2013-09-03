@@ -191,7 +191,7 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage() const
 {
     if( m_sWin16SystemLocale.isEmpty() )
         return LANGUAGE_NONE;
-    return LanguageTag::convertToLanguageType( m_sWin16SystemLocale );
+    return LanguageTag::convertToLanguageTypeWithFallback( m_sWin16SystemLocale );
 }
 
 bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const
