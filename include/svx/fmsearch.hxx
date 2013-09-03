@@ -63,13 +63,14 @@ struct FmFoundRecordInformation
 struct FmSearchContext
 {
     // [in]
-    sal_Int16                   nContext;       // the number of the context
+    sal_Int16               nContext;       // the number of the context
     // [out]
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xCursor;        // the iterator for the context
-    String                  strUsedFields;  // a list of field names separeted by ';'
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+    css::uno::Reference< css::sdbc::XResultSet>
+                            xCursor;        // the iterator for the context
+    OUString                strUsedFields;  // a list of field names separeted by ';'
+    ::std::vector< css::uno::Reference< css::uno::XInterface > >
                             arrFields;      // the corresponding text interfaces for the fields in strUsedFields
-    String                  sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
+    OUString                sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
 };
 
 #endif // _FMSEARCH_HXX

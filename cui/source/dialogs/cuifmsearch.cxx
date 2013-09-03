@@ -175,7 +175,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, co
         ::comphelper::getProcessComponentContext(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, SM_ALLOWSCHEDULE );
     initCommon( fmscInitial.xCursor );
 
-    if (fmscInitial.sFieldDisplayNames.Len() != 0)
+    if ( !fmscInitial.sFieldDisplayNames.isEmpty() )
     {   // use the display names if supplied
         DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';'),
             "FmSearchDialog::FmSearchDialog : invalid initial context description !");
@@ -553,7 +553,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     // put the field names into the respective listbox
     m_lbField.Clear();
 
-    if (fmscContext.sFieldDisplayNames.Len() != 0)
+    if (!fmscContext.sFieldDisplayNames.isEmpty())
     {
         // use the display names if supplied
         DBG_ASSERT(comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'),

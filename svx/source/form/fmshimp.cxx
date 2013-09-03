@@ -2539,7 +2539,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     {
         pfmscContextInfo->arrFields.clear();
         pfmscContextInfo->xCursor = NULL;
-        pfmscContextInfo->strUsedFields.Erase();
+        pfmscContextInfo->strUsedFields = "";
         return 0L;
     }
 
