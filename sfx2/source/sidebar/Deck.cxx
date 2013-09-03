@@ -152,20 +152,6 @@ Rectangle Deck::GetContentArea (void) const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
-
-
-
-::rtl::OUString Deck::GetIconURL (const bool bIsHighContrastModeActive) const
-{
-    if (bIsHighContrastModeActive)
-        return msHighContrastIconURL;
-    else
-        return msIconURL;
-}
-
-
-
-
 void Deck::Paint (const Rectangle& rUpdateArea)
 {
     (void) rUpdateArea;

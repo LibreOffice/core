@@ -32,13 +32,9 @@ ScCellValue::set(EditTextObject const&)
 ScCellValue::set(ScFormulaCell const&)
 ScColorScaleEntry::UpdateMoveTab(short, short, short)
 ScColumn::MoveListeners(SvtBroadcaster&, int)
-ScCompiler::IsCharWordChar(String const&, unsigned short, formula::FormulaGrammar::AddressConvention)
-ScCompiler::IsWordChar(String const&, unsigned short, formula::FormulaGrammar::AddressConvention)
 ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
-ScDPObject::ParseFilters(ScDPGetPivotDataField&, std::__debug::vector<ScDPGetPivotDataField, std::allocator<ScDPGetPivotDataField> >&, rtl::OUString const&)
-ScDdeLink::GetModifiableResult()
 ScDocument::GetCellCount(short, short) const
 ScDocument::GetFormulaTokens(ScAddress const&) const
 ScDocument::GetStringCell(ScAddress const&) const
@@ -46,14 +42,9 @@ ScDocument::IsEmptyData(short, short) const
 ScDocumentImport::setFormulaCell(ScAddress const&, ScTokenArray const&)
 ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
-ScFormulaCell::GetResultDouble() const
-ScFormulaCell::GetValueAlways()
 ScFormulaCell::HasColRowName() const
-ScFormulaCell::IsSharedInvariant() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
 ScMyNotEmptyCellsIterator::GetCell() const
-ScRangeData::SetMaxCol(short)
-ScRangeData::SetMaxRow(int)
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
 ScRefCellValue::commit(ScColumn&, int) const
 ScUndoSetCell::ScUndoSetCell(ScDocShell*, ScAddress const&, ScCellValue const&)
@@ -146,8 +137,6 @@ oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
 sc::ColumnSet::has(short, short) const
-sc::sidebar::CellLineStyleValueSet::GetSelItem()
-sc::sidebar::CellLineStyleValueSet::SetCusEnable(bool)
 sc::sidebar::CellLineStyleValueSet::SetImage(Image)
 sc_apitest::main()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
@@ -159,13 +148,11 @@ sd::framework::Pane::SetWindow(Window*)
 sd::sidebar::LayoutMenu::GetMinimumWidth()
 sd::sidebar::LayoutMenu::GetPreferredSize()
 sd::sidebar::LayoutMenu::GetPreferredWidth(int)
-sdr::overlay::OverlayRectangle::setBlinkTime(unsigned int)
 sdr::overlay::OverlayRectangle::setSecondPosition(basegfx::B2DPoint const&)
 sdr::table::SdrTableObj::getRowCount() const
 sfx2::sidebar::AsynchronousCall::RequestCall(boost::function<void ()> const&)
 sfx2::sidebar::Context::EvaluateMatch(std::__debug::vector<sfx2::sidebar::Context, std::allocator<sfx2::sidebar::Context> > const&) const
 sfx2::sidebar::ContextList::IsEmpty()
-sfx2::sidebar::Deck::GetIconURL(bool) const
 sfx2::sidebar::Deck::PrintWindowTree(std::__debug::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
 sfx2::sidebar::EnumContext::EvaluateMatch(std::__debug::vector<sfx2::sidebar::EnumContext, std::allocator<sfx2::sidebar::EnumContext> > const&) const
 sfx2::sidebar::EnumContext::GetApplication() const
@@ -176,16 +163,13 @@ sfx2::sidebar::SidebarDockingWindow::GetChildWindow()
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
-svx::DialControl::GetLinkedField() const
 svx::DialControl::GetModifyHdl() const
 svx::sidebar::AreaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LinePropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
 svx::sidebar::LineWidthControl::GetValueSet()
 svx::sidebar::ParaPropertyPanel::InitImageList(boost::scoped_ptr<ToolBox>&, ImageList&, ImageList&)
 svx::sidebar::ParaPropertyPanel::LinkStubImplPopupModeEndHdl(void*, void*)
-sw::util::HdFtDistanceGlue::EqualTopBottom(sw::util::HdFtDistanceGlue const&) const
 unoidl::UnoidlProvider::getConstant(unsigned int) const
-utl::ConfigItem::getUniqueSetElementName(rtl::OUString const&, rtl::OUString&)
 utl::toISO8601(com::sun::star::util::Time const&)
 vclmain::createApplication()
 writerfilter::ooxml::OOXMLFastContextHandler::mark(unsigned int const&, boost::shared_ptr<writerfilter::ooxml::OOXMLValue>)

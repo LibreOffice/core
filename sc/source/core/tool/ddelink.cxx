@@ -249,11 +249,6 @@ void ScDdeLink::SetResult( const ScMatrixRef& pRes )
     pResult = pRes;
 }
 
-ScMatrixRef ScDdeLink::GetModifiableResult()
-{
-    return pResult;
-}
-
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)

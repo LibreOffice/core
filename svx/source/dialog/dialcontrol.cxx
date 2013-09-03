@@ -427,11 +427,6 @@ bool DialControl::IsValueModified()
     return mpImpl->mnInitialAngle != mpImpl->mnAngle;
 }
 
-NumericField* DialControl::GetLinkedField() const
-{
-    return mpImpl->mpLinkField;
-}
-
 void DialControl::SetModifyHdl( const Link& rLink )
 {
     mpImpl->maModifyHdl = rLink;

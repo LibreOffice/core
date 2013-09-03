@@ -71,7 +71,6 @@ namespace sdr
 
             // added CursorBlinkTime (in ms)
             sal_uInt32 getBlinkTime() const { return mnBlinkTime; }
-            void setBlinkTime(sal_uInt32 nNew);
 
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.

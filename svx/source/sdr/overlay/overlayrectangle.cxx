@@ -105,21 +105,6 @@ namespace sdr
             }
         }
 
-        void OverlayRectangle::setBlinkTime(sal_uInt32 nNew)
-        {
-            if(mnBlinkTime != nNew)
-            {
-                // remember new value
-                mnBlinkTime = nNew;
-
-                // #i53216# check blink time value range
-                mnBlinkTime = impCheckBlinkTimeValueRange(mnBlinkTime);
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
         void OverlayRectangle::Trigger(sal_uInt32 nTime)
         {
             if(getOverlayManager())

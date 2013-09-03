@@ -133,20 +133,6 @@ namespace sw
             bool HasFooter() const { return mbHasFooter; }
 
             /** Is the top of the page the same in both objects
-
-                Ignoring the difference in header and footers, will the main
-                document text have the same top/bottom bounds in word between
-                both these objects.
-
-                @param
-                rOther the other HdFtDistanceGlue to compare against
-
-                @return true if the main text areas top and bottom is at the
-                same location, false otherwise.
-            */
-            bool EqualTopBottom(const HdFtDistanceGlue &rOther) const;
-
-            /** Is the top of the page the same in both objects
                 when there are headers\footers present or non-present in both objects
 
                 This test is important, because we would like to ignore cases

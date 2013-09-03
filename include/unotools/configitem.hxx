@@ -156,17 +156,6 @@ namespace utl
             // add a new node without setting any properties
             sal_Bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
-            /** get a name for a new element of a set node
-                @param _rSetNode
-                    relative path to the set node
-                @param _rBaseName
-                    <ul><li><b>in</b>: the base to use when calculating a new name</li>
-                        <li><b>out</b>: an unused element name</li>
-                    </ul>
-                @return <TRUE/> if a free name could be generated
-            */
-            sal_Bool                getUniqueSetElementName( const OUString& _rSetNode, OUString& _rBaseName);
-
         public:
             virtual ~ConfigItem();
 

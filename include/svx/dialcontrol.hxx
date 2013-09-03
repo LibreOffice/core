@@ -116,8 +116,6 @@ public:
      *     2 means 100th of degree
      */
     void                SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces = 0);
-    /** Returns the linked numeric edit field, or 0. */
-    NumericField*       GetLinkedField() const;
 
     /** The passed handler is called whenever the totation value changes. */
     void                SetModifyHdl( const Link& rLink );

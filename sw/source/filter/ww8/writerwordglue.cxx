@@ -418,12 +418,6 @@ namespace sw
                 mbHasFooter = false;
         }
 
-        bool HdFtDistanceGlue::EqualTopBottom(const HdFtDistanceGlue &rOther)
-            const
-        {
-            return (dyaTop == rOther.dyaTop && dyaBottom == rOther.dyaBottom);
-        }
-
         bool HdFtDistanceGlue::StrictEqualTopBottom(const HdFtDistanceGlue &rOther)
             const
         {

@@ -70,9 +70,6 @@ public:
     const ScMatrix* GetResult() const;
     void            SetResult( const ScMatrixRef& pRes );
 
-                    // XML and Excel import after NewData()
-    ScMatrixRef     GetModifiableResult();
-
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
     const String&   GetItem() const     { return aItem; }

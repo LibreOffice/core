@@ -56,7 +56,6 @@ public:
     const ::rtl::OUString& GetId (void) const;
     DeckTitleBar* GetTitleBar (void) const;
     Rectangle GetContentArea (void) const;
-    ::rtl::OUString GetIconURL (const bool bIsHighContrastModeActive) const;
     void SetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels (void) const;
     void RequestLayout (void);

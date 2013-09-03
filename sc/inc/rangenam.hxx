@@ -148,9 +148,7 @@ public:
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static bool        IsNameValid( const String& rName, ScDocument* pDoc );
 
-    SC_DLLPUBLIC void SetMaxRow(SCROW nRow);
     SCROW GetMaxRow() const;
-    SC_DLLPUBLIC void SetMaxCol(SCCOL nCol);
     SCCOL GetMaxCol() const;
 
     void            CompileUnresolvedXML();
