@@ -80,7 +80,7 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
     return &aSDLayerPropertySet_Impl;
 }
 
-String SdLayer::convertToInternalName( const OUString& rName )
+OUString SdLayer::convertToInternalName( const OUString& rName )
 {
     if ( rName == sUNO_LayerName_background )
     {
@@ -104,11 +104,11 @@ String SdLayer::convertToInternalName( const OUString& rName )
     }
     else
     {
-        return String( rName );
+        return rName;
     }
 }
 
-OUString SdLayer::convertToExternalName( const String& rName )
+OUString SdLayer::convertToExternalName( const OUString& rName )
 {
     if( rName == SD_RESSTR( STR_LAYER_BCKGRND ) )
     {
@@ -132,7 +132,7 @@ OUString SdLayer::convertToExternalName( const String& rName )
     }
     else
     {
-        return OUString( rName );
+        return rName;
     }
 }
 
@@ -317,7 +317,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
 
         if(pSdrPageView)
         {
-            String aLayerName = pLayer->GetName();
+            OUString aLayerName = pLayer->GetName();
             switch(what)
             {
             case VISIBLE:   return pSdrPageView->IsLayerVisible(aLayerName);
@@ -354,7 +354,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 
         if(pSdrPageView)
         {
-            String aLayerName(pLayer->GetName());
+            OUString aLayerName(pLayer->GetName());
             switch(what)
             {
             case VISIBLE:   pSdrPageView->SetLayerVisible(aLayerName,flag);
@@ -525,10 +525,10 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
         sal_Int32 nLayer = nLayerCnt - 2 + 1;
-        String aLayerName;
+        OUString aLayerName;
 
         // Test for existing names
-        while( aLayerName.Len()==0 || rLayerAdmin.GetLayer( aLayerName, sal_False) )
+        while( aLayerName.isEmpty() || rLayerAdmin.GetLayer( aLayerName, sal_False) )
         {
             aLayerName = SD_RESSTR(STR_LAYER);
             aLayerName += OUString::number(nLayer);

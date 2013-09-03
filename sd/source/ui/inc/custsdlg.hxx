@@ -83,7 +83,7 @@ private:
     SdDrawDocument& rDoc;
     SdCustomShow*&  rpCustomShow;
     sal_Bool            bModified;
-    String          aOldName;
+    OUString        aOldName;
 
     void            CheckState();
     void            CheckCustomShow();

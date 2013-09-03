@@ -56,7 +56,7 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    String  aOldLayer;
+    OUString aOldLayer;
 
 private:
     sal_uInt32 nInventor;
