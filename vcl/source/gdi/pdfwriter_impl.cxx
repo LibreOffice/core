@@ -9455,6 +9455,12 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 
 bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 {
+    // LO internal gradient -> PDF shading type:
+    //  * GradientStyle_LINEAR: axial shading, using sampled-function with 2 samples
+    //                          [t=0:colorStart, t=1:colorEnd]
+    //  * GradientStyle_AXIAL: axial shading, using sampled-function with 3 samples
+    //                          [t=0:colorEnd, t=0.5:colorStart, t=1:colorEnd]
+    //  * other styles: function shading with aSize.Width() * aSize.Height() samples
     sal_Int32 nFunctionObject = createObject();
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
@@ -9480,12 +9486,30 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     OStringBuffer aLine( 120 );
     aLine.append( nFunctionObject );
     aLine.append( " 0 obj\n"
-                  "<</FunctionType 0\n"
-                  "/Domain[ 0 1 0 1 ]\n"
-                  "/Size[ " );
-    aLine.append( (sal_Int32)aSize.Width() );
-    aLine.append( ' ' );
-    aLine.append( (sal_Int32)aSize.Height() );
+                  "<</FunctionType 0\n");
+    switch (rObject.m_aGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+        case GradientStyle::GradientStyle_AXIAL:
+            aLine.append("/Domain[ 0 1]\n");
+            break;
+        default:
+            aLine.append("/Domain[ 0 1 0 1]\n");
+    }
+    aLine.append("/Size[ " );
+    switch (rObject.m_aGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+            aLine.append('2');
+            break;
+        case GradientStyle::GradientStyle_AXIAL:
+            aLine.append('3');
+            break;
+        default:
+            aLine.append( (sal_Int32)aSize.Width() );
+            aLine.append( ' ' );
+            aLine.append( (sal_Int32)aSize.Height() );
+    }
     aLine.append( " ]\n"
                   "/BitsPerSample 8\n"
                   "/Range[ 0 1 0 1 0 1 ]\n"
@@ -9505,17 +9529,39 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     checkAndEnableStreamEncryption( nFunctionObject );
     beginCompression();
-    for( int y = aSize.Height()-1; y >= 0; y-- )
+    sal_uInt8 aCol[3];
+    switch (rObject.m_aGradient.GetStyle())
     {
-        for( int x = 0; x < aSize.Width(); x++ )
-        {
-            sal_uInt8 aCol[3];
-            BitmapColor aColor = pAccess->GetColor( y, x );
-            aCol[0] = aColor.GetRed();
-            aCol[1] = aColor.GetGreen();
-            aCol[2] = aColor.GetBlue();
+        case GradientStyle::GradientStyle_AXIAL:
+            aCol[0] = rObject.m_aGradient.GetEndColor().GetRed();
+            aCol[1] = rObject.m_aGradient.GetEndColor().GetGreen();
+            aCol[2] = rObject.m_aGradient.GetEndColor().GetBlue();
             CHECK_RETURN( writeBuffer( aCol, 3 ) );
+        case GradientStyle::GradientStyle_LINEAR:
+        {
+            aCol[0] = rObject.m_aGradient.GetStartColor().GetRed();
+            aCol[1] = rObject.m_aGradient.GetStartColor().GetGreen();
+            aCol[2] = rObject.m_aGradient.GetStartColor().GetBlue();
+            CHECK_RETURN( writeBuffer( aCol, 3 ) );
+
+            aCol[0] = rObject.m_aGradient.GetEndColor().GetRed();
+            aCol[1] = rObject.m_aGradient.GetEndColor().GetGreen();
+            aCol[2] = rObject.m_aGradient.GetEndColor().GetBlue();
+            CHECK_RETURN( writeBuffer( aCol, 3 ) );
+            break;
         }
+        default:
+            for( int y = aSize.Height()-1; y >= 0; y-- )
+            {
+                for( int x = 0; x < aSize.Width(); x++ )
+                {
+                    BitmapColor aColor = pAccess->GetColor( y, x );
+                    aCol[0] = aColor.GetRed();
+                    aCol[1] = aColor.GetGreen();
+                    aCol[2] = aColor.GetBlue();
+                    CHECK_RETURN( writeBuffer( aCol, 3 ) );
+                }
+            }
     }
     endCompression();
     disableStreamEncryption();
@@ -9539,17 +9585,76 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
     aLine.setLength( 0 );
     aLine.append( rObject.m_nObject );
-    aLine.append( " 0 obj\n"
-                  "<</ShadingType 1\n"
-                  "/ColorSpace/DeviceRGB\n"
-                  "/AntiAlias true\n"
-                  "/Domain[ 0 1 0 1 ]\n"
-                  "/Matrix[ " );
-    aLine.append( (sal_Int32)aSize.Width() );
-    aLine.append( " 0 0 " );
-    aLine.append( (sal_Int32)aSize.Height() );
-    aLine.append( " 0 0 ]\n"
-                  "/Function " );
+    aLine.append( " 0 obj\n");
+    switch (rObject.m_aGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+        case GradientStyle::GradientStyle_AXIAL:
+            aLine.append("<</ShadingType 2\n");
+            break;
+        default:
+            aLine.append("<</ShadingType 1\n");
+    }
+    aLine.append("/ColorSpace/DeviceRGB\n"
+                  "/AntiAlias true\n");
+
+    // Determination of shading axis
+    // See: OutputDevice::ImplDrawLinearGradient for reference
+    Rectangle aRect;
+    aRect.Left() = aRect.Top() = 0;
+    aRect.Right() = aSize.Width();
+    aRect.Bottom() = aSize.Height();
+
+    Rectangle aBoundRect;
+    Point     aCenter;
+    sal_uInt16    nAngle = rObject.m_aGradient.GetAngle() % 3600;
+    rObject.m_aGradient.GetBoundRect( aRect, aBoundRect, aCenter );
+
+    const bool bLinear = (rObject.m_aGradient.GetStyle() == GradientStyle_LINEAR);
+    double fBorder = aBoundRect.GetHeight() * rObject.m_aGradient.GetBorder() / 100.0;
+    if ( !bLinear )
+    {
+        fBorder /= 2.0;
+    }
+
+    aBoundRect.Bottom() -= fBorder;
+    if (!bLinear)
+    {
+        aBoundRect.Top() += fBorder;
+    }
+
+    switch (rObject.m_aGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+        case GradientStyle::GradientStyle_AXIAL:
+        {
+            aLine.append("/Domain[ 0 1 ]\n"
+                    "/Coords[ " );
+            Polygon     aPoly( 2 );
+            aPoly[0] = aBoundRect.BottomCenter();
+            aPoly[1] = aBoundRect.TopCenter();
+            aPoly.Rotate( aCenter, 3600 - nAngle );
+
+            aLine.append( (sal_Int32) aPoly[0].X() );
+            aLine.append( " " );
+            aLine.append( (sal_Int32) aPoly[0].Y() );
+            aLine.append( " " );
+            aLine.append( (sal_Int32) aPoly[1].X());
+            aLine.append( " ");
+            aLine.append( (sal_Int32) aPoly[1].Y());
+            aLine.append( " ]\n");
+            aLine.append("/Extend [true true]\n");
+            break;
+        }
+        default:
+            aLine.append("/Domain[ 0 1 0 1 ]\n"
+                    "/Matrix[ " );
+            aLine.append( (sal_Int32)aSize.Width() );
+            aLine.append( " 0 0 " );
+            aLine.append( (sal_Int32)aSize.Height() );
+            aLine.append( " 0 0 ]\n");
+    }
+    aLine.append("/Function " );
     aLine.append( nFunctionObject );
     aLine.append( " 0 R\n"
                   ">>\n"

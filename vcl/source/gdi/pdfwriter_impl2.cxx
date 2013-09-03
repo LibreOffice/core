@@ -41,13 +41,13 @@
 
 #include <rtl/digest.h>
 
-#undef USE_PDFGRADIENTS
-
 using namespace vcl;
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
 // -----------------------------------------------------------------------------
 
@@ -360,23 +360,28 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_GRADIENT_ACTION ):
                 {
                     const MetaGradientAction* pA = (const MetaGradientAction*) pAction;
-                    #ifdef USE_PDFGRADIENTS
-                    m_rOuterFace.DrawGradient( pA->GetRect(), pA->GetGradient() );
-                    #else
-                    const PolyPolygon         aPolyPoly( pA->GetRect() );
-                    implWriteGradient( aPolyPoly, pA->GetGradient(), pDummyVDev, i_rContext );
-                    #endif
+                    const Gradient& rGradient = pA->GetGradient();
+                    if (lcl_canUsePDFAxialShading(rGradient))
+                    {
+                        m_rOuterFace.DrawGradient( pA->GetRect(), rGradient );
+                    }
+                    else
+                    {
+                        const PolyPolygon aPolyPoly( pA->GetRect() );
+                        implWriteGradient( aPolyPoly, rGradient, pDummyVDev, i_rContext );
+                    }
                 }
                 break;
 
                 case( META_GRADIENTEX_ACTION ):
                 {
                     const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
-                    #ifdef USE_PDFGRADIENTS
-                    m_rOuterFace.DrawGradient( pA->GetPolyPolygon(), pA->GetGradient() );
-                    #else
-                    implWriteGradient( pA->GetPolyPolygon(), pA->GetGradient(), pDummyVDev, i_rContext );
-                    #endif
+                    const Gradient& rGradient = pA->GetGradient();
+
+                    if (lcl_canUsePDFAxialShading(rGradient))
+                        m_rOuterFace.DrawGradient( pA->GetPolyPolygon(), rGradient );
+                    else
+                        implWriteGradient( pA->GetPolyPolygon(), rGradient, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -535,11 +540,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                         if( pGradAction )
                         {
-                            #ifdef USE_PDFGRADIENTS
-                            m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
-                            #else
-                            implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );
-                            #endif
+                            if (lcl_canUsePDFAxialShading(pGradAction->GetGradient()))
+                            {
+                                m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
+                            }
+                            else
+                            {
+                                implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );
+                            }
                         }
                     }
                     else
@@ -2037,5 +2045,23 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
 
     rtl_freeMemory( pFirstRefLine );
 }
+
+static bool lcl_canUsePDFAxialShading(const Gradient& rGradient) {
+    switch (rGradient.GetStyle())
+    {
+        case GradientStyle::GradientStyle_LINEAR:
+        case GradientStyle::GradientStyle_AXIAL:
+            break;
+        default:
+            return false;
+    }
+
+    // TODO: handle step count
+    if (rGradient.GetSteps() > 0)
+        return false;
+
+    return true;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
