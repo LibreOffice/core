@@ -58,12 +58,12 @@ public:
     void            RemoveEntry         ( sal_uInt16 nPos );
 
     void            SelectEntryPos      ( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
-    sal_uInt16          GetSelectEntryPos   () const;
+    sal_uInt16      GetSelectEntryPos   () const;
 
-    String          GetText             ( sal_uInt16 nPos ) const;
-    sal_uInt16          GetCheckedEntryCount() const;
+    OUString        GetText             ( sal_uInt16 nPos ) const;
+    sal_uInt16      GetCheckedEntryCount() const;
     void            CheckEntryPos       ( sal_uInt16 nPos, sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked           ( sal_uInt16 nPos ) const;
+    sal_Bool        IsChecked           ( sal_uInt16 nPos ) const;
     void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
 
     void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );

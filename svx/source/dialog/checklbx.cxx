@@ -122,13 +122,13 @@ sal_uInt16 SvxCheckListBox::GetSelectEntryPos() const
 
 // -----------------------------------------------------------------------
 
-String SvxCheckListBox::GetText( sal_uInt16 nPos ) const
+OUString SvxCheckListBox::GetText( sal_uInt16 nPos ) const
 {
     SvTreeListEntry* pEntry = GetEntry( nPos );
 
     if ( pEntry )
         return GetEntryText( pEntry );
-    return String();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
