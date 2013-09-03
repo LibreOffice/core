@@ -46,7 +46,7 @@
     
     [self setTitle:NSLocalizedString(@"How-to", nil)];
     
-    
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)didReceiveMemoryWarning
