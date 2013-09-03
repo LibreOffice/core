@@ -595,8 +595,6 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nT
  */
 inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nTag, sal_uInt32 nSize )
 :   _pStream( pStream ),
-    // _nTag( uninitialized ),
-    // _nStarPos( uninitialized ),
     _bHeaderOk(true)
 {
     DBG_ASSERT( nTag != 0 && nTag != 0xFF, "invalid Tag" );
@@ -699,8 +697,6 @@ inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
         SfxMiniRecordWriter::Close( bSeekToEndOfRec );
 #endif
 
-    // Record war bereits geschlossen
-//  nRet = 0;
     return nRet;
 }
 
