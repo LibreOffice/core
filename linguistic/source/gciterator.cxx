@@ -1022,7 +1022,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
                 {
                     // only the first entry is used, there should be only one grammar checker per language
                     const OUString aImplName( aImplNames[0] );
-                    const LanguageType nLang = LanguageTag::convertToLanguageType( pElementNames[i] );
+                    const LanguageType nLang = LanguageTag::convertToLanguageTypeWithFallback( pElementNames[i] );
                     aTmpGCImplNamesByLang[ nLang ] = aImplName;
                 }
             }
