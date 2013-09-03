@@ -53,7 +53,7 @@ namespace {
         int nInd = 0;
         while( nInd < nLen )
         {
-            char nSign = ( nValue / ( 1 << ( ( nLen - nInd ) * 4 ) ) ) % 16;
+            char nSign = ( nValue / ( 1 << ( ( nLen - nInd - 1 ) * 4 ) ) ) % 16;
             if ( nSign >= 0 && nSign <= 9 )
                 pBuf[nInd] = nSign + '0';
             else if ( nSign >= 10 && nSign <= 15 )
