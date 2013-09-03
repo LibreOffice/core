@@ -58,7 +58,7 @@ SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* 
 class SVX_DLLPUBLIC SdrEngineDefaults
 {
 friend class SdrAttrObj;
-    String     aFontName;
+    OUString   aFontName;
     FontFamily eFontFamily;
     Color      aFontColor;
     sal_uIntPtr      nFontHeight;
@@ -71,8 +71,8 @@ private:
 public:
     SdrEngineDefaults();
     // Default Fontname ist "Times New Roman"
-    static void       SetFontName(const String& rFontName) { GetDefaults().aFontName=rFontName; }
-    static String     GetFontName()                        { return GetDefaults().aFontName; }
+    static void       SetFontName(const OUString& rFontName) { GetDefaults().aFontName=rFontName; }
+    static OUString   GetFontName()                        { return GetDefaults().aFontName; }
     // Default FontFamily ist FAMILY_ROMAN
     static void       SetFontFamily(FontFamily eFam)       { GetDefaults().eFontFamily=eFam; }
     static FontFamily GetFontFamily()                      { return GetDefaults().eFontFamily; }
