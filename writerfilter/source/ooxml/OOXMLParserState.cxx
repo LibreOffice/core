@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "OOXMLParserState.hxx"
-#include "ooxmlLoggers.hxx"
+#include "ooxml/ooxmlLoggers.hxx"
 
 namespace writerfilter {
 namespace ooxml
