@@ -104,6 +104,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
+		$(gb_LTOFLAGS) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(dir $(3)) \
 		$(6) \
