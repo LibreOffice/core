@@ -874,6 +874,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
                     case LANGUAGE_USER_INTERLINGUA:
                     case LANGUAGE_USER_LOJBAN:
                     case LANGUAGE_KASHMIRI:
+                    case LANGUAGE_USER_KEYID:
                         return pEntry->getLocale();
                     default:
                         ;   // nothing
