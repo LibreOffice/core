@@ -45,10 +45,14 @@ namespace
         if ( ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"Software\\VideoLAN\\VLC",
                              0, KEY_READ, &hKey ) == ERROR_SUCCESS )
         {
-            if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS )
+            if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
+                 dwType == REG_SZ )
             {
                 ::RegCloseKey( hKey );
-                return OUString( arCurrent, wcslen(arCurrent) ) + "/";
+                // The value might be 0-terminated or not
+                if (arCurrent[dwCurrentSize/2] == 0)
+                    dwCurrentSize -= 2;
+                return OUString( arCurrent, dwCurrentSize ) + "/";
             }
 
             ::RegCloseKey( hKey );
