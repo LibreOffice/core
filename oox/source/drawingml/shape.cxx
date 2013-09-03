@@ -37,6 +37,7 @@
 #include "oox/helper/propertyset.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
+#include <editeng/unoprnms.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -83,6 +84,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mbHidden( false )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
+, maDiagramDoms( 0 )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -118,6 +120,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
+, maDiagramDoms( pSourceShape->maDiagramDoms )
 {}
 
 
@@ -571,7 +574,8 @@ Reference< XShape > Shape::createAndInsert(
             if( aShapeProps.hasProperty( PROP_TextAutoGrowHeight ) )
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
-        // do not set properties at a group shape (this causes assertions from svx)
+        // do not set properties at a group shape (this causes
+        // assertions from svx) ...
         if( aServiceName != "com.sun.star.drawing.GroupShape" )
         {
             PropertySet( xSet ).setProperties( aShapeProps );
@@ -581,6 +585,27 @@ Reference< XShape > Shape::createAndInsert(
                 mxShape->setPosition(awt::Point(aShapeRectHmm.X, aShapeRectHmm.Y));
                 mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             }
+        }
+
+        // ... but for the InteropGrabBag property
+        const OUString& aGrabBagPropName = OUString::createFromAscii(UNO_NAME_MISC_OBJ_INTEROPGRABBAG);
+        if( maDiagramDoms.hasElements() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
+        {
+            Sequence<PropertyValue> aGrabBag;
+            xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+
+            // we keep the previous items, if present
+            if (aGrabBag.hasElements())
+            {
+                sal_Int32 length = aGrabBag.getLength();
+                aGrabBag.realloc(length+maDiagramDoms.getLength());
+
+                for(sal_Int32 i = 0; i < maDiagramDoms.getLength(); ++i)
+                    aGrabBag[length+i] = maDiagramDoms[i];
+
+                xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
+            } else
+                xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
         }
 
         if( bIsCustomShape )
