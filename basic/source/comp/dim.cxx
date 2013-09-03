@@ -1349,7 +1349,7 @@ bool SbiParser::IsUnoInterface(const OUString& sTypeName)
         }
         return false;
     }
-    catch(const Exception& ex)
+    catch(const Exception&)
     {
         OSL_FAIL("Could not create reflection.CoreReflection.");
     }
