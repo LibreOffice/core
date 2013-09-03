@@ -43,7 +43,7 @@ public:
     void                CopyBackground( const DialControlBmp& rSrc );
     void                DrawBackground( const Size& rSize, bool bEnabled );
     virtual void        DrawBackground();
-    virtual void        DrawElements( const String& rText, sal_Int32 nAngle );
+    virtual void        DrawElements( const OUString& rText, sal_Int32 nAngle );
 
 protected:
     Rectangle           maRect;

@@ -70,7 +70,7 @@ void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
     DrawBackground();
 }
 
-void DialControlBmp::DrawElements( const String& rText, sal_Int32 nAngle )
+void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
 {
     double fAngle = nAngle * F_PI180 / 100.0;
     double fSin = sin( fAngle );
@@ -78,7 +78,7 @@ void DialControlBmp::DrawElements( const String& rText, sal_Int32 nAngle )
     double fWidth = GetTextWidth( rText ) / 2.0;
     double fHeight = GetTextHeight() / 2.0;
 
-    if ( rText.Len() > 0 )
+    if ( !rText.isEmpty() )
     {
         // rotated text
         Font aFont( GetFont() );
