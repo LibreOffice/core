@@ -102,7 +102,7 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 // ------------------------
 
 sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             String& rFilterName, sal_Bool bShowProgress )
+                             OUString& rFilterName, sal_Bool bShowProgress )
 {
     sal_uInt16      nRet = SGA_IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
@@ -217,23 +217,23 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
 // - GetReducedString -
 // --------------------
 
-String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
+OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 {
-    String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    OUString aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    aReduced = aReduced.GetToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
+    aReduced = aReduced.getToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
 
     if( INET_PROT_PRIV_SOFFICE != rURL.GetProtocol() )
     {
         sal_Unicode     aDelimiter;
-           const String    aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
-        const String    aName( aReduced );
+        const OUString  aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
+        const OUString  aName( aReduced );
 
-        if( aPath.Len() > nMaxLen )
+        if( aPath.getLength() > nMaxLen )
         {
-            aReduced = aPath.Copy( 0, (sal_uInt16)( nMaxLen - aName.Len() - 4 ) );
-            aReduced += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-            aReduced += aDelimiter;
+            aReduced = aPath.copy( 0, nMaxLen - aName.getLength() - 4 );
+            aReduced += "...";
+            aReduced += OUString(aDelimiter);
             aReduced += aName;
         }
         else

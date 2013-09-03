@@ -328,7 +328,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
     {
         String aName( mpExchangeData->pTheme->GetName() );
 
-        if( mpExchangeData->aEditedTitle.Len() && aName != mpExchangeData->aEditedTitle )
+        if( !mpExchangeData->aEditedTitle.isEmpty() && aName != mpExchangeData->aEditedTitle )
         {
             const String    aOldName( aName );
             String          aTitle( mpExchangeData->aEditedTitle );

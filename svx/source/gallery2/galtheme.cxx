@@ -555,7 +555,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
     if( !IsReadOnly() )
     {
         Graphic         aGraphic;
-        String          aFormat;
+        OUString        aFormat;
         GalleryObject*  pEntry;
         const size_t    nCount = aObjectList.size();
 
@@ -835,7 +835,7 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
             case( SGA_OBJ_ANIM ):
             case( SGA_OBJ_INET ):
             {
-                String aFilterDummy;
+                OUString aFilterDummy;
                 bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != SGA_IMPORT_NONE );
             }
             break;
@@ -1158,7 +1158,7 @@ sal_Bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool )
 sal_Bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos )
 {
     Graphic         aGraphic;
-    String          aFormat;
+    OUString        aFormat;
     SgaObject*      pNewObj = NULL;
     const sal_uInt16    nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
     sal_Bool            bRet = sal_False;

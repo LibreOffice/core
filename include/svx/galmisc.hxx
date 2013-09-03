@@ -37,7 +37,7 @@ class GalleryTheme;
 struct ExchangeData
 {
     GalleryTheme*   pTheme;
-    String          aEditedTitle;
+    OUString        aEditedTitle;
     Date            aThemeChangeDate;
     Time            aThemeChangeTime;
 
@@ -78,7 +78,6 @@ enum SgaObjKind
 #define GALLERY_DLG_COLOR       Application::GetSettings().GetStyleSettings().GetDialogColor()
 
 class ResMgr;
-class String;
 class SvStream;
 class Graphic;
 class FmFormModel;
@@ -86,10 +85,10 @@ class ImageMap;
 class Gallery;
 
 SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
-sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, sal_Bool bShowProgress = sal_False );
+sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, sal_Bool bShowProgress = sal_False );
 sal_Bool            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 sal_Bool            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen );
+SVX_DLLPUBLIC OUString            GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen );
 String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
 sal_Bool            FileExists( const INetURLObject& rURL );
@@ -205,10 +204,10 @@ private:
 
 public:
 
-                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, const String& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
 
     sal_uIntPtr          GetType() const { return mnType; }
