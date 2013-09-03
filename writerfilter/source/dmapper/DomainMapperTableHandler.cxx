@@ -823,7 +823,20 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     {
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
-        bool bFloating = aFrameProperties.hasElements();
+
+        bool bNoFly = false;
+        if (SectionPropertyMap* pSectionContext = m_rDMapper_Impl.GetSectionContext())
+        {
+            sal_Int32 nTextAreaWidth = pSectionContext->GetPageWidth() - pSectionContext->GetLeftMargin() - pSectionContext->GetRightMargin();
+            sal_Int32 nTableWidth = 0;
+            m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
+            // If the table is wider than the text area, then don't create a fly
+            // for the table: no wrapping will be performed anyway, but multi-page
+            // tables will be broken.
+            bNoFly = nTableWidth >= nTextAreaWidth;
+        }
+
+        bool bFloating = aFrameProperties.hasElements() && !bNoFly;
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
         {

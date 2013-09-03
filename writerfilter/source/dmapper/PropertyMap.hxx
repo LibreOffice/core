@@ -241,11 +241,14 @@ public:
     void SetFirstPaperBin( sal_Int32 nSet );
 
     void SetLeftMargin(    sal_Int32 nSet ) { m_nLeftMargin = nSet; }
+    sal_Int32 GetLeftMargin() { return m_nLeftMargin; }
     void SetRightMargin( sal_Int32 nSet ) { m_nRightMargin = nSet; }
+    sal_Int32 GetRightMargin() { return m_nRightMargin; }
     void SetTopMargin(    sal_Int32 nSet ) { m_nTopMargin = nSet; }
     void SetBottomMargin( sal_Int32 nSet ) { m_nBottomMargin = nSet; }
     void SetHeaderTop(    sal_Int32 nSet ) { m_nHeaderTop = nSet; }
     void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
+    sal_Int32 GetPageWidth();
 
     void SetGutterRTL( bool bSet ) { m_bGutterRTL = bSet;}
     void SetDzaGutter( sal_Int32 nSet ) {m_nDzaGutter = nSet; }
