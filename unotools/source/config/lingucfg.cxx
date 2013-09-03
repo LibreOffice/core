@@ -82,7 +82,7 @@ static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
-    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag::convertToLanguageType( aTmp );
+    return (aTmp.isEmpty()) ? LANGUAGE_SYSTEM : LanguageTag::convertToLanguageTypeWithFallback( aTmp );
 }
 
 SvtLinguOptions::SvtLinguOptions()
