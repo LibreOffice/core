@@ -45,8 +45,8 @@ private:
     CancelButton    aEscBtn;
     HelpButton      aHelpBtn;
 
-    String          aOldPasswdErrStr;
-    String          aRepeatPasswdErrStr;
+    OUString        aOldPasswdErrStr;
+    OUString        aRepeatPasswdErrStr;
 
     Link            aCheckPasswordHdl;
 
@@ -59,8 +59,8 @@ public:
                     SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords = sal_False, sal_Bool bDisableOldPassword = sal_False );
                     ~SvxPasswordDialog();
 
-    String          GetOldPassword() const { return aOldPasswdED.GetText(); }
-    String          GetNewPassword() const { return aNewPasswdED.GetText(); }
+    OUString        GetOldPassword() const { return aOldPasswdED.GetText(); }
+    OUString        GetNewPassword() const { return aNewPasswdED.GetText(); }
 
     void            SetCheckPasswordHdl( const Link& rLink ) { aCheckPasswordHdl = rLink; }
 };
