@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -100,6 +99,8 @@ TempFile::~TempFile() {
                 "osl::File::remove(" << url << ") failed with " << +e);
         }
     }
+}
+
 }
 
 void writeData(oslFileHandle handle, char const * begin, sal_Int32 length) {
@@ -510,8 +511,6 @@ void writeModifications(
                 node->getMember(i->first), i->second);
         }
     }
-}
-
 }
 
 void writeModFile(

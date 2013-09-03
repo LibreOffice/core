@@ -66,6 +66,9 @@
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
 #include "xcsparser.hxx"
+#ifdef WNT
+#include "winreg.hxx"
+#endif
 
 namespace configmgr {
 
@@ -541,7 +544,25 @@ Components::Components(
             }
             modificationFileUrl_ = url;
             parseModificationLayer(url);
-        } else {
+        }
+#ifdef WNT
+        else if ( type == "winreg" )
+        {
+            if (!url.isEmpty()) {
+                SAL_WARN(
+                    "configmgr",
+                    "winreg URL is not empty, URL handling is not implemented for winreg");
+            }
+            OUString aTempFileURL;
+            if ( dumpWindowsRegistry(&aTempFileURL) )
+            {
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, data_, 0, 0, 0);
+                layer++;
+                osl::File::remove(aTempFileURL);
+            }
+        }
+#endif
+        else {
             throw css::uno::RuntimeException(
                 "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"",
                 css::uno::Reference< css::uno::XInterface >());
