@@ -579,7 +579,7 @@ SbError getProcData(HMODULE handle, OUString const & name, ProcData * proc)
         }
         FARPROC p = GetProcAddress(handle, reinterpret_cast< LPCSTR >(n));
         if (p != 0) {
-            proc->name = OString("#") + OString::valueOf(n);
+            proc->name = OString("#") + OString::number(n);
             proc->proc = p;
             return ERRCODE_NONE;
         }
