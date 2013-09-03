@@ -167,7 +167,10 @@ namespace
         if (pEnvData == NULL)
             return -1;
 
-#if defined WNT
+#if defined MACOSX
+        // Explicit converts from NSView* to int
+        const int id = reinterpret_cast<int>( pEnvData->pView );
+#elif defined WNT
         // Explicit converts from HWND to int
         const int id = reinterpret_cast<int>( pEnvData->hWnd );
 #else
