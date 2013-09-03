@@ -123,7 +123,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
-ifneq (,$(filter IOS MACOSX,$(OS)))
+ifeq ($(OS),IOS)
 $(eval $(call gb_Library_add_cxxflags,sal,\
     $(gb_OBJCXXFLAGS) \
 ))
@@ -162,7 +162,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
-	sal/osl/unx/uunxapi \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/mutex \
@@ -182,6 +181,17 @@ $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
 	$(if $(filter $(ENABLE_CRASHDUMP),YES)$(filter $(ENABLE_DBGUTIL),TRUE), \
 		-DSAL_ENABLE_CRASH_REPORT) \
 ))
+
+# Note that the uunxapi.mm file just includes the uunxapi.cxx one
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_objcxxobjects,sal,\
+	sal/osl/unx/uunxapi \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sal,\
+	sal/osl/unx/uunxapi \
+))
+endif
 
 ifneq ($(filter $(OS),MACOSX IOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
