@@ -525,40 +525,35 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
 
 }
 
-static void lcl_StripFields(String &rString, long &rNewStartCp)
+static void lcl_StripFields(OUString &rString, long &rNewStartCp)
 {
-    for(sal_uInt16 i=0; i < rString.Len(); i++)
+    sal_Int32 nStartPos = 0;
+    for (;;)
     {
-        if( 0x13 == rString.GetChar( i ) )
+        nStartPos = rString.indexOf(0x13, nStartPos);
+        if (nStartPos<0)
+            return;
+
+        const sal_Unicode cStops[] = {0x14, 0x15, 0};
+        const sal_Int32 nStopPos = comphelper::string::indexOfAny(rString, cStops, nStartPos);
+        if (nStopPos<0)
         {
-            do
-            {
-                rString.Erase( i, 1 );
-                rNewStartCp++;
-            }
-            while(              rString.Len()
-                    && (   i  < rString.Len())
-                    && (0x14 != rString.GetChar( i ) )
-                    && (0x15 != rString.GetChar( i ) ) );
-            if( rString.Len() )
-            {
-                if( 0x14 == rString.GetChar( i ) )
-                {
-                    rString.Erase( i, 1 );
-                    rNewStartCp++;
-                    do
-                    {
-                        i++;
-                    }
-                    while(              rString.Len()
-                            && (   i  < rString.Len())
-                            && (0x15 != rString.GetChar( i ) ) );
-                    if( i < rString.Len() )
-                        rString.Erase( i, 1 );
-                }
-                else if( 0x15 == rString.GetChar( i ) )
-                    rString.Erase( i, 1 );
-            }
+            rNewStartCp += rString.getLength()-nStartPos;
+            rString = rString.copy(0, nStartPos);
+            return;
+        }
+
+        const bool was0x14 = rString[nStopPos]==0x14;
+        rString = rString.replaceAt(nStartPos, nStopPos+1-nStartPos, "");
+        rNewStartCp += nStopPos-nStartPos;
+
+        if (was0x14)
+        {
+            ++rNewStartCp;
+            nStartPos = rString.indexOf(0x15, nStartPos);
+            if (nStartPos<0)
+                return;
+            rString = rString.replaceAt(nStartPos, 1, "");
         }
     }
 }
@@ -586,7 +581,7 @@ public:
     long GetStartPos() const {return mnStartPos;}
     long GetEndPos() const {return mnEndPos;}
     const String &GetURL() const {return msURL;}
-    void Adjust(xub_StrLen nAdjust)
+    void Adjust(sal_Int32 nAdjust)
     {
         mnStartPos-=nAdjust;
         mnEndPos-=nAdjust;
@@ -767,12 +762,12 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     {
         ESelection aSel(GetESelection(aIter->GetStartPos()-nStartCp,
             aIter->GetEndPos()-nStartCp));
-        String aString(mpDrawEditEngine->GetText(aSel));
-        xub_StrLen nOrigLen = aString.Len();
+        OUString aString(mpDrawEditEngine->GetText(aSel));
+        const sal_Int32 nOrigLen = aString.getLength();
         long nDummy(0);
         lcl_StripFields(aString, nDummy);
 
-        xub_StrLen nChanged;
+        sal_Int32 nChanged;
         if (aIter->GetURL().Len())
         {
             SvxURLField aURL(aIter->GetURL(), aString,
@@ -783,7 +778,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
         else
         {
             mpDrawEditEngine->QuickInsertText(aString, aSel);
-            nChanged = nOrigLen - aString.Len();
+            nChanged = nOrigLen - aString.getLength();
         }
         for (myIter aIter2 = aIter+1; aIter2 != aEnd; ++aIter2)
             aIter2->Adjust(nChanged);
@@ -894,33 +889,32 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
 // TxbxText() holt aus WW-File den Text und gibt diesen und den Anfangs- und
 // den um -2 (bzw. -1 bei Ver8) korrigierten End-Cp zurueck
-bool SwWW8ImplReader::GetRangeAsDrawingString(String& rString, long nStartCp, long nEndCp, ManTypes eType)
+bool SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
     WW8_CP nOffset = pWwFib->GetBaseCp(eType);
 
-    bool bOk = false;
     OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
-        rString.Erase();      // leerer String: durchaus denkbar!
+        rString = OUString();      // leerer String: durchaus denkbar!
     else if (nStartCp < nEndCp)
     {
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
-        sal_uInt16 nLen = pSBase->WW8ReadString(*pStrm, rString,
+        const sal_Int32 nLen = pSBase->WW8ReadString(*pStrm, rString,
             nStartCp + nOffset, nEndCp - nStartCp, GetCurrentCharSet());
         OSL_ENSURE(nLen, "+Wo ist der Grafik-Text (8) ?");
-        if (nLen)
+        if (nLen>0)
         {
-            bOk = true;
-            if( 0x0d == rString.GetChar(nLen - 1) )
-                rString.Erase(nLen - 1);
+            if( rString[nLen-1]==0x0d )
+                rString = rString.copy(0, nLen-1);
 
-            rString.SearchAndReplaceAll( 0xb, 0xa );
+            rString = rString.replace( 0xb, 0xa );
+            return true;
         }
     }
-    return bOk;
+    return false;
 }
 
-OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
+OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
 {
     OutlinerParaObject* pRet = 0;
 
@@ -951,14 +945,12 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         //Strip out fields, leaving the result
         long nDummy(0);
         lcl_StripFields(rString, nDummy);
-        OUString aString(rString);
         //Strip out word's special characters for the simple string
-        aString = comphelper::string::remove(aString, 0x1);
-        aString = comphelper::string::remove(aString, 0x5);
-        aString = comphelper::string::remove(aString, 0x8);
-        aString = aString.replaceAll(OUString("\007\007"), OUString("\007\012"));
-        aString = aString.replace(0x7, ' ');
-        rString = aString;
+        rString = rString.replaceAll(OUString(0x1), "");
+        rString = rString.replaceAll(OUString(0x5), "");
+        rString = rString.replaceAll(OUString(0x8), "");
+        rString = rString.replaceAll("\007\007", "\007\012");
+        rString = rString.replace(0x7, ' ');
     }
 
     return pRet;
@@ -979,7 +971,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
     rbEraseTextObj = false;
 
-    String aString;
+    OUString aString;
     WW8_CP nStartCp, nEndCp;
     bool bContainsGraphics = false;
     bool bTextWasRead = GetTxbxTextSttEndCp( nStartCp, nEndCp, nTxBxS,
@@ -990,24 +982,20 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     if( pObjSiz )
         mpDrawEditEngine->SetPaperSize( *pObjSiz );
 
-    String aOrigString(aString);
+    const OUString aOrigString(aString);
     if( bTextWasRead )
     {
         long nNewStartCp = nStartCp;
         lcl_StripFields(aString, nNewStartCp);
 
-        if (1 != aString.Len())
+        if (aString.getLength()!=1)
         {
-            if ( (STRING_NOTFOUND != aString.Search(0x1)) ||
-                (STRING_NOTFOUND != aString.Search(0x8)) )
-            {
-                bContainsGraphics = true;
-            }
+            bContainsGraphics = aString.indexOf(0x1)<0 || aString.indexOf(0x8)<0;
         }
         else        // May be a single graphic or object
         {
             bool bDone = true;
-            switch( aString.GetChar(0) )
+            switch( aString[0] )
             {
                 case 0x1:
                     if (!pbTestTxbxContainsText)
@@ -1133,7 +1121,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         MapWrapIntoFlyFmt(pRecord, pFlyFmt);
                     }
                 }
-                aString.Erase();
+                aString = OUString();
                 rbEraseTextObj = (0 != pFlyFmt);
             }
         }

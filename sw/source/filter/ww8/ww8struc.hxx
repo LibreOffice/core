@@ -22,6 +22,7 @@
 
 #include <osl/endian.h>
 #include <tools/string.hxx>
+#include "rtl/ustring.hxx"
 #include <sal/config.h>
 
 #include <editeng/borderline.hxx>

@@ -1902,11 +1902,11 @@ String read_uInt16_BeltAndBracesString(SvStream& rStrm)
     return aRet;
 }
 
-xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
+sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
     WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
     // Read in plain text, which can extend over several pieces
-    rStr.Erase();
+    rStr = OUString();
 
     long nTotalRead = 0;
     WW8_CP nBehindTextCp = nAktStartCp + nTotalLen;
@@ -1931,18 +1931,18 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
         if( nLen > USHRT_MAX - 1 )
             nLen = USHRT_MAX - 1;
 
-        if( bIsUnicode )
-            rStr.Append(String(read_uInt16s_ToOUString(rStrm, nLen)));
-        else
-            rStr.Append(String(read_uInt8s_ToOUString(rStrm, nLen, eEnc)));
+        rStr += bIsUnicode
+             ? read_uInt16s_ToOUString(rStrm, nLen)
+             : read_uInt8s_ToOUString(rStrm, nLen, eEnc);
+
         nTotalRead  += nLen;
         nAktStartCp += nLen;
-        if ( nTotalRead != rStr.Len() )
+        if ( nTotalRead != rStr.getLength() )
             break;
     }
     while( nTotalRead < nTotalLen );
 
-    return rStr.Len();
+    return rStr.getLength();
 }
 
 WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,

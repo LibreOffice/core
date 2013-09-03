@@ -1862,7 +1862,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     DateTime aDate = msfilter::util::DTTM2DateTime(nDateTime);
 
-    String sTxt;
+    OUString sTxt;
     OutlinerParaObject *pOutliner = ImportAsOutliner( sTxt, pRes->nCp2OrIdx,
         pRes->nCp2OrIdx + pRes->nMemLen, MAN_AND );
 
