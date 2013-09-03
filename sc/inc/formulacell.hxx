@@ -244,7 +244,6 @@ public:
     bool IsValueNoError();
     bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
-    double          GetValueAlways();   // ignore errors
     OUString   GetString();
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
@@ -309,7 +308,6 @@ public:
 
     void SetResultToken( const formula::FormulaToken* pToken );
 
-    double GetResultDouble() const;
     OUString GetResultString() const;
 
     void            SetErrCode( sal_uInt16 n );
@@ -342,7 +340,6 @@ public:
     void EndListeningTo( sc::EndListeningContext& rCxt );
 
     bool IsShared() const;
-    bool IsSharedInvariant() const;
     bool IsSharedTop() const;
     SCROW GetSharedTopRow() const;
     SCROW GetSharedLength() const;

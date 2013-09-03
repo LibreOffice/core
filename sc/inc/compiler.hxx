@@ -437,18 +437,6 @@ public:
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
-    /** If the character is allowed as first character in sheet names or
-        references, includes '$' and '?'. */
-    static bool IsCharWordChar(
-        String const & rStr, xub_StrLen nPos,
-        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
-
-    /** If the character is allowed in sheet names, thus may be part of a
-        reference, includes '$' and '?' and such. */
-    static bool IsWordChar(
-        String const & rStr, xub_StrLen nPos,
-        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
-
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
         in nFlags, all bits must match. If bTestLetterNumeric is false and

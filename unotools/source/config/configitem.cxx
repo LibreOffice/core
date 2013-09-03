@@ -1089,44 +1089,6 @@ sal_Bool ConfigItem::ReplaceSetProperties(
     return bRet;
 }
 
-sal_Bool ConfigItem::getUniqueSetElementName( const OUString& _rSetNode, OUString& _rName)
-{
-    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
-    sal_Bool bRet = sal_False;
-    if(xHierarchyAccess.is())
-    {
-        try
-        {
-            Reference< XNameAccess > xSetNode;
-            xHierarchyAccess->getByHierarchicalName(_rSetNode) >>= xSetNode;
-            if (xSetNode.is())
-            {
-                const sal_uInt32 nPrime = 65521;                            // a prime number
-                const sal_uInt32 nPrimeLess2 = nPrime - 2;
-                sal_uInt32 nEngendering     = (rand() % nPrimeLess2) + 2;   // the engendering of the field
-
-                // the element which will loop through the field
-                sal_uInt32 nFieldElement = nEngendering;
-
-                for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
-                {
-                    OUString sThisRoundTrial = _rName;
-                    sThisRoundTrial += OUString::number(nFieldElement);
-
-                    if (!xSetNode->hasByName(sThisRoundTrial))
-                    {
-                        _rName = sThisRoundTrial;
-                        bRet =  sal_True;
-                        break;
-                    }
-                }
-            }
-        }
-        CATCH_INFO("Exception from getUniqueSetElementName(): ")
-    }
-    return bRet;
-}
-
 sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);

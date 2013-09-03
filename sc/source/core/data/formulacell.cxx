@@ -1700,11 +1700,6 @@ void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
     aResult.SetToken(pToken);
 }
 
-double ScFormulaCell::GetResultDouble() const
-{
-    return aResult.GetDouble();
-}
-
 OUString ScFormulaCell::GetResultString() const
 {
     return aResult.GetString();
@@ -1867,13 +1862,6 @@ double ScFormulaCell::GetValue()
             !aResult.GetResultError())
         return aResult.GetDouble();
     return 0.0;
-}
-
-double ScFormulaCell::GetValueAlways()
-{
-    // for goal seek: return result value even if error code is set
-    MaybeInterpret();
-    return aResult.GetDouble();
 }
 
 OUString ScFormulaCell::GetString()
@@ -3847,11 +3835,6 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
 bool ScFormulaCell::IsShared() const
 {
     return mxGroup.get() != NULL;
-}
-
-bool ScFormulaCell::IsSharedInvariant() const
-{
-    return mxGroup ? mxGroup->mbInvariant : false;
 }
 
 bool ScFormulaCell::IsSharedTop() const

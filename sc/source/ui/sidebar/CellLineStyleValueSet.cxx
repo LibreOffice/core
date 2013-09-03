@@ -59,19 +59,9 @@ void CellLineStyleValueSet::SetSelItem(sal_uInt16 nSel)
     }
 }
 
-sal_uInt16 CellLineStyleValueSet::GetSelItem()
-{
-    return nSelItem;
-}
-
 void CellLineStyleValueSet::SetImage(Image img)
 {
     imgCus = img;
-}
-
-void CellLineStyleValueSet::SetCusEnable(bool bEnable)
-{
-    bCusEnable = bEnable;
 }
 
 void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )

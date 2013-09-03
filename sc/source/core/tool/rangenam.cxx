@@ -489,19 +489,9 @@ bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
     return true;
 }
 
-void ScRangeData::SetMaxRow(SCROW nRow)
-{
-    mnMaxRow = nRow;
-}
-
 SCROW ScRangeData::GetMaxRow() const
 {
     return mnMaxRow >= 0 ? mnMaxRow : MAXROW;
-}
-
-void ScRangeData::SetMaxCol(SCCOL nCol)
-{
-    mnMaxCol = nCol;
 }
 
 SCCOL ScRangeData::GetMaxCol() const

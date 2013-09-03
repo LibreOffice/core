@@ -4137,35 +4137,6 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
     }
 }
 
-bool ScCompiler::IsCharWordChar(
-    String const & rStr, xub_StrLen nPos, const formula::FormulaGrammar::AddressConvention eConv )
-{
-    sal_Unicode c = rStr.GetChar( nPos );
-    sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
-    if (c < 128)
-    {
-        return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD :
-            false;   // no convention => assume invalid
-    }
-    else
-        return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
-}
-
-bool ScCompiler::IsWordChar(
-    String const & rStr, xub_StrLen nPos,
-    const formula::FormulaGrammar::AddressConvention eConv )
-{
-    sal_Unicode c = rStr.GetChar( nPos );
-    sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
-    if (c < 128)
-    {
-        return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD :
-            false;   // convention not known => assume invalid
-    }
-    else
-        return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
-}
-
 bool ScCompiler::IsCharFlagAllConventions(
     String const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric )
 {
