@@ -467,6 +467,7 @@ void DomainMapperTableManager::startLevel( )
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
+    m_nMaxFixedWidth = 0;
 
     // And push it back to the right level.
     if (oCurrentWidth)
@@ -477,10 +478,20 @@ void DomainMapperTableManager::endLevel( )
 {
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
+
+    // Do the same trick as in startLevel(): pop the value that was pushed too early.
+    boost::optional<sal_Int32> oCurrentWidth;
+    if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
+        oCurrentWidth.reset(m_aCellWidths.back()->back());
     m_aCellWidths.pop_back( );
+    // And push it back to the right level.
+    if (oCurrentWidth)
+        m_aCellWidths.back()->push_back(*oCurrentWidth);
+
     m_nCell.pop_back( );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
+    m_nMaxFixedWidth = 0;
 
     m_aTmpPosition.pop_back( );
     m_aTmpTableProperties.pop_back( );
