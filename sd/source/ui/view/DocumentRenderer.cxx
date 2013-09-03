@@ -1507,15 +1507,15 @@ private:
 
             switch (mpOptions->GetOutputQuality())
             {
-                case 1:
+                case 1: // Grayscale
                     aInfo.mnDrawMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
                         | DRAWMODE_GRAYTEXT | DRAWMODE_GRAYBITMAP
                         | DRAWMODE_GRAYGRADIENT;
                     break;
 
-                case 2:
+                case 2: // Black & White
                     aInfo.mnDrawMode = DRAWMODE_BLACKLINE | DRAWMODE_WHITEFILL
-                        | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEBITMAP
+                        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
                         | DRAWMODE_WHITEGRADIENT;
                     break;
 
