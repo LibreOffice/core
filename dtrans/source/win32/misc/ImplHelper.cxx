@@ -94,11 +94,11 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
     // set an default value
     if ( LOCALE_IDEFAULTCODEPAGE == lctype )
     {
-        winCP = OUString::valueOf( static_cast<sal_Int32>(GetOEMCP( )), 10 );
+        winCP = OUString::number( static_cast<sal_Int32>(GetOEMCP( )) );
     }
     else if ( LOCALE_IDEFAULTANSICODEPAGE == lctype )
     {
-        winCP = OUString::valueOf( static_cast<sal_Int32>(GetACP( )), 10 );
+        winCP = OUString::number( static_cast<sal_Int32>(GetACP( )) );
     }
     else
         OSL_ASSERT( sal_False );
@@ -180,7 +180,7 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 {
     OSL_ASSERT( IsValidCodePage( codepage ) );
 
-    return OUString::valueOf( static_cast<sal_Int64>( codepage ), 10 );
+    return OUString::number( static_cast<sal_Int64>( codepage ) );
 }
 
 //-------------------------------------------------------------------------
