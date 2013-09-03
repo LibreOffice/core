@@ -1097,7 +1097,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         // Thus, delete character 0x01, which stands for such a graphic.
         if (aF.nId==51) //#i56768# only do it for the MACROBUTTON field, since DropListFields need the 0x01.
         {
-            aStr.replaceAll(OUString(0x01), "");
+            aStr = aStr.replaceAll(OUString(0x01), "");
         }
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
