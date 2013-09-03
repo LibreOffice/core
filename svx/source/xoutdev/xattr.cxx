@@ -220,7 +220,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     }
                     else
                     {
-                        sal_Int32 nThisIndex = pEntry->GetName().Copy( aUser.Len() ).ToInt32();
+                        sal_Int32 nThisIndex = pEntry->GetName().copy( aUser.Len() ).toInt32();
                         if( nThisIndex >= nUserIndex )
                             nUserIndex = nThisIndex + 1;
                     }

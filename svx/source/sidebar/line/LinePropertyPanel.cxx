@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
             const XDashEntry* pDashEntry = mxLineStyleList->GetDash(nPos - 2);
             OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
             const XLineDashItem aItemB(
-                pDashEntry ? pDashEntry->GetName() : String(),
+                pDashEntry ? pDashEntry->GetName() : OUString(),
                 pDashEntry ? pDashEntry->GetDash() : XDash());
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItemA, 0L);
