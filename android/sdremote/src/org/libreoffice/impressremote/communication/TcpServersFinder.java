@@ -124,11 +124,7 @@ class TcpServersFinder implements ServersFinder, Runnable {
 
         String aFoundServerHostname = aSearchResultScanner.nextLine();
 
-        Server aFoundServer = new Server(Server.Protocol.TCP,
-            aSearchResultPacket.getAddress().getHostAddress(),
-            aFoundServerHostname);
-
-        addServer(aFoundServer);
+        addServer(buildServer(aSearchResultPacket, aFoundServerHostname));
 
         callUpdatingServersList();
     }
@@ -154,6 +150,12 @@ class TcpServersFinder implements ServersFinder, Runnable {
 
     private void addServer(Server aServer) {
         mServers.put(aServer.getAddress(), aServer);
+    }
+
+    private Server buildServer(DatagramPacket aSearchResultPacket, String aServerHostname) {
+        String aServerAddress = aSearchResultPacket.getAddress().getHostAddress();
+
+        return Server.newTcpInstance(aServerAddress, aServerHostname);
     }
 
     private void callUpdatingServersList() {
