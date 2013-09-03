@@ -90,9 +90,9 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
-    String      sBullets;
+    OUString    sBullets;
     Timer       aFormatTimer;
-    sal_Bool        bGrfNotFound;
+    sal_Bool    bGrfNotFound;
 
     void init();
 
