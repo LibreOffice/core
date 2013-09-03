@@ -192,6 +192,19 @@ void PDFWriter::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
     pImplementation->drawHatch( rPolyPoly, rHatch );
 }
 
+void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient )
+{
+    pImplementation->drawGradient( rRect, rGradient );
+}
+
+void PDFWriter::DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+{
+    pImplementation->push(PUSH_CLIPREGION);
+    pImplementation->setClipRegion( rPolyPoly.getB2DPolyPolygon() );
+    pImplementation->drawGradient( rPolyPoly.GetBoundRect(), rGradient );
+    pImplementation->pop();
+}
+
 void PDFWriter::DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper )
 {
     pImplementation->drawWallpaper( rRect, rWallpaper );
