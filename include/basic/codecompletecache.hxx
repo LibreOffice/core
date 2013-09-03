@@ -37,7 +37,7 @@ typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > Cod
 class BASIC_DLLPUBLIC CodeCompleteOptions
 {
 /*
- * class to store basic code completition
+ * class to store basic code completion
  * options
  * */
 private:
@@ -75,7 +75,7 @@ class BASIC_DLLPUBLIC CodeCompleteDataCache
 {
 /*
  * cache to store data for
- * code completition
+ * code completion
  * */
 private:
     CodeCompleteVarScopes aVarScopes;

@@ -28,7 +28,7 @@
         </info>
         <prop oor:name="CodeComplete" oor:type="xs:boolean" oor:nillable="false">
             <info>
-                <desc>Sets the code completition on/off. Default is false.</desc>
+                <desc>Sets the code completion on/off. Default is false.</desc>
             </info>
             <value>false</value>
         </prop>

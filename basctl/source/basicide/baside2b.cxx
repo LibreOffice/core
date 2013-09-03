@@ -536,12 +536,12 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN && CodeCompleteOptions::IsProcedureAutoCompleteOn() )
     {//autoclose implementation
-       HandleProcedureCompletition();
+       HandleProcedureCompletion();
     }
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && CodeCompleteOptions::IsCodeCompleteOn() )
     {
-        HandleCodeCompletition();
+        HandleCodeCompletion();
     }
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
@@ -729,7 +729,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     }
 }
 
-void EditorWindow::HandleProcedureCompletition()
+void EditorWindow::HandleProcedureCompletion()
 {
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine = aSel.GetStart().GetPara();
@@ -809,7 +809,7 @@ void EditorWindow::HandleProcedureCompletition()
     }
 }
 
-void EditorWindow::HandleCodeCompletition()
+void EditorWindow::HandleCodeCompletion()
 {
     rModulWindow.UpdateModule();
     rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse(aCodeCompleteCache);

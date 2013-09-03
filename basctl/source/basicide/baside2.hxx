@@ -128,8 +128,8 @@ private:
     void HandleAutoCorrect();
     void HandleAutoCloseParen();
     void HandleAutoCloseDoubleQuotes();
-    void HandleCodeCompletition();
-    void HandleProcedureCompletition();
+    void HandleCodeCompletion();
+    void HandleProcedureCompletion();
     TextSelection GetLastHighlightPortionTextSelection();
 
 protected:
