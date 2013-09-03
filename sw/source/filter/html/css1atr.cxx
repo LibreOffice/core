@@ -3682,6 +3682,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
 /* RES_PARATR_OUTLINELEVEL */       0, // new since cws outlinelevel
 /* RES_PARATR_RSID */               0, // new
+/* RES_PARATR_GRABBAG */            0,
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new
