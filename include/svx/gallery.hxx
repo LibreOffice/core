@@ -55,35 +55,35 @@ public:
     static bool                 FillThemeList( std::vector<String>& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
-    static sal_Bool                 FillObjList( const String& rThemeName, std::vector<String> &rObjList );
+    static sal_Bool                 FillObjList( const OUString& rThemeName, std::vector<String> &rObjList );
     static sal_Bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList );
     static bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object
     static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList );
 
-    static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL );
-    static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL );
+    static sal_Bool                 InsertURL( const OUString& rThemeName, const OUString& rURL );
+    static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const OUString& rURL );
 
-    static sal_Bool                 GetGraphicObj( const String& rThemeName, sal_uIntPtr nPos,
+    static sal_Bool                 GetGraphicObj( const OUString& rThemeName, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
     static sal_Bool                 GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
                                                Graphic* pGraphic = NULL, BitmapEx* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
 
-    static sal_uIntPtr              GetSdrObjCount( const String& rThemeName );
+    static sal_uIntPtr              GetSdrObjCount( const OUString& rThemeName );
     static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
 
-    static sal_Bool                 GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
+    static sal_Bool                 GetSdrObj( const OUString& rThemeName, sal_uIntPtr nSdrModelPos,
                                            SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
     static sal_Bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
                                            SdrModel* pModel = NULL, BitmapEx* pThumb = NULL );
 
-    static sal_Bool                 BeginLocking( const String& rThemeName );
+    static sal_Bool                 BeginLocking( const OUString& rThemeName );
     static sal_Bool                 BeginLocking( sal_uIntPtr nThemeId );
 
-    static sal_Bool                 EndLocking( const String& rThemeName );
+    static sal_Bool                 EndLocking( const OUString& rThemeName );
     static sal_Bool                 EndLocking( sal_uIntPtr nThemeId );
 };
 
