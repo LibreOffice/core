@@ -77,7 +77,7 @@ public:
 class SmXMLExport : public SvXMLExport
 {
     const SmNode *  pTree;
-    String          aText;
+    OUString        aText;
     sal_Bool        bSuccess;
 
 protected:

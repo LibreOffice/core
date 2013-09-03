@@ -130,7 +130,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   sal_Bool bTemplate = sal_False ) const;
 
-    virtual sal_Bool        SetData( const String& rData );
+    virtual sal_Bool        SetData( const OUString& rData );
     virtual sal_uLong       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
@@ -179,7 +179,7 @@ public:
     SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
     void        SetPrinter( SfxPrinter * );
 
-    const String GetComment() const;
+    const OUString GetComment() const;
 
     // to replace chars that can not be saved with the document...
     sal_Bool    ReplaceBadChars();

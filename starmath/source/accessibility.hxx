@@ -203,7 +203,7 @@ public:
 
     virtual sal_Int32   GetParagraphCount() const;
     virtual sal_uInt16  GetTextLen( sal_Int32 nParagraph ) const;
-    virtual String      GetText( const ESelection& rSel ) const;
+    virtual OUString    GetText( const ESelection& rSel ) const;
     virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All ) const;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
@@ -213,7 +213,7 @@ public:
     virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
     virtual sal_uInt16      GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const;
 
-    virtual void        QuickInsertText( const String& rText, const ESelection& rSel );
+    virtual void        QuickInsertText( const OUString& rText, const ESelection& rSel );
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     virtual void        QuickInsertLineBreak( const ESelection& rSel );
@@ -240,7 +240,7 @@ public:
     virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const;
     virtual sal_uInt16          GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nLine ) const;
     virtual sal_Bool        Delete( const ESelection& );
-    virtual sal_Bool        InsertText( const String&, const ESelection& );
+    virtual sal_Bool        InsertText( const OUString&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False );
 
     virtual sal_Int16       GetDepth( sal_Int32 nPara ) const;
@@ -249,7 +249,7 @@ public:
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
-    virtual xub_StrLen  AppendTextPortion( sal_Int32 nPara, const String &rText, const SfxItemSet &rSet );
+    virtual sal_uInt16  AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet );
 
     virtual void        CopyText(const SvxTextForwarder& rSource);
 };

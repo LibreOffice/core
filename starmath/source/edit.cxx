@@ -653,7 +653,7 @@ void SmEditWindow::InitScrollBars()
 
 OUString SmEditWindow::GetText() const
 {
-    String aText;
+    OUString aText;
     EditEngine *pEditEngine = const_cast< SmEditWindow* >(this)->GetEditEngine();
     OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if (pEditEngine)

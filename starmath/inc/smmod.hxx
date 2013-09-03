@@ -98,13 +98,13 @@ public:
 
     const ResStringArray& GetUiSymbolNamesArray() const     { return aUiSymbolNamesAry; }
     const ResStringArray& GetExportSymbolNamesArray() const { return aExportSymbolNamesAry; }
-    const String          GetUiSymbolName( const String &rExportName ) const;
-    const String          GetExportSymbolName( const String &rUiName ) const;
+    const OUString        GetUiSymbolName( const OUString &rExportName ) const;
+    const OUString        GetExportSymbolName( const OUString &rUiName ) const;
 
     const ResStringArray& GetUiSymbolSetNamesArray() const     { return aUiSymbolSetNamesAry; }
     const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
-    const String          GetUiSymbolSetName( const String &rExportName ) const;
-    const String          GetExportSymbolSetName( const String &rUiName ) const;
+    const OUString        GetUiSymbolSetName( const OUString &rExportName ) const;
+    const OUString        GetExportSymbolSetName( const OUString &rUiName ) const;
 
     const ResStringArray* Get50NamesArray( LanguageType nLang );
     const ResStringArray* Get60NamesArray( LanguageType nLang );

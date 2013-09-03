@@ -150,7 +150,7 @@ private:
 
     EDITENG_DLLPRIVATE EditSelection InsertText(
         com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable >& rxDataObj,
-        const String& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
+        const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
 
     EDITENG_DLLPRIVATE EditPaM EndOfWord(
         const EditPaM& rPaM, sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
@@ -531,7 +531,7 @@ public:
         ContentNode* pLeft, ContentNode* pRight, bool bBackward = false);
 
     EditPaM InsertField(const EditSelection& rEditSelection, const SvxFieldItem& rFld);
-    EditPaM InsertText(const EditSelection& aCurEditSelection, const String& rStr);
+    EditPaM InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditSelection InsertText(const EditTextObject& rTextObject, const EditSelection& rSel);
     EditPaM InsertParaBreak(
         const EditSelection& rEditSelection, bool bKeepEndingAttribs = true);

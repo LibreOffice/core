@@ -80,10 +80,10 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     Reference< XInputStream > xStream;
     Reference< XContent > xContent;
     Reference< XInteractionHandler > xInteraction;
-    String aURL;
+    OUString aURL;
     OUString sTemp;
-    String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
     OUString aDocumentTitle; // interesting only if set in this method
 
@@ -114,7 +114,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
+        else if( aURL.isEmpty() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -160,14 +160,14 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     bWasReadOnly = pItem && pItem->GetValue();
 
-    String aFilterName;
-    String aPrefix = OUString( "private:factory/" );
-    if( aURL.Match( aPrefix ) == aPrefix.Len() )
+    OUString aFilterName;
+    OUString aPrefix( "private:factory/" );
+    if( aURL.startsWith( aPrefix ) )
     {
         const SfxFilter* pFilter = 0;
-        String aPattern( aPrefix );
-        aPattern += OUString("smath");
-        if ( aURL.Match( aPattern ) >= aPattern.Len() )
+        OUString aPattern( aPrefix );
+        aPattern += "smath";
+        if ( aURL.startsWith( aPattern ) )
         {
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
             aTypeName = pFilter->GetTypeName();
@@ -219,13 +219,13 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 }
                 else
                 {
-                    aFilterName.Erase();
+                    aFilterName = OUString();
 
                     try
                     {
-                        const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
-                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
-                                SfxFilterMatcher(OUString("smath")).GetFilter4EA( aTypeName ) : 0;
+                        const SfxFilter* pFilter = !aPreselectedFilterName.isEmpty() ?
+                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : !aTypeName.isEmpty() ?
+                                SfxFilterMatcher( "smath" ).GetFilter4EA( aTypeName ) : 0;
                         OUString aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
@@ -240,7 +240,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
-                        if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )
+                        if ( ( aWrap.TargetException >>= aZipException ) && !aTypeName.isEmpty() )
                         {
                             if ( xInteraction.is() )
                             {
@@ -267,7 +267,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                             }
 
                             if ( !bRepairAllowed )
-                                aTypeName.Erase();
+                                aTypeName = OUString();
                         }
                     }
                     catch( RuntimeException& )
@@ -276,13 +276,13 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     catch( Exception& )
                     {
-                        aTypeName.Erase();
+                        aTypeName = OUString();
                     }
 
-                       if ( aTypeName.Len() )
+                       if ( !aTypeName.isEmpty() )
                     {
                            const SfxFilter* pFilter =
-                                    SfxFilterMatcher( OUString("smath") ).GetFilter4EA( aTypeName );
+                                    SfxFilterMatcher( "smath" ).GetFilter4EA( aTypeName );
                         if ( pFilter )
                             aFilterName = pFilter->GetName();
                     }
@@ -294,17 +294,17 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 //the MathML filter. There are all sorts of things wrong with
                 //this approach, to be fixed at a better level than here
                 SvStream *pStrm = aMedium.GetInStream();
-                aTypeName.Erase();
+                aTypeName = OUString();
                 if (pStrm && !pStrm->GetError())
                 {
                     SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
                     {
-                        if (aStorage->IsStream(OUString("Equation Native")))
+                        if (aStorage->IsStream("Equation Native"))
                         {
                             sal_uInt8 nVersion;
                             if (GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3)
-                                aTypeName.AssignAscii( "math_MathType_3x" );
+                                aTypeName = "math_MathType_3x";
                         }
                     }
                     else
@@ -335,17 +335,15 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                 bIsMathType = true;
 
                             if (bIsMathType){
-                                static const sal_Char sFltrNm_2[] = MATHML_XML;
-                                static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
-                                aFilterName.AssignAscii( sFltrNm_2 );
-                                aTypeName.AssignAscii( sTypeNm_2 );
+                                aFilterName = OUString( MATHML_XML );
+                                aTypeName = "math_MathML_XML_Math";
                             }
                         }
                     }
 
-                    if ( aTypeName.Len() )
+                    if ( !aTypeName.isEmpty() )
                     {
-                        const SfxFilter* pFilt = SfxFilterMatcher( OUString("smath") ).GetFilter4EA( aTypeName );
+                        const SfxFilter* pFilt = SfxFilterMatcher( "smath" ).GetFilter4EA( aTypeName );
                         if ( pFilt )
                             aFilterName = pFilt->GetName();
                     }
@@ -424,8 +422,8 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
-    if ( !aFilterName.Len() )
-        aTypeName.Erase();
+    if ( aFilterName.isEmpty() )
+        aTypeName = OUString();
 
     return aTypeName;
 }

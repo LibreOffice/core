@@ -212,7 +212,7 @@ SmCfgOther::SmCfgOther()
 
 SmFontFormat::SmFontFormat()
 {
-    aName.AssignAscii( FONTNAME_MATH );
+    aName       = OUString( FONTNAME_MATH );
     nCharSet    = RTL_TEXTENCODING_UNICODE;
     nFamily     = FAMILY_DONTKNOW;
     nPitch      = PITCH_DONTKNOW;
@@ -258,7 +258,7 @@ bool SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
 
 /////////////////////////////////////////////////////////////////
 
-SmFntFmtListEntry::SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt ) :
+SmFntFmtListEntry::SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt ) :
     aId     (rId),
     aFntFmt (rFntFmt)
 {
@@ -281,7 +281,7 @@ void SmFontFormatList::Clear()
 }
 
 
-void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
+void SmFontFormatList::AddFontFormat( const OUString &rFntFmtId,
         const SmFontFormat &rFntFmt )
 {
     const SmFontFormat *pFntFmt = GetFontFormat( rFntFmtId );
@@ -295,7 +295,7 @@ void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
 }
 
 
-void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
+void SmFontFormatList::RemoveFontFormat( const OUString &rFntFmtId )
 {
 
     // search for entry
@@ -312,7 +312,7 @@ void SmFontFormatList::RemoveFontFormat( const String &rFntFmtId )
 }
 
 
-const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) const
+const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId ) const
 {
     const SmFontFormat *pRes = 0;
 
@@ -339,9 +339,9 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( size_t nPos ) const
 }
 
 
-const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
+const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
 {
-    String aRes;
+    OUString aRes;
 
     for (size_t i = 0;  i < aEntries.size();  ++i)
     {
@@ -356,10 +356,10 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) co
 }
 
 
-const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd )
+const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd )
 {
-    String aRes( GetFontFormatId( rFntFmt) );
-    if (0 == aRes.Len()  &&  bAdd)
+    OUString aRes( GetFontFormatId( rFntFmt) );
+    if (aRes.isEmpty()  &&  bAdd)
     {
         aRes = GetNewFontFormatId();
         AddFontFormat( aRes, rFntFmt );
@@ -368,9 +368,9 @@ const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt, boo
 }
 
 
-const String SmFontFormatList::GetFontFormatId( size_t nPos ) const
+const OUString SmFontFormatList::GetFontFormatId( size_t nPos ) const
 {
-    String aRes;
+    OUString aRes;
     if (nPos < aEntries.size())
         aRes = aEntries[nPos].aId;
     return aRes;
@@ -464,7 +464,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         const Any * pValue = aValues.getConstArray();
         Font        aFont;
         sal_UCS4    cChar = '\0';
-        String      aSet;
+        OUString    aSet;
         bool        bPredefined = false;
 
         OUString    aTmpStr;
@@ -500,23 +500,23 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
 
         if (bOK)
         {
-            String aUiName( rSymbolName );
-            String aUiSetName( aSet );
+            OUString aUiName( rSymbolName );
+            OUString aUiSetName( aSet );
             if (bPredefined)
             {
-                String aTmp;
+                OUString aTmp;
                 aTmp = GetUiSymbolName( rSymbolName );
-                OSL_ENSURE( aTmp.Len(), "localized symbol-name not found" );
-                if (aTmp.Len())
+                OSL_ENSURE( !aTmp.isEmpty(), "localized symbol-name not found" );
+                if (!aTmp.isEmpty())
                     aUiName = aTmp;
                 aTmp = GetUiSymbolSetName( aSet );
-                OSL_ENSURE( aTmp.Len(), "localized symbolset-name not found" );
-                if (aTmp.Len())
+                OSL_ENSURE( !aTmp.isEmpty(), "localized symbolset-name not found" );
+                if (!aTmp.isEmpty())
                     aUiSetName = aTmp;
             }
 
             rSymbol = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
-            if (aUiName != String(rSymbolName))
+            if (aUiName != rSymbolName)
                 rSymbol.SetExportName( rSymbolName );
         }
         else
@@ -613,11 +613,11 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         pVal++;
         // FontFormatId
         SmFontFormat aFntFmt( rSymbol.GetFace() );
-        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt, true ) );
-        OSL_ENSURE( aFntFmtId.Len(), "FontFormatId not found" );
+        OUString aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt, true ) );
+        OSL_ENSURE( !aFntFmtId.isEmpty(), "FontFormatId not found" );
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= OUString( aFntFmtId );
+        pVal->Value <<= aFntFmtId;
         pVal++;
     }
     OSL_ENSURE( pVal - pValues == sal::static_int_cast< ptrdiff_t >(nCount * nSymbolProps), "properties missing" );
@@ -749,7 +749,7 @@ void SmMathConfig::SaveFontFormatList()
     OUString aDelim( OUString( (sal_Unicode) '/' ) );
     for (size_t i = 0;  i < nCount;  ++i)
     {
-        String aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
+        OUString aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
         const SmFontFormat aFntFmt( *rFntFmtList.GetFontFormat( aFntFmtId ) );
 
         OUString  aNodeNameDelim( FONT_FORMAT_LIST );
@@ -828,7 +828,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     }
     for (k = 0;  k < nCnt;  ++k)
     {
-        if (0 == aUsedList.GetFontFormatId( pTmpFormat[k] ).Len())
+        if (aUsedList.GetFontFormatId( pTmpFormat[k] ).isEmpty())
         {
             rFntFmtList.RemoveFontFormat( pId[k] );
         }

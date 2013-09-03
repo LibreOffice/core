@@ -97,7 +97,7 @@ namespace accessibility
         // SvxTextForwarder
         sal_Int32          GetParagraphCount() const { return 1; }
         sal_uInt16          GetTextLen( sal_Int32 /*nParagraph*/ ) const { return 0; }
-        String          GetText( const ESelection& /*rSel*/ ) const { return String(); }
+        OUString        GetText( const ESelection& /*rSel*/ ) const { return String(); }
         SfxItemSet      GetAttribs( const ESelection& /*rSel*/, sal_Bool /*bOnlyHardAttrib*/ = 0 ) const
         {
             // AW: Very dangerous: The former implementation used a SfxItemPool created on the
@@ -115,7 +115,7 @@ namespace accessibility
 
         SfxItemPool*    GetPool() const { return NULL; }
 
-        void            QuickInsertText( const String& /*rText*/, const ESelection& /*rSel*/ ) {}
+        void            QuickInsertText( const OUString& /*rText*/, const ESelection& /*rSel*/ ) {}
         void            QuickInsertField( const SvxFieldItem& /*rFld*/, const ESelection& /*rSel*/ ) {}
         void            QuickSetAttribs( const SfxItemSet& /*rSet*/, const ESelection& /*rSel*/ ) {}
         void            QuickInsertLineBreak( const ESelection& /*rSel*/ ) {}
@@ -123,7 +123,7 @@ namespace accessibility
         const SfxItemSet * GetEmptyItemSetPtr() { return 0; }
 
         void        AppendParagraph() {}
-        xub_StrLen  AppendTextPortion( sal_Int32 /*nPara*/, const String & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
+        sal_uInt16  AppendTextPortion( sal_Int32 /*nPara*/, const OUString & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
 
         //XTextCopy
         void        CopyText(const SvxTextForwarder& ){}
@@ -162,7 +162,7 @@ namespace accessibility
         // longer be possible to enter text in previously empty
         // shapes).
         sal_Bool        Delete( const ESelection& ) { return sal_False; }
-        sal_Bool        InsertText( const String&, const ESelection& ) { return sal_False; }
+        sal_Bool        InsertText( const OUString&, const ESelection& ) { return sal_False; }
         sal_Bool        QuickFormatDoc( sal_Bool ) { return sal_True; }
         sal_Int16       GetDepth( sal_Int32 ) const { return -1; }
         sal_Bool        SetDepth( sal_Int32, sal_Int16 ) { return sal_True; }

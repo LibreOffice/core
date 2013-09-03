@@ -2868,14 +2868,14 @@ void SmAttributNode::CreateTextFromNode(OUString &rText)
 
 /**************************************************************************/
 
-static bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+static bool lcl_IsFromGreekSymbolSet( const OUString &rTokenText )
 {
     bool bRes = false;
 
     // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
-    if (rTokenText.Len() > 2 && rTokenText.GetBuffer()[0] == (sal_Unicode)'%')
+    if (rTokenText.getLength() > 2 && rTokenText.getStr()[0] == (sal_Unicode)'%')
     {
-        String aName( rTokenText.Copy(1) );
+        OUString aName( rTokenText.copy(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
         if (pSymbol && GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
             bRes = true;

@@ -67,7 +67,7 @@ static const sal_uInt16 aCTLDefFnts[FNT_END] =
 };
 
 
-String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
+OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 {
     OSL_ENSURE( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
             "index out opd range" );

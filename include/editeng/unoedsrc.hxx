@@ -142,7 +142,7 @@ public:
 
     virtual sal_Int32   GetParagraphCount() const = 0;
     virtual sal_uInt16  GetTextLen( sal_Int32 nParagraph ) const = 0;
-    virtual String      GetText( const ESelection& rSel ) const = 0;
+    virtual OUString    GetText( const ESelection& rSel ) const = 0;
     virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const = 0;
     virtual SfxItemSet  GetParaAttribs( sal_Int32 nPara ) const = 0;
     virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) = 0;
@@ -152,7 +152,7 @@ public:
     virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
     virtual sal_uInt16      GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const = 0;
 
-    virtual void        QuickInsertText( const String& rText, const ESelection& rSel ) = 0;
+    virtual void        QuickInsertText( const OUString& rText, const ESelection& rSel ) = 0;
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
     virtual void        QuickInsertLineBreak( const ESelection& rSel ) = 0;
@@ -166,7 +166,7 @@ public:
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph() = 0;
-    virtual xub_StrLen  AppendTextPortion( sal_Int32 nPara, const String &rText, const SfxItemSet &rSet ) = 0;
+    virtual sal_uInt16  AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet ) = 0;
 
     // XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource) = 0;
@@ -394,7 +394,7 @@ public:
 
          @return sal_True if text has been successfully inserted
       */
-    virtual sal_Bool        InsertText( const String& rText, const ESelection& rSel ) = 0;
+    virtual sal_Bool        InsertText( const OUString& rText, const ESelection& rSel ) = 0;
 
      /** Updates the formatting
 

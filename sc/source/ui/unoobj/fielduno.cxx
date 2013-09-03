@@ -1203,7 +1203,7 @@ void ScEditFieldObj::DeleteField()
     if (mpEditSource)
     {
         SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
-        pForwarder->QuickInsertText( String(), aSelection );
+        pForwarder->QuickInsertText( OUString(), aSelection );
         mpEditSource->UpdateData();
 
         aSelection.nEndPara = aSelection.nStartPara;
