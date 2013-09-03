@@ -130,7 +130,7 @@ void ThesDummy_Impl::GetCfgLocales()
         Locale *pLocale = pLocaleSeq->getArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            pLocale[i] = LanguageTag::convertToLocale( pNodeNames[i] );
+            pLocale[i] = LanguageTag::convertToLocaleWithFallback( pNodeNames[i] );
         }
     }
 }
