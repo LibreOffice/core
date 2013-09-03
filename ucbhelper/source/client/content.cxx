@@ -1049,9 +1049,11 @@ sal_Bool Content::isFolder()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
+#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     // Unreachable - cancelCommandExecution always throws an exception.
     // But some compilers complain...
     return sal_False;
+#endif
 }
 
 //=========================================================================
@@ -1070,9 +1072,11 @@ sal_Bool Content::isDocument()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
+#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     // Unreachable - cancelCommandExecution always throws an exception,
     // But some compilers complain...
     return sal_False;
+#endif
 }
 
 //=========================================================================
