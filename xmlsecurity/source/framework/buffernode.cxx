@@ -788,38 +788,6 @@ void BufferNode::notifyBranch()
     }
 }
 
-void BufferNode::notifyAncestor()
-/****** BufferNode/notifyAncestor ********************************************
- *
- *   NAME
- *  notifyAncestor -- notifies each ancestor BufferNode through the parent
- *  link.
- *
- *   SYNOPSIS
- *  notifyAncestor();
- *
- *   FUNCTION
- *  see NAME
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    BufferNode* pParent = m_pParent;
-    while (pParent != NULL)
-    {
-        pParent->notifyAncestor();
-        pParent = (BufferNode*)pParent->getParent();
-    }
-}
-
 void BufferNode::elementCollectorNotify()
 /****** BufferNode/elementCollectorNotify ************************************
  *

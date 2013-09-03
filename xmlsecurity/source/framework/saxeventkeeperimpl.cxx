@@ -722,8 +722,6 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                 ElementCollector* pElementCollector = (ElementCollector*)pElementMark;
 
                 cssxc::sax::ElementMarkPriority nPriority = pElementCollector->getPriority();
-                bool bToModify = pElementCollector->getModify();
-
                 /*
                      * Delete the EC from the buffer node.
                      */
@@ -733,11 +731,6 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
                 if ( nPriority == cssxc::sax::ElementMarkPriority_BEFOREMODIFY)
                 {
                     pBufferNode->notifyBranch();
-                }
-
-                if (bToModify)
-                {
-                    pBufferNode->notifyAncestor();
                 }
 
                 /*

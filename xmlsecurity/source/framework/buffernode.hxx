@@ -113,7 +113,6 @@ public:
     void setXMLElement(const com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     void notifyBranch();
-    void notifyAncestor();
     void elementCollectorNotify();
     void freeAllChildren();
 };
