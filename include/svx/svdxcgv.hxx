@@ -104,7 +104,7 @@ public:
     // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
     // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
     virtual sal_Bool    Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(const String& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    sal_Bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
     sal_Bool            Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
     sal_Bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );

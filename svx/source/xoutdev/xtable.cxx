@@ -161,7 +161,7 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
     return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : NULL;
 }
 
-long XPropertyList::GetIndex(const XubString& rName) const
+long XPropertyList::GetIndex(const OUString& rName) const
 {
     if( mbListDirty )
     {
@@ -170,7 +170,7 @@ long XPropertyList::GetIndex(const XubString& rName) const
     }
 
     for( long i = 0, n = maList.size(); i < n; ++i ) {
-        if ( maList[ i ]->GetName() == rName ) {
+        if (rName.equals(maList[ i ]->GetName())) {
             return i;
         }
     }

@@ -417,9 +417,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         if( pModel->IsUndoEnabled() )
         {
             OUString aStr(SVX_RESSTR(RID_STR_FORM));
-            XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace(OUString('#'), aStr);
-            pModel->BegUndo(aUndoStr);
+            OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
+            pModel->BegUndo(aUndoStr.replaceFirst("'#'", aStr));
         }
 
         try
