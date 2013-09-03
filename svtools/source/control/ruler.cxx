@@ -2890,7 +2890,7 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Color &rFillColor, const Point
 
 void Ruler::SetTextRTL(sal_Bool bRTL)
 {
-    if(mpData->bTextRTL != bRTL)
+    if(mpData->bTextRTL != (bool) bRTL)
     {
         mpData->bTextRTL = bRTL;
         if ( IsReallyVisible() && IsUpdateMode() )
