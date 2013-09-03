@@ -975,7 +975,7 @@ public:
     WW8_FC WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode = 0,
         WW8_CP* pNextPieceCp = 0, bool* pTestFlag = 0) const;
 
-    xub_StrLen WW8ReadString(SvStream& rStrm, String& rStr, WW8_CP nAktStartCp,
+    sal_Int32 WW8ReadString(SvStream& rStrm, OUString& rStr, WW8_CP nAktStartCp,
         long nTotalLen, rtl_TextEncoding eEnc ) const;
 
 };

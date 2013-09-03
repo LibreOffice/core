@@ -21,6 +21,7 @@
 #define _WW8PAR_HXX
 
 #include <tools/string.hxx>
+#include "rtl/ustring.hxx"
 #include <filter/msfilter/msdffimp.hxx>
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>
@@ -1493,8 +1494,8 @@ private:
 
     bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, sal_uInt16 nTxBxS,
         sal_uInt16 nSequence);
-    bool GetRangeAsDrawingString(String& rString, long StartCp, long nEndCp, ManTypes eType);
-    OutlinerParaObject* ImportAsOutliner(String &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
+    bool GetRangeAsDrawingString(OUString& rString, long StartCp, long nEndCp, ManTypes eType);
+    OutlinerParaObject* ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
     SwFrmFmt* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
         sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrmFmt* pFlyFmt,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
@@ -1733,51 +1734,51 @@ public:     // eigentlich private, geht aber leider nur public
     String GetMappedBookmark(const String &rOrigName);
 
     // Felder
-    eF_ResT Read_F_Input(WW8FieldDesc*, String& rStr);
-    eF_ResT Read_F_InputVar(WW8FieldDesc*, String& rStr);
-    eF_ResT Read_F_ANumber( WW8FieldDesc*, String& );
-    eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, String& rStr );
-    eF_ResT Read_F_Author( WW8FieldDesc*, String& );
-    eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
-    short GetTimeDatePara(String& rStr, sal_uInt32& rFormat, sal_uInt16 &rLang,
+    eF_ResT Read_F_Input(WW8FieldDesc*, OUString& rStr);
+    eF_ResT Read_F_InputVar(WW8FieldDesc*, OUString& rStr);
+    eF_ResT Read_F_ANumber( WW8FieldDesc*, OUString& );
+    eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr );
+    eF_ResT Read_F_Author( WW8FieldDesc*, OUString& );
+    eF_ResT Read_F_TemplName( WW8FieldDesc*, OUString& );
+    short GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat, sal_uInt16 &rLang,
         int nWhichDefault, bool bHijri = false);
     bool ForceFieldLanguage(SwField &rFld, sal_uInt16 nLang);
-    eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_FileName( WW8FieldDesc*, String& rStr);
-    eF_ResT Read_F_Anz( WW8FieldDesc* pF, String& );
-    eF_ResT Read_F_CurPage( WW8FieldDesc*, String& );
-    eF_ResT Read_F_Ref( WW8FieldDesc* pF, String& );
+    eF_ResT Read_F_DateTime( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_FileName( WW8FieldDesc*, OUString& rStr);
+    eF_ResT Read_F_Anz( WW8FieldDesc* pF, OUString& );
+    eF_ResT Read_F_CurPage( WW8FieldDesc*, OUString& );
+    eF_ResT Read_F_Ref( WW8FieldDesc* pF, OUString& );
 
-    eF_ResT Read_F_Set( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_PgRef( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, String& rStr );
+    eF_ResT Read_F_Set( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_PgRef( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_NoteReference( WW8FieldDesc* pF, OUString& rStr );
 
-    eF_ResT Read_F_Tox( WW8FieldDesc* pF, String& rStr );
+    eF_ResT Read_F_Tox( WW8FieldDesc* pF, OUString& rStr );
     bool AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase);
-    eF_ResT Read_F_Symbol( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);
-    eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr );
-    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, String& rStr);
+    eF_ResT Read_F_Symbol( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_Embedd( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr);
+    eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr );
+    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr);
     com::sun::star::awt::Size MiserableDropDownFormHack(const String &rString,
         com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>&
         rPropSet);
 
-    eF_ResT Read_F_Macro( WW8FieldDesc*, String& rStr);
-    eF_ResT Read_F_DBField( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
-    eF_ResT Read_F_DBNum( WW8FieldDesc*, String& );
-    eF_ResT Read_F_Equation( WW8FieldDesc*, String& );
+    eF_ResT Read_F_Macro( WW8FieldDesc*, OUString& rStr);
+    eF_ResT Read_F_DBField( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_DBNext( WW8FieldDesc*, OUString& );
+    eF_ResT Read_F_DBNum( WW8FieldDesc*, OUString& );
+    eF_ResT Read_F_Equation( WW8FieldDesc*, OUString& );
     void Read_SubF_Ruby( WW8ReadFieldParams& rReadParam);
     void Read_SubF_Combined( WW8ReadFieldParams& rReadParam);
-    eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
+    eF_ResT Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_IncludeText(    WW8FieldDesc*, OUString& rStr );
+    eF_ResT Read_F_Seq( WW8FieldDesc*, OUString& rStr );
 
-    eF_ResT Read_F_OCX(WW8FieldDesc*, String&);
-    eF_ResT Read_F_Hyperlink(WW8FieldDesc*, String& rStr);
-        eF_ResT Read_F_Shape(WW8FieldDesc* pF, String& rStr);
-    eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr);
+    eF_ResT Read_F_OCX(WW8FieldDesc*, OUString&);
+    eF_ResT Read_F_Hyperlink(WW8FieldDesc*, OUString& rStr);
+        eF_ResT Read_F_Shape(WW8FieldDesc* pF, OUString& rStr);
+    eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, OUString& rStr);
 
 
     void DeleteFormImpl();
