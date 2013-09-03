@@ -195,22 +195,19 @@ protected:
     sal_uInt8       _nPreTag;   // 'pre-Tag' to write to header
 
 public:
-    inline          SfxMiniRecordWriter( SvStream *pStream,
-                                         sal_uInt8 nTag );
+    inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag );
     inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag,
                                          sal_uInt32 nSize );
-
     inline          ~SfxMiniRecordWriter();
 
     inline SvStream& operator*() const;
 
     inline void     Reset();
-
-    sal_uInt32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32      Close( bool bSeekToEndOfRec = true );
 
 private:
-                    // not implementend, not allowed
-                    SfxMiniRecordWriter( const SfxMiniRecordWriter& );
+    /// not implementend, not allowed
+    SfxMiniRecordWriter( const SfxMiniRecordWriter& );
     SfxMiniRecordWriter& operator=(const SfxMiniRecordWriter&);
 };
 
@@ -264,7 +261,7 @@ public:
     SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
     inline              ~SfxMiniRecordReader();
 
-    inline sal_uInt8        GetTag() const;
+    inline sal_uInt8    GetTag() const;
     inline bool         IsValid() const;
 
     inline SvStream&    operator*() const;
@@ -272,8 +269,8 @@ public:
     inline void         Skip();
 
 private:
-                        // not implementend, not allowed
-                        SfxMiniRecordReader( const SfxMiniRecordReader& );
+    /// not implementend, not allowed
+    SfxMiniRecordReader( const SfxMiniRecordReader& );
     SfxMiniRecordReader& operator=(const SfxMiniRecordReader&);
 };
 
@@ -473,7 +470,7 @@ public:
 
     void                NewContent();
 
-    virtual sal_uInt32      Close( bool bSeekToEndOfRec = true );
+    virtual sal_uInt32  Close( bool bSeekToEndOfRec = true );
 };
 
 /** write record with multiple content items with identical size
@@ -564,11 +561,11 @@ public:
                         ~SfxMultiRecordReader();
 
     bool                GetContent();
-    inline sal_uInt16       GetContentTag();
-    inline sal_uInt8        GetContentVersion() const;
+    inline sal_uInt16   GetContentTag();
+    inline sal_uInt8    GetContentVersion() const;
     inline bool         HasContentVersion( sal_uInt16 nVersion ) const;
 
-    inline sal_uInt32       ContentCount() const;
+    inline sal_uInt32   ContentCount() const;
 };
 
 /** create a mini record
