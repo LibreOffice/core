@@ -435,6 +435,19 @@ public:
      */
     static LanguageType convertToLanguageType( const OUString& rBcp47, bool bResolveSystem = true );
 
+    /** Convert BCP 47 string to MS-LangID with fallback, convenience method.
+
+        NOTE: exists only for consistency with the other convertTo...()
+        methods, internally uses a temporary LanguageTag instance for
+        conversion so does not save anything compared to
+        LanguageTag(rBcp47).makeFallback().getLanguageType(bResolveSystem).
+
+        @see    makeFallback()
+
+        Always resolves an empty tag to the system locale.
+     */
+    static LanguageType convertToLanguageTypeWithFallback( const OUString& rBcp47 );
+
 private:
 
     enum Decision

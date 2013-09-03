@@ -1633,4 +1633,11 @@ LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bR
     return LanguageTag( rBcp47).getLanguageType( bResolveSystem);
 }
 
+
+// static
+LanguageType LanguageTag::convertToLanguageTypeWithFallback( const OUString& rBcp47 )
+{
+    return LanguageTag( rBcp47).makeFallback().getLanguageType( true);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
