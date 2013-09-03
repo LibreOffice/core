@@ -35,6 +35,8 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace dom { class XDocument; } }
 } } }
 
+using namespace ::com::sun::star;
+
 namespace oox { namespace drawingml {
 
 namespace dgm {
@@ -151,6 +153,10 @@ typedef std::vector< Point >        Points;
 
 class LayoutNode;
 typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
+
+////////////////////
+
+typedef std::map< OUString, uno::Reference<xml::dom::XDocument> > DiagramDomMap;
 
 ////////////////////
 
@@ -289,15 +295,19 @@ public:
     const DiagramQStyleMap& getStyles() const { return maStyles; }
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
+    DiagramDomMap & getDomMap() { return maMainDomMap; }
 
     void addTo( const ShapePtr & pShape );
+
+    uno::Sequence<beans::PropertyValue> getDomsAsPropertyValues() const;
 private:
     void build( );
-    DiagramDataPtr                             mpData;
-    DiagramLayoutPtr                           mpLayout;
-    DiagramQStyleMap                           maStyles;
-    DiagramColorMap                            maColors;
-    std::map< OUString, ShapePtr >             maShapeMap;
+    DiagramDataPtr                 mpData;
+    DiagramLayoutPtr               mpLayout;
+    DiagramQStyleMap               maStyles;
+    DiagramColorMap                maColors;
+    std::map< OUString, ShapePtr > maShapeMap;
+    DiagramDomMap                  maMainDomMap;
 };
 
 

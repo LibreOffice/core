@@ -174,6 +174,9 @@ public:
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
     void                setLockedCanvas(bool bLockedCanvas);
     bool                getLockedCanvas();
+    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
+                        getDiagramDoms() { return maDiagramDoms; }
+    void                setDiagramDoms(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
 
 protected:
 
@@ -265,6 +268,8 @@ private:
                                                          // we need separate flag because we don't want
                                                          // to propagate it when applying reference shape
     bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
+
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maDiagramDoms;
 };
 
 // ============================================================================

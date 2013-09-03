@@ -38,6 +38,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 
 #include <vcl/svapp.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <bordertest.hxx>
@@ -539,6 +540,27 @@ void Test::testSmartart()
 
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xGroupPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> nAGrabBag(0);
+    xGroupPropertySet->getPropertyValue(OUString::createFromAscii(UNO_NAME_MISC_OBJ_INTEROPGRABBAG)) >>= nAGrabBag;
+    CPPUNIT_ASSERT(nAGrabBag.hasElements()); // Grab Bag not empty
+
+    sal_Bool bData, bLayout, bQStyle, bColor, bDrawing = sal_False;
+    for(int i = 0; i < nAGrabBag.getLength(); ++i)
+    {
+      if (nAGrabBag[i].Name == OUString::createFromAscii("OOXData"))
+        bData = sal_True;
+      else if (nAGrabBag[i].Name == OUString::createFromAscii("OOXLayout"))
+        bLayout = sal_True;
+      else if (nAGrabBag[i].Name == OUString::createFromAscii("OOXStyle"))
+        bQStyle = sal_True;
+      else if (nAGrabBag[i].Name == OUString::createFromAscii("OOXColor"))
+        bColor = sal_True;
+      else if (nAGrabBag[i].Name == OUString::createFromAscii("OOXDrawing"))
+        bDrawing = sal_True;
+    }
+    CPPUNIT_ASSERT(bData && bLayout && bQStyle && bColor && bDrawing); // Grab Bag has all the expected elements
 
     uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
     sal_Int32 nValue(0);
