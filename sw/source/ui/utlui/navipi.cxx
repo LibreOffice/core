@@ -355,7 +355,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
     {
         case FN_CREATE_NAVIGATION:
         {
-            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), true);
+            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), true, this);
         }
         break;
 
@@ -418,18 +418,17 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
     {
-        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false);
+        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false, this);
     }
     else
         SwHelpToolBox::MouseButtonDown(rEvt);
 }
 
-void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus)
+void SwNavigationPI::CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, Window *pParent)
 {
     Reference< XFrame > xFrame = GetCreateView()->GetViewFrame()->GetFrame().GetFrameInterface();
     SwScrollNaviPopup* pPopup = new
-        SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
-                          xFrame );
+        SwScrollNaviPopup(FN_SCROLL_NAVIGATION, xFrame, pParent);
 
     Rectangle aRect(rRect);
     Point aT1 = aRect.TopLeft();

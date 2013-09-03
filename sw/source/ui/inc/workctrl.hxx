@@ -162,7 +162,7 @@ protected:
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
         ~SwScrollNaviPopup();
 
     static String           GetQuickHelpText(sal_Bool bNext);

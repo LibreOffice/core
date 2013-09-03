@@ -1208,6 +1208,23 @@ SfxPopupWindow::SfxPopupWindow(
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
+SfxPopupWindow::SfxPopupWindow(
+    sal_uInt16 nId,
+    const Reference< XFrame >& rFrame,
+    Window* pParentWindow,
+    const ResId &rId ) :
+    FloatingWindow( pParentWindow, rId )
+    , m_bFloating(sal_False)
+    , m_bCascading( sal_False )
+    , m_nId( nId )
+    , m_xFrame( rFrame )
+    , m_pStatusListener( 0 )
+{
+    Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+}
+
 //--------------------------------------------------------------------
 
 SfxPopupWindow::~SfxPopupWindow()

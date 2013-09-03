@@ -168,7 +168,7 @@ public:
     sal_Bool            IsGlobalMode() const {return    bGlobalMode;}
 
     SwView*         GetCreateView() const;
-    void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus);
+    void            CreateNavigationTool(const Rectangle& rRect, bool bSetFocus, Window *pParent);
 };
 
 class SwNavigationChild : public SfxChildWindowContext

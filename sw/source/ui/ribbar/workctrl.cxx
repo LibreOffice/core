@@ -452,8 +452,8 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
     HID_NID_NEXT
 };
 
-SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >& rFrame )
-    : SfxPopupWindow(nId, rFrame, SW_RES(RID_SCROLL_NAVIGATION_WIN) ),
+SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, Window *pParent)
+    : SfxPopupWindow(nId, rFrame, pParent, SW_RES(RID_SCROLL_NAVIGATION_WIN)),
     aToolBox(this, 0),
     aSeparator(this, SW_RES(FL_SEP)),
     aInfoField(this, SW_RES(FI_INFO)),
@@ -540,7 +540,7 @@ void SwScrollNaviPopup::ApplyImageList()
 
 SfxPopupWindow* SwScrollNaviPopup::Clone() const
 {
-    return new SwScrollNaviPopup( GetId(), GetFrame() );
+    return new SwScrollNaviPopup( GetId(), GetFrame(), GetParent() );
 }
 
 IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
@@ -602,7 +602,7 @@ void SwNaviImageButton::Click()
 {
     pPopup = new
         SwScrollNaviPopup( FN_SCROLL_NAVIGATION,
-                           m_xFrame );
+                           m_xFrame, this );
     Point aPos = OutputToScreenPixel(Point(0,0));
     Rectangle aRect(aPos, GetSizePixel());
     SetPopupWindow( pPopup );
