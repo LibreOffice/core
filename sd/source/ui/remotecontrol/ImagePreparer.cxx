@@ -195,7 +195,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "<html><body>" );
     aBuffer.append( aNotes );
-    aBuffer.append( "</html></body>" );
+    aBuffer.append( "</body></html>" );
     aBuffer.append( "\n\n" );
     pTransmitter->addMessage( aBuffer.makeStringAndClear(),
         Transmitter::PRIORITY_LOW );
