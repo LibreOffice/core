@@ -2685,15 +2685,15 @@ void Ruler::SetLines( sal_uInt32 aLineArraySize, const RulerLine* pLineArray )
     if ( mpData->pLines.size() == aLineArraySize )
     {
         sal_uInt32           i = aLineArraySize;
-        const RulerLine* pAry1 = &mpData->pLines[0];
+        vector<RulerLine>::const_iterator aItr1 = mpData->pLines.begin();
         const RulerLine* pAry2 = pLineArray;
         while ( i )
         {
-            if ( (pAry1->nPos   != pAry2->nPos)   ||
-                 (pAry1->nStyle != pAry2->nStyle) )
+            if ( (aItr1->nPos   != pAry2->nPos)   ||
+                 (aItr1->nStyle != pAry2->nStyle) )
                 break;
-            pAry1++;
-            pAry2++;
+            ++aItr1;
+            ++pAry2;
             i--;
         }
         if ( !i )
