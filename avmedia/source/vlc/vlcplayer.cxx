@@ -184,7 +184,7 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    VLCWindow * const window = new VLCWindow( *this );
+    VLCWindow * const window = new VLCWindow;
 
     const int winID = GetWindowID( aArguments );
 
