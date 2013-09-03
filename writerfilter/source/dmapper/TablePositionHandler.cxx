@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <TablePositionHandler.hxx>
+#include <DomainMapperTableHandler.hxx>
 #include <PropertyMap.hxx>
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
@@ -28,7 +29,9 @@ TablePositionHandler::TablePositionHandler() :
     m_aHorzAnchor( "text" ),
     m_aXSpec( ),
     m_nY( 0 ),
-    m_nX( 0 )
+    m_nX( 0 ),
+    m_nLeftBorderDistance(DEF_BORDER_DIST),
+    m_nRightBorderDistance(DEF_BORDER_DIST)
 {
 }
 
@@ -75,7 +78,7 @@ void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/)
 
 uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
-    uno::Sequence< beans::PropertyValue > aFrameProperties(18);
+    uno::Sequence< beans::PropertyValue > aFrameProperties(19);
     beans::PropertyValue* pFrameProperties = aFrameProperties.getArray();
 
     pFrameProperties[0].Name = "LeftBorderDistance";
@@ -132,7 +135,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[13].Name = "HoriOrientRelation";
     pFrameProperties[13].Value <<= nHoriOrientRelation;
     pFrameProperties[14].Name = "HoriOrientPosition";
-    pFrameProperties[14].Value <<= m_nX;
+    pFrameProperties[14].Value <<= m_nX - m_nLeftBorderDistance;
 
 
     // Vertical positioning
@@ -160,6 +163,9 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     pFrameProperties[16].Value <<= nVertOrientRelation;
     pFrameProperties[17].Name = "VertOrientPosition";
     pFrameProperties[17].Value <<= m_nY;
+
+    pFrameProperties[18].Name = "RightMargin";
+    pFrameProperties[18].Value <<= m_nRightBorderDistance;
 
     return aFrameProperties;
 }

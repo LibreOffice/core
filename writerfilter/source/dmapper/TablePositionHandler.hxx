@@ -27,6 +27,8 @@ namespace writerfilter {
             OUString m_aXSpec;
             sal_Int32 m_nY;
             sal_Int32 m_nX;
+            sal_Int32 m_nLeftBorderDistance;
+            sal_Int32 m_nRightBorderDistance;
 
             // Properties
             virtual void lcl_attribute(Id Name, Value & val);
