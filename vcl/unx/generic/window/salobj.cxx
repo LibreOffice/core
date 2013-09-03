@@ -51,7 +51,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
-    SystemChildData*    pObjData = const_cast<SystemChildData*>(pObject->GetSystemData());
+    SystemEnvData*    pObjData = const_cast<SystemEnvData*>(pObject->GetSystemData());
 
     if ( ! XShapeQueryExtension( (Display*)pObjData->pDisplay,
                                   &event_base, &error_base ) )
@@ -236,7 +236,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 
 X11SalObject::X11SalObject()
 {
-    maSystemChildData.nSize     = sizeof( SystemChildData );
+    maSystemChildData.nSize     = sizeof( SystemEnvData );
     maSystemChildData.pDisplay  = GetGenericData()->GetSalDisplay()->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = 0;
@@ -412,7 +412,7 @@ void X11SalObject::GrabFocus()
 
 // -----------------------------------------------------------------------
 
-const SystemChildData* X11SalObject::GetSystemData() const
+const SystemEnvData* X11SalObject::GetSystemData() const
 {
     return &maSystemChildData;
 }

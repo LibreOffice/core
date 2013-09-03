@@ -120,7 +120,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     OUString   m_sWMClass;
 
-    SystemChildData maSystemChildData;
+    SystemEnvData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
     Bool            mbInputFocus;

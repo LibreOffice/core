@@ -60,7 +60,7 @@ private:
 class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
 {
 public:
-    SystemChildData maSystemChildData;
+    SystemEnvData maSystemChildData;
     SalFrame*       mpParent;
     XLIB_Window     maPrimary;
     XLIB_Window     maSecondary;

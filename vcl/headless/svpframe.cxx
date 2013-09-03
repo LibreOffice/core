@@ -80,8 +80,8 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxHeight( 0 )
 {
     // fast and easy cross-platform wiping of the data
-    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemChildData ) );
-    m_aSystemChildData.nSize        = sizeof( SystemChildData );
+    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemEnvData ) );
+    m_aSystemChildData.nSize        = sizeof( SystemEnvData );
 #ifdef IOS
     // Nothing
 #elif defined ANDROID

@@ -27,7 +27,7 @@
 
 class GtkSalObject : public SalObject
 {
-    SystemChildData     m_aSystemData;
+    SystemEnvData     m_aSystemData;
     GtkWidget*          m_pSocket;
 #if GTK_CHECK_VERSION(3,0,0)
     cairo_region_t*     m_pRegion;

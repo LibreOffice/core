@@ -30,7 +30,7 @@ class SalGraphics;
 class SvpSalObject : public SalObject
 {
 public:
-    SystemChildData m_aSystemChildData;
+    SystemEnvData m_aSystemChildData;
 
     SvpSalObject();
     virtual ~SvpSalObject();

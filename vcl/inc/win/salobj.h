@@ -32,7 +32,7 @@ public:
     HWND                    mhWnd;                  // Window handle
     HWND                    mhWndChild;             // Child Window handle
     HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
-    SystemChildData         maSysData;              // SystemEnvData
+    SystemEnvData         maSysData;              // SystemEnvData
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect

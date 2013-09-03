@@ -997,7 +997,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_realize( m_pWindow );
 
     //system data
-    m_aSystemData.nSize         = sizeof( SystemChildData );
+    m_aSystemData.nSize         = sizeof( SystemEnvData );
 #if !GTK_CHECK_VERSION(3,0,0)
     GtkSalDisplay* pDisp = GetGtkSalData()->GetGtkDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();

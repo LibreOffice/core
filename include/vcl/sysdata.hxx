@@ -83,8 +83,6 @@ struct SystemEnvData
 #endif
 };
 
-#define SystemChildData SystemEnvData
-
 // --------------------
 // - SystemParentData -
 // --------------------
