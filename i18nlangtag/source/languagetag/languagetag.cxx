@@ -1302,9 +1302,9 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     Extraction eRet = EXTRACTED_NONE;
     const sal_Int32 nLen = rBcp47.getLength();
     const sal_Int32 nHyph1 = rBcp47.indexOf( '-');
-    const sal_Int32 nHyph2 = (nHyph1 < 0 ? -1 : rBcp47.indexOf( '-', nHyph1 + 1));
-    const sal_Int32 nHyph3 = (nHyph2 < 0 ? -1 : rBcp47.indexOf( '-', nHyph2 + 1));
-    const sal_Int32 nHyph4 = (nHyph3 < 0 ? -1 : rBcp47.indexOf( '-', nHyph3 + 1));
+    sal_Int32 nHyph2 = (nHyph1 < 0 ? -1 : rBcp47.indexOf( '-', nHyph1 + 1));
+    sal_Int32 nHyph3 = (nHyph2 < 0 ? -1 : rBcp47.indexOf( '-', nHyph2 + 1));
+    sal_Int32 nHyph4 = (nHyph3 < 0 ? -1 : rBcp47.indexOf( '-', nHyph3 + 1));
     if (nLen == 1 && rBcp47[0] == '*')              // * the dreaded jolly joker
     {
         // It's f*d up but we need to recognize this.
@@ -1362,45 +1362,42 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     else if (  (nHyph1 == 2 && nHyph2 == 7 && nHyph3 == 10 && nLen >= 15)   // ll-Ssss-CC-vvvv[vvvv][-...]
             || (nHyph1 == 3 && nHyph2 == 8 && nHyph3 == 11 && nLen >= 16))  // lll-Ssss-CC-vvvv[vvvv][-...]
     {
-        if (nHyph4 < 0 || (nHyph4 - nHyph3 > 4 && nHyph4 - nHyph3 <= 9))
+        if (nHyph4 < 0)
+            nHyph4 = rBcp47.getLength();
+        if (nHyph4 - nHyph3 > 4 && nHyph4 - nHyph3 <= 9)
         {
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
+            rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
             rVariants = rBcp47.copy( nHyph3 + 1);
-            if (nHyph4 < 0 && (rVariants.getLength() < 4 || 8 < rVariants.getLength()))
-            {
-                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-                rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
-                rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
-                eRet = EXTRACTED_LV;
-            }
+            eRet = EXTRACTED_LV;
         }
     }
     else if (  (nHyph1 == 2 && nHyph2 == 5 && nLen >= 10)   // ll-CC-vvvv[vvvv][-...]
             || (nHyph1 == 3 && nHyph2 == 6 && nLen >= 11))  // lll-CC-vvvv[vvvv][-...]
     {
-        if (nHyph3 < 0 || (nHyph3 - nHyph2 > 4 && nHyph3 - nHyph2 <= 9))
+        if (nHyph3 < 0)
+            nHyph3 = rBcp47.getLength();
+        if (nHyph3 - nHyph2 > 4 && nHyph3 - nHyph2 <= 9)
         {
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rScript   = OUString();
+            rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
             rVariants = rBcp47.copy( nHyph2 + 1);
-            if (nHyph3 < 0 && (rVariants.getLength() < 4 || 8 < rVariants.getLength()))
-            {
-                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-                rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
-                rScript   = OUString();
-                eRet = EXTRACTED_LV;
-            }
+            eRet = EXTRACTED_LV;
         }
     }
     else if (  (nHyph1 == 2 && nLen >= 8)                   // ll-vvvvv[vvv][-...]
             || (nHyph1 == 3 && nLen >= 9))                  // lll-vvvvv[vvv][-...]
     {
-        if (nHyph2 < 0 || (nHyph2 - nHyph1 > 5 && nHyph2 - nHyph1 <= 9))
+        if (nHyph2 < 0)
+            nHyph2 = rBcp47.getLength();
+        if (nHyph2 - nHyph1 > 5 && nHyph2 - nHyph1 <= 9)
         {
+            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+            rScript   = rCountry = OUString();
             rVariants = rBcp47.copy( nHyph1 + 1);
-            if (nHyph2 < 0 && (rVariants.getLength() < 5 || 8 < rVariants.getLength()))
-            {
-                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-                rScript   = rCountry = OUString();
-                eRet = EXTRACTED_LV;
-            }
+            eRet = EXTRACTED_LV;
         }
     }
     if (eRet == EXTRACTED_NONE)
