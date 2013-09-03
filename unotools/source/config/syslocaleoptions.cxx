@@ -674,7 +674,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
         OUString aIsoStr( rConfigString.copy( nDelim+1 ) );
-        eLang = LanguageTag::convertToLanguageType( aIsoStr );
+        eLang = LanguageTag::convertToLanguageTypeWithFallback( aIsoStr );
     }
     else
     {
