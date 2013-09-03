@@ -535,17 +535,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "bootstrap.uno.a", bootstrap_component_getFactory },
         { "libbootstraplo.a", bootstrap_component_getFactory },
 
-        // The .uno ones seem to consistently have a "lib" prefix now for Android,
-        // but not iOS, hmm.
-#ifdef ANDROID
         { "libintrospectionlo.a", introspection_component_getFactory },
         { "libreflectionlo.a", reflection_component_getFactory },
         { "libstocserviceslo.a", stocservices_component_getFactory },
-#else
-        { "introspection.uno.a", introspection_component_getFactory },
-        { "reflection.uno.a", reflection_component_getFactory },
-        { "stocservices.uno.a", stocservices_component_getFactory },
-#endif
         { "libcomphelper.a", comphelp_component_getFactory },
         { "libconfigmgrlo.a", configmgr_component_getFactory },
         { "libdeployment.a", deployment_component_getFactory },
