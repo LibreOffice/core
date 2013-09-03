@@ -44,7 +44,7 @@ ErrCode SvxPluginFileDlg::Execute()
     return maFileDlg.Execute();
 }
 
-String SvxPluginFileDlg::GetPath() const
+OUString SvxPluginFileDlg::GetPath() const
 {
     return maFileDlg.GetPath();
 }

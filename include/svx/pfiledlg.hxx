@@ -40,7 +40,7 @@ public:
     ~SvxPluginFileDlg ();
 
     ErrCode                  Execute();
-    String                   GetPath() const;
+    OUString                 GetPath() const;
 
     void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };
