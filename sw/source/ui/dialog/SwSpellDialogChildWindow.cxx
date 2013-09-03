@@ -467,7 +467,7 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
 }
 
 void SwSpellDialogChildWindow::AddAutoCorrection(
-        const String& rOld, const String& rNew, LanguageType eLanguage)
+        const OUString& rOld, const OUString& rNew, LanguageType eLanguage)
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     pACorr->PutText( rOld, rNew, eLanguage );

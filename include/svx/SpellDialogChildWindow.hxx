@@ -79,7 +79,7 @@ protected:
     virtual bool HasAutoCorrection();
     /** This method adds a word pair to the AutoCorrection - if available
      */
-    virtual void AddAutoCorrection(const String& rOld, const String& rNew, LanguageType eLanguage);
+    virtual void AddAutoCorrection(const OUString& rOld, const OUString& rNew, LanguageType eLanguage);
     /** Return the sfx bindings for this child window. They are
         retrieved from the dialog so they do not have to be stored in
         this class as well.  The bindings may be necessary to be used

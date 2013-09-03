@@ -66,8 +66,8 @@ bool SpellDialogChildWindow::HasAutoCorrection()
 }
 
 void SpellDialogChildWindow::AddAutoCorrection(
-        const String& /*rOld*/,
-        const String& /*rNew*/,
+        const OUString& /*rOld*/,
+        const OUString& /*rNew*/,
         LanguageType /*eLanguage*/)
 {
     OSL_FAIL("AutoCorrection should have been overloaded - if available");
