@@ -131,7 +131,7 @@ void ColorControl::FillColors (void)
         maVSColor.SetStyle(aWinBits);
 
         // neds to be done *before* layouting
-        if(msNoColorString.Len() > 0)
+        if(!msNoColorString.isEmpty())
         {
             maVSColor.SetStyle(maVSColor.GetStyle() | WB_NONEFIELD);
             maVSColor.SetText(msNoColorString);

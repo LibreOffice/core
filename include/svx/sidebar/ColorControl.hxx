@@ -71,7 +71,7 @@ public:
 private:
     SvxColorValueSet maVSColor;
     FloatingWindow* mpFloatingWindow;
-    const String msNoColorString;
+    const OUString msNoColorString;
     ::boost::function<Color(void)> maNoColorGetter;
     ::boost::function<void(String&,Color)> maColorSetter;
 
