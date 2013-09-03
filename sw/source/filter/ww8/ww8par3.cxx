@@ -94,7 +94,7 @@ using namespace sw::mark;
 //-----------------------------------------
 
 //cmc, OCX i.e. word 97 form controls
-eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, String& )
+eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, OUString& )
 {
     if( bObj && nPicLocFc )
         nObjLocFc = nPicLocFc;
@@ -102,11 +102,11 @@ eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, String& )
     return FLD_TEXT;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1))) {
+    if (rStr[pF->nLCode-1]==0x01) {
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
     }
 
@@ -167,22 +167,24 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     }
 }
 
-eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaCheckBox aFormula(*this);
 
     if (!pFormImpl)
         pFormImpl = new SwMSConvertControls(mpDocShell, pPaM);
 
-    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
+    if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
-    if (!bUseEnhFields) {
-    pFormImpl->InsertFormula(aFormula);
-    return FLD_OK;
-    } else {
+    if (!bUseEnhFields)
+    {
+        pFormImpl->InsertFormula(aFormula);
+        return FLD_OK;
+    }
+
     String aBookmarkName;
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if (pB!=NULL) {
@@ -222,14 +224,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         }
     }
     return FLD_OK;
-    }
 }
 
-eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
+eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 {
     WW8FormulaListBox aFormula(*this);
 
-    if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
+    if (rStr[pF->nLCode-1]==0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
@@ -298,7 +299,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     }
 }
 
-eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, String&)
+eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
 {
     if( bObj && nPicLocFc )
         nObjLocFc = nPicLocFc;
