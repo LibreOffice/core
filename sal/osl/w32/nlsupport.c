@@ -147,7 +147,7 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
             WCHAR *pwcEnd;
             UINT  codepage;
 
-            /* values returned from GetLocaleInfo are dezimal based */
+            /* values returned from GetLocaleInfo are decimal based */
             codepage = wcstol( ansiCP, &pwcEnd, 10 );
 
             /* find matching rtl encoding */

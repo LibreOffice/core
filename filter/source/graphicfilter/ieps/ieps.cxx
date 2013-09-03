@@ -598,7 +598,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                                         {
                                                             if ( nByte > '9' )
                                                             {
-                                                                nByte &=~0x20;  // case none sensitive for hexadezimal values
+                                                                nByte &=~0x20;  // case none sensitive for hexadecimal values
                                                                 nByte -= ( 'A' - 10 );
                                                                 if ( nByte > 15 )
                                                                     bIsValid = sal_False;
