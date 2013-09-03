@@ -113,7 +113,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
             return SFX_ITEM_PRESENTATION_NONE;
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            if ( aDescName.Len() )
+            if ( !aDescName.isEmpty() )
             {
                 rText = aDescName + cpDelimTmp;
             }
@@ -133,7 +133,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText += SVX_RESSTR(RID_SVXITEMS_PAGE_COMPLETE);
-            if ( aDescName.Len() )
+            if ( !aDescName.isEmpty() )
             {
                 rText += aDescName + cpDelimTmp;
             }

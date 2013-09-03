@@ -62,8 +62,8 @@ portait or landscape, layout)
 class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 {
 private:
-    String          aDescName;          // name of the template
-    SvxNumType      eNumType;           // enumeration
+    OUString            aDescName;          // name of the template
+    SvxNumType          eNumType;           // enumeration
     sal_Bool            bLandscape;         // Portrait / Landscape
     sal_uInt16          eUse;               // Layout
 
@@ -98,8 +98,8 @@ public:
     void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
 
     // name of the descriptor
-    const String&   GetDescName() const                 { return aDescName;  }
-    void            SetDescName(const String& rStr)     { aDescName = rStr;  }
+    const OUString& GetDescName() const                 { return aDescName;  }
+    void            SetDescName(const OUString& rStr)     { aDescName = rStr;  }
 };
 
 
