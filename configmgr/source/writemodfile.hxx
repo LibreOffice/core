@@ -22,12 +22,14 @@
 
 #include "sal/config.h"
 
-
 namespace configmgr {
 
 class Components;
 struct Data;
 
+void writeData(oslFileHandle handle, OString const & text);
+void writeAttributeValue(oslFileHandle handle, OUString const & value);
+void writeValueContent(oslFileHandle handle, OUString const & value);
 void writeModFile(
     Components & components, OUString const & url, Data const & data);
 
