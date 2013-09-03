@@ -197,11 +197,11 @@ private:
     bool            bReadOnly;
     bool            bConstruct;
     sal_uIntPtr         nModifyFlag;
-    String          aStylesStr;
-    String          aLayoutStr;
-    String          aLayoutWriterStr;
-    String          aLayoutCalcStr;
-    String aCalcStr;
+    OUString        aStylesStr;
+    OUString        aLayoutStr;
+    OUString        aLayoutWriterStr;
+    OUString        aLayoutCalcStr;
+    OUString        aCalcStr;
 
     std::vector<OUString> aSearchStrings;
     std::vector<OUString> aReplaceStrings;
@@ -236,9 +236,9 @@ private:
     void            Init_Impl( int bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
-    void            Remember_Impl( const String &rStr,sal_Bool bSearch );
+    void            Remember_Impl( const OUString &rStr,sal_Bool bSearch );
     void            PaintAttrText_Impl();
-    String&         BuildAttrText_Impl( String& rStr, sal_Bool bSrchFlag ) const;
+    OUString&       BuildAttrText_Impl( OUString& rStr, sal_Bool bSrchFlag ) const;
 
     void            TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool );
     void            EnableControls_Impl( const sal_uInt16 nFlags );

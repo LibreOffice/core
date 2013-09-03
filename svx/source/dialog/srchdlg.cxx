@@ -366,7 +366,7 @@ void SvxSearchDialog::Construct_Impl()
     EnableControls_Impl( 0 );
 
     // Store old Text from m_pWordBtn
-    aCalcStr += sal_Unicode('#');
+    aCalcStr += "#";
     aCalcStr += m_pWordBtn->GetText();
 
     aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
@@ -798,7 +798,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
                     m_pCalcSearchInLB->SelectEntryPos( SVX_SEARCHIN_NOTE );
                 break;
         }
-        m_pWordBtn->SetText( aCalcStr.GetToken( 0, '#' ) );
+        m_pWordBtn->SetText( aCalcStr.getToken( 0, '#' ) );
 
         if ( pSearchItem->GetRowDirection() &&
              ( nModifyFlag & MODIFY_ROWS ) == 0 )
@@ -817,7 +817,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     }
     else
     {
-        m_pWordBtn->SetText( aCalcStr.GetToken( 1, '#' ) );
+        m_pWordBtn->SetText( aCalcStr.getToken( 1, '#' ) );
 
         if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_DRAW )
         {
@@ -1045,7 +1045,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
     }
 
     // See to it that are the texts of the attributes are correct
-    String aDesc;
+    OUString aDesc;
 
     if ( pSSet )
     {
@@ -1061,7 +1061,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
             else
                 pImpl->m_pSearchFormats->SetText( BuildAttrText_Impl( aDesc, sal_True ) );
 
-            if ( aDesc.Len() )
+            if ( !aDesc.isEmpty() )
                 bFormat |= sal_True;
         }
     }
@@ -1080,7 +1080,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
             else
                 pImpl->m_pReplaceFormats->SetText( BuildAttrText_Impl( aDesc, sal_False ) );
 
-            if ( aDesc.Len() )
+            if ( !aDesc.isEmpty() )
                 bFormat |= sal_True;
         }
     }
@@ -1432,7 +1432,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 
     if ( bFormat )
         return 0;
-    String sDesc;
+    OUString sDesc;
 
     if ( m_pLayoutBtn->IsChecked() )
     {
@@ -1529,9 +1529,9 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-void SvxSearchDialog::Remember_Impl( const String &rStr,sal_Bool _bSearch )
+void SvxSearchDialog::Remember_Impl( const OUString &rStr, sal_Bool _bSearch )
 {
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return;
 
     std::vector<OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
@@ -2074,11 +2074,11 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
 
 // -----------------------------------------------------------------------
 
-String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
+OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
                                              sal_Bool bSrchFlag ) const
 {
-    if ( rStr.Len() )
-        rStr.Erase();
+    if ( !rStr.isEmpty() )
+        rStr = "";
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "no DocShell" );
@@ -2117,8 +2117,8 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
     {
         const SearchAttrItem& rItem = pList->GetObject(i);
 
-        if ( rStr.Len() )
-            rStr.AppendAscii( ", " );
+        if ( !rStr.isEmpty() )
+            rStr += ", ";
 
         if ( !IsInvalidItem( rItem.pItem ) )
         {
@@ -2147,10 +2147,10 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
 
 void SvxSearchDialog::PaintAttrText_Impl()
 {
-    String aDesc;
+    OUString aDesc;
     BuildAttrText_Impl( aDesc, bSearch );
 
-    if ( !bFormat && aDesc.Len() )
+    if ( !bFormat && !aDesc.isEmpty() )
         bFormat = sal_True;
 
     if ( bSearch )
