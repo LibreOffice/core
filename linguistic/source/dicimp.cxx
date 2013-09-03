@@ -121,8 +121,8 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
                 if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("<none>")))
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = LanguageTag(OStringToOUString(
-                        aTagValue, RTL_TEXTENCODING_ASCII_US)).getLanguageType();
+                    nLng = LanguageTag::convertToLanguageTypeWithFallback(
+                            OStringToOUString( aTagValue, RTL_TEXTENCODING_ASCII_US));
             }
 
             // type: negative / positive
