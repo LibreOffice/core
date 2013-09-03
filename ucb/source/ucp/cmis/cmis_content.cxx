@@ -1499,8 +1499,6 @@ namespace cmis
             aParentUrl.removeSegment( );
             return aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
         }
-
-        return parentUrl;
     }
 
     XTYPEPROVIDER_COMMON_IMPL( Content );
