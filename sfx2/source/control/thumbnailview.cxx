@@ -89,22 +89,21 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
         return;
 
     (void) rMEvt; // unused parameter
-    ThumbnailViewItem *pItem;
     size_t      nItemCount = mFilteredItemList.size();
-    bool        bFound = false;
     Point       aPoint = GetPointerState().maPos;
+    OUString    aHelp;
 
-    for ( size_t i = 0; i < nItemCount && !bFound; i++ )
+    for ( size_t i = 0; i < nItemCount; i++ )
     {
-        pItem = mFilteredItemList[i];
+        ThumbnailViewItem *pItem = mFilteredItemList[i];
         if ( pItem->mbVisible && pItem->getDrawArea().IsInside(aPoint) )
-            bFound = true;
+        {
+            aHelp = pItem->maTitle;
+            break;
+        }
     }
 
-    if ( bFound )
-        SetQuickHelpText(pItem->maTitle);
-    else
-        SetQuickHelpText("");
+    SetQuickHelpText(aHelp);
 }
 
 void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
