@@ -26,7 +26,6 @@
 #include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
 #include <cuires.hrc>
-#include <svl/filerec.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
 #include "fmsearch.hrc"
