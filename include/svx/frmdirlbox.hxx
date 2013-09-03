@@ -45,7 +45,7 @@ public:
 
     /** Inserts a string with corresponding direction enum into the listbox. */
     void                InsertEntryValue(
-                            const String& rString,
+                            const OUString& rString,
                             SvxFrameDirection eDirection,
                             sal_uInt16 nPos = LISTBOX_APPEND );
     /** Removes the entry, that represents the specified frame direction. */

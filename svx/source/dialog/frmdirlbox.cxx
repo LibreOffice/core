@@ -62,7 +62,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFrameDirectionListBox(Windo
 }
 
 
-void FrameDirectionListBox::InsertEntryValue( const String& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
+void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = InsertEntry( rString, nPos );
     SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
