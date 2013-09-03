@@ -47,7 +47,7 @@ class SvtLanguageTable;
 
 
 // load language strings from resource
-SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const sal_uInt16 nLang, bool bNeg );
+SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
@@ -56,7 +56,7 @@ public:
 private:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
-    String                  m_aAllString;
+    OUString                m_aAllString;
     com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;
     sal_Int16                   m_nLangList;
@@ -65,7 +65,7 @@ private:
     sal_Bool                    m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                    Init();
-    SVX_DLLPRIVATE sal_uInt16                  ImplInsertImgEntry( const String& rEntry, sal_uInt16 nPos, bool bChecked );
+    SVX_DLLPRIVATE sal_uInt16                  ImplInsertImgEntry( const OUString& rEntry, sal_uInt16 nPos, bool bChecked );
     SVX_DLLPRIVATE sal_uInt16                  ImplInsertLanguage(LanguageType, sal_uInt16, sal_Int16 );
 
 public:

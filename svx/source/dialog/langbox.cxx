@@ -41,27 +41,26 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------------------------------------------------
 
-String GetDicInfoStr( const String& rName, const sal_uInt16 nLang, bool bNeg )
+OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
     aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
-    String aTmp( aURLObj.GetBase() );
-    aTmp += sal_Unicode( ' ' );
+    OUString aTmp( aURLObj.GetBase() );
+    aTmp += " ";
 
     if ( bNeg )
     {
-        sal_Char const sTmp[] = " (-) ";
-        aTmp.AppendAscii( sTmp );
+        aTmp += " (-) ";
     }
 
     if ( LANGUAGE_NONE == nLang )
         aTmp += SVX_RESSTR(RID_SVXSTR_LANGUAGE_ALL);
     else
     {
-        aTmp += sal_Unicode( '[' );
+        aTmp += " '[' ";
         aTmp += SvtLanguageTable::GetLanguageString( (LanguageType)nLang );
-        aTmp += sal_Unicode( ']' );
+        aTmp += " ']' ";
     }
 
     return aTmp;
@@ -189,7 +188,7 @@ SvxLanguageBox::~SvxLanguageBox()
 
 //------------------------------------------------------------------------
 
-sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const String& rEntry, sal_uInt16 nPos, bool bChecked )
+sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_uInt16 nPos, bool bChecked )
 {
     sal_uInt16 nRet = 0;
     if( !bChecked )
