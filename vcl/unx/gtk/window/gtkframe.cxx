@@ -2719,7 +2719,7 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
 
 void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11Screen nXScreen )
 {
-    bool bWasVisible = IS_WIDGET_MAPPED(m_pWindow);
+    bool bWasVisible = m_pWindow ? IS_WIDGET_MAPPED(m_pWindow) : false;
     if( bWasVisible )
         Show( sal_False );
 
