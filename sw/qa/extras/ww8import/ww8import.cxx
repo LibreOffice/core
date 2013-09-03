@@ -255,7 +255,7 @@ void Test::testI120158()
 
 void Test::testN816603()
 {
-    // Bugdoc was 5 page in Word, 1 in Writer due to pointlessly wrapping the
+    // Bugdoc was 5 pages in Word, 1 in Writer due to pointlessly wrapping the
     // table in a frame. Exact layout may depend on fonts available, etc. --
     // but at least make sure that our table spans over multiple pages now.
     CPPUNIT_ASSERT(getPages() > 1);
