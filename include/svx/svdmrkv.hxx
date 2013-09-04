@@ -160,7 +160,7 @@ protected:
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     sal_Bool ImpIsFrameHandles() const;
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
     sal_Bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, sal_Bool bUnmark);

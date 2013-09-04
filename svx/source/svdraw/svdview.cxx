@@ -1163,18 +1163,18 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 }
 
 #define STR_NOTHING "nothing"
-XubString SdrView::GetStatusText()
+OUString SdrView::GetStatusText()
 {
-    XubString aStr;
-    XubString aName;
+    OUString aStr;
+    OUString aName;
 
-    aStr.AppendAscii(STR_NOTHING);
+    aStr += STR_NOTHING;
 
     if (pAktCreate!=NULL)
     {
         aStr=pAktCreate->getSpecialDragComment(aDragStat);
 
-        if(!aStr.Len())
+        if(aStr.isEmpty())
         {
             aName = pAktCreate->TakeObjNameSingul();
             aStr = ImpGetResStr(STR_ViewCreateObj);
@@ -1253,9 +1253,9 @@ XubString SdrView::GetStatusText()
             if (nLen==0) bBrk=true; // to be sure
         }
 
-        aStr.SearchAndReplaceAscii("%1", OUString::number(nPar + 1));
-        aStr.SearchAndReplaceAscii("%2", OUString::number(nLin + 1));
-        aStr.SearchAndReplaceAscii("%3", OUString::number(nCol + 1));
+        aStr = aStr.replaceFirst("%1", OUString::number(nPar + 1));
+        aStr = aStr.replaceFirst("%2", OUString::number(nLin + 1));
+        aStr = aStr.replaceFirst("%3", OUString::number(nCol + 1));
 
 #ifdef DBG_UTIL
         aStr += OUString( ", Level " );
@@ -1263,7 +1263,7 @@ XubString SdrView::GetStatusText()
 #endif
     }
 
-    if(aStr.EqualsAscii(STR_NOTHING))
+    if(aStr.equals(STR_NOTHING))
     {
         if (AreObjectsMarked()) {
             ImpTakeDescriptionStr(STR_ViewMarked,aStr);
@@ -1277,19 +1277,18 @@ XubString SdrView::GetStatusText()
                 }
             }
         } else {
-            aStr.Erase();
+            aStr = OUString();
         }
     }
-    else if(aName.Len())
+    else if(!aName.isEmpty())
     {
-        aStr.SearchAndReplaceAscii("%1", aName);
+        aStr = aStr.replaceFirst("%1", aName);
     }
 
-    if(aStr.Len())
+    if(!aStr.isEmpty())
     {
         // capitalize first letter
-        OUString aTmpStr(aStr.Copy(0, 1));
-        aStr.Replace(0, 1, aTmpStr.toAsciiUpperCase());
+        aStr.replaceAt(0, 1, OUString(aStr[0]).toAsciiUpperCase());
     }
     return aStr;
 }

@@ -79,7 +79,7 @@ public:
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
         sal_Bool bFull = sal_False);
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual void CancelSdrDrag();

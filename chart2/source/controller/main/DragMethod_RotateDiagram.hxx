@@ -45,7 +45,7 @@ public:
         );
     virtual ~DragMethod_RotateDiagram();
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
 
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);

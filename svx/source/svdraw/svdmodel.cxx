@@ -1390,7 +1390,7 @@ void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPercentChar) const
+void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar) const
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
@@ -1412,10 +1412,10 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPer
     rStr = OUString::number(nMul);
 
     if(bNeg)
-        rStr.Insert(sal_Unicode('-'), 0);
+        rStr = "-" + rStr;
 
     if(!bNoPercentChar)
-        rStr += sal_Unicode('%');
+        rStr += "%";
 }
 
 void SdrModel::SetChanged(sal_Bool bFlg)

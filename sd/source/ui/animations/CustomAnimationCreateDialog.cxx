@@ -76,7 +76,7 @@ public:
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt );
 
-    sal_uInt16          InsertCategory( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertCategory( const OUString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
 
     void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
@@ -104,7 +104,7 @@ CategoryListBox::~CategoryListBox()
 {
 }
 
-sal_uInt16 CategoryListBox::InsertCategory( const XubString& rStr, sal_uInt16 nPos /* = LISTBOX_APPEND */ )
+sal_uInt16 CategoryListBox::InsertCategory( const OUString& rStr, sal_uInt16 nPos /* = LISTBOX_APPEND */ )
 {
     sal_uInt16 n = ListBox::InsertEntry( rStr, nPos );
     if( n != LISTBOX_ENTRY_NOTFOUND )

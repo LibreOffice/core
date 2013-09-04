@@ -1994,36 +1994,32 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, XubString& rStr, sal_uInt16 nVal, sal_uInt16 nOpt) const
+void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal, sal_uInt16 nOpt) const
 {
     rStr = ImpGetResStr(nStrCacheID);
-    xub_StrLen nPos = rStr.SearchAscii("%1");
 
-    if(nPos != STRING_NOTFOUND)
+    // check if there's something to replace
+    if (rStr.indexOf("%1") != -1)
     {
-        rStr.Erase(nPos, 2);
+        OUString aStr;
 
         if(nOpt == IMPSDR_POINTSDESCRIPTION)
         {
-            rStr.Insert(GetDescriptionOfMarkedPoints(), nPos);
+            aStr = GetDescriptionOfMarkedPoints();
         }
         else if(nOpt == IMPSDR_GLUEPOINTSDESCRIPTION)
         {
-            rStr.Insert(GetDescriptionOfMarkedGluePoints(), nPos);
+            aStr = GetDescriptionOfMarkedGluePoints();
         }
         else
         {
-            rStr.Insert(GetDescriptionOfMarkedObjects(), nPos);
+            aStr = GetDescriptionOfMarkedObjects();
         }
+
+        rStr = rStr.replaceFirst("%1", aStr);
     }
 
-    nPos = rStr.SearchAscii("%2");
-
-    if(nPos != STRING_NOTFOUND)
-    {
-        rStr.Erase(nPos, 2);
-        rStr.Insert(OUString::number( nVal ), nPos);
-    }
+    rStr = rStr.replaceFirst("%2", OUString::number( nVal ));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

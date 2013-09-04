@@ -32,7 +32,7 @@ public:
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     virtual ~DragMethod_PieSegment();
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual bool BeginSdrDrag();
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual bool EndSdrDrag(bool bCopy);

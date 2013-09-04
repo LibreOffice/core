@@ -1369,17 +1369,17 @@ sal_Bool SdrObjEditView::ImpIsTextEditAllSelected() const
             ESelection aESel(pTextEditOutlinerView->GetSelection());
             if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==(nParaAnz-1))
             {
-                XubString aStr(pTextEditOutliner->GetText(pLastPara));
+                OUString aStr(pTextEditOutliner->GetText(pLastPara));
 
-                if(aStr.Len() == aESel.nEndPos)
+                if(aStr.getLength() == aESel.nEndPos)
                     bRet = sal_True;
             }
             // in case the selection was done backwards
             if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==(nParaAnz-1))
             {
-                XubString aStr(pTextEditOutliner->GetText(pLastPara));
+                OUString aStr(pTextEditOutliner->GetText(pLastPara));
 
-                if(aStr.Len() == aESel.nStartPos)
+                if(aStr.getLength() == aESel.nStartPos)
                     bRet = sal_True;
             }
         }
@@ -1539,7 +1539,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
 
                 if( bUndo )
                 {
-                    String aStr;
+                    OUString aStr;
                     ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));
@@ -1588,7 +1588,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
             {
                 if( IsUndoEnabled() )
                 {
-                    String aStr;
+                    OUString aStr;
                     ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
                     BegUndo(aStr);
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*mxTextEditObj.get()));

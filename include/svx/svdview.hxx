@@ -249,7 +249,7 @@ public:
     //   - Object-specific dragging
     //   - General dragging
     // und mehr...
-    String GetStatusText();
+    OUString GetStatusText();
 
     SvtAccessibilityOptions& getAccessibilityOptions();
 
@@ -298,7 +298,7 @@ public:
 //   Sonstiges:
 //   ~~~~~~~~~~
 //     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
-//     String  GetStatusText();
+//     OUString GetStatusText();
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 

@@ -40,7 +40,7 @@ public:
 
     virtual OUString getUndoDescription() const;
 
-    virtual void TakeSdrDragComment(String& rStr) const;
+    virtual void TakeSdrDragComment(OUString& rStr) const;
     virtual Pointer GetSdrDragPointer() const;
 
 protected:

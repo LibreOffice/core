@@ -413,7 +413,7 @@ public:
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void             TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
-    void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
+    void             TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.
     bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };
