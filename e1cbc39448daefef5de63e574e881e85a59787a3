@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7h8\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1000257
+      },
+      "writtenOn": "2013-09-04T08:40:36Z",
+      "side": 1,
+      "message": "I am getting the error at this line http://pastebin.com/u2M3Pwu2 . I am not able to understand the error message.",
+      "revId": "e1cbc39448daefef5de63e574e881e85a59787a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7h4\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000257
+      },
+      "writtenOn": "2013-09-04T08:40:36Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "e1cbc39448daefef5de63e574e881e85a59787a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
