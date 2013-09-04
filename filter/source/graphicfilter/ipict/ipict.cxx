@@ -1864,7 +1864,10 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
 //================== GraphicImport - the exported function ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+// this needs to be kept in sync with
+// ImpFilterLibCacheEntry::GetImportFunction() from
+// vcl/source/filter/graphicfilter.cxx
+#if defined(DISABLE_DYNLOADING)
 #define GraphicImport iptGraphicImport
 #endif
 
