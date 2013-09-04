@@ -239,7 +239,7 @@ private:
     void InitToolBoxSpacing();
     void InitToolBoxLineSpacing();
 
-    void SetBGColor (const String& rsColorName, const Color aColor);
+    void SetBGColor (const OUString& rsColorName, const Color aColor);
 };
 
 } } // end of namespace ::svx::sidebar

@@ -651,7 +651,7 @@ void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eS
 }
 
 void ParaPropertyPanel::SetBGColor (
-    const String& /*rsColorName*/,
+    const OUString& /*rsColorName*/,
     const Color aColor)
 {
     SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);

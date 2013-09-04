@@ -47,7 +47,7 @@ class ToolBox;
 class FloatingWindow;
 
 namespace {
-    #define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE String("PopupPanel_LineWidth", 20, RTL_TEXTENCODING_ASCII_US)
+    #define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE "PopupPanel_LineWidth"
 } //end of anonymous namespace
 
 namespace svx { namespace sidebar {
@@ -175,7 +175,7 @@ private:
     virtual ~LinePropertyPanel(void);
 
     void SetColor(
-        const String& rsColorName,
+        const OUString& rsColorName,
         const Color aColor);
 
     PopupControl* CreateColorPopupControl (PopupContainer* pParent);

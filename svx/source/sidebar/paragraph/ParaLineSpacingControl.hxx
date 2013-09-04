@@ -32,8 +32,8 @@
 
 namespace svx { namespace sidebar {
 
-#define LSP_POS_GLOBAL_VALUE    String("Line_Spacing_Pos", 16, RTL_TEXTENCODING_ASCII_US)
-#define LSP_LV_GLOBAL_VALUE     String("Line_Spacing_Lv", 15, RTL_TEXTENCODING_ASCII_US)
+#define LSP_POS_GLOBAL_VALUE   "Line_Spacing_Pos"
+#define LSP_LV_GLOBAL_VALUE    "Line_Spacing_Lv"
 #define BEGIN_VALUE            28
 class ParaLineSpacingControl:public svx::sidebar::PopupControl
 {
@@ -59,46 +59,46 @@ public:
 private:
     bool                    mbUseLineSPCustom;
     bool                    mbLineSPDisable;
-    SfxMapUnit                      m_eLNSpaceUnit;
-    ParaPropertyPanel&     mrParaPropertyPanel;
-    SfxBindings*        mpBindings;
+    SfxMapUnit              m_eLNSpaceUnit;
+    ParaPropertyPanel&      mrParaPropertyPanel;
+    SfxBindings*            mpBindings;
 
-    long                            nMinFixDist;
-    Edit*                           pActLineDistFld;
+    long                    nMinFixDist;
+    Edit*                   pActLineDistFld;
 
     ValueSetWithTextControl maLineSpacing;
 
-    FixedText maCustomFT;
-    FixedText maLSpacingFT;
-    ListBox                         aLineDist;
+    FixedText               maCustomFT;
+    FixedText               maLSpacingFT;
+    ListBox                 aLineDist;
 
-    FixedText maOfFT;
-    MetricField                     aLineDistAtPercentBox;
-    MetricField                     aLineDistAtMetricBox;
+    FixedText               maOfFT;
+    MetricField             aLineDistAtPercentBox;
+    MetricField             aLineDistAtMetricBox;
 
-    Image  maSpacing1;
-    Image  maSpacing115;
-    Image  maSpacing15;
-    Image  maSpacing2;
+    Image                   maSpacing1;
+    Image                   maSpacing115;
+    Image                   maSpacing15;
+    Image                   maSpacing2;
 
-    Image  maSelSpacing1;
-    Image  maSelSpacing115;
-    Image  maSelSpacing15;
-    Image  maSelSpacing2;
-    Image  maSelSelHanging;
-    Image               maImgCus;
-    Image               maImgCusGrey;
-    OUString            maStrCus;
+    Image                   maSelSpacing1;
+    Image                   maSelSpacing115;
+    Image                   maSelSpacing15;
+    Image                   maSelSpacing2;
+    Image                   maSelSelHanging;
+    Image                   maImgCus;
+    Image                   maImgCusGrey;
+    OUString                maStrCus;
 
-    Image*              mpImg;
-    Image*              mpImgSel;
-    OUString*           mpStr;
-    OUString*           mpStrTip;
-    String              maLine;
-    String              maOf;
+    Image*                  mpImg;
+    Image*                  mpImgSel;
+    OUString*               mpStr;
+    OUString*               mpStrTip;
+    OUString                maLine;
+    OUString                maOf;
 
-    sal_Int64             maValue;
-    sal_uInt16                maPos;
+    sal_Int64               maValue;
+    sal_uInt16              maPos;
 private:
     void initial();
     DECL_LINK(LineSPDistHdl_Impl, ListBox*);

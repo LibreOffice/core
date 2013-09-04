@@ -528,7 +528,7 @@ IMPL_LINK(AreaPropertyPanel, ToolBoxColorDropHdl, ToolBox*, pToolBox)
 
 
 void AreaPropertyPanel::SetColor (
-    const String& rsColorName,
+    const OUString& rsColorName,
     const Color aColor)
 {
     const XFillColorItem aXFillColorItem(rsColorName, aColor);

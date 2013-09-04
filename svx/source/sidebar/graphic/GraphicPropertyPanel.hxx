@@ -74,10 +74,10 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
 
-    String                                              msNormal;
-    String                                              msBW;
-    String                                              msGray;
-    String                                              msWater;
+    OUString                                            msNormal;
+    OUString                                            msBW;
+    OUString                                            msGray;
+    OUString                                            msWater;
 
     cssu::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;

@@ -136,8 +136,8 @@ private:
     Image                                               maImgLinear;
     Image                                               maImgColor;
 
-    String                                              msHelpFillType;
-    String                                              msHelpFillAttr;
+    OUString                                            msHelpFillType;
+    OUString                                            msHelpFillAttr;
 
     AreaTransparencyGradientPopup maTrGrPopup;
     ColorPopup maColorPopup;
@@ -179,7 +179,7 @@ private:
 
     Color GetLastColor (void) const;
     void SetColor (
-        const String& rsColorName,
+        const OUString& rsColorName,
         const Color aColor);
 };
 

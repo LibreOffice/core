@@ -963,7 +963,7 @@ void LinePropertyPanel::SetWidthIcon()
 
 
 void LinePropertyPanel::SetColor (
-    const String& rsColorName,
+    const OUString& rsColorName,
     const Color aColor)
 {
     XLineColorItem aColorItem(rsColorName, aColor);

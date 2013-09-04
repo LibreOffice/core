@@ -34,8 +34,8 @@ class SvxSBFontNameBox : public FontNameBox//, public SfxListener
 private:
     const FontList* pFontList;
     Font            aCurFont;
-    String          aCurText;
-    sal_uInt16 nFtCount;
+    OUString        aCurText;
+    sal_uInt16      nFtCount;
     void            EnableControls_Impl();
     SfxBindings*    pBindings;//
 protected:
