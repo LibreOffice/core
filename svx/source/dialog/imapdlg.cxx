@@ -588,13 +588,13 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
     if ( rInfo.bNewObj )
     {
-        if( rInfo.aMarkURL.Len() && ( maURLBox.GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
+        if( !rInfo.aMarkURL.isEmpty() && ( maURLBox.GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
             maURLBox.InsertEntry( rInfo.aMarkURL );
 
         maURLBox.SetText( rInfo.aMarkURL );
         aEdtText.SetText( rInfo.aMarkAltText );
 
-        if ( !rInfo.aMarkTarget.Len() )
+        if ( rInfo.aMarkTarget.isEmpty() )
             maCbbTarget.SetText( SELF_TARGET );
         else
             maCbbTarget.SetText( rInfo.aMarkTarget );
@@ -640,7 +640,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         if ( aEdtText.GetText() != OUString(rInfo.aMarkAltText) )
             aEdtText.SetText( rInfo.aMarkAltText );
 
-        if ( !rInfo.aMarkTarget.Len() )
+        if ( rInfo.aMarkTarget.isEmpty() )
             maCbbTarget.SetText( SELF_TARGET );
         else
             maCbbTarget.SetText(  rInfo.aMarkTarget );

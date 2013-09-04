@@ -34,9 +34,9 @@
 
 struct NotifyInfo
 {
-    String  aMarkURL;
-    String  aMarkAltText;
-    String  aMarkTarget;
+    OUString    aMarkURL;
+    OUString    aMarkAltText;
+    OUString    aMarkTarget;
     sal_Bool    bNewObj;
     sal_Bool    bOneMarked;
     sal_Bool    bActivated;
