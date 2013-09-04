@@ -191,6 +191,10 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
                 callSettingsActivity();
                 return true;
 
+            case R.id.menu_requirements:
+                callRequirementsActivity();
+                return true;
+
             case R.id.menu_licenses:
                 callLicensesActivity();
                 return true;
@@ -202,6 +206,11 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
 
     private void callSettingsActivity() {
         Intent aIntent = Intents.buildSettingsIntent(this);
+        startActivity(aIntent);
+    }
+
+    private void callRequirementsActivity() {
+        Intent aIntent = Intents.buildRequirementsIntent(this);
         startActivity(aIntent);
     }
 

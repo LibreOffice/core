@@ -4,10 +4,12 @@
     <string name="application_name">Impress Remote</string>
 
     <string name="title_computers">Computers</string>
+    <string name="title_generic">Generic</string>
     <string name="title_bluetooth" translatable="false">Bluetooth</string>
     <string name="title_wifi" translatable="false">WiFi</string>
     <string name="title_licenses">Open source licenses</string>
     <string name="title_settings">Settings</string>
+    <string name="title_requirements">Requirements</string>
     <string name="title_connection">Connection</string>
     <string name="title_creation">Creation</string>
     <string name="title_slide_show">Slide Show</string>
@@ -15,6 +17,7 @@
 
     <string name="menu_licenses">Open source licenses</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_requirements">Requirements</string>
     <string name="menu_reconnect">Reconnect</string>
     <string name="menu_add_computer">Add computer</string>
     <string name="menu_remove_computer">Remove</string>
@@ -54,5 +57,12 @@
     <string name="preferences_volume_keys_actions_summary">Switch slides and activate animations using volume keys</string>
     <string name="preferences_keep_screen_on_title">Screen on</string>
     <string name="preferences_keep_screen_on_summary">Keep screen on while presenting</string>
+
+    <string name="requirements_libreoffice_version">LibreOffice version 4.0.3 or higher running on a computer.</string>
+    <string name="requirements_libreoffice_general_enabled">Impress Remote enabled at “Tools → Options → LibreOffice Impress → General” in LibreOffice Impress.</string>
+    <string name="requirements_libreoffice_experimental_enabled">Experimental features enabled at “Tools → Options → LibreOffice → Advanced” in LibreOffice Impress.</string>
+    <string name="requirements_network_connection">The Android device and a computer connected to the same network.</string>
+    <string name="requirements_network_ports">If you have a firewall make sure ports 1598 and 1599 are opened.</string>
+    <string name="requirements_bluetooth_connection">A computer with enabled Bluetooth.</string>
 
 </resources>

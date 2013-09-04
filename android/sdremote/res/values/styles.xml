@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SectionHeader">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/background_header</item>
+        <item name="android:drawableBottom">@drawable/underline_header</item>
+        <item name="android:drawablePadding">@dimen/padding_header_underline</item>
+        <item name="android:paddingLeft">@dimen/padding_header</item>
+        <item name="android:paddingRight">@dimen/padding_header</item>
+        <item name="android:paddingTop">@dimen/padding_header</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SectionItem">
+        <item name="android:padding">@dimen/padding_section_item</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+</resources>

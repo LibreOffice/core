@@ -12,6 +12,8 @@
     <dimen name="padding_header_underline">4dp</dimen>
     <dimen name="padding_header">8dp</dimen>
     <dimen name="padding_slide_notes">8dp</dimen>
+    <dimen name="padding_help">16dp</dimen>
+    <dimen name="padding_section_item">8dp</dimen>
 
     <dimen name="padding_horizontal_list_item">8dp</dimen>
     <dimen name="padding_horizontal_connection_layout">40dp</dimen>

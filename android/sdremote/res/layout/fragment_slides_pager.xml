@@ -35,17 +35,9 @@
             android:layout_height="match_parent">
 
             <TextView
+                style="@style/SectionHeader"
                 android:text="@string/header_notes"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:textColor="@color/background_header"
-                android:drawableBottom="@drawable/underline_header"
-                android:drawablePadding="@dimen/padding_header_underline"
-                android:paddingLeft="@dimen/padding_header"
-                android:paddingTop="@dimen/padding_header"
-                android:gravity="left"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:paddingTop="@dimen/padding_header"/>
 
             <ScrollView
                 android:layout_width="wrap_content"

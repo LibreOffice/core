@@ -59,6 +59,11 @@
         </activity>
 
         <activity
+            android:name=".activity.RequirementsActivity"
+            android:label="@string/title_requirements">
+        </activity>
+
+        <activity
             android:name=".activity.LicensesActivity"
             android:label="@string/title_licenses">
         </activity>
