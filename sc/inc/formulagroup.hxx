@@ -23,10 +23,13 @@ namespace sc {
 
 struct FormulaGroupContext : boost::noncopyable
 {
-    typedef std::vector<double> DoubleArrayType;
-    typedef boost::ptr_vector<DoubleArrayType> ArrayStoreType;
+    typedef std::vector<double> NumArrayType;
+    typedef std::vector<OUString> StrArrayType;
+    typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
+    typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
-    ArrayStoreType maArrays;
+    NumArrayStoreType maNumArrays;
+    StrArrayStoreType maStrArrays;
 };
 
 /**

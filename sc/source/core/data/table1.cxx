@@ -49,6 +49,8 @@
 #include "scmatrix.hxx"
 #include "refupdatecontext.hxx"
 
+#include "formula/vectortoken.hxx"
+
 #include <vector>
 
 using ::std::vector;
@@ -2148,16 +2150,16 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     return formula::FormulaTokenRef(new ScMatrixToken(pMat));
 }
 
-const double* ScTable::FetchDoubleArray(
+formula::VectorRefArray ScTable::FetchVectorRefArray(
     sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
     if (nRow2 < nRow1)
-        return NULL;
+        return formula::VectorRefArray();
 
     if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
-        return NULL;
+        return formula::VectorRefArray();
 
-    return aCol[nCol].FetchDoubleArray(rCxt, nRow1, nRow2);
+    return aCol[nCol].FetchVectorRefArray(rCxt, nRow1, nRow2);
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )

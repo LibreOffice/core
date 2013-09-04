@@ -35,6 +35,7 @@
 #include <mdds/flat_segment_tree.hpp>
 
 namespace editeng { class SvxBorderLine; }
+namespace formula { struct VectorRefArray; }
 
 namespace sc {
     struct FormulaGroupContext;
@@ -469,7 +470,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const;
-    const double* FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    formula::VectorRefArray FetchVectorRefArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 );
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );

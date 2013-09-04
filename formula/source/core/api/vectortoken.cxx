@@ -11,17 +11,24 @@
 
 namespace formula {
 
+VectorRefArray::VectorRefArray() : mpNumericArray(NULL), mbNumeric(true) {}
+VectorRefArray::VectorRefArray( const double* pArray ) : mpNumericArray(pArray), mbNumeric(true) {}
+VectorRefArray::VectorRefArray( const OUString* pArray ) : mpStringArray(pArray), mbNumeric(false) {}
+
 SingleVectorRefToken::SingleVectorRefToken( const double* pArray, size_t nLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), mpArray(pArray), mnArrayLength(nLength) {}
+    FormulaToken(svSingleVectorRef, ocPush), maArray(pArray), mnArrayLength(nLength) {}
+
+SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nLength ) :
+    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnArrayLength(nLength) {}
 
 FormulaToken* SingleVectorRefToken::Clone() const
 {
-    return new SingleVectorRefToken(mpArray, mnArrayLength);
+    return new SingleVectorRefToken(maArray, mnArrayLength);
 }
 
-const double* SingleVectorRefToken::GetArray() const
+const VectorRefArray& SingleVectorRefToken::GetArray() const
 {
-    return mpArray;
+    return maArray;
 }
 
 size_t SingleVectorRefToken::GetArrayLength() const
@@ -30,7 +37,7 @@ size_t SingleVectorRefToken::GetArrayLength() const
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<const double*>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
+    const std::vector<VectorRefArray>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
     FormulaToken(svDoubleVectorRef, ocPush),
     maArrays(rArrays), mnArrayLength(nArrayLength), mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
 
@@ -39,7 +46,7 @@ FormulaToken* DoubleVectorRefToken::Clone() const
     return new DoubleVectorRefToken(maArrays, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
 }
 
-const std::vector<const double*>& DoubleVectorRefToken::GetArrays() const
+const std::vector<VectorRefArray>& DoubleVectorRefToken::GetArrays() const
 {
     return maArrays;
 }

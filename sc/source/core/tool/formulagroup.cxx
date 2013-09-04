@@ -68,14 +68,17 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                 case formula::svSingleVectorRef:
                 {
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
-                    const double* pArray = p2->GetArray();
-                    aCode2.AddDouble(static_cast<size_t>(i) < p2->GetArrayLength() ? pArray[i] : 0.0);
+                    const formula::VectorRefArray& rArray = p2->GetArray();
+                    if (rArray.mbNumeric)
+                        aCode2.AddDouble(static_cast<size_t>(i) < p2->GetArrayLength() ? rArray.mpNumericArray[i] : 0.0);
+                    else
+                        aCode2.AddString(static_cast<size_t>(i) < p2->GetArrayLength() ? rArray.mpStringArray[i] : OUString());
                 }
                 break;
                 case formula::svDoubleVectorRef:
                 {
                     const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    const std::vector<const double*>& rArrays = p2->GetArrays();
+                    const std::vector<formula::VectorRefArray>& rArrays = p2->GetArrays();
                     size_t nColSize = rArrays.size();
                     size_t nRowStart = p2->IsStartFixed() ? 0 : i;
                     size_t nRowEnd = p2->GetRefRowSize() - 1;
@@ -85,9 +88,19 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
-                        const double* pArray = rArrays[nCol];
-                        pArray += nRowStart;
-                        pMat->PutDouble(pArray, nRowSize, nCol, 0);
+                        const formula::VectorRefArray& rArray = rArrays[nCol];
+                        if (rArray.mbNumeric)
+                        {
+                            const double* pNums = rArray.mpNumericArray;
+                            pNums += nRowStart;
+                            pMat->PutDouble(pNums, nRowSize, nCol, 0);
+                        }
+                        else
+                        {
+                            const OUString* pStrs = rArray.mpStringArray;
+                            pStrs += nRowStart;
+                            pMat->PutString(pStrs, nRowSize, nCol, 0);
+                        }
                     }
 
                     if (p2->IsStartFixed() && p2->IsEndFixed())

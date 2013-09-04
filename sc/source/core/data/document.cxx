@@ -95,6 +95,8 @@
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
 
+#include "formula/vectortoken.hxx"
+
 #include <map>
 #include <limits>
 #include <boost/scoped_ptr.hpp>
@@ -1662,14 +1664,14 @@ formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScRange& rRan
         rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
-const double* ScDocument::FetchDoubleArray(
+formula::VectorRefArray ScDocument::FetchVectorRefArray(
     sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength )
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
-        return NULL;
+        return formula::VectorRefArray();
 
-    return maTabs[nTab]->FetchDoubleArray(rCxt, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+    return maTabs[nTab]->FetchVectorRefArray(rCxt, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )

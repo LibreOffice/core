@@ -63,6 +63,7 @@
 #include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 #include "formula/errorcodes.hxx"
+#include "formula/vectortoken.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -2039,7 +2040,7 @@ void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nR
 namespace {
 
 bool appendDouble(
-    sc::FormulaGroupContext::DoubleArrayType& rArray, size_t nLen,
+    sc::FormulaGroupContext::NumArrayType& rArray, size_t nLen,
     sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
 {
     size_t nLenRemain = nLen;
@@ -2135,10 +2136,10 @@ bool appendDouble(
 
 }
 
-const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 )
+formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 )
 {
     if (nRow1 > nRow2)
-        return NULL;
+        return formula::VectorRefArray();
 
     size_t nLenRequested = nRow2 - nRow1 + 1;
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
@@ -2149,23 +2150,26 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
         {
             // This is a numeric cell block.
             if (nLenRequested <= nLen)
+            {
                 // Requested length fits a single block.
-                return &sc::numeric_block::at(*aPos.first->data, aPos.second);
+                const double* p = &sc::numeric_block::at(*aPos.first->data, aPos.second);
+                return formula::VectorRefArray(p);
+            }
 
             // Allocate a new array and copy the values to it.
             sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aPos.first->data);
             sc::numeric_block::const_iterator itEnd = sc::numeric_block::end(*aPos.first->data);
             std::advance(it, aPos.second);
-            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(it, itEnd));
-            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(it, itEnd));
+            sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
             rArray.reserve(nLenRequested);
 
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
             if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
-                return NULL;
+                return formula::VectorRefArray();
 
-            return &rArray[0];
+            return formula::VectorRefArray(&rArray[0]);
         }
         break;
         case sc::element_type_formula:
@@ -2173,8 +2177,8 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             sal_uInt16 nErr;
             double fVal;
 
-            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType);
-            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType);
+            sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
             rArray.reserve(nLenRequested);
 
             sc::formula_block::const_iterator it = sc::formula_block::begin(*aPos.first->data);
@@ -2196,13 +2200,13 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
                             rCell.SetErrCode(0);
                             rCell.SetDirtyVar();
                         }
-                        return NULL;
+                        return formula::VectorRefArray();
                     }
 
                     rArray.push_back(fVal);
                 }
 
-                return &rArray[0];
+                return formula::VectorRefArray(&rArray[0]);
             }
 
             // Requested length goes beyond a single block.  Fill the array
@@ -2219,7 +2223,7 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
                         rCell.SetErrCode(0);
                         rCell.SetDirtyVar();
                     }
-                    return NULL;
+                    return formula::VectorRefArray();
                 }
 
                 rArray.push_back(fVal);
@@ -2228,9 +2232,22 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
             if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
-                return NULL;
+                return formula::VectorRefArray();
 
-            return &rArray[0];
+            return formula::VectorRefArray(&rArray[0]);
+        }
+        break;
+        case sc::element_type_string:
+        {
+            if (nLenRequested <= nLen)
+            {
+                // Requested length fits a single block.
+                const OUString* p = &sc::string_block::at(*aPos.first->data, aPos.second);
+                return formula::VectorRefArray(p);
+            }
+
+            // TODO: handle cases where the requested length goes beyond the
+            // current block just like we do with numeric array.
         }
         break;
         case sc::element_type_empty:
@@ -2238,27 +2255,27 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW n
             if (nLenRequested <= nLen)
             {
                 // Fill the whole length with zero.
-                rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(nLenRequested, 0.0));
-                return &rCxt.maArrays.back()[0];
+                rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nLenRequested, 0.0));
+                return formula::VectorRefArray(&rCxt.maNumArrays.back()[0]);
             }
 
             // Fill the array with zero for the length of the empty block.
-            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(nLen, 0.0));
-            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nLen, 0.0));
+            sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
             rArray.reserve(nLenRequested);
 
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
             if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
-                return NULL;
+                return formula::VectorRefArray();
 
-            return &rArray[0];
+            return formula::VectorRefArray(&rArray[0]);
         }
         default:
             ;
     }
 
-    return NULL;
+    return formula::VectorRefArray();
 }
 
 void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen )

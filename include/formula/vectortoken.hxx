@@ -14,21 +14,36 @@
 
 namespace formula {
 
+struct FORMULA_DLLPUBLIC VectorRefArray
+{
+    union {
+        const double* mpNumericArray;
+        const OUString* mpStringArray;
+    };
+
+    bool mbNumeric;
+
+    VectorRefArray();
+    VectorRefArray( const double* pArray );
+    VectorRefArray( const OUString* pArray );
+};
+
 /**
  * This token represents a single cell reference in a vectorized formula
  * calculation context.
  */
 class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
-    const double* mpArray;
+    VectorRefArray maArray;
     size_t mnArrayLength;
 
 public:
     SingleVectorRefToken( const double* pArray, size_t nLength );
+    SingleVectorRefToken( const VectorRefArray& rArray, size_t nLength );
 
     virtual FormulaToken* Clone() const;
 
-    const double* GetArray() const;
+    const VectorRefArray& GetArray() const;
     size_t GetArrayLength() const;
 };
 
@@ -38,7 +53,7 @@ public:
  */
 class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
-    std::vector<const double*> maArrays;
+    std::vector<VectorRefArray> maArrays;
 
     size_t mnArrayLength; /// length of all arrays.
     size_t mnRefRowSize; /// original reference row size. The row size may
@@ -50,11 +65,11 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<const double*>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
+        const std::vector<VectorRefArray>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
     virtual FormulaToken* Clone() const;
 
-    const std::vector<const double*>& GetArrays() const;
+    const std::vector<VectorRefArray>& GetArrays() const;
     size_t GetArrayLength() const;
     size_t GetRefRowSize() const;
     bool IsStartFixed() const;

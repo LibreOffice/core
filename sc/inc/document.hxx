@@ -49,6 +49,8 @@
 #include "markdata.hxx"
 
 namespace editeng { class SvxBorderLine; }
+namespace formula { struct VectorRefArray; }
+
 namespace sc {
     struct FormulaGroupContext;
     class StartListeningContext;
@@ -59,6 +61,7 @@ namespace sc {
     struct RefUpdateContext;
     class EditTextIterator;
 }
+
 class SvxFontItem;
 
 class KeyEvent;
@@ -1983,7 +1986,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
-    const double* FetchDoubleArray(
+    formula::VectorRefArray FetchVectorRefArray(
         sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength );
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );

@@ -3387,11 +3387,11 @@ public:
                         // returned array equals or greater than the requested
                         // length.
 
-                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nLen);
-                        if (!pArray)
+                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nLen);
+                        if (!aArray.mpNumericArray)
                             return false;
 
-                        formula::SingleVectorRefToken aTok(pArray, nLen);
+                        formula::SingleVectorRefToken aTok(aArray, nLen);
                         mrGroupTokens.AddToken(aTok);
                     }
                     else
@@ -3435,7 +3435,7 @@ public:
                     bool bAbsLast = !aRef.Ref2.IsRowRel();
                     ScAddress aRefPos = aAbs.aStart;
                     size_t nCols = aAbs.aEnd.Col() - aAbs.aStart.Col() + 1;
-                    std::vector<const double*> aArrays;
+                    std::vector<formula::VectorRefArray> aArrays;
                     aArrays.reserve(nCols);
                     SCROW nArrayLength = nLen;
                     SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
@@ -3448,11 +3448,11 @@ public:
                     for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
                     {
                         aRefPos.SetCol(i);
-                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nArrayLength);
-                        if (!pArray)
+                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nArrayLength);
+                        if (!aArray.mpNumericArray)
                             return false;
 
-                        aArrays.push_back(pArray);
+                        aArrays.push_back(aArray);
                     }
 
                     formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
