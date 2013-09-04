@@ -255,8 +255,9 @@ public:
         return result;
     }
 
-    sal_Bool GetSuccess()           { return bSuccess; }
-    OUString &GetText()             { return aText; }
+    sal_Bool GetSuccess()              { return bSuccess; }
+    OUString GetText()                 { return aText; }
+    void SetText(const OUString &rStr) { aText = rStr; }
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
