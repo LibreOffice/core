@@ -557,15 +557,15 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 {
-    String aStr;
+    OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
-    aStr.Append( OUString(" / ") );
-    aStr.Append( GetUnitString( rMousePos.Y(), eFieldUnit, cSep ) );
+    aStr = GetUnitString( rMousePos.X(), eFieldUnit, cSep );
+    aStr += " / ";
+    aStr += GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
     aStbStatus.SetItemText( 2, aStr );
 
@@ -574,15 +574,15 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 
 IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 {
-    String aStr;
+    OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
-    aStr.Append( OUString(" x ") );
-    aStr.Append( GetUnitString( rSize.Height(), eFieldUnit, cSep ) );
+    aStr = GetUnitString( rSize.Width(), eFieldUnit, cSep );
+    aStr += " x ";
+    aStr += GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
     aStbStatus.SetItemText( 3, aStr );
 

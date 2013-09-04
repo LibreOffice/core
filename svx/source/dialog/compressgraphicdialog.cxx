@@ -252,7 +252,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     aFilterData[ 2 ].Name = "Quality";
     aFilterData[ 2 ].Value <<= (sal_Int32) m_pQualityMF->GetValue();
 
-    String aGraphicFormatName = m_pLosslessRB->IsChecked() ? String( "png" ) : String( "jpg" );
+    OUString aGraphicFormatName = m_pLosslessRB->IsChecked() ? OUString( "png" ) : OUString( "jpg" );
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
     rFilter.ExportGraphic( aScaledGraphic, OUString( "none" ), aStream, nFilterFormat, &aFilterData );

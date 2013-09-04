@@ -386,7 +386,7 @@ void DialControl::SetNoRotation()
         mpImpl->mbNoRot = true;
         InvalidateControl();
         if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->SetText( String() );
+            mpImpl->mpLinkField->SetText( "" );
     }
 }
 

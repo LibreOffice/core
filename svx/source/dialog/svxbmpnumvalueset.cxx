@@ -92,8 +92,7 @@ static const sal_Unicode aBulletTypes[] =
 static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( OUString("StarSymbol"),
-                                String(), Size( 0, 14 ) );
+    static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -218,10 +217,10 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         {
             sal_uInt16 nY = 11 + i * 33;
             aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-            String sText;
+            OUString sText;
             if(nPageType == NUM_PAGETYPE_BULLET)
             {
-                sText = aBulletTypes[nItemId - 1];
+                sText = OUString( aBulletTypes[nItemId - 1] );
                 aStart.Y() -= pDev->GetTextHeight()/2;
                 aStart.X() = aBLPos.X() + 5;
             }

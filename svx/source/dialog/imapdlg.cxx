@@ -472,7 +472,7 @@ void SvxIMapDlg::DoOpen()
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
     ImageMap        aLoadIMap;
-    const String    aFilter( IMAP_ALL_FILTER );
+    const OUString  aFilter( IMAP_ALL_FILTER );
 
     aDlg.AddFilter( aFilter, IMAP_ALL_TYPE );
     aDlg.AddFilter( IMAP_CERN_FILTER, IMAP_CERN_TYPE );
@@ -490,7 +490,7 @@ void SvxIMapDlg::DoOpen()
 
         if( pIStm )
         {
-            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT, String() );
+            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT, "" );
 
             if( pIStm->GetError() )
             {
@@ -512,9 +512,9 @@ sal_Bool SvxIMapDlg::DoSave()
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
-    const String    aBinFilter( IMAP_BINARY_FILTER );
-    const String    aCERNFilter( IMAP_CERN_FILTER );
-    const String    aNCSAFilter( IMAP_NCSA_FILTER );
+    const OUString    aBinFilter( IMAP_BINARY_FILTER );
+    const OUString    aCERNFilter( IMAP_CERN_FILTER );
+    const OUString    aNCSAFilter( IMAP_NCSA_FILTER );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
     sal_Bool            bRet = false;
@@ -528,9 +528,9 @@ sal_Bool SvxIMapDlg::DoSave()
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {
-        const String    aFilter( aDlg.GetCurrentFilter() );
-        String          aExt;
-        sal_uIntPtr         nFormat;
+        const OUString    aFilter( aDlg.GetCurrentFilter() );
+        OUString          aExt;
+        sal_uIntPtr       nFormat;
 
         if ( aFilter == aBinFilter )
         {
@@ -566,7 +566,7 @@ sal_Bool SvxIMapDlg::DoSave()
             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
             if( pOStm )
             {
-                pIMapWnd->GetImageMap().Write( *pOStm, nFormat, String() );
+                pIMapWnd->GetImageMap().Write( *pOStm, nFormat, "" );
 
                 if( pOStm->GetError() )
                     ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
@@ -583,7 +583,7 @@ sal_Bool SvxIMapDlg::DoSave()
 
 IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 {
-    String              aStr;
+    OUString            aStr;
     const NotifyInfo&   rInfo = pWnd->GetInfo();
 
     if ( rInfo.bNewObj )
@@ -615,8 +615,8 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         maFtTarget.Disable();
         maCbbTarget.Disable();
 
-        maURLBox.SetText( String() );
-        aEdtText.SetText( String() );
+        maURLBox.SetText( "" );
+        aEdtText.SetText( "" );
     }
     else
     {
@@ -694,13 +694,13 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
 
 IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
 {
-    NotifyInfo      aNewInfo;
-    const String    aURLText( maURLBox.GetText() );
-    const String    aTargetText( maCbbTarget.GetText() );
+    NotifyInfo        aNewInfo;
+    const OUString    aURLText( maURLBox.GetText() );
+    const OUString    aTargetText( maCbbTarget.GetText() );
 
-    if ( aURLText.Len() )
+    if ( !aURLText.isEmpty() )
     {
-        String aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
+        OUString aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
         aNewInfo.aMarkURL = ::URIHelper::SmartRel2Abs( INetURLObject(aBase), aURLText, URIHelper::GetMaybeFileHdl(), true, false,
                                                         INetURLObject::WAS_ENCODED,
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
@@ -710,7 +710,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
 
     aNewInfo.aMarkAltText = aEdtText.GetText();
 
-    if ( !aTargetText.Len() )
+    if ( aTargetText.isEmpty() )
         aNewInfo.aMarkTarget = SELF_TARGET;
     else
         aNewInfo.aMarkTarget = aTargetText;

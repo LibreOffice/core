@@ -493,12 +493,12 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 
     // append as new one
     // TODO think about mmatching Module name to a corresponding icon
-    String sURL = aNew.OrgURL;
-    if (!sURL.Len())
+    OUString sURL = aNew.OrgURL;
+    if (sURL.isEmpty())
         sURL = aNew.FactoryURL;
-    if (!sURL.Len())
+    if (sURL.isEmpty())
         sURL = aNew.TempURL;
-    if (!sURL.Len())
+    if (sURL.isEmpty())
         sURL = aNew.TemplateURL;
     INetURLObject aURL(sURL);
     aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL, false);
@@ -1002,8 +1002,8 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     {
         const TURLInfo& rInfo = *pIt;
 
-        String sName( rInfo.DisplayName );
-        sName += '\t';
+        OUString sName( rInfo.DisplayName );
+        sName += "\t";
         sName += impl_getStatusString( rInfo );
         SvTreeListEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
@@ -1105,7 +1105,7 @@ short RecoveryDialog::execute()
                  // a user selected directrory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
                  BrokenRecoveryDialog* pBrokenRecoveryDialog = new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
-                 String                sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
+                 OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
                  if (pBrokenRecoveryDialog->isExecutionNeeded())
                  {
                      nRet = pBrokenRecoveryDialog->Execute();
@@ -1174,7 +1174,7 @@ short RecoveryDialog::execute()
                  // we have to remove all recovery/session data anyway!
                  short                 nRet                  = DLG_RET_UNKNOWN;
                  BrokenRecoveryDialog* pBrokenRecoveryDialog = new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
-                 String                sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
+                 OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.
                  // It uses the information m_bWasRecoveryStarted doing so.
@@ -1271,8 +1271,8 @@ void RecoveryDialog::updateItems()
         if ( !pInfo )
             continue;
 
-        String sStatus = impl_getStatusString( *pInfo );
-        if ( sStatus.Len() > 0 )
+        OUString sStatus = impl_getStatusString( *pInfo );
+        if ( !sStatus.isEmpty() )
             m_aFileListLB.SetEntryText( sStatus, pEntry, 1 );
     }
 
@@ -1451,7 +1451,7 @@ OUString BrokenRecoveryDialog::getSaveDirURL()
 //===============================================
 IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
-    String sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
+    OUString sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
     OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;
@@ -1719,10 +1719,10 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         void ErrorRepSendDialog::initControls()
         {
             // if the text is too short for two lines, insert a newline
-            String sText = maDocTypeFT.GetText();
+            OUString sText = maDocTypeFT.GetText();
             if ( maDocTypeFT.GetCtrlTextWidth( sText ) <= maDocTypeFT.GetSizePixel().Width() )
             {
-                sText.Insert( '\n', 0 );
+                sText = "\n" + sText;
                 maDocTypeFT.SetText( sText );
             }
 
@@ -1956,9 +1956,9 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             return aURL;
         }
 
-        static String LoadCrashFile( const OUString &rURL )
+        static OUString LoadCrashFile( const OUString &rURL )
         {
-            String  aFileContent;
+            OUString  aFileContent;
             ::osl::File aFile( rURL );
 
             printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
@@ -2006,16 +2006,16 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
             mnMinHeight = ( maContentML.GetSizePixel().Height() / 2 );
 
-            String  aPreview = LoadCrashFile( GetPreviewURL() );
+            OUString  aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
 
-            String aSeparator = OUString( "\r\n\r\n================\r\n\r\n"  );
+            OUString aSeparator( "\r\n\r\n================\r\n\r\n"  );
 
-            String aContent = pMainDlg->GetDocType();
-            if ( aContent.Len() > 0 )
+            OUString aContent = pMainDlg->GetDocType();
+            if ( !aContent.isEmpty() )
                 aContent += aSeparator;
             aContent += pMainDlg->GetUsing();
-            if ( aContent.Len() > 0 )
+            if ( !aContent.isEmpty() )
                 aContent += aSeparator;
             aContent += aPreview;
 

@@ -248,17 +248,17 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         SfxItemSet aSet( pModel->GetItemPool() );
 
         aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-        aSet.Put( XFillColorItem( String(), TRANSCOL ) );
+        aSet.Put( XFillColorItem( "", TRANSCOL ) );
 
         if ( !pIMapObj->IsActive() )
         {
             aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( String(), Color( COL_RED ) ) );
+            aSet.Put( XLineColorItem( "", Color( COL_RED ) ) );
         }
         else
         {
             aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( String(), Color( COL_BLACK ) ) );
+            aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
         }
 
         pSdrObj->SetMergedItemSetAndBroadcast(aSet);
@@ -276,7 +276,7 @@ void IMapWindow::InitSdrModel()
 
     SfxItemSet aSet( pModel->GetItemPool() );
 
-    aSet.Put( XFillColorItem( String(), TRANSCOL ) );
+    aSet.Put( XFillColorItem( "", TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
     pView->SetFrameDragSingles( sal_True );
@@ -289,8 +289,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case( OBJ_RECT ):
         {
             SdrRectObj*          pRectObj = (SdrRectObj*) &rObj;
-            IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(),
-                String(), String(), String(), String(), String(), sal_True, sal_False );
+            IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(), "", "", "", "", "", sal_True, sal_False );
 
             pRectObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -303,7 +302,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), String(), String(), String(), String(), String(),  sal_True, sal_False );
+            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), "", "", "", "", "", sal_True, sal_False );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -320,7 +319,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             if ( rXPolyPoly.count() )
             {
                 Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, String(), String(), String(), String(), String(),  sal_True, sal_False );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", sal_True, sal_False );
                 pPathObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
             }
         }
@@ -337,12 +336,12 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
 
     if ( pUserData )
     {
-        String          aURL;
-        String          aAltText;
-        String          aDesc;
-        String          aTarget;
+        OUString        aURL;
+        OUString        aAltText;
+        OUString        aDesc;
+        OUString        aTarget;
         IMapObjectPtr   pIMapObj = pUserData->GetObject();
-        sal_Bool            bActive = sal_True;
+        sal_Bool        bActive = sal_True;
 
         if ( pIMapObj.get() )
         {
@@ -358,7 +357,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             case( OBJ_RECT ):
             {
                 pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( ( (const SdrRectObj&) rObj ).GetLogicRect(),
-                          aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False ) ) );
+                          aURL, aAltText, aDesc, aTarget, "", bActive, sal_False ) ) );
             }
             break;
 
@@ -368,7 +367,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( sal_False, sal_False );
                 Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
 
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, sal_False );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
                 // was only created by us temporarily
@@ -388,7 +387,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 if ( rXPolyPoly.count() )
                 {
                     Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
-                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, String(), bActive, sal_False );
+                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, sal_False );
                     pUserData->ReplaceObject( IMapObjectPtr(pObj) );
                 }
             }
@@ -518,7 +517,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if( IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
     {
-        const String    aString;
+        const OUString  aString;
         INetBookmark    aBookMark( aString, aString );
         SdrObject*      pSdrObj = GetHitSdrObj( rEvt.maPosPixel );
 
@@ -550,9 +549,9 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
         if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
-            String              aStr;
+            OUString            aStr;
 
-            if ( pIMapObj && ( aStr = pIMapObj->GetURL() ).Len() )
+            if ( pIMapObj && !( aStr = pIMapObj->GetURL() ).isEmpty() )
             {
                 Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetGraphicSize() ) ) );
                 Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
@@ -579,17 +578,17 @@ void IMapWindow::SetCurrentObjState( sal_Bool bActive )
 
         GetIMapObj( pObj )->SetActive( bActive );
 
-        aSet.Put( XFillColorItem( String(), TRANSCOL ) );
+        aSet.Put( XFillColorItem( "", TRANSCOL ) );
 
         if ( !bActive )
         {
             aSet.Put( XFillTransparenceItem( 100 ) );
-            aSet.Put( XLineColorItem( String(), Color( COL_RED ) ) );
+            aSet.Put( XLineColorItem( "", Color( COL_RED ) ) );
         }
         else
         {
             aSet.Put( XFillTransparenceItem( 50 ) );
-            aSet.Put( XLineColorItem( String(), Color( COL_BLACK ) ) );
+            aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
         }
 
         pView->SetAttributes( aSet, sal_False );
@@ -616,7 +615,7 @@ void IMapWindow::UpdateInfo( sal_Bool bNewObj )
         }
         else
         {
-            aInfo.aMarkURL = aInfo.aMarkAltText = aInfo.aMarkTarget = String();
+            aInfo.aMarkURL = aInfo.aMarkAltText = aInfo.aMarkTarget = "";
             aInfo.bOneMarked = sal_False;
             aInfo.bActivated = sal_False;
         }
@@ -634,8 +633,8 @@ void IMapWindow::DoMacroAssign()
         SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
 
         SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-        aNamesItem.AddEvent( OUString("MouseOver"), String(), SFX_EVENT_MOUSEOVER_OBJECT );
-        aNamesItem.AddEvent( OUString("MouseOut"), String(), SFX_EVENT_MOUSEOUT_OBJECT );
+        aNamesItem.AddEvent( "MouseOver", "", SFX_EVENT_MOUSEOVER_OBJECT );
+        aNamesItem.AddEvent( "MouseOut", "", SFX_EVENT_MOUSEOUT_OBJECT );
         aSet.Put( aNamesItem );
 
         SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
@@ -673,9 +672,9 @@ void IMapWindow::DoPropertyDialog()
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             if ( aDlg->Execute() == RET_OK )
             {
-                const String aURLText( aDlg->GetURL() );
+                const OUString aURLText( aDlg->GetURL() );
 
-                if ( aURLText.Len() )
+                if ( !aURLText.isEmpty() )
                 {
                     INetURLObject aObj( aURLText, INET_PROT_FILE );
                     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );

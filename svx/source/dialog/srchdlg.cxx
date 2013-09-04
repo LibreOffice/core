@@ -732,16 +732,16 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
     }
     else
     {
-        String aText = m_pSearchAttrText->GetText();
+        OUString aText = m_pSearchAttrText->GetText();
         m_pSearchAttrText->Hide();
 
-        if ( aText.Len() )
+        if ( !aText.isEmpty() )
             pImpl->m_pSearchFormats->SetText( aText );
         pImpl->m_pSearchFormats->Show();
         aText = m_pReplaceAttrText->GetText();
         m_pReplaceAttrText->Hide();
 
-        if ( aText.Len() )
+        if ( !aText.isEmpty() )
             pImpl->m_pReplaceFormats->SetText( aText );
         pImpl->m_pReplaceFormats->Show();
     }
@@ -940,7 +940,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             if ( bSetSearch && !bAttributes )
                 m_pSearchLB->SetText(aSearchStrings[0]);
 
-            String aReplaceTxt = pSearchItem->GetReplaceString();
+            OUString aReplaceTxt = pSearchItem->GetReplaceString();
 
             if (!aReplaceStrings.empty())
                 aReplaceTxt = aReplaceStrings[0];
@@ -1299,13 +1299,13 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         if ( !m_pLayoutBtn->IsChecked() || bInclusive )
         {
-            String aStr( m_pSearchLB->GetText() );
+            OUString aStr( m_pSearchLB->GetText() );
 
-            if ( aStr.Len() )
+            if ( !aStr.isEmpty() )
                 Remember_Impl( aStr, sal_True );
             aStr = m_pReplaceLB->GetText();
 
-            if ( aStr.Len() )
+            if ( !aStr.isEmpty() )
                 Remember_Impl( aStr, sal_False );
         }
         SaveToModule_Impl();
@@ -1560,8 +1560,8 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, sal_Bool _bSearch )
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
 {
-    String aOldSrch( m_pSearchTmplLB->GetSelectEntry() );
-    String aOldRepl( m_pReplaceTmplLB->GetSelectEntry() );
+    OUString aOldSrch( m_pSearchTmplLB->GetSelectEntry() );
+    OUString aOldRepl( m_pReplaceTmplLB->GetSelectEntry() );
     m_pSearchTmplLB->Clear();
     m_pReplaceTmplLB->Clear();
     rPool.SetSearchMask( pSearchItem->GetFamily(), SFXSTYLEBIT_ALL );
@@ -1580,11 +1580,11 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
     m_pReplaceTmplLB->SetUpdateMode( sal_True );
     m_pSearchTmplLB->SelectEntryPos(0);
 
-    if ( aOldSrch.Len() )
+    if ( !aOldSrch.isEmpty() )
         m_pSearchTmplLB->SelectEntry( aOldSrch );
     m_pReplaceTmplLB->SelectEntryPos(0);
 
-    if ( aOldRepl.Len() )
+    if ( !aOldRepl.isEmpty() )
         m_pReplaceTmplLB->SelectEntry( aOldRepl );
 
     if ( m_pSearchTmplLB->GetEntryCount() )
@@ -1926,7 +1926,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     pWhRanges[nPos] = 0;
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
-    String aTxt;
+    OUString aTxt;
 
     aSet.InvalidateAllItems();
     aSet.Put(SvxBrushItem(nBrushWhich));
@@ -1952,7 +1952,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     {
         SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, RID_SVXDLG_SEARCHFORMAT );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        aTxt.Insert( pDlg->GetText(), 0 );
+        aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
 
         if ( pDlg->Execute() == RET_OK )
@@ -2012,17 +2012,17 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
     if ( bSearch )
     {
         if ( !pImpl->bMultiLineEdit )
-            m_pSearchAttrText->SetText( String() );
+            m_pSearchAttrText->SetText( "" );
         else
-            pImpl->m_pSearchFormats->SetText( String() );
+            pImpl->m_pSearchFormats->SetText( "" );
         pSearchList->Clear();
     }
     else
     {
         if ( !pImpl->bMultiLineEdit )
-            m_pReplaceAttrText->SetText( String() );
+            m_pReplaceAttrText->SetText( "" );
         else
-            pImpl->m_pReplaceFormats->SetText( String() );
+            pImpl->m_pReplaceFormats->SetText( "" );
         pReplaceList->Clear();
     }
     pImpl->bSaveToModule = sal_False;

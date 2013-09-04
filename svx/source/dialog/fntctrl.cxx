@@ -143,8 +143,8 @@ class FontPrevWin_Impl
     std::vector<sal_uInt16>         aScriptType;
     SvxFont                         aCJKFont;
     SvxFont                         aCTLFont;
-    String                          aText;
-    String                          aScriptText;
+    OUString                        aText;
+    OUString                        aScriptText;
     Color*                          pColor;
     Color*                          pBackColor;
     long                            nAscent;
@@ -229,7 +229,7 @@ inline bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
  */
 void FontPrevWin_Impl::CheckScript()
 {
-    assert(aText.Len()); // must have a preview text here!
+    assert(!aText.isEmpty()); // must have a preview text here!
     if (aText == aScriptText)
     {
         return; // already initialized
@@ -251,7 +251,7 @@ void FontPrevWin_Impl::CheckScript()
     if( com::sun::star::i18n::ScriptType::WEAK == nScript )
     {
         nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-        if( nChg < aText.Len() )
+        if( nChg < aText.getLength() )
             nScript = xBreak->getScriptType( aText, nChg );
         else
             nScript = com::sun::star::i18n::ScriptType::LATIN;
@@ -260,11 +260,11 @@ void FontPrevWin_Impl::CheckScript()
     do
     {
         nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-        if (nChg < aText.Len() && nChg > 0 &&
+        if (nChg < aText.getLength() && nChg > 0 &&
             (com::sun::star::i18n::ScriptType::WEAK ==
              xBreak->getScriptType(aText, nChg - 1)))
         {
-            int8_t nType = u_charType(aText.GetChar(nChg) );
+            int8_t nType = u_charType(aText[nChg] );
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
@@ -282,7 +282,7 @@ void FontPrevWin_Impl::CheckScript()
         aScriptType.push_back( nScript );
         aTextWidth.push_back( 0 );
 
-        if( nChg < aText.Len() )
+        if( nChg < aText.getLength() )
             nScript = xBreak->getScriptType( aText, nChg );
         else
             break;
@@ -314,7 +314,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     }
     else
     {
-        nEnd = aText.Len();
+        nEnd = aText.getLength();
         nScript = com::sun::star::i18n::ScriptType::LATIN;
     }
     long nTxtWidth = 0;
@@ -346,7 +346,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
                 calcFontHeightAnyAscent(pWin,rFont,nHeight,nAscent);
         }
 
-        if( nEnd < aText.Len() && nIdx < nCnt )
+        if( nEnd < aText.getLength() && nIdx < nCnt )
         {
             nStart = nEnd;
             nEnd = aScriptChg[ nIdx ];
@@ -396,7 +396,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     }
     else
     {
-        nEnd = aText.Len();
+        nEnd = aText.getLength();
         nScript = com::sun::star::i18n::ScriptType::LATIN;
     }
     do
@@ -407,7 +407,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
         rFnt.DrawPrev( pWin, _pPrinter, rPt, aText, nStart, nEnd - nStart );
 
         rPt.X() += aTextWidth[ nIdx++ ];
-        if( nEnd < aText.Len() && nIdx < nCnt )
+        if( nEnd < aText.getLength() && nIdx < nCnt )
         {
             nStart = nEnd;
             nEnd = aScriptChg[ nIdx ];
@@ -669,7 +669,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             {
                 pImpl->aText = pSh->GetSelectionText();
                 pImpl->bGetSelection = true;
-                pImpl->bSelection = pImpl->aText.Len() != 0;
+                pImpl->bSelection = !pImpl->aText.isEmpty();
 
             }
 
@@ -685,42 +685,41 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
                 if (pImpl->m_bCJKEnabled)
                 {
-                    if (pImpl->aText.Len())
-                        pImpl->aText.AppendAscii("   ");
+                    if (!pImpl->aText.isEmpty())
+                        pImpl->aText += "   ";
                     pImpl->aText += makeRepresentativeTextForFont(ASIAN, rCJKFont);
 
                 }
                 if (pImpl->m_bCTLEnabled)
                 {
-                    if (pImpl->aText.Len())
-                        pImpl->aText.AppendAscii("   ");
+                    if (!pImpl->aText.isEmpty())
+                        pImpl->aText += "   ";
                     pImpl->aText += makeRepresentativeTextForFont(COMPLEX, rCTLFont);
                 }
             }
 
-            if ( !pImpl->aText.Len() )
+            if ( pImpl->aText.isEmpty() )
                 pImpl->aText = GetText();
 
-            if (!pImpl->aText.Len())
+            if (pImpl->aText.isEmpty())
             {   // fdo#58427: still no text? let's try that one...
                 pImpl->aText = makeRepresentativeTextForFont(LATIN, rFont);
             }
 
             // remove line feeds and carriage returns from string
             bool bNotEmpty = false;
-            for ( xub_StrLen i = 0; i < pImpl->aText.Len(); ++i )
+            for ( sal_Int32 i = 0; i < pImpl->aText.getLength(); ++i )
             {
-                if ( 0xa == pImpl->aText.GetChar( i ) ||
-                     0xd == pImpl->aText.GetChar( i ) )
-                     pImpl->aText.SetChar( i, ' ' );
+                if ( 0xa == pImpl->aText[i] || 0xd == pImpl->aText[i] )
+                     pImpl->aText = pImpl->aText.replaceAt( i, 1, " " );
                 else
                     bNotEmpty = true;
             }
             if ( !bNotEmpty )
                 pImpl->aText = GetText();
 
-            if ( pImpl->aText.Len() > (TEXT_WIDTH-1) )
-                pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), TEXT_WIDTH ) );
+            if ( pImpl->aText.getLength() > (TEXT_WIDTH-1) )
+                pImpl->aText = pImpl->aText.replaceAt( pImpl->aText.indexOf(" ", TEXT_WIDTH), 1, "" );
         }
 
         // calculate text width scaling

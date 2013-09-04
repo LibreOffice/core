@@ -137,7 +137,7 @@ void Svx3DPreviewControl::Construct()
         0, 0 );
     aSet.Put( XLineStyleItem( XLINE_NONE ) );
     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-    aSet.Put( XFillColorItem( String(), Color( COL_WHITE ) ) );
+    aSet.Put( XFillColorItem( "", Color( COL_WHITE ) ) );
 
     mpScene->SetMergedItemSet(aSet);
 

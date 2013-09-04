@@ -77,7 +77,7 @@ public:
         ~RulerDebugWindow();
 
         ListBox& GetLBox() {return aBox;}
-        static void     AddDebugText(const sal_Char* pDescription, const String& rText );
+        static void     AddDebugText(const sal_Char* pDescription, const OUString& rText );
 };
 static RulerDebugWindow* pDebugWindow = 0;
 
@@ -85,7 +85,7 @@ RulerDebugWindow::~RulerDebugWindow()
 {
     pDebugWindow = 0;
 }
-void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const String& rText )
+void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const OUString& rText )
 {
     if(!pDebugWindow)
     {

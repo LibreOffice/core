@@ -575,7 +575,7 @@ void SvxBmpMask::SetColorList( const XColorListRef &pList )
 {
     if ( pList.is() && ( pList != pColLst ) )
     {
-        const String aTransp(BMP_RESID(RID_SVXDLG_BMPMASK_STR_TRANSP).toString());
+        const OUString aTransp(BMP_RESID(RID_SVXDLG_BMPMASK_STR_TRANSP).toString());
 
         pColLst = pList;
 
@@ -1210,23 +1210,23 @@ void SvxBmpMask::ApplyStyle()
 */
 void SvxBmpMask::SetAccessibleNames (void)
 {
-    String sSourceColor(BMP_RESID(RID_SVXDLG_BMPMASK_STR_SOURCECOLOR).toString());
-    String sSourceColorN;
+    OUString sSourceColor(BMP_RESID(RID_SVXDLG_BMPMASK_STR_SOURCECOLOR).toString());
+    OUString sSourceColorN;
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (" 1");
+    sSourceColorN += " 1";
     aCbx1.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (" 2");
+    sSourceColorN += " 2";
     aCbx2.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (" 3");
+    sSourceColorN += " 3";
     aCbx3.SetAccessibleName (sSourceColorN);
 
     sSourceColorN = sSourceColor;
-    sSourceColorN.AppendAscii (" 4");
+    sSourceColorN += " 4";
     aCbx4.SetAccessibleName (sSourceColorN);
 }
 

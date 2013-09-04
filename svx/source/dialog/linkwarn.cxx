@@ -40,8 +40,8 @@ SvxLinkWarningDialog::SvxLinkWarningDialog( Window* pParent, const OUString& _rF
     m_aQueryImage.SetImage( QueryBox::GetStandardImage() );
 
     // replace filename
-    String sInfoText = m_aInfoText.GetText();
-    sInfoText.SearchAndReplaceAll(OUString("%FILENAME"), _rFileName);
+    OUString sInfoText = m_aInfoText.GetText();
+    sInfoText = sInfoText.replaceAll("%FILENAME", _rFileName);
     m_aInfoText.SetText( sInfoText );
 
     // load state of "warning on" checkbox from misc options

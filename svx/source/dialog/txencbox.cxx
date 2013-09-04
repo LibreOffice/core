@@ -209,8 +209,8 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uInt16 nPos )
 {
-    const String& rEntry = m_pEncTable->GetTextString( nEnc );
-    if ( rEntry.Len() )
+    const OUString& rEntry = m_pEncTable->GetTextString( nEnc );
+    if ( !rEntry.isEmpty() )
         InsertTextEncoding( nEnc, rEntry, nPos );
     else
         SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );

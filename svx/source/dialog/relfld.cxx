@@ -46,12 +46,12 @@ void SvxRelativeField::Modify()
 
     if ( bRelativeMode )
     {
-        String  aStr = GetText();
+        OUString  aStr = GetText();
         sal_Bool    bNewMode = bRelative;
 
         if ( bRelative )
         {
-            const sal_Unicode* pStr = aStr.GetBuffer();
+            const sal_Unicode* pStr = aStr.getStr();
 
             while ( *pStr )
             {
@@ -66,9 +66,7 @@ void SvxRelativeField::Modify()
         }
         else
         {
-            xub_StrLen nPos = aStr.Search( sal_Unicode( '%' ) );
-
-            if ( nPos != STRING_NOTFOUND )
+            if ( aStr.indexOf( "%" ) != -1 )
                 bNewMode = sal_True;
         }
 
@@ -96,7 +94,7 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
 void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
 {
     Selection aSelection = GetSelection();
-    String aStr = GetText();
+    OUString aStr = GetText();
 
     if ( bNewRelative )
     {

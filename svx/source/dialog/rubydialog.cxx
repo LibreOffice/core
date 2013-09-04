@@ -251,7 +251,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
 
     UpdateColors();
 
-    String leftLabelName = m_pLeftFT->GetText(), rightLabelName = m_pRightFT->GetText();
+    OUString leftLabelName = m_pLeftFT->GetText(), rightLabelName = m_pRightFT->GetText();
     m_pLeft2ED->SetAccessibleName(leftLabelName);
     m_pLeft3ED->SetAccessibleName(leftLabelName);
     m_pLeft4ED->SetAccessibleName(leftLabelName);
@@ -306,7 +306,7 @@ void SvxRubyDialog::Activate()
         if(xRubySel.is())
         {
             Reference< XModel > xModel = pImpl->GetModel();
-            const String sCharStyleSelect = m_pCharStyleLB->GetSelectEntry();
+            const OUString sCharStyleSelect = m_pCharStyleLB->GetSelectEntry();
             ClearCharStyleList();
             Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
             if(xSupplier.is())
@@ -356,7 +356,7 @@ void SvxRubyDialog::Activate()
                 {
                     OSL_FAIL("exception in style access");
                 }
-                if(sCharStyleSelect.Len())
+                if(!sCharStyleSelect.isEmpty())
                     m_pCharStyleLB->SelectEntry(sCharStyleSelect);
             }
             m_pCharStyleLB->Enable(xSupplier.is());
@@ -813,7 +813,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
         nYBase = nTmp;
     }
     long nYOutput, nOutTextWidth;
-    String sOutputText;
+    OUString sOutputText;
 
 
     if(bRubyStretch)
@@ -854,13 +854,13 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
         }
         // no break!
         case RubyAdjust_BLOCK:
-        if(sOutputText.Len() > 1)
+        if(sOutputText.getLength() > 1)
         {
-            xub_StrLen nCount = sOutputText.Len();
+            sal_Int32 nCount = sOutputText.getLength();
             long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
-            for(xub_StrLen i = 0; i < nCount; i++)
+            for(sal_Int32 i = 0; i < nCount; i++)
             {
-                OUString sChar(sOutputText.GetChar(i));
+                OUString sChar(sOutputText[i]);
                 DrawText( Point( nLeftStart , nYOutput),  sChar);
                 long nCharWidth = GetTextWidth(sChar);
                 nLeftStart += nCharWidth + nSpace;

@@ -770,8 +770,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)
 {
-    XFormTextShadowColorItem aItem( (const String &) String(),
-                                    (const Color &) aShadowColorLB.GetSelectEntryColor() );
+    XFormTextShadowColorItem aItem( "", aShadowColorLB.GetSelectEntryColor() );
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SFX_CALLMODE_RECORD, &aItem, 0L );
     return 0;
 }

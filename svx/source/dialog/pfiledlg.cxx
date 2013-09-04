@@ -75,29 +75,29 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
     const plugin::PluginDescription* pDescription = aSeq.getConstArray();
     sal_Int32 nAnzahlPlugins = rPluginManager->getPluginDescriptions().getLength();
 
-    std::list< String > aPlugNames;
-    std::list< String > aPlugExtensions;
-    std::list< String >::iterator j;
-    std::list< String >::iterator k;
-    std::list< String >::const_iterator end;
+    std::list< OUString > aPlugNames;
+    std::list< OUString > aPlugExtensions;
+    std::list< OUString >::iterator j;
+    std::list< OUString >::iterator k;
+    std::list< OUString >::const_iterator end;
 
     for ( int i = 0; i < nAnzahlPlugins; i++ )
     {
-        String aStrPlugMIMEType( pDescription[i].Mimetype );
-        String aStrPlugName( pDescription[i].Description );
-        String aStrPlugExtension( pDescription[i].Extension );
+        OUString aStrPlugMIMEType( pDescription[i].Mimetype );
+        OUString aStrPlugName( pDescription[i].Description );
+        OUString aStrPlugExtension( pDescription[i].Extension );
 
-        aStrPlugMIMEType.ToLowerAscii();
-        aStrPlugExtension.ToLowerAscii();
+        aStrPlugMIMEType = aStrPlugMIMEType.toAsciiLowerCase();
+        aStrPlugExtension = aStrPlugExtension.toAsciiLowerCase();
 
-        if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.SearchAscii ( sAudio ) == 0 ) ||
-             ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.SearchAscii ( sVideo ) == 0 ) )
+        if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.indexOf( sAudio ) == 0 ) ||
+             ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.indexOf( sVideo ) == 0 ) )
         {
             // extension already in the filterlist of the filedlg ?
             bool bAlreadyExist = false;
             for ( j = aPlugExtensions.begin(), end = aPlugExtensions.end(); j != end && !bAlreadyExist; ++j )
             {
-                bAlreadyExist = (j->Search( aStrPlugExtension ) != STRING_NOTFOUND );
+                bAlreadyExist = (j->indexOf( aStrPlugExtension ) != -1 );
             }
 
             if ( !bAlreadyExist )
@@ -110,14 +110,15 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
                           end = aPlugNames.end();
                       j != end && nfound != 0;  )
                 {
-                    if ( ( nfound = j->Search( aStrPlugName ) ) == 0 )
+                    if ( ( nfound = j->indexOf( aStrPlugName ) ) == 0 )
                     {
-                        if ( aStrPlugExtension.Len() > 0 )
-                            aStrPlugExtension.Insert( sal_Unicode( ';' ) );
-                        aStrPlugExtension.Insert( *k );
+                        if ( !aStrPlugExtension.isEmpty() )
+                            aStrPlugExtension += ";";
+                        aStrPlugExtension += *k;
 
                         // remove old entry, increment (iterators are invalid thereafter, thus the postincrement)
-                        aPlugNames.erase(j++); aPlugExtensions.erase(k++);
+                        aPlugNames.erase(j++);
+                        aPlugExtensions.erase(k++);
 
                         // update end iterator (which may be invalid, too!)
                         end = aPlugNames.end();
@@ -130,9 +131,9 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
                 }
 
                 // build filterdescription
-                aStrPlugName.AppendAscii( "  (" );
-                aStrPlugName.Append( aStrPlugExtension );
-                aStrPlugName.AppendAscii( ")" );
+                aStrPlugName += "  (";
+                aStrPlugName += aStrPlugExtension;
+                aStrPlugName += ")";
 
                 // use a own description for the video-formate avi, mov and mpeg
                 // the descriptions of these MIME-types are not very meaningful
@@ -142,13 +143,13 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
                 const sal_Char sMPE[] = "*.mpe";
                 const sal_Char sMPEG[] = "*.mpeg";
 
-                if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sAVI ) )
+                if ( aStrPlugExtension.equalsIgnoreAsciiCase( sAVI ) )
                     aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_AVI );
-                else if ( aStrPlugExtension.EqualsIgnoreCaseAscii( sMOV ) )
+                else if ( aStrPlugExtension.equalsIgnoreAsciiCase( sMOV ) )
                     aStrPlugName = SVX_RESSTR( STR_INSERT_VIDEO_EXTFILTER_MOV );
-                else if ( aStrPlugExtension.SearchAscii( sMPG ) != STRING_NOTFOUND ||
-                          aStrPlugExtension.SearchAscii( sMPE ) != STRING_NOTFOUND ||
-                          aStrPlugExtension.SearchAscii( sMPEG ) != STRING_NOTFOUND )
+                else if ( aStrPlugExtension.indexOf( sMPG ) != -1 ||
+                          aStrPlugExtension.indexOf( sMPE ) != -1 ||
+                          aStrPlugExtension.indexOf( sMPEG ) != -1 )
                     aStrPlugName = SVX_RESSTR(STR_INSERT_VIDEO_EXTFILTER_MPEG);
 
                 aPlugNames.push_back( aStrPlugName );
@@ -167,8 +168,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
     }
 
     // add the All-Filter
-    String aAllFilter( ResId( STR_EXTFILTER_ALL, DIALOG_MGR() ).toString() );
-    maFileDlg.AddFilter(aAllFilter, OUString("*.*"));
+    OUString aAllFilter( ResId( STR_EXTFILTER_ALL, DIALOG_MGR() ).toString() );
+    maFileDlg.AddFilter(aAllFilter, "*.*");
 
     // and activate him
     maFileDlg.SetCurrentFilter( aAllFilter );

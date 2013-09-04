@@ -106,7 +106,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pPar
     return new SvxFontListBox(pParent, nWinStyle);
 }
 
-void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, const Color* pColor )
+void SvxFontListBox::InsertFontEntry( const OUString& rString, const Font& rFont, const Color* pColor )
 {
     mbUseFont = true;           // InitEntry() will use maEntryFont
     maEntryFont = rFont;        // font to use in InitEntry() over InsertEntry()

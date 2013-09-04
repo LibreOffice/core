@@ -400,7 +400,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 
         OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( i ) );
-        String aCharStr(buf.makeStringAndClear());
+        OUString aCharStr(buf.makeStringAndClear());
         int nTextWidth = GetTextWidth(aCharStr);
         int tx = x + (nX - nTextWidth + 1) / 2;
         int ty = y + (nY - nTextHeight + 1) / 2;

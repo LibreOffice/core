@@ -31,7 +31,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 {
     bool bOK = true;
     short nRet = RET_OK;
-    String aEmpty;
+    OUString aEmpty;
 
     if ( aNewPasswdED.GetText() != aRepeatPasswdED.GetText() )
     {
@@ -62,10 +62,10 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
 {
     if ( !bEmpty )
     {
-        String aPasswd = comphelper::string::strip(aRepeatPasswdED.GetText(), ' ');
-        if ( !aPasswd.Len() && aOKBtn.IsEnabled() )
+        OUString aPasswd = comphelper::string::strip(aRepeatPasswdED.GetText(), ' ');
+        if ( aPasswd.isEmpty() && aOKBtn.IsEnabled() )
             aOKBtn.Disable();
-        else if ( aPasswd.Len() && !aOKBtn.IsEnabled() )
+        else if ( !aPasswd.isEmpty() && !aOKBtn.IsEnabled() )
             aOKBtn.Enable();
     }
     else if ( !aOKBtn.IsEnabled() )

@@ -75,7 +75,7 @@ public:
     /** Inserts a list entry and sets the font used for this entry.
         @param pColor  The font color. NULL = use default listbox text color. */
     void                        InsertFontEntry(
-                                    const String& rString, const Font& rFont, const Color* pColor = NULL );
+                                    const OUString& rString, const Font& rFont, const Color* pColor = NULL );
 
     /** Selects/deselects an entry specified by its position in the list box. */
     void                        SelectEntryPos( sal_uInt16 nPos, bool bSelect = true );
