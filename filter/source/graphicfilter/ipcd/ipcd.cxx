@@ -367,7 +367,10 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
 //================== GraphicImport - the exported Function ================
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+// this needs to be kept in sync with
+// ImpFilterLibCacheEntry::GetImportFunction() from
+// vcl/source/filter/graphicfilter.cxx
+#if defined(DISABLE_DYNLOADING)
 #define GraphicImport icdGraphicImport
 #endif
 

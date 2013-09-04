@@ -269,7 +269,10 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 // - exported function -
 // ---------------------
 
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+// this needs to be kept in sync with
+// ImpFilterLibCacheEntry::GetImportFunction() from
+// vcl/source/filter/graphicfilter.cxx
+#if defined(DISABLE_DYNLOADING)
 #define GraphicExport eraGraphicExport
 #endif
 
