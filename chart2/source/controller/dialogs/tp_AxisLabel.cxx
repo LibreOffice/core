@@ -36,30 +36,7 @@ namespace chart
 {
 
 SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent, SchResId( TP_AXIS_LABEL ), rInAttrs ),
-
-        aCbShowDescription( this, SchResId( CB_AXIS_LABEL_SCHOW_DESCR ) ),
-
-        aFlOrder( this, SchResId( FL_AXIS_LABEL_ORDER ) ),
-        aRbSideBySide( this, SchResId( RB_AXIS_LABEL_SIDEBYSIDE ) ),
-        aRbUpDown( this, SchResId( RB_AXIS_LABEL_UPDOWN ) ),
-        aRbDownUp( this, SchResId( RB_AXIS_LABEL_DOWNUP ) ),
-        aRbAuto( this, SchResId( RB_AXIS_LABEL_AUTOORDER ) ),
-
-        aFlSeparator( this, SchResId( FL_SEPARATOR ) ),
-        aFlTextFlow( this, SchResId( FL_AXIS_LABEL_TEXTFLOW ) ),
-        aCbTextOverlap( this, SchResId( CB_AXIS_LABEL_TEXTOVERLAP ) ),
-        aCbTextBreak( this, SchResId( CB_AXIS_LABEL_TEXTBREAK ) ),
-
-        aFlOrient( this, SchResId( FL_AXIS_LABEL_ORIENTATION ) ),
-        aCtrlDial( this, SchResId( CT_AXIS_LABEL_DIAL ) ),
-        aFtRotate( this, SchResId( FT_AXIS_LABEL_DEGREES ) ),
-        aNfRotate( this, SchResId( NF_AXIS_LABEL_ORIENT ) ),
-        aCbStacked( this, SchResId( PB_AXIS_LABEL_TEXTSTACKED ) ),
-        aOrientHlp( aCtrlDial, aNfRotate, aCbStacked ),
-
-        m_aFtTextDirection( this, SchResId( FT_AXIS_TEXTDIR ) ),
-        m_aLbTextDirection( this, SchResId( LB_AXIS_TEXTDIR ), &m_aFtTextDirection ),
+        SfxTabPage( pParent, "AxisLabelTabPage","modules/schart/ui/tp_axisLabel.ui", rInAttrs ),
 
         m_bShowStaggeringControls( true ),
 
@@ -69,22 +46,39 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( Window* pParent, const SfxItemSet& rIn
         m_bHasInitialStacking( true ),
         m_bComplexCategories( false )
 {
-    FreeResource();
+    get(m_pCbShowDescription, "showlabelsCB");
+    get(m_pFlOrder, "orderL");
+    get(m_pRbSideBySide, "tile");
+    get(m_pRbUpDown, "odd");
+    get(m_pRbDownUp, "even");
+    get(m_pRbAuto, "auto");
+    get(m_pFlTextFlow, "textflowL");
+    get(m_pCbTextOverlap, "overlapCB");
+    get(m_pCbTextBreak, "breakCB");
+    get(m_pFlOrient, "labelTextOrient");
+    get(m_pCtrlDial,"dialCtrl");
+    get(m_pFtRotate,"degreeL");
+    get(m_pNfRotate,"OrientDegree");
+    get(m_pCbStacked,"stackedCB");
+    get(m_pFtTextDirection,"textdirL");
+    get(m_pLbTextDirection,"textdirLB");
+    get(m_pFtABCD,"labelABCD");
+    m_pCtrlDial->SetText(m_pFtABCD->GetText());
+    m_pOrientHlp = new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
+    m_pOrientHlp->Enable( sal_True );
 
-    aCbStacked.EnableTriState( sal_False );
-    aOrientHlp.AddDependentWindow( aFlOrient );
-    aOrientHlp.AddDependentWindow( aFtRotate, STATE_CHECK );
 
-    aCbShowDescription.SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
+    m_pCbStacked->EnableTriState( sal_False );
+    m_pOrientHlp->AddDependentWindow( *m_pFlOrient );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, STATE_CHECK );
 
-    //  Make the fixed line separator vertical.
-    aFlSeparator.SetStyle (aFlSeparator.GetStyle() | WB_VERT);
+    m_pCbShowDescription->SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
 
     Construct();
 }
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
-{}
+{delete m_pOrientHlp;}
 
 void SchAxisLabelTabPage::Construct()
 {
@@ -98,16 +92,16 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
 sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     bool bStacked = false;
-    if( aOrientHlp.GetStackedState() != STATE_DONTKNOW )
+    if( m_pOrientHlp->GetStackedState() != STATE_DONTKNOW )
     {
-        bStacked = aOrientHlp.GetStackedState() == STATE_CHECK;
+        bStacked = m_pOrientHlp->GetStackedState() == STATE_CHECK;
         if( !m_bHasInitialStacking || (bStacked != m_bInitialStacking) )
             rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
 
-    if( aCtrlDial.HasRotation() )
+    if( m_pCtrlDial->HasRotation() )
     {
-        sal_Int32 nDegrees = bStacked ? 0 : aCtrlDial.GetRotation();
+        sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
             rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
@@ -117,13 +111,13 @@ sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         SvxChartTextOrder eOrder = CHTXTORDER_SIDEBYSIDE;
         bool bRadioButtonChecked = true;
 
-        if( aRbUpDown.IsChecked())
+        if( m_pRbUpDown->IsChecked())
             eOrder = CHTXTORDER_UPDOWN;
-        else if( aRbDownUp.IsChecked())
+        else if( m_pRbDownUp->IsChecked())
             eOrder = CHTXTORDER_DOWNUP;
-        else if( aRbAuto.IsChecked())
+        else if( m_pRbAuto->IsChecked())
             eOrder = CHTXTORDER_AUTO;
-        else if( aRbSideBySide.IsChecked())
+        else if( m_pRbSideBySide->IsChecked())
             eOrder = CHTXTORDER_SIDEBYSIDE;
         else
             bRadioButtonChecked = false;
@@ -132,40 +126,40 @@ sal_Bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
     }
 
-    if( aCbTextOverlap.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, aCbTextOverlap.IsChecked() ) );
-    if( aCbTextBreak.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, aCbTextBreak.IsChecked() ) );
-    if( aCbShowDescription.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, aCbShowDescription.IsChecked() ) );
+    if( m_pCbTextOverlap->GetState() != STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_pCbTextOverlap->IsChecked() ) );
+    if( m_pCbTextBreak->GetState() != STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_pCbTextBreak->IsChecked() ) );
+    if( m_pCbShowDescription->GetState() != STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
 
-    if( m_aLbTextDirection.GetSelectEntryCount() > 0 )
-        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_aLbTextDirection.GetSelectEntryValue() ) );
+    if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
+        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
 
     return sal_True;
 }
 
 void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem* pPoolItem = NULL;
+   const SfxPoolItem* pPoolItem = NULL;
 
     // show description
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, sal_False, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        aCbShowDescription.EnableTriState( sal_True );
-        aCbShowDescription.SetState( STATE_DONTKNOW );
+        m_pCbShowDescription->EnableTriState( sal_True );
+        m_pCbShowDescription->SetState( STATE_DONTKNOW );
     }
     else
     {
-        aCbShowDescription.EnableTriState( sal_False );
+        m_pCbShowDescription->EnableTriState( sal_False );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        aCbShowDescription.Check( bCheck );
+        m_pCbShowDescription->Check( bCheck );
 
         if( ( aState & SFX_ITEM_DEFAULT ) == 0 )
-            aCbShowDescription.Hide();
+            m_pCbShowDescription->Hide();
     }
 
     // Rotation as orient item or in degrees ----------
@@ -178,9 +172,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 
     m_bHasInitialDegrees = aState != SFX_ITEM_DONTCARE;
     if( m_bHasInitialDegrees )
-        aCtrlDial.SetRotation( m_nInitialDegrees );
+        m_pCtrlDial->SetRotation( m_nInitialDegrees );
     else
-        aCtrlDial.SetNoRotation();
+        m_pCtrlDial->SetNoRotation();
 
     // check stacked item
     m_bInitialStacking = false;
@@ -190,52 +184,52 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 
     m_bHasInitialStacking = aState != SFX_ITEM_DONTCARE;
     if( m_bHasInitialDegrees )
-        aOrientHlp.SetStackedState( m_bInitialStacking ? STATE_CHECK : STATE_NOCHECK );
+        m_pOrientHlp->SetStackedState( m_bInitialStacking ? STATE_CHECK : STATE_NOCHECK );
     else
-        aOrientHlp.SetStackedState( STATE_DONTKNOW );
+        m_pOrientHlp->SetStackedState( STATE_DONTKNOW );
 
     if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-        m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
     // Text overlap ----------
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, sal_False, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        aCbTextOverlap.EnableTriState( sal_True );
-        aCbTextOverlap.SetState( STATE_DONTKNOW );
+        m_pCbTextOverlap->EnableTriState( sal_True );
+        m_pCbTextOverlap->SetState( STATE_DONTKNOW );
     }
     else
     {
-        aCbTextOverlap.EnableTriState( sal_False );
+        m_pCbTextOverlap->EnableTriState( sal_False );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        aCbTextOverlap.Check( bCheck );
+        m_pCbTextOverlap->Check( bCheck );
 
         if( ( aState & SFX_ITEM_DEFAULT ) == 0 )
-            aCbTextOverlap.Hide();
+            m_pCbTextOverlap->Hide();
     }
 
     // text break ----------
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_BREAK, sal_False, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        aCbTextBreak.EnableTriState( sal_True );
-        aCbTextBreak.SetState( STATE_DONTKNOW );
+        m_pCbTextBreak->EnableTriState( sal_True );
+        m_pCbTextBreak->SetState( STATE_DONTKNOW );
     }
     else
     {
-        aCbTextBreak.EnableTriState( sal_False );
+        m_pCbTextBreak->EnableTriState( sal_False );
         sal_Bool bCheck = sal_False;
         if( aState == SFX_ITEM_SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        aCbTextBreak.Check( bCheck );
+        m_pCbTextBreak->Check( bCheck );
 
         if( ( aState & SFX_ITEM_DEFAULT ) == 0 )
         {
-            aCbTextBreak.Hide();
-            if( ! aCbTextOverlap.IsVisible() )
-                aFlTextFlow.Hide();
+            m_pCbTextBreak->Hide();
+            if( ! m_pCbTextOverlap->IsVisible() )
+                m_pFlTextFlow->Hide();
         }
     }
 
@@ -250,16 +244,16 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
             switch( eOrder )
             {
                 case CHTXTORDER_SIDEBYSIDE:
-                    aRbSideBySide.Check();
+                    m_pRbSideBySide->Check();
                     break;
                 case CHTXTORDER_UPDOWN:
-                    aRbUpDown.Check();
+                    m_pRbUpDown->Check();
                     break;
                 case CHTXTORDER_DOWNUP:
-                    aRbDownUp.Check();
+                    m_pRbDownUp->Check();
                     break;
                 case CHTXTORDER_AUTO:
-                    aRbAuto.Check();
+                    m_pRbAuto->Check();
                     break;
             }
         }
@@ -274,11 +268,11 @@ void SchAxisLabelTabPage::ShowStaggeringControls( sal_Bool bShowStaggeringContro
 
     if( !m_bShowStaggeringControls )
     {
-        aRbSideBySide.Hide();
-        aRbUpDown.Hide();
-        aRbDownUp.Hide();
-        aRbAuto.Hide();
-        aFlOrder.Hide();
+        m_pRbSideBySide->Hide();
+        m_pRbUpDown->Hide();
+        m_pRbDownUp->Hide();
+        m_pRbAuto->Hide();
+        m_pFlOrder->Hide();
     }
 }
 
@@ -291,21 +285,21 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 {
-    sal_Bool bEnable = ( aCbShowDescription.GetState() != STATE_NOCHECK );
+    sal_Bool bEnable = ( m_pCbShowDescription->GetState() != STATE_NOCHECK );
 
-    aOrientHlp.Enable( bEnable );
-    aFlOrder.Enable( bEnable );
-    aRbSideBySide.Enable( bEnable );
-    aRbUpDown.Enable( bEnable );
-    aRbDownUp.Enable( bEnable );
-    aRbAuto.Enable( bEnable );
+    m_pOrientHlp->Enable( bEnable );
+    m_pFlOrder->Enable( bEnable );
+    m_pRbSideBySide->Enable( bEnable );
+    m_pRbUpDown->Enable( bEnable );
+    m_pRbDownUp->Enable( bEnable );
+    m_pRbAuto->Enable( bEnable );
 
-    aFlTextFlow.Enable( bEnable );
-    aCbTextOverlap.Enable( bEnable && !m_bComplexCategories );
-    aCbTextBreak.Enable( bEnable );
+    m_pFlTextFlow->Enable( bEnable );
+    m_pCbTextOverlap->Enable( bEnable && !m_bComplexCategories );
+    m_pCbTextBreak->Enable( bEnable );
 
-    m_aFtTextDirection.Enable( bEnable );
-    m_aLbTextDirection.Enable( bEnable );
+    m_pFtTextDirection->Enable( bEnable );
+    m_pLbTextDirection->Enable( bEnable );
 
     return 0L;
 }

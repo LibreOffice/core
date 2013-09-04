@@ -36,6 +36,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/smoothlinesdlg \
 	chart2/uiconfig/ui/steppedlinesdlg \
 	chart2/uiconfig/ui/titlerotationtabpage \
+	chart2/uiconfig/ui/tp_axisLabel \
 	chart2/uiconfig/ui/tp_SeriesToAxis \
 ))
 
