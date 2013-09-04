@@ -74,8 +74,8 @@ namespace
                 *pMap[ i ].refValue = NULL;
                 return false;
             }
-
-            *pMap[ i ].refValue = aMethod;
+            else
+                *pMap[ i ].refValue = aMethod;
         }
 
         return true;
@@ -104,7 +104,6 @@ namespace VLC
 
         if (tryLink( aModule, pMap ))
         {
-            osl_unloadModule( aModule );
             return true;
         }
 

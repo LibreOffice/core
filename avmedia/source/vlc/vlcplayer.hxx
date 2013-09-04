@@ -19,7 +19,9 @@
 
 #ifndef _VLCPLAYER_HXX
 #define _VLCPLAYER_HXX
-
+#if defined UNX
+#include <unistd.h>
+#endif
 #include "vlccommon.hxx"
 #include <boost/shared_ptr.hpp>
 #include <cppuhelper/compbase2.hxx>

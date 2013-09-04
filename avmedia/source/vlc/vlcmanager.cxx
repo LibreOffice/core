@@ -30,9 +30,11 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
         //Check VLC version
         std::vector<std::string> verComponents;
         const std::string str(Common::Version());
+
+        std::cout << str << std::endl;
         boost::split(verComponents,
                      str,
-                     boost::is_any_of(".-"));
+                     boost::is_any_of(". "));
         if (verComponents.size() < 3
             || boost::lexical_cast<int>(verComponents[0]) < 2
             || (boost::lexical_cast<int>(verComponents[1]) == 0 && boost::lexical_cast<int>(verComponents[2]) < 8))
