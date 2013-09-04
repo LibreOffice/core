@@ -519,7 +519,7 @@ void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
     OSL_FAIL( "SmNode: GetAccessibleText not overloaded" );
 }
 
-const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
+const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
 {
     const SmNode *pResult = 0;
 

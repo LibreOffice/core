@@ -159,7 +159,7 @@ public:
 
     virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
-    const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
+    const SmNode *  FindNodeWithAccessibleIndex(sal_Int32 nAccIndex) const;
 
     sal_uInt16  GetRow() const    { return (sal_uInt16)aNodeToken.nRow; }
     sal_uInt16  GetColumn() const { return (sal_uInt16)aNodeToken.nCol; }

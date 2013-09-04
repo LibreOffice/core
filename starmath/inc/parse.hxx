@@ -118,8 +118,8 @@ struct SmToken
     sal_uInt16      nLevel;
 
     // token position
-    sal_uInt16      nRow;
-    xub_StrLen      nCol;
+    sal_Int32      nRow;
+    sal_Int32      nCol;
 
     SmToken();
     SmToken(SmTokenType eTokenType,
@@ -150,7 +150,7 @@ struct SmErrorDesc
 {
     SmParseError  Type;
     SmNode       *pNode;
-    String        Text;
+    OUString      Text;
 };
 
 
@@ -180,15 +180,15 @@ struct SmTokenTableEntry
 
 class SmParser
 {
-    String          m_aBufferString;
+    OUString        m_aBufferString;
     SmToken         m_aCurToken;
     SmNodeStack     m_aNodeStack;
     SmErrDescList   m_aErrDescList;
     int             m_nCurError;
     LanguageType    m_nLang;
-    xub_StrLen      m_nBufferIndex,
+    sal_Int32       m_nBufferIndex,
                     m_nTokenIndex;
-    sal_uInt16          m_Row,
+    sal_Int32       m_Row,
                     m_nColOff;
     SmConvert       m_eConversion;
     bool            bImportSymNames,
@@ -206,12 +206,12 @@ class SmParser
 
 protected:
 #if OSL_DEBUG_LEVEL > 1
-    bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
+    bool            IsDelimiter( const OUString &rTxt, sal_Int32 nPos );
 #endif
     void            NextToken();
-    xub_StrLen      GetTokenIndex() const   { return m_nTokenIndex; }
-    void            Insert(const String &rText, sal_uInt16 nPos);
-    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
+    sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
+    void            Insert(const OUString &rText, sal_Int32 nPos);
+    void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
     inline bool     TokenInGroup( sal_uLong nGroup );
 
@@ -253,17 +253,17 @@ protected:
     void    Error(SmParseError Error);
 
     void    ClearUsedSymbols()                              { m_aUsedSymbols.clear(); }
-    void    AddToUsedSymbols( const String &rSymbolName )   { m_aUsedSymbols.insert( rSymbolName ); }
+    void    AddToUsedSymbols( const OUString &rSymbolName ) { m_aUsedSymbols.insert( rSymbolName ); }
 
 public:
                  SmParser();
 
     /** Parse rBuffer to formula tree */
-    SmNode      *Parse(const String &rBuffer);
+    SmNode      *Parse(const OUString &rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
     SmNode      *ParseExpression(const OUString &rBuffer);
 
-    const String & GetText() const { return m_aBufferString; };
+    const OUString & GetText() const { return m_aBufferString; };
 
     SmConvert   GetConversion() const              { return m_eConversion; }
     void        SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
@@ -277,8 +277,8 @@ public:
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i = size_t(-1) );
-    static const SmTokenTableEntry* GetTokenTableEntry( const String &rName );
-    bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
+    static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
+    bool    IsUsedSymbol( const OUString &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
     std::set< OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
