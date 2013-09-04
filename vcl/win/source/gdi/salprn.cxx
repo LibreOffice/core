@@ -200,7 +200,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             {
                 if( pWinInfo2->pDriverName )
                     pInfo->maDriver = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
-                XubString aPortName;
+                OUString aPortName;
                 if ( pWinInfo2->pPortName )
                     aPortName = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
                 // pLocation can be 0 (the Windows docu doesn't describe this)
@@ -235,13 +235,13 @@ OUString WinSalInstance::GetDefaultPrinter()
     if( nChars )
     {
         LPWSTR  pStr = (LPWSTR)rtl_allocateMemory(nChars*sizeof(WCHAR));
-        XubString aDefPrt;
+        OUString aDefPrt;
         if( GetDefaultPrinterW( pStr, &nChars ) )
         {
-            aDefPrt = reinterpret_cast<sal_Unicode* >(pStr);
+            aDefPrt = OUString(reinterpret_cast<sal_Unicode* >(pStr));
         }
         rtl_freeMemory( pStr );
-        if( aDefPrt.Len() )
+        if( !aDefPrt.isEmpty() )
             return aDefPrt;
     }
 
@@ -1231,7 +1231,7 @@ sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 
 OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
 {
-    XubString aPaperBinName;
+    OUString aPaperBinName;
 
     DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, NULL, pSetupData );
     if ( (nPaperBin < nBins) && (nBins != GDI_ERROR) )
@@ -1239,7 +1239,7 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
         sal_Unicode* pBuffer = new sal_Unicode[nBins*24];
         DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, (BYTE*)pBuffer, pSetupData );
         if ( nRet && (nRet != GDI_ERROR) )
-            aPaperBinName = pBuffer + (nPaperBin*24);
+            aPaperBinName = OUString( pBuffer + (nPaperBin*24) );
         delete [] pBuffer;
     }
 
