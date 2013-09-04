@@ -335,7 +335,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
             }
             else
             {
-                pObj->SetMergedItem( XSecondaryFillColorItem( String(), aColor ) );
+                pObj->SetMergedItem( XSecondaryFillColorItem( "", aColor ) );
             }
             pObj->BroadcastObjectChange();
         }
