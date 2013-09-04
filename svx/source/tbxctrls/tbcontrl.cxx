@@ -1066,9 +1066,9 @@ void SvxFontNameBox_Impl::Select()
 #endif
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
-                                          sal_uInt16                     nSlotId,
+                                          sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
-                                          const String&              rWndTitle,
+                                          const OUString&            rWndTitle,
                                           Window*                    pParentWindow,
                                           const ::Color              rLastColor ) :
 

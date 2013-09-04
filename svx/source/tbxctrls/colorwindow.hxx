@@ -54,7 +54,7 @@ public:
     SvxColorWindow_Impl( const OUString& rCommand,
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                         const String& rWndTitle,
+                         const OUString& rWndTitle,
                          Window* pParentWindow,
                          const Color rLastColor = COL_AUTO);
     ~SvxColorWindow_Impl();
