@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7eY\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T14:22:05Z",
+      "side": 1,
+      "message": "i believe it is spelled \"duplicate\"",
+      "revId": "7672a9cb1ee8b2e497fa35db8fe5f2e135848843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7eo\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T14:22:05Z",
+      "side": 1,
+      "message": "a) why is this conditional on gb_RUNNABLE_INSTDIR\nb) what is gb_RUNNABLE_INSTDIR and why does it exist?",
+      "revId": "7672a9cb1ee8b2e497fa35db8fe5f2e135848843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7es\u003d",
+        "filename": "solenv/gbuild/AllLangResTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T14:22:05Z",
+      "side": 1,
+      "message": "eek, a trailing space!!1!",
+      "revId": "7672a9cb1ee8b2e497fa35db8fe5f2e135848843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
