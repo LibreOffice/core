@@ -35,6 +35,7 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
     sal_Bool bDropWholeWord;
 
     void ContextFontFilter(
+                bool bEnableFoFontFamily,
                 XMLPropertyState *pFontNameState,
                 XMLPropertyState *pFontFamilyNameState,
                 XMLPropertyState *pFontStyleNameState,
@@ -56,6 +57,7 @@ protected:
 
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
+            bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
             ::com::sun::star::uno::Reference<
                         ::com::sun::star::beans::XPropertySet > rPropSet ) const;
