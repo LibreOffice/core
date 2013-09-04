@@ -1525,11 +1525,9 @@ void SdrDragMove::TakeSdrDragComment(OUString& rStr) const
     ImpTakeDescriptionStr(STR_DragMethMove, rStr);
     rStr += " (x=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
-    rStr += " y=";
+    rStr += aStr + " y=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
-    rStr += ")";
+    rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
     {
@@ -2134,8 +2132,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 
     OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
-    rStr += aStr;
-    rStr += ")";
+    rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -2271,8 +2268,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
 
     OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
-    rStr += aStr;
-    rStr += ")";
+    rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -2858,8 +2854,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
         nVal = std::abs(nVal);
         OUString aStr;
         getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
-        rStr += aStr;
-        rStr += ")";
+        rStr += aStr + ")";
     }
 
     if(getSdrDragView().IsDragWithCopy())
@@ -3511,11 +3506,9 @@ void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
 
     rStr += " (x=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
-    rStr += " y=";
+    rStr += aStr + " y=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
-    rStr += ")";
+    rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);
@@ -3666,11 +3659,9 @@ void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
 
     rStr += " (x=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
-    rStr += aStr;
-    rStr += " y=";
+    rStr += aStr + " y=";
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDY(), aStr);
-    rStr += aStr;
-    rStr += ")";
+    rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
         rStr += ImpGetResStr(STR_EditWithCopy);

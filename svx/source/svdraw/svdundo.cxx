@@ -1315,10 +1315,7 @@ OUString SdrUndoObjStrAttr::GetComment() const
     {
     case OBJ_NAME:
         ImpTakeDescriptionStr( STR_UndoObjName, aStr );
-        aStr += " ";
-        aStr += "\'";
-        aStr += msNewStr;
-        aStr += "\'";
+        aStr += " '" + msNewStr + "'";
         break;
     case OBJ_TITLE:
         ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );

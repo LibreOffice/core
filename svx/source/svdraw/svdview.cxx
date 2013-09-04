@@ -1288,8 +1288,7 @@ OUString SdrView::GetStatusText()
     if(!aStr.isEmpty())
     {
         // capitalize first letter
-        OUString aTmpStr(aStr.copy(0, 1));
-        aStr = aStr.replaceAt(0, 1, aTmpStr.toAsciiUpperCase());
+        aStr = aStr.replaceAt(0, 1, OUString(aStr[0]).toAsciiUpperCase());
     }
     return aStr;
 }

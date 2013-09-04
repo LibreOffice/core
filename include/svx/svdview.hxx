@@ -298,7 +298,7 @@ public:
 //   Sonstiges:
 //   ~~~~~~~~~~
 //     Pointer GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
-//     String  GetStatusText();
+//     OUString GetStatusText();
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 

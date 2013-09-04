@@ -2015,12 +2015,7 @@ void SdrMarkView::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, 
         }
     }
 
-    nPos = rStr.indexOf("%2");
-
-    if(nPos != -1)
-    {
-        rStr = rStr.replaceAt(nPos, 2, OUString::number( nVal ));
-    }
+    rStr = rStr.replaceFirst("%2", OUString::number( nVal ));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

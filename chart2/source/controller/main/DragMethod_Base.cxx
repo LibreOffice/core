@@ -66,7 +66,7 @@ OUString DragMethod_Base::getUndoDescription() const
 }
 void DragMethod_Base::TakeSdrDragComment(OUString& rStr) const
 {
-    rStr = String( getUndoDescription() );
+    rStr = getUndoDescription();
 }
 Pointer DragMethod_Base::GetSdrDragPointer() const
 {
