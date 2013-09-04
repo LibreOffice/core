@@ -27,9 +27,6 @@ $(eval $(call gb_UnoApi_set_include,udkapi,\
 ))
 
 
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star,\
-	udk-modules \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
 	PropertySet \
 ))

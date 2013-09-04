@@ -481,9 +481,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/xslt,\
 ))
 
 
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
-	modules \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessibility,\
 	Accessible \
 	AccessibleContext \
@@ -822,7 +819,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	TextProperties \
 	TextShape \
 	TransparencyGradientTable \
-	modules \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/embed,\
 	BaseStorage \
@@ -839,7 +835,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form,\
 	FormController \
 	FormControllerDispatcher \
 	PropertyBrowserController \
-	modules \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/binding,\
 	BindableControlModel \
@@ -1036,9 +1031,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/present
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/rendering,\
 	BitmapCanvas \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report,\
-	modules \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report/inspection,\
 	DataProviderHandler \
