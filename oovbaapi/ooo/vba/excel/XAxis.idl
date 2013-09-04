@@ -118,8 +118,7 @@ interface XAxis
     boolean getMinimumScaleIsAuto()
         raises(com::sun::star::script::BasicErrorException);
 
-    long getAxisGroup();//
-        raises(com::sun::star::script::BasicErrorException);
+    long getAxisGroup();
 
     void setScaleType([in] long ScaleType)
         raises(com::sun::star::script::BasicErrorException);
