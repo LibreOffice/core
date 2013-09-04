@@ -2018,18 +2018,18 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             Default,
             Transparent,
             Gradient
-        } eDrawStyle = DrawStyle::Default;
+        } eDrawStyle = Default;
 
         // Gradient and transparency are mutually exclusive (need to check gradient first)
         if (pFillStyleItem && pFillStyleItem->GetValue() == XFILL_GRADIENT && pFillGradientItem)
         {
-            eDrawStyle = DrawStyle::Gradient;
+            eDrawStyle = Gradient;
         }
         else if (bConsiderBackgroundTransparency &&
                 ( ( aColor.GetTransparency() != 0) ||
                 bTransparentGrfWithNoFillBackgrd ) )
         {
-            eDrawStyle = DrawStyle::Transparent;
+            eDrawStyle = Transparent;
         }
 
         // #i75614# reset draw mode in high contrast mode in order to get fill color set
@@ -2045,7 +2045,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         ///     the fill color for the output device.
         switch (eDrawStyle)
         {
-            case DrawStyle::Transparent:
+            case Transparent:
             {
                 if( pOutDev->GetFillColor() != aColor.GetRGBColor() )
                     pOutDev->SetFillColor( aColor.GetRGBColor() );
@@ -2066,7 +2066,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
         /// OD 02.09.2002 #99657#
         switch (eDrawStyle)
         {
-            case DrawStyle::Transparent:
+            case Transparent:
             {
                 /// background region have to be drawn transparent.
                 /// Thus, create a poly-polygon from the region and draw it with
@@ -2103,12 +2103,12 @@ void DrawGraphic( const SvxBrushItem *pBrush,
 
                 break;
             }
-            case DrawStyle::Gradient:
+            case Gradient:
             {
                 pOutDev->DrawGradient(rOut.SVRect(), pFillGradientItem->GetGradientValue().VclGradient());
                 break;
             }
-            case DrawStyle::Default:
+            case Default:
             default:
             {
                 SwRegionRects aRegion( rOut, 4 );
