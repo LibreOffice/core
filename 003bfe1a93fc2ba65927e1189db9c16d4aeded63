@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7co\u003d",
+        "filename": "fpicker/source/win32/misc/WinImplHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T18:08:49Z",
+      "side": 1,
+      "message": "several parentheses missing here",
+      "revId": "003bfe1a93fc2ba65927e1189db9c16d4aeded63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7cs\u003d",
+        "filename": "fpicker/source/win32/misc/WinImplHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T18:08:49Z",
+      "side": 1,
+      "message": "this still refers to aBuff",
+      "revId": "003bfe1a93fc2ba65927e1189db9c16d4aeded63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
