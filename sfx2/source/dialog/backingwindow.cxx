@@ -104,15 +104,15 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpInfoButton,       "info");
     get(mpTplRepButton,     "add_temp");
 
-    get(mpShowWriterTemplateButton,     "show_writer_template");
-    get(mpShowCalcTemplateButton,       "show_calc_template");
-    get(mpShowImpressTemplateButton,    "show_impress_template");
-    get(mpShowDrawTemplateButton,       "show_draw_template");
+    get(mpWriterShowTemplateButton,     "show_writer_template");
+    get(mpCalcShowTemplateButton,       "show_calc_template");
+    get(mpImpressShowTemplateButton,    "show_impress_template");
+    get(mpDrawShowTemplateButton,       "show_draw_template");
 
-    get(mpShowWriterRecentButton,       "show_writer_recent");
-    get(mpShowCalcRecentButton,         "show_calc_recent");
-    get(mpShowImpressRecentButton,      "show_impress_recent");
-    get(mpShowDrawRecentButton,         "show_draw_recent");
+    get(mpWriterShowRecentButton,       "show_writer_recent");
+    get(mpCalcShowRecentButton,         "show_calc_recent");
+    get(mpImpressShowRecentButton,      "show_impress_recent");
+    get(mpDrawShowRecentButton,         "show_draw_recent");
 
     get( mpAllRecentThumbnails,         "all_recent");
     get( mpWriterRecentThumbnails,      "writer_recent");
@@ -279,13 +279,13 @@ void BackingWindow::initControls()
     setupExternalLink( mpTplRepButton );
 
     setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER,
-                       mpShowWriterRecentButton,    mpShowWriterTemplateButton );
+                       mpWriterShowRecentButton,    mpWriterShowTemplateButton );
     setupTemplateView( mpCalcTemplateThumbnails,    FILTER_APP_CALC,
-                       mpShowCalcRecentButton,      mpShowCalcTemplateButton );
+                       mpCalcShowRecentButton,      mpCalcShowTemplateButton );
     setupTemplateView( mpImpressTemplateThumbnails, FILTER_APP_IMPRESS,
-                       mpShowImpressRecentButton,   mpShowImpressTemplateButton );
+                       mpImpressShowRecentButton,   mpImpressShowTemplateButton );
     setupTemplateView( mpDrawTemplateThumbnails,    FILTER_APP_DRAW,
-                       mpShowDrawRecentButton,      mpShowDrawTemplateButton );
+                       mpDrawShowRecentButton,      mpDrawShowTemplateButton );
 
     Resize();
 }
@@ -519,64 +519,64 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
 {
     // writer
-    if( pButton == mpShowWriterTemplateButton )
+    if( pButton == mpWriterShowTemplateButton )
     {
         mpWriterRecentThumbnails->Hide();
+        mpWriterShowTemplateButton->Hide();
         mpWriterTemplateThumbnails->Show();
-        mpShowWriterTemplateButton->Hide();
-        mpShowWriterRecentButton->Show();
+        mpWriterShowRecentButton->Show();
     }
-    else if( pButton == mpShowWriterRecentButton )
+    else if( pButton == mpWriterShowRecentButton )
     {
-        mpWriterRecentThumbnails->Show();
         mpWriterTemplateThumbnails->Hide();
-        mpShowWriterTemplateButton->Show();
-        mpShowWriterRecentButton->Hide();
+        mpWriterShowRecentButton->Hide();
+        mpWriterRecentThumbnails->Show();
+        mpWriterShowTemplateButton->Show();
     }
     // calc
-    else if( pButton == mpShowCalcTemplateButton )
+    else if( pButton == mpCalcShowTemplateButton )
     {
         mpCalcRecentThumbnails->Hide();
+        mpCalcShowTemplateButton->Hide();
         mpCalcTemplateThumbnails->Show();
-        mpShowCalcTemplateButton->Hide();
-        mpShowCalcRecentButton->Show();
+        mpCalcShowRecentButton->Show();
     }
-    else if( pButton == mpShowCalcRecentButton )
+    else if( pButton == mpCalcShowRecentButton )
     {
-        mpCalcRecentThumbnails->Show();
         mpCalcTemplateThumbnails->Hide();
-        mpShowCalcTemplateButton->Show();
-        mpShowCalcRecentButton->Hide();
+        mpCalcShowRecentButton->Hide();
+        mpCalcRecentThumbnails->Show();
+        mpCalcShowTemplateButton->Show();
     }
     // impress
-    else if( pButton == mpShowImpressTemplateButton )
+    else if( pButton == mpImpressShowTemplateButton )
     {
         mpImpressRecentThumbnails->Hide();
+        mpImpressShowTemplateButton->Hide();
         mpImpressTemplateThumbnails->Show();
-        mpShowImpressTemplateButton->Hide();
-        mpShowImpressRecentButton->Show();
+        mpImpressShowRecentButton->Show();
     }
-    else if( pButton == mpShowImpressRecentButton )
+    else if( pButton == mpImpressShowRecentButton )
     {
-        mpImpressRecentThumbnails->Show();
         mpImpressTemplateThumbnails->Hide();
-        mpShowImpressTemplateButton->Show();
-        mpShowImpressRecentButton->Hide();
+        mpImpressShowRecentButton->Hide();
+        mpImpressRecentThumbnails->Show();
+        mpImpressShowTemplateButton->Show();
     }
     // draw
-    else if( pButton == mpShowDrawTemplateButton )
+    else if( pButton == mpDrawShowTemplateButton )
     {
         mpDrawRecentThumbnails->Hide();
+        mpDrawShowTemplateButton->Hide();
         mpDrawTemplateThumbnails->Show();
-        mpShowDrawTemplateButton->Hide();
-        mpShowDrawRecentButton->Show();
+        mpDrawShowRecentButton->Show();
     }
-    else if( pButton == mpShowDrawRecentButton )
+    else if( pButton == mpDrawShowRecentButton )
     {
-        mpDrawRecentThumbnails->Show();
         mpDrawTemplateThumbnails->Hide();
-        mpShowDrawTemplateButton->Show();
-        mpShowDrawRecentButton->Hide();
+        mpDrawShowRecentButton->Hide();
+        mpDrawRecentThumbnails->Show();
+        mpDrawShowTemplateButton->Show();
     }
     return 0;
 }

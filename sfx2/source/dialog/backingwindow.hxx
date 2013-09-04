@@ -74,15 +74,15 @@ class BackingWindow
     PushButton*                     mpInfoButton;
     PushButton*                     mpTplRepButton;
 
-    PushButton*                     mpShowWriterTemplateButton;
-    PushButton*                     mpShowCalcTemplateButton;
-    PushButton*                     mpShowImpressTemplateButton;
-    PushButton*                     mpShowDrawTemplateButton;
+    PushButton*                     mpWriterShowTemplateButton;
+    PushButton*                     mpCalcShowTemplateButton;
+    PushButton*                     mpImpressShowTemplateButton;
+    PushButton*                     mpDrawShowTemplateButton;
 
-    PushButton*                     mpShowWriterRecentButton;
-    PushButton*                     mpShowCalcRecentButton;
-    PushButton*                     mpShowImpressRecentButton;
-    PushButton*                     mpShowDrawRecentButton;
+    PushButton*                     mpWriterShowRecentButton;
+    PushButton*                     mpCalcShowRecentButton;
+    PushButton*                     mpImpressShowRecentButton;
+    PushButton*                     mpDrawShowRecentButton;
 
     RecentDocsView*                 mpAllRecentThumbnails;
     RecentDocsView*                 mpWriterRecentThumbnails;
