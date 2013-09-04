@@ -701,6 +701,12 @@ public:
      * PFInTable SPRM or not).
      */
     sal_Int32 m_nTableDepth;
+
+    /// If the document has a footnote separator.
+    bool m_bHasFtnSep;
+
+    /// If the next newline should be ignored, used by the special footnote separator paragraph.
+    bool m_bIgnoreNextPara;
 };
 } //namespace dmapper
 } //namespace writerfilter

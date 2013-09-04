@@ -23120,7 +23120,7 @@
       <attribute name="id" tokenid="ooxml:CT_FtnEdnSepRef_id"/>
     </resource>
     <resource name="CT_FtnEdn" resource="XNote" tag="reference">
-      <attribute name="type" tokenid="ooxml:CT_FtnEdn_type"/>
+      <attribute name="type" tokenid="ooxml:CT_FtnEdn_type" action="checkType"/>
       <attribute name="id" tokenid="ooxml:CT_FtnEdn_id" action="checkId"/>
       <action name="start" action="propagateCharacterProperties"/>
       <action name="end" action="endSectionGroup"/>

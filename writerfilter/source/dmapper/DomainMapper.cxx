@@ -1465,6 +1465,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (pSectionContext != NULL)
                 pSectionContext->SetPageNumber(nIntValue);
         break;
+        case NS_ooxml::LN_CT_FtnEdn_type:
+            // This is the "separator" footnote, ignore its linebreak.
+            if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
+                m_pImpl->m_bIgnoreNextPara = true;
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3728,6 +3733,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_pSdtHelper->createDateControl(sText);
         return;
     }
+    else if (len == 1 && sText[0] == 0x03)
+    {
+        // This is the uFtnEdnSep, remember that the document has a separator.
+        m_pImpl->m_bHasFtnSep = true;
+        return;
+    }
 
     try
     {
@@ -3735,6 +3746,11 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
         {
+            if (m_pImpl->m_bIgnoreNextPara)
+            {
+                m_pImpl->m_bIgnoreNextPara = false;
+                return;
+            }
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if (pContext && m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
             {

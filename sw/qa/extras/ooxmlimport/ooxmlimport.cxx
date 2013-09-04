@@ -131,6 +131,7 @@ public:
     void testTableStyleParprop();
     void testTablePagebreak();
     void testFdo68607();
+    void testFdo68787();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -228,6 +229,7 @@ void Test::run()
         {"table-style-parprop.docx", &Test::testTableStyleParprop},
         {"table-pagebreak.docx", &Test::testTablePagebreak},
         {"fdo68607.docx", &Test::testFdo68607},
+        {"fdo68787.docx", &Test::testFdo68787},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1538,6 +1540,13 @@ void Test::testFdo68607()
     // table in a frame. Exact layout may depend on fonts available, etc. --
     // but at least make sure that our table spans over multiple pages now.
     CPPUNIT_ASSERT(getPages() > 1);
+}
+
+void Test::testFdo68787()
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

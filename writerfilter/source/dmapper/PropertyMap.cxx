@@ -864,6 +864,9 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
 
     if (rDM_Impl.m_oBackgroundColor)
         operator[](PropertyDefinition(PROP_BACK_COLOR )) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
+    if (!rDM_Impl.m_bHasFtnSep)
+        // Set footnote line width to zero, document has no footnote separator.
+        operator[](PropertyDefinition(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH)) = uno::makeAny(sal_Int32(0));
 
     /*** if headers/footers are available then the top/bottom margins of the
       header/footer are copied to the top/bottom margin of the page

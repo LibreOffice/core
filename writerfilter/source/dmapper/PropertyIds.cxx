@@ -331,6 +331,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_MIRROR_INDENTS : sName = "MirrorIndents"; break;
             case PROP_SURROUND_TEXT_WRAP_SMALL: sName = "SurroundTextWrapSmall"; break;
             case PROP_PARA_SHADOW_FORMAT: sName = "ParaShadowFormat"; break;
+            case PROP_FOOTNOTE_LINE_RELATIVE_WIDTH: sName = "FootnoteLineRelativeWidth"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

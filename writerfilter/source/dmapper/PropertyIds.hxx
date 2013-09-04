@@ -302,6 +302,7 @@ enum PropertyIds
         ,PROP_MIRROR_INDENTS
         ,PROP_SURROUND_TEXT_WRAP_SMALL
         ,PROP_PARA_SHADOW_FORMAT
+        ,PROP_FOOTNOTE_LINE_RELATIVE_WIDTH
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

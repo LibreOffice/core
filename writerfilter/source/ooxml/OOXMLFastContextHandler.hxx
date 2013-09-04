@@ -432,11 +432,14 @@ public:
 
     void checkId(OOXMLValue::Pointer_t pValue);
 
+    void checkType(OOXMLValue::Pointer_t pValue);
+
     virtual string getType() const { return "XNote"; }
 
 private:
     bool mbForwardEventsSaved;
     sal_Int32 mnMyXNoteId;
+    sal_Int32 mnMyXNoteType;
 
     virtual void lcl_startFastElement
     (Token_t Element,

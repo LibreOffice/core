@@ -175,7 +175,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsNewDoc(bIsNewDoc),
         m_bInTableStyleRunProps(false),
         m_pSdtHelper(0),
-        m_nTableDepth(0)
+        m_nTableDepth(0),
+        m_bHasFtnSep(false),
+        m_bIgnoreNextPara(false)
 
 {
     appendTableManager( );

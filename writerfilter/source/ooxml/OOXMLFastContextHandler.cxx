@@ -1748,7 +1748,7 @@ void OOXMLFastContextHandlerTable::newPropertySet
 
 OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandlerProperties(pContext), mbForwardEventsSaved(false)
+: OOXMLFastContextHandlerProperties(pContext), mbForwardEventsSaved(false), mnMyXNoteType(0)
 {
 }
 
@@ -1763,7 +1763,8 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 {
     mbForwardEventsSaved = isForwardEvents();
 
-    if (mnMyXNoteId == getXNoteId())
+    // If this is the note we're looking for or this is the footnote separator one.
+    if (mnMyXNoteId == getXNoteId() || static_cast<sal_uInt32>(mnMyXNoteType) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
         setForwardEvents(true);
     else
         setForwardEvents(false);
@@ -1792,6 +1793,16 @@ void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 #endif
 
     mnMyXNoteId = sal_Int32(pValue->getInt());
+}
+
+void OOXMLFastContextHandlerXNote::checkType(OOXMLValue::Pointer_t pValue)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("checkType");
+    debug_logger->attribute("myType", sal_Int32(pValue->getInt()));
+    debug_logger->endElement();
+#endif
+    mnMyXNoteType = pValue->getInt();
 }
 
 /*
