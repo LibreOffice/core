@@ -10,7 +10,7 @@
 #ifndef _WRAPPER_PLAYER_HXX
 #define _WRAPPER_PLAYER_HXX
 #if defined UNX
-# include <unistd.h>
+# include <stdint.h>
 #endif
 
 struct libvlc_media_player_t;
