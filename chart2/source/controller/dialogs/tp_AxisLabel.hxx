@@ -36,28 +36,27 @@ namespace chart
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
-    CheckBox            aCbShowDescription;
+    CheckBox*            m_pCbShowDescription;
 
-    FixedLine           aFlOrder;
-    RadioButton         aRbSideBySide;
-    RadioButton         aRbUpDown;
-    RadioButton         aRbDownUp;
-    RadioButton         aRbAuto;
+    FixedText*           m_pFlOrder;
+    RadioButton*         m_pRbSideBySide;
+    RadioButton*         m_pRbUpDown;
+    RadioButton*         m_pRbDownUp;
+    RadioButton*         m_pRbAuto;
 
-    FixedLine           aFlSeparator;
-    FixedLine           aFlTextFlow;
-    CheckBox            aCbTextOverlap;
-    CheckBox            aCbTextBreak;
+    FixedText*          m_pFlTextFlow;
+    CheckBox*            m_pCbTextOverlap;
+    CheckBox*            m_pCbTextBreak;
+    FixedText*               m_pFtABCD;
+    FixedText*           m_pFlOrient;
+    svx::DialControl*    m_pCtrlDial;
+    FixedText*           m_pFtRotate;
+    svx::WrapField*      m_pNfRotate;
+    TriStateBox*         m_pCbStacked;
+    svx::OrientationHelper* m_pOrientHlp;
 
-    FixedLine           aFlOrient;
-    svx::DialControl    aCtrlDial;
-    FixedText           aFtRotate;
-    svx::WrapField      aNfRotate;
-    TriStateBox         aCbStacked;
-    svx::OrientationHelper aOrientHlp;
-
-    FixedText               m_aFtTextDirection;
-    TextDirectionListBox    m_aLbTextDirection;
+    FixedText*               m_pFtTextDirection;
+    TextDirectionListBox*    m_pLbTextDirection;
 
     sal_Bool                m_bShowStaggeringControls;
 
