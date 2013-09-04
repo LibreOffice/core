@@ -27,9 +27,6 @@
       <CountryID>SV</CountryID>
       <DefaultName>El Salvador</DefaultName>
     </Country>
-    <Platform>
-      <PlatformID>generic</PlatformID>
-    </Platform>
   </LC_INFO>
   <LC_CTYPE ref="es_NI"/>
   <LC_FORMAT ref="es_BO" replaceTo="[$C-440A]"/>

@@ -27,9 +27,6 @@
       <CountryID>MX</CountryID>
       <DefaultName>Mexico</DefaultName>
     </Country>
-    <Platform>
-      <PlatformID>generic</PlatformID>
-    </Platform>
   </LC_INFO>
   <LC_CTYPE ref="es_DO"/>
   <LC_FORMAT ref="es_DO" replaceTo="[$$-80A]"/>

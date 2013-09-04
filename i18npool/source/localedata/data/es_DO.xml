@@ -27,9 +27,6 @@
       <CountryID>DO</CountryID>
       <DefaultName>Dominican Republic</DefaultName>
     </Country>
-    <Platform>
-      <PlatformID>generic</PlatformID>
-    </Platform>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>

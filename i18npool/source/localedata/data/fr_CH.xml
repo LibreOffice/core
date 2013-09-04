@@ -27,9 +27,6 @@
       <CountryID>CH</CountryID>
       <DefaultName>Switzerland</DefaultName>
     </Country>
-    <Platform>
-      <PlatformID>generic</PlatformID>
-    </Platform>
   </LC_INFO>
   <LC_CTYPE>
     <Separators>

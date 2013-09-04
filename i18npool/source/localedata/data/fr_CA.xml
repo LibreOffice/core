@@ -27,9 +27,6 @@
       <CountryID>CA</CountryID>
       <DefaultName>Canada</DefaultName>
     </Country>
-    <Platform>
-      <PlatformID>generic</PlatformID>
-    </Platform>
   </LC_INFO>
   <LC_CTYPE>
     <Separators>
