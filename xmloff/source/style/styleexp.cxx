@@ -318,7 +318,7 @@ sal_Bool XMLStyleExport::exportStyle(
 
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
-            rPropMapper->Filter( xPropSet );
+            rPropMapper->Filter( xPropSet, true );
         rPropMapper->exportXML( GetExport(), xPropStates,
                                 XML_EXPORT_FLAG_IGN_WS );
 

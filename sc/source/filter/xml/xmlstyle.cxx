@@ -186,6 +186,7 @@ ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper()
 }
 
 void ScXMLCellExportPropertyMapper::ContextFilter(
+    bool bEnableFoFontFamily,
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
@@ -503,7 +504,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
         pDiagonalBLTRWidthState->maValue.clear();
     }
 
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -553,6 +554,7 @@ ScXMLRowExportPropertyMapper::~ScXMLRowExportPropertyMapper()
 }
 
 void ScXMLRowExportPropertyMapper::ContextFilter(
+    bool /* bEnableFoFontFamily */,
     ::std::vector< XMLPropertyState >& /* rProperties */,
     uno::Reference< beans::XPropertySet > /* rPropSet */ ) const
 {

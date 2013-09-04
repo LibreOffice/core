@@ -190,6 +190,7 @@ XMLTextExportPropertySetMapper::~XMLTextExportPropertySetMapper()
 }
 
 void XMLTextExportPropertySetMapper::ContextFontFilter(
+    bool bEnableFoFontFamily,
     XMLPropertyState *pFontNameState,
     XMLPropertyState *pFontFamilyNameState,
     XMLPropertyState *pFontStyleNameState,
@@ -241,19 +242,25 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     {
         OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
                             sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
-        if( !sName.isEmpty() )
+        if (!sName.isEmpty())
         {
             pFontNameState->maValue <<= sName;
-            if( pFontFamilyNameState )
-                pFontFamilyNameState->mnIndex = -1;
-            if( pFontStyleNameState )
-                pFontStyleNameState->mnIndex = -1;
-            if( pFontFamilyState )
-                pFontFamilyState->mnIndex = -1;
-            if( pFontPitchState )
-                pFontPitchState->mnIndex = -1;
-            if( pFontCharsetState )
-                pFontCharsetState->mnIndex = -1;
+            //Resolves: fdo#68431 style:font-name unrecognized by LibreOffice
+            //<= 4.1 in styles (but recognized in autostyles) so add
+            //fo:font-family, etc
+            if (!bEnableFoFontFamily)
+            {
+                if( pFontFamilyNameState )
+                    pFontFamilyNameState->mnIndex = -1;
+                if( pFontStyleNameState )
+                    pFontStyleNameState->mnIndex = -1;
+                if( pFontFamilyState )
+                    pFontFamilyState->mnIndex = -1;
+                if( pFontPitchState )
+                    pFontPitchState->mnIndex = -1;
+                if( pFontCharsetState )
+                    pFontCharsetState->mnIndex = -1;
+            }
         }
         else
         {
@@ -479,6 +486,7 @@ static void lcl_FilterBorders(
 }
 
 void XMLTextExportPropertySetMapper::ContextFilter(
+    bool bEnableFoFontFamily,
     ::std::vector< XMLPropertyState >& rProperties,
     Reference< XPropertySet > rPropSet ) const
 {
@@ -781,15 +789,15 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     }
 
     if( pFontNameState )
-        ContextFontFilter( pFontNameState, pFontFamilyNameState,
+        ContextFontFilter( bEnableFoFontFamily, pFontNameState, pFontFamilyNameState,
                            pFontStyleNameState, pFontFamilyState,
                            pFontPitchState, pFontCharsetState );
     if( pFontNameCJKState )
-        ContextFontFilter( pFontNameCJKState, pFontFamilyNameCJKState,
+        ContextFontFilter( bEnableFoFontFamily, pFontNameCJKState, pFontFamilyNameCJKState,
                            pFontStyleNameCJKState, pFontFamilyCJKState,
                            pFontPitchCJKState, pFontCharsetCJKState );
     if( pFontNameCTLState )
-        ContextFontFilter( pFontNameCTLState, pFontFamilyNameCTLState,
+        ContextFontFilter( bEnableFoFontFamily, pFontNameCTLState, pFontFamilyNameCTLState,
                            pFontStyleNameCTLState, pFontFamilyCTLState,
                            pFontPitchCTLState, pFontCharsetCTLState );
 
@@ -1055,7 +1063,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pClipState != NULL && pClip11State != NULL  )
         pClip11State->mnIndex = -1;
 
-    SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
 namespace {
