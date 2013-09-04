@@ -512,6 +512,34 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #   define SAL_WNODEPRECATED_DECLARATIONS_POP
 #endif
 
+/**
+   Use as follows:
+
+   SAL_WNOUNREACHABLE_CODE_PUSH
+
+   function definition
+
+   SAL_WNOUNREACHABLE_CODE_POP
+
+   Useful in cases where the compiler is "too clever" like when doing
+   link-time code generation, and noticing that a called function
+   always throws, and fixing the problem cleanly so that it produceds
+   no warnings in normal non-LTO compilations either is not easy.
+
+*/
+
+#ifdef _MSC_VER
+#define SAL_WNOUNREACHABLE_CODE_PUSH \
+    __pragma(warning(push)) \
+    __pragma(warning(disable:4702))
+#define SAL_WNOUNREACHABLE_CODE_POP \
+    __pragma(warning(pop))
+#else
+/* Add definitions for GCC and Clang if needed */
+#define SAL_WNOUNREACHABLE_CODE_PUSH
+#define SAL_WNOUNREACHABLE_CODE_POP
+#endif
+
 /** Annotate unused but required C++ function parameters.
 
     An unused parameter is required if the function needs to adhere to a given
