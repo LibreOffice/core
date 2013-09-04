@@ -43,8 +43,10 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
         }
     }
 
-    if (m_is_vlc_found)
-        mEventHandler->launch();
+    std::cout << "T" << std::endl;
+    //if (m_is_vlc_found)
+    //    mEventHandler->launch();
+    std::cout << "T" << std::endl;
 }
 
 Manager::~Manager()
@@ -62,6 +64,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
         VLCPlayer* pPlayer( new VLCPlayer( rURL, mEventHandler /*, mxMgr */ ) );
         mPlayer = uno::Reference< media::XPlayer >( pPlayer );
     }
+        std::cout << "A" << std::endl;
 
     return mPlayer;
 }
