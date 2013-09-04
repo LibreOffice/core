@@ -32,23 +32,23 @@ published struct Uik
 {
     /** specifies a 4 byte data block.
      */
-    unsigned long m_Data1;
+    unsigned long Data1;
 
     /** specifies a 2 byte data block.
      */
-    unsigned short m_Data2;
+    unsigned short Data2;
 
     /** specifies a 2 byte data block.
      */
-    unsigned short m_Data3;
+    unsigned short Data3;
 
     /** specifies a 4 byte data block.
      */
-    unsigned long m_Data4;
+    unsigned long Data4;
 
     /** specifies a 4 byte data block.
      */
-    unsigned long m_Data5;
+    unsigned long Data5;
 };
 
 
