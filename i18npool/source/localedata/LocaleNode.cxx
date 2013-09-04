@@ -340,25 +340,37 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     const LocaleNode * countryNode = findNode("Country");
     const LocaleNode * variantNode = findNode("Variant");
 
+    OUString aLanguage;
+
     if (languageNode)
     {
-        writeParameterCheckLen( of, "langID", languageNode->getChildAt(0), 2, -1);
+        aLanguage = languageNode->getChildAt(0)->getValue();
+        if (!(aLanguage.getLength() == 2 || aLanguage.getLength() == 3))
+            incErrorStr( "langID not 2-3 characters", aLanguage);
+        of.writeParameter("langID", aLanguage);
         of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
     else
         incError( "No Language node.");
     if (countryNode)
     {
-        of.writeParameter("countryID", countryNode->getChildAt(0)->getValue());
+        OUString aCountry( countryNode->getChildAt(0)->getValue());
+        if (!(aCountry.isEmpty() || aCountry.getLength() == 2))
+            incErrorStr( "countryID not empty or more than 2 characters", aCountry);
+        of.writeParameter("countryID", aCountry);
         of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
     else
         incError( "No Country node.");
     if (variantNode)
     {
-        of.writeParameter("Variant", variantNode->getValue());
-        fprintf( stderr, "Warning: %s\n",
-                "Variants are not supported by application.");
+        // If given Variant must be at least ll-Ssss and language must be 'qlt'
+        OUString aVariant( variantNode->getValue());
+        if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-'))))
+            incErrorStr( "invalid Variant", aVariant);
+        if (!(aVariant.isEmpty() || aLanguage == "qlt"))
+            incErrorStrStr( "Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
+        of.writeParameter("Variant", aVariant);
     }
     else
         of.writeParameter("Variant", OUString());
