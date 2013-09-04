@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7e4\u003d",
+        "filename": "fpicker/source/win32/misc/WinImplHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T13:45:02Z",
+      "side": 1,
+      "message": "the old code creates a buffer of size lItem, while OUString::number converts lItem to a string",
+      "revId": "777e7e17d3562104aa35c557ad3b230ec61af4c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7e0\u003d",
+        "filename": "fpicker/source/win32/misc/WinImplHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T13:45:02Z",
+      "side": 1,
+      "message": "http://msdn.microsoft.com/en-us/library/windows/desktop/bb775862%28v\u003dvs.85%29.aspx\nsays that this aString receives a string result.\nneither of OUString or OUStringBuffer can be used for this.\n\nmaybe could use a std::vector\u003csal_Unicode\u003e though.",
+      "revId": "777e7e17d3562104aa35c557ad3b230ec61af4c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
