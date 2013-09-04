@@ -91,7 +91,7 @@ VDiagram::~VDiagram()
 void VDiagram::init(
     const uno::Reference< drawing::XShapes >& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    OSL_PRECOND(xLogicTarget.is() && xFactory.is(), "no proper initialization parameters");
+    OSL_PRECOND(xFactory.is(), "no proper initialization parameters");
 
     m_xTarget  = xTarget;
     m_xShapeFactory = xFactory;
