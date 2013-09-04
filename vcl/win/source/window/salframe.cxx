@@ -2904,11 +2904,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     // is to wide for the dialogs
     if ( rSettings.GetLanguageTag().getLanguageType() == LANGUAGE_RUSSIAN )
     {
-        XubString aFontName = aAppFont.GetName();
-        XubString aFirstName = aFontName.GetToken( 0, ';' );
-        if ( aFirstName.EqualsIgnoreCaseAscii( "MS Sans Serif" ) )
+        OUString aFontName = aAppFont.GetName();
+        OUString aFirstName = aFontName.getToken( 0, ';' );
+        if ( aFirstName.equalsIgnoreAsciiCase( "MS Sans Serif" ) )
         {
-            aFontName.InsertAscii( "Arial;", 0 );
+            aFontName = "Arial;" + aFontName;
             aAppFont.SetName( aFontName );
         }
     }

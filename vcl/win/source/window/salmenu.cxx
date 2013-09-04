@@ -328,14 +328,13 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
 #endif
 
         // combine text and accelerator text
-        XubString aStr( pWItem->mText );
+        OUString aStr( pWItem->mText );
         if( pWItem->mAccelText.getLength() )
         {
-            aStr.AppendAscii("\t");
-            aStr.Append( pWItem->mAccelText );
+            aStr += "\t" + pWItem->mAccelText;
         }
-        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
-        pWItem->mInfo.cch = aStr.Len();
+        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.getStr();
+        pWItem->mInfo.cch = aStr.getLength();
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
@@ -357,14 +356,13 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
             pWItem->mInfo.fType |= MFT_OWNERDRAW;
 #endif
         // combine text and accelerator text
-        XubString aStr( pWItem->mText );
+        OUString aStr( pWItem->mText );
         if( pWItem->mAccelText.getLength() )
         {
-            aStr.AppendAscii("\t");
-            aStr.Append( pWItem->mAccelText );
+            aStr += "\t" + pWItem->mAccelText;
         }
-        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.GetBuffer();
-        pWItem->mInfo.cch = aStr.Len();
+        pWItem->mInfo.dwTypeData = (LPWSTR) aStr.getStr();
+        pWItem->mInfo.cch = aStr.getLength();
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
