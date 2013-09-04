@@ -2183,7 +2183,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( aLbMatColor.GetSelectEntryCount() )
     {
         aColor = aLbMatColor.GetSelectEntryColor();
-        rAttrs.Put( XFillColorItem( String(), aColor) );
+        rAttrs.Put( XFillColorItem( "", aColor) );
     }
     else
     {
@@ -3053,13 +3053,13 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
     pLb->SelectEntry( rColor );
     if( pLb->GetSelectEntryCount() == 0 )
     {
-        String aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
+        OUString aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
 
         aStr += OUString::number((sal_Int32)rColor.GetRed());
-        aStr += sal_Unicode(' ');
+        aStr += " '";
         aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_G);
         aStr += OUString::number((sal_Int32)rColor.GetGreen());
-        aStr += sal_Unicode(' ');
+        aStr += " ";
         aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_B);
         aStr += OUString::number((sal_Int32)rColor.GetBlue());
 
