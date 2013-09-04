@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAXn//7gw\u003d",
+        "filename": "comphelper/source/misc/configparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-04T09:45:15Z",
+      "side": 1,
+      "message": "why the _const_ OUString return here?",
+      "revId": "e1cbc39448daefef5de63e574e881e85a59787a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7gs\u003d",
+        "filename": "include/comphelper/configparser.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-04T09:45:15Z",
+      "side": 1,
+      "message": "With the changed scope and purpose of the function, I think the cxx/hxx should be renamed.",
+      "revId": "e1cbc39448daefef5de63e574e881e85a59787a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7go\u003d",
+        "filename": "include/comphelper/configparser.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-04T09:45:15Z",
+      "side": 1,
+      "message": "Note that comphelper/source/officeinstdir/officeinstallationdirectories.cxx has a macroexpander right there nearby. When you consolidate all those places, it might be advantageous to have the component context as an additional argument here. Or have two overloaded methods, one w/o component context, one with it",
+      "revId": "e1cbc39448daefef5de63e574e881e85a59787a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7h8\u003d",
         "filename": "sd/source/core/drawdoc.cxx",
         "patchSetId": 5
