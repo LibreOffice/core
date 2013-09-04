@@ -1057,6 +1057,9 @@ sal_Bool Content::isFolder()
 }
 
 //=========================================================================
+
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -1072,12 +1075,12 @@ sal_Bool Content::isDocument()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     // Unreachable - cancelCommandExecution always throws an exception,
     // But some compilers complain...
     return sal_False;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
 
 //=========================================================================
 //=========================================================================
