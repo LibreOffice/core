@@ -525,6 +525,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpWriterShowTemplateButton->Hide();
         mpWriterTemplateThumbnails->Show();
         mpWriterShowRecentButton->Show();
+        mpWriterShowRecentButton->GrabFocus();
     }
     else if( pButton == mpWriterShowRecentButton )
     {
@@ -532,6 +533,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpWriterShowRecentButton->Hide();
         mpWriterRecentThumbnails->Show();
         mpWriterShowTemplateButton->Show();
+        mpWriterShowTemplateButton->GrabFocus();
     }
     // calc
     else if( pButton == mpCalcShowTemplateButton )
@@ -540,6 +542,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpCalcShowTemplateButton->Hide();
         mpCalcTemplateThumbnails->Show();
         mpCalcShowRecentButton->Show();
+        mpCalcShowRecentButton->GrabFocus();
     }
     else if( pButton == mpCalcShowRecentButton )
     {
@@ -547,6 +550,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpCalcShowRecentButton->Hide();
         mpCalcRecentThumbnails->Show();
         mpCalcShowTemplateButton->Show();
+        mpCalcShowTemplateButton->GrabFocus();
     }
     // impress
     else if( pButton == mpImpressShowTemplateButton )
@@ -555,6 +559,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpImpressShowTemplateButton->Hide();
         mpImpressTemplateThumbnails->Show();
         mpImpressShowRecentButton->Show();
+        mpImpressShowRecentButton->GrabFocus();
     }
     else if( pButton == mpImpressShowRecentButton )
     {
@@ -562,6 +567,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpImpressShowRecentButton->Hide();
         mpImpressRecentThumbnails->Show();
         mpImpressShowTemplateButton->Show();
+        mpImpressShowTemplateButton->GrabFocus();
     }
     // draw
     else if( pButton == mpDrawShowTemplateButton )
@@ -570,6 +576,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpDrawShowTemplateButton->Hide();
         mpDrawTemplateThumbnails->Show();
         mpDrawShowRecentButton->Show();
+        mpDrawShowRecentButton->GrabFocus();
     }
     else if( pButton == mpDrawShowRecentButton )
     {
@@ -577,6 +584,7 @@ IMPL_LINK( BackingWindow, RecentTemplateToggleHdl, Button*, pButton )
         mpDrawShowRecentButton->Hide();
         mpDrawRecentThumbnails->Show();
         mpDrawShowTemplateButton->Show();
+        mpDrawShowTemplateButton->GrabFocus();
     }
     return 0;
 }
