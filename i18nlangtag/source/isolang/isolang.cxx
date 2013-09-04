@@ -322,6 +322,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BELARUSIAN,                  "be", "BY" },
     { LANGUAGE_CATALAN,                     "ca", "ES" },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD" },   // Andorra
+    //LANGUAGE_CATALAN_VALENCIAN ca-ES-valencia Bcp47CountryEntry takes precedence
     { LANGUAGE_CATALAN_VALENCIAN,           "ca", "XV" },   // XV: ISO 3166 user-assigned; old workaround for UI localization only, in case it escaped to document content
     { LANGUAGE_CATALAN_VALENCIAN,          "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; old UI localization quirk only, in case it escaped to document content
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
