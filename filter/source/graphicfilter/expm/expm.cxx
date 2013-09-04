@@ -247,11 +247,10 @@ void XPMWriter::ImplWriteColor( sal_uInt16 nNumber )
 
 // ------------------------------------------------------------------------
 
-// ---------------------
-// - exported function -
-// ---------------------
-
-#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+// this needs to be kept in sync with
+// ImpFilterLibCacheEntry::GetImportFunction() from
+// vcl/source/filter/graphicfilter.cxx
+#if defined(DISABLE_DYNLOADING)
 #define GraphicExport expGraphicExport
 #endif
 
