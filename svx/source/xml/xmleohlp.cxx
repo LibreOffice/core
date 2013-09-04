@@ -381,7 +381,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     if( !xCntnrStor.is() && !pTemp )
         return sal_False;
 
-    String aSrcObjName( rObjName );
+    OUString aSrcObjName( rObjName );
     comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
 
     // Is the object name unique?

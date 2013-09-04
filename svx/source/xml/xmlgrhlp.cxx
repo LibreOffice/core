@@ -120,14 +120,14 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    String          aFormat;
+                    OUString          aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String(  "gif"  );
+                        aFormat = "gif";
                     else
-                        aFormat = String(  "png"  );
+                        aFormat = "png";
 
-                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
@@ -283,7 +283,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -326,7 +326,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
-                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pDest ,nFormat,&pDeterminedFormat );
                         }
                     }
                     delete pDest;
@@ -370,18 +370,18 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStorageName,
                                                  OUString& rPictureStreamName )
 {
-    String      aURLStr( rURLStr );
+    OUString      aURLStr( rURLStr );
     sal_Bool    bRet = sal_False;
 
-    if( aURLStr.Len() )
+    if( !aURLStr.isEmpty() )
     {
-        aURLStr = aURLStr.GetToken( comphelper::string::getTokenCount(aURLStr, ':') - 1, ':' );
+        aURLStr = aURLStr.getToken( comphelper::string::getTokenCount(aURLStr, ':') - 1, ':' );
 
         const sal_uInt32 nTokenCount = comphelper::string::getTokenCount(aURLStr, '/');
 
         if( 1 == nTokenCount )
         {
-            rPictureStorageName = String(  XML_GRAPHICSTORAGE_NAME  );
+            rPictureStorageName = XML_GRAPHICSTORAGE_NAME;
             rPictureStreamName = aURLStr;
         }
         else
@@ -495,7 +495,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pStream );
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pStream );
         delete pStream;
     }
 
@@ -540,14 +540,14 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    String          aFormat;
+                    OUString          aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String(  "gif"  );
+                        aFormat = "gif";
                     else
-                        aFormat = String(  "png"  );
+                        aFormat = "png";
 
-                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStream,
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream,
                                                      rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
@@ -621,33 +621,33 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     RTL_TEXTENCODING_ASCII_US);
             }
             else
-                rURLPair.second = String();
+                rURLPair.second = "";
         }
         else
         {
-            const String        aGraphicObjectId( aPictureStreamName );
+            const OUString      aGraphicObjectId( aPictureStreamName );
             const OString aAsciiObjectID(OUStringToOString(aGraphicObjectId, RTL_TEXTENCODING_ASCII_US));
             const GraphicObject aGrfObject( aAsciiObjectID );
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
-                String          aStreamName( aGraphicObjectId );
+                OUString        aStreamName( aGraphicObjectId );
                 Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
-                String          aExtension;
+                OUString        aExtension;
                 bool            bUseGfxLink( true );
 
                 if( aGfxLink.GetDataSize() )
                 {
                     switch( aGfxLink.GetType() )
                     {
-                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String(  ".eps"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String(  ".gif"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String(  ".jpg"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String(  ".png"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String(  ".tif"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String(  ".wmf"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String(  ".met"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String(  ".pct"  ); break;
+                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = ".eps"; break;
+                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = ".gif"; break;
+                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = ".jpg"; break;
+                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = ".png"; break;
+                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = ".tif"; break;
+                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = ".wmf"; break;
+                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = ".met"; break;
+                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = ".pct"; break;
                         case( GFX_LINK_TYPE_NATIVE_SVG ):
                             // backward-compat kludge: since no released OOo
                             // version to date can handle svg properly, wrap it up
@@ -657,14 +657,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                             if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
                             {
                                 bUseGfxLink = false;
-                                aExtension = String(  ".svm"  );
+                                aExtension = ".svm";
                             }
                             else
-                                aExtension = String(  ".svg"  );
+                                aExtension = ".svg";
                             break;
 
                         default:
-                            aExtension = String(  ".grf"  );
+                            aExtension = ".grf";
                         break;
                     }
                 }
@@ -673,23 +673,23 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     if( aGrfObject.GetType() == GRAPHIC_BITMAP )
                     {
                         if( aGrfObject.IsAnimated() )
-                            aExtension = String(  ".gif"  );
+                            aExtension = ".gif";
                         else
-                            aExtension = String(  ".png"  );
+                            aExtension = ".png";
                     }
                     else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                         if ( ImplCheckForEPS( rMtf ) )
-                            aExtension = String(  ".eps"  );
+                            aExtension = ".eps";
                         else
-                            aExtension = String(  ".svm"  );
+                            aExtension = ".svm";
                     }
                 }
 
                 OUString aURLEntry;
-                const String sPictures(  "Pictures/"  );
+                const OUString sPictures(  "Pictures/"  );
 
                 if ( !rRequestedFileName.isEmpty() )
                 {
@@ -709,7 +709,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
                 aStreamName += aExtension;
 
-                if( mbDirect && aStreamName.Len() )
+                if( mbDirect && !aStreamName.isEmpty() )
                     ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId, bUseGfxLink );
 
                 rURLPair.second = sPictures;

@@ -359,8 +359,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
                                uno::Reference < embed::XStorage > xStorage )
 {
     uno::Reference < io::XStream > xIStm;
-    const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-    xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
+    xIStm.set( xStorage->openStreamElement( "Content.xml", embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
     if( !xIStm.is() )
     {
         OSL_FAIL( "could not open Content stream" );
