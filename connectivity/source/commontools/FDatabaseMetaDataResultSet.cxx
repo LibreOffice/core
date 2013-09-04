@@ -323,21 +323,23 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException
     return m_bEOF;
 }
 // -------------------------------------------------------------------------
+
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
+
 // -------------------------------------------------------------------------
 void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
@@ -361,46 +363,41 @@ void SAL_CALL ODatabaseMetaDataResultSet::close(  ) throw(SQLException, RuntimeE
 }
 // -------------------------------------------------------------------------
 
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::last(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::absolute( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::relative( sal_Int32 /*row*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
+
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
@@ -408,29 +405,28 @@ Reference< XInterface > SAL_CALL ODatabaseMetaDataResultSet::getStatement(  ) th
 }
 // -------------------------------------------------------------------------
 
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionSequenceException(*this);
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return sal_False;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
+
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)

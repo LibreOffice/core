@@ -46,20 +46,25 @@ BlobHelper::BlobHelper(const ::com::sun::star::uno::Sequence< sal_Int8 >& _val) 
     return new ::comphelper::SequenceInputStream(m_aValue);
 }
 // -----------------------------------------------------------------------------
+
+// The "return" after a call to throwFeatureNotImplementedException()
+// (which always throws) will be detected as unreachable when doing
+// global inlining.
+
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 ::sal_Int64 SAL_CALL BlobHelper::position( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XBlob::position", *this );
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return 0;
-#endif
 }
 // -----------------------------------------------------------------------------
 ::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XBlob::positionOfBlob", *this );
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return 0;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

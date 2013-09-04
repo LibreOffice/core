@@ -121,16 +121,15 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException)
     return const_cast<OUser*>(this)->m_pGroups;
 }
 // -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
+SAL_WNOUNREACHABLE_CODE_PUSH
 
 sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::changePassword", *this );
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return 0;
-#endif
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -138,10 +137,11 @@ sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, s
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedException( "XAuthorizable::getGrantablePrivileges", *this );
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     return 0;
-#endif
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
+
 // -------------------------------------------------------------------------
 void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
