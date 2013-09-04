@@ -2151,7 +2151,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                     aFillColor = GetColorData(
                         ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
                         std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() );
-                    rObj.SetMergedItem( XFillColorItem( String(), aFillColor ) );
+                    rObj.SetMergedItem( XFillColorItem( "", aFillColor ) );
                 }
                 break;
             }
@@ -2170,7 +2170,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                             std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() ));
                 }
 
-                rObj.SetMergedItem( XFillGradientItem( String(), aXGradient ) );
+                rObj.SetMergedItem( XFillGradientItem( "", aXGradient ) );
                 break;
             }
             case XFILL_HATCH:
@@ -2184,7 +2184,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                             std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() ));
                 }
 
-                rObj.SetMergedItem( XFillHatchItem( String(), aXHatch ) );
+                rObj.SetMergedItem( XFillHatchItem( "", aXHatch ) );
                 break;
             }
             case XFILL_BITMAP:

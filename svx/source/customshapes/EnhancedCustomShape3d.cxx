@@ -531,7 +531,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aLocalSet );
                     if ( bUseExtrusionColor )
-                        p3DObj->SetMergedItem( XFillColorItem( String(), ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
+                        p3DObj->SetMergedItem( XFillColorItem( "", ((XSecondaryFillColorItem&)pCustomShape->GetMergedItem( XATTR_SECONDARYFILLCOLOR )).GetColorValue() ) );
                     p3DObj->SetMergedItem( XFillStyleItem( XFILL_SOLID ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
@@ -552,7 +552,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 else if ( aLocalFillStyle == XFILL_NONE )
                 {
                     XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
-                    p3DObj->SetMergedItem( XFillColorItem( String(), rLineColor.GetColorValue() ) );
+                    p3DObj->SetMergedItem( XFillColorItem( "", rLineColor.GetColorValue() ) );
                     p3DObj->SetMergedItem( Svx3DDoubleSidedItem( sal_True ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
