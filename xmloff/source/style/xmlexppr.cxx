@@ -605,7 +605,7 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
 
 vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         const Reference< XPropertySet > xPropSet,
-        const sal_Bool bDefault ) const
+        bool bDefault, bool bEnableFoFontFamily) const
 {
     vector< XMLPropertyState > aPropStateArray;
 
@@ -706,7 +706,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
     // Call centext-filter
     if( !aPropStateArray.empty() )
-        ContextFilter( aPropStateArray, xPropSet );
+        ContextFilter(bEnableFoFontFamily, aPropStateArray, xPropSet);
 
     // Have to do if we change from a vector to a list or something like that
 
@@ -717,12 +717,13 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 }
 
 void SvXMLExportPropertyMapper::ContextFilter(
+        bool bEnableFoFontFamily,
         vector< XMLPropertyState >& rProperties,
         Reference< XPropertySet > rPropSet ) const
 {
     // Derived class could implement this.
     if( mxNextMapper.is() )
-        mxNextMapper->ContextFilter( rProperties, rPropSet );
+        mxNextMapper->ContextFilter( bEnableFoFontFamily, rProperties, rPropSet );
 }
 
 ///////////////////////////////////////////////////////////////////////////

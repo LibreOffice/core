@@ -310,6 +310,7 @@ void XMLPageMasterExportPropMapper::handleSpecialItem(
 }
 
 void XMLPageMasterExportPropMapper::ContextFilter(
+        bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rPropState,
         Reference< XPropertySet > rPropSet ) const
 {
@@ -458,7 +459,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ZEROVALUES), "PrintZeroValues", rPropSet);
     }
 
-    SvXMLExportPropertyMapper::ContextFilter(rPropState,rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rPropState, rPropSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
