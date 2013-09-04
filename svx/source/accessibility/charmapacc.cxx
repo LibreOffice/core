@@ -696,7 +696,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    String sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
+    OUString sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE );
 
     sal_Unicode c = mpParent->maText[0];
     char buf[16] = "0x0000";
@@ -709,7 +709,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     }
     if( c < 256 )
         snprintf( buf+6, 10, " (%d)", c );
-    sDescription.AppendAscii(buf);
+    sDescription += OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
 
     return sDescription;
 }

@@ -207,12 +207,12 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         OUString aMimeType;
 
         SvtPathOptions aPathOpt;
-        String sGraphicPath( aPathOpt.GetGraphicPath() );
+        OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
         FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
         Reference < XFilePicker > xFilePicker = aDialogHelper.GetFilePicker();
 
-        aDialogHelper.SetTitle( OUString( "Save as Picture" ) );
+        aDialogHelper.SetTitle( "Save as Picture" );
 
         INetURLObject aPath;
         aPath.SetSmartURL( sGraphicPath );
