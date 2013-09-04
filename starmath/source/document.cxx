@@ -873,31 +873,24 @@ sal_Bool SmDocShell::Save()
 sal_Bool SmDocShell::ReplaceBadChars()
 {
     sal_Bool bReplace = sal_False;
+
     if (pEditEngine)
     {
-        String aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
-        const sal_Unicode *pEngTxt = aEngTxt.GetBuffer();
-        xub_StrLen nLen = aEngTxt.Len();
-        for (xub_StrLen i = 0;  i < nLen && !bReplace;  ++i)
-        {
-            const sal_Unicode c = *pEngTxt++;
-            if (c < ' ' && c != '\r' && c != '\n' && c != '\t')
-                bReplace = sal_True;
-        }
-        if (bReplace)
-        {
-            sal_Unicode *pChgTxt = aEngTxt.GetBufferAccess();
-            for (xub_StrLen i = 0;  i < nLen;  ++i)
-            {
-                sal_Unicode &rc = *pChgTxt++;
-                if (rc < ' ' && rc != '\r' && rc != '\n' && rc != '\t')
-                    rc = ' ';
-            }
-            aEngTxt.ReleaseBufferAccess( nLen );
+        OUStringBuffer aBuf( pEditEngine->GetText( LINEEND_LF ) );
 
-            aText = aEngTxt;
+        for (sal_Int32 i = 0;  i < aBuf.getLength();  ++i)
+        {
+            if (aBuf[i] < ' ' && aBuf[i] != '\r' && aBuf[i] != '\n' && aBuf[i] != '\t')
+            {
+                aBuf[i] = ' ';
+                bReplace = sal_True;
+            }
         }
+
+        if (bReplace)
+            aText = aBuf.makeStringAndClear();
     }
+
     return bReplace;
 }
 
