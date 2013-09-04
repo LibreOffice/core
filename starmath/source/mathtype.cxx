@@ -664,7 +664,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     bool bOpenString=false;
     sal_Int32 nTextStart = 0;
     sal_Int32 nSubSupStartPos = 0;
-    sal_Int32 nLastTemplateBracket=STRING_NOTFOUND;
+    sal_Int32 nLastTemplateBracket=-1;
 
     do
     {
@@ -1261,7 +1261,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         {
                             bool bOk=false;
                             sal_Int32 nI = rRet.lastIndexOf('{');
-                            if (nI != STRING_NOTFOUND)
+                            if (nI != -1)
                             {
                                 for(nI=nI+1;nI<rRet.getLength();nI++)
                                     if (rRet[nI] != ' ')
@@ -1386,7 +1386,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
 
                             bool bOk=false;
                             sal_Int32 nI = rRet.lastIndexOf('{');
-                            if (nI != STRING_NOTFOUND)
+                            if (nI != -1)
                             {
                                 for(nI=nI+1;nI<rRet.getLength();nI++)
                                     if (rRet[nI] != ' ')
@@ -2694,7 +2694,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
 
     sal_Int32 nI = rRet.lastIndexOf('#');
-    if ((nI != STRING_NOTFOUND) && (nI > 0))
+    if ((nI != -1) && (nI > 0))
         if (rRet[nI-1] != '#')  //missing column
             rRet += "{}";
 
@@ -2723,7 +2723,7 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     //another one after it, mathtype handles it as if the second one was
     //inside the first one and renders it as sub of sub
     bool bRemove=false;
-    if ( (rSelector == 0xf) && (rLastTemplateBracket != STRING_NOTFOUND) )
+    if ( (rSelector == 0xf) && (rLastTemplateBracket != -1) )
     {
         bRemove=true;
         for (sal_Int32 nI = rLastTemplateBracket+1; nI < rRet.getLength(); nI++ )
@@ -2741,12 +2741,12 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     {
         rRet = rRet.replaceAt(rLastTemplateBracket,1,"");
         rRet += "} ";
-        rLastTemplateBracket = STRING_NOTFOUND;
+        rLastTemplateBracket = -1;
     }
     if (rSelector == 0xf)
         rLastTemplateBracket = rRet.lastIndexOf('}');
     else
-        rLastTemplateBracket = STRING_NOTFOUND;
+        rLastTemplateBracket = -1;
 
     rSelector = sal::static_int_cast< sal_uInt8 >(-1);
     return nRet;
