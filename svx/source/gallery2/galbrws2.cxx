@@ -972,7 +972,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
 void GalleryBrowser2::ImplUpdateInfoBar()
 {
-    String aInfoText;
+    OUString aInfoText;
 
     if( mpCurTheme )
     {
@@ -1211,7 +1211,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
                 if( pObj )
                 {
-                    const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
+                    const OUString  aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
@@ -1220,12 +1220,12 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");
                         if( aDlg->Execute() == RET_OK )
                         {
-                            String aNewTitle( aDlg->GetTitle() );
+                            OUString aNewTitle( aDlg->GetTitle() );
 
-                            if( ( !aNewTitle.Len() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
+                            if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                             {
-                                if( !aNewTitle.Len() )
-                                    aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
+                                if( aNewTitle.isEmpty() )
+                                    aNewTitle = "__<empty>__";
 
                                 pObj->SetTitle( aNewTitle );
                                 mpCurTheme->InsertObject( *pObj );
@@ -1288,15 +1288,15 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
 
     if( nItemTextFlags & GALLERY_ITEM_TITLE )
     {
-        String aTitle( rObj.GetTitle() );
+        OUString aTitle( rObj.GetTitle() );
 
-        if( !aTitle.Len() )
+        if( aTitle.isEmpty() )
             aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
 
-        if( !aTitle.Len() )
+        if( aTitle.isEmpty() )
         {
             aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-            aTitle = aTitle.GetToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
+            aTitle = aTitle.getToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
         }
 
         aRet += aTitle;
@@ -1304,14 +1304,14 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
 
     if( nItemTextFlags & GALLERY_ITEM_PATH )
     {
-        const String aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        const OUString aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
-            aRet += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+            aRet += " (";
 
-        aRet += String(aURL.getFSysPath( INetURLObject::FSYS_DETECT ));
+        aRet += aURL.getFSysPath( INetURLObject::FSYS_DETECT );
 
-        if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
             aRet += ")";
     }
 

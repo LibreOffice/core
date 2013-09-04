@@ -198,8 +198,8 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     else
         rOut << aThumbMtf;
 
-    String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
-    aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
+    OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    aURLWithoutDestDir = aURLWithoutDestDir.replaceFirst(rDestDir, "");
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
 }
 
@@ -234,11 +234,11 @@ const OUString SgaObject::GetTitle() const
     {
         if ( comphelper::string::getTokenCount(aReturnValue, ':') == 3 )
         {
-            String      aPrivateInd  ( aReturnValue.getToken( 0, ':' ) );
-            String      aResourceName( aReturnValue.getToken( 1, ':' ) );
+            OUString    aPrivateInd  ( aReturnValue.getToken( 0, ':' ) );
+            OUString    aResourceName( aReturnValue.getToken( 1, ':' ) );
             sal_Int32   nResId       ( aReturnValue.getToken( 2, ':' ).toInt32() );
-            if ( aPrivateInd.EqualsAscii( "private" ) &&
-                aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
+            if ( aPrivateInd == "private" &&
+                !aResourceName.isEmpty() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
                 OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
                 ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
@@ -270,7 +270,7 @@ void SgaObject::SetTitle( const OUString& rTitle )
 
 SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
 {
-    rObj.WriteData( rOut, String() );
+    rObj.WriteData( rOut, "" );
     return rOut;
 }
 
@@ -491,7 +491,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
 {
     DBG_CTOR(SvxGalleryDrawModel,NULL);
 
-    const String sFactoryURL(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
+    const OUString sFactoryURL("sdraw");
 
     mxDoc = SfxObjectShell::CreateObjectByFactoryName( sFactoryURL );
 

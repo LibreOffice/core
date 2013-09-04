@@ -247,12 +247,12 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 
 String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 {
-    String aRet;
+    OUString aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
         comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ), '/') == 3 )
     {
-        aRet = String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetToken( 2, '/' );
+        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).getToken( 2, '/' );
     }
 
     return aRet;
@@ -405,7 +405,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
         if( mxProgressBar.is() )
         {
-            String aProgressText;
+            OUString aProgressText;
 
             if( mpFilter )
             {
@@ -415,9 +415,9 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 //                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
             }
             else
-                aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
+                aProgressText = "Gallery";
 
-            xMonitor->addText( String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ), aProgressText, sal_False ) ;
+            xMonitor->addText( "Gallery", aProgressText, sal_False ) ;
             mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
         }
     }
@@ -483,7 +483,7 @@ void GalleryTransferable::InitData( bool bLazy )
 
                 if( !mxModelStream.Is() )
                 {
-                    mxModelStream = new SotStorageStream( String() );
+                    mxModelStream = new SotStorageStream( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
                     if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )

@@ -109,7 +109,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
 
     fprintf( stderr, "Using DestDir: %s\n",
              OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ).getStr() );
-    pGalTheme->SetDestDir( String( aDestDir ), bRelativeURLs );
+    pGalTheme->SetDestDir( aDestDir, bRelativeURLs );
 
     FileNameList::const_iterator aIter;
 

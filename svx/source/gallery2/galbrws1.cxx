@@ -326,18 +326,18 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
 
     if( nRet == RET_OK )
     {
-        String aName( mpExchangeData->pTheme->GetName() );
+        OUString aName( mpExchangeData->pTheme->GetName() );
 
         if( !mpExchangeData->aEditedTitle.isEmpty() && aName != mpExchangeData->aEditedTitle )
         {
-            const String    aOldName( aName );
-            String          aTitle( mpExchangeData->aEditedTitle );
+            const OUString      aOldName( aName );
+            OUString            aTitle( mpExchangeData->aEditedTitle );
             sal_uInt16          nCount = 0;
 
             while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
             {
                 aTitle = mpExchangeData->aEditedTitle;
-                aTitle += ' ';
+                aTitle += " ";
                 aTitle += OUString::number( nCount );
             }
 
@@ -351,7 +351,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
         }
     }
 
-    String aThemeName( mpExchangeData->pTheme->GetName() );
+    OUString aThemeName( mpExchangeData->pTheme->GetName() );
     mpGallery->ReleaseTheme( mpExchangeData->pTheme, *this );
 
     if ( bCreateNew && ( nRet != RET_OK ) )
@@ -423,7 +423,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         case( MN_RENAME ):
         {
             GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            const String    aOldName( pTheme->GetName() );
+            const OUString  aOldName( pTheme->GetName() );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -432,17 +432,17 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
             if( aDlg->Execute() == RET_OK )
             {
-                const String aNewName( aDlg->GetTitle() );
+                const OUString aNewName( aDlg->GetTitle() );
 
-                if( aNewName.Len() && ( aNewName != aOldName ) )
+                if( !aNewName.isEmpty() && ( aNewName != aOldName ) )
                 {
-                    String  aName( aNewName );
+                    OUString  aName( aNewName );
                     sal_uInt16  nCount = 0;
 
                     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                     {
                         aName = aNewName;
-                        aName += ' ';
+                        aName += " ";
                         aName += OUString::number( nCount );
                     }
 
@@ -690,14 +690,14 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
 {
-    String  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
-    String  aName( aNewTheme );
+    OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
+    OUString  aName( aNewTheme );
     sal_uIntPtr nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {
         aName = aNewTheme;
-        aName += ' ';
+        aName += " ";
         aName += OUString::number( nCount );
     }
 

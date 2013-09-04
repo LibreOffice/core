@@ -239,7 +239,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
         {
             // check readonlyness the very hard way
             INetURLObject   aTestURL( rBaseURL );
-            String          aTestFile( RTL_CONSTASCII_USTRINGPARAM( "cdefghij.klm" ) );
+            OUString        aTestFile( "cdefghij.klm" );
 
             aTestURL.Append( aTestFile );
             SvStream* pTestStm = ::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
@@ -547,7 +547,7 @@ sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewNam
 
         if( pThm )
         {
-            const String aOldName( rOldName );
+            const OUString aOldName( rOldName );
 
             pThemeEntry->SetName( rNewName );
             pThm->ImplWrite();
