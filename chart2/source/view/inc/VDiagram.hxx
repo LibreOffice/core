@@ -45,11 +45,9 @@ public: //methods
                 , sal_Int32 nDimension=3, sal_Bool bPolar=sal_False );
     virtual ~VDiagram();
 
-    void init( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::drawing::XShapes >& xLogicTarget
-             , const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::drawing::XShapes >& xFinalTarget
-             , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
+    void init(
+        const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xTarget,
+        const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xFactory );
 
     void    createShapes( const ::com::sun::star::awt::Point& rPos
                         , const ::com::sun::star::awt::Size& rSize );
@@ -81,9 +79,7 @@ private: //members
     VDiagram(const VDiagram& rD);
 
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                    m_xLogicTarget;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes >                    m_xFinalTarget;
+                    ::com::sun::star::drawing::XShapes >                    m_xTarget;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>           m_xShapeFactory;
     ShapeFactory*                                                           m_pShapeFactory;

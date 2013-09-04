@@ -51,8 +51,7 @@ VDiagram::VDiagram(
     const uno::Reference< XDiagram > & xDiagram
     , const drawing::Direction3D& rPreferredAspectRatio
     , sal_Int32 nDimension, sal_Bool bPolar )
-    : m_xLogicTarget(NULL)
-    , m_xFinalTarget(NULL)
+    : m_xTarget(NULL)
     , m_xShapeFactory(NULL)
     , m_pShapeFactory(NULL)
     , m_xOuterGroupShape(NULL)
@@ -92,14 +91,11 @@ VDiagram::~VDiagram()
 }
 
 void VDiagram::init(
-                const uno::Reference< drawing::XShapes >& xLogicTarget
-              , const uno::Reference< drawing::XShapes >& xFinalTarget
-              , const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    const uno::Reference< drawing::XShapes >& xTarget, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xFactory.is(),"no proper initialization parameters");
+    OSL_PRECOND(xLogicTarget.is() && xFactory.is(), "no proper initialization parameters");
 
-    m_xLogicTarget  = xLogicTarget;
-    m_xFinalTarget  = xFinalTarget;
+    m_xTarget  = xTarget;
     m_xShapeFactory = xFactory;
     m_pShapeFactory = new ShapeFactory(xFactory);
 }
@@ -157,12 +153,12 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
 
 void VDiagram::createShapes_2d()
 {
-    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is()))
+    OSL_PRECOND(m_pShapeFactory && m_xTarget.is() && m_xShapeFactory.is(), "is not proper initialized");
+    if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
         return;
 
     //create group shape
-    uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xLogicTarget);
+    uno::Reference< drawing::XShapes > xOuterGroup_Shapes = m_pShapeFactory->createGroup2D(m_xTarget);
     m_xOuterGroupShape = uno::Reference<drawing::XShape>( xOuterGroup_Shapes, uno::UNO_QUERY );
 
     uno::Reference< drawing::XShapes > xGroupForWall( m_pShapeFactory->createGroup2D(xOuterGroup_Shapes,"PlotAreaExcludingAxes") );
@@ -478,8 +474,8 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 
 void VDiagram::createShapes_3d()
 {
-    OSL_PRECOND(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is(),"is not proper initialized");
-    if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()&&m_xShapeFactory.is()))
+    OSL_PRECOND(m_pShapeFactory && m_xTarget.is() && m_xShapeFactory.is(), "is not proper initialized");
+    if (!m_pShapeFactory || !m_xTarget.is() || !m_xShapeFactory.is())
         return;
 
     //create shape
@@ -487,7 +483,7 @@ void VDiagram::createShapes_3d()
             m_xShapeFactory->createInstance(
             "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
     ShapeFactory::setShapeName( m_xOuterGroupShape, "PlotAreaExcludingAxes" );
-    m_xLogicTarget->add(m_xOuterGroupShape);
+    m_xTarget->add(m_xOuterGroupShape);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );

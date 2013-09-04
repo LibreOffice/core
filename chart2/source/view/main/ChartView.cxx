@@ -1396,7 +1396,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
-        aVDiagram.init(xDiagramPlusAxes_Shapes,xDiagramPlusAxes_Shapes,m_xShapeFactory);
+        aVDiagram.init(xDiagramPlusAxes_Shapes, m_xShapeFactory);
         aVDiagram.createShapes(rAvailablePos,rAvailableSize);
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
         // It is preferrable to use full size than minimum for pie charts
