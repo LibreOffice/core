@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <vector>
+#include <map>
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
@@ -127,7 +128,7 @@ void RemoteServer::execute()
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, pSocket, OStringToOUString( aPin,
                     RTL_TEXTENCODING_UTF8 ) );
-            mAvailableClients.push_back( pClient );
+            mAvailableClients[pClient->mAddress] = pClient;
 
             // Read off any additional non-empty lines
             // We know that we at least have the empty termination line to read.
@@ -244,8 +245,11 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     }
 
     MutexGuard aGuard( sDataMutex );
-    aClients.assign( spServer->mAvailableClients.begin(),
-                     spServer->mAvailableClients.end() );
+    for ( map<OUString, ClientInfoInternal*>::const_iterator aIt = spServer->mAvailableClients.begin();
+      aIt != spServer->mAvailableClients.end(); ++aIt )
+    {
+      aClients.push_back(aIt->second);
+    }
     return aClients;
 }
 
@@ -292,15 +296,8 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
 
         sCommunicators.push_back( pCommunicator );
 
-        for ( vector<ClientInfoInternal*>::iterator aIt = spServer->mAvailableClients.begin();
-            aIt != spServer->mAvailableClients.end(); ++aIt )
-        {
-            if ( pClient == *aIt )
-            {
-                spServer->mAvailableClients.erase( aIt );
-            break;
-            }
-        }
+        spServer->mAvailableClients.erase(pClient->mAddress);
+
         pCommunicator->launch();
         return true;
     }

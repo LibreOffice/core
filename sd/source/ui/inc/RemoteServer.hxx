@@ -17,6 +17,7 @@
 #endif
 #include <sys/types.h>
 #include <vector>
+#include <map>
 
 #include <osl/mutex.hxx>
 #include <osl/socket.hxx>
@@ -83,7 +84,7 @@ namespace sd
             static ::std::vector<Communicator*> sCommunicators;
             osl::AcceptorSocket mSocket;
 
-            ::std::vector<ClientInfoInternal*> mAvailableClients;
+            ::std::map<OUString, ClientInfoInternal*> mAvailableClients;
 
             void execute();
     };
