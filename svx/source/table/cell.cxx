@@ -1778,17 +1778,17 @@ static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow )
     }
     else
     {
-        String aStr;
+        OUString aStr;
         while (nCol >= 26)
         {
             sal_Int32 nC = nCol % 26;
-            aStr += static_cast<sal_Unicode>( 'A' +
-                    static_cast<sal_uInt16>(nC));
+            aStr += OUString( static_cast<sal_Unicode>( 'A' +
+                                static_cast<sal_uInt16>(nC)) );
             nCol = nCol - nC;
             nCol = nCol / 26 - 1;
         }
-        aStr += static_cast<sal_Unicode>( 'A' +
-                static_cast<sal_uInt16>(nCol));
+        aStr += OUString ( static_cast<sal_Unicode>( 'A' +
+                             static_cast<sal_uInt16>(nCol)) );
         aBuf.append(comphelper::string::reverseString(aStr));
     }
     aBuf.append( OUString::number(nRow+1) );

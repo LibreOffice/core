@@ -175,7 +175,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         return ;
     }
 
-    String aContent;
+    OUString aContent;
 
     OutlinerParaObject* pParaObj = xCell->GetEditOutlinerParaObject();
     bool bOwnParaObj = pParaObj != 0;
