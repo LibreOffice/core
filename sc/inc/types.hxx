@@ -63,6 +63,19 @@ enum GroupCalcState
     GroupCalcDisabled
 };
 
+struct RangeMatrix
+{
+    ScMatrixRef mpMat;
+    sal_Int32 mnCol1;
+    sal_Int32 mnRow1;
+    sal_Int32 mnCol2;
+    sal_Int32 mnRow2;
+
+    RangeMatrix();
+
+    bool isRangeValid() const;
+};
+
 }
 
 #endif

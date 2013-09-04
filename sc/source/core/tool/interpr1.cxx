@@ -1081,11 +1081,11 @@ double ScInterpreter::Compare()
 }
 
 
-ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
+sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 {
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
-    ScMatrixRef pMat[2];
+    sc::RangeMatrix aMat[2];
     ScAddress aAdr;
     for( short i = 1; i >= 0; i-- )
     {
@@ -1127,11 +1127,11 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             break;
             case svDoubleRef:
             case svMatrix:
-                pMat[ i ] = GetMatrix();
-                if ( !pMat[ i ] )
+                aMat[i] = GetRangeMatrix();
+                if (!aMat[i].mpMat)
                     SetError( errIllegalParameter);
                 else
-                    pMat[i]->SetErrorInterpreter( NULL);
+                    aMat[i].mpMat->SetErrorInterpreter(NULL);
                     // errors are transported as DoubleError inside matrix
                 break;
             default:
@@ -1139,82 +1139,88 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             break;
         }
     }
-    ScMatrixRef pResMat = NULL;
+
+    sc::RangeMatrix aRes;
     if( !nGlobalError )
     {
-        if ( pMat[0] && pMat[1] )
+        if (aMat[0].mpMat && aMat[1].mpMat)
         {
             SCSIZE nC0, nC1;
             SCSIZE nR0, nR1;
-            pMat[0]->GetDimensions( nC0, nR0 );
-            pMat[1]->GetDimensions( nC1, nR1 );
+            aMat[0].mpMat->GetDimensions(nC0, nR0);
+            aMat[1].mpMat->GetDimensions(nC1, nR1);
             SCSIZE nC = std::max( nC0, nC1 );
             SCSIZE nR = std::max( nR0, nR1 );
-            pResMat = GetNewMat( nC, nR);
-            if ( !pResMat )
-                return NULL;
+            aRes.mpMat = GetNewMat( nC, nR);
+            if (!aRes.mpMat)
+                return aRes;
             for ( SCSIZE j=0; j<nC; j++ )
             {
                 for ( SCSIZE k=0; k<nR; k++ )
                 {
                     SCSIZE nCol = j, nRow = k;
-                    if (    pMat[0]->ValidColRowOrReplicated( nCol, nRow ) &&
-                            pMat[1]->ValidColRowOrReplicated( nCol, nRow ))
+                    if (aMat[0].mpMat->ValidColRowOrReplicated(nCol, nRow) &&
+                        aMat[1].mpMat->ValidColRowOrReplicated(nCol, nRow))
                     {
                         for ( short i=1; i>=0; i-- )
                         {
-                            if ( pMat[i]->IsString(j,k) )
+                            if (aMat[i].mpMat->IsString(j, k))
                             {
                                 aComp.bVal[i] = false;
-                                *aComp.pVal[i] = pMat[i]->GetString(j,k);
-                                aComp.bEmpty[i] = pMat[i]->IsEmpty(j,k);
+                                *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k);
+                                aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
                             }
                             else
                             {
                                 aComp.bVal[i] = true;
-                                aComp.nVal[i] = pMat[i]->GetDouble(j,k);
+                                aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
                                 aComp.bEmpty[i] = false;
                             }
                         }
-                        pResMat->PutDouble( CompareFunc( aComp, pOptions ), j,k );
+                        aRes.mpMat->PutDouble(CompareFunc(aComp, pOptions), j, k);
                     }
                     else
-                        pResMat->PutString( ScGlobal::GetRscString(STR_NO_VALUE), j,k );
+                        aRes.mpMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), j, k);
                 }
             }
         }
-        else if ( pMat[0] || pMat[1] )
+        else if (aMat[0].mpMat || aMat[1].mpMat)
         {
-            short i = ( pMat[0] ? 0 : 1);
+            short i = ( aMat[0].mpMat ? 0 : 1);
             SCSIZE nC, nR;
-            pMat[i]->GetDimensions( nC, nR );
-            pResMat = GetNewMat( nC, nR);
-            if ( !pResMat )
-                return NULL;
+            aMat[i].mpMat->GetDimensions(nC, nR);
+            aRes.mpMat = GetNewMat( nC, nR);
+            if (!aRes.mpMat)
+                return aRes;
+
+            aRes.mnCol1 = aMat[i].mnCol1;
+            aRes.mnRow1 = aMat[i].mnRow1;
+            aRes.mnCol2 = aMat[i].mnCol2;
+            aRes.mnRow2 = aMat[i].mnRow2;
 
             for (SCSIZE j = 0; j < nC; ++j)
             {
                 for (SCSIZE k = 0; k < nR; ++k)
                 {
-                    if ( pMat[i]->IsValue(j,k) )
+                    if (aMat[i].mpMat->IsValue(j, k))
                     {
                         aComp.bVal[i] = true;
-                        aComp.nVal[i] = pMat[i]->GetDouble(j,k);
+                        aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
                         aComp.bEmpty[i] = false;
                     }
                     else
                     {
                         aComp.bVal[i] = false;
-                        *aComp.pVal[i] = pMat[i]->GetString(j,k);
-                        aComp.bEmpty[i] = pMat[i]->IsEmpty(j,k);
+                        *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k);
+                        aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
                     }
-                    pResMat->PutDouble( CompareFunc(aComp, pOptions), j, k);
+                    aRes.mpMat->PutDouble(CompareFunc(aComp, pOptions), j, k);
                 }
             }
         }
     }
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    return pResMat;
+    return aRes;
 }
 
 
@@ -1228,7 +1234,7 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
         PushString(rItem.maString);
     else
         PushDouble(rItem.mfVal);
-    ScMatrixRef pResultMatrix = CompareMat( &rOptions);
+    ScMatrixRef pResultMatrix = CompareMat( &rOptions).mpMat;
     nCurFmtType = nSaveCurFmtType;
     nFuncFmtType = nSaveFuncFmtType;
     if (nGlobalError || !pResultMatrix)
@@ -1264,19 +1270,56 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
     return pResultMatrix;
 }
 
+namespace {
+
+double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& rPos)
+{
+    if (rMat.mnRow1 <= rPos.Row() && rPos.Row() <= rMat.mnRow2 && rMat.mnCol1 == rMat.mnCol2)
+    {
+        SCROW nOffset = rPos.Row() - rMat.mnRow1;
+        return rMat.mpMat->GetDouble(0, nOffset);
+    }
+
+    if (rMat.mnCol1 <= rPos.Col() && rPos.Col() <= rMat.mnCol2 && rMat.mnRow1 == rMat.mnRow2)
+    {
+        SCROW nOffset = rPos.Col() - rMat.mnCol1;
+        return rMat.mpMat->GetDouble(nOffset, 0);
+    }
+
+    double fVal;
+    rtl::math::setNan(&fVal);
+    return fVal;
+}
+
+}
 
 void ScInterpreter::ScEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareEqual();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal == 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareEqual();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() == 0 );
@@ -1287,14 +1330,29 @@ void ScInterpreter::ScNotEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareNotEqual();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal != 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareNotEqual();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() != 0 );
@@ -1305,14 +1363,29 @@ void ScInterpreter::ScLess()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareLess();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal < 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareLess();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() < 0 );
@@ -1323,14 +1396,29 @@ void ScInterpreter::ScGreater()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareGreater();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal > 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareGreater();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() > 0 );
@@ -1341,14 +1429,29 @@ void ScInterpreter::ScLessEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareLessEqual();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal <= 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareLessEqual();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() <= 0 );
@@ -1359,14 +1462,29 @@ void ScInterpreter::ScGreaterEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrixRef pMat = CompareMat();
-        if ( !pMat )
-            PushIllegalParameter();
-        else
+        sc::RangeMatrix aMat = CompareMat();
+        if (!aMat.mpMat)
         {
-            pMat->CompareGreaterEqual();
-            PushMatrix( pMat );
+            PushIllegalParameter();
+            return;
         }
+
+        if (aMat.isRangeValid())
+        {
+            // This matrix represents a range reference. Apply implicit intersection.
+            double fVal = applyImplicitIntersection(aMat, aPos);
+            if (rtl::math::isNan(fVal))
+            {
+                PushError(errCellNoValue);
+                return;
+            }
+
+            PushInt(fVal >= 0.0);
+            return;
+        }
+
+        aMat.mpMat->CompareGreaterEqual();
+        PushMatrix(aMat.mpMat);
     }
     else
         PushInt( Compare() >= 0 );

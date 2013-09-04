@@ -494,6 +494,20 @@ ScMatrixRef ScInterpreter::GetMatrix()
     return pMat;
 }
 
+sc::RangeMatrix ScInterpreter::GetRangeMatrix()
+{
+    sc::RangeMatrix aRet;
+    switch (GetRawStackType())
+    {
+        case svMatrix:
+            aRet = PopRangeMatrix();
+        break;
+        default:
+            aRet.mpMat = GetMatrix();
+    }
+    return aRet;
+}
+
 void ScInterpreter::ScMatValue()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )

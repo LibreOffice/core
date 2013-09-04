@@ -1794,6 +1794,45 @@ ScMatrixRef ScInterpreter::PopMatrix()
     return NULL;
 }
 
+sc::RangeMatrix ScInterpreter::PopRangeMatrix()
+{
+    sc::RangeMatrix aRet;
+    if (sp)
+    {
+        switch (pStack[sp-1]->GetType())
+        {
+            case svMatrix:
+            {
+                --sp;
+                FormulaToken* p = pStack[sp];
+                ScToken* p2 = static_cast<ScToken*>(p);
+                aRet.mpMat = p2->GetMatrix();
+                if (aRet.mpMat)
+                {
+                    aRet.mpMat->SetErrorInterpreter(this);
+                    if (p2->GetByte() == MATRIX_TOKEN_HAS_RANGE)
+                    {
+                        const ScComplexRefData& rRef = p2->GetDoubleRef();
+                        if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel())
+                        {
+                            aRet.mnCol1 = rRef.Ref1.Col();
+                            aRet.mnRow1 = rRef.Ref1.Row();
+                            aRet.mnCol2 = rRef.Ref2.Col();
+                            aRet.mnRow2 = rRef.Ref2.Row();
+                        }
+                    }
+                }
+                else
+                    SetError( errUnknownVariable);
+            }
+            break;
+            default:
+                aRet.mpMat = PopMatrix();
+        }
+    }
+    return aRet;
+}
+
 void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr)
 {
     if (xMat)

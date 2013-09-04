@@ -804,6 +804,47 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && pMatrix == static_cast<const ScToken&>(r).GetMatrix();
 }
 
+ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef ) :
+    ScToken(formula::svMatrix), mpMatrix(p), maRef(rRef) {}
+
+ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& r ) :
+    ScToken(r), mpMatrix(r.mpMatrix), maRef(r.maRef) {}
+
+sal_uInt8 ScMatrixRangeToken::GetByte() const
+{
+    return MATRIX_TOKEN_HAS_RANGE;
+}
+
+const ScMatrix* ScMatrixRangeToken::GetMatrix() const
+{
+    return mpMatrix.get();
+}
+
+ScMatrix* ScMatrixRangeToken::GetMatrix()
+{
+    return mpMatrix.get();
+}
+
+const ScComplexRefData& ScMatrixRangeToken::GetDoubleRef() const
+{
+    return maRef;
+}
+
+ScComplexRefData& ScMatrixRangeToken::GetDoubleRef()
+{
+    return maRef;
+}
+
+bool ScMatrixRangeToken::operator==( const FormulaToken& r ) const
+{
+    return FormulaToken::operator==(r) && mpMatrix == static_cast<const ScToken&>(r).GetMatrix();
+}
+
+FormulaToken* ScMatrixRangeToken::Clone() const
+{
+    return new ScMatrixRangeToken(*this);
+}
+
 // ============================================================================
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :

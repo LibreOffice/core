@@ -51,6 +51,12 @@ class ScToken;
 class ScJumpMatrix;
 struct ScRefCellValue;
 
+namespace sc {
+
+struct RangeMatrix;
+
+}
+
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
 class ScTokenStack
@@ -298,6 +304,7 @@ inline void MatrixDoubleRefToMatrix();      // if MatrixFormula: PopDoubleRefPus
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
+sc::RangeMatrix PopRangeMatrix();
 void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
 void PushDouble(double nVal);
@@ -338,6 +345,8 @@ ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
 inline ScTokenMatrixMap& GetTokenMatrixMap();
 ScTokenMatrixMap* CreateTokenMatrixMap();
 ScMatrixRef GetMatrix();
+sc::RangeMatrix GetRangeMatrix();
+
 void ScTableOp();                                       // repeated operations
 void ScErrCell();                                       // special handling for
                                                         // error cell
@@ -373,7 +382,7 @@ double Compare();
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
-ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
+sc::RangeMatrix CompareMat( ScCompareOptions* pOptions = NULL );
 ScMatrixRef QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();

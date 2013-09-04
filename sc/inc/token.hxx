@@ -33,6 +33,9 @@
 #include "scmatrix.hxx"
 #include "calcmacros.hxx"
 
+// Matrix token constants.
+#define MATRIX_TOKEN_HAS_RANGE 1
+
 class ScJumpMatrix;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
@@ -176,6 +179,27 @@ public:
     virtual FormulaToken*       Clone() const { return new ScMatrixToken(*this); }
 };
 
+/**
+ * Token storing matrix that represents values in sheet range. It stores
+ * both the values in matrix form, and the range address the matrix
+ * represents.
+ */
+class ScMatrixRangeToken : public ScToken
+{
+    ScMatrixRef mpMatrix;
+    ScComplexRefData maRef;
+public:
+    ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef );
+    ScMatrixRangeToken( const ScMatrixRangeToken& r );
+
+    virtual sal_uInt8 GetByte() const;
+    virtual const ScMatrix* GetMatrix() const;
+    virtual ScMatrix* GetMatrix();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData& GetDoubleRef();
+    virtual bool operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const;
+};
 
 class ScExternalSingleRefToken : public ScToken
 {

@@ -93,7 +93,11 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     if (p2->IsStartFixed() && p2->IsEndFixed())
                     {
                         // Cached the converted token for absolute range referene.
-                        formula::FormulaTokenRef xTok(new ScMatrixToken(pMat));
+                        ScComplexRefData aRef;
+                        ScRange aRefRange = rTopPos;
+                        aRefRange.aEnd.SetRow(rTopPos.Row() + nRowEnd);
+                        aRef.InitRange(aRefRange);
+                        formula::FormulaTokenRef xTok(new ScMatrixRangeToken(pMat, aRef));
                         aCachedTokens.insert(CachedTokensType::value_type(p, xTok));
                         aCode2.AddToken(*xTok);
                     }
