@@ -83,7 +83,7 @@ DictionaryList::DictionaryList( Window* pParent )
 OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
 {
     if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
-        return String();
+        return OUString();
 
     sal_uInt16 nPos = static_cast<sal_uInt16>( nConversionPropertyType )-1;
     if(nPos<m_pPropertyTypeNameListBox->GetEntryCount())
@@ -93,10 +93,10 @@ OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType 
 
 OUString DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
 {
-    String aStr( rEntry.m_aTerm );
-    aStr += '\t';
-    aStr += String( rEntry.m_aMapping );
-    aStr += '\t';
+    OUString aStr( rEntry.m_aTerm );
+    aStr += "\t";
+    aStr += rEntry.m_aMapping;
+    aStr += "\t";
     aStr += getPropertyTypeName( rEntry.m_nConversionPropertyType );
     return aStr;
 }
@@ -547,9 +547,9 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
     //init HeaderBar and set tabs
     {
-        String aColumn1( OutputDevice::GetNonMnemonicString( m_aFT_Term.GetText() ) );
-        String aColumn2( OutputDevice::GetNonMnemonicString( m_aFT_Mapping.GetText() ) );
-        String aColumn3( OutputDevice::GetNonMnemonicString( m_aFT_Property.GetText() ) );
+        OUString aColumn1( OutputDevice::GetNonMnemonicString( m_aFT_Term.GetText() ) );
+        OUString aColumn2( OutputDevice::GetNonMnemonicString( m_aFT_Mapping.GetText() ) );
+        OUString aColumn3( OutputDevice::GetNonMnemonicString( m_aFT_Property.GetText() ) );
 
         long nWidth1 = m_aED_Mapping.GetPosPixel().X() - m_aED_Term.GetPosPixel().X();
         long nWidth2 = m_aLB_Property.GetPosPixel().X() - m_aED_Mapping.GetPosPixel().X();
