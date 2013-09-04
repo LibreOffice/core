@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7do\u003d",
+        "filename": "connectivity/source/drivers/firebird/Driver.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T16:16:28Z",
+      "side": 1,
+      "message": "where are these removed again? iirc it requires calling EnableKillingFile() or some manual cleanup",
+      "revId": "a97f8919dc80f1d14d3e8b97c1f43b905c7b0c87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
