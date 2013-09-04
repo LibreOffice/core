@@ -1206,6 +1206,7 @@ XMLShapeExportPropertyMapper::~XMLShapeExportPropertyMapper()
 }
 
 void XMLShapeExportPropertyMapper::ContextFilter(
+    bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
@@ -1526,7 +1527,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     if( pClipState != NULL && pClip11State != NULL  )
         pClip11State->mnIndex = -1;
 
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
 void XMLShapeExportPropertyMapper::handleSpecialItem(
@@ -1589,6 +1590,7 @@ XMLPageExportPropertyMapper::~XMLPageExportPropertyMapper()
 }
 
 void XMLPageExportPropertyMapper::ContextFilter(
+    bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
@@ -1733,7 +1735,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
             pTransType->mnIndex = -1;
     }
 
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
 void XMLPageExportPropertyMapper::handleElementItem(
