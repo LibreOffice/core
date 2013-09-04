@@ -36,9 +36,9 @@ class SwFtnPortion : public SwFldPortion
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
 public:
-    SwFtnPortion( const XubString &rExpand, SwTxtFtn *pFtn,
+    SwFtnPortion( const OUString &rExpand, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
-    inline KSHORT& Orig() { return nOrigHeight; }
+    KSHORT& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
@@ -59,7 +59,7 @@ public:
 class SwFtnNumPortion : public SwNumberPortion
 {
 public:
-    inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFntL )
+    SwFtnNumPortion( const OUString &rExpand, SwFont *pFntL )
          : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0, false )
          { SetWhichPor( POR_FTNNUM ); }
 
@@ -72,16 +72,16 @@ public:
 
 class SwQuoVadisPortion : public SwFldPortion
 {
-    XubString   aErgo;
+    OUString   aErgo;
 public:
-            SwQuoVadisPortion( const XubString &rExp, const XubString& rStr );
+    SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
-    inline void SetNumber( const XubString& rStr ) { aErgo = rStr; }
-    inline const OUString GetQuoTxt() const { return aExpand; }
-    inline const XubString &GetContTxt() const { return aErgo; }
+    void SetNumber( const OUString& rStr ) { aErgo = rStr; }
+    const OUString GetQuoTxt() const { return aExpand; }
+    const OUString &GetContTxt() const { return aErgo; }
 
     // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const OUString &rExpand ) const;
@@ -99,7 +99,7 @@ public:
 class SwErgoSumPortion : public SwFldPortion
 {
 public:
-            SwErgoSumPortion( const XubString &rExp, const XubString& rStr );
+    SwErgoSumPortion( const OUString &rExp, const OUString& rStr );
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 

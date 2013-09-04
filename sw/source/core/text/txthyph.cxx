@@ -41,9 +41,9 @@ using namespace ::com::sun::star::i18n;
  *************************************************************************/
 
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
-                                const XubString &rTxt, const MSHORT nMinTrail )
+                                const OUString &rTxt, const MSHORT nMinTrail )
 {
-    if( rTxt.Len() < 4 || m_pFnt->IsSymbol(m_pVsh) )
+    if( rTxt.getLength() < 4 || m_pFnt->IsSymbol(m_pVsh) )
         return 0;
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
@@ -51,7 +51,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
                             g_pBreakIt->GetLocale( m_pFnt->GetLanguage() ),
-                            rTxt.Len() - nMinTrail, GetHyphValues() );
+                            rTxt.getLength() - nMinTrail, GetHyphValues() );
     return xHyphWord;
 
 }
@@ -237,7 +237,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         bRet = 0 != nLen;
         if( bRet )
         {
-            XubString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
+            OUString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
 
             {
                 MSHORT nMinTrail = 0;
@@ -293,7 +293,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         aAltSpell = SvxGetAltSpelling( xHyphWord );
         OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
-        XubString  aAltTxt   = aAltSpell.aReplacement;
+        OUString aAltTxt = aAltSpell.aReplacement;
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
         xub_StrLen nTmpLen = 0;
 
@@ -308,7 +308,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         }
 
         // length of pHyphPor is adjusted
-        pHyphPor->SetLen( aAltTxt.Len() + 1 );
+        pHyphPor->SetLen( aAltTxt.getLength() + 1 );
         (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
         pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
     }
@@ -635,7 +635,7 @@ void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SwHyphStrPortion::Paint( rInf );
 }
 
-SwSoftHyphStrPortion::SwSoftHyphStrPortion( const XubString &rStr )
+SwSoftHyphStrPortion::SwSoftHyphStrPortion( const OUString &rStr )
     : SwHyphStrPortion( rStr )
 {
     SetLen( 1 );

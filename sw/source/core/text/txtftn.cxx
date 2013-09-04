@@ -999,7 +999,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
 
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
-    XubString aFtnTxt( rFtn.GetViewNumStr( *pDoc, sal_True ));
+    OUString aFtnTxt( rFtn.GetViewNumStr( *pDoc, sal_True ));
 
     const SwEndNoteInfo* pInfo;
     if( rFtn.IsEndNote() )
@@ -1039,7 +1039,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
  *                  SwTxtFormatter::NewErgoSumPortion()
  *************************************************************************/
 
-XubString lcl_GetPageNumber( const SwPageFrm* pPage )
+OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
     MSHORT nVirtNum = pPage->GetVirtPageNum();
@@ -1065,7 +1065,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
     const SwPageFrm* pQuoPage = pQuoFrm->FindPageFrm();
     if( pPage == pQuoFrm->FindPageFrm() )
         return 0; // Wenn der QuoVadis auf der selben (spaltigen) Seite steht
-    const XubString aPage = lcl_GetPageNumber( pPage );
+    const OUString aPage = lcl_GetPageNumber( pPage );
     SwParaPortion *pPara = pQuoFrm->GetPara();
     if( pPara )
         pPara->SetErgoSumNum( aPage );
@@ -1142,7 +1142,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     const KSHORT nOldRealWidth = rInf.RealWidth();
     rInf.RealWidth( nOldRealWidth - nLastLeft );
 
-    XubString aErgo = lcl_GetPageNumber( pErgoFrm->FindPageFrm() );
+    OUString aErgo = lcl_GetPageNumber( pErgoFrm->FindPageFrm() );
     SwQuoVadisPortion *pQuo = new SwQuoVadisPortion(rFtnInfo.aQuoVadis, aErgo );
     pQuo->SetAscent( rInf.GetAscent()  );
     pQuo->Height( rInf.GetTxtHeight() );
@@ -1401,7 +1401,7 @@ SwFtnSave::~SwFtnSave()
  *                      SwFtnPortion::SwFtnPortion()
  *************************************************************************/
 
-SwFtnPortion::SwFtnPortion( const XubString &rExpand,
+SwFtnPortion::SwFtnPortion( const OUString &rExpand,
                             SwTxtFtn *pFootn, KSHORT nReal )
         : SwFldPortion( rExpand, 0 )
         , pFtn(pFootn)
@@ -1484,9 +1484,11 @@ void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
  *************************************************************************/
 
 SwFldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
-{ return new SwQuoVadisPortion( rExpand, aErgo ); }
+{
+    return new SwQuoVadisPortion( rExpand, aErgo );
+}
 
-SwQuoVadisPortion::SwQuoVadisPortion( const XubString &rExp, const XubString& rStr )
+SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr )
     : SwFldPortion( rExp ), aErgo(rStr)
 {
     SetLen(0);
@@ -1575,7 +1577,7 @@ SwFldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
     return new SwErgoSumPortion( rExpand, OUString() );
 }
 
-SwErgoSumPortion::SwErgoSumPortion( const XubString &rExp, const XubString& rStr )
+SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     : SwFldPortion( rExp )
 {
     SetLen(0);
@@ -1618,7 +1620,7 @@ sal_Bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
  *                      SwParaPortion::SetErgoSumNum()
  *************************************************************************/
 
-void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
+void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
 {
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
@@ -1643,7 +1645,7 @@ void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
  * Wird im SwTxtFrm::Prepare() gerufen
  *************************************************************************/
 
-sal_Bool SwParaPortion::UpdateQuoVadis( const XubString &rQuo )
+sal_Bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
 {
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )

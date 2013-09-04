@@ -372,7 +372,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             sal_Int32 nNextOfst = aExpand.getLength() - nRest;
 
             if ( IsQuoVadisPortion() )
-                nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().Len();
+                nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().getLength();
 
             XubString aNew( aExpand, nNextOfst, STRING_LEN );
             aExpand = aExpand.copy( 0, nNextOfst );

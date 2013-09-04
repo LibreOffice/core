@@ -305,7 +305,7 @@ public:
     xub_StrLen GetParLen() const;
 
     // For Prepare()
-    sal_Bool UpdateQuoVadis( const XubString &rQuo );
+    sal_Bool UpdateQuoVadis( const OUString &rQuo );
 
     // Flags
     inline void SetFly( const sal_Bool bNew = sal_True ) { bFlys = bNew; }
@@ -349,7 +349,7 @@ public:
     SvStream &WriteSwg( SvStream& rStream ); //$ ostream
 
     // Set nErgo in the QuoVadisPortion
-    void SetErgoSumNum( const XubString &rErgo );
+    void SetErgoSumNum( const OUString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
 

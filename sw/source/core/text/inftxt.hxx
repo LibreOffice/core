@@ -700,7 +700,7 @@ public:
     // Calls HyphenateWord() of Hyphenator
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
-                HyphWord( const String &rTxt, const sal_uInt16 nMinTrail );
+                HyphWord( const OUString &rTxt, const sal_uInt16 nMinTrail );
     const com::sun::star::beans::PropertyValues &
                 GetHyphValues() const;
 

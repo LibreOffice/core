@@ -28,7 +28,10 @@
 class SwHyphPortion : public SwExpandPortion
 {
 public:
-    inline  SwHyphPortion( ) { SetWhichPor( POR_HYPH ); }
+    SwHyphPortion()
+    {
+        SetWhichPor( POR_HYPH );
+    }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
@@ -44,9 +47,14 @@ public:
 
 class SwHyphStrPortion : public SwHyphPortion
 {
-    XubString aExpand;
+    OUString aExpand;
 public:
-    inline  SwHyphStrPortion( const XubString &rStr );
+    SwHyphStrPortion(const OUString &rStr)
+        : aExpand(rStr + "-")
+    {
+        SetWhichPor( POR_HYPHSTR );
+    }
+
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -90,17 +98,10 @@ public:
 class SwSoftHyphStrPortion : public SwHyphStrPortion
 {
 public:
-    SwSoftHyphStrPortion( const XubString &rStr );
+    SwSoftHyphStrPortion( const OUString &rStr );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     OUTPUT_OPERATOR
 };
-
-inline  SwHyphStrPortion::SwHyphStrPortion( const XubString &rStr )
-        : aExpand( rStr )
-{
-    aExpand += '-';
-    SetWhichPor( POR_HYPHSTR );
-}
 
 CLASSIO( SwHyphPortion )
 CLASSIO( SwHyphStrPortion )
