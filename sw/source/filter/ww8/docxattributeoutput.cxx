@@ -4340,7 +4340,17 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
             FSEND );
     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_separator, FSEND );
+
+    bool bSeparator = true;
+    if (bFootnotes)
+    {
+        const SwPageFtnInfo& rFtnInfo = m_rExport.pDoc->GetPageDesc(0).GetFtnInfo();
+        // Request a separator only in case the width is larger than zero.
+        bSeparator = double(rFtnInfo.GetWidth()) > 0;
+    }
+
+    if (bSeparator)
+        m_pSerializer->singleElementNS( XML_w, XML_separator, FSEND );
     m_pSerializer->endElementNS( XML_w, XML_r );
     m_pSerializer->endElementNS( XML_w, XML_p );
     m_pSerializer->endElementNS( XML_w, nItem );
