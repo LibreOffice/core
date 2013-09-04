@@ -293,7 +293,7 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser1::ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew )
+void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet = new SfxItemSet( SFX_APP()->GetPool() );

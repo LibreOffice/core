@@ -103,7 +103,7 @@ private:
     void                    ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     void                    ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec);
     void                    ImplExecute( sal_uInt16 nId );
-    void                    ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew );
+    void                    ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew );
     void                    ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew );
 
     // Control
@@ -131,7 +131,7 @@ public:
                                 const ::boost::function<void(void)>& rThemeSlectionHandler);
                             ~GalleryBrowser1();
 
-    void                    SelectTheme( const String& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
+    void                    SelectTheme( const OUString& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
     void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }
     OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : OUString(); }
 
