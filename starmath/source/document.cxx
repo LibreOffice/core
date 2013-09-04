@@ -1406,15 +1406,15 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
-        *pFullTypeName  = OUString(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
-        *pShortTypeName = OUString(SmResId(RID_DOCUMENTSTR));
+        *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
+        *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
-        *pFullTypeName  = OUString(SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT));
-        *pShortTypeName = OUString(SmResId(RID_DOCUMENTSTR));
+        *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
+        *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
     }
 }
 

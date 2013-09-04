@@ -2531,7 +2531,7 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 
     pErrDesc->Type  = Type;
     pErrDesc->pNode = pNode;
-    pErrDesc->Text  = String(SmResId(RID_ERR_IDENT));
+    pErrDesc->Text  = SM_RESSTR(RID_ERR_IDENT);
 
     sal_uInt16  nRID;
     switch (Type)

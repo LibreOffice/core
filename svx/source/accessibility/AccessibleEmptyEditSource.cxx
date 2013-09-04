@@ -97,7 +97,7 @@ namespace accessibility
         // SvxTextForwarder
         sal_Int32          GetParagraphCount() const { return 1; }
         sal_uInt16          GetTextLen( sal_Int32 /*nParagraph*/ ) const { return 0; }
-        OUString        GetText( const ESelection& /*rSel*/ ) const { return String(); }
+        OUString        GetText( const ESelection& /*rSel*/ ) const { return OUString(); }
         SfxItemSet      GetAttribs( const ESelection& /*rSel*/, sal_Bool /*bOnlyHardAttrib*/ = 0 ) const
         {
             // AW: Very dangerous: The former implementation used a SfxItemPool created on the

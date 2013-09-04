@@ -509,7 +509,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     for (sal_uInt16 i = 0; i < sizeof(aCategories) / sizeof(sal_uInt16) ; i++)
     {
-        maElementListBox.InsertEntry(OUString(SmResId(aCategories[i])));
+        maElementListBox.InsertEntry(SM_RESSTR(aCategories[i]));
     }
 
     maElementListBox.SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
@@ -520,7 +520,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     maElementsControl.SetTextColor( Color( COL_BLACK ) );
     maElementsControl.SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHdl));
 
-    maElementListBox.SelectEntry(OUString(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS)));
+    maElementListBox.SelectEntry(SM_RESSTR(RID_CATEGORY_UNARY_BINARY_OPERATORS));
     maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
 
     FreeResource();
@@ -555,7 +555,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)
     for (sal_uInt16 i = 0; i < sizeof(aCategories) / sizeof(sal_uInt16) ; i++)
     {
         sal_uInt16 aCurrentCategory = aCategories[i];
-        OUString aCurrentCategoryString = OUString(SmResId(aCurrentCategory));
+        OUString aCurrentCategoryString = SM_RESSTR(aCurrentCategory);
         if (aCurrentCategoryString == pList->GetSelectEntry())
         {
             maElementsControl.setElementSetId(aCurrentCategory);
