@@ -1422,8 +1422,8 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // Strings are dealt with directly by the GetFieldText
                 case TypeClass_STRING           :
                 {
-                    String sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
-                    pReturnArray[i] <<= OUString(sText);
+                    OUString sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    pReturnArray[i] <<= sText;
                 }
                 break;
                 // everything else is requested in the DatabaseVariant
@@ -1491,7 +1491,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
 
         if (evt.PropertyName == FM_PROP_LABEL)
         {
-            String aName = ::comphelper::getString(evt.NewValue);
+            OUString aName = ::comphelper::getString(evt.NewValue);
             if (aName != pGrid->GetColumnTitle(nId))
                 pGrid->SetColumnTitle(nId, aName);
         }
@@ -1810,7 +1810,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     addColumnListeners(xSet);
 
     Reference< XPropertySet >  xNewColumn(xSet);
-    String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
+    OUString aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
@@ -1854,7 +1854,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     removeColumnListeners(xOldColumn);
     addColumnListeners(xNewColumn);
 
-    String aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
+    OUString aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
     Any aWidth = xNewColumn->getPropertyValue(FM_PROP_WIDTH);
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)

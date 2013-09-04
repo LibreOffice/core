@@ -651,7 +651,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
         case NavigationBar::RECORD_COUNT:
         {
             pWnd = &m_aRecordCount;
-            String aText;
+            OUString aText;
             if (bAvailable)
             {
                 if (pParent->GetOptions() & DbGridControl::OPT_INSERT)
@@ -667,15 +667,15 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                     aText += OUString(" *");
             }
             else
-                aText = String();
+                aText = "";
 
             // add the number of selected rows, if applicable
             if (pParent->GetSelectRowCount())
             {
-                String aExtendedInfo(aText);
-                aExtendedInfo.AppendAscii(" (");
+                OUString aExtendedInfo(aText);
+                aExtendedInfo += " (";
                 aExtendedInfo += m_aAbsolute.CreateFieldText(pParent->GetSelectRowCount());
-                aExtendedInfo += ')';
+                aExtendedInfo += ")";
                 pWnd->SetText(aExtendedInfo);
             }
             else

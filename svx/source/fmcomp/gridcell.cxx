@@ -2688,7 +2688,7 @@ OUString DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
                 if ( aPosSeq.getLength() )
                     sText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
                 else
-                    sText = String();
+                    sText = "";
             }
         }
         catch( const Exception& )

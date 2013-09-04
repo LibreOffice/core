@@ -543,7 +543,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
         if (bDateNTimeCol)
         {
-            String sRealName,sPurePostfix;
+            OUString sRealName,sPurePostfix;
 
             OUString aPostfix[] = {
                 SVX_RESSTR(RID_STR_POSTFIX_DATE),
@@ -556,7 +556,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
                 sPurePostfix = comphelper::string::stripStart(sPurePostfix, '(');
                 sPurePostfix = comphelper::string::stripEnd(sPurePostfix, ')');
                 sRealName = sFieldName;
-                sRealName += '_';
+                sRealName += "_";
                 sRealName += sPurePostfix;
                 if (i)
                     xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(OUString(sRealName)));
