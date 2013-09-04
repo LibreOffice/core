@@ -31,7 +31,7 @@ OUString editToString( const EditTextObject& /*rEditText*/ )
     return OUString();
 }
 
-EditTextObject stringToEdit( const OUString& rStr )
+EditTextObject stringToEdit( const OUString& /* rStr */ )
 {
     // FIXME: implement me.
     // The code here only serves to make this file compilable.
@@ -196,9 +196,7 @@ public:
 
     void appendAddress( const ScAddress &rPos )
     {
-        OUString aStr;
-        rPos.Format( aStr, SCA_VALID );
-        aMessage.append( aStr );
+        aMessage.append( rPos.Format( SCA_VALID ) );
         appendSeparator();
     }
 
@@ -379,7 +377,7 @@ bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell,
     aOp.appendFormulaCell( pCell );
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
-    pCell->Delete();
+    delete pCell;
     return true; // needs some code auditing action
 }
 
