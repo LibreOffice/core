@@ -95,7 +95,7 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
     maItemSetVector.push_back( mpInSet );
 
     NameOrIndex* pNewItem = createItem();
-    pNewItem->SetName( String( aName ) );
+    pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
     mpInSet->Put( *pNewItem, mnWhich );
     delete pNewItem;

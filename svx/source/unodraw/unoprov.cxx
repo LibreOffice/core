@@ -1149,13 +1149,13 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     return true;
 }
 
-bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
+bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString ) throw()
 {
     // first, calculate the search string length without an optional number behind the name
-    xub_StrLen nLength = rString.Len();
+    sal_Int32 nLength = rString.getLength();
     while( nLength > 0 )
     {
-        const sal_Unicode nChar = rString.GetChar( nLength - 1 );
+        const sal_Unicode nChar = rString[ nLength - 1 ];
         if( (nChar < '0') || (nChar > '9') )
             break;
 
@@ -1163,11 +1163,11 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     }
 
     // if we cut off a number, also cut of some spaces
-    if( nLength != rString.Len() )
+    if( nLength != rString.getLength() )
     {
         while( nLength > 0 )
         {
-            const sal_Unicode nChar = rString.GetChar( nLength - 1 );
+            const sal_Unicode nChar = rString[ nLength - 1 ];
             if( nChar != ' ' )
                 break;
 
@@ -1175,19 +1175,19 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
         }
     }
 
-    const String aShortString( rString.Copy( 0, nLength ) );
+    const OUString aShortString( rString.copy( 0, nLength ) );
 
     int i;
     for( i = 0; i < nCount; i++ )
     {
         sal_uInt16 nResId = (sal_uInt16)(nSourceResIds + i);
         const ResId aRes( SVX_RES(nResId));
-        const String aCompare( aRes.toString() );
+        const OUString aCompare( aRes.toString() );
         if( aShortString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
-            rString.Replace( 0, aShortString.Len(), aNewRes.toString() );
+            rString = rString.replaceAt( 0, aShortString.getLength(), aNewRes.toString() );
             return true;
         }
         else if( rString == aCompare )
@@ -1304,29 +1304,27 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
+bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw()
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
-    OUString sStr(rString);
-    const sal_Unicode *pStr = sStr.getStr();
-    sal_Int32 nLength = sStr.getLength();
+    sal_Int32 nLength = rString.getLength();
     while( nLength > 0 )
     {
-        const sal_Unicode nChar = pStr[nLength-1];
+        const sal_Unicode nChar = rString[nLength-1];
         if (nChar != '%' && (nChar < '0' || nChar > '9'))
             break;
         nLength--;
     }
-    sStr = OUString(pStr, nLength).trim();
+    OUString sStr = rString.copy(0, nLength).trim();
 
     for(int i = 0; i < nCount; ++i )
     {
-        String aStrDefName = SVX_RESSTR( pSourceResIds[i] );
-        if( sStr.equals( aStrDefName ) )
+        OUString aStrDefName = SVX_RESSTR( pSourceResIds[i] );
+        if( sStr == aStrDefName )
         {
-            String aReplace = SVX_RESSTR( pDestResIds[i] );
-            rString.Replace( 0, aStrDefName.Len(), aReplace );
+            OUString aReplace = SVX_RESSTR( pDestResIds[i] );
+            rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
             return true;
         }
     }
@@ -1339,7 +1337,7 @@ bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uIn
 */
 OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw()
 {
-    String aNew = rInternalName;
+    OUString aNew = rInternalName;
 
     if( nWhich == XATTR_LINECOLOR )
     {
@@ -1372,7 +1370,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 */
 OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw()
 {
-    String aNew = rApiName;
+    OUString aNew = rApiName;
 
     if( nWhich == XATTR_LINECOLOR )
     {

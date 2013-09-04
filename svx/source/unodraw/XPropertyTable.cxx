@@ -295,8 +295,7 @@ XPropertyEntry* SvxUnoXColorTable::getEntry( const OUString& rName, const uno::A
         return NULL;
 
     const Color aColor( (ColorData)nColor );
-    const String aName( rName );
-    return new XColorEntry( aColor, aName );
+    return new XColorEntry( aColor, rName );
 }
 
 // XElementAccess
@@ -369,8 +368,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno:
     // #86265# make sure polygon is closed
     aPolyPolygon.setClosed(true);
 
-    const String aName( rName );
-    return new XLineEndEntry( aPolyPolygon, aName );
+    return new XLineEndEntry( aPolyPolygon, rName );
 }
 
 // XElementAccess
@@ -451,8 +449,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
     aXDash.SetDashLen(aLineDash.DashLen);
     aXDash.SetDistance(aLineDash.Distance);
 
-    const String aName( rName );
-    return new XDashEntry( aXDash, aName );
+    return new XDashEntry( aXDash, rName );
 }
 
 // XElementAccess
@@ -528,8 +525,7 @@ XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::A
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( aUnoHatch.Angle );
 
-    const String aName( rName );
-    return new XHatchEntry( aXHatch, aName );
+    return new XHatchEntry( aXHatch, rName );
 }
 
 // XElementAccess
@@ -617,8 +613,7 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno
     aXGradient.SetEndIntens( aGradient.EndIntensity );
     aXGradient.SetSteps( aGradient.StepCount );
 
-    const String aName( rName );
-    return new XGradientEntry( aXGradient, aName );
+    return new XGradientEntry( aXGradient, rName );
 }
 
 // XElementAccess
@@ -684,9 +679,8 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
         return NULL;
 
     const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(aURL));
-    const String aName(rName);
 
-    return new XBitmapEntry(aGrafObj, aName);
+    return new XBitmapEntry(aGrafObj, rName);
 }
 
 // XElementAccess

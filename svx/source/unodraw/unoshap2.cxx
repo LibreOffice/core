@@ -1511,7 +1511,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             {
                 // graphic manager url
                 aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
-                String aTmpStr(aURL);
+                OUString aTmpStr(aURL);
                 OString aUniqueID(OUStringToOString(aTmpStr, RTL_TEXTENCODING_UTF8));
                 GraphicObject aGrafObj(aUniqueID);
 
@@ -1527,7 +1527,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             else if( !aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
             {
                 // normal link
-                String              aFilterName;
+                OUString            aFilterName;
                 const SfxFilter*    pSfxFilter = NULL;
                 SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE );
 

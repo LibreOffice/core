@@ -646,7 +646,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if (aStr.isEmpty())
             {
                 // its empty, so we have to force the outliner to initialise itself
-                mpOutliner->SetText( String(), mpOutliner->GetParagraph( 0 ) );
+                mpOutliner->SetText( "", mpOutliner->GetParagraph( 0 ) );
 
                 if(mpObject->GetStyleSheet())
                     mpOutliner->SetStyleSheet( 0, mpObject->GetStyleSheet());

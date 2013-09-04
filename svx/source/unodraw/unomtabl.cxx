@@ -160,13 +160,13 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
     maItemSetVector.push_back( mpInSet );
 
     XLineEndItem aEndMarker;
-    aEndMarker.SetName( String( aName ) );
+    aEndMarker.SetName( aName );
     aEndMarker.PutValue( aElement );
 
     mpInSet->Put( aEndMarker, XATTR_LINEEND );
 
     XLineStartItem aStartMarker;
-    aStartMarker.SetName( String( aName ) );
+    aStartMarker.SetName( aName );
     aStartMarker.PutValue( aElement );
 
     mpInSet->Put( aStartMarker, XATTR_LINESTART );
@@ -205,7 +205,7 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
     NameOrIndex *pItem;
-    const String aSearchName( Name );
+    const OUString aSearchName( Name );
 
     while( aIter != aEnd )
     {
@@ -235,7 +235,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
     NameOrIndex *pItem;
-    const String aSearchName( aName );
+    const OUString aSearchName( aName );
 
     while( aIter != aEnd )
     {
@@ -293,7 +293,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         throw container::NoSuchElementException();
 }
 
-static bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
+static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
     NameOrIndex *pItem;
     const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
@@ -390,7 +390,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
     if( aName.isEmpty() )
         return sal_False;
 
-    String aSearchName;
+    OUString aSearchName;
 
     NameOrIndex *pItem;
 

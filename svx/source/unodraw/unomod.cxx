@@ -415,74 +415,76 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
 
     uno::Reference< uno::XInterface > xRet;
 
-    const String aType( aServiceSpecifier );
-    if( aType.EqualsAscii( "com.sun.star.presentation.", 0, 26 ) )
+    const OUString aType( aServiceSpecifier );
+    const OUString aPackagePrefix( "com.sun.star.presentation." );
+    if( aType.startsWith( aPackagePrefix ) )
     {
         SvxShape* pShape = NULL;
 
         sal_uInt16 nType = OBJ_TEXT;
+        OUString aTypeName = aType.copy( aPackagePrefix.getLength() );
         // create a shape wrapper
-        if( aType.EqualsAscii( "TitleTextShape", 26, 14 ) )
+        if( aTypeName.startsWith("TitleTextShape") )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "OutlinerShape", 26, 13 ) )
+        else if( aTypeName.startsWith( "OutlinerShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "SubtitleShape", 26, 13 ) )
+        else if( aTypeName.startsWith( "SubtitleShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "GraphicObjectShape", 26, 18 ) )
+        else if( aTypeName.startsWith( "GraphicObjectShape" ) )
         {
             nType = OBJ_GRAF;
         }
-        else if( aType.EqualsAscii( "PageShape", 26, 9 ) )
+        else if( aTypeName.startsWith( "PageShape" ) )
         {
             nType = OBJ_PAGE;
         }
-        else if( aType.EqualsAscii( "OLE2Shape", 26, 9 ) )
+        else if( aTypeName.startsWith( "OLE2Shape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "ChartShape", 26, 10 ) )
+        else if( aTypeName.startsWith( "ChartShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        else if( aTypeName.startsWith( "TableShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "OrgChartShape", 26, 13 ) )
+        else if( aTypeName.startsWith( "OrgChartShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "NotesShape", 26, 10 ) )
+        else if( aTypeName.startsWith( "NotesShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "HandoutShape", 26, 12 ) )
+        else if( aTypeName.startsWith( "HandoutShape" ) )
         {
             nType = OBJ_PAGE;
         }
-        else if( aType.EqualsAscii( "FooterShape", 26, 12 ) )
+        else if( aTypeName.startsWith( "FooterShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "HeaderShape", 26, 12 ) )
+        else if( aTypeName.startsWith( "HeaderShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "SlideNumberShape", 26, 17 ) )
+        else if( aTypeName.startsWith( "SlideNumberShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "DateTimeShape", 26, 17 ) )
+        else if( aTypeName.startsWith( "DateTimeShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        else if( aTypeName.startsWith( "TableShape" ) )
         {
             nType = OBJ_TABLE;
         }

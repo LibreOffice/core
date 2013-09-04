@@ -374,16 +374,16 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             const SvxFieldData* pField = pInfo->GetField().GetField();
             if( pField && pField->ISA( SvxPageField ) )
             {
-                String aPageNumValue;
+                OUString aPageNumValue;
                 sal_Bool bUpper = sal_False;
 
                 switch(mpDoc->GetPageNumType())
                 {
                     case SVX_CHARS_UPPER_LETTER:
-                        aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'A');
+                        aPageNumValue += OUString( (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'A') );
                         break;
                     case SVX_CHARS_LOWER_LETTER:
-                        aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a');
+                        aPageNumValue += OUString( (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a') );
                         break;
                     case SVX_ROMAN_UPPER:
                         bUpper = sal_True;
@@ -391,8 +391,8 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
                     case SVX_NUMBER_NONE:
-                        aPageNumValue.Erase();
-                        aPageNumValue += sal_Unicode(' ');
+                        aPageNumValue = "";
+                        aPageNumValue += " ";
                         break;
                     default:
                         aPageNumValue += OUString::number( (sal_Int32)mnPageNumber );
@@ -1073,7 +1073,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
                 SvMemoryStream aStream( 1024, 1024 );
 
-                nStatus = rFilter.ExportGraphic( aGraphic, String(), aStream, nFilter, &aSettings.maFilterData );
+                nStatus = rFilter.ExportGraphic( aGraphic,"", aStream, nFilter, &aSettings.maFilterData );
 
                 // copy temp stream to XOutputStream
                 SvOutputStream aOutputStream( aSettings.mxOutputStream );
@@ -1248,14 +1248,14 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
 // XMimeTypeInfo
 sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException)
 {
-    const String aMimeTypeName( MimeTypeName );
+    const OUString aMimeTypeName( MimeTypeName );
 
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = rFilter.GetExportFormatCount();
     sal_uInt16 nFilter;
     for( nFilter = 0; nFilter < nCount; nFilter++ )
     {
-        if( aMimeTypeName.Equals( rFilter.GetExportFormatMediaType( nFilter ) ) )
+        if( aMimeTypeName == rFilter.GetExportFormatMediaType( nFilter ) )
         {
             return sal_True;
         }

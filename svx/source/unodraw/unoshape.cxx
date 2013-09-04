@@ -1619,7 +1619,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
         case XATTR_LINEEND:
         case XATTR_LINESTART:
             {
-                const String aEmpty;
+                const OUString aEmpty;
                 const basegfx::B2DPolyPolygon aEmptyPoly;
                 if( nWID == XATTR_LINEEND )
                     rSet.Put( XLineEndItem( aEmpty, aEmptyPoly ) );
@@ -1642,7 +1642,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
     const SfxItemPool* pPool = rSet.GetPool();
 
-    const String aSearchName( aName );
+    const OUString aSearchName( aName );
     const sal_uInt32 nCount = pPool->GetItemCount2((sal_uInt16)nWID);
     const NameOrIndex* pItem;
 
