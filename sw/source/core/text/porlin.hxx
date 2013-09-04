@@ -25,7 +25,6 @@
 #include <libxml/xmlwriter.h>
 #endif
 
-class XubString;
 class SwTxtSizeInfo;
 class SwTxtPaintInfo;
 class SwTxtFormatInfo;

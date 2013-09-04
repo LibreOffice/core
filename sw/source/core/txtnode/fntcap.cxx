@@ -317,8 +317,6 @@ void SwDoDrawCapital::Do()
 
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
-    static sal_Char const sDoubleSpace[] = "  ";
-
     long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
@@ -343,7 +341,7 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     {
         rInf.ApplyAutoColor();
         GetOut().DrawStretchText( aPos, nDiff,
-            XubString( sDoubleSpace, RTL_TEXTENCODING_MS_1252 ), 0, 2 );
+            OUString("  "), 0, 2 );
     }
     rPos.X() = rInf.GetPos().X() + rInf.GetWidth();
 }

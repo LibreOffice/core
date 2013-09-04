@@ -164,8 +164,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         if( rInf.GetFont()->IsPaintBlank() )
         {
-            static sal_Char const sDoubleSpace[] = "  ";
-            XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
+            OUString aTxtDouble("  ");
             //
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );

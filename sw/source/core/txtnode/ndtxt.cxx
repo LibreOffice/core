@@ -3067,15 +3067,15 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 {
                 case RES_TXTATR_FIELD:
                     {
-                        XubString const aExpand(
+                        OUString const aExpand(
                             static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
                                 ->ExpandField(true));
-                        if( aExpand.Len() )
+                        if (!aExpand.isEmpty())
                         {
                             ++aDestIdx;     // dahinter einfuegen;
                             OUString const ins(
                                 rDestNd.InsertText( aExpand, aDestIdx));
-                            SAL_INFO_IF(ins.getLength() != aExpand.Len(),
+                            SAL_INFO_IF(ins.getLength() != aExpand.getLength(),
                                     "sw.core", "GetExpandTxt lossage");
                             aDestIdx = nInsPos + nAttrStartIdx;
                             nInsPos = nInsPos + ins.getLength();

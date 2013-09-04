@@ -1518,9 +1518,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 SwTwips nSpace = 0;
                 if( FILL_TAB != rFill.Mode() )
                 {
-static sal_Char const sDoubleSpace[] = "  ";
-                    const XubString aTmp( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-
+                    const OUString aTmp("  ");
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTmp, 0, 2 );
                     nSpace = pFnt->_GetTxtSize( aDrawInf ).Width()/2;
                 }

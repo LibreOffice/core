@@ -537,25 +537,23 @@ bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     const xub_StrLen nPos )
 {
     // get word boundaries
-    xub_StrLen nWordLen;
-
     Boundary aBound =
         g_pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;
-    nWordLen = static_cast<xub_StrLen>(aBound.endPos - nBreakStart);
+    sal_Int32 nWordLen = aBound.endPos - nBreakStart;
 
     // if everything else fails, we want to cut at nPos
     nCutPos = nPos;
 
-    XubString aTxt( rInf.GetTxt().copy( nBreakStart, nWordLen ) );
+    OUString aTxt( rInf.GetTxt().copy( nBreakStart, nWordLen ) );
 
     // check, if word has alternative spelling
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     OSL_ENSURE( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
-    xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
+    xHyphWord = xHyph->queryAlternativeSpelling( aTxt,
                         g_pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
                         nPos - nBreakStart, rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
