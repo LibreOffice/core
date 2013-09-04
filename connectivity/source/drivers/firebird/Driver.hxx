@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <cppuhelper/compbase3.hxx>
+#include <unotools/tempfile.hxx>
 
 namespace connectivity
 {
@@ -47,6 +48,9 @@ namespace connectivity
         private:
             static const ::rtl::OUString our_sFirebirdTmpVar;
             static const ::rtl::OUString our_sFirebirdLockVar;
+
+            ::utl::TempFile m_firebirdTMPDirectory;
+            ::utl::TempFile m_firebirdLockDirectory;
 
         protected:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
