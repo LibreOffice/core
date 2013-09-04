@@ -44,12 +44,6 @@
 #define HID_SCH_TBI_DATA_INSERT_TEXT_COL                    "CHART2_HID_SCH_TBI_DATA_INSERT_TEXT_COL"
 #define HID_SCH_TBX_DATA                                    "CHART2_HID_SCH_TBX_DATA"
 
-#define HID_SCH_ALIGNMENT_CTR_DIAL                          "CHART2_HID_SCH_ALIGNMENT_CTR_DIAL"
-#define HID_SCH_ALIGNMENT_STACKED                           "CHART2_HID_SCH_ALIGNMENT_STACKED"
-#define HID_SCH_ALIGNMENT_DEGREES                           "CHART2_HID_SCH_ALIGNMENT_DEGREES"
-
-#define HID_SCH_TP_AXIS_LABEL                               "CHART2_HID_SCH_TP_AXIS_LABEL"
-
 #define HID_SCH_CHART_AUTO_FORMAT                           "CHART2_HID_SCH_CHART_AUTO_FORMAT"
 #define HID_SCH_LB_BAR_GEOMETRY                             "CHART2_HID_SCH_LB_BAR_GEOMETRY"
 #define HID_SCH_DLG_RANGES                                  "CHART2_HID_SCH_DLG_RANGES"
