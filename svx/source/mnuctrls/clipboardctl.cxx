@@ -75,8 +75,8 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
         {
             sal_uIntPtr nFmtID =  pFmtItem->GetClipbrdFormatId( i );
-            String aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
-            if (!aFmtStr.Len())
+            OUString aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
+            if (aFmtStr.isEmpty())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
             pPopup->InsertItem( (sal_uInt16)nFmtID, aFmtStr );
         }

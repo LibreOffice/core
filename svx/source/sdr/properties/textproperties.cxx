@@ -276,8 +276,8 @@ namespace sdr
                             {
                                 if((OBJ_OUTLINETEXT == rObj.GetTextKind()) && (SdrInventor == rObj.GetObjInventor()))
                                 {
-                                    String aNewStyleSheetName(GetStyleSheet()->GetName());
-                                    aNewStyleSheetName.Erase(aNewStyleSheetName.Len() - 1, 1);
+                                    OUString aNewStyleSheetName(GetStyleSheet()->GetName());
+                                    aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
                                     sal_Int16 nDepth = rOutliner.GetDepth(nPara);
                                     aNewStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth + 1);
 
@@ -600,11 +600,11 @@ namespace sdr
                     if(pExtendedHint
                         && SFX_STYLESHEET_MODIFIED == pExtendedHint->GetHint())
                     {
-                        String aOldName(pExtendedHint->GetOldName());
-                        String aNewName(pExtendedHint->GetStyleSheet()->GetName());
+                        OUString aOldName(pExtendedHint->GetOldName());
+                        OUString aNewName(pExtendedHint->GetStyleSheet()->GetName());
                         SfxStyleFamily eFamily = pExtendedHint->GetStyleSheet()->GetFamily();
 
-                        if(!aOldName.Equals(aNewName))
+                        if(aOldName != aNewName)
                         {
                             sal_Int32 nText = rTextProvider.getTextCount();
                             while( --nText > 0 )

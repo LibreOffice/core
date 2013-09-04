@@ -102,7 +102,7 @@ void SvxFontMenuControl::StateChanged(
         if ( !pMenu->GetItemCount() )
             FillMenu();
         const SvxFontItem* pFontItem = PTR_CAST( SvxFontItem, pState );
-        String aFont;
+        OUString aFont;
 
         if ( pFontItem )
             aFont = pFontItem->GetFamilyName();
