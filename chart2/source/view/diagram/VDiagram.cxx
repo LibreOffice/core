@@ -48,9 +48,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 VDiagram::VDiagram(
-    const uno::Reference< XDiagram > & xDiagram
-    , const drawing::Direction3D& rPreferredAspectRatio
-    , sal_Int32 nDimension, sal_Bool bPolar )
+    const uno::Reference<XDiagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,
+    sal_Int32 nDimension )
     : m_xTarget(NULL)
     , m_xShapeFactory(NULL)
     , m_pShapeFactory(NULL)
@@ -58,14 +57,13 @@ VDiagram::VDiagram(
     , m_xCoordinateRegionShape(NULL)
     , m_xWall2D(NULL)
     , m_nDimensionCount(nDimension)
-    , m_bPolar(bPolar)
     , m_xDiagram(xDiagram)
     , m_aPreferredAspectRatio(rPreferredAspectRatio)
     , m_xAspectRatio3D()
     , m_fXAnglePi(0)
     , m_fYAnglePi(0)
     , m_fZAnglePi(0)
-    , m_bRightAngledAxes(sal_False)
+    , m_bRightAngledAxes(false)
 {
     if( m_nDimensionCount == 3)
     {

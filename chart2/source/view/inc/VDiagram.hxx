@@ -39,10 +39,9 @@ diagram.
 class VDiagram
 {
 public: //methods
-    VDiagram( const ::com::sun::star::uno::Reference<
-                  ::com::sun::star::chart2::XDiagram > & xDiagram
-                , const ::com::sun::star::drawing::Direction3D& rPreferredAspectRatio
-                , sal_Int32 nDimension=3, sal_Bool bPolar=sal_False );
+    VDiagram( const com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram>& xDiagram,
+              const com::sun::star::drawing::Direction3D& rPreferredAspectRatio,
+              sal_Int32 nDimension = 3 );
     virtual ~VDiagram();
 
     void init(
@@ -91,7 +90,6 @@ private: //members
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xWall2D;
 
     sal_Int32                                                               m_nDimensionCount;
-    sal_Bool                                                                m_bPolar;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDiagram >                                m_xDiagram;
 
@@ -101,13 +99,14 @@ private: //members
     double m_fXAnglePi;
     double m_fYAnglePi;
     double m_fZAnglePi;
-    sal_Bool m_bRightAngledAxes;
 
     ::com::sun::star::awt::Point    m_aAvailablePosIncludingAxes;
     ::com::sun::star::awt::Size     m_aAvailableSizeIncludingAxes;
 
     ::com::sun::star::awt::Point    m_aCurrentPosWithoutAxes;
     ::com::sun::star::awt::Size     m_aCurrentSizeWithoutAxes;
+
+    bool m_bRightAngledAxes;
 };
 
 } //namespace chart
