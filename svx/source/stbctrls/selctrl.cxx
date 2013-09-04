@@ -80,7 +80,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
     mnState( 0 ),
     maImage( SVX_RES( RID_SVXBMP_SELECTION ) )
 {
-    GetStatusBar().SetItemText( GetId(), String() );
+    GetStatusBar().SetItemText( GetId(), "" );
 }
 
 // -----------------------------------------------------------------------

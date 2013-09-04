@@ -190,7 +190,7 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
 {
     if ( (SFX_ITEM_AVAILABLE != eState) || pState->ISA( SfxVoidItem ) )
     {
-        GetStatusBar().SetItemText( GetId(), String() );
+        GetStatusBar().SetItemText( GetId(), "" );
         mpImpl->mbValuesSet   = false;
     }
     else

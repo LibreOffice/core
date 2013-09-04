@@ -139,16 +139,16 @@ struct SvxPosSizeStatusBarControl_Impl
 */
 
 {
-    Point   aPos;       // valid when a position is shown
-    Size    aSize;      // valid when a size is shown
-    String  aStr;       // valid when a text is shown
-    bool    bPos;       // show position ?
-    bool    bSize;      // set size ?
-    bool    bTable;     // set table index ?
-    bool    bHasMenu;   // set StarCalc popup menu ?
+    Point     aPos;       // valid when a position is shown
+    Size      aSize;      // valid when a size is shown
+    OUString  aStr;       // valid when a text is shown
+    bool      bPos;       // show position ?
+    bool      bSize;      // set size ?
+    bool      bTable;     // set table index ?
+    bool      bHasMenu;   // set StarCalc popup menu ?
     sal_uInt16  nFunction;  // the selected StarCalc function
-    Image   aPosImage;  // Image to show the position
-    Image   aSizeImage; // Image to show the size
+    Image     aPosImage;  // Image to show the position
+    Image     aSizeImage; // Image to show the size
 };
 
 // class SvxPosSizeStatusBarControl ------------------------------------------
@@ -219,7 +219,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 {
     // Because the combi-controller, always sets the curent Id as HelpId
     // first clean the cached HelpText
-    GetStatusBar().SetHelpText( GetId(), String() );
+    GetStatusBar().SetHelpText( GetId(), "" );
 
     switch ( nSID )
     {
@@ -291,7 +291,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
     //  set only strings as text at the statusBar, so that the Help-Tips
     //  can work with the text, when it is too long for the statusBar
-    String aText;
+    OUString aText;
     if ( pImp->bTable )
         aText = pImp->aStr;
     GetStatusBar().SetItemText( GetId(), aText );
@@ -369,8 +369,8 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawImage( aPnt, pImp->aPosImage );
         aPnt.X() += pImp->aPosImage.GetSizePixel().Width();
         aPnt.X() += PAINT_OFFSET;
-        String aStr = GetMetricStr_Impl( pImp->aPos.X());
-        aStr.AppendAscii(" / ");
+        OUString aStr = GetMetricStr_Impl( pImp->aPos.X());
+        aStr += " / ";
         aStr += GetMetricStr_Impl( pImp->aPos.Y());
         pDev->DrawRect(
             Rectangle( aPnt, Point( nSizePosX, rRect.Bottom() ) ) );
@@ -386,7 +386,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
             Point aDrwPnt = aPnt;
             aPnt.X() += PAINT_OFFSET;
             aStr = GetMetricStr_Impl( pImp->aSize.Width() );
-            aStr.AppendAscii(" x ");
+            aStr += " x ";
             aStr += GetMetricStr_Impl( pImp->aSize.Height() );
             pDev->DrawRect( Rectangle( aDrwPnt, rRect.BottomRight() ) );
             pDev->DrawText( aPnt, aStr );

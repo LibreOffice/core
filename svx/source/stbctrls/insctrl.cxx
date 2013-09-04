@@ -53,7 +53,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
-        GetStatusBar().SetItemText( GetId(), String() );
+        GetStatusBar().SetItemText( GetId(), "" );
     else
     {
         DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
@@ -98,7 +98,7 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    String aText;
+    OUString aText;
     if ( !bInsert )
         aText = SVX_RESSTR( RID_SVXSTR_OVERWRITE_TEXT );
 

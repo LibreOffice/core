@@ -86,7 +86,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     if( GetStatusBar().AreItemsVisible() )              // necessary ?
         GetStatusBar().SetItemData( GetId(), 0 );
 
-    GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
+    GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 
     sal_uInt16 nResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )

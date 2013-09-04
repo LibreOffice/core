@@ -113,15 +113,15 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 {
     if( SFX_ITEM_AVAILABLE != eState )
     {
-        GetStatusBar().SetItemText( GetId(), String() );
+        GetStatusBar().SetItemText( GetId(), "" );
         nValueSet = 0;
     }
     else if ( pState->ISA( SfxUInt16Item) )
     {
         const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
         nZoom = pItem->GetValue();
-        String aStr( OUString::number(nZoom) );
-        aStr += '%';
+        OUString aStr( OUString::number(nZoom) );
+        aStr += "%";
         GetStatusBar().SetItemText( GetId(), aStr );
 
         if ( pState->ISA(SvxZoomItem) )
@@ -140,8 +140,8 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
-    String aStr( OUString::number( nZoom ));
-    aStr += '%';
+    OUString aStr( OUString::number( nZoom ));
+    aStr += "%";
     GetStatusBar().SetItemText( GetId(), aStr );
 }
 
