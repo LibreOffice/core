@@ -1192,7 +1192,7 @@ void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
 void SmXMLAnnotationContext_Impl::Characters(const OUString &rChars)
 {
     if (bIsStarMath)
-        GetSmImport().GetText() + rChars;
+        GetSmImport().SetText( GetSmImport().GetText() + rChars );
 }
 
 ////////////////////////////////////////////////////////////
