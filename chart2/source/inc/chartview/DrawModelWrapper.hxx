@@ -37,7 +37,6 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTVIEW DrawModelWrapper : private SdrModel
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory > m_xMCF;
     SfxItemPool* m_pChartItemPool;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > m_xMainDrawPage;
@@ -49,8 +48,8 @@ private:
     DrawModelWrapper();
 
 public:
-    SAL_DLLPRIVATE DrawModelWrapper(::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext );
+    SAL_DLLPRIVATE DrawModelWrapper(
+        const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
     SAL_DLLPRIVATE virtual ~DrawModelWrapper();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getShapeFactory();

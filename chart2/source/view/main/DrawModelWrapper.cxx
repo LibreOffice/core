@@ -102,18 +102,14 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 namespace chart
 {
 
-DrawModelWrapper::DrawModelWrapper(
-        uno::Reference<uno::XComponentContext> const & xContext )
+DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
         : SdrModel( SvtPathOptions().GetPalettePath() )
-        , m_xMCF(0)
         , m_pChartItemPool(0)
         , m_xMainDrawPage(0)
         , m_xHiddenDrawPage(0)
         , m_apRefDevice(0)
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
-
-    m_xMCF = xContext->getServiceManager();
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
