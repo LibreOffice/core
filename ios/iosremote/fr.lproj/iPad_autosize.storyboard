@@ -117,7 +117,7 @@
                             <tableViewSection footerTitle="" id="CVG-Eq-rLd">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="b8A-jh-k26" customClass="EditableTableViewCell">
-                                        <rect key="frame" x="0.0" y="30" width="540" height="45"/>
+                                        <rect key="frame" x="0.0" y="99" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b8A-jh-k26" id="etu-oV-iGF">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="45"/>
@@ -125,7 +125,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="jrI-wU-4NT" customClass="EditableTableViewCell">
-                                        <rect key="frame" x="0.0" y="75" width="540" height="44"/>
+                                        <rect key="frame" x="0.0" y="143" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jrI-wU-4NT" id="xyc-BA-quE">
                                             <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
@@ -509,6 +509,7 @@
         <image name="timer_clear_btn.png" width="14.400480270385742" height="14.400480270385742"/>
         <image name="timer_start_btn.png" width="14.400480270385742" height="14.400480270385742"/>
     </resources>
+    <color key="tintColor" red="0.95294117649999999" green="0.54008895990000005" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
