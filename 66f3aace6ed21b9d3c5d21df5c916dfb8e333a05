@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7fI\u003d",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-09-04T13:36:12Z",
+      "side": 1,
+      "message": "Looks like some micro optimization. But if someone says this is needless I\u0027ll drop it.",
+      "revId": "66f3aace6ed21b9d3c5d21df5c916dfb8e333a05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
