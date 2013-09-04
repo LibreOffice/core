@@ -204,8 +204,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                         &pMembers[2], typelib_TypeClass_INTERFACE_METHOD, sMethodName2.pData );
 
                     ::typelib_typedescription_newInterface(
-                        &pTD, sTypeName.pData, 0xe227a391, 0x33d6, 0x11d1, 0xaabe00a0, 0x249d5590,
-                        0, 3, pMembers );
+                        &pTD, sTypeName.pData, 0, 0, 0, 0, 0, 0, 3, pMembers );
 
                     ::typelib_typedescription_register( (typelib_TypeDescription **)&pTD );
                     ::typelib_typedescriptionreference_acquire(

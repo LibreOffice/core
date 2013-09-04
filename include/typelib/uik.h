@@ -26,6 +26,8 @@
 #endif
 
 /** Binary typelib uik struct.  Internally not used anymore.
+
+    @deprecated
 */
 typedef struct _typelib_Uik
 {

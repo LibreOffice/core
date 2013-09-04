@@ -451,12 +451,10 @@ inline static typelib_TypeDescription * createCTD(
                 aMemberTypeName.pData );
         }
 
-        Uik uik = xType->getUik();
-
         typelib_typedescription_newMIInterface(
             (typelib_InterfaceTypeDescription **)&pRet,
             aTypeName.pData,
-            uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5,
+            0, 0, 0, 0, 0,
             nBases, pBaseTypeRefs,
             nMembers, ppMemberRefs );
 

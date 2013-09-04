@@ -434,6 +434,9 @@ typedef struct _typelib_InterfaceTypeDescription
     */
     struct _typelib_InterfaceTypeDescription *  pBaseTypeDescription;
     /** unique identifier of interface
+
+        @deprecated
+        should always contain all-zeros
     */
     typelib_Uik                                 aUik;
     /** number of members
@@ -647,11 +650,11 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
 
     @param ppRet inout interface type description
     @param pTypeName the fully qualified name of the interface.
-    @param nUik1 uik part
-    @param nUik2 uik part
-    @param nUik3 uik part
-    @param nUik4 uik part
-    @param nUik5 uik part
+    @param nUik1 uik part; deprecated and ignored, should always be 0
+    @param nUik2 uik part; deprecated and ignored, should always be 0
+    @param nUik3 uik part; deprecated and ignored, should always be 0
+    @param nUik4 uik part; deprecated and ignored, should always be 0
+    @param nUik5 uik part; deprecated and ignored, should always be 0
     @param pBaseInterface base interface type, else 0
     @param nMembers number of members
     @param ppMembers members; attributes or methods
@@ -672,11 +675,11 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
 
     @param ppRet inout interface type description
     @param pTypeName the fully qualified name of the interface.
-    @param nUik1 uik part
-    @param nUik2 uik part
-    @param nUik3 uik part
-    @param nUik4 uik part
-    @param nUik5 uik part
+    @param nUik1 uik part; deprecated and ignored, should always be 0
+    @param nUik2 uik part; deprecated and ignored, should always be 0
+    @param nUik3 uik part; deprecated and ignored, should always be 0
+    @param nUik4 uik part; deprecated and ignored, should always be 0
+    @param nUik5 uik part; deprecated and ignored, should always be 0
     @param nBaseInterfaces number of base interface types
     @param ppBaseInterfaces base interface types
     @param nMembers number of members

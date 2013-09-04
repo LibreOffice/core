@@ -56,7 +56,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 sMethodName0.pData );
             typelib_typedescription_newInterface(
                 &pTD,
-                sTypeName.pData, 0x00000000, 0x0000, 0x0000, 0x00000000, 0x00000000,
+                sTypeName.pData, 0, 0, 0, 0, 0,
                 * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ),
                 1,
                 pMembers );

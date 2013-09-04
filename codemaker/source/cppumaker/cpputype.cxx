@@ -1250,10 +1250,9 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << "\n" << indent() << "typelib_typedescription_newMIInterface(\n";
     inc();
     out << indent() << "&pTD,\n" << indent()
-        << ("sTypeName.pData, 0x00000000, 0x0000, 0x0000, 0x00000000,"
-            " 0x00000000,\n") // UIK
-        << indent() << entity_->getDirectMandatoryBases().size()
-        << ", aSuperTypes,\n" << indent() << count << ",\n" << indent()
+        << "sTypeName.pData, 0, 0, 0, 0, 0,\n" << indent()
+        << entity_->getDirectMandatoryBases().size() << ", aSuperTypes,\n"
+        << indent() << count << ",\n" << indent()
         << (count == 0 ? "0" : "pMembers") << " );\n\n";
     dec();
     out << indent()

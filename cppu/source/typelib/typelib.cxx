@@ -1043,15 +1043,17 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
+    SAL_UNUSED_PARAMETER sal_uInt32, SAL_UNUSED_PARAMETER sal_uInt16,
+    SAL_UNUSED_PARAMETER sal_uInt16, SAL_UNUSED_PARAMETER sal_uInt32,
+    SAL_UNUSED_PARAMETER sal_uInt32,
     typelib_TypeDescriptionReference * pBaseInterface,
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
     typelib_typedescription_newMIInterface(
-        ppRet, pTypeName, nUik1, nUik2, nUik3, nUik4, nUik5,
-        pBaseInterface == 0 ? 0 : 1, &pBaseInterface, nMembers, ppMembers);
+        ppRet, pTypeName, 0, 0, 0, 0, 0, pBaseInterface == 0 ? 0 : 1,
+        &pBaseInterface, nMembers, ppMembers);
 }
 
 //------------------------------------------------------------------------
@@ -1128,7 +1130,9 @@ void BaseList::calculate(
 extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
-    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
+    SAL_UNUSED_PARAMETER sal_uInt32, SAL_UNUSED_PARAMETER sal_uInt16,
+    SAL_UNUSED_PARAMETER sal_uInt16, SAL_UNUSED_PARAMETER sal_uInt32,
+    SAL_UNUSED_PARAMETER sal_uInt32,
     sal_Int32 nBaseInterfaces,
     typelib_TypeDescriptionReference ** ppBaseInterfaces,
     sal_Int32 nMembers,
@@ -1167,11 +1171,11 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
         pITD->pBaseTypeDescription = pITD->ppBaseTypes[0];
     }
     // set the
-    pITD->aUik.m_Data1 = nUik1;
-    pITD->aUik.m_Data2 = nUik2;
-    pITD->aUik.m_Data3 = nUik3;
-    pITD->aUik.m_Data4 = nUik4;
-    pITD->aUik.m_Data5 = nUik5;
+    pITD->aUik.m_Data1 = 0;
+    pITD->aUik.m_Data2 = 0;
+    pITD->aUik.m_Data3 = 0;
+    pITD->aUik.m_Data4 = 0;
+    pITD->aUik.m_Data5 = 0;
 
     BaseList aBaseList(pITD);
     pITD->nAllMembers = nMembers + aBaseList.getBaseMembers();
