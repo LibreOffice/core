@@ -3029,8 +3029,10 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        // #i121932# do *not* forget to invert shearX(!)
-        aGeoStat.nShearWink = FRound((atan(-fShearX) / F_PI180) * 100.0);
+        // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
+        // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
+        // back the mirroring of the shear angle
+        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, sal_False);
     }
