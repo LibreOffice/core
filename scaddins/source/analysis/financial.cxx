@@ -395,6 +395,10 @@ double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::be
     RETURN_FINITE( fRet );
 }
 
+// Encapsulation violation: We *know* that GetOddfprice() always
+// throws.
+
+SAL_WNOUNREACHABLE_CODE_PUSH
 
 double SAL_CALL AnalysisAddIn::getOddfprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
@@ -403,22 +407,16 @@ double SAL_CALL AnalysisAddIn::getOddfprice( const css::uno::Reference< css::bea
     if( fRate < 0.0 || fYield < 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         throw css::lang::IllegalArgumentException();
 
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     double fRet = GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
     RETURN_FINITE( fRet );
-#else
-    // During link-time optimization the compiler inlines the above
-    // call to GetOddfprice() (note upper-case 'G') (from
-    // analysishelper.cxx), and notices that GetOddfprice() always
-    // throws, so the assignment and return are unreachable. Avoid
-    // that warning by throwing directly here.
-    (void) rOB;
-    (void) fRedemp;
-    (void) xOpt;
-    throw css::uno::RuntimeException();
-#endif
 }
 
+SAL_WNOUNREACHABLE_CODE_POP
+
+// Encapsulation violation: We *know* that Getoddfyield() always
+// throws.
+
+SAL_WNOUNREACHABLE_CODE_PUSH
 
 double SAL_CALL AnalysisAddIn::getOddfyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
@@ -427,19 +425,12 @@ double SAL_CALL AnalysisAddIn::getOddfyield( const css::uno::Reference< css::bea
     if( fRate < 0.0 || fPrice <= 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         throw css::lang::IllegalArgumentException();
 
-#if !(defined(_MSC_VER) && defined(ENABLE_LTO))
     double fRet = GetOddfyield( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fPrice, fRedemp, nFreq,
                         getDateMode( xOpt, rOB ) );
     RETURN_FINITE( fRet );
-#else
-    // Same story here, see comment in getOddfprice()
-    (void) rOB;
-    (void) fRedemp;
-    (void) xOpt;
-    throw css::uno::RuntimeException();
-#endif
 }
 
+SAL_WNOUNREACHABLE_CODE_POP
 
 double SAL_CALL AnalysisAddIn::getOddlprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,

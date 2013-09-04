@@ -1068,8 +1068,9 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fYield*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
     sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    // If you ever change this to not unconditionally throw, adapt
-    // getOddfprice() (note lower-case 'g') in financial.cxx.
+    // If you change this to not unconditionally throw, the
+    // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
+    // financial.cxx can be removed.
     throw uno::RuntimeException();  // #87380#
 }
 
@@ -1153,8 +1154,9 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fPrice*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
     sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    // Ditto here, if you change this to not throw unconditionally,
-    // adapt getOddfyield() in financial.cxx.
+    // If you change this to not unconditionally throw, the
+    // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
+    // financial.cxx can be removed.
     throw uno::RuntimeException();  // #87380#
 }
 
