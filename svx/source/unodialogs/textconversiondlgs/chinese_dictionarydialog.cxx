@@ -80,7 +80,7 @@ DictionaryList::DictionaryList( Window* pParent )
 {
 }
 
-String DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
+OUString DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
 {
     if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
         return String();
@@ -91,7 +91,7 @@ String DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) 
     return m_pPropertyTypeNameListBox->GetEntry(0);
 }
 
-String DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
+OUString DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
 {
     String aStr( rEntry.m_aTerm );
     aStr += '\t';
@@ -315,7 +315,7 @@ void DictionaryList::activate( HeaderBar* pHeaderBar )
     Show();
 }
 
-HeaderBar* DictionaryList::createHeaderBar( const String& rColumn1, const String& rColumn2, const String& rColumn3
+HeaderBar* DictionaryList::createHeaderBar( const OUString& rColumn1, const OUString& rColumn2, const OUString& rColumn3
                   , long nWidth1, long nWidth2, long nWidth3 )
 {
     HeaderBar* pHeaderBar = new HeaderBar( Control::GetParent(), WB_BUTTONSTYLE | WB_BOTTOMBORDER );

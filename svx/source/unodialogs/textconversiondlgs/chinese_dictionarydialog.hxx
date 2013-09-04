@@ -69,7 +69,7 @@ public:
     DictionaryList( Window* pParent );
     virtual ~DictionaryList();
 
-    HeaderBar* createHeaderBar( const String& rColumn1, const String& rColumn2, const String& rColumn3
+    HeaderBar* createHeaderBar( const OUString& rColumn1, const OUString& rColumn2, const OUString& rColumn3
                   , long nWidth1, long nWidth2, long nWidth3 );
 
     void initDictionaryControl( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary>& xDictionary
@@ -95,8 +95,8 @@ public:
     virtual void Resize();
 
 private:
-    String getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
-    String makeTabString( const DictionaryEntry& rEntry ) const;
+    OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
+    OUString makeTabString( const DictionaryEntry& rEntry ) const;
 
     DECL_LINK( CompareHdl, SvSortData* );
     StringCompare ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
