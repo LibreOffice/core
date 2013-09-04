@@ -1227,7 +1227,12 @@ LanguageTag & LanguageTag::makeFallback()
     if (isIsoLocale())
     {
         if (!aCountry.isEmpty())
+        {
             aVec.push_back( aLanguage + "-" + aCountry);
+            // For zh-HK or zh-MO also list zh-TW
+            if (aLanguage == "zh" && (aCountry == "HK" || aCountry == "MO"))
+                aVec.push_back( aLanguage + "-TW");
+        }
         aVec.push_back( aLanguage);
         return aVec;
     }
