@@ -296,7 +296,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SANSKRIT                   0x044F
 #define LANGUAGE_SEPEDI                     0x046C
 #define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
-#define LANGUAGE_SERBIAN                    0x001A  /* primary only, not a locale! */
 #define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A  /* MS lists this as Serbian (Cyrillic, Serbia) 'sr-Cyrl-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */
 #define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA    0x1C1A
 #define LANGUAGE_SERBIAN_LATIN              0x081A  /* MS lists this as Serbian (Latin, Serbia) 'sr-Latn-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */

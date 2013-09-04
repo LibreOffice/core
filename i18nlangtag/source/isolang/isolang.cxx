@@ -280,7 +280,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS" },   // alias to be able to integrate localizations, rsc needs it
     { LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO,    "sr", "ME" },
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA" },
-    { LANGUAGE_SERBIAN,                             "sr", ""   },   // SERBIAN is only LID, MS-LCID not defined (was dupe of CROATIAN)
     { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS" },   // Serbian Latin in Serbia; kludge, needed to be sr_Latn_RS instead, script codes not supported yet
     { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU" },   // legacy Serbian Latin in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_Latn_CS instead, script codes not supported yet
     { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS" },   // Serbian Latin in Serbia and Montenegro; kludge, needed to be sr_Latn_CS instead, script codes not supported yet
