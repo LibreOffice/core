@@ -16,6 +16,24 @@
       "revId": "be5b9421b7504e18c4df075ffc56327492e8e732",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7g4\u003d",
+        "filename": "starmath/source/smdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2013-09-04T09:57:11Z",
+      "side": 1,
+      "message": "seems to be the case",
+      "parentUuid": "AAAAXn//7jc\u003d",
+      "revId": "be5b9421b7504e18c4df075ffc56327492e8e732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
