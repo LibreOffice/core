@@ -37,7 +37,7 @@ TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
 SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 
-    INIT( NULL, SVX_VALUE_TYPE_UNDEFINED, 0, String() )
+    INIT( NULL, SVX_VALUE_TYPE_UNDEFINED, 0, "" )
 
 {
 }
@@ -47,7 +47,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const sal_uInt16 nId ) :
 
-    INIT( pNumFormatter, SVX_VALUE_TYPE_UNDEFINED, 0, String() )
+    INIT( pNumFormatter, SVX_VALUE_TYPE_UNDEFINED, 0, "" )
 
 {
 }
@@ -67,7 +67,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
 
-    INIT( pNumFormatter, SVX_VALUE_TYPE_NUMBER, rVal, String() )
+    INIT( pNumFormatter, SVX_VALUE_TYPE_NUMBER, rVal, "" )
 
 {
 }

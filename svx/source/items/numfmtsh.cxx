@@ -672,8 +672,8 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
+    OUString            aStrComment;
+    OUString            aNewFormNInfo;
 
     short           nMyCat      = SELPOS_NONE;
 
@@ -713,8 +713,8 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
+    OUString            aStrComment;
+    OUString            aNewFormNInfo;
 
     short           nMyCat      = SELPOS_NONE;
 
@@ -793,8 +793,8 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
-    String          aStrComment;
-    String          aNewFormNInfo;
+    OUString            aStrComment;
+    OUString            aNewFormNInfo;
 
     nCurCurrencyEntryPos=0;
 
@@ -881,7 +881,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    String          aStrComment;
+    OUString        aStrComment;
     OUString        aNewFormNInfo;
     short           nMyCat = SELPOS_NONE;
 
@@ -1015,7 +1015,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
     for( size_t i = 0, nPos = nOldListCount; i < aWSStringsDtor.size(); ++i )
     {
         bool bFlag = true;
-        String aInsStr(aWSStringsDtor[i]);
+        OUString aInsStr(aWSStringsDtor[i]);
         size_t j;
         for( j=0; j < aList.size(); ++j )
         {
@@ -1075,8 +1075,8 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    String          aStrComment;
-    String          aNewFormNInfo;
+    OUString        aStrComment;
+    OUString        aNewFormNInfo;
 
     short           nMyCat      = SELPOS_NONE;
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&

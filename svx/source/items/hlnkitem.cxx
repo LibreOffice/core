@@ -152,7 +152,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
         while( nCnt-- )
         {
             sal_uInt16 nCurKey;
-            String aLibName, aMacName;
+            OUString aLibName, aMacName;
 
             rStrm >> nCurKey;
             // UNICODE: rStrm >> aLibName;
@@ -168,7 +168,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
         while( nCnt-- )
         {
             sal_uInt16 nCurKey, nScriptType;
-            String aLibName, aMacName;
+            OUString aLibName, aMacName;
 
             rStrm >> nCurKey;
 

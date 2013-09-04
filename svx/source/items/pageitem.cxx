@@ -123,8 +123,8 @@ SfxItemPresentation SvxPageItem::GetPresentation
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
-            String aUsageText = GetUsageText( eUse );
-            if (aUsageText.Len())
+            OUString aUsageText = GetUsageText( eUse );
+            if (!aUsageText.isEmpty())
             {
                 rText += cpDelimTmp + aUsageText;
             }
@@ -143,8 +143,8 @@ SfxItemPresentation SvxPageItem::GetPresentation
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
-            String aUsageText = GetUsageText( eUse );
-            if (aUsageText.Len())
+            OUString aUsageText = GetUsageText( eUse );
+            if (!aUsageText.isEmpty())
             {
                 rText += cpDelimTmp + aUsageText;
             }

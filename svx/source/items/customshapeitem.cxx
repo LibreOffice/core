@@ -24,11 +24,11 @@ using namespace ::std;
 using namespace com::sun::star;
 
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, String() )
+:   SfxStringItem( SDRATTR_CUSTOMSHAPE_ENGINE, "" )
 {}
 
 SdrCustomShapeDataItem::SdrCustomShapeDataItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
+:   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, "" )
 {}
 
 TYPEINIT1_FACTORY( SdrCustomShapeGeometryItem, SfxPoolItem , new  SdrCustomShapeGeometryItem);
@@ -292,7 +292,7 @@ const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeom
 }
 
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
-:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
+:   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, "" )
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
