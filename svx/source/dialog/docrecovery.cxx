@@ -829,7 +829,7 @@ void SaveProgressDialog::end()
 //===============================================
 RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
                                            sal_uInt16       nFlags,
-                                     const String&      sText )
+                                     const OUString&        sText )
     : SvLBoxString( pEntry, nFlags, sText )
 {
 }
@@ -1336,9 +1336,9 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
 }
 
 //===============================================
-String RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
+OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 {
-    String sStatus;
+    OUString sStatus;
     switch ( rInfo.RecoveryState )
     {
         case E_SUCCESSFULLY_RECOVERED :
@@ -1764,12 +1764,12 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             }
         }
 
-        String ErrorRepSendDialog::GetDocType( void ) const
+        OUString ErrorRepSendDialog::GetDocType( void ) const
         {
             return maDocTypeED.GetText();
         }
 
-        String ErrorRepSendDialog::GetUsing( void ) const
+        OUString ErrorRepSendDialog::GetUsing( void ) const
         {
             return maUsingML.GetText();
         }
@@ -1779,7 +1779,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             return maContactCB.IsChecked();
         }
 
-        String ErrorRepSendDialog::GetEMailAddress( void ) const
+        OUString ErrorRepSendDialog::GetEMailAddress( void ) const
         {
             return maEMailAddrED.GetText();
         }

@@ -494,7 +494,7 @@ class SaveProgressDialog : public ModalDialog
 
         FixedText       m_aHintFT;
         FixedText       m_aProgrFT;
-        String          m_aProgrBaseTxt;
+        OUString        m_aProgrBaseTxt;
         Window          m_aProgrParent;
 
         // @short   TODO
@@ -548,7 +548,7 @@ public:
     /** @short TODO */
     RecovDocListEntry(      SvTreeListEntry* pEntry,
                             sal_uInt16       nFlags,
-                      const String&      sText );
+                      const OUString&      sText );
 
     //---------------------------------------
     /** @short TODO */
@@ -612,11 +612,11 @@ class RecoveryDialog : public IExtendedTabPage
         FixedLine       m_aBottomFL;
         PushButton      m_aNextBtn;
         CancelButton    m_aCancelBtn;
-        String          m_aNextStr;
-        String          m_aTitleRecoveryInProgress;
-        String          m_aTitleRecoveryReport;
-        String          m_aRecoveryOnlyFinish;
-        String          m_aRecoveryOnlyFinishDescr;
+        OUString        m_aNextStr;
+        OUString        m_aTitleRecoveryInProgress;
+        OUString        m_aTitleRecoveryReport;
+        OUString        m_aRecoveryOnlyFinish;
+        OUString        m_aRecoveryOnlyFinishDescr;
 
         PushButton*     m_pDefButton;
         RecoveryCore*   m_pCore;
@@ -678,7 +678,7 @@ class RecoveryDialog : public IExtendedTabPage
 
         //---------------------------------------
         /** @short TODO */
-        String impl_getStatusString( const TURLInfo& rInfo ) const;
+        OUString impl_getStatusString( const TURLInfo& rInfo ) const;
 };
 
 //===============================================
@@ -789,13 +789,13 @@ class BrokenRecoveryDialog : public ModalDialog
                 , mbAllowContact( false )
             {}
 
-            String              maHTTPProxyServer;
-            String              maHTTPProxyPort;
+            OUString            maHTTPProxyServer;
+            OUString            maHTTPProxyPort;
             int                 miHTTPConnectionType;
             bool                mbAllowContact;
-            String              maReturnAddress;
-            String              maSubject;
-            String              maBody;
+            OUString            maReturnAddress;
+            OUString            maSubject;
+            OUString            maBody;
         };
 
         class ErrorDescriptionEdit : public MultiLineEdit
@@ -846,10 +846,10 @@ class BrokenRecoveryDialog : public ModalDialog
                                 ErrorRepSendDialog( Window* _pParent );
             virtual             ~ErrorRepSendDialog();
 
-            String              GetDocType( void ) const;
-            String              GetUsing( void ) const;
+            OUString            GetDocType( void ) const;
+            OUString            GetUsing( void ) const;
             bool                IsContactAllowed( void ) const;
-            String              GetEMailAddress( void ) const;
+            OUString            GetEMailAddress( void ) const;
 
             bool                ReadParams();
             bool                SaveParams();
