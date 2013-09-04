@@ -504,7 +504,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             --nIndex;
 
         const SmNode *pTree = pDoc->GetFormulaTree();
-        const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( (xub_StrLen) nIndex );
+        const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( nIndex );
         //! pNode may be 0 if the index belongs to a char that was inserted
         //! only for the accessible text!
         if (pNode)
@@ -1450,7 +1450,7 @@ void SmTextForwarder::AppendParagraph()
 
 sal_uInt16 SmTextForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet &rSet )
 {
-    xub_StrLen nRes = 0;
+    sal_uInt16 nRes = 0;
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine && nPara < pEditEngine->GetParagraphCount())
     {
