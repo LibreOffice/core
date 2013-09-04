@@ -3651,7 +3651,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
 //------------------------------------------------------------------------------
 namespace
 {
-    void displayErrorSetFocus( const String& _rMessage, const Reference< XControl >& _rxFocusControl, Window* _pDialogParent )
+    void displayErrorSetFocus( const OUString& _rMessage, const Reference< XControl >& _rxFocusControl, Window* _pDialogParent )
     {
         SQLContext aError;
         aError.Message = SVX_RESSTR(RID_STR_WRITEERROR);
@@ -3777,8 +3777,8 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
                 continue;
 
-            String sMessage( SVX_RESSTR( RID_ERR_FIELDREQUIRED ) );
-            sMessage.SearchAndReplace( OUString('#'), rColInfo.sName );
+            OUString sMessage( SVX_RESSTR( RID_ERR_FIELDREQUIRED ) );
+            sMessage = sMessage.replaceFirst( "#", rColInfo.sName );
 
             // the control to focus
             Reference< XControl > xControl( rColInfo.xFirstControlWithInputRequired );
@@ -4036,12 +4036,12 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     }
     // default handling: instantiate an interaction handler and let it handle the request
 
-    String sTitle;
+    OUString sTitle;
     sal_Int32 nLength = aEvent.Rows;
     if ( nLength > 1 )
     {
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
-        sTitle.SearchAndReplace( OUString('#'), OUString::number(nLength) );
+        sTitle = sTitle.replaceFirst( "#", OUString::number(nLength) );
     }
     else
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );

@@ -1771,20 +1771,20 @@ namespace svxform
         {
             // ---------------
             // initialize UNDO
-            String aUndoStr;
+            OUString aUndoStr;
             if ( m_arrCurrentSelection.size() == 1 )
             {
                 aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE);
                 if (m_nFormsSelected)
-                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RESSTR( RID_STR_FORM ) );
+                    aUndoStr = aUndoStr.replaceFirst( "#", SVX_RESSTR( RID_STR_FORM ) );
                 else
                     // it must be a control (else the root would be selected, but it cannot be deleted)
-                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RESSTR( RID_STR_CONTROL ) );
+                    aUndoStr = aUndoStr.replaceFirst( "#", SVX_RESSTR( RID_STR_CONTROL ) );
             }
             else
             {
                 aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
-                aUndoStr.SearchAndReplaceAscii( "#", OUString::number( m_arrCurrentSelection.size() ) );
+                aUndoStr = aUndoStr.replaceFirst( "#", OUString::number( m_arrCurrentSelection.size() ) );
             }
             pFormModel->BegUndo(aUndoStr);
         }

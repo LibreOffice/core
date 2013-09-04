@@ -1021,9 +1021,9 @@ void FmUndoPropertyAction::Redo()
 //------------------------------------------------------------------------------
 OUString FmUndoPropertyAction::GetComment() const
 {
-    String aStr(static_STR_UNDO_PROPERTY);
+    OUString aStr(static_STR_UNDO_PROPERTY);
 
-    aStr.SearchAndReplace( OUString('#'), aPropertyName );
+    aStr = aStr.replaceFirst( "#", aPropertyName );
     return aStr;
 }
 

@@ -63,15 +63,15 @@ namespace svx
         );
         ~DatabaseLocationInputController_Impl();
 
-        bool    prepareCommit();
-        void    setURL( const String& _rURL );
-        String  getURL() const;
+        bool     prepareCommit();
+        void     setURL( const OUString& _rURL );
+        OUString getURL() const;
 
     private:
-        void    impl_initFilterProperties_nothrow();
-        void    impl_onBrowseButtonClicked();
-        void    impl_onLocationModified();
-        String  impl_getCurrentURL() const;
+        void     impl_initFilterProperties_nothrow();
+        void     impl_onBrowseButtonClicked();
+        void     impl_onLocationModified();
+        OUString impl_getCurrentURL() const;
 
         DECL_LINK( OnControlAction, VclWindowEvent* );
 
@@ -141,14 +141,14 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void DatabaseLocationInputController_Impl::setURL( const String& _rURL )
+    void DatabaseLocationInputController_Impl::setURL( const OUString& _rURL )
     {
         ::svt::OFileNotation aTransformer( _rURL );
         m_rLocationInput.SetText( aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
     }
 
     //--------------------------------------------------------------------
-    String DatabaseLocationInputController_Impl::getURL() const
+    OUString DatabaseLocationInputController_Impl::getURL() const
     {
         return impl_getCurrentURL();
     }
@@ -219,10 +219,10 @@ namespace svx
     }
 
     // -----------------------------------------------------------------------------
-    String DatabaseLocationInputController_Impl::impl_getCurrentURL() const
+    OUString DatabaseLocationInputController_Impl::impl_getCurrentURL() const
     {
-        String sCurrentFile( m_rLocationInput.GetText() );
-        if ( sCurrentFile.Len() )
+        OUString sCurrentFile( m_rLocationInput.GetText() );
+        if ( !sCurrentFile.isEmpty() )
         {
             ::svt::OFileNotation aCurrentFile( sCurrentFile );
             sCurrentFile = aCurrentFile.get( ::svt::OFileNotation::N_URL );

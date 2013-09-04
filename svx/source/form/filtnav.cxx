@@ -1609,7 +1609,7 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
             continue;
 
         FmFilterItem* pFilterItem = _pTargetItems->Find( pLookupItem->GetComponentIndex() );
-        String aText = pLookupItem->GetText();
+        OUString aText = pLookupItem->GetText();
         if ( !pFilterItem )
         {
             pFilterItem = new FmFilterItem( _pTargetItems, pLookupItem->GetFieldName(), aText, pLookupItem->GetComponentIndex() );

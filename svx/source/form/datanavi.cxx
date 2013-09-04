@@ -667,7 +667,7 @@ namespace svxform
                     if ( aDlg.Execute() == RET_OK )
                     {
                         // Set the new name
-                        String sNewName;
+                        OUString sNewName;
                         if ( DGTInstance == m_eGroup )
                         {
                             try
@@ -684,13 +684,13 @@ namespace svxform
                         {
                             try
                             {
-                                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                                OUString sDelim( ": " );
                                 OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                sNewName += String( sTemp );
+                                sNewName += sTemp;
                                 sNewName += sDelim;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                                sNewName += String( sTemp );
+                                sNewName += sTemp;
                             }
                             catch ( Exception& )
                             {
@@ -972,28 +972,28 @@ namespace svxform
                 pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
-                sEntry += String( sTemp );
+                OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
+                sEntry += sTemp;
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += String( lcl_MethodString::get().toUI( sTemp ) );
+                sEntry +=  lcl_MethodString::get().toUI( sTemp );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
-                sEntry += String( sTemp );
+                sEntry += sTemp;
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Bind
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
-                sEntry += String( sTemp );
+                sEntry += sTemp;
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += String( lcl_ReplaceString::get().toUI( sTemp ) );
+                sEntry += lcl_ReplaceString::get().toUI( sTemp );
                 m_aItemList.InsertEntry( sEntry, aImage, aImage, pEntry );
             }
             catch ( Exception& )
@@ -1005,13 +1005,13 @@ namespace svxform
         {
             try
             {
-                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                OUString sDelim( ": " );
                 OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                sName += String( sTemp );
+                sName += sTemp;
                 sName += sDelim;
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                sName += String( sTemp );
+                sName += sTemp;
                 pEntry = m_aItemList.InsertEntry(
                     sName, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
             }
@@ -1048,29 +1048,29 @@ namespace svxform
                 m_aItemList.SetEntryText( pEntry, sTemp );
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
-                sEntry += String( sTemp );
+                OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
+                sEntry += sTemp;
                 sal_uIntPtr nPos = 0;
                 SvTreeListEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
-                sEntry += String( sTemp );
+                sEntry += sTemp;
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
-                sEntry += String( sTemp );
+                sEntry += sTemp;
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
-                sEntry += String( lcl_MethodString::get().toUI( sTemp ) );
+                sEntry += lcl_MethodString::get().toUI( sTemp );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
-                sEntry += String( lcl_ReplaceString::get().toUI( sTemp ) );
+                sEntry += lcl_ReplaceString::get().toUI( sTemp );
                 pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
             }
@@ -1146,8 +1146,8 @@ namespace svxform
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
                 QueryBox aQBox( this, SVX_RES( nResId ) );
-                String sMessText = aQBox.GetMessText();
-                sMessText.SearchAndReplace( sSearch, String( sName ) );
+                OUString sMessText = aQBox.GetMessText();
+                sMessText = sMessText.replaceFirst( sSearch, sName);
                 aQBox.SetMessText( sMessText );
                 if ( aQBox.Execute() == RET_YES )
                 {
@@ -1209,7 +1209,7 @@ namespace svxform
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
 
         m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
-        String sRet;
+        OUString sRet;
         m_bHasModel = true;
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
 
@@ -1310,20 +1310,20 @@ namespace svxform
                         {
                             Image aImage1 = rImageList.GetImage( IID_ELEMENT );
                             Image aImage2 = rImageList.GetImage( IID_ELEMENT );
-                            String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                            OUString sDelim( ": " );
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
                                 Any aAny = xNum->nextElement();
                                 if ( aAny >>= xPropSet )
                                 {
-                                    String sEntry;
+                                    OUString sEntry;
                                     OUString sTemp;
                                     xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                    sEntry += String( sTemp );
+                                    sEntry += sTemp;
                                     sEntry += sDelim;
                                     xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                                    sEntry += String( sTemp );
+                                    sEntry += sTemp;
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_aItemList.InsertEntry(
@@ -1659,7 +1659,7 @@ namespace svxform
                         bShowDialog = false;
                         if ( aDlg.Execute() == RET_OK )
                         {
-                            String sNewName = aDlg.GetName();
+                            OUString sNewName = aDlg.GetName();
                             sal_Bool bDocumentData = aDlg.GetModifyDoc();
 
                             if ( m_aModelsBox.GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
@@ -1742,8 +1742,8 @@ namespace svxform
                             }
                         }
 
-                        String sNewName = aDlg.GetName();
-                        if ( sNewName.Len() > 0 && ( sNewName != String( sSelectedModel ) ) )
+                        OUString sNewName = aDlg.GetName();
+                        if ( !sNewName.isEmpty() && ( sNewName != sSelectedModel ) )
                         {
                             try
                             {
@@ -1836,10 +1836,10 @@ namespace svxform
                         aDlg.SetName( pPage->GetInstanceName() );
                         aDlg.SetURL( pPage->GetInstanceURL() );
                         aDlg.SetLinkInstance( pPage->GetLinkOnce() );
-                        String sOldName = aDlg.GetName();
+                        OUString sOldName = aDlg.GetName();
                         if ( aDlg.Execute() == RET_OK )
                         {
-                            String sNewName = aDlg.GetName();
+                            OUString sNewName = aDlg.GetName();
                             OUString sURL = aDlg.GetURL();
                             bool bLinkOnce = aDlg.IsLinkInstance();
                             try
@@ -1868,7 +1868,7 @@ namespace svxform
                     XFormsPage* pPage = GetCurrentPage( nId );
                     if ( pPage )
                     {
-                        String sInstName = pPage->GetInstanceName();
+                        OUString sInstName = pPage->GetInstanceName();
                         QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
                         OUString sMessText = aQBox.GetMessText();
                         sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
@@ -2103,9 +2103,9 @@ namespace svxform
                     // instance page
                     nPagePos = m_aTabCtrl.GetPagePos( nId );
                 m_bIsNotifyDisabled = true;
-                String sText = pPage->SetModel( xFormsModel, nPagePos );
+                OUString sText = pPage->SetModel( xFormsModel, nPagePos );
                 m_bIsNotifyDisabled = false;
-                if ( sText.Len() > 0 )
+                if ( !sText.isEmpty() )
                     m_aTabCtrl.SetPageText( nId, sText );
             }
         }
@@ -2213,7 +2213,7 @@ namespace svxform
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            String sTemp = OUString("untitled");
+            OUString sTemp("untitled");
             sTemp += OUString::number( nPageId );
             sInstName = sTemp;
         }
@@ -2595,7 +2595,7 @@ namespace svxform
             sPropName = PN_CALCULATE_EXPR;
         AddConditionDialog aDlg( this, sPropName, m_xTempBinding );
         bool bIsDefBtn = ( &m_aDefaultBtn == pBtn );
-        String sCondition;
+        OUString sCondition;
         if ( bIsDefBtn )
             sCondition = m_aDefaultED.GetText();
         else
@@ -2609,7 +2609,7 @@ namespace svxform
 
         if ( aDlg.Execute() == RET_OK )
         {
-            String sNewCondition = aDlg.GetCondition();
+            OUString sNewCondition = aDlg.GetCondition();
             if ( bIsDefBtn )
                 m_aDefaultED.SetText( sNewCondition );
             else
@@ -2939,7 +2939,7 @@ namespace svxform
                         OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
-                            sal_uInt16 nPos = m_aDataTypeLB.GetEntryPos( String( sTemp ) );
+                            sal_uInt16 nPos = m_aDataTypeLB.GetEntryPos( sTemp );
                             if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                                 nPos = m_aDataTypeLB.InsertEntry( sTemp );
                             m_aDataTypeLB.SelectEntryPos( nPos );
@@ -2956,7 +2956,7 @@ namespace svxform
 
     void AddDataItemDialog::InitText( DataItemType _eType )
     {
-        String sText;
+        OUString sText;
 
         switch ( _eType )
         {
@@ -3105,9 +3105,9 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
     {
-        String sCondition = comphelper::string::strip(m_aConditionED.GetText(), ' ');
-        String sResult;
-        if ( sCondition.Len() > 0 )
+        OUString sCondition = comphelper::string::strip(m_aConditionED.GetText(), ' ');
+        OUString sResult;
+        if ( !sCondition.isEmpty() )
         {
             try
             {
@@ -3148,8 +3148,8 @@ namespace svxform
     {
         static long aStaticTabs[]= { 3, 0, 35, 200 };
         m_aNamespacesList.SvSimpleTable::SetTabs( aStaticTabs );
-        String sHeader = SVX_RESSTR( STR_HEADER_PREFIX );
-        sHeader += '\t';
+        OUString sHeader = SVX_RESSTR( STR_HEADER_PREFIX );
+        sHeader += "\t";
         sHeader += SVX_RESSTR(STR_HEADER_URL);
         m_aNamespacesList.InsertHeaderEntry(
             sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
@@ -3190,8 +3190,8 @@ namespace svxform
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, false );
             if ( aDlg.Execute() == RET_OK )
             {
-                String sEntry = aDlg.GetPrefix();
-                sEntry += '\t';
+                OUString sEntry = aDlg.GetPrefix();
+                sEntry += "\t";
                 sEntry += aDlg.GetURL();
                 m_aNamespacesList.InsertEntry( sEntry );
             }
@@ -3201,7 +3201,7 @@ namespace svxform
             ManageNamespaceDialog aDlg( this, m_pConditionDlg, true );
             SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            String sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
             aDlg.SetNamespace(
                 sPrefix,
                 m_aNamespacesList.GetEntryText( pEntry, 1 ) );
@@ -3281,9 +3281,9 @@ namespace svxform
                     Any aAny = m_rNamespaces->getByName( sPrefix );
                     if ( aAny >>= sURL )
                     {
-                        String sEntry( sPrefix );
-                        sEntry += '\t';
-                        sEntry += String( sURL );
+                        OUString sEntry( sPrefix );
+                        sEntry += "\t";
+                        sEntry += sURL;
 
                         m_aNamespacesList.InsertEntry( sEntry );
                     }
@@ -3333,7 +3333,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
-        String sPrefix = m_aPrefixED.GetText();
+        OUString sPrefix = m_aPrefixED.GetText();
 
         try
         {
@@ -3463,8 +3463,8 @@ namespace svxform
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
                 sTemp = m_aRefED.GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
-                String sEntry = m_aBindLB.GetSelectEntry();
-                sEntry.Erase( sEntry.Search( ':' ) );
+                OUString sEntry = m_aBindLB.GetSelectEntry();
+                sEntry = sEntry.replaceFirst( ":", "" );
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
                 sTemp = lcl_ReplaceString::get().toAPI( m_aReplaceLB.GetSelectEntry() );
@@ -3501,20 +3501,20 @@ namespace svxform
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                     if ( xNum.is() && xNum->hasMoreElements() )
                     {
-                        String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                        OUString sDelim( ": " );
                         while ( xNum->hasMoreElements() )
                         {
                             Reference< XPropertySet > xPropSet;
                             Any aAny = xNum->nextElement();
                             if ( aAny >>= xPropSet )
                             {
-                                String sEntry;
+                                OUString sEntry;
                                 OUString sTemp;
                                 xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
-                                sEntry += String( sTemp );
+                                sEntry += sTemp;
                                 sEntry += sDelim;
                                 xPropSet->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
-                                sEntry += String( sTemp );
+                                sEntry += sTemp;
                                 m_aBindLB.InsertEntry( sEntry );
 
                                 if ( !m_xTempBinding.is() )
@@ -3564,13 +3564,13 @@ namespace svxform
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sTemp = lcl_MethodString::get().toUI( sTemp );
-                sal_uInt16 nPos = m_aMethodLB.GetEntryPos( String( sTemp ) );
+                sal_uInt16 nPos = m_aMethodLB.GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_aMethodLB.InsertEntry( sTemp );
                 m_aMethodLB.SelectEntryPos( nPos );
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                nPos = m_aBindLB.GetEntryPos( String( sTemp ) );
+                nPos = m_aBindLB.GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_aBindLB.InsertEntry( sTemp );
                 m_aBindLB.SelectEntryPos( nPos );
@@ -3579,7 +3579,7 @@ namespace svxform
                 sTemp = lcl_ReplaceString::get().toUI( sTemp );
                 if ( sTemp.isEmpty() )
                     sTemp = m_aReplaceLB.GetEntry(0); // first entry == "none"
-                nPos = m_aReplaceLB.GetEntryPos( String( sTemp ) );
+                nPos = m_aReplaceLB.GetEntryPos( sTemp );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_aReplaceLB.InsertEntry( sTemp );
                 m_aReplaceLB.SelectEntryPos( nPos );
@@ -3666,8 +3666,8 @@ namespace svxform
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
         aDlg.AddFilter( m_sAllFilterName, OUString(FILEDIALOG_FILTER_ALL) );
-        String sFilterName( "XML" );
-        aDlg.AddFilter( sFilterName, OUString("*.xml") );
+        OUString sFilterName( "XML" );
+        aDlg.AddFilter( sFilterName, "*.xml" );
         aDlg.SetCurrentFilter( sFilterName );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 

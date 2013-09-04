@@ -61,7 +61,7 @@ OSystemParseContext::~OSystemParseContext()
 //-----------------------------------------------------------------------------
 OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
-    String aMsg;
+    OUString aMsg;
     SolarMutexGuard aGuard;
     switch (_eCode)
     {

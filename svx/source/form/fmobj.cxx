@@ -73,7 +73,7 @@ FmFormObj::FmFormObj(const OUString& rModelName)
 
 //------------------------------------------------------------------
 FmFormObj::FmFormObj()
-          :SdrUnoObj                ( String()  )
+          :SdrUnoObj                ( ""  )
           ,m_nPos                   ( -1        )
           ,m_pLastKnownRefDevice    ( NULL      )
 {
@@ -418,8 +418,8 @@ namespace
             xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
 
         // while the current content is a form
-        String sReturn;
-        String sCurrentIndex;
+        OUString sReturn;
+        OUString sCurrentIndex;
         while (xChild.is())
         {
             // get the content's relative pos within it's parent container
@@ -427,9 +427,9 @@ namespace
 
             // prepend this current relaive pos
             sCurrentIndex = OUString::number(nPos);
-            if (sReturn.Len() != 0)
+            if (!sReturn.isEmpty())
             {
-                sCurrentIndex += '\\';
+                sCurrentIndex += "\\";
                 sCurrentIndex += sReturn;
             }
 

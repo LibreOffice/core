@@ -417,7 +417,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         }
 
         // set the new title according to the selected object
-        String sTitle;
+        OUString sTitle;
 
         if ( _rSelection.empty() )
         {
