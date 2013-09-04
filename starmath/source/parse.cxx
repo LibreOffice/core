@@ -302,14 +302,14 @@ static const SmTokenTableEntry aTokenTable[] =
     { "", TEND, '\0', 0, 0}
 };
 
-const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
+const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 {
     const SmTokenTableEntry * pRes = 0;
-    if (rName.Len())
+    if (!rName.isEmpty())
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aTokenTable); ++i)
         {
-            if (rName.EqualsIgnoreCaseAscii( aTokenTable[i].pIdent ))
+            if (rName.equalsIgnoreAsciiCase( OUString::createFromAscii(aTokenTable[i].pIdent) ))
             {
                 pRes = &aTokenTable[i];
                 break;
@@ -325,12 +325,12 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
 
 #if OSL_DEBUG_LEVEL > 1
 
-bool SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
+bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     // returns 'true' iff cChar is '\0' or a delimeter
 {
-    OSL_ENSURE( nPos <= rTxt.Len(), "index out of range" );
+    OSL_ENSURE( nPos <= rTxt.getLength(), "index out of range" );
 
-    sal_Unicode cChar = rTxt.GetChar( nPos );
+    sal_Unicode cChar = rTxt[nPos];
     if(!cChar)
         return true;
 
@@ -351,22 +351,22 @@ bool SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
 
 #endif
 
-void SmParser::Insert(const String &rText, sal_uInt16 nPos)
+void SmParser::Insert(const OUString &rText, sal_Int32 nPos)
 {
-    m_aBufferString.Insert(rText, nPos);
+    m_aBufferString = m_aBufferString.replaceAt(nPos, 0, rText);
 
-    xub_StrLen  nLen = rText.Len();
+    sal_Int32 nLen = rText.getLength();
     m_nBufferIndex = m_nBufferIndex + nLen;
     m_nTokenIndex  = m_nTokenIndex + nLen;
 }
 
 
-void SmParser::Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText )
+void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 {
-    OSL_ENSURE( nPos + nLen <= m_aBufferString.Len(), "argument mismatch" );
+    OSL_ENSURE( nPos + nLen <= m_aBufferString.getLength(), "argument mismatch" );
 
-    m_aBufferString.Replace( nPos, nLen, rText );
-    sal_Int16  nChg = rText.Len() - nLen;
+    m_aBufferString = m_aBufferString.replaceAt( nPos, nLen, rText );
+    sal_Int32 nChg = rText.getLength() - nLen;
     m_nBufferIndex = m_nBufferIndex + nChg;
     m_nTokenIndex = m_nTokenIndex + nChg;
 }
@@ -393,11 +393,11 @@ const sal_Int32 coNumContFlags =
 
 void SmParser::NextToken()
 {
-    static const String aEmptyStr;
+    static const OUString aEmptyStr;
 
-    xub_StrLen  nBufLen = m_aBufferString.Len();
+    sal_Int32   nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
-    xub_StrLen  nRealStart;
+    sal_Int32   nRealStart;
     bool        bCont;
     CharClass   aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
     do
@@ -426,13 +426,13 @@ void SmParser::NextToken()
                                      coContFlags, aEmptyStr);
         }
 
-        nRealStart = m_nBufferIndex + sal::static_int_cast< xub_StrLen >(aRes.LeadingWhiteSpace);
+        nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
         m_nBufferIndex = nRealStart;
 
         bCont = false;
         if ( aRes.TokenType == 0  &&
                 nRealStart < nBufLen &&
-                '\n' == m_aBufferString.GetChar( nRealStart ) )
+                '\n' == m_aBufferString[ nRealStart ] )
         {
             // keep data needed for tokens row and col entry up to date
             ++m_Row;
@@ -441,12 +441,12 @@ void SmParser::NextToken()
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
-            if (m_aBufferString.EqualsAscii("%%", nRealStart, 2))
+            if (m_aBufferString.copy(nRealStart, 2) == "%%")
             {
                 //SkipComment
                 m_nBufferIndex = nRealStart + 2;
                 while (m_nBufferIndex < nBufLen  &&
-                    '\n' != m_aBufferString.GetChar( m_nBufferIndex ))
+                    '\n' != m_aBufferString[ m_nBufferIndex ])
                     ++m_nBufferIndex;
                 bCont = true;
             }
@@ -477,10 +477,10 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar  = '\0';
         m_aCurToken.nGroup     = 0;
         m_aCurToken.nLevel     = 5;
-        m_aCurToken.aText      = m_aBufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) );
+        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, n );
 
 #if OSL_DEBUG_LEVEL > 1
-        if (!IsDelimiter( m_aBufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
+        if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
         {
             OSL_FAIL( "identifier really finished? (compatibility!)" );
         }
@@ -500,7 +500,7 @@ void SmParser::NextToken()
     {
         sal_Int32 n = aRes.EndPos - nRealStart;
         OSL_ENSURE( n >= 0, "length < 0" );
-        String aName( m_aBufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) ) );
+        OUString aName( m_aBufferString.copy( nRealStart, n ) );
         const SmTokenTableEntry *pEntry = GetTokenTableEntry( aName );
 
         if (pEntry)
@@ -520,14 +520,14 @@ void SmParser::NextToken()
             m_aCurToken.aText      = aName;
 
 #if OSL_DEBUG_LEVEL > 1
-            if (!IsDelimiter( m_aBufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
+            if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
             {
                 OSL_FAIL( "identifier really finished? (compatibility!)" );
             }
 #endif
         }
     }
-    else if (aRes.TokenType == 0  &&  '_' == m_aBufferString.GetChar( nRealStart ))
+    else if (aRes.TokenType == 0  &&  '_' == m_aBufferString[ nRealStart ])
     {
         m_aCurToken.eType    = TRSUB;
         m_aCurToken.cMathChar = '\0';
@@ -542,13 +542,12 @@ void SmParser::NextToken()
         sal_Int32   &rnEndPos = aRes.EndPos;
         if (rnEndPos - nRealStart <= 2)
         {
-            sal_Unicode ch = m_aBufferString.GetChar(nRealStart);
+            sal_Unicode ch = m_aBufferString[ nRealStart ];
             switch (ch)
             {
                 case '<':
                     {
-                        if (m_aBufferString.
-                                EqualsAscii("<<", nRealStart, 2))
+                        if (m_aBufferString.copy(nRealStart, 2) == "<<")
                         {
                             m_aCurToken.eType    = TLL;
                             m_aCurToken.cMathChar = MS_LL;
@@ -558,8 +557,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.
-                                     EqualsAscii("<=", nRealStart, 2))
+                        else if (m_aBufferString.copy(nRealStart, 2) == "<=")
                         {
                             m_aCurToken.eType    = TLE;
                             m_aCurToken.cMathChar = MS_LE;
@@ -569,8 +567,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.
-                                     EqualsAscii("<>", nRealStart, 2))
+                        else if (m_aBufferString.copy(nRealStart, 2) == "<>")
                         {
                             m_aCurToken.eType    = TNEQ;
                             m_aCurToken.cMathChar = MS_NEQ;
@@ -580,8 +577,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.
-                                     EqualsAscii("<?>", nRealStart, 3))
+                        else if (m_aBufferString.copy(nRealStart, 3) == "<?>")
                         {
                             m_aCurToken.eType    = TPLACE;
                             m_aCurToken.cMathChar = MS_PLACE;
@@ -603,8 +599,7 @@ void SmParser::NextToken()
                     break;
                 case '>':
                     {
-                        if (m_aBufferString.
-                                EqualsAscii(">=", nRealStart, 2))
+                        if (m_aBufferString.copy(nRealStart, 2) == ">=")
                         {
                             m_aCurToken.eType    = TGE;
                             m_aCurToken.cMathChar = MS_GE;
@@ -614,8 +609,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.
-                                     EqualsAscii(">>", nRealStart, 2))
+                        else if (m_aBufferString.copy(nRealStart, 2) == ">>")
                         {
                             m_aCurToken.eType    = TGG;
                             m_aCurToken.cMathChar = MS_GG;
@@ -645,7 +639,7 @@ void SmParser::NextToken()
         sal_Int32   &rnEndPos = aRes.EndPos;
         if (rnEndPos - nRealStart == 1)
         {
-            sal_Unicode ch = m_aBufferString.GetChar(nRealStart);
+            sal_Unicode ch = m_aBufferString[ nRealStart ];
             switch (ch)
             {
                 case '%':
@@ -653,7 +647,7 @@ void SmParser::NextToken()
                         //! modifies aRes.EndPos
 
                         OSL_ENSURE( rnEndPos >= nBufLen  ||
-                                    '%' != m_aBufferString.GetChar( sal::static_int_cast< xub_StrLen >(rnEndPos) ),
+                                    '%' != m_aBufferString[ rnEndPos ],
                                 "unexpected comment start" );
 
                         // get identifier of user-defined character
@@ -664,8 +658,7 @@ void SmParser::NextToken()
                                 coContFlags,
                                 aEmptyStr );
 
-                        xub_StrLen nTmpStart = sal::static_int_cast< xub_StrLen >(rnEndPos +
-                                                    aTmpRes.LeadingWhiteSpace);
+                        sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
 
                         // default setting for the case that no identifier
                         // i.e. a valid symbol-name is following the '%'
@@ -674,16 +667,16 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar  = '\0';
                         m_aCurToken.nGroup     = 0;
                         m_aCurToken.nLevel     = 5;
-                        m_aCurToken.aText      = String();
-                        m_aCurToken.nRow       = sal::static_int_cast< xub_StrLen >(m_Row);
+                        m_aCurToken.aText      = OUString();
+                        m_aCurToken.nRow       = m_Row;
                         m_aCurToken.nCol       = nTmpStart - m_nColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
-                            xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
+                            sal_Int32 n = aTmpRes.EndPos - nTmpStart;
                             m_aCurToken.eType      = TSPECIAL;
-                            m_aCurToken.aText      = m_aBufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
+                            m_aCurToken.aText      = m_aBufferString.copy( nTmpStart-1, n+1 );
 
                             OSL_ENSURE( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
@@ -781,8 +774,7 @@ void SmParser::NextToken()
                     break;
                 case '#':
                     {
-                        if (m_aBufferString.
-                                EqualsAscii("##", nRealStart, 2))
+                        if (m_aBufferString.copy(nRealStart, 2) == "##")
                         {
                             m_aCurToken.eType    = TDPOUND;
                             m_aCurToken.cMathChar = '\0';
@@ -840,8 +832,7 @@ void SmParser::NextToken()
                     break;
                 case '+':
                     {
-                        if (m_aBufferString.
-                                EqualsAscii("+-", nRealStart, 2))
+                        if (m_aBufferString.copy(nRealStart, 2) == "+-")
                         {
                             m_aCurToken.eType    = TPLUSMINUS;
                             m_aCurToken.cMathChar = MS_PLUSMINUS;
@@ -863,8 +854,7 @@ void SmParser::NextToken()
                     break;
                 case '-':
                     {
-                        if (m_aBufferString.
-                                EqualsAscii("-+", nRealStart, 2))
+                        if (m_aBufferString.copy(nRealStart, 2) == "-+")
                         {
                             m_aCurToken.eType    = TMINUSPLUS;
                             m_aCurToken.cMathChar = MS_MINUSPLUS;
@@ -894,16 +884,15 @@ void SmParser::NextToken()
                         m_aCurToken.nGroup       = 0;
                         m_aCurToken.nLevel    = 5;
 
-                        xub_StrLen nTxtStart = m_nBufferIndex;
+                        sal_Int32 nTxtStart = m_nBufferIndex;
                         sal_Unicode cChar;
                         do
                         {
-                            cChar = m_aBufferString.GetChar( ++m_nBufferIndex );
+                            cChar = m_aBufferString[ ++m_nBufferIndex ];
                         }
                         while ( cChar == '.' || rtl::isAsciiDigit( cChar ) );
 
-                        m_aCurToken.aText = m_aBufferString.Copy( sal::static_int_cast< xub_StrLen >(nTxtStart),
-                                                            sal::static_int_cast< xub_StrLen >(m_nBufferIndex - nTxtStart) );
+                        m_aCurToken.aText = m_aBufferString.copy( nTxtStart, m_nBufferIndex - nTxtStart );
                         aRes.EndPos = m_nBufferIndex;
                     }
                     break;
@@ -939,13 +928,13 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar  = '\0';
         m_aCurToken.nGroup     = 0;
         m_aCurToken.nLevel     = 5;
-        m_aCurToken.aText      = m_aBufferString.Copy( nRealStart, 1 );
+        m_aCurToken.aText      = m_aBufferString.copy( nRealStart, 1 );
 
         aRes.EndPos = nRealStart + 1;
     }
 
     if (TEND != m_aCurToken.eType)
-        m_nBufferIndex = sal::static_int_cast< xub_StrLen >(aRes.EndPos);
+        m_nBufferIndex = aRes.EndPos;
 }
 
 
@@ -995,7 +984,7 @@ void SmParser::Align()
         if (CONVERT_40_TO_50 == GetConversion())
             // encapsulate expression to be aligned in group braces
             // (here group-open brace)
-        {   Insert(OUString('{'), GetTokenIndex());
+        {   Insert("{", GetTokenIndex());
             bNeedGroupClose = true;
 
             // get first valid align statement in sequence
@@ -1006,7 +995,7 @@ void SmParser::Align()
                 if (TokenInGroup(TGDISCARDED) || pSNode)
                 {
                     m_nBufferIndex = GetTokenIndex();
-                    m_aBufferString.Erase(m_nBufferIndex, m_aCurToken.aText.getLength());
+                    m_aBufferString = m_aBufferString.replaceAt(m_nBufferIndex, m_aCurToken.aText.getLength(), "");
                 }
                 else
                     pSNode = new SmAlignNode(m_aCurToken);
@@ -1033,7 +1022,7 @@ void SmParser::Align()
     Expression();
 
     if (bNeedGroupClose)
-        Insert(OUString('}'), GetTokenIndex());
+        Insert("}", GetTokenIndex());
 
     if (pSNode)
     {
@@ -1438,9 +1427,9 @@ void SmParser::Term(bool bGroupNumberIdent)
                 // work to distinguish from "x_2 n".
                 // See https://issues.apache.org/ooo/show_bug.cgi?id=11752 and
                 // https://www.libreoffice.org/bugzilla/show_bug.cgi?id=55853
-                xub_StrLen nBufLen = m_aBufferString.Len();
+                sal_Int32 nBufLen = m_aBufferString.getLength();
                 CharClass aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
-                sal_uInt16 nTokens = 1;
+                sal_Int32 nTokens = 1;
 
                 // We need to be careful to call NextToken() only after having
                 // tested for a whitespace separator (otherwise it will be
@@ -1599,7 +1588,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                 else    // encapsulate old 4.0 style parsing in braces
                 {
                     // insert opening brace
-                    Insert(OUString('{'), GetTokenIndex());
+                    Insert("{", GetTokenIndex());
 
                     //
                     // parse in 4.0 style
@@ -1616,7 +1605,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                     }
 
                     // insert closing brace
-                    Insert(OUString('}'), GetTokenIndex());
+                    Insert("}", GetTokenIndex());
 
                     SmStructureNode *pSNode = new SmExpressionNode(pFunc->GetToken());
                     pSNode->SetSubNodes(pFunc, lcl_popOrZero(m_aNodeStack));
@@ -2474,7 +2463,7 @@ SmParser::SmParser()
     m_nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
 }
 
-SmNode *SmParser::Parse(const String &rBuffer)
+SmNode *SmParser::Parse(const OUString &rBuffer)
 {
     ClearUsedSymbols();
 

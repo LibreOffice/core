@@ -823,7 +823,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        const xub_StrLen    nCol = sal::static_int_cast< xub_StrLen >(rPos.X());
+        const sal_uInt16        nCol = sal::static_int_cast< sal_uInt16 >(rPos.X());
         const sal_uInt16        nRow = sal::static_int_cast< sal_uInt16 >(rPos.Y() - 1);
 
         pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));

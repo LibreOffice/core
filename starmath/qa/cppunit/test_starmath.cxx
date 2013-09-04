@@ -142,7 +142,7 @@ void Test::editMarker()
 
 void Test::editFailure()
 {
-    m_xDocShRef->SetText(String("color a b over {a/}"));
+    m_xDocShRef->SetText("color a b over {a/}");
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 
