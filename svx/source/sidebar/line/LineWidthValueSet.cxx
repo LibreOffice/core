@@ -29,7 +29,7 @@ LineWidthValueSet::LineWidthValueSet (
       nSelItem(0),
       bCusEnable(false)
 {
-    strUnit = new XubString[9];
+    strUnit = new OUString[9];
     SetColCount( 1 );
     SetLineCount( 9);
 }
@@ -46,7 +46,7 @@ LineWidthValueSet::~LineWidthValueSet (void)
 
 
 
-void LineWidthValueSet::SetUnit(XubString* str)
+void LineWidthValueSet::SetUnit(OUString* str)
 {
     for(int i = 0; i < 9; i++)
     {

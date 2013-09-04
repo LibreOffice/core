@@ -67,25 +67,37 @@ bool XColorList::Create()
     sal_uInt32 b(0);
 
     // <!-- Gray palette from white to black -->
-    XubString aStrGrey( SVX_RESSTR( RID_SVXSTR_COLOR_GREY ) );
+    const OUString aStrGrey( SVX_RESSTR( RID_SVXSTR_COLOR_GREY ) );
 
     Insert( new XColorEntry( Color( 0xff, 0xff, 0xff ), SVX_RESSTR( RID_SVXSTR_COLOR_WHITE ) ) );
-    aStrGrey.AppendAscii(" 1"); Insert( new XColorEntry( Color( 0xee, 0xee, 0xee ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('2')); Insert( new XColorEntry( Color( 0xdd, 0xdd, 0xdd ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('3')); Insert( new XColorEntry( Color( 0xcc, 0xcc, 0xcc ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('4')); Insert( new XColorEntry( Color( 0xb2, 0xb2, 0xb2 ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('5')); Insert( new XColorEntry( Color( 0x99, 0x99, 0x99 ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('6')); Insert( new XColorEntry( Color( 0x80, 0x80, 0x80 ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('7')); Insert( new XColorEntry( Color( 0x66, 0x66, 0x66 ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('8')); Insert( new XColorEntry( Color( 0x33, 0x33, 0x33 ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('9')); Insert( new XColorEntry( Color( 0x1c, 0x1c, 0x1c  ), aStrGrey ) );
-    aStrGrey.SetChar(aStrGrey.Len() - 1, sal_Unicode('1')); aStrGrey.AppendAscii("0"); Insert( new XColorEntry( Color( 0x11, 0x11, 0x11 ), aStrGrey ) );
+    Insert( new XColorEntry( Color( 0xee, 0xee, 0xee ), aStrGrey + " 1" ) );
+    Insert( new XColorEntry( Color( 0xdd, 0xdd, 0xdd ), aStrGrey + " 2" ) );
+    Insert( new XColorEntry( Color( 0xcc, 0xcc, 0xcc ), aStrGrey + " 3" ) );
+    Insert( new XColorEntry( Color( 0xb2, 0xb2, 0xb2 ), aStrGrey + " 4" ) );
+    Insert( new XColorEntry( Color( 0x99, 0x99, 0x99 ), aStrGrey + " 5" ) );
+    Insert( new XColorEntry( Color( 0x80, 0x80, 0x80 ), aStrGrey + " 6" ) );
+    Insert( new XColorEntry( Color( 0x66, 0x66, 0x66 ), aStrGrey + " 7" ) );
+    Insert( new XColorEntry( Color( 0x33, 0x33, 0x33 ), aStrGrey + " 8" ) );
+    Insert( new XColorEntry( Color( 0x1c, 0x1c, 0x1c ), aStrGrey + " 9" ) );
+    Insert( new XColorEntry( Color( 0x11, 0x11, 0x11 ), aStrGrey + " 10") );
     Insert( new XColorEntry( Color( 0x00, 0x00, 0x00 ), SVX_RESSTR( RID_SVXSTR_COLOR_BLACK ) ) );
 
     // <!-- Base colors step 0 to 10 -->
     const sal_uInt32 nNumColorsInGroup(12);
     const sal_uInt32 nNumGroups(11);
-    XubString aStrCol[nNumColorsInGroup];
+    const OUString aStrCol[nNumColorsInGroup] = {
+        SVX_RESSTR(RID_SVXSTR_COLOR_YELLOW),
+        SVX_RESSTR(RID_SVXSTR_COLOR_ORANGE),
+        SVX_RESSTR(RID_SVXSTR_COLOR_RED),
+        SVX_RESSTR(RID_SVXSTR_COLOR_PINK),
+        SVX_RESSTR(RID_SVXSTR_COLOR_MAGENTA),
+        SVX_RESSTR(RID_SVXSTR_COLOR_PURPLE),
+        SVX_RESSTR(RID_SVXSTR_COLOR_BLUE),
+        SVX_RESSTR(RID_SVXSTR_COLOR_SKYBLUE),
+        SVX_RESSTR(RID_SVXSTR_COLOR_CYAN),
+        SVX_RESSTR(RID_SVXSTR_COLOR_TURQUOISE),
+        SVX_RESSTR(RID_SVXSTR_COLOR_GREEN),
+        SVX_RESSTR(RID_SVXSTR_COLOR_YELLOWGREEN) };
     const sal_uInt32 aStdCol[nNumColorsInGroup * nNumGroups] = {
         0xffff99, 0xff6600, 0xff3333, 0xff00cc, 0xff33ff, 0x9900ff, 0x6666ff, 0x00ccff, 0x66ffff, 0x33ff99, 0x99ff66, 0xccff00,
         0xffff66, 0xffcc00, 0xff9999, 0xff66cc, 0xff99ff, 0xcc66ff, 0x9999ff, 0x9999ff, 0x99ffff, 0x66ff99, 0x99ff99, 0xccff66,
@@ -101,56 +113,14 @@ bool XColorList::Create()
 
     for(a = 0; a < nNumGroups; a++)
     {
-        switch(a)
-        {
-            case 0:
-            {
-                aStrCol[0] = SVX_RESSTR(RID_SVXSTR_COLOR_YELLOW);
-                aStrCol[1] = SVX_RESSTR(RID_SVXSTR_COLOR_ORANGE);
-                aStrCol[2] = SVX_RESSTR(RID_SVXSTR_COLOR_RED);
-                aStrCol[3] = SVX_RESSTR(RID_SVXSTR_COLOR_PINK);
-                aStrCol[4] = SVX_RESSTR(RID_SVXSTR_COLOR_MAGENTA);
-                aStrCol[5] = SVX_RESSTR(RID_SVXSTR_COLOR_PURPLE);
-                aStrCol[6] = SVX_RESSTR(RID_SVXSTR_COLOR_BLUE);
-                aStrCol[7] = SVX_RESSTR(RID_SVXSTR_COLOR_SKYBLUE);
-                aStrCol[8] = SVX_RESSTR(RID_SVXSTR_COLOR_CYAN);
-                aStrCol[9] = SVX_RESSTR(RID_SVXSTR_COLOR_TURQUOISE);
-                aStrCol[10] = SVX_RESSTR(RID_SVXSTR_COLOR_GREEN);
-                aStrCol[11] = SVX_RESSTR(RID_SVXSTR_COLOR_YELLOWGREEN);
-                break;
-            }
-            case 1:
-            {
-                for(b = 0; b < nNumColorsInGroup; b++)
-                {
-                    aStrCol[b].AppendAscii(" 1");
-                }
-                break;
-            }
-            case 10:
-            {
-                for(b = 0; b < nNumColorsInGroup; b++)
-                {
-                    aStrCol[b].SetChar(aStrCol[b].Len() - 1, sal_Unicode('1'));
-                    aStrCol[b].AppendAscii("0");
-                }
-                break;
-            }
-            default: // 2 .. 9, 11
-            {
-                for(b = 0; b < nNumColorsInGroup; b++)
-                {
-                    aStrCol[b].SetChar(aStrCol[b].Len() - 1, sal_Unicode('0') + sal_Unicode(a % 10));
-                }
-                break;
-            }
-        }
+        OUString aSuffix;
+        if (a > 0) aSuffix = OUString::number(a);
 
         const sal_uInt32 nOffset(a * nNumColorsInGroup);
 
         for(b = 0; b < nNumColorsInGroup; b++)
         {
-            Insert( new XColorEntry( aStdCol[nOffset + b], aStrCol[b] ) );
+            Insert( new XColorEntry( aStdCol[nOffset + b], aStrCol[b] + aSuffix ) );
         }
     }
 
@@ -168,32 +138,19 @@ bool XColorList::Create()
     Insert( new XColorEntry( Color( 0x00, 0x66, 0xcc ), SVX_RESSTR( RID_SVXSTR_COLOR_SEABLUE ) ) );
 
     // <!-- add Chart colors from original palette (also 12, coincidence?) -->
-    XubString aStrChart( SVX_RESSTR( RID_SVXSTR_COLOR_CHART ) );
-    aStrChart.AppendAscii(" 1");
-    Insert( new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('2'));
-    Insert( new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('3'));
-    Insert( new XColorEntry( Color( 0xff, 0xd3, 0x20 ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('4'));
-    Insert( new XColorEntry( Color( 0x57, 0x9d, 0x1c ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('5'));
-    Insert( new XColorEntry( Color( 0x7e, 0x00, 0x21 ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('6'));
-    Insert( new XColorEntry( Color( 0x83, 0xca, 0xff ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('7'));
-    Insert( new XColorEntry( Color( 0x31, 0x40, 0x04 ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('8'));
-    Insert( new XColorEntry( Color( 0xae, 0xcf, 0x00 ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('9'));
-    Insert( new XColorEntry( Color( 0x4b, 0x1f, 0x6f ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('1'));
-    aStrChart.AppendAscii("0");
-    Insert( new XColorEntry( Color( 0xff, 0x95, 0x0e ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('1'));
-    Insert( new XColorEntry( Color( 0xc5, 0x00, 0x0b ), aStrChart ) );
-    aStrChart.SetChar(aStrChart.Len() - 1, sal_Unicode('2'));
-    Insert( new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStrChart ) );
+    const OUString aStrChart( SVX_RESSTR( RID_SVXSTR_COLOR_CHART ) );
+    Insert( new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStrChart + " 1" ) );
+    Insert( new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStrChart + " 2" ) );
+    Insert( new XColorEntry( Color( 0xff, 0xd3, 0x20 ), aStrChart + " 3" ) );
+    Insert( new XColorEntry( Color( 0x57, 0x9d, 0x1c ), aStrChart + " 4" ) );
+    Insert( new XColorEntry( Color( 0x7e, 0x00, 0x21 ), aStrChart + " 5" ) );
+    Insert( new XColorEntry( Color( 0x83, 0xca, 0xff ), aStrChart + " 6" ) );
+    Insert( new XColorEntry( Color( 0x31, 0x40, 0x04 ), aStrChart + " 7" ) );
+    Insert( new XColorEntry( Color( 0xae, 0xcf, 0x00 ), aStrChart + " 8" ) );
+    Insert( new XColorEntry( Color( 0x4b, 0x1f, 0x6f ), aStrChart + " 9" ) );
+    Insert( new XColorEntry( Color( 0xff, 0x95, 0x0e ), aStrChart + " 10" ) );
+    Insert( new XColorEntry( Color( 0xc5, 0x00, 0x0b ), aStrChart + " 11" ) );
+    Insert( new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStrChart + " 12" ) );
 
     return(165 == Count());
 }

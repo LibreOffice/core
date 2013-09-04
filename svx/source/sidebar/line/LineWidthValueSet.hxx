@@ -30,7 +30,7 @@ public:
     LineWidthValueSet (Window* pParent, const ResId& rResId);
     virtual ~LineWidthValueSet (void);
 
-    void SetUnit(XubString* str);
+    void SetUnit(OUString* str);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem();
     void SetImage(Image img);
@@ -41,7 +41,7 @@ public:
 protected:
     VirtualDevice*  pVDev;
     sal_uInt16          nSelItem;
-    XubString*      strUnit;
+    OUString*      strUnit;
     Image           imgCus;
     bool            bCusEnable;
 };

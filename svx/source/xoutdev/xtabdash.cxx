@@ -68,16 +68,11 @@ uno::Reference< container::XNameContainer > XDashList::createInstance()
 
 bool XDashList::Create()
 {
-    XubString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
-    xub_StrLen nLen;
+    const OUString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
 
-    aStr.AppendAscii(" 1");
-    nLen = aStr.Len() - 1;
-    Insert(new XDashEntry(XDash(XDASH_RECT,1, 50,1, 50, 50),aStr));
-    aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XDashEntry(XDash(XDASH_RECT,1,500,1,500,500),aStr));
-    aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
+    Insert(new XDashEntry(XDash(XDASH_RECT,1, 50,1, 50, 50),aStr + " 1"));
+    Insert(new XDashEntry(XDash(XDASH_RECT,1,500,1,500,500),aStr + " 2"));
+    Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr + " 3"));
 
     return true;
 }

@@ -130,16 +130,16 @@ void LineWidthControl::Initialize()
     maMFWidth.SetMin( maMFWidth.Normalize( nMin ), FUNIT_TWIP );
     maMFWidth.SetMax( maMFWidth.Normalize( nMax ), FUNIT_TWIP );
 
-    rStr = new XubString[9];
+    rStr = new OUString[9];
     //modify,
-    rStr[0] = OUString("05");
-    rStr[1] = OUString("08");
-    rStr[2] = OUString("10");
-    rStr[3] = OUString("15");
-    rStr[4] = OUString("23");
-    rStr[5] = OUString("30");
-    rStr[6] = OUString("45");
-    rStr[7] = OUString("60");
+    rStr[0] = "05";
+    rStr[1] = "08";
+    rStr[2] = "10";
+    rStr[3] = "15";
+    rStr[4] = "23";
+    rStr[5] = "30";
+    rStr[6] = "45";
+    rStr[7] = "60";
     rStr[8] = SVX_RESSTR(STR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
@@ -147,8 +147,8 @@ void LineWidthControl::Initialize()
 
     for(int i = 0; i <= 7 ; i++)
     {
-        rStr[i] = rStr[i].Insert(cSep, 1);//Modify
-        rStr[i].Append(mstrPT);
+        rStr[i] = rStr[i].replaceAt(1, 1, OUString(cSep));//Modify
+        rStr[i] += mstrPT;
     }
     //end
 

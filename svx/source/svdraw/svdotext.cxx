@@ -472,9 +472,7 @@ bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
         if(nParaAnz==1)
         {
             // if it is only one paragraph, check if that paragraph is empty
-            XubString aStr(pOutliner->GetText(p1stPara));
-
-            if(!aStr.Len())
+            if( pOutliner->GetText(p1stPara).isEmpty() )
                 nParaAnz = 0;
         }
 
@@ -970,7 +968,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
 
 OUString SdrTextObj::TakeObjNameSingul() const
 {
-    XubString aStr;
+    OUString aStr;
 
     switch(eTextKind)
     {

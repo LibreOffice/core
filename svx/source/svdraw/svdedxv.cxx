@@ -1369,17 +1369,13 @@ sal_Bool SdrObjEditView::ImpIsTextEditAllSelected() const
             ESelection aESel(pTextEditOutlinerView->GetSelection());
             if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==(nParaAnz-1))
             {
-                XubString aStr(pTextEditOutliner->GetText(pLastPara));
-
-                if(aStr.Len() == aESel.nEndPos)
+                if( pTextEditOutliner->GetText(pLastPara).getLength() == aESel.nEndPos )
                     bRet = sal_True;
             }
             // in case the selection was done backwards
             if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==(nParaAnz-1))
             {
-                XubString aStr(pTextEditOutliner->GetText(pLastPara));
-
-                if(aStr.Len() == aESel.nStartPos)
+                if(pTextEditOutliner->GetText(pLastPara).getLength() == aESel.nStartPos)
                     bRet = sal_True;
             }
         }

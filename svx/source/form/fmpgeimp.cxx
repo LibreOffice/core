@@ -498,8 +498,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             if( bUndo )
             {
                 OUString aStr(SVX_RESSTR(RID_STR_FORM));
-                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace(OUString('#'), aStr);
+                OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
+                aUndoStr = aUndoStr.replaceFirst("#", aStr);
                 pModel->BegUndo(aUndoStr);
             }
 

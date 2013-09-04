@@ -50,8 +50,8 @@ private:
     FixedText                           maFTWidth;
     MetricField                         maMFWidth;
     SfxMapUnit                          meMapUnit;
-    XubString*                          rStr;
-    XubString                           mstrPT; //
+    OUString*                           rStr;
+    OUString                            mstrPT; //
     long                                mnCustomWidth;
     bool                                mbCustom;
     bool                                mbColseByEdit;

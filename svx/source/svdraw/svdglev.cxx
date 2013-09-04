@@ -362,8 +362,8 @@ static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* 
 void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
 {
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditMove));
-    if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
+    OUString aStr(ImpGetResStr(STR_EditMove));
+    if (bCopy) aStr += ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_MOVE);
     if (bCopy) ImpCopyMarkedGluePoints();
     ImpTransformMarkedGluePoints(ImpMove,&rSiz);
@@ -381,7 +381,7 @@ static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3
 void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditResize));
+    OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_RESIZE);
     if (bCopy) ImpCopyMarkedGluePoints();
@@ -400,7 +400,7 @@ static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void
 void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nWink, bool bCopy)
 {
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditRotate));
+    OUString aStr(ImpGetResStr(STR_EditRotate));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_ROTATE);
     if (bCopy) ImpCopyMarkedGluePoints();

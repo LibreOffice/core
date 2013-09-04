@@ -1062,25 +1062,22 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaTextAction& rAct)
 {
-    XubString aStr(rAct.GetText());
-    aStr.Erase(0,rAct.GetIndex());
-    aStr.Erase(rAct.GetLen());
+    OUString aStr(rAct.GetText());
+    aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaTextArrayAction& rAct)
 {
-    XubString aStr(rAct.GetText());
-    aStr.Erase(0,rAct.GetIndex());
-    aStr.Erase(rAct.GetLen());
+    OUString aStr(rAct.GetText());
+    aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaStretchTextAction& rAct)
 {
-    XubString aStr(rAct.GetText());
-    aStr.Erase(0,rAct.GetIndex());
-    aStr.Erase(rAct.GetLen());
+    OUString aStr(rAct.GetText());
+    aStr = aStr.copy(rAct.GetIndex(), rAct.GetLen());
     ImportText( rAct.GetPoint(), aStr, rAct );
 }
 

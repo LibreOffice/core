@@ -1026,7 +1026,7 @@ void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnl
 {
     // bOnlyHardAttr has no effect here at all.
     bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
-    const XubString& aNam=bMeasure?aMeasureLayer:aAktLayer;
+    const OUString& aNam = bMeasure ? aMeasureLayer : aAktLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
     SdrLayerID nLayer=pMod->GetLayerAdmin().GetLayerID(aNam,sal_True);
     if (nLayer!=SDRLAYER_NOTFOUND) {

@@ -664,7 +664,7 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
 {
     bCopy=sal_False; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditMove));
+    OUString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_MOVE);
     ImpTransformMarkedPoints(ImpMove,&rSiz);
@@ -685,7 +685,7 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
 {
     bCopy=sal_False; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditResize));
+    OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_RESIZE);
     ImpTransformMarkedPoints(ImpResize,&rRef,&xFact,&yFact);
@@ -706,7 +706,7 @@ void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCo
 {
     bCopy=sal_False; // TODO: not yet implemented
     ForceUndirtyMrkPnt();
-    XubString aStr(ImpGetResStr(STR_EditResize));
+    OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_ROTATE);
     double nSin=sin(nWink*nPi180);

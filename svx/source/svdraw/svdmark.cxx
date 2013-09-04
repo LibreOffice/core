@@ -559,7 +559,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
     if(!mbNameOk)
     {
         SdrMark* pMark = GetMark(0);
-        XubString aNam;
+        OUString aNam;
 
         if(!nAnz)
         {
@@ -583,7 +583,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
                 {
                     SdrMark* pMark2 = GetMark(i);
                     OUString aStr1(pMark2->GetMarkedSdrObj()->TakeObjNamePlural());
-                    bEq = aNam.Equals(aStr1);
+                    bEq = aNam == aStr1;
                 }
 
                 if(!bEq)
@@ -592,8 +592,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
                 }
             }
 
-            aNam.Insert(sal_Unicode(' '), 0);
-            aNam.Insert(OUString::number( nAnz ), 0);
+            aNam = OUString::number( nAnz ) + " " + aNam;
         }
 
         const_cast<SdrMarkList*>(this)->maMarkName = aNam;
@@ -656,7 +655,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
     else if(!rNameOk)
     {
         const SdrMark* pMark = GetMark(n1stMarkNum);
-        XubString aNam;
+        OUString aNam;
 
         if(1L == nMarkPtObjAnz)
         {
@@ -682,7 +681,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
                 if(pPts && !pPts->empty() && pMark2->GetMarkedSdrObj())
                 {
                     OUString aStr1(pMark2->GetMarkedSdrObj()->TakeObjNamePlural());
-                    bEq = aNam.Equals(aStr1);
+                    bEq = aNam == aStr1;
                 }
             }
 
@@ -691,11 +690,10 @@ const OUString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
                 aNam = ImpGetResStr(STR_ObjNamePlural);
             }
 
-            aNam.Insert(sal_Unicode(' '), 0);
-            aNam.Insert(OUString::number( nMarkPtObjAnz ), 0);
+            aNam = OUString::number( nMarkPtObjAnz ) + " " + aNam;
         }
 
-        XubString aStr1;
+        OUString aStr1;
 
         if(1L == nMarkPtAnz)
         {
@@ -704,10 +702,10 @@ const OUString& SdrMarkList::GetPointMarkDescription(sal_Bool bGlue) const
         else
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints));
-            aStr1.SearchAndReplaceAscii("%2", OUString::number( nMarkPtAnz ));
+            aStr1 = aStr1.replaceFirst("%2", OUString::number( nMarkPtAnz ));
         }
 
-        aStr1.SearchAndReplaceAscii("%1", aNam);
+        aStr1 = aStr1.replaceFirst("%1", aNam);
         rName = aStr1;
         rNameOk = sal_True;
     }

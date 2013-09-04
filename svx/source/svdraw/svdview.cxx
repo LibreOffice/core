@@ -1166,7 +1166,7 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
 OUString SdrView::GetStatusText()
 {
     OUString aStr;
-    XubString aName;
+    OUString aName;
 
     aStr += STR_NOTHING;
 
@@ -1280,7 +1280,7 @@ OUString SdrView::GetStatusText()
             aStr = "";
         }
     }
-    else if(aName.Len())
+    else if(!aName.isEmpty())
     {
         aStr = aStr.replaceFirst("%1", aName);
     }

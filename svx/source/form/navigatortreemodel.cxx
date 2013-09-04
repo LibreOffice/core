@@ -275,7 +275,7 @@ namespace svxform
         Reference< XChild > xElement( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
-            XubString aStr;
+            OUString aStr;
             if (pEntry->ISA(FmFormData))
                 aStr = SVX_RESSTR(RID_STR_FORM);
             else
@@ -291,8 +291,8 @@ namespace svxform
 
             if( bUndo )
             {
-                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace(OUString('#'), aStr);
+                OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
+                aUndoStr = aUndoStr.replaceFirst("#", aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }
 
@@ -381,7 +381,7 @@ namespace svxform
         Reference< XChild > xElement ( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
-            XubString        aStr;
+            OUString        aStr;
             if (pEntry->ISA(FmFormData))
                 aStr = SVX_RESSTR(RID_STR_FORM);
             else
@@ -389,8 +389,8 @@ namespace svxform
 
             if( bUndo )
             {
-                XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE));
-                aUndoStr.SearchAndReplace(OUString('#'), aStr);
+                OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE));
+                aUndoStr = aUndoStr.replaceFirst("#", aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }
         }

@@ -1000,10 +1000,10 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             aStr = aTmp;
 
             // delete %O
-            XubString aStr2(ImpGetResStr(STR_EditDelete));
+            OUString aStr2(ImpGetResStr(STR_EditDelete));
 
             // UNICODE: delete point of ...
-            aStr2.SearchAndReplaceAscii("%1", aStr);
+            aStr2 = aStr2.replaceFirst("%1", aStr);
 
             return aStr2;
         }
