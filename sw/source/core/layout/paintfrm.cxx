@@ -1468,6 +1468,25 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
+static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
+                                         const SwFrm&           _rFrm,
+                                         const SwBorderAttrs&   _rAttrs,
+                                         const SwRectFn&        _rRectFn )
+{
+    // Extend left/right border/shadow rectangle to bottom of previous frame/to
+    // top of next frame, if border/shadow is joined with previous/next frame.
+    if ( _rAttrs.JoinedWithPrev( _rFrm ) )
+    {
+        const SwFrm* pPrevFrm = _rFrm.GetPrev();
+        (_rRect.*_rRectFn->fnSetTop)( (pPrevFrm->*_rRectFn->fnGetPrtBottom)() );
+    }
+    if ( _rAttrs.JoinedWithNext( _rFrm ) )
+    {
+        const SwFrm* pNextFrm = _rFrm.GetNext();
+        (_rRect.*_rRectFn->fnSetBottom)( (pNextFrm->*_rRectFn->fnGetPrtTop)() );
+    }
+}
+
 static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
                            const SwRect &rRect, SwRegionRects &rRegion )
 {
@@ -4474,7 +4493,10 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
               (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
             );
 
-   lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true);
+    SWRECTFN( this );
+    ::lcl_ExtendLeftAndRight( rOutRect, *(this), rAttrs, fnRect );
+
+    lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true);
 }
 
 /*************************************************************************
@@ -4795,6 +4817,8 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
 
     if ( _rFrm.IsCntntFrm() )
     {
+        ::lcl_ExtendLeftAndRight( aRect, _rFrm, _rAttrs, _rRectFn );
+
         // No Top / bottom borders for joint borders
         if ( _rAttrs.JoinedWithPrev( _rFrm ) ) pTopBorder = NULL;
         if ( _rAttrs.JoinedWithNext( _rFrm ) ) pBottomBorder = NULL;
