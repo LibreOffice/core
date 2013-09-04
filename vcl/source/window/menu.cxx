@@ -2007,9 +2007,7 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    assert ( pData );
-
-    if ( pData->aHelpText.isEmpty() &&
+    if ( pData && pData->aHelpText.isEmpty() &&
          (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
     {
         if ( pData->aHelpText.isEmpty() &&
