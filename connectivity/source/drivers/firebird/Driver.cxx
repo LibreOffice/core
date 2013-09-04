@@ -27,7 +27,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/process.h>
-#include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -61,15 +61,17 @@ const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 FirebirdDriver::FirebirdDriver()
     : ODriver_BASE(m_aMutex)
 {
-    OUString sTmpDirURL, sTmpDirPath;
-    ::osl::FileBase::getTempDirURL(sTmpDirURL);
-    ::osl::FileBase::getSystemPathFromFileURL(sTmpDirURL, sTmpDirPath);
+    // ::utl::TempFile::CreateTempName() uses a unique temporary directory
+    // (subdirectory of /tmp or other user specific tmp directory) per instance
+    // so we can create subdirectories for firebird at will.
+    const OUString sTmpDirPath = ::utl::TempFile::CreateTempName();
+    const OUString sLockDirPath = ::utl::TempFile::CreateTempName();
 
     // Overrides firebird's default of /tmp or c:\temp
     osl_setEnvironment(our_sFirebirdTmpVar.pData, sTmpDirPath.pData);
+
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
-    sTmpDirPath += "/firebird";
-    osl_setEnvironment(our_sFirebirdLockVar.pData, sTmpDirPath.pData);
+    osl_setEnvironment(our_sFirebirdLockVar.pData, sLockDirPath.pData);
 }
 
 void FirebirdDriver::disposing()
