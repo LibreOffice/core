@@ -547,7 +547,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem(
+        const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_FILLBITMAP, &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                 XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,

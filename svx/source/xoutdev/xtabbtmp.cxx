@@ -48,38 +48,38 @@ uno::Reference< container::XNameContainer > XBitmapList::createInstance()
 
 bool XBitmapList::Create()
 {
-    String aStr(SVX_RESSTR(RID_SVXSTR_BITMAP));
+    OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_BITMAP));
     sal_uInt16 aArray[64];
     Bitmap aBitmap;
-    const xub_StrLen nLen(aStr.Len() - 1);
+    const sal_Int32 nLen(aStr.getLength() - 1);
 
     memset(aArray, 0, sizeof(aArray));
 
     // white/white bitmap
-    aStr.AppendAscii(" 1");
+    aStr.append(" 1");
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_WHITE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
 
     // black/white bitmap
     aArray[ 0] = 1; aArray[ 9] = 1; aArray[18] = 1; aArray[27] = 1;
     aArray[36] = 1; aArray[45] = 1; aArray[54] = 1; aArray[63] = 1;
-    aStr.SetChar(nLen, sal_Unicode('2'));
+    aStr[nLen] = '2';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
 
     // lightred/white bitmap
     aArray[ 7] = 1; aArray[14] = 1; aArray[21] = 1; aArray[28] = 1;
     aArray[35] = 1; aArray[42] = 1; aArray[49] = 1; aArray[56] = 1;
-    aStr.SetChar(nLen, sal_Unicode('3'));
+    aStr[nLen] = '3';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTRED), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
 
     // lightblue/white bitmap
     aArray[24] = 1; aArray[25] = 1; aArray[26] = 1;
     aArray[29] = 1; aArray[30] = 1; aArray[31] = 1;
-    aStr.SetChar(nLen, sal_Unicode('4'));
+    aStr[nLen] = '4';
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
-    Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
+    Insert(new XBitmapEntry(Graphic(aBitmap), aStr.toString()));
 
     return sal_True;
 }

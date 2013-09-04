@@ -121,7 +121,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
     {
         INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
-        String          aExt;
+        OUString        aExt;
         GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
         sal_Bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
@@ -131,13 +131,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         // calculate correct file name
         if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
         {
-            String aName( aURL.getBase() );
-            aName += '_';
-            aName += String(aURL.getExtension());
-            aName += '_';
-            String aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
-            if ( aStr.GetChar(0) == '-' )
-                aStr.SetChar(0,'m');
+            OUString aName( aURL.getBase() );
+            aName += "_";
+            aName += aURL.getExtension();
+            aName += "_";
+            OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
+            if ( aStr[0] == '-' )
+                aStr = "m" + aStr.copy(1);
             aName += aStr;
             aURL.setBase( aName );
         }
@@ -190,7 +190,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     break;
                 }
 
-                if( aExt.Len() )
+                if( !aExt.isEmpty() )
                 {
                     if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
                         aURL.setExtension( aExt );
@@ -213,9 +213,9 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
         if( GRFILTER_OK != nErr )
         {
-            String  aFilter( rFilterName );
-            bool    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
-                                     ( aFilter.EqualsIgnoreCaseAscii( "gif" ) ) ||
+            OUString  aFilter( rFilterName );
+            bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
+                                     ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
                                      ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
                                      ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
 
