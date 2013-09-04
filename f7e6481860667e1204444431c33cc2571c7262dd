@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7b4\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T21:07:20Z",
+      "side": 1,
+      "message": "this is now misleading since there is no OUString involved",
+      "revId": "f7e6481860667e1204444431c33cc2571c7262dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7b8\u003d",
+        "filename": "fpicker/source/win32/misc/WinImplHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T21:07:20Z",
+      "side": 1,
+      "message": "probably lItem is one too large since it has been incremented to store \u0027\\0\u0027 in vec... i would assume that lRet \u003d\u003d original value of lItem but probably it\u0027s best to use lRet here",
+      "revId": "f7e6481860667e1204444431c33cc2571c7262dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
