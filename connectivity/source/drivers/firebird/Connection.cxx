@@ -149,7 +149,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-        m_sURL = utl::TempFile::CreateTempName() + ".fdb";
+        m_sURL = utl::TempFile::CreateTempName();
 
         SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
                     << OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8 ).getStr());
