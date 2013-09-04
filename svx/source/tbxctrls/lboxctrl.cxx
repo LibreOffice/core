@@ -268,7 +268,7 @@ void SvxUndoRedoControl::StateChanged(
         {
             SfxStringItem& rItem = *(SfxStringItem *)pState;
             ToolBox& rBox = GetToolBox();
-            String aQuickHelpText = MnemonicGenerator::EraseAllMnemonicChars( rItem.GetValue() );
+            OUString aQuickHelpText = MnemonicGenerator::EraseAllMnemonicChars( rItem.GetValue() );
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
         }
         SvxListBoxControl::StateChanged( nSID, eState, pState );
@@ -306,7 +306,7 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
     rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 
     for( sal_uInt32 n = 0; n < aUndoRedoList.size(); n++ )
-        rListBox.InsertEntry( String( aUndoRedoList[n] ));
+        rListBox.InsertEntry( aUndoRedoList[n] );
 
     rListBox.SelectEntryPos( 0 );
     aActionStr = SVX_RESSTR(SID_UNDO == GetSlotId() ?

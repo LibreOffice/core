@@ -250,7 +250,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if ( pColorItem )
                 {
-                    String aString( pColorItem->GetName() );
+                    OUString aString( pColorItem->GetName() );
                     ::Color aColor = pColorItem->GetColorValue();
 
                     pFillAttrLB->SelectEntry( aString );
@@ -265,20 +265,18 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         pFillAttrLB->GetSelectEntryColor() != aColor )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
-                        String aTmpStr;
+                        OUString aTmpStr;
                         if( nCount > 0 )
                         {
                             // Last entry gets tested against temporary color
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
+                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = TMP_STR_BEGIN;
-                        aTmpStr += aString;
-                        aTmpStr += TMP_STR_END;
+                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
 
                         //pFillAttrLB->SetUpdateMode( sal_False );
                         sal_uInt16 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
@@ -295,30 +293,27 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if ( pGradientItem )
                 {
-                    String aString( pGradientItem->GetName() );
+                    OUString aString( pGradientItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
                     // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
-                        String aTmpStr;
+                        OUString aTmpStr;
                         if( nCount > 0 )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
+                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = TMP_STR_BEGIN;
-                        aTmpStr += aString;
-                        aTmpStr += TMP_STR_END;
+                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
-                        String aEmptyString = String();
-                         XGradientList aGradientList( aEmptyString );
+                        XGradientList aGradientList( "" );
                         aGradientList.Insert( pEntry );
                         aGradientList.SetDirty( sal_False );
                         const Bitmap aBmp = aGradientList.GetUiBitmap( 0 );
@@ -343,30 +338,27 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if ( pHatchItem )
                 {
-                    String aString( pHatchItem->GetName() );
+                    OUString aString( pHatchItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
                     // Check if the entry is not in the list
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
-                        String aTmpStr;
+                        OUString aTmpStr;
                         if( nCount > 0 )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
+                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = TMP_STR_BEGIN;
-                        aTmpStr += aString;
-                        aTmpStr += TMP_STR_END;
+                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
-                        String aEmptyString = String();
-                        XHatchList aHatchList( aEmptyString );
+                        XHatchList aHatchList( "" );
                         aHatchList.Insert( pEntry );
                         aHatchList.SetDirty( sal_False );
                         const Bitmap aBmp = aHatchList.GetUiBitmap( 0 );
@@ -394,7 +386,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     // SfxObjectShell::Current()    &&
                     // SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) )
                 {
-                    String aString( pBitmapItem->GetName() );
+                    OUString aString( pBitmapItem->GetName() );
                     // Bitmap aBitmap( pBitmapItem->GetValue() );
 
                     // SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
@@ -404,20 +396,18 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
-                        String aTmpStr;
+                        OUString aTmpStr;
                         if( nCount > 0 )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
+                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = TMP_STR_BEGIN;
-                        aTmpStr += aString;
-                        aTmpStr += TMP_STR_END;
+                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
 
                         XBitmapEntry* pEntry = new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr);
                         XBitmapListRef xBitmapList =
@@ -458,7 +448,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         if( pState->ISA( SvxGradientListItem ) &&
             eXFS == XFILL_GRADIENT )
         {
-            String aString( pFillAttrLB->GetSelectEntry() );
+            OUString aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxGradientListItem*)pState )->GetGradientList() );
             pFillAttrLB->SelectEntry( aString );
@@ -466,7 +456,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         if( pState->ISA( SvxHatchListItem ) &&
             eXFS == XFILL_HATCH )
         {
-            String aString( pFillAttrLB->GetSelectEntry() );
+            OUString aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxHatchListItem*)pState )->GetHatchList() );
             pFillAttrLB->SelectEntry( aString );
@@ -474,7 +464,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         if( pState->ISA( SvxBitmapListItem ) &&
             eXFS == XFILL_BITMAP )
         {
-            String aString( pFillAttrLB->GetSelectEntry() );
+            OUString aString( pFillAttrLB->GetSelectEntry() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxBitmapListItem*)pState )->GetBitmapList() );
             pFillAttrLB->SelectEntry( aString );
@@ -695,19 +685,18 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
             case XFILL_SOLID:
             {
                 // Entry gets tested against temporary color
-                String aTmpStr = pLbFillAttr->GetSelectEntry();
-                if( aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                OUString aTmpStr = pLbFillAttr->GetSelectEntry();
+                if( aTmpStr[0] == TMP_STR_BEGIN && aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                 {
-                    aTmpStr.Erase( aTmpStr.Len()-1, 1 );
-                    aTmpStr.Erase( 0, 1 );
+                    aTmpStr = aTmpStr.copy(1, aTmpStr.getLength()-2);
                 }
 
                 XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
 
-                aArgs[0].Name = OUString( "FillColor" );
+                aArgs[0].Name = "FillColor";
                 aXFillColorItem.QueryValue( a );
                 aArgs[0].Value = a;
-                ((SvxFillToolBoxControl*)GetData())->Dispatch( OUString( ".uno:FillColor" ),
+                ((SvxFillToolBoxControl*)GetData())->Dispatch( ".uno:FillColor",
                                                                aArgs );
             }
             break;

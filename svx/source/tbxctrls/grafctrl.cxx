@@ -588,13 +588,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
     SfxItemSet      aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
-    String          aUndoStr;
+    OUString        aUndoStr;
     const bool      bUndo = rView.IsUndoEnabled();
 
     if( bUndo )
     {
         aUndoStr = rView.GetDescriptionOfMarkedObjects();
-        aUndoStr.Append( sal_Unicode(' ') );
+        aUndoStr += " ";
     }
 
     const SfxItemSet*   pArgs = rReq.GetArgs();
@@ -612,7 +612,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafRedItem( ((SfxInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFRED ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFRED );
             }
         }
         break;
@@ -623,7 +623,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafGreenItem( ((SfxInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGREEN ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGREEN );
             }
         }
         break;
@@ -634,7 +634,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafBlueItem( ((SfxInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFBLUE ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFBLUE );
             }
         }
         break;
@@ -645,7 +645,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafLuminanceItem( ((SfxInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFLUMINANCE ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFLUMINANCE );
             }
         }
         break;
@@ -656,7 +656,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafContrastItem( ((SfxInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCONTRAST ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCONTRAST );
             }
         }
         break;
@@ -667,7 +667,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafGamma100Item( ((SfxUInt32Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGAMMA ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGAMMA );
             }
         }
         break;
@@ -678,7 +678,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafTransparenceItem( ((SfxUInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFTRANSPARENCY ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFTRANSPARENCY );
             }
         }
         break;
@@ -689,7 +689,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             {
                 aSet.Put( SdrGrafModeItem( (GraphicDrawMode) ((SfxUInt16Item*)pItem)->GetValue() ));
                 if( bUndo )
-                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFMODE ) ) );
+                    aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFMODE );
             }
         }
         break;
@@ -739,7 +739,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                     SfxNoLayoutSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                     aCropDlgAttr, 950 );
-                    const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
+                    const OUString        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet error!");
@@ -756,7 +756,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                         if( pOutAttr )
                         {
-                            aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP ) ) );
+                            aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP );
 
                             // set crop attributes
                             if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )

@@ -74,9 +74,9 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 public:
-                            TableWindow( sal_uInt16                     nSlotId,
-                                         const OUString&       rCmd,
-                                         const String&              rText,
+                            TableWindow( sal_uInt16                 nSlotId,
+                                         const OUString&            rCmd,
+                                         const OUString&            rText,
                                          ToolBox&                   rParentTbx,
                                          const Reference< XFrame >& rFrame );
                             ~TableWindow();
@@ -104,7 +104,7 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) ),
     aTableButton( this ),
     nCol( 0 ),
@@ -132,7 +132,7 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const String
 
     aTableButton.SetPosSizePixel( Point( TABLE_POS_X + TABLE_CELL_WIDTH, TABLE_HEIGHT + 5 ),
             Size( TABLE_WIDTH - TABLE_POS_X - 2*TABLE_CELL_WIDTH, 24 ) );
-    aTableButton.SetText( String( SVX_RESSTR( RID_SVXSTR_MORE ) ) );
+    aTableButton.SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
     aTableButton.SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
     aTableButton.Show();
 
@@ -283,14 +283,14 @@ void TableWindow::Paint( const Rectangle& )
     // the text near the mouse cursor telling the table dimensions
     if ( nCol && nLine )
     {
-        String aText;
+        OUString aText;
         aText += OUString::number( nCol );
-        aText.AppendAscii( " x " );
+        aText += " x ";
         aText += OUString::number( nLine );
         if(GetId() == FN_SHOW_MULTIPLE_PAGES)
         {
-            aText += ' ';
-            aText += String(SVX_RESSTR(RID_SVXSTR_PAGES));
+            aText += " ";
+            aText += SVX_RESSTR(RID_SVXSTR_PAGES);
         }
 
         Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
@@ -312,7 +312,7 @@ void TableWindow::Paint( const Rectangle& )
 
         // #i95350# force RTL output
         if ( IsRTLEnabled() )
-            aText.Insert( 0x202D, 0 );
+            aText = OUString(0x202D) + aText;
 
         DrawText( Point( nTextX, nTextY ), aText );
     }
@@ -409,7 +409,7 @@ private:
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const String &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
+                            ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -424,7 +424,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
     bInitialKeyInput(true),
     m_bMod1(false),
@@ -657,7 +657,7 @@ void ColumnsWindow::Paint( const Rectangle& )
 
     SetLineColor();
     SetFillColor( aFaceColor );
-    String aText;
+    OUString aText;
     if ( nCol )
         aText = OUString::number(nCol);
     else

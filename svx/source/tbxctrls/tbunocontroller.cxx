@@ -61,7 +61,7 @@ protected:
 
 private:
     FontHeightToolBoxControl*                  m_pCtrl;
-    String                                     m_aCurText;
+    OUString                                   m_aCurText;
     Size                                       m_aLogicalSize;
     bool                                       m_bRelease;
     uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
@@ -91,7 +91,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
 {
     SetSizePixel( LogicToPixel( m_aLogicalSize, MAP_APPFONT ));
     SetValue( 0 );
-    SetText( String() );
+    SetText( "" );
 }
 
 // -----------------------------------------------------------------------
@@ -149,7 +149,7 @@ void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
     {
         // Wert in der Anzeige l"oschen
         SetValue( -1L );
-        SetText( String() );
+        SetText( "" );
     }
     SaveValue();
 }

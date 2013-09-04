@@ -128,7 +128,7 @@ class SvxStyleBox_Impl : public ComboBox
     using Window::IsVisible;
 public:
     SvxStyleBox_Impl( Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
-                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, bool bInSpecialMode );
+                        const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode );
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
@@ -160,9 +160,9 @@ private:
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
-    String                          aClearFormatKey;
-    String                          aMoreKey;
-    String                          sDefaultStyle;
+    OUString                        aClearFormatKey;
+    OUString                        aMoreKey;
+    OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
 
     void            ReleaseFocus();
@@ -182,7 +182,7 @@ private:
     SAL_WNODEPRECATED_DECLARATIONS_POP
     Font                           aCurFont;
     Size                           aLogicalSize;
-    String                         aCurText;
+    OUString                       aCurText;
     sal_uInt16                     nFtCount;
     bool                           bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
@@ -329,12 +329,12 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(
     Window*                                 pParent,
-    const OUString&                    rCommand,
+    const OUString&                         rCommand,
     SfxStyleFamily                          eFamily,
     const Reference< XDispatchProvider >&   rDispatchProvider,
     const Reference< XFrame >&              _xFrame,
-    const String&                           rClearFormatKey,
-    const String&                           rMoreKey,
+    const OUString&                         rClearFormatKey,
+    const OUString&                         rMoreKey,
     bool                                    bInSpec) :
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
@@ -1717,11 +1717,11 @@ void SfxStyleControllerItem_Impl::StateChanged(
 
 struct SvxStyleToolBoxControl::Impl
 {
-    String                              aClearForm;
-    String                              aMore;
+    OUString                     aClearForm;
+    OUString                     aMore;
     ::std::vector< OUString >    aDefaultStyles;
-    sal_Bool                        bSpecModeWriter;
-    sal_Bool                        bSpecModeCalc;
+    sal_Bool                     bSpecModeWriter;
+    sal_Bool                     bSpecModeCalc;
 
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
@@ -2262,7 +2262,7 @@ void SvxFontNameToolBoxControl::StateChanged(
                 pBox->Update( pFontItem );
         }
         else
-            pBox->SetText( String() );
+            pBox->SetText( "" );
         pBox->SaveValue();
     }
 

@@ -178,8 +178,8 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     sal_uInt32 nFavorite;
     for( nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
-        String aStr(SVX_RESSTR(RID_SVXFLOAT3D_FAVORITE));
-        aStr += sal_Unicode(' ');
+        OUString aStr(SVX_RESSTR(RID_SVXFLOAT3D_FAVORITE));
+        aStr += " ";
         aStr += OUString::number((sal_Int32)nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
         maCtlFavorites.InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );

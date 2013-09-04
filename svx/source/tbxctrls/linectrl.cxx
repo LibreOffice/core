@@ -179,7 +179,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
 
-        String aString( pBox->GetSelectEntry() );
+        OUString aString( pBox->GetSelectEntry() );
         pBox->Clear();
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID) );
@@ -232,7 +232,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
         if ( eState == SFX_ITEM_DISABLED )
         {
             pFld->Disable();
-            pFld->SetText( String() );
+            pFld->SetText( "" );
         }
         else
         {
