@@ -466,7 +466,7 @@ namespace svxform
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
-                    if ( m_sInstanceURL.Len() > 0 )
+                    if ( !m_sInstanceURL.isEmpty() )
                     {
                         LinkedInstanceWarningBox aMsgBox( this );
                         if ( aMsgBox.Execute() != RET_OK )
@@ -631,7 +631,7 @@ namespace svxform
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
-                    if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
+                    if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
                     {
                         LinkedInstanceWarningBox aMsgBox( this );
                         if ( aMsgBox.Execute() != RET_OK )
@@ -719,7 +719,7 @@ namespace svxform
         case TBI_ITEM_REMOVE:
         {
             bHandled = true;
-            if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
+            if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
             {
                 LinkedInstanceWarningBox aMsgBox( this );
                 if ( aMsgBox.Execute() != RET_OK )
@@ -1204,7 +1204,7 @@ namespace svxform
         m_aItemList.SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
     }
     //------------------------------------------------------------------------
-    String XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
+    OUString XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
     {
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
 
@@ -1355,10 +1355,10 @@ namespace svxform
         m_aItemList.DeleteAndClear();
     }
     //------------------------------------------------------------------------
-    String XFormsPage::LoadInstance(
+    OUString XFormsPage::LoadInstance(
         const Sequence< PropertyValue >& _xPropSeq, const ImageList& _rImgLst )
     {
-        String sRet;
+        OUString sRet;
         OUString sTemp;
         OUString sInstModel = PN_INSTANCE_MODEL;
         OUString sInstName = PN_INSTANCE_ID;

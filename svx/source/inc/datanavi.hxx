@@ -149,8 +149,8 @@ namespace svxform
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper
         // interface.
-        String                      m_sInstanceName;
-        String                      m_sInstanceURL;
+        OUString                    m_sInstanceName;
+        OUString                    m_sInstanceURL;
         bool                        m_bLinkOnce;
 
         DECL_LINK(TbxSelectHdl, void *);
@@ -175,27 +175,27 @@ namespace svxform
         virtual void                Resize();
 
         inline bool                 HasModel() const { return m_bHasModel; }
-        String                      SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
+        OUString                    SetModel( const XModel_ref& _xModel, sal_uInt16 _nPagePos );
         void                        ClearModel();
-        String                      LoadInstance( const PropertyValue_seq& _xPropSeq,
+        OUString                    LoadInstance( const PropertyValue_seq& _xPropSeq,
                                                   const ImageList& _rImgLst );
 
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
-        inline SvTreeListEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
-        inline const String&        GetInstanceName() const { return m_sInstanceName; }
-        inline const String&        GetInstanceURL() const { return m_sInstanceURL; }
+        inline SvTreeListEntry*     GetSelectedItem() const { return m_aItemList.FirstSelected(); }
+        inline const OUString&      GetInstanceName() const { return m_sInstanceName; }
+        inline const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
         inline bool                 GetLinkOnce() const { return m_bLinkOnce; }
-        inline void                 SetInstanceName( const String &name ) { m_sInstanceName=name; }
-        inline void                 SetInstanceURL( const String &url ) { m_sInstanceURL=url; }
+        inline void                 SetInstanceName( const OUString &name ) { m_sInstanceName=name; }
+        inline void                 SetInstanceURL( const OUString &url ) { m_sInstanceURL=url; }
         inline void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
 
         typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> XPropertySet_t;
         typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
 
         inline XPropertySet_t GetBindingForNode( const XNode_t &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
-        inline String GetServiceNameForNode( const XNode_t &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
+        inline OUString GetServiceNameForNode( const XNode_t &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
         inline XFormsUIHelper1_ref GetXFormsHelper( void ) const { return m_xUIHelper; }
     };
 
@@ -341,10 +341,10 @@ namespace svxform
 
         ItemNode*           m_pItemNode;
         DataItemType        m_eItemType;
-        String              m_sFL_Element;
-        String              m_sFL_Attribute;
-        String              m_sFL_Binding;
-        String              m_sFT_BindingExp;
+        OUString            m_sFL_Element;
+        OUString            m_sFL_Attribute;
+        OUString            m_sFL_Binding;
+        OUString            m_sFT_BindingExp;
 
         DECL_LINK(          CheckHdl, CheckBox * );
         DECL_LINK(          ConditionHdl, PushButton * );
@@ -393,11 +393,11 @@ namespace svxform
         ~AddConditionDialog();
 
         inline XFormsUIHelper1_ref  GetUIHelper() const { return m_xUIHelper; }
-        inline String               GetCondition() const { return m_aConditionED.GetText(); }
-        inline void                 SetCondition( const String& _rCondition );
+        inline OUString             GetCondition() const { return m_aConditionED.GetText(); }
+        inline void                 SetCondition( const OUString& _rCondition );
     };
 
-    inline void AddConditionDialog::SetCondition( const String& _rCondition )
+    inline void AddConditionDialog::SetCondition( const OUString& _rCondition )
     {
         m_aConditionED.SetText( _rCondition );
         m_aResultTimer.Start();
@@ -457,12 +457,12 @@ namespace svxform
         ManageNamespaceDialog( Window* pParent, AddConditionDialog* _pCondDlg, bool _bIsEdit );
         ~ManageNamespaceDialog();
 
-        inline void         SetNamespace( const String& _rPrefix, const String& _rURL );
-        inline String       GetPrefix() const { return m_aPrefixED.GetText(); }
-        inline String       GetURL() const { return m_aUrlED.GetText(); }
+        inline void         SetNamespace( const OUString& _rPrefix, const OUString& _rURL );
+        inline OUString     GetPrefix() const { return m_aPrefixED.GetText(); }
+        inline OUString     GetURL() const { return m_aUrlED.GetText(); }
     };
 
-    void ManageNamespaceDialog::SetNamespace( const String& _rPrefix, const String& _rURL )
+    void ManageNamespaceDialog::SetNamespace( const OUString& _rPrefix, const OUString& _rURL )
     {
         m_aPrefixED.SetText( _rPrefix );
         m_aUrlED.SetText( _rURL );
@@ -530,8 +530,8 @@ namespace svxform
         AddModelDialog( Window* pParent, bool _bEdit );
         ~AddModelDialog();
 
-        inline String           GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
+        inline OUString           GetName() const { return m_aNameED.GetText(); }
+        inline void             SetName( const OUString& _rName ) { m_aNameED.SetText( _rName );}
 
         inline bool             GetModifyDoc() const { return bool( m_aModifyCB.IsChecked() ); }
         inline void             SetModifyDoc( const bool _bModify ) { m_aModifyCB.Check( _bModify ); }
@@ -553,7 +553,7 @@ namespace svxform
         CancelButton            m_aEscBtn;
         HelpButton              m_aHelpBtn;
 
-        String                  m_sAllFilterName;
+        OUString                m_sAllFilterName;
 
         DECL_LINK(FilePickerHdl, void *);
 
@@ -562,10 +562,10 @@ namespace svxform
         ~AddInstanceDialog();
 
         inline void             SetRenameMode();
-        inline String           GetName() const { return m_aNameED.GetText(); }
-        inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
-        inline String           GetURL() const { return m_aURLED.GetText(); }
-        inline void             SetURL( const String& _rURL ) { m_aURLED.SetText( _rURL );}
+        inline OUString         GetName() const { return m_aNameED.GetText(); }
+        inline void             SetName( const OUString& _rName ) { m_aNameED.SetText( _rName );}
+        inline OUString         GetURL() const { return m_aURLED.GetText(); }
+        inline void             SetURL( const OUString& _rURL ) { m_aURLED.SetText( _rURL );}
         inline bool             IsLinkInstance() const { return ( m_aLinkInstanceCB.IsChecked() != sal_False ); }
         inline void             SetLinkInstance( bool _bLink ) { m_aLinkInstanceCB.Check( _bLink != false ); }
     };
