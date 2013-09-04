@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7fU\u003d",
+        "filename": "connectivity/source/drivers/firebird/Driver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-04T13:29:28Z",
+      "side": 1,
+      "message": "this is racy because another process may create the sTmpDirPath between the time when CreateTempName_Impl(..., false) removes the direcory and firebird starts using it (with potential security implications).\n\nactually CreateTempName_Impl should never be called with bKeep\u003dfalse\n\ncan you instead use utl::TempFile(..., true) and retain the instance as a member variable? surely the firebird thing will have stopped using the directory by the time FirebirdDriver is destroyed.\n\noh need to watch out, either call EnableKillingFile() so the dtor cleans up or ... actually there is no method to delete it \"now\" ?\n\n... bah the interface of utl::TempFile leaves a lot to be desired :(",
+      "revId": "b77884b49a9cacf8cbe30acc7a1d4c941331cbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
