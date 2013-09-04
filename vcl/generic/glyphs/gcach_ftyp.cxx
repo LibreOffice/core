@@ -51,26 +51,21 @@
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
 #include FT_SIZES_H
+#include FT_SYNTHESIS_H
 #include FT_TRUETYPE_TABLES_H
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
-
-#ifdef ANDROID
-#include FT_SYNTHESIS_H
-#endif
 
 #ifndef FT_RENDER_MODE_MONO  // happens in the MACOSX build
     #define FT_RENDER_MODE_MONO ft_render_mode_mono
 #endif
 #include "rtl/instance.hxx"
 
+#ifdef ANDROID
 #define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
-
-#if FTVERSION >= 2200
-typedef const FT_Vector* FT_Vector_CPtr;
-#else // FTVERSION < 2200
-typedef FT_Vector* FT_Vector_CPtr;
 #endif
+
+typedef const FT_Vector* FT_Vector_CPtr;
 
 #include <vector>
 
@@ -124,7 +119,6 @@ static FT_Library aLibFT = 0;
 
 // enable linking with old FT versions
 static int nFTVERSION = 0;
-void (*pFTEmbolden)(FT_GlyphSlot);
 static FT_UInt (*pFT_Face_GetCharVariantIndex)(FT_Face, FT_ULong, FT_ULong);
 
 typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
@@ -480,22 +474,17 @@ FreetypeManager::FreetypeManager()
     // system FreeType code (which *is* present in a system library,
     // libskia.so, but is not a public API, and in fact does crash the
     // app if used).
-    pFTEmbolden = FT_GlyphSlot_Embolden;
     pFT_Face_GetCharVariantIndex = FT_Face_GetCharVariantIndex;
     nFTVERSION = FTVERSION;
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
-    pFTEmbolden     = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
     pFT_Face_GetCharVariantIndex = (FT_UInt(*)(FT_Face, FT_ULong, FT_ULong))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Face_GetCharVariantIndex" );
 
     FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
     FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
     nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
-    // disable artificial emboldening with the Freetype API for older versions
-    if( nFTVERSION < 2110 )
-        pFTEmbolden = NULL;
     // disable FT_Face_GetCharVariantIndex for older versions
     // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
     if( nFTVERSION < 2404 )
@@ -1245,8 +1234,8 @@ void ServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     }
 
     const bool bOriginallyZeroWidth = (maFaceFT->glyph->metrics.horiAdvance == 0);
-    if( mbArtBold && pFTEmbolden )
-        (*pFTEmbolden)( maFaceFT->glyph );
+    if (mbArtBold)
+        FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     const int nCharWidth = bOriginallyZeroWidth ? 0 : lcl_GetCharWidth( maFaceFT, mfStretch, nGlyphFlags );
     rGD.SetCharWidth( nCharWidth );
@@ -1255,8 +1244,6 @@ void ServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
     ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
-    if( mbArtBold && pFTEmbolden && (nFTVERSION < 2200) ) // #i71094# workaround staircase bug
-        pGlyphFT->advance.y = 0;
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
@@ -1294,11 +1281,8 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 
     FT_Int nLoadFlags = mnLoadFlags;
     // #i70930# force mono-hinting for monochrome text
-    if( nFTVERSION >= 2110 ) //#i71947# unless it looks worse
-    {
-        nLoadFlags &= ~0xF0000;
-        nLoadFlags |= FT_LOAD_TARGET_MONO;
-    }
+    nLoadFlags &= ~0xF0000;
+    nLoadFlags |= FT_LOAD_TARGET_MONO;
 
     if( mbArtItalic )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
@@ -1317,8 +1301,8 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     if( rc != FT_Err_Ok )
         return false;
 
-    if( mbArtBold && pFTEmbolden )
-        (*pFTEmbolden)( maFaceFT->glyph );
+    if (mbArtBold)
+        FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
@@ -1371,17 +1355,8 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     const FT_Bitmap& rBitmapFT  = pBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnBitCount       = 1;
-    if( mbArtBold && !pFTEmbolden )
-    {
-        rRawBitmap.mnWidth = rBitmapFT.width + 1;
-        int nLineBytes = (rRawBitmap.mnWidth + 7) >> 3;
-        rRawBitmap.mnScanlineSize  = (nLineBytes > rBitmapFT.pitch) ? nLineBytes : rBitmapFT.pitch;
-    }
-    else
-    {
-        rRawBitmap.mnWidth          = rBitmapFT.width;
-        rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
-    }
+    rRawBitmap.mnWidth          = rBitmapFT.width;
+    rRawBitmap.mnScanlineSize   = rBitmapFT.pitch;
 
     const sal_uLong nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
 
@@ -1391,7 +1366,7 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
         rRawBitmap.mpBits.reset(new unsigned char[ rRawBitmap.mnAllocated ]);
     }
 
-    if( !mbArtBold || pFTEmbolden )
+    if (!mbArtBold)
     {
         memcpy( rRawBitmap.mpBits.get(), rBitmapFT.buffer, nNeededSize );
     }
@@ -1463,8 +1438,8 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     if( rc != FT_Err_Ok )
         return false;
 
-    if( mbArtBold && pFTEmbolden )
-        (*pFTEmbolden)( maFaceFT->glyph );
+    if (mbArtBold)
+        FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
@@ -1504,11 +1479,6 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     rRawBitmap.mnWidth          = rBitmapFT.width;
     rRawBitmap.mnBitCount       = 8;
     rRawBitmap.mnScanlineSize   = bEmbedded ? rBitmapFT.width : rBitmapFT.pitch;
-    if( mbArtBold && !pFTEmbolden )
-    {
-        ++rRawBitmap.mnWidth;
-            ++rRawBitmap.mnScanlineSize;
-    }
     rRawBitmap.mnScanlineSize = (rRawBitmap.mnScanlineSize + 3) & -4;
 
     const sal_uLong nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
@@ -1543,23 +1513,6 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
             }
             for(; x < int(rRawBitmap.mnScanlineSize); ++x )
                 *(pDest++) = 0;
-        }
-    }
-
-    if( mbArtBold && !pFTEmbolden )
-    {
-        // overlay with glyph image shifted by one left pixel
-        unsigned char* p = rRawBitmap.mpBits.get();
-        for( sal_uLong y=0; y < rRawBitmap.mnHeight; y++ )
-        {
-            unsigned char nLastByte = 0;
-            for( sal_uLong x=0; x < rRawBitmap.mnWidth; x++ )
-            {
-                unsigned char nTmp = p[x];
-                p[x] |= p[x] | nLastByte;
-                nLastByte = nTmp;
-            }
-            p += rRawBitmap.mnScanlineSize;
         }
     }
 
@@ -2133,8 +2086,8 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
     if( rc != FT_Err_Ok )
         return false;
 
-    if( mbArtBold && pFTEmbolden )
-        (*pFTEmbolden)( maFaceFT->glyph );
+    if (mbArtBold)
+        FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );

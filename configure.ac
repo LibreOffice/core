@@ -7682,9 +7682,8 @@ if test  "$test_freetype" = "yes"; then
     # * soname
     # FreeType's docs/VERSION.DLL provides a table mapping between the three
     #
-    # 9.4.3 is 2.1.5; the first FreeType release to provide a freetype2.pc file
-    # XXX: replace this with a real minimum required version
-    PKG_CHECK_MODULES( FREETYPE, freetype2 >= 9.4.3 )
+    # 9.9.3 is 2.2.0
+    PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
     FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     SYSTEM_FREETYPE=YES
 fi
