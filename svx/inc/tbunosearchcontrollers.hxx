@@ -53,7 +53,7 @@ public:
 
     virtual long PreNotify( NotifyEvent& rNEvt );
 
-    void Remember_Impl(const String& rStr);
+    void Remember_Impl(const OUString& rStr);
     void SetTextToSelected_Impl();
 
 private:

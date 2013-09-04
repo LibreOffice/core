@@ -409,7 +409,7 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
             GalleryObject aNewEntry;
 
             // update title of new object if necessary
-            if( !rObj.GetTitle().Len() )
+            if( rObj.GetTitle().isEmpty() )
             {
                 SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );
 
@@ -419,8 +419,8 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
                     delete pOldObj;
                 }
             }
-            else if( rObj.GetTitle() == String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) ) )
-                ( (SgaObject&) rObj ).SetTitle( String() );
+            else if( rObj.GetTitle() == "__<empty>__" )
+                ( (SgaObject&) rObj ).SetTitle( "" );
 
             ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry );
             pFoundEntry->nOffset = aNewEntry.nOffset;

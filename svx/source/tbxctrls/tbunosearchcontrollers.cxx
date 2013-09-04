@@ -136,7 +136,7 @@ FindTextFieldControl::~FindTextFieldControl()
 {
 }
 
-void FindTextFieldControl::Remember_Impl(const String& rStr)
+void FindTextFieldControl::Remember_Impl(const OUString& rStr)
 {
     sal_uInt16 nCount = GetEntryCount();
 

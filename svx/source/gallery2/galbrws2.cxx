@@ -750,7 +750,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     return bRet;
 }
 
-void GalleryBrowser2::SelectTheme( const String& rThemeName )
+void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 {
     delete mpIconView, mpIconView = NULL;
     delete mpListView, mpListView = NULL;
@@ -1222,7 +1222,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                         {
                             String aNewTitle( aDlg->GetTitle() );
 
-                            if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
+                            if( ( !aNewTitle.Len() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                             {
                                 if( !aNewTitle.Len() )
                                     aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
@@ -1274,16 +1274,16 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
     }
 }
 
-String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
+OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
 {
-    String          aRet;
+    OUString          aRet;
 
     INetURLObject aURL(rObj.GetURL());
 
     if( nItemTextFlags & GALLERY_ITEM_THEMENAME )
     {
         aRet += rTheme.GetName();
-        aRet += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+        aRet += " - ";
     }
 
     if( nItemTextFlags & GALLERY_ITEM_TITLE )
@@ -1312,7 +1312,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
         aRet += String(aURL.getFSysPath( INetURLObject::FSYS_DETECT ));
 
         if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
-            aRet += ')';
+            aRet += ")";
     }
 
     return aRet;
@@ -1328,9 +1328,9 @@ INetURLObject GalleryBrowser2::GetURL() const
     return aURL;
 }
 
-String GalleryBrowser2::GetFilterName() const
+OUString GalleryBrowser2::GetFilterName() const
 {
-    String aFilterName;
+    OUString aFilterName;
 
     if( mpCurTheme && mnCurActionPos != 0xffffffff )
     {
@@ -1339,7 +1339,8 @@ String GalleryBrowser2::GetFilterName() const
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-            INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
+            INetURLObject       aURL;
+            mpCurTheme->GetURL( mnCurActionPos, aURL );
             sal_uInt16          nFilter = rFilter.GetImportFormatNumberForShortName( aURL.GetExtension() );
 
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
