@@ -55,10 +55,11 @@ protected:
     ::std::vector< XMLPropertyState > _Filter(
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > rPropSet,
-            const sal_Bool bDefault ) const;
+            bool bDefault, bool bDisableFoFontFamily) const;
 
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
+            bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
             ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet > rPropSet ) const;
@@ -107,8 +108,8 @@ public:
         filter-processes. */
     ::std::vector< XMLPropertyState > Filter(
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet ) const
-                    { return _Filter(rPropSet, sal_False); }
+                    ::com::sun::star::beans::XPropertySet > rPropSet, bool bEnableFoFontFamily = false) const
+                    { return _Filter(rPropSet, false, bEnableFoFontFamily); }
 
     /** Like Filter(), except that:
       * - only properties that have the map flag MID_FLAG_DEFAULT_ITEM_EXPORT
@@ -117,8 +118,8 @@ public:
       */
     ::std::vector< XMLPropertyState > FilterDefaults(
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet ) const
-                    { return _Filter(rPropSet, sal_True); }
+                    ::com::sun::star::beans::XPropertySet > rPropSet, bool bEnableFoFontFamily = false) const
+                    { return _Filter(rPropSet, true, bEnableFoFontFamily); }
 
     /** Compare to arrays of XMLPropertyState */
     sal_Bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,

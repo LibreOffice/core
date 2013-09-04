@@ -191,6 +191,7 @@ XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper()
 }
 
 void XMLChartExportPropertyMapper::ContextFilter(
+    bool bEnableFoFontFamily,
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
@@ -266,7 +267,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
         }
     }
 
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+    SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
 void XMLChartExportPropertyMapper::handleElementItem(

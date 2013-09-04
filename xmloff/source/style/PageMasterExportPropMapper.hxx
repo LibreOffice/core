@@ -33,6 +33,7 @@ protected:
     XMLFootnoteSeparatorExport aFootnoteSeparatorExport;
 
     virtual void        ContextFilter(
+                            bool bEnableFoFontFamily,
                             ::std::vector< XMLPropertyState >& rProperties,
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rPropSet
                             ) const;
