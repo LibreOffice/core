@@ -66,6 +66,7 @@ struct Bcp47CountryEntry
     LanguageType    mnLang;
     const sal_Char* mpBcp47;
     sal_Char        maCountry[3];
+    const sal_Char* mpFallback;
 
     /** Obtain a language tag string with '-' separator. */
     OUString getTagString() const;
@@ -322,9 +323,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BELARUSIAN,                  "be", "BY" },
     { LANGUAGE_CATALAN,                     "ca", "ES" },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD" },   // Andorra
-    { LANGUAGE_USER_CATALAN_VALENCIAN,                     "ca", "XV" },   // XV: ISO 3166 user-assigned; workaround for UI localization only, do not use in document content!
-    { LANGUAGE_CATALAN,                    "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; UI localization quirk only, do not use in document content!
-//    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "ES" },   // In case MS format files escaped into the wild, map them back.
+    { LANGUAGE_CATALAN_VALENCIAN,           "ca", "XV" },   // XV: ISO 3166 user-assigned; old workaround for UI localization only, in case it escaped to document content
+    { LANGUAGE_CATALAN_VALENCIAN,          "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; old UI localization quirk only, in case it escaped to document content
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
     { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI" },
     { LANGUAGE_FRENCH_MALI,                 "fr", "ML" },
@@ -579,9 +579,10 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 
 static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
 {
-    // MS-LangID                            full BCP47, ISO3166
-//  { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca-ES-valencia", "ES" },   // for example, once we support it in l10n; TODO: add to unit test
-    { LANGUAGE_DONTKNOW,                    "", ""   }   // marks end of table
+    // MS-LangID                              full BCP47, ISO3166, ISO639-Variant or other fallback
+    { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
+    { LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN, "ca-ES-valencia", "ES", "" },   // In case MS format files using the old value escaped into the wild, map them back.
+    { LANGUAGE_DONTKNOW,                    "", "", "" }    // marks end of table
 };
 
 static IsoLanguageCountryEntry aLastResortFallbackEntry =
@@ -822,12 +823,13 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
-        // Search in BCP47, only full match, only LanguageTag can decide the
-        // proper fallback.
+        // Search in BCP47, only full match and one fallback, for other
+        // fallbacks only LanguageTag can decide.
         for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
                 pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
         {
-            if (rLocale.Variant.equalsIgnoreAsciiCase( pBcp47Entry->getTagString()))
+            if (    rLocale.Variant.equalsIgnoreAsciiCase( pBcp47Entry->getTagString()) ||
+                    rLocale.Variant.equalsIgnoreAsciiCaseAscii( pBcp47Entry->mpFallback))
                 return pBcp47Entry->getLocale();
         }
 

@@ -38,7 +38,7 @@ br       0  1150   # Breton
 brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
 ca       0  1027   # Catalan
-ca-XV    0  2051   # Catalan Valencian
+ca-valencia     0  2051   # Catalan Valencian
 cs       0  1029   # Czech
 cy       0  1106   # Welsh
 da       0  1030

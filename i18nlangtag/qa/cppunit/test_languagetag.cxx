@@ -153,12 +153,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "ES" );
         CPPUNIT_ASSERT( aLocale.Variant == s_ca_ES_valencia );
-        /* TODO: conversion doesn't know this yet, once it does activate test. */
-#if 0
-        CPPUNIT_ASSERT( ca_ES_valencia.getLanguageType() == LANGUAGE_USER_CATALAN_VALENCIAN );
-#else
-        CPPUNIT_ASSERT( ca_ES_valencia.getLanguageType() == LANGUAGE_SYSTEM );
-#endif
+        CPPUNIT_ASSERT( ca_ES_valencia.getLanguageType() == LANGUAGE_CATALAN_VALENCIAN );
         CPPUNIT_ASSERT( ca_ES_valencia.isValidBcp47() == true );
         CPPUNIT_ASSERT( ca_ES_valencia.isIsoLocale() == false );
         CPPUNIT_ASSERT( ca_ES_valencia.isIsoODF() == false );
@@ -172,12 +167,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[1] == "ca-valencia");
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[2] == "ca-ES");
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[3] == "ca");
-        /* TODO: conversion doesn't know this yet, once it does activate test. */
-#if 0
         CPPUNIT_ASSERT( ca_ES_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
-#else
-        CPPUNIT_ASSERT( ca_ES_valencia.makeFallback().getBcp47() == "ca-ES");
-#endif
     }
 
     {
@@ -200,12 +190,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia_Fallbacks.size() == 2);
         CPPUNIT_ASSERT( ca_valencia_Fallbacks[0] == "ca-valencia");
         CPPUNIT_ASSERT( ca_valencia_Fallbacks[1] == "ca");
-        /* TODO: conversion doesn't know this yet, once it does activate test. */
-#if 0
         CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
-#else
-        CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES");
-#endif
     }
 
     {

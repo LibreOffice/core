@@ -31,7 +31,7 @@ br \
 brx \
 bs \
 ca \
-ca-XV \
+ca-valencia \
 cs \
 cy \
 da \

@@ -409,7 +409,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 
 
 // static
-LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool bUserInterfaceSelection )
+LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool /*bUserInterfaceSelection*/ )
 {
     switch (nLang)
     {
@@ -445,6 +445,9 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         case LANGUAGE_OBSOLETE_USER_KABYLE:
             nLang = LANGUAGE_TAMAZIGHT_LATIN;
             break;
+        case LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN:
+            nLang = LANGUAGE_CATALAN_VALENCIAN;
+            break;
 
         // The following are not strictly obsolete but should be mapped to a
         // replacement locale when encountered.
@@ -458,13 +461,6 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         // do not support.
         case LANGUAGE_SPANISH_DATED:
             nLang = LANGUAGE_SPANISH_MODERN;
-            break;
-
-         // Do not use ca-XV for document content.
-         /* TODO: remove in case we implement BCP47 language tags. */
-        case LANGUAGE_USER_CATALAN_VALENCIAN:
-            if (!bUserInterfaceSelection)
-                nLang = LANGUAGE_CATALAN;
             break;
     }
     return nLang;

@@ -71,7 +71,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Bulgarian" ; LANGUAGE_BULGARIAN ; > ;
         < "Belarusian" ; LANGUAGE_BELARUSIAN ; > ;
         < "Catalan" ; LANGUAGE_CATALAN ; > ;
-        < "Catalan (Valencian)" ; LANGUAGE_USER_CATALAN_VALENCIAN ; > ;     // UI only!
+        < "Catalan (Valencian)" ; LANGUAGE_USER_CATALAN_VALENCIAN ; > ;
         < "Chinese (traditional)" ; LANGUAGE_CHINESE_TRADITIONAL ; > ;
         < "Chinese (simplified)" ; LANGUAGE_CHINESE_SIMPLIFIED ; > ;
         < "Chinese (Hong Kong)" ; LANGUAGE_CHINESE_HONGKONG ; > ;

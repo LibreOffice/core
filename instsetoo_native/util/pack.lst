@@ -7,13 +7,13 @@
 
 # Product       List_of_platforms                                                   List_of_languages   Target
 
-LibreOffice             unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|bg|bn|ca|ca-XV|cs|da|de|el|en-GB|es|et|eu|fi|fr|ga|gl|he|hu|it|ja|km|ko|lt|mk|nb|nl|om|pl|pt|pt-BR|ru|sh|sl|sr|sv|tr|vi|zh-CN|zh-TW openoffice
+LibreOffice             unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|bg|bn|ca|ca-valencia|cs|da|de|el|en-GB|es|et|eu|fi|fr|ga|gl|he|hu|it|ja|km|ko|lt|mk|nb|nl|om|pl|pt|pt-BR|ru|sh|sl|sr|sv|tr|vi|zh-CN|zh-TW openoffice
 #LibreOffice      unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12                                  en-US   openoffice
 #LibreOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxmacxi.pro,unxlngx6.pro    en-US   openofficedev
 LibreOffice_SDK         unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro  en-US   sdkoo
 #LibreOffice_Dev_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro  en-US   sdkoodev
 LibreOffice_Test         unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro  en-US   test
-LibreOfficeLanguagepack unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|as|ast|be|bg|bn|ca|ca-XV|cs|da|de|dz|el|en-GB|eo|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|ka|km|kn|ko|ku|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ro|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|uz|vi|zh-CN|zh-TW ooolanguagepack
+LibreOfficeLanguagepack unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|as|ast|be|bg|bn|ca|ca-valencia|cs|da|de|dz|el|en-GB|eo|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|ka|km|kn|ko|ku|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ro|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|uz|vi|zh-CN|zh-TW ooolanguagepack
 #LibreOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12,unxmacxi                                     de      ooolanguagepack
-#LibreOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro     ar|as|ast|bg|bn|ca|ca-XV|cs|da|de|dz|el|en-GB|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|km|kn|ko|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|vi|zh-CN|zh-TW   ooodevlanguagepack
+#LibreOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro     ar|as|ast|bg|bn|ca|ca-valencia|cs|da|de|dz|el|en-GB|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|km|kn|ko|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|vi|zh-CN|zh-TW   ooodevlanguagepack
 

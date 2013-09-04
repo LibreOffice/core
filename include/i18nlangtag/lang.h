@@ -140,6 +140,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_BULGARIAN                  0x0402
 #define LANGUAGE_BURMESE                    0x0455
 #define LANGUAGE_CATALAN                    0x0403
+#define LANGUAGE_CATALAN_VALENCIAN          0x0803
 #define LANGUAGE_CHEROKEE_UNITED_STATES     0x045C
 #define LANGUAGE_CHINESE_HONGKONG           0x0C04
 #define LANGUAGE_CHINESE_MACAU              0x1404
@@ -440,7 +441,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_CHUVASH               0x0635
 #define LANGUAGE_USER_GASCON                0x0636  /* Gascon France */
 #define LANGUAGE_USER_GERMAN_BELGIUM        0x8007  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_GERMAN)) */
-#define LANGUAGE_USER_CATALAN_VALENCIAN     0x8003  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
+#define LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN    0x8003  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
+#define LANGUAGE_USER_CATALAN_VALENCIAN     LANGUAGE_CATALAN_VALENCIAN
 #define LANGUAGE_USER_HAUSA_GHANA           0x8068  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HAUSA_NIGERIA)) */
 #define LANGUAGE_USER_EWE_GHANA             0x0637
 #define LANGUAGE_USER_ENGLISH_GHANA         0x8409  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
