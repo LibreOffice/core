@@ -174,7 +174,6 @@ void Throbber::initImages()
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
