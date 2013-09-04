@@ -56,7 +56,7 @@ interface XModify : com::sun::star::uno::XInterface
      * @since LibreOffice 4.0
      */
 
-    void InstallMimeTypes( [in] unsigned long xid, [in] sequence< string > mime_types, [in] string interaction);
+    void InstallMimeTypes( [in] unsigned long xid, [in] sequence< string > mimeTypes, [in] string interaction);
 
     /**
      * Installs fontconfig resources ( [in] usually fonts) from a configured software source.

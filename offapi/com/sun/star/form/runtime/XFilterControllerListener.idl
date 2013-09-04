@@ -44,7 +44,7 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
 
         <p>FilterEvent::PredicateExpression is the new <em>predicate expressions</em>.</p>
     */
-    void    predicateExpressionChanged( [in] FilterEvent _Event );
+    void    predicateExpressionChanged( [in] FilterEvent Event );
 
     /** is fired when a <em>disjunctive term</em> was removed from the filter of the filter controller.
 
@@ -54,7 +54,7 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
         <p>FilterEvent::FilterComponent and FilterEvent::PredicateExpression are not
         used for this event type.</p>
     */
-    void    disjunctiveTermRemoved( [in] FilterEvent _Event );
+    void    disjunctiveTermRemoved( [in] FilterEvent Event );
 
     /** is fired when a <em>disjunctive term</em> was added to the filter of the filter controller.
 
@@ -64,7 +64,7 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
         <p>FilterEvent::FilterComponent and FilterEvent::PredicateExpression are not
         used for this event type.</p>
     */
-    void    disjunctiveTermAdded( [in] FilterEvent _Event );
+    void    disjunctiveTermAdded( [in] FilterEvent Event );
 };
 
 

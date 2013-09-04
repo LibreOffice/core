@@ -43,7 +43,7 @@ published interface XScannerManager: com::sun::star::uno::XInterface
         configure the scan area, etc., it
         returns FALSE if user cancelled this process
     */
-    boolean configureScanner( [inout] com::sun::star::scanner::ScannerContext scanner_context )
+    boolean configureScanner( [inout] com::sun::star::scanner::ScannerContext scannerContext )
             raises( com::sun::star::scanner::ScannerException );
 
     /**start the scanning process
@@ -52,18 +52,18 @@ published interface XScannerManager: com::sun::star::uno::XInterface
         the ScannerManager if the scan was successful,
         an empty interface otherwise
     */
-    void startScan( [in] com::sun::star::scanner::ScannerContext scanner_context,
+    void startScan( [in] com::sun::star::scanner::ScannerContext scannerContext,
              [in] com::sun::star::lang::XEventListener listener )
             raises( com::sun::star::scanner::ScannerException );
 
     /**get the state of scanning after completion of scan
     */
-    com::sun::star::scanner::ScanError getError( [in] com::sun::star::scanner::ScannerContext scanner_context )
+    com::sun::star::scanner::ScanError getError( [in] com::sun::star::scanner::ScannerContext scannerContext )
             raises( com::sun::star::scanner::ScannerException );
 
     /**get the image after completion of scan
     */
-    com::sun::star::awt::XBitmap getBitmap( [in] com::sun::star::scanner::ScannerContext scanner_context )
+    com::sun::star::awt::XBitmap getBitmap( [in] com::sun::star::scanner::ScannerContext scannerContext )
             raises( com::sun::star::scanner::ScannerException );
 
 };

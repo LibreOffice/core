@@ -38,7 +38,7 @@ published interface XModeChangeListener : com::sun::star::lang::XEventListener
 {
     /** indicates that the mode of the broadcasting component has changed.
     */
-    void modeChanged( [in] ModeChangeEvent _rSource );
+    void modeChanged( [in] ModeChangeEvent rSource );
 };
 
 

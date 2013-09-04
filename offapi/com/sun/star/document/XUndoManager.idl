@@ -82,7 +82,7 @@ interface XUndoManager
 
     /** enters a new undo context.
 
-        <p>A new undo action will be added to the undo stack, with the title given as <code>i_title</code>. As long
+        <p>A new undo action will be added to the undo stack, with the title given as <code>iTitle</code>. As long
         as the context is not left, every undo action added to the stack will be treated as sub action. This means
         it will not be directly accessible at the Undo manager, not appear in any user interface, and cannot be
         separately undone or re-done.</p>
@@ -96,7 +96,7 @@ interface XUndoManager
         @see leaveUndoContext
     */
     void    enterUndoContext(
-                [in] string i_title
+                [in] string iTitle
             );
 
     /** enters a new undo context, creating a hidden undo action.
@@ -167,7 +167,7 @@ interface XUndoManager
             if the given undo action is `NULL`.
     */
     void    addUndoAction(
-                [in] XUndoAction i_action
+                [in] XUndoAction iAction
             )
             raises( ::com::sun::star::lang::IllegalArgumentException );
 
@@ -309,13 +309,13 @@ interface XUndoManager
     /** adds a listener to be notified of changes in the Undo/Redo stacks.
     */
     void    addUndoManagerListener(
-                [in] XUndoManagerListener i_listener
+                [in] XUndoManagerListener iListener
             );
 
     /** removes a previously added listener
     */
     void    removeUndoManagerListener(
-                [in] XUndoManagerListener i_listener
+                [in] XUndoManagerListener iListener
             );
 };
 

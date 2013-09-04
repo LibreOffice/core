@@ -342,9 +342,9 @@ interface XPropertyHandler
         @param Primary
             `TRUE` if and only if the primary button has been clicked, `FALSE` otherwise
 
-        @param out_Data
+        @param outData
             If the method returns InteractiveSelectionResult::ObtainedValue,
-            then out_Data contains the value which has been interactively obtained
+            then outData contains the value which has been interactively obtained
             from the user, and which still needs to be set at the inspected component.
 
         @param InspectorUI
@@ -369,7 +369,7 @@ interface XPropertyHandler
         onInteractivePropertySelection(
             [in] string PropertyName,
             [in] boolean Primary,
-            [out] any out_Data,
+            [out] any outData,
             [in] XObjectInspectorUI InspectorUI
         )
         raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException);

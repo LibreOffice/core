@@ -27,7 +27,7 @@ published interface XScannerManager2: com::sun::star::scanner::XScannerManager
         configure the scan area, etc., it, and scan it
         returns FALSE if user cancelled this process
     */
-    boolean configureScannerAndScan( [inout] com::sun::star::scanner::ScannerContext scanner_context,
+    boolean configureScannerAndScan( [inout] com::sun::star::scanner::ScannerContext scannerContext,
              [in] com::sun::star::lang::XEventListener listener )
             raises( com::sun::star::scanner::ScannerException );
 

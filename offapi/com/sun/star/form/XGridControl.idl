@@ -41,11 +41,11 @@ interface XGridControl
     /** registers a listener which is to be notified about state changes in
         the grid control
     */
-    void    addGridControlListener( [in] XGridControlListener _listener );
+    void    addGridControlListener( [in] XGridControlListener listener );
 
     /** revokes a previously registered grid control listener
     */
-    void    removeGridControlListener( [in] XGridControlListener _listener );
+    void    removeGridControlListener( [in] XGridControlListener listener );
 
     /// provides access to the data in the control, even in non-current rows
     interface XGridFieldDataSupplier;

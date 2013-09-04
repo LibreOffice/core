@@ -41,35 +41,35 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::addUndoAction
     */
-    void    undoActionAdded( [in] UndoManagerEvent i_event );
+    void    undoActionAdded( [in] UndoManagerEvent iEvent );
 
     /** is called when the top-most action of the undo stack has been undone.
 
         @see XUndoManager::undo
     */
-    void    actionUndone( [in] UndoManagerEvent i_event );
+    void    actionUndone( [in] UndoManagerEvent iEvent );
 
     /** is called when the top-most action of the Redo stack has been re-applied.
 
         @see XUndoManager::redo
     */
-    void    actionRedone( [in] UndoManagerEvent i_event );
+    void    actionRedone( [in] UndoManagerEvent iEvent );
 
     /** is called when both the Undo and the Redo stack have been cleared from all Undo actions.
 
         @see XUndoManager::clear
     */
-    void    allActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
+    void    allActionsCleared( [in] ::com::sun::star::lang::EventObject iEvent );
 
     /** is called when the Redo stack has been cleared.
 
         @see XUndoManager::clearRedo
     */
-    void    redoActionsCleared( [in] ::com::sun::star::lang::EventObject i_event );
+    void    redoActionsCleared( [in] ::com::sun::star::lang::EventObject iEvent );
 
     /** called when the complete undo manager has been reset
     */
-    void    resetAll( [in] ::com::sun::star::lang::EventObject i_event );
+    void    resetAll( [in] ::com::sun::star::lang::EventObject iEvent );
 
     /** is called when a new Undo context has been entered.
 
@@ -79,7 +79,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::enterUndoContext
     */
-    void    enteredContext( [in] UndoManagerEvent i_event );
+    void    enteredContext( [in] UndoManagerEvent iEvent );
 
     /** is called when a new hidden Undo context has been entered.
 
@@ -89,7 +89,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
         @see XUndoManager::enterUndoContext
     */
-    void    enteredHiddenContext( [in] UndoManagerEvent i_event );
+    void    enteredHiddenContext( [in] UndoManagerEvent iEvent );
 
     /** is called when an Undo context has been left.
 
@@ -101,7 +101,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         @see leftHiddenUndocontext
         @see cancelledContext
     */
-    void    leftContext( [in] UndoManagerEvent i_event );
+    void    leftContext( [in] UndoManagerEvent iEvent );
 
     /** is calledn when a hidden Undo context has been left.
 
@@ -112,7 +112,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         @see leftContext
         @see cancelledContext
     */
-    void    leftHiddenContext( [in] UndoManagerEvent i_event );
+    void    leftHiddenContext( [in] UndoManagerEvent iEvent );
 
     /** is called when an Undo context has been left, but no actions have been added within this context.
 
@@ -123,7 +123,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
         @see leftContext
         @see leftHiddenContext
     */
-    void    cancelledContext( [in] UndoManagerEvent i_event );
+    void    cancelledContext( [in] UndoManagerEvent iEvent );
 };
 
 

@@ -37,7 +37,7 @@ interface XFormControllerContext
 {
     /** ensures the given control is visible, by scrolling the view if necessary.
     */
-    void    makeVisible( [in] ::com::sun::star::awt::XControl _Control );
+    void    makeVisible( [in] ::com::sun::star::awt::XControl Control );
 };
 
 

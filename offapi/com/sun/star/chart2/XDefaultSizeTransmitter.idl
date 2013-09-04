@@ -36,10 +36,10 @@ module chart2
 interface XDefaultSizeTransmitter : ::com::sun::star::uno::XInterface
 {
     /** set a default size
-        @param aSize_100TH_MM
+        @param aSize100ThMm
             specifies a size in hundredth mm.
      */
-    void setDefaultSize( [in] ::com::sun::star::awt::Size aSize_100TH_MM );
+    void setDefaultSize( [in] ::com::sun::star::awt::Size aSize100ThMm );
 };
 
 } ; // chart2

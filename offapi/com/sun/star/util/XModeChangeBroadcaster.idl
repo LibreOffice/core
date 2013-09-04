@@ -42,12 +42,12 @@ published interface XModeChangeBroadcaster : com::sun::star::uno::XInterface
     /** adds the given listener to the list of components to be notified when the mode
         changes.
     */
-    void addModeChangeListener( [in] XModeChangeListener _rxListener );
+    void addModeChangeListener( [in] XModeChangeListener rxListener );
 
     /** removes the given listener from the list of components to be notified when the mode
         changes.
     */
-    void removeModeChangeListener( [in] XModeChangeListener _rxListener );
+    void removeModeChangeListener( [in] XModeChangeListener rxListener );
 
     /** adds the given listener to the list of components to be notified when the mode
         is about to change.
@@ -55,7 +55,7 @@ published interface XModeChangeBroadcaster : com::sun::star::uno::XInterface
         @throws com::sun::star::lang::NoSupportException
             if the component does not allow vetoing mode changes
     */
-    void addModeChangeApproveListener( [in] XModeChangeApproveListener _rxListener )
+    void addModeChangeApproveListener( [in] XModeChangeApproveListener rxListener )
         raises( com::sun::star::lang::NoSupportException );
 
     /** remove the given listener from the list of components to be notified when the mode
@@ -64,7 +64,7 @@ published interface XModeChangeBroadcaster : com::sun::star::uno::XInterface
         @throws com::sun::star::lang::NoSupportException
             if the component does not allow vetoing mode changes
     */
-    void removeModeChangeApproveListener( [in] XModeChangeApproveListener _rxListener )
+    void removeModeChangeApproveListener( [in] XModeChangeApproveListener rxListener )
         raises( com::sun::star::lang::NoSupportException );
 };
 

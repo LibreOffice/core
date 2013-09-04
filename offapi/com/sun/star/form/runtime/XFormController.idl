@@ -338,12 +338,12 @@ interface XFormController
     /** adds the specified listener to receive notifications whenever the activation state of
         the controller changes.
      */
-    void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener _Listener );
+    void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener Listener );
 
     /** removes the specified listener from the list of components to receive notifications whenever the activation
         state of the controller changes.
      */
-    void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener _Listener );
+    void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener Listener );
 
     /** adds a controller to the list of child controllers
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -351,7 +351,7 @@ interface XFormController
             mirror the hierarchy of the forms the are responsible for, this means that the form of the given
             child controller must be a child of the controller at which the method is invoked.
     */
-    void addChildController( [in] XFormController _ChildController )
+    void addChildController( [in] XFormController ChildController )
         raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 

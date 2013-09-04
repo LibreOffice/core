@@ -44,19 +44,19 @@ interface XDocumentEventBroadcaster
 {
     /** registers a listener which is notified about document events
 
-        @param _Listener
+        @param Listener
             the listener to register. The behavior of the method is undefined this listener
             is `NULL`.
     */
-    void    addDocumentEventListener( [in] XDocumentEventListener _Listener );
+    void    addDocumentEventListener( [in] XDocumentEventListener Listener );
 
     /** revokes a listener which has previously been registered to be notified about document events.
 
-        @param _Listener
+        @param Listener
             the listener to revoke. The behavior of the method is undefined this listener
             is `NULL`.
     */
-    void    removeDocumentEventListener( [in] XDocumentEventListener _Listener );
+    void    removeDocumentEventListener( [in] XDocumentEventListener Listener );
 
     /** causes the broadcaster to notify all registered listeners of the given event
 
@@ -71,15 +71,15 @@ interface XDocumentEventBroadcaster
         their own discretion. Again, in this case they're encouraged to document this in their service
         contract.</p>
 
-        @param _EventName
+        @param EventName
             the name of the event to be notified.
-        @param _ViewController
+        @param ViewController
             the view/controller which the event applies to. May be `NULL`
-        @param _Supplement
+        @param Supplement
             supplemental information related to the event.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if _EventName is empty, or if _EventName is not supported by the
+            if EventName is empty, or if EventName is not supported by the
             document implementation.
 
         @throws ::com::sun::star::lang::NoSupportException
@@ -88,9 +88,9 @@ interface XDocumentEventBroadcaster
             be unable to fill in the <code>Source</code> member of the DocumentEvent instance.
     */
     void    notifyDocumentEvent(
-                [in] string _EventName,
-                [in] ::com::sun::star::frame::XController2 _ViewController,
-                [in] any _Supplement
+                [in] string EventName,
+                [in] ::com::sun::star::frame::XController2 ViewController,
+                [in] any Supplement
             )
             raises ( ::com::sun::star::lang::IllegalArgumentException,
                      ::com::sun::star::lang::NoSupportException );

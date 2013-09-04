@@ -38,7 +38,7 @@ module com { module sun { module star { module sdb {
     /** notifies the listener that the <code>RowSet</code> associated with a XRowSetSupplier
         has changed.
     */
-    void onRowSetChanged( [in] ::com::sun::star::lang::EventObject i_Event );
+    void onRowSetChanged( [in] ::com::sun::star::lang::EventObject iEvent );
 };
 
 

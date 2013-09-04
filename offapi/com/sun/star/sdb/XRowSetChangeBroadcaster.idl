@@ -38,11 +38,11 @@ interface XRowSetChangeBroadcaster
 {
     /** adds a listener to be notified when the <code>RowSet</code> supplied by the component changes.
     */
-    void addRowSetChangeListener( [in] XRowSetChangeListener i_Listener );
+    void addRowSetChangeListener( [in] XRowSetChangeListener iListener );
 
     /** removes a previously added listener.
     */
-    void removeRowSetChangeListener( [in] XRowSetChangeListener i_Listener );
+    void removeRowSetChangeListener( [in] XRowSetChangeListener iListener );
 };
 
 

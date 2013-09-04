@@ -73,11 +73,11 @@ interface XFilterController
         <p>Registering the same listener multiple times results in multiple notifications of the same event,
         and also requires multiple revocations of the listener.
     */
-    void    addFilterControllerListener( [in] XFilterControllerListener _Listener );
+    void    addFilterControllerListener( [in] XFilterControllerListener Listener );
 
     /** revokes a listener which was previously registered to be notified of certain changes in the form based filter.
     */
-    void    removeFilterControllerListener( [in] XFilterControllerListener _Listener );
+    void    removeFilterControllerListener( [in] XFilterControllerListener Listener );
 
     /** is the number of <em>filter components</em>, or filter controls, which the filter controller is responsible
         for.
@@ -99,22 +99,22 @@ interface XFilterController
 
     /** sets a given <em>predicate expression</em>
 
-        @param _Component
+        @param Component
             denotes the filter component whose expression is to be set. Must be greater than or equal to 0, and smaller than
             #FilterComponents.
 
-        @param _Term
+        @param Term
             denotes the <em>disjunctive term</em> in which the expression is to be set. Must be greater than or equal to 0,
             and smaller than #DisjunctiveTerms.
 
-        @param _PredicateExpression
+        @param PredicateExpression
             denotes the <em>predicate expression</em> to set for the given filter component in the given term.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if one of the indexes is out of the allowed range
     */
     void
-        setPredicateExpression( [in] long _Component, [in] long _Term, [in] string _PredicateExpression )
+        setPredicateExpression( [in] long Component, [in] long Term, [in] string PredicateExpression )
             raises( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the filter component with the given index.
@@ -123,17 +123,17 @@ interface XFilterController
         to obtain the database column which the filter control works on, by examining the control model's <code>BoundField</code>
         property.</p>
 
-        @param _Component
+        @param Component
             denotes the index of the filter component whose control should be obtained. Must be greater than or equal to 0,
             and smaller than #FilterComponents.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if _Component is out of the allowed range.
+            if Component is out of the allowed range.
 
         @see ::com::sun::star::form::DataAwareControlModel::BoundField
     */
     ::com::sun::star::awt::XControl
-        getFilterComponent( [in] long _Component )
+        getFilterComponent( [in] long Component )
             raises( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the entirety of the <em>predicate expressions</em> represented by the filter controller.
@@ -146,15 +146,15 @@ interface XFilterController
 
     /** removes a given <em>disjunctive term</em>
 
-        @param _Term
+        @param Term
             the index of the term to remove. Must be greater than or equal to 0, and smaller than
             #DisjunctiveTerms.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if _Term is out of the allowed range.
+            if Term is out of the allowed range.
     */
     void
-        removeDisjunctiveTerm( [in] long _Term )
+        removeDisjunctiveTerm( [in] long Term )
             raises( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** appends an empty disjunctive term to the list of terms.

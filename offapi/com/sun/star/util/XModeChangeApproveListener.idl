@@ -44,7 +44,7 @@ published interface XModeChangeApproveListener : com::sun::star::lang::XEventLis
         @throws VetoException
             when the mode change is vetoed
     */
-    void approveModeChange( [in] ModeChangeEvent _rSource )
+    void approveModeChange( [in] ModeChangeEvent rSource )
         raises ( VetoException );
 };
 

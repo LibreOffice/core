@@ -70,17 +70,17 @@ interface XAnimatedImages
 
     /** returns the URLs of the image set with the given index
 
-        @param i_index
+        @param iIndex
             the index of the set those image URLs are to be retrieved. Must be greater than or equal to <code>0</code>,
             and smaller than the value returned by getImageSetCount().
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>i_index</code> is not a valid index.
+            if the <code>iIndex</code> is not a valid index.
     */
     sequence< string >
         getImageSet
         (
-            [in] long i_index
+            [in] long iIndex
         )
         raises
         (
@@ -89,20 +89,20 @@ interface XAnimatedImages
 
     /** sets the URLs of the image set with the given index
 
-        @param i_index
+        @param iIndex
             the index at which a new image set should be inserted. Must be greater than or equal to <code>0</code>,
             and smaller than or equal to the value returned by getImageSetCount().
-        @param i_imageURLs
+        @param iImageURLs
             the URLs for the images for the given set. Will be resolved using a com::sun::star::graphic::GraphicProvider.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>i_index</code> is not a valid index.
+            if the <code>iIndex</code> is not a valid index.
     */
     void
         insertImageSet
         (
-            [in] long i_index,
-            [in] sequence< string > i_imageURLs
+            [in] long iIndex,
+            [in] sequence< string > iImageURLs
         )
         raises
         (
@@ -111,21 +111,21 @@ interface XAnimatedImages
 
     /** replaces the image set given by index with a new one
 
-        @param i_index
+        @param iIndex
             the index of the set those image URLs are to be replaced. Must be greater than or equal to <code>0</code>,
             and smaller than the value returned by getImageSetCount().
 
-        @param i_imageURLs
+        @param iImageURLs
             the URLs for the images for the given set. Will be resolved using a com::sun::star::graphic::GraphicProvider.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>i_index</code> is not a valid index.
+            if the <code>iIndex</code> is not a valid index.
     */
     void
         replaceImageSet
         (
-            [in] long i_index,
-            [in] sequence< string > i_imageURLs
+            [in] long iIndex,
+            [in] sequence< string > iImageURLs
         )
         raises
         (
@@ -135,17 +135,17 @@ interface XAnimatedImages
 
     /** removes the image set with the given index
 
-        @param i_index
+        @param iIndex
             the index of the set to remove. Must be greater than or equal to <code>0</code>,
             and smaller than the value returned by getImageSetCount().
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the <code>i_index</code> is not a valid index.
+            if the <code>iIndex</code> is not a valid index.
     */
     void
         removeImageSet
         (
-            [in] long i_index
+            [in] long iIndex
         )
         raises
         (

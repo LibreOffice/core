@@ -36,7 +36,7 @@ interface XGridControlListener : ::com::sun::star::lang::XEventListener
     /** called when the current column in a grid control changed
         @see XGrid::getCurrentColumnPosition
     */
-    void    columnChanged( [in] ::com::sun::star::lang::EventObject _event );
+    void    columnChanged( [in] ::com::sun::star::lang::EventObject event );
 };
 
 

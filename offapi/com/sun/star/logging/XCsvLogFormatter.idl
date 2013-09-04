@@ -55,9 +55,9 @@ interface XCsvLogFormatter : XLogFormatter
         column, any logged information has to be send through this
         method before calling log(). E.g.:
 
-        <code>XLoggerInstance.log(1000, XCsvLogFormatterInstance.formatMultiColumn(column_data))</code>
+        <code>XLoggerInstance.log(1000, XCsvLogFormatterInstance.formatMultiColumn(columnData))</code>
     */
-    string formatMultiColumn( [in] sequence< string > column_data);
+    string formatMultiColumn( [in] sequence< string > columnData);
 };
 
 
