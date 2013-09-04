@@ -47,10 +47,18 @@ using namespace ::svxform;
 }
 
 //-----------------------------------------------------------------------------
+
+// Encapsulation violation: We *know* that
+// SvxUnoDrawMSFactory::createInstanceWithArguments() always throws.
+
+SAL_WNOUNREACHABLE_CODE_PUSH
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL  SvxFmMSFactory::createInstanceWithArguments(const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     return SvxUnoDrawMSFactory::createInstanceWithArguments(ServiceSpecifier, Arguments );
 }
+
+SAL_WNOUNREACHABLE_CODE_POP
 
 //-----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
