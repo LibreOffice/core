@@ -50,12 +50,12 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 #include FT_OUTLINE_H
+#include FT_SIZES_H
 #include FT_TRUETYPE_TABLES_H
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
 #ifdef ANDROID
-#include FT_SIZES_H
 #include FT_SYNTHESIS_H
 #endif
 
@@ -122,14 +122,10 @@ static void InitGammaTable()
 
 static FT_Library aLibFT = 0;
 
-// #110607# enable linking with old FT versions
+// enable linking with old FT versions
 static int nFTVERSION = 0;
-static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
-static FT_Error (*pFTActivateSize)(FT_Size);
-static FT_Error (*pFTDoneSize)(FT_Size);
 void (*pFTEmbolden)(FT_GlyphSlot);
 static FT_UInt (*pFT_Face_GetCharVariantIndex)(FT_Face, FT_ULong, FT_ULong);
-static bool bEnableSizeFT = false;
 
 typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
@@ -348,11 +344,8 @@ void FtFontInfo::InitHashes() const
 
 FT_FaceRec_* FtFontInfo::GetFaceFT()
 {
-    // get faceFT once/multiple depending on availability of SizeFT APIs
-    if( (mnRefCount++ <= 0) || !bEnableSizeFT )
+    if (!maFaceFT && mpFontFile->Map())
     {
-        if( !mpFontFile->Map() )
-            return NULL;
         FT_Error rc = FT_New_Memory_Face( aLibFT,
             (FT_Byte*)mpFontFile->GetBuffer(),
             mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
@@ -360,6 +353,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
             maFaceFT = NULL;
     }
 
+   ++mnRefCount;
    return maFaceFT;
 }
 
@@ -388,12 +382,11 @@ GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
 
 // -----------------------------------------------------------------------
 
-void FtFontInfo::ReleaseFaceFT( FT_FaceRec_* pFaceFT )
+void FtFontInfo::ReleaseFaceFT()
 {
-    // release last/each depending on SizeFT availability
-    if( (--mnRefCount <= 0) || !bEnableSizeFT )
+    if (--mnRefCount <= 0)
     {
-        FT_Done_Face( pFaceFT );
+        FT_Done_Face( maFaceFT );
         maFaceFT = NULL;
         mpFontFile->Unmap();
     }
@@ -487,22 +480,14 @@ FreetypeManager::FreetypeManager()
     // system FreeType code (which *is* present in a system library,
     // libskia.so, but is not a public API, and in fact does crash the
     // app if used).
-    pFTNewSize = FT_New_Size;
-    pFTActivateSize = FT_Activate_Size;
-    pFTDoneSize = FT_Done_Size;
     pFTEmbolden = FT_GlyphSlot_Embolden;
     pFT_Face_GetCharVariantIndex = FT_Face_GetCharVariantIndex;
     nFTVERSION = FTVERSION;
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
     // Get version of freetype library to enable workarounds.
-    pFTNewSize      = (FT_Error(*)(FT_Face,FT_Size*))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_New_Size" );
-    pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
-    pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
     pFTEmbolden     = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
     pFT_Face_GetCharVariantIndex = (FT_UInt(*)(FT_Face, FT_ULong, FT_ULong))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Face_GetCharVariantIndex" );
-
-    bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
     FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
     FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
@@ -541,8 +526,7 @@ FreetypeManager::FreetypeManager()
 
 FT_Face ServerFont::GetFtFace() const
 {
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     return maFaceFT;
 }
@@ -683,12 +667,8 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
         return;
 
-    // perf: use maSizeFT if available
-    if( bEnableSizeFT )
-    {
-        pFTNewSize( maFaceFT, &maSizeFT );
-        pFTActivateSize( maSizeFT );
-    }
+    FT_New_Size( maFaceFT, &maSizeFT );
+    FT_Activate_Size( maSizeFT );
     FT_Error rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
     if( rc != FT_Err_Ok )
         return;
@@ -885,9 +865,9 @@ ServerFont::~ServerFont()
         rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
     if( maSizeFT )
-        pFTDoneSize( maSizeFT );
+        FT_Done_Size( maSizeFT );
 
-    mpFontInfo->ReleaseFaceFT( maFaceFT );
+    mpFontInfo->ReleaseFaceFT();
 
     ReleaseFromGarbageCollect();
 }
@@ -914,8 +894,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     if ( IsStarSymbol( rTo.GetFamilyName() ) )
         rTo.SetSymbolFlag( true );
 
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     rFactor = 0x100;
 
@@ -1242,8 +1221,7 @@ static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFl
 
 void ServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1309,8 +1287,7 @@ bool ServerFont::GetAntialiasAdvice( void ) const
 
 bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1464,8 +1441,7 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 
 bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1740,8 +1716,7 @@ sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
     // when font faces of different sizes share the same maFaceFT
     // then we have to make sure that it uses the correct maSizeFT
-    if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+    FT_Activate_Size( maSizeFT );
 
     // first figure out which glyph pairs are involved in kerning
     sal_uLong nKernLength = 0;
@@ -2140,7 +2115,7 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
-        pFTActivateSize( maSizeFT );
+        FT_Activate_Size( maSizeFT );
 
     rB2DPolyPoly.clear();
 
