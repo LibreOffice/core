@@ -316,7 +316,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
         OUString aStr;
 
         if( aValue >>= aStr )
-            aUnoControlTypeName = String(aStr);
+            aUnoControlTypeName = aStr;
     }
 
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
@@ -516,7 +516,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
             uno::Any aValue( xSet->getPropertyValue(String("DefaultControl", osl_getThreadTextEncoding())) );
             OUString aStr;
             if( aValue >>= aStr )
-                aUnoControlTypeName = String(aStr);
+                aUnoControlTypeName = aStr;
         }
 
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);

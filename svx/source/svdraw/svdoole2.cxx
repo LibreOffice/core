@@ -683,7 +683,7 @@ public:
     bool            mbConnected;
 
     SdrEmbedObjectLink* mpObjectLink;
-    String maLinkURL;
+    OUString maLinkURL;
 
     SdrOle2ObjImpl()
     : pGraphicObject( NULL )
@@ -967,7 +967,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY_THROW );
                 xLinkSupport->breakLink( xStorage, mpImpl->aPersistName );
                 DisconnectFileLink_Impl();
-                mpImpl->maLinkURL = String();
+                mpImpl->maLinkURL = "";
             }
             catch( ::com::sun::star::uno::Exception& )
             {
@@ -1005,8 +1005,8 @@ void SdrOle2Obj::CheckFileLink_Impl()
             uno::Reference< embed::XLinkageSupport > xLinkSupport( xObjRef.GetObject(), uno::UNO_QUERY );
             if ( xLinkSupport.is() && xLinkSupport->isLink() )
             {
-                String aLinkURL = xLinkSupport->getLinkURL();
-                if ( aLinkURL.Len() )
+                OUString aLinkURL = xLinkSupport->getLinkURL();
+                if ( !aLinkURL.isEmpty() )
                 {
                     // this is a file link so the model link manager should handle it
                     sfx2::LinkManager* pLinkManager = pModel->GetLinkManager();

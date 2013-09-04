@@ -410,20 +410,20 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    String aEngine(((SdrCustomShapeEngineItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
-    if ( !aEngine.Len() )
-        aEngine = String( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
+    OUString aEngine(((SdrCustomShapeEngineItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
+    if ( aEngine.isEmpty() )
+        aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
 
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
-        if ( aEngine.Len() )
+        if ( !aEngine.isEmpty() )
         {
             Sequence< Any > aArgument( 1 );
             Sequence< PropertyValue > aPropValues( 1 );
-            aPropValues[ 0 ].Name = OUString("CustomShape");
+            aPropValues[ 0 ].Name = "CustomShape";
             aPropValues[ 0 ].Value <<= aXShape;
             aArgument[ 0 ] <<= aPropValues;
             Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );

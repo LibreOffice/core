@@ -1000,25 +1000,25 @@ OUString SdrTextObj::TakeObjNameSingul() const
     if(pOutlinerParaObject && eTextKind != OBJ_OUTLINETEXT)
     {
         // shouldn't currently cause any problems at OUTLINETEXT
-        XubString aStr2(comphelper::string::stripStart(pOutlinerParaObject->GetTextObject().GetText(0), ' '));
+        OUString aStr2(comphelper::string::stripStart(pOutlinerParaObject->GetTextObject().GetText(0), ' '));
 
         // avoid non expanded text portions in object name
         // (second condition is new)
-        if(aStr2.Len() && aStr2.Search(sal_Unicode(255)) == STRING_NOTFOUND)
+        if(!aStr2.isEmpty() && aStr2.indexOf(sal_Unicode(255)) == -1)
         {
             // space between ResStr and content text
-            aStr += sal_Unicode(' ');
+            aStr += " ";
 
-            aStr += sal_Unicode('\'');
+            aStr += "\'";
 
-            if(aStr2.Len() > 10)
+            if(aStr2.getLength() > 10)
             {
-                aStr2.Erase(8);
-                aStr2.AppendAscii("...", 3);
+                aStr2 = aStr2.replaceAt(8, 1, "");
+                aStr2 += "...";
             }
 
             aStr += aStr2;
-            aStr += sal_Unicode('\'');
+            aStr += "\'";
         }
     }
 

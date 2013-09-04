@@ -1183,7 +1183,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
 
     // Undo-String will be set later
     if( bUndo )
-        BegUndo(String(), String(), bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
+        BegUndo("", "", bNoPolyPoly ? SDRREPFUNC_OBJ_COMBINE_ONEPOLY : SDRREPFUNC_OBJ_COMBINE_POLYPOLY);
 
     // #105899# First, guarantee that all objects are converted to polyobjects,
     // especially for SdrGrafObj with bitmap filling this is necessary to not
@@ -1615,8 +1615,7 @@ void SdrEditView::DismantleMarkedObjects(sal_Bool bMakeLines)
     if( bUndo )
     {
         // comment is constructed later
-        BegUndo(String(), String(),
-            bMakeLines ? SDRREPFUNC_OBJ_DISMANTLE_LINES : SDRREPFUNC_OBJ_DISMANTLE_POLYS);
+        BegUndo("", "", bMakeLines ? SDRREPFUNC_OBJ_DISMANTLE_LINES : SDRREPFUNC_OBJ_DISMANTLE_POLYS);
     }
 
     sal_uIntPtr nm;
@@ -1791,7 +1790,7 @@ void SdrEditView::UnGroupMarked()
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
-        BegUndo(String(), String(), SDRREPFUNC_OBJ_UNGROUP);
+        BegUndo("", "", SDRREPFUNC_OBJ_UNGROUP);
 
     sal_uIntPtr nCount=0;
     OUString aName1;
@@ -1979,7 +1978,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(String(), String(), SDRREPFUNC_OBJ_IMPORTMTF);
+        BegUndo("", "", SDRREPFUNC_OBJ_IMPORTMTF);
 
     SortMarkedObjects();
     SdrMarkList aForTheDescription;

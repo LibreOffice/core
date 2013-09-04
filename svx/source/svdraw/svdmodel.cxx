@@ -536,7 +536,7 @@ void SdrModel::BegUndo()
 {
     if( mpImpl->mpUndoManager )
     {
-        const String aEmpty;
+        const OUString aEmpty;
         mpImpl->mpUndoManager->EnterListAction(aEmpty,aEmpty);
         nUndoLevel++;
     }
@@ -558,7 +558,7 @@ void SdrModel::BegUndo(const OUString& rComment)
 {
     if( mpImpl->mpUndoManager )
     {
-        const String aEmpty;
+        const OUString aEmpty;
         mpImpl->mpUndoManager->EnterListAction( rComment, aEmpty );
         nUndoLevel++;
     }
@@ -581,7 +581,7 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         {
             aComment = aComment.replaceFirst("%1", rObjDescr);
         }
-        const String aEmpty;
+        const OUString aEmpty;
         mpImpl->mpUndoManager->EnterListAction( aComment,aEmpty );
         nUndoLevel++;
     }
@@ -1173,7 +1173,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
         case FUNIT_NONE   :
         case FUNIT_CUSTOM :
         {
-            rStr = String();
+            rStr = "";
             break;
         }
         case FUNIT_100TH_MM:
@@ -1327,10 +1327,10 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     // if necessary, add separators before every third digit
     if( nVorKomma > 3 )
     {
-        String aThoSep( rLoc.getNumThousandSep() );
-        if ( aThoSep.Len() > 0 )
+        OUString aThoSep( rLoc.getNumThousandSep() );
+        if ( !aThoSep.isEmpty() )
         {
-            sal_Unicode cTho( aThoSep.GetChar(0) );
+            sal_Unicode cTho( aThoSep[0] );
             sal_Int32 i(nVorKomma - 3);
 
             while(i > 0)
@@ -1342,11 +1342,11 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     }
 
     if (aBuf.isEmpty())
-        aBuf.append(sal_Unicode('0'));
+        aBuf.append("0");
 
     if(bNegative)
     {
-        aBuf.insert(0, sal_Unicode('-'));
+        aBuf.insert(0, "-");
     }
 
     if(!bNoUnitChars)

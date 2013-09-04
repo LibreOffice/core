@@ -1196,7 +1196,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, sal_Bool bSetItemOnObject, 
     GradTransGradient aGradTransGradient;
     GradTransVector aGradTransVector;
 
-    String aString;
+    OUString aString;
 
     aGradTransVector.maPositionA = basegfx::B2DPoint(GetPos().X(), GetPos().Y());
     aGradTransVector.maPositionB = basegfx::B2DPoint(Get2ndPos().X(), Get2ndPos().Y());
@@ -1220,13 +1220,13 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, sal_Bool bSetItemOnObject, 
 
         if(IsGradient())
         {
-            aString = String();
+            aString = "";
             XFillGradientItem aNewGradItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewGradItem);
         }
         else
         {
-            aString = String();
+            aString = "";
             XFillFloatTransparenceItem aNewTransItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewTransItem);
         }

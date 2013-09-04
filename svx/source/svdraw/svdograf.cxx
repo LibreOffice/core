@@ -67,7 +67,7 @@ using namespace ::com::sun::star::io;
 
 #define SWAPGRAPHIC_TIMEOUT     5000
 
-const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilterName )
+const Graphic ImpLoadLinkedGraphic( const OUString aFileName, const OUString aFilterName )
 {
     Graphic aGraphic;
 
@@ -80,12 +80,12 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
-        const sal_uInt16 nFilter = aFilterName.Len() && rGF.GetImportFormatCount()
+        const sal_uInt16 nFilter = !aFilterName.isEmpty() && rGF.GetImportFormatCount()
             ? rGF.GetImportFormatNumber( aFilterName )
             : GRFILTER_FORMAT_DONTKNOW;
 
-        String aEmptyStr;
-        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
+        OUString aEmptyStr;
+        css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
 
         // TODO: Room for improvement:
         // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
@@ -122,12 +122,12 @@ public:
 class SdrGraphicUpdater : public ::osl::Thread
 {
 public:
-    SdrGraphicUpdater( const String& rFileName, const String& rFilterName, SdrGraphicLink& );
+    SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
     virtual ~SdrGraphicUpdater( void );
 
     void SAL_CALL Terminate( void );
 
-    bool GraphicLinkChanged( const String& rFileName ){ return maFileName != rFileName;    };
+    bool GraphicLinkChanged( const OUString& rFileName ){ return maFileName != rFileName;    };
 
 protected:
 
@@ -143,14 +143,14 @@ protected:
 
 private:
 
-    const String    maFileName;
-    const String    maFilterName;
+    const OUString  maFileName;
+    const OUString  maFilterName;
     SdrGraphicLink& mrGraphicLink;
 
     volatile bool   mbIsTerminated;
 };
 
-SdrGraphicUpdater::SdrGraphicUpdater( const String& rFileName, const String& rFilterName, SdrGraphicLink& rGraphicLink )
+SdrGraphicUpdater::SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& rGraphicLink )
 : maFileName( rFileName )
 , maFilterName( rFilterName )
 , mrGraphicLink( rGraphicLink )
@@ -277,9 +277,9 @@ sdr::contact::ViewContact* SdrGrafObj::CreateObjectSpecificViewContact()
 
 void SdrGrafObj::onGraphicChanged()
 {
-    String aName;
-    String aTitle;
-    String aDesc;
+    OUString aName;
+    OUString aTitle;
+    OUString aDesc;
 
     if(pGraphic)
     {
@@ -308,17 +308,17 @@ void SdrGrafObj::onGraphicChanged()
         }
     }
 
-    if(aName.Len())
+    if(!aName.isEmpty())
     {
         SetName(aName);
     }
 
-    if(aTitle.Len())
+    if(!aTitle.isEmpty())
     {
         SetTitle(aTitle);
     }
 
-    if(aDesc.Len())
+    if(!aDesc.isEmpty())
     {
         SetDescription(aDesc);
     }
@@ -563,7 +563,7 @@ void SdrGrafObj::ForceSwapIn() const
     if( mbIsPreview )
     {
         // removing preview graphic
-        const String aUserData( pGraphic->GetUserData() );
+        const OUString aUserData( pGraphic->GetUserData() );
 
         Graphic aEmpty;
         pGraphic->SetGraphic( aEmpty );
@@ -1350,11 +1350,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         com::sun::star::awt::Size aPreviewSizeHint( 64, 64 );
                         sal_Bool bAllowPartialStreamRead = true;
                         sal_Bool bCreateNativeLink = false;
-                        (*pFilterData)[ 0 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "PreviewSizeHint" ) );
+                        (*pFilterData)[ 0 ].Name = "PreviewSizeHint";
                         (*pFilterData)[ 0 ].Value <<= aPreviewSizeHint;
-                        (*pFilterData)[ 1 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "AllowPartialStreamRead" ) );
+                        (*pFilterData)[ 1 ].Name = "AllowPartialStreamRead";
                         (*pFilterData)[ 1 ].Value <<= bAllowPartialStreamRead;
-                        (*pFilterData)[ 2 ].Name = String( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
+                        (*pFilterData)[ 2 ].Name = "CreateNativeLink";
                         (*pFilterData)[ 2 ].Value <<= bCreateNativeLink;
 
                         mbIsPreview = true;
@@ -1364,7 +1364,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         aGraphic, aUserData, *pStream,
                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData))
                     {
-                        const String aNewUserData( pGraphic->GetUserData() );
+                        const OUString aNewUserData( pGraphic->GetUserData() );
 
                         pGraphic->SetGraphic( aGraphic );
                         pGraphic->SetUserData( aNewUserData );

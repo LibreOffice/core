@@ -1517,8 +1517,7 @@ sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplace
 
             if(bHasEEFeatureItems)
             {
-                String aMessage;
-                aMessage.AppendAscii("SdrObjEditView::SetAttributes(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
+                OUString aMessage("SdrObjEditView::SetAttributes(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
                 InfoBox(NULL, aMessage).Execute();
             }
         }

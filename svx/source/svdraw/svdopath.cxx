@@ -496,7 +496,7 @@ public:
     bool beginPathDrag( SdrDragStat& rDrag )  const;
     bool movePathDrag( SdrDragStat& rDrag ) const;
     bool endPathDrag( SdrDragStat& rDrag );
-    String getSpecialDragComment(const SdrDragStat& rDrag) const;
+    OUString getSpecialDragComment(const SdrDragStat& rDrag) const;
     basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
 
     // create stuff
@@ -906,9 +906,9 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
     return true;
 }
 
-String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
+OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    XubString aStr;
+    OUString aStr;
     const SdrHdl* pHdl = rDrag.GetHdl();
     const bool bCreateComment(rDrag.GetView() && &mrSdrPathObject == rDrag.GetView()->GetCreateObj());
 
@@ -930,41 +930,41 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
             aNow = pU->aLineEnd;
 
         aNow -= aPrev;
-        aStr.AppendAscii(" (");
+        aStr += " (";
 
         OUString aMetr;
 
         if(pU->bCircle)
         {
             mrSdrPathObject.GetModel()->TakeWinkStr(std::abs(pU->nCircRelWink), aMetr);
-            aStr.Append(aMetr);
-            aStr.AppendAscii(" r=");
+            aStr += aMetr;
+            aStr += " r=";
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, sal_True);
-            aStr.Append(aMetr);
+            aStr += aMetr;
         }
 
-        aStr.AppendAscii("dx=");
+        aStr += "dx=";
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, sal_True);
-        aStr.Append(aMetr);
+        aStr += aMetr;
 
-        aStr.AppendAscii(" dy=");
+        aStr += " dy=";
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, sal_True);
-        aStr.Append(aMetr);
+        aStr += aMetr;
 
         if(!IsFreeHand(meObjectKind))
         {
             sal_Int32 nLen(GetLen(aNow));
-            aStr.AppendAscii("  l=");
+            aStr += "  l=";
             mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
-            aStr.Append(aMetr);
+            aStr += aMetr;
 
             sal_Int32 nWink(GetAngle(aNow));
-            aStr += sal_Unicode(' ');
+            aStr += " ";
             mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
-            aStr.Append(aMetr);
+            aStr += aMetr;
         }
 
-        aStr += sal_Unicode(')');
+        aStr += ")";
     }
     else if(!mrSdrPathObject.GetModel() || !pHdl)
     {
@@ -989,7 +989,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         if(!pDragData)
         {
             OSL_FAIL("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData is invalid.");
-            return String();
+            return OUString();
         }
 
         if(!pDragData->IsMultiPointDrag() && pDragData->bEliminate)
@@ -1015,14 +1015,14 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());
 
-        aStr = String();
-        aStr.AppendAscii("dx=");
+        aStr = "";
+        aStr += "dx=";
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, sal_True);
-        aStr.Append(aMetr);
+        aStr += aMetr;
 
-        aStr.AppendAscii(" dy=");
+        aStr += " dy=";
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y() - aBeg.Y(), aMetr, sal_True);
-        aStr.Append(aMetr);
+        aStr += aMetr;
 
         if(!pDragData->IsMultiPointDrag())
         {
@@ -1047,14 +1047,14 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
                 aNow -= rXPoly[nRef];
 
                 sal_Int32 nLen(GetLen(aNow));
-                aStr.AppendAscii("  l=");
+                aStr += "  l=";
                 mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
-                aStr.Append(aMetr);
+                aStr += aMetr;
 
                 sal_Int32 nWink(GetAngle(aNow));
-                aStr += sal_Unicode(' ');
+                aStr += " ";
                 mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
-                aStr.Append(aMetr);
+                aStr += aMetr;
             }
             else if(nPntAnz > 1)
             {
@@ -1093,12 +1093,12 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
                     aPt -= rXPoly[nPt1];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    aStr.AppendAscii("  l=");
+                    aStr += "  l=";
                     mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
                     aStr += aMetr;
 
                     sal_Int32 nWink(GetAngle(aPt));
-                    aStr += sal_Unicode(' ');
+                    aStr += " ";
                     mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
                     aStr += aMetr;
                 }
@@ -1106,20 +1106,20 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
                 if(bPt2)
                 {
                     if(bPt1)
-                        aStr.AppendAscii(" / ");
+                        aStr += " / ";
                     else
-                        aStr.AppendAscii("  ");
+                        aStr += "  ";
 
                     Point aPt(aNow);
                     aPt -= rXPoly[nPt2];
 
                     sal_Int32 nLen(GetLen(aPt));
-                    aStr.AppendAscii("l=");
+                    aStr += "l=";
                     mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, sal_True);
                     aStr += aMetr;
 
                     sal_Int32 nWink(GetAngle(aPt));
-                    aStr += sal_Unicode(' ');
+                    aStr += " ";
                     mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
                     aStr += aMetr;
                 }

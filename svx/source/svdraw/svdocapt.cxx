@@ -387,7 +387,7 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
     if(bCreateComment)
     {
-        return String();
+        return OUString();
     }
     else
     {

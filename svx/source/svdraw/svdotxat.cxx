@@ -224,7 +224,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
     SfxStyleSheetBasePool* pStylePool=pModel!=NULL ? pModel->GetStyleSheetPool() : NULL;
     if (pStylePool!=NULL)
     {
-        std::vector<XubString*> aStyleNames;
+        std::vector<OUString> aStyleNames;
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL)
         {
@@ -256,12 +256,12 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                     {
                         // we don't want duplicate stylesheets
                         nNum--;
-                        bFnd = aStyleName.equals(*aStyleNames[nNum]);
+                        bFnd = aStyleName == aStyleNames[nNum];
                     }
 
                     if(!bFnd)
                     {
-                        aStyleNames.push_back(new XubString(aStyleName));
+                        aStyleNames.push_back(aStyleName);
                     }
                 }
             }
@@ -270,20 +270,19 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         // now convert the strings in the vector from names to StyleSheet*
         std::set<SfxStyleSheet*> aStyleSheets;
         while (!aStyleNames.empty()) {
-            XubString* pName=aStyleNames.back();
+            OUString aName = aStyleNames.back();
             aStyleNames.pop_back();
 
-            String aFam = pName->Copy(0, pName->Len() - 6);
+            OUString aFam = aName.copy(0, aName.getLength() - 6);
 
-            aFam.Erase(0,1);
+            aFam = aFam.copy(1);
             aFam = comphelper::string::stripEnd(aFam, ' ');
 
-            sal_uInt16 nFam = (sal_uInt16)aFam.ToInt32();
+            sal_uInt16 nFam = (sal_uInt16)aFam.toInt32();
 
-            SfxStyleFamily eFam=(SfxStyleFamily)nFam;
-            SfxStyleSheetBase* pStyleBase=pStylePool->Find(*pName,eFam);
-            SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pStyleBase);
-            delete pName;
+            SfxStyleFamily eFam = (SfxStyleFamily)nFam;
+            SfxStyleSheetBase* pStyleBase = pStylePool->Find(aName,eFam);
+            SfxStyleSheet* pStyle = PTR_CAST(SfxStyleSheet,pStyleBase);
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) {
                 aStyleSheets.insert(pStyle);
             }

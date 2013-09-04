@@ -1051,8 +1051,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
 
         if(bHasEEFeatureItems)
         {
-            String aMessage;
-            aMessage.AppendAscii("SdrPaintView::SetDefaultAttr(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
+            OUString aMessage("SdrPaintView::SetDefaultAttr(): Setting EE_FEATURE items at the SdrView does not make sense! It only leads to overhead and unreadable documents.");
             InfoBox(NULL, aMessage).Execute();
         }
     }

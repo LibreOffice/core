@@ -91,7 +91,7 @@ void SdrUndoAction::SdrRepeat(SdrView& /*rView*/)
 
 OUString SdrUndoAction::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
-    return String();
+    return OUString();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

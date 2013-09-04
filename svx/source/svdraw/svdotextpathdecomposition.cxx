@@ -71,7 +71,7 @@ namespace
     class impPathTextPortion
     {
         basegfx::B2DVector                          maOffset;
-        String                                      maText;
+        OUString                                    maText;
         xub_StrLen                                  mnTextStart;
         xub_StrLen                                  mnTextLength;
         sal_Int32                                   mnParagraph;
@@ -124,7 +124,7 @@ namespace
         }
 
         const basegfx::B2DVector& getOffset() const { return maOffset; }
-        const String& getText() const { return maText; }
+        const OUString& getText() const { return maText; }
         xub_StrLen getTextStart() const { return mnTextStart; }
         xub_StrLen getTextLength() const { return mnTextLength; }
         sal_Int32 getParagraph() const { return mnParagraph; }
@@ -481,7 +481,7 @@ namespace
                             aNewTransformB.translate(aPerpendicular.getX(), aPerpendicular.getY());
                         }
 
-                        if(pCandidate->getText().Len() && nNextGlyphLen)
+                        if(!pCandidate->getText().isEmpty() && nNextGlyphLen)
                         {
                             const xub_StrLen nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
                             ::std::vector< double > aNewDXArray;

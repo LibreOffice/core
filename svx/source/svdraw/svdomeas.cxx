@@ -284,7 +284,7 @@ struct ImpMeasureRec : public SdrDragStatUserData
     FieldUnit                   eMeasureUnit;
     Fraction                    aMeasureScale;
     bool                        bShowUnit;
-    String                      aFormatString;
+    OUString                    aFormatString;
     bool                        bTextAutoAngle;
     long                        nTextAutoAngleView;
     bool                        bTextIsFixedAngle;
