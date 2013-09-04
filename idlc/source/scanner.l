@@ -359,8 +359,7 @@ published       return IDL_PUBLISHED;
                 return asciiToInteger(yytext, &yylval.ival, &yylval.uval);
             }
 
-("-")?{DIGIT}+(e|E){1}(("+"|"-")?{DIGIT}+)+(f|F)?	|
-("-")?"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?	|
+("-")?{DIGIT}+(e|E)(("+"|"-")?{DIGIT}+)?(f|F)?	|
 ("-")?{DIGIT}*"."{DIGIT}+((e|E)("+"|"-")?{DIGIT}+)?(f|F)?        {
                 yylval.dval = asciiToFloat( yytext );
 				return IDL_FLOATING_PT_LITERAL;
