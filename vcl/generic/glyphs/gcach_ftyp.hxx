@@ -75,7 +75,7 @@ public:
 #if ENABLE_GRAPHITE
     GraphiteFaceWrapper*  GetGraphiteFace();
 #endif
-    void                  ReleaseFaceFT( FT_FaceRec_* );
+    void                  ReleaseFaceFT();
 
     const OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFaceNum() const        { return mnFaceNum; }
