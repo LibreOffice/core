@@ -187,8 +187,8 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 
-        String aWinData( aTmp );
-        maPos = (sal_uInt16)aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        maPos = (sal_uInt16)aWinData.toInt32();
     }
 
     SvtViewOptions aWinOpt2( E_WINDOW, LSP_LV_GLOBAL_VALUE );
@@ -199,10 +199,10 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 
-        String aWinData( aTmp );
-        maValue = (sal_uInt16)aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        maValue = (sal_uInt16)aWinData.toInt32();
     }
-    String sHelpText;
+    OUString sHelpText;
     switch(maPos)
     {
         case LLINESPACE_1:
@@ -216,27 +216,27 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
             break;
         case LLINESPACE_PROP:
             sHelpText +=maLine;
-            sHelpText.Append(String("Proportion: ", 12, RTL_TEXTENCODING_ASCII_US));
+            sHelpText += "Proportion: ";
             sHelpText += maOf;
-            sHelpText.Append( OUString::number( maValue ));
+            sHelpText += OUString::number( maValue );
             break;
         case LLINESPACE_MIN:
             sHelpText += maLine;
-            sHelpText.Append(String("At Least: ", 10, RTL_TEXTENCODING_ASCII_US));
+            sHelpText += "At Least: ";
             sHelpText += maOf;
-            sHelpText.Append( OUString::number( maValue ));
+            sHelpText += OUString::number( maValue );
             break;
         case LLINESPACE_DURCH:
             sHelpText += maLine;
-            sHelpText.Append(String("Leading: ", 9, RTL_TEXTENCODING_ASCII_US));
+            sHelpText += "Leading: ";
             sHelpText += maOf;
-            sHelpText.Append( OUString::number( maValue ));
+            sHelpText += OUString::number( maValue );
             break;
         case LLINESPACE_FIX:
             sHelpText += maLine;
-            sHelpText.Append(String("Fixed: ", 7, RTL_TEXTENCODING_ASCII_US));
+            sHelpText += "Fixed: ";
             sHelpText += maOf;
-            sHelpText.Append( OUString::number( maValue ));
+            sHelpText += OUString::number( maValue );
             break;
     }
     if( !aWinOpt.Exists() && !aWinOpt2.Exists() )
@@ -259,7 +259,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 //  mpLineSPPage->SetAllNoSel();
     aLineDist.Enable();
     pActLineDistFld->Enable();
-    pActLineDistFld->SetText( String() );
+    pActLineDistFld->SetText( "" );
     //bool bValueSetFocus = sal_False;        //wj
 
     if( eState >= SFX_ITEM_AVAILABLE )
@@ -280,7 +280,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                     {
                         aLineDist.SelectEntryPos( LLINESPACE_1 );
                         pActLineDistFld->Disable();
-                        pActLineDistFld->SetText( String() );
+                        pActLineDistFld->SetText( "" );
                         mbUseLineSPCustom = DO_NOT_CUSTOM;
                         if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
                         {
@@ -296,7 +296,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         {
                             aLineDist.SelectEntryPos( LLINESPACE_1 );
                             pActLineDistFld->Disable();
-                            pActLineDistFld->SetText( String() );
+                            pActLineDistFld->SetText( "" );
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(1);
                             //bValueSetFocus = sal_True;  //wj
@@ -306,7 +306,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         {
                             aLineDist.SelectEntryPos( LLINESPACE_15 );
                             pActLineDistFld->Disable();
-                            pActLineDistFld->SetText( String() );
+                            pActLineDistFld->SetText( "" );
 
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(3);
@@ -317,7 +317,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         {
                             aLineDist.SelectEntryPos( LLINESPACE_2 );
                             pActLineDistFld->Disable();
-                            pActLineDistFld->SetText( String() );
+                            pActLineDistFld->SetText( "" );
 
                             mbUseLineSPCustom = DO_NOT_CUSTOM;
                             maLineSpacing.SelectItem(4);
@@ -452,7 +452,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     {
         aLineDist.Disable();
         pActLineDistFld->Enable(sal_False);
-        pActLineDistFld->SetText( String() );
+        pActLineDistFld->SetText( "" );
         maLineSpacing.SetNoSelection();
               maLineSpacing.SelectItem(0);
 
@@ -461,7 +461,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     else
     {
         pActLineDistFld->Enable(sal_False);
-        pActLineDistFld->SetText( String() );
+        pActLineDistFld->SetText( "" );
         aLineDist.SetNoSelection();
         maLineSpacing.SetNoSelection();
               maLineSpacing.SelectItem(0);
@@ -523,7 +523,7 @@ IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
         case LLINESPACE_15:
         case LLINESPACE_2:
             pActLineDistFld->Enable(sal_False);
-            pActLineDistFld->SetText( String() );
+            pActLineDistFld->SetText( "" );
             break;
 
         case LLINESPACE_DURCH:

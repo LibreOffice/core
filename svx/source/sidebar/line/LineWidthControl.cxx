@@ -214,14 +214,14 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 
-        String aWinData( aTmp );
-        mnCustomWidth = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnCustomWidth = aWinData.toInt32();
         mbCustom = true;
         maVSWidth.SetImage(maIMGCus);
         maVSWidth.SetCusEnable(true);
 
-        String aStrTip( OUString::number( (double)mnCustomWidth / 10));
-        aStrTip.Append(mstrPT);     //
+        OUString aStrTip( OUString::number( (double)mnCustomWidth / 10));
+        aStrTip += mstrPT;
         maVSWidth.SetItemText(9, aStrTip);
     }
     else
@@ -243,7 +243,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     }
     else
     {
-        maMFWidth.SetText( String() );
+        maMFWidth.SetText( "" );
     }
 
     MapUnit eOrgUnit = (MapUnit)eMapUnit;

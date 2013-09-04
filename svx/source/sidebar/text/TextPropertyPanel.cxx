@@ -769,7 +769,7 @@ void TextPropertyPanel::NotifyItemUpdate (
             }
             else
             {
-                mpFontNameBox->SetText( String() );
+                mpFontNameBox->SetText( "" );
                 if (SFX_ITEM_DISABLED == eState)
                     bIsControlEnabled = false;
             }
@@ -825,7 +825,7 @@ void TextPropertyPanel::NotifyItemUpdate (
             else
             {
                 mpHeightItem = NULL;
-                mpFontSizeBox->SetText( String() );
+                mpFontSizeBox->SetText( "" );
                 //increase decrease diabled when multi-seletion have different font size
 
                 // font size +/- enhancement in sd

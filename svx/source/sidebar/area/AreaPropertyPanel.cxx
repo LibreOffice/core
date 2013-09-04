@@ -236,7 +236,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
             {
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
-                const String aTmpStr;
+                const OUString aTmpStr;
                 const Color aColor = maLastColor;
                 const XFillColorItem aXFillColorItem( aTmpStr, aColor );
 
@@ -998,7 +998,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 {
                     if(mpFillGradientItem)
                     {
-                        const String aString( mpFillGradientItem->GetName() );
+                        const OUString aString( mpFillGradientItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
                         const SvxGradientListItem aItem( *(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
 
@@ -1023,7 +1023,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 {
                     if(mpHatchItem)
                     {
-                        const String aString( mpHatchItem->GetName() );
+                        const OUString aString( mpHatchItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
                         const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
 
@@ -1048,7 +1048,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 {
                     if(mpBitmapItem)
                     {
-                        const String aString( mpBitmapItem->GetName() );
+                        const OUString aString( mpBitmapItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
                         const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
 
@@ -1120,7 +1120,7 @@ void AreaPropertyPanel::Update()
 
                     if(mpFillGradientItem)
                     {
-                        const String aString(mpFillGradientItem->GetName());
+                        const OUString aString(mpFillGradientItem->GetName());
 
                         mpLbFillAttr->SelectEntry(aString);
                     }
@@ -1149,7 +1149,7 @@ void AreaPropertyPanel::Update()
 
                     if(mpHatchItem)
                     {
-                        const String aString(mpHatchItem->GetName());
+                        const OUString aString(mpHatchItem->GetName());
 
                         mpLbFillAttr->SelectEntry( aString );
                     }
@@ -1178,7 +1178,7 @@ void AreaPropertyPanel::Update()
 
                     if(mpBitmapItem)
                     {
-                        const String aString(mpBitmapItem->GetName());
+                        const OUString aString(mpBitmapItem->GetName());
 
                         mpLbFillAttr->SelectEntry(aString);
                     }

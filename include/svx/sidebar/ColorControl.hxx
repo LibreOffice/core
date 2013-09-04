@@ -58,7 +58,7 @@ public:
         const ResId& rControlResId,
         const ResId& rValueSetResId,
         const ::boost::function<Color(void)>& rNoColorGetter,
-        const ::boost::function<void(String&,Color)>& rColorSetter,
+        const ::boost::function<void(OUString&,Color)>& rColorSetter,
         FloatingWindow* pFloatingWindow,
         const ResId* pNoColorStringResId);
     virtual ~ColorControl (void);
@@ -73,7 +73,7 @@ private:
     FloatingWindow* mpFloatingWindow;
     const OUString msNoColorString;
     ::boost::function<Color(void)> maNoColorGetter;
-    ::boost::function<void(String&,Color)> maColorSetter;
+    ::boost::function<void(OUString&,Color)> maColorSetter;
 
     void FillColors (void);
     DECL_LINK(VSSelectHdl, void *);

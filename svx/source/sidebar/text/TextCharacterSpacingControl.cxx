@@ -150,8 +150,8 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
 
-        String aWinData( aTmp );
-        mnCustomKern = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnCustomKern = aWinData.toInt32();
         mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;
         mbCusEnable = true;
     }
@@ -171,21 +171,21 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         maVSSpacing.ReplaceItemImages(6, maImgCus,0);
         if(mnCustomKern > 0)
         {
-            String aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
-            aStrTip.Append( OUString::number( (double)mnCustomKern / 10));
-            aStrTip.Append(maStrUnit);      // modify
+            OUString aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
+            aStrTip += OUString::number( (double)mnCustomKern / 10);
+            aStrTip += maStrUnit;      // modify
             maVSSpacing.SetItemText(6,aStrTip);
         }
         else if(mnCustomKern < 0)
         {
-            String aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
-            aStrTip.Append( OUString::number( (double)-mnCustomKern / 10));
-            aStrTip.Append(maStrUnit);      // modify
+            OUString aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
+            aStrTip += OUString::number( (double)-mnCustomKern / 10);
+            aStrTip += maStrUnit;      // modify
             maVSSpacing.SetItemText( 6, aStrTip );
         }
         else
         {
-            String aStrTip(maStrCusN) ;     //LAST CUSTOM no tip defect //add
+            OUString aStrTip(maStrCusN) ;     //LAST CUSTOM no tip defect //add
             maVSSpacing.SetItemText( 6, aStrTip );
         }
 

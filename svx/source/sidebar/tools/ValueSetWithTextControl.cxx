@@ -346,7 +346,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
     Point aStart(aBLPos.X() + nRectWidth / 9,0);
     if ( nItemId == DEFAULT_NONE)
     {
-        String sText(SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE));
+        OUString sText(SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE));
         Font aLclFont = pDev->GetFont();
         Size aLclSize = aLclFont.GetSize();
         aLclSize.Height() = nRectHeight/4;
@@ -374,14 +374,12 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 sal_uInt32 nY = 11 + i * 33;
                 aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-                String sText;
+                OUString sText;
                 sal_uInt16 nLvl = 0;
                 SvxNumRule aTempRule( 0, 10, false );
                 pNumbering->ApplyNumRule(aTempRule,nItemId -1,1<<nLvl);
                 SvxNumberFormat aNumFmt(aTempRule.GetLevel(nLvl));
-                sText=aNumFmt.GetNumStr(i+1);
-                sText.Insert( aNumFmt.GetPrefix(), 0 );
-                sText += aNumFmt.GetSuffix();
+                sText = aNumFmt.GetPrefix() + aNumFmt.GetNumStr(i+1) + aNumFmt.GetSuffix();
                 aStart.X() = aBLPos.X() + 2;
                 aStart.Y() -= pDev->GetTextHeight()/2;
                 pDev->DrawText(aStart, sText);
@@ -444,8 +442,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
                 pDev->SetFont(aFont);
                 pDev->SetFillColor( aBackColor ); //wj
 
-                String sText;
-                sText = cChar;
+                OUString sText(cChar);
                 Font aOldBulletFont = pDev->GetFont();
                 Font aBulletFnt(aFmt.GetBulletFont() ? *aFmt.GetBulletFont() : aOldBulletFont);
                 Size aBulSize = aOldBulletFont.GetSize();
@@ -488,7 +485,7 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->SetFont(aFont);
             pDev->SetFillColor( aBackColor );
 
-            String sText(SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE));
+            OUString sText(SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE));
 
             long nTextWidth = pDev->GetTextWidth(sText);
             long nTextHeight = pDev->GetTextHeight();

@@ -616,7 +616,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMtrWidth->SetText( String());
+            mpMtrWidth->SetText( "" );
             break;
 
         case SID_ATTR_TRANSFORM_HEIGHT:
@@ -636,7 +636,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMtrHeight->SetText( String());
+            mpMtrHeight->SetText( "");
             break;
 
         case SID_ATTR_TRANSFORM_POS_X:
@@ -654,7 +654,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMtrPosX->SetText( String());
+            mpMtrPosX->SetText( "" );
             break;
 
         case SID_ATTR_TRANSFORM_POS_Y:
@@ -672,7 +672,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMtrPosY->SetText( String());
+            mpMtrPosY->SetText( "" );
             break;
 
         case SID_ATTR_TRANSFORM_ROT_X:
@@ -801,7 +801,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMtrAngle->SetText( String() );
+            mpMtrAngle->SetText( "" );
             mpDial->SetRotation( 0 );
             break;
 
@@ -883,12 +883,12 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
     // mpCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions  aPageOpt( E_TABPAGE, OUString::number( RID_SVXPAGE_POSITION_SIZE ) );
-    String  sUserData;
+    OUString  sUserData;
     ::com::sun::star::uno::Any  aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
     ::rtl::OUString aTemp;
     if ( aUserItem >>= aTemp )
-        sUserData = String( aTemp );
-    mpCbxScale->Check( (bool)sUserData.ToInt32() );
+        sUserData = aTemp;
+    mpCbxScale->Check( (bool)sUserData.toInt32() );
 }
 
 

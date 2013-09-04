@@ -89,7 +89,7 @@ ColorControl::ColorControl (
     const ResId& rControlResId,
     const ResId& rValueSetResId,
     const ::boost::function<Color(void)>& rNoColorGetter,
-    const ::boost::function<void(String&,Color)>& rColorSetter,
+    const ::boost::function<void(OUString&,Color)>& rColorSetter,
     FloatingWindow* pFloatingWindow,
     const ResId* pNoColorStringResId) // const sal_uInt32 nNoColorStringResId)
     : PopupControl(pParent, rControlResId),
@@ -200,10 +200,10 @@ IMPL_LINK(ColorControl, VSSelectHdl, void *, pControl)
     {
         sal_uInt16 iPos = maVSColor.GetSelectItemId();
         Color aColor = maVSColor.GetItemColor( iPos );
-        String aTmpStr = maVSColor.GetItemText( iPos );
+        OUString aTmpStr = maVSColor.GetItemText( iPos );
 
         // react when the WB_NONEFIELD created entry is selected
-        if (aColor.GetColor() == 0 && aTmpStr.Len() == 0)
+        if (aColor.GetColor() == 0 && aTmpStr.isEmpty())
         {
             if (maNoColorGetter)
                 aColor = maNoColorGetter();

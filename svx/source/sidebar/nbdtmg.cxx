@@ -65,8 +65,7 @@ namespace svx { namespace sidebar {
 Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( OUString("StarSymbol" ),
-                                String(), Size( 0, 14 ) );
+    static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -132,7 +131,7 @@ NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>
     }
     const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix.getStr()[0] : 0;
     const sal_Unicode cLocalSuffix = pNew->sSuffix.getLength() ? pNew->sSuffix.getStr()[0] : 0;
-    String aEmptyStr;
+    OUString aEmptyStr;
     if( cLocalPrefix == ' ') pNew->sPrefix=aEmptyStr;
     if( cLocalSuffix == ' ') pNew->sSuffix=aEmptyStr;
     return pNew;
@@ -167,7 +166,7 @@ void NBOTypeMgrBase::StoreBulCharFmtName_impl() {
 
             if ( pBulletCharFmt )
             {
-                aNumCharFmtName =  String(pBulletCharFmt->GetValue());
+                aNumCharFmtName =  pBulletCharFmt->GetValue();
             }
         }
 }
@@ -417,10 +416,10 @@ sal_Bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
         pActualBullets[nIndex]->aFont = *pFont;
     pActualBullets[nIndex]->bIsCustomized = sal_True;
 
-    String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-    String aReplace = OUString("%LIST_NUM");
-    String sNUM = OUString::number( nIndex + 1 );
-    aStrFromRES.SearchAndReplace(aReplace,sNUM);
+    OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+    OUString aReplace = OUString("%LIST_NUM");
+    OUString sNUM = OUString::number( nIndex + 1 );
+    aStrFromRES = aStrFromRES.replaceFirst(aReplace,sNUM);
     pActualBullets[nIndex]->sDescription = aStrFromRES;
 
     return sal_True;
@@ -458,7 +457,7 @@ sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
     Font rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
-    String sBulletCharFmtName = GetBulCharFmtName();
+    OUString sBulletCharFmtName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -479,7 +478,7 @@ sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
 
 OUString BulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
 {
-    String sRet;
+    OUString sRet;
     //sal_uInt16 nLength = 0;
     //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
 
@@ -586,7 +585,7 @@ void GraphyicBulletsTypeMgr::Init()
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
     for(sal_uInt16 i = 0; i < aGrfNames.size(); i++)
     {
-        String sGrfNm = aGrfNames[i];
+        OUString sGrfNm = aGrfNames[i];
         INetURLObject aObj(sGrfNm);
         if(aObj.GetProtocol() == INET_PROT_FILE)
             sGrfNm = aObj.PathToFileName();
@@ -678,10 +677,9 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
         //pEntry->sDescription = sEmpty;
         pEntry->nGallaryIndex = (sal_uInt16)0xFFFF;
         pEntry->bIsCustomized = sal_True;
-        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-        String aReplace = OUString("%LIST_NUM");
-        String sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+        OUString sNUM = OUString::number( nIndex + 1 );
+        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         pEntry->sDescription = aStrFromRES;
     }else
     {
@@ -699,14 +697,14 @@ sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex
     if ( nIndex >= aGrfDataLst.size() )
         return sal_False;
 
-    String sGrfName;
+    OUString sGrfName;
     GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
     sGrfName= pEntry->sGrfName;
 
     sal_uInt16 nMask = 1;
-    String aEmptyStr;
+    OUString aEmptyStr;
     sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
-    String sNumCharFmtName = GetBulCharFmtName();
+    OUString sNumCharFmtName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -738,7 +736,7 @@ sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex
 }
 OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /*isDefault*/)
 {
-    String sRet;
+    OUString sRet;
     sal_uInt16 nLength = 0;
     nLength = aGrfDataLst.size();
 
@@ -1041,10 +1039,9 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
         pEntry->cBulletChar = cChar;
         pEntry->aFont = pFont?*pFont:lcl_GetDefaultBulletFont();
         pEntry->bIsCustomized = sal_True;
-        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-        String aReplace = OUString("%LIST_NUM");
-        String sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+        OUString sNUM = OUString::number( nIndex + 1 );
+        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         pEntry->sDescription = aStrFromRES;
 
     }else if ( (eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP && pActualBullets[nIndex]->eType == eNBType::GRAPHICBULLETS )
@@ -1056,7 +1053,7 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
         else
             return sal_False;
 
-        String sEmpty;
+        OUString sEmpty;
         if ( pGrf )
         {
             const String* pGrfName = pBrsh->GetGraphicLink();
@@ -1074,10 +1071,9 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
                 //}else
                 {
                     pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                    sEmpty = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-                    String aReplace = OUString("%LIST_NUM");
-                    String sNUM = OUString::number( nIndex + 1 );
-                    sEmpty.SearchAndReplace(aReplace,sNUM);
+                    sEmpty = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+                    OUString sNUM = OUString::number( nIndex + 1 );
+                    sEmpty = sEmpty.replaceFirst("%LIST_NUM",sNUM);
                     //pEntry->pGrfObj = pGrf;
                     pEntry->pGrfObj = new Graphic(*pGrf);
                     pEntry->aSize = aFmt.GetGraphicSize();
@@ -1118,10 +1114,9 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
                 //}else
                 {
                     pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                    String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-                    String aReplace = OUString("%LIST_NUM");
-                    String sNUM = OUString::number( nIndex + 1 );
-                    aStrFromRES.SearchAndReplace(aReplace,sNUM);
+                    OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+                    OUString sNUM = OUString::number( nIndex + 1 );
+                    aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
                     ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
                 }
             }
@@ -1157,10 +1152,9 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
                     //}else
                     {
                         pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-                        String aReplace = OUString("%LIST_NUM");
-                        String sNUM = OUString::number( nIndex + 1 );
-                        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+                        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+                        OUString sNUM = OUString::number( nIndex + 1 );
+                        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
                         ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
                         //((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = pGrf;
                         ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = new Graphic(*pGrf);
@@ -1210,7 +1204,7 @@ sal_Bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
         //Font& rActBulletFont = lcl_GetDefaultBulletFont();
         Font rActBulletFont = ((BulletsSettings_Impl*)(pCurrentBullets->pBullets))->aFont;
         sal_uInt16 nMask = 1;
-        String sBulletCharFmtName = GetBulCharFmtName();
+        OUString sBulletCharFmtName = GetBulCharFmtName();
         for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
         {
             if(mLevel & nMask)
@@ -1221,7 +1215,7 @@ sal_Bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFmtName(sBulletCharFmtName);
-                String aEmptyStr;
+                OUString aEmptyStr;
                 aFmt.SetPrefix( aEmptyStr );
                 aFmt.SetSuffix( aEmptyStr );
                 if (isResetSize) aFmt.SetBulletRelSize(45);
@@ -1231,14 +1225,14 @@ sal_Bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
         }
     }else if (  pCurrentBullets->eType == eNBType::GRAPHICBULLETS )
     {
-        String sGrfName;
+        OUString sGrfName;
         GrfBulDataRelation* pEntry = (GrfBulDataRelation*) (pCurrentBullets->pBullets);
         sGrfName= pEntry->sGrfName;
 
         sal_uInt16 nMask = 1;
-        String aEmptyStr;
+        OUString aEmptyStr;
         sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
-        String sNumCharFmtName = GetBulCharFmtName();
+        OUString sNumCharFmtName = GetBulCharFmtName();
         for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
         {
             if(mLevel & nMask)
@@ -1293,7 +1287,7 @@ sal_Bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
 
 OUString MixBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
-    String sRet;
+    OUString sRet;
     //sal_uInt16 nLength = 0;
     //nLength = sizeof(pActualBullets)/sizeof(BulletsSettings_Impl);
 
@@ -1366,7 +1360,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->pNumSetting = pNew;
             //SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
             {
-                String sText;
+                OUString sText;
                 //const OUString sValue(C2U("Value"));
                 Reference<XNumberingFormatter> xFormatter(xDefNum, UNO_QUERY);
                 if(xFormatter.is() && aNumberings.getLength() > i)
@@ -1393,9 +1387,8 @@ void NumberingTypeMgr::Init()
                         }
                     }
                 }
-                String aStrFromRES(SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS));
-                String aReplace = OUString("%NUMBERINGSAMPLE");
-                aStrFromRES.SearchAndReplace(aReplace,sText);
+                OUString aStrFromRES(SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS));
+                aStrFromRES = aStrFromRES.replaceFirst("%NUMBERINGSAMPLE",sText);
                 pNumEntry->sDescription = aStrFromRES;
             }
     //End modification
@@ -1422,8 +1415,8 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
     //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
-    String sPreFix = aFmt.GetPrefix();
-    String sLclSuffix = aFmt.GetSuffix();
+    OUString sPreFix = aFmt.GetPrefix();
+    OUString sLclSuffix = aFmt.GetSuffix();
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
     sal_uInt16 nCount = pNumberSettingsArr->size();
@@ -1431,10 +1424,10 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     {
         NumberSettings_ImplPtr _pSet = (*pNumberSettingsArr)[i].get();
         sal_Int16 eNType = _pSet->pNumSetting->nNumberType;
-        String sLocalPreFix = _pSet->pNumSetting->sPrefix;
-        String sLocalSuffix = _pSet->pNumSetting->sSuffix;
-        if (sPreFix.CompareTo(sLocalPreFix)==COMPARE_EQUAL &&
-            sLclSuffix.CompareTo(sLocalSuffix)==COMPARE_EQUAL &&
+        OUString sLocalPreFix = _pSet->pNumSetting->sPrefix;
+        OUString sLocalSuffix = _pSet->pNumSetting->sSuffix;
+        if (sPreFix == sLocalPreFix &&
+            sLclSuffix == sLocalSuffix &&
             eNumType == eNType )
         {
             return i+1;
@@ -1480,10 +1473,9 @@ sal_Bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sa
     ApplyNumRule(aTmpRule2,nIndex,mLevel,false);
     if (aTmpRule1==aTmpRule2) _pSet->bIsCustomized=false;
     if (_pSet->bIsCustomized) {
-        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION));
-        String aReplace = OUString("%LIST_NUM");
-        String sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION);
+        OUString sNUM = OUString::number( nIndex + 1 );
+        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         _pSet->sDescription = aStrFromRES;
     } else {
         _pSet->sDescription = GetDescription(nIndex,true);
@@ -1506,7 +1498,7 @@ sal_Bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
     sal_Int16 eNewType = _pSet->pNumSetting->nNumberType;
 
     sal_uInt16 nMask = 1;
-    String sNumCharFmtName = GetBulCharFmtName();
+    OUString sNumCharFmtName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -1528,7 +1520,7 @@ sal_Bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
 }
 OUString NumberingTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
-    String sRet;
+    OUString sRet;
     sal_uInt16 nLength = 0;
     nLength = pNumberSettingsArr->size();
 
@@ -1644,8 +1636,8 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             sal_Int16 eNType = _pSet->nNumberType;
 
             SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-            String sPreFix = aFmt.GetPrefix();
-            String sLclSuffix = aFmt.GetSuffix();
+            OUString sPreFix = aFmt.GetPrefix();
+            OUString sLclSuffix = aFmt.GetSuffix();
                 sal_Int16 eNumType = aFmt.GetNumberingType();
                 if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
@@ -1684,14 +1676,14 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                         }
                 } else
                 {
-                if (!((sPreFix.CompareTo(_pSet->sPrefix)==COMPARE_EQUAL) &&
-                    ( sLclSuffix.CompareTo(_pSet->sSuffix)==COMPARE_EQUAL ) &&
-                    eNumType == eNType &&
-                    _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
-                    _pSet->nTabValue == aFmt.GetListtabPos() &&
-                    _pSet->eNumAlign == aFmt.GetNumAdjust() &&
-                    _pSet->nNumAlignAt == aFmt.GetFirstLineIndent() &&
-                    _pSet->nNumIndentAt == aFmt.GetIndentAt()))
+                if (!(sPreFix == _pSet->sPrefix &&
+                      sLclSuffix == _pSet->sSuffix &&
+                      eNumType == eNType &&
+                      _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
+                      _pSet->nTabValue == aFmt.GetListtabPos() &&
+                      _pSet->eNumAlign == aFmt.GetNumAdjust() &&
+                      _pSet->nNumAlignAt == aFmt.GetFirstLineIndent() &&
+                      _pSet->nNumIndentAt == aFmt.GetIndentAt()))
                 {
                     bNotMatch = sal_True;
                     break;
@@ -1766,10 +1758,9 @@ sal_Bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     ApplyNumRule(aTmpRule2,nIndex,mLevel,false);
     if (aTmpRule1==aTmpRule2) pItemArr->bIsCustomized=false;
     if (pItemArr->bIsCustomized) {
-        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION));
-        String aReplace = OUString("%LIST_NUM");
-        String sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION);
+        OUString sNUM = OUString::number( nIndex + 1 );
+        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         pItemArr->sDescription = aStrFromRES;
     } else {
         pItemArr->sDescription = GetDescription(nIndex,true);
@@ -1796,7 +1787,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
     NumSettings_ImplPtr pLevelSettings = 0;
-    String sBulletCharFmtName = GetBulCharFmtName();
+    OUString sBulletCharFmtName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(pNumSettingsArr->size() > i)
@@ -1897,7 +1888,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
 }
 OUString OutlineTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
 {
-    String sRet;
+    OUString sRet;
     sal_uInt16 nLength = 0;
     nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
 
