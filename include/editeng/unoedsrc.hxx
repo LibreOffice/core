@@ -38,7 +38,6 @@ struct ESelection;
 struct EFieldInfo;
 struct EBulletInfo;
 class OutputDevice;
-class String;
 class SfxItemSet;
 class SvxTextForwarder;
 class SvxViewForwarder;
