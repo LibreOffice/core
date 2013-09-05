@@ -427,8 +427,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                         case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
                         default: OSL_FAIL("illegal user data");
                     }
-                    OUString sTmp = sCommand.replaceFirst("%1", sReplace);
-                    sCommand = sTmp;
+                    sCommand = sCommand.replaceFirst("%1", sReplace);
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
                     SequenceAsVector< OUString > lList;
                     SequenceAsVector< sal_Bool > lAlienList;

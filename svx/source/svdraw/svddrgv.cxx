@@ -640,15 +640,9 @@ sal_Bool SdrDragView::ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, con
         DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
 
         OUString aStr(ImpGetResStr(STR_DragInsertPoint));
-        OUString aName(pMarkedObj->TakeObjNameSingul());
-        sal_Int32 nPos(aStr.indexOf("%1"));
 
-        if(-1 != nPos)
-        {
-            aStr = aStr.replaceAt(nPos, 2, aName);
-        }
+        aInsPointUndoStr = aStr.replaceFirst("%1", pMarkedObj->TakeObjNameSingul() );
 
-        aInsPointUndoStr = aStr;
         Point aPt(rPnt);
 
         if(bNewObj)
@@ -749,11 +743,9 @@ sal_Bool SdrDragView::BegInsGluePoint(const Point& rPnt)
         pInsPointUndo= dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj) );
         DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
         OUString aStr(ImpGetResStr(STR_DragInsertGluePoint));
-        OUString aName(pObj->TakeObjNameSingul());
 
-        aStr = aStr.replaceFirst("%1", aName);
+        aInsPointUndoStr = aStr.replaceFirst("%1", pObj->TakeObjNameSingul() );
 
-        aInsPointUndoStr=aStr;
         SdrGluePointList* pGPL=pObj->ForceGluePointList();
         if (pGPL!=NULL)
         {
