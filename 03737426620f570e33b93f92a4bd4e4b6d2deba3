@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7bA\u003d",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 0,
+      "message": "everything that is not newly \"exported\" needs to remain in the anonymous namespace",
+      "revId": "03737426620f570e33b93f92a4bd4e4b6d2deba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

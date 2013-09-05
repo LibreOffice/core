@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7bU\u003d",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "would probably make sense to move this ifdef\u0027ed type to the end of the if-cascade (the existing order is indeed modelled after the anticipated order of use in CONFIGURATION_LAYERS, but IMO clutters the code less if special cases go at the end)",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7bQ\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "this should go into an anonymous namespace",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7bM\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "what\u0027s the use of using std::nothrow here?  note that other parts of the function can throw std::bad_alloc anyway",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7bI\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "is aKeyName guaranteed to contain only characters that can safely be included verbatim in these XML attribute values?",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7bE\u003d",
+        "filename": "configmgr/source/winreg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "the rest of the configmgr code uses the convention of flagging out parameters by using pointers (i.e., dumpWindowsRegistry(OUString * fileURL)), so it becomes more obvious at the call site dumpWindowsRegistry(\u0026aTempFileURL) that aTempFileURL is modified there",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7a8\u003d",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-05T07:35:39Z",
+      "side": 1,
+      "message": "\"winreg:default\":  I\u0027d either leave the url part (\"default\") empty (and SAL_WARN in the Components ctor if it isn\u0027t) or use it to always pass the winreg path to dumpWindowsRegistry",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
