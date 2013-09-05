@@ -354,14 +354,38 @@ void JPEGReader::FillBitmap()
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
-                pTmp = (sal_uInt8*) mpBuffer + nY * nAlignedWidth;
+                // #i122985# Added fast-lane implementations using CopyScanline with direct supported mem formats
+                static bool bCheckOwnReader(true);
 
-                for( long nX = 0L; nX < nWidth; nX++ )
+                if(bCheckOwnReader)
                 {
-                    aColor.SetRed(   *pTmp++ );
-                    aColor.SetGreen( *pTmp++ );
-                    aColor.SetBlue(  *pTmp++ );
-                    mpAcc->SetPixel( nY, nX, aColor );
+                    // #i122985# Trying to copy the RGB data from jpeg import to make things faster. Unfortunately
+                    // it has no GBR format, so RGB three-byte groups need to be 'flipped' to GBR first,
+                    // then CopyScanline can use a memcpy to do the data transport. CopyScanline can also
+                    // do the needed conversion from BMP_FORMAT_24BIT_TC_RGB (and it works well), but this
+                    // is not faster that the old loop below using SetPixel.
+                    sal_uInt8* aSource((sal_uInt8*)mpBuffer + nY * nAlignedWidth);
+                    sal_uInt8* aEnd(aSource + (nWidth * 3));
+
+                    for(sal_uInt8* aTmp(aSource); aTmp < aEnd; aTmp += 3)
+                    {
+                        ::std::swap(*aTmp, *(aTmp + 2));
+                    }
+
+                    mpAcc->CopyScanline(nY, aSource, BMP_FORMAT_24BIT_TC_BGR, nWidth * 3);
+                }
+                else
+                {
+                    // old version: WritePixel
+                    pTmp = (sal_uInt8*) mpBuffer + nY * nAlignedWidth;
+
+                    for( long nX = 0L; nX < nWidth; nX++ )
+                    {
+                        aColor.SetRed( *pTmp++ );
+                        aColor.SetGreen( *pTmp++ );
+                        aColor.SetBlue( *pTmp++ );
+                        mpAcc->SetPixel( nY, nX, aColor );
+                    }
                 }
             }
         }

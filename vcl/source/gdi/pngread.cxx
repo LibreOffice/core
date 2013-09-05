@@ -123,6 +123,15 @@ private:
     bool                mbpHYs;         // true if pysical size of pixel available
     bool                mbIgnoreGammaChunk;
 
+#ifdef DBG_UTIL
+    // do some checks in debug mode
+    sal_uInt32          mnAllocSizeScanline;
+    sal_uInt32          mnAllocSizeScanlineAlpha;
+#endif
+    // the temporary Scanline (and alpha) for direct scanline copy to Bitmap
+    sal_uInt8*          mpScanline;
+    sal_uInt8*          mpScanlineAlpha;
+
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
 
@@ -178,7 +187,13 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbIDAT( false ),
     mbGamma             ( false ),
     mbpHYs              ( false ),
-    mbIgnoreGammaChunk  ( false )
+    mbIgnoreGammaChunk  ( false ),
+#ifdef DBG_UTIL
+    mnAllocSizeScanline(0),
+    mnAllocSizeScanlineAlpha(0),
+#endif
+    mpScanline(0),
+    mpScanlineAlpha(0)
 {
     // prepare the PNG data stream
     mnOrigStreamMode = mrPNGStream.GetNumberFormatInt();
@@ -222,6 +237,9 @@ PNGReaderImpl::~PNGReaderImpl()
     delete[] mpInflateInBuf;
     delete[] mpScanPrior;
     delete mpZCodec;
+
+    delete[] mpScanline;
+    delete[] mpScanlineAlpha;
 }
 
 bool PNGReaderImpl::ReadNextChunk()
@@ -1290,42 +1308,123 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     }
     else // no palette => truecolor
     {
-        if( mbAlphaChannel ) // has RGB + alpha
-        {   // BMP_FORMAT_32BIT_TC_RGBA
+        // #i122985# Added fast-lane implementations using CopyScanline with direct supported mem formats
+        static bool bCkeckDirectScanline(true);
+
+        if( mbAlphaChannel )
+        {
+            // has RGB + alpha
             if ( mnPngDepth == 8 )  // maybe the source has 16 bit per sample
             {
-                if ( mpColorTable != mpDefaultColorTable )
+                // BMP_FORMAT_32BIT_TC_RGBA
+                // only use DirectScanline when we have no preview shifting stuff and accesses to content and alpha
+                const bool bDoDirectScanline(
+                    bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpAcc && mpMaskAcc);
+                const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
+
+                if(bDoDirectScanline)
                 {
-                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
-                       ImplSetAlphaPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                               mpColorTable[ pTmp[ 1 ] ],
-                                                               mpColorTable[ pTmp[ 2 ] ] ), pTmp[ 3 ] );
+                    // allocate scanlines on demand, reused for next line
+                    if(!mpScanline)
+                    {
+#ifdef DBG_UTIL
+                        mnAllocSizeScanline = maOrigSize.Width() * 3;
+#endif
+                        mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
+                    }
+
+                    if(!mpScanlineAlpha)
+                    {
+#ifdef DBG_UTIL
+                        mnAllocSizeScanlineAlpha = maOrigSize.Width();
+#endif
+                        mpScanlineAlpha = new sal_uInt8[maOrigSize.Width()];
+                    }
+                }
+
+                if(bDoDirectScanline)
+                {
+                    OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
+                    OSL_ENSURE(mpScanlineAlpha, "No ScanlineAlpha allocated (!)");
+                    OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
+                    OSL_ENSURE(mnAllocSizeScanlineAlpha >= maOrigSize.Width(), "Allocated ScanlineAlpha too small (!)");
+                    sal_uInt8* pScanline(mpScanline);
+                    sal_uInt8* pScanlineAlpha(mpScanlineAlpha);
+
+                    for(sal_uInt32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
+                    {
+                        // prepare content line as BGR by reordering when copying
+                        // do not forget to invert alpha (source is alpha, target is opacity)
+                        if(bCustomColorTable)
+                        {
+                            *pScanline++ = mpColorTable[pTmp[2]];
+                            *pScanline++ = mpColorTable[pTmp[1]];
+                            *pScanline++ = mpColorTable[pTmp[0]];
+                            *pScanlineAlpha++ = ~pTmp[3];
+                        }
+                        else
+                        {
+                            *pScanline++ = pTmp[2];
+                            *pScanline++ = pTmp[1];
+                            *pScanline++ = pTmp[0];
+                            *pScanlineAlpha++ = ~pTmp[3];
+                        }
+                    }
+
+                    // copy scanlines directly to bitmaps for content and alpha; use the formats which
+                    // are able to copy directly to BitmapBuffer
+                    mpAcc->CopyScanline(nY, mpScanline, BMP_FORMAT_24BIT_TC_BGR, maOrigSize.Width() * 3);
+                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha, BMP_FORMAT_8BIT_PAL, maOrigSize.Width());
                 }
                 else
                 {
-//                  if ( nXAdd == 1 && mnPreviewShift == 0 ) // copy raw line data if possible
-//                  {
-//                      int nLineBytes = 4 * maOrigSize.Width();
-//                      mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_32BIT_TC_RGBA, nLineBytes );
-//                      pTmp += nLineBytes;
-//                  }
-//                  else
+                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
                     {
-                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 4 )
-                            ImplSetAlphaPixel( nY, nX, BitmapColor( pTmp[0], pTmp[1], pTmp[2] ), pTmp[3] );
+                        if(bCustomColorTable)
+                        {
+                            ImplSetAlphaPixel(
+                                nY,
+                                nX,
+                                BitmapColor(
+                                    mpColorTable[ pTmp[ 0 ] ],
+                                    mpColorTable[ pTmp[ 1 ] ],
+                                    mpColorTable[ pTmp[ 2 ] ]),
+                                pTmp[ 3 ]);
+                        }
+                        else
+                        {
+                            ImplSetAlphaPixel(
+                                nY,
+                                nX,
+                                BitmapColor(
+                                    pTmp[0],
+                                    pTmp[1],
+                                    pTmp[2]),
+                                pTmp[3]);
+                        }
                     }
                 }
             }
             else
-            {   // BMP_FORMAT_64BIT_TC_RGBA
+            {
+                // BMP_FORMAT_64BIT_TC_RGBA
                 for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 8 )
-                    ImplSetAlphaPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                        mpColorTable[ pTmp[ 2 ] ],
-                                                        mpColorTable[ pTmp[ 4 ] ] ), pTmp[6] );
+                {
+                    ImplSetAlphaPixel(
+                        nY,
+                        nX,
+                        BitmapColor(
+                            mpColorTable[ pTmp[ 0 ] ],
+                            mpColorTable[ pTmp[ 2 ] ],
+                            mpColorTable[ pTmp[ 4 ] ]),
+                        pTmp[6]);
+                }
             }
         }
         else if( mbTransparent ) // has RGB + transparency
-        {   // BMP_FORMAT_24BIT_TC_RGB
+        {
+            // BMP_FORMAT_24BIT_TC_RGB
+            // no support currently for DirectScanline, found no real usages in current PNGs, may be added on demand
             if ( mnPngDepth == 8 )  // maybe the source has 16 bit per sample
             {
                 for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
@@ -1334,7 +1433,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     sal_uInt8 nGreen = pTmp[ 1 ];
                     sal_uInt8 nBlue = pTmp[ 2 ];
                     bool bTransparent = ( ( nRed == mnTransRed )
-                                         && ( nGreen == mnTransGreen )
+                                        && ( nGreen == mnTransGreen )
                                         && ( nBlue == mnTransBlue ) );
 
                     ImplSetTranspPixel( nY, nX, BitmapColor( mpColorTable[ nRed ],
@@ -1343,7 +1442,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 }
             }
             else
-            {   // BMP_FORMAT_48BIT_TC_RGB
+            {
+                // BMP_FORMAT_48BIT_TC_RGB
                 for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
                 {
                     sal_uInt8 nRed = pTmp[ 0 ];
@@ -1360,37 +1460,92 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             }
         }
         else  // has RGB but neither alpha nor transparency
-        {   // BMP_FORMAT_24BIT_TC_RGB
+        {
+            // BMP_FORMAT_24BIT_TC_RGB
+            // only use DirectScanline when we have no preview shifting stuff and access to content
+            const bool bDoDirectScanline(
+                bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpAcc);
+            const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
+
+            if(bDoDirectScanline && !mpScanline)
+            {
+                // allocate scanlines on demand, reused for next line
+#ifdef DBG_UTIL
+                mnAllocSizeScanline = maOrigSize.Width() * 3;
+#endif
+                mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
+            }
+
             if ( mnPngDepth == 8 )   // maybe the source has 16 bit per sample
             {
-                if ( mpColorTable != mpDefaultColorTable )
+                if(bDoDirectScanline)
                 {
-                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
-                        ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                            mpColorTable[ pTmp[ 1 ] ],
-                                                            mpColorTable[ pTmp[ 2 ] ] ) );
+                    OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
+                    OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
+                    sal_uInt8* pScanline(mpScanline);
+
+                    for(sal_uInt32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                    {
+                        // prepare content line as BGR by reordering when copying
+                        if(bCustomColorTable)
+                        {
+                            *pScanline++ = mpColorTable[pTmp[2]];
+                            *pScanline++ = mpColorTable[pTmp[1]];
+                            *pScanline++ = mpColorTable[pTmp[0]];
+                        }
+                        else
+                        {
+                            *pScanline++ = pTmp[2];
+                            *pScanline++ = pTmp[1];
+                            *pScanline++ = pTmp[0];
+                        }
+                    }
+
+                    // copy scanline directly to bitmap for content; use the format which is able to
+                    // copy directly to BitmapBuffer
+                    mpAcc->CopyScanline(nY, mpScanline, BMP_FORMAT_24BIT_TC_BGR, maOrigSize.Width() * 3);
                 }
                 else
                 {
-                    if( nXAdd == 1 && mnPreviewShift == 0 ) // copy raw line data if possible
+                    for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
                     {
-                        int nLineBytes = maOrigSize.Width() * 3;
-                        mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_24BIT_TC_RGB, nLineBytes );
-                        pTmp += nLineBytes;
-                    }
-                    else
-                    {
-                        for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 3 )
-                            ImplSetPixel( nY, nX, BitmapColor( pTmp[0], pTmp[1], pTmp[2] ) );
+                        if(bCustomColorTable)
+                        {
+                            ImplSetPixel(
+                                nY,
+                                nX,
+                                BitmapColor(
+                                    mpColorTable[ pTmp[ 0 ] ],
+                                    mpColorTable[ pTmp[ 1 ] ],
+                                    mpColorTable[ pTmp[ 2 ] ]));
+                        }
+                        else
+                        {
+                            ImplSetPixel(
+                                nY,
+                                nX,
+                                BitmapColor(
+                                    pTmp[0],
+                                    pTmp[1],
+                                    pTmp[2]));
+                        }
                     }
                 }
             }
             else
-            {   // BMP_FORMAT_48BIT_TC_RGB
+            {
+                // BMP_FORMAT_48BIT_TC_RGB
+                // no support currently for DirectScanline, found no real usages in current PNGs, may be added on demand
                 for ( sal_Int32 nX = nXStart; nX < maOrigSize.Width(); nX += nXAdd, pTmp += 6 )
-                    ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                        mpColorTable[ pTmp[ 2 ] ],
-                                                        mpColorTable[ pTmp[ 4 ] ] ) );
+                {
+                    ImplSetPixel(
+                        nY,
+                        nX,
+                        BitmapColor(
+                            mpColorTable[ pTmp[ 0 ] ],
+                            mpColorTable[ pTmp[ 2 ] ],
+                            mpColorTable[ pTmp[ 4 ] ]));
+                }
             }
         }
     }

@@ -60,12 +60,47 @@
 #include <osl/thread.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 #define SWAPGRAPHIC_TIMEOUT     5000
+
+// #i122985# it is not correct to set the swap-timeout to a hard-coded 5000ms as it was before.
+// Added code and experimented what to do as a good compromize, see description
+sal_uInt32 getCacheTimeInMs()
+{
+    static bool bSetAtAll(true);
+
+    if(bSetAtAll)
+    {
+        static bool bSetToPreferenceTime(true);
+
+        if(bSetToPreferenceTime)
+        {
+            const sal_uInt32 nSeconds =
+                officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
+                    comphelper::getProcessComponentContext());
+
+
+            // the default is 10 minutes. The minimum is one minute, thus 60 seconds. When the minimum
+            // should match to the former hard-coded 5 seconds, we have a divisor of 12 to use. For the
+            // default of 10 minutes this would mean 50 seconds. Compared to before this is ten times
+            // more (would allow better navigation by switching through pages) and is controllable
+            // by the user by setting the tools/options/memory/Remove_from_memory_after setting. Seems
+            // to be a good compromize to me.
+            return nSeconds * 1000 / 12;
+        }
+        else
+        {
+            return SWAPGRAPHIC_TIMEOUT;
+        }
+    }
+
+    return 0;
+}
 
 const Graphic ImpLoadLinkedGraphic( const OUString aFileName, const OUString aFilterName )
 {
@@ -333,7 +368,7 @@ SdrGrafObj::SdrGrafObj()
 {
     pGraphic = new GraphicObject;
     mpReplacementGraphic = 0;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), getCacheTimeInMs() );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -357,7 +392,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = 0;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), getCacheTimeInMs() );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -381,7 +416,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 {
     pGraphic = new GraphicObject( rGrf );
     mpReplacementGraphic = 0;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), getCacheTimeInMs() );
     onGraphicChanged();
 
     // #i118485# Shear allowed and possible now
@@ -410,7 +445,7 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
     *pGraphic = rGrfObj;
     delete mpReplacementGraphic;
     mpReplacementGraphic = 0;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), getCacheTimeInMs() );
     pGraphic->SetUserData();
     mbIsPreview = false;
     SetChanged();
