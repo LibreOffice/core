@@ -59,6 +59,9 @@ public:
                                      SCsTAB nDz
                                    );
 
+    void InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize );
+    void InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize );
+
     /** For now this method assumes that nTab1 == nTab2
      * The algorithm will be much more complicated if nTab1 != nTab2
      */

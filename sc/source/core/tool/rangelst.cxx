@@ -459,6 +459,68 @@ bool ScRangeList::UpdateReference(
     return bChanged;
 }
 
+void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize )
+{
+    std::vector<ScRange> aNewRanges;
+    for(iterator it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
+            ++it)
+    {
+        ScRange* pRange = *it;
+        if(pRange->aStart.Tab() <= nTab && pRange->aEnd.Tab() >= nTab)
+        {
+            if(pRange->aEnd.Row() == nRowPos - 1 && (nColStart <= pRange->aEnd.Col() || nColEnd >= pRange->aStart.Col()))
+            {
+                SCCOL nNewRangeStartCol = std::max<SCCOL>(nColStart, pRange->aStart.Col());
+                SCCOL nNewRangeEndCol = std::min<SCCOL>(nColEnd, pRange->aEnd.Col());
+                SCROW nNewRangeStartRow = pRange->aEnd.Row() + 1;
+                SCROW nNewRangeEndRow = nRowPos + nSize - 1;
+                aNewRanges.push_back(ScRange(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
+                            nNewRangeEndRow, nTab));
+            }
+        }
+    }
+
+    for(std::vector<ScRange>::const_iterator it = aNewRanges.begin(), itEnd = aNewRanges.end();
+            it != itEnd; ++it)
+    {
+        if(!it->IsValid())
+            continue;
+
+        Join(*it);
+    }
+}
+
+void ScRangeList::InsertCol( SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize )
+{
+    std::vector<ScRange> aNewRanges;
+    for(iterator it = maRanges.begin(), itEnd = maRanges.end(); it != itEnd;
+            ++it)
+    {
+        ScRange* pRange = *it;
+        if(pRange->aStart.Tab() <= nTab && pRange->aEnd.Tab() >= nTab)
+        {
+            if(pRange->aEnd.Col() == nColPos - 1 && (nRowStart <= pRange->aEnd.Row() || nRowEnd >= pRange->aStart.Row()))
+            {
+                SCROW nNewRangeStartRow = std::max<SCROW>(nRowStart, pRange->aStart.Row());
+                SCROW nNewRangeEndRow = std::min<SCROW>(nRowEnd, pRange->aEnd.Row());
+                SCCOL nNewRangeStartCol = pRange->aEnd.Col() + 1;
+                SCCOL nNewRangeEndCol = nColPos + nSize - 1;
+                aNewRanges.push_back(ScRange(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
+                            nNewRangeEndRow, nTab));
+            }
+        }
+    }
+
+    for(std::vector<ScRange>::const_iterator it = aNewRanges.begin(), itEnd = aNewRanges.end();
+            it != itEnd; ++it)
+    {
+        if(!it->IsValid())
+            continue;
+
+        Join(*it);
+    }
+}
+
 namespace {
 
 /**

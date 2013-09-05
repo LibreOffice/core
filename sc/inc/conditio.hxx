@@ -413,6 +413,10 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+
+    void InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowStart, SCSIZE nSize);
+    void InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColStart, SCSIZE nSize);
+
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            RenameCellStyle( const OUString& rOld, const OUString& rNew );
 
@@ -478,6 +482,10 @@ public:
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
+
+    void InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowStart, SCSIZE nSize);
+    void InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColStart, SCSIZE nSize);
+
     void    RenameCellStyle( const OUString& rOld, const OUString& rNew );
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 

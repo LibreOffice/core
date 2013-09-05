@@ -1960,6 +1960,16 @@ void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCop
         maRanges.UpdateReference(rCxt.meMode, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
 }
 
+void ScConditionalFormat::InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize)
+{
+    maRanges.InsertRow(nTab, nColStart, nColEnd, nRowPos, nSize);
+}
+
+void ScConditionalFormat::InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize)
+{
+    maRanges.InsertCol(nTab, nRowStart, nRowEnd, nColPos, nSize);
+}
+
 void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
@@ -2166,6 +2176,18 @@ void ScConditionalFormatList::UpdateReference( sc::RefUpdateContext& rCxt )
                 ++itr;
         }
     }
+}
+
+void ScConditionalFormatList::InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize)
+{
+    for(iterator it = begin(), itEnd = end(); it != itEnd; ++it)
+        it->InsertRow(nTab, nColStart, nColEnd, nRowPos, nSize);
+}
+
+void ScConditionalFormatList::InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize)
+{
+    for(iterator it = begin(), itEnd = end(); it != itEnd; ++it)
+        it->InsertCol(nTab, nRowStart, nRowEnd, nColPos, nSize);
 }
 
 void ScConditionalFormatList::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )

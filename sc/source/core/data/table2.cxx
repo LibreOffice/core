@@ -218,6 +218,8 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         aNotes.ReleaseNote( nCol, nRow);
     }
 
+    mpCondFormatList->InsertRow(nTab, nStartCol, nEndCol, nStartRow, nSize);
+
     InvalidatePageBreaks();
 
     if (IsStreamValid())
@@ -425,10 +427,9 @@ void ScTable::InsertCol(
 
     if (nStartCol>0)                        // copy old attributes
     {
-        sal_uInt16 nWhichArray[3];
+        sal_uInt16 nWhichArray[2];
         nWhichArray[0] = ATTR_MERGE;
-        nWhichArray[1] = ATTR_CONDITIONAL;
-        nWhichArray[2] = 0;
+        nWhichArray[1] = 0;
 
         sc::CopyToDocContext aCxt(*pDocument);
         for (SCSIZE i=0; i<nSize; i++)
@@ -440,6 +441,8 @@ void ScTable::InsertCol(
             aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
         }
     }
+
+    mpCondFormatList->InsertCol(nTab, nStartRow, nEndRow, nStartCol, nSize);
 
     InvalidatePageBreaks();
 
