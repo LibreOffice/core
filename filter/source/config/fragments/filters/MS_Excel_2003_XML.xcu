@@ -15,16 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="XHTML Draw File" oor:op="replace">
-        <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>XHTML_File</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+    <node oor:name="MS Excel 2003 XML" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
         <prop oor:name="UIComponent"/>
-                <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Draw.XMLOasisImporter,com.sun.star.comp.Draw.XMLOasisExporter,,../@LIBO_SHARE_FOLDER@/xslt/export/xhtml/opendoc2xhtml.xsl</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,../$(share_subdir_name)/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl,../$(share_subdir_name)/xslt/export/spreadsheetml/ooo2spreadsheetml.xsl</value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>calc_MS_Excel_2003_XML</value></prop>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value>XHTML</value>
-        </prop>
-        <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     </node>

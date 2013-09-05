@@ -12519,25 +12519,7 @@ if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
 
-AC_CONFIG_FILES([config_host.mk
-                 Makefile
-                 lo.xcent
-                 filter/source/config/fragments/filters/DocBook_File.xcu
-                 filter/source/config/fragments/filters/MS_Excel_2003_XML.xcu
-                 filter/source/config/fragments/filters/MS_Word_2003_XML.xcu
-                 filter/source/config/fragments/filters/UOF_presentation.xcu
-                 filter/source/config/fragments/filters/UOF_spreadsheet.xcu
-                 filter/source/config/fragments/filters/UOF_text.xcu
-                 filter/source/config/fragments/filters/XHTML_Calc_File.xcu
-                 filter/source/config/fragments/filters/XHTML_Draw_File.xcu
-                 filter/source/config/fragments/filters/XHTML_Impress_File.xcu
-                 filter/source/config/fragments/filters/XHTML_Writer_File.xcu
-                 officecfg/registry/data/org/openoffice/Office/Paths.xcu
-                 officecfg/registry/data/org/openoffice/Office/WebWizard.xcu
-                 officecfg/registry/schema/org/openoffice/Office/Common.xcs
-                 wizards/source/configshare/dialog.xlc
-                 wizards/source/configshare/script.xlc
-                 instsetoo_native/util/openoffice.lst])
+AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])

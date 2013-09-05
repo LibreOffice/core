@@ -1241,12 +1241,12 @@
     <node oor:name="BackgroundImages">
       <node oor:name="1" oor:op="replace">
         <prop oor:name="Href">
-          <value>$(inst)/@LIBO_SHARE_FOLDER@/gallery/www-back/</value>
+          <value>$(inst)/$(share_subdir_name)/gallery/www-back/</value>
         </prop>
       </node>
       <node oor:name="2" oor:op="replace">
         <prop oor:name="Href">
-          <value>$(inst)/@LIBO_SHARE_FOLDER@/gallery/surface</value>
+          <value>$(inst)/$(share_subdir_name)/gallery/surface</value>
         </prop>
       </node>
       <node oor:name="3" oor:op="replace">
