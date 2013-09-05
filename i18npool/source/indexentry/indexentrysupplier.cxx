@@ -25,8 +25,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
-static const sal_Unicode under = sal_Unicode('_');
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 IndexEntrySupplier::IndexEntrySupplier( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
