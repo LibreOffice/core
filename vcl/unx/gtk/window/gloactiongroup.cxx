@@ -144,8 +144,15 @@ g_lo_action_group_query_action (GActionGroup        *group,
     if (action == NULL)
         return FALSE;
 
+
     if (enabled)
+    {
+        GtkSalFrame* pFrame = lo_group->priv->frame;
+        if (pFrame) {
+            pFrame->EnsureDbusMenuSynced();
+        }
         *enabled = action->enabled;
+    }
 
     if (parameter_type)
         *parameter_type = action->parameter_type;
@@ -193,6 +200,7 @@ g_lo_action_group_change_state (GActionGroup *group,
                                 const gchar  *action_name,
                                 GVariant     *value)
 {
+    SAL_INFO("vcl.unity", "g_lo_action_group_change_state on " << group );
     g_return_if_fail (value != NULL);
 
     g_variant_ref_sink (value);

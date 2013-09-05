@@ -489,6 +489,9 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+    m_pLastSyncedDbusMenu = NULL;
+#endif
     Init( pSysData );
 }
 
@@ -527,6 +530,17 @@ static void ObjectDestroyedNotify( gpointer data )
         g_object_unref( data );
     }
 }
+
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+void GtkSalFrame::EnsureDbusMenuSynced()
+{
+    GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(GetMenu());
+    if(m_pLastSyncedDbusMenu != pSalMenu) {
+        m_pLastSyncedDbusMenu = pSalMenu;
+        static_cast<GtkSalMenu*>(pSalMenu)->Activate();
+    }
+}
+#endif
 
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {

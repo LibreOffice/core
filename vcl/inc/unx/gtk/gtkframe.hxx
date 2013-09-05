@@ -219,6 +219,10 @@ class GtkSalFrame : public SalFrame
     SalMenu*                        m_pSalMenu;
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+    public:
+    void EnsureDbusMenuSynced();
+    private:
+    SalMenu*                        m_pLastSyncedDbusMenu;
     friend void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
