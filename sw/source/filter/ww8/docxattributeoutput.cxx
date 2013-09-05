@@ -289,6 +289,23 @@ void lcl_TextFrameShadow(FSHelperPtr pSerializer, const SwFrmFmt& rFrmFmt)
             FSEND);
 }
 
+class ExportDataSaveRestore
+{
+private:
+    DocxExport& m_rExport;
+public:
+    ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame *pParentFrame)
+        : m_rExport(rExport)
+    {
+        m_rExport.SaveData(nStt, nEnd);
+        m_rExport.mpParentFrame = pParentFrame;
+    }
+    ~ExportDataSaveRestore()
+    {
+        m_rExport.RestoreData();
+    }
+};
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -309,9 +326,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
         sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
 
-        m_rExport.SaveData( nStt, nEnd );
-
-        m_rExport.mpParentFrame = pParentFrame;
+        //Save data here and restore when out of scope
+        ExportDataSaveRestore aDataGuard(m_rExport, nStt, nEnd, pParentFrame);
 
         // When a frame has some low height, but automatically expanded due
         // to lots of contents, this size contains the real size.
@@ -358,9 +374,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pSerializer->endElementNS( XML_v, XML_rect );
         m_pSerializer->endElementNS( XML_w, XML_pict );
         m_pSerializer->endElementNS( XML_w, XML_r );
-
-        m_rExport.RestoreData();
-
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
