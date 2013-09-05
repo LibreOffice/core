@@ -22,6 +22,7 @@
 #include "AutoBuffer.hxx"
 #include "WinImplHelper.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vector>
 
 //------------------------------------------------------------
 // namespace directives
