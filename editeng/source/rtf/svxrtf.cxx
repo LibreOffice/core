@@ -140,7 +140,7 @@ SvParserState SvxRTFParser::CallParser()
     bNewGroup = sal_False;
     nDfltFont = 0;
 
-    sBaseURL.Erase();
+    sBaseURL = "";
 
     // generate the correct WhichId table from the set WhichIds.
     BuildWhichTbl();
@@ -600,9 +600,9 @@ void SvxRTFParser::ReadOLEData()
     SvRTFParser::ReadOLEData();
 }
 
-String& SvxRTFParser::GetTextToEndGroup( String& rStr )
+OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 {
-    rStr.Erase( 0 );
+    rStr = "";
     int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
 
     while( _nOpenBrakets && IsParserWorking() )
@@ -666,7 +666,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
     int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
-    String sStr, sComment;
+    OUString sStr, sComment;
     long nVersNo = 0;
 
     while( _nOpenBrakets && IsParserWorking() )
@@ -758,7 +758,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
     }
 
     if( pChkForVerNo &&
-        COMPARE_EQUAL == sComment.CompareToAscii( pChkForVerNo ))
+        sComment == OUString::createFromAscii( pChkForVerNo ) )
         nVersionNo = nVersNo;
 
     SkipToken( -1 );        // the closing brace is evaluated "above"

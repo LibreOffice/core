@@ -185,7 +185,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::vector<sal_uInt16> aPlainMap;
     std::vector<sal_uInt16> aPardMap;
     std::vector<sal_uInt16> aWhichMap;
-    String  sBaseURL;
+    OUString  sBaseURL;
 
     SvxPosition* pInsPos;
     SfxItemPool* pAttrPool;
@@ -262,7 +262,7 @@ protected:
 
     // Read Document-Info
     ::com::sun::star::util::DateTime GetDateTimeStamp( );
-    String& GetTextToEndGroup( String& rStr );
+    OUString& GetTextToEndGroup( OUString& rStr );
     virtual void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
     inline SfxItemSet& GetAttrSet();
@@ -319,7 +319,7 @@ protected:
     SvxRTFColorTbl& GetColorTbl()               { return aColorTbl; }
     SvxRTFFontTbl& GetFontTbl()                 { return aFontTbl; }
 
-    const String& GetBaseURL() const            { return sBaseURL; }
+    const OUString& GetBaseURL() const          { return sBaseURL; }
 
 public:
 
