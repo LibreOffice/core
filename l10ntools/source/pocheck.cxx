@@ -33,15 +33,19 @@ static void checkStyleNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* aPoEntry = new PoEntry();
-        aPoInput.readEntry(*aPoEntry);
+        PoEntry* pPoEntry = new PoEntry();
+        aPoInput.readEntry(*pPoEntry);
         bool bRepeated = false;
         if( aPoInput.eof() )
-            break;
-        if( !aPoEntry->isFuzzy() && aPoEntry->getSourceFile() == "poolfmt.src" &&
-            aPoEntry->getGroupId().startsWith("STR_POOLCOLL") )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            delete pPoEntry;
+            break;
+        }
+
+        if( !pPoEntry->isFuzzy() && pPoEntry->getSourceFile() == "poolfmt.src" &&
+            pPoEntry->getGroupId().startsWith("STR_POOLCOLL") )
+        {
+            OString aMsgStr = pPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedStyleNames.find(aMsgStr) == aLocalizedStyleNames.end() )
@@ -51,10 +55,10 @@ static void checkStyleNames(OString aLanguage)
                 bRepeated = true;
             }
         }
-        if( !aPoEntry->isFuzzy() && aPoEntry->getSourceFile() == "poolfmt.src" &&
-            aPoEntry->getGroupId().startsWith("STR_POOLNUMRULE") )
+        if( !pPoEntry->isFuzzy() && pPoEntry->getSourceFile() == "poolfmt.src" &&
+            pPoEntry->getGroupId().startsWith("STR_POOLNUMRULE") )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            OString aMsgStr = pPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedNumStyleNames.find(aMsgStr) == aLocalizedNumStyleNames.end() )
@@ -65,9 +69,9 @@ static void checkStyleNames(OString aLanguage)
             }
         }
         if (bRepeated)
-            repeatedEntries.push_back(aPoEntry);
+            repeatedEntries.push_back(pPoEntry);
          else
-            delete aPoEntry;
+            delete pPoEntry;
 
     }
     aPoInput.close();
