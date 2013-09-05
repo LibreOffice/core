@@ -20,6 +20,7 @@
 
 #include <localedata.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <string.h>
 #include <stdio.h>
@@ -1654,6 +1655,38 @@ LocaleData::getSupportedServiceNames() throw( RuntimeException )
     Sequence< OUString > aRet(1);
     aRet[0] = OUString(clocaledata);
     return aRet;
+}
+
+// static
+OUString LocaleData::getFirstLocaleServiceName( const com::sun::star::lang::Locale & rLocale )
+{
+    if (rLocale.Language == I18NLANGTAG_QLT)
+        return rLocale.Variant.replaceAll( "-", "_");
+    else if (!rLocale.Country.isEmpty())
+        return rLocale.Language + "_" + rLocale.Country;
+    else
+        return rLocale.Language;
+}
+
+// static
+::std::vector< OUString > LocaleData::getFallbackLocaleServiceNames( const com::sun::star::lang::Locale & rLocale )
+{
+    ::std::vector< OUString > aVec;
+    if (rLocale.Language == I18NLANGTAG_QLT)
+    {
+        aVec = LanguageTag( rLocale).getFallbackStrings();
+        aVec.erase( aVec.begin());
+        for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
+        {
+            *it = (*it).replaceAll( "-", "_");
+        }
+    }
+    else if (!rLocale.Country.isEmpty())
+    {
+        aVec.push_back( rLocale.Language);
+    }
+    // else nothing, language-only was the first
+    return aVec;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

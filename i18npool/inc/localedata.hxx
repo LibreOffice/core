@@ -75,6 +75,13 @@ public:
     static com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > downcastCalendarItems( const com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem2 > & rCi );
     static com::sun::star::i18n::Calendar downcastCalendar( const com::sun::star::i18n::Calendar2 & rC );
 
+    /** Generates a <Language>_<Country> or <Variant> (if Language=="qlt")
+        string suitable as part of service name with all '-' replaced by '_' */
+    static OUString getFirstLocaleServiceName( const com::sun::star::lang::Locale & rLocale );
+    /** Generates fallback strings suitable as parts of service names,
+        excluding the one obtained via getFirstLocaleServiceName() */
+    static ::std::vector< OUString > getFallbackLocaleServiceNames( const com::sun::star::lang::Locale & rLocale );
+
     virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual LocaleDataItem SAL_CALL getLocaleItem( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< Calendar2 > SAL_CALL getAllCalendars2( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
