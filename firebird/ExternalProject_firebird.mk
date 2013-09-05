@@ -29,7 +29,12 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
 		&& export PKG_CONFIG="" \
-		&& export CXXFLAGS=" \
+		&& export CPPFLAGS=" \
+			$(if $(filter NO,$(SYSTEM_LIBATOMIC_OPS)), \
+			-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+			,$(LIBATOMIC_OPS_CFLAGS)) \
+			" \
+		&& export CFLAGS=" \
 			$(if $(filter NO,$(SYSTEM_BOOST)), \
 				-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib) \
@@ -38,6 +43,9 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 				,$(ICU_CPPFLAGS)) \
+			$(if $(filter NO,$(SYSTEM_LIBATOMIC_OPS)), \
+				-I$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
+				,$(LIBATOMIC_OPS_CFLAGS)) \
 			-L$(OUTDIR)/lib \
 			" \
 		&& ./configure \

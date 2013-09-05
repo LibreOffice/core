@@ -11,10 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,libatomic_ops,libatomic_ops))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libatomic_ops,libatomic_ops))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libatomic_ops,lib/atomic_ops-7.2d.lib,src/lib/.libs/libatomic_ops-7.2d.lib))
-else
-$(eval $(call gb_ExternalPackage_add_file,libatomic_ops,lib/libatomic_ops-7.2d.a,src/lib/.libs/libatomic_ops-7.2d.a))
-endif
+$(eval $(call gb_ExternalPackage_add_file,libatomic_ops,lib/libatomic_ops.a,src/libatomic_ops.a))
 
 # vim: set noet sw=4 ts=4:
