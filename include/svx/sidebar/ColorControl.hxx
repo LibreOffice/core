@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef SVX_COLORCONTROL_HXX
+#define SVX_COLORCONTROL_HXX
+
 #include "svx/sidebar/PopupControl.hxx"
 
 #include <svtools/valueset.hxx>
@@ -80,3 +85,7 @@ private:
 };
 
 } } // end of namespace svx::sidebar
+
+#endif // SVX_COLORCONTROL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
