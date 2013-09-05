@@ -225,8 +225,7 @@ OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageT
         }
         else
         {
-            ::std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings());
-            aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+            ::std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings( false));
             for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
                     it != aFallbacks.end() && aRet.isEmpty(); ++it)
             {
@@ -1147,7 +1146,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     if( aLanguageTag.isSystemLocale() )
         aLanguageTag = SvtSysLocale().GetUILanguageTag();
 
-    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     if (aLanguageTag.getLanguage() != "en")
         aFallbacks.push_back("en");
 

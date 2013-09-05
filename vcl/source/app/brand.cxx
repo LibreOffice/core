@@ -60,7 +60,7 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
     for (size_t i=0; i < aFallbacks.size(); ++i)
     {
         if (tryLoadPng( aBaseDir, aBaseName + "-" + aFallbacks[i] + aPng, rBitmap))

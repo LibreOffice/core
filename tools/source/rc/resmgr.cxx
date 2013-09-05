@@ -233,7 +233,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     LanguageTag aLocale( rLocale );
     boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
-    ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings());
+    ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
     if (!isAlreadyPureenUS( aLocale))
         aFallbacks.push_back( "en-US");     // last resort if all fallbacks fail
 
@@ -356,7 +356,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
      * passed / remember a fallback list and an index within to pick the next.
      * */
 
-    ::std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings());
+    ::std::vector< OUString > aFallbacks( pMgr->aLocale.getFallbackStrings( true));
     // The first is the locale itself, use next fallback or en-US.
     /* TODO: what happens if the chain is "en-US", "en" -> "en-US", ...
      * This was already an issue with the previous code. */

@@ -74,7 +74,7 @@ static const KnownTagSet & getKnowns()
                 // Do not use the BCP47 string here to initialize the
                 // LanguageTag because then canonicalize() would call this
                 // getKnowns() again..
-                ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings());
+                ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings( true));
                 for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
                 {
                     rKnowns.insert( *fb);
@@ -1198,8 +1198,7 @@ LanguageTag & LanguageTag::makeFallback()
             {
                 // "en-US" is the last resort fallback, try if we get a better
                 // one for the fallback hierarchy of a non-"en" locale.
-                ::std::vector< OUString > aFallbacks( getFallbackStrings());
-                aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+                ::std::vector< OUString > aFallbacks( getFallbackStrings( false));
                 for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
                 {
                     lang::Locale aLocale3( LanguageTag( *it).getLocale());
@@ -1219,7 +1218,7 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
-::std::vector< OUString > LanguageTag::getFallbackStrings() const
+::std::vector< OUString > LanguageTag::getFallbackStrings( bool bIncludeFullBcp47 ) const
 {
     ::std::vector< OUString > aVec;
     OUString aLanguage( getLanguage());
@@ -1228,7 +1227,8 @@ LanguageTag & LanguageTag::makeFallback()
     {
         if (!aCountry.isEmpty())
         {
-            aVec.push_back( aLanguage + "-" + aCountry);
+            if (bIncludeFullBcp47)
+                aVec.push_back( aLanguage + "-" + aCountry);
             if (aLanguage == "zh")
             {
                 // For zh-HK or zh-MO also list zh-TW, for all other zh-XX also
@@ -1239,10 +1239,13 @@ LanguageTag & LanguageTag::makeFallback()
                     aVec.push_back( aLanguage + "-CN");
             }
         }
-        aVec.push_back( aLanguage);
+        else if (bIncludeFullBcp47)
+            aVec.push_back( aLanguage);
         return aVec;
     }
-    aVec.push_back( getBcp47());
+
+    if (bIncludeFullBcp47)
+        aVec.push_back( getBcp47());
     OUString aVariants( getVariants());
     OUString aTmp;
     if (hasScript())
@@ -1471,8 +1474,7 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
             return it;  // exact match
     }
 
-    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
-    aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     if (rReference != "en-US")
     {
         aFallbacks.push_back( "en-US");
@@ -1524,13 +1526,12 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     }
 
     // Now for each reference fallback test the fallbacks of the list in order.
-    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings());
-    aFallbacks.erase( aFallbacks.begin());  // first is full BCP47, we already checked that
+    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
     size_t i = 0;
     for (it = rList.begin(); it != rList.end(); ++it, ++i)
     {
-        ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings());
+        ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings( true));
         aListFallbacks[i] = aTmp;
     }
     for (::std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)

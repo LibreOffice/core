@@ -31,7 +31,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
 
-    ::std::vector< OUString > aFallbacks = rLangTag.getFallbackStrings();
+    ::std::vector< OUString > aFallbacks = rLangTag.getFallbackStrings( true);
 
     OUString aResult;
     sal_Int32 nRank = 42;
@@ -71,6 +71,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             // grisly language matching, is this not available somewhere else?
             if( aKey == aKeyName )
             {
+                /* FIXME-BCP47: what is this supposed to do? */
                 n = 0;
                 OUString aLang = aLocale.replace('_','-');
                 for( std::vector< OUString >::const_iterator i = aFallbacks.begin();

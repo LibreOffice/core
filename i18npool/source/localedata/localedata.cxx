@@ -1649,8 +1649,7 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const com::sun::star::lang::
     ::std::vector< OUString > aVec;
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
-        aVec = LanguageTag( rLocale).getFallbackStrings();
-        aVec.erase( aVec.begin());
+        aVec = LanguageTag( rLocale).getFallbackStrings( false);
         for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
         {
             *it = (*it).replace( cHyphen, cUnder);

@@ -93,7 +93,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
         fprintf( stderr, "ISO Language out:");
 #endif
         LanguageTag aLanguageTag( (*iTag).maBcp47);
-        ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+        ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
         for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
         {
             OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));

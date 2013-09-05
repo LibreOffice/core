@@ -156,7 +156,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
 
         // Second, try match of fallback search with fallback locales,
         // appending also 'en-US' and 'en' to search if not queried.
-        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings());
+        ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
         if (aSearch != "en-US")
         {
             aFallbackSearch.push_back( "en-US");
@@ -165,22 +165,16 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
                 aFallbackSearch.push_back( "en");
             }
         }
-        bool bFirst = true;
         ::std::vector< OUString >::const_iterator itSearch( aFallbackSearch.begin());
         for ( ; itSearch != aFallbackSearch.end(); ++itSearch)
         {
             itNames = rCompNames.begin();
             for ( ; itNames != rCompNames.end(); ++itNames)
             {
-                ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings());
-                ::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
-                if (bFirst)
-                {
-                    // We checked already the full tag, start with second.
-                    if (itLocales != aFallbackLocales.end())
-                        ++itLocales;
-                }
-                for ( ; itLocales != aFallbackLocales.end(); ++itLocales)
+                // We checked already the full tag, start with second.
+                ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings( false));
+                for (::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
+                        itLocales != aFallbackLocales.end(); ++itLocales)
                 {
                     if (*itLocales == *itSearch)
                     {
@@ -189,7 +183,6 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
                     }
                 }
             }
-            bFirst = false;
         }
 
         // Third, last resort, use first (default) entry.

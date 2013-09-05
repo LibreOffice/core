@@ -267,6 +267,17 @@ public:
         lll-CC
         lll
 
+        If the tag includes variants the order is:
+        full BCP 47 tag, same as getBcp47()
+        lll-Ssss-CC-vvvvvvvv
+        lll-Ssss-vvvvvvvv
+        lll-Ssss-CC
+        lll-Ssss
+        lll-CC-vvvvvvvv
+        lll-vvvvvvvv
+        lll-CC
+        lll
+
         Only strings that differ from a higher order are included, for example
         if there is no script the elements will be bcp47, lll-CC, lll; if the
         bcp47 string is identical to lll-CC then only lll-CC, lll.
@@ -274,8 +285,14 @@ public:
         Note that lll is only ISO 639-1/2 alpha code and CC is only ISO 3166
         alpha code. If the region can not be expressed as ISO 3166 then no -CC
         tags are included.
+
+        @param  bIncludeFullBcp47
+                If TRUE, the full BCP 47 tag is included as first element.
+                If FALSE, the full tag is not included; used if the caller
+                obtains the fallbacks only if the full tag did not lead to a
+                match, so subsequent tries need not to include it again.
      */
-    ::std::vector< OUString >       getFallbackStrings() const;
+    ::std::vector< OUString >       getFallbackStrings( bool bIncludeFullBcp47 ) const;
 
 
     /** @short  Search for an equal or at least for a similar locale in a list

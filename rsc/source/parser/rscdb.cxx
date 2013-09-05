@@ -82,7 +82,7 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
     if (rNewLang.isEmpty())
         aFallbacks.push_back( "" );     // do not resolve to SYSTEM (en-US)
     else
-        aFallbacks = LanguageTag( OStringToOUString( rNewLang, RTL_TEXTENCODING_ASCII_US)).getFallbackStrings();
+        aFallbacks = LanguageTag( OStringToOUString( rNewLang, RTL_TEXTENCODING_ASCII_US)).getFallbackStrings( true);
 
     bool bAppendEnUsFallback = ! (rNewLang.equalsIgnoreAsciiCase( "en-US" ) ||
                                   rNewLang.equalsIgnoreAsciiCase( "x-no-translate" ) );

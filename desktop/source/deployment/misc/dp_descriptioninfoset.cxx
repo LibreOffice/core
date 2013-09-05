@@ -728,12 +728,9 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
         //office: en-DE, en, en-DE-altmark
         if (! nodeMatch.is())
         {
-            const ::std::vector< OUString > aFallbacks = getOfficeLanguageTag().getFallbackStrings();
             // Already tried full tag, continue with first fallback.
-            ::std::vector< OUString >::const_iterator it( aFallbacks.begin());
-            if (it != aFallbacks.end())
-                ++it;
-            for ( ; it != aFallbacks.end(); ++it)
+            const ::std::vector< OUString > aFallbacks( getOfficeLanguageTag().getFallbackStrings( false));
+            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
             {
                 nodeMatch = matchLanguageTag(xParent, *it);
                 if (nodeMatch.is())

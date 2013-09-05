@@ -1420,7 +1420,7 @@ void BackendImpl::PackageImpl::scanBundle(
 
 
     const LanguageTag& officeLocale = getOfficeLanguageTag();
-    const ::std::vector< OUString > officeFallbacks( officeLocale.getFallbackStrings());
+    const ::std::vector< OUString > officeFallbacks( officeLocale.getFallbackStrings( true));
     const size_t nPenaltyMax = ::std::numeric_limits<size_t>::max();
     size_t descrPenalty = nPenaltyMax;
     OUString descrFile;
@@ -1475,7 +1475,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 if (officeLocale.getLanguage() == descrTag.getLanguage())
                 {
                     size_t nPenalty = nPenaltyMax;
-                    const ::std::vector< OUString > descrFallbacks( descrTag.getFallbackStrings());
+                    const ::std::vector< OUString > descrFallbacks( descrTag.getFallbackStrings( true));
                     for (size_t o=0; o < officeFallbacks.size() && nPenalty == nPenaltyMax; ++o)
                     {
                         for (size_t d=0; d < descrFallbacks.size() && nPenalty == nPenaltyMax; ++d)
