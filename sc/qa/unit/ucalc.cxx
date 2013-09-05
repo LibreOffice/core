@@ -4138,6 +4138,50 @@ void Test::testCondFormatINSDEL()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondFormatInsertCol()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertCol(0,0,MAXROW,0,4,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,3,0)), rRange);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCondFormatInsertRow()
+{
+    m_pDoc->InsertTab(0, "Test");
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(0);
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
+    pList->InsertNew(pFormat);
+
+    m_pDoc->InsertRow(0,0,MAXCOL,0,4,2);
+    const ScRangeList& rRange = pFormat->GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,5,0)), rRange);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();

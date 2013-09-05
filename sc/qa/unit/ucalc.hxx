@@ -271,6 +271,8 @@ public:
     void testEditTextIterator();
 
     void testCondFormatINSDEL();
+    void testCondFormatInsertRow();
+    void testCondFormatInsertCol();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
