@@ -9,10 +9,24 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_rangelst_test))
 
-$(eval $(call gb_CppunitTest_use_external,sc_rangelst_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_rangelst_test, \
+	boost_headers \
+    icu_headers \
+    icudata \
+    icui18n \
+    icuuc \
+	libxml2 \
+	mdds_headers \
+	orcus \
+	orcus-parser \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_rangelst_test, \
     sc/qa/unit/rangelst_test \
+))
+
+$(eval $(call gb_CppunitTest_use_library_objects,sc_rangelst_test, \
+	scqahelper \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_rangelst_test, \

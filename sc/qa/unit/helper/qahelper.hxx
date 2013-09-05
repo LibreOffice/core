@@ -78,6 +78,15 @@ struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
+// Printers for the calc data structures. Needed for the EQUAL assertion
+// macros from CPPUNIT.
+
+std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr);
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange);
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
+
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
 // wrappers here and there (and then having to handle the Android (and
