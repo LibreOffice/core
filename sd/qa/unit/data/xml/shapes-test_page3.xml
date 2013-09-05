@@ -21,6 +21,7 @@
    <Line2 column1="0.000000" column2="2800.000000" column3="1800.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="4800" positionY="3600" sizeX="1200" sizeY="200" type="com.sun.star.drawing.LineShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
@@ -43,6 +44,7 @@
    <Line2 column1="0.000000" column2="200.000000" column3="3600.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="8629" positionY="86" sizeX="7592" sizeY="7398" type="com.sun.star.drawing.OpenBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -57,6 +59,7 @@
    <Line2 column1="0.000000" column2="7398.482222" column3="85.734286"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <pointSequence>
    <point positionX="8632" positionY="7287" polygonFlags="NORMAL"/>
    <point positionX="8587" positionY="6521" polygonFlags="CONTROL"/>
@@ -220,6 +223,7 @@
    <Line2 column1="0.000000" column2="1200.000000" column3="6400.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="18348" positionY="525" sizeX="8645" sizeY="6751" type="com.sun.star.drawing.ClosedBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -234,6 +238,7 @@
    <Line2 column1="0.000000" column2="6751.172578" column3="525.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <pointSequence>
    <point positionX="18348" positionY="7243" polygonFlags="NORMAL"/>
    <point positionX="18951" positionY="7332" polygonFlags="CONTROL"/>
@@ -432,6 +437,7 @@
    <Line2 column1="0.000000" column2="6913.571703" column3="7886.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <pointSequence>
    <point positionX="9200" positionY="13600" polygonFlags="NORMAL"/>
    <point positionX="9200" positionY="12200" polygonFlags="CONTROL"/>
@@ -504,6 +510,7 @@
    <Line2 column1="0.000000" column2="4800.051183" column3="9000.190964"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="1312" positionY="8865" sizeX="5636" sizeY="6339" type="com.sun.star.drawing.OpenBezierShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -518,6 +525,7 @@
    <Line2 column1="0.000000" column2="6339.544162" column3="8864.747882"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <pointSequence>
    <point positionX="1401" positionY="13600" polygonFlags="NORMAL"/>
    <point positionX="2001" positionY="11200" polygonFlags="CONTROL"/>
@@ -602,6 +610,7 @@
    <Line2 column1="0.000000" column2="6000.000000" column3="9800.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="2200" positionY="16600" sizeX="7800" sizeY="3000" type="com.sun.star.drawing.PolyPolygonShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -652,6 +661,7 @@
    <Line2 column1="0.000000" column2="3000.000000" column3="16600.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="12400" positionY="17200" sizeX="6200" sizeY="2600" type="com.sun.star.drawing.PolyPolygonShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
@@ -710,5 +720,6 @@
    <Line2 column1="0.000000" column2="2600.000000" column3="17200.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
 </XShapes>
