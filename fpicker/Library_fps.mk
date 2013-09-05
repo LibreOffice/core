@@ -86,7 +86,6 @@ $(eval $(call gb_Library_add_exception_objects,fps,\
 	fpicker/source/win32/folderpicker/FolderPicker \
 	fpicker/source/win32/folderpicker/MtaFop \
 	fpicker/source/win32/folderpicker/WinFOPImpl \
-	fpicker/source/win32/misc/AutoBuffer \
 	fpicker/source/win32/misc/resourceprovider \
 	fpicker/source/win32/misc/WinImplHelper \
 ))
