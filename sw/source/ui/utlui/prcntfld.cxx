@@ -21,10 +21,15 @@
 #include "prcntfld.hxx"
 
 PercentField::PercentField()
-    : nOldMax(0)
+    : m_pField(NULL)
+    , nRefValue(0)
+    , nOldMax(0)
     , nOldMin(0)
+    , nOldSpinSize(0)
+    , nOldBaseValue(0)
     , nLastPercent(-1)
     , nLastValue(-1)
+    , nOldDigits(0)
     , eOldUnit(FUNIT_NONE)
     , bLockAutoCalculation(sal_False)
 {
