@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "charthelper.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -35,12 +34,8 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-
-// ====================================================================
-
 namespace
 {
-
 
 sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAllCharts )
 {
@@ -116,8 +111,7 @@ bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 
 }//end anonymous namespace
 
-// === ScChartHelper ======================================
-
+// ScChartHelper
 //static
 sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dbdata.hxx"
@@ -39,8 +38,6 @@ using ::std::for_each;
 using ::std::find_if;
 using ::std::remove_if;
 using ::std::pair;
-
-//---------------------------------------------------------------------------------------
 
 bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) const
 {
@@ -208,7 +205,6 @@ ScDBData::~ScDBData()
 {
     StopRefreshTimer();
 }
-
 
 OUString ScDBData::GetSourceString() const
 {
@@ -958,7 +954,6 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
 }
-
 
 void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {

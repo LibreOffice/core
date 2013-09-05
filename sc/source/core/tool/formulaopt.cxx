@@ -21,11 +21,7 @@ using namespace com::sun::star::uno;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::i18n::LocaleDataItem;
 
-// -----------------------------------------------------------------------
-
 TYPEINIT1(ScTpFormulaItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
 
 ScFormulaOptions::ScFormulaOptions()
 {
@@ -154,9 +150,6 @@ bool ScFormulaOptions::operator!=( const ScFormulaOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-// -----------------------------------------------------------------------
-
-
 ScTpFormulaItem::ScTpFormulaItem( sal_uInt16 nWhichP, const ScFormulaOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
@@ -190,8 +183,6 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 {
     return new ScTpFormulaItem( *this );
 }
-
-// -----------------------------------------------------------------------
 
 #define CFGPATH_FORMULA           "Office.Calc/Formula"
 

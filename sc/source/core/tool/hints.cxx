@@ -19,8 +19,6 @@
 
 #include "hints.hxx"
 
-// -----------------------------------------------------------------------
-
 TYPEINIT1(ScPaintHint, SfxHint);
 TYPEINIT1(ScUpdateRefHint, SfxHint);
 TYPEINIT1(ScPointerChangedHint, SfxHint);
@@ -29,9 +27,7 @@ TYPEINIT1(ScAutoStyleHint, SfxHint);
 TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
 TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
 
-// -----------------------------------------------------------------------
 // ScPaintHint - info what has to be repainted
-// -----------------------------------------------------------------------
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
     aRange( rRng ),
@@ -44,9 +40,7 @@ ScPaintHint::~ScPaintHint()
 {
 }
 
-// -----------------------------------------------------------------------
 // ScUpdateRefHint - update references
-// -----------------------------------------------------------------------
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                     SCsCOL nX, SCsROW nY, SCsTAB nZ ) :
@@ -62,18 +56,13 @@ ScUpdateRefHint::~ScUpdateRefHint()
 {
 }
 
-// -----------------------------------------------------------------------
 // ScPointerChangedHint - pointer has become invalid
-// -----------------------------------------------------------------------
-
 
 ScPointerChangedHint::~ScPointerChangedHint()
 {
 }
 
-// -----------------------------------------------------------------------
 //      ScLinkRefreshedHint - a link has been refreshed
-// -----------------------------------------------------------------------
 
 ScLinkRefreshedHint::ScLinkRefreshedHint() :
     nLinkType( SC_LINKREFTYPE_NONE ),
@@ -107,9 +96,7 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
     aDestPos = rPos;
 }
 
-// -----------------------------------------------------------------------
 //      ScAutoStyleHint - STYLE() function has been called
-// -----------------------------------------------------------------------
 
 ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const String& rSt1,
                                         sal_uLong nT, const String& rSt2 ) :
@@ -124,7 +111,6 @@ ScAutoStyleHint::~ScAutoStyleHint()
 {
 }
 
-
 ScDBRangeRefreshedHint::ScDBRangeRefreshedHint( const ScImportParam& rP )
     : aParam(rP)
 {
@@ -133,7 +119,6 @@ ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
 {
 }
 
-
 ScDataPilotModifiedHint::ScDataPilotModifiedHint( const String& rName )
     : maName(rName)
 {
@@ -141,6 +126,5 @@ ScDataPilotModifiedHint::ScDataPilotModifiedHint( const String& rName )
 ScDataPilotModifiedHint::~ScDataPilotModifiedHint()
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

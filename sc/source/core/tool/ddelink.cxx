@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -38,8 +37,6 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
 bool ScDdeLink::bIsInUpdate = false;
-
-//------------------------------------------------------------------------
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
                         sal_uInt8 nM ) :

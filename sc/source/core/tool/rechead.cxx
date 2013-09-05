@@ -20,9 +20,7 @@
 #include "rechead.hxx"
 #include "scerrors.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-// =======================================================================
+// STATIC DATA
 
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
@@ -107,8 +105,6 @@ sal_uLong ScMultipleReadHeader::BytesLeft() const
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 ScMultipleWriteHeader::ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault) :
     rStream( rNewStream ),
     aMemStream( 4096, 4096 )
@@ -149,9 +145,5 @@ void ScMultipleWriteHeader::StartEntry()
     sal_uLong nPos = rStream.Tell();
     nEntryStart = nPos;
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

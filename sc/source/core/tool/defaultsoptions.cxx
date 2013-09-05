@@ -18,11 +18,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-// -----------------------------------------------------------------------
-
 TYPEINIT1(ScTpDefaultsItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
 
 ScDefaultsOptions::ScDefaultsOptions()
 {
@@ -64,9 +60,6 @@ bool ScDefaultsOptions::operator!=( const ScDefaultsOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-// -----------------------------------------------------------------------
-
-
 ScTpDefaultsItem::ScTpDefaultsItem( sal_uInt16 nWhichP, const ScDefaultsOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
@@ -100,8 +93,6 @@ SfxPoolItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
 {
     return new ScTpDefaultsItem( *this );
 }
-
-// -----------------------------------------------------------------------
 
 #define CFGPATH_FORMULA          "Office.Calc/Defaults"
 

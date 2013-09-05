@@ -36,9 +36,6 @@ using ::std::for_each;
 // which register UNO listeners.
 #define SC_CHARTTIMEOUT 10
 
-
-// ====================================================================
-
 class ScChartUnoData
 {
     uno::Reference< chart::XChartDataChangeEventListener >  xListener;
@@ -54,9 +51,7 @@ public:
     const uno::Reference< chart::XChartData >& GetSource() const                        { return xSource; }
 };
 
-
-// === ScChartListener ================================================
-
+// ScChartListener
 ScChartListener::ExternalRefListener::ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc) :
     mrParent(rParent), mpDoc(pDoc)
 {
@@ -104,8 +99,6 @@ boost::unordered_set<sal_uInt16>& ScChartListener::ExternalRefListener::getAllFi
 {
     return maFileIds;
 }
-
-// ----------------------------------------------------------------------------
 
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
@@ -338,7 +331,6 @@ void ScChartListener::EndListeningTo()
     for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mpDoc, *this, false));
 }
 
-
 void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
                                        bool bDirtyP )
 {
@@ -349,7 +341,6 @@ void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
         SetDirty( true );
 }
 
-
 void ScChartListener::UpdateScheduledSeriesRanges()
 {
     if ( bSeriesRangesScheduled )
@@ -358,7 +349,6 @@ void ScChartListener::UpdateScheduledSeriesRanges()
         UpdateSeriesRanges();
     }
 }
-
 
 void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
@@ -371,7 +361,6 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
         mpDoc->UpdateChart(GetName());
     }
 }
-
 
 void ScChartListener::UpdateSeriesRanges()
 {
@@ -416,8 +405,6 @@ bool ScChartListener::operator!=( const ScChartListener& r ) const
     return !operator==(r);
 }
 
-// ============================================================================
-
 ScChartHiddenRangeListener::ScChartHiddenRangeListener()
 {
 }
@@ -427,8 +414,7 @@ ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
     // empty d'tor
 }
 
-// === ScChartListenerCollection ======================================
-
+// ScChartListenerCollection
 ScChartListenerCollection::RangeListenerItem::RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p) :
     maRange(rRange), mpListener(p)
 {
@@ -652,7 +638,6 @@ void ScChartListenerCollection::UpdateDirtyCharts()
     }
 }
 
-
 void ScChartListenerCollection::SetDirty()
 {
     ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
@@ -661,7 +646,6 @@ void ScChartListenerCollection::SetDirty()
 
     StartTimer();
 }
-
 
 void ScChartListenerCollection::SetDiffDirty(
             const ScChartListenerCollection& rCmp, bool bSetChartRangeLists )
@@ -697,7 +681,6 @@ void ScChartListenerCollection::SetDiffDirty(
         StartTimer();
 }
 
-
 void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 {
     bool bDirty = false;
@@ -724,14 +707,12 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
     }
 }
 
-
 void ScChartListenerCollection::UpdateScheduledSeriesRanges()
 {
     ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
     for (; it != itEnd; ++it)
         it->second->UpdateScheduledSeriesRanges();
 }
-
 
 void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 {
@@ -740,7 +721,6 @@ void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
     for (; it != itEnd; ++it)
         it->second->UpdateChartIntersecting(aRange);
 }
-
 
 bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r ) const
 {

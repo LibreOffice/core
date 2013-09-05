@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
@@ -34,8 +33,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 
 #define SC_CHARTLOCKTIMEOUT 660
-
-// ====================================================================
 
 namespace
 {
@@ -80,8 +77,7 @@ std::vector< WeakReference< frame::XModel > > lcl_getAllLivingCharts( ScDocument
 
 }//end anonymous namespace
 
-// === ScChartLockGuard ======================================
-
+// ScChartLockGuard
 ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
     maChartModels( lcl_getAllLivingCharts( pDoc ) )
 {
@@ -145,15 +141,13 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
     }
 }
 
-// === ScTemporaryChartLock ======================================
-
+// ScTemporaryChartLock
 ScTemporaryChartLock::ScTemporaryChartLock( ScDocument* pDocP ) :
     mpDoc( pDocP )
 {
     maTimer.SetTimeout( SC_CHARTLOCKTIMEOUT );
     maTimer.SetTimeoutHdl( LINK( this, ScTemporaryChartLock, TimeoutHdl ) );
 }
-
 
 ScTemporaryChartLock::~ScTemporaryChartLock()
 {

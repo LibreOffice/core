@@ -235,8 +235,6 @@ bool lcl_fillQueryEntries(
 
 }
 
-// ============================================================================
-
 ScDBRangeBase::ScDBRangeBase(ScDocument* pDoc, RefType eType) :
     mpDoc(pDoc), meType(eType)
 {
@@ -268,8 +266,6 @@ ScDocument* ScDBRangeBase::getDoc() const
 {
     return mpDoc;
 }
-
-// ============================================================================
 
 ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
     ScDBRangeBase(pDoc, INTERNAL), maRange(rRange)
@@ -390,8 +386,6 @@ bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
 {
     return maRange == rRange;
 }
-
-// ============================================================================
 
 ScDBExternalRange::ScDBExternalRange(ScDocument* pDoc, const ScMatrixRef& pMat) :
     ScDBRangeBase(pDoc, EXTERNAL), mpMatrix(pMat)

@@ -37,14 +37,11 @@
 using ::std::vector;
 using namespace formula;
 
-// STATIC DATA -----------------------------------------------------------
-
+// STATIC DATA
 #define MAX_ANZ_DOUBLE_FOR_SORT 100000
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
-
-//-----------------------------------------------------------------------------
 
 class ScDistFunc
 {
@@ -164,9 +161,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
     return fRx;
 }
 
-//-----------------------------------------------------------------------------
 // Allgemeine Funktionen
-//-----------------------------------------------------------------------------
 
 void ScInterpreter::ScNoName()
 {
@@ -886,8 +881,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
 
 /*
                 x^a * (1-x)^b
-    I_x(a,b) = ----------------  * result of ContFrac
-                a * Beta(a,b)
+    Ix(a,b)    * result of ContFrac                a * Beta(a,b)
 */
 static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
 {   // like old version
@@ -1137,7 +1131,6 @@ void ScInterpreter::ScVariationen2()
             PushDouble(pow(n,k));
     }
 }
-
 
 double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
 // used in ScB and ScBinomDist
@@ -2948,7 +2941,6 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
     } // if (nGlobalError)
     return true;
 }
-
 
 void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
 {

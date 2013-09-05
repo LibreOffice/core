@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 
 #include "zforauto.hxx"
 #include "global.hxx"
-
-//------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
     sFormatstring   ( "Standard" ),
