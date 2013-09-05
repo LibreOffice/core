@@ -719,7 +719,11 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
                 pImpl->aText = GetText();
 
             if ( pImpl->aText.getLength() > (TEXT_WIDTH-1) )
-                pImpl->aText = pImpl->aText.replaceAt( pImpl->aText.indexOf(" ", TEXT_WIDTH), 1, "" );
+            {
+                sal_Int32 nSpaceIdx = pImpl->aText.indexOf(" ", TEXT_WIDTH);
+                if (nSpaceIdx != -1)
+                    pImpl->aText = pImpl->aText.copy(0, nSpaceIdx);
+            }
         }
 
         // calculate text width scaling

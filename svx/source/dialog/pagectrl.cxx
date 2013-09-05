@@ -300,7 +300,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         sText += OUString(cArrow);
         for(sal_uInt16 i = 0; i < sText.getLength(); i++)
         {
-            OUString sDraw(sText.copy(0,1));
+            OUString sDraw(sText.copy(i,1));
             long nHDiff = 0;
             long nCharWidth = GetTextWidth(sDraw);
             bool bHorizontal = 0 == aMove.Y();

@@ -122,15 +122,13 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
     // First only loop over the ObjectShells to find those
     // with the specific name:
     sal_Bool bRet = sal_False;
-    OUString sNm( rNm );
-    sNm = sNm.toAsciiLowerCase();
+    OUString sNm( rNm.toAsciiLowerCase() );
     TypeId aType( TYPE(SfxObjectShell) );
     SfxObjectShell* pShell = SfxObjectShell::GetFirst( &aType );
     while( pShell )
     {
         OUString sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
-        sTmp = sTmp.toAsciiLowerCase();
-        if( sTmp == sNm )
+        if( sNm == sTmp.toAsciiLowerCase() )
         {
             SFX_APP()->AddDdeTopic( pShell );
             bRet = true;

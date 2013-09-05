@@ -1615,7 +1615,8 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     for ( sal_uInt16 i = 0; i < aActiveLB.GetEntryCount(); ++i )
     {
         OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData(i);
-        if ( pFactory->toAsciiLowerCase() == pIPage->GetFactory() )
+        *pFactory = pFactory->toAsciiLowerCase();
+        if ( *pFactory == pIPage->GetFactory() )
         {
             if ( aActiveLB.GetSelectEntryPos() != i )
             {

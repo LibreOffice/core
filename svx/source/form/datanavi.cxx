@@ -3464,7 +3464,9 @@ namespace svxform
                 sTemp = m_aRefED.GetText();
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
                 OUString sEntry = m_aBindLB.GetSelectEntry();
-                sEntry = sEntry.replaceFirst( ":", "" );
+                sal_Int32 nColonIdx = sEntry.indexOf(':');
+                if (nColonIdx != -1)
+                    sEntry = sEntry.copy(0, nColonIdx);
                 sTemp = sEntry;
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
                 sTemp = lcl_ReplaceString::get().toAPI( m_aReplaceLB.GetSelectEntry() );
