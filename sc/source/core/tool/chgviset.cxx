@@ -27,14 +27,13 @@
 // -----------------------------------------------------------------------
 ScChangeViewSettings::~ScChangeViewSettings()
 {
-    if(pCommentSearcher!=NULL)
-        delete pCommentSearcher;
+    delete pCommentSearcher;
 }
 
-ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r )
-    :
-        aFirstDateTime( DateTime::EMPTY ),
-        aLastDateTime( DateTime::EMPTY )
+ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
+    pCommentSearcher(NULL),
+    aFirstDateTime( DateTime::EMPTY ),
+    aLastDateTime( DateTime::EMPTY )
 {
     SetTheComment(r.aComment);
 
@@ -59,6 +58,7 @@ ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r )
 
 ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSettings& r )
 {
+    pCommentSearcher = NULL;
     SetTheComment(r.aComment);
 
     aFirstDateTime  =r.aFirstDateTime;
@@ -83,21 +83,21 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
 
 sal_Bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
 {
-    sal_Bool nTheFlag=sal_True;
+    bool nTheFlag = true;
 
-    if(pCommentSearcher!=NULL)
+    if(pCommentSearcher)
     {
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pCommentStr->getLength();
-        nTheFlag=pCommentSearcher->SearchForward(*pCommentStr, &nStartPos, &nEndPos);
+        nTheFlag = pCommentSearcher->SearchForward(*pCommentStr, &nStartPos, &nEndPos);
     }
     return nTheFlag;
 }
 
 void ScChangeViewSettings::SetTheComment(const OUString& rString)
 {
-    aComment=rString;
-    if(pCommentSearcher!=NULL)
+    aComment = rString;
+    if(pCommentSearcher)
     {
         delete pCommentSearcher;
         pCommentSearcher=NULL;
