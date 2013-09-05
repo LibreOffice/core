@@ -23,8 +23,6 @@
 #include "global.hxx"       // for pSysLocale
 #include <unotools/syslocale.hxx>
 
-//------------------------------------------------------------------
-
 sal_Bool ScOptionsUtil::IsMetricSystem()
 {
     //! which language should be used here - system language or installed office language?
@@ -33,8 +31,6 @@ sal_Bool ScOptionsUtil::IsMetricSystem()
 
     return ( eSys == MEASURE_METRIC );
 }
-
-//------------------------------------------------------------------
 
 ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree ) :
     ConfigItem( rSubTree )
@@ -60,6 +56,5 @@ void ScLinkConfigItem::Commit()
 {
     aCommitLink.Call( this );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

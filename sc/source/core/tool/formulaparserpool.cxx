@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "formulaparserpool.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -34,8 +33,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
-
-// ============================================================================
 
 namespace {
 
@@ -106,8 +103,6 @@ struct ScParserFactorySingleton : public ::rtl::Static< ScParserFactoryMap, ScPa
 
 } // namespace
 
-// ============================================================================
-
 ScFormulaParserPool::ScFormulaParserPool( const ScDocument& rDoc ) :
     mrDoc( rDoc )
 {
@@ -144,7 +139,5 @@ Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUStrin
     }
     return rxParser;
 }
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

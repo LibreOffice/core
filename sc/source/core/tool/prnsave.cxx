@@ -21,9 +21,7 @@
 #include "global.hxx"
 #include "address.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-//------------------------------------------------------------------
+// STATIC DATA
 
 //
 //      Daten pro Tabelle
@@ -112,8 +110,5 @@ sal_Bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const
             }
     return bEqual;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

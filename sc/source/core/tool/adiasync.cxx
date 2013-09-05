@@ -26,12 +26,8 @@
 #include "sc.hrc"       // FID_DATACHANGED
 #include <osl/thread.h>
 
-
-//------------------------------------------------------------------------
-
 ScAddInAsyncs theAddInAsyncTbl;
 static ScAddInAsync aSeekObj;
-
 
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
@@ -40,15 +36,11 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 }
 }
 
-
-
 ScAddInAsync::ScAddInAsync() :
     SvtBroadcaster(),
     nHandle( 0 )
 {   // nur fuer aSeekObj !
 }
-
-
 
 ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* pDoc) :
     SvtBroadcaster(),
@@ -63,8 +55,6 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* 
     theAddInAsyncTbl.insert( this );
 }
 
-
-
 ScAddInAsync::~ScAddInAsync()
 {
     // aSeekObj does not have that, handle 0 does not exist otherwise
@@ -78,8 +68,6 @@ ScAddInAsync::~ScAddInAsync()
     }
 }
 
-
-
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
     ScAddInAsync* pRet = 0;
@@ -90,8 +78,6 @@ ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
     aSeekObj.nHandle = 0;
     return pRet;
 }
-
-
 
 void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 {
@@ -132,8 +118,6 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     }
 }
 
-
-
 void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 {
     if ( !theAddInAsyncTbl.empty() )
@@ -155,7 +139,5 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
         }
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

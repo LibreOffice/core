@@ -73,22 +73,15 @@
 
 using ::std::vector;
 
-//------------------------------------------------------------------------
-
 // line ends are now created with an empty name.
 // The checkForUniqueItem method then finds a unique name for the item's value.
 #define SC_LINEEND_NAME     EMPTY_STRING
-
-//------------------------------------------------------------------------
 
 enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Level
             DET_INS_CONTINUE,
             DET_INS_INSERTED,
             DET_INS_EMPTY,
             DET_INS_CIRCULAR };
-
-
-//------------------------------------------------------------------------
 
 class ScDetectiveData
 {
@@ -125,14 +118,10 @@ private:
     SfxItemSet          aCaptionSet;
 };
 
-//------------------------------------------------------------------------
-
 ColorData ScDetectiveFunc::nArrowColor = 0;
 ColorData ScDetectiveFunc::nErrorColor = 0;
 ColorData ScDetectiveFunc::nCommentColor = 0;
 sal_Bool ScDetectiveFunc::bColorsInitialized = false;
-
-//------------------------------------------------------------------------
 
 static sal_Bool lcl_HasThickLine( SdrObject& rObj )
 {
@@ -140,8 +129,6 @@ static sal_Bool lcl_HasThickLine( SdrObject& rObj )
 
     return ( ((const XLineWidthItem&)rObj.GetMergedItem(XATTR_LINEWIDTH)).GetValue() > 0 );
 }
-
-//------------------------------------------------------------------------
 
 ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aBoxSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END ),
@@ -279,8 +266,6 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
         }
     }
 }
-
-//------------------------------------------------------------------------
 
 void ScDetectiveFunc::Modified()
 {
@@ -465,8 +450,6 @@ sal_Bool ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
     return false;
 }
 
-//------------------------------------------------------------------------
-
 //  InsertXXX: called from DrawEntry/DrawAlienEntry and InsertObject
 
 sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
@@ -606,8 +589,6 @@ sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     Modified();
     return sal_True;
 }
-
-//------------------------------------------------------------------------
 
 //  DrawEntry:      Formel auf dieser Tabelle,
 //                  Referenz auf dieser oder anderer
@@ -783,8 +764,6 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
         Modified();
     }
 }
-
-//------------------------------------------------------------------------
 
 sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
                                         ScDetectiveData& rData, sal_uInt16 nLevel )
@@ -966,8 +945,6 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
     return nResult;
 }
 
-//------------------------------------------------------------------------
-
 sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
                                             sal_uInt16 nLevel )
 {
@@ -1018,8 +995,6 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 
     return nResult;
 }
-
-//------------------------------------------------------------------------
 
 sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         ScDetectiveData& rData, sal_uInt16 nLevel )
@@ -1168,9 +1143,8 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
     return nResult;
 }
 
-
 //
-//  --------------------------------------------------------------------------------
+
 //
 
 sal_Bool ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )

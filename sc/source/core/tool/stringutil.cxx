@@ -45,8 +45,6 @@ void ScSetStringParam::setNumericInput()
     meSetTextNumFormat = Never;
 }
 
-// ============================================================================-
-
 bool ScStringUtil::parseSimpleNumber(
     const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)
 {

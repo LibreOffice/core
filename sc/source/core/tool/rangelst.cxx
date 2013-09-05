@@ -173,8 +173,7 @@ private:
 
 }
 
-// === ScRangeList ====================================================
-
+//  ScRangeList
 ScRangeList::~ScRangeList()
 {
     RemoveAll();
@@ -225,7 +224,6 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
         return 0;
 }
 
-
 void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter ) const
@@ -238,7 +236,6 @@ void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
     FormatString func(rStr, nFlags, pDoc, eConv, cDelimiter);
     for_each(maRanges.begin(), maRanges.end(), func);
 }
-
 
 void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
@@ -253,7 +250,6 @@ void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
     for_each(maRanges.begin(), maRanges.end(), func);
     rStr = aStr;
 }
-
 
 void ScRangeList::Join( const ScRange& r, bool bIsInList )
 {
@@ -355,7 +351,6 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     if (  !bIsInList && !bJoinedInput )
         Append( r );
 }
-
 
 bool ScRangeList::operator==( const ScRangeList& r ) const
 {
@@ -881,6 +876,7 @@ bool handleFourRanges( const ScRange& rDelRange, ScRange* p, std::vector<ScRange
 
     if (nCol1 < nDeleteCol1 && nDeleteCol2 < nCol2 && nRow1 < nDeleteRow1 && nDeleteRow2 < nRow2)
     {
+
         // +---------------+
         // |       1       |
         // +---+-------+---+
@@ -1030,7 +1026,6 @@ bool ScRangeList::In( const ScRange& rRange ) const
     return itr != itrEnd;
 }
 
-
 size_t ScRangeList::GetCellCount() const
 {
     CountCells func;
@@ -1172,15 +1167,13 @@ ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
     return aReturn;
 }
 
-// === ScRangePairList ========================================================
-
+//  ScRangePairList
 ScRangePairList::~ScRangePairList()
 {
     for_each( maPairs.begin(), maPairs.end(), ScDeleteObjectByPtr<ScRangePair>() );
     maPairs.clear();
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Remove(size_t nPos)
 {
     if (maPairs.size() <= nPos)
@@ -1194,7 +1187,6 @@ ScRangePair* ScRangePairList::Remove(size_t nPos)
     return p;
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
 {
     ScRangePair* p = NULL;
@@ -1284,7 +1276,6 @@ bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
     return bChanged;
 }
 
-//-----------------------------------------------------------------------------
 // Delete entries that have the labels (first range) on nTab
 void ScRangePairList::DeleteOnTab( SCTAB nTab )
 {
@@ -1305,7 +1296,6 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
     }
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 {
     for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
@@ -1317,7 +1307,6 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 {
     for ( size_t j = 0, nListCount = maPairs.size(); j < nListCount; j++ )
@@ -1329,8 +1318,6 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
     return NULL;
 }
 
-
-//-----------------------------------------------------------------------------
 ScRangePairList* ScRangePairList::Clone() const
 {
     ScRangePairList* pNew = new ScRangePairList;
@@ -1341,14 +1328,12 @@ ScRangePairList* ScRangePairList::Clone() const
     return pNew;
 }
 
-//-----------------------------------------------------------------------------
 struct ScRangePairNameSort
 {
     ScRangePair*    pPair;
     ScDocument*     pDoc;
 };
 
-//-----------------------------------------------------------------------------
 extern "C"
 int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
@@ -1427,7 +1412,6 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 #endif
 }
 
-//-----------------------------------------------------------------------------
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
 {
     if ( maPairs.empty() )
@@ -1547,7 +1531,6 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
         Append( r );
 }
 
-//-----------------------------------------------------------------------------
 ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
         ScDocument* pDoc ) const
 {

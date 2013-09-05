@@ -69,7 +69,6 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
-
 CharClass*                          ScCompiler::pCharClassEnglish = NULL;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { NULL, NULL, NULL, NULL, NULL, NULL };
 
@@ -91,10 +90,6 @@ static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
 using namespace ::com::sun::star::i18n;
 
-/////////////////////////////////////////////////////////////////////////
-
-
-
 class ScCompilerRecursionGuard
 {
 private:
@@ -104,7 +99,6 @@ public:
                                     : rRecursion( rRec ) { ++rRecursion; }
                                 ~ScCompilerRecursionGuard() { --rRecursion; }
 };
-
 
 void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Grammar _eGrammar  ) const
 {
@@ -208,7 +202,6 @@ void ScCompiler::InitCharClassEnglish()
             ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
 }
 
-
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 {
     OSL_ENSURE( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
@@ -265,7 +258,6 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
     }
 }
 
-
 void ScCompiler::SetGrammarAndRefConvention(
         const FormulaGrammar::Grammar eNewGrammar, const FormulaGrammar::Grammar eOldGrammar )
 {
@@ -286,9 +278,6 @@ String ScCompiler::FindAddInFunction( const String& rUpperName, bool bLocalFirst
 {
     return ScGlobal::GetAddInCollection()->FindFunction(rUpperName, bLocalFirst);    // bLocalFirst=false for english
 }
-
-
-//-----------------------------------------------------------------------------
 
 ScCompiler::Convention::~Convention()
 {
@@ -418,8 +407,6 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
         }
     }
 }
-
-//-----------------------------------------------------------------------------
 
 static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
 {
@@ -731,8 +718,6 @@ void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
         rBuffer.append(sal_Int32(nRow + 1));
 }
 
-//-----------------------------------------------------------------------------
-
 struct ConventionOOO_A1 : public Convention_A1
 {
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
@@ -762,7 +747,6 @@ struct ConventionOOO_A1 : public Convention_A1
         aString += '.';
         return aString;
     }
-
 
     void MakeOneRefStrImpl(
         OUStringBuffer& rBuffer, const ScCompiler& rComp,
@@ -803,7 +787,6 @@ struct ConventionOOO_A1 : public Convention_A1
         else
             MakeRowStr(rBuffer, rAbsRef.Row());
     }
-
 
     void MakeRefStrImpl( OUStringBuffer&   rBuffer,
                          const ScCompiler&      rComp,
@@ -1015,11 +998,8 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 };
 
-
 static const ConventionOOO_A1 ConvOOO_A1;
 const ScCompiler::Convention * const ScCompiler::pConvOOO_A1 = &ConvOOO_A1;
-
-//-----------------------------------------------------------------------------
 
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
@@ -1054,8 +1034,6 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 
 static const ConventionOOO_A1_ODF ConvOOO_A1_ODF;
 const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_ODF;
-
-//-----------------------------------------------------------------------------
 
 struct ConventionXL
 {
@@ -1430,7 +1408,6 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 static const ConventionXL_A1 ConvXL_A1;
 const ScCompiler::Convention * const ScCompiler::pConvXL_A1 = &ConvXL_A1;
 
-
 struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
@@ -1438,9 +1415,6 @@ struct ConventionXL_OOX : public ConventionXL_A1
 
 static const ConventionXL_OOX ConvXL_OOX;
 const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
-
-
-//-----------------------------------------------------------------------------
 
 static void
 r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress& rAbsRef )
@@ -1666,7 +1640,6 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 static const ConventionXL_R1C1 ConvXL_R1C1;
 const ScCompiler::Convention * const ScCompiler::pConvXL_R1C1 = &ConvXL_R1C1;
 
-//-----------------------------------------------------------------------------
 ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
@@ -1741,7 +1714,6 @@ void ScCompiler::CheckTabQuotes( String& rString,
     }
 }
 
-
 xub_StrLen ScCompiler::GetDocTabPos( const String& rString )
 {
     if (rString.GetChar(0) != '\'')
@@ -1752,8 +1724,6 @@ xub_StrLen ScCompiler::GetDocTabPos( const String& rString )
         nPos = STRING_NOTFOUND;
     return nPos;
 }
-
-//---------------------------------------------------------------------------
 
 void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
 {
@@ -1783,7 +1753,6 @@ void ScCompiler::SetError(sal_uInt16 nError)
         pArr->SetCodeError( nError);
 }
 
-
 static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, xub_StrLen nMax )
 {
     const sal_Unicode* const pStop = pDst + nMax;
@@ -1795,15 +1764,13 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
     return pDst;
 }
 
-
-//---------------------------------------------------------------------------
 // NextSymbol
-//---------------------------------------------------------------------------
+
 // Zerlegt die Formel in einzelne Symbole fuer die weitere
 // Verarbeitung (Turing-Maschine).
-//---------------------------------------------------------------------------
+
 // Ausgangs Zustand = GetChar
-//---------------+-------------------+-----------------------+---------------
+
 // Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
 //---------------+-------------------+-----------------------+---------------
 // GetChar       | ;()+-*/^=&        | Symbol=Zeichen        | Stop
@@ -1822,7 +1789,7 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
 //               | $_:.              |                       |
 //               | Buchstabe,Ziffer  | Symbol=Symbol+Zeichen | GetWord
 //               | Sonst             | Fehler                | Stop
-//---------------|-------------------+-----------------------+---------------
+//---------------+-------------------+-----------------------+---------------
 // GetValue      | ;()*/^=<>&        |                       |
 //               | Leerzeichen       | Dec(CharPos)          | Stop
 //               | Ziffer E+-%,.     | Symbol=Symbol+Zeichen | GetValue
@@ -2419,9 +2386,7 @@ Label_MaskStateMachine:
     return nSpaces;
 }
 
-//---------------------------------------------------------------------------
 // Convert symbol to token
-//---------------------------------------------------------------------------
 
 bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
 {
@@ -2616,7 +2581,6 @@ bool ScCompiler::IsString()
     return false;
 }
 
-
 bool ScCompiler::IsPredetectedReference( const String& rName )
 {
     // Speedup documents with lots of broken references, e.g. sheet deleted.
@@ -2674,7 +2638,6 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
     return false;
 }
 
-
 bool ScCompiler::IsDoubleReference( const String& rName )
 {
     ScRange aRange( aPos, aPos );
@@ -2716,7 +2679,6 @@ bool ScCompiler::IsDoubleReference( const String& rName )
 
     return ( nFlags & SCA_VALID ) != 0;
 }
-
 
 bool ScCompiler::IsSingleReference( const String& rName )
 {
@@ -2763,7 +2725,6 @@ bool ScCompiler::IsSingleReference( const String& rName )
 
     return ( nFlags & SCA_VALID ) != 0;
 }
-
 
 bool ScCompiler::IsReference( const String& rName )
 {
@@ -3261,7 +3222,6 @@ bool ScCompiler::IsBoolean( const String& rName )
         return false;
 }
 
-
 bool ScCompiler::IsErrorConstant( const String& rName ) const
 {
     sal_uInt16 nError = GetErrorConstant( rName);
@@ -3275,8 +3235,6 @@ bool ScCompiler::IsErrorConstant( const String& rName ) const
     else
         return false;
 }
-
-//---------------------------------------------------------------------------
 
 void ScCompiler::AutoCorrectParsedSymbol()
 {
@@ -3924,7 +3882,6 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     return pNew;
 }
 
-
 ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUString& rFormulaNmsp )
 {
     OSL_ENSURE( (GetGrammar() == FormulaGrammar::GRAM_EXTERNAL) || rFormulaNmsp.isEmpty(),
@@ -3952,7 +3909,6 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula, const OUStrin
     return CompileString( rFormula );
 }
 
-
 ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 {
     ScRangeData* pRangeData = NULL;
@@ -3969,7 +3925,6 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
     }
     return pRangeData;
 }
-
 
 bool ScCompiler::HandleRange()
 {
@@ -4024,7 +3979,7 @@ bool ScCompiler::HandleRange()
         SetError(errNoName);
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 {
     // Handle external range names.
@@ -4286,12 +4241,12 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
     else
         pConv->MakeRefStr( rBuffer, *this, aRef, true );
 }
-// -----------------------------------------------------------------------------
+
 void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
     pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false );
 }
-// -----------------------------------------------------------------------------
+
 void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
     const OpCode eOp = _pTokenP->GetOpCode();
@@ -4320,14 +4275,13 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
     else
         rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
 }
-// -----------------------------------------------------------------------------
+
 void ScCompiler::LocalizeString( String& rName )
 {
     OUString aName(rName);
     ScGlobal::GetAddInCollection()->LocalizeString( aName );
     rName = aName;
 }
-// -----------------------------------------------------------------------------
 
 // Put quotes around string if non-alphanumeric characters are contained,
 // quote characters contained within are escaped by '\\'.
@@ -4383,7 +4337,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
     }
     // FIXME: what about those old non-UNO AddIns?
 }
-// -----------------------------------------------------------------------------
+
 bool ScCompiler::HandleSingleRef()
 {
     ScSingleRefData& rRef = static_cast<ScToken*>(mpToken.get())->GetSingleRef();
@@ -4597,7 +4551,7 @@ bool ScCompiler::HandleSingleRef()
         SetError(errNoName);
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool ScCompiler::HandleDbData()
 {
     ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
@@ -4620,7 +4574,6 @@ bool ScCompiler::HandleDbData()
     return true;
 }
 
-// -----------------------------------------------------------------------------
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
 {
     return ScToken::ExtendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );

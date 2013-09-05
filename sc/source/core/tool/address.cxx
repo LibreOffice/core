@@ -46,9 +46,6 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-
-////////////////////////////////////////////////////////////////////////////
-
 /**
  * Parse from the opening single quote to the closing single quote.  Inside
  * the quotes, a single quote character is encoded by double single-quote
@@ -332,7 +329,6 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     return p;
 }
 
-
 /** Tries to obtain the external document index and replace by actual document
     name.
 
@@ -388,7 +384,6 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, String& rExtern
     }
     return true;
 }
-
 
 const sal_Unicode* ScRange::Parse_XL_Header(
         const sal_Unicode* p,
@@ -572,7 +567,6 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     }
     return p;
 }
-
 
 static const sal_Unicode*
 lcl_r1c1_get_col( const sal_Unicode* p,
@@ -1268,7 +1262,6 @@ lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
     }
 }
 
-
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
@@ -1290,7 +1283,6 @@ bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
     }
     return bRet;
 }
-
 
 bool ConvertDoubleRef( ScDocument* pDoc, const String& rRefString, SCTAB nDefTab,
                        ScRefAddress& rStartRefAddress, ScRefAddress& rEndRefAddress,
@@ -1318,7 +1310,6 @@ bool ConvertDoubleRef( ScDocument* pDoc, const String& rRefString, SCTAB nDefTab
     return bRet;
 }
 
-
 sal_uInt16 ScAddress::Parse( const String& r, ScDocument* pDoc,
                          const Details& rDetails,
                          ExternalInfo* pExtInfo,
@@ -1326,7 +1317,6 @@ sal_uInt16 ScAddress::Parse( const String& r, ScDocument* pDoc,
 {
     return lcl_ScAddress_Parse( r.GetBuffer(), pDoc, *this, rDetails, pExtInfo, pExternalLinks );
 }
-
 
 bool ScRange::Intersects( const ScRange& r ) const
 {
@@ -1476,7 +1466,6 @@ sal_uInt16 ScRange::Parse( const String& r, ScDocument* pDoc,
         return lcl_ScRange_Parse_XL_R1C1( *this, r.GetBuffer(), pDoc, rDetails, false, pExtInfo );
     }
 }
-
 
 // Accept a full range, or an address
 sal_uInt16 ScRange::ParseAny( const String& r, ScDocument* pDoc,
@@ -1965,13 +1954,11 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
     return bValid;
 }
 
-
 bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
     // single & to process both
     return aStart.Move( dx, dy, dz, pDoc ) & aEnd.Move( dx, dy, dz, pDoc );
 }
-
 
 String ScAddress::GetColRowString( bool bAbsolute,
                                    const Details& rDetails ) const
@@ -2004,7 +1991,6 @@ String ScAddress::GetColRowString( bool bAbsolute,
     return aString;
 }
 
-
 String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
                                    const ScAddress::Details& rDetails ) const
 {
@@ -2027,8 +2013,6 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
 
     return aAdr.Format(nFlags, pDoc, rDetails);
 }
-
-//------------------------------------------------------------------------
 
 void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
 {
@@ -2061,7 +2045,6 @@ void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
         rBuf.append(comphelper::string::reverseString(aStr));
     }
 }
-
 
 bool AlphaToCol( SCCOL& rCol, const String& rStr)
 {

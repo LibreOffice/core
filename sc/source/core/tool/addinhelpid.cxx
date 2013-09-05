@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "addinhelpid.hxx"
 #include "sc.hrc"
-
-// ============================================================================
 
 // A struct containing the built-in function name and the built-in help ID.
 struct ScUnoAddInHelpId
@@ -29,9 +26,6 @@ struct ScUnoAddInHelpId
     const sal_Char*             pFuncName;
     const sal_Char*             sHelpId;
 };
-
-
-// ----------------------------------------------------------------------------
 
 // Help IDs for Analysis AddIn. MUST BE SORTED for binary search.
 const ScUnoAddInHelpId pAnalysisHelpIds[] =
@@ -139,9 +133,6 @@ const ScUnoAddInHelpId pAnalysisHelpIds[] =
     { "getYieldmat"                 , HID_AAI_FUNC_YIELDMAT         }
 };
 
-
-// ----------------------------------------------------------------------------
-
 // Help IDs for DateFunc AddIn. MUST BE SORTED for binary search.
 const ScUnoAddInHelpId pDateFuncHelpIds[] =
 {
@@ -153,10 +144,6 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
     { "getRot13"                    , HID_DAI_FUNC_ROT13            },
     { "getWeeksInYear"              , HID_DAI_FUNC_WEEKSINYEAR      }
 };
-
-
-// ============================================================================
-
 
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const OUString& rServiceName )
 {
@@ -204,8 +191,5 @@ OString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
 
     return OString();
 }
-
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

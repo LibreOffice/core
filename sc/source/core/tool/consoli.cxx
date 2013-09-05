@@ -31,8 +31,7 @@
 
 #define SC_CONS_NOTFOUND    -1
 
-// STATIC DATA -----------------------------------------------------------
-
+// STATIC DATA
 static const OpCode eOpCodeTable[] = {      //  Reihenfolge wie bei enum ScSubTotalFunc
         ocBad,                              //  none
         ocAverage,
@@ -46,8 +45,6 @@ static const OpCode eOpCodeTable[] = {      //  Reihenfolge wie bei enum ScSubTo
         ocSum,
         ocVar,
         ocVarP };
-
-// -----------------------------------------------------------------------
 
 void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -86,8 +83,6 @@ static void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
     ++nCount;
 }
 
-// -----------------------------------------------------------------------
-
 ScConsData::ScConsData() :
     eFunction(SUBTOTAL_FUNC_SUM),
     bReference(false),
@@ -114,7 +109,6 @@ ScConsData::~ScConsData()
 {
     DeleteData();
 }
-
 
 #define DELETEARR(ppArray,nCount)   \
 {                                   \
@@ -813,9 +807,5 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
         }
     }
 }
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,30 +34,22 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-//========================================================================
 //      ScAppOptions - Applikations-Optionen
-//========================================================================
 
 ScAppOptions::ScAppOptions() : pLRUList( NULL )
 {
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
-
 ScAppOptions::ScAppOptions( const ScAppOptions& rCpy ) : pLRUList( NULL )
 {
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
-
 ScAppOptions::~ScAppOptions()
 {
     delete [] pLRUList;
 }
-
-//------------------------------------------------------------------------
 
 void ScAppOptions::SetDefaults()
 {
@@ -117,7 +109,6 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     meKeyBindingType  = rCpy.meKeyBindingType;
      return *this;
 }
-//------------------------------------------------------------------------
 
 void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCount )
 {
@@ -136,9 +127,7 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
         pLRUList = NULL;
 }
 
-//==================================================================
 //  Config Item containing app options
-//==================================================================
 
 static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 {
@@ -220,8 +209,6 @@ static void lcl_GetSortList( Any& rDest )
     else
         rDest <<= Sequence<OUString>(0);    // empty
 }
-
-//------------------------------------------------------------------
 
 #define CFGPATH_LAYOUT      "Office.Calc/Layout"
 
@@ -778,6 +765,5 @@ void ScAppCfg::OptionsChanged()
     aMiscItem.SetModified();
     aCompatItem.SetModified();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

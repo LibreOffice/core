@@ -225,8 +225,6 @@ void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
     nCallerPos = nNewPos;
 }
 
-//------------------------------------------------------------------------
-
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
     ppFuncData( NULL ),
@@ -321,7 +319,6 @@ void ScUnoAddInCollection::Initialize()
 
     bInitialized = true;        // with or without functions
 }
-// -----------------------------------------------------------------------------
 
 static sal_uInt16 lcl_GetCategory( const OUString& rName )
 {
@@ -348,7 +345,6 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
     return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group
 }
 
-
 #define CFGPATH_ADDINS              "Office.CalcAddIns/AddInInfo"
 #define CFGSTR_ADDINFUNCTIONS       "AddInFunctions"
 
@@ -363,7 +359,6 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
 
 #define CFGSTR_COMPATIBILITYNAME    "CompatibilityName"
 #define CFGSTR_PARAMETERS           "Parameters"
-
 
 void ScUnoAddInCollection::ReadConfiguration()
 {
@@ -1215,7 +1210,6 @@ void ScUnoAddInCollection::LocalizeString( OUString& rName )
         rName = iLook->second->GetUpperLocal();         //! upper?
 }
 
-
 long ScUnoAddInCollection::GetFuncCount()
 {
     if (!bInitialized)
@@ -1300,9 +1294,6 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     return true;
 }
-
-
-//------------------------------------------------------------------------
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                 long nParamCount ) :

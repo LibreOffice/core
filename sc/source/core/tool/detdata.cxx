@@ -21,8 +21,6 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 
-//------------------------------------------------------------------------
-
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     bHasAddError( false )
 {
@@ -74,7 +72,6 @@ void ScDetOpList::Append( ScDetOpData* pDetOpData )
 
     aDetOpDataVector.push_back( pDetOpData );
 }
-
 
 sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {

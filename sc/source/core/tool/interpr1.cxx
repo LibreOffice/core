@@ -110,10 +110,7 @@ private:
      ScCompareOptions&  operator=( const ScCompareOptions & );
 };
 
-//-----------------------------------------------------------------------------
 // Functions
-//-----------------------------------------------------------------------------
-
 
 void ScInterpreter::ScIfJump()
 {
@@ -243,7 +240,6 @@ void ScInterpreter::ScIfJump()
     }
 }
 
-
 /** Store a matrix value in another matrix in the context of that other matrix
     is the result matrix of a jump matrix. All arguments must be valid and are
     not checked. */
@@ -264,7 +260,6 @@ static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCS
         pResMat->PutString( rStr, nC, nR );
     }
 }
-
 
 void ScInterpreter::ScIfError( bool bNAonly )
 {
@@ -425,7 +420,6 @@ void ScInterpreter::ScIfError( bool bNAonly )
         aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
     }
 }
-
 
 void ScInterpreter::ScChoseJump()
 {
@@ -822,7 +816,6 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     return false;
 }
 
-
 ScCompareOptions::ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg ) :
     aQueryEntry(rEntry),
     bRegEx(bReg),
@@ -834,7 +827,6 @@ ScCompareOptions::ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry
     // comparison operators, for which these options aren't used. Override in
     // struct if needed.
 }
-
 
 double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions )
 {
@@ -991,7 +983,6 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
     return fRes;
 }
 
-
 double ScInterpreter::Compare()
 {
     String aVal1, aVal2;
@@ -1079,7 +1070,6 @@ double ScInterpreter::Compare()
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
     return CompareFunc( aComp );
 }
-
 
 ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 {
@@ -1217,7 +1207,6 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
     return pResMat;
 }
 
-
 ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions )
 {
     short nSaveCurFmtType = nCurFmtType;
@@ -1264,7 +1253,6 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
     return pResultMatrix;
 }
 
-
 void ScInterpreter::ScEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
@@ -1281,7 +1269,6 @@ void ScInterpreter::ScEqual()
     else
         PushInt( Compare() == 0 );
 }
-
 
 void ScInterpreter::ScNotEqual()
 {
@@ -1300,7 +1287,6 @@ void ScInterpreter::ScNotEqual()
         PushInt( Compare() != 0 );
 }
 
-
 void ScInterpreter::ScLess()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
@@ -1317,7 +1303,6 @@ void ScInterpreter::ScLess()
     else
         PushInt( Compare() < 0 );
 }
-
 
 void ScInterpreter::ScGreater()
 {
@@ -1336,7 +1321,6 @@ void ScInterpreter::ScGreater()
         PushInt( Compare() > 0 );
 }
 
-
 void ScInterpreter::ScLessEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
@@ -1354,7 +1338,6 @@ void ScInterpreter::ScLessEqual()
         PushInt( Compare() <= 0 );
 }
 
-
 void ScInterpreter::ScGreaterEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
@@ -1371,7 +1354,6 @@ void ScInterpreter::ScGreaterEqual()
     else
         PushInt( Compare() >= 0 );
 }
-
 
 void ScInterpreter::ScAnd()
 {
@@ -1472,7 +1454,6 @@ void ScInterpreter::ScAnd()
     }
 }
 
-
 void ScInterpreter::ScOr()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -1572,7 +1553,6 @@ void ScInterpreter::ScOr()
             PushNoValue();
     }
 }
-
 
 void ScInterpreter::ScXor()
 {
@@ -1677,7 +1657,6 @@ void ScInterpreter::ScXor()
     }
 }
 
-
 void ScInterpreter::ScNeg()
 {
     // Simple negation doesn't change current format type to number, keep
@@ -1720,7 +1699,6 @@ void ScInterpreter::ScNeg()
     }
 }
 
-
 void ScInterpreter::ScPercentSign()
 {
     nFuncFmtType = NUMBERFORMAT_PERCENT;
@@ -1734,7 +1712,6 @@ void ScInterpreter::ScPercentSign()
     pCur = pSaveCur;
     cPar = nSavePar;
 }
-
 
 void ScInterpreter::ScNot()
 {
@@ -1776,7 +1753,6 @@ void ScInterpreter::ScNot()
     }
 }
 
-
 void ScInterpreter::ScBitAnd()
 {
 
@@ -1791,7 +1767,6 @@ void ScInterpreter::ScBitAnd()
     else
         PushDouble ((sal_uInt64) num1 & (sal_uInt64) num2);
 }
-
 
 void ScInterpreter::ScBitOr()
 {
@@ -1808,7 +1783,6 @@ void ScInterpreter::ScBitOr()
         PushDouble ((sal_uInt64) num1 | (sal_uInt64) num2);
 }
 
-
 void ScInterpreter::ScBitXor()
 {
 
@@ -1823,7 +1797,6 @@ void ScInterpreter::ScBitXor()
     else
         PushDouble ((sal_uInt64) num1 ^ (sal_uInt64) num2);
 }
-
 
 void ScInterpreter::ScBitLshift()
 {
@@ -1848,7 +1821,6 @@ void ScInterpreter::ScBitLshift()
     }
 }
 
-
 void ScInterpreter::ScBitRshift()
 {
 
@@ -1872,18 +1844,15 @@ void ScInterpreter::ScBitRshift()
     }
 }
 
-
 void ScInterpreter::ScPi()
 {
     PushDouble(F_PI);
 }
 
-
 void ScInterpreter::ScRandom()
 {
     PushDouble(sc::rng::uniform());
 }
-
 
 void ScInterpreter::ScTrue()
 {
@@ -1891,97 +1860,81 @@ void ScInterpreter::ScTrue()
     PushInt(1);
 }
 
-
 void ScInterpreter::ScFalse()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt(0);
 }
 
-
 void ScInterpreter::ScDeg()
 {
     PushDouble((GetDouble() / F_PI) * 180.0);
 }
-
 
 void ScInterpreter::ScRad()
 {
     PushDouble(GetDouble() * (F_PI / 180));
 }
 
-
 void ScInterpreter::ScSin()
 {
     PushDouble(::rtl::math::sin(GetDouble()));
 }
-
 
 void ScInterpreter::ScCos()
 {
     PushDouble(::rtl::math::cos(GetDouble()));
 }
 
-
 void ScInterpreter::ScTan()
 {
     PushDouble(::rtl::math::tan(GetDouble()));
 }
-
 
 void ScInterpreter::ScCot()
 {
     PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
 }
 
-
 void ScInterpreter::ScArcSin()
 {
     PushDouble(asin(GetDouble()));
 }
-
 
 void ScInterpreter::ScArcCos()
 {
     PushDouble(acos(GetDouble()));
 }
 
-
 void ScInterpreter::ScArcTan()
 {
     PushDouble(atan(GetDouble()));
 }
-
 
 void ScInterpreter::ScArcCot()
 {
     PushDouble((F_PI2) - atan(GetDouble()));
 }
 
-
 void ScInterpreter::ScSinHyp()
 {
     PushDouble(sinh(GetDouble()));
 }
-
 
 void ScInterpreter::ScCosHyp()
 {
     PushDouble(cosh(GetDouble()));
 }
 
-
 void ScInterpreter::ScTanHyp()
 {
     PushDouble(tanh(GetDouble()));
 }
 
-
 void ScInterpreter::ScCotHyp()
 {
     PushDouble(1.0 / tanh(GetDouble()));
 }
-
 
 void ScInterpreter::ScArcSinHyp()
 {
@@ -2005,7 +1958,6 @@ void ScInterpreter::ScArcTanHyp()
     else
         PushDouble( ::rtl::math::atanh( fVal));
 }
-
 
 void ScInterpreter::ScArcCotHyp()
 {
@@ -2036,12 +1988,10 @@ void ScInterpreter::ScSecantHyp()
     PushDouble(1.0 / cosh(GetDouble()));
 }
 
-
 void ScInterpreter::ScExp()
 {
     PushDouble(exp(GetDouble()));
 }
-
 
 void ScInterpreter::ScSqrt()
 {
@@ -2051,7 +2001,6 @@ void ScInterpreter::ScSqrt()
     else
         PushIllegalArgument();
 }
-
 
 void ScInterpreter::ScIsEmpty()
 {
@@ -2107,7 +2056,6 @@ void ScInterpreter::ScIsEmpty()
     nGlobalError = 0;
     PushInt( nRes );
 }
-
 
 short ScInterpreter::IsString()
 {
@@ -2169,18 +2117,15 @@ short ScInterpreter::IsString()
     return nRes;
 }
 
-
 void ScInterpreter::ScIsString()
 {
     PushInt( IsString() );
 }
 
-
 void ScInterpreter::ScIsNonString()
 {
     PushInt( !IsString() );
 }
-
 
 void ScInterpreter::ScIsLogical()
 {
@@ -2219,7 +2164,6 @@ void ScInterpreter::ScIsLogical()
     nGlobalError = 0;
     PushInt( nRes );
 }
-
 
 void ScInterpreter::ScType()
 {
@@ -2299,12 +2243,10 @@ void ScInterpreter::ScType()
     PushInt( nType );
 }
 
-
 static inline bool lcl_FormatHasNegColor( const SvNumberformat* pFormat )
 {
     return pFormat && pFormat->GetColor( 1 );
 }
-
 
 static inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 {
@@ -2728,7 +2670,6 @@ void ScInterpreter::ScIsRef()
     PushInt( nRes );
 }
 
-
 void ScInterpreter::ScIsValue()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -2792,7 +2733,6 @@ void ScInterpreter::ScIsValue()
     PushInt( nRes );
 }
 
-
 void ScInterpreter::ScIsFormula()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -2815,7 +2755,6 @@ void ScInterpreter::ScIsFormula()
     nGlobalError = 0;
     PushInt( nRes );
 }
-
 
 void ScInterpreter::ScFormula()
 {
@@ -2847,8 +2786,6 @@ void ScInterpreter::ScFormula()
     }
     PushString( aFormula );
 }
-
-
 
 void ScInterpreter::ScIsNV()
 {
@@ -2897,7 +2834,6 @@ void ScInterpreter::ScIsNV()
     nGlobalError = 0;
     PushInt( nRes );
 }
-
 
 void ScInterpreter::ScIsErr()
 {
@@ -2953,7 +2889,6 @@ void ScInterpreter::ScIsErr()
     PushInt( nRes );
 }
 
-
 void ScInterpreter::ScIsError()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -3004,7 +2939,6 @@ void ScInterpreter::ScIsError()
     nGlobalError = 0;
     PushInt( nRes );
 }
-
 
 short ScInterpreter::IsEven()
 {
@@ -3089,12 +3023,10 @@ short ScInterpreter::IsEven()
     return nRes;
 }
 
-
 void ScInterpreter::ScIsEven()
 {
     PushInt( IsEven() );
 }
-
 
 void ScInterpreter::ScIsOdd()
 {
@@ -3134,13 +3066,11 @@ void ScInterpreter::ScTrim()
     PushString( aStr );
 }
 
-
 void ScInterpreter::ScUpper()
 {
     String aString = ScGlobal::pCharClass->uppercase(GetString());
     PushString(aString);
 }
-
 
 void ScInterpreter::ScPropper()
 {
@@ -3172,20 +3102,17 @@ void ScInterpreter::ScPropper()
     PushString( aStr );
 }
 
-
 void ScInterpreter::ScLower()
 {
     String aString = ScGlobal::pCharClass->lowercase(GetString());
     PushString(aString);
 }
 
-
 void ScInterpreter::ScLen()
 {
     String aStr( GetString() );
     PushDouble( aStr.Len() );
 }
-
 
 void ScInterpreter::ScT()
 {
@@ -3253,7 +3180,6 @@ void ScInterpreter::ScT()
             PushError( errUnknownOpCode);
     }
 }
-
 
 void ScInterpreter::ScValue()
 {
@@ -3329,7 +3255,6 @@ void ScInterpreter::ScValue()
     else
         PushIllegalArgument();
 }
-
 
 // fdo#57180
 void ScInterpreter::ScNumberValue()
@@ -3427,7 +3352,6 @@ void ScInterpreter::ScNumberValue()
     PushNoValue();
 }
 
-
 //2do: this should be a proper unicode string method
 static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {
@@ -3445,7 +3369,6 @@ void ScInterpreter::ScClean()
     PushString(aStr);
 }
 
-
 void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
@@ -3460,7 +3383,6 @@ void ScInterpreter::ScCode()
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
     PushInt( (sal_uChar) OUStringToOString(OUString(rStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
 }
-
 
 void ScInterpreter::ScChar()
 {
@@ -3482,7 +3404,6 @@ void ScInterpreter::ScChar()
     }
 }
 
-
 /* #i70213# fullwidth/halfwidth conversion provided by
  * Takashi Nakamoto <bluedwarf@ooo>
  * erAck: added Excel compatibility conversions as seen in issue's test case. */
@@ -3501,7 +3422,6 @@ static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
     return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), NULL );
 }
 
-
 static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 {
     static bool bFirstJISCall = true;
@@ -3515,7 +3435,6 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 
     return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), NULL );
 }
-
 
 /* ODFF:
  * Summary: Converts half-width to full-width ASCII and katakana characters.
@@ -3532,7 +3451,6 @@ void ScInterpreter::ScJis()
     if (MustHaveParamCount( GetByte(), 1))
         PushString( lcl_convertIntoFullWidth( GetString()));
 }
-
 
 /* ODFF:
  * Summary: Converts full-width to half-width ASCII and katakana characters.
@@ -3576,7 +3494,6 @@ void ScInterpreter::ScUnichar()
         }
     }
 }
-
 
 void ScInterpreter::ScMin( bool bTextAsZero )
 {
@@ -3879,7 +3796,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
     rVal = vSum;
 }
 
-
 void ScInterpreter::ScVar( bool bTextAsZero )
 {
     double nVal;
@@ -3892,7 +3808,6 @@ void ScInterpreter::ScVar( bool bTextAsZero )
         PushDouble( nVal / (nValCount - 1.0));
 }
 
-
 void ScInterpreter::ScVarP( bool bTextAsZero )
 {
     double nVal;
@@ -3901,7 +3816,6 @@ void ScInterpreter::ScVarP( bool bTextAsZero )
 
     PushDouble( div( nVal, nValCount));
 }
-
 
 void ScInterpreter::ScStDev( bool bTextAsZero )
 {
@@ -3913,7 +3827,6 @@ void ScInterpreter::ScStDev( bool bTextAsZero )
     else
         PushDouble( sqrt( nVal / (nValCount - 1.0)));
 }
-
 
 void ScInterpreter::ScStDevP( bool bTextAsZero )
 {
@@ -3942,7 +3855,6 @@ void ScInterpreter::ScStDevP( bool bTextAsZero )
      * not occur when compiled with debug=t.
      */
 }
-
 
 void ScInterpreter::ScColumns()
 {
@@ -4000,7 +3912,6 @@ void ScInterpreter::ScColumns()
     }
     PushDouble((double)nVal);
 }
-
 
 void ScInterpreter::ScRows()
 {
@@ -4113,7 +4024,6 @@ void ScInterpreter::ScTables()
     PushDouble( (double) nVal );
 }
 
-
 void ScInterpreter::ScColumn()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -4194,7 +4104,6 @@ void ScInterpreter::ScColumn()
         PushDouble( nVal );
     }
 }
-
 
 void ScInterpreter::ScRow()
 {
@@ -4788,7 +4697,6 @@ void ScInterpreter::ScMatch()
     }
 }
 
-
 void ScInterpreter::ScCountEmptyCells()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
@@ -4835,7 +4743,6 @@ void ScInterpreter::ScCountEmptyCells()
         PushDouble(nMaxCount - nCount);
     }
 }
-
 
 double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 {
@@ -6027,7 +5934,6 @@ void ScInterpreter::ScLookup()
             SetError( errIllegalParameter);
     }
 
-
     if (nGlobalError)
     {
         PushError( nGlobalError);
@@ -6434,7 +6340,6 @@ void ScInterpreter::ScLookup()
         PushCellResultToken(true, aAdr, NULL, NULL);
     }
 }
-
 
 void ScInterpreter::ScHLookup()
 {
@@ -6945,7 +6850,6 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
     return NULL;
 }
 
-
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
     double nErg = 0.0;
@@ -7012,12 +6916,10 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     PushDouble( nErg );
 }
 
-
 void ScInterpreter::ScDBSum()
 {
     DBIterator( ifSUM );
 }
-
 
 void ScInterpreter::ScDBCount()
 {
@@ -7079,7 +6981,6 @@ void ScInterpreter::ScDBCount()
         PushIllegalParameter();
 }
 
-
 void ScInterpreter::ScDBCount2()
 {
     bool bMissingField = true;
@@ -7112,30 +7013,25 @@ void ScInterpreter::ScDBCount2()
         PushIllegalParameter();
 }
 
-
 void ScInterpreter::ScDBAverage()
 {
     DBIterator( ifAVERAGE );
 }
-
 
 void ScInterpreter::ScDBMax()
 {
     DBIterator( ifMAX );
 }
 
-
 void ScInterpreter::ScDBMin()
 {
     DBIterator( ifMIN );
 }
 
-
 void ScInterpreter::ScDBProduct()
 {
     DBIterator( ifPRODUCT );
 }
-
 
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
@@ -7181,14 +7077,12 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     rVal = vSum;
 }
 
-
 void ScInterpreter::ScDBStdDev()
 {
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble( sqrt(fVal/(fCount-1)));
 }
-
 
 void ScInterpreter::ScDBStdDevP()
 {
@@ -7197,14 +7091,12 @@ void ScInterpreter::ScDBStdDevP()
     PushDouble( sqrt(fVal/fCount));
 }
 
-
 void ScInterpreter::ScDBVar()
 {
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble(fVal/(fCount-1));
 }
-
 
 void ScInterpreter::ScDBVarP()
 {
@@ -7292,7 +7184,6 @@ void ScInterpreter::ScIndirect()
         }
     }
 }
-
 
 void ScInterpreter::ScAddressFunc()
 {
@@ -7383,7 +7274,6 @@ void ScInterpreter::ScAddressFunc()
     else
         PushString( aRefStr );
 }
-
 
 void ScInterpreter::ScOffset()
 {
@@ -7531,7 +7421,6 @@ void ScInterpreter::ScOffset()
         } // end switch
     }
 }
-
 
 void ScInterpreter::ScIndex()
 {
@@ -7739,7 +7628,6 @@ void ScInterpreter::ScIndex()
     }
 }
 
-
 void ScInterpreter::ScMultiArea()
 {
     // Legacy support, convert to RefList
@@ -7752,7 +7640,6 @@ void ScInterpreter::ScMultiArea()
         }
     }
 }
-
 
 void ScInterpreter::ScAreas()
 {
@@ -7789,7 +7676,6 @@ void ScInterpreter::ScAreas()
         PushDouble( double(nCount));
     }
 }
-
 
 void ScInterpreter::ScCurrency()
 {
@@ -7849,7 +7735,6 @@ void ScInterpreter::ScCurrency()
     }
 }
 
-
 void ScInterpreter::ScReplace()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
@@ -7877,7 +7762,6 @@ void ScInterpreter::ScReplace()
         }
     }
 }
-
 
 void ScInterpreter::ScFixed()
 {
@@ -7936,7 +7820,6 @@ void ScInterpreter::ScFixed()
     }
 }
 
-
 void ScInterpreter::ScFind()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -7961,7 +7844,6 @@ void ScInterpreter::ScFind()
     }
 }
 
-
 void ScInterpreter::ScExact()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -7972,7 +7854,6 @@ void ScInterpreter::ScExact()
         PushInt( s1 == s2 );
     }
 }
-
 
 void ScInterpreter::ScLeft()
 {
@@ -8198,7 +8079,6 @@ void ScInterpreter::ScRight()
     }
 }
 
-
 void ScInterpreter::ScSearch()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -8238,7 +8118,6 @@ void ScInterpreter::ScSearch()
     }
 }
 
-
 void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
@@ -8252,7 +8131,6 @@ void ScInterpreter::ScMid()
             PushString(rStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
     }
 }
-
 
 void ScInterpreter::ScText()
 {
@@ -8327,7 +8205,6 @@ void ScInterpreter::ScText()
     }
 }
 
-
 void ScInterpreter::ScSubstitute()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -8381,7 +8258,6 @@ void ScInterpreter::ScSubstitute()
     }
 }
 
-
 void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
@@ -8408,7 +8284,6 @@ void ScInterpreter::ScRept()
     }
 }
 
-
 void ScInterpreter::ScConcat()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -8420,7 +8295,6 @@ void ScInterpreter::ScConcat()
     }
     PushString( aRes );
 }
-
 
 void ScInterpreter::ScErrorType()
 {
@@ -8501,7 +8375,6 @@ void ScInterpreter::ScErrorType()
         PushNA();
     }
 }
-
 
 bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
 {

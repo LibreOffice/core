@@ -24,12 +24,8 @@ using ::std::list;
 using ::std::pair;
 using ::std::max;
 
-// ============================================================================
-
 ScSimpleRangeList::Range::Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) :
     mnCol1(nCol1), mnRow1(nRow1), mnCol2(nCol2), mnRow2(nRow2) {}
-
-// ----------------------------------------------------------------------------
 
 ScSimpleRangeList::ScSimpleRangeList()
 {

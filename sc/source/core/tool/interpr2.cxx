@@ -44,7 +44,6 @@
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
 
-
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <string.h>
@@ -55,9 +54,7 @@ using namespace formula;
 
 #define SCdEpsilon                1.0E-7
 
-//-----------------------------------------------------------------------------
 // Datum und Zeit
-//-----------------------------------------------------------------------------
 
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         bool bStrict, bool bCheckGregorian )
@@ -95,9 +92,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
 }
 
-//-----------------------------------------------------------------------------
 // Funktionen
-//-----------------------------------------------------------------------------
 
 void ScInterpreter::ScGetActDate()
 {
@@ -576,7 +571,6 @@ void ScInterpreter::ScInt()
     PushDouble(::rtl::math::approxFloor(GetDouble()));
 }
 
-
 void ScInterpreter::RoundNumber( rtl_math_RoundingMode eMode )
 {
     sal_uInt8 nParamCount = GetByte();
@@ -912,7 +906,6 @@ void ScInterpreter::ScMIRR()
     }
 }
 
-
 void ScInterpreter::ScISPMT()
 {   // rate ; period ; total_periods ; invest
     if( MustHaveParamCount( GetByte(), 4 ) )
@@ -929,9 +922,7 @@ void ScInterpreter::ScISPMT()
     }
 }
 
-
-//----------------------- Finanzfunktionen ------------------------------------
-
+// Finanzfunktionen
 double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
                               double fZw, double fF)
 {
@@ -1073,7 +1064,6 @@ void ScInterpreter::ScGDA2()
     PushDouble(nGda2);
 }
 
-
 double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
                              double fDauer1,double fPeriode,double fFaktor)
 {
@@ -1118,7 +1108,6 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
     }
     return fVdb;
 }
-
 
 inline double DblMin( double a, double b )
 {
@@ -1840,7 +1829,6 @@ void ScInterpreter::ScIntersect()
     }
 }
 
-
 void ScInterpreter::ScRangeFunc()
 {
     formula::FormulaTokenRef x2 = PopToken();
@@ -1857,7 +1845,6 @@ void ScInterpreter::ScRangeFunc()
     else
         PushTempToken( xRes.get());
 }
-
 
 void ScInterpreter::ScUnionFunc()
 {
@@ -1881,7 +1868,6 @@ void ScInterpreter::ScUnionFunc()
 
     ScToken* x1 = static_cast<ScToken*>(p1st.get());
     ScToken* x2 = static_cast<ScToken*>(p2nd.get());
-
 
     ScTokenRef xRes;
     // Append to an existing RefList if there is one.
@@ -1934,7 +1920,6 @@ void ScInterpreter::ScUnionFunc()
     ValidateRef( *pRes);    // set #REF! if needed
     PushTempToken( xRes.get());
 }
-
 
 void ScInterpreter::ScCurrent()
 {
@@ -2235,7 +2220,6 @@ void ScInterpreter::ScBase()
     }
 }
 
-
 void ScInterpreter::ScDecimal()
 {   // Text, Base
     if ( MustHaveParamCount( GetByte(), 2 ) )
@@ -2292,7 +2276,6 @@ void ScInterpreter::ScDecimal()
     }
 }
 
-
 void ScInterpreter::ScConvert()
 {   // Value, FromUnit, ToUnit
     if ( MustHaveParamCount( GetByte(), 3 ) )
@@ -2314,7 +2297,6 @@ void ScInterpreter::ScConvert()
         }
     }
 }
-
 
 void ScInterpreter::ScRoman()
 {   // Value [Mode]
@@ -2387,7 +2369,6 @@ void ScInterpreter::ScRoman()
     }
 }
 
-
 static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rbIsDec )
 {
     switch( cChar )
@@ -2403,7 +2384,6 @@ static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rb
     }
     return true;
 }
-
 
 void ScInterpreter::ScArabic()
 {
@@ -2461,7 +2441,6 @@ void ScInterpreter::ScArabic()
             PushIllegalArgument();
     }
 }
-
 
 void ScInterpreter::ScHyperLink()
 {
@@ -2547,7 +2526,6 @@ void ScInterpreter::ScHyperLink()
         PushMatrix(pResMat);
     }
 }
-
 
 bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
 {
@@ -2647,9 +2625,7 @@ void ScInterpreter::ScEuroConvert()
     }
 }
 
-
-// BAHTTEXT ===================================================================
-
+// BAHTTEXT
 #define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
 #define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
 #define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
@@ -2673,8 +2649,7 @@ void ScInterpreter::ScEuroConvert()
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-// local functions ------------------------------------------------------------
-
+// local functions
 namespace {
 
 inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
@@ -2764,8 +2739,6 @@ void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
 
 } // namespace
 
-// ----------------------------------------------------------------------------
-
 void ScInterpreter::ScBahtText()
 {
     sal_uInt8 nParamCount = GetByte();
@@ -2834,8 +2807,6 @@ void ScInterpreter::ScBahtText()
         PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }
 }
-
-// ============================================================================
 
 void ScInterpreter::ScGetPivotData()
 {

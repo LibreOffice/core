@@ -19,11 +19,7 @@
 
 #include "navicfg.hxx"
 
-//------------------------------------------------------------------
-
 //! #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
-
-//------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
 //! ConfigItem( OUString( CFGPATH_NAVIPI ) ),
@@ -32,8 +28,6 @@ ScNavipiCfg::ScNavipiCfg() :
     nRootType(0)
 {
 }
-
-//------------------------------------------------------------------------
 
 void ScNavipiCfg::SetListMode(sal_uInt16 nNew)
 {
@@ -61,6 +55,5 @@ void ScNavipiCfg::SetRootType(sal_uInt16 nNew)
 //!     SetModified();
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

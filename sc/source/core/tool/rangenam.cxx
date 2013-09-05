@@ -41,9 +41,7 @@ using namespace formula;
 using ::std::pair;
 using ::std::unary_function;
 
-//========================================================================
 // ScRangeData
-//========================================================================
 
 ScRangeData::ScRangeData( ScDocument* pDok,
                           const OUString& rName,
@@ -363,7 +361,6 @@ bool ScRangeData::operator== (const ScRangeData& rData) const       // for Undo
     return true;
 }
 
-
 bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
     bool bRet = false;
@@ -509,7 +506,6 @@ SCCOL ScRangeData::GetMaxCol() const
     return mnMaxCol >= 0 ? mnMaxCol : MAXCOL;
 }
 
-
 sal_uInt16 ScRangeData::GetErrCode() const
 {
     return pCode ? pCode->GetCodeError() : 0;
@@ -639,7 +635,6 @@ void ScRangeData::InitCode()
         }
     }
 }
-
 
 extern "C"
 int SAL_CALL ScRangeData_QsortNameCompare( const void* p1, const void* p2 )

@@ -24,7 +24,6 @@
 #include "chgtrack.hxx"
 #include "document.hxx"
 
-// -----------------------------------------------------------------------
 ScChangeViewSettings::~ScChangeViewSettings()
 {
     if(pCommentSearcher!=NULL)

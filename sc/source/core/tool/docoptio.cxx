@@ -35,17 +35,11 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-//------------------------------------------------------------------------
-
 TYPEINIT1(ScTpCalcItem, SfxPoolItem);
-
-//------------------------------------------------------------------------
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
-
-//------------------------------------------------------------------------
 
 static sal_uInt16 lcl_GetDefaultTabDist()
 {
@@ -55,16 +49,12 @@ static sal_uInt16 lcl_GetDefaultTabDist()
         return 720;                 // 1/2"
 }
 
-//========================================================================
 //      ScDocOptions - Dokument-Optionen
-//========================================================================
 
 ScDocOptions::ScDocOptions()
 {
     ResetDocOptions();
 }
-
-//------------------------------------------------------------------------
 
 ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
         :   fIterEps( rCpy.fIterEps ),
@@ -85,13 +75,9 @@ ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
 {
 }
 
-//------------------------------------------------------------------------
-
 ScDocOptions::~ScDocOptions()
 {
 }
-
-//------------------------------------------------------------------------
 
 void ScDocOptions::ResetDocOptions()
 {
@@ -112,11 +98,7 @@ void ScDocOptions::ResetDocOptions()
     bFormulaRegexEnabled= true;
 }
 
-//========================================================================
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
-//========================================================================
-
-//------------------------------------------------------------------------
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
@@ -124,28 +106,20 @@ ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
 {
 }
 
-//------------------------------------------------------------------------
-
 ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
     :   SfxPoolItem ( rItem ),
         theOptions  ( rItem.theOptions )
 {
 }
 
-//------------------------------------------------------------------------
-
 ScTpCalcItem::~ScTpCalcItem()
 {
 }
-
-//------------------------------------------------------------------------
 
 OUString ScTpCalcItem::GetValueText() const
 {
     return OUString("ScTpCalcItem");
 }
-
-//------------------------------------------------------------------------
 
 int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -156,16 +130,12 @@ int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
     return ( theOptions == rPItem.theOptions );
 }
 
-//------------------------------------------------------------------------
-
 SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 {
     return new ScTpCalcItem( *this );
 }
 
-//==================================================================
 //  Config Item containing document options
-//==================================================================
 
 #define CFGPATH_CALC        "Office.Calc/Calculate"
 
@@ -416,6 +386,5 @@ void ScDocCfg::SetOptions( const ScDocOptions& rNew )
     aCalcItem.SetModified();
     aLayoutItem.SetModified();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

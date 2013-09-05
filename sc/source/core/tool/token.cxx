@@ -121,8 +121,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken )
 // Need quite a lot of ScDoubleRefToken
 IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken )
 
-// --- class ScRawToken -----------------------------------------------------
-
+// class ScRawToken
 xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
 {
     if ( !pStr )
@@ -132,7 +131,6 @@ xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
         p++;
     return sal::static_int_cast<xub_StrLen>( p - pStr );
 }
-
 
 void ScRawToken::SetOpCode( OpCode e )
 {
@@ -274,8 +272,6 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
     extname.cName[n] = 0;
 }
 
-
-
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
     eOp   = ocExternal;
@@ -288,7 +284,6 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     cStr[ nLen+1 ] = 0;
     nRefCnt = 0;
 }
-
 
 bool ScRawToken::IsValidReference() const
 {
@@ -306,7 +301,6 @@ bool ScRawToken::IsValidReference() const
     }
     return false;
 }
-
 
 sal_uInt16 ScRawToken::sbyteOffset()
 {
@@ -362,7 +356,6 @@ ScRawToken* ScRawToken::Clone() const
     p->bRaw = false;
     return p;
 }
-
 
 FormulaToken* ScRawToken::CreateToken() const
 {
@@ -437,7 +430,6 @@ FormulaToken* ScRawToken::CreateToken() const
 #undef IF_NOT_OPCODE_ERROR
 }
 
-
 void ScRawToken::Delete()
 {
     if ( bRaw )
@@ -455,9 +447,7 @@ void ScRawToken::Delete()
     }
 }
 
-
-// --- class ScToken --------------------------------------------------------
-
+// class ScToken
 static ScSingleRefData lcl_ScToken_InitSingleRef()
 {
     ScSingleRefData aRef;
@@ -516,7 +506,6 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
     else
         return *this == _rToken;     // else normal operator==
 }
-
 
 bool ScToken::Is3DRef() const
 {
@@ -726,7 +715,6 @@ ScMatrix* ScToken::GetMatrix()
     return NULL;
 }
 
-
 ScJumpMatrix* ScToken::GetJumpMatrix() const
 {
     OSL_FAIL( "ScToken::GetJumpMatrix: virtual dummy called" );
@@ -743,12 +731,8 @@ ScRefList* ScToken::GetRefList()
     OSL_FAIL( "ScToken::GetRefList: virtual dummy called" );
     return NULL;
 }
-// ==========================================================================
+
 // real implementations of virtual functions
-// --------------------------------------------------------------------------
-
-
-
 
 const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
@@ -804,8 +788,6 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && pMatrix == static_cast<const ScToken&>(r).GetMatrix();
 }
 
-// ============================================================================
-
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :
     ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
@@ -859,8 +841,6 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 
     return maSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
-
-// ============================================================================
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r ) :
     ScToken( svExternalDoubleRef, ocPush),
@@ -936,8 +916,6 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
     return maDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
 
-// ============================================================================
-
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
     ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
@@ -986,8 +964,6 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     }
     return true;
 }
-
-// ============================================================================
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
@@ -1124,7 +1100,6 @@ void ScMatrixFormulaCellToken::ResetResult()
     xUpperLeft = NULL;
 }
 
-
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
 const String& ScHybridCellToken::GetString() const { return maString; }
 bool ScHybridCellToken::operator==( const FormulaToken& r ) const
@@ -1133,11 +1108,6 @@ bool ScHybridCellToken::operator==( const FormulaToken& r ) const
         mfDouble == r.GetDouble() && maString == r.GetString() &&
         maFormula == static_cast<const ScHybridCellToken &>(r).GetFormula();
 }
-
-
-
-
-//////////////////////////////////////////////////////////////////////////
 
 bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef)
 {
@@ -1520,8 +1490,6 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
     return ImplGetReference(rRange, rPos, true);
 }
 
-////////////////////////////////////////////////////////////////////////////
-
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
@@ -1790,7 +1758,6 @@ FormulaToken* ScTokenArray::MergeArray( )
     return AddMatrix( pArray );
 }
 
-
 FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
 {
     if (!pCode || !nLen)
@@ -2010,7 +1977,6 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     }
     return false;
 }
-
 
 void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
         const ScAddress& rNewPos )
@@ -3032,6 +2998,5 @@ void ScTokenArray::Dump() const
     }
 }
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

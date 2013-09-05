@@ -26,9 +26,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
-//------------------------------------------------------------------
-
 #define CFGPATH_FILTER          "Office.Calc/Filter/Import"
 
 #define SCFILTOPT_COLSCALE      0
@@ -86,7 +83,6 @@ ScFilterOptions::ScFilterOptions() :
     }
 }
 
-
 void ScFilterOptions::Commit()
 {
     // options are never modified from office
@@ -98,6 +94,5 @@ void ScFilterOptions::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
     OSL_FAIL("properties have been changed");
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
