@@ -66,6 +66,7 @@ public:
     void testContentXLSX();
     void testContentLotus123();
     void testContentDIF();
+    void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
 #if TEST_BUG_FILES
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
+    //CPPUNIT_TEST(testContentXLS_XML);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
@@ -330,6 +332,17 @@ void ScFiltersTest::testContentDIF()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentXLS_XML()
+{
+    ScDocShellRef xDocSh = loadDoc("universal-content.", XLS_XML);
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    testContentImpl(pDoc, XLS_XML);
     xDocSh->DoClose();
 }
 
