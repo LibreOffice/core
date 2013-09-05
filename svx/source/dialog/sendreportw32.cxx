@@ -137,7 +137,7 @@ namespace svx{
 
         bool ErrorRepSendDialog::SaveParams()
         {
-            const _TCHAR    *lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.GetBuffer());
+            const _TCHAR    *lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.getStr());
             RegWriteValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
@@ -146,7 +146,7 @@ namespace svx{
                 sizeof(TCHAR) * (_tcslen(lpHTTPProxyServer) + 1) );
 
             _TCHAR* endptr = NULL;
-            DWORD dwProxyPort = _tcstoul( reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyPort.GetBuffer()), &endptr, 10 );
+            DWORD dwProxyPort = _tcstoul( reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyPort.getStr()), &endptr, 10 );
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
@@ -173,7 +173,7 @@ namespace svx{
                 &uInternetConnection,
                 sizeof(DWORD) );
 
-            const _TCHAR    *lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().GetBuffer());
+            const _TCHAR    *lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().getStr());
             RegWriteValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
@@ -203,7 +203,7 @@ namespace svx{
                 fclose( fp );
             }
 
-            SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), reinterpret_cast<LPCTSTR>(GetDocType().GetBuffer()) );
+            SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), reinterpret_cast<LPCTSTR>(GetDocType().getStr()) );
             SetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szFileName );
 
             _TCHAR  szBuffer[1024];
