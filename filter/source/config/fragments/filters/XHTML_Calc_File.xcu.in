@@ -15,16 +15,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="DocBook File" oor:op="replace">
+    <node oor:name="XHTML Calc File" oor:op="replace">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>writer_DocBook_File</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="Type"><value>XHTML_File</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
         <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLImporter,com.sun.star.comp.Writer.XMLExporter,../$(share_subdir_name)/xslt/docbook/docbooktosoffheadings.xsl,../$(share_subdir_name)/xslt/docbook/sofftodocbookheadings.xsl</value></prop>
+                <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter,,../@LIBO_SHARE_FOLDER@/xslt/export/xhtml/opendoc2xhtml.xsl</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
-        <prop oor:name="TemplateName"><value>../$(share_subdir_name)/xslt/docbook/DocBookTemplate.stw</value></prop>
+        <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value>DocBook</value>
+            <value>XHTML</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
