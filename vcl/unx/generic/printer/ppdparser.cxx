@@ -1303,7 +1303,9 @@ void PPDParser::parseConstraint( const OString& rLine )
     bool bFailed = false;
 
     OUString aLine(OStringToOUString(rLine, RTL_TEXTENCODING_MS_1252));
-    aLine = aLine.replaceAt(0, rLine.indexOf(':') + 1, "");
+    sal_Int32 nIdx = rLine.indexOf(':');
+    if (nIdx != -1)
+        aLine = aLine.replaceAt(0, nIdx + 1, "");
     PPDConstraint aConstraint;
     int nTokens = GetCommandLineTokenCount( aLine );
     for( int i = 0; i < nTokens; i++ )
