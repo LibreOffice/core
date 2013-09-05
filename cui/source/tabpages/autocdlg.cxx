@@ -1405,7 +1405,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    String* pString = (*pWrdList)[ --i ];
+                    OUString* pString = (*pWrdList)[ --i ];
 
                     if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
                     {
@@ -1416,7 +1416,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
                 for(std::vector<OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++it)
                 {
-                    String* s = new String(*it);
+                    OUString* s = new OUString(*it);
                     if(!pWrdList->insert(s).second)
                         delete s;
                 }
@@ -1431,7 +1431,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    String* pString = (*pCplList)[ --i ];
+                    OUString* pString = (*pCplList)[ --i ];
                     if( !lcl_FindInArray(rArrays.aAbbrevStrings, *pString))
                     {
                         delete (*pCplList)[ i ];
@@ -1441,7 +1441,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
                 for(std::vector<OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
                 {
-                    String* s = new String(*it);
+                    OUString* s = new OUString(*it);
                     if(!pCplList->insert(s).second)
                         delete s;
                 }
@@ -1460,7 +1460,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            String* pString = (*pWrdList)[ --i ];
+            OUString* pString = (*pWrdList)[ --i ];
             if( USHRT_MAX == m_pDoubleCapsLB->GetEntryPos(*pString) )
             {
                 delete (*pWrdList)[ i ];
@@ -1470,7 +1470,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         nCount = m_pDoubleCapsLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            String* pEntry = new String( m_pDoubleCapsLB->GetEntry( i ) );
+            OUString* pEntry = new OUString( m_pDoubleCapsLB->GetEntry( i ) );
             if( !pWrdList->insert( pEntry ).second)
                 delete pEntry;
         }
@@ -1485,7 +1485,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            String* pString = (*pCplList)[ --i ];
+            OUString* pString = (*pCplList)[ --i ];
             if( USHRT_MAX == m_pAbbrevLB->GetEntryPos(*pString) )
             {
                 delete (*pCplList)[ i ];
@@ -1495,7 +1495,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         nCount = m_pAbbrevLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            String* pEntry = new String( m_pAbbrevLB->GetEntry( i ) );
+            OUString* pEntry = new OUString( m_pAbbrevLB->GetEntry( i ) );
             if( !pCplList->insert( pEntry ).second)
                 delete pEntry;
         }

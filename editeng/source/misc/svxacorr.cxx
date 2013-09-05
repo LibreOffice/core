@@ -1734,13 +1734,13 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     // and last in LANGUAGE_UNDETERMINED
     LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
-    String sTemp(sWord);
+    OUString sTemp(sWord);
 
     if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists* pList = pLangTable->find(eLang)->second;
-        String _sTemp(sWord);
+        OUString _sTemp(sWord);
         if(pList->GetWrdSttExceptList()->find(&_sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
@@ -1774,20 +1774,20 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
 static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
-    String sAbk(OUString('~'));
+    OUString sAbk('~');
     SvStringsISortDtor::const_iterator it = pList->find( &sAbk );
     sal_uInt16 nPos = it - pList->begin();
     if( nPos < pList->size() )
     {
         String sLowerWord( sWord ); sLowerWord.ToLowerAscii();
-        const String* pAbk;
+        const OUString* pAbk;
         for( sal_uInt16 n = nPos;
                 n < pList->size() &&
-                '~' == ( pAbk = (*pList)[ n ])->GetChar( 0 );
+                '~' == (*( pAbk = (*pList)[ n ]))[ 0 ];
             ++n )
         {
             // ~ and ~. are not allowed!
-            if( 2 < pAbk->Len() && pAbk->Len() - 1 <= sWord.Len() )
+            if( 2 < pAbk->getLength() && pAbk->getLength() - 1 <= sWord.Len() )
             {
                 String sLowerAbk( *pAbk ); sLowerAbk.ToLowerAscii();
                 for( xub_StrLen i = sLowerAbk.Len(), ii = sLowerWord.Len(); i; )
@@ -1801,7 +1801,7 @@ static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const Str
             }
         }
     }
-    OSL_ENSURE( !(nPos && '~' == (*pList)[ --nPos ]->GetChar( 0 ) ),
+    OSL_ENSURE( !(nPos && '~' == (*(*pList)[ --nPos ])[ 0 ] ),
             "Wrongly sorted exception list?" );
     return sal_False;
 }
@@ -1813,7 +1813,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     // and last in LANGUAGE_UNDETERMINED
     LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
-    String sTemp( sWord );
+    OUString sTemp( sWord );
 
     if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
@@ -2123,7 +2123,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 
 sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
-    String* pNew = new String( rNew );
+    OUString* pNew = new OUString( rNew );
     if( rNew.Len() && GetCplSttExceptList()->insert( pNew ).second )
     {
         MakeUserStorage_Impl();
@@ -2144,7 +2144,7 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 
 sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
-    String* pNew = new String( rNew );
+    OUString* pNew = new OUString( rNew );
     SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
     if( rNew.Len() && pExceptList && pExceptList->insert( pNew ).second )
     {

@@ -232,7 +232,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
     if (!sWord.Len() )
         return;
 
-    String * pNew = new String( sWord );
+    OUString * pNew = new OUString( sWord );
 
     if( !rLocalRef.rList.insert( pNew ).second )
         delete pNew;
