@@ -72,9 +72,10 @@ protected:
             CK_ATTRIBUTE_TYPE operation);
 #endif
 
-public:
+protected:
     Crypto(CryptoType type);
 
+public:
     virtual ~Crypto();
 
     virtual sal_uInt32 update(
