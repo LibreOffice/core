@@ -386,7 +386,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 
     //aProperty.Name = sPropertyPath + OUString("/") + sPropertyName;
 
-    Prop_Impl* aProperty = new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) );
+    Prop_Impl* pProperty = new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) );
 
     bool bOpenDialog;
     OUString sDialogValue;
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
             bValue = true;
         }
 
-        aProperty->Value = uno::makeAny( bValue );
+        pProperty->Value = uno::makeAny( bValue );
         bOpenDialog = false;
     }else// if ( sPropertyType == OUString( "string" ) )
     {
@@ -425,12 +425,16 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         {
             sNewValue = pValueDialog->getValue();
             //TODO: parse the value according to the type?
-            aProperty->Value = uno::makeAny( sNewValue );
-            AddToModifiedVector( aProperty );
+            pProperty->Value = uno::makeAny( sNewValue );
+            AddToModifiedVector( pProperty );
 
             sDialogValue = sNewValue;
         }
+        else
+            delete pProperty;
     }
+    else
+        delete pProperty;
 
     pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
     //TODO:update listbox value.
