@@ -26,6 +26,7 @@
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/IndexType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
@@ -1548,17 +1549,99 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
     return xResultSet;
 }
-// -------------------------------------------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
-    const Any& catalog, const OUString& schema, const OUString& table,
-    sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
+        const Any& aCatalog, const OUString& sSchema, const OUString& sTable,
+        sal_Bool bIsUnique, sal_Bool bIsApproximate)
+    throw(SQLException, RuntimeException)
 {
-    (void) catalog;
-    (void) schema;
-    (void) table;
-    (void) unique;
-    (void) approximate;
-    return NULL;
+    (void) aCatalog;
+    (void) sSchema;
+
+    // Apparently this method can also return a "tableIndexStatistic"
+    // However this is only mentioned in XDatabaseMetaData.idl (whose comments
+    // are duplicated in the postgresql driver), and is otherwise undocumented.
+
+    SAL_INFO("connectivity.firebird", "getPrimaryKeys() with "
+             "Table: " << sTable);
+
+    OUStringBuffer aQueryBuf("SELECT "
+        "indices.RDB$RELATION_NAME, "               // 1. Table Name
+        "index_segments.RDB$FIELD_NAME, "           // 2. Column Name
+        "index_segments.RDB$FIELD_POSITION, "       // 3. Sequence Number
+        "indices.RDB$INDEX_NAME, "                  // 4. Index name
+        "indices.RDB$UNIQUE_FLAG, "                 // 5. Unique Flag
+        "indices.RDB$INDEX_TYPE "                   // 6. Index Type
+        "FROM RDB$INDICES indices "
+        "JOIN RDB$INDEX_SEGMENTS index_segments "
+        "on (indices.RDB$INDEX_NAME = index_segments.RDB$INDEX_NAME) "
+        "WHERE (indices.RDB$SYSTEM_FLAG = 0) ");
+    // Not sure whether we should exclude system indices, but otoh. we never
+    // actually deal with system tables (system indices only apply to system
+    // tables) within the GUI.
+
+    // Only filter if true (according to the docs), i.e.:
+    // If false we return all indices, if true we return only unique indices
+    if (bIsUnique)
+        aQueryBuf.append("AND (indices.RDB$UNIQUE_FLAG = 1) ");
+
+    // TODO: what is bIsApproximate?
+    (void) bIsApproximate;
+
+    OUString sQuery = aQueryBuf.makeStringAndClear();
+
+    uno::Reference< XStatement > xStatement = m_pConnection->createStatement();
+    uno::Reference< XResultSet > xRs = xStatement->executeQuery(sQuery);
+    uno::Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
+
+    ODatabaseMetaDataResultSet::ORows aResults;
+    ODatabaseMetaDataResultSet::ORow aCurrentRow(14);
+
+    aCurrentRow[0] = new ORowSetValueDecorator(); // Unused -- numbering starts from 0
+    aCurrentRow[1] = new ORowSetValueDecorator(); // Catalog - can be null
+    aCurrentRow[2] = new ORowSetValueDecorator(); // Schema - can be null
+    aCurrentRow[5] = new ORowSetValueDecorator(); // Index Catalog -- can be null
+    // According to wikipedia firebird uses clustered indices.
+    // The documentation does not specifically seem to specify this.
+    aCurrentRow[7] = new ORowSetValueDecorator(IndexType::CLUSTERED); // 7. INDEX TYPE
+    aCurrentRow[13] = new ORowSetValueDecorator(); // Filter Condition -- can be null
+
+    while(xRs->next())
+    {
+        // 3. Table Name
+        if (xRs->getRow() == 1) // Table name doesn't change, so only retrieve once
+        {
+            aCurrentRow[3] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(1)));
+        }
+
+        // 4. NON_UNIQUE -- i.e. specifically negate here.
+        aCurrentRow[4] = new ORowSetValueDecorator(!xRow->getBoolean(5));
+        // 6. INDEX NAME
+        aCurrentRow[6] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(4)));
+
+        // 8. ORDINAL POSITION
+        aCurrentRow[8] = new ORowSetValueDecorator(xRow->getShort(3));
+        // 9. COLUMN NAME
+        aCurrentRow[9] = new ORowSetValueDecorator(sanitizeIdentifier(xRow->getString(2)));
+        // 10. ASC(ending)/DESC(ending)
+        if (xRow->getShort(6) == 1)
+            aCurrentRow[10] = new ORowSetValueDecorator(OUString("D"));
+        else
+            aCurrentRow[10] = new ORowSetValueDecorator(OUString("A"));
+        // TODO: double check this^^^, doesn't seem to be officially documented anywhere.
+        // 11. CARDINALITY
+        aCurrentRow[11] = new ORowSetValueDecorator((sal_Int32)0); // TODO: determine how to do this
+        // 12. PAGES
+        aCurrentRow[12] = new ORowSetValueDecorator((sal_Int32)0); // TODO: determine how to do this
+
+        aResults.push_back(aCurrentRow);
+    }
+    ODatabaseMetaDataResultSet* pResultSet = new
+            ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
+    uno::Reference< XResultSet > xResultSet = pResultSet;
+    pResultSet->setRows( aResults );
+
+    return xResultSet;
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
