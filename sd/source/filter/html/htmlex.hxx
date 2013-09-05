@@ -63,8 +63,8 @@ class HtmlErrorContext : public ErrorContext
 {
 private:
     sal_uInt16  mnResId;
-    String  maURL1;
-    String  maURL2;
+    OUString  maURL1;
+    OUString  maURL2;
 
 public:
                     HtmlErrorContext(Window *pWin=0);
@@ -72,8 +72,8 @@ public:
 
     virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr );
 
-    void            SetContext( sal_uInt16 nResId, const String& rURL );
-    void            SetContext( sal_uInt16 nResId, const String& rURL1, const String& rURL2 );
+    void            SetContext( sal_uInt16 nResId, const OUString& rURL );
+    void            SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 );
 };
 
 /// this class exports an Impress Document as a HTML Presentation.
@@ -82,7 +82,7 @@ class HtmlExport
     std::vector< SdPage* > maPages;
     std::vector< SdPage* > maNotesPages;
 
-    String maPath;
+    OUString maPath;
 
     SdDrawDocument* mpDoc;
     ::sd::DrawDocShell* mpDocSh;
@@ -102,15 +102,15 @@ class HtmlExport
     bool mbHeader;
     bool mbNotes;
     bool mbFrames;
-    String maIndex;
-    String maEMail;
-    String maAuthor;
-    String maHomePage;
-    String maInfo;
+    OUString maIndex;
+    OUString maEMail;
+    OUString maAuthor;
+    OUString maHomePage;
+    OUString maInfo;
     sal_Int16 mnCompression;
-    String maDocFileName;
-    String maFramePage;
-    String mDocTitle;
+    OUString maDocFileName;
+    OUString maFramePage;
+    OUString mDocTitle;
     bool mbDownload;
 
     bool mbAutoSlide;
@@ -128,20 +128,20 @@ class HtmlExport
     Color maFirstPageColor;
     bool mbDocColors;
 
-    String   maHTMLExtension;
-    String** mpHTMLFiles;
-    String** mpImageFiles;
-    String** mpThumbnailFiles;
-    String** mpPageNames;
-    String** mpTextFiles;
+    OUString   maHTMLExtension;
+    OUString** mpHTMLFiles;
+    OUString** mpImageFiles;
+    OUString** mpThumbnailFiles;
+    OUString** mpPageNames;
+    OUString** mpTextFiles;
 
-    String maExportPath; ///< output directory or URL.
-    String maIndexUrl;
-    String maURLPath;
-    String maCGIPath;
+    OUString maExportPath; ///< output directory or URL.
+    OUString maIndexUrl;
+    OUString maURLPath;
+    OUString maCGIPath;
     PublishingScript meScript;
 
-    const String maHTMLHeader;
+    const OUString maHTMLHeader;
 
     boost::scoped_ptr< ButtonSet > mpButtonSet;
 
@@ -166,56 +166,56 @@ class HtmlExport
     bool    CreateImageNumberFile();
 
     bool    checkForExistingFiles();
-    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, String const & aFileName );
+    bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName );
 
-    String getDocumentTitle();
+    OUString getDocumentTitle();
     bool    SavePresentation();
 
-    String  CreateLink( const String& aLink, const String& aText,
-                        const String& aTarget = String()) const;
-    String  CreateImage( const String& aImage, const String& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 ) const;
-    String  CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
-    String  CreateBodyTag() const;
+    OUString CreateLink( const OUString& aLink, const OUString& aText,
+                        const OUString& aTarget = OUString()) const;
+    OUString CreateImage( const OUString& aImage, const OUString& aAltText, sal_Int16 nWidth = -1, sal_Int16 nHeight = -1 ) const;
+    OUString CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
+    OUString CreateBodyTag() const;
 
-    String  ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor );
-    String  TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
+    OUString ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor );
+    OUString TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
 
-    String  CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
-    String  CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
-    String  CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
+    OUString CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
+    OUString CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
+    OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
 
-    String  CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
-                                  sal_uLong nCenterY, const String& rHRef ) const;
-    String  CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const String& rHRef ) const;
-    String  CreateHTMLRectArea( const Rectangle& rRect,
-                                const String& rHRef ) const;
+    OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
+                                  sal_uLong nCenterY, const OUString& rHRef ) const;
+    OUString CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPoly, Size aShift, double fFactor, const OUString& rHRef ) const;
+    OUString CreateHTMLRectArea( const Rectangle& rRect,
+                                const OUString& rHRef ) const;
 
-    String  CreatePageURL( sal_uInt16 nPgNum );
+    OUString CreatePageURL( sal_uInt16 nPgNum );
 
-    String InsertSound( const String& rSoundFile );
+    OUString InsertSound( const OUString& rSoundFile );
     bool CopyFile( const OUString& rSourceFile, const OUString& rDestFile );
-    bool CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix = false );
+    bool CopyScript( const OUString& rPath, const OUString& rSource, const OUString& rDest, bool bUnix = false );
 
     void InitProgress( sal_uInt16 nProgrCount );
     void ResetProgress();
 
-    String WriteMetaCharset() const;
+    OUString CreateMetaCharset() const;
 
     void InitExportParameters( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams);
     void ExportHtml();
     void ExportKiosk();
     void ExportWebCast();
 
-    bool WriteHtml( const String& rFileName, bool bAddExtension, const String& rHtmlData );
-    String GetButtonName( int nButton ) const;
+    bool WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData );
+    OUString GetButtonName( int nButton ) const;
 
  public:
      HtmlExport( OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
     virtual ~HtmlExport();
 
-    static String   ColorToHTMLString( Color aColor );
-    static String   StringToHTMLString( const String& rString );
-    static String   StringToURL( const String& rURL );
+    static OUString ColorToHTMLString( Color aColor );
+    static OUString StringToHTMLString( const OUString& rString );
+    static OUString StringToURL( const OUString& rURL );
 };
 
 #endif // _SD_HTMLEX_HXX
