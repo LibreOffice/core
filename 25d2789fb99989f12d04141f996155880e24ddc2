@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7as\u003d",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-09-05T08:00:38Z",
+      "side": 1,
+      "message": "This doesn\u0027t modify m_aBufferString but instead returns a new String, i.e. you\u0027ll have to do m_aBufferString \u003d m_aBufferString.replaceAt(nPos, 0, rText);",
+      "revId": "25d2789fb99989f12d04141f996155880e24ddc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ag\u003d",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-09-05T08:00:38Z",
+      "side": 1,
+      "message": "Same here : This doesn\u0027t modify m_aBufferString but instead returns a new String, i.e. you\u0027ll have to do m_aBufferString \u003d m_aBufferString.replaceAt(......)",
+      "revId": "25d2789fb99989f12d04141f996155880e24ddc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
