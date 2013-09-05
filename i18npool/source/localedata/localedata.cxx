@@ -453,12 +453,8 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
         Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
         if (aFbLocale == aLocale)
             bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
-        else if (!aFbLocale.Country.isEmpty()) {
-            OUStringBuffer aBuf(5);
-            aFallback = aBuf.append(aFbLocale.Language).append( under).append(aFbLocale.Country).makeStringAndClear();
-        }
         else
-            aFallback = aFbLocale.Language;
+            aFallback = LocaleData::getFirstLocaleServiceName( aFbLocale);
     }
 
     for ( sal_Int16 i = 0; i < nbOfLocales; i++)
@@ -1474,44 +1470,22 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
     }
 
     oslGenericFunction pSymbol = 0;
-
-    sal_Int32 l = rLocale.Language.getLength();
-    sal_Int32 c = rLocale.Country.getLength();
-    sal_Int32 v = rLocale.Variant.getLength();
-    aBuf.ensureCapacity(l+c+v+3);
-
     LocaleDataLookupTableItem *pCachedItem = 0;
 
-    if (l > 0 && c > 0 && v > 0)
-    {
-        // load function with name <func>_<lang>_<country>_<variant>
-        pSymbol = rLookupTable.getFunctionSymbolByName(
-                aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(),
-                pFunction, &pCachedItem);
-    }
-
-    if (!pSymbol && l > 0 && c > 0)
-    {
-        // load function with name <ase>_<lang>_<country>
-        pSymbol = rLookupTable.getFunctionSymbolByName(
-                aBuf.append(rLocale.Language).append(under).append(rLocale.Country).makeStringAndClear(),
-                pFunction, &pCachedItem);
-    }
-
-    if (!pSymbol && l > 0 && c > 0 && rLocale.Language == "zh" && (rLocale.Country == "HK" || rLocale.Country == "MO"))
-    {
-        // if the country code is HK or MO, one more step to try TW.
-        pSymbol = rLookupTable.getFunctionSymbolByName(
-                aBuf.append(rLocale.Language).append(under).append("TW").makeStringAndClear(),
-                pFunction, &pCachedItem);
-    }
-
+    // Load function with name <func>_<lang>_<country> or <func>_<bcp47> and
+    // fallbacks.
+    pSymbol = rLookupTable.getFunctionSymbolByName( LocaleData::getFirstLocaleServiceName( rLocale),
+            pFunction, &pCachedItem);
     if (!pSymbol)
     {
-        // load function with name <func>_<lang>
-        pSymbol = rLookupTable.getFunctionSymbolByName(rLocale.Language, pFunction, &pCachedItem);
+        ::std::vector< OUString > aFallbacks( LocaleData::getFallbackLocaleServiceNames( rLocale));
+        for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+        {
+            pSymbol = rLookupTable.getFunctionSymbolByName( *it, pFunction, &pCachedItem);
+            if (pSymbol)
+                break;
+        }
     }
-
     if (!pSymbol)
     {
         // load default function with name <func>_en_US
