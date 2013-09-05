@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7Zw\u003d",
+        "filename": "drawinglayer/source/dumper/XShapeDumper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-05T08:17:06Z",
+      "side": 1,
+      "message": "Nitpick: this comment should be changed later -- XShapeDumper should know only about InteropGrabBag, not about Smart-Art directly.",
+      "revId": "066e534cef3d274be83fd34d5a3b92d704ed5c26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
