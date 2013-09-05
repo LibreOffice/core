@@ -248,23 +248,27 @@ static void checkFunctionNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* aPoEntry = new PoEntry();
-        aPoInput.readEntry(*aPoEntry);
+        PoEntry* pPoEntry = new PoEntry();
+        aPoInput.readEntry(*pPoEntry);
         if( aPoInput.eof() )
-            break;
-        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            delete pPoEntry;
+            break;
+        }
+
+        if( !pPoEntry->isFuzzy() && pPoEntry->getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
+        {
+            OString aMsgStr = pPoEntry->getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
             if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-                delete aPoEntry;
+                delete pPoEntry;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
-                repeatedEntries.push_back(aPoEntry);
+                repeatedEntries.push_back(pPoEntry);
             }
         }
     }
