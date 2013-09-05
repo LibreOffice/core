@@ -131,6 +131,7 @@ public:
     void testTableStyleParprop();
     void testTablePagebreak();
     void testFdo68607();
+    void testVmlTextVerticalAdjust();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -228,6 +229,7 @@ void Test::run()
         {"table-style-parprop.docx", &Test::testTableStyleParprop},
         {"table-pagebreak.docx", &Test::testTablePagebreak},
         {"fdo68607.docx", &Test::testFdo68607},
+        {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1538,6 +1540,15 @@ void Test::testFdo68607()
     // table in a frame. Exact layout may depend on fonts available, etc. --
     // but at least make sure that our table spans over multiple pages now.
     CPPUNIT_ASSERT(getPages() > 1);
+}
+
+void Test::testVmlTextVerticalAdjust()
+{
+    uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // Was CENTER.
+    CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -126,6 +127,16 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
     if ( maLayoutFlow == "vertical" )
     {
         uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+
+        // VML has the text horizontally aligned to left (all the time),
+        // v-text-anchor for vertical alignment, and vertical mode to swap the
+        // two.  drawinglayer supports both horizontal and vertical alignment,
+        // but no vertical mode: we use T->B, R->L instead.
+        // As a result, we need to set horizontal adjustment here to 'right',
+        // that will result in vertical 'top' after writing mode is applied,
+        // which matches the VML behavior.
+        xProperties->setPropertyValue("TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_RIGHT));
+
         xProperties->setPropertyValue( "TextWritingMode", uno::makeAny( text::WritingMode_TB_RL ) );
     }
 }
