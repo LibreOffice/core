@@ -145,11 +145,6 @@ namespace drawinglayer
         {
         }
 
-        bool FontAttribute::isDefault() const
-        {
-            return mpFontAttribute.same_object(theGlobalDefault::get());
-        }
-
         FontAttribute& FontAttribute::operator=(const FontAttribute& rCandidate)
         {
             mpFontAttribute = rCandidate.mpFontAttribute;

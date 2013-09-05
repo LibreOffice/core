@@ -148,11 +148,6 @@ namespace drawinglayer
         {
         }
 
-        bool Sdr3DObjectAttribute::isDefault() const
-        {
-            return mpSdr3DObjectAttribute.same_object(theGlobalDefault::get());
-        }
-
         Sdr3DObjectAttribute& Sdr3DObjectAttribute::operator=(const Sdr3DObjectAttribute& rCandidate)
         {
             mpSdr3DObjectAttribute = rCandidate.mpSdr3DObjectAttribute;

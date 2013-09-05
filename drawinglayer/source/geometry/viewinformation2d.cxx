@@ -447,11 +447,6 @@ namespace drawinglayer
         {
         }
 
-        bool ViewInformation2D::isDefault() const
-        {
-            return mpViewInformation2D.same_object(theGlobalDefault::get());
-        }
-
         ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D& rCandidate)
         {
             mpViewInformation2D = rCandidate.mpViewInformation2D;

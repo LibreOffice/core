@@ -92,11 +92,6 @@ namespace drawinglayer
         {
         }
 
-        bool Sdr3DLightAttribute::isDefault() const
-        {
-            return mpSdr3DLightAttribute.same_object(theGlobalDefault::get());
-        }
-
         Sdr3DLightAttribute& Sdr3DLightAttribute::operator=(const Sdr3DLightAttribute& rCandidate)
         {
             mpSdr3DLightAttribute = rCandidate.mpSdr3DLightAttribute;

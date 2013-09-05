@@ -117,12 +117,7 @@ connectivity::file::OStatement_Base::reset()
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-drawinglayer::attribute::FontAttribute::isDefault() const
-drawinglayer::attribute::MaterialAttribute3D::isDefault() const
-drawinglayer::attribute::Sdr3DLightAttribute::isDefault() const
-drawinglayer::attribute::Sdr3DObjectAttribute::isDefault() const
 drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
-drawinglayer::geometry::ViewInformation2D::isDefault() const
 editeng::MisspellRange::MisspellRange()
 editeng::Section::Section()
 formula::DoubleVectorRefToken::GetArrayLength() const
