@@ -43,6 +43,9 @@ public:
     void testUpdateReference_DeleteRow();
     void testUpdateReference_DeleteCol();
 
+    void testInsertRow();
+    void testInsertCol();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testDeleteArea_4Ranges);
     CPPUNIT_TEST(testDeleteArea_3Ranges);
@@ -65,6 +68,8 @@ public:
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
     CPPUNIT_TEST(testGetIntersectedRange);
+    CPPUNIT_TEST(testInsertRow);
+    CPPUNIT_TEST(testInsertCol);
     CPPUNIT_TEST_SUITE_END();
 
 
@@ -475,6 +480,20 @@ void Test::testGetIntersectedRange()
     ScRangeList aList(ScRange(2, 2, 0, 5, 5, 0));
     ScRangeList aIntersecting = aList.GetIntersectedRange(ScRange(0, 0, 0, 3, 3, 0));
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(2,2,0,3,3,0)), aIntersecting);
+}
+
+void Test::testInsertRow()
+{
+    ScRangeList aList(ScRange(1,1,0,4,4,0));
+    aList.InsertRow(0, 0, MAXCOL, 5, 2);
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,4,6,0)), aList);
+}
+
+void Test::testInsertCol()
+{
+    ScRangeList aList(ScRange(1,1,0,4,4,0));
+    aList.InsertCol(0, 0, MAXROW, 5, 2);
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,6,4,0)), aList);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
