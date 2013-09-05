@@ -95,7 +95,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
-        ContextHandler2Helper *rFragmentHandler
+        boost::shared_ptr<ContextHandler2Helper> pFragmentHandler
             (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
@@ -104,12 +104,12 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
             case XML_graphic:
                 mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
                 mxGraphicShapeContext.set
-                (new GraphicalObjectFrameContext(*rFragmentHandler, pMasterShape, mpShape, true));
+                (new GraphicalObjectFrameContext(*pFragmentHandler, pMasterShape, mpShape, true));
                 break;
             case XML_pic:
                 mpShape.reset(new Shape("com.sun.star.drawing.GraphicObjectShape" ));
                 mxGraphicShapeContext.set
-                (new GraphicShapeContext(*rFragmentHandler, pMasterShape, mpShape));
+                (new GraphicShapeContext(*pFragmentHandler, pMasterShape, mpShape));
                 break;
             default:
                 break;
@@ -139,9 +139,9 @@ ShapeContextHandler::getDiagramShapeContext()
 {
     if (!mxDiagramShapeContext.is())
     {
-        ContextHandler2Helper *rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        boost::shared_ptr<ContextHandler2Helper> pFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         mpShape.reset(new Shape());
-        mxDiagramShapeContext.set(new DiagramGraphicDataContext(*rFragmentHandler, mpShape));
+        mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }
 
     return mxDiagramShapeContext;
