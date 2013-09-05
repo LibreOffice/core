@@ -257,7 +257,9 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         switch (aKeyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                mCommunicationService.getTransmitter().performNextTransition();
+                if (!isLastSlideDisplayed()) {
+                    mCommunicationService.getTransmitter().performNextTransition();
+                }
                 return true;
 
             case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -273,6 +275,13 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         Preferences preferences = Preferences.getSettingsInstance(this);
 
         return preferences.getBoolean(Preferences.Keys.VOLUME_KEYS_ACTIONS);
+    }
+
+    private boolean isLastSlideDisplayed() {
+        int aCurrentSlideIndex = mCommunicationService.getSlideShow().getHumanCurrentSlideIndex();
+        int aSlidesCount = mCommunicationService.getSlideShow().getSlidesCount();
+
+        return aCurrentSlideIndex == aSlidesCount;
     }
 
     @Override
