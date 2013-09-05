@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "WinImplHelper.hxx"
+
+#include <vector>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include "AutoBuffer.hxx"
-#include "WinImplHelper.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 
