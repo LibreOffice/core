@@ -13,6 +13,7 @@
    <Line2 column1="0.000000" column2="10856.000000" column3="5160.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues/>
@@ -99,6 +100,7 @@
    <Line2 column1="-1004.091629" column2="1026.011940" column3="7175.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues>
@@ -176,6 +178,7 @@
    <Line2 column1="1003.384523" column2="1026.011940" column3="6171.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
     <AdjustmentValues>

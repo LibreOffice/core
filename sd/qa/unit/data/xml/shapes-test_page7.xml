@@ -6,5 +6,6 @@
    <Line2 column1="0.000000" column2="7859.000000" column3="9000.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
+  <InteropGrabBag/>
  </XShape>
 </XShapes>
