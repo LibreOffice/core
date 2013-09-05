@@ -75,7 +75,6 @@ namespace connectivity
                                             { return m_aMutex; }
         protected:
             static const OUString sDBLocation; // Location within .odb container
-            rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
             //====================================================================
             // Data attributes
             //====================================================================
@@ -166,7 +165,6 @@ namespace connectivity
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
             inline isc_db_handle&    getDBHandle()       { return m_DBHandler; }
             inline FirebirdDriver*  getDriver()         const { return m_pDriver;}
-            inline rtl_TextEncoding getTextEncoding()   const { return m_nTextEncoding; }
 
             ::rtl::OUString         getConnectionURL()  const { return m_sConnectionURL; }
             sal_Bool                isEmbedded()        const { return m_bIsEmbedded; }
