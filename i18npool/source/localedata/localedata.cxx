@@ -1520,14 +1520,7 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem.reset( pCachedItem );
-            sal_Int32 index = 0;
-            lang::Locale tmpLocale(name.getToken(0, under, index), empStr, empStr);
-            if (index >= 0) {
-                tmpLocale.Country = name.getToken(0, under, index);
-                if (index >= 0)
-                    tmpLocale.Variant = name.getToken(0, under, index);
-            }
-            seq[nInstalled++] = tmpLocale;
+            seq[nInstalled++] = LanguageTag::convertToLocale( name.replaceAll( "_", "-"), false);
         }
         else
         {
