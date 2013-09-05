@@ -44,7 +44,7 @@ unzip \
 $(if $(filter-out 0,$(UNPACKED_STRIP_COMPONENTS)),\
 	&& UNZIP_DIR=`ls $(UNPACKED_DIR)` \
 	&& mv $(UNPACKED_DIR)/$$UNZIP_DIR/* $(UNPACKED_DIR) \
-	&& rmdir $(UNPACKED_DIR)/$$UNZIP_DIR \
+	&& rm -rf $(UNPACKED_DIR)/$$UNZIP_DIR \
 )
 endef
 
