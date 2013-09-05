@@ -108,12 +108,12 @@ void SdCustomShow::RemovePage( const SdPage* pPage )
     maPages.erase(::std::remove(maPages.begin(), maPages.end(), pPage), maPages.end());
 }
 
-void   SdCustomShow::SetName(const String& rName)
+void   SdCustomShow::SetName(const OUString& rName)
 {
     aName = rName;
 }
 
-String SdCustomShow::GetName() const
+OUString SdCustomShow::GetName() const
 {
     return aName;
 }

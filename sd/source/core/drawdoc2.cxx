@@ -75,7 +75,7 @@ const long PRINT_OFFSET = 30;       // see /svx/source/dialog/page.cxx
 using namespace com::sun::star;
 
 // Looks up an object by name
-SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
+SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 {
     SdrObject* pObj = NULL;
     SdrObject* pObjFound = NULL;
@@ -136,7 +136,7 @@ SdrObject* SdDrawDocument::GetObj(const String& rObjName) const
 
 
 // Find SdPage by name
-sal_uInt16 SdDrawDocument::GetPageByName(const String& rPgName, sal_Bool& rbIsMasterPage) const
+sal_uInt16 SdDrawDocument::GetPageByName(const OUString& rPgName, sal_Bool& rbIsMasterPage) const
 {
     SdPage* pPage = NULL;
     sal_uInt16 nPage = 0;
@@ -244,9 +244,9 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
     }
 }
 
-void SdDrawDocument::UpdatePageRelativeURLs(const String& rOldName, const String& rNewName)
+void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName)
 {
-    if (rNewName.Len() == 0)
+    if (rNewName.isEmpty())
         return;
 
     SfxItemPool& pPool(GetPool());
@@ -262,25 +262,24 @@ void SdDrawDocument::UpdatePageRelativeURLs(const String& rOldName, const String
 
             if(pURLField)
             {
-                XubString aURL = pURLField->GetURL();
+                OUString aURL = pURLField->GetURL();
 
-                if (aURL.Len() && (aURL.GetChar(0) == 35) && (aURL.Search(rOldName, 1) == 1))
+                if (!aURL.isEmpty() && (aURL[0] == 35) && (aURL.indexOf(rOldName, 1) == 1))
                 {
-                    if (aURL.Len() == rOldName.Len() + 1) // standard page name
+                    if (aURL.getLength() == rOldName.getLength() + 1) // standard page name
                     {
-                        aURL.Erase (1, aURL.Len() - 1);
+                        aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
                         aURL += rNewName;
                         pURLField->SetURL(aURL);
                     }
                     else
                     {
-                        const XubString sNotes = SdResId(STR_NOTES);
-                        if (aURL.Len() == rOldName.Len() + 2 + sNotes.Len() && aURL.Search(sNotes, rOldName.Len() + 2) == rOldName.Len() + 2)
+                        const OUString sNotes(SD_RESSTR(STR_NOTES));
+                        if (aURL.getLength() == rOldName.getLength() + 2 + sNotes.getLength()
+                            && aURL.indexOf(sNotes, rOldName.getLength() + 2) == rOldName.getLength() + 2)
                         {
-                            aURL.Erase (1, aURL.Len() - 1);
-                            aURL += rNewName;
-                            aURL += ' ';
-                            aURL += sNotes;
+                            aURL = aURL.replaceAt(1, aURL.getLength() - 1, "");
+                            aURL += rNewName + " " + sNotes;
                             pURLField->SetURL(aURL);
                         }
                     }
@@ -307,41 +306,41 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
 
             if(pURLField)
             {
-                XubString aURL = pURLField->GetURL();
+                OUString aURL = pURLField->GetURL();
 
-                if (aURL.Len() && (aURL.GetChar(0) == 35))
+                if (!aURL.isEmpty() && (aURL[0] == 35))
                 {
-                    XubString aHashSlide = OUString('#');
+                    OUString aHashSlide("#");
                     aHashSlide += SD_RESSTR(STR_PAGE);
 
-                    if (aURL.CompareTo(aHashSlide, aHashSlide.Len()) == COMPARE_EQUAL)
+                    if (aURL.startsWith(aHashSlide))
                     {
-                        XubString aURLCopy = aURL;
-                        const XubString sNotes = SdResId(STR_NOTES);
+                        OUString aURLCopy = aURL;
+                        const OUString sNotes(SD_RESSTR(STR_NOTES));
 
-                        aURLCopy.Erase(0, aHashSlide.Len());
+                        aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), "");
 
-                        bool bNotesLink = (aURLCopy.Len() >= sNotes.Len() + 3 && aURLCopy.Search(sNotes, aURLCopy.Len() - sNotes.Len()) == aURLCopy.Len() - sNotes.Len());
+                        bool bNotesLink = ( aURLCopy.getLength() >= sNotes.getLength() + 3
+                            && aURLCopy.indexOf(sNotes, aURLCopy.getLength() - sNotes.getLength()) == aURLCopy.getLength() - sNotes.getLength() );
 
                         if (bNotesLink ^ bNotes)
                             continue; // no compatible link and page
 
                         if (bNotes)
-                            aURLCopy.Erase(aURLCopy.Len() - sNotes.Len(), sNotes.Len());
+                            aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), "");
 
-                        sal_Int32 number = aURLCopy.ToInt32();
+                        sal_Int32 number = aURLCopy.toInt32();
                         sal_uInt16 realPageNumber = (nPos + 1)/ 2;
 
                         if ( number >= realPageNumber )
                         {
                             // update link page number
                             number += nIncrement;
-                            aURL.Erase (aHashSlide.Len() + 1, aURL.Len() - aHashSlide.Len() - 1);
+                            aURL = aURL.replaceAt(aHashSlide.getLength() + 1, aURL.getLength() - aHashSlide.getLength() - 1, "");
                             aURL += OUString::number(number);
                             if (bNotes)
                             {
-                                aURL += ' ';
-                                aURL += sNotes;
+                                aURL += " " + sNotes;
                             }
                             pURLField->SetURL(aURL);
                         }
@@ -1185,8 +1184,8 @@ void SdDrawDocument::CheckMasterPages()
 sal_uInt16 SdDrawDocument::CreatePage (
     SdPage* pActualPage,
     PageKind ePageKind,
-    const String& sStandardPageName,
-    const String& sNotesPageName,
+    const OUString& sStandardPageName,
+    const OUString& sNotesPageName,
     AutoLayout eStandardLayout,
     AutoLayout eNotesLayout,
     sal_Bool bIsPageBack,
@@ -1288,7 +1287,7 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
     return DuplicatePage (
         pActualPage, ePageKind,
         // No names for the new slides
-        String(), String(),
+        OUString(), OUString(),
         aVisibleLayers.IsSet(aBckgrnd),
         aVisibleLayers.IsSet(aBckgrndObj));
 }
@@ -1299,8 +1298,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 sal_uInt16 SdDrawDocument::DuplicatePage (
     SdPage* pActualPage,
     PageKind ePageKind,
-    const String& sStandardPageName,
-    const String& sNotesPageName,
+    const OUString& sStandardPageName,
+    const OUString& sNotesPageName,
     sal_Bool bIsPageBack,
     sal_Bool bIsPageObj,
     const sal_Int32 nInsertPosition)
@@ -1347,8 +1346,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
 sal_uInt16 SdDrawDocument::InsertPageSet (
     SdPage* pActualPage,
     PageKind ePageKind,
-    const String& sStandardPageName,
-    const String& sNotesPageName,
+    const OUString& sStandardPageName,
+    const OUString& sNotesPageName,
     sal_Bool bIsPageBack,
     sal_Bool bIsPageObj,
     SdPage* pStandardPage,
@@ -1359,8 +1358,8 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     SdPage* pPreviousNotesPage;
     sal_uInt16 nStandardPageNum;
     sal_uInt16 nNotesPageNum;
-    String aStandardPageName = sStandardPageName;
-    String aNotesPageName = sNotesPageName;
+    OUString aStandardPageName(sStandardPageName);
+    OUString aNotesPageName(sNotesPageName);
 
     // Gather some information about the standard page and the notes page
     // that are to be inserted. This makes sure that there is always one
@@ -1415,7 +1414,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
 void SdDrawDocument::SetupNewPage (
     SdPage* pPreviousPage,
     SdPage* pPage,
-    const String& sPageName,
+    const OUString& sPageName,
     sal_uInt16 nInsertionPoint,
     sal_Bool bIsPageBack,
     sal_Bool bIsPageObj)

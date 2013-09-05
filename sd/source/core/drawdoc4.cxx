@@ -123,14 +123,14 @@ void SdDrawDocument::CreateLayoutTemplates()
 {
     SdStyleSheetPool*       pSSPool = (SdStyleSheetPool*)GetStyleSheetPool();
     SfxStyleSheetBase*      pSheet = NULL;
-    String                  aHelpFile;
-    String                  aStdName = SD_RESSTR(STR_STANDARD_STYLESHEET_NAME);
+    OUString                aHelpFile;
+    OUString                aStdName(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
 
     // Default style
 
     sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
 
-    String aName(aStdName);
+    OUString aName(aStdName);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
@@ -147,7 +147,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Line attributes (Extended OutputDevice)
     rISet.Put(XLineStyleItem(XLINE_SOLID));
-    rISet.Put(XLineColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
+    rISet.Put(XLineColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(pPool,aNullDash));
     rISet.Put(XLineStartItem(pPool,aNullPolyPolygon));
@@ -160,7 +160,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Fill attributes (Extended OutputDevice)
     rISet.Put(XFillStyleItem(XFILL_SOLID));
-    rISet.Put(XFillColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
+    rISet.Put(XFillColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
 
     rISet.Put( XFillGradientItem( aNullGrad) );
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
@@ -257,7 +257,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XLineStyleItem(XLINE_SOLID));
-    pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
     pISet->Put(XLineWidthItem(150));
 
     ::basegfx::B2DPolygon aArrow;
@@ -291,7 +291,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(XFILL_NONE));
-    pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
 
     // Object no fill no line
 
@@ -367,7 +367,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      // 44 pt
 
     // Title1
-    aName = String(SdResId(STR_POOLSHEET_TITLE1));
+    aName = SD_RESSTR(STR_POOLSHEET_TITLE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
@@ -375,7 +375,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_SOLID));
-    pISet->Put(XFillColorItem(String(), RGB_Color(COL_CYAN)));
+    pISet->Put(XFillColorItem(OUString(), RGB_Color(COL_CYAN)));
 
     pISet->Put(SdrShadowItem(sal_True));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
@@ -388,7 +388,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Title2
 
-    aName = String(SdResId(STR_POOLSHEET_TITLE2));
+    aName = SD_RESSTR(STR_POOLSHEET_TITLE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE2 );
@@ -399,7 +399,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // Don't get color from the color table, because the color might have been
     // deleted or changed there
     Color aOrange4(255, 204, 153);
-    pISet->Put(XFillColorItem(String(), aOrange4));
+    pISet->Put(XFillColorItem(OUString(), aOrange4));
 
     pISet->Put(SdrShadowItem(sal_True));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
@@ -432,7 +432,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Headline1
-    aName = String(SdResId(STR_POOLSHEET_HEADLINE1));
+    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
@@ -449,7 +449,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Headline2
-    aName = String(SdResId(STR_POOLSHEET_HEADLINE2));
+    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
@@ -474,7 +474,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(XFILL_NONE));
-    pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
+    pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
 
     pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
 
@@ -486,7 +486,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SdrMeasureShowUnitItem(true));
 
     // Generate presentation templates for default layout.
-    String aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
+    OUString aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
@@ -496,7 +496,7 @@ static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rN
     pSheet->SetParent(rParent);
     SfxItemSet* pISet = &pSheet->GetItemSet();
     pISet->Put(XFillStyleItem(XFILL_SOLID));
-    pISet->Put(XFillColorItem(String(), rColor));
+    pISet->Put(XFillColorItem(OUString(), rColor));
 
     return Any( Reference< XStyle >( static_cast< XWeak* >( pSheet ), UNO_QUERY ) );
 }
@@ -530,7 +530,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 {
     SdStyleSheetPool*       pSSPool = static_cast< SdStyleSheetPool* >(GetStyleSheetPool());
     SfxStyleSheetBase*      pSheet = NULL;
-    String                  aHelpFile;
+    OUString                aHelpFile;
 
     Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
 
@@ -553,7 +553,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     XHatch    aNullHatch(aNullCol);
 
     rISet.Put(XFillStyleItem(XFILL_SOLID));
-    rISet.Put(XFillColorItem(String(), RGB_Color(0x00ccccff)));
+    rISet.Put(XFillColorItem(OUString(), RGB_Color(0x00ccccff)));
 
     Font aLatinFont, aCJKFont, aCTLFont;
 
@@ -1010,25 +1010,25 @@ void SdDrawDocument::RestoreLayerNames()
 
         if (pLayer)
         {
-            String aLayerName(pLayer->GetName());
+            OUString aLayerName(pLayer->GetName());
 
-            if (aLayerName.EqualsAscii( "LAYER_LAYOUT" ))
+            if (aLayerName == "LAYER_LAYOUT")
             {
                 pLayer->SetName(SD_RESSTR(STR_LAYER_LAYOUT));
             }
-            else if (aLayerName.EqualsAscii( "LAYER_BCKGRND" ))
+            else if (aLayerName == "LAYER_BCKGRND")
             {
                 pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRND));
             }
-            else if (aLayerName.EqualsAscii( "LAYER_BACKGRNDOBJ" ))
+            else if (aLayerName == "LAYER_BACKGRNDOBJ")
             {
                 pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
             }
-            else if (aLayerName.EqualsAscii( "LAYER_CONTROLS" ))
+            else if (aLayerName == "LAYER_CONTROLS")
             {
                 pLayer->SetName(SD_RESSTR(STR_LAYER_CONTROLS));
             }
-            else if (aLayerName.EqualsAscii( "LAYER_MEASURELINES" ))
+            else if (aLayerName == "LAYER_MEASURELINES")
             {
                 pLayer->SetName(SD_RESSTR(STR_LAYER_MEASURELINES));
             }
@@ -1037,18 +1037,18 @@ void SdDrawDocument::RestoreLayerNames()
 }
 
 // Return formatted page number (1, I, i, a, etc.)
-String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
+OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 {
-    String aPageNumValue;
+    OUString aPageNumValue;
     sal_Bool bUpper = sal_False;
 
     switch (mePageNumType)
     {
         case SVX_CHARS_UPPER_LETTER:
-            aPageNumValue += (sal_Unicode)(char)((nNum - 1) % 26 + 'A');
+            aPageNumValue += OUString( (sal_Unicode)(char)((nNum - 1) % 26 + 'A') );
             break;
         case SVX_CHARS_LOWER_LETTER:
-            aPageNumValue += (sal_Unicode)(char)((nNum - 1) % 26 + 'a');
+            aPageNumValue += OUString( (sal_Unicode)(char)((nNum - 1) % 26 + 'a') );
             break;
         case SVX_ROMAN_UPPER:
             bUpper = sal_True;
@@ -1056,14 +1056,13 @@ String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;
         case SVX_NUMBER_NONE:
-            aPageNumValue.Erase();
-            aPageNumValue += sal_Unicode(' ');
+            aPageNumValue = OUString(" ");
             break;
         default:
             aPageNumValue += OUString::number(nNum);
     }
 
-    return(aPageNumValue);
+    return aPageNumValue;
 }
 
 
@@ -1071,14 +1070,15 @@ String SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 // Rename layout template
 // Keep in mind that rOldLayoutName contains the _complete_ name of the layout
 // (including ~LT~). This is unlike rNewName.
-void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName)
+void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName)
 {
-    String aOldName(rOldLayoutName);
-    sal_uInt16 nPos = aOldName.SearchAscii( SD_LT_SEPARATOR );
+    OUString aSep(SD_LT_SEPARATOR);
+    OUString aOldName(rOldLayoutName);
+    sal_Int32 nPos = aOldName.indexOf( aSep );
 
     // erase everything after '~LT~'
-    aOldName.Erase(nPos + sizeof(SD_LT_SEPARATOR) - 1 );
-    sal_uInt16 nLen = aOldName.Len();
+    if (nPos != -1)
+        aOldName = aOldName.copy(0, nPos + aSep.getLength());
 
     std::vector<StyleReplaceData> aReplList;
     SfxStyleSheetIterator aIter(mxStyleSheetPool.get(), SD_STYLE_FAMILY_MASTERPAGE);
@@ -1086,13 +1086,12 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 
     while (pSheet)
     {
-        String aSheetName = pSheet->GetName();
+        OUString aSheetName = pSheet->GetName();
 
         // if the sheetname starts with aOldName + "~LT~"
-        if (aSheetName.Match(aOldName) == nLen)
+        if (aSheetName.startsWith(aOldName))
         {
-            aSheetName.Erase(0, nLen - sizeof(SD_LT_SEPARATOR) + 1 );
-            aSheetName.Insert(rNewName, 0);
+            aSheetName = aSheetName.replaceAt(0, aOldName.getLength() - aSep.getLength(), rNewName);
 
             StyleReplaceData aReplData;
             aReplData.nFamily     = pSheet->GetFamily();
@@ -1109,9 +1108,8 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
 
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
-    String aPageLayoutName(rNewName);
-    aPageLayoutName.AppendAscii( SD_LT_SEPARATOR );
-    aPageLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
+    OUString aPageLayoutName(rNewName);
+    aPageLayoutName += aSep + SD_RESSTR(STR_LAYOUT_OUTLINE);
 
     // Inform all text objects on pages that use the renamed layout and set the
     // new name.
@@ -1119,7 +1117,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     for (nPage = 0; nPage < GetPageCount(); nPage++)
     {
         SdPage* pPage = (SdPage*) GetPage(nPage);
-        String aTemp(pPage->GetLayoutName());
+        OUString aTemp(pPage->GetLayoutName());
 
         if (aTemp == rOldLayoutName)
         {
@@ -1161,7 +1159,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
     {
         SdPage* pPage = (SdPage*) GetMasterPage(nPage);
-        String aTemp(pPage->GetLayoutName());
+        OUString aTemp(pPage->GetLayoutName());
 
         if (aTemp == rOldLayoutName)
         {

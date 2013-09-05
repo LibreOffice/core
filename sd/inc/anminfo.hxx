@@ -46,22 +46,22 @@ public:
     sal_Bool                    mbDimHide;      ///< hide rather than dim
     Color                       maBlueScreen;   ///< identifies "background pixels"
     Color                       maDimColor;     ///< for fading the object
-    String                      maSoundFile;    ///< Path to the sound file in MS DOS notation
+    OUString                    maSoundFile;    ///< Path to the sound file in MS DOS notation
     sal_Bool                    mbSoundOn;      ///< Sound on / off
     sal_Bool                    mbPlayFull;     ///< play sound completely.
     SdrPathObj*                 mpPathObj;      ///< The path object
     ::com::sun::star::presentation::ClickAction     meClickAction;  ///< Action at mouse click
     ::com::sun::star::presentation::AnimationEffect meSecondEffect; ///< for object fading.
     ::com::sun::star::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.
-    String                      maSecondSoundFile; ///< for object fading.
+    OUString                    maSecondSoundFile; ///< for object fading.
     sal_Bool                    mbSecondSoundOn;   ///< for object fading.
     sal_Bool                    mbSecondPlayFull;  ///< for object fading.
     sal_uInt16                  mnVerb;            ///< for OLE object
     sal_uLong                   mnPresOrder;
-    SdrObject&              mrObject;
+    SdrObject&                  mrObject;
 
-    SD_DLLPUBLIC void                    SetBookmark( const String& rBookmark );
-    SD_DLLPUBLIC String                  GetBookmark();
+    SD_DLLPUBLIC void           SetBookmark( const OUString& rBookmark );
+    SD_DLLPUBLIC OUString       GetBookmark();
 public:
                             SdAnimationInfo(SdrObject& rObject);
                             SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);

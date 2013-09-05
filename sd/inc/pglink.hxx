@@ -31,7 +31,7 @@ class SdPageLink : public ::sfx2::SvBaseLink
     SdPage* pPage;
 
 public:
-    SdPageLink(SdPage* pPg, const String& rFileName, const String& rBookmarkName);
+    SdPageLink(SdPage* pPg, const OUString& rFileName, const OUString& rBookmarkName);
     virtual ~SdPageLink();
 
     virtual void Closed();
