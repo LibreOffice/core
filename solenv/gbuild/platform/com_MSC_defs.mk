@@ -117,6 +117,8 @@ gb_AFLAGS := $(AFLAGS)
 # C4626: 'derived class' : assignment operator could not be generated
 #   because a base class assignment operator is inaccessible
 
+# C4702: unreachable code
+
 # C4706: assignment within conditional expression
 
 # C4800: 'type' : forcing value to bool 'true' or 'false' (performance
@@ -184,6 +186,26 @@ gb_CXXFLAGS := \
 ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
 gb_CXXFLAGS += \
 	-wd4996 \
+
+endif
+
+ifneq ($(ENABLE_LTO),)
+
+# Sigh, but there are cases of C4702 when using link-time code
+# generation and optimisation where I couldn't get
+# __pragma(warning(disable:4702)) to help. Especially, the
+# ImplInheritanceHelper2() {} in <cppuhelper/implbase2.hxx>
+# was reported as containing "unreachable code" when linking
+# the dbaccess dbu library. Let's try globally disabling C4702.
+
+# Might be fixed in VS2013 though?
+# VCVER=100 for VS2010 and VCVER=110 for VS2012
+
+ifneq ($(filter 100 110,$(VCVER)),)
+gb_CXXFLAGS += \
+	-wd4702 \
+
+endif
 
 endif
 
