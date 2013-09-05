@@ -197,7 +197,7 @@ struct UndoTransitionImpl
     sal_Bool mbNewTransitionDirection;
     sal_Int32 mnNewTransitionFadeColor;
     double mfNewTransitionDuration;
-    String maNewSoundFile;
+    OUString maNewSoundFile;
     bool mbNewSoundOn;
     bool mbNewLoopSound;
     bool mbNewStopSound;
@@ -207,7 +207,7 @@ struct UndoTransitionImpl
     sal_Bool mbOldTransitionDirection;
     sal_Int32 mnOldTransitionFadeColor;
     double mfOldTransitionDuration;
-    String maOldSoundFile;
+    OUString maOldSoundFile;
     bool mbOldSoundOn;
     bool mbOldLoopSound;
     bool mbOldStopSound;

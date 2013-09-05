@@ -104,11 +104,11 @@ SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObject) const
     return new SdAnimationInfo(*this, *pObject );
 }
 
-void SdAnimationInfo::SetBookmark( const String& rBookmark )
+void SdAnimationInfo::SetBookmark( const OUString& rBookmark )
 {
     if( meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK )
     {
-        String sURL = OUString('#');
+        OUString sURL("#");
         sURL += rBookmark;
         SvxFieldItem aURLItem( SvxURLField( sURL, sURL ), EE_FEATURE_FIELD );
         mrObject.SetMergedItem( aURLItem );
@@ -120,9 +120,9 @@ void SdAnimationInfo::SetBookmark( const String& rBookmark )
     }
 }
 
-String SdAnimationInfo::GetBookmark()
+OUString SdAnimationInfo::GetBookmark()
 {
-    String sBookmark;
+    OUString sBookmark;
 
     const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem* >( &mrObject.GetMergedItem( EE_FEATURE_FIELD ) );
     if( pFldItem )
@@ -132,8 +132,8 @@ String SdAnimationInfo::GetBookmark()
             sBookmark = pURLField->GetURL();
     }
 
-    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && sBookmark.Len() && (sBookmark.GetChar(0) == '#') )
-        sBookmark = sBookmark.Copy( 1 );
+    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && !sBookmark.isEmpty() && (sBookmark[0] == '#') )
+        sBookmark = sBookmark.copy( 1 );
 
     return sBookmark;
 }

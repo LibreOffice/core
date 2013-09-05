@@ -68,7 +68,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         maLayoutName = mxMasterPage->GetLayoutName();
 
         OUString aLayoutName( maLayoutName );
-        const sal_uInt32 nSepIdx = aLayoutName.indexOf( SD_LT_SEPARATOR );
+        const sal_Int32 nSepIdx = aLayoutName.indexOf( SD_LT_SEPARATOR );
         if (nSepIdx != -1)
             aLayoutName = aLayoutName.copy(0, nSepIdx + 4);
 

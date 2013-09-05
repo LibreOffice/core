@@ -41,7 +41,7 @@ public:
 
 private:
     PageVec       maPages;
-    String          aName;
+    OUString        aName;
     SdDrawDocument* pDoc;
 
     // this is a weak reference to a possible living api wrapper for this custom show
@@ -70,8 +70,8 @@ public:
     /** Removes all occurences of pPage. */
     void RemovePage( const SdPage* pPage );
 
-    void   SetName(const String& rName);
-    String GetName() const;
+    void   SetName(const OUString& rName);
+    OUString GetName() const;
 
     SdDrawDocument* GetDoc() const { return pDoc; }
 

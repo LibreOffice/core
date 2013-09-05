@@ -34,7 +34,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class SdPage;
-class String;
 
 namespace sd {
 
@@ -72,7 +71,7 @@ private:
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMape,
-                                       String aFilaname );
+                                       OUString aFilename );
 };
 
 }

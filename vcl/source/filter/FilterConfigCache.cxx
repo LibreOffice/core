@@ -88,8 +88,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
                 bIsPixelFormat = sal_True;
         }
         OUString sTemp(SVLIBRARY("?"));
-        sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
-        sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
+        sFilterName = sTemp.replaceFirst("?", sFilterName);
     }
     return ! sFilterName.isEmpty();
 }

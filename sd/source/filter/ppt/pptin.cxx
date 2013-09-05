@@ -1331,7 +1331,7 @@ sal_Bool ImplSdPPTImport::Import()
             rStCtrl >> nFlags;
         }
         // set the current custom show
-        if ( aCustomShow.getLength() )
+        if ( !aCustomShow.isEmpty() )
         {
             SdCustomShowList* pList = mpDoc->GetCustomShowList( sal_False );
             if ( pList )

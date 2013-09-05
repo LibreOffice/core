@@ -71,16 +71,16 @@ namespace sd {
     struct SD_DLLPUBLIC HeaderFooterSettings
     {
         bool mbHeaderVisible;
-        String maHeaderText;
+        OUString maHeaderText;
 
         bool mbFooterVisible;
-        String maFooterText;
+        OUString maFooterText;
 
         bool mbSlideNumberVisible;
 
         bool mbDateTimeVisible;
         bool mbDateTimeIsFixed;
-        String maDateTimeText;
+        OUString maDateTimeText;
         int meDateTimeFormat;
 
         HeaderFooterSettings();
@@ -119,10 +119,10 @@ protected:
     sal_Bool    mbSoundOn;                ///< with / without sound.
     sal_Bool    mbExcluded;               ///< will (not) be displayed during show.
     OUString    maLayoutName;             ///< Name of the layout
-    String      maSoundFile;              ///< Path to sound file (MSDOS notation).
+    OUString    maSoundFile;              ///< Path to sound file (MSDOS notation).
     bool        mbLoopSound;
     bool        mbStopSound;
-    String      maCreatedPageName;        ///< generated page name by GetPageName.
+    OUString    maCreatedPageName;        ///< generated page name by GetPageName.
     OUString    maFileName;               ///< file name.
     OUString    maBookmarkName;           ///< Bookmark name.
     sal_Bool    mbScaleObjects;           ///< Objects should be scaled
@@ -180,7 +180,7 @@ public:
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
-    String          GetPresObjText(PresObjKind eObjKind) const;
+    OUString        GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
     bool            RestoreDefaultText( SdrObject* pObj );
@@ -209,7 +209,7 @@ public:
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
 
-    void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const String& rStr );
+    void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rStr );
 
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }
     PageKind    GetPageKind() const                  { return mePageKind; }
@@ -235,8 +235,8 @@ public:
     void        SetScaleObjects(sal_Bool bScale)        { mbScaleObjects = bScale; }
     sal_Bool        IsScaleObjects() const              { return mbScaleObjects; }
 
-    void        SetSoundFile(const String& rStr)    { maSoundFile = rStr; }
-    String      GetSoundFile() const                { return maSoundFile; }
+    void        SetSoundFile(const OUString& rStr)    { maSoundFile = rStr; }
+    OUString    GetSoundFile() const                { return maSoundFile; }
 
     void        SetLoopSound( bool bLoopSound ) { mbLoopSound = bLoopSound; }
     bool        IsLoopSound() const                 { return mbLoopSound; }
@@ -265,10 +265,10 @@ public:
     void            SetLayoutName(OUString aName);
     virtual OUString GetLayoutName() const       { return maLayoutName; }
 
-    void            SetFileName(const String& aName) { maFileName = aName; }
-    virtual String  GetFileName() const       { return maFileName; }
-    void            SetBookmarkName(const String& aName) { maBookmarkName = aName; }
-    virtual String  GetBookmarkName() const       { return maBookmarkName; }
+    void            SetFileName(const OUString& aName) { maFileName = aName; }
+    virtual OUString GetFileName() const       { return maFileName; }
+    void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
+    virtual OUString GetBookmarkName() const       { return maBookmarkName; }
     SdPageLink*     GetLink() { return mpPageLink; }
 
     void            ConnectLink();
@@ -277,10 +277,10 @@ public:
     void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
                          sal_Bool bScaleAllObj);
 
-    const String&   GetName() const;
-    String          GetRealName() const { return FmFormPage::GetName(); };
+    const OUString&   GetName() const;
+    OUString          GetRealName() const { return FmFormPage::GetName(); };
 
-    void    SetPresentationLayout(const String& rLayoutName,
+    void    SetPresentationLayout(const OUString& rLayoutName,
                                   sal_Bool bReplaceStyleSheets = sal_True,
                                   sal_Bool bSetMasterPage = sal_True,
                                   sal_Bool bReverseOrder = sal_False);
@@ -324,7 +324,7 @@ public:
 
     /** Set the name of the page and broadcast a model change.
     */
-    virtual void SetName (const String& rName);
+    virtual void SetName (const OUString& rName);
 
     const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
     void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );

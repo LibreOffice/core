@@ -99,8 +99,8 @@ struct StyleReplaceData
 {
     SfxStyleFamily  nFamily;
     SfxStyleFamily  nNewFamily;
-    String          aName;
-    String          aNewName;
+    OUString        aName;
+    OUString        aNewName;
 };
 
 enum DocCreationMode
@@ -153,7 +153,7 @@ private:
     SdTransferable *    mpCreatingTransferable;
     sal_Bool                mbHasOnlineSpellErrors;
     sal_Bool                mbInitialOnlineSpellingEnabled;
-    String              maBookmarkFile;
+    OUString            maBookmarkFile;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
     sd::PresentationSettings maPresentationSettings;
@@ -222,7 +222,7 @@ public:
 
     SvxNumType          GetPageNumType() const;
     void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
-    SD_DLLPUBLIC String              CreatePageNumValue(sal_uInt16 nNum) const;
+    SD_DLLPUBLIC OUString CreatePageNumValue(sal_uInt16 nNum) const;
 
     DocumentType        GetDocumentType() const { return meDocType; }
 
@@ -247,10 +247,10 @@ public:
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
 
     void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, sal_Bool bOnlyDuplicatePages=sal_False, sal_Bool bUndo=sal_True );
-    SD_DLLPUBLIC void   SetMasterPage(sal_uInt16 nSdPageNum, const String& rLayoutName,
+    SD_DLLPUBLIC void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
                                       SdDrawDocument* pSourceDoc, sal_Bool bMaster, sal_Bool bCheckMasters);
 
-    SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const String& rBookmarkFile);
+    SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
     SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
 
     sal_Bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
@@ -331,7 +331,7 @@ public:
 
     SD_DLLPUBLIC void   CloseBookmarkDoc();
 
-    SdrObject*          GetObj(const String& rObjName) const;
+    SdrObject*          GetObj(const OUString& rObjName) const;
 
     /** Return the first page that has the given name.  Regular pages and
         notes pages are searched first.  When not found then the master
@@ -346,7 +346,7 @@ public:
             Returns the index of the page with the given name or
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
     */
-    sal_uInt16 GetPageByName(const String& rPgName, sal_Bool& rbIsMasterPage ) const;
+    sal_uInt16 GetPageByName(const OUString& rPgName, sal_Bool& rbIsMasterPage ) const;
     SD_DLLPUBLIC SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
     SD_DLLPUBLIC sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
 
@@ -410,7 +410,7 @@ public:
     void                SetTextDefaults() const;
 
     void                CreateLayoutTemplates();
-    void                RenameLayoutTemplate(const String& rOldLayoutName, const String& rNewName);
+    void                RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName);
 
     void                CreateDefaultCellStyles();
 
@@ -497,8 +497,8 @@ public:
     sal_uInt16 CreatePage (
         SdPage* pCurrentPage,
         PageKind ePageKind,
-        const String& sStandardPageName,
-        const String& sNotesPageName,
+        const OUString& sStandardPageName,
+        const OUString& sNotesPageName,
         AutoLayout eStandardLayout,
         AutoLayout eNotesLayout,
         sal_Bool bIsPageBack,
@@ -547,8 +547,8 @@ public:
     sal_uInt16 DuplicatePage (
         SdPage* pCurrentPage,
         PageKind ePageKind,
-        const String& sStandardPageName,
-        const String& sNotesPageName,
+        const OUString& sStandardPageName,
+        const OUString& sNotesPageName,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         const sal_Int32 nInsertPosition = -1);
@@ -566,7 +566,7 @@ public:
      */
     SD_DLLPUBLIC SdStyleSheetPool* GetSdStyleSheetPool() const;
 
-       void UpdatePageRelativeURLs(const String& rOldName, const String& rNewName);
+       void UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName);
 
     void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
@@ -613,8 +613,8 @@ private:
     sal_uInt16 InsertPageSet (
         SdPage* pCurrentPage,
         PageKind ePageKind,
-        const String& sStandardPageName,
-        const String& sNotesPageName,
+        const OUString& sStandardPageName,
+        const OUString& sNotesPageName,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj,
         SdPage* pStandardPage,
@@ -639,7 +639,7 @@ private:
     void SetupNewPage (
         SdPage* pPreviousPage,
         SdPage* pPage,
-        const String& sPageName,
+        const OUString& sPageName,
         sal_uInt16 nInsertionPoint,
         sal_Bool bIsPageBack,
         sal_Bool bIsPageObj);

@@ -465,13 +465,11 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         else if ( pParams->Name == "Compression" )
         {
             pParams->Value >>= aStr;
-            String aTmp( aStr );
-            if(aTmp.Len())
+            OUString aTmp( aStr );
+            if(!aTmp.isEmpty())
             {
-                xub_StrLen nPos = aTmp.Search( '%' );
-                if(nPos != STRING_NOTFOUND)
-                    aTmp.Erase(nPos,1);
-                mnCompression = (sal_Int16)aTmp.ToInt32();
+                aTmp = aTmp.replaceFirst("%", "");
+                mnCompression = (sal_Int16)aTmp.toInt32();
             }
         }
         else if ( pParams->Name == "Width" )

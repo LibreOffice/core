@@ -698,7 +698,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         }
         else
         {
-            String aBookmark( rBookmark );
+            OUString aBookmark( rBookmark );
 
             // Is the bookmark a page?
             nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
