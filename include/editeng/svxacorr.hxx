@@ -46,17 +46,15 @@ class Window;
 
 struct CompareSvStringsISortDtor
 {
-    bool operator()( OUString* const& lhs, OUString* const& rhs ) const
+    bool operator()( OUString const& lhs, OUString const& rhs ) const
     {
-        return lhs->compareToIgnoreAsciiCase( *rhs ) < 0;
+        return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
     }
 };
 
 class SvStringsISortDtor
-    : public o3tl::sorted_vector<OUString*, CompareSvStringsISortDtor>
+    : public o3tl::sorted_vector<OUString, CompareSvStringsISortDtor>
 {
-public:
-    ~SvStringsISortDtor() { DeleteAndDestroyAll(); }
 };
 
 // Auto correct flags

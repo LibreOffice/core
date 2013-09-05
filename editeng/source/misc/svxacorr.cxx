@@ -1741,7 +1741,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists* pList = pLangTable->find(eLang)->second;
         OUString _sTemp(sWord);
-        if(pList->GetWrdSttExceptList()->find(&_sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(_sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
 
@@ -1750,7 +1750,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey1)->second;
-        if(pList->GetWrdSttExceptList()->find(&sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
 
@@ -1758,7 +1758,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey2)->second;
-        if(pList->GetWrdSttExceptList()->find(&sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
 
@@ -1766,7 +1766,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     {
         //the language is available - so bring it on
         SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_UNDETERMINED)->second;
-        if(pList->GetWrdSttExceptList()->find(&sTemp) != pList->GetWrdSttExceptList()->end() )
+        if(pList->GetWrdSttExceptList()->find(sTemp) != pList->GetWrdSttExceptList()->end() )
             return sal_True;
     }
     return sal_False;
@@ -1775,21 +1775,21 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
     OUString sAbk('~');
-    SvStringsISortDtor::const_iterator it = pList->find( &sAbk );
+    SvStringsISortDtor::const_iterator it = pList->find( sAbk );
     sal_uInt16 nPos = it - pList->begin();
     if( nPos < pList->size() )
     {
         String sLowerWord( sWord ); sLowerWord.ToLowerAscii();
-        const OUString* pAbk;
+        OUString pAbk;
         for( sal_uInt16 n = nPos;
                 n < pList->size() &&
-                '~' == (*( pAbk = (*pList)[ n ]))[ 0 ];
+                '~' == ( pAbk = (*pList)[ n ])[ 0 ];
             ++n )
         {
             // ~ and ~. are not allowed!
-            if( 2 < pAbk->getLength() && pAbk->getLength() - 1 <= sWord.Len() )
+            if( 2 < pAbk.getLength() && pAbk.getLength() - 1 <= sWord.Len() )
             {
-                String sLowerAbk( *pAbk ); sLowerAbk.ToLowerAscii();
+                String sLowerAbk( pAbk ); sLowerAbk.ToLowerAscii();
                 for( xub_StrLen i = sLowerAbk.Len(), ii = sLowerWord.Len(); i; )
                 {
                     if( !--i )      // agrees
@@ -1801,7 +1801,7 @@ static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const Str
             }
         }
     }
-    OSL_ENSURE( !(nPos && '~' == (*(*pList)[ --nPos ])[ 0 ] ),
+    OSL_ENSURE( !(nPos && '~' == (*pList)[ --nPos ][ 0 ] ),
             "Wrongly sorted exception list?" );
     return sal_False;
 }
@@ -1819,7 +1819,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = pLangTable->find(eLang)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(&sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
             return sal_True;
     }
 
@@ -1827,7 +1827,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     if(nTmpKey1 != eLang && (pLangTable->find(nTmpKey1) != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
     {
         const SvStringsISortDtor* pList = pLangTable->find(nTmpKey1)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(&sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
             return sal_True;
     }
 
@@ -1835,7 +1835,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = pLangTable->find(nTmpKey2)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(&sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
             return sal_True;
     }
 
@@ -1843,7 +1843,7 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     {
         //the language is available - so bring it on
         const SvStringsISortDtor* pList = pLangTable->find(LANGUAGE_UNDETERMINED)->second->GetCplSttExceptList();
-        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(&sTemp) != pList->end() )
+        if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->find(sTemp) != pList->end() )
             return sal_True;
     }
     return sal_False;
@@ -1929,7 +1929,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                                         SotStorageRef& rStg)
 {
     if( rpLst )
-        rpLst->DeleteAndDestroyAll();
+        rpLst->clear();
     else
         rpLst = new SvStringsISortDtor;
 
@@ -2123,8 +2123,8 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 
 sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
-    OUString* pNew = new OUString( rNew );
-    if( rNew.Len() && GetCplSttExceptList()->insert( pNew ).second )
+    sal_Bool aRet = sal_False;
+    if( rNew.Len() && GetCplSttExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
@@ -2136,17 +2136,16 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time( Time::SYSTEM );
+        aRet = sal_True;
     }
-    else
-        delete pNew, pNew = 0;
-    return 0 != pNew;
+    return aRet;
 }
 
 sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
-    OUString* pNew = new OUString( rNew );
+    sal_Bool aRet = sal_False;
     SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
-    if( rNew.Len() && pExceptList && pExceptList->insert( pNew ).second )
+    if( rNew.Len() && pExceptList && pExceptList->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
@@ -2158,10 +2157,9 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
         aLastCheckTime = Time( Time::SYSTEM );
+        aRet = sal_True;
     }
-    else
-        delete pNew, pNew = 0;
-    return 0 != pNew;
+    return aRet;
 }
 
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
@@ -2330,7 +2328,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             if (pTmpWordList)
             {
                 SaveExceptList_Imp( *pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xDstStg, sal_True );
-                pTmpWordList->DeleteAndDestroyAll();
+                pTmpWordList->clear();
                 pTmpWordList = NULL;
             }
 
@@ -2341,7 +2339,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             if (pTmpWordList)
             {
                 SaveExceptList_Imp( *pTmpWordList, pXMLImplCplStt_ExcptLstStr, xDstStg, sal_True );
-                pTmpWordList->DeleteAndDestroyAll();
+                pTmpWordList->clear();
             }
 
             GetAutocorrWordList();

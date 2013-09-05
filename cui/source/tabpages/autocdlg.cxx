@@ -1405,20 +1405,17 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    OUString* pString = (*pWrdList)[ --i ];
+                    OUString aString = (*pWrdList)[ --i ];
 
-                    if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
+                    if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, aString))
                     {
-                      delete (*pWrdList)[ i ];
                       pWrdList->erase(i);
                     }
                 }
 
                 for(std::vector<OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++it)
                 {
-                    OUString* s = new OUString(*it);
-                    if(!pWrdList->insert(s).second)
-                        delete s;
+                    pWrdList->insert(*it);
                 }
                 pAutoCorrect->SaveWrdSttExceptList(eCurLang);
             }
@@ -1431,19 +1428,16 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    OUString* pString = (*pCplList)[ --i ];
-                    if( !lcl_FindInArray(rArrays.aAbbrevStrings, *pString))
+                    OUString aString = (*pCplList)[ --i ];
+                    if( !lcl_FindInArray(rArrays.aAbbrevStrings, aString))
                     {
-                        delete (*pCplList)[ i ];
                         pCplList->erase(i);
                     }
                 }
 
                 for(std::vector<OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
                 {
-                    OUString* s = new OUString(*it);
-                    if(!pCplList->insert(s).second)
-                        delete s;
+                    pCplList->insert(*it);
                 }
 
                 pAutoCorrect->SaveCplSttExceptList(eCurLang);
@@ -1460,19 +1454,16 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            OUString* pString = (*pWrdList)[ --i ];
-            if( USHRT_MAX == m_pDoubleCapsLB->GetEntryPos(*pString) )
+            OUString aString = (*pWrdList)[ --i ];
+            if( USHRT_MAX == m_pDoubleCapsLB->GetEntryPos(aString) )
             {
-                delete (*pWrdList)[ i ];
                 pWrdList->erase(i);
             }
         }
         nCount = m_pDoubleCapsLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            OUString* pEntry = new OUString( m_pDoubleCapsLB->GetEntry( i ) );
-            if( !pWrdList->insert( pEntry ).second)
-                delete pEntry;
+            pWrdList->insert( m_pDoubleCapsLB->GetEntry( i ) );
         }
         pAutoCorrect->SaveWrdSttExceptList(eLang);
     }
@@ -1485,19 +1476,16 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            OUString* pString = (*pCplList)[ --i ];
-            if( USHRT_MAX == m_pAbbrevLB->GetEntryPos(*pString) )
+            OUString aString = (*pCplList)[ --i ];
+            if( USHRT_MAX == m_pAbbrevLB->GetEntryPos(aString) )
             {
-                delete (*pCplList)[ i ];
                 pCplList->erase(i);
             }
         }
         nCount = m_pAbbrevLB->GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
-            OUString* pEntry = new OUString( m_pAbbrevLB->GetEntry( i ) );
-            if( !pCplList->insert( pEntry ).second)
-                delete pEntry;
+            pCplList->insert( m_pAbbrevLB->GetEntry( i ) );
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
     }
@@ -1576,11 +1564,11 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         sal_uInt16 i;
         for( i = 0; i < pCplList->size(); i++ )
         {
-            m_pAbbrevLB->InsertEntry(*(*pCplList)[i]);
+            m_pAbbrevLB->InsertEntry((*pCplList)[i]);
         }
         for( i = 0; i < pWrdList->size(); i++ )
         {
-            m_pDoubleCapsLB->InsertEntry(*(*pWrdList)[i]);
+            m_pDoubleCapsLB->InsertEntry((*pWrdList)[i]);
         }
     }
 }

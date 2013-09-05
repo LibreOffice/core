@@ -100,7 +100,7 @@ sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
         {
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,
-                          OUString( *rList[i] ) );
+                          rList[i] );
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, sal_True, sal_True);
         }
     }
