@@ -29,6 +29,14 @@
 #include <string>
 #include <sstream>
 
+#include "sal/types.h"
+
+#if defined(SCQAHELPER_DLLIMPLEMENTATION)
+#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
+#else
+#define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
+#endif
+
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
@@ -49,7 +57,7 @@
 
 enum StringType { PureString, FormulaValue, StringValue };
 
-SC_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
+SCQAHELPER_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 
 #define CHECK_OPTIMAL 0x1
 
@@ -95,25 +103,25 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
 // eventually perhaps iOS) special cases here, too)?  Please move this to osl,
 // it sure looks gemerally useful. Or am I missing something?
 
-SC_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
+SCQAHELPER_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
 
-SC_DLLPUBLIC void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue);
+SCQAHELPER_DLLPUBLIC void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue);
 
 //need own handler because conditional formatting strings must be generated
-SC_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
+SCQAHELPER_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
 
-SC_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
+SCQAHELPER_DLLPUBLIC const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
 
-SC_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
+SCQAHELPER_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rChartObj);
 
-SC_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
+SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
-SC_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
+SCQAHELPER_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
 /**
  * Convert formula token array to a formula string.
  */
-SC_DLLPUBLIC OUString toString(
+SCQAHELPER_DLLPUBLIC OUString toString(
     ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray,
     formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE);
 
@@ -150,7 +158,7 @@ struct assertion_traits<ScRange>
 class ScDocShellRef;
 class ScDocShell;
 
-class SC_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
+class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
 protected:
     OUString m_aBaseString;

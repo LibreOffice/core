@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_externals,scqahelper, \
 ))
 
 $(eval $(call gb_Library_add_defs,scqahelper,\
-	-DSC_DLLIMPLEMENTATION \
+	-DSCQAHELPER_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,scqahelper))
