@@ -65,7 +65,7 @@ published struct Locale
      */
     string Language;
 
-    /** specifies an <strong>ISO Country Code.</strong>
+    /** specifies an <strong>ISO Country Code</strong>.
 
         <p>These codes are the upper-case two-letter codes as
         defined by ISO-3166.  You can find a full list of these codes at a
