@@ -577,17 +577,24 @@ Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& nam
         throw(RuntimeException)
 {
     if (!ref_name.equals(name)) {
-        sal_Int32 index = 0;
-        OUString language = name.getToken(0, cUnder, index);
-        OUString country = name.getToken(0, cUnder, index);
-        Locale loc(language, country, OUString());
+        OUString aLocStr, id;
+        sal_Int32 nLastUnder = name.lastIndexOf( cUnder);
+        SAL_WARN_IF( nLastUnder < 1, "i18npool",
+                "LocaleData::getCalendarItemByName - no '_' or first in name can't be right: " << name);
+        if (nLastUnder >= 0)
+        {
+            aLocStr = name.copy( 0, nLastUnder);
+            if (nLastUnder + 1 < name.getLength())
+                id = name.copy( nLastUnder + 1);
+        }
+        Locale loc( LanguageTag::convertToLocale( aLocStr.replace( cUnder, cHyphen)));
         Sequence < Calendar2 > cals;
         if (loc == rLocale) {
             cals = calendarsSeq;
         } else {
             cals = getAllCalendars2(loc);
         }
-        const OUString& id = name.getToken(0, cUnder, index);
+        sal_Int32 index;
         for (index = 0; index < cals.getLength(); index++) {
             if (id.equals(cals[index].Name)) {
                 ref_cal = cals[index];
