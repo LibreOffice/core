@@ -39,6 +39,7 @@ namespace connectivity { namespace jdbc
         :m_environment( environment )
         ,m_currentThread( environment )
         ,m_oldContextClassLoader( environment )
+        ,m_setContextClassLoaderMethod( NULL )
     {
         if ( !newClassLoader.is() )
             return;
