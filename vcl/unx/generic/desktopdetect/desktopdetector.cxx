@@ -318,7 +318,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             rtl_getAppCommandArg( i, &aParam.pData );
             if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
             {
-                osl_getCommandArg( i+1, &aParam.pData );
+                rtl_getAppCommandArg( i+1, &aParam.pData );
                 aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
                 pDisplayStr = aBParm.getStr();
                 break;
