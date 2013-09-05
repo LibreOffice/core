@@ -452,8 +452,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             pSdrObj->SetLogicRect(rRect);
         }
 
-        String aString = GetPresObjText(eObjKind);
-        if( (aString.Len() || bForceText) && pSdrObj->ISA(SdrTextObj) )
+        OUString aString = GetPresObjText(eObjKind);
+        if( (!aString.isEmpty() || bForceText) && pSdrObj->ISA(SdrTextObj) )
         {
             SdrOutliner* pOutliner = ( (SdDrawDocument*) GetModel() )->GetInternalOutliner();
 
@@ -518,9 +518,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         {
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
-                String aName(maLayoutName);
-                aName += sal_Unicode( ' ' );
-                aName += OUString::number( nLevel );
+                OUString aName( maLayoutName + " " + OUString::number( nLevel ) );
                 SfxStyleSheet* pSheet = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                 DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
@@ -602,9 +600,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     {
         case PRESOBJ_OUTLINE:
         {
-            aName = GetLayoutName();
-            aName += sal_Unicode( ' ' );
-            aName += OUString::number( 1 );
+            aName = GetLayoutName() + " " + OUString::number( 1 );
         }
         break;
 
@@ -1870,13 +1866,12 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         }
                         else if (pObj == GetPresObj(PRESOBJ_OUTLINE, nIndexOutline))
                         {
-                            String aName(GetLayoutName());
-                            aName += sal_Unicode( ' ' );
+                            OUString aName(GetLayoutName());
+                            aName += " ";
 
-                            for (sal_uInt16 i=1; i<=9; i++)
+                            for (sal_Int32 i=1; i<=9; i++)
                             {
-                                String sLayoutName(aName);
-                                sLayoutName += OUString::number( (sal_Int32)i );
+                                OUString sLayoutName( aName + OUString::number( i ) );
                                 SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)((SdDrawDocument*) pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE);
 
                                 if (pOutlineSheet)
@@ -2028,9 +2023,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
                 // assign new template
-                String aName(rPage.GetLayoutName());
-                aName += sal_Unicode( ' ' );
-                aName += OUString::number( nLevel );
+                OUString aName( rPage.GetLayoutName() + " " + OUString::number( nLevel ) );
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
 
                 if (pSheet)
@@ -2304,7 +2297,7 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 |*
 \************************************************************************/
 
-void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const String& rString )
+void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const OUString& rString )
 {
     if ( pObj )
     {
@@ -2463,10 +2456,10 @@ void SdPage::SetLayoutName(OUString aName)
 |*
 \************************************************************************/
 
-const String& SdPage::GetName() const
+const OUString& SdPage::GetName() const
 {
-    String aCreatedPageName( maCreatedPageName );
-    if (GetRealName().Len() == 0)
+    OUString aCreatedPageName( maCreatedPageName );
+    if (GetRealName().isEmpty())
     {
         if ((mePageKind == PK_STANDARD || mePageKind == PK_NOTES) && !mbMaster)
         {
@@ -2474,7 +2467,7 @@ const String& SdPage::GetName() const
             sal_uInt16  nNum = (GetPageNum() + 1) / 2;
 
             aCreatedPageName = SD_RESSTR(STR_PAGE);
-            aCreatedPageName += sal_Unicode( ' ' );
+            aCreatedPageName += " ";
             if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
             {
                 // if the document has number none as a formating
@@ -2502,14 +2495,14 @@ const String& SdPage::GetName() const
 
     if (mePageKind == PK_NOTES)
     {
-        aCreatedPageName += sal_Unicode( ' ' );
+        aCreatedPageName += " ";
         aCreatedPageName += SD_RESSTR(STR_NOTES);
     }
     else if (mePageKind == PK_HANDOUT && mbMaster)
     {
-        aCreatedPageName += OUString(" (");
-        aCreatedPageName += SdResId(STR_HANDOUT).toString();
-        aCreatedPageName += sal_Unicode( ')' );
+        aCreatedPageName += " (";
+        aCreatedPageName += SD_RESSTR(STR_HANDOUT);
+        aCreatedPageName += ")";
     }
 
     const_cast< SdPage* >(this)->maCreatedPageName = aCreatedPageName;
@@ -2532,9 +2525,9 @@ Orientation SdPage::GetOrientation() const
 |*
 \************************************************************************/
 
-String SdPage::GetPresObjText(PresObjKind eObjKind) const
+OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
 {
-    String aString;
+    OUString aString;
 
     if (eObjKind == PRESOBJ_TITLE)
     {
@@ -2601,7 +2594,7 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
         aString = SD_RESSTR( STR_PRESOBJ_TABLE );
     }
 
-    return(aString);
+    return aString;
 }
 
 extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
@@ -2632,9 +2625,9 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
     return 0;
 }
 
-void SdPage::SetName (const String& rName)
+void SdPage::SetName (const OUString& rName)
 {
-    String aOldName = GetName();
+    OUString aOldName( GetName() );
     FmFormPage::SetName (rName);
     static_cast<SdDrawDocument*>(pModel)->UpdatePageRelativeURLs(aOldName, rName);
     ActionChanged();
@@ -2765,9 +2758,9 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
             ePresObjKind == PRESOBJ_NOTES   ||
             ePresObjKind == PRESOBJ_TEXT)
         {
-            String aString( GetPresObjText(ePresObjKind) );
+            OUString aString( GetPresObjText(ePresObjKind) );
 
-            if (aString.Len())
+            if (!aString.isEmpty())
             {
                 sal_Bool bVertical = sal_False;
                 OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();

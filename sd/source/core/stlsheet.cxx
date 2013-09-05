@@ -451,7 +451,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
         if (nPos >= 0)
         {
-            String aNumStr(aStyleName.copy(aOutlineStr.getLength()));
+            OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
             aInternalName = OUString(SdResId(STR_LAYOUT_OUTLINE));
             aInternalName += aNumStr;
         }

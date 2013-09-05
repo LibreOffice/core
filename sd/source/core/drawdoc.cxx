@@ -357,7 +357,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
       */
 
     {
-        String aControlLayerName( SdResId(STR_LAYER_CONTROLS) );
+        OUString aControlLayerName( SD_RESSTR(STR_LAYER_CONTROLS) );
 
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
         rLayerAdmin.NewLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
@@ -475,8 +475,8 @@ SdrModel* SdDrawDocument::AllocModel() const
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
             // Move with all of the master page's layouts
-            String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
-            aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
+            OUString aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
+            aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
             SdStyleSheetVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
         }
@@ -581,8 +581,8 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             // LayoutName and PageName must be the same
             SdPage* pPage = (SdPage*) GetMasterPage( nPage );
 
-            String aName( pPage->GetLayoutName() );
-            aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ) );
+            OUString aName( pPage->GetLayoutName() );
+            aName = aName.copy( 0, aName.indexOf( SD_LT_SEPARATOR ) );
 
             if( aName != pPage->GetName() )
                 pPage->SetName( aName );
@@ -599,7 +599,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     }
 
     // Set default style of Drawing Engine
-    String aName( SdResId(STR_STANDARD_STYLESHEET_NAME));
+    OUString aName( SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
     // #i119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
@@ -672,7 +672,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     {
         pPage = (SdPage*) GetSdPage(nSdPage, PK_STANDARD);
 
-        if (pPage && pPage->GetFileName().Len() && pPage->GetBookmarkName().Len())
+        if (pPage && !pPage->GetFileName().isEmpty() && pPage->GetBookmarkName().getLength())
         {
             pPage->SetModel(this);
         }
@@ -706,8 +706,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     if(!rPresentationShapes.isEmpty())
     {
         // Create lists of title and outline styles
-        String aName = pPage->GetLayoutName();
-        aName.Erase( aName.SearchAscii( SD_LT_SEPARATOR ));
+        OUString aName = pPage->GetLayoutName();
+        aName = aName.copy( 0, aName.indexOf( SD_LT_SEPARATOR ) );
 
         std::vector<SfxStyleSheetBase*> aOutlineList;
         pSPool->CreateOutlineSheetList(aName,aOutlineList);
@@ -759,9 +759,9 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
                 {
                     PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
-                    String aString( pPage->GetPresObjText(ePresObjKind) );
+                    OUString aString( pPage->GetPresObjText(ePresObjKind) );
 
-                    if (aString.Len())
+                    if (!aString.isEmpty())
                     {
                         sd::Outliner* pInternalOutl = GetInternalOutliner(sal_True);
                         pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );

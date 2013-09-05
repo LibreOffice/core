@@ -3024,7 +3024,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
     {
         SdDrawDocument* pDoc = GetModel()->GetDoc();
         sal_Bool bOutDummy;
-        String aNewName( rName );
+        OUString aNewName( rName );
 
         // Slide Name has to be unique
         if( pDoc && pDoc->GetPageByName( aNewName, bOutDummy ) != SDRPAGE_NOTFOUND )

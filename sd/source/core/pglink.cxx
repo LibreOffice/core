@@ -31,8 +31,8 @@
 |*
 \************************************************************************/
 
-SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
-                       const String& rBookmarkName) :
+SdPageLink::SdPageLink(SdPage* pPg, const OUString& rFileName,
+                       const OUString& rBookmarkName) :
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
     pPage(pPg)
 {
@@ -126,8 +126,8 @@ SdPageLink::~SdPageLink()
 void SdPageLink::Closed()
 {
     // the connection is closed
-    pPage->SetFileName(String());
-    pPage->SetBookmarkName(String());
+    pPage->SetFileName(OUString());
+    pPage->SetBookmarkName(OUString());
 
     SvBaseLink::Closed();
 }

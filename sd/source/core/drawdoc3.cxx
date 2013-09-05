@@ -241,11 +241,11 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 }
 
 // Opens a bookmark document
-SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
+SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
 {
     SdDrawDocument* pBookmarkDoc = NULL;
 
-    if (maBookmarkFile != rBookmarkFile && rBookmarkFile.Len())
+    if (!rBookmarkFile.isEmpty() && maBookmarkFile != rBookmarkFile)
     {
         SfxMedium* pMedium = new SfxMedium( rBookmarkFile, STREAM_READ );
         pBookmarkDoc = OpenBookmarkDoc(*pMedium);
@@ -1352,7 +1352,7 @@ String createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 }
 
 void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
-                                   const String& rLayoutName,
+                                   const OUString& rLayoutName,
                                    SdDrawDocument* pSourceDoc,
                                    sal_Bool bMaster,
                                    sal_Bool bCheckMasters)
@@ -1386,7 +1386,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         sal_Bool bLayoutReloaded = sal_False;   // Wurde ex. Layout wieder geladen?
 
         // LayoutName, Page and Notes page
-        if (rLayoutName.Len() == 0)
+        if (rLayoutName.isEmpty())
         {
             // No LayoutName: take first MasterPage
             pMaster = (SdPage*) pSourceDoc->GetMasterSdPage(0, PK_STANDARD);

@@ -197,12 +197,12 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
 
 UStringList CustomAnimationPreset::getProperties() const
 {
-    String aProperties( maProperty );
+    OUString aProperties( maProperty );
     sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
     sal_uInt16 nToken;
     UStringList aPropertyList;
     for( nToken = 0; nToken < nTokens; nToken++ )
-        aPropertyList.push_back( aProperties.GetToken( nToken ) );
+        aPropertyList.push_back( aProperties.getToken( nToken, ';' ) );
 
     return aPropertyList;
 
@@ -210,13 +210,13 @@ UStringList CustomAnimationPreset::getProperties() const
 
 bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
 {
-    String aProperties( maProperty );
-    String aProperty( rProperty );
+    OUString aProperties( maProperty );
+    OUString aProperty( rProperty );
     sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
     sal_uInt16 nToken;
     for( nToken = 0; nToken < nTokens; nToken++ )
     {
-        if( aProperties.GetToken( nToken ) == aProperty )
+        if( aProperties.getToken( nToken, ';' ) == aProperty )
             return true;
     }
 
@@ -429,7 +429,7 @@ void CustomAnimationPresets::importResources()
 void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  )
 {
 #ifdef DEBUG
-    String aMissedPresetIds;
+    OUString aMissedPresetIds;
 #endif
 
     try
@@ -470,8 +470,8 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 #ifdef DEBUG
                         else
                         {
-                            aMissedPresetIds += String(*pEffectNames);
-                            aMissedPresetIds += String( "\n" );
+                            aMissedPresetIds += OUString(*pEffectNames);
+                            aMissedPresetIds += "\n";
                         }
 #endif
                         pEffectNames++;
@@ -489,7 +489,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
     }
 
 #ifdef DEBUG
-    if( aMissedPresetIds.Len() )
+    if( !aMissedPresetIds.isEmpty() )
     {
         OStringBuffer aTmp("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n");
         aTmp.append(OUStringToOString(aMissedPresetIds,

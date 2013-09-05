@@ -114,7 +114,7 @@ public:
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
 
-    sal_uLong   Read(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
+    sal_uLong   Read(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
