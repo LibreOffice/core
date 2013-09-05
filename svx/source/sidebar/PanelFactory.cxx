@@ -48,7 +48,6 @@ using ::rtl::OUString;
 
 namespace svx { namespace sidebar {
 
-#define A2S(s) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 #define IMPLEMENTATION_NAME "org.apache.openoffice.comp.svx.sidebar.PanelFactory"
 #define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
 
