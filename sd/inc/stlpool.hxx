@@ -60,10 +60,10 @@ public:
     void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
     SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
-    SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
+    SfxStyleSheetBase*  GetTitleSheet(const OUString& rLayoutName);
 
                         // Caller has to delete the list
-    void                CreateOutlineSheetList(const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
+    void                CreateOutlineSheetList(const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
     /** creates all layout style sheets for the givin layout name if they
         don't exist yet.
@@ -73,10 +73,10 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
-    void                CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const;
-    void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
-    void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
+    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const OUString& rLayoutName, sal_Bool bCheck = sal_False );
+    void                CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const;
+    void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
+    void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
     void                CopyTableStyles(SdStyleSheetPool& rSourcePool);

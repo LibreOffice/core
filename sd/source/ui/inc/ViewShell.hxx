@@ -51,7 +51,7 @@ namespace embed {
 
 namespace sd {
 
-extern const String aEmptyStr;
+extern const OUString aEmptyStr;
 
 class DrawDocShell;
 class FrameView;

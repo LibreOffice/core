@@ -74,7 +74,7 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEve
 |*
 \************************************************************************/
 
-void SdPage::SetPresentationLayout(const String& rLayoutName,
+void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                                    sal_Bool bReplaceStyleSheets,
                                    sal_Bool bSetMasterPage,
                                    sal_Bool bReverseOrder)

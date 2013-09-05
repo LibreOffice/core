@@ -91,7 +91,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
 bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                                               Reference< XMultiServiceFactory >& xServiceFactory,
                                               UStringMap& rTransitionNameMape,
-                                              String aURL )
+                                              OUString aURL )
 {
     // import transition presets
     Reference< XAnimationNode > xAnimationNode;

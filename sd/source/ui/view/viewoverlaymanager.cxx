@@ -218,7 +218,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
                 SdResId aResId( gButtonToolTips[mnHighlightId] );
                 aResId.SetRT( RSC_STRING );
 
-                String aHelpText( aResId );
+                OUString aHelpText( aResId );
                 Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
                 mnTip = Help::ShowTip( static_cast< ::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText, 0 ) ;
             }

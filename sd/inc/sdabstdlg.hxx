@@ -39,7 +39,6 @@ namespace sd {
     class DrawView;
 }
 
-class String;
 class SfxObjectShell;
 class SfxObjectShellLock;
 class SvxFieldData;
