@@ -2202,7 +2202,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
         nAutoCmpltListCnt = m_pAutoCompleteList->size();
         for (size_t n = 0; n < nAutoCmpltListCnt; ++n)
         {
-            const String* pStr =
+            const OUString* pStr =
                 &(*m_pAutoCompleteList)[n]->GetAutoCompleteString();
             sal_uInt16 nPos = aLBEntries.InsertEntry( *pStr );
             aLBEntries.SetEntryData( nPos, (void*)pStr );
@@ -2230,7 +2230,7 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
     while( nSelCnt )
     {
         sal_uInt16 nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
-        String* pStr = static_cast<String*>(aLBEntries.GetEntryData(nPos));
+        OUString* pStr = static_cast<OUString*>(aLBEntries.GetEntryData(nPos));
         aLBEntries.RemoveEntry( nPos );
         editeng::IAutoCompleteString hack(*pStr); // UGLY
         m_pAutoCompleteList->erase(&hack);

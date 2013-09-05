@@ -52,7 +52,7 @@ public:
 
     bool InsertWord( const String& rWord, SwDoc& rDoc );
 
-    const String& operator[](size_t n) const
+    const OUString& operator[](size_t n) const
         { return m_WordList[n]->GetAutoCompleteString(); }
 
     bool IsLockWordLstLocked() const           { return bLockWordLst; }

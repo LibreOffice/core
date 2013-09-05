@@ -34,11 +34,11 @@ namespace editeng {
 class EDITENG_DLLPUBLIC IAutoCompleteString
 {
 private:
-    String m_String;
+    OUString m_String;
 public:
-    explicit IAutoCompleteString(String const& rString) : m_String(rString) {}
+    explicit IAutoCompleteString(OUString const& rString) : m_String(rString) {}
     virtual ~IAutoCompleteString() {}
-    String const& GetAutoCompleteString() const { return m_String; }
+    OUString const& GetAutoCompleteString() const { return m_String; }
 };
 
 struct CompareAutoCompleteString
@@ -46,8 +46,8 @@ struct CompareAutoCompleteString
     bool operator()(IAutoCompleteString *const& lhs,
                     IAutoCompleteString *const& rhs) const
     {
-        return lhs->GetAutoCompleteString().CompareIgnoreCaseToAscii(
-                rhs->GetAutoCompleteString()) == COMPARE_LESS;
+        return lhs->GetAutoCompleteString().compareToIgnoreAsciiCase(
+                rhs->GetAutoCompleteString()) < 0;
     }
 };
 

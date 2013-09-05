@@ -327,7 +327,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     if( n < nMinWrdLen )
     {
         for (size_t nPos = 0; nPos < m_WordList.size(); ++nPos)
-            if (m_WordList[ nPos ]->GetAutoCompleteString().Len() < n)
+            if (m_WordList[ nPos ]->GetAutoCompleteString().getLength() < n)
             {
                 SwAutoCompleteString *const pDel =
                     dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos]);
