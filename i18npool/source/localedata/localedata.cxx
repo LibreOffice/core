@@ -1520,7 +1520,7 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem.reset( pCachedItem );
-            seq[nInstalled++] = LanguageTag::convertToLocale( name.replaceAll( "_", "-"), false);
+            seq[nInstalled++] = LanguageTag::convertToLocale( name.replace( under, '-'), false);
         }
         else
         {
@@ -1628,7 +1628,7 @@ LocaleData::getSupportedServiceNames() throw( RuntimeException )
 OUString LocaleData::getFirstLocaleServiceName( const com::sun::star::lang::Locale & rLocale )
 {
     if (rLocale.Language == I18NLANGTAG_QLT)
-        return rLocale.Variant.replaceAll( "-", "_");
+        return rLocale.Variant.replace( '-', under);
     else if (!rLocale.Country.isEmpty())
         return rLocale.Language + "_" + rLocale.Country;
     else
@@ -1645,7 +1645,7 @@ OUString LocaleData::getFirstLocaleServiceName( const com::sun::star::lang::Loca
         aVec.erase( aVec.begin());
         for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
         {
-            *it = (*it).replaceAll( "-", "_");
+            *it = (*it).replace( '-', under);
         }
     }
     else if (!rLocale.Country.isEmpty())
