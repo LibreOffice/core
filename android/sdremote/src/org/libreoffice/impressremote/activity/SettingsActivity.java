@@ -27,9 +27,10 @@ public class SettingsActivity extends SherlockPreferenceActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
     }
 
+    @SuppressWarnings("deprecation")
     private void setUpPreferences() {
         // This action is deprecated
-        // but we still need to target pre-Honeycomb devices
+        // but we still need to target pre-Honeycomb devices.
 
         addPreferencesFromResource(R.xml.preferences);
     }
