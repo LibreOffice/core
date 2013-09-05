@@ -24,8 +24,7 @@ namespace sc { namespace sidebar {
 CellLineStyleValueSet::CellLineStyleValueSet( Window* pParent, const ResId& rResId)
 :   ValueSet( pParent, rResId ),
     pVDev(NULL),
-    nSelItem(0),
-    bCusEnable(false)
+    nSelItem(0)
 {
     SetColCount( 1 );
     SetLineCount( 9);
