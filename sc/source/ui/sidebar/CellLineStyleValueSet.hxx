@@ -32,7 +32,6 @@ private:
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
     Image           imgCus;
-    bool            bCusEnable;
 public:
     CellLineStyleValueSet( Window* pParent, const ResId& rResId);
     virtual ~CellLineStyleValueSet();
