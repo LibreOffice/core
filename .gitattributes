@@ -1,2 +1,4 @@
 *.doc binary
 *.sdw binary
+*.svg binary
+*.jcs binary
