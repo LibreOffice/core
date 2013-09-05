@@ -2931,7 +2931,9 @@ void SdMasterPage::setBackground( const Any& rValue )
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
-                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
+                sal_Int32 nSepIdx = aLayoutName.indexOf(SD_LT_SEPARATOR);
+                if (nSepIdx != -1)
+                    aLayoutName = aLayoutName.copy(0, nSepIdx+4);
                 aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -2975,7 +2977,9 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             if(pSSPool)
             {
                 OUString aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
-                aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR)+4);
+                sal_Int32 nSepIdx = aLayoutName.indexOf(SD_LT_SEPARATOR);
+                if (nSepIdx != -1)
+                    aLayoutName = aLayoutName.copy(0, nSepIdx+4);
                 aLayoutName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -3067,7 +3071,11 @@ OUString SAL_CALL SdMasterPage::getName(  )
     if(SvxFmDrawPage::mpPage)
     {
         OUString aLayoutName( GetPage()->GetLayoutName() );
-        return aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+        sal_Int32 nSepIdx = aLayoutName.indexOf(SD_LT_SEPARATOR);
+        if (nSepIdx != -1)
+            return aLayoutName.copy(0, nSepIdx);
+        else
+            return aLayoutName;
     }
 
     return OUString();

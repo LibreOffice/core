@@ -149,7 +149,9 @@ void SdPresLayoutDlg::FillValueSet()
         if (pMaster->GetPageKind() == PK_STANDARD)
         {
             OUString aLayoutName(pMaster->GetLayoutName());
-            aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+            sal_Int32 nSepIdx = aLayoutName.indexOf(SD_LT_SEPARATOR);
+            if (nSepIdx != -1)
+                aLayoutName = aLayoutName.copy(0, nSepIdx);
             maLayoutNames.push_back(aLayoutName);
 
             Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
@@ -252,7 +254,9 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                         if (pMaster->GetPageKind() == PK_STANDARD)
                         {
                             OUString aLayoutName(pMaster->GetLayoutName());
-                            aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+                            sal_Int32 nSepIdx = aLayoutName.indexOf(SD_LT_SEPARATOR);
+                            if (nSepIdx != -1)
+                                aLayoutName = aLayoutName.copy(0, nSepIdx);
                             maLayoutNames.push_back(aLayoutName);
 
                             Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
