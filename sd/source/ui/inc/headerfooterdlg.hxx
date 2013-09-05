@@ -41,10 +41,21 @@ private:
     DECL_LINK( ActivatePageHdl, TabControl * );
     DECL_LINK( DeactivatePageHdl, void * );
 
-    TabControl      maTabCtrl;
+    DECL_LINK( ClickApplyToAllHdl, void * );
+    DECL_LINK( ClickApplyHdl, void * );
+    DECL_LINK( ClickCancelHdl, void * );
+
+    TabControl*      mpTabCtrl;
 
     HeaderFooterTabPage*    mpSlideTabPage;
     HeaderFooterTabPage*    mpNotesHandoutsTabPage;
+
+    sal_uInt16 mnSlidesId;
+    sal_uInt16 mnNotesId;
+
+    PushButton*      maPBApplyToAll;
+    PushButton*      maPBApply;
+    CancelButton*    maPBCancel;
 
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;
@@ -60,9 +71,9 @@ public:
     HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
     ~HeaderFooterDialog();
 
-    void ApplyToAll( TabPage* pPage );
-    void Apply( TabPage* pPage );
-    void Cancel( TabPage* pPage );
+    void ApplyToAll();
+    void Apply();
+    void Cancel();
 
     virtual short Execute();
 };

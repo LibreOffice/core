@@ -75,11 +75,13 @@ private:
     void Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted = false );
 
 public:
-    PresLayoutPreview( ::Window* pParent, const ResId& rResId, SdPage* pMaster );
+    PresLayoutPreview( ::Window* pParent, SdPage* pMaster );
+    PresLayoutPreview( ::Window* pParent );
     ~PresLayoutPreview();
 
     virtual void Paint( const Rectangle& rRect );
 
+    void init( SdPage* pMaster );
     void update( HeaderFooterSettings& rSettings );
 };
 
@@ -115,51 +117,40 @@ int nDateTimeFormats[nDateTimeFormatsCount] =
 class HeaderFooterTabPage : public TabPage
 {
 private:
-    FixedLine   maFLIncludeOnPage;
 
-    CheckBox    maCBHeader;
-    FixedText   maFTHeader;
-    Edit        maTBHeader;
+    FixedText*   mpFTIncludeOn;
 
-    FixedLine   maFLDateTime;
-    CheckBox    maCBDateTime;
-    RadioButton maRBDateTimeFixed;
-    RadioButton maRBDateTimeAutomatic;
-    Edit        maTBDateTimeFixed;
-    ListBox     maCBDateTimeFormat;
-    FixedText   maFTDateTimeLanguage;
-    SvxLanguageBox  maCBDateTimeLanguage;
+    CheckBox*    mpCBHeader;
+    FixedText*   mpFTHeader;
+    Edit*        mpTBHeader;
 
-    FixedLine   maFLFooter;
-    CheckBox    maCBFooter;
-    FixedText   maFTFooter;
-    Edit        maTBFooter;
+    CheckBox*    mpCBDateTime;
+    RadioButton* mpRBDateTimeFixed;
+    RadioButton* mpRBDateTimeAutomatic;
+    Edit*        mpTBDateTimeFixed;
+    ListBox*     mpCBDateTimeFormat;
+    FixedText*   mpFTDateTimeLanguage;
+    SvxLanguageBox*  mpCBDateTimeLanguage;
 
-    FixedLine   maFLSlideNumber;
-    CheckBox    maCBSlideNumber;
+    CheckBox*    mpCBFooter;
+    FixedText*   mpFTFooter;
+    Edit*        mpTBFooter;
 
-    FixedLine   maFLNotOnTitle;
-    CheckBox    maCBNotOnTitle;
+    CheckBox*   mpCBSlideNumber;
+    FixedText*   mpFTPageNumber;
 
-    PushButton      maPBApplyToAll;
-    PushButton      maPBApply;
-    CancelButton    maPBCancel;
-    HelpButton      maPBHelp;
+    CheckBox*    mpCBNotOnTitle;
 
-    PresLayoutPreview   maCTPreview;
+    PresLayoutPreview*   mpCTPreview;
 
     SdPage*             mpCurrentPage;
-    SdDrawDocument *    mpDoc;
+    SdDrawDocument*    mpDoc;
     HeaderFooterDialog* mpDialog;
     LanguageType        meOldLanguage;
 
     bool            mbHandoutMode;
 
     DECL_LINK( UpdateOnClickHdl, void * );
-
-    DECL_LINK( ClickApplyToAllHdl, void * );
-    DECL_LINK( ClickApplyHdl, void * );
-    DECL_LINK( ClickCancelHdl, void * );
 
     DECL_LINK( LanguageChangeHdl, void * );
 
@@ -174,7 +165,7 @@ public:
     static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
     static  sal_uInt16*    GetRanges();
 
-    void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
+    void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
     void    update();
 };
@@ -187,13 +178,13 @@ using namespace ::sd;
 
 
 HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage ) :
-        TabDialog ( pParent, SdResId( RID_SD_DLG_HEADERFOOTER ) ),
-        maTabCtrl( this, SdResId( 1 ) ),
+        TabDialog ( pParent, "HeaderFooterDialog", "modules/simpress/ui/headerfooterdialog.ui" ),
         mpDoc( pDoc ),
         mpCurrentPage( pCurrentPage ),
         mpViewShell( pViewShell )
 {
-    FreeResource();
+    //FreeResource();
+    get(mpTabCtrl, "tabs" );
 
     SdPage* pSlide;
     SdPage* pNotes;
@@ -216,49 +207,60 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
         mpCurrentPage = NULL;
     }
 
-//  maTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
-    maTabCtrl.Show();
+    pDoc->StopWorkStartupDelay();
+//  mpTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
+    mpTabCtrl->Show();
 
-    mpSlideTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pSlide, false );
-    mpSlideTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_SLIDE );
-    maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_SLIDE, mpSlideTabPage );
+    mnSlidesId = mpTabCtrl->GetPageId("slides");
+    mpSlideTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pSlide, false );
+    //mpSlideTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_SLIDE );
+    mpTabCtrl->SetTabPage( mnSlidesId, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
-    Size aCtrlSiz = maTabCtrl.GetOutputSizePixel();
+    Size aCtrlSiz = mpTabCtrl->GetOutputSizePixel();
     // set size on TabControl only if smaller than TabPage
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
-        maTabCtrl.SetOutputSizePixel( aSiz );
+        mpTabCtrl->SetOutputSizePixel( aSiz );
         aCtrlSiz = aSiz;
     }
 
-    mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pNotes, true );
-    mpNotesHandoutsTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT );
-    maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT, mpNotesHandoutsTabPage );
+    mnNotesId = mpTabCtrl->GetPageId("notes");
+    mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pNotes, true );
+    //mpNotesHandoutsTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT );
+    mpTabCtrl->SetTabPage( mnNotesId, mpNotesHandoutsTabPage );
 
-    aSiz = mpNotesHandoutsTabPage->GetSizePixel();
+    get(maPBApplyToAll, "apply_all" );
+    get(maPBApply, "apply" );
+    get(maPBCancel, "cancel" );
+
+    /*aSiz = mpNotesHandoutsTabPage->GetSizePixel();
     if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
     {
-        maTabCtrl.SetOutputSizePixel( aSiz );
+        mpTabCtrl.SetOutputSizePixel( aSiz );
         aCtrlSiz = aSiz;
-    }
+    }*/
 
-    ActivatePageHdl( &maTabCtrl );
+    ActivatePageHdl( mpTabCtrl );
 
     AdjustLayout();
 
-    maTabCtrl.SetActivatePageHdl( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
-    maTabCtrl.SetDeactivatePageHdl( LINK( this, HeaderFooterDialog, DeactivatePageHdl ) );
+    mpTabCtrl->SetActivatePageHdl( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
+    mpTabCtrl->SetDeactivatePageHdl( LINK( this, HeaderFooterDialog, DeactivatePageHdl ) );
+
+    maPBApplyToAll->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyToAllHdl ) );
+    maPBApply->SetClickHdl( LINK( this, HeaderFooterDialog, ClickApplyHdl ) );
+    maPBCancel->SetClickHdl( LINK( this, HeaderFooterDialog, ClickCancelHdl ) );
 
     maSlideSettings = pSlide->getHeaderFooterSettings();
 
     const HeaderFooterSettings& rTitleSettings = mpDoc->GetSdPage(0, PK_STANDARD)->getHeaderFooterSettings();
     bool bNotOnTitle = !rTitleSettings.mbFooterVisible && !rTitleSettings.mbSlideNumberVisible && !rTitleSettings.mbDateTimeVisible;
 
-    mpSlideTabPage->init( maSlideSettings, bNotOnTitle, mpCurrentPage != NULL );
+    mpSlideTabPage->init( maSlideSettings, bNotOnTitle );
 
     maNotesHandoutSettings = pNotes->getHeaderFooterSettings();
-    mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false, false );
+    mpNotesHandoutsTabPage->init( maNotesHandoutSettings, false );
 }
 
 // -----------------------------------------------------------------------
@@ -276,6 +278,8 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
+    maPBApply->Show( nId == mnSlidesId );
+    maPBApply->Enable( mpCurrentPage != NULL );
 
     return 0;
 }
@@ -285,6 +289,30 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
 {
     return sal_True;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl)
+{
+    ApplyToAll();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl)
+{
+    Apply();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl)
+{
+    Cancel();
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -299,23 +327,25 @@ short HeaderFooterDialog::Execute()
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::ApplyToAll( TabPage* pPage )
+void HeaderFooterDialog::ApplyToAll()
 {
-    apply( true, pPage == mpSlideTabPage );
+    sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
+    apply( true, tabId == mnSlidesId );
     EndDialog(1);
 }
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::Apply( TabPage* pPage )
+void HeaderFooterDialog::Apply()
 {
-    apply( false, pPage == mpSlideTabPage );
+    sal_uInt16 tabId = mpTabCtrl->GetCurPageId();
+    apply( false, tabId == mnSlidesId );
     EndDialog(1);
 }
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::Cancel( TabPage* )
+void HeaderFooterDialog::Cancel()
 {
     EndDialog();
 }
@@ -410,130 +440,79 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
 
 ///////////////////////////////////////////////////////////////////////
 
-inline void moveY( ::Window& rWin, int deltaY )
-{
-    Point aPos = rWin.GetPosPixel();
-    aPos.Y() += deltaY;
-    rWin.SetPosPixel( aPos );
-}
-
 HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
-        TabPage( pWindow, SdResId( RID_SD_TABPAGE_HEADERFOOTER ) ),
-        maFLIncludeOnPage( this, SdResId( FL_INCLUDE_ON_PAGE ) ),
-        maCBHeader( this, SdResId( CB_HEADER ) ),
-        maFTHeader( this, SdResId( FT_HEADER ) ),
-        maTBHeader( this, SdResId( TB_HEADER_FIXED ) ),
-        maFLDateTime( this, SdResId( FL_DATETIME ) ),
-        maCBDateTime( this, SdResId( CB_DATETIME ) ),
-        maRBDateTimeFixed( this, SdResId( RB_DATETIME_FIXED ) ),
-        maRBDateTimeAutomatic( this, SdResId( RB_DATETIME_AUTOMATIC ) ),
-        maTBDateTimeFixed( this, SdResId( TB_DATETIME_FIXED ) ),
-        maCBDateTimeFormat( this, SdResId( CB_DATETIME_FORMAT ) ),
-        maFTDateTimeLanguage( this, SdResId( FT_DATETIME_LANGUAGE ) ),
-        maCBDateTimeLanguage( this, SdResId( CB_DATETIME_LANGUAGE ) ),
-
-        maFLFooter( this, SdResId( FL_FOOTER ) ),
-        maCBFooter( this, SdResId( CB_FOOTER ) ),
-        maFTFooter( this, SdResId( FT_FOOTER ) ),
-        maTBFooter( this, SdResId( TB_FOOTER_FIXED ) ),
-
-        maFLSlideNumber( this, SdResId( FL_SLIDENUMBER ) ),
-        maCBSlideNumber( this, SdResId( CB_SLIDENUMBER ) ),
-
-        maFLNotOnTitle( this, SdResId( FL_NOTONTITLE ) ),
-        maCBNotOnTitle( this, SdResId( CB_NOTONTITLE ) ),
-
-        maPBApplyToAll( this, SdResId( BT_APPLYTOALL ) ),
-        maPBApply( this, SdResId( BT_APPLY ) ),
-        maPBCancel( this, SdResId( BT_CANCEL ) ),
-        maPBHelp( this, SdResId( BT_HELP ) ),
-
-        maCTPreview( this, SdResId( CT_PREVIEW ),
-            pActualPage ?
-                (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
-                (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) ),
+        TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
         mpCurrentPage(pActualPage),
         mpDoc(pDoc),
         mpDialog(pDialog),
         mbHandoutMode( bHandoutMode )
-
 {
-    pDoc->StopWorkStartupDelay();
+        get(mpFTIncludeOn, "include_label");
+        get(mpCBHeader, "header_cb" );
+        get(mpFTHeader, "header_label" );
+        get(mpTBHeader, "header_text" );
+        get(mpCBDateTime, "datetime_cb" );
+        get(mpRBDateTimeFixed, "rb_fixed" );
+        get(mpRBDateTimeAutomatic, "rb_auto" );
+        get(mpTBDateTimeFixed, "datetime_value" );
+        get(mpCBDateTimeFormat, "datetime_format_list" );
+        get(mpFTDateTimeLanguage, "language_label" );
+        get(mpCBDateTimeLanguage, "language_list" );
 
-    if( !mbHandoutMode )
+        get(mpCBFooter, "footer_cb" );
+        get(mpFTFooter, "footer_label" );
+        get(mpTBFooter, "footer_text" );
+
+        get(mpCBSlideNumber, "slide_number" );
+
+        get(mpCBNotOnTitle, "not_on_title" );
+
+        get(mpCTPreview, "preview");
+        mpCTPreview->init( pActualPage ?
+                (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
+                (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) );
+
+    if( mbHandoutMode )
     {
-        int deltaY = maCBHeader.GetPosPixel().Y() - maCBDateTime.GetPosPixel().Y();
+        OUString sPageNo = get<FixedText>("replacement_a")->GetText();
+        mpCBSlideNumber->SetText( sPageNo );
 
-        moveY( maCBDateTime, deltaY );
-        moveY( maRBDateTimeFixed, deltaY );
-        moveY( maRBDateTimeAutomatic, deltaY );
-        moveY( maTBDateTimeFixed, deltaY );
-        moveY( maCBDateTimeFormat, deltaY );
-        moveY( maFTDateTimeLanguage, deltaY );
-        moveY( maCBDateTimeLanguage, deltaY );
-        moveY( maFLFooter, deltaY );
-        moveY( maCBFooter, deltaY );
-        moveY( maFTFooter, deltaY );
-        moveY( maTBFooter, deltaY );
-        moveY( maFLSlideNumber, deltaY );
-        moveY( maCBSlideNumber, deltaY );
-        moveY( maFLNotOnTitle, deltaY );
-        moveY( maCBNotOnTitle, deltaY );
-    }
-    else
-    {
-        int deltaY = maPBApply.GetPosPixel().Y() - maPBCancel.GetPosPixel().Y();
-
-        moveY( maPBCancel, deltaY );
-        moveY( maPBHelp, deltaY );
-
-        maCBSlideNumber.SetText( SD_RESSTR( STR_PAGE_NUMBER ) );
-        maFLIncludeOnPage.SetText( SD_RESSTR( STR_INCLUDE_ON_PAGE ) );
+        OUString sFrameTitle = get<FixedText>("replacement_b")->GetText();
+        mpFTIncludeOn->SetText( sFrameTitle );
     }
 
-    FreeResource();
+    mpCBHeader->Show( mbHandoutMode );
+    mpFTHeader->Show( mbHandoutMode );
+    mpTBHeader->Show( mbHandoutMode );
+    mpCBNotOnTitle->Show( !mbHandoutMode );
 
-    maPBApply.Show( !mbHandoutMode );
-    maCBHeader.Show( mbHandoutMode );
-    maFTHeader.Show( mbHandoutMode );
-    maTBHeader.Show( mbHandoutMode );
-    maFLDateTime.Show( mbHandoutMode );
-    maFLNotOnTitle.Show( !mbHandoutMode );
-    maCBNotOnTitle.Show( !mbHandoutMode );
+    mpCBDateTime->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mpRBDateTimeFixed->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mpRBDateTimeAutomatic->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mpCBFooter->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mpCBHeader->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
+    mpCBSlideNumber->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
 
-    maCBDateTime.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    maRBDateTimeFixed.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    maRBDateTimeAutomatic.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    maCBFooter.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    maCBHeader.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-    maCBSlideNumber.SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
-
-    maPBApplyToAll.SetClickHdl( LINK( this, HeaderFooterTabPage, ClickApplyToAllHdl ) );
-    maPBApply.SetClickHdl( LINK( this, HeaderFooterTabPage, ClickApplyHdl ) );
-    maPBCancel.SetClickHdl( LINK( this, HeaderFooterTabPage, ClickCancelHdl ) );
-
-    maCBDateTimeLanguage.SetLanguageList( LANG_LIST_ALL|LANG_LIST_ONLY_KNOWN, false );
-    maCBDateTimeLanguage.SetSelectHdl( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
+    mpCBDateTimeLanguage->SetLanguageList( LANG_LIST_ALL|LANG_LIST_ONLY_KNOWN, false );
+    mpCBDateTimeLanguage->SetSelectHdl( LINK( this, HeaderFooterTabPage, LanguageChangeHdl ) );
 
     GetOrSetDateTimeLanguage( meOldLanguage, false );
     meOldLanguage = MsLangId::getRealLanguage( meOldLanguage );
-    maCBDateTimeLanguage.SelectLanguage( meOldLanguage );
+    mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
     FillFormatList(SVXDATEFORMAT_A);
 
-    maTBHeader.SetAccessibleRelationMemberOf(&maCBHeader);
-    maRBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maRBDateTimeAutomatic.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBDateTimeFixed.SetAccessibleName(maRBDateTimeFixed.GetText());
-    maTBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBDateTimeFixed.SetAccessibleRelationLabeledBy(&maRBDateTimeFixed);
-    maCBDateTimeFormat.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maCBDateTimeFormat.SetAccessibleName(maRBDateTimeAutomatic.GetText());
-    maCBDateTimeFormat.SetAccessibleRelationLabeledBy(&maRBDateTimeAutomatic);
-    maCBDateTimeLanguage.SetAccessibleRelationMemberOf(&maCBDateTime);
-    maTBFooter.SetAccessibleRelationMemberOf(&maCBFooter);
-    maCBSlideNumber.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
-    maCBFooter.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
+    mpTBHeader->SetAccessibleRelationMemberOf(mpCBHeader);
+    mpRBDateTimeFixed->SetAccessibleRelationMemberOf(mpCBDateTime);
+    mpRBDateTimeAutomatic->SetAccessibleRelationMemberOf(mpCBDateTime);
+    mpTBDateTimeFixed->SetAccessibleName(mpRBDateTimeFixed->GetText());
+    mpTBDateTimeFixed->SetAccessibleRelationMemberOf(mpCBDateTime);
+    mpTBDateTimeFixed->SetAccessibleRelationLabeledBy(mpRBDateTimeFixed);
+    mpCBDateTimeFormat->SetAccessibleRelationMemberOf(mpCBDateTime);
+    mpCBDateTimeFormat->SetAccessibleName(mpRBDateTimeAutomatic->GetText());
+    mpCBDateTimeFormat->SetAccessibleRelationLabeledBy(mpRBDateTimeAutomatic);
+    mpCBDateTimeLanguage->SetAccessibleRelationMemberOf(mpCBDateTime);
+    mpTBFooter->SetAccessibleRelationMemberOf(mpCBFooter);
 }
 // -----------------------------------------------------------------------
 
@@ -545,7 +524,7 @@ HeaderFooterTabPage::~HeaderFooterTabPage()
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
-    FillFormatList( (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() ) );
+    FillFormatList( (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() ) );
 
 
     return 0L;
@@ -555,9 +534,9 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )
 {
-    LanguageType eLanguage = maCBDateTimeLanguage.GetSelectLanguage();
+    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
 
-    maCBDateTimeFormat.Clear();
+    mpCBDateTimeFormat->Clear();
 
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
@@ -568,46 +547,45 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
         OUString aStr( SvxDateTimeField::GetFormatted(
                 aDate, aTime, nDateTimeFormats[nFormat],
                 *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
-        sal_uInt16 nEntry = maCBDateTimeFormat.InsertEntry( aStr );
-        maCBDateTimeFormat.SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
+        sal_uInt16 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
+        mpCBDateTimeFormat->SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )
         {
-            maCBDateTimeFormat.SelectEntryPos( nEntry );
-            maCBDateTimeFormat.SetText( aStr );
+            mpCBDateTimeFormat->SelectEntryPos( nEntry );
+            mpCBDateTimeFormat->SetText( aStr );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply )
+void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNotOnTitle )
 {
-    maCBDateTime.Check( rSettings.mbDateTimeVisible );
-    maRBDateTimeFixed.Check( rSettings.mbDateTimeIsFixed );
-    maRBDateTimeAutomatic.Check( !rSettings.mbDateTimeIsFixed );
-    maTBDateTimeFixed.SetText( rSettings.maDateTimeText );
+    mpCBDateTime->Check( rSettings.mbDateTimeVisible );
+    mpRBDateTimeFixed->Check( rSettings.mbDateTimeIsFixed );
+    mpRBDateTimeAutomatic->Check( !rSettings.mbDateTimeIsFixed );
+    mpTBDateTimeFixed->SetText( rSettings.maDateTimeText );
 
-    maCBHeader.Check( rSettings.mbHeaderVisible );
-    maTBHeader.SetText( rSettings.maHeaderText );
+    mpCBHeader->Check( rSettings.mbHeaderVisible );
+    mpTBHeader->SetText( rSettings.maHeaderText );
 
-    maCBFooter.Check( rSettings.mbFooterVisible );
-    maTBFooter.SetText( rSettings.maFooterText );
+    mpCBFooter->Check( rSettings.mbFooterVisible );
+    mpTBFooter->SetText( rSettings.maFooterText );
 
-    maCBSlideNumber.Check( rSettings.mbSlideNumberVisible );
+    mpCBSlideNumber->Check( rSettings.mbSlideNumberVisible );
 
-    maCBNotOnTitle.Check( bNotOnTitle );
-    maPBApply.Enable( bHasApply );
+    mpCBNotOnTitle->Check( bNotOnTitle );
 
-    maCBDateTimeLanguage.SelectLanguage( meOldLanguage );
+    mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
     sal_uInt16 nPos;
-    for( nPos = 0; nPos < maCBDateTimeFormat.GetEntryCount(); nPos++ )
+    for( nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
     {
-        int nFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( nPos );
+        int nFormat = (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( nPos );
         if( nFormat == rSettings.meDateTimeFormat )
         {
-            maCBDateTimeFormat.SelectEntryPos( nPos );
-            maCBDateTimeFormat.SetText( maCBDateTimeFormat.GetEntry(nPos) );
+            mpCBDateTimeFormat->SelectEntryPos( nPos );
+            mpCBDateTimeFormat->SetText( mpCBDateTimeFormat->GetEntry(nPos) );
             break;
         }
     }
@@ -619,46 +597,46 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
 void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle )
 {
-    rSettings.mbDateTimeVisible = maCBDateTime.IsChecked();
-    rSettings.mbDateTimeIsFixed = maRBDateTimeFixed.IsChecked();
-    rSettings.maDateTimeText = maTBDateTimeFixed.GetText();
-    rSettings.mbFooterVisible = maCBFooter.IsChecked();
-    rSettings.maFooterText = maTBFooter.GetText();
-    rSettings.mbSlideNumberVisible = maCBSlideNumber.IsChecked();
-    rSettings.mbHeaderVisible = maCBHeader.IsChecked();
-    rSettings.maHeaderText = maTBHeader.GetText();
+    rSettings.mbDateTimeVisible = mpCBDateTime->IsChecked();
+    rSettings.mbDateTimeIsFixed = mpRBDateTimeFixed->IsChecked();
+    rSettings.maDateTimeText = mpTBDateTimeFixed->GetText();
+    rSettings.mbFooterVisible = mpCBFooter->IsChecked();
+    rSettings.maFooterText = mpTBFooter->GetText();
+    rSettings.mbSlideNumberVisible = mpCBSlideNumber->IsChecked();
+    rSettings.mbHeaderVisible = mpCBHeader->IsChecked();
+    rSettings.maHeaderText = mpTBHeader->GetText();
 
-    if( maCBDateTimeFormat.GetSelectEntryCount() == 1 )
-        rSettings.meDateTimeFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() );
+    if( mpCBDateTimeFormat->GetSelectEntryCount() == 1 )
+        rSettings.meDateTimeFormat = (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() );
 
-    LanguageType eLanguage = maCBDateTimeLanguage.GetSelectLanguage();
+    LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
     if( eLanguage != meOldLanguage )
         GetOrSetDateTimeLanguage( eLanguage, true );
 
-    rNotOnTitle = maCBNotOnTitle.IsChecked();
+    rNotOnTitle = mpCBNotOnTitle->IsChecked();
 }
 
 // -----------------------------------------------------------------------
 
 void HeaderFooterTabPage::update()
 {
-    maRBDateTimeFixed.Enable( maCBDateTime.IsChecked() );
-    maTBDateTimeFixed.Enable( maRBDateTimeFixed.IsChecked() && maCBDateTime.IsChecked() );
-    maRBDateTimeAutomatic.Enable( maCBDateTime.IsChecked() );
-    maCBDateTimeFormat.Enable( maCBDateTime.IsChecked() && maRBDateTimeAutomatic.IsChecked() );
-    maFTDateTimeLanguage.Enable( maCBDateTime.IsChecked() && maRBDateTimeAutomatic.IsChecked() );
-    maCBDateTimeLanguage.Enable( maCBDateTime.IsChecked() && maRBDateTimeAutomatic.IsChecked() );
+    mpRBDateTimeFixed->Enable( mpCBDateTime->IsChecked() );
+    mpTBDateTimeFixed->Enable( mpRBDateTimeFixed->IsChecked() && mpCBDateTime->IsChecked() );
+    mpRBDateTimeAutomatic->Enable( mpCBDateTime->IsChecked() );
+    mpCBDateTimeFormat->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
+    mpFTDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
+    mpCBDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
 
-    maFTFooter.Enable( maCBFooter.IsChecked() );
-    maTBFooter.Enable( maCBFooter.IsChecked() );
+    mpFTFooter->Enable( mpCBFooter->IsChecked() );
+    mpTBFooter->Enable( mpCBFooter->IsChecked() );
 
-    maFTHeader.Enable( maCBHeader.IsChecked() );
-    maTBHeader.Enable( maCBHeader.IsChecked() );
+    mpFTHeader->Enable( mpCBHeader->IsChecked() );
+    mpTBHeader->Enable( mpCBHeader->IsChecked() );
 
     HeaderFooterSettings aSettings;
     bool bNotOnTitle;
     getData( aSettings, bNotOnTitle );
-    maCTPreview.update( aSettings );
+    mpCTPreview->update( aSettings );
 }
 
 // -----------------------------------------------------------------------
@@ -667,30 +645,6 @@ IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
 {
     update();
 
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK_NOARG(HeaderFooterTabPage, ClickApplyToAllHdl)
-{
-    mpDialog->ApplyToAll( this );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK_NOARG(HeaderFooterTabPage, ClickApplyHdl)
-{
-    mpDialog->Apply( this );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK_NOARG(HeaderFooterTabPage, ClickCancelHdl)
-{
-    mpDialog->Cancel( this );
     return 0;
 }
 
@@ -806,18 +760,34 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 
 ///////////////////////////////////////////////////////////////////////
 
-PresLayoutPreview::PresLayoutPreview( ::Window* pParent, const ResId& rResId, SdPage* pMaster )
-:Control( pParent, rResId ), mpMaster( pMaster ), maPageSize( pMaster->GetSize() )
+PresLayoutPreview::PresLayoutPreview( ::Window* pParent, SdPage* pMaster )
+:Control( pParent ), mpMaster( pMaster ), maPageSize( pMaster->GetSize() )
+{
+}
+
+PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
+:Control( pParent )
 {
 }
 
 // -----------------------------------------------------------------------
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Window *pParent, VclBuilder::stringmap & )
+{
+    return new PresLayoutPreview( pParent );
+}
 
 PresLayoutPreview::~PresLayoutPreview()
 {
 }
 
 // -----------------------------------------------------------------------
+
+void PresLayoutPreview::init( SdPage *pMaster )
+{
+    mpMaster = pMaster;
+    maPageSize = pMaster->GetSize();
+}
 
 void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
 {

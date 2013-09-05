@@ -356,17 +356,17 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( ::com::sun::star::uno::
 
 void AbstractHeaderFooterDialog_Impl::ApplyToAll( TabPage* pPage )
 {
-  pDlg->ApplyToAll( pPage );
+  pDlg->ApplyToAll();
 }
 
 void AbstractHeaderFooterDialog_Impl::Apply( TabPage* pPage )
 {
-  pDlg->Apply( pPage );
+  pDlg->Apply( );
 }
 
 void AbstractHeaderFooterDialog_Impl::Cancel( TabPage* pPage )
 {
-  pDlg->Cancel( pPage );
+  pDlg->Cancel( );
 }
 
 //-------------- SdAbstractDialogFactory implementation--------------
