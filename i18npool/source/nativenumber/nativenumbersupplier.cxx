@@ -62,315 +62,315 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
-        const sal_Unicode *src = inStr.getStr() + startPos;
-        rtl_uString *newStr = rtl_uString_alloc(nCount);
-        if (useOffset)
-            offset.realloc(nCount);
+    const sal_Unicode *src = inStr.getStr() + startPos;
+    rtl_uString *newStr = rtl_uString_alloc(nCount);
+    if (useOffset)
+        offset.realloc(nCount);
 
-        for (sal_Int32 i = 0; i < nCount; i++)
-        {
-            sal_Unicode ch = src[i];
-            if (isNumber(ch))
-                newStr->buffer[i] = NumberChar[number][ ch - NUMBER_ZERO ];
-            else if (i+1 < nCount && isNumber(src[i+1])) {
-                if (i > 0 && isNumber(src[i-1]) && isSeparator(ch))
-                    newStr->buffer[i] = SeparatorChar[number] ? SeparatorChar[number] : ch;
-                else
-                    newStr->buffer[i] = isDecimal(ch) ? (DecimalChar[number] ? DecimalChar[number] : ch) :
-                            isMinus(ch) ? (MinusChar[number] ? MinusChar[number] : ch) : ch;
-            }
+    for (sal_Int32 i = 0; i < nCount; i++)
+    {
+        sal_Unicode ch = src[i];
+        if (isNumber(ch))
+            newStr->buffer[i] = NumberChar[number][ ch - NUMBER_ZERO ];
+        else if (i+1 < nCount && isNumber(src[i+1])) {
+            if (i > 0 && isNumber(src[i-1]) && isSeparator(ch))
+                newStr->buffer[i] = SeparatorChar[number] ? SeparatorChar[number] : ch;
             else
-                newStr->buffer[i] = ch;
-            if (useOffset)
-                offset[i] = startPos + i;
+                newStr->buffer[i] = isDecimal(ch) ? (DecimalChar[number] ? DecimalChar[number] : ch) :
+                    isMinus(ch) ? (MinusChar[number] ? MinusChar[number] : ch) : ch;
         }
-        return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
+        else
+            newStr->buffer[i] = ch;
+        if (useOffset)
+            offset[i] = startPos + i;
+    }
+    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
         sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int32 startPos,
  const Number *number, const sal_Unicode* numberChar)
 {
-        sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
-        if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
-            if (number->multiplierExponent[number->exponentCount-1] > 1) {
-                sal_Int16 i;
-                sal_Bool notZero = false;
-                for (i = 0; i < len; i++, begin++) {
-                    if (notZero || str[begin] != NUMBER_ZERO) {
-                        dst[count] = numberChar[str[begin] - NUMBER_ZERO];
-                        if (useOffset)
-                            offset[count] = begin + startPos;
-                        count++;
-                        notZero = sal_True;
-                    }
-                }
-                if (notZero && multiChar > 0) {
-                    dst[count] = multiChar;
-                    if (useOffset)
-                        offset[count] = begin + startPos;
-                    count++;
-                }
-                return notZero;
-            } else if (str[begin] != NUMBER_ZERO) {
-                if (!(number->numberFlag & (multiChar_index < 0 ? 0 : NUMBER_OMIT_ONE_CHECK(multiChar_index))) || str[begin] != NUMBER_ONE) {
+    sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
+    if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
+        if (number->multiplierExponent[number->exponentCount-1] > 1) {
+            sal_Int16 i;
+            sal_Bool notZero = false;
+            for (i = 0; i < len; i++, begin++) {
+                if (notZero || str[begin] != NUMBER_ZERO) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     if (useOffset)
                         offset[count] = begin + startPos;
                     count++;
+                    notZero = sal_True;
                 }
-                if (multiChar > 0) {
-                    dst[count] = multiChar;
-                    if (useOffset)
-                        offset[count] = begin + startPos;
-                    count++;
-                }
-            } else if (!(number->numberFlag & NUMBER_OMIT_ZERO) && count > 0 && dst[count-1] != numberChar[0]) {
-                dst[count] = numberChar[0];
+            }
+            if (notZero && multiChar > 0) {
+                dst[count] = multiChar;
                 if (useOffset)
                     offset[count] = begin + startPos;
                 count++;
             }
-            return str[begin] != NUMBER_ZERO;
-        } else {
-            sal_Bool printPower = sal_False;
-            // sal_Int16 last = 0;
-            for (sal_Int16 i = 1; i <= number->exponentCount; i++) {
-                sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
-                if (tmp > 0) {
-                    printPower |= AsciiToNative_numberMaker(str, begin, tmp, dst, count,
-                        (i == number->exponentCount ? -1 : i), offset, useOffset, startPos, number, numberChar);
-                    begin += tmp;
-                    len -= tmp;
-                }
+            return notZero;
+        } else if (str[begin] != NUMBER_ZERO) {
+            if (!(number->numberFlag & (multiChar_index < 0 ? 0 : NUMBER_OMIT_ONE_CHECK(multiChar_index))) || str[begin] != NUMBER_ONE) {
+                dst[count] = numberChar[str[begin] - NUMBER_ZERO];
+                if (useOffset)
+                    offset[count] = begin + startPos;
+                count++;
             }
-            if (printPower) {
-                if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
-                            dst[count-1] == numberChar[0])
-                    count--;
-                if (multiChar > 0) {
-                    dst[count] = multiChar;
-                    if (useOffset)
-                        offset[count] = begin + startPos;
-                    count++;
-                }
+            if (multiChar > 0) {
+                dst[count] = multiChar;
+                if (useOffset)
+                    offset[count] = begin + startPos;
+                count++;
             }
-            return printPower;
+        } else if (!(number->numberFlag & NUMBER_OMIT_ZERO) && count > 0 && dst[count-1] != numberChar[0]) {
+            dst[count] = numberChar[0];
+            if (useOffset)
+                offset[count] = begin + startPos;
+            count++;
         }
+        return str[begin] != NUMBER_ZERO;
+    } else {
+        sal_Bool printPower = sal_False;
+        // sal_Int16 last = 0;
+        for (sal_Int16 i = 1; i <= number->exponentCount; i++) {
+            sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
+            if (tmp > 0) {
+                printPower |= AsciiToNative_numberMaker(str, begin, tmp, dst, count,
+                        (i == number->exponentCount ? -1 : i), offset, useOffset, startPos, number, numberChar);
+                begin += tmp;
+                len -= tmp;
+            }
+        }
+        if (printPower) {
+            if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
+                    dst[count-1] == numberChar[0])
+                count--;
+            if (multiChar > 0) {
+                dst[count] = multiChar;
+                if (useOffset)
+                    offset[count] = begin + startPos;
+                count++;
+            }
+        }
+        return printPower;
+    }
 }
 
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, const Number* number ) throw(RuntimeException)
 {
-        OUString aRet;
+    OUString aRet;
 
-        sal_Int32 strLen = inStr.getLength() - startPos;
-        const sal_Unicode *numberChar = NumberChar[number->number];
+    sal_Int32 strLen = inStr.getLength() - startPos;
+    const sal_Unicode *numberChar = NumberChar[number->number];
 
-        if (nCount > strLen)
-            nCount = strLen;
+    if (nCount > strLen)
+        nCount = strLen;
 
-        if (nCount > 0)
+    if (nCount > 0)
+    {
+        const sal_Unicode *str = inStr.getStr() + startPos;
+        sal_Unicode *newStr = new sal_Unicode[nCount * 2 + 1];
+        sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; // for keeping number without comma
+        sal_Int32 i, len = 0, count = 0;
+
+        if (useOffset)
+            offset.realloc( nCount * 2 );
+        sal_Bool doDecimal = sal_False;
+
+        for (i = 0; i <= nCount; i++)
         {
-            const sal_Unicode *str = inStr.getStr() + startPos;
-            sal_Unicode *newStr = new sal_Unicode[nCount * 2 + 1];
-            sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; // for keeping number without comma
-            sal_Int32 i, len = 0, count = 0;
-
-            if (useOffset)
-                offset.realloc( nCount * 2 );
-            sal_Bool doDecimal = sal_False;
-
-            for (i = 0; i <= nCount; i++)
-            {
-                if (i < nCount && isNumber(str[i])) {
-                    if (doDecimal) {
-                        newStr[count] = numberChar[str[i] - NUMBER_ZERO];
-                        if (useOffset)
-                            offset[count] = i + startPos;
-                        count++;
-                    }
-                    else
-                        srcStr[len++] = str[i];
-                } else {
-                    if (len > 0) {
-                        if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            continue; // skip comma inside number string
-                        sal_Bool notZero = sal_False;
-                        for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
-                                end <= len; begin = end, end += number->multiplierExponent[0]) {
-                            if (end == 0) continue;
-                            sal_Int32 _count = count;
-                            notZero |= AsciiToNative_numberMaker(srcStr, begin, end - begin, newStr, count,
-                                        end == len ? -1 : 0, offset, useOffset, i - len + startPos, number, numberChar);
-                            if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
-                                        newStr[count-1] == numberChar[0])
-                                count--;
-                            if (notZero && _count == count) {
-                                if (end != len) {
-                                    newStr[count] = number->multiplierChar[0];
-                                    if (useOffset)
-                                        offset[count] = i - len + startPos;
-                                    count++;
-                                }
+            if (i < nCount && isNumber(str[i])) {
+                if (doDecimal) {
+                    newStr[count] = numberChar[str[i] - NUMBER_ZERO];
+                    if (useOffset)
+                        offset[count] = i + startPos;
+                    count++;
+                }
+                else
+                    srcStr[len++] = str[i];
+            } else {
+                if (len > 0) {
+                    if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                        continue; // skip comma inside number string
+                    sal_Bool notZero = sal_False;
+                    for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
+                            end <= len; begin = end, end += number->multiplierExponent[0]) {
+                        if (end == 0) continue;
+                        sal_Int32 _count = count;
+                        notZero |= AsciiToNative_numberMaker(srcStr, begin, end - begin, newStr, count,
+                                end == len ? -1 : 0, offset, useOffset, i - len + startPos, number, numberChar);
+                        if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
+                                newStr[count-1] == numberChar[0])
+                            count--;
+                        if (notZero && _count == count) {
+                            if (end != len) {
+                                newStr[count] = number->multiplierChar[0];
+                                if (useOffset)
+                                    offset[count] = i - len + startPos;
+                                count++;
                             }
                         }
-                        if (! notZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
-                            newStr[count] = numberChar[0];
-                            if (useOffset)
-                                offset[count] = i - len + startPos;
-                            count++;
-                        }
-                        len = 0;
                     }
-                    if (i < nCount) {
-                        if ((doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1]))) != sal_False)
-                            newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
-                        else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
-                        else if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            newStr[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
-                        else
-                            newStr[count] = str[i];
+                    if (! notZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
+                        newStr[count] = numberChar[0];
                         if (useOffset)
-                            offset[count] = i + startPos;
+                            offset[count] = i - len + startPos;
                         count++;
                     }
+                    len = 0;
+                }
+                if (i < nCount) {
+                    if ((doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1]))) != sal_False)
+                        newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
+                    else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                        newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
+                    else if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                        newStr[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
+                    else
+                        newStr[count] = str[i];
+                    if (useOffset)
+                        offset[count] = i + startPos;
+                    count++;
                 }
             }
-
-            delete[] srcStr;
-
-            if (useOffset)
-                offset.realloc(count);
-            aRet = OUString(newStr, count);
-            delete[] newStr;
         }
-        return aRet;
+
+        delete[] srcStr;
+
+        if (useOffset)
+            offset.realloc(count);
+        aRet = OUString(newStr, count);
+        delete[] newStr;
+    }
+    return aRet;
 }
 static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
         sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, sal_Bool useOffset,
         OUString& numberChar, OUString& multiplierChar)
 {
-        sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
-        while (++i < nCount) {
-            if ((curr = sal::static_int_cast<sal_Int16>( numberChar.indexOf(str[i]) )) >= 0) {
-                if (num > 0)
-                    break;
-                num = curr % 10;
-            } else if ((curr = sal::static_int_cast<sal_Int16>( multiplierChar.indexOf(str[i]) )) >= 0) {
-                curr = MultiplierExponent_7_CJK[curr % ExponentCount_7_CJK];
-                if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
-                shift = end = 0;
-                if (curr >= max)
-                    max = curr;
-                else if (curr > prev)
-                    shift = max - curr;
-                else
-                    end = curr;
-                while (end++ < prev) {
-                    dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-                    if (useOffset)
-                        offset[count] = i;
-                    count++;
-                }
-                if (shift) {
-                    count -= max;
-                    for (sal_Int16 j = 0; j < shift; j++, count++) {
-                        dst[count] = dst[count + curr];
-                        if (useOffset)
-                            offset[count] = offset[count + curr];
-                    }
-                    max = curr;
-                }
-                NativeToAscii_numberMaker(max, curr, str, i, nCount, dst,
-                        count, offset, useOffset, numberChar, multiplierChar);
-                return;
-            } else
+    sal_Int16 curr = 0, num = 0, end = 0, shift = 0;
+    while (++i < nCount) {
+        if ((curr = sal::static_int_cast<sal_Int16>( numberChar.indexOf(str[i]) )) >= 0) {
+            if (num > 0)
                 break;
-        }
-        while (end++ < prev) {
-            dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
-            if (useOffset)
-                offset[count] = i - 1;
-            count++;
-        }
+            num = curr % 10;
+        } else if ((curr = sal::static_int_cast<sal_Int16>( multiplierChar.indexOf(str[i]) )) >= 0) {
+            curr = MultiplierExponent_7_CJK[curr % ExponentCount_7_CJK];
+            if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
+            shift = end = 0;
+            if (curr >= max)
+                max = curr;
+            else if (curr > prev)
+                shift = max - curr;
+            else
+                end = curr;
+            while (end++ < prev) {
+                dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
+                if (useOffset)
+                    offset[count] = i;
+                count++;
+            }
+            if (shift) {
+                count -= max;
+                for (sal_Int16 j = 0; j < shift; j++, count++) {
+                    dst[count] = dst[count + curr];
+                    if (useOffset)
+                        offset[count] = offset[count + curr];
+                }
+                max = curr;
+            }
+            NativeToAscii_numberMaker(max, curr, str, i, nCount, dst,
+                    count, offset, useOffset, numberChar, multiplierChar);
+            return;
+        } else
+            break;
+    }
+    while (end++ < prev) {
+        dst[count] = NUMBER_ZERO + (end == prev ? num : 0);
+        if (useOffset)
+            offset[count] = i - 1;
+        count++;
+    }
 }
 
 static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, sal_Bool useOffset ) throw(RuntimeException)
 {
-        OUString aRet;
+    OUString aRet;
 
-        sal_Int32 strLen = inStr.getLength() - startPos;
+    sal_Int32 strLen = inStr.getLength() - startPos;
 
-        if (nCount > strLen)
-            nCount = strLen;
+    if (nCount > strLen)
+        nCount = strLen;
 
-        if (nCount > 0) {
-            const sal_Unicode *str = inStr.getStr() + startPos;
-            sal_Unicode *newStr = new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2];
-            if (useOffset)
-                offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
-            sal_Int32 count = 0, index;
-            sal_Int32 i;
+    if (nCount > 0) {
+        const sal_Unicode *str = inStr.getStr() + startPos;
+        sal_Unicode *newStr = new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2];
+        if (useOffset)
+            offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
+        sal_Int32 count = 0, index;
+        sal_Int32 i;
 
-            OUString numberChar, multiplierChar, decimalChar, minusChar, separatorChar;
-            numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
-            multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
-            decimalChar = OUString(DecimalChar, NumberChar_Count);
-            minusChar = OUString(MinusChar, NumberChar_Count);
-            separatorChar = OUString(SeparatorChar, NumberChar_Count);
+        OUString numberChar, multiplierChar, decimalChar, minusChar, separatorChar;
+        numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
+        multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
+        decimalChar = OUString(DecimalChar, NumberChar_Count);
+        minusChar = OUString(MinusChar, NumberChar_Count);
+        separatorChar = OUString(SeparatorChar, NumberChar_Count);
 
-            for ( i = 0; i < nCount; i++) {
-                if ((index = multiplierChar.indexOf(str[i])) >= 0) {
-                    if (count == 0 || !isNumber(newStr[count-1])) { // add 1 in front of multiplier
-                        newStr[count] = NUMBER_ONE;
-                        if (useOffset)
-                            offset[count] = i;
-                        count++;
-                    }
-                    index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
-                    NativeToAscii_numberMaker(
-                                sal::static_int_cast<sal_Int16>( index ), sal::static_int_cast<sal_Int16>( index ),
-                                str, i, nCount, newStr, count, offset, useOffset,
-                                numberChar, multiplierChar);
-                } else {
-                    if ((index = numberChar.indexOf(str[i])) >= 0)
-                        newStr[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
-                    else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
-                            (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
-                                            multiplierChar.indexOf(str[i+1]) >= 0)))
-                        newStr[count] = SeparatorChar[NumberChar_HalfWidth];
-                    else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
-                            (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
-                                            multiplierChar.indexOf(str[i+1]) >= 0)))
-                        // Only when decimal point is followed by numbers,
-                        // it will be convert to ASCII decimal point
-                        newStr[count] = DecimalChar[NumberChar_HalfWidth];
-                    else if ((index = minusChar.indexOf(str[i])) >= 0 &&
-                            (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
-                                            multiplierChar.indexOf(str[i+1]) >= 0)))
-                        // Only when minus is followed by numbers,
-                        // it will be convert to ASCII minus sign
-                        newStr[count] = MinusChar[NumberChar_HalfWidth];
-                    else
-                        newStr[count] = str[i];
+        for ( i = 0; i < nCount; i++) {
+            if ((index = multiplierChar.indexOf(str[i])) >= 0) {
+                if (count == 0 || !isNumber(newStr[count-1])) { // add 1 in front of multiplier
+                    newStr[count] = NUMBER_ONE;
                     if (useOffset)
                         offset[count] = i;
                     count++;
                 }
+                index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
+                NativeToAscii_numberMaker(
+                        sal::static_int_cast<sal_Int16>( index ), sal::static_int_cast<sal_Int16>( index ),
+                        str, i, nCount, newStr, count, offset, useOffset,
+                        numberChar, multiplierChar);
+            } else {
+                if ((index = numberChar.indexOf(str[i])) >= 0)
+                    newStr[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
+                else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
+                        (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
+                                          multiplierChar.indexOf(str[i+1]) >= 0)))
+                    newStr[count] = SeparatorChar[NumberChar_HalfWidth];
+                else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
+                        (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
+                                          multiplierChar.indexOf(str[i+1]) >= 0)))
+                    // Only when decimal point is followed by numbers,
+                    // it will be convert to ASCII decimal point
+                    newStr[count] = DecimalChar[NumberChar_HalfWidth];
+                else if ((index = minusChar.indexOf(str[i])) >= 0 &&
+                        (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
+                                          multiplierChar.indexOf(str[i+1]) >= 0)))
+                    // Only when minus is followed by numbers,
+                    // it will be convert to ASCII minus sign
+                    newStr[count] = MinusChar[NumberChar_HalfWidth];
+                else
+                    newStr[count] = str[i];
+                if (useOffset)
+                    offset[count] = i;
+                count++;
             }
-
-            if (useOffset) {
-                offset.realloc(count);
-                for (i = 0; i < count; i++)
-                    offset[i] += startPos;
-            }
-            aRet = OUString(newStr, count);
-            delete[] newStr;
         }
-        return aRet;
+
+        if (useOffset) {
+            offset.realloc(count);
+            for (i = 0; i < count; i++)
+                offset[i] += startPos;
+        }
+        aRet = OUString(newStr, count);
+        delete[] newStr;
+    }
+    return aRet;
 }
 
 static const Number natnum4[4] = {
@@ -523,79 +523,79 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset) throw (RuntimeException)
 {
-        const Number *number = 0;
-        sal_Int16 num = -1;
+    const Number *number = 0;
+    sal_Int16 num = -1;
 
-        if (isValidNatNum(rLocale, nNativeNumberMode)) {
-            sal_Int16 langnum = getLanguageNumber(rLocale);
-            switch (nNativeNumberMode) {
-                case NativeNumberMode::NATNUM0: // Ascii
-                    return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
-                case NativeNumberMode::NATNUM1: // Char, Lower
-                    num = natnum1[langnum];
+    if (isValidNatNum(rLocale, nNativeNumberMode)) {
+        sal_Int16 langnum = getLanguageNumber(rLocale);
+        switch (nNativeNumberMode) {
+            case NativeNumberMode::NATNUM0: // Ascii
+                return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
+            case NativeNumberMode::NATNUM1: // Char, Lower
+                num = natnum1[langnum];
                 break;
-                case NativeNumberMode::NATNUM2: // Char, Upper
-                    num = natnum2[langnum];
+            case NativeNumberMode::NATNUM2: // Char, Upper
+                num = natnum2[langnum];
                 break;
-                case NativeNumberMode::NATNUM3: // Char, FullWidth
-                    num = NumberChar_FullWidth;
+            case NativeNumberMode::NATNUM3: // Char, FullWidth
+                num = NumberChar_FullWidth;
                 break;
-                case NativeNumberMode::NATNUM4: // Text, Lower, Long
-                    number = &natnum4[langnum];
+            case NativeNumberMode::NATNUM4: // Text, Lower, Long
+                number = &natnum4[langnum];
                 break;
-                case NativeNumberMode::NATNUM5: // Text, Upper, Long
-                    number = &natnum5[langnum];
+            case NativeNumberMode::NATNUM5: // Text, Upper, Long
+                number = &natnum5[langnum];
                 break;
-                case NativeNumberMode::NATNUM6: // Text, FullWidth
-                    number = &natnum6[langnum];
+            case NativeNumberMode::NATNUM6: // Text, FullWidth
+                number = &natnum6[langnum];
                 break;
-                case NativeNumberMode::NATNUM7: // Text. Lower, Short
-                    number = &natnum7[langnum];
+            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+                number = &natnum7[langnum];
                 break;
-                case NativeNumberMode::NATNUM8: // Text, Upper, Short
-                    number = &natnum8[langnum];
+            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+                number = &natnum8[langnum];
                 break;
-                case NativeNumberMode::NATNUM9: // Char, Hangul
-                    num = NumberChar_Hangul_ko;
+            case NativeNumberMode::NATNUM9: // Char, Hangul
+                num = NumberChar_Hangul_ko;
                 break;
-                case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-                    number = &natnum10;
+            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+                number = &natnum10;
                 break;
-                case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
-                    number = &natnum11;
+            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+                number = &natnum11;
                 break;
-                default:
+            default:
                 break;
-            }
         }
+    }
 
-        if (number || num >= 0) {
-            if (!aLocale.Language.equals(rLocale.Language) ||
-                    !aLocale.Country.equals(rLocale.Country) ||
-                    !aLocale.Variant.equals(rLocale.Variant)) {
-                LocaleDataItem item = LocaleDataImpl().getLocaleItem( rLocale );
-                aLocale = rLocale;
-                DecimalChar[NumberChar_HalfWidth]=item.decimalSeparator.toChar();
-                if (DecimalChar[NumberChar_HalfWidth] > 0x7E || DecimalChar[NumberChar_HalfWidth] < 0x21)
-                    DecimalChar[NumberChar_FullWidth]=0xFF0E;
-                else
-                    DecimalChar[NumberChar_FullWidth]=DecimalChar[NumberChar_HalfWidth]+0xFEE0;
-                SeparatorChar[NumberChar_HalfWidth]=item.thousandSeparator.toChar();
-                if (SeparatorChar[NumberChar_HalfWidth] > 0x7E || SeparatorChar[NumberChar_HalfWidth] < 0x21)
-                    SeparatorChar[NumberChar_FullWidth]=0xFF0C;
-                else
-                    SeparatorChar[NumberChar_FullWidth]=SeparatorChar[NumberChar_HalfWidth]+0xFEE0;
-            }
-            if (number)
-                return AsciiToNative( aNumberString, 0, aNumberString.getLength(), offset, useOffset, number );
-            else if (num == NumberChar_he)
-                return getHebrewNativeNumberString(aNumberString,
-                                nNativeNumberMode == NativeNumberMode::NATNUM2);
+    if (number || num >= 0) {
+        if (!aLocale.Language.equals(rLocale.Language) ||
+                !aLocale.Country.equals(rLocale.Country) ||
+                !aLocale.Variant.equals(rLocale.Variant)) {
+            LocaleDataItem item = LocaleDataImpl().getLocaleItem( rLocale );
+            aLocale = rLocale;
+            DecimalChar[NumberChar_HalfWidth]=item.decimalSeparator.toChar();
+            if (DecimalChar[NumberChar_HalfWidth] > 0x7E || DecimalChar[NumberChar_HalfWidth] < 0x21)
+                DecimalChar[NumberChar_FullWidth]=0xFF0E;
             else
-                return AsciiToNativeChar(aNumberString, 0, aNumberString.getLength(), offset, useOffset, num);
+                DecimalChar[NumberChar_FullWidth]=DecimalChar[NumberChar_HalfWidth]+0xFEE0;
+            SeparatorChar[NumberChar_HalfWidth]=item.thousandSeparator.toChar();
+            if (SeparatorChar[NumberChar_HalfWidth] > 0x7E || SeparatorChar[NumberChar_HalfWidth] < 0x21)
+                SeparatorChar[NumberChar_FullWidth]=0xFF0C;
+            else
+                SeparatorChar[NumberChar_FullWidth]=SeparatorChar[NumberChar_HalfWidth]+0xFEE0;
         }
+        if (number)
+            return AsciiToNative( aNumberString, 0, aNumberString.getLength(), offset, useOffset, number );
+        else if (num == NumberChar_he)
+            return getHebrewNativeNumberString(aNumberString,
+                    nNativeNumberMode == NativeNumberMode::NATNUM2);
         else
-            return aNumberString;
+            return AsciiToNativeChar(aNumberString, 0, aNumberString.getLength(), offset, useOffset, num);
+    }
+    else
+        return aNumberString;
 }
 
 OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
@@ -607,181 +607,181 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
 
 sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(com::sun::star::uno::RuntimeException)
 {
-        if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
-            for (sal_Int16 i = 0; i < NumberChar_Count; i++)
-                for (sal_Int16 j = 0; j < 10; j++)
-                    if (inChar == NumberChar[i][j])
-                        return j;
-            return inChar;
-        }
-        else if (isNumber(inChar) && isValidNatNum(rLocale, nNativeNumberMode)) {
-            sal_Int16 langnum = getLanguageNumber(rLocale);
-            switch (nNativeNumberMode) {
-                case NativeNumberMode::NATNUM1: // Char, Lower
-                case NativeNumberMode::NATNUM4: // Text, Lower, Long
-                case NativeNumberMode::NATNUM7: // Text. Lower, Short
-                    return NumberChar[natnum1[langnum]][inChar - NUMBER_ZERO];
-                case NativeNumberMode::NATNUM2: // Char, Upper
-                case NativeNumberMode::NATNUM5: // Text, Upper, Long
-                case NativeNumberMode::NATNUM8: // Text, Upper, Short
-                    return NumberChar[natnum2[langnum]][inChar - NUMBER_ZERO];
-                case NativeNumberMode::NATNUM3: // Char, FullWidth
-                case NativeNumberMode::NATNUM6: // Text, FullWidth
-                    return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
-                case NativeNumberMode::NATNUM9: // Char, Hangul
-                case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-                case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
-                    return NumberChar[NumberChar_Hangul_ko][inChar - NUMBER_ZERO];
-                default:
-                break;
-            }
-        }
+    if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
+        for (sal_Int16 i = 0; i < NumberChar_Count; i++)
+            for (sal_Int16 j = 0; j < 10; j++)
+                if (inChar == NumberChar[i][j])
+                    return j;
         return inChar;
+    }
+    else if (isNumber(inChar) && isValidNatNum(rLocale, nNativeNumberMode)) {
+        sal_Int16 langnum = getLanguageNumber(rLocale);
+        switch (nNativeNumberMode) {
+            case NativeNumberMode::NATNUM1: // Char, Lower
+            case NativeNumberMode::NATNUM4: // Text, Lower, Long
+            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+                return NumberChar[natnum1[langnum]][inChar - NUMBER_ZERO];
+            case NativeNumberMode::NATNUM2: // Char, Upper
+            case NativeNumberMode::NATNUM5: // Text, Upper, Long
+            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+                return NumberChar[natnum2[langnum]][inChar - NUMBER_ZERO];
+            case NativeNumberMode::NATNUM3: // Char, FullWidth
+            case NativeNumberMode::NATNUM6: // Text, FullWidth
+                return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
+            case NativeNumberMode::NATNUM9: // Char, Hangul
+            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+                return NumberChar[NumberChar_Hangul_ko][inChar - NUMBER_ZERO];
+            default:
+                break;
+        }
+    }
+    return inChar;
 }
 
 sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException)
 {
-        sal_Int16 langnum = getLanguageNumber(rLocale);
+    sal_Int16 langnum = getLanguageNumber(rLocale);
 
-        switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM0:     // Ascii
-            case NativeNumberMode::NATNUM3:     // Char, FullWidth
+    switch (nNativeNumberMode) {
+        case NativeNumberMode::NATNUM0:     // Ascii
+        case NativeNumberMode::NATNUM3:     // Char, FullWidth
+            return sal_True;
+        case NativeNumberMode::NATNUM1:     // Char, Lower
+            return (langnum >= 0);
+        case NativeNumberMode::NATNUM2:     // Char, Upper
+            if (langnum == 4) // Hebrew numbering
                 return sal_True;
-            case NativeNumberMode::NATNUM1:     // Char, Lower
-                return (langnum >= 0);
-            case NativeNumberMode::NATNUM2:     // Char, Upper
-                if (langnum == 4) // Hebrew numbering
-                    return sal_True;
-            case NativeNumberMode::NATNUM4:     // Text, Lower, Long
-            case NativeNumberMode::NATNUM5:     // Text, Upper, Long
-            case NativeNumberMode::NATNUM6:     // Text, FullWidth
-            case NativeNumberMode::NATNUM7:     // Text. Lower, Short
-            case NativeNumberMode::NATNUM8:     // Text, Upper, Short
-                return (langnum >= 0 && langnum < 4); // CJK numbering
-            case NativeNumberMode::NATNUM9:     // Char, Hangul
-            case NativeNumberMode::NATNUM10:    // Text, Hangul, Long
-            case NativeNumberMode::NATNUM11:    // Text, Hangul, Short
-                return (langnum == 3); // Korean numbering
-        }
-        return sal_False;
+        case NativeNumberMode::NATNUM4:     // Text, Lower, Long
+        case NativeNumberMode::NATNUM5:     // Text, Upper, Long
+        case NativeNumberMode::NATNUM6:     // Text, FullWidth
+        case NativeNumberMode::NATNUM7:     // Text. Lower, Short
+        case NativeNumberMode::NATNUM8:     // Text, Upper, Short
+            return (langnum >= 0 && langnum < 4); // CJK numbering
+        case NativeNumberMode::NATNUM9:     // Char, Hangul
+        case NativeNumberMode::NATNUM10:    // Text, Hangul, Long
+        case NativeNumberMode::NATNUM11:    // Text, Hangul, Short
+            return (langnum == 3); // Korean numbering
+    }
+    return sal_False;
 }
 
 NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException)
 {
-        static const sal_Int16 attShort         = 0;
-        static const sal_Int16 attMedium        = 1;
-        static const sal_Int16 attLong          = 2;
-        static const sal_Char *attType[] = { "short", "medium", "long" };
+    static const sal_Int16 attShort         = 0;
+    static const sal_Int16 attMedium        = 1;
+    static const sal_Int16 attLong          = 2;
+    static const sal_Char *attType[] = { "short", "medium", "long" };
 
-        sal_Int16 number = NumberChar_HalfWidth, type = attShort;
+    sal_Int16 number = NumberChar_HalfWidth, type = attShort;
 
-        if (isValidNatNum(rLocale, nNativeNumberMode)) {
-            sal_Int16 langnum = getLanguageNumber(rLocale);
-            switch (nNativeNumberMode) {
-                case NativeNumberMode::NATNUM0: // Ascii
-                    number = NumberChar_HalfWidth;
-                    type = attShort;
+    if (isValidNatNum(rLocale, nNativeNumberMode)) {
+        sal_Int16 langnum = getLanguageNumber(rLocale);
+        switch (nNativeNumberMode) {
+            case NativeNumberMode::NATNUM0: // Ascii
+                number = NumberChar_HalfWidth;
+                type = attShort;
                 break;
-                case NativeNumberMode::NATNUM1: // Char, Lower
-                    number = natnum1[langnum];
-                    type = attShort;
+            case NativeNumberMode::NATNUM1: // Char, Lower
+                number = natnum1[langnum];
+                type = attShort;
                 break;
-                case NativeNumberMode::NATNUM2: // Char, Upper
-                    number = natnum2[langnum];
-                    type = number == NumberChar_he ? attMedium : attShort;
+            case NativeNumberMode::NATNUM2: // Char, Upper
+                number = natnum2[langnum];
+                type = number == NumberChar_he ? attMedium : attShort;
                 break;
-                case NativeNumberMode::NATNUM3: // Char, FullWidth
-                    number = NumberChar_FullWidth;
-                    type = attShort;
+            case NativeNumberMode::NATNUM3: // Char, FullWidth
+                number = NumberChar_FullWidth;
+                type = attShort;
                 break;
-                case NativeNumberMode::NATNUM4: // Text, Lower, Long
-                    number = natnum1[langnum];
-                    type = attLong;
+            case NativeNumberMode::NATNUM4: // Text, Lower, Long
+                number = natnum1[langnum];
+                type = attLong;
                 break;
-                case NativeNumberMode::NATNUM5: // Text, Upper, Long
-                    number = natnum2[langnum];
-                    type = attLong;
+            case NativeNumberMode::NATNUM5: // Text, Upper, Long
+                number = natnum2[langnum];
+                type = attLong;
                 break;
-                case NativeNumberMode::NATNUM6: // Text, FullWidth
-                    number = NumberChar_FullWidth;
-                    type = attLong;
+            case NativeNumberMode::NATNUM6: // Text, FullWidth
+                number = NumberChar_FullWidth;
+                type = attLong;
                 break;
-                case NativeNumberMode::NATNUM7: // Text. Lower, Short
-                    number = natnum1[langnum];
-                    type = attMedium;
+            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+                number = natnum1[langnum];
+                type = attMedium;
                 break;
-                case NativeNumberMode::NATNUM8: // Text, Upper, Short
-                    number = natnum2[langnum];
-                    type = attMedium;
+            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+                number = natnum2[langnum];
+                type = attMedium;
                 break;
-                case NativeNumberMode::NATNUM9: // Char, Hangul
-                    number = NumberChar_Hangul_ko;
-                    type = attShort;
+            case NativeNumberMode::NATNUM9: // Char, Hangul
+                number = NumberChar_Hangul_ko;
+                type = attShort;
                 break;
-                case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-                    number = NumberChar_Hangul_ko;
-                    type = attLong;
+            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+                number = NumberChar_Hangul_ko;
+                type = attLong;
                 break;
-                case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
-                    number = NumberChar_Hangul_ko;
-                    type = attMedium;
+            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+                number = NumberChar_Hangul_ko;
+                type = attMedium;
                 break;
-                default:
+            default:
                 break;
-            }
         }
-        return NativeNumberXmlAttributes(rLocale, OUString(&NumberChar[number][1], 1),
-                                            OUString::createFromAscii(attType[type]));
+    }
+    return NativeNumberXmlAttributes(rLocale, OUString(&NumberChar[number][1], 1),
+            OUString::createFromAscii(attType[type]));
 }
 
 static sal_Bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
 {
-        for (sal_Int16 i = 0; i < len; i++)
-            if (natnum[i] == num)
-                return sal_True;
-        return sal_False;
+    for (sal_Int16 i = 0; i < len; i++)
+        if (natnum[i] == num)
+            return sal_True;
+    return sal_False;
 }
 
 sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException)
 {
-        sal_Unicode numberChar[NumberChar_Count];
-        for (sal_Int16 i = 0; i < NumberChar_Count; i++)
-            numberChar[i] = NumberChar[i][1];
-        OUString number(numberChar, NumberChar_Count);
+    sal_Unicode numberChar[NumberChar_Count];
+    for (sal_Int16 i = 0; i < NumberChar_Count; i++)
+        numberChar[i] = NumberChar[i][1];
+    OUString number(numberChar, NumberChar_Count);
 
-        sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
+    sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
 
-        if ( aAttr.Style == "short" ) {
-            if (num == NumberChar_FullWidth)
-                return NativeNumberMode::NATNUM3;
-            else if (num == NumberChar_Hangul_ko)
-                return NativeNumberMode::NATNUM9;
-            else if (natNumIn(num, natnum1, sizeof_natnum1))
-                return NativeNumberMode::NATNUM1;
-            else if (natNumIn(num, natnum2, sizeof_natnum2))
-                return NativeNumberMode::NATNUM2;
-        } else if ( aAttr.Style == "medium" ) {
-            if (num == NumberChar_Hangul_ko)
-                return NativeNumberMode::NATNUM11;
-            else if (num == NumberChar_he)
-                return NativeNumberMode::NATNUM2;
-            else if (natNumIn(num, natnum1, sizeof_natnum1))
-                return NativeNumberMode::NATNUM7;
-            else if (natNumIn(num, natnum2, sizeof_natnum2))
-                return NativeNumberMode::NATNUM8;
-        } else if ( aAttr.Style == "long" ) {
-            if (num == NumberChar_FullWidth)
-                return NativeNumberMode::NATNUM6;
-            else if (num == NumberChar_Hangul_ko)
-                return NativeNumberMode::NATNUM10;
-            else if (natNumIn(num, natnum1, sizeof_natnum1))
-                return NativeNumberMode::NATNUM4;
-            else if (natNumIn(num, natnum2, sizeof_natnum2))
-                return NativeNumberMode::NATNUM5;
-        } else {
-            throw RuntimeException();
-        }
-        return NativeNumberMode::NATNUM0;
+    if ( aAttr.Style == "short" ) {
+        if (num == NumberChar_FullWidth)
+            return NativeNumberMode::NATNUM3;
+        else if (num == NumberChar_Hangul_ko)
+            return NativeNumberMode::NATNUM9;
+        else if (natNumIn(num, natnum1, sizeof_natnum1))
+            return NativeNumberMode::NATNUM1;
+        else if (natNumIn(num, natnum2, sizeof_natnum2))
+            return NativeNumberMode::NATNUM2;
+    } else if ( aAttr.Style == "medium" ) {
+        if (num == NumberChar_Hangul_ko)
+            return NativeNumberMode::NATNUM11;
+        else if (num == NumberChar_he)
+            return NativeNumberMode::NATNUM2;
+        else if (natNumIn(num, natnum1, sizeof_natnum1))
+            return NativeNumberMode::NATNUM7;
+        else if (natNumIn(num, natnum2, sizeof_natnum2))
+            return NativeNumberMode::NATNUM8;
+    } else if ( aAttr.Style == "long" ) {
+        if (num == NumberChar_FullWidth)
+            return NativeNumberMode::NATNUM6;
+        else if (num == NumberChar_Hangul_ko)
+            return NativeNumberMode::NATNUM10;
+        else if (natNumIn(num, natnum1, sizeof_natnum1))
+            return NativeNumberMode::NATNUM4;
+        else if (natNumIn(num, natnum2, sizeof_natnum2))
+            return NativeNumberMode::NATNUM5;
+    } else {
+        throw RuntimeException();
+    }
+    return NativeNumberMode::NATNUM0;
 }
 
 

@@ -48,11 +48,11 @@ ignoreZiZu_ja_JP_translator (const sal_Unicode c)
 
 ignoreZiZu_ja_JP::ignoreZiZu_ja_JP()
 {
-        func = ignoreZiZu_ja_JP_translator;
-        table = 0;
-        map = 0;
-        transliterationName = "ignoreZiZu_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreZiZu_ja_JP";
+    func = ignoreZiZu_ja_JP_translator;
+    table = 0;
+    map = 0;
+    transliterationName = "ignoreZiZu_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreZiZu_ja_JP";
 }
 
 } } } }

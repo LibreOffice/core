@@ -267,7 +267,7 @@ DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponent
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
 {
-        delete translit;
+    delete translit;
 }
 
 void DefaultNumberingProvider::impl_loadTranslit()
@@ -293,42 +293,42 @@ OUString toRoman( sal_Int32 n )
 
 //              i, ii, iii, iv, v, vi, vii, vii, viii, ix
 //                                                      (Dummy),1000,500,100,50,10,5,1
-        static const sal_Char coRomanArr[] = "MDCLXVI--";       // +2 Dummy entries !!
-        const sal_Char* cRomanStr = coRomanArr;
-        sal_uInt16 nMask = 1000;
-        sal_uInt32 nOver1000 = n / nMask;
-        n -= ( nOver1000 * nMask );
+    static const sal_Char coRomanArr[] = "MDCLXVI--";       // +2 Dummy entries !!
+    const sal_Char* cRomanStr = coRomanArr;
+    sal_uInt16 nMask = 1000;
+    sal_uInt32 nOver1000 = n / nMask;
+    n -= ( nOver1000 * nMask );
 
-        OUStringBuffer sTmp;
-        while(nOver1000--)
-            sTmp.append(sal_Unicode(*coRomanArr));
+    OUStringBuffer sTmp;
+    while(nOver1000--)
+        sTmp.append(sal_Unicode(*coRomanArr));
 
-        while( nMask )
+    while( nMask )
+    {
+        sal_uInt8 nZahl = sal_uInt8( n / nMask );
+        sal_uInt8 nDiff = 1;
+        n %= nMask;
+
+        if( 5 < nZahl )
         {
-                sal_uInt8 nZahl = sal_uInt8( n / nMask );
-                sal_uInt8 nDiff = 1;
-                n %= nMask;
-
-                if( 5 < nZahl )
-                {
-                        if( nZahl < 9 )
-                                sTmp.append(sal_Unicode(*(cRomanStr-1)));
-                        ++nDiff;
-                        nZahl -= 5;
-                }
-                switch( nZahl )
-                {
-                case 3: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
-                case 2: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
-                case 1: sTmp.append(sal_Unicode(*cRomanStr));           break;
-                case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
-                case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
-                }
-
-                nMask /= 10;                    // to the next decade
-                cRomanStr += 2;
+            if( nZahl < 9 )
+                sTmp.append(sal_Unicode(*(cRomanStr-1)));
+            ++nDiff;
+            nZahl -= 5;
         }
-        return sTmp.makeStringAndClear();
+        switch( nZahl )
+        {
+            case 3: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
+            case 2: sTmp.append(sal_Unicode(*cRomanStr));           //no break!
+            case 1: sTmp.append(sal_Unicode(*cRomanStr));           break;
+            case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
+            case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
+        }
+
+        nMask /= 10;                    // to the next decade
+        cRomanStr += 2;
+    }
+    return sTmp.makeStringAndClear();
 }
 
 // not used:
@@ -943,24 +943,24 @@ static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / siz
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
                                 throw(RuntimeException)
 {
-        if (aSupportedTypes[index].cSymbol)
-            return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
-//            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
-        else {
-            OUString result;
-            Locale aLocale(OUString("en"), OUString(), OUString());
-            Sequence<beans::PropertyValue> aProperties(2);
-            aProperties[0].Name = OUString("NumberingType");
-            aProperties[0].Value <<= aSupportedTypes[index].nType;
-            aProperties[1].Name = OUString("Value");
-            for (sal_Int32 j = 1; j <= 3; j++) {
-                aProperties[1].Value <<= j;
-                result += makeNumberingString( aProperties, aLocale );
-                result += ", ";
-            }
-            result += "...";
-            return result;
+    if (aSupportedTypes[index].cSymbol)
+        return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
+    //            return OUString::createFromAscii(aSupportedTypes[index].cSymbol);
+    else {
+        OUString result;
+        Locale aLocale(OUString("en"), OUString(), OUString());
+        Sequence<beans::PropertyValue> aProperties(2);
+        aProperties[0].Name = OUString("NumberingType");
+        aProperties[0].Value <<= aSupportedTypes[index].nType;
+        aProperties[1].Name = OUString("Value");
+        for (sal_Int32 j = 1; j <= 3; j++) {
+            aProperties[1].Value <<= j;
+            result += makeNumberingString( aProperties, aLocale );
+            result += ", ";
         }
+        result += "...";
+        return result;
+    }
 }
 
 sal_Bool SAL_CALL
@@ -1000,46 +1000,46 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
                                 throw(RuntimeException)
 {
-        Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
-        sal_Int16* pArray = aRet.getArray();
+    Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
+    sal_Int16* pArray = aRet.getArray();
 
-        sal_Bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
-        sal_Bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
+    sal_Bool cjkEnabled = isScriptFlagEnabled(OUString("CJK/CJKFont"));
+    sal_Bool ctlEnabled = isScriptFlagEnabled(OUString("CTL/CTLFont"));
 
-        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
-            if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
-                    ((aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled) ||
-                    ((aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled) )
-                pArray[i] = aSupportedTypes[i].nType;
-        }
-        return aRet;
+    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
+        if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
+                ((aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled) ||
+                ((aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled) )
+            pArray[i] = aSupportedTypes[i].nType;
+    }
+    return aRet;
 }
 
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
-        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-                if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
-                        return aSupportedTypes[i].nType;
-        throw RuntimeException();
+    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+            return aSupportedTypes[i].nType;
+    throw RuntimeException();
 }
 
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
-        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-                if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
-                        return sal_True;
-        return sal_False;
+    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+            return sal_True;
+    return sal_False;
 }
 
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )
                                 throw(RuntimeException)
 {
-        for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-            if(nNumberingType == aSupportedTypes[i].nType)
-                return makeNumberingIdentifier(i);
-        return OUString();
+    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+        if(nNumberingType == aSupportedTypes[i].nType)
+            return makeNumberingIdentifier(i);
+    return OUString();
 }
 
 static const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";

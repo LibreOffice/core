@@ -32,19 +32,19 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
 static sal_Unicode toKatakana (const sal_Unicode c) {
-        if ( (0x3041 <= c && c <= 0x3096) || (0x309d <= c && c <= 0x309f) ) { // 3040 - 309F HIRAGANA LETTER
-            // shift code point by 0x0060
-            return c + (0x30a0 - 0x3040);
-        }
-        return c;
+    if ( (0x3041 <= c && c <= 0x3096) || (0x309d <= c && c <= 0x309f) ) { // 3040 - 309F HIRAGANA LETTER
+        // shift code point by 0x0060
+        return c + (0x30a0 - 0x3040);
+    }
+    return c;
 }
 
 hiraganaToKatakana::hiraganaToKatakana()
 {
-        func = toKatakana;
-        table = 0;
-        transliterationName = "hiraganaToKatakana";
-        implementationName = "com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA";
+    func = toKatakana;
+    table = 0;
+    transliterationName = "hiraganaToKatakana";
+    implementationName = "com.sun.star.i18n.Transliteration.HIRAGANA_KATAKANA";
 }
 
 } } } }

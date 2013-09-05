@@ -183,25 +183,25 @@ Transliteration_body::transliterate(
 OUString SAL_CALL
 Transliteration_body::transliterateChar2String( sal_Unicode inChar ) throw(RuntimeException)
 {
-        const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
-        rtl_uString* pStr = rtl_uString_alloc(map.nmap);
-        sal_Unicode* out = pStr->buffer;
-        sal_Int32 i;
+    const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    rtl_uString* pStr = rtl_uString_alloc(map.nmap);
+    sal_Unicode* out = pStr->buffer;
+    sal_Int32 i;
 
-        for (i = 0; i < map.nmap; i++)
-            out[i] = map.map[i];
-        out[i] = 0;
+    for (i = 0; i < map.nmap; i++)
+        out[i] = map.map[i];
+    out[i] = 0;
 
-        return OUString( pStr, SAL_NO_ACQUIRE );
+    return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
 sal_Unicode SAL_CALL
 Transliteration_body::transliterateChar2Char( sal_Unicode inChar ) throw(MultipleCharsOutputException, RuntimeException)
 {
-        const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
-        if (map.nmap > 1)
-            throw MultipleCharsOutputException();
-        return map.map[0];
+    const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    if (map.nmap > 1)
+        throw MultipleCharsOutputException();
+    return map.map[0];
 }
 
 OUString SAL_CALL

@@ -32,53 +32,53 @@ sal_Bool SAL_CALL
 transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) throw(RuntimeException)
 {
-        Sequence< sal_Int32 > offset1;
-        Sequence< sal_Int32 > offset2;
+    Sequence< sal_Int32 > offset1;
+    Sequence< sal_Int32 > offset2;
 
-        // The method folding is defined in a sub class.
-        OUString s1 = this->folding( str1, pos1, nCount1, offset1);
-        OUString s2 = this->folding( str2, pos2, nCount2, offset2);
+    // The method folding is defined in a sub class.
+    OUString s1 = this->folding( str1, pos1, nCount1, offset1);
+    OUString s2 = this->folding( str2, pos2, nCount2, offset2);
 
-        const sal_Unicode * p1 = s1.getStr();
-        const sal_Unicode * p2 = s2.getStr();
-        sal_Int32 length = Min(s1.getLength(), s2.getLength());
-        sal_Int32 nmatch;
+    const sal_Unicode * p1 = s1.getStr();
+    const sal_Unicode * p2 = s2.getStr();
+    sal_Int32 length = Min(s1.getLength(), s2.getLength());
+    sal_Int32 nmatch;
 
-        for ( nmatch = 0; nmatch < length; nmatch++)
-            if (*p1++ != *p2++)
-                break;
+    for ( nmatch = 0; nmatch < length; nmatch++)
+        if (*p1++ != *p2++)
+            break;
 
-        if (nmatch > 0) {
-            nMatch1 = offset1[ nmatch - 1 ] + 1; // Subtract 1 from nmatch because the index starts from zero.
-            nMatch2 = offset2[ nmatch - 1 ] + 1; // And then, add 1 to position because it means the number of character matched.
-        }
-        else {
-            nMatch1 = 0;  // No character was matched.
-            nMatch2 = 0;
-        }
+    if (nmatch > 0) {
+        nMatch1 = offset1[ nmatch - 1 ] + 1; // Subtract 1 from nmatch because the index starts from zero.
+        nMatch2 = offset2[ nmatch - 1 ] + 1; // And then, add 1 to position because it means the number of character matched.
+    }
+    else {
+        nMatch1 = 0;  // No character was matched.
+        nMatch2 = 0;
+    }
 
-        return (nmatch == s1.getLength()) && (nmatch == s2.getLength());
+    return (nmatch == s1.getLength()) && (nmatch == s2.getLength());
 }
 
 
 Sequence< OUString > SAL_CALL
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2 ) throw(RuntimeException)
 {
-        if (str1.isEmpty() || str2.isEmpty())
-            throw RuntimeException();
+    if (str1.isEmpty() || str2.isEmpty())
+        throw RuntimeException();
 
-        Sequence< OUString > r(2);
-        r[0] = str1.copy(0, 1);
-        r[1] = str2.copy(0, 1);
-        return r;
+    Sequence< OUString > r(2);
+    r[0] = str1.copy(0, 1);
+    r[1] = str2.copy(0, 1);
+    return r;
 }
 
 
 sal_Int16 SAL_CALL
 transliteration_Ignore::getType() throw(RuntimeException)
 {
-        // The type is also defined in com/sun/star/util/TransliterationType.hdl
-        return TransliterationType::IGNORE;
+    // The type is also defined in com/sun/star/util/TransliterationType.hdl
+    return TransliterationType::IGNORE;
 }
 
 
@@ -86,36 +86,36 @@ OUString SAL_CALL
 transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset  ) throw(RuntimeException)
 {
-        // The method folding is defined in a sub class.
-        return this->folding( inStr, startPos, nCount, offset);
+    // The method folding is defined in a sub class.
+    return this->folding( inStr, startPos, nCount, offset);
 }
 
 Sequence< OUString > SAL_CALL
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2,
         XTransliteration& t1, XTransliteration& t2 ) throw(RuntimeException)
 {
-        if (str1.isEmpty() || str2.isEmpty())
-            throw RuntimeException();
+    if (str1.isEmpty() || str2.isEmpty())
+        throw RuntimeException();
 
-        Sequence< sal_Int32 > offset;
-        OUString s11 = t1.transliterate( str1, 0, 1, offset );
-        OUString s12 = t1.transliterate( str2, 0, 1, offset );
-        OUString s21 = t2.transliterate( str1, 0, 1, offset );
-        OUString s22 = t2.transliterate( str2, 0, 1, offset );
+    Sequence< sal_Int32 > offset;
+    OUString s11 = t1.transliterate( str1, 0, 1, offset );
+    OUString s12 = t1.transliterate( str2, 0, 1, offset );
+    OUString s21 = t2.transliterate( str1, 0, 1, offset );
+    OUString s22 = t2.transliterate( str2, 0, 1, offset );
 
-        if ( (s11 == s21) && (s12 == s22) ) {
-            Sequence< OUString > r(2);
-            r[0] = s11;
-            r[1] = s12;
-            return r;
-        }
-
-        Sequence< OUString > r(4);
+    if ( (s11 == s21) && (s12 == s22) ) {
+        Sequence< OUString > r(2);
         r[0] = s11;
         r[1] = s12;
-        r[2] = s21;
-        r[3] = s22;
         return r;
+    }
+
+    Sequence< OUString > r(4);
+    r[0] = s11;
+    r[1] = s12;
+    r[2] = s21;
+    r[3] = s22;
+    return r;
 }
 
 OUString SAL_CALL

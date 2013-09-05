@@ -83,61 +83,62 @@ xdictionary::xdictionary(const sal_Char *lang) :
     OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
 #endif
     aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
-        hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
-        if( hModule ) {
-            sal_IntPtr (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getExistMark").pData );
-            existMark = (sal_uInt8*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex1").pData );
-            index1 = (sal_Int16*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex2").pData );
-            index2 = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getLenArray").pData );
-            lenArray = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getDataArea").pData );
-            dataArea = (sal_Unicode*) (*func)();
-        }
-        else
-        {
-            existMark = NULL;
-            index1 = NULL;
-            index2 = NULL;
-            lenArray = NULL;
-            dataArea = NULL;
-        }
+    hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+    if( hModule ) {
+        sal_IntPtr (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getExistMark").pData );
+        existMark = (sal_uInt8*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex1").pData );
+        index1 = (sal_Int16*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getIndex2").pData );
+        index2 = (sal_Int32*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getLenArray").pData );
+        lenArray = (sal_Int32*) (*func)();
+        func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString("getDataArea").pData );
+        dataArea = (sal_Unicode*) (*func)();
+    }
+    else
+    {
+        existMark = NULL;
+        index1 = NULL;
+        index2 = NULL;
+        lenArray = NULL;
+        dataArea = NULL;
+    }
 
 #else
-        if( strcmp( lang, "ja" ) == 0 ) {
-            existMark = getExistMark_ja();
-            index1 = getIndex1_ja();
-            index2 = getIndex2_ja();
-            lenArray = getLenArray_ja();
-            dataArea = getDataArea_ja();
-        }
-        else if( strcmp( lang, "zh" ) == 0 ) {
-            existMark = getExistMark_zh();
-            index1 = getIndex1_zh();
-            index2 = getIndex2_zh();
-            lenArray = getLenArray_zh();
-            dataArea = getDataArea_zh();
-        }
-        else
-        {
-            existMark = NULL;
-            index1 = NULL;
-            index2 = NULL;
-            lenArray = NULL;
-            dataArea = NULL;
-        }
+    if( strcmp( lang, "ja" ) == 0 ) {
+        existMark = getExistMark_ja();
+        index1 = getIndex1_ja();
+        index2 = getIndex2_ja();
+        lenArray = getLenArray_ja();
+        dataArea = getDataArea_ja();
+    }
+    else if( strcmp( lang, "zh" ) == 0 ) {
+        existMark = getExistMark_zh();
+        index1 = getIndex1_zh();
+        index2 = getIndex2_zh();
+        lenArray = getLenArray_zh();
+        dataArea = getDataArea_zh();
+    }
+    else
+    {
+        existMark = NULL;
+        index1 = NULL;
+        index2 = NULL;
+        lenArray = NULL;
+        dataArea = NULL;
+    }
 #endif
 
-        for (sal_Int32 i = 0; i < CACHE_MAX; i++)
-            cache[i].size = 0;
+    for (sal_Int32 i = 0; i < CACHE_MAX; i++)
+        cache[i].size = 0;
 
-        japaneseWordBreak = sal_False;
+    japaneseWordBreak = sal_False;
 }
 
-xdictionary::~xdictionary() {
+xdictionary::~xdictionary()
+{
 #ifndef DISABLE_DYNLOADING
         osl_unloadModule(hModule);
 #endif
@@ -151,46 +152,48 @@ xdictionary::~xdictionary() {
 
 void xdictionary::setJapaneseWordBreak()
 {
-        japaneseWordBreak = sal_True;
+    japaneseWordBreak = sal_True;
 }
 
-sal_Bool xdictionary::exists(const sal_uInt32 c) {
-        // 0x1FFF is the hardcoded limit in gendict for existMarks
-        sal_Bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
-        if (!exist && japaneseWordBreak)
-            return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
-        else
-            return exist;
+sal_Bool xdictionary::exists(const sal_uInt32 c)
+{
+    // 0x1FFF is the hardcoded limit in gendict for existMarks
+    sal_Bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
+    if (!exist && japaneseWordBreak)
+        return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
+    else
+        return exist;
 }
 
-sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen) {
+sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen)
+{
 
-        if ( !index1 ) return 0;
+    if ( !index1 ) return 0;
 
-        sal_Int16 idx = index1[str[0] >> 8];
+    sal_Int16 idx = index1[str[0] >> 8];
 
-        if (idx == 0xFF) return 0;
+    if (idx == 0xFF) return 0;
 
-        idx = (idx<<8) | (str[0]&0xff);
+    idx = (idx<<8) | (str[0]&0xff);
 
-        sal_uInt32 begin = index2[idx], end = index2[idx+1];
+    sal_uInt32 begin = index2[idx], end = index2[idx+1];
 
-        if (begin == 0) return 0;
+    if (begin == 0) return 0;
 
-        str++; sLen--; // first character is not stored in the dictionary
-        for (sal_uInt32 i = end; i > begin; i--) {
-            sal_Int32 len = lenArray[i] - lenArray[i - 1];
-            if (sLen >= len) {
-                const sal_Unicode *dstr = dataArea + lenArray[i-1];
-                sal_Int32 pos = 0;
+    str++; sLen--; // first character is not stored in the dictionary
+    for (sal_uInt32 i = end; i > begin; i--) {
+        sal_Int32 len = lenArray[i] - lenArray[i - 1];
+        if (sLen >= len) {
+            const sal_Unicode *dstr = dataArea + lenArray[i-1];
+            sal_Int32 pos = 0;
 
-                while (pos < len && dstr[pos] == str[pos]) { pos++; }
+            while (pos < len && dstr[pos] == str[pos]) { pos++; }
 
-                if (pos == len)
-                    return len + 1;
-            }
+            if (pos == len)
+                return len + 1;
         }
-        return 0;
+    }
+    return 0;
 }
 
 
@@ -210,14 +213,15 @@ WordBreakCache::WordBreakCache() :
  * Compare two unicode string,
  */
 
-sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
-        // Different length, different string.
-        if (length != boundary.endPos - boundary.startPos) return sal_False;
+sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
+{
+    // Different length, different string.
+    if (length != boundary.endPos - boundary.startPos) return sal_False;
 
-        for (sal_Int32 i = 0; i < length; i++)
-            if (contents[i] != str[i + boundary.startPos]) return sal_False;
+    for (sal_Int32 i = 0; i < length; i++)
+        if (contents[i] != str[i + boundary.startPos]) return sal_False;
 
-        return sal_True;
+    return sal_True;
 }
 
 

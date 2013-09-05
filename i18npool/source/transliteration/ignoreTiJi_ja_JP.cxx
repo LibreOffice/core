@@ -31,29 +31,29 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 
 static const Mapping TiJi[] = {
-        // TU + I --> TI
-        { 0x30C4, 0x30A3, 0x30C1, sal_True },
-        // TE + I --> TI
-        { 0x30C6, 0x30A3, 0x30C1, sal_True },
-        // TU + I --> TI
-        { 0x3064, 0x3043, 0x3061, sal_True },
-        // TE + I --> TI
-        { 0x3066, 0x3043, 0x3061, sal_True },
-        // DE + I --> ZI
-        { 0x30C7, 0x30A3, 0x30B8, sal_True },
-        // DE + I --> ZI
-        { 0x3067, 0x3043, 0x3058, sal_True },
+    // TU + I --> TI
+    { 0x30C4, 0x30A3, 0x30C1, sal_True },
+    // TE + I --> TI
+    { 0x30C6, 0x30A3, 0x30C1, sal_True },
+    // TU + I --> TI
+    { 0x3064, 0x3043, 0x3061, sal_True },
+    // TE + I --> TI
+    { 0x3066, 0x3043, 0x3061, sal_True },
+    // DE + I --> ZI
+    { 0x30C7, 0x30A3, 0x30B8, sal_True },
+    // DE + I --> ZI
+    { 0x3067, 0x3043, 0x3058, sal_True },
 
-        { 0, 0, 0, sal_True }
+    { 0, 0, 0, sal_True }
 };
 
 ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()
 {
-        func = (TransFunc) 0;
-        table = 0;
-        map = TiJi;
-        transliterationName = "ignoreTiJi_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreTiJi_ja_JP";
+    func = (TransFunc) 0;
+    table = 0;
+    map = TiJi;
+    transliterationName = "ignoreTiJi_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreTiJi_ja_JP";
 }
 
 } } } }

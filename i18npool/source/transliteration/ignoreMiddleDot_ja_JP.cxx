@@ -40,11 +40,11 @@ ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
 
 ignoreMiddleDot_ja_JP::ignoreMiddleDot_ja_JP()
 {
-        func = ignoreMiddleDot_ja_JP_translator;
-        table = 0;
-        map = 0;
-        transliterationName = "ignoreMiddleDot_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP";
+    func = ignoreMiddleDot_ja_JP_translator;
+    table = 0;
+    map = 0;
+    transliterationName = "ignoreMiddleDot_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP";
 }
 
 } } } }

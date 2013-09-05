@@ -30,25 +30,25 @@ using namespace com::sun::star::lang;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static const Mapping SeZe[] = {
-        // SI + E --> SE
-        { 0x30B7, 0x30A7, 0x30BB, sal_True },
-        // SI + E --> SE
-        { 0x3057, 0x3047, 0x305B, sal_True },
-        // ZI + E --> ZE
-        { 0x30B8, 0x30A7, 0x30BC, sal_True },
-        // ZI + E --> ZE
-        { 0x3058, 0x3047, 0x305C, sal_True },
+    // SI + E --> SE
+    { 0x30B7, 0x30A7, 0x30BB, sal_True },
+    // SI + E --> SE
+    { 0x3057, 0x3047, 0x305B, sal_True },
+    // ZI + E --> ZE
+    { 0x30B8, 0x30A7, 0x30BC, sal_True },
+    // ZI + E --> ZE
+    { 0x3058, 0x3047, 0x305C, sal_True },
 
-        { 0, 0, 0, sal_True }
+    { 0, 0, 0, sal_True }
 };
 
 ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()
 {
-        func = (TransFunc) 0;
-        table = 0;
-        map = SeZe;
-        transliterationName = "ignoreSeZe_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreSeZe_ja_JP";
+    func = (TransFunc) 0;
+    table = 0;
+    map = SeZe;
+    transliterationName = "ignoreSeZe_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreSeZe_ja_JP";
 }
 
 } } } }

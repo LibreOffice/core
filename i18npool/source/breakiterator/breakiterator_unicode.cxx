@@ -205,18 +205,18 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
         throw(uno::RuntimeException)
 {
-        if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
-            loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
-            for (nDone = 0; nDone < nCount; nDone++) {
-                nStartPos = character.aBreakIterator->following(nStartPos);
-                if (nStartPos == BreakIterator::DONE)
-                    return Text.getLength();
-            }
-        } else { // for CHARACTER mode
-            for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
-                Text.iterateCodePoints(&nStartPos, 1);
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
+        loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
+        for (nDone = 0; nDone < nCount; nDone++) {
+            nStartPos = character.aBreakIterator->following(nStartPos);
+            if (nStartPos == BreakIterator::DONE)
+                return Text.getLength();
         }
-        return nStartPos;
+    } else { // for CHARACTER mode
+        for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
+            Text.iterateCodePoints(&nStartPos, 1);
+    }
+    return nStartPos;
 }
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Text,
@@ -224,131 +224,131 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
         throw(uno::RuntimeException)
 {
-        if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
-            loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
-            for (nDone = 0; nDone < nCount; nDone++) {
-                nStartPos = character.aBreakIterator->preceding(nStartPos);
-                if (nStartPos == BreakIterator::DONE)
-                    return 0;
-            }
-        } else { // for BS to delete one char and CHARACTER mode.
-            for (nDone = 0; nDone < nCount && nStartPos > 0; nDone++)
-                Text.iterateCodePoints(&nStartPos, -1);
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
+        loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
+        for (nDone = 0; nDone < nCount; nDone++) {
+            nStartPos = character.aBreakIterator->preceding(nStartPos);
+            if (nStartPos == BreakIterator::DONE)
+                return 0;
         }
-        return nStartPos;
+    } else { // for BS to delete one char and CHARACTER mode.
+        for (nDone = 0; nDone < nCount && nStartPos > 0; nDone++)
+            Text.iterateCodePoints(&nStartPos, -1);
+    }
+    return nStartPos;
 }
 
 
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int16 rWordType ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
 
-        result.startPos = icuBI->aBreakIterator->following(nStartPos);
-        if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
-            result.endPos = result.startPos;
-        else {
-            if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
+    result.startPos = icuBI->aBreakIterator->following(nStartPos);
+    if( result.startPos >= Text.getLength() || result.startPos == BreakIterator::DONE )
+        result.endPos = result.startPos;
+    else {
+        if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD ) &&
-                        u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
-                result.startPos = icuBI->aBreakIterator->following(result.startPos);
+                u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
+            result.startPos = icuBI->aBreakIterator->following(result.startPos);
 
-            result.endPos = icuBI->aBreakIterator->following(result.startPos);
-            if(result.endPos == BreakIterator::DONE)
-                result.endPos = result.startPos;
-        }
-        return result;
+        result.endPos = icuBI->aBreakIterator->following(result.startPos);
+        if(result.endPos == BreakIterator::DONE)
+            result.endPos = result.startPos;
+    }
+    return result;
 }
 
 
 Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int16 rWordType) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
 
-        result.startPos = icuBI->aBreakIterator->preceding(nStartPos);
-        if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
-            result.endPos = result.startPos;
-        else {
-            if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
+    result.startPos = icuBI->aBreakIterator->preceding(nStartPos);
+    if( result.startPos < 0 || result.startPos == BreakIterator::DONE)
+        result.endPos = result.startPos;
+    else {
+        if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD) &&
-                        u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
-                result.startPos = icuBI->aBreakIterator->preceding(result.startPos);
+                u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
+            result.startPos = icuBI->aBreakIterator->preceding(result.startPos);
 
-            result.endPos = icuBI->aBreakIterator->following(result.startPos);
-            if(result.endPos == BreakIterator::DONE)
-                result.endPos = result.startPos;
-        }
-        return result;
+        result.endPos = icuBI->aBreakIterator->following(result.startPos);
+        if(result.endPos == BreakIterator::DONE)
+            result.endPos = result.startPos;
+    }
+    return result;
 }
 
 
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
         sal_Int16 rWordType, sal_Bool bDirection ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
-        sal_Int32 len = Text.getLength();
+    loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, NULL, Text);
+    sal_Int32 len = Text.getLength();
 
-        if(icuBI->aBreakIterator->isBoundary(nPos)) {
-            result.startPos = result.endPos = nPos;
-            if((bDirection || nPos == 0) && nPos < len) //forward
-                result.endPos = icuBI->aBreakIterator->following(nPos);
-            else
-                result.startPos = icuBI->aBreakIterator->preceding(nPos);
+    if(icuBI->aBreakIterator->isBoundary(nPos)) {
+        result.startPos = result.endPos = nPos;
+        if((bDirection || nPos == 0) && nPos < len) //forward
+            result.endPos = icuBI->aBreakIterator->following(nPos);
+        else
+            result.startPos = icuBI->aBreakIterator->preceding(nPos);
+    } else {
+        if(nPos <= 0) {
+            result.startPos = 0;
+            result.endPos = len ? icuBI->aBreakIterator->following((sal_Int32)0) : 0;
+        } else if(nPos >= len) {
+            result.startPos = icuBI->aBreakIterator->preceding(len);
+            result.endPos = len;
         } else {
-            if(nPos <= 0) {
-                result.startPos = 0;
-                result.endPos = len ? icuBI->aBreakIterator->following((sal_Int32)0) : 0;
-            } else if(nPos >= len) {
-                result.startPos = icuBI->aBreakIterator->preceding(len);
-                result.endPos = len;
-            } else {
-                result.startPos = icuBI->aBreakIterator->preceding(nPos);
-                result.endPos = icuBI->aBreakIterator->following(nPos);
-            }
+            result.startPos = icuBI->aBreakIterator->preceding(nPos);
+            result.endPos = icuBI->aBreakIterator->following(nPos);
         }
-        if (result.startPos == BreakIterator::DONE)
-            result.startPos = result.endPos;
-        else if (result.endPos == BreakIterator::DONE)
-            result.endPos = result.startPos;
+    }
+    if (result.startPos == BreakIterator::DONE)
+        result.startPos = result.endPos;
+    else if (result.endPos == BreakIterator::DONE)
+        result.endPos = result.startPos;
 
-        return result;
+    return result;
 }
 
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
+    loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
-        sal_Int32 len = Text.getLength();
-        if (len > 0 && nStartPos == len)
-            Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
-        if (!sentence.aBreakIterator->isBoundary(nStartPos))
-            nStartPos = sentence.aBreakIterator->preceding(nStartPos);
+    sal_Int32 len = Text.getLength();
+    if (len > 0 && nStartPos == len)
+        Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
+    if (!sentence.aBreakIterator->isBoundary(nStartPos))
+        nStartPos = sentence.aBreakIterator->preceding(nStartPos);
 
-        // skip preceding space.
-        sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 1);
-        while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos, 1);
-        Text.iterateCodePoints(&nStartPos, -1);
+    // skip preceding space.
+    sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 1);
+    while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos, 1);
+    Text.iterateCodePoints(&nStartPos, -1);
 
-        return nStartPos;
+    return nStartPos;
 }
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
+    loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
-        sal_Int32 len = Text.getLength();
-        if (len > 0 && nStartPos == len)
-            Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
-        nStartPos = sentence.aBreakIterator->following(nStartPos);
+    sal_Int32 len = Text.getLength();
+    if (len > 0 && nStartPos == len)
+        Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
+    nStartPos = sentence.aBreakIterator->following(nStartPos);
 
-        sal_Int32 nPos=nStartPos;
-        while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&nPos, -1))) nStartPos=nPos;
+    sal_Int32 nPos=nStartPos;
+    while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&nPos, -1))) nStartPos=nPos;
 
-        return nStartPos;
+    return nStartPos;
 }
 
 LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
@@ -357,63 +357,63 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         const LineBreakHyphenationOptions& hOptions,
         const LineBreakUserOptions& /*rOptions*/ ) throw(uno::RuntimeException)
 {
-        LineBreakResults lbr;
+    LineBreakResults lbr;
 
-        if (nStartPos >= Text.getLength()) {
-            lbr.breakIndex = Text.getLength();
+    if (nStartPos >= Text.getLength()) {
+        lbr.breakIndex = Text.getLength();
+        lbr.breakType = BreakType::WORDBOUNDARY;
+        return lbr;
+    }
+
+    loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, lineRule, Text);
+
+    sal_Bool GlueSpace=sal_True;
+    while (GlueSpace) {
+        if (line.aBreakIterator->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
+            lbr.breakIndex = nStartPos;
             lbr.breakType = BreakType::WORDBOUNDARY;
-            return lbr;
-        }
-
-        loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, lineRule, Text);
-
-        sal_Bool GlueSpace=sal_True;
-        while (GlueSpace) {
-            if (line.aBreakIterator->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
-                lbr.breakIndex = nStartPos;
-                lbr.breakType = BreakType::WORDBOUNDARY;
-            } else if (hOptions.rHyphenator.is()) { //Hyphenation break
-                Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
-                                                WordType::DICTIONARY_WORD, false);
-                uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
-                aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
-                    wBoundary.endPos - wBoundary.startPos), rLocale,
+        } else if (hOptions.rHyphenator.is()) { //Hyphenation break
+            Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
+                    WordType::DICTIONARY_WORD, false);
+            uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
+            aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
+                        wBoundary.endPos - wBoundary.startPos), rLocale,
                     (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
-                if (aHyphenatedWord.is()) {
-                    lbr.rHyphenatedWord = aHyphenatedWord;
-                    if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
-                        lbr.breakIndex = -1;
-                    else
-                        lbr.breakIndex = wBoundary.startPos; //aHyphenatedWord->getHyphenationPos();
-                    lbr.breakType = BreakType::HYPHENATION;
-                } else {
-                    lbr.breakIndex = line.aBreakIterator->preceding(nStartPos);
-                    lbr.breakType = BreakType::WORDBOUNDARY;;
-                }
-            } else { //word boundary break
+            if (aHyphenatedWord.is()) {
+                lbr.rHyphenatedWord = aHyphenatedWord;
+                if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
+                    lbr.breakIndex = -1;
+                else
+                    lbr.breakIndex = wBoundary.startPos; //aHyphenatedWord->getHyphenationPos();
+                lbr.breakType = BreakType::HYPHENATION;
+            } else {
                 lbr.breakIndex = line.aBreakIterator->preceding(nStartPos);
-                lbr.breakType = BreakType::WORDBOUNDARY;
+                lbr.breakType = BreakType::WORDBOUNDARY;;
             }
+        } else { //word boundary break
+            lbr.breakIndex = line.aBreakIterator->preceding(nStartPos);
+            lbr.breakType = BreakType::WORDBOUNDARY;
+        }
 
 #define WJ 0x2060   // Word Joiner
-            GlueSpace=sal_False;
-            if (lbr.breakType == BreakType::WORDBOUNDARY) {
-                nStartPos = lbr.breakIndex;
+        GlueSpace=sal_False;
+        if (lbr.breakType == BreakType::WORDBOUNDARY) {
+            nStartPos = lbr.breakIndex;
+            if (Text[nStartPos--] == WJ)
+                GlueSpace=sal_True;
+            while (nStartPos >= 0 &&
+                    (u_isWhitespace(Text.iterateCodePoints(&nStartPos, 0)) || Text[nStartPos] == WJ)) {
                 if (Text[nStartPos--] == WJ)
                     GlueSpace=sal_True;
-                while (nStartPos >= 0 &&
-                    (u_isWhitespace(Text.iterateCodePoints(&nStartPos, 0)) || Text[nStartPos] == WJ)) {
-                    if (Text[nStartPos--] == WJ)
-                        GlueSpace=sal_True;
-                }
-                if (GlueSpace && nStartPos < 0)  {
-                    lbr.breakIndex = 0;
-                    break;
-                }
+            }
+            if (GlueSpace && nStartPos < 0)  {
+                lbr.breakIndex = 0;
+                break;
             }
         }
+    }
 
-        return lbr;
+    return lbr;
 }
 
 
@@ -421,21 +421,21 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 OUString SAL_CALL
 BreakIterator_Unicode::getImplementationName(void) throw( uno::RuntimeException )
 {
-        return OUString::createFromAscii(cBreakIterator);
+    return OUString::createFromAscii(cBreakIterator);
 }
 
 sal_Bool SAL_CALL
 BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-        return !rServiceName.compareToAscii(cBreakIterator);
+    return !rServiceName.compareToAscii(cBreakIterator);
 }
 
 uno::Sequence< OUString > SAL_CALL
 BreakIterator_Unicode::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-        uno::Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii(cBreakIterator);
-        return aRet;
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = OUString::createFromAscii(cBreakIterator);
+    return aRet;
 }
 
 } } } }

@@ -30,20 +30,20 @@ using namespace com::sun::star::lang;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static const Mapping HyuByu[] = {
-        { 0x30D5, 0x30E5, 0x30D2, sal_False },
-        { 0x3075, 0x3085, 0x3072, sal_False },
-        { 0x30F4, 0x30E5, 0x30D3, sal_False },
-        { 0x3094, 0x3085, 0x3073, sal_False },
-        { 0, 0, 0, sal_False }
+    { 0x30D5, 0x30E5, 0x30D2, sal_False },
+    { 0x3075, 0x3085, 0x3072, sal_False },
+    { 0x30F4, 0x30E5, 0x30D3, sal_False },
+    { 0x3094, 0x3085, 0x3073, sal_False },
+    { 0, 0, 0, sal_False }
 };
 
 ignoreHyuByu_ja_JP::ignoreHyuByu_ja_JP()
 {
-        func = (TransFunc) 0;
-        table = 0;
-        map = HyuByu;
-        transliterationName = "ignoreHyuByu_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreHyuByu_ja_JP";
+    func = (TransFunc) 0;
+    table = 0;
+    map = HyuByu;
+    transliterationName = "ignoreHyuByu_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreHyuByu_ja_JP";
 }
 
 } } } }

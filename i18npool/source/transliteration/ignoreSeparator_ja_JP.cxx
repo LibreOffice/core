@@ -104,12 +104,12 @@ OneToOneMappingTable_t ignoreSeparatorTable[] = {
 
 ignoreSeparator_ja_JP::ignoreSeparator_ja_JP()
 {
-        static oneToOneMapping _table(ignoreSeparatorTable, sizeof(ignoreSeparatorTable));
-        func = (TransFunc) 0;
-        table = &_table;
-        map = 0;
-        transliterationName = "ignoreSeparator_ja_JP";
-        implementationName = "com.sun.star.i18n.Transliteration.ignoreSeparator_ja_JP";
+    static oneToOneMapping _table(ignoreSeparatorTable, sizeof(ignoreSeparatorTable));
+    func = (TransFunc) 0;
+    table = &_table;
+    map = 0;
+    transliterationName = "ignoreSeparator_ja_JP";
+    implementationName = "com.sun.star.i18n.Transliteration.ignoreSeparator_ja_JP";
 }
 
 } } } }
