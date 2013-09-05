@@ -703,15 +703,10 @@ $(LIBATOMIC_OPS_CFLAGS) \
 $(call gb_LinkTarget_use_external_project,$(1),\
 	libatomic_ops \
 )
-ifeq ($(COM),MSC)
+
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib/.libs/libatomic_ops-7.2d.lib \
+	-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib -latomic_ops \
 )
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib/.libs -latomic_ops-7.2d \
-)
-endif
 
 endef
 
@@ -3158,6 +3153,7 @@ $(call gb_ExternalExecutable_set_external,python,$(call gb_UnpackedTarball_get_d
 # target, as that is not used on Mac)
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_GeneratedPackage_get_target_for_build,python3))
 
+<<<<<<< HEAD
 else
 
 $(call gb_ExternalExecutable_set_internal,python,$(INSTROOT)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
