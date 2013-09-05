@@ -8,6 +8,11 @@
         android:showAsAction="always"/>
 
     <item
+        android:id="@+id/menu_settings"
+        android:title="@string/title_settings"
+        android:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_licenses"
         android:title="@string/menu_licenses"
         android:showAsAction="never"/>

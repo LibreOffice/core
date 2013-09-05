@@ -14,6 +14,7 @@ import android.content.Intent;
 import org.libreoffice.impressremote.activity.ComputerConnectionActivity;
 import org.libreoffice.impressremote.activity.ComputerCreationActivity;
 import org.libreoffice.impressremote.activity.LicensesActivity;
+import org.libreoffice.impressremote.activity.SettingsActivity;
 import org.libreoffice.impressremote.activity.SlideShowActivity;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
@@ -137,6 +138,10 @@ public final class Intents {
 
     public static Intent buildSlideShowIntent(Context aContext) {
         return new Intent(aContext, SlideShowActivity.class);
+    }
+
+    public static Intent buildSettingsIntent(Context aContext) {
+        return new Intent(aContext, SettingsActivity.class);
     }
 
     public static Intent buildLicensesIntent(Context aContext) {

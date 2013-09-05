@@ -7,12 +7,14 @@
     <string name="title_bluetooth" translatable="false">Bluetooth</string>
     <string name="title_wifi" translatable="false">WiFi</string>
     <string name="title_licenses">Open source licenses</string>
+    <string name="title_settings">Settings</string>
     <string name="title_connection">Connection</string>
     <string name="title_creation">Creation</string>
     <string name="title_slide_show">Slide Show</string>
     <string name="title_timer">Timer</string>
 
     <string name="menu_licenses">Open source licenses</string>
+    <string name="menu_settings">Settings</string>
     <string name="menu_reconnect">Reconnect</string>
     <string name="menu_add_computer">Add computer</string>
     <string name="menu_remove_computer">Remove</string>
@@ -47,5 +49,10 @@
 
     <string name="description_pager_slide">Slide preview</string>
     <string name="description_grid_slide">Slide preview</string>
+
+    <string name="preferences_volume_keys_actions_title">Volume keys actions</string>
+    <string name="preferences_volume_keys_actions_summary">Switch slides and activate animations using volume keys</string>
+    <string name="preferences_keep_screen_on_title">Screen on</string>
+    <string name="preferences_keep_screen_on_summary">Keep screen on while presenting</string>
 
 </resources>

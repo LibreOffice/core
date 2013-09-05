@@ -187,6 +187,10 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
+            case R.id.menu_settings:
+                callSettingsActivity();
+                return true;
+
             case R.id.menu_licenses:
                 callLicensesActivity();
                 return true;
@@ -194,6 +198,11 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
             default:
                 return super.onOptionsItemSelected(aMenuItem);
         }
+    }
+
+    private void callSettingsActivity() {
+        Intent aIntent = Intents.buildSettingsIntent(this);
+        startActivity(aIntent);
     }
 
     private void callLicensesActivity() {

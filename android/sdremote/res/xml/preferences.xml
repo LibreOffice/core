@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="volume_keys_actions"
+        android:title="@string/preferences_volume_keys_actions_title"
+        android:summary="@string/preferences_volume_keys_actions_summary"/>
+
+    <CheckBoxPreference
+        android:key="keep_screen_on"
+        android:title="@string/preferences_keep_screen_on_title"
+        android:summary="@string/preferences_keep_screen_on_summary"/>
+
+</PreferenceScreen>

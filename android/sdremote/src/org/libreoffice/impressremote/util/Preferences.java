@@ -12,6 +12,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public final class Preferences {
     private static final class Locations {
@@ -28,6 +29,17 @@ public final class Preferences {
         }
 
         public static final String SELECTED_COMPUTERS_TAB_INDEX = "selected_computers_tab_index";
+        public static final String VOLUME_KEYS_ACTIONS = "volume_keys_actions";
+        public static final String KEEP_SCREEN_ON = "keep_screen_on";
+    }
+
+    private static final class Defaults {
+        private Defaults() {
+        }
+
+        public static final String STRING = null;
+        public static final int INT = 0;
+        public static final boolean BOOLEAN = false;
     }
 
     private final SharedPreferences mPreferences;
@@ -52,20 +64,32 @@ public final class Preferences {
         return new Preferences(aContext, Locations.APPLICATION_STATES);
     }
 
+    public static Preferences getSettingsInstance(Context context) {
+        return new Preferences(context);
+    }
+
+    private Preferences(Context context) {
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
     public Map<String, ?> getAll() {
         return mPreferences.getAll();
     }
 
     public String getString(String aKey) {
-        return mPreferences.getString(aKey, null);
+        return mPreferences.getString(aKey, Defaults.STRING);
     }
 
     public int getInt(String aKey) {
-        return mPreferences.getInt(aKey, 0);
+        return mPreferences.getInt(aKey, Defaults.INT);
     }
 
     public void setString(String aKey, String aValue) {
         mPreferences.edit().putString(aKey, aValue).commit();
+    }
+
+    public boolean getBoolean(String aKey) {
+        return mPreferences.getBoolean(aKey, Defaults.BOOLEAN);
     }
 
     public void setInt(String aKey, int aValue) {

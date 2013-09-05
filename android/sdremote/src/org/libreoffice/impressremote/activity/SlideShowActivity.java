@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.KeyEvent;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -34,6 +35,7 @@ import org.libreoffice.impressremote.fragment.TimerEditingDialog;
 import org.libreoffice.impressremote.fragment.TimerSettingDialog;
 import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
+import org.libreoffice.impressremote.util.Preferences;
 
 public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
     private static enum Mode {
@@ -53,6 +55,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         setUpHomeButton();
         setUpFragment();
+        setUpKeepingScreenOn();
 
         bindService();
     }
@@ -84,6 +87,16 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             default:
                 return SlidesPagerFragment.newInstance();
         }
+    }
+
+    private void setUpKeepingScreenOn() {
+        findViewById(android.R.id.content).setKeepScreenOn(isKeepingScreenOnRequired());
+    }
+
+    private boolean isKeepingScreenOnRequired() {
+        Preferences preferences = Preferences.getSettingsInstance(this);
+
+        return preferences.getBoolean(Preferences.Keys.KEEP_SCREEN_ON);
     }
 
     private void bindService() {
@@ -237,6 +250,50 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     @Override
+    public boolean onKeyDown(int aKeyCode, KeyEvent aKeyEvent) {
+        if (!areVolumeKeysActionsRequired()) {
+            return super.onKeyDown(aKeyCode, aKeyEvent);
+        }
+
+        switch (aKeyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                mCommunicationService.getTransmitter().performNextTransition();
+                return true;
+
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                mCommunicationService.getTransmitter().performPreviousTransition();
+                return true;
+
+            default:
+                return super.onKeyDown(aKeyCode, aKeyEvent);
+        }
+    }
+
+    private boolean areVolumeKeysActionsRequired() {
+        Preferences preferences = Preferences.getSettingsInstance(this);
+
+        return preferences.getBoolean(Preferences.Keys.VOLUME_KEYS_ACTIONS);
+    }
+
+    @Override
+    public boolean onKeyUp(int aKeyCode, KeyEvent aKeyEvent) {
+        if (!areVolumeKeysActionsRequired()) {
+            return super.onKeyUp(aKeyCode, aKeyEvent);
+        }
+
+        // Suppress sound of volume changing
+
+        switch (aKeyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                return true;
+
+            default:
+                return super.onKeyUp(aKeyCode, aKeyEvent);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu aMenu) {
         getSupportMenuInflater().inflate(R.menu.menu_action_bar_slide_show, aMenu);
 
@@ -318,8 +375,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         if (aTimer.isSet()) {
             callEditingTimer(aTimer);
-        }
-        else {
+        } else {
             callSettingTimer();
         }
     }
@@ -334,8 +390,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     private DialogFragment buildTimerEditingDialog(Timer aTimer) {
         if (aTimer.isTimeUp()) {
             return TimerEditingDialog.newInstance(aTimer.getMinutesLength());
-        }
-        else {
+        } else {
             return TimerEditingDialog.newInstance(aTimer.getMinutesLeft());
         }
     }
