@@ -16,10 +16,6 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#ifdef LIBO_MERGELIBS
-#define GraphicImport iptGraphicImport
-#endif
-
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
