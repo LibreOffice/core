@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
     sfx \
     svl \
     svt \
+    sot \
 	test \
     tl \
     ucbhelper \
