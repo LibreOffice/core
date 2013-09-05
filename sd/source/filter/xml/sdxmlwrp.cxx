@@ -269,8 +269,8 @@ sal_Int32 ReadThroughComponent(
         SAL_WARN( "sd.filter", "SAX parse exception caught while importing:" << r.Message);
 #endif
 
-        String sErr( OUString::number( r.LineNumber ));
-        sErr += ',';
+        OUString sErr( OUString::number( r.LineNumber ));
+        sErr += ",";
         sErr += OUString::number( r.ColumnNumber );
 
         if( rStreamName.Len() )

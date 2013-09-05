@@ -76,11 +76,11 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
     mpText                  ( NULL ),
     mpFieldEntry            ( NULL )
 {
-    String aString( rXTextRange->getString() );
-    String aURL;
+    OUString aString( rXTextRange->getString() );
+    OUString aURL;
     sal_Bool bRTL_endingParen = sal_False;
 
-    mnTextSize = aString.Len();
+    mnTextSize = aString.getLength();
     if ( bLast )
         mnTextSize++;
 
@@ -127,19 +127,18 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
         else
         {
-            const sal_Unicode* pText = aString.GetBuffer();
             // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
             // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
-            if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
+            if ( bLast && aString[ aString.getLength() - 1 ] == ')' && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
             {
                 mnTextSize++;
                 bRTL_endingParen = sal_True;
             }
             mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
-            for ( int i = 0; i < aString.Len(); i++ )
+            for ( sal_Int32 i = 0; i < aString.getLength(); i++ )
             {
-                nChar = (sal_uInt16)pText[ i ];
+                nChar = (sal_uInt16)aString[ i ];
                 if ( nChar == 0xa )
                     nChar++;
                 else if ( !bSymbol )
@@ -473,7 +472,7 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
 //     23->     PPT Textfield needs a placeholder
 
 sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & ,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, String& rURL )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, OUString& rURL )
 {
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
@@ -526,7 +525,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             else if ( aFieldKind == "URL" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "URL" ) ), sal_True )
-                                    rURL = String( *(OUString*)aAny.getValue() );
+                                    rURL = *(OUString*)aAny.getValue();
                                 nRetValue = 4 << 28;
                             }
                             else if ( aFieldKind == "Page" )
@@ -773,7 +772,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
-                String aGraphicURL;
+                OUString aGraphicURL;
                 for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
                 {
                     const void* pValue = pPropValue[ i ].Value.getValue();
@@ -849,17 +848,17 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     }
                 }
 
-                if ( aGraphicURL.Len() )
+                if ( !aGraphicURL.isEmpty() )
                 {
                     if ( aBuGraSize.Width() && aBuGraSize.Height() )
                     {
-                        xub_StrLen nIndex = aGraphicURL.Search( (sal_Unicode)':', 0 );
-                        if ( nIndex != STRING_NOTFOUND )
+                        sal_Int32 nIndex = aGraphicURL.indexOf(':');
+                        if ( nIndex != -1 )
                         {
                             nIndex++;
-                            if ( aGraphicURL.Len() > nIndex  )
+                            if ( nIndex < aGraphicURL.getLength() )
                             {
-                                OString aUniqueId(OUStringToOString(aGraphicURL.Copy(nIndex, aGraphicURL.Len() - nIndex), RTL_TEXTENCODING_UTF8));
+                                OString aUniqueId(OUStringToOString(aGraphicURL.copy(nIndex), RTL_TEXTENCODING_UTF8));
                                 if ( !aUniqueId.isEmpty() )
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
@@ -926,9 +925,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 case SVX_NUM_CHARS_UPPER_LETTER :
                                 case SVX_NUM_CHARS_UPPER_LETTER_N :
                                 {
-                                    if ( sSuffix == String( ")" ) )
+                                    if ( sSuffix == ")" )
                                     {
-                                        if ( sPrefix == String( "(" ) )
+                                        if ( sPrefix == "(" )
                                             nMappedNumType = 0xa0001;   // (A)
                                         else
                                             nMappedNumType = 0xb0001;   // A)
@@ -940,9 +939,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 case SVX_NUM_CHARS_LOWER_LETTER :
                                 case SVX_NUM_CHARS_LOWER_LETTER_N :
                                 {
-                                    if ( sSuffix == String( ")" ) )
+                                    if ( sSuffix == ")" )
                                     {
-                                        if ( sPrefix == String( "(" ) )
+                                        if ( sPrefix == "(" )
                                             nMappedNumType = 0x80001;   // (a)
                                         else
                                             nMappedNumType = 0x90001;   // a)
@@ -953,9 +952,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ROMAN_UPPER :
                                 {
-                                    if ( sSuffix == String( ")" ) )
+                                    if ( sSuffix == ")" )
                                     {
-                                        if ( sPrefix == String( "(" ) )
+                                        if ( sPrefix == "(" )
                                             nMappedNumType = 0xe0001;   // (I)
                                         else
                                             nMappedNumType = 0xf0001;   // I)
@@ -966,9 +965,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ROMAN_LOWER :
                                 {
-                                    if ( sSuffix == String( ")" ) )
+                                    if ( sSuffix == ")" )
                                     {
-                                        if ( sPrefix == String( "(" ) )
+                                        if ( sPrefix == "(" )
                                             nMappedNumType = 0x40001;   // (i)
                                         else
                                             nMappedNumType = 0x50001;   // i)
@@ -979,16 +978,16 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ARABIC :
                                 {
-                                    if ( sSuffix == String( ")" ) )
+                                    if ( sSuffix == ")" )
                                     {
-                                        if ( sPrefix == String( "(" ) )
+                                        if ( sPrefix == "(" )
                                             nMappedNumType = 0xc0001;   // (1)
                                         else
                                             nMappedNumType = 0x20001;   // 1)
                                     }
                                     else
                                     {
-                                        if ( ! ( sSuffix.Len() + sPrefix.Len() ) )
+                                        if ( sSuffix.isEmpty() && sPrefix.isEmpty() )
                                             nMappedNumType = 0xd0001;   // 1
                                         else
                                             nMappedNumType = 0x30001;   // 1.
@@ -997,7 +996,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_NUMBER_UPPER_ZH :
                                 {
-                                    if ( sSuffix.Len() )
+                                    if ( !sSuffix.isEmpty() )
                                         nMappedNumType = 0x110001;   // Simplified Chinese with single-byte period.
                                     else
                                         nMappedNumType = 0x100001;   // Simplified Chinese.
@@ -1010,7 +1009,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_NUMBER_UPPER_ZH_TW :
                                 {
-                                    if ( sSuffix.Len() )
+                                    if ( !sSuffix.isEmpty() )
                                         nMappedNumType = 0x160001;   // Traditional Chinese with single-byte period.
                                     else
                                         nMappedNumType = 0x150001;   // Traditional Chinese.
@@ -1020,7 +1019,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 {
                                     if ( sSuffix == OUString( sal_Unicode(0xff0e)) )
                                         nMappedNumType = 0x260001;   // Japanese with double-byte period.
-                                    else if ( sSuffix.Len() )
+                                    else if ( !sSuffix.isEmpty() )
                                         nMappedNumType = 0x1B0001;   // Japanese/Korean with single-byte period.
                                     else
                                         nMappedNumType = 0x1A0001;   // Japanese/Korean.
@@ -1028,7 +1027,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_FULL_WIDTH_ARABIC :
                                 {
-                                    if ( sSuffix.Len() )
+                                    if ( !sSuffix.isEmpty() )
                                         nMappedNumType = 0x1D0001;   // Double-byte Arabic numbers with double-byte period.
                                     else
                                         nMappedNumType = 0x1C0001;   // Double-byte Arabic numbers.
@@ -1054,13 +1053,11 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
 void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
 {
-    static String sNumberingLevel( "NumberingLevel" );
-
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
+    if ( GetPropertyValue( aAny, mXPropSet, "NumberingLevel", sal_True ) )
     {
         if ( bGetPropStateValue )
-            meBullet = GetPropertyState( mXPropSet, sNumberingLevel );
+            meBullet = GetPropertyState( mXPropSet, "NumberingLevel" );
         nDepth = *( (sal_Int16*)aAny.getValue() );
 
         if ( nDepth < 0 )
@@ -1320,10 +1317,10 @@ FontCollectionEntry::~FontCollectionEntry()
 {
 }
 
-void FontCollectionEntry::ImplInit( const String& rName )
+void FontCollectionEntry::ImplInit( const OUString& rName )
 {
-    String aSubstName( GetSubsFontName( rName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
-    if ( aSubstName.Len() )
+    OUString aSubstName( GetSubsFontName( rName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+    if ( !aSubstName.isEmpty() )
     {
         Name = aSubstName;
         bIsConverted = sal_True;
@@ -1357,7 +1354,7 @@ short FontCollection::GetScriptDirection( const OUString& rString ) const
 
 sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 {
-    if( rEntry.Name.Len() )
+    if( !rEntry.Name.isEmpty() )
     {
         const sal_uInt32 nFonts = maFonts.size();
 

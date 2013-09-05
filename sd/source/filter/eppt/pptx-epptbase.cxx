@@ -384,7 +384,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
         nMode &=~4;
 
 /* sj: Don't know what's IsBackgroundVisible for, have to ask cl
-    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundVisible" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundVisible" ) ) )
     {
         sal_Bool bBackgroundVisible;
         if ( aAny >>= bBackgroundVisible )
@@ -570,37 +570,37 @@ sal_Bool PPTWriterBase::GetStyleSheets()
         {
             for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterTitle; nInstance++ )
             {
-                String aStyle;
-                String aFamily;
+                OUString aStyle;
+                OUString aFamily;
                 switch ( nInstance )
                 {
                     case EPP_TEXTTYPE_CenterTitle :
                     case EPP_TEXTTYPE_Title :
                     {
-                        aStyle = OUString( "title" );
+                        aStyle = "title";
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Body :
                     {
-                        aStyle = OUString( "outline1" );      // SD_LT_SEPARATOR
+                        aStyle = "outline1";      // SD_LT_SEPARATOR
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Other :
                     {
-                        aStyle = OUString( "standard" );
-                        aFamily = OUString( "graphics" );
+                        aStyle = "standard";
+                        aFamily = "graphics";
                     }
                     break;
                     case EPP_TEXTTYPE_CenterBody :
                     {
-                        aStyle = OUString( "subtitle" );
+                        aStyle = "subtitle";
                         aFamily = aXNamed->getName();
                     }
                     break;
                 }
-                if ( aStyle.Len() && aFamily.Len() )
+                if ( !aStyle.isEmpty() && !aFamily.isEmpty() )
                 {
                     try
                     {
@@ -629,8 +629,8 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                                             {
                                                 if ( nInstance == EPP_TEXTTYPE_Body )
                                                 {
-                                                    sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
-                                                    aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
+                                                    sal_Unicode cTemp = aStyle[aStyle.getLength() - 1];
+                                                    aStyle = aStyle.copy(0, aStyle.getLength() - 1) + OUString(++cTemp);
                                                     if ( aXFamily->hasByName( aStyle ) )
                                                     {
                                                         aXFamily->getByName( aStyle ) >>= xStyle;

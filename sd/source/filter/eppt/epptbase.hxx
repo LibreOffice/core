@@ -24,7 +24,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <vcl/mapmod.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -103,14 +102,14 @@ class PropValue
         ::com::sun::star::uno::Any GetAny() { return mAny; }
 
         static sal_Bool GetPropertyValue(
-                ::com::sun::star::uno::Any& rAny,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                        const String& rPropertyName,
-                            sal_Bool bTestPropertyAvailability = sal_False );
+            ::com::sun::star::uno::Any& rAny,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+            const OUString& rPropertyName,
+            sal_Bool bTestPropertyAvailability = sal_False );
 
         static ::com::sun::star::beans::PropertyState GetPropertyState(
-                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
-                        const String& rPropertyName );
+            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &,
+            const OUString& rPropertyName );
 };
 
 class EscherGraphicProvider;
@@ -136,16 +135,16 @@ class PPTExBulletProvider
 
 struct FontCollectionEntry
 {
-        String                  Name;
+        OUString                Name;
         double                  Scaling;
         sal_Int16               Family;
         sal_Int16               Pitch;
         sal_Int16               CharSet;
 
-        String                  Original;
+        OUString                Original;
         sal_Bool                bIsConverted;
 
-        FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
+        FontCollectionEntry( const OUString& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),
                             Family  ( nFamily ),
                             Pitch   ( nPitch ),
@@ -155,7 +154,7 @@ struct FontCollectionEntry
                                 ImplInit( rName );
                             };
 
-        FontCollectionEntry( const String& rName ) :
+        FontCollectionEntry( const OUString& rName ) :
                             Scaling ( 1.0 ),
                             Original( rName )
                             {
@@ -167,7 +166,7 @@ struct FontCollectionEntry
 
         FontCollectionEntry() {};
 
-        void ImplInit( const String& rName );
+        void ImplInit( const OUString& rName );
 };
 
 class VirtualDevice;

@@ -380,8 +380,8 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
 
 // ---------------------------------------------------------------------------------------------
 
-sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const sal_uInt32 nType,
-    const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 )
+sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const sal_uInt32 nType,
+    const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 )
 {
     sal_uInt32 nHyperId = ++mnExEmbed;
 
@@ -406,43 +406,11 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
                 << (sal_uInt32)4
                 << nHyperId;
 
-    sal_uInt16 i, nStringLen;
-    nStringLen = rStringVer0.Len();
-    if ( nStringLen )
-    {
-        *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nStringLen * 2 );
-        for ( i = 0; i < nStringLen; i++ )
-        {
-            *mpExEmbed << rStringVer0.GetChar( i );
-        }
-    }
-    nStringLen = rStringVer1.Len();
-    if ( nStringLen )
-    {
-        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x10 ) << (sal_uInt32)( nStringLen * 2 );
-        for ( i = 0; i < nStringLen; i++ )
-        {
-            *mpExEmbed << rStringVer1.GetChar( i );
-        }
-    }
-    nStringLen = rStringVer2.Len();
-    if ( nStringLen )
-    {
-        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x20 ) << (sal_uInt32)( nStringLen * 2 );
-        for ( i = 0; i < nStringLen; i++ )
-        {
-            *mpExEmbed << rStringVer2.GetChar( i );
-        }
-    }
-    nStringLen = rStringVer3.Len();
-    if ( nStringLen )
-    {
-        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x30 ) << (sal_uInt32)( nStringLen * 2 );
-        for ( i = 0; i < nStringLen; i++ )
-        {
-            *mpExEmbed << rStringVer3.GetChar( i );
-        }
-    }
+    PPTWriter::WriteCString( *mpExEmbed, rStringVer0, 0 );
+    PPTWriter::WriteCString( *mpExEmbed, rStringVer1, 1 );
+    PPTWriter::WriteCString( *mpExEmbed, rStringVer2, 2 );
+    PPTWriter::WriteCString( *mpExEmbed, rStringVer3, 3 );
+
     nHyperSize = mpExEmbed->Tell() - nHyperStart;
     mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
     *mpExEmbed  << nHyperSize;
@@ -528,14 +496,14 @@ sal_Bool PPTWriter::ImplCloseDocument()
         {
             mpPptEscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
             const FontCollectionEntry* pDesc = maFontCollection.GetById( i );
-            sal_uInt32 nFontLen = pDesc->Name.Len();
+            sal_Int32 nFontLen = pDesc->Name.getLength();
             if ( nFontLen > 31 )
                 nFontLen = 31;
-            for ( sal_uInt16 n = 0; n < 32; n++ )
+            for ( sal_Int32 n = 0; n < 32; n++ )
             {
                 sal_Unicode nUniCode = 0;
                 if ( n < nFontLen )
-                    nUniCode = pDesc->Name.GetChar( n );
+                    nUniCode = pDesc->Name[n];
                 *mpStrm << nUniCode;
             }
             sal_uInt8   lfCharSet = ANSI_CHARSET;
@@ -615,9 +583,9 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
 sal_Bool PropValue::GetPropertyValue(
     ::com::sun::star::uno::Any& rAny,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-            const String& rString,
-                    sal_Bool bTestPropertyAvailability )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+    const OUString& rString,
+    sal_Bool bTestPropertyAvailability )
 {
     sal_Bool bRetValue = sal_True;
     if ( bTestPropertyAvailability )
@@ -655,7 +623,7 @@ sal_Bool PropValue::GetPropertyValue(
 
 ::com::sun::star::beans::PropertyState PropValue::GetPropertyState(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-        const String& rPropertyName )
+    const OUString& rPropertyName )
 {
     ::com::sun::star::beans::PropertyState eRetValue = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
     try
@@ -1203,10 +1171,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         case 4 :
                         {
                             sal_uInt32 nPageIndex = 0;
-                            String aPageUrl;
-                            String aEmpty;
-                            String aFile( pFieldEntry->aFieldUrl );
-                            String aTarget( pFieldEntry->aFieldUrl );
+                            OUString aPageUrl;
+                            OUString aFile( pFieldEntry->aFieldUrl );
+                            OUString aTarget( pFieldEntry->aFieldUrl );
                             INetURLObject aUrl( pFieldEntry->aFieldUrl );
                             if ( INET_PROT_FILE == aUrl.GetProtocol() )
                                 aFile = aUrl.PathToFileName();
@@ -1214,33 +1181,32 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             {
                                 // Convert smb notation to '\\' and skip the 'smb:' part
                                 aFile = aUrl.GetMainURL(INetURLObject::NO_DECODE).copy(4);
-                                aFile.SearchAndReplaceAll( '/', '\\' );
+                                aFile = aFile.replaceAll( "/", "\\" );
                                 aTarget = aFile;
                             }
-                            else if ( pFieldEntry->aFieldUrl.GetChar( 0 ) == '#' )
+                            else if ( pFieldEntry->aFieldUrl[0] == '#' )
                             {
-                                String aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
-                                aPage.Erase( 0, 1 );
+                                OUString aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                                aPage = aPage.copy( 1 );
 
-                                OUString aUPage(aPage);
                                 std::vector<OUString>::const_iterator pIter = std::find(
-                                            maSlideNameList.begin(),maSlideNameList.end(),aUPage);
+                                            maSlideNameList.begin(),maSlideNameList.end(),aPage);
 
                                 if ( pIter != maSlideNameList.end() )
                                 {
                                     nPageIndex = pIter - maSlideNameList.begin();
                                     aPageUrl = OUString::number(256 + nPageIndex);
-                                    aPageUrl.Append( OUString( "," ) );
-                                    aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
-                                    aPageUrl.Append( OUString( ",Slide " ) );
-                                    aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
+                                    aPageUrl += ",";
+                                    aPageUrl += OUString::number(nPageIndex + 1);
+                                    aPageUrl += ",Slide ";
+                                    aPageUrl += OUString::number(nPageIndex + 1);
                                 }
                             }
                             sal_uInt32 nHyperId(0);
-                            if ( aPageUrl.Len() )
-                                nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1 << 31 ), pFieldEntry->aRepresentation, aEmpty, aEmpty, aPageUrl );
+                            if ( !aPageUrl.isEmpty() )
+                                nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1 << 31 ), pFieldEntry->aRepresentation, "", "", aPageUrl );
                             else
-                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, aEmpty, aEmpty );
+                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, "", "" );
 
                             rOut << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) << (sal_uInt32)24
                                  << (sal_uInt32)( EPP_InteractiveInfoAtom << 16 ) << (sal_uInt32)16
@@ -1993,7 +1959,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                             // Bit 3: CustomShowReturn. If 1, and this is a jump to custom show, then return to this slide after custom show.
     sal_uInt8   nHyperLinkType = 0;// HyperlinkType a value from the LinkTo enum, such as LT_URL (only valid when action == HyperlinkAction).
 
-    String  aFile;
+    OUString aFile;
 
     /*
         Action Table:       Action Value
@@ -2069,13 +2035,12 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                         nAction = 4;
                         nHyperLinkType = 7;
 
-                        String aEmpty;
-                        String aHyperString = OUString::number(256 + nIndex);
-                        aHyperString.Append( OUString( "," ) );
-                        aHyperString.Append( OUString::number( nIndex + 1 ) );
-                        aHyperString.Append( OUString( ",Slide " ) );
-                        aHyperString.Append( OUString::number( nIndex + 1 ) );
-                        nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ), aBookmark, aEmpty, aEmpty, aHyperString );
+                        OUString aHyperString = OUString::number(256 + nIndex);
+                        aHyperString += ",";
+                        aHyperString += OUString::number(nIndex + 1);
+                        aHyperString += ",Slide ";
+                        aHyperString += OUString::number(nIndex + 1);
+                        nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ), aBookmark, "", "", aHyperString );
                     }
                 }
             }
@@ -2086,18 +2051,17 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         {
             if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
-                String aBookmark( *(OUString*)mAny.getValue() );
-                if ( aBookmark.Len() )
+                OUString aBookmark( *(OUString*)mAny.getValue() );
+                if ( !aBookmark.isEmpty() )
                 {
                     nAction = 4;
                     nHyperLinkType = 8;
 
-                    String aEmpty;
-                    String aBookmarkFile( aBookmark );
+                    OUString aBookmarkFile( aBookmark );
                     INetURLObject aUrl( aBookmark );
                     if ( INET_PROT_FILE == aUrl.GetProtocol() )
                         aBookmarkFile = aUrl.PathToFileName();
-                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, (sal_uInt32)(2 | ( 1 << 31 )), aBookmarkFile, aBookmark, aEmpty, aEmpty );
+                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, (sal_uInt32)(2 | ( 1 << 31 )), aBookmarkFile, aBookmark, "", "" );
                 }
             }
         }
@@ -2113,7 +2077,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
     sal_uInt32 nContainerSize = 24;
     if ( nAction == 2 )
-        nContainerSize += ( aFile.Len() * 2 ) + 8;
+        nContainerSize += ( aFile.getLength() * 2 ) + 8;
     rSt << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) << (sal_uInt32)nContainerSize
         << (sal_uInt32)( EPP_InteractiveInfoAtom << 16 ) << (sal_uInt32)16
         << nSoundRef
@@ -2126,10 +2090,10 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
     if ( nAction == 2 )     // run program Action
     {
-        sal_uInt16 i, nLen = aFile.Len();
+        sal_Int32 nLen = aFile.getLength();
         rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 0x20 ) << (sal_uInt32)( nLen * 2 );
-        for ( i = 0; i < nLen; i++ )
-            rSt << aFile.GetChar( i );
+        for ( sal_Int32 i = 0; i < nLen; i++ )
+            rSt << aFile[i];
     }
 
     rSt << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0x1f ) << (sal_uInt32)24   // Mouse Over Action
@@ -2592,9 +2556,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), sal_True ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
-                    String  aUserName( xTemp->GetUserName() );
-                    String  aOleIdentifier;
-                    if ( aUserName.Len() )
+                    OUString aUserName( xTemp->GetUserName() );
+                    OUString aOleIdentifier;
+                    if ( !aUserName.isEmpty() )
                     {
                         SvStorageStreamRef xCompObj = xTemp->OpenSotStream(
                             OUString( "\1CompObj" ),
@@ -2627,12 +2591,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
 
-                    if ( !aControlName.isEmpty() )
-                        PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
-                    if ( aOleIdentifier.Len() )
-                        PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
-                    if ( aUserName.Len() )
-                        PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
+                    PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
+                    PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
+                    PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
                 }
                 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
@@ -3650,15 +3611,15 @@ sal_Int32 GetCellBottom( sal_Int32 nRow,
     return nBottom;
 }
 
-void PPTWriter::WriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
+void PPTWriter::WriteCString( SvStream& rSt, const OUString& rString, sal_uInt32 nInstance )
 {
-    sal_uInt32 i, nLen = rString.Len();
+    sal_Int32 nLen = rString.getLength();
     if ( nLen )
     {
         rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
             << (sal_uInt32)( nLen << 1 );
-        for ( i = 0; i < nLen; i++ )
-            rSt << rString.GetChar( (sal_uInt16)i );
+        for ( sal_Int32 i = 0; i < nLen; i++ )
+            rSt << rString[i];
     }
 }
 

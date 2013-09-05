@@ -193,7 +193,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
 sal_Bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
-    const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+    const OUString  aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     const sal_uInt16 nFilter = rGraphicFilter.GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
@@ -284,7 +284,7 @@ sal_Bool SdGRFFilter::Export()
             SfxItemSet* pSet = mrMedium.GetItemSet();
             if ( pSet && xSource.is() )
             {
-                const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
+                const OUString aTypeName( mrMedium.GetFilter()->GetTypeName() );
                 GraphicFilter &rGraphicFilter = GraphicFilter::GetGraphicFilter();
                 const sal_uInt16 nFilter = rGraphicFilter.GetExportFormatNumberForTypeName( aTypeName );
                 if ( nFilter != GRFILTER_FORMAT_NOTFOUND )

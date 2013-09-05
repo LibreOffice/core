@@ -98,7 +98,7 @@ sal_Bool SdCGMFilter::Import()
                 {
                     // set PageFill to given color
                     const Color aColor((sal_uInt8)(nRetValue >> 16), (sal_uInt8)(nRetValue >> 8), (sal_uInt8)(nRetValue >> 16));
-                    pSdPage->getSdrPageProperties().PutItem(XFillColorItem(String(), aColor));
+                    pSdPage->getSdrPageProperties().PutItem(XFillColorItem(OUString(), aColor));
                     pSdPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_SOLID));
                 }
             }

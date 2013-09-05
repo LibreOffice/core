@@ -63,7 +63,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
 
-    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
+    void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName );
 
     virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
@@ -71,8 +71,8 @@ class ImplSdPPTImport : public SdrPowerPointImport
 
 public:
 
-    String          ReadSound( sal_uInt32 nSoundRef ) const;
-    String          ReadMedia( sal_uInt32 nMediaRef ) const;
+    OUString        ReadSound( sal_uInt32 nSoundRef ) const;
+    OUString        ReadMedia( sal_uInt32 nMediaRef ) const;
 
     ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     ~ImplSdPPTImport();

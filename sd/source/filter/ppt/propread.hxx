@@ -28,8 +28,6 @@
 #include <sot/storage.hxx>
 #include <tools/stream.hxx>
 
-#include <tools/string.hxx>
-
 // SummaryInformation
 #define PID_TITLE               0x02
 #define PID_SUBJECT             0x03
@@ -172,7 +170,7 @@ class PropRead
         void                    AddSection( Section& rSection );
 
     public:
-                                PropRead( SvStorage& rSvStorage, const String& rName );
+                                PropRead( SvStorage& rSvStorage, const OUString& rName );
 
         PropRead&               operator=( const PropRead& rPropRead );
         const Section*          GetSection( const sal_uInt8* pFMTID );

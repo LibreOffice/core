@@ -26,7 +26,6 @@
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <unotools/fontcvt.hxx>
-#include <tools/string.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
 
@@ -106,13 +105,13 @@
 
 struct EPPTHyperlink
 {
-    String      aURL;
+    OUString    aURL;
     sal_uInt32  nType;      // bit 0-7 : type       ( 1: click action to a slide )
                             //                      ( 2: hyperlink url )
                             // bit 8-23: index
                             // bit 31  : hyperlink is attached to a shape
 
-    EPPTHyperlink( const String rURL, sal_uInt32 nT ) :
+    EPPTHyperlink( const OUString& rURL, sal_uInt32 nT ) :
         aURL        ( rURL ),
         nType       ( nT ){};
 };
@@ -220,7 +219,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
 
     public:
-        static void         WriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
+        static void         WriteCString( SvStream&, const OUString&, sal_uInt32 nInstance = 0 );
 
     protected:
 
@@ -231,8 +230,8 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
         virtual sal_Bool        ImplCreateDocument();
         sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
-        sal_uInt32          ImplInsertBookmarkURL( const String& rBookmark, const sal_uInt32 nType,
-            const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 );
+        sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
+            const OUString& rStringVer0, const OUString& rStringVer1, const OUString& rStringVer2, const OUString& rStringVer3 );
         virtual sal_Bool        ImplCreateMainNotes();
         sal_Bool            ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );

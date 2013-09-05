@@ -63,15 +63,15 @@ void PropItem::Clear()
 
 //  -----------------------------------------------------------------------
 
-static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
+static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 {
     nSize -= 1; //Drop NULL terminator
 
     //If it won't fit in a string, clip it to the max size that does
-    if (nSize > STRING_MAXLEN)
-        nSize = STRING_MAXLEN;
+    if (nSize > SAL_MAX_INT32)
+        nSize = SAL_MAX_INT32;
 
-    return static_cast< xub_StrLen >( nSize );
+    return static_cast< sal_Int32 >( nSize );
 }
 
 sal_Bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, sal_Bool bAlign )
@@ -522,7 +522,7 @@ Section& Section::operator=( const Section& rSection )
 
 //  -----------------------------------------------------------------------
 
-PropRead::PropRead( SvStorage& rStorage, const String& rName ) :
+PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
         mbStatus            ( sal_False ),
         mnByteOrder         ( 0xfffe ),
         mnFormat            ( 0 ),

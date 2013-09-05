@@ -968,8 +968,8 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
         //          = 7 :    "         "      " " (PPT) text range
         //          = 8 :    "         "      " " (Project) task
 
-        sal_uInt32 nUrlLen = pIter->aURL.Len();
-        const sal_Unicode* pUrl = pIter->aURL.GetBuffer();
+        sal_Int32 nUrlLen = pIter->aURL.getLength();
+        const OUString& rUrl = pIter->aURL;
 
         sal_uInt32 nInfo = 7;
 
@@ -982,22 +982,22 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
             {
                 rStrm << (sal_uInt32)0x1f << (sal_uInt32)1 << (sal_uInt32)0;    // path
                 rStrm << (sal_uInt32)0x1f << (sal_uInt32)( nUrlLen + 1 );
-                for ( sal_uInt32 i = 0; i < nUrlLen; i++ )
+                for ( sal_Int32 i = 0; i < nUrlLen; i++ )
                 {
-                    rStrm << pUrl[ i ];
+                    rStrm << rUrl[ i ];
                 }
                 rStrm << (sal_uInt16)0;
             }
             break;
             case 2 :
             {
-                sal_uInt32 i;
+                sal_Int32 i;
 
                 rStrm   << (sal_uInt32)0x1f
                         << (sal_uInt32)( nUrlLen + 1 );
                 for ( i = 0; i < nUrlLen; i++ )
                 {
-                    rStrm << pUrl[ i ];
+                    rStrm << rUrl[ i ];
                 }
                 if ( ! ( i & 1 ) )
                     rStrm << (sal_uInt16)0;

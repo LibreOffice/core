@@ -99,7 +99,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     sal_uInt32 nImportFlags = 0;
 
 #ifdef DBG_UTIL
-    PropRead* pSummaryInformation = new PropRead( rStorage, String( "\005SummaryInformation"  ) );
+    PropRead* pSummaryInformation = new PropRead( rStorage, OUString( "\005SummaryInformation"  ) );
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
@@ -601,7 +601,7 @@ sal_Bool ImplSdPPTImport::Import()
                     // create layoutstylesheets, set layoutname and stylesheet
                     // (only on standard and not pages)
                     ///////////////////////////////////////////////////////////
-                    String aLayoutName( SdResId( STR_LAYOUT_DEFAULT_NAME ) );
+                    OUString aLayoutName( SD_RESSTR( STR_LAYOUT_DEFAULT_NAME ) );
                     if ( nMasterNum > 2 )
                     {
                         if ( ePgKind == PK_STANDARD )
@@ -614,7 +614,7 @@ sal_Bool ImplSdPPTImport::Import()
                             aLayoutName = ( (SdPage*)mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
                     }
                     pPage->SetName( aLayoutName );
-                    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
+                    aLayoutName += SD_LT_SEPARATOR;
                     aLayoutName += SD_RESSTR( STR_LAYOUT_OUTLINE );
                     pPage->SetLayoutName( aLayoutName );
 
@@ -724,7 +724,7 @@ sal_Bool ImplSdPPTImport::Import()
                 pSdrModel->InsertMasterPage( pNotesClone, nAktPageNum );
                 if ( pNotesClone )
                 {
-                    String aLayoutName( ((SdPage*)pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
+                    OUString aLayoutName( ((SdPage*)pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
                     ((SdPage*)pNotesClone)->SetPresentationLayout( aLayoutName, sal_False, sal_False, sal_False );
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
@@ -1300,7 +1300,7 @@ sal_Bool ImplSdPPTImport::Import()
             }
         }
         // this is defaulted, maybe there is no SSDocInfoAtom
-        String      aCustomShow;
+        OUStringBuffer aCustomShow;
         sal_uInt32  nFlags = 1;                 // Bit 0:   Auto advance
         sal_uInt16  nStartSlide = 0;
 
@@ -1321,7 +1321,7 @@ sal_Bool ImplSdPPTImport::Import()
             {
                 rStCtrl >> nChar;
                 if ( nChar )
-                    aCustomShow.Append( nChar );
+                    aCustomShow.append( nChar );
                 else
                 {
                     rStCtrl.SeekRel( ( 31 - i2 ) << 1 );
@@ -1331,15 +1331,16 @@ sal_Bool ImplSdPPTImport::Import()
             rStCtrl >> nFlags;
         }
         // set the current custom show
-        if ( aCustomShow.Len() )
+        if ( aCustomShow.getLength() )
         {
             SdCustomShowList* pList = mpDoc->GetCustomShowList( sal_False );
             if ( pList )
             {
                 SdCustomShow* pPtr = NULL;
+                OUString aCustomShowStr = aCustomShow.makeStringAndClear();
                 for( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                 {
-                    if ( pPtr->GetName() == aCustomShow )
+                    if ( pPtr->GetName() == aCustomShowStr )
                         break;
                 }
                 if ( !pPtr )
@@ -1411,7 +1412,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                         pPage->NbcInsertObject( pObj, 0 );
                 }
             }
-            String aPlaceHolderString = pHFE->pPlaceholder[ i ];
+            OUString aPlaceHolderString = pHFE->pPlaceholder[ i ];
 
             sd::HeaderFooterSettings rHeaderFooterSettings( pPage->getHeaderFooterSettings() );
             switch( i )
@@ -1768,7 +1769,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 if ( nBuildFlags & 16 )
                                 {   // slide with sound effect
                                     pPage->SetSound( sal_True );
-                                    String aSoundFile( ReadSound( nSoundRef ) );
+                                    OUString aSoundFile( ReadSound( nSoundRef ) );
                                     pPage->SetSoundFile( aSoundFile );
                                 }
                                 if ( nBuildFlags & ( 1 << 6 ) )     // Loop until next sound
@@ -1852,7 +1853,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 //
 ///////////////////////////////////////////////////////////////////////////
 
-String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
+OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
     OUString aRetval;
     sal_uInt32 nPosMerk = rStCtrl.Tell();
@@ -1895,7 +1896,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     // Check if this sound file already exists.
                     // If not, it is exported to our local sound directory.
                     sal_Bool    bSoundExists = sal_False;
-                    ::std::vector< String > aSoundList;
+                    ::std::vector< OUString > aSoundList;
 
                     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, aSoundList );
                     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, aSoundList );
@@ -1919,8 +1920,9 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                         DffRecordHeader aSoundDataRecHd;
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd, 0 ) )
                         {
-                            String          aGalleryDir( SvtPathOptions().GetGalleryPath() );
-                            INetURLObject   aGalleryUserSound( aGalleryDir.GetToken( comphelper::string::getTokenCount(aGalleryDir, ';') - 1 ) );
+                            OUString aGalleryDir( SvtPathOptions().GetGalleryPath() );
+                            sal_Int32 nTokenCount = comphelper::string::getTokenCount(aGalleryDir, ';');
+                            INetURLObject aGalleryUserSound( aGalleryDir.getToken( nTokenCount - 1, ';' ) );
 
                             aGalleryUserSound.Append( aRetval );
                             sal_uInt32 nSoundDataLen = aSoundDataRecHd.nRecLen;
@@ -1961,7 +1963,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 //
 //////////////////////////////////////////////////////////////////////////
 
-String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
+OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 {
     OUString aRetVal;
     DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING ) );
@@ -2031,7 +2033,7 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 //
 //////////////////////////////////////////////////////////////////////////
 
-void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName )
+void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName )
 {
     // set local information into pInfo
     if( pIAtom->nSoundRef )
@@ -2098,7 +2100,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                             ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
                             if ( pDocShell )
                             {
-                                String aBaseURL = pDocShell->GetMedium()->GetBaseURL();
+                                OUString aBaseURL = pDocShell->GetMedium()->GetBaseURL();
                                 OUString aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
                                 if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -2147,7 +2149,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
     PresObjKind ePresKind = PRESOBJ_NONE;
     PptOEPlaceholderAtom* pPlaceHolder = pTextObj->GetOEPlaceHolderAtom();
-    String aPresentationText;
+    OUString aPresentationText;
     if ( pPlaceHolder )
     {
         switch( pPlaceHolder->nPlaceholderId )
@@ -2281,7 +2283,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 SdrOutliner* pOutl = NULL;
                 if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
                     pOutl = GetDrawOutliner( pText );
-                if ( aPresentationText.Len() )
+                if ( !aPresentationText.isEmpty() )
                     pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
 
                 if ( pPage->GetPageKind() != PK_NOTES && pPage->GetPageKind() != PK_HANDOUT)
@@ -2643,10 +2645,10 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                     {
                                         sal_uInt32 nRef;
                                         rSt >> nRef;
-                                        String aMediaURL( ReadMedia( nRef ) );
-                                        if ( !aMediaURL.Len() )
+                                        OUString aMediaURL( ReadMedia( nRef ) );
+                                        if ( aMediaURL.isEmpty() )
                                             aMediaURL = ReadSound( nRef );
-                                        if ( aMediaURL.Len() )
+                                        if ( !aMediaURL.isEmpty() )
                                         {
                                             SdrMediaObj* pMediaObj = new SdrMediaObj( pObj->GetSnapRect() );
                                             pMediaObj->SetModel( pObj->GetModel() );

@@ -41,9 +41,9 @@ struct SOParagraph
     sal_Bool                bExtendedParameters;
     sal_uInt32              nParaFlags;
     sal_Int16               nBulletFlags;
-    String                  sPrefix;
-    String                  sSuffix;
-    String                  sGraphicUrl;            // String to a graphic
+    OUString                sPrefix;
+    OUString                sSuffix;
+    OUString                sGraphicUrl;            // String to a graphic
     Size                    aBuGraSize;
     sal_uInt32              nNumberingType;         // this is actually a SvxEnum
     sal_uInt32              nHorzAdjust;
@@ -92,8 +92,8 @@ struct FieldEntry
     sal_uInt32  nFieldType;
     sal_uInt32  nFieldStartPos;
     sal_uInt32  nFieldEndPos;
-    String      aRepresentation;
-    String      aFieldUrl;
+    OUString    aRepresentation;
+    OUString    aFieldUrl;
 
     FieldEntry( sal_uInt32 nType, sal_uInt32 nStart, sal_uInt32 nEnd )
     {
@@ -113,7 +113,7 @@ class PortionObj : public PropStateValue
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = sal_False );
 

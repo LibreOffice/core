@@ -20,7 +20,6 @@
 #include <pptexsoundcollection.hxx>
 #include "epptdef.hxx"
 #include <tools/urlobj.hxx>
-#include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/proptypehlp.hxx>
