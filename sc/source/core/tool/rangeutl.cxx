@@ -31,8 +31,6 @@
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
-
 sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
@@ -68,8 +66,6 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
     return nSuccess;
 }
 
-//------------------------------------------------------------------------
-
 void ScRangeUtil::CutPosString( const String&   theAreaStr,
                                 String&         thePosStr ) const
 {
@@ -86,8 +82,6 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
 
     thePosStr = aPosStr;
 }
-
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 ScDocument*     pDoc,
@@ -176,8 +170,6 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     return bStrOk;
 }
 
-//------------------------------------------------------------------------
-
 sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
                              ScDocument*    pDoc,
                              SCTAB          nTab,
@@ -217,8 +209,6 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
     return bIsAbsArea;
 }
 
-//------------------------------------------------------------------------
-
 sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
@@ -243,8 +233,6 @@ sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
 
     return bIsAbsPos;
 }
-
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeUtil::MakeRangeFromName (
     const String&   rName,
@@ -341,8 +329,6 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 
     return bResult;
 }
-
-//========================================================================
 
 void ScRangeStringConverter::AssignString(
         OUString& rString,
@@ -449,8 +435,6 @@ sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Un
     }
     return nCount;
 }
-
-//___________________________________________________________________
 
 sal_Bool ScRangeStringConverter::GetAddressFromString(
         ScAddress& rAddress,
@@ -570,9 +554,6 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     return bRet;
 }
 
-
-//___________________________________________________________________
-
 sal_Bool ScRangeStringConverter::GetAreaFromString(
         ScArea& rArea,
         const OUString& rRangeStr,
@@ -595,9 +576,6 @@ sal_Bool ScRangeStringConverter::GetAreaFromString(
     }
     return bResult;
 }
-
-
-//___________________________________________________________________
 
 sal_Bool ScRangeStringConverter::GetAddressFromString(
         table::CellAddress& rAddress,
@@ -662,9 +640,6 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     return bRet;
 }
 
-
-//___________________________________________________________________
-
 void ScRangeStringConverter::GetStringFromAddress(
         OUString& rString,
         const ScAddress& rAddress,
@@ -724,9 +699,6 @@ void ScRangeStringConverter::GetStringFromRangeList(
     rString = sRangeListStr;
 }
 
-
-//___________________________________________________________________
-
 void ScRangeStringConverter::GetStringFromArea(
         OUString& rString,
         const ScArea& rArea,
@@ -739,9 +711,6 @@ void ScRangeStringConverter::GetStringFromArea(
     ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
     GetStringFromRange( rString, aRange, pDocument, eConv, cSeparator, bAppendStr, nFormatFlags );
 }
-
-
-//___________________________________________________________________
 
 void ScRangeStringConverter::GetStringFromAddress(
         OUString& rString,
@@ -1005,8 +974,6 @@ ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rStr
     return pData;
 }
 
-//========================================================================
-
 ScArea::ScArea( SCTAB tab,
                 SCCOL colStart, SCROW rowStart,
                 SCCOL colEnd,   SCROW rowEnd ) :
@@ -1016,16 +983,12 @@ ScArea::ScArea( SCTAB tab,
 {
 }
 
-//------------------------------------------------------------------------
-
 ScArea::ScArea( const ScArea& r ) :
         nTab     ( r.nTab ),
         nColStart( r.nColStart ),   nRowStart( r.nRowStart ),
         nColEnd  ( r.nColEnd ),     nRowEnd  ( r.nRowEnd )
 {
 }
-
-//------------------------------------------------------------------------
 
 ScArea& ScArea::operator=( const ScArea& r )
 {
@@ -1037,8 +1000,6 @@ ScArea& ScArea::operator=( const ScArea& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
-
 sal_Bool ScArea::operator==( const ScArea& r ) const
 {
     return (   (nTab        == r.nTab)
@@ -1047,8 +1008,6 @@ sal_Bool ScArea::operator==( const ScArea& r ) const
             && (nColEnd     == r.nColEnd)
             && (nRowEnd     == r.nRowEnd) );
 }
-
-//------------------------------------------------------------------------
 
 ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     pRangeName(pDoc->GetRangeName()),
@@ -1116,8 +1075,5 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
         }
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

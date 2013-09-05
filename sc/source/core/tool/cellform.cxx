@@ -28,8 +28,7 @@
 #include "formula/errorcodes.hxx"
 #include "sc.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
+// STATIC DATA
 // Err527 Workaround
 const ScFormulaCell* pLastFormulaTreeTop = 0;
 
@@ -262,7 +261,5 @@ void ScCellFormat::GetInputString(
     }
     rString = aString;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

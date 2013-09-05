@@ -50,14 +50,10 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
+// STATIC DATA
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
 const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
-
-
-//------------------------------------------------------------------------
 
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
@@ -282,8 +278,6 @@ OUString ScEditUtil::GetCellFieldValue(
     return aRet;
 }
 
-//------------------------------------------------------------------------
-
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )
 {
     // bForceToTop = always align to top, for editing
@@ -375,8 +369,6 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForc
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
-//------------------------------------------------------------------------
-
 ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     pEngine( pEng ),
     pEditAttrs( NULL ),
@@ -439,9 +431,6 @@ ScEditAttrTester::~ScEditAttrTester()
     delete pEditAttrs;
 }
 
-
-//------------------------------------------------------------------------
-
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 sal_Bool bDeleteEnginePoolP )
             :
@@ -452,7 +441,6 @@ ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
 {
 }
 
-
 ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
             :
             pEnginePool( rOrg.bDeleteEnginePool ? rOrg.pEnginePool->Clone() : rOrg.pEnginePool ),
@@ -462,7 +450,6 @@ ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
 {
 }
 
-
 ScEnginePoolHelper::~ScEnginePoolHelper()
 {
     if ( bDeleteDefaults )
@@ -470,9 +457,6 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
     if ( bDeleteEnginePool )
         SfxItemPool::Free(pEnginePool);
 }
-
-
-//------------------------------------------------------------------------
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
                 sal_Bool bDeleteEnginePoolP )
@@ -486,7 +470,6 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
 
-
 ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg )
             :
             ScEnginePoolHelper( rOrg ),
@@ -495,11 +478,9 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg 
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
 
-
 ScEditEngineDefaulter::~ScEditEngineDefaulter()
 {
 }
-
 
 void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRememberCopy )
 {
@@ -527,7 +508,6 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, sal_Bool bRemem
         EnableUndo( sal_True );
 }
 
-
 void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, sal_Bool bTakeOwnership )
 {
     if ( bDeleteDefaults )
@@ -537,7 +517,6 @@ void ScEditEngineDefaulter::SetDefaults( SfxItemSet* pSet, sal_Bool bTakeOwnersh
     if ( pDefaults )
         SetDefaults( *pDefaults, false );
 }
-
 
 void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
 {
@@ -595,7 +574,6 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObjec
     if ( bUpdateMode )
         SetUpdateMode( sal_True );
 }
-
 
 void ScEditEngineDefaulter::SetText( const OUString& rText )
 {
@@ -716,8 +694,6 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         SetUpdateMode( sal_True );
 }
 
-//------------------------------------------------------------------------
-
 ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
         : ScEditEngineDefaulter( pDoc->GetEnginePool() )
 {
@@ -744,9 +720,7 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
     SetControlWord( GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-//------------------------------------------------------------------------
 //      Feldbefehle fuer Kopf- und Fusszeilen
-//------------------------------------------------------------------------
 
 //
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
@@ -876,11 +850,9 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-//------------------------------------------------------------------------
 //
 //                          Feld-Daten
 //
-//------------------------------------------------------------------------
 
 ScFieldEditEngine::ScFieldEditEngine(
     ScDocument* pDoc, SfxItemPool* pEnginePoolP,
@@ -917,8 +889,6 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
     }
 }
-
-//------------------------------------------------------------------------
 
 ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
             SfxItemPool* pTextObjectPool, sal_Bool bDeleteEnginePoolP ) :

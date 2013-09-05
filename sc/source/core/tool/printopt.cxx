@@ -26,12 +26,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
-// -----------------------------------------------------------------------
-
 TYPEINIT1(ScTpPrintItem, SfxPoolItem);
-
-// -----------------------------------------------------------------------
 
 ScPrintOptions::ScPrintOptions()
 {
@@ -72,9 +67,6 @@ bool ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
     return !(operator==(rOpt));
 }
 
-// -----------------------------------------------------------------------
-
-
 ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
@@ -108,8 +100,6 @@ SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 {
     return new ScTpPrintItem( *this );
 }
-
-// -----------------------------------------------------------------------
 
 #define CFGPATH_PRINT           "Office.Calc/Print"
 
@@ -160,7 +150,6 @@ ScPrintCfg::ScPrintCfg() :
         }
     }
 }
-
 
 void ScPrintCfg::Commit()
 {

@@ -33,8 +33,6 @@
 
 using ::std::vector;
 
-// -----------------------------------------------------------------------
-
 ScMemChart::ScMemChart(short nCols, short nRows)
 {
     nRowCnt = nRows;
@@ -60,8 +58,6 @@ ScMemChart::~ScMemChart()
     delete[] pColText;
     delete[] pData;
 }
-
-// -----------------------------------------------------------------------
 
 ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP,

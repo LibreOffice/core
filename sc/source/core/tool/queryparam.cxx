@@ -221,8 +221,6 @@ void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
     }
 }
 
-// ============================================================================
-
 ScQueryParamTable::ScQueryParamTable()
 {
 }
@@ -236,8 +234,6 @@ ScQueryParamTable::~ScQueryParamTable()
 {
 }
 
-// ============================================================================
-
 ScQueryParam::ScQueryParam() :
     ScQueryParamBase(),
     ScQueryParamTable(),
@@ -248,8 +244,6 @@ ScQueryParam::ScQueryParam() :
 {
     Clear();
 }
-
-//------------------------------------------------------------------------
 
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
     ScQueryParamBase(r),
@@ -268,14 +262,9 @@ ScQueryParam::ScQueryParam( const ScDBQueryParamInternal& r ) :
 {
 }
 
-
-//------------------------------------------------------------------------
-
 ScQueryParam::~ScQueryParam()
 {
 }
-
-//------------------------------------------------------------------------
 
 void ScQueryParam::Clear()
 {
@@ -300,8 +289,6 @@ void ScQueryParam::ClearDestParams()
     nDestRow = 0;
 }
 
-//------------------------------------------------------------------------
-
 ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 {
     nCol1       = r.nCol1;
@@ -324,8 +311,6 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 
     return *this;
 }
-
-//------------------------------------------------------------------------
 
 bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
@@ -365,8 +350,6 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
-
 void ScQueryParam::MoveToDest()
 {
     if (!bInplace)
@@ -392,8 +375,6 @@ void ScQueryParam::MoveToDest()
     }
 }
 
-// ============================================================================
-
 ScDBQueryParamBase::ScDBQueryParamBase(DataType eType) :
     ScQueryParamBase(),
     mnField(-1),
@@ -411,8 +392,6 @@ ScDBQueryParamBase::DataType ScDBQueryParamBase::GetType() const
     return meType;
 }
 
-// ============================================================================
-
 ScDBQueryParamInternal::ScDBQueryParamInternal() :
     ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),
     ScQueryParamTable()
@@ -427,8 +406,6 @@ bool ScDBQueryParamInternal::IsValidFieldIndex() const
 {
     return nCol1 <= mnField && mnField <= nCol2;
 }
-
-// ============================================================================
 
 ScDBQueryParamMatrix::ScDBQueryParamMatrix() :
     ScDBQueryParamBase(ScDBQueryParamBase::MATRIX)

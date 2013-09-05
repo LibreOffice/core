@@ -82,7 +82,6 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 
-
 namespace
 {
     /// Read an AutoFormatSwBlob from stream.
@@ -208,8 +207,6 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
 
     rStream << (sal_uInt16)0;       // Num-Format
 }
-
-//  ---------------------------------------------------------------------------
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
     aFont( ATTR_FONT ),
@@ -435,9 +432,6 @@ sal_Bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion 
 
     return (rStream.GetError() == 0);
 }
-
-
-//  ---------------------------------------------------------------------------
 
 ScAutoFormatData::ScAutoFormatData()
 {
@@ -823,9 +817,6 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     return bRet;
 }
 
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-
 ScAutoFormat::ScAutoFormat() :
     mbSaveLater(false)
 {
@@ -1104,7 +1095,6 @@ bool ScAutoFormat::Save()
 
         bRet &= (rStream.GetError() == 0);
 
-        //-----------------------------------------------------------
         rStream << (sal_uInt16)(maData.size() - 1);
         bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();

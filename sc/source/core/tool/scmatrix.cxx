@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
@@ -63,8 +62,6 @@ struct custom_string_trait
 
     typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
-
-// ============================================================================
 
 namespace {
 
@@ -1053,7 +1050,6 @@ size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_blo
     return ResultNotSet;
 }
 
-
 struct MaxOp
 {
     static double init() { return -std::numeric_limits<double>::max(); }
@@ -1386,8 +1382,6 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
     rC = nRowSize > 1 ? nIndex / nRowSize : nIndex;
     rR = nIndex - rC*nRowSize;
 }
-
-// ============================================================================
 
 void ScMatrix::IncRef() const
 {

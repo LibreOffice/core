@@ -22,16 +22,13 @@
 #include "compiler.hxx"
 #include "document.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
+// STATIC DATA
 namespace {
 
 // Include colon; addresses in range reference are handled individually.
 const sal_Unicode pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
-
-// =======================================================================
 
 inline bool IsText( sal_Unicode c )
 {
@@ -295,8 +292,5 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
     maFormula = aTotal;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

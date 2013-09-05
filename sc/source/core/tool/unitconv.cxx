@@ -27,14 +27,9 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
-// --------------------------------------------------------------------
-
 const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
 
-
-// --- ScUnitConverterData --------------------------------------------
-
+// ScUnitConverterData
 ScUnitConverterData::ScUnitConverterData(
     const OUString& rFromUnit, const OUString& rToUnit, double fValue ) :
     maIndexString(BuildIndexString(rFromUnit, rToUnit)),
@@ -65,8 +60,7 @@ OUString ScUnitConverterData::BuildIndexString(
     return aBuf.makeStringAndClear();
 }
 
-// --- ScUnitConverter ------------------------------------------------
-
+// ScUnitConverter
 #define CFGPATH_UNIT        "Office.Calc/UnitConversion"
 #define CFGSTR_UNIT_FROM    "FromUnit"
 #define CFGSTR_UNIT_TO      "ToUnit"
@@ -146,6 +140,5 @@ bool ScUnitConverter::GetValue(
     fValue = it->second->GetValue();
     return true;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,8 +28,6 @@
 
 using namespace com::sun::star;
 
-//==================================================================
-
 #define CFGPATH_ADDINS  "Office.CalcAddIns/AddInInfo"
 
 ScAddInCfg::ScAddInCfg() :
@@ -54,6 +52,5 @@ void ScAddInCfg::Notify( const uno::Sequence<OUString>& )
     if ( SC_MOD()->GetCurRefDlgId() != SID_OPENDLG_FUNCTION )
         ScGlobal::ResetFunctionList();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

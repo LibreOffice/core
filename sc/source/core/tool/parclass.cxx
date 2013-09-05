@@ -37,7 +37,6 @@
 #include "sc.hrc"   // VAR_ARGS
 #endif
 
-
 /* Following assumptions are made:
  * - OpCodes not specified at all will have at least one and only parameters of
  *   type Value, no check is done on the count of parameters => no Bounds type
@@ -208,7 +207,6 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
 
 ScParameterClassification::RunData * ScParameterClassification::pData = NULL;
 
-
 void ScParameterClassification::Init()
 {
     if ( pData )
@@ -281,13 +279,11 @@ void ScParameterClassification::Init()
 #endif
 }
 
-
 void ScParameterClassification::Exit()
 {
     delete [] pData;
     pData = NULL;
 }
-
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(
         const formula::FormulaToken* pToken, sal_uInt16 nParameter)
@@ -328,7 +324,6 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     }
     return Unknown;
 }
-
 
 ScParameterClassification::Type
 ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
@@ -405,8 +400,6 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     return eRet;
 }
 
-//-----------------------------------------------------------------------------
-
 #if OSL_DEBUG_LEVEL > 1
 
 // add remaining functions, all Value parameters
@@ -464,7 +457,6 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
     }
 }
-
 
 void ScParameterClassification::GenerateDocumentation()
 {

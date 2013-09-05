@@ -31,8 +31,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
-
 static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
 {
     // no need to look at empty cells - just use ScCellIterator
@@ -84,7 +82,6 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, con
     return !lcl_HasErrors( pDoc, rRange );
 }
 
-
 sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
     if (!pMatrix)
@@ -113,8 +110,6 @@ sal_Bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatr
     return sal_True;
 }
 
-//------------------------------------------------------------------------
-
 sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -139,7 +134,6 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument* pDoc, c
     rAny <<= aRowSeq;
     return !lcl_HasErrors( pDoc, rRange );
 }
-
 
 sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix )
 {
@@ -168,8 +162,6 @@ sal_Bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMa
     rAny <<= aRowSeq;
     return sal_True;
 }
-
-//------------------------------------------------------------------------
 
 sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
 {
@@ -201,7 +193,6 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
     rAny <<= aRowSeq;
     return !bHasErrors;
 }
-
 
 sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMatrix,
                                             SvNumberFormatter* pFormatter )
@@ -291,7 +282,6 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
     return bAllowNV || !bHasErrors;
 }
 
-
 sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
 {
     if (!pMatrix)
@@ -333,8 +323,6 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
     return sal_True;
 }
 
-//------------------------------------------------------------------------
-
 bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         com::sun::star::uno::TypeClass & o_eClass,
         const com::sun::star::uno::Any & rAny )
@@ -364,8 +352,6 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
         o_fVal = 0.0;
     return bRet;
 }
-
-//------------------------------------------------------------------------
 
 ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
 {
@@ -441,9 +427,6 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
     return xMatrix;
 }
 
-
-//------------------------------------------------------------------------
-
 sal_Bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
                                         sal_uInt16 nEncoding )
 {
@@ -457,7 +440,5 @@ sal_Bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& r
     }
     return false;
 }
-
-//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

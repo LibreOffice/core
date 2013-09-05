@@ -26,8 +26,6 @@
 #include "global.hxx"
 #include "adiasync.hxx"
 
-//------------------------------------------------------------------------
-
 extern "C" {
 
 typedef void (CALLTYPE* ExFuncPtr1)(void*);
@@ -97,8 +95,6 @@ public:
     void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
-//------------------------------------------------------------------------
-
 FuncData::FuncData(const ModuleData*pModule,
                    const OUString& rIName,
                    const OUString& rFName,
@@ -116,8 +112,6 @@ FuncData::FuncData(const ModuleData*pModule,
     for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = peType[i];
 }
-
-//------------------------------------------------------------------------
 
 FuncData::FuncData(const FuncData& rData) :
     pModuleData     (rData.pModuleData),
@@ -257,14 +251,10 @@ bool InitExternalFunc(const OUString& rModuleName)
 #endif
 }
 
-//------------------------------------------------------------------------
-
 void ExitExternalFunc()
 {
     aModuleCollection.clear();
 }
-
-//------------------------------------------------------------------------
 
 bool FuncData::Call(void** ppParam) const
 {
@@ -364,8 +354,6 @@ bool FuncData::Call(void** ppParam) const
 #endif
 }
 
-//------------------------------------------------------------------------
-
 bool FuncData::Unadvice( double nHandle )
 {
 #ifdef DISABLE_DYNLOADING
@@ -383,8 +371,6 @@ bool FuncData::Unadvice( double nHandle )
     return bRet;
 #endif
 }
-
-//------------------------------------------------------------------------
 
 const OUString& FuncData::GetModuleName() const
 {
@@ -455,6 +441,5 @@ FuncCollection::const_iterator FuncCollection::end() const
 {
     return maData.end();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

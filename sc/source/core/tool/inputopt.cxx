@@ -31,30 +31,21 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-
-//========================================================================
 // ScInputOptions - input options
-//========================================================================
 
 ScInputOptions::ScInputOptions()
 {
     SetDefaults();
 }
 
-//------------------------------------------------------------------------
-
 ScInputOptions::ScInputOptions( const ScInputOptions& rCpy )
 {
     *this = rCpy;
 }
 
-//------------------------------------------------------------------------
-
 ScInputOptions::~ScInputOptions()
 {
 }
-
-//------------------------------------------------------------------------
 
 void ScInputOptions::SetDefaults()
 {
@@ -70,8 +61,6 @@ void ScInputOptions::SetDefaults()
     bReplCellsWarn  = sal_True;
     bLegacyCellSelection = false;
 }
-
-//------------------------------------------------------------------------
 
 const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 {
@@ -90,10 +79,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     return *this;
 }
 
-
-//==================================================================
 //  Config Item containing input options
-//==================================================================
 
 #define CFGPATH_INPUT           "Office.Calc/Input"
 
@@ -192,7 +178,6 @@ ScInputCfg::ScInputCfg() :
     }
 }
 
-
 void ScInputCfg::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -256,6 +241,5 @@ void ScInputCfg::OptionsChanged()
 {
     SetModified();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

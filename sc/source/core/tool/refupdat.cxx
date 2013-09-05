@@ -23,8 +23,6 @@
 #include "bigrange.hxx"
 #include "chgtrack.hxx"
 
-//------------------------------------------------------------------------
-
 template< typename R, typename S, typename U >
 static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 {
@@ -199,7 +197,6 @@ bool IsExpand( R n1, R n2, U nStart, S nD )
         );      // n1 < nStart <= n2 wird sowieso expanded!
 }
 
-
 template< typename R, typename S, typename U >
 void Expand( R& n1, R& n2, U nStart, S nD )
 {   //! nach normalem Move..., nur wenn IsExpand vorher true war!
@@ -213,7 +210,6 @@ void Expand( R& n1, R& n2, U nStart, S nD )
     n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
-
 static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
 {
     if ( nRef > 0 && nDelta > 0 )
@@ -222,7 +218,6 @@ static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
         return nRef + nDelta >= 0;
     return false;
 }
-
 
 static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
 {
@@ -245,7 +240,6 @@ static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
     rRef += nDelta;
     return bCut;
 }
-
 
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -386,7 +380,6 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     return eRet;
 }
 
-
 // simples UpdateReference fuer ScBigRange (ScChangeAction/ScChangeTrack)
 // Referenzen koennen auch ausserhalb des Dokuments liegen!
 // Ganze Spalten/Zeilen (nInt32Min..nInt32Max) bleiben immer solche!
@@ -526,8 +519,6 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
     rRef.SetRange(aAbsRange, rPos);
 }
 
-//------------------------------------------------------------------
-
 void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
                         ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
 {
@@ -573,11 +564,8 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
     return eRet;
 }
 
-//------------------------------------------------------------------
-
 //  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
 //  kommt ohne Dokument aus
-
 
 ScRefUpdateRes ScRefUpdate::UpdateGrow(
     const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef )
@@ -610,6 +598,5 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow(
 
     return eRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

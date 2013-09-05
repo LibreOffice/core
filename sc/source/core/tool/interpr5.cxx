@@ -381,7 +381,6 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     return pMat;
 }
 
-
 ScMatrixRef ScInterpreter::GetMatrix()
 {
     ScMatrixRef pMat = NULL;
@@ -746,7 +745,6 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
     return nSign;
 }
 
-
 /* Solve a LUP decomposed equation Ax=b. LU is a combined matrix of L and U
  * triangulars and P the permutation vector as obtained from
  * lcl_LUP_decompose(). B is the right-hand side input vector, X is used to
@@ -790,7 +788,6 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
     fprintf( stderr, "%s\n", "");
 #endif
 }
-
 
 void ScInterpreter::ScMatDet()
 {
@@ -1015,7 +1012,6 @@ void ScInterpreter::ScMatTrans()
     }
 }
 
-
 /** Minimum extent of one result matrix dimension.
     For a row or column vector to be replicated the larger matrix dimension is
     returned, else the smaller dimension.
@@ -1098,7 +1094,6 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     return xResMat;
 }
 
-
 // for DATE, TIME, DATETIME
 static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 {
@@ -1125,7 +1120,6 @@ static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt
         }
     }
 }
-
 
 void ScInterpreter::ScAdd()
 {
@@ -1808,13 +1802,11 @@ void ScInterpreter::ScFrequency()
 
 namespace {
 
-// -----------------------------------------------------------------------------
 // Helper methods for LINEST/LOGEST and TREND/GROWTH
 // All matrices must already exist and have the needed size, no control tests
 // done. Those methods, which names start with lcl_T, are adapted to case 3,
 // where Y (=observed values) is given as row.
 // Remember, ScMatrix matrices are zero based, index access (column,row).
-// -----------------------------------------------------------------------------
 
 // <A;B> over all elements; uses the matrices as vectors of length M
 double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
@@ -1989,7 +1981,6 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
     return true;
 }
 
-
 /* Applies a Householder transformation to a column vector Y with is given as
  * Nx1 Matrix. The Vektor u, from which the Householder transformation is build,
  * is the column part in matrix A, with column index C, starting with row
@@ -2097,8 +2088,6 @@ void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
         pMatZ->PutDouble( fSum, row);
     }
 }
-
-
 
 double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
 {
@@ -2281,8 +2270,6 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
     }
     return true;
 }
-
-// -----------------------------------------------------------------------------
 
 // LINEST
 void ScInterpreter::ScRGP()
@@ -2553,7 +2540,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
                                    : pSlopes->GetDouble(i) , K-1-i, 0);
 
-
             if (bStats)
             {
                 double fSSreg = 0.0;
@@ -2711,7 +2697,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             for (SCSIZE i = 0; i < K; i++)
                 pResMat->PutDouble(_bRKP ? exp(pSlopes->GetDouble(i))
                                    : pSlopes->GetDouble(i) , K-1-i, 0);
-
 
             if (bStats)
             {
@@ -3123,7 +3108,6 @@ void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
     }
     PushMatrix(pResMat);
 }
-
 
 void ScInterpreter::ScMatRef()
 {

@@ -48,8 +48,6 @@ const ScEditDataArray::Item* ScEditDataArray::Next()
     return &(*maIter++);
 }
 
-// ============================================================================
-
 ScEditDataArray::Item::Item(SCTAB nTab, SCCOL nCol, SCROW nRow,
                             EditTextObject* pOldData, EditTextObject* pNewData) :
     mnTab(nTab),
@@ -88,6 +86,5 @@ SCROW ScEditDataArray::Item::GetRow() const
 {
     return mnRow;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
