@@ -68,8 +68,9 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         maLayoutName = mxMasterPage->GetLayoutName();
 
         OUString aLayoutName( maLayoutName );
-        const sal_uInt16 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
-        aLayoutName = aLayoutName.copy(0, nLen );
+        const sal_uInt32 nSepIdx = aLayoutName.indexOf( SD_LT_SEPARATOR );
+        if (nSepIdx != -1)
+            aLayoutName = aLayoutName.copy(0, nSepIdx + 4);
 
         if( (maStyleSheets.empty()) || !(*maStyleSheets.begin()).second->GetName().startsWith( aLayoutName) )
         {
@@ -208,11 +209,13 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
         if( pPage == 0 )
             throw DisposedException();
 
-        String aLayoutName( pPage->GetLayoutName() );
-        const String aSep( SD_LT_SEPARATOR );
-        aLayoutName.Erase(aLayoutName.Search(aSep));
+        // erase all after separator index
+        OUString aLayoutName( pPage->GetLayoutName() );
+        sal_Int32 nSepIdx = aLayoutName.indexOf( SD_LT_SEPARATOR );
+        if (nSepIdx != -1)
+            aLayoutName = aLayoutName.copy(0, nSepIdx);
 
-        return OUString( aLayoutName );
+        return aLayoutName;
     }
     else
     {
