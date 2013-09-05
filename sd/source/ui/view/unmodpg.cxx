@@ -70,6 +70,11 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
         mbOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
     }
+    else
+    {
+        mbOldBckgrndVisible = false;
+        mbOldBckgrndObjsVisible = false;
+    }
 
     maComment = SD_RESSTR(STR_UNDO_MODIFY_PAGE);
 }
