@@ -1302,8 +1302,8 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     {
                         OUString aMessage( String( ModuleRes( STR_CTW_UNSUPPORTED_COLUMN_TYPE ) ) );
 
-                        aMessage = aMessage.replaceAt( aMessage.indexOfAsciiL( "$type$", 6 ), 6, OUString::number( aSourceColTypes[ nSourceColumn ] ) );
-                        aMessage = aMessage.replaceAt( aMessage.indexOfAsciiL( "$pos$", 5 ), 5, OUString::number( nSourceColumn ) );
+                        aMessage = aMessage.replaceFirst( "$type$", OUString::number( aSourceColTypes[ nSourceColumn ] ) );
+                        aMessage = aMessage.replaceFirst( "$pos$", OUString::number( nSourceColumn ) );
 
                         ::dbtools::throwSQLException(
                             aMessage,
