@@ -260,6 +260,15 @@ protected:
         return xCursor->getPage();
     }
 
+    /// Get shape (counted from 1)
+    uno::Reference<drawing::XShape> getShape(int number)
+    {
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(number - 1), uno::UNO_QUERY);
+        return xShape;
+    }
+
     uno::Reference<lang::XComponent> mxComponent;
     xmlBufferPtr mpXmlBuffer;
 
