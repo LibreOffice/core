@@ -31,6 +31,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <map>
 #include <OTypeInfo.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentEvent.hpp>
@@ -74,6 +75,8 @@ namespace connectivity
             ::osl::Mutex&                   getMutex()
                                             { return m_aMutex; }
         protected:
+            ::utl::TempFile m_extractedFDBFile;
+
             static const OUString sDBLocation; // Location within .odb container
             rtl_TextEncoding                        m_nTextEncoding; // the encoding which is used for all text conversions
             //====================================================================
