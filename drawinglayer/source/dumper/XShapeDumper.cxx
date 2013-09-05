@@ -134,7 +134,9 @@ void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, x
 void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter);
+#if 0 // unused now, but will presumably soon be used, avoid compiler warning till then
 void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGrabBag, xmlTextWriterPtr xmlWriter);
+#endif
 
 // CustomShape.idl
 void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
@@ -1054,6 +1056,8 @@ void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter)
         OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
 }
 
+#if 0 // unused now, but will presumably soon be used, avoid compiler warning till then
+
 void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGrabBag, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
@@ -1064,6 +1068,8 @@ void dumpInteropGrabBagAsElement(uno::Sequence< beans::PropertyValue> aInteropGr
 
     xmlTextWriterEndElement( xmlWriter );
 }
+
+#endif
 
 // --------------------------------
 // ---------- XShape.idl ----------
