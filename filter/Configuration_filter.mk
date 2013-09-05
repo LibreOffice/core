@@ -43,6 +43,7 @@ $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
 			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
+			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 		 	fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=Types tcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
@@ -91,6 +92,7 @@ $(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
 			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
+			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
@@ -127,6 +129,7 @@ $(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 		echo "items=$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter contenthandlers,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),)))))" \
 			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE2} && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
+			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=Misc \
 			lcfg=$${RESPONSEFILE} ccfg=$${RESPONSEFILE2} && \
@@ -162,6 +165,7 @@ $(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
 			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
+			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			outdir=$(dir $@) pkg=$@ xmlpackage=GraphicFilter \
 			fcfg=$${RESPONSEFILE} subdir_filters=internalgraphicfilters && \
@@ -208,6 +212,7 @@ $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
 			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
 		$(filter_MERGE) tempdir=$(TMPDIR) \
+			share_subdir_name=$(LIBO_SHARE_FOLDER) \
 			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
 			pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} languagepack=true \
 		&& rm -f $${RESPONSEFILE})

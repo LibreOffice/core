@@ -40,6 +40,7 @@ PROP_LCFG            = "lcfg"                     # // <= cmdline
 PROP_CCFG            = "ccfg"                     # // <= cmdline
 PROP_LANGUAGEPACK    = "languagepack"             # // <= cmdline
 PROP_VERBOSE         = "verbose"                  # // <= cmdline
+PROP_SHARE_SUBDIR_NAME = "share_subdir_name"      # // <= cmdline
 PROP_ITEMS           = "items"                    # // <= pkg cfg files!
 
 #---begin java.util.Properties copy---#
@@ -378,7 +379,7 @@ class ConfigHelper:
                 sArg = lCommandLineArgs[arg][pos + 1:]
                 self.props[sArg] = 1
                 continue
-            
+
             raise Exception("Invalid command line detected. The argument \"" + \
                 lCommandLineArgs[arg] + "\" use an unsupported format.")
 
@@ -555,6 +556,9 @@ class Merger:
     def getFragments(self, aDir, sSetName, lFragments, nPrettyTabs):
         sBuffer = '' 
         sExtXcu = self.m_aCfg.getValue(PROP_EXTENSION_XCU);
+        sShareSubdirName = self.m_aCfg.getValue(PROP_SHARE_SUBDIR_NAME)
+        if len(sShareSubdirName) < 1:
+            raise Exception("no share subdir set")
 
         if len(lFragments) < 1:
             return sBuffer
@@ -572,7 +576,9 @@ class Merger:
                 # handle simple files only and check for existence!
                 raise Exception("fragment \"" + sFragPath + "\" does not exists.")
             printOut("merge fragment \"" + sFragPath + "\" ...")
-            sBuffer = sBuffer + aFragmentFile.read()
+            data = aFragmentFile.read()
+            data = data.replace("$(share_subdir_name)", sShareSubdirName)
+            sBuffer = sBuffer + data
             sBuffer = sBuffer + "\n"
 
         nPrettyTabs = nPrettyTabs - 1
