@@ -1516,7 +1516,6 @@ Sequence< Locale > SAL_CALL
 LocaleDataImpl::getAllInstalledLocaleNames() throw(RuntimeException)
 {
     Sequence< lang::Locale > seq( nbOfLocales );
-    OUString empStr;
     sal_Int16 nInstalled = 0;
 
     for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
