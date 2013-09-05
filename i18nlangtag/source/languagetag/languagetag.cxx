@@ -1229,9 +1229,15 @@ LanguageTag & LanguageTag::makeFallback()
         if (!aCountry.isEmpty())
         {
             aVec.push_back( aLanguage + "-" + aCountry);
-            // For zh-HK or zh-MO also list zh-TW
-            if (aLanguage == "zh" && (aCountry == "HK" || aCountry == "MO"))
-                aVec.push_back( aLanguage + "-TW");
+            if (aLanguage == "zh")
+            {
+                // For zh-HK or zh-MO also list zh-TW, for all other zh-XX also
+                // list zh-CN.
+                if (aCountry == "HK" || aCountry == "MO")
+                    aVec.push_back( aLanguage + "-TW");
+                else if (aCountry != "CN")
+                    aVec.push_back( aLanguage + "-CN");
+            }
         }
         aVec.push_back( aLanguage);
         return aVec;
