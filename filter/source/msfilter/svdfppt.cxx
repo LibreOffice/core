@@ -1319,13 +1319,13 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             bOk = sal_False;                                // (it should not be greater than the PPT_PST_PersistPtrIncrementalBlock, but
                                                         // we are reading this block later, so we do not have access yet)
 
-        if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) ) )
-            pPersistPtr = new (std::nothrow) sal_uInt32[ nPersistPtrAnz ];
+        if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) -1 ) )
+            pPersistPtr = new (std::nothrow) sal_uInt32[ nPersistPtrAnz + 1 ];
         if ( !pPersistPtr )
             bOk = sal_False;
         if ( bOk )
         {
-            memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
+            memset( pPersistPtr, 0x00, (nPersistPtrAnz+1) * sizeof(sal_uInt32) );
 
             // SJ: new search mechanism from bottom to top (Issue 21122)
             PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
@@ -1343,14 +1343,14 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                         sal_uLong nPibLen = aPersistHd.GetRecEndFilePos();
                         while ( bOk && ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPibLen ) )
                         {
-                            sal_uInt32 nOfs, nAnz;
+                            sal_uInt32 nOfs(0);
                             rStCtrl >> nOfs;
-                            nAnz = nOfs;
+                            sal_uInt32 nAnz = nOfs;
                             nOfs &= 0x000FFFFF;
                             nAnz >>= 20;
                             while ( bOk && ( rStCtrl.GetError() == 0 ) && ( nAnz > 0 ) && ( nOfs <= nPersistPtrAnz ) )
                             {
-                                sal_uInt32 nPt;
+                                sal_uInt32 nPt(0);
                                 rStCtrl >> nPt;
                                 if ( !pPersistPtr[ nOfs ] )
                                 {
