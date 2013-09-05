@@ -76,6 +76,7 @@ const OUString OConnection::sDBLocation( "firebird.fdb" );
 OConnection::OConnection(FirebirdDriver*    _pDriver)
                         :OConnection_BASE(m_aMutex),
                          OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+                         m_extractedFDBFile(),
                          m_xMetaData(NULL),
                          m_bIsEmbedded(sal_False),
                          m_sConnectionURL(),
@@ -149,10 +150,10 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-        m_sURL = utl::TempFile::CreateTempName() + ".fdb";
+        m_sURL = m_extractedFDBFile.GetFileName();
 
-        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
-                    << OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8 ).getStr());
+        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sURL);
+
         if (!bIsNewDatabase)
         {
             SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
@@ -177,6 +178,19 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
             }
 
             xFileAccess->writeFile(m_sURL,xDBStream->getInputStream());
+        }
+        else
+        {
+            // ::utl::TempFile creates a physical file, if we are creating a new
+            // db using isc_create_database we need to ensure that no file
+            // exists at the specified location. (We use TempFile in order to
+            // ensure that the containing directory continues to safely exist
+            // while we work with the db.)
+            uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
+                ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext()),
+                uno::UNO_QUERY);
+            if (xFileAccess->exists(m_sURL))
+                xFileAccess->kill(m_sURL);
         }
         // TOOO: Get DB properties from XML
 
@@ -740,14 +754,6 @@ void OConnection::disposing()
         evaluateStatusVector(status, "isc_detach_database", *this);
     }
     // TODO: write to storage again?
-    if (m_bIsEmbedded)
-    {
-        uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
-            ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext()),
-            uno::UNO_QUERY);
-        if (xFileAccess->exists(m_sURL))
-            xFileAccess->kill(m_sURL);
-    }
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
