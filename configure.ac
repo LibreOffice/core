@@ -8405,20 +8405,6 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
         SYSTEM_FIREBIRD=NO
         FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
         FIREBIRD_LIBS="-lfbembed"
-        dnl FIREBIRD_LIBS="-L${OUTDIR}/lib -lfbclient"
-
-        dnl TODO: Checking to build IBPP in case we want to use it for the SDBC driver
-
-        dnl dnl HP-UX atomic routines are in atomic library, not standard C library.
-        dnl dnl If we can't find atomic routines in vendor library, look for atomic_ops.
-        dnl AC_SEARCH_LIBS(atomic_inc, atomic,,
-        dnl     AC_CHECK_LIB(atomic_ops, main))
-
-        dnl dnl check for tommath presence
-        dnl save_LIBS=$LIBS
-        dnl AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
-        dnl AC_CHECK_LIB(tommath, mp_init, TOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
-        dnl LIBS=$save_LIBS
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
         ENABLE_FIREBIRD_SDBC="TRUE"
