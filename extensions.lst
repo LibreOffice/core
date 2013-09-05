@@ -55,7 +55,7 @@
 
 # French dictionary.
 [ language=fr || language=nl || language=de || language=de_DE ]
-    47ca39e385b02839c24a5d953495cb98 http://sourceforge.net/projects/aoo-extensions/files/3554/5/ooo-dictionnaire-fr-moderne-v4.2.oxt/download "ooo-dictionnaire-fr-moderne-v4.2.oxt"
+    8f7ca241048c70bd7893995ac4bcca3b http://sourceforge.net/projects/aoo-extensions/files/17340/1/dict411.oxt/download "dict411.oxt"
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
