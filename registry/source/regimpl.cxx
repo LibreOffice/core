@@ -1632,6 +1632,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     fprintf(
                         stdout, "%lu = \"%s\"\n",
                         sal::static_int_cast< unsigned long >(i), pValue);
+                    rtl_freeMemory(pValue);
                     offset += sLen;
                 }
             }
