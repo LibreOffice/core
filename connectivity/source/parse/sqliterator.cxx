@@ -2129,9 +2129,9 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
         const sal_Char* pPlaceHolder1 = bTwoTokens ? "#1" : "#";
         const OUString sPlaceHolder1 = OUString::createFromAscii( pPlaceHolder1 );
 
-        sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( sPlaceHolder1 ), sPlaceHolder1.getLength(), *_pReplaceToken1 );
+        sErrorMessage = sErrorMessage.replaceFirst( sPlaceHolder1, *_pReplaceToken1 );
         if ( _pReplaceToken2 )
-            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( "#2" ), 2, *_pReplaceToken2 );
+            sErrorMessage = sErrorMessage.replaceFirst( "#2" , *_pReplaceToken2 );
     }
 
     impl_appendError( SQLException(
