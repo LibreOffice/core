@@ -291,7 +291,8 @@ static const struct {
 
 #endif
 
-static const sal_Unicode under = sal_Unicode('_');
+static const sal_Unicode cUnder = sal_Unicode('_');
+static const sal_Unicode cHyphen = sal_Unicode('-');
 
 static const sal_Int16 nbOfLocales = SAL_N_ELEMENTS(aLibTable);
 
@@ -445,7 +446,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
         LocaleDataLookupTableItem** pOutCachedItem )
 {
     OUString aFallback;
-    bool bFallback = (localeName.indexOf( under) < 0);
+    bool bFallback = (localeName.indexOf( cUnder) < 0);
     if (bFallback)
     {
         Locale aLocale;
@@ -478,7 +479,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                             (*pOutCachedItem) = new LocaleDataLookupTableItem( *pCurrent );
                             (*pOutCachedItem)->localeName = aLibTable[i].pLocale;
                             return (*pOutCachedItem)->module->getFunctionSymbol(
-                                    aBuf.appendAscii( pFunction).append( under).
+                                    aBuf.appendAscii( pFunction).append( cUnder).
                                     appendAscii( (*pOutCachedItem)->localeName).makeStringAndClear());
                         }
                         else
@@ -505,7 +506,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                 {
                     (*pOutCachedItem) = new LocaleDataLookupTableItem( *pNewItem );
                     return module->getFunctionSymbol(
-                            aBuf.appendAscii(pFunction).append(under).
+                            aBuf.appendAscii(pFunction).append(cUnder).
                             appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
                 }
                 else
@@ -577,8 +578,8 @@ Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& nam
 {
     if (!ref_name.equals(name)) {
         sal_Int32 index = 0;
-        OUString language = name.getToken(0, under, index);
-        OUString country = name.getToken(0, under, index);
+        OUString language = name.getToken(0, cUnder, index);
+        OUString country = name.getToken(0, cUnder, index);
         Locale loc(language, country, OUString());
         Sequence < Calendar2 > cals;
         if (loc == rLocale) {
@@ -586,7 +587,7 @@ Sequence< CalendarItem2 > &LocaleData::getCalendarItemByName(const OUString& nam
         } else {
             cals = getAllCalendars2(loc);
         }
-        const OUString& id = name.getToken(0, under, index);
+        const OUString& id = name.getToken(0, cUnder, index);
         for (index = 0; index < cals.getLength(); index++) {
             if (id.equals(cals[index].Name)) {
                 ref_cal = cals[index];
@@ -1465,7 +1466,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
     if (cachedItem.get() && cachedItem->equals(rLocale))
     {
         aBuf.ensureCapacity(strlen(pFunction) + 1 + strlen(cachedItem->localeName));
-        return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(under).
+        return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(cUnder).
                 appendAscii(cachedItem->localeName).makeStringAndClear());
     }
 
@@ -1520,7 +1521,7 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
                 cachedItem.reset( pCachedItem );
-            seq[nInstalled++] = LanguageTag::convertToLocale( name.replace( under, '-'), false);
+            seq[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);
         }
         else
         {
@@ -1628,7 +1629,7 @@ LocaleData::getSupportedServiceNames() throw( RuntimeException )
 OUString LocaleData::getFirstLocaleServiceName( const com::sun::star::lang::Locale & rLocale )
 {
     if (rLocale.Language == I18NLANGTAG_QLT)
-        return rLocale.Variant.replace( '-', under);
+        return rLocale.Variant.replace( cHyphen, cUnder);
     else if (!rLocale.Country.isEmpty())
         return rLocale.Language + "_" + rLocale.Country;
     else
@@ -1645,7 +1646,7 @@ OUString LocaleData::getFirstLocaleServiceName( const com::sun::star::lang::Loca
         aVec.erase( aVec.begin());
         for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
         {
-            *it = (*it).replace( '-', under);
+            *it = (*it).replace( cHyphen, cUnder);
         }
     }
     else if (!rLocale.Country.isEmpty())
