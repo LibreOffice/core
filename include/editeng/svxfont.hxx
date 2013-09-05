@@ -80,28 +80,28 @@ public:
     void SetPhysFont( OutputDevice *pOut ) const;
     Font ChgPhysFont( OutputDevice *pOut ) const;
 
-    Size GetCapitalSize( const OutputDevice *pOut, const String &rTxt,
-                          const sal_uInt16 nIdx, const sal_uInt16 nLen) const;
-    void DrawCapital( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-                      const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
+    Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
+                          const sal_Int32 nIdx, const sal_Int32 nLen) const;
+    void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
+                      const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
-    Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt,
-                         const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
+    Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+                         const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
-    Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt );
+    Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt );
 
-    Size GetTxtSize( const OutputDevice *pOut, const String &rTxt,
-                      const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
+    Size GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
-    void QuickDrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-               const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN, const sal_Int32* pDXArray = NULL ) const;
+    void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
+               const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const sal_Int32* pDXArray = NULL ) const;
 
-    Size QuickGetTextSize( const OutputDevice *pOut, const String &rTxt,
-                         const sal_uInt16 nIdx, const sal_uInt16 nLen, sal_Int32* pDXArray = NULL ) const;
+    Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
+                         const sal_Int32 nIdx, const sal_Int32 nLen, sal_Int32* pDXArray = NULL ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
-                   const Point &rPos, const String &rTxt,
-                   const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
+                   const Point &rPos, const OUString &rTxt,
+                   const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
         const Size& rSize, const Color& rCol, sal_Bool bLeft );

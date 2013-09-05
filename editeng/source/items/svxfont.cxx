@@ -349,8 +349,8 @@ Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
 }
 
 
-Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const xub_StrLen nIdx, const xub_StrLen nLen ) const
+Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+                         const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextWidth( rTxt, nIdx, nLen ),
@@ -363,8 +363,8 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
     else
     {
         // #108210#
-        const XubString aNewText = CalcCaseMap(rTxt);
-        sal_Bool bCaseMapLengthDiffers(aNewText.Len() != rTxt.Len());
+        const OUString aNewText = CalcCaseMap(rTxt);
+        sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
         sal_Int32 nWidth(0L);
 
         if(bCaseMapLengthDiffers)
@@ -389,7 +389,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
     return aTxtSize;
 }
 
-Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt )
+Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt )
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextWidth( rTxt ), pOut->GetTextHeight() );
@@ -401,14 +401,14 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt )
     else
         aTxtSize.setWidth( pOut->GetTextWidth( CalcCaseMap( rTxt ) ) );
 
-    if( IsKern() && ( rTxt.Len() > 1 ) )
-        aTxtSize.Width() += ( ( rTxt.Len()-1 ) * long( nKern ) );
+    if( IsKern() && ( rTxt.getLength() > 1 ) )
+        aTxtSize.Width() += ( ( rTxt.getLength()-1 ) * long( nKern ) );
 
     return aTxtSize;
 }
 
-Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const sal_uInt16 nIdx, const sal_uInt16 nLen, sal_Int32* pDXArray ) const
+Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
+                         const sal_Int32 nIdx, const sal_Int32 nLen, sal_Int32* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -438,15 +438,15 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
 }
 
 
-Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const xub_StrLen nIdx, const xub_StrLen nLen ) const
+Size SvxFont::GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
+                         const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )   // already initialized?
-        nTmp = rTxt.Len();
+    sal_Int32 nTmp = nLen;
+    if ( nTmp == SAL_MAX_INT32 )   // already initialized?
+        nTmp = rTxt.getLength();
     Font aOldFont( ChgPhysFont((OutputDevice *)pOut) );
     Size aTxtSize;
-    if( IsCapital() && rTxt.Len() )
+    if( IsCapital() && !rTxt.isEmpty() )
     {
         aTxtSize = GetCapitalSize( pOut, rTxt, nIdx, nTmp );
     }
@@ -457,8 +457,8 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
 
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
-    const Point &rPos, const XubString &rTxt,
-    const xub_StrLen nIdx, const xub_StrLen nLen, const sal_Int32* pDXArray ) const
+    const Point &rPos, const OUString &rTxt,
+    const sal_Int32 nIdx, const sal_Int32 nLen, const sal_Int32* pDXArray ) const
 {
     // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
@@ -509,15 +509,15 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
 
 void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
-                        const Point &rPos, const XubString &rTxt,
-                        const xub_StrLen nIdx, const xub_StrLen nLen ) const
+                        const Point &rPos, const OUString &rTxt,
+                        const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    if ( !nLen || !rTxt.Len() )
+    if ( !nLen || rTxt.isEmpty() )
         return;
-    xub_StrLen nTmp = nLen;
+    sal_Int32 nTmp = nLen;
 
-    if ( nTmp == STRING_LEN )   // already initialized?
-        nTmp = rTxt.Len();
+    if ( nTmp == SAL_MAX_INT32 )   // already initialized?
+        nTmp = rTxt.getLength();
     Point aPos( rPos );
 
     if ( nEsc )
@@ -546,17 +546,17 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         else
         {
             // #108210#
-            const XubString aNewText = CalcCaseMap(rTxt);
-            sal_Bool bCaseMapLengthDiffers(aNewText.Len() != rTxt.Len());
+            const OUString aNewText = CalcCaseMap(rTxt);
+            sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
 
             if(bCaseMapLengthDiffers)
             {
                 // If strings differ work preparing the necessary snippet to address that
                 // potential difference
-                const XubString aSnippet(rTxt, nIdx, nTmp);
-                XubString _aNewText = CalcCaseMap(aSnippet);
+                const OUString aSnippet(rTxt.copy( nIdx, nTmp));
+                OUString _aNewText = CalcCaseMap(aSnippet);
 
-                pOut->DrawStretchText( aPos, aSize.Width(), _aNewText, 0, _aNewText.Len() );
+                pOut->DrawStretchText( aPos, aSize.Width(), _aNewText, 0, _aNewText.getLength() );
             }
             else
             {
@@ -632,8 +632,8 @@ void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     aTxtSize.Width() += ( _nLen * long( nKern ) );
 }
 
-Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
-                             const xub_StrLen nIdx, const xub_StrLen nLen) const
+Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
+                             const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
     // Start:
     SvxDoGetCapitalSize aDo( (SvxFont *)this, pOut, rTxt, nIdx, nLen, nKern );
@@ -743,8 +743,8 @@ void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
  *************************************************************************/
 
 void SvxFont::DrawCapital( OutputDevice *pOut,
-               const Point &rPos, const XubString &rTxt,
-               const xub_StrLen nIdx, const xub_StrLen nLen ) const
+               const Point &rPos, const OUString &rTxt,
+               const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     SvxDoDrawCapital aDo( (SvxFont *)this,pOut,rTxt,nIdx,nLen,rPos,nKern );
     DoOnCapitals( aDo );
