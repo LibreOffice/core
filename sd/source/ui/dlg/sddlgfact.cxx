@@ -354,17 +354,17 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( ::com::sun::star::uno::
     pDlg->GetParameterSequence( rParams );
 }
 
-void AbstractHeaderFooterDialog_Impl::ApplyToAll( TabPage* pPage )
+void AbstractHeaderFooterDialog_Impl::ApplyToAll()
 {
   pDlg->ApplyToAll();
 }
 
-void AbstractHeaderFooterDialog_Impl::Apply( TabPage* pPage )
+void AbstractHeaderFooterDialog_Impl::Apply()
 {
   pDlg->Apply( );
 }
 
-void AbstractHeaderFooterDialog_Impl::Cancel( TabPage* pPage )
+void AbstractHeaderFooterDialog_Impl::Cancel()
 {
   pDlg->Cancel( );
 }

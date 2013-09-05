@@ -219,9 +219,9 @@ class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 {
   DECL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl,::sd::HeaderFooterDialog)
-  virtual void ApplyToAll( TabPage* pPage );
-  virtual void Apply( TabPage* pPage );
-  virtual void Cancel( TabPage* pPage );
+  virtual void ApplyToAll();
+  virtual void Apply();
+  virtual void Cancel();
 };
 
 //AbstractDialogFactory_Impl implementations

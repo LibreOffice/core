@@ -164,9 +164,9 @@ public:
 class AbstractHeaderFooterDialog : public VclAbstractDialog
 {
 public:
-    virtual void ApplyToAll( TabPage* pPage ) = 0;
-    virtual void Apply( TabPage* pPage ) = 0;
-    virtual void Cancel( TabPage* pPage ) = 0;
+    virtual void ApplyToAll() = 0;
+    virtual void Apply() = 0;
+    virtual void Cancel() = 0;
 };
 
 //---------------------------------------------------------
