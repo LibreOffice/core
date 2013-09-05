@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
 {
 public:
     typedef std::map<OString, OString> stringmap;
-    typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
+    typedef ::Window* (*customMakeWidget)(::Window *pParent, stringmap &rVec);
 private:
     typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
     //We store these until the builder is deleted, that way we can use the
@@ -67,10 +67,10 @@ private:
     struct WinAndId
     {
         OString m_sID;
-        Window *m_pWindow;
+        ::Window *m_pWindow;
         short m_nResponseId;
         PackingData m_aPackingData;
-        WinAndId(const OString &rId, Window *pWindow, bool bVertical)
+        WinAndId(const OString &rId, ::Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
             , m_nResponseId(RET_CANCEL)
@@ -178,7 +178,7 @@ private:
         }
     };
 
-    typedef std::map<Window*, stringmap> AtkMap;
+    typedef std::map< ::Window*, stringmap> AtkMap;
 
     struct ParserState
     {
@@ -203,7 +203,7 @@ private:
 
         Translations m_aTranslations;
 
-        std::map<Window*, Window*> m_aRedundantParentWidgets;
+        std::map< ::Window*, ::Window*> m_aRedundantParentWidgets;
 
         std::vector<SizeGroup> m_aSizeGroups;
 
@@ -220,17 +220,17 @@ private:
     OString m_sID;
     OString m_sHelpRoot;
     ResHookProc m_pStringReplace;
-    Window *m_pParent;
+    ::Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
     bool m_bToplevelHasDeferredProperties;
     bool m_bToplevelParentFound;
     ParserState *m_pParserState;
 
-    Window *get_by_name(OString sID);
+    ::Window *get_by_name(OString sID);
     void delete_by_name(OString sID);
 
     class sortIntoBestTabTraversalOrder
-        : public std::binary_function<const Window*, const Window*, bool>
+        : public std::binary_function<const ::Window*, const ::Window*, bool>
     {
         VclBuilder *m_pBuilder;
     public:
@@ -238,21 +238,22 @@ private:
             : m_pBuilder(pBuilder)
         {
         }
-        bool operator()(const Window *pA, const Window *pB) const;
+        bool operator()(const ::Window *pA, const ::Window *pB) const;
     };
 
     /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame> m_xFrame;
 
 public:
-    VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString(),
+    VclBuilder(::Window *pParent, OUString sUIRootDir, OUString sUIFile,
+            OString sID = OString(),
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame = com::sun::star::uno::Reference<com::sun::star::frame::XFrame>());
     ~VclBuilder();
-    Window *get_widget_root();
+    ::Window *get_widget_root();
     //sID must exist and be of type T
     template <typename T> T* get(T*& ret, OString sID)
     {
-        Window *w = get_by_name(sID);
+        ::Window *w = get_by_name(sID);
         SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID.getStr() << "\" not found in .ui");
         SAL_WARN_IF(!dynamic_cast<T*>(w),
             "vcl.layout", ".ui widget \"" << sID.getStr() << "\" needs to correspond to vcl type " << typeid(T).name());
@@ -268,9 +269,9 @@ public:
         return ret;
     }
     //sID may not exist, but must be of type T if it does
-    template <typename T /*=Window if we had c++11*/> T* get(OString sID)
+    template <typename T /*= ::Window if we had c++11*/> T* get(OString sID)
     {
-        Window *w = get_by_name(sID);
+        ::Window *w = get_by_name(sID);
         SAL_WARN_IF(w && !dynamic_cast<T*>(w),
             "vcl.layout", ".ui widget \"" << sID.getStr() << "\" needs to correspond to vcl type " << typeid(T).name());
         assert(!w || dynamic_cast<T*>(w));
@@ -280,13 +281,13 @@ public:
     PopupMenu* get_menu(OString sID);
 
     //given an sID return the response value for that widget
-    short get_response(const Window *pWindow) const;
+    short get_response(const ::Window *pWindow) const;
 
-    OString get_by_window(const Window *pWindow) const;
-    void delete_by_window(const Window *pWindow);
+    OString get_by_window(const ::Window *pWindow) const;
+    void delete_by_window(const ::Window *pWindow);
 
     //apply the properties of rProps to pWindow
-    static void set_properties(Window *pWindow, const stringmap &rProps);
+    static void set_properties(::Window *pWindow, const stringmap &rProps);
 
     //Convert _ gtk markup to ~ vcl markup
     static OString convertMnemonicMarkup(const OString &rIn);
@@ -305,14 +306,16 @@ public:
     void setDeferredProperties();
 
     //Helpers to retrofit all the existing code to the builder
-    static void reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButtonBox);
-    static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
+    static void reorderWithinParent(std::vector< ::Window*>& rChilds, bool bIsButtonBox);
+    static void reorderWithinParent(::Window &rWindow, sal_uInt16 nNewPosition);
 private:
-    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
+    ::Window *insertObject(::Window *pParent,
+        const OString &rClass, const OString &rID,
         stringmap &rProps, stringmap &rPangoAttributes,
         stringmap &rAtkProps, std::vector<OString> &rItems);
 
-    Window *makeObject(Window *pParent, const OString &rClass, const OString &rID,
+    ::Window *makeObject(::Window *pParent,
+        const OString &rClass, const OString &rID,
         stringmap &rVec, const std::vector<OString> &rItems);
 
     void connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment);
@@ -329,10 +332,10 @@ private:
 
     void handleTranslations(xmlreader::XmlReader &reader);
 
-    void handleChild(Window *pParent, xmlreader::XmlReader &reader);
-    Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
-    void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
-    void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
+    void handleChild(::Window *pParent, xmlreader::XmlReader &reader);
+    ::Window* handleObject(::Window *pParent, xmlreader::XmlReader &reader);
+    void handlePacking(::Window *pCurrent, xmlreader::XmlReader &reader);
+    void applyPackingProperty(::Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
@@ -347,21 +350,21 @@ private:
     void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
     void handleAdjustment(const OString &rID, stringmap &rProperties);
     void handleTextBuffer(const OString &rID, stringmap &rProperties);
-    void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
+    void handleTabChild(::Window *pParent, xmlreader::XmlReader &reader);
     void handleMenu(xmlreader::XmlReader &reader, const OString &rID);
     std::vector<OString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
 
     void handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID);
 
-    void handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, Window *pWindow);
+    void handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, ::Window *pWindow);
 
     void handleActionWidget(xmlreader::XmlReader &reader);
 
-    PackingData get_window_packing_data(const Window *pWindow) const;
-    void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
+    PackingData get_window_packing_data(const ::Window *pWindow) const;
+    void set_window_packing_position(const ::Window *pWindow, sal_Int32 nPosition);
 
-    Window* prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle);
-    void cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap);
+    ::Window* prepareWidgetOwnScrolling(::Window *pParent, WinBits &rWinStyle);
+    void cleanupWidgetOwnScrolling(::Window *pScrollParent, ::Window *pWindow, stringmap &rMap);
 
     void set_response(OString sID, short nResponse);
 };
@@ -391,7 +394,7 @@ public:
     {
         return m_pUIBuilder->get<T>(ret, sID);
     }
-    template <typename T /*=Window if we had c++11*/> T* get(OString sID)
+    template <typename T /*= ::Window if we had c++11*/> T* get(OString sID)
     {
         return m_pUIBuilder->get<T>(sID);
     }
