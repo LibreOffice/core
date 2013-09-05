@@ -46,10 +46,7 @@ dispatch_queue_t backgroundQueue;
         [self.stopWatch start];
     }
     
-    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"slideshowRail"]];
-    [tempImageView setFrame:self.tableView.frame];
-    
-    self.tableView.backgroundView = tempImageView;
+    self.tableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -128,7 +125,7 @@ dispatch_queue_t backgroundQueue;
     UILabel *label = [[UILabel alloc] init];
     label.frame = CGRectMake(10, 0, 284, 23);
     label.textColor = [UIColor whiteColor];
-    label.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    label.font = [UIFont boldSystemFontOfSize:14.0];
     label.text = sectionTitle;
     label.backgroundColor = [UIColor clearColor];
     
@@ -159,14 +156,19 @@ dispatch_queue_t backgroundQueue;
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
         UILabel * slideNumber = (UILabel *)[cell viewWithTag:2];
+        UIImageView * image = (UIImageView *)[cell viewWithTag:1];
 
         // Starting 20, all tags are used for thumbnails in this sidebar
         [cell setTag:20+indexPath.row];
         [self.slideshow getContentAtIndex:indexPath.row forView:cell];
         [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row+1]];
         
-        
-        cell.backgroundColor = [UIColor colorWithRed:0 green:0.40784314 blue:0.21568627 alpha:1.0];
+        image.layer.shadowColor = [[UIColor blackColor] CGColor];
+        image.layer.shadowOpacity = 0.5;
+        image.layer.shadowRadius = 4.0;
+        image.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
+        image.layer.shadowPath = [UIBezierPath bezierPathWithRect:image.bounds].CGPath;
+        image.clipsToBounds = NO;
         
         return cell;
     }
