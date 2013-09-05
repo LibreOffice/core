@@ -117,11 +117,11 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 struct SvxAlternativeSpelling
 {
-    String      aReplacement;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
+    OUString         aReplacement;
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >
+                    xHyphWord;
     sal_Int16       nChangedPos,
-                 nChangedLength;
+                    nChangedLength;
     sal_Bool        bIsAltSpelling;
 
     inline SvxAlternativeSpelling();
