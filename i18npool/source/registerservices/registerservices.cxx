@@ -284,7 +284,7 @@ static const struct InstancesArray {
         FN_CreateInstance pFn;
 } aInstances[] = {
     {   "com.sun.star.i18n.LocaleData",
-        "com.sun.star.i18n.LocaleData",
+        "com.sun.star.i18n.LocaleDataImpl",
         & LocaleDataImpl_CreateInstance },
     {   "com.sun.star.i18n.NumberFormatMapper",
         "com.sun.star.i18n.NumberFormatCodeMapper",
