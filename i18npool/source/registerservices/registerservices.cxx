@@ -118,7 +118,7 @@ using namespace i18n;
 
 IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( NativeNumberSupplier )
-IMPL_CREATEINSTANCE( LocaleData )
+IMPL_CREATEINSTANCE( LocaleDataImpl )
 IMPL_CREATEINSTANCE_CTX( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier )
 IMPL_CREATEINSTANCE_CTX( IndexEntrySupplier_asian )
@@ -285,7 +285,7 @@ static const struct InstancesArray {
 } aInstances[] = {
     {   "com.sun.star.i18n.LocaleData",
         "com.sun.star.i18n.LocaleData",
-        & LocaleData_CreateInstance },
+        & LocaleDataImpl_CreateInstance },
     {   "com.sun.star.i18n.NumberFormatMapper",
         "com.sun.star.i18n.NumberFormatCodeMapper",
         & NumberFormatCodeMapper_CreateInstance },

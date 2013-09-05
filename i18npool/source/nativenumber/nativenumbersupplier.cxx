@@ -573,7 +573,7 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
             if (!aLocale.Language.equals(rLocale.Language) ||
                     !aLocale.Country.equals(rLocale.Country) ||
                     !aLocale.Variant.equals(rLocale.Variant)) {
-                LocaleDataItem item = LocaleData().getLocaleItem( rLocale );
+                LocaleDataItem item = LocaleDataImpl().getLocaleItem( rLocale );
                 aLocale = rLocale;
                 DecimalChar[NumberChar_HalfWidth]=item.decimalSeparator.toChar();
                 if (DecimalChar[NumberChar_HalfWidth] > 0x7E || DecimalChar[NumberChar_HalfWidth] < 0x21)

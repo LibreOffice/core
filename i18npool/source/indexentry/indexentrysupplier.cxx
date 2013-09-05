@@ -35,12 +35,12 @@ IndexEntrySupplier::IndexEntrySupplier( const Reference < XComponentContext >& r
 
 Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList() throw (RuntimeException)
 {
-        return LocaleData().getAllInstalledLocaleNames();
+        return LocaleDataImpl().getAllInstalledLocaleNames();
 }
 
 Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale ) throw (RuntimeException)
 {
-        return LocaleData().getIndexAlgorithm(rLocale);
+        return LocaleDataImpl().getIndexAlgorithm(rLocale);
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
@@ -58,7 +58,7 @@ sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, cons
 
 sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException)
 {
-        return LocaleData().hasPhonetic(rLocale);
+        return LocaleDataImpl().hasPhonetic(rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
@@ -118,7 +118,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
             return xIES;
         else {
-            LocaleData ld;
+            LocaleDataImpl ld;
             aLocale = rLocale;
             if (rSortAlgorithm.isEmpty())
                 aSortAlgorithm = ld.getDefaultIndexAlgorithm( rLocale );
@@ -167,7 +167,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
 OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
         const Locale& rLocale ) throw (RuntimeException)
 {
-        Sequence< OUString > aFollowPageWords = LocaleData().getFollowPageWords(rLocale);
+        Sequence< OUString > aFollowPageWords = LocaleDataImpl().getFollowPageWords(rLocale);
 
         return (bMorePages && aFollowPageWords.getLength() > 1) ?
             aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?

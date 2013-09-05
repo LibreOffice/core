@@ -120,7 +120,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 BreakIterator_zh::BreakIterator_zh()
 {
         dict = new xdictionary("zh");
-        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("zh", "CN"));
+        hangingCharacters = LocaleDataImpl().getHangingCharacters(LOCALE("zh", "CN"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_zh";
 }
 
@@ -135,7 +135,7 @@ BreakIterator_zh::~BreakIterator_zh()
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
         dict = new xdictionary("zh");
-        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("zh", "TW"));
+        hangingCharacters = LocaleDataImpl().getHangingCharacters(LOCALE("zh", "TW"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_zh_TW";
 }
 
@@ -151,7 +151,7 @@ BreakIterator_ja::BreakIterator_ja()
 {
         dict = new xdictionary("ja");
         dict->setJapaneseWordBreak();
-        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("ja", "JP"));
+        hangingCharacters = LocaleDataImpl().getHangingCharacters(LOCALE("ja", "JP"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_ja";
 }
 
@@ -165,7 +165,7 @@ BreakIterator_ja::~BreakIterator_ja()
 //      ----------------------------------------------------;
 BreakIterator_ko::BreakIterator_ko()
 {
-        hangingCharacters = LocaleData().getHangingCharacters(LOCALE("ko", "KR"));
+        hangingCharacters = LocaleDataImpl().getHangingCharacters(LOCALE("ko", "KR"));
         cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
 }
 

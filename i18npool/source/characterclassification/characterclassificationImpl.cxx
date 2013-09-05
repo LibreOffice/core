@@ -170,10 +170,10 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             // Load service with name <base>_<lang>_<country> or
             // <base>_<bcp47> and fallbacks.
             bool bLoaded = createLocaleSpecificCharacterClassification(
-                    LocaleData::getFirstLocaleServiceName( rLocale), rLocale);
+                    LocaleDataImpl::getFirstLocaleServiceName( rLocale), rLocale);
             if (!bLoaded)
             {
-                ::std::vector< OUString > aFallbacks( LocaleData::getFallbackLocaleServiceNames( rLocale));
+                ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
                 for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
                 {
                     bLoaded = createLocaleSpecificCharacterClassification( *it, rLocale);

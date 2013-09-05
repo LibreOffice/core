@@ -118,7 +118,7 @@
   <implementation name="com.sun.star.i18n.InputSequenceChecker_th">
     <service name="com.sun.star.i18n.InputSequenceChecker_th"/>
   </implementation>
-  <implementation name="com.sun.star.i18n.LocaleData">
+  <implementation name="com.sun.star.i18n.LocaleDataImpl">
     <service name="com.sun.star.i18n.LocaleData"/>
   </implementation>
   <implementation name="com.sun.star.i18n.NativeNumberSupplier">

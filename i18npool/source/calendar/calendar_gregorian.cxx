@@ -183,8 +183,8 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
             // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
             com::sun::star::lang::Locale jaLocale =
                 com::sun::star::lang::Locale(OUString("ja"), OUString(), OUString());
-            if (idx == 0) return LocaleData().getLocaleItem(jaLocale).timeAM;
-            else if (idx == 1) return LocaleData().getLocaleItem(jaLocale).timePM;
+            if (idx == 0) return LocaleDataImpl().getLocaleItem(jaLocale).timeAM;
+            else if (idx == 1) return LocaleDataImpl().getLocaleItem(jaLocale).timePM;
             else throw ERROR;
         }
         else
@@ -236,7 +236,7 @@ Calendar_gregorian::loadCalendar( const OUString& uniqueID, const com::sun::star
         getValue();
 
         aLocale = rLocale;
-        Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
+        Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
         for (sal_Int32 i = 0; i < xC.getLength(); i++)
         {
             if (uniqueID == xC[i].Name)
@@ -271,7 +271,7 @@ Calendar_gregorian::getLoadedCalendar2() throw(RuntimeException)
 com::sun::star::i18n::Calendar SAL_CALL
 Calendar_gregorian::getLoadedCalendar() throw(RuntimeException)
 {
-        return LocaleData::downcastCalendar( aCalendar);
+        return LocaleDataImpl::downcastCalendar( aCalendar);
 }
 
 OUString SAL_CALL
@@ -921,14 +921,14 @@ Calendar_gregorian::getNumberOfDaysInWeek() throw(RuntimeException)
 Sequence< CalendarItem > SAL_CALL
 Calendar_gregorian::getDays() throw(RuntimeException)
 {
-        return LocaleData::downcastCalendarItems( aCalendar.Days);
+        return LocaleDataImpl::downcastCalendarItems( aCalendar.Days);
 }
 
 
 Sequence< CalendarItem > SAL_CALL
 Calendar_gregorian::getMonths() throw(RuntimeException)
 {
-        return LocaleData::downcastCalendarItems( aCalendar.Months);
+        return LocaleDataImpl::downcastCalendarItems( aCalendar.Months);
 }
 
 
@@ -967,8 +967,8 @@ Calendar_gregorian::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_I
 
         switch( displayIndex ) {
             case CalendarDisplayIndex::AM_PM:/* ==0 */
-                if (idx == 0) aStr = LocaleData().getLocaleItem(aLocale).timeAM;
-                else if (idx == 1) aStr = LocaleData().getLocaleItem(aLocale).timePM;
+                if (idx == 0) aStr = LocaleDataImpl().getLocaleItem(aLocale).timeAM;
+                else if (idx == 1) aStr = LocaleDataImpl().getLocaleItem(aLocale).timePM;
                 else throw ERROR;
                 break;
             case CalendarDisplayIndex::DAY:
@@ -1030,7 +1030,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
             nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER) {
-        Sequence< OUString> xR = LocaleData().getReservedWord(aLocale);
+        Sequence< OUString> xR = LocaleDataImpl().getReservedWord(aLocale);
         sal_Int16 quarter = value / 3;
         // Since this base class method may be called by derived calendar
         // classes where a year consists of more than 12 months we need a check

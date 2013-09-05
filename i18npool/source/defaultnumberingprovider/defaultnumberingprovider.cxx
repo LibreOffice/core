@@ -279,13 +279,13 @@ void DefaultNumberingProvider::impl_loadTranslit()
 Sequence< Reference<container::XIndexAccess> >
 DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale ) throw(RuntimeException)
 {
-     return LocaleData().getOutlineNumberingLevels( rLocale );
+     return LocaleDataImpl().getOutlineNumberingLevels( rLocale );
 }
 
 Sequence< Sequence<beans::PropertyValue> >
 DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLocale ) throw(RuntimeException)
 {
-     return LocaleData().getContinuousNumberingLevels( rLocale );
+     return LocaleDataImpl().getContinuousNumberingLevels( rLocale );
 }
 
 OUString toRoman( sal_Int32 n )

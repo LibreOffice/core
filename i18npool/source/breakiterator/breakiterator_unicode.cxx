@@ -107,7 +107,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             icuBI->aBreakIterator=NULL;
         }
         if (rule) {
-            uno::Sequence< OUString > breakRules = LocaleData().getBreakIteratorRules(rLocale);
+            uno::Sequence< OUString > breakRules = LocaleDataImpl().getBreakIteratorRules(rLocale);
 
             status = U_ZERO_ERROR;
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);

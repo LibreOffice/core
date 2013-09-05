@@ -45,7 +45,7 @@ CalendarImpl::~CalendarImpl()
 void SAL_CALL
 CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
+    Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
     for (sal_Int32 i = 0; i < xC.getLength(); i++) {
         if (xC[i].Default) {
             loadCalendar(xC[i].Name, rLocale);
@@ -75,7 +75,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.
-            Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
+            Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
             for (i = 0; i < xC.getLength(); i++) {
                 if (uniqueID == xC[i].Name) {
                     xI = m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Calendar_gregorian", m_xContext);
@@ -130,7 +130,7 @@ CalendarImpl::getLoadedCalendar() throw(RuntimeException)
 Sequence< OUString > SAL_CALL
 CalendarImpl::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
-    Sequence< Calendar2 > xC = LocaleData().getAllCalendars2(rLocale);
+    Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
     sal_Int32 nLen = xC.getLength();
     Sequence< OUString > xSeq( nLen );
     for (sal_Int32 i = 0; i < nLen; i++)
