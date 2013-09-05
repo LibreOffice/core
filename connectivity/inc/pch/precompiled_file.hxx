@@ -56,14 +56,12 @@
 #include <osl/diagnose.h>
 #include <osl/nlsupport.h>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <stdio.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

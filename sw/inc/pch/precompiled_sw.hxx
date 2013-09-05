@@ -14,6 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "cppuhelper/implementationentry.hxx"
@@ -21,6 +22,7 @@
 #include "editeng/unolingu.hxx"
 #include "i18nlangtag/languagetag.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
@@ -82,7 +84,6 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
@@ -143,6 +144,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -197,6 +199,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -240,6 +243,7 @@
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -317,7 +321,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/HoriOrientationFormat.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
-#include <com/sun/star/text/InvalidTextContentException.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #include <com/sun/star/text/MailMergeType.hpp>
@@ -325,7 +328,6 @@
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
-#include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -366,7 +368,6 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -441,7 +442,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/extract.hxx>
@@ -449,6 +449,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/sequence.hxx>
@@ -462,6 +463,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
+#include <config_folders.h>
 #include <config_graphite.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -482,6 +484,7 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
@@ -498,12 +501,14 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -686,6 +691,10 @@
 #include <sfx2/sfxhtml.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/taskpane.hxx>
@@ -716,6 +725,7 @@
 #include <svl/flagitem.hxx>
 #include <svl/fstathelper.hxx>
 #include <svl/globalnameitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/inethist.hxx>
 #include <svl/intitem.hxx>
@@ -779,6 +789,7 @@
 #include <svtools/xwindowitem.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleTextHelper.hxx>
+#include <svx/AffineMatrixItem.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SmartTagCtl.hxx>
 #include <svx/SmartTagItem.hxx>
@@ -815,6 +826,7 @@
 #include <svx/framelink.hxx>
 #include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
+#include <svx/galleryitem.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/grfflt.hxx>
@@ -828,6 +840,8 @@
 #include <svx/linectrl.hxx>
 #include <svx/linkwarn.hxx>
 #include <svx/modctrl.hxx>
+#include <svx/nbdtmg.hxx>
+#include <svx/nbdtmgfact.hxx>
 #include <svx/numinf.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/objfac3d.hxx>
@@ -861,6 +875,7 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdrundomanager.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/sdtaditm.hxx>
@@ -868,6 +883,9 @@
 #include <svx/sdtakitm.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/shapepropertynotifier.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <svx/sidebar/PopupContainer.hxx>
+#include <svx/sidebar/ValueSetWithTextControl.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/stddlg.hxx>
 #include <svx/svddef.hxx>
@@ -923,6 +941,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflasit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflftrit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xftadit.hxx>
@@ -935,6 +954,8 @@
 #include <svx/xftstit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedit.hxx>
@@ -964,6 +985,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/inetmime.hxx>
 #include <tools/line.hxx>
 #include <tools/link.hxx>
 #include <tools/multisel.hxx>
@@ -1022,6 +1044,7 @@
 #include <vcl/cmdevt.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -1034,6 +1057,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/lstbox.hxx>

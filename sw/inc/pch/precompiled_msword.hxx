@@ -14,6 +14,8 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/log.hxx"
 #include "svl/urihelper.hxx"
@@ -36,6 +38,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/drawing/XConnectableShape.hpp>
 #include <com/sun/star/drawing/XConnectorShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -90,7 +93,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
 #include <cstring>
-#include <ctype.h>
 #include <doctok/sprmids.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
@@ -161,6 +163,7 @@
 #include <list>
 #include <map>
 #include <math.h>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
@@ -198,6 +201,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <svl/grabbagitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
@@ -246,6 +250,7 @@
 #include <unicode/ubidi.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <unotools/fontcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>

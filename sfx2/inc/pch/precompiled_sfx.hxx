@@ -49,6 +49,8 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/Date.hpp"
+#include "com/sun/star/util/DateTimeWithTimezone.hpp"
+#include "com/sun/star/util/DateWithTimezone.hpp"
 #include "com/sun/star/util/Duration.hpp"
 #include "com/sun/star/util/Time.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
@@ -64,7 +66,6 @@
 #include "com/sun/star/xml/sax/Writer.hpp"
 #include "com/sun/star/xml/sax/XSAXSerializable.hpp"
 #include "com/sun/star/xml/xpath/XPathAPI.hpp"
-#include "comphelper/configurationhelper.hxx"
 #include "comphelper/mediadescriptor.hxx"
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceasvector.hxx"
@@ -76,6 +77,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "dinfedt.hxx"
+#include "i18nlangtag/languagetag.hxx"
 #include "imagemgr.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
@@ -147,8 +149,10 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -182,7 +186,9 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
+#include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
@@ -498,8 +504,9 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/DateTimeWithTimezone.hpp>
+#include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -558,9 +565,11 @@
 #include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/types.hxx>
 #include <config_features.h>
+#include <config_folders.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -608,6 +617,8 @@
 #include <objsh.hxx>
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/ProtocolHandler.hxx>
+#include <officecfg/Setup.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
@@ -690,6 +701,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/addresstemplate.hxx>
 #include <svtools/asynclink.hxx>
+#include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
@@ -707,9 +719,11 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/itemdel.hxx>
 #include <svtools/javacontext.hxx>
+#include <svtools/langhelp.hxx>
 #include <svtools/localresaccess.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/printoptions.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svtools/restartdialog.hxx>
@@ -726,6 +740,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/xwindowitem.hxx>
 #include <time.h>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -763,6 +778,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/eventcfg.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <unotools/fontoptions.hxx>
@@ -812,6 +828,7 @@
 #include <vcl/help.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/menu.hxx>

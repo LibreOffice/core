@@ -63,7 +63,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -98,7 +97,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -157,6 +155,8 @@
 #include <svx/ucsubset.hxx>
 #include <svx/xmlsecctrl.hxx>
 #include <svx/zoomctrl.hxx>
+#include <svx/zoomsliderctrl.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
@@ -181,8 +181,10 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/help.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>

@@ -16,6 +16,7 @@
 
 #include "basegfx/numeric/ftools.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/processfactory.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "sal/log.hxx"
@@ -26,6 +27,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
 #include <boost/unordered_map.hpp>
@@ -112,10 +114,17 @@
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/LinearScaling.hpp>
+#include <com/sun/star/chart2/LogarithmicScaling.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
@@ -129,7 +138,6 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -159,6 +167,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -168,8 +177,10 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -233,6 +244,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -285,6 +297,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -310,6 +323,7 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -320,17 +334,18 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
-#include <config_oox.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
 #include <editeng/svxenum.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <filter/msfilter/util.hxx>
 #include <fstream>
 #include <functional>
+#include <i18nlangtag/languagetag.hxx>
 #include <iostream>
 #include <list>
 #include <map>
@@ -340,9 +355,9 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
-#include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/random.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -362,6 +377,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/unoapi.hxx>
 #include <time.h>
 #include <tools/globname.hxx>

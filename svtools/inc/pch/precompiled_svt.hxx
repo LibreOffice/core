@@ -67,6 +67,7 @@
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
@@ -119,6 +120,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -264,7 +266,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/extract.hxx>
@@ -283,6 +284,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <config_folders.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -315,6 +317,7 @@
 #include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
 #include <rtl/instance.hxx>
@@ -353,6 +356,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
+#include <svl/urlfilter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
@@ -424,6 +428,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
@@ -452,6 +457,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/pngwrite.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/print.hxx>
 #include <vcl/salbtype.hxx>

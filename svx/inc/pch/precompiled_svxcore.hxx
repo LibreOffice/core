@@ -36,7 +36,6 @@
 #include "osl/diagnose.h"
 #include "sal/config.h"
 #include "sal/types.h"
-#include "svtools/treelistentry.hxx"
 #include "uno/lbnames.h"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
@@ -86,12 +85,13 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include <boost/unordered_map.hpp>
 #include <cassert>
+#include <cmath>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -110,6 +110,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -143,6 +144,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -192,9 +194,11 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XWindowSupplier.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -229,6 +233,7 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -247,9 +252,9 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -265,7 +270,6 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -298,14 +302,15 @@
 #include <cppuhelper/weak.hxx>
 #include <cstdio>
 #include <drawinglayer/animation/animationtiming.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
+#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
@@ -368,7 +373,7 @@
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
-#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
@@ -424,7 +429,9 @@
 #include <editeng/wrlmitem.hxx>
 #include <float.h>
 #include <framework/interaction.hxx>
+#include <functional>
 #include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <limits>
 #include <linguistic/misc.hxx>
@@ -470,6 +477,7 @@
 #include <sfx2/querystatus.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
+#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -479,6 +487,7 @@
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <stack>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -487,6 +496,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/eitem.hxx>
 #include <svl/flagitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
 #include <svl/isethint.hxx>
@@ -520,7 +530,6 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svtools/popupwindowcontroller.hxx>
-#include <svtools/svlbitm.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/treelistentry.hxx>
@@ -537,6 +546,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
@@ -573,6 +583,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/cvtsvm.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>

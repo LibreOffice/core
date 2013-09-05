@@ -14,6 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include "comphelper/processfactory.hxx"
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -43,7 +44,6 @@
 #include <ctype.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>
 #include <svl/converter.hxx>

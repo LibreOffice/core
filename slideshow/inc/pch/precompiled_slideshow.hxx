@@ -47,6 +47,7 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/weak_ptr.hpp>
@@ -127,6 +128,7 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -197,6 +199,8 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <stack>
 #include <stdio.h>
 #include <string>
 #include <svtools/grfmgr.hxx>

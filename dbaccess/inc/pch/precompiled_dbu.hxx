@@ -290,7 +290,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/basicio.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -310,6 +309,8 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_features.h>
+#include <config_folders.h>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/FValue.hxx>
@@ -338,6 +339,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
@@ -347,7 +349,6 @@
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>

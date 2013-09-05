@@ -58,6 +58,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -75,6 +76,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -102,6 +104,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
@@ -176,6 +179,7 @@
 #include <libxml/xmlstring.h>
 #include <map>
 #include <math.h>
+#include <officecfg/Office/Common.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -200,6 +204,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <set>
 #include <sfx2/sfxbasemodel.hxx>
@@ -210,11 +215,13 @@
 #include <string>
 #include <svl/lngmisc.hxx>
 #include <svtools/grfmgr.hxx>
+#include <svx/svdtrans.hxx>
 #include <tools/color.hxx>
 #include <tools/globname.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

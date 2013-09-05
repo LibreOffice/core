@@ -53,6 +53,8 @@
 #include <algorithm>
 #include <boost/unordered_map.hpp>
 #include <cassert>
+#include <config_features.h>
+#include <config_folders.h>
 #include <cstdarg>
 #include <cstddef>
 #include <cstdio>
@@ -74,6 +76,7 @@
 #include <osl/profile.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.h>

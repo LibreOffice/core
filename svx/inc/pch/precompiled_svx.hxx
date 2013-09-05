@@ -51,10 +51,13 @@
 #include "rtl/ustring.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
+#include "sfx2/imagemgr.hxx"
 #include "sfx2/module.hxx"
+#include "sfx2/sidebar/CommandInfoProvider.hxx"
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include "uno/lbnames.h"
+#include "vcl/builder.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>
 #include <basegfx/point/b2dpoint.hxx>
@@ -68,6 +71,8 @@
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <climits>
+#include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -121,6 +126,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
@@ -130,6 +136,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -147,6 +154,7 @@
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.hpp>
+#include <com/sun/star/smarttags/XRangeBasedSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -167,6 +175,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
@@ -180,6 +189,10 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/ui/ContextChangeEventObject.hpp>
+#include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -188,6 +201,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
@@ -202,6 +216,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblewrapper.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -211,7 +226,9 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_folders.h>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -219,7 +236,10 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <cstring>
 #include <deque>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/charreliefitem.hxx>
@@ -247,6 +267,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -259,6 +280,8 @@
 #include <editeng/unotext.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <limits.h>
 #include <limits>
@@ -267,6 +290,7 @@
 #include <math.h>
 #include <memory>
 #include <numeric>
+#include <officecfg/Office/Recovery.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
@@ -289,8 +313,10 @@
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/dockwin.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -300,8 +326,18 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/shell.hxx>
+#include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/ControllerFactory.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
+#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <sfx2/templdlg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
@@ -310,10 +346,10 @@
 #include <sot/formats.hxx>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <string>
 #include <svl/aeitem.hxx>
 #include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemiter.hxx>
@@ -339,6 +375,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/generictoolboxcontroller.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
@@ -354,12 +391,15 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/stdmenu.hxx>
 #include <svtools/svlbitm.hxx>
+#include <svtools/toolbarmenu.hxx>
+#include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
@@ -367,6 +407,7 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
+#include <tools/resid.hxx>
 #include <tools/shl.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -377,11 +418,13 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/fontoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/searchopt.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -395,6 +438,7 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -23,6 +23,7 @@
 #include "comphelper/scopeguard.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
 #include "osl/time.h"
 #include "rtl/ref.hxx"
@@ -58,6 +59,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/tools.hxx>
 #include <basegfx/tools/zoomtools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basic/basmgr.hxx>
@@ -226,6 +228,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -333,6 +336,12 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -344,7 +353,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/componentcontext.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -415,6 +424,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/frmdir.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -466,6 +476,7 @@
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/module.hxx>
@@ -473,7 +484,6 @@
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -519,8 +529,13 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/shell.hxx>
+#include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
+#include <sfx2/sidebar/SidebarPanelBase.hxx>
+#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/thumbnailview.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -592,14 +607,17 @@
 #include <svtools/valueset.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
+#include <svx/AffineMatrixItem.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
+#include <svx/SvxColorChildWindow.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/algitem.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/camera3d.hxx>
+#include <svx/charthelper.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -631,6 +649,7 @@
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
+#include <svx/galleryitem.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/graphichelper.hxx>
@@ -644,6 +663,8 @@
 #include <svx/linectrl.hxx>
 #include <svx/linkwarn.hxx>
 #include <svx/modctrl.hxx>
+#include <svx/nbdtmg.hxx>
+#include <svx/nbdtmgfact.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/ofaitem.hxx>
@@ -672,6 +693,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/sdr/properties/properties.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -680,6 +702,8 @@
 #include <svx/sdshitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdtmfitm.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/subtoolboxcontrol.hxx>
@@ -752,6 +776,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflftrit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xftadit.hxx>
@@ -766,6 +791,8 @@
 #include <svx/xit.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlineit0.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnedcit.hxx>
@@ -835,6 +862,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
@@ -842,11 +870,13 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>

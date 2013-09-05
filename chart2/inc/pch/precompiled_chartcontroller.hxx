@@ -307,6 +307,7 @@
 #include <unotools/syslocale.hxx>
 #include <utility>
 #include <vcl/bitmap.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>

@@ -432,7 +432,6 @@
 #include <osl/endian.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/strbuf.hxx>

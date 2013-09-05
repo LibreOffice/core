@@ -73,8 +73,10 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -258,12 +260,16 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_buildid.h>
+#include <config_features.h>
+#include <config_folders.h>
 #include <config_vclplug.h>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -460,6 +466,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/treelistbox.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
