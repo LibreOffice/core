@@ -129,6 +129,7 @@ void WPXSvStreamTest::testRead()
     pData = pInput->read(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0UL, nReadBytes);
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
+    CPPUNIT_ASSERT_EQUAL(pData, static_cast<const unsigned char*>(0));
     CPPUNIT_ASSERT(!pInput->atEOS());
 }
 
