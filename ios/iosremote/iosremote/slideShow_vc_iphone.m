@@ -318,6 +318,8 @@
         // Disable all calibration functions for acc based pointer
         self.count = INT_MAX;
     }
+    
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 
 - (void) popOverStart:(id)sender

@@ -108,18 +108,36 @@ dispatch_queue_t backgroundQueue;
         return [self.slideshow size];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 23;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    NSString *sectionTitle;
     switch (section) {
         case 0:
-            return NSLocalizedString(@"Stop Watch", @"Sidebar section header");
+            sectionTitle = NSLocalizedString(@"Stop Watch", @"Sidebar section header");
             break;
         case 1:
-            return NSLocalizedString(@"Slides", @"Sidebar section header");
+            sectionTitle = NSLocalizedString(@"Slides", @"Sidebar section header");
         default:
             break;
     }
-    return nil;
+    
+    UILabel *label = [[UILabel alloc] init];
+    label.frame = CGRectMake(10, 0, 284, 23);
+    label.textColor = [UIColor whiteColor];
+    label.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    label.text = sectionTitle;
+    label.backgroundColor = [UIColor clearColor];
+    
+    // Create header view and add label as a subview
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
+    view.backgroundColor = [UIColor colorWithRed:1.0 green:0.662745098 blue:0.074509804 alpha:0.9];
+    [view addSubview:label];
+    
+    return view;
 }
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

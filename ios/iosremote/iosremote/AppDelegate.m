@@ -50,9 +50,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
                                                 forState:UIControlStateHighlighted];
     
-    UIPageControl *pageControl = [UIPageControl appearance];
-    pageControl.pageIndicatorTintColor = UIColorFromRGB(0x2980b9);
-    pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0x1abc9c);
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
+    {
+        UIPageControl *pageControl = [UIPageControl appearance];
+        pageControl.pageIndicatorTintColor = UIColorFromRGB(0x2980b9);
+        pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0x1abc9c);
+    }
     return YES;
 }
 

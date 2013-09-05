@@ -48,6 +48,7 @@ typedef enum
 @implementation SWDirectionPanGestureRecognizer
 {
     BOOL _dragging;
+    BOOL _disabled;
     CGPoint _init;
 }
 
@@ -56,6 +57,11 @@ typedef enum
     [super touchesBegan:touches withEvent:event];
    
     UITouch *touch = [touches anyObject];
+    if ([touch locationInView:self.view].x > 60.0) {
+        _disabled = YES;
+        return;
+    }
+    _disabled = NO;
     _init = [touch locationInView:self.view];
     _dragging = NO;
 }
@@ -63,6 +69,9 @@ typedef enum
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    if (_disabled) {
+        return;
+    }
     [super touchesMoved:touches withEvent:event];
     
     if (self.state == UIGestureRecognizerStateFailed)
@@ -347,7 +356,7 @@ const int FrontViewPositionNone = 0xff;
     _frontViewPosition = FrontViewPositionLeft;
     _rearViewPosition = FrontViewPositionLeft;
     _rightViewPosition = FrontViewPositionLeft;
-    _rearViewRevealWidth = 260.0f;
+    _rearViewRevealWidth = 220.0f;
     _rearViewRevealOverdraw = 60.0f;
     _rightViewRevealWidth = 260.0f;
     _rightViewRevealOverdraw = 60.0f;
