@@ -19,6 +19,7 @@
 
 
 #include <characterclassificationImpl.hxx>
+#include <localedata.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
@@ -166,32 +167,25 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
                     return cachedItem->xCI;
             }
 
-            static sal_Unicode under = (sal_Unicode)'_';
-            sal_Int32 l = rLocale.Language.getLength();
-            sal_Int32 c = rLocale.Country.getLength();
-            sal_Int32 v = rLocale.Variant.getLength();
-            OUStringBuffer aBuf(l+c+v+3);
-
-                    // load service with name <base>_<lang>_<country>_<varian>
-            if ((l > 0 && c > 0 && v > 0 &&
-                    createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
-                                    rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(), rLocale)) ||
-                    // load service with name <base>_<lang>_<country>
-                (l > 0 && c > 0 &&
-                    createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
-                                    rLocale.Country).makeStringAndClear(), rLocale)) ||
-                (l > 0 && c > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
-                                    (rLocale.Country.compareToAscii("HK") == 0 ||
-                                    rLocale.Country.compareToAscii("MO") == 0) &&
-                    // if the country code is HK or MO, one more step to try TW.
-                    createLocaleSpecificCharacterClassification(aBuf.append(rLocale.Language).append(under).append(
-                                    "TW").makeStringAndClear(), rLocale)) ||
-                (l > 0 &&
-                    // load service with name <base>_<lang>
-                    createLocaleSpecificCharacterClassification(rLocale.Language, rLocale))) {
+            // Load service with name <base>_<lang>_<country> or
+            // <base>_<bcp47> and fallbacks.
+            bool bLoaded = createLocaleSpecificCharacterClassification(
+                    LocaleData::getFirstLocaleServiceName( rLocale), rLocale);
+            if (!bLoaded)
+            {
+                ::std::vector< OUString > aFallbacks( LocaleData::getFallbackLocaleServiceNames( rLocale));
+                for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                {
+                    bLoaded = createLocaleSpecificCharacterClassification( *it, rLocale);
+                    if (bLoaded)
+                        break;
+                }
+            }
+            if (bLoaded)
                 return cachedItem->xCI;
-            } else if (xUCI.is()) {
-                lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, OUString("Unicode"), xUCI) );
+            else if (xUCI.is())
+            {
+                lookupTable.push_back( cachedItem = new lookupTableItem( rLocale, OUString("Unicode"), xUCI));
                 return cachedItem->xCI;
             }
         }
