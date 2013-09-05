@@ -8511,14 +8511,22 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
     elif test "$cross_compiling" = "yes"; then
         AC_MSG_RESULT([none])
     else
-        dnl ===================================================================
-        dnl Check for system libatomic-ops
-        dnl ===================================================================
-        libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
-        if test "$with_system_libatomic_ops" = "yes"; then
-            SYSTEM_LIBATOMIC_OPS=YES
-            AC_CHECK_HEADERS(atomic_ops.h, [],
-            [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
+        dnl We need libatomic-ops for any non X86/X64 system
+        if test "$CPU" != I -a "$CPU" != X; then
+            dnl ===================================================================
+            dnl Check for system libatomic-ops
+            dnl ===================================================================
+            libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
+            if test "$with_system_libatomic_ops" = "yes"; then
+                SYSTEM_LIBATOMIC_OPS=YES
+                AC_CHECK_HEADERS(atomic_ops.h, [],
+                [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
+            else
+                SYSTEM_LIBATOMIC_OPS=NO
+                LIBATOMIC_OPS_CFLAGS="-I${WORKDIR}/UnpackedTarball/libatomic_ops/include"
+                LIBATOMIC_OPS_LIBS="-latomic_ops"
+                BUILD_TYPE="$BUILD_TYPE LIBATOMIC_OPS"
+            fi
         fi
 
         AC_MSG_RESULT([internal])
@@ -8532,6 +8540,9 @@ if test "x$enable_firebird_sdbc" = "xyes"; then
 
 fi
 AC_SUBST(ENABLE_FIREBIRD_SDBC)
+AC_SUBST(SYSTEM_LIBATOMIC_OPS)
+AC_SUBST(LIBATOMIC_OPS_CFLAGS)
+AC_SUBST(LIBATOMIC_OPS_LIBS)
 AC_SUBST(SYSTEM_FIREBIRD)
 AC_SUBST(FIREBIRD_CFLAGS)
 AC_SUBST(FIREBIRD_LIBS)
