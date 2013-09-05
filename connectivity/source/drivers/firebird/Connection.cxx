@@ -149,10 +149,12 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-        m_sURL = utl::TempFile::CreateTempName();
+        m_pExtractedFDBFile.reset(new ::utl::TempFile(NULL, true));
+        m_pExtractedFDBFile->EnableKillingFile();
+        m_sURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
 
-        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  "
-                    << OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8 ).getStr());
+        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sURL);
+
         if (!bIsNewDatabase)
         {
             SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
@@ -746,14 +748,6 @@ void OConnection::disposing()
         evaluateStatusVector(status, "isc_detach_database", *this);
     }
     // TODO: write to storage again?
-    if (m_bIsEmbedded)
-    {
-        uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
-            ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext()),
-            uno::UNO_QUERY);
-        if (xFileAccess->exists(m_sURL))
-            xFileAccess->kill(m_sURL);
-    }
 
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();

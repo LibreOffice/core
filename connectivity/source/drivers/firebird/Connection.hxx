@@ -25,12 +25,14 @@
 
 #include <ibase.h>
 
+#include <boost/scoped_ptr.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
 #include <OTypeInfo.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/DocumentEvent.hpp>
@@ -74,6 +76,8 @@ namespace connectivity
             ::osl::Mutex&                   getMutex()
                                             { return m_aMutex; }
         protected:
+            ::boost::scoped_ptr< ::utl::TempFile > m_pExtractedFDBFile;
+
             static const OUString sDBLocation; // Location within .odb container
             //====================================================================
             // Data attributes
