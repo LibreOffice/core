@@ -294,6 +294,7 @@ using namespace ::rtl;
             switch(type) {
                 case ::com::sun::star::text::TextMarkupType::SPELLCHECK: {
                     [string addAttribute:NSAccessibilityMisspelledTextAttribute value:[NSNumber numberWithBool:YES] range:markupRange];
+                    [string addAttribute:@"AXMarkedMisspelled" value:[NSNumber numberWithBool:YES] range:markupRange];
                     break;
                 }
             }
