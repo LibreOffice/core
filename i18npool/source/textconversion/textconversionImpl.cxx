@@ -20,6 +20,8 @@
 
 #include <assert.h>
 #include <textconversionImpl.hxx>
+#include <localedata.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -85,21 +87,21 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
     if (rLocale != aLocale) {
         aLocale = rLocale;
 
+        OUString aPrefix("com.sun.star.i18n.TextConversion_");
         Reference < XInterface > xI;
 
         xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language, m_xContext);
-
-        if ( ! xI.is() )
-            xI = m_xContext->getServiceManager()->createInstanceWithContext(
-                OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString("_") + aLocale.Country, m_xContext);
-        if ( ! xI.is() )
-            xI = m_xContext->getServiceManager()->createInstanceWithContext(
-                OUString("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString("_") + aLocale.Country +
-                OUString("_") + aLocale.Variant, m_xContext);
-
+                aPrefix + LocaleDataImpl::getFirstLocaleServiceName( aLocale), m_xContext);
+        if (!xI.is())
+        {
+            ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( aLocale));
+            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            {
+                xI = m_xContext->getServiceManager()->createInstanceWithContext( aPrefix + *it, m_xContext);
+                if (xI.is())
+                    break;
+            }
+        }
         if (xI.is())
             xTC.set( xI, UNO_QUERY );
         else if (xTC.is())
