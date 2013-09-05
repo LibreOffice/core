@@ -73,6 +73,8 @@
 
 #include "cppuhelper/implbase1.hxx"
 
+#include <boost/scoped_array.hpp>
+
 #if !defined(ANDROID) && !defined(IOS)
 // NSS header files for PDF signing support
 #include "nss.h"
@@ -6003,26 +6005,24 @@ bool PDFWriterImpl::finalizeSignature()
 
     HASH_Begin(hc.get());
 
-    char *buffer = new char[m_nSignatureContentOffset + 1];
+    boost::scoped_array<char> buffer(new char[m_nSignatureContentOffset + 1]);
     sal_uInt64 bytesRead;
 
     //FIXME: Check if SHA1 is calculated from the correct byterange
 
-    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, m_nSignatureContentOffset - 1 , &bytesRead ) ) );
+    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer.get(), m_nSignatureContentOffset - 1 , &bytesRead ) ) );
     if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
         SAL_WARN("vcl.gdi", "PDF Signing: First buffer read failed!");
 
-    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer), bytesRead);
-    delete[] buffer;
+    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ) );
-    buffer = new char[nLastByteRangeNo + 1];
-    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer, nLastByteRangeNo, &bytesRead ) ) );
+    buffer.reset(new char[nLastByteRangeNo + 1]);
+    CHECK_RETURN( (osl_File_E_None == osl_readFile( m_aFile, buffer.get(), nLastByteRangeNo, &bytesRead ) ) );
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
         SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
 
-    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer), bytesRead);
-    delete[] buffer;
+    HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
     SECItem digest;
     unsigned char hash[SHA1_LENGTH];
