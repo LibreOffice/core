@@ -52,7 +52,7 @@ namespace drawingml {
 
 namespace {
 
-Reference< XGraphic > lclCheckAndApplyDuotoneTransform( BlipFillProperties aBlipProps, Reference< XGraphic > xGraphic,
+Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties& aBlipProps, Reference< XGraphic > xGraphic,
                                                         const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
 {
     if( aBlipProps.maDuotoneColors[0].isUsed() && aBlipProps.maDuotoneColors[1].isUsed() )
