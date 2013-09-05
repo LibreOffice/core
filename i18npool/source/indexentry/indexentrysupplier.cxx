@@ -129,39 +129,40 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             if (!module.isEmpty() && createLocaleSpecificIndexEntrySupplier(module))
                 return xIES;
 
-            sal_Int32 l = rLocale.Language.getLength();
-            sal_Int32 c = rLocale.Country.getLength();
-            sal_Int32 v = rLocale.Variant.getLength();
-            sal_Int32 a = aSortAlgorithm.getLength();
-            OUStringBuffer aBuf(l+c+v+a+4);
-
-            if ((l > 0 && c > 0 && v > 0 && a > 0 &&
-                        // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
-                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                                    rLocale.Country).append(under).append(rLocale.Variant).append(under).append(
-                                    aSortAlgorithm).makeStringAndClear())) ||
-                (l > 0 && c > 0 && a > 0 &&
-                        // load service with name <base>_<lang>_<country>_<algorithm>
-                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                                    rLocale.Country).append(under).append(aSortAlgorithm).makeStringAndClear())) ||
-                (l > 0 && c > 0 && a > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
-                                            (rLocale.Country.compareToAscii("HK") == 0 ||
-                                            rLocale.Country.compareToAscii("MO") == 0) &&
-                        // if the country code is HK or MO, one more step to try TW.
-                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).appendAscii(
-                                    "TW").append(under).append(aSortAlgorithm).makeStringAndClear())) ||
-                (l > 0 && a > 0 &&
-                        // load service with name <base>_<lang>_<algorithm>
-                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                                    aSortAlgorithm).makeStringAndClear())) ||
+            bool bLoaded = false;
+            if (!aSortAlgorithm.isEmpty())
+            {
+                // Load service with name <base>_<lang>_<country>_<algorithm>
+                // or <base>_<bcp47>_<algorithm> and fallbacks.
+                bLoaded = createLocaleSpecificIndexEntrySupplier(
+                        LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + aSortAlgorithm);
+                if (!bLoaded)
+                {
+                    ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
+                    for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                    {
+                        bLoaded = createLocaleSpecificIndexEntrySupplier( *it + "_" + aSortAlgorithm);
+                        if (bLoaded)
+                            break;
+                    }
+                    if (!bLoaded)
+                    {
                         // load service with name <base>_<algorithm>
-                (a > 0 && createLocaleSpecificIndexEntrySupplier(aSortAlgorithm)) ||
-                        // load default service with name <base>_Unicode
-                        createLocaleSpecificIndexEntrySupplier(OUString("Unicode"))) {
-                return xIES;
+                        bLoaded = createLocaleSpecificIndexEntrySupplier( aSortAlgorithm);
+                    }
+                }
             }
+            if (!bLoaded)
+            {
+                // load default service with name <base>_Unicode
+                bLoaded = createLocaleSpecificIndexEntrySupplier( "Unicode");
+                if (!bLoaded)
+                {
+                    throw RuntimeException();   // could not load any service
+                }
+            }
+            return xIES;
         }
-        throw RuntimeException();
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
