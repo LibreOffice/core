@@ -680,7 +680,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // of the URL. The URL we save for later using separately.
                 // Execution of the print job will be done later by executing
                 // a slot ...
-                pUCBPrintTempFile = new ::utl::TempFile();
+                if(!pUCBPrintTempFile)
+                    pUCBPrintTempFile = new ::utl::TempFile();
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
@@ -772,7 +773,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     //  a) printing finished                        => move the file directly and forget the watcher thread
     //  b) printing is asynchron and runs currently => start watcher thread and exit this method
     //                                                 This thread make all necessary things by itself.
-    if (pUCBPrintTempFile!=NULL)
+    if (pUCBPrintTempFile)
     {
         // a)
         SfxPrinter* pPrinter = pView->GetPrinter();
@@ -782,7 +783,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else
         {
             // Note: we create(d) some resource on the heap. (thread and tep file)
-            // They will be delected by the thread automaticly if he finish his run() method.
+            // They will be deleted by the thread automaticly if he finish his run() method.
             ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
             pWatcher->create();
         }
