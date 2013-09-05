@@ -24,7 +24,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#include "headerfooterdlg.hrc"
 #include "sdpage.hxx"
 
 class SdUndoGroup;

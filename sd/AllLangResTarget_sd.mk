@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/dlgfield.src \
     sd/source/ui/dlg/dlgolbul.src \
     sd/source/ui/dlg/dlgpage.src \
-    sd/source/ui/dlg/headerfooterdlg.src \
     sd/source/ui/dlg/inspagob.src \
     sd/source/ui/dlg/ins_paste.src \
     sd/source/ui/dlg/LayerDialog.src \
