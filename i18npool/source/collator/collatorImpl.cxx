@@ -19,6 +19,7 @@
 
 
 #include <collatorImpl.hxx>
+#include <localedata.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -177,41 +178,39 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
         }
     }
 
-    static sal_Unicode under = (sal_Unicode) '_';
-
-    sal_Int32 l = rLocale.Language.getLength();
-    sal_Int32 c = rLocale.Country.getLength();
-    sal_Int32 v = rLocale.Variant.getLength();
-    sal_Int32 a = rSortAlgorithm.getLength();
-    OUStringBuffer aBuf(l+c+v+a+4);
-
-    if ((l > 0 && c > 0 && v > 0 && a > 0 &&
-                // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
-                createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
-                        under).append(rLocale.Variant).append(under).append(rSortAlgorithm).makeStringAndClear(),
-                    rSortAlgorithm)) ||
-            (l > 0 && c > 0 && a > 0 &&
-             // load service with name <base>_<lang>_<country>_<algorithm>
-             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(
-                     under).append(rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-            (l > 0 && c > 0 && a > 0 && rLocale.Language == "zh" && (rLocale.Country == "HK" || rLocale.Country == "MO") &&
-             // if the country code is HK or MO, one more step to try TW.
-             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append("TW").append(under).append(
-                     rSortAlgorithm).makeStringAndClear(), rSortAlgorithm)) ||
-            (l > 0 && a > 0 &&
-             // load service with name <base>_<lang>_<algorithm>
-             createCollator(rLocale, aBuf.append(rLocale.Language).append(under).append(rSortAlgorithm).makeStringAndClear(),
-                 rSortAlgorithm)) ||
-            // load service with name <base>_<algorithm>
-            (a > 0 &&
-             createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
-            // load default service with name <base>_Unicode
-            createCollator(rLocale, "Unicode", rSortAlgorithm)) {
-                return;
-            } else {
-                cachedItem = NULL;
-                throw RuntimeException(); // could not load any service
+    bool bLoaded = false;
+    if (!rSortAlgorithm.isEmpty())
+    {
+        // Load service with name <base>_<lang>_<country>_<algorithm> or
+        // <base>_<bcp47>_<algorithm> and fallbacks.
+        bLoaded = createCollator( rLocale,
+                LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + rSortAlgorithm, rSortAlgorithm);
+        if (!bLoaded)
+        {
+            ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
+            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            {
+                bLoaded = createCollator( rLocale, *it + "_" + rSortAlgorithm, rSortAlgorithm);
+                if (bLoaded)
+                    break;
             }
+            if (!bLoaded)
+            {
+                // load service with name <base>_<algorithm>
+                bLoaded = createCollator( rLocale, rSortAlgorithm, rSortAlgorithm);
+            }
+        }
+    }
+    if (!bLoaded)
+    {
+        // load default service with name <base>_Unicode
+        bLoaded = createCollator( rLocale, "Unicode", rSortAlgorithm);
+        if (!bLoaded)
+        {
+            cachedItem = NULL;
+            throw RuntimeException();   // could not load any service
+        }
+    }
 }
 
 const sal_Char cCollator[] = "com.sun.star.i18n.Collator";
