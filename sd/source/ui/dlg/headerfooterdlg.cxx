@@ -75,7 +75,6 @@ private:
     void Paint( OutputDevice& aOut, SdrTextObj* pObj, bool bVisible, bool bDotted = false );
 
 public:
-    PresLayoutPreview( ::Window* pParent, SdPage* pMaster );
     PresLayoutPreview( ::Window* pParent );
     ~PresLayoutPreview();
 
@@ -759,11 +758,6 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-PresLayoutPreview::PresLayoutPreview( ::Window* pParent, SdPage* pMaster )
-:Control( pParent ), mpMaster( pMaster ), maPageSize( pMaster->GetSize() )
-{
-}
 
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
 :Control( pParent )
