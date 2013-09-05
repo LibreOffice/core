@@ -153,6 +153,8 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     if (!bDouble)
         pRecs->insert( pRecs->begin(), pRec );
+    else
+        delete pRec;
 
     sal_uInt16 nLstGroup = 0;
     const std::vector<OUString>& rMan = aLabelsCfg.GetManufacturers();
