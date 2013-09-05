@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vector>
 
 //------------------------------------------------------------
 // namespace directives
