@@ -122,15 +122,15 @@ public:
 
 class EDITENG_DLLPUBLIC SvxAutocorrWord
 {
-    String sShort, sLong;
+    OUString sShort, sLong;
     sal_Bool bIsTxtOnly;                // Is pure ASCII - Text
 public:
-    SvxAutocorrWord( const String& rS, const String& rL, sal_Bool bFlag = sal_True )
+    SvxAutocorrWord( const OUString& rS, const OUString& rL, sal_Bool bFlag = sal_True )
         : sShort( rS ), sLong( rL ), bIsTxtOnly( bFlag )
     {}
 
-    const String& GetShort() const                  { return sShort; }
-    const String& GetLong() const                   { return sLong; }
+    const OUString& GetShort() const                  { return sShort; }
+    const OUString& GetLong() const                   { return sLong; }
     sal_Bool IsTextOnly() const                     { return bIsTxtOnly; }
 };
 

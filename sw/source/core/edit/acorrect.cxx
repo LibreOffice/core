@@ -328,8 +328,8 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
         if( pFnd->IsTextOnly() )
         {
             //JP 22.04.99: Bug 63883 - Special treatment for dots.
-            if( !bLastCharIsPoint || !pFnd->GetLong().Len() ||
-                '.' != pFnd->GetLong().GetChar( pFnd->GetLong().Len() - 1 ) )
+            if( !bLastCharIsPoint || pFnd->GetLong().isEmpty() ||
+                '.' != pFnd->GetLong()[ pFnd->GetLong().getLength() - 1 ] )
             {
                 // replace the selection
                 pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);

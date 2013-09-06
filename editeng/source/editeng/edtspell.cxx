@@ -753,7 +753,7 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
                 "Cursor in the heart of the action?!");
         nCursor -= ( nEndPos-rSttPos );
         mpEditEngine->InsertText(aSel, pFnd->GetLong());
-        nCursor = nCursor + pFnd->GetLong().Len();
+        nCursor = nCursor + pFnd->GetLong().getLength();
         if( pPara )
             *pPara = pCurNode->GetString();
         bRet = true;
