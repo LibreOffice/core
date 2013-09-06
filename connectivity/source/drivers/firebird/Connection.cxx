@@ -565,16 +565,16 @@ sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException
     return m_bReadOnly;
 }
 
-void SAL_CALL OConnection::setCatalog(const OUString& catalog)
-                                            throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog(const OUString& /*catalog*/)
+    throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
-    (void) catalog;
+    ::dbtools::throwFunctionNotSupportedException("setCatalog", *this);
 }
 
-OUString SAL_CALL OConnection::getCatalog() throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog()
+    throw(SQLException, RuntimeException)
 {
-    // Unsupported
+    ::dbtools::throwFunctionNotSupportedException("getCatalog", *this);
     return OUString();
 }
 
@@ -667,9 +667,9 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
     }
 }
 // XEventListener
-void SAL_CALL OConnection::disposing( const EventObject& Source ) throw (RuntimeException)
+void SAL_CALL OConnection::disposing(const EventObject& /*rSource*/)
+    throw (RuntimeException)
 {
-    (void) Source;
 }
 //--------------------------------------------------------------------
 void OConnection::buildTypeInfo() throw( SQLException)
