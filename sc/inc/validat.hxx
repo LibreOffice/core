@@ -183,16 +183,28 @@ struct CompareScValidationDataPtr
   bool operator()( ScValidationData* const& lhs, ScValidationData* const& rhs ) const { return (*lhs)<(*rhs); }
 };
 
-class ScValidationDataList : public std::set<ScValidationData*, CompareScValidationDataPtr>
+class ScValidationDataList
 {
+private:
+    typedef std::set<ScValidationData*, CompareScValidationDataPtr> ScValidationDataListDataType;
+    ScValidationDataListDataType maData;
+
 public:
     ScValidationDataList() {}
     ScValidationDataList(const ScValidationDataList& rList);
     ScValidationDataList(ScDocument* pNewDoc, const ScValidationDataList& rList);
     ~ScValidationDataList() {}
 
+    typedef ScValidationDataListDataType::iterator iterator;
+    typedef ScValidationDataListDataType::const_iterator const_iterator;
+
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
+
     void    InsertNew( ScValidationData* pNew )
-                { if (!insert(pNew).second) delete pNew; }
+                { if (!maData.insert(pNew).second) delete pNew; }
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
@@ -203,6 +215,9 @@ public:
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
 
     sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
+
+    void clear();
+
 };
 
 #endif

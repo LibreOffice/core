@@ -1792,8 +1792,8 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
 
     short nScriptType = 0;
 
-     sal_Int32 nStartPara = GetEditDoc().GetPos( aSel.Min().GetNode() );
-     sal_Int32 nEndPara = GetEditDoc().GetPos( aSel.Max().GetNode() );
+    sal_Int32 nStartPara = GetEditDoc().GetPos( aSel.Min().GetNode() );
+    sal_Int32 nEndPara = GetEditDoc().GetPos( aSel.Max().GetNode() );
 
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
@@ -1811,7 +1811,7 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
         for ( size_t n = 0; n < rTypes.size(); n++ )
         {
             if (rTypes[n].nStartPos <= nS  &&  nE <= rTypes[n].nEndPos)
-               {
+            {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
                 {
                     nScriptType |= GetItemScriptType ( rTypes[n].nScriptType );

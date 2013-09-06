@@ -899,8 +899,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
 // ============================================================================
 // ============================================================================
 
-ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList) :
-    std::set<ScValidationData*, CompareScValidationDataPtr>()
+ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
@@ -971,13 +970,38 @@ sal_Bool ScValidationDataList::operator==( const ScValidationDataList& r ) const
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen
 
-    sal_uInt16 nCount = size();
-    sal_Bool bEqual = ( nCount == r.size() );
+    size_t nCount = maData.size();
+    bool bEqual = ( nCount == r.maData.size() );
     for( const_iterator it1 = begin(), it2 = r.begin(); it1 != end() && bEqual; ++it1, ++it2 ) // Eintraege sind sortiert
         if ( !(*it1)->EqualEntries(**it2) )         // Eintraege unterschiedlich ?
-            bEqual = sal_False;
+            bEqual = false;
 
     return bEqual;
+}
+
+ScValidationDataList::iterator ScValidationDataList::begin()
+{
+    return maData.begin();
+}
+
+ScValidationDataList::const_iterator ScValidationDataList::begin() const
+{
+    return maData.begin();
+}
+
+ScValidationDataList::iterator ScValidationDataList::end()
+{
+    return maData.end();
+}
+
+ScValidationDataList::const_iterator ScValidationDataList::end() const
+{
+    return maData.end();
+}
+
+void ScValidationDataList::clear()
+{
+    maData.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
