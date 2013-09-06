@@ -24,6 +24,7 @@
 
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/langhelp.hxx>
+#include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -127,6 +128,18 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get( mpImpressTemplateThumbnails,   "impress_templates");
     get( mpDrawTemplateThumbnails,      "draw_templates");
 
+    maDndWindows.push_back(mpAllRecentThumbnails);
+    maDndWindows.push_back(mpWriterRecentThumbnails);
+    maDndWindows.push_back(mpCalcRecentThumbnails);
+    maDndWindows.push_back(mpImpressRecentThumbnails);
+    maDndWindows.push_back(mpDrawRecentThumbnails);
+    maDndWindows.push_back(mpDatabaseRecentThumbnails);
+    maDndWindows.push_back(mpMathRecentThumbnails);
+    maDndWindows.push_back(mpWriterTemplateThumbnails);
+    maDndWindows.push_back(mpCalcTemplateThumbnails);
+    maDndWindows.push_back(mpImpressTemplateThumbnails);
+    maDndWindows.push_back(mpDrawTemplateThumbnails);
+
     try
     {
         mxContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
@@ -188,6 +201,25 @@ BackingWindow::~BackingWindow()
     mpCalcTemplateThumbnails    ->setOpenTemplateHdl(Link());
     mpImpressTemplateThumbnails ->setOpenTemplateHdl(Link());
     mpDrawTemplateThumbnails    ->setOpenTemplateHdl(Link());
+
+    // deregister drag&drop helper
+    if (mxDropTargetListener.is())
+    {
+        for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
+            aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+        {
+            Window *pDndWin = *aI;
+            css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
+                    pDndWin->GetDropTarget();
+            if (xDropTarget.is())
+            {
+                xDropTarget->removeDropTargetListener(mxDropTargetListener);
+                xDropTarget->setActive(false);
+            }
+        }
+        mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
+    }
+
 }
 
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
@@ -416,6 +448,22 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
     mxFrame = xFrame;
     if( ! mbInitControls )
         initControls();
+
+    // establish drag&drop mode
+    mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
+
+    for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
+        aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+    {
+        Window *pDndWin = *aI;
+        css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
+            pDndWin->GetDropTarget();
+        if (xDropTarget.is())
+        {
+            xDropTarget->addDropTargetListener(mxDropTargetListener);
+            xDropTarget->setActive(true);
+        }
+    }
 }
 
 void BackingWindow::Resize()

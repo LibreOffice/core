@@ -21,8 +21,6 @@
 
 #include "backingwindow.hxx"
 
-#include <svtools/openfiledroptargetlistener.hxx>
-
 #include <helpid.hrc>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -31,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -453,18 +450,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // safe the frame reference
     m_xFrame = xFrame;
 
-    // establish drag&drop mode
-    OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, m_xFrame);
-    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >(static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY);
-
-    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
-    css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget(m_xWindow);
-    if (xDropTarget.is())
-    {
-        xDropTarget->addDropTargetListener(m_xDropTargetListener);
-        xDropTarget->setActive(sal_True);
-    }
-
     // initialize the component and it's parent window
     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
     WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
@@ -666,19 +651,6 @@ void SAL_CALL BackingComp::dispose()
         css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_MENUBAR, 0);
         if (xDispatch.is())
             xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
-    }
-
-    // deregister drag&drop helper
-    if (m_xDropTargetListener.is())
-    {
-        css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
-        css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget(m_xWindow);
-        if (xDropTarget.is())
-        {
-            xDropTarget->removeDropTargetListener(m_xDropTargetListener);
-            xDropTarget->setActive(sal_False);
-        }
-        m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
 
     // stop listening at the window

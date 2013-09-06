@@ -73,9 +73,6 @@ class BackingComp : public  css::lang::XTypeProvider
         /** the owner frame of this component. */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
 
-        /** helper for drag&drop. */
-        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > m_xDropTargetListener;
-
     //______________________________________
     // interface
 

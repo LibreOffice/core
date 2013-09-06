@@ -34,6 +34,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -50,6 +51,8 @@ class BackingWindow
     com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
     com::sun::star::uno::Reference< com::sun::star::frame::XDesktop2 >               mxDesktop;
+    /** helper for drag&drop. */
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
     PushButton*                     mpTemplateButton;
@@ -96,6 +99,8 @@ class BackingWindow
     TemplateLocalView*              mpCalcTemplateThumbnails;
     TemplateLocalView*              mpImpressTemplateThumbnails;
     TemplateLocalView*              mpDrawTemplateThumbnails;
+
+    std::vector<Window*>            maDndWindows;
 
     Rectangle                       maStartCentButtons;
 
