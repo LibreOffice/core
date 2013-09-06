@@ -1151,7 +1151,7 @@ void Outliner::InvalidateBullet( Paragraph* /*pPara*/, sal_Int32 nPara )
     }
 }
 
-sal_uLong Outliner::Read( SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -1813,13 +1813,13 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_u
     }
 }
 
-void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar, const SvxFont& rFont,
+void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar, const SvxFont& rFont,
     sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {
     if(aDrawPortionHdl.IsSet())
     {
-        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.Len(), rFont, nPara, nIndex, NULL, NULL,
+        DrawPortionInfo aInfo( rStartPos, rChar, 0, rChar.getLength(), rFont, nPara, nIndex, NULL, NULL,
             NULL, NULL, rOverlineColor, rTextLineColor, nRightToLeft, true, nWidth, bEndOfLine, bEndOfParagraph, false);
 
         aDrawPortionHdl.Call( &aInfo );
@@ -2051,17 +2051,17 @@ void Outliner::SetFlatMode( sal_Bool bFlat )
     }
 }
 
-String Outliner::ImplGetBulletText( sal_Int32 nPara )
+OUString Outliner::ImplGetBulletText( sal_Int32 nPara )
 {
-        String aRes;
+    OUString aRes;
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (pPara)
-        {
+    if (pPara)
+    {
     // Enable optimization again ...
 //  if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
         ImplCalcBulletText( nPara, sal_False, sal_False );
-                aRes = pPara->GetText();
-        }
+        aRes = pPara->GetText();
+    }
     return aRes;
 }
 

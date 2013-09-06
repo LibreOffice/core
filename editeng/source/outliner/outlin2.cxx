@@ -193,7 +193,7 @@ OUString Outliner::GetWordDelimiters() const
     return pEditEngine->GetWordDelimiters();
 }
 
-String Outliner::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
+OUString Outliner::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetWord( nPara, nIndex );

@@ -174,7 +174,7 @@ namespace
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
     {
-        if(rInfo.mrText.Len() && rInfo.mnTextLen)
+        if(!rInfo.maText.isEmpty() && rInfo.mnTextLen)
         {
             basegfx::B2DVector aFontScaling;
             drawinglayer::attribute::FontAttribute aFontAttribute(
@@ -327,7 +327,7 @@ namespace
 
                     // attributes for TextSimplePortionPrimitive2D
                     aNewTransform,
-                    rInfo.mrText,
+                    rInfo.maText,
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
@@ -354,7 +354,7 @@ namespace
                 // TextSimplePortionPrimitive2D is enough
                 pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                     aNewTransform,
-                    rInfo.mrText,
+                    rInfo.maText,
                     rInfo.mnTextStart,
                     rInfo.mnTextLen,
                     aDXArray,
@@ -584,7 +584,7 @@ namespace
 
                 const basegfx::B2DRange aTextBoundRect(
                     aTextLayouterDevice.getTextBoundRect(
-                        pInfo->mrText, pInfo->mnTextStart, pInfo->mnTextLen));
+                        pInfo->maText, pInfo->mnTextStart, pInfo->mnTextLen));
                 const basegfx::B2DPoint aTopLeft(aTextBoundRect.getMinimum() + aStartPosition);
 
                 if(!maClipRange.isInside(aTopLeft))

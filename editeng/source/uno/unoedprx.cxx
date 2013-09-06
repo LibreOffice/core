@@ -198,7 +198,7 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
-        mnIndex += aBulletInfo.aText.Len();
+        mnIndex += aBulletInfo.aText.getLength();
     }
 
     for( nCurrField=0; nCurrField < nFieldCount; ++nCurrField )
@@ -247,7 +247,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
-        sal_Int32 nBulletLen = aBulletInfo.aText.Len();
+        sal_Int32 nBulletLen = aBulletInfo.aText.getLength();
 
         if( nIndex < nBulletLen )
         {

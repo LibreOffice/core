@@ -86,7 +86,7 @@ namespace
     public:
         impPathTextPortion(DrawPortionInfo& rInfo)
         :   maOffset(rInfo.mrStartPos.X(), rInfo.mrStartPos.Y()),
-            maText(rInfo.mrText),
+            maText(rInfo.maText),
             mnTextStart(rInfo.mnTextStart),
             mnTextLength(rInfo.mnTextLen),
             mnParagraph(rInfo.mnPara),

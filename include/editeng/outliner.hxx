@@ -272,9 +272,9 @@ public:
     void        Indent( short nDiff );
     void        AdjustDepth( short nDX );   // Later replace with Indent!
 
-    sal_Bool        AdjustHeight( long nDY );
+    sal_Bool    AdjustHeight( long nDY );
 
-    sal_uLong       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong   Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     void        InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
     void        InsertText( const OutlinerParaObject& rParaObj );
@@ -372,21 +372,21 @@ public:
     */
     void        EnableBullets();
 
-    sal_Bool        IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
-    sal_Bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
+    sal_Bool    IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
+    sal_Bool    IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
     void        ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
-    sal_uInt16      GetInvalidateMore() const;
+    sal_uInt16  GetInvalidateMore() const;
 
-    String      GetSurroundingText() const;
-     Selection  GetSurroundingTextSelection() const;
+    OUString    GetSurroundingText() const;
+    Selection   GetSurroundingTextSelection() const;
 };
 
 
 // some thesaurus functionality to avoid code duplication in different projects...
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatusVal, LanguageType &rLang, const EditView &rEditView );
-void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText );
+void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText );
 
 typedef ::std::vector< OutlinerView* > ViewList;
 
@@ -394,7 +394,7 @@ class EDITENG_DLLPUBLIC DrawPortionInfo
 {
 public:
     const Point&        mrStartPos;
-    const String&       mrText;
+    const OUString      maText;
     sal_uInt16          mnTextStart;
     sal_uInt16          mnTextLen;
     sal_Int32           mnPara;
@@ -423,7 +423,7 @@ public:
 
     DrawPortionInfo(
         const Point& rPos,
-        const String& rTxt,
+        const OUString& rTxt,
         sal_uInt16 nTxtStart,
         sal_uInt16 nTxtLen,
         const SvxFont& rFnt,
@@ -442,7 +442,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet)
     :   mrStartPos(rPos),
-        mrText(rTxt),
+        maText(rTxt),
         mnTextStart(nTxtStart),
         mnTextLen(nTxtLen),
         mnPara(nPar),
@@ -561,9 +561,9 @@ public:
 
 struct EBulletInfo
 {
-    sal_Bool        bVisible;
-    sal_uInt16      nType;          // see SvxNumberType
-    String      aText;
+    sal_Bool    bVisible;
+    sal_uInt16  nType;          // see SvxNumberType
+    OUString    aText;
     SvxFont     aFont;
     Graphic     aGraphic;
     sal_Int32   nParagraph;
@@ -644,7 +644,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     Size                    ImplGetBulletSize( sal_Int32 nPara );
     sal_uInt16              ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* pParaFmt );
     void                    ImplCalcBulletText( sal_Int32 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChildren );
-    String                  ImplGetBulletText( sal_Int32 nPara );
+    OUString                ImplGetBulletText( sal_Int32 nPara );
     void                    ImplCheckNumBulletItem( sal_Int32 nPara );
     void                    ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, sal_Bool bCreateUndo, sal_Bool bUndoAction = sal_False );
     void                    ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = NULL );
@@ -859,7 +859,7 @@ public:
 
     void        SetWordDelimiters( const OUString& rDelimiters );
     OUString    GetWordDelimiters() const;
-    String      GetWord( sal_Int32 nPara, xub_StrLen nIndex );
+    OUString    GetWord( sal_Int32 nPara, xub_StrLen nIndex );
 
     void            StripPortions();
 
@@ -876,7 +876,7 @@ public:
         const Color& rTextLineColor);
 
     virtual void DrawingTab(
-        const Point& rStartPos, long nWidth, const String& rChar,
+        const Point& rStartPos, long nWidth, const OUString& rChar,
         const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
@@ -921,7 +921,7 @@ public:
     sal_uInt16          GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const;
     sal_uLong           GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine = 0 );
 
-    sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     ::svl::IUndoManager& GetUndoManager();
     ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);

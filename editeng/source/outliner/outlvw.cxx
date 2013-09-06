@@ -1482,7 +1482,7 @@ void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link* pStartDlg )
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
-sal_uLong OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS(OutlinerView,0);
     sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
@@ -1542,7 +1542,7 @@ sal_uInt16 OutlinerView::GetSelectedScriptType() const
     return pEditView->GetSelectedScriptType();
 }
 
-String OutlinerView::GetSurroundingText() const
+OUString OutlinerView::GetSurroundingText() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSurroundingText();
@@ -1585,7 +1585,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
 }
 
 
-void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText )
+void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText )
 {
     // get selection to use
     ESelection aCurSel( rEditView.GetSelection() );
