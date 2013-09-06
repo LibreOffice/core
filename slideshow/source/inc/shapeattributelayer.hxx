@@ -29,7 +29,6 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include "state.hxx"
 #include "rgbcolor.hxx"
 
 #include <stack>
@@ -40,6 +39,36 @@ namespace slideshow
 {
     namespace internal
     {
+
+        /** This interface represents a stateful object.
+
+            The state ID returned by the getStateId() method
+            abstractly encodes the object's state. When this ID
+            changes, clients can assume that the object's state has
+            changed.
+         */
+        class State
+        {
+        public:
+            virtual ~State() {}
+
+            /// Abstract, numerically encoded state ID
+            typedef ::std::size_t StateId;
+
+            /** This method returns a numerical state identifier.
+
+                The state ID returned by this method abstractly
+                encodes the object's state. When this ID changes,
+                clients can assume that the object's state has
+                changed.
+
+                @return an abstract, numerical state ID.
+             */
+            virtual StateId getStateId() const = 0;
+        };
+
+        typedef ::boost::shared_ptr< State > StateSharedPtr;
+
         class ShapeAttributeLayer;
 
         typedef ::boost::shared_ptr< ShapeAttributeLayer > ShapeAttributeLayerSharedPtr;

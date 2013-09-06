@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_EXPRESSIONNODE_HXX
 #define INCLUDED_SLIDESHOW_EXPRESSIONNODE_HXX
 
-#include "animationfunction.hxx"
-
+#include <boost/shared_ptr.hpp>
 
 /* Definition of ExpressionNode interface */
 
@@ -29,6 +28,33 @@ namespace slideshow
 {
     namespace internal
     {
+        /** Interface describing an abstract animation function.
+
+            Use this interface to model time-dependent animation
+            functions of one variable.
+         */
+        class AnimationFunction
+        {
+        public:
+            virtual ~AnimationFunction() {}
+
+            /** Operator to calculate function value.
+
+                This method calculates the function value for the
+                given time instant t.
+
+                @param t
+                Current time instant, must be in the range [0,1]
+
+                @return the function value, typically in relative
+                user coordinate space ([0,1] range).
+             */
+            virtual double operator()( double t ) const = 0;
+
+        };
+
+        typedef ::boost::shared_ptr< AnimationFunction > AnimationFunctionSharedPtr;
+
         /** Refinement of AnimationFunction
 
             This interface is used by the SMIL function parser, to

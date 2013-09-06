@@ -20,19 +20,24 @@
 #define INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
 
 #include "eventhandler.hxx"
-#include "hyperlinkhandler.hxx"
 #include "mouseeventhandler.hxx"
 #include "animationeventhandler.hxx"
 #include "pauseeventhandler.hxx"
 #include "shapelistenereventhandler.hxx"
-#include "shapecursoreventhandler.hxx"
-#include "userpainteventhandler.hxx"
 #include "vieweventhandler.hxx"
-#include "viewrepainthandler.hxx"
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
+#include "unoview.hxx"
+
+namespace com { namespace sun { namespace star { namespace drawing
+{
+    class XShape;
+} } } }
 
 namespace slideshow {
 namespace internal {
@@ -42,6 +47,100 @@ class UnoViewContainer;
 class AnimationNode;
 
 struct EventMultiplexerImpl;
+
+class RGBColor;
+
+/** Interface for handling view repaint events.
+
+    Classes implementing this interface can be added to an
+    EventMultiplexer object, and are called from there to
+    handle view repaint events.
+*/
+class ViewRepaintHandler
+{
+public:
+    virtual ~ViewRepaintHandler() {}
+
+    /** Notify clobbered view.
+
+      Reasons for a viewChanged notification can be
+      different view size, transformation, or other device
+      properties (color resolution or profile, etc.)
+
+      @param rView
+      The changed view
+     */
+    virtual void viewClobbered( const UnoViewSharedPtr& rView ) = 0;
+};
+
+typedef ::boost::shared_ptr< ViewRepaintHandler > ViewRepaintHandlerSharedPtr;
+typedef ::boost::weak_ptr< ViewRepaintHandler >   ViewRepaintHandlerWeakPtr;
+
+/** Interface for handling hyperlink clicks.
+
+  Classes implementing this interface can be added to an
+  EventMultiplexer object, and are called from there to
+  handle hyperlink events.
+ */
+class HyperlinkHandler
+{
+public:
+    /** Handle the event.
+
+        @param rLink
+        The actual hyperlink URI
+
+        @return true, if this handler has successfully
+        processed the event. When this method returns false,
+        possibly other, less prioritized handlers are called,
+        too.
+    */
+    virtual bool handleHyperlink( OUString const& rLink ) = 0;
+
+protected:
+    ~HyperlinkHandler() {}
+};
+
+typedef ::boost::shared_ptr< HyperlinkHandler > HyperlinkHandlerSharedPtr;
+
+/** Interface for handling user paint state changes.
+
+    Classes implementing this interface can be added to an
+    EventMultiplexer object, and are called from there to
+    handle user paint events.
+*/
+class UserPaintEventHandler
+{
+public:
+    virtual ~UserPaintEventHandler() {}
+    virtual bool colorChanged( RGBColor const& rUserColor ) = 0;
+    virtual bool widthChanged( double nUserStrokeWidth ) = 0;
+    virtual bool eraseAllInkChanged(bool const& rEraseAllInk) =0;
+    virtual bool eraseInkWidthChanged(sal_Int32 rEraseInkSize) =0;
+    virtual bool switchEraserMode() = 0;
+    virtual bool switchPenMode() = 0;
+    virtual bool disable() = 0;
+};
+
+typedef ::boost::shared_ptr< UserPaintEventHandler > UserPaintEventHandlerSharedPtr;
+
+/** Interface for handling view events.
+
+    Classes implementing this interface can be added to an
+    EventMultiplexer object, and are called from there to
+    handle view events.
+*/
+class ShapeCursorEventHandler
+{
+public:
+    virtual ~ShapeCursorEventHandler() {}
+
+    virtual bool cursorChanged( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::drawing::XShape>&   xShape,
+                                      sal_Int16                                nCursor ) = 0;
+};
+
+typedef ::boost::shared_ptr< ShapeCursorEventHandler > ShapeCursorEventHandlerSharedPtr;
 
 /** This class multiplexes user-activated and
     slide-show global events.
@@ -80,7 +179,6 @@ public:
     EventMultiplexer( EventQueue&             rEventQueue,
                       UnoViewContainer const& rViewContainer );
     ~EventMultiplexer();
-
 
     // Management methods
     // =========================================================
