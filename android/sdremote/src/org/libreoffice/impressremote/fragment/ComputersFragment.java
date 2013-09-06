@@ -152,6 +152,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     @Override
     public void run() {
+        if (!isAdded()) {
+            return;
+        }
+
         if (isShowingProgressMessageRequired()) {
             showProgressMessage();
         }
