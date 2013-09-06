@@ -133,9 +133,14 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     private void hideComputersList() {
         ViewAnimator aViewAnimator = getViewAnimator();
-        ViewGroup aProgressBarLayout = getProgressBarLayout();
 
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aProgressBarLayout));
+        int aProgressBarLayoutIndex = aViewAnimator.indexOfChild(getProgressBarLayout());
+
+        if (aViewAnimator.getDisplayedChild() == aProgressBarLayoutIndex) {
+            return;
+        }
+
+        aViewAnimator.setDisplayedChild(aProgressBarLayoutIndex);
     }
 
     private ViewAnimator getViewAnimator() {
@@ -193,7 +198,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void tearDownComputersAdapter() {
-        getComputesList().setAdapter(null);
+        setListAdapter(null);
     }
 
     private ListView getComputesList() {
