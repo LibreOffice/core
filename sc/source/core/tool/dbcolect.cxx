@@ -691,11 +691,18 @@ ScDataObject*   ScDBData::Clone() const
 {
     return new ScDBData(*this);
 }
-sal_Bool    ScDBData::IsBuildin()
+
+
+bool ScDBData::IsInternalUnnamed() const
 {
-    String  aNoName = String::CreateFromAscii(SC_DBNAME_UNNAMED);
-    String  aBeginName = aName.Copy(0,22);
-    return  (sal_Bool)(!ScGlobal::GetpTransliteration()->compareString( aNoName, aBeginName ));
+    return GetName() == ScGlobal::GetRscString( STR_DB_NONAME );
+}
+
+bool ScDBData::IsInternalForAutoFilter() const
+{
+    const String aNoName = String::CreateFromAscii(SC_DBNAME_UNNAMED);
+    const String aBeginName = aName.Copy( 0, aNoName.Len() );
+    return aBeginName == aNoName;
 }
 
 //---------------------------------------------------------------------------------------
@@ -717,7 +724,7 @@ sal_Bool ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
 {
-    ScDBData* pNoNameData = NULL;
+    ScDBData* pInternalDBData = NULL;
     if (pItems)
     {
 
@@ -725,32 +732,42 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             if (((ScDBData*)pItems[i])->IsDBAtCursor(nCol, nRow, nTab, bStartOnly))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->IsBuildin() )
-                    pNoNameData = pDB;
+                if ( pDB->IsInternalUnnamed()
+                     || pDB->IsInternalForAutoFilter() )
+                {
+                    pInternalDBData = pDB;
+                }
                 else
+                {
                     return pDB;
+                }
             }
     }
-    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    return pInternalDBData;
 }
 
-ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+ScDBData* ScDBCollection::GetDBAtArea(
+    const SCTAB nTab,
+    const SCCOL nCol1,
+    const SCROW nRow1,
+    const SCCOL nCol2,
+    const SCROW nRow2 ) const
 {
-    ScDBData* pNoNameData = NULL;
+    ScDBData* pInternalDBData = NULL;
     if (pItems)
     {
-
         for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
-                if ( pDB->IsBuildin() )
-                    pNoNameData = pDB;
+                if ( pDB->IsInternalUnnamed()
+                     || pDB->IsInternalForAutoFilter() )
+                    pInternalDBData = pDB;
                 else
                     return pDB;
             }
     }
-    return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
+    return pInternalDBData;
 }
 
 ScDBData* ScDBCollection::GetFilterDBAtTable(SCTAB nTab) const
@@ -919,55 +936,4 @@ String ScDBCollection::GetNewDefaultDBName()
         aNewName += String::CreateFromInt32( i++ );
     }while(SearchName(aNewName,nDummy));
     return  aNewName;
-}
-/*
-sal_Bool ScDBCollection::IsFiltered(SCTAB nTab, SCROW nRow)
-{
-    SCCOL   nLastCol;
-    SCROW   nLastRow;
-    pDoc->GetLastAttrCellArea(nTab, nLastCol, nLastRow);
-
-    if ( pItems )
-    {
-        for (unsigned short i = 0; i < nCount; i++)
-        {
-            ScDBData*   pData = (ScDBData*)pItems[i];
-            if ( pData->nTable == nTab && pData->HasQueryParam() && pData->bQueryInplace )
-                if ( nRow >= (pData->nStartRow + (pData->HasHeader()?1:0)) && nRow <= pData->nEndRow && nRow <= nLastRow )
-                    return sal_True;
-        }
-    }
-    return sal_False;
-}
-*/
-ScDBData* ScDBCollection::GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const
-{
-    ScDBData* pDataEmpty = NULL;
-    if (pItems)
-    {
-        for (unsigned short i = 0; i < nCount; i++)
-        {
-            ScDBData* pDBTemp = (ScDBData*)pItems[i];
-            if ( pDBTemp->nTable == nTab )                      //Sym2_7885 mod
-            {
-                sal_Bool bImport = pDBTemp->HasImportParam();
-                sal_Bool bFilter = pDBTemp->HasAutoFilter() || pDBTemp->HasQueryParam();
-                sal_Bool bSort = pDBTemp->HasSortParam();
-                sal_Bool bSubtotal = pDBTemp->HasSubTotalParam();
-                sal_Bool bAnyParam = bImport || bFilter || bSort || bSubtotal;
-                if ( ((eMode == SC_DB_MAKE_SORT)    && bSort && !bFilter) ||      //Sym2_7334 mod 20100420
-                    ((eMode == SC_DB_MAKE_SUBTOTAL) && bSubtotal && !bFilter ) ||
-                    ((eMode == SC_DB_MAKE_FILTER || eMode == SC_DB_OLD_FILTER) && bFilter ) )
-                {
-                    return pDBTemp;
-                }
-                else if ( pDBTemp->IsBuildin() && !bAnyParam )  //Sym2_7885 mod
-                {
-                    pDataEmpty = pDBTemp;
-                }
-            }
-        }
-    }
-
-    return pDataEmpty;
 }

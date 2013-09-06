@@ -332,118 +332,118 @@ void ScDBFunc::ToggleAutoFilter()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
 
-    ScQueryParam    aParam;
-    ScDocument*     pDoc    = GetViewData()->GetDocument();
-    ScDBData*       pDBData = GetDBData( sal_False, SC_DB_OLD_FILTER, SC_DBSEL_ROW_DOWN );
-
-
-
-
-    SCCOL  nCol;
-    SCROW  nRow;
-    SCTAB  nTab = GetViewData()->GetTabNo();
-    sal_Int16   nFlag;
-    //sal_Bool  bHasAuto = sal_True;
-    sal_Bool    bHeader;
-    sal_Bool    bPaint   = sal_False;
-
-    //!     stattdessen aus DB-Bereich abfragen?
-
-    /*for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
+    ScDBData* pDBData = GetDBData( sal_False, SC_DB_MAKE_AUTOFILTER, SC_DBSEL_ROW_DOWN );
+    if ( pDBData == NULL )
     {
-        nFlag = ((ScMergeFlagAttr*) pDoc->
-                GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
+        return;
+    }
+
+    // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
+    const String aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
+    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+    pDBData->SetByRow( sal_True );
+    ScQueryParam aParam;
+    pDBData->GetQueryParam( aParam );
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+
+    bool bHasAutoFilter = true;
+    const SCROW  nRow = aParam.nRow1;
+    const SCTAB  nTab = GetViewData()->GetTabNo();
+    for ( SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAutoFilter; ++nCol )
+    {
+        const sal_Int16 nFlag =
+            ((ScMergeFlagAttr*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
 
         if ( (nFlag & SC_MF_AUTO) == 0 )
-            bHasAuto = sal_False;
-    }*/
+            bHasAutoFilter = false;
+    }
 
-    if (pDBData && pDBData->HasAutoFilter())                                // aufheben
+    bool bPaint = false;
+
+    if ( bHasAutoFilter )
     {
-        //  Filterknoepfe ausblenden
-        pDBData->SetByRow( sal_True );              //! Undo, vorher abfragen ??
-        pDBData->GetQueryParam( aParam );
-        nRow = aParam.nRow1;
-        bHeader = pDBData->HasHeader();
-        for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
+        // switch filter buttons
+        for ( SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2; ++nCol )
         {
-            nFlag = ((ScMergeFlagAttr*) pDoc->
-                    GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            const sal_Int16 nFlag =
+                ((ScMergeFlagAttr*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
             pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
         }
 
-        // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
-
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
-        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
-
         ScRange aRange;
         pDBData->GetArea( aRange );
-        pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
+        pDocSh->GetUndoManager()->AddUndoAction( new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
 
         pDBData->SetAutoFilter(sal_False);
 
-        //  Filter aufheben (incl. Paint / Undo)
-
-        SCSIZE nEC = aParam.GetEntryCount();
-        for (SCSIZE i=0; i<nEC; i++)
+        //  switch off filter
+        const SCSIZE nEC = aParam.GetEntryCount();
+        for ( SCSIZE i=0; i<nEC; ++i )
+        {
             aParam.GetEntry(i).bDoQuery = sal_False;
+        }
         aParam.bDuplicate = sal_True;
         Query( aParam, NULL, sal_True );
 
-        pDocSh->GetUndoManager()->LeaveListAction();
-
-        bPaint = sal_True;
-    }
-    else                                    // Filterknoepfe einblenden
-    {
-        pDBData = GetDBData(sal_False, SC_DB_MAKE_FILTER);
-        pDBData->SetByRow(sal_True);
-        pDBData->GetQueryParam(aParam);
-        nRow = aParam.nRow1;
-        bHeader = pDBData->HasHeader();
-
-        if ( !pDoc->IsBlockEmpty( nTab,
-                                  aParam.nCol1, aParam.nRow1,
-                                  aParam.nCol2, aParam.nRow2 ) )
+        // delete internal database range for auto filter
+        if ( pDBData->IsInternalForAutoFilter() )
         {
-            if (!bHeader)
+            ScDBDocFunc aFunc(*pDocSh);
+            aFunc.DeleteDBRange( pDBData->GetName(), sal_False );
+        }
+        pDBData = NULL;
+
+        bPaint = true;
+    }
+    else
+    {
+        if ( !pDoc->IsBlockEmpty(
+                nTab,
+                aParam.nCol1,
+                aParam.nRow1,
+                aParam.nCol2,
+                aParam.nRow2 ) )
+        {
+            if ( !pDBData->HasHeader() )
             {
-                if ( MessBox( GetViewData()->GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 )     // Koepfe aus erster Zeile?
-                    ).Execute() == RET_YES )
+                if ( MessBox(
+                        GetViewData()->GetDialogParent(),
+                        WinBits(WB_YES_NO | WB_DEF_YES),
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
+                        ScGlobal::GetRscString( STR_MSSG_MAKEAUTOFILTER_0 ) ).Execute() == RET_YES )
                 {
-                    pDBData->SetHeader( sal_True );     //! Undo ??
-                    bHeader = sal_True;
+                    pDBData->SetHeader( sal_True );
                 }
             }
 
             ScRange aRange;
             pDBData->GetArea( aRange );
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_True ) );
+            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_True ) );
 
             pDBData->SetAutoFilter(sal_True);
 
-            for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
+            for ( SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2; ++nCol )
             {
-                nFlag = ((ScMergeFlagAttr*) pDoc->
-                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
+                const sal_Int16 nFlag =
+                    ((ScMergeFlagAttr*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
                 pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | SC_MF_AUTO ) );
             }
-            pDocSh->PostPaint( aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab,
-                                                     PAINT_GRID );
-            bPaint = sal_True;
+            pDocSh->PostPaint( aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab, PAINT_GRID );
+            bPaint = true;
         }
         else
         {
-            ErrorBox aErrorBox( GetViewData()->GetDialogParent(), WinBits( WB_OK | WB_DEF_OK ),
-                                ScGlobal::GetRscString( STR_ERR_AUTOFILTER ) );
+            ErrorBox aErrorBox(
+                GetViewData()->GetDialogParent(),
+                WinBits( WB_OK | WB_DEF_OK ),
+                ScGlobal::GetRscString( STR_ERR_AUTOFILTER ) );
             aErrorBox.Execute();
         }
     }
+
+    pDocSh->GetUndoManager()->LeaveListAction();
 
     if ( bPaint )
     {
@@ -462,30 +462,41 @@ void ScDBFunc::HideAutoFilter()
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
 
-    ScDocument* pDoc = pDocSh->GetDocument();
-
-    ScQueryParam aParam;
-    //ScDBData* pDBData = GetDBData( FALSE );
-    ScDBData* pDBData = GetDBData(sal_False, SC_DB_OLD_FILTER);
-
+    ScDBData* pDBData = GetDBData( sal_False );
     SCTAB nTab;
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     pDBData->GetArea(nTab, nCol1, nRow1, nCol2, nRow2);
 
-    for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        sal_Int16 nFlag = ((ScMergeFlagAttr*) pDoc->
-                                GetAttr( nCol, nRow1, nTab, ATTR_MERGE_FLAG ))->GetValue();
-        pDoc->ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
+        ScDocument* pDoc = pDocSh->GetDocument();
+        for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
+        {
+            const sal_Int16 nFlag =
+                ((ScMergeFlagAttr*) pDoc->GetAttr( nCol, nRow1, nTab, ATTR_MERGE_FLAG ))->GetValue();
+            pDoc->ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
+        }
     }
 
-    ScRange aRange;
-    pDBData->GetArea( aRange );
-    pDocSh->GetUndoManager()->AddUndoAction(
-        new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
+    const String aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
+    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+    {
+        ScRange aRange;
+        pDBData->GetArea( aRange );
+        pDocSh->GetUndoManager()->AddUndoAction(
+            new ScUndoAutoFilter( pDocSh, aRange, pDBData->GetName(), sal_False ) );
 
-    pDBData->SetAutoFilter(sal_False);
+        pDBData->SetAutoFilter(sal_False);
+
+        // delete internal database range for auto filter
+        if ( pDBData->IsInternalForAutoFilter() )
+        {
+            ScDBDocFunc aFunc(*pDocSh);
+            aFunc.DeleteDBRange( pDBData->GetName(), sal_False );
+        }
+        pDBData = NULL;
+    }
+    pDocSh->GetUndoManager()->LeaveListAction();
 
     pDocSh->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
     aModificator.SetDocumentModified();

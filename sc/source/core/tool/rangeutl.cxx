@@ -997,8 +997,7 @@ sal_Bool ScArea::operator==( const ScArea& r ) const
 
 //------------------------------------------------------------------------
 
-ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
-    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) )
+ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc )
 {
     pRangeName = pDoc->GetRangeName();
     pDBCollection = pDoc->GetDBCollection();
@@ -1032,8 +1031,9 @@ sal_Bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             if ( pDBCollection && nPos < pDBCollection->GetCount() )
             {
                 ScDBData* pData = (*pDBCollection)[nPos++];
-//              if (pData && pData->GetName() != aStrNoName)
-                if (pData && !pData->IsBuildin())
+                if ( pData
+                     && !pData->IsInternalUnnamed()
+                     && !pData->IsInternalForAutoFilter() )
                 {
                     pData->GetArea( rRange );
                     rName = pData->GetName();

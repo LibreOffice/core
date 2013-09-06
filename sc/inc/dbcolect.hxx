@@ -136,8 +136,10 @@ public:
             void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
             SC_DLLPUBLIC void       GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            //If the name of DBData is started with "unnamed", it will be recognized as build in DBData
-            sal_Bool        IsBuildin();
+
+            bool IsInternalUnnamed() const;
+            bool IsInternalForAutoFilter() const;
+
             void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             sal_Bool        IsByRow() const                 { return bByRow; }
             void        SetByRow(sal_Bool bByR)             { bByRow = bByR; }
@@ -216,9 +218,13 @@ public:
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
     virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
-            ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData* GetDBAtArea(
+                const SCTAB nTab,
+                const SCCOL nCol1,
+                const SCROW nRow1,
+                const SCCOL nCol2,
+                const SCROW nRow2 ) const;
             ScDBData*       GetFilterDBAtTable(SCTAB nTab) const;
-            ScDBData*   GetDBAtTable(SCTAB nTab, ScGetDBMode eMode) const;
 
     sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;
 

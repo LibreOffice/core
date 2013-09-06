@@ -357,8 +357,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScSubTotalParam aSubTotalParam;
                     SfxItemSet      aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
 
-                    //ScDBData* pDBData = pTabViewShell->GetDBData();
-                    ScDBData* pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SUBTOTAL);
+                    ScDBData* pDBData = pTabViewShell->GetDBData();
                     pDBData->GetSubTotalParam( aSubTotalParam );
                     aSubTotalParam.bRemoveOnly = sal_False;
 
@@ -412,7 +411,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
                 //the patch comes from maoyg
                 ScSortParam aSortParam;
-                ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
+                ScDBData*   pDBData = pTabViewShell->GetDBData();
                 ScViewData* pData   = GetViewData();
 
                 pDBData->GetSortParam( aSortParam );
@@ -463,7 +462,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pArgs )        // Basic
                 {
                     ScSortParam aSortParam;
-                    ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
+                    ScDBData*   pDBData = pTabViewShell->GetDBData();
                     ScViewData* pData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
@@ -526,7 +525,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 else
                 {
                     ScSortParam aSortParam;
-                    ScDBData*   pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_MAKE_SORT);
+                    ScDBData*   pDBData = pTabViewShell->GetDBData();
                     ScViewData* pData   = GetViewData();
 
                     pDBData->GetSortParam( aSortParam );
@@ -681,7 +680,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_UNFILTER:
             {
                 ScQueryParam aParam;
-                ScDBData*    pDBData = pTabViewShell->GetDBData(sal_True, SC_DB_OLD_FILTER);
+                ScDBData*    pDBData = pTabViewShell->GetDBData();
 
                 pDBData->GetQueryParam( aParam );
                 SCSIZE nEC = aParam.GetEntryCount();
@@ -945,7 +944,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        const String    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) );
                         List            aList;
                         sal_uInt16          nDBCount = pDBCol->GetCount();
                         ScDBData*       pDbData  = NULL;
@@ -959,18 +957,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 pDBName = new String;
                                 pDbData->GetName( *pDBName );
 
-                                if ( *pDBName != aStrNoName )
+                                if ( !pDbData->IsInternalUnnamed() )
                                     aList.Insert( pDBName );
                                 else
                                     DELETEZ(pDBName);
                             }
                         }
 
-//CHINA001                      ScSelEntryDlg* pDlg =
-//CHINA001                      new ScSelEntryDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_SELECTDB,
-//CHINA001                      String(ScResId(SCSTR_SELECTDB)),
-//CHINA001                      String(ScResId(SCSTR_AREAS)),
-//CHINA001                      aList );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 

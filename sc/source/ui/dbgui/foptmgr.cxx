@@ -178,15 +178,15 @@ void ScFilterOptionsMgr::Init()
         {
             ScAddress&  rStart  = theCurArea.aStart;
             ScAddress&  rEnd    = theCurArea.aEnd;
-            ScDBData*   pDBData = pDBColl->GetDBAtArea( rStart.Tab(),
-                                                        rStart.Col(), rStart.Row(),
-                                                        rEnd.Col(),   rEnd.Row() );
+            ScDBData*   pDBData = pDBColl->GetDBAtArea(
+                rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
             if ( pDBData )
             {
                 rBtnHeader.Check( pDBData->HasHeader() );
                 pDBData->GetName( theDbName );
 
-                if ( !pDBData->IsBuildin() )
+                if ( !pDBData->IsInternalUnnamed()
+                     && !pDBData->IsInternalForAutoFilter() )
                 {
                     rBtnHeader.Disable();
                 }

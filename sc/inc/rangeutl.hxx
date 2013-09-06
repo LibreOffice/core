@@ -302,7 +302,6 @@ private:
     ScDBCollection* pDBCollection;
     sal_Bool            bFirstPass;
     sal_uInt16          nPos;
-    String          aStrNoName;
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );
