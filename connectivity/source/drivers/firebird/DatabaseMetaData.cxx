@@ -1575,7 +1575,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         "FROM RDB$INDICES indices "
         "JOIN RDB$INDEX_SEGMENTS index_segments "
         "on (indices.RDB$INDEX_NAME = index_segments.RDB$INDEX_NAME) "
-        "WHERE (indices.RDB$SYSTEM_FLAG = 0) ");
+        "WHERE indices.RDB$RELATION_NAME = '" + sTable + "' "
+        "AND (indices.RDB$SYSTEM_FLAG = 0) ");
     // Not sure whether we should exclude system indices, but otoh. we never
     // actually deal with system tables (system indices only apply to system
     // tables) within the GUI.
