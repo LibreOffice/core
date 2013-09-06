@@ -79,7 +79,8 @@ namespace connectivity
              * parameter is not of nType then an Exception will be thrown.
              */
             template <typename T> void setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
             void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
 
             void ensurePrepared()

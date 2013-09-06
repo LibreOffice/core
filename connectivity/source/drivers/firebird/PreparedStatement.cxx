@@ -333,7 +333,7 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
 
 template <typename T>
 void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
-    throw(SQLException)
+    throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
