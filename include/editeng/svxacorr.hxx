@@ -150,7 +150,7 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
     mutable SvxAutocorrWordList_Hash maHash; // key is 'Short'
 
     const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
-                                       const String &rTxt,
+                                       const OUString &rTxt,
                                        xub_StrLen &rStt,
                                        xub_StrLen nEndPos) const;
 public:
@@ -159,13 +159,13 @@ public:
     void                   DeleteAndDestroyAll();
     bool                   Insert(SvxAutocorrWord *pWord) const;
     SvxAutocorrWord*       FindAndRemove(SvxAutocorrWord *pWord);
-    void                   LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt);
+    void                   LoadEntry(const OUString& sWrong, const OUString& sRight, sal_Bool bOnlyTxt);
     bool                   empty() const;
 
     typedef std::vector<SvxAutocorrWord *> Content;
     Content                getSortedContent() const;
 
-    const SvxAutocorrWord* SearchWordsInList(const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos) const;
+    const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos) const;
 };
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists

@@ -2646,7 +2646,7 @@ bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord) const
         return maSet.insert( pWord ).second;
 }
 
-void SvxAutocorrWordList::LoadEntry(String sWrong, String sRight, sal_Bool bOnlyTxt)
+void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRight, sal_Bool bOnlyTxt)
 {
     SvxAutocorrWord* pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
     if( !Insert( pNew ) )
@@ -2703,7 +2703,7 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
 }
 
 const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
-                                      const String &rTxt,
+                                      const OUString &rTxt,
                                       xub_StrLen &rStt,
                                       xub_StrLen nEndPos) const
 {
@@ -2717,19 +2717,19 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
         xub_StrLen nCalcStt = nEndPos - rChk.Len() + left_wildcard;
         if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
-                IsWordDelim( rTxt.GetChar( nCalcStt - 1 ) ))) )
+                IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
         {
             TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-            OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len() - left_wildcard);
+            OUString sWord = rTxt.copy(nCalcStt, rChk.Len() - left_wildcard);
             if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.Copy(1), sWord) ))
             {
                 rStt = nCalcStt;
                 if (!left_wildcard) return pFnd;
                 // get the first word delimiter position before the matching "*word" pattern
-                while( rStt && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --rStt ))))
+                while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                     ;
                 if (bWasWordDelim) rStt++;
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + rStt, nEndPos - rStt), OUString(rTxt.GetBuffer() + rStt, nEndPos - rStt - rChk.Len() + 1) + OUString(pFnd->GetLong()));
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), rTxt.copy(rStt, nEndPos - rStt - rChk.Len() + 1) + pFnd->GetLong());
                 if( Insert( pNew ) ) return pNew; else delete pNew;
             }
         }
@@ -2739,18 +2739,20 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             String sTmp( rChk.Copy( 0, rChk.Len() - 1 ) );
             // Get the last word delimiter position
             bool not_suffix;
-            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --nSttWdPos ))))
+            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
             // search the first occurance with a left word delimitation
-            xub_StrLen nFndPos = -1;
+            sal_Int32 nFndPos = -1;
             do {
-                nFndPos = rTxt.Search( sTmp, nFndPos + 1);
+                nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
                 not_suffix = (bWasWordDelim && (nSttWdPos >= nFndPos + sTmp.Len()));
-            } while ( nFndPos != STRING_NOTFOUND && (!(!nFndPos || IsWordDelim( rTxt.GetChar( nFndPos - 1 ))) || not_suffix));
-            if ( nFndPos != STRING_NOTFOUND )
+            } while ( nFndPos != -1 && (!(!nFndPos || IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix));
+            if ( nFndPos != -1 )
             {
                 // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(OUString(rTxt.GetBuffer() + nFndPos, nEndPos - nFndPos + ((rTxt.GetChar(nEndPos) != 0x20) ? 1: 0)), pFnd->GetLong() + OUString(rTxt.GetBuffer() + nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len()));
+                OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + ((rTxt[nEndPos] != 0x20) ? 1: 0));
+                OUString aLong = pFnd->GetLong() + rTxt.copy(nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len());
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
                 if( Insert( pNew ) )
                 {
                     rStt = nFndPos;
@@ -2762,7 +2764,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     return NULL;
 }
 
-const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const String& rTxt, xub_StrLen& rStt,
+const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, xub_StrLen& rStt,
                                                               xub_StrLen nEndPos) const
 {
     for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
