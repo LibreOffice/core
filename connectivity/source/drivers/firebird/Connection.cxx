@@ -792,12 +792,13 @@ uno::Reference< XTablesSupplier > OConnection::createCatalog()
 
 void OConnection::rebuildIndexes() throw(SQLException)
 {
-
     SAL_INFO("connectivity.firebird", "rebuildIndexes()");
     MutexGuard aGuard(m_aMutex);
 
     // We only need to do this for character based columns on user-created tables.
 
+    // Ideally we'd use a FOR SELECT ... INTO .... DO ..., but that seems to
+    // only be possible using PSQL, i.e. using a stored procedure.
     OUString sSql(
         // multiple columns possible per index, only select once
         "SELECT DISTINCT indices.RDB$INDEX_NAME "
@@ -816,15 +817,35 @@ void OConnection::rebuildIndexes() throw(SQLException)
         "AND (indices.RDB$INDEX_INACTIVE IS NULL OR indices.RDB$INDEX_INACTIVE = 0) "
     );
 
+    uno::Reference< XStatement > xCharIndicesStatement = createStatement();
+    uno::Reference< XResultSet > xCharIndices =
+                                    xCharIndicesStatement->executeQuery(sSql);
+    uno::Reference< XRow > xRow(xCharIndices, UNO_QUERY_THROW);
 
-    uno::Reference< XStatement > xStatement = createStatement();
-    uno::Reference< XResultSet > xCharIndices = xStatement->executeQuery(sSql);
-    uno::Reference< XRow > xRow( xCharIndices, UNO_QUERY_THROW );
+    uno::Reference< XStatement > xAlterIndexStatement = createStatement();
+
+    // ALTER is a DDL statement, hence using Statement will cause a commit
+    // after every alter -- in this case this is inappropriate (xCharIndicesStatement
+    // and its ResultSet become invalidated) hence we use the native api.
     while (xCharIndices->next())
     {
-    }
+        OUString sIndexName(xRow->getString(1));
+        SAL_INFO("connectivity.firebird", "rebuilding index " + sIndexName);
+        OString sAlterIndex = "ALTER INDEX "
+                               + OUStringToOString(sIndexName, RTL_TEXTENCODING_UTF8)
+                               + " ACTIVE";
 
-    Reference< XCloseable> xClose(xCharIndices,UNO_QUERY);
-    xClose->close();
+        ISC_STATUS_ARRAY aStatusVector;
+        ISC_STATUS aErr = 0;
+
+        aErr = isc_dsql_execute_immediate(aStatusVector,
+                                          &getDBHandle(),
+                                          &getTransaction(),
+                                          0, // Length: 0 for null terminated
+                                          sAlterIndex.getStr(),
+                                          FIREBIRD_SQL_DIALECT,
+                                          NULL);
+    }
+    commit();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
