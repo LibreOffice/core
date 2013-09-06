@@ -621,7 +621,7 @@ sub run {
 
         installer::logger::print_message( "... analyzing files with flag FILELIST ...\n" );
 
-        $filesinproductlanguageresolvedarrayref = installer::filelists::resolve_filelist_flag($filesinproductlanguageresolvedarrayref, $ENV{'INSTDIR'});
+        ($filesinproductlanguageresolvedarrayref, $unixlinksinproductarrayref) = installer::filelists::resolve_filelist_flag($filesinproductlanguageresolvedarrayref, $unixlinksinproductarrayref, $ENV{'INSTDIR'});
 
         # packed files sometimes contain a "$" in their name: HighlightText$1.class. For epm the "$" has to be quoted by "$$"
 

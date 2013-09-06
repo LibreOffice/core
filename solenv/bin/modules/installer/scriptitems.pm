@@ -869,7 +869,11 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
 
         my $destfilename;
 
-        if ((!( $ispredefinedprogdir )) && (!( $ispredefinedconfigdir )))
+        if ($oneitem->{'DoNotMessWithSymlinks'})
+        {
+            $destfilename = $oneitem->{'Name'};
+        }
+        elsif ((!( $ispredefinedprogdir )) && (!( $ispredefinedconfigdir )))
         {
             my $directorynameref = get_Directoryname_From_Directorygid($dirsarrayref, $searchdirgid, $onelanguage, $oneitemgid);
             $destfilename = $$directorynameref . $installer::globals::separator . $oneitemname;

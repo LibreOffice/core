@@ -611,7 +611,10 @@ sub create_simple_package
                 # see issue 102274
                 if ( $onefile->{'UnixRights'} )
                 {
-                    chmod oct($onefile->{'UnixRights'}), $destination;
+                    if ( ! -l $destination ) # that would be rather pointless
+                    {
+                        chmod oct($onefile->{'UnixRights'}), $destination;
+                    }
                 }
             }
         }

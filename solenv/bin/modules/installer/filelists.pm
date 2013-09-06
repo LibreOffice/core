@@ -17,7 +17,7 @@ use installer::pathanalyzer;
 
 sub resolve_filelist_flag
 {
-    my ($files, $outdir) = @_;
+    my ($files, $links, $outdir) = @_;
     my @newfiles = ();
 
     foreach my $file (@{$files})
@@ -47,13 +47,22 @@ sub resolve_filelist_flag
 
                 foreach my $path (@{$filelist})
                 {
+                    my $is_symlink = 0;
+
                     if ((index $path, $outdir) != 0)
                     {
                         installer::logger::print_error("file '$path' is not in '$outdir'");
                     }
-                    if (!-e $path)
+                    if (-l $path)
                     {
-                        installer::logger::print_error("file '$path' does not exist");
+                        $is_symlink = 1;
+                    }
+                    else
+                    {
+                        if (!-e $path)
+                        {
+                            installer::logger::print_error("file '$path' does not exist");
+                        }
                     }
 
                     my $subpath = substr $path, ((length $outdir) + 1); # drop separator too
@@ -66,13 +75,24 @@ sub resolve_filelist_flag
                     $newfile{'filelistname'} = $file->{'Name'};
                     $newfile{'filelistpath'} = $file->{'sourcepath'};
 
-                    if ($use_internal_rights)
+                    if ($is_symlink)
                     {
-                        my $st = stat($path);
-                        $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                        # FIXME: for symlinks destination is mangled later in
+                        # get_Destination_Directory_For_Item_From_Directorylist
+                        $newfile{'DoNotMessWithSymlinks'} = 1;
+                        $newfile{'Target'} = readlink($path);
+                        push @links, \%newfile;
                     }
+                    else
+                    {
+                        if ($use_internal_rights)
+                        {
+                            my $st = stat($path);
+                            $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                        }
 
-                    push @newfiles, \%newfile;
+                        push @newfiles, \%newfile;
+                    }
                 }
             }
             else
@@ -86,7 +106,7 @@ sub resolve_filelist_flag
         }
     }
 
-    return \@newfiles;
+    return (\@newfiles, \@links);
 }
 
 sub read_filelist
