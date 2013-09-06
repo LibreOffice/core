@@ -28,6 +28,7 @@
 #include "vcl/svapp.hxx"
 #include <outfont.hxx>
 #include <impfont.hxx>
+#include <config_features.h>
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include <graphite2/Font.h>
@@ -67,8 +68,6 @@ typedef const FT_Vector* FT_Vector_CPtr;
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
-    #include <dlfcn.h>
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
@@ -115,7 +114,6 @@ static FT_Library aLibFT = 0;
 
 // enable linking with old FT versions
 static int nFTVERSION = 0;
-static FT_UInt (*pFT_Face_GetCharVariantIndex)(FT_Face, FT_ULong, FT_ULong);
 
 typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
@@ -468,23 +466,6 @@ FreetypeManager::FreetypeManager()
     FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
     nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
-#ifdef ANDROID
-    // For Android we use the bundled static libfreetype.a, and we
-    // want to avoid accidentally finding the FT_* symbols in the
-    // system FreeType code (which *is* present in a system library,
-    // libskia.so, but is not a public API, and in fact does crash the
-    // app if used).
-    pFT_Face_GetCharVariantIndex = FT_Face_GetCharVariantIndex;
-#else
-#ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
-    pFT_Face_GetCharVariantIndex = (FT_UInt(*)(FT_Face, FT_ULong, FT_ULong))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Face_GetCharVariantIndex" );
-
-    // disable FT_Face_GetCharVariantIndex for older versions
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
-    if( nFTVERSION < 2404 )
-        pFT_Face_GetCharVariantIndex = NULL;
-#endif
-#endif
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
     pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
@@ -1110,10 +1091,14 @@ int ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
     }
 
     int nGlyphIndex = 0;
+#if HAVE_FT_FACE_GETCHARVARIANTINDEX
     // If asked, check first for variant glyph with the given Unicode variation
     // selector. This is quite uncommon so we don't bother with caching here.
-    if (aVS && pFT_Face_GetCharVariantIndex)
-        nGlyphIndex = (*pFT_Face_GetCharVariantIndex)(maFaceFT, aChar, aVS);
+    // Disabled for buggy FreeType versions:
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
+    if (aVS && nFTVERSION >= 2404)
+        nGlyphIndex = FT_Face_GetCharVariantIndex(maFaceFT, aChar, aVS);
+#endif
 
     if (nGlyphIndex == 0)
     {
