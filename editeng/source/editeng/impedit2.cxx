@@ -1739,6 +1739,24 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     }
 }
 
+namespace {
+
+struct FindByPos
+{
+    FindByPos(sal_uInt16 nPos):
+        mnPos(nPos) {}
+
+    bool operator()(const ScriptTypePosInfos::value_type& rValue)
+    {
+        return rValue.nStartPos <= mnPos && rValue.nEndPos >= mnPos;
+    }
+
+private:
+    sal_uInt16 mnPos;
+};
+
+}
+
 sal_uInt16 ImpEditEngine::GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos ) const
 {
     sal_uInt16 nScriptType = 0;
@@ -1754,16 +1772,14 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPo
             ((ImpEditEngine*)this)->InitScriptTypes( nPara );
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+
         sal_uInt16 nPos = rPaM.GetIndex();
-        for ( size_t n = 0; n < rTypes.size(); n++ )
+        ScriptTypePosInfos::const_iterator itr = std::find_if(rTypes.begin(), rTypes.end(), FindByPos(nPos));
+        if(itr != rTypes.end())
         {
-            if ( ( rTypes[n].nStartPos <= nPos ) && ( rTypes[n].nEndPos >= nPos ) )
-               {
-                nScriptType = rTypes[n].nScriptType;
-                if( pEndPos )
-                    *pEndPos = rTypes[n].nEndPos;
-                break;
-            }
+            nScriptType = itr->nScriptType;
+            if( pEndPos )
+                *pEndPos = itr->nEndPos;
         }
     }
     return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
