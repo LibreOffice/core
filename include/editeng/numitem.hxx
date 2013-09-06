@@ -149,7 +149,7 @@ private:
     Size                aGraphicSize;       // Always! in 1/100 mm
     Font*               pBulletFont;        // Pointer to the bullet font
 
-    String              sCharStyleName;     // Character Style
+    OUString            sCharStyleName;     // Character Style
 
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
@@ -175,7 +175,7 @@ public:
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString&   GetSuffix() const { return sSuffix;}
 
-    void                    SetCharFmtName(const String& rSet){ sCharStyleName = rSet; }
+    void                    SetCharFmtName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFmtName()const;
 
     void            SetBulletFont(const Font* pFont);
@@ -194,7 +194,7 @@ public:
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
-    void            SetGraphic( const String& rName );
+    void            SetGraphic( const OUString& rName );
     virtual void        SetVertOrient(sal_Int16 eSet);
     virtual sal_Int16   GetVertOrient() const;
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
@@ -222,7 +222,7 @@ public:
     long GetIndentAt() const;
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static String   CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
+    static OUString CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
 };
 
 enum SvxNumRuleType
@@ -269,23 +269,23 @@ public:
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, sal_Bool bIsValid = sal_True);
     void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt);
 
-    sal_Bool                    IsContinuousNumbering()const
+    sal_Bool                IsContinuousNumbering()const
                                             {return bContinuousNumbering;}
     void                    SetContinuousNumbering(sal_Bool bSet)
                                             {bContinuousNumbering = bSet;}
 
-    sal_uInt16                  GetLevelCount() const {return nLevelCount;}
-    sal_Bool                    IsFeatureSupported(sal_uInt32 nFeature) const
+    sal_uInt16              GetLevelCount() const {return nLevelCount;}
+    sal_Bool                IsFeatureSupported(sal_uInt32 nFeature) const
                                             {return 0 != (nFeatureFlags & nFeature);}
-    sal_uInt32                  GetFeatureFlags() const {return nFeatureFlags;}
+    sal_uInt32              GetFeatureFlags() const {return nFeatureFlags;}
     void                    SetFeatureFlag( sal_uInt32 nFlag, sal_Bool bSet = sal_True ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
-    String                  MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
+    OUString                MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
     void                    SetNumRuleType( const SvxNumRuleType& rType ) { eNumberingType = rType; }
 
-    sal_Bool                    UnLinkGraphics();
+    sal_Bool                UnLinkGraphics();
 };
 
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem

@@ -419,7 +419,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
-void SvxNumberFormat::SetGraphic( const String& rName )
+void SvxNumberFormat::SetGraphic( const OUString& rName )
 {
     const String* pName;
     if( pGraphicBrush &&
@@ -551,7 +551,7 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
     return aRetSize;
 }
 
-String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
+OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
 {
     nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
@@ -560,7 +560,7 @@ String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
                         ? "MDCLXVI--"   // +2 Dummy entries!
                         : "mdclxvi--";  // +2 Dummy entries!
 
-    String sRet;
+    OUString sRet;
     sal_uInt16 nMask = 1000;
     while( nMask )
     {
@@ -571,23 +571,23 @@ String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
         if( 5 < nZahl )
         {
             if( nZahl < 9 )
-                sRet += sal_Unicode(*(cRomanArr-1));
+                sRet += OUString(*(cRomanArr-1));
             ++nDiff;
             nZahl -= 5;
         }
         switch( nZahl )
         {
-        case 3:     { sRet += sal_Unicode(*cRomanArr); }
-        case 2:     { sRet += sal_Unicode(*cRomanArr); }
-        case 1:     { sRet += sal_Unicode(*cRomanArr); }
+        case 3:     { sRet += OUString(*cRomanArr); }
+        case 2:     { sRet += OUString(*cRomanArr); }
+        case 1:     { sRet += OUString(*cRomanArr); }
                     break;
 
         case 4:     {
-                        sRet += sal_Unicode(*cRomanArr);
-                        sRet += sal_Unicode(*(cRomanArr-nDiff));
+                        sRet += OUString(*cRomanArr);
+                        sRet += OUString(*(cRomanArr-nDiff));
                     }
                     break;
-        case 5:     { sRet += sal_Unicode(*(cRomanArr-nDiff)); }
+        case 5:     { sRet += OUString(*(cRomanArr-nDiff)); }
                     break;
         }
 
@@ -853,9 +853,9 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
     }
 }
 
-String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
+OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
 {
-    String aStr;
+    OUString aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
     {
         const SvxNumberFormat& rMyNFmt = GetLevel( rNum.GetLevel() );
@@ -893,16 +893,15 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings
                         bDot = sal_False;
                 }
                 else
-                    aStr += sal_Unicode('0');       // all 0-levels are a 0
+                    aStr += "0";       // all 0-levels are a 0
                 if( i != rNum.GetLevel() && bDot)
-                    aStr += sal_Unicode('.');
+                    aStr += ".";
             }
         }
 
         if( bInclStrings )
         {
-            aStr.Insert( rMyNFmt.GetPrefix(), 0 );
-            aStr += rMyNFmt.GetSuffix();
+            aStr = rMyNFmt.GetPrefix() + aStr + rMyNFmt.GetSuffix();
         }
     }
     return aStr;
