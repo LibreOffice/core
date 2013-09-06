@@ -36,7 +36,7 @@ class Window;
 
 // misc functions ---------------------------------------------------------------
 
-void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( String &rOldText, String &rNewText );
+void EDITENG_DLLPUBLIC SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText );
 
 /*--------------------------------------------------------------------
      Description: The SpellWrapper
@@ -129,19 +129,19 @@ protected:
     virtual void     SpellStart( SvxSpellArea eSpell ); // Preparing the area
     virtual sal_Bool SpellContinue();     // Check Areas
                                           // Result available through GetLast
-    virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
-    virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );
+    virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
+    virtual void StartThesaurus( const OUString &rWord, sal_uInt16 nLang );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic() const;
     virtual void SpellEnd();                        // Finish area
     virtual void ScrollArea();                      // Set ScrollArea
     // Replace word
-    virtual void ChangeWord( const String& rNewWord, const sal_uInt16 nLang );
+    virtual void ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang );
     // Wort via Thesaurus ersetzen
-    virtual void ChangeThesWord( const String& rNewWord );
+    virtual void ChangeThesWord( const OUString& rNewWord );
     virtual void SetLanguage( const sal_uInt16 nLang ); // Change Language
-    virtual void AutoCorrect( const String& rAktStr, const String& rNewStr );
+    virtual void AutoCorrect( const OUString& rAktStr, const OUString& rNewStr );
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Insert hyphen
 
 };

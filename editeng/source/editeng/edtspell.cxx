@@ -150,7 +150,7 @@ void EditSpellWrapper::ScrollArea()
     // still anywhere.
 }
 
-void EditSpellWrapper::ReplaceAll( const String &rNewText,
+void EditSpellWrapper::ReplaceAll( const OUString &rNewText,
             sal_Int16 )
 {
     // Is called when the word is in ReplaceList of the spell checker
@@ -158,7 +158,7 @@ void EditSpellWrapper::ReplaceAll( const String &rNewText,
     CheckSpellTo();
 }
 
-void EditSpellWrapper::ChangeWord( const String& rNewWord,
+void EditSpellWrapper::ChangeWord( const OUString& rNewWord,
             const sal_uInt16 )
 {
     // Will be called when Word Button Change
@@ -171,13 +171,13 @@ void EditSpellWrapper::ChangeWord( const String& rNewWord,
     CheckSpellTo();
 }
 
-void EditSpellWrapper::ChangeThesWord( const String& rNewWord )
+void EditSpellWrapper::ChangeThesWord( const OUString& rNewWord )
 {
     pEditView->InsertText( rNewWord );
     CheckSpellTo();
 }
 
-void EditSpellWrapper::AutoCorrect( const String&, const String& )
+void EditSpellWrapper::AutoCorrect( const OUString&, const OUString& )
 {
 }
 

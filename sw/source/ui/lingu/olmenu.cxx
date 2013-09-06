@@ -691,8 +691,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             // record only if it's NOT already present in autocorrection
             SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
-            String aOrigWord( bGrammarResults ? OUString() : xSpellAlt->getWord() ) ;
-            String aNewWord( aSuggestions[ nAltIdx ] );
+            OUString aOrigWord( bGrammarResults ? OUString() : xSpellAlt->getWord() ) ;
+            OUString aNewWord( aSuggestions[ nAltIdx ] );
             SvxPrepareAutoCorrect( aOrigWord, aNewWord );
 
             if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)

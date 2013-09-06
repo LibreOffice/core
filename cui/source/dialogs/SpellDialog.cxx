@@ -463,7 +463,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
         const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
         if( pSpellErrorDescription )
         {
-            String sWrong(pSpellErrorDescription->sErrorText);
+            OUString sWrong(pSpellErrorDescription->sErrorText);
             //if the word has not been edited in the MultiLineEdit then
             //the current suggestion should be used
             //if it's not the 'no suggestions' entry
@@ -581,7 +581,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
     LanguageType eLang = GetSelectedLang_Impl();
 
     // add new word to ChangeAll list
-    String  aOldWord( m_pSentenceED->GetErrorText() );
+    OUString  aOldWord( m_pSentenceED->GetErrorText() );
     SvxPrepareAutoCorrect( aOldWord, aString );
     Reference<XDictionary> aXDictionary( SvxGetChangeAllList(), UNO_QUERY );
     sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,

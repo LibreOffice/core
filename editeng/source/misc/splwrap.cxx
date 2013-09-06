@@ -53,7 +53,7 @@ using namespace ::com::sun::star::linguistic2;
 
 // misc functions ---------------------------------------------
 
-void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
+void SvxPrepareAutoCorrect( OUString &rOldText, const OUString &rNewText )
 {
     // This function should be used to strip (or add) trailing '.' from
     // the strings before passing them on to the autocorrect function in
@@ -64,15 +64,15 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
     // rOldText: text to be replaced
     // rNewText: replacement text
 
-    xub_StrLen  nOldLen = rOldText.Len(),
-                nNewLen = rNewText.Len();
+    xub_StrLen  nOldLen = rOldText.getLength(),
+                nNewLen = rNewText.getLength();
     if (nOldLen && nNewLen)
     {
-        sal_Bool bOldHasDot = sal_Unicode( '.' ) == rOldText.GetChar( nOldLen - 1 ),
-             bNewHasDot = sal_Unicode( '.' ) == rNewText.GetChar( nNewLen - 1 );
+        bool bOldHasDot = '.' == rOldText[ nOldLen - 1 ],
+             bNewHasDot = '.' == rNewText[ nNewLen - 1 ];
         if (bOldHasDot && !bNewHasDot
             /*this is: !(bOldHasDot && bNewHasDot) && bOldHasDot*/)
-            rOldText.Erase( nOldLen - 1 );
+            rOldText = rOldText.copy( 0, nOldLen - 1 );
     }
 }
 
@@ -282,7 +282,7 @@ sal_Bool SvxSpellWrapper::SpellContinue()
 
 // -----------------------------------------------------------------------
 
-void SvxSpellWrapper::AutoCorrect( const String&, const String& )
+void SvxSpellWrapper::AutoCorrect( const OUString&, const OUString& )
 {
 }
 
@@ -296,21 +296,21 @@ void SvxSpellWrapper::ScrollArea()
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
+void SvxSpellWrapper::ChangeWord( const OUString&, const sal_uInt16 )
 {   // Insert Word
 }
 
 // -----------------------------------------------------------------------
 
 
-void SvxSpellWrapper::ChangeThesWord( const String& )
+void SvxSpellWrapper::ChangeThesWord( const OUString& )
 {
     // replace word due to Thesaurus.
 }
 
 // -----------------------------------------------------------------------
 
-void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage )
+void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguage )
 {
     Reference< XThesaurus >  xThes( SvxGetThesaurus() );
     if (!xThes.is())
@@ -332,7 +332,7 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 
 // -----------------------------------------------------------------------
 
-void SvxSpellWrapper::ReplaceAll( const String &, sal_Int16 )
+void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 {   // Replace Word from the Replace list
 }
 
