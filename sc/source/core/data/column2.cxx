@@ -1823,6 +1823,17 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
 
             return formula::FormulaTokenRef(new formula::FormulaStringToken(p->GetString()));
         }
+        case sc::element_type_string:
+        {
+            OUString aStr = sc::string_block::at(*it->data, aPos.second);
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(aStr));
+        }
+        case sc::element_type_edittext:
+        {
+            const EditTextObject* pText = sc::edittext_block::at(*it->data, aPos.second);
+            OUString aStr = ScEditUtil::GetString(*pText, pDocument);
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(aStr));
+        }
         case sc::element_type_empty:
         default:
             // Return a value of 0.0 in all the other cases.
