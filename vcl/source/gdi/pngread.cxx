@@ -123,7 +123,7 @@ private:
     bool                mbpHYs;         // true if pysical size of pixel available
     bool                mbIgnoreGammaChunk;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     // do some checks in debug mode
     sal_Int32           mnAllocSizeScanline;
     sal_Int32           mnAllocSizeScanlineAlpha;
@@ -188,7 +188,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbGamma             ( false ),
     mbpHYs              ( false ),
     mbIgnoreGammaChunk  ( false ),
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     mnAllocSizeScanline(0),
     mnAllocSizeScanlineAlpha(0),
 #endif
@@ -1327,7 +1327,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     // allocate scanlines on demand, reused for next line
                     if(!mpScanline)
                     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                         mnAllocSizeScanline = maOrigSize.Width() * 3;
 #endif
                         mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
@@ -1335,7 +1335,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     if(!mpScanlineAlpha)
                     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                         mnAllocSizeScanlineAlpha = maOrigSize.Width();
 #endif
                         mpScanlineAlpha = new sal_uInt8[maOrigSize.Width()];
@@ -1470,7 +1470,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             if(bDoDirectScanline && !mpScanline)
             {
                 // allocate scanlines on demand, reused for next line
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 mnAllocSizeScanline = maOrigSize.Width() * 3;
 #endif
                 mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
