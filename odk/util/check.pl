@@ -79,7 +79,8 @@ if (-d "$SdkDir") {
         }
     }
     } else {
-    $return++;
+        print "\nERROR: \"bin\" is missing\n";
+        $return++;
     }
     print "\n";
 
@@ -110,7 +111,8 @@ if (-d "$SdkDir") {
         }
     }
     } else {
-    $return++;
+        print "\nERROR: \"docs\" is missing\n";
+        $return++;
     }
     print "\n";
 
@@ -169,7 +171,8 @@ if (-d "$SdkDir") {
         $return++;
     }
     } else {
-    $return++;
+        print "\nERROR: \"settings\" is missing\n";
+        $return++;
     }
     print "\n";
 
@@ -183,6 +186,7 @@ if (-d "$SdkDir") {
                 $return++;
             }
         } else {
+            print "\nERROR: \"docs/cpp/ref\" is missing\n";
             $return++;
         }
         print "\n";
@@ -214,6 +218,7 @@ if (-d "$SdkDir") {
         }
         }
     } else {
+        print "\nERROR: \"docs/java/ref\" is missing\n";
         $return++;
     }
     print "\n";
@@ -360,12 +365,14 @@ if (-d "$SdkDir") {
         }
         }
         } else {
-        $return++;
+            print "\nERROR: \"docs/idl/ref\" is missing\n";
+            $return++;
         }
         print "\n";
     }
 
 } else {
+    print "\nERROR: \"$SdkDir\" is missing\n";
     $return++;
 }
 
