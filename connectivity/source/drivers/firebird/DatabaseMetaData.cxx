@@ -1031,15 +1031,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
-        const Any& aCatalog,
-        const OUString& sSchema,
+        const Any& /*aCatalog*/,
+        const OUString& /*sSchema*/,
         const OUString& sTable,
         const OUString& sColumnNamePattern)
     throw(SQLException, RuntimeException)
 {
-    (void) aCatalog;
-    (void) sSchema;
-
     SAL_INFO("connectivity.firebird", "getColumnPrivileges() with "
              "Table: " << sTable
              << " & ColumnNamePattern: " << sColumnNamePattern);
@@ -1109,14 +1106,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
-        const Any& catalog,
-        const OUString& schemaPattern,
+        const Any& /*catalog*/,
+        const OUString& /*schemaPattern*/,
         const OUString& tableNamePattern,
         const OUString& columnNamePattern)
     throw(SQLException, RuntimeException)
 {
-    (void) catalog;         // Unsupported in firebird
-    (void) schemaPattern;   // Unsupported in firebird
     SAL_INFO("connectivity.firebird", "getColumns() with "
              "TableNamePattern: " << tableNamePattern <<
              " & ColumnNamePattern: " << columnNamePattern);
@@ -1298,15 +1293,12 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
-        const Any& catalog,
-        const OUString& schemaPattern,
+        const Any& /*catalog*/,
+        const OUString& /*schemaPattern*/,
         const OUString& tableNamePattern,
         const Sequence< OUString >& types)
     throw(SQLException, RuntimeException)
 {
-    (void) catalog;
-    (void) schemaPattern;
-
     SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
@@ -1488,13 +1480,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
-        const Any& aCatalog,
-        const OUString& sSchema,
+        const Any& /*aCatalog*/,
+        const OUString& /*sSchema*/,
         const OUString& sTable)
     throw(SQLException, RuntimeException)
 {
-    (void) aCatalog;
-    (void) sSchema;
     SAL_INFO("connectivity.firebird", "getPrimaryKeys() with "
              "Table: " << sTable);
 
@@ -1551,17 +1541,16 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
-        const Any& aCatalog, const OUString& sSchema, const OUString& sTable,
-        sal_Bool bIsUnique, sal_Bool bIsApproximate)
+        const Any& /*aCatalog*/,
+        const OUString& /*sSchema*/,
+        const OUString& sTable,
+        sal_Bool bIsUnique,
+        sal_Bool bIsApproximate)
     throw(SQLException, RuntimeException)
 {
-    (void) aCatalog;
-    (void) sSchema;
-
     // Apparently this method can also return a "tableIndexStatistic"
     // However this is only mentioned in XDatabaseMetaData.idl (whose comments
     // are duplicated in the postgresql driver), and is otherwise undocumented.
-
     SAL_INFO("connectivity.firebird", "getPrimaryKeys() with "
              "Table: " << sTable);
 
@@ -1658,14 +1647,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
-        const Any& aCatalog,
-        const OUString& sSchemaPattern,
+        const Any& /*aCatalog*/,
+        const OUString& /*sSchemaPattern*/,
         const OUString& sTableNamePattern)
     throw(SQLException, RuntimeException)
 {
-    (void) aCatalog;
-    (void) sSchemaPattern;
-
     SAL_INFO("connectivity.firebird", "getTablePrivileges() with "
              "TableNamePattern: " << sTableNamePattern);
 
