@@ -23,6 +23,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <osl/file.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
@@ -143,6 +144,18 @@ void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle)
     AppendItem(pChild);
 }
 
+static bool lcl_fileOpenable(const OUString &rURL)
+{
+    osl::File aRecentFile(rURL);
+    if(!aRecentFile.open(osl_File_OpenFlag_Read))
+    {
+        aRecentFile.close();
+        return true;
+    }
+    else
+        return false;
+}
+
 void RecentDocsView::loadRecentDocs()
 {
     Clear();
@@ -165,7 +178,7 @@ void RecentDocsView::loadRecentDocs()
                 a >>= aTitle;
         }
 
-        if( isAcceptedFile(aURL) )
+        if( isAcceptedFile(aURL) && lcl_fileOpenable(aURL))
         {
             insertItem(aURL, aTitle);
         }
