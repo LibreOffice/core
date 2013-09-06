@@ -20,6 +20,7 @@
 #include "oox/vml/vmltextbox.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <svx/unopage.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
@@ -90,6 +91,15 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         {
             aPropertyValue.Name = "CharHeight";
             aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
+            aPropVec.push_back(aPropertyValue);
+        }
+        if (rFont.monSpacing.has())
+        {
+            aPropertyValue.Name = "CharKerning";
+            // Value is not converted to mm100: SvxKerningItem::PutValue() gets
+            // called with nMemberId = 0, so no mm100 -> twips conversion will
+            // be done there.
+            aPropertyValue.Value = uno::makeAny(sal_Int16(rFont.monSpacing.get()));
             aPropVec.push_back(aPropertyValue);
         }
         if (rParagraph.moParaAdjust.has())

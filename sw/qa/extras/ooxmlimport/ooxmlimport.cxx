@@ -132,6 +132,7 @@ public:
     void testTablePagebreak();
     void testFdo68607();
     void testVmlTextVerticalAdjust();
+    void testGroupshapeSdt();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -230,6 +231,7 @@ void Test::run()
         {"table-pagebreak.docx", &Test::testTablePagebreak},
         {"fdo68607.docx", &Test::testFdo68607},
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
+        {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1549,6 +1551,20 @@ void Test::testVmlTextVerticalAdjust()
     uno::Reference<drawing::XShape> xShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
     // Was CENTER.
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
+}
+
+void Test::testGroupshapeSdt()
+{
+    // All problems here are due to the groupshape: we have a drawinglayer rectangle, not a writer textframe.
+    uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xInnerGroupShape->getByIndex(0), uno::UNO_QUERY);
+    // Border distances were not implemented, this was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(xShape, "TextUpperDistance"));
+    // Sdt field result wasn't imported, this was "".
+    CPPUNIT_ASSERT_EQUAL(OUString("placeholder text"), xShape->getString());
+    // w:spacing was ignored in oox, this was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

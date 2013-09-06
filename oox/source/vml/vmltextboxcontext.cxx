@@ -132,6 +132,16 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
         case OOX_TOKEN(doc, color):
             maFont.moColor = rAttribs.getString( OOX_TOKEN(doc, val) );
         break;
+        case OOX_TOKEN(doc, spacing):
+            maFont.monSpacing = rAttribs.getInteger(OOX_TOKEN(doc, val));
+        break;
+        case OOX_TOKEN(doc, r):
+        case OOX_TOKEN(doc, rPr):
+        case OOX_TOKEN(doc, t):
+        break;
+        default:
+            SAL_INFO("oox", "unhandled: 0x" << std::hex<< getCurrentElement());
+        break;
     }
 }
 
