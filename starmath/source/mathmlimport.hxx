@@ -256,7 +256,7 @@ public:
     }
 
     sal_Bool GetSuccess()              { return bSuccess; }
-    OUString GetText()                 { return aText; }
+    SAL_WARN_UNUSED_RESULT OUString GetText() { return aText; }
     void SetText(const OUString &rStr) { aText = rStr; }
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
