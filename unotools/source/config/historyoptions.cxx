@@ -18,6 +18,7 @@
  */
 
 
+#include <osl/file.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -317,6 +318,18 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     }
 }
 
+static bool lcl_fileOpenable(const OUString &rURL)
+{
+    osl::File aRecentFile(rURL);
+    if(!aRecentFile.open(osl_File_OpenFlag_Read))
+    {
+        aRecentFile.close();
+        return true;
+    }
+    else
+        return false;
+}
+
 //*****************************************************************************************************************
 //  public method
 //  get a sequence list from the items
@@ -382,12 +395,15 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
                     xOrderList->getByName(OUString::number(nItem)) >>= xSet;
                     xSet->getPropertyValue(OUString(s_sHistoryItemRef)) >>= sUrl;
 
-                    xItemList->getByName(sUrl) >>= xSet;
-                    seqProperties[s_nOffsetURL  ].Value <<= sUrl;
-                    xSet->getPropertyValue(OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
-                    xSet->getPropertyValue(OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
-                    xSet->getPropertyValue(OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
-                    aRet[nCount++] = seqProperties;
+                    if( !sUrl.startsWith("file://") || lcl_fileOpenable( sUrl ) )
+                    {
+                        xItemList->getByName(sUrl) >>= xSet;
+                        seqProperties[s_nOffsetURL  ].Value <<= sUrl;
+                        xSet->getPropertyValue(OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
+                        xSet->getPropertyValue(OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
+                        xSet->getPropertyValue(OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
+                        aRet[nCount++] = seqProperties;
+                    }
                 }
                 catch(const css::uno::Exception& ex)
                 {
