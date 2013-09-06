@@ -836,14 +836,19 @@ void OConnection::rebuildIndexes() throw(SQLException)
                                + " ACTIVE";
 
         ISC_STATUS_ARRAY aStatusVector;
+        ISC_STATUS aErr;
 
-        isc_dsql_execute_immediate(aStatusVector,
+        aErr = isc_dsql_execute_immediate(aStatusVector,
                                           &getDBHandle(),
                                           &getTransaction(),
                                           0, // Length: 0 for null terminated
                                           sAlterIndex.getStr(),
                                           FIREBIRD_SQL_DIALECT,
                                           NULL);
+        if (aErr)
+            evaluateStatusVector(aStatusVector,
+                                 "rebuildIndexes:isc_dsql_execute_immediate",
+                                 *this);
     }
     commit();
 }
