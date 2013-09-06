@@ -87,32 +87,32 @@ public:
     virtual ~SvxAutoCorrDoc();
 
     virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd ) = 0;
-    virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt ) = 0;
-    virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt ) = 0;
-    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt ) = 0;
+    virtual sal_Bool Insert( xub_StrLen nPos, const OUString& rTxt ) = 0;
+    virtual sal_Bool Replace( xub_StrLen nPos, const OUString& rTxt ) = 0;
+    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const OUString& rTxt ) = 0;
 
     virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) = 0;
 
     virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL ) = 0;
 
-    // Return the text of a previous paragraph. This must not be empty!
-    // If no paragraph exits or just an empty one, then return 0.
+    // Return the text of a previous paragraph.
+    // If no paragraph exits or just an empty one, then return an empty string.
     // The flag indicates:
     //      TRUE: before the normal insertion position (TRUE)
     //      FALSE: in which the corrected word was inserted.
     //             (Does not to have to be the same paragraph !!!!)
-    virtual const String* GetPrevPara( sal_Bool bAtNormalPos ) = 0;
+    virtual OUString GetPrevPara( sal_Bool bAtNormalPos ) = 0;
 
     virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
                                   SvxAutoCorrect& rACorrect,
-                                  const String** ppPara ) = 0;
+                                  OUString* pPara ) = 0;
     // Is called after the change of the signs by the functions
     //  - FnCptlSttWrd
     //  - FnCptlSttSntnc
     // As an option, the words can then be inserted into the exception lists.
     virtual void SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
-                                    const String& rExceptWord,
+                                    const OUString& rExceptWord,
                                     sal_Unicode cChar );
 
     // which language at the position?

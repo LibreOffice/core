@@ -603,27 +603,27 @@ sal_Bool EdtAutoCorrDoc::Delete( sal_uInt16 nStt, sal_uInt16 nEnd )
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const String& rTxt )
+sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const OUString& rTxt )
 {
     EditSelection aSel = EditPaM( pCurNode, nPos );
     mpEditEngine->InsertText(aSel, rTxt);
     SAL_WARN_IF(nCursor < nPos, "editeng",
             "Cursor in the heart of the action?!");
-    nCursor = nCursor + rTxt.Len();
+    nCursor = nCursor + rTxt.getLength();
 
-    if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
+    if ( bAllowUndoAction && ( rTxt.getLength() == 1 ) )
         ImplStartUndoAction();
     bAllowUndoAction = false;
 
     return true;
 }
 
-sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const String& rTxt )
+sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const OUString& rTxt )
 {
-    return ReplaceRange( nPos, rTxt.Len(), rTxt );
+    return ReplaceRange( nPos, rTxt.getLength(), rTxt );
 }
 
-sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
+sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const OUString& rTxt )
 {
     // Actually a Replace introduce => corresponds to UNDO
     sal_uInt16 nEnd = nPos+nSourceLength;
@@ -636,9 +636,9 @@ sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength
         EditSelection(EditPaM(pCurNode, nPos), EditPaM(pCurNode, nEnd)));
 
     if ( nPos == nCursor )
-        nCursor = nCursor + rTxt.Len();
+        nCursor = nCursor + rTxt.getLength();
 
-    if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
+    if ( bAllowUndoAction && ( rTxt.getLength() == 1 ) )
         ImplStartUndoAction();
 
     bAllowUndoAction = false;
@@ -691,7 +691,7 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
     return true;
 }
 
-const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
+OUString EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 {
     // Return previous paragraph, so that it can be determined,
     // whether the current word is at the beginning of a sentence.
@@ -714,22 +714,22 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
             bBullet = true;
     }
     if ( bBullet )
-        return NULL;
+        return OUString();
 
     for ( sal_Int32 n = nPos; n; )
     {
         n--;
         ContentNode* pNode = rNodes[n];
         if ( pNode->Len() )
-            return &pNode->GetString();
+            return pNode->GetString();
     }
-    return NULL;
+    return OUString();
 
 }
 
 sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
             sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
-            const String** ppPara )
+            OUString* pPara )
 {
     // Paragraph-start or a blank found, search for the word
     // shortcut in Auto
@@ -754,8 +754,8 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
         nCursor -= ( nEndPos-rSttPos );
         mpEditEngine->InsertText(aSel, pFnd->GetLong());
         nCursor = nCursor + pFnd->GetLong().Len();
-        if( ppPara )
-            *ppPara = &pCurNode->GetString();
+        if( pPara )
+            *pPara = pCurNode->GetString();
         bRet = true;
     }
 

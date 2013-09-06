@@ -175,7 +175,7 @@ SvxAutoCorrDoc::~SvxAutoCorrDoc()
 //  - FnCptlSttSntnc
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
-void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, xub_StrLen, const String&,
+void SvxAutoCorrDoc::SaveCpltSttWord( sal_uLong, xub_StrLen, const OUString&,
                                         sal_Unicode )
 {
 }
@@ -865,8 +865,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     {
         // Check out the previous paragraph, if it exists.
         // If so, then check to paragraph separator at the end.
-        const String* pPrevPara = rDoc.GetPrevPara( bNormalPos );
-        if( !pPrevPara )
+        OUString aPrevPara = rDoc.GetPrevPara( bNormalPos );
+        if( !aPrevPara.isEmpty() )
         {
             // valid separator -> replace
             OUString sChar( *pWordStt );
@@ -875,7 +875,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                     rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
 
-        aText = *pPrevPara;
+        aText = aPrevPara;
         bAtStart = sal_False;
         pStart = aText.GetBuffer();
         pStr = pStart + aText.Len();
@@ -1324,11 +1324,11 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         if( IsAutoCorrFlag( Autocorrect ) )
         {
-            const String* pPara = 0;
-            const String** ppPara = IsAutoCorrFlag(CptlSttSntnc) ? &pPara : 0;
+            OUString aPara;
+            OUString* pPara = IsAutoCorrFlag(CptlSttSntnc) ? &aPara : 0;
 
             sal_Bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
-                                                    *this, ppPara );
+                                                    *this, pPara );
             if( !bChgWord )
             {
                 xub_StrLen nCapLttrPos1 = nCapLttrPos, nInsPos1 = nInsPos;
@@ -1343,7 +1343,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
                 if( (nCapLttrPos1 != nCapLttrPos || nInsPos1 != nInsPos ) &&
                     nCapLttrPos1 < nInsPos1 &&
-                    rDoc.ChgAutoCorrWord( nCapLttrPos1, nInsPos1, *this, ppPara ))
+                    rDoc.ChgAutoCorrWord( nCapLttrPos1, nInsPos1, *this, pPara ))
                 {
                     bChgWord = sal_True;
                     nCapLttrPos = nCapLttrPos1;
@@ -1353,16 +1353,16 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             if( bChgWord )
             {
                 nRet = Autocorrect;
-                if( pPara )
+                if( !aPara.isEmpty() )
                 {
                     xub_StrLen nEnd = nCapLttrPos;
-                    while( nEnd < pPara->Len() &&
-                            !IsWordDelim( pPara->GetChar( nEnd )))
+                    while( nEnd < aPara.getLength() &&
+                            !IsWordDelim( aPara[ nEnd ]))
                         ++nEnd;
 
                     // Capital letter at beginning of paragraph?
                     if( IsAutoCorrFlag( CptlSttSntnc ) &&
-                        FnCptlSttSntnc( rDoc, *pPara, sal_False,
+                        FnCptlSttSntnc( rDoc, aPara, sal_False,
                                                 nCapLttrPos, nEnd, eLang ) )
                         nRet |= CptlSttSntnc;
 

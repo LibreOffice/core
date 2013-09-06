@@ -123,14 +123,14 @@ sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
     return sal_True;
 }
 
-sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
+sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const OUString& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->InsertString( aPam, rTxt );
     if( !bUndoIdInitialized )
     {
         bUndoIdInitialized = true;
-        if( 1 == rTxt.Len() )
+        if( 1 == rTxt.getLength() )
         {
             rEditSh.StartUndo( UNDO_AUTOCORRECT );
             ++m_nEndUndoCounter;
@@ -139,12 +139,12 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
     return sal_True;
 }
 
-sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
+sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const OUString& rTxt )
 {
-    return ReplaceRange( nPos, rTxt.Len(), rTxt );
+    return ReplaceRange( nPos, rTxt.getLength(), rTxt );
 }
 
-sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
+sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const OUString& rTxt )
 {
     SwPaM* pPam = &rCrsr;
     if( pPam->GetPoint()->nContent.GetIndex() != nPos )
@@ -161,8 +161,8 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
 
     // text attributes with dummy characters must not be replaced!
     bool bDoReplace = true;
-    xub_StrLen const nLen = rTxt.Len();
-    for ( xub_StrLen n = 0; n < nLen; ++n )
+    sal_Int32 const nLen = rTxt.getLength();
+    for ( sal_Int32 n = 0; n < nLen; ++n )
     {
         sal_Unicode const Char = pNd->GetTxt()[n + nPos];
         if ( ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char )
@@ -197,7 +197,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
         }
         else
         {
-            if( nSourceLength != rTxt.Len() )
+            if( nSourceLength != rTxt.getLength() )
             {
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = std::min<sal_Int32>(
@@ -213,7 +213,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
         if( bUndoIdInitialized )
         {
             bUndoIdInitialized = true;
-            if( 1 == rTxt.Len() )
+            if( 1 == rTxt.getLength() )
             {
                 rEditSh.StartUndo( UNDO_AUTOCORRECT );
                 ++m_nEndUndoCounter;
@@ -266,15 +266,13 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUS
 
 /** Return the text of a previous paragraph
  *
- * This must not be empty!
- *
  * @param bAtNormalPos If <true> before the normal insert position; if <false> in which the
  *                     corrected word was inserted. (Doesn't need to be the same paragraph!)
  * @return text or 0, if previous paragraph does not exists or there are only blankness
  */
-const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
+OUString SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
 {
-    const String* pStr = 0;
+    OUString aStr;
 
     if( bAtNormalPos || !pIdx )
         pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
@@ -288,16 +286,16 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         pTNd = pIdx->GetNode().GetTxtNode();
     }
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
-        pStr = reinterpret_cast<String const*>(&pTNd->GetTxt()); // FIXME
+        aStr = pTNd->GetTxt();
 
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
-    return pStr;
+    return aStr;
 }
 
 sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
-                                            SvxAutoCorrect& rACorrect,
-                                            const String** ppPara )
+                                         SvxAutoCorrect& rACorrect,
+                                         OUString* pPara )
 {
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
@@ -347,7 +345,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
                 DeleteSel( aPam );
                 pDoc->DontExpandFmt( *aPam.GetPoint() );
 
-                if( ppPara )
+                if( pPara )
                 {
                     OSL_ENSURE( !pIdx, "who has not deleted his Index?" );
                     pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
@@ -378,7 +376,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
                 aExpItem.RestoreDontExpandItems( *aPam.GetPoint() );
 
-                if( ppPara )
+                if( pPara )
                 {
                     ++(*pIdx);
                     pTxtNd = pIdx->GetNode().GetTxtNode();
@@ -389,8 +387,8 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
         }
     }
 
-    if( bRet && ppPara && pTxtNd )
-        *ppPara = reinterpret_cast<String const*>(&pTxtNd->GetTxt()); //FIXME
+    if( bRet && pPara && pTxtNd )
+        *pPara = pTxtNd->GetTxt();
 
     return bRet;
 }
@@ -402,7 +400,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 // after the exchange of characters. Then the words, if necessary, can be inserted
 // into the exception list.
 void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
-                                            const String& rExceptWord,
+                                            const OUString& rExceptWord,
                                             sal_Unicode cChar )
 {
     sal_uLong nNode = pIdx ? pIdx->GetIndex() : rCrsr.GetPoint()->nNode.GetIndex();

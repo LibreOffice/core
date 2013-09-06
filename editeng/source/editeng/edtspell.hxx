@@ -140,17 +140,17 @@ public:
     ~EdtAutoCorrDoc();
 
     virtual sal_Bool    Delete( sal_uInt16 nStt, sal_uInt16 nEnd );
-    virtual sal_Bool    Insert( sal_uInt16 nPos, const String& rTxt );
-    virtual sal_Bool    Replace( sal_uInt16 nPos, const String& rTxt );
-    virtual sal_Bool    ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt );
+    virtual sal_Bool    Insert( sal_uInt16 nPos, const OUString& rTxt );
+    virtual sal_Bool    Replace( sal_uInt16 nPos, const OUString& rTxt );
+    virtual sal_Bool    ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const OUString& rTxt );
 
     virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
     virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const OUString& rURL );
 
-    virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
+    virtual OUString    GetPrevPara( sal_Bool bAtNormalPos );
 
     virtual sal_Bool    ChgAutoCorrWord( sal_uInt16& rSttPos, sal_uInt16 nEndPos,
-                                  SvxAutoCorrect& rACorrect, const String** ppPara );
+                                  SvxAutoCorrect& rACorrect, OUString* pPara );
 
     virtual LanguageType GetLanguage( sal_uInt16 nPos, sal_Bool bPrevPara = sal_False ) const;
 

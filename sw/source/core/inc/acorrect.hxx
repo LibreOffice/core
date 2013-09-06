@@ -58,9 +58,9 @@ public:
     ~SwAutoCorrDoc();
 
     virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd );
-    virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt );
-    virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt );
-    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt );
+    virtual sal_Bool Insert( xub_StrLen nPos, const OUString& rTxt );
+    virtual sal_Bool Replace( xub_StrLen nPos, const OUString& rTxt );
+    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const OUString& rTxt );
 
     virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& );
@@ -68,23 +68,22 @@ public:
     virtual sal_Bool SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const OUString& rURL );
 
     // return text of a previous paragraph
-    // This must not be empty/blank!
-    // If it does not exist or if there is nothing before, return 0.
+    // If it does not exist or if there is nothing before, return blank.
     //  - sal_True:  paragraph before "normal" insertion position
     //  - sal_False: paragraph in that the corrected word was inserted
     //               (does not need to be the same paragraph)
-    virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
+    virtual OUString GetPrevPara( sal_Bool bAtNormalPos );
 
     virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
                                   SvxAutoCorrect& rACorrect,
-                                  const String** ppPara );
+                                  OUString* pPara );
 
     // Will be called after swapping characters by the functions
     //  - FnCptlSttWrd and
     //  - FnCptlSttSntnc.
     // Afterwards the words can be added into exception list if needed.
     virtual void SaveCpltSttWord( sal_uLong nFlag, xub_StrLen nPos,
-                                    const String& rExceptWord, sal_Unicode cChar );
+                                    const OUString& rExceptWord, sal_Unicode cChar );
     virtual LanguageType GetLanguage( xub_StrLen nPos, sal_Bool bPrevPara ) const;
 };
 

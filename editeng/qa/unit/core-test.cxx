@@ -240,18 +240,18 @@ private:
         m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
-    virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt )
+    virtual sal_Bool Insert( xub_StrLen nPos, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
         m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
-    virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt )
+    virtual sal_Bool Replace( xub_StrLen nPos, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
-        return ReplaceRange( nPos, rTxt.Len(), rTxt );
+        return ReplaceRange( nPos, rTxt.getLength(), rTxt );
     }
-    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt )
+    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const OUString& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
@@ -267,14 +267,14 @@ private:
         //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
         return true;
     }
-    virtual const String* GetPrevPara( sal_Bool )
+    virtual OUString GetPrevPara( sal_Bool )
     {
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
-        return NULL;
+        return OUString();
     }
     virtual sal_Bool ChgAutoCorrWord( sal_uInt16& rSttPos,
                 sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
-                const String** ppPara )
+                OUString* pPara )
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
 
@@ -286,8 +286,8 @@ private:
         if (pFnd && pFnd->IsTextOnly())
         {
             m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());
-            if( ppPara )
-                *ppPara = NULL;//&pCurNode->GetString();
+            if( pPara )
+                *pPara = "";//&pCurNode->GetString();
             return true;
         }
 
