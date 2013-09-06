@@ -309,10 +309,9 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
 }
 
 //----- XParameters -----------------------------------------------------------
-void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 nSqlType)
+void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType*/)
     throw(SQLException, RuntimeException)
 {
-    (void) nSqlType;
     MutexGuard aGuard( m_pConnection->getMutex() );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -350,11 +349,9 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
 
-void SAL_CALL OPreparedStatement::setByte(sal_Int32 nIndex, sal_Int8 nValue)
+void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
     throw(SQLException, RuntimeException)
 {
-    (void) nIndex;
-    (void) nValue;
     ::dbtools::throwFunctionNotSupportedException("setByte not supported in firebird",
                                                   *this,
                                                   Any());
