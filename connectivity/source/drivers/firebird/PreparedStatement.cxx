@@ -64,7 +64,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
 }
 
 void OPreparedStatement::ensurePrepared()
-    throw (SQLException)
+    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
@@ -584,7 +584,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
 }
 
 void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
-    throw(SQLException)
+    throw(SQLException, RuntimeException)
 {
     ensurePrepared();
     if ((nParameterIndex == 0) || (nParameterIndex > m_pInSqlda->sqld))

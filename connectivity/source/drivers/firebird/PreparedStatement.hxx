@@ -72,7 +72,8 @@ namespace connectivity
             XSQLDA*         m_pOutSqlda;
             XSQLDA*         m_pInSqlda;
             void checkParameterIndex(sal_Int32 nParameterIndex)
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
 
             /**
              * Set a numeric value in the input SQLDA. If the destination
@@ -84,7 +85,8 @@ namespace connectivity
             void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
 
             void ensurePrepared()
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
 
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
