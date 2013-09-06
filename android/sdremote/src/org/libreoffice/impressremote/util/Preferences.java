@@ -29,6 +29,7 @@ public final class Preferences {
         }
 
         public static final String SELECTED_COMPUTERS_TAB_INDEX = "selected_computers_tab_index";
+
         public static final String VOLUME_KEYS_ACTIONS = "volume_keys_actions";
         public static final String KEEP_SCREEN_ON = "keep_screen_on";
     }

@@ -55,7 +55,8 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     }
 
     private ActionBar.LayoutParams buildCustomActionBarLayoutParams() {
-        return new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        return new ActionBar.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
@@ -128,9 +129,14 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
     }
 
     @Override
-    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-            saveServer();
+    public boolean onEditorAction(TextView aTextView, int aActionId, KeyEvent aKeyEvent) {
+        switch (aActionId) {
+            case EditorInfo.IME_ACTION_DONE:
+                saveServer();
+                break;
+
+            default:
+                break;
         }
 
         return false;

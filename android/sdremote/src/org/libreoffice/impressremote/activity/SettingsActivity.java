@@ -16,8 +16,8 @@ import org.libreoffice.impressremote.R;
 
 public class SettingsActivity extends SherlockPreferenceActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
 
         setUpHomeButton();
         setUpPreferences();

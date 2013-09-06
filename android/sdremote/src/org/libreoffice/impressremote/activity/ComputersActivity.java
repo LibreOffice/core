@@ -37,15 +37,15 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
 
         setUpTitle();
         setUpContent();
     }
 
     private void setUpTitle() {
-        // Looks hacky but it seems to be the best way to set activity title
+        // Looks hacky but it seems to be the best way to set activity’s title
         // different to application’s label. The other way is setting title
         // to intents filter but it shows wrong label for recent apps screen.
 
@@ -145,7 +145,9 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     }
 
     private int loadTabIndex() {
-        return Preferences.getApplicationStatesInstance(this).getInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX);
+        Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
+
+        return aPreferences.getInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX);
     }
 
     private void setUpComputersList() {
@@ -227,9 +229,10 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     }
 
     private void saveTabIndex() {
+        Preferences aPreferences = Preferences.getApplicationStatesInstance(this);
         int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
 
-        Preferences.getApplicationStatesInstance(this).setInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX, aTabIndex);
+        aPreferences.setInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX, aTabIndex);
     }
 }
 

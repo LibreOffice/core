@@ -76,8 +76,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
 
         mType = (Type) getArguments().getSerializable("TYPE");
 
@@ -89,8 +89,8 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onActivityCreated(Bundle aSavedInstanceState) {
+        super.onActivityCreated(aSavedInstanceState);
 
         bindService();
     }

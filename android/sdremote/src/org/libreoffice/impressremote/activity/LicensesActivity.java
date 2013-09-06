@@ -22,8 +22,8 @@ public class LicensesActivity extends SherlockActivity {
     private static final String PATH = "licenses.html";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
         setContentView(R.layout.activity_licenses);
 
         setUpHomeButton();

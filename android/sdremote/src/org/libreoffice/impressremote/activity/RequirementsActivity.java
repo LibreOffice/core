@@ -16,8 +16,8 @@ import org.libreoffice.impressremote.R;
 
 public class RequirementsActivity extends SherlockActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
         setContentView(R.layout.activity_requirements);
 
         setUpHomeButton();
