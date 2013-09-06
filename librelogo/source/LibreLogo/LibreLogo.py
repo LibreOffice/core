@@ -787,7 +787,7 @@ def __dots__(n, pos, dx, dy, r = -1, q = 0): # dots for dotted polyline or circl
         dots += [(__Point__(px, py), __Point__(px + 7, py + 7))]
     return dots
 
-def __draw__(d):
+def __draw__(d, count = True):
     shape = _.doc.createInstance( "com.sun.star.drawing." + d)
     shape.AnchorType = __AT_PAGE__
     shape.TextWrap = __THROUGHT__
@@ -799,7 +799,8 @@ def __draw__(d):
     _.drawpage.add(shape)
     if __group__:
         __group__.add(shape)
-        _.shapecache[next(_.shapecount)] = str(_.time)
+        if count:
+            _.shapecache[next(_.shapecount)] = str(_.time)
     return shape
 
 def __zoom__():
@@ -895,7 +896,7 @@ def __fillit__(filled = True):
         __removeshape__(__ACTUAL__)  # FIXME close dotted polyline
         return
     if oldshape and "LineShape" in oldshape.ShapeType:
-        shape = __draw__("PolyPolygonShape")
+        shape = __draw__("PolyPolygonShape", False)
         shape.PolyPolygon = oldshape.PolyPolygon
         shape.setPosition(oldshape.getPosition())
         shape.LineStyle, shape.LineDash = __linestyle__(_.linestyle)
