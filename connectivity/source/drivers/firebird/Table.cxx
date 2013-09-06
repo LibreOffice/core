@@ -8,6 +8,7 @@
  */
 
 #include "Columns.hxx"
+#include "Indexes.hxx"
 #include "Keys.hxx"
 #include "Table.hxx"
 
@@ -15,7 +16,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
-#include <connectivity/TIndexes.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
@@ -105,9 +105,9 @@ OCollection* Table::createKeys(const TStringVector& rNames)
 
 OCollection* Table::createIndexes(const TStringVector& rNames)
 {
-    return new OIndexesHelper(this,
-                              m_rMutex,
-                              rNames);
+    return new Indexes(this,
+                       m_rMutex,
+                       rNames);
 }
 
 //----- XAlterTable -----------------------------------------------------------
