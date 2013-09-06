@@ -591,7 +591,16 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         }
         int numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
                 rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
-        if (rArgs.mnMinCharPos + numchars > limit) numchars = limit - rArgs.mnMinCharPos; // fdo#52540
+        if (mnSegCharOffset + numchars > limit)
+        {
+            int combining_char = 0;
+            for (int i = mnSegCharOffset; i < numchars; i++) {
+                int ch = rArgs.mpStr[i];
+                if ((ch >= 0x300 && ch <= 0x36F) || (ch >= 0x1DC0 && ch <= 0x1DFF) ||
+                        (ch >= 0x20D0 && ch <= 0x20F0) || (ch >= 0xFE20 && ch <= 0xFE26)) combining_char++;
+            }
+            numchars = limit - mnSegCharOffset + combining_char; // fdo#52540, fdo#68313
+        }
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
                                         rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
