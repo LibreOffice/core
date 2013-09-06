@@ -594,7 +594,16 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, makeAny(eTextVerticalAdjust));
 
         if (getTextBox())
+        {
             getTextBox()->convert(xShape);
+            if (getTextBox()->borderDistanceSet)
+            {
+                PropertySet(xShape).setAnyProperty(PROP_TextLeftDistance, makeAny(sal_Int32(getTextBox()->borderDistanceLeft)));
+                PropertySet(xShape).setAnyProperty(PROP_TextUpperDistance, makeAny(sal_Int32(getTextBox()->borderDistanceTop)));
+                PropertySet(xShape).setAnyProperty(PROP_TextRightDistance, makeAny(sal_Int32(getTextBox()->borderDistanceRight)));
+                PropertySet(xShape).setAnyProperty(PROP_TextLowerDistance, makeAny(sal_Int32(getTextBox()->borderDistanceBottom)));
+            }
+        }
     }
 
     // Import Legacy Fragments (if any)
