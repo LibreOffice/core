@@ -608,6 +608,7 @@ linux-android*)
         AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
     fi
 
+    AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
     BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
@@ -7686,6 +7687,13 @@ if test  "$test_freetype" = "yes"; then
     PKG_CHECK_MODULES(FREETYPE, freetype2 >= 9.9.3)
     FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     SYSTEM_FREETYPE=YES
+    _save_libs="$LIBS"
+    _save_cflags="$CFLAGS"
+    LIBS="$LIBS $FREETYPE_LIBS"
+    CFLAGS="$CFLAGS $FREETYPE_CFLAGS"
+    AC_CHECK_FUNC(FT_Face_GetCharVariantIndex, AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX), [])
+    LIBS="$_save_libs"
+    CFLAGS="$_save_cflags"
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
