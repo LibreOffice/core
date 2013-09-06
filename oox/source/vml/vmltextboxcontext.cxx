@@ -226,13 +226,18 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
             if (nElement == OOX_TOKEN(doc, p)) return this;
         break;
         case OOX_TOKEN(doc, p):
+        case OOX_TOKEN(doc, sdtContent):
             if (nElement == OOX_TOKEN(doc, r))
                 return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
             else
                 return this;
         break;
         case OOX_TOKEN(doc, pPr):
+        case OOX_TOKEN(doc, sdt):
             return this;
+        break;
+        default:
+            SAL_INFO("oox", "unhandled 0x" << std::hex << getCurrentElement());
         break;
     }
     return 0;
