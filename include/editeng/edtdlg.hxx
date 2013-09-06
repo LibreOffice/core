@@ -41,7 +41,7 @@ class SvxSpellWrapper;
 class AbstractThesaurusDialog : public VclAbstractDialog
 {
 public:
-    virtual String      GetWord() = 0;
+    virtual OUString    GetWord() = 0;
     virtual sal_uInt16  GetLanguage() const = 0;
     virtual Window*     GetWindow() = 0;
 };
@@ -57,28 +57,30 @@ public:
 class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
 {
  public:
-    virtual void EnableRubySupport( bool _bVal ) = 0;
-     virtual void SetByCharacter( bool _bByCharacter ) = 0;
-    virtual void SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
-     virtual void SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
-    virtual void    SetOptionsChangedHdl( const Link& _rHdl ) = 0;
-     virtual void   SetIgnoreHdl( const Link& _rHdl ) = 0;
-     virtual void   SetIgnoreAllHdl( const Link& _rHdl ) = 0;
-     virtual void   SetChangeHdl( const Link& _rHdl ) = 0;
-     virtual void   SetChangeAllHdl( const Link& _rHdl ) = 0;
-    virtual void    SetClickByCharacterHdl( const Link& _rHdl ) = 0;
-     virtual void   SetConversionFormatChangedHdl( const Link& _rHdl ) = 0;
-     virtual void   SetFindHdl( const Link& _rHdl ) = 0;
-    virtual bool    GetUseBothDirections() const= 0;
-    virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
-    virtual void    SetCurrentString(
-                    const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
-                    bool _bOriginatesFromDocument = true )=0;
-    virtual String  GetCurrentString( ) const =0;
-    virtual editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const =0;
-    virtual void    FocusSuggestion( )= 0;
-    virtual String  GetCurrentSuggestion( ) const =0;
+    virtual void     EnableRubySupport( bool _bVal ) = 0;
+    virtual void     SetByCharacter( bool _bByCharacter ) = 0;
+    virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
+    virtual void     SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
+    virtual void     SetOptionsChangedHdl( const Link& _rHdl ) = 0;
+    virtual void     SetIgnoreHdl( const Link& _rHdl ) = 0;
+    virtual void     SetIgnoreAllHdl( const Link& _rHdl ) = 0;
+    virtual void     SetChangeHdl( const Link& _rHdl ) = 0;
+    virtual void     SetChangeAllHdl( const Link& _rHdl ) = 0;
+    virtual void     SetClickByCharacterHdl( const Link& _rHdl ) = 0;
+    virtual void     SetConversionFormatChangedHdl( const Link& _rHdl ) = 0;
+    virtual void     SetFindHdl( const Link& _rHdl ) = 0;
+    virtual bool     GetUseBothDirections() const= 0;
+    virtual editeng::HangulHanjaConversion::ConversionDirection
+                     GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
+    virtual void     SetCurrentString(
+                        const OUString& _rNewString,
+                        const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
+                        bool _bOriginatesFromDocument = true )=0;
+    virtual OUString GetCurrentString( ) const =0;
+    virtual editeng::HangulHanjaConversion::ConversionFormat
+                     GetConversionFormat( ) const =0;
+    virtual void     FocusSuggestion( )= 0;
+    virtual OUString GetCurrentSuggestion( ) const =0;
 };
 
 class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDialogFactory
@@ -86,12 +88,12 @@ class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDi
 public:
                                         virtual ~EditAbstractDialogFactory();   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
-    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
-                                                const String &rWord, sal_Int16 nLanguage ) = 0;
+    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
+                                                const OUString &rWord, sal_Int16 nLanguage ) = 0;
 
     virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
-                                                const String &rWord, LanguageType nLang,
-                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                const OUString &rWord, LanguageType nLang,
+                                                css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper ) = 0;
     virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) = 0;

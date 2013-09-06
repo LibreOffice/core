@@ -325,14 +325,14 @@ editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversio
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
-                    const String& _rNewString,
+                    const OUString& _rNewString,
                     const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument
                 )
 {
      pDlg->SetCurrentString(_rNewString,_rSuggestions,_bOriginatesFromDocument);
 }
-String   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
+OUString   AbstractHangulHanjaConversionDialog_Impl::GetCurrentString( ) const
 {
     return pDlg->GetCurrentString();
 }
@@ -346,12 +346,12 @@ void AbstractHangulHanjaConversionDialog_Impl::FocusSuggestion( )
     pDlg->FocusSuggestion();
 }
 
-String  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
+OUString  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 {
     return pDlg->GetCurrentSuggestion();
 }
 
-String AbstractThesaurusDialog_Impl::GetWord()
+OUString AbstractThesaurusDialog_Impl::GetWord()
 {
     return pDlg->GetWord();
 };
@@ -1163,15 +1163,15 @@ AbstractHangulHanjaConversionDialog* AbstractDialogFactory_Impl::CreateHangulHan
 }
 
 AbstractThesaurusDialog* AbstractDialogFactory_Impl::CreateThesaurusDialog( Window* pParent,
-                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
-                                const String &rWord, sal_Int16 nLanguage )
+                                css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
+                                const OUString &rWord, sal_Int16 nLanguage )
 {
     SvxThesaurusDialog* pDlg = new SvxThesaurusDialog( pParent, xThesaurus, rWord, nLanguage );
     return new AbstractThesaurusDialog_Impl( pDlg );
 }
 
 AbstractHyphenWordDialog* AbstractDialogFactory_Impl::CreateHyphenWordDialog( Window* pParent,
-                                                const String &rWord, LanguageType nLang,
+                                                const OUString &rWord, LanguageType nLang,
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper )
 {
