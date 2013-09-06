@@ -185,7 +185,8 @@ namespace connectivity
              */
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
                 createBlob(ISC_QUAD* pBlobID)
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
 
             /**
              * Create and/or connect to the sdbcx Catalog. This is completely

@@ -320,7 +320,7 @@ IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnect
                                                     "com.sun.star.sdbc.Connection")
 
 Reference< XBlob> OConnection::createBlob(ISC_QUAD* pBlobId)
-    throw(SQLException)
+    throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "createBlob()");
     MutexGuard aGuard(m_aMutex);
