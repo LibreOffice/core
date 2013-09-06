@@ -70,7 +70,6 @@ SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
 SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
 SvxNumRule::Create(SvStream&)
 SvxNumberFormat::Create(SvStream&)
-SwFont::SwFont()
 Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
 ThumbnailView::DeselectItem(unsigned short)

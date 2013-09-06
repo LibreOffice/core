@@ -162,9 +162,6 @@ class SwFont
     sal_Bool bGreyWave      :1;  // Fuers extended TextInput: Graue Wellenlinie
     sal_Bool bNoColReplace  :1;  // Replacement without colormanipulation
 
-protected:
-    SwFont();
-
 public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
     SwFont( const SwFont& rFont );

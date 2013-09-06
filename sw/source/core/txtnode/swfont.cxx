@@ -705,31 +705,6 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
 
 // SwFont
 
-SwFont::SwFont()
-    : pBackColor(0)
-    , m_nTopBorderDist(0)
-    , m_nBottomBorderDist(0)
-    , m_nRightBorderDist(0)
-    , m_nLeftBorderDist(0)
-    , m_aShadowColor(COL_TRANSPARENT)
-    , m_nShadowWidth(0)
-    , m_aShadowLocation(SVX_SHADOW_NONE)
-    , nToxCnt(0)
-    , nRefCnt(0)
-    , m_nMetaCount(0)
-    , nActual(SW_LATIN)
-    , bNoHyph(false)
-    , bBlink(false)
-    , bPaintBlank(false)
-    , bFntChg(false)
-    , bOrgChg(false)
-    , bURL(false)
-    , bPaintWrong(false)
-    , bGreyWave(false)
-    , bNoColReplace(false)
-{
-}
-
 SwFont::SwFont( const SwFont &rFont )
 {
     aSub[SW_LATIN] = rFont.aSub[SW_LATIN];
