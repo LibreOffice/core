@@ -54,6 +54,7 @@ struct OOX_DLLPUBLIC TextFontModel
     OptValue< bool >    mobBold;
     OptValue< bool >    mobItalic;
     OptValue< bool >    mobStrikeout;
+    OptValue<sal_Int32> monSpacing;
 
     explicit            TextFontModel();
 };
