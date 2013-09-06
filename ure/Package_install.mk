@@ -12,13 +12,19 @@ $(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 $(eval $(call gb_Package_set_outdir,ure_install,$(INSTDIR)))
 
 ifneq (WNT,$(OS))
+ifeq ($(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),)
 $(eval $(call gb_Package_add_file,ure_install,ure/bin/startup.sh,startup.sh))
 $(eval $(call gb_Package_add_symbolic_link,ure_install,ure/bin/uno,startup.sh))
 endif
+endif
 
 ifeq (MACOSX,$(OS))
-$(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link/bin/urelibs,../lib))
-else ifneq (WNT,$(OS))
+ifeq ($(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),)
+$(eval $(call gb_Package_add_symbolic_link,ure_install,Contents/MacOS/urelibs,../ure-link/lib))
+endif
+else ifeq (WNT,$(OS))
+$(eval $(call gb_Package_add_file,ure_install,ure-link,ure-link))
+else
 $(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link,ure))
 endif
 

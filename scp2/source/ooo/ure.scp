@@ -92,15 +92,6 @@ End
 
 #endif // !ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
-#if defined WNT
-File gid_File_UreLink
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Brand_Root;
-    Name = "ure-link";
-    Styles = (PACKED);
-End
-#endif
-
 // Public Dynamic Libraries:
 
 File gid_File_Dl_Cppu
@@ -202,6 +193,10 @@ End
 // and on Windows into .../ure/bin/unorc. The latter two locations
 // are factored out as SCP2_URE_DL_DIR.
 
+// FIXME: remove this completely?
+// currently getting 'destination' at file not unique error on WNT
+// but needs handling of ENABLE_MACOSX_MACLIKE_APP_STRUCTURE then...
+#ifndef WNT
 Profile gid_Profile_Dl_Uno_Ini
     ModuleID = gid_Module_Root_Ure_Hidden;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
@@ -273,12 +268,12 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
     Value = "${ORIGIN}/../share/misc/services.rdb ${URE_MORE_SERVICES}";
 #endif
 End
+#endif
 
 File gid_File_ure_install
-    TXT_FILE_BODY;
     Dir = FILELIST_DIR;
-    Name = ure_install.filelist;
-    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Name = "ure_install.filelist";
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "1124A984-F905-47DC-ACEF-EDEC037F9B38";
 End
 

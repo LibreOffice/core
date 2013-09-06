@@ -92,8 +92,7 @@ Module gid_Module_Root_Brand
 	     gid_Apache_Notice);
 #if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
     Unixlinks = (gid_Brand_Unixlink_Program,
-                 gid_Brand_Unixlink_Unopkg,
-                 gid_Brand_Unixlink_Urelibs);
+                 gid_Brand_Unixlink_Unopkg);
 #endif
 End
 
@@ -464,14 +463,6 @@ End
 #endif
 
 // UnixLinks
-
-#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-Unixlink gid_Brand_Unixlink_Urelibs
-    Dir = gid_Brand_Dir_Program;
-    Name = "urelibs";
-    Target = "../ure-link/lib";
-End
-#endif
 
 #if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 Unixlink gid_Brand_Unixlink_Program
