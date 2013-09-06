@@ -541,7 +541,7 @@ void EditView::Redo()
     PIMPE->Redo( this );
 }
 
-sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -1411,7 +1411,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
     return bRet;
 }
 
-String EditView::GetSurroundingText() const
+OUString EditView::GetSurroundingText() const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -1421,13 +1421,13 @@ String EditView::GetSurroundingText() const
 
     if( HasSelection() )
     {
-        String aStr = PIMPE->GetSelected(aSel);
+        OUString aStr = PIMPE->GetSelected(aSel);
 
         // Stop reconversion if the selected text includes a line break.
-        if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )
-        return aStr;
+        if ( aStr.indexOf( 0x0A ) == -1 )
+          return aStr;
         else
-        return String();
+          return OUString();
     }
     else
     {

@@ -79,7 +79,7 @@ public: // Needed for Undo
 
 private:
     ImpEditView*    pImpEditView;
-    String          aDicNameSingle;
+    OUString        aDicNameSingle;
 
                     EDITENG_DLLPRIVATE EditView( const EditView& );
     EDITENG_DLLPRIVATE EditView&        operator=( const EditView& );
@@ -114,7 +114,7 @@ public:
     sal_Bool            IsInsertMode() const;
     void            SetInsertMode( sal_Bool bInsert );
 
-    void            ReplaceSelected( const String& rStr );
+    void            ReplaceSelected( const OUString& rStr );
     OUString        GetSelected();
     void            DeleteSelected();
 
@@ -163,7 +163,7 @@ public:
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );
 
-    sal_uLong           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -218,7 +218,7 @@ public:
 
     static bool ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFontList );
 
-    String          GetSurroundingText() const;
+    OUString        GetSurroundingText() const;
     Selection       GetSurroundingTextSelection() const;
 
     /** Tries to determine the language of 'rText', returning a matching known
