@@ -117,9 +117,9 @@ Size SvxPaperInfo::GetDefaultPaperSize( MapUnit eUnit )
  Description:   String representation for the SV-defines of paper size
 ------------------------------------------------------------------------*/
 
-String SvxPaperInfo::GetName( Paper ePaper )
+OUString SvxPaperInfo::GetName( Paper ePaper )
 {
-    return String( Printer::GetPaperName( ePaper ) );
+    return Printer::GetPaperName( ePaper );
 }
 
 

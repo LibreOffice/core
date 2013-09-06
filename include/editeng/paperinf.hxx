@@ -30,7 +30,6 @@
 
 class Printer;
 class Size;
-class String;
 
 // class SvxPaperInfo -----------------------------------------------------
 
@@ -42,7 +41,7 @@ public:
     static Size     GetPaperSize( const Printer* pPrinter );
     static Paper    GetSvxPaper( const Size &rSize, MapUnit eUnit = MAP_TWIP, bool bSloppy = sal_False );
     static long     GetSloppyPaperDimension( long nSize, MapUnit eUnit = MAP_TWIP );
-    static String   GetName( Paper ePaper );
+    static OUString GetName( Paper ePaper );
 };
 
 // INLINE -----------------------------------------------------------------
