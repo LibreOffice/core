@@ -10,6 +10,7 @@ package org.libreoffice.impressremote.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -19,12 +20,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.MenuItem;
@@ -34,7 +42,9 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
 
-public class ComputersFragment extends SherlockListFragment implements ServiceConnection {
+public class ComputersFragment extends SherlockListFragment implements ServiceConnection, Runnable {
+    private static final int SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS = 10;
+
     public static enum Type {
         WIFI, BLUETOOTH
     }
@@ -58,6 +68,11 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         aArguments.putSerializable("TYPE", aType);
 
         return aArguments;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater aInflater, ViewGroup aContainer, Bundle aSavedInstanceState) {
+        return aInflater.inflate(R.layout.fragment_computers_list, aContainer, false);
     }
 
     @Override
@@ -88,7 +103,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     @Override
     public void onServiceConnected(ComponentName aComponentName, IBinder aBinder) {
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
-
         mCommunicationService = aServiceBinder.getService();
 
         mCommunicationService.startSearch();
@@ -103,8 +117,12 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
         if (getComputers().isEmpty()) {
             hideComputersList();
+            setUpProgressMessage();
+            tearDownComputersAdapter();
         }
         else {
+            setUpComputersAdapter();
+            fillComputersAdapter();
             showComputersList();
         }
     }
@@ -114,20 +132,83 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void hideComputersList() {
-        setListAdapter(null);
+        ViewAnimator aViewAnimator = getViewAnimator();
+        ViewGroup aProgressBarLayout = getProgressBarLayout();
 
-        setListShown(false);
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aProgressBarLayout));
+    }
+
+    private ViewAnimator getViewAnimator() {
+        return (ViewAnimator) getView().findViewById(R.id.view_animator);
+    }
+
+    private ViewGroup getProgressBarLayout() {
+        return (ViewGroup) getView().findViewById(R.id.container_progress);
+    }
+
+    private void setUpProgressMessage() {
+        new Handler().postDelayed(this, TimeUnit.SECONDS.toMillis(SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS));
+    }
+
+    @Override
+    public void run() {
+        if (isShowingProgressMessageRequired()) {
+            showProgressMessage();
+        }
+    }
+
+    private boolean isShowingProgressMessageRequired() {
+        return getProgressMessageView().getVisibility() == View.INVISIBLE;
+    }
+
+    private TextView getProgressMessageView() {
+        return (TextView) getView().findViewById(R.id.text_progress_message);
+    }
+
+    private void showProgressMessage() {
+        TextView aProgressMessageView = getProgressMessageView();
+        Animation aFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+
+        aProgressMessageView.setText(getProgressMessage());
+
+        aProgressMessageView.startAnimation(aFadeInAnimation);
+        aProgressMessageView.setVisibility(View.VISIBLE);
+    }
+
+    private String getProgressMessage() {
+        switch (mType) {
+            case WIFI:
+                return getString(R.string.message_search_wifi);
+
+            case BLUETOOTH:
+                return getString(R.string.message_search_bluetooth);
+
+            default:
+                return "";
+        }
+    }
+
+    private void tearDownComputersAdapter() {
+        getComputesList().setAdapter(null);
+    }
+
+    private ListView getComputesList() {
+        return (ListView) getView().findViewById(android.R.id.list);
     }
 
     private void showComputersList() {
-        if (!isComputersAdapterExist()) {
-            setUpComputersAdapter();
+        ViewAnimator aViewAnimator = getViewAnimator();
+        ListView aComputersList= getComputesList();
+
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aComputersList));
+    }
+
+    private void setUpComputersAdapter() {
+        if (isComputersAdapterExist()) {
+            return;
         }
 
-        getComputersAdapter().clear();
-        getComputersAdapter().add(getComputers());
-
-        setListShown(true);
+        setListAdapter(new ComputersAdapter(getActivity()));
     }
 
     private boolean isComputersAdapterExist() {
@@ -138,8 +219,9 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         return (ComputersAdapter) getListAdapter();
     }
 
-    private void setUpComputersAdapter() {
-        setListAdapter(new ComputersAdapter(getActivity()));
+    private void fillComputersAdapter() {
+        getComputersAdapter().clear();
+        getComputersAdapter().add(getComputers());
     }
 
     private List<Server> getComputers() {

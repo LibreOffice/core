@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/view_animator"
+              android:inAnimation="@android:anim/fade_in"
+              android:outAnimation="@android:anim/fade_out"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:animateLayoutChanges="true"
+        android:id="@+id/container_progress"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingLeft="@dimen/padding_horizontal_progress_layout"
+        android:paddingRight="@dimen/padding_horizontal_progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/text_progress_message"
+            android:text="@string/message_search_wifi"
+            android:gravity="center_horizontal"
+            android:visibility="invisible"
+            android:paddingTop="@dimen/padding_vertical_progress_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</ViewAnimator>
