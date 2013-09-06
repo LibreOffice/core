@@ -28,10 +28,11 @@
 
 #include "sdresid.hxx"
 
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 
 #include "helpids.h"
 #include "Outliner.hxx"
@@ -79,6 +80,7 @@ public:
     ~PresLayoutPreview();
 
     virtual void Paint( const Rectangle& rRect );
+    virtual Size GetOptimalSize() const;
 
     void init( SdPage* pMaster );
     void update( HeaderFooterSettings& rSettings );
@@ -120,7 +122,7 @@ private:
     FixedText*   mpFTIncludeOn;
 
     CheckBox*    mpCBHeader;
-    FixedText*   mpFTHeader;
+    VclContainer* mpHeaderBox;
     Edit*        mpTBHeader;
 
     CheckBox*    mpCBDateTime;
@@ -132,7 +134,7 @@ private:
     SvxLanguageBox*  mpCBDateTimeLanguage;
 
     CheckBox*    mpCBFooter;
-    FixedText*   mpFTFooter;
+    VclContainer* mpFooterBox;
     Edit*        mpTBFooter;
 
     CheckBox*   mpCBSlideNumber;
@@ -182,7 +184,6 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
         mpCurrentPage( pCurrentPage ),
         mpViewShell( pViewShell )
 {
-    //FreeResource();
     get(mpTabCtrl, "tabs" );
 
     SdPage* pSlide;
@@ -207,12 +208,10 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     }
 
     pDoc->StopWorkStartupDelay();
-//  mpTabCtrl.SetHelpId( HID_XML_FILTER_TABPAGE_CTRL );
     mpTabCtrl->Show();
 
     mnSlidesId = mpTabCtrl->GetPageId("slides");
     mpSlideTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pSlide, false );
-    //mpSlideTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_SLIDE );
     mpTabCtrl->SetTabPage( mnSlidesId, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
@@ -226,23 +225,13 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
 
     mnNotesId = mpTabCtrl->GetPageId("notes");
     mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, mpTabCtrl, pDoc, pNotes, true );
-    //mpNotesHandoutsTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT );
     mpTabCtrl->SetTabPage( mnNotesId, mpNotesHandoutsTabPage );
 
     get(maPBApplyToAll, "apply_all" );
     get(maPBApply, "apply" );
     get(maPBCancel, "cancel" );
 
-    /*aSiz = mpNotesHandoutsTabPage->GetSizePixel();
-    if ( aCtrlSiz.Width() < aSiz.Width() || aCtrlSiz.Height() < aSiz.Height() )
-    {
-        mpTabCtrl.SetOutputSizePixel( aSiz );
-        aCtrlSiz = aSiz;
-    }*/
-
     ActivatePageHdl( mpTabCtrl );
-
-    AdjustLayout();
 
     mpTabCtrl->SetActivatePageHdl( LINK( this, HeaderFooterDialog, ActivatePageHdl ) );
     mpTabCtrl->SetDeactivatePageHdl( LINK( this, HeaderFooterDialog, DeactivatePageHdl ) );
@@ -446,30 +435,30 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
         mpDialog(pDialog),
         mbHandoutMode( bHandoutMode )
 {
-        get(mpFTIncludeOn, "include_label");
-        get(mpCBHeader, "header_cb" );
-        get(mpFTHeader, "header_label" );
-        get(mpTBHeader, "header_text" );
-        get(mpCBDateTime, "datetime_cb" );
-        get(mpRBDateTimeFixed, "rb_fixed" );
-        get(mpRBDateTimeAutomatic, "rb_auto" );
-        get(mpTBDateTimeFixed, "datetime_value" );
-        get(mpCBDateTimeFormat, "datetime_format_list" );
-        get(mpFTDateTimeLanguage, "language_label" );
-        get(mpCBDateTimeLanguage, "language_list" );
+    get(mpFTIncludeOn, "include_label");
+    get(mpCBHeader, "header_cb" );
+    get(mpHeaderBox, "header_box" );
+    get(mpTBHeader, "header_text" );
+    get(mpCBDateTime, "datetime_cb" );
+    get(mpRBDateTimeFixed, "rb_fixed" );
+    get(mpRBDateTimeAutomatic, "rb_auto" );
+    get(mpTBDateTimeFixed, "datetime_value" );
+    get(mpCBDateTimeFormat, "datetime_format_list" );
+    get(mpFTDateTimeLanguage, "language_label" );
+    get(mpCBDateTimeLanguage, "language_list" );
 
-        get(mpCBFooter, "footer_cb" );
-        get(mpFTFooter, "footer_label" );
-        get(mpTBFooter, "footer_text" );
+    get(mpCBFooter, "footer_cb" );
+    get(mpFooterBox, "footer_box" );
+    get(mpTBFooter, "footer_text" );
 
-        get(mpCBSlideNumber, "slide_number" );
+    get(mpCBSlideNumber, "slide_number" );
 
-        get(mpCBNotOnTitle, "not_on_title" );
+    get(mpCBNotOnTitle, "not_on_title" );
 
-        get(mpCTPreview, "preview");
-        mpCTPreview->init( pActualPage ?
-                (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
-                (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) );
+    get(mpCTPreview, "preview");
+    mpCTPreview->init( pActualPage ?
+            (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
+            (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) );
 
     if( mbHandoutMode )
     {
@@ -481,8 +470,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
     }
 
     mpCBHeader->Show( mbHandoutMode );
-    mpFTHeader->Show( mbHandoutMode );
-    mpTBHeader->Show( mbHandoutMode );
+    mpHeaderBox->Show( mbHandoutMode );
     mpCBNotOnTitle->Show( !mbHandoutMode );
 
     mpCBDateTime->SetClickHdl( LINK( this, HeaderFooterTabPage, UpdateOnClickHdl ) );
@@ -500,18 +488,6 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
     mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
     FillFormatList(SVXDATEFORMAT_A);
-
-    mpTBHeader->SetAccessibleRelationMemberOf(mpCBHeader);
-    mpRBDateTimeFixed->SetAccessibleRelationMemberOf(mpCBDateTime);
-    mpRBDateTimeAutomatic->SetAccessibleRelationMemberOf(mpCBDateTime);
-    mpTBDateTimeFixed->SetAccessibleName(mpRBDateTimeFixed->GetText());
-    mpTBDateTimeFixed->SetAccessibleRelationMemberOf(mpCBDateTime);
-    mpTBDateTimeFixed->SetAccessibleRelationLabeledBy(mpRBDateTimeFixed);
-    mpCBDateTimeFormat->SetAccessibleRelationMemberOf(mpCBDateTime);
-    mpCBDateTimeFormat->SetAccessibleName(mpRBDateTimeAutomatic->GetText());
-    mpCBDateTimeFormat->SetAccessibleRelationLabeledBy(mpRBDateTimeAutomatic);
-    mpCBDateTimeLanguage->SetAccessibleRelationMemberOf(mpCBDateTime);
-    mpTBFooter->SetAccessibleRelationMemberOf(mpCBFooter);
 }
 // -----------------------------------------------------------------------
 
@@ -626,11 +602,9 @@ void HeaderFooterTabPage::update()
     mpFTDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
     mpCBDateTimeLanguage->Enable( mpCBDateTime->IsChecked() && mpRBDateTimeAutomatic->IsChecked() );
 
-    mpFTFooter->Enable( mpCBFooter->IsChecked() );
-    mpTBFooter->Enable( mpCBFooter->IsChecked() );
+    mpFooterBox->Enable( mpCBFooter->IsChecked() );
 
-    mpFTHeader->Enable( mpCBHeader->IsChecked() );
-    mpTBHeader->Enable( mpCBHeader->IsChecked() );
+    mpHeaderBox->Enable( mpCBHeader->IsChecked() );
 
     HeaderFooterSettings aSettings;
     bool bNotOnTitle;
@@ -773,6 +747,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makePresLayoutPreview( ::Wind
 
 PresLayoutPreview::~PresLayoutPreview()
 {
+}
+
+Size PresLayoutPreview::GetOptimalSize() const
+{
+    return LogicToPixel(Size(80, 80), MAP_APPFONT);
 }
 
 // -----------------------------------------------------------------------

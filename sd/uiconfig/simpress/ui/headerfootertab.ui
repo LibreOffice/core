@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="HeaderFooterTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="spacing">12</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
         <property name="hexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -39,6 +43,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="header_box"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -47,17 +54,21 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box4">
+                      <object class="GtkBox" id="header_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
                         <property name="margin_left">12</property>
+                        <property name="spacing">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="header_cb"/>
+                        </accessibility>
                         <child>
                           <object class="GtkLabel" id="header_label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Header _text:</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">header_text</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -93,6 +104,9 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <accessibility>
+                          <relation type="label-for" target="datetimebox"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -101,12 +115,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box5">
+                      <object class="GtkBox" id="datetimebox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_left">12</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
-                        <property name="margin_left">12</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="datetime_cb"/>
+                        </accessibility>
                         <child>
                           <object class="GtkBox" id="box6">
                             <property name="visible">True</property>
@@ -122,7 +139,10 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">rb_fixed</property>
+                                <property name="group">rb_auto</property>
+                                <accessibility>
+                                  <relation type="label-for" target="datetime_value"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -136,6 +156,9 @@
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
                                 <property name="invisible_char_set">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="rb_fixed"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -155,7 +178,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="rb_auto">
                                 <property name="label" translatable="yes">_Variable</property>
@@ -164,9 +186,11 @@
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
-                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">rb_fixed</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="variablebox"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -176,25 +200,77 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="language_label">
+                              <object class="GtkAlignment" id="variablebox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">_Language</property>
-                                <property name="use_underline">True</property>
-                                <property name="halign">start</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="datetime_format_list">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin_left">12</property>
+                                <property name="left_padding">12</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="rb_auto"/>
+                                </accessibility>
+                                <child>
+                                  <object class="GtkGrid" id="grid2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="column_spacing">12</property>
+                                    <child>
+                                      <object class="svxcorelo-SvxLanguageBox" id="language_list">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="language_label">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">_Language</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">language_list</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="datetime_format_list">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="language_label1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">_Format</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">datetime_format_list</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -202,39 +278,12 @@
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
-                            </child>
-                            <child>
-                              <object class="svxcorelo-SvxLanguageBox" id="language_list">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -259,6 +308,9 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <accessibility>
+                              <relation type="label-for" target="footer_box"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -267,17 +319,21 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box8">
+                          <object class="GtkBox" id="footer_box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">12</property>
                             <property name="margin_left">12</property>
+                            <property name="spacing">12</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="footer_cb"/>
+                            </accessibility>
                             <child>
                               <object class="GtkLabel" id="footer_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">F_ooter text:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">footer_text</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -368,9 +424,10 @@
         <child>
           <object class="GtkLabel" id="replacement_a">
             <property name="can_focus">False</property>
-            <property name="no_show_all">False</property>
+            <property name="no_show_all">True</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Slide Number</property>
+            <property name="label" translatable="yes">_Page Number</property>
+            <property name="use_underline">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -381,7 +438,7 @@
         <child>
           <object class="GtkLabel" id="replacement_b">
             <property name="can_focus">False</property>
-            <property name="no_show_all">False</property>
+            <property name="no_show_all">True</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Include on page</property>
           </object>
@@ -402,6 +459,8 @@
       <object class="sduilo-PresLayoutPreview" id="preview">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">start</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
       </object>

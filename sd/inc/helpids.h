@@ -109,9 +109,6 @@
 #define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
 #define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
 
-#define HID_SD_TABPAGE_HEADERFOOTER_SLIDE                       "SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE"
-#define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT                "SD_HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT"
-
 #define HID_SD_TASK_PANE                                        "SD_HID_SD_TASK_PANE"
 #define HID_SD_SLIDE_DESIGNS                                    "SD_HID_SD_SLIDE_DESIGNS"
 #define HID_SD_CURRENT_MASTERS                                  "SD_HID_SD_CURRENT_MASTERS"

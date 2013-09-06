@@ -329,6 +329,9 @@
     <glade-widget-class title="Frame Preview" name="svxlo-SvxSwFrameExample"
                         generic-name="Frame Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Presentation Preview" name="sduilo-PresLayoutPreview"
+                        generic-name="Presentation Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
                         generic-name="Rectangle Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
