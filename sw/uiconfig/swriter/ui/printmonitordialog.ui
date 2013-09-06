@@ -79,7 +79,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="saing">
+              <object class="GtkLabel" id="saving">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">is being saved to</property>
