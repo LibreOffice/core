@@ -16,6 +16,24 @@
       "revId": "03737426620f570e33b93f92a4bd4e4b6d2deba3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Wc\u003d",
+        "filename": "configmgr/source/writemodfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 0,
+      "message": "I found this too difficult with all the templates and overloading stuff used here.",
+      "parentUuid": "AAAAXn//7bA\u003d",
+      "revId": "03737426620f570e33b93f92a4bd4e4b6d2deba3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

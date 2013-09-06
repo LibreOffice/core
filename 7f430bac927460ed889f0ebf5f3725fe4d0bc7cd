@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Ww\u003d",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//7bU\u003d",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7bQ\u003d",
         "filename": "configmgr/source/winreg.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-09-05T07:35:39Z",
       "side": 1,
       "message": "this should go into an anonymous namespace",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Ws\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//7bQ\u003d",
       "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Wo\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//7bM\u003d",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7bI\u003d",
         "filename": "configmgr/source/winreg.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-09-05T07:35:39Z",
       "side": 1,
       "message": "is aKeyName guaranteed to contain only characters that can safely be included verbatim in these XML attribute values?",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Wk\u003d",
+        "filename": "configmgr/source/winreg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "I thought so... But you are right, I can use writeAttributeValue() which is safe.",
+      "parentUuid": "AAAAXn//7bI\u003d",
       "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Wg\u003d",
+        "filename": "configmgr/source/winreg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXn//7bE\u003d",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7a8\u003d",
         "filename": "scp2/source/ooo/common_brand.scp",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2013-09-05T07:35:39Z",
       "side": 1,
       "message": "\"winreg:default\":  I\u0027d either leave the url part (\"default\") empty (and SAL_WARN in the Components ctor if it isn\u0027t) or use it to always pass the winreg path to dumpWindowsRegistry",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7WY\u003d",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000516
+      },
+      "writtenOn": "2013-09-06T08:03:58Z",
+      "side": 1,
+      "message": "I will use empty string for the time being. Maybe later we can use both HKLM and HKCU, and extend the code. By the way, how can I see SAL_WARN messages under Windows?",
+      "parentUuid": "AAAAXn//7a8\u003d",
       "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
