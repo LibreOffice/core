@@ -38,7 +38,7 @@ public:
     TYPEINFO();
 
     explicit inline SvxPageModelItem( sal_uInt16 nWh  );
-    inline SvxPageModelItem( const String& rModel, sal_Bool bA /*= sal_False*/,
+    inline SvxPageModelItem( const OUString& rModel, sal_Bool bA /*= sal_False*/,
                              sal_uInt16 nWh  );
     inline SvxPageModelItem& operator=( const SvxPageModelItem& rModel );
 
@@ -60,7 +60,7 @@ inline SvxPageModelItem::SvxPageModelItem( sal_uInt16 nWh )
     SetWhich( nWh );
 }
 
-inline SvxPageModelItem::SvxPageModelItem( const String& rModel, sal_Bool bA,
+inline SvxPageModelItem::SvxPageModelItem( const OUString& rModel, sal_Bool bA,
                                            sal_uInt16 nWh ) :
     SfxStringItem( nWh, rModel ),
     bAuto( bA )
