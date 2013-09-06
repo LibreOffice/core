@@ -419,7 +419,7 @@ ISC_QUAD* OResultSet::retrieveValue(sal_Int32 columnIndex)
 
 template <typename T>
 T OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
-    throw (SQLException)
+    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

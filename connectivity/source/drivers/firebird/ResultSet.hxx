@@ -94,7 +94,8 @@ namespace connectivity
             template <typename T> T     retrieveValue(sal_Int32 columnIndex);
 
             template <typename T> T safelyRetrieveValue(sal_Int32 columnIndex)
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
 
             // OIdPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
