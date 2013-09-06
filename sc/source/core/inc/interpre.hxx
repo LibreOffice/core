@@ -319,6 +319,7 @@ void PushExternalSingleRef(sal_uInt16 nFileId, const String& rTabName,
 void PushExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName,
                            SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
+void PushMatrix( const sc::RangeMatrix& rMat );
 void PushMatrix(const ScMatrixRef& pMat);
 void PushError( sal_uInt16 nError );
 /// Raw stack type without default replacements.

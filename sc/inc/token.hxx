@@ -36,6 +36,12 @@
 // Matrix token constants.
 #define MATRIX_TOKEN_HAS_RANGE 1
 
+namespace sc {
+
+struct RangeMatrix;
+
+}
+
 class ScJumpMatrix;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
@@ -190,6 +196,7 @@ class ScMatrixRangeToken : public ScToken
     ScComplexRefData maRef;
 public:
     ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef );
+    ScMatrixRangeToken( const sc::RangeMatrix& rMat );
     ScMatrixRangeToken( const ScMatrixRangeToken& r );
 
     virtual sal_uInt8 GetByte() const;

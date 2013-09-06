@@ -38,6 +38,7 @@
 #include "externalrefmgr.hxx"
 #include "document.hxx"
 #include "refupdatecontext.hxx"
+#include "types.hxx"
 
 using ::std::vector;
 
@@ -806,6 +807,12 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
 
 ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef ) :
     ScToken(formula::svMatrix), mpMatrix(p), maRef(rRef) {}
+
+ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
+    ScToken(formula::svMatrix), mpMatrix(rMat.mpMat)
+{
+    maRef.InitRange(rMat.mnCol1, rMat.mnRow1, rMat.mnTab1, rMat.mnCol2, rMat.mnRow2, rMat.mnTab2);
+}
 
 ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRangeToken& r ) :
     ScToken(r), mpMatrix(r.mpMatrix), maRef(r.maRef) {}

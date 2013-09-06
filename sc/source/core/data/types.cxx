@@ -12,11 +12,14 @@
 
 namespace sc {
 
-RangeMatrix::RangeMatrix() : mpMat(NULL), mnCol1(-1), mnRow1(-1), mnCol2(-1), mnRow2(-1) {}
+RangeMatrix::RangeMatrix() :
+    mpMat(NULL), mnCol1(-1), mnRow1(-1), mnTab1(-1), mnCol2(-1), mnRow2(-1), mnTab2(-1) {}
 
 bool RangeMatrix::isRangeValid() const
 {
-    return mnCol1 >= 0 && mnRow1 >= 0 && mnCol2 >= 0 && mnRow2 >= 0 && mnCol1 <= mnCol2 && mnRow1 <= mnRow2;
+    return mnCol1 >= 0 && mnRow1 >= 0 && mnTab1 >=0 &&
+        mnCol2 >= 0 && mnRow2 >= 0 && mnTab2 >= 0 &&
+        mnCol1 <= mnCol2 && mnRow1 <= mnRow2 && mnTab1 <= mnTab2;
 }
 
 }

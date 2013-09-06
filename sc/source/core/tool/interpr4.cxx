@@ -1817,8 +1817,10 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
                         {
                             aRet.mnCol1 = rRef.Ref1.Col();
                             aRet.mnRow1 = rRef.Ref1.Row();
+                            aRet.mnTab1 = rRef.Ref1.Tab();
                             aRet.mnCol2 = rRef.Ref2.Col();
                             aRet.mnRow2 = rRef.Ref2.Row();
+                            aRet.mnTab2 = rRef.Ref2.Tab();
                         }
                     }
                 }
@@ -1953,6 +1955,19 @@ void ScInterpreter::PushExternalDoubleRef(
     }
 }
 
+void ScInterpreter::PushMatrix( const sc::RangeMatrix& rMat )
+{
+    if (!rMat.isRangeValid())
+    {
+        // Just push the matrix part only.
+        PushMatrix(rMat.mpMat);
+        return;
+    }
+
+    rMat.mpMat->SetErrorInterpreter(NULL);
+    nGlobalError = 0;
+    PushTempTokenWithoutError(new ScMatrixRangeToken(rMat));
+}
 
 void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
 {
@@ -3735,6 +3750,28 @@ void ScInterpreter::GlobalExit()
     DELETEZ(pGlobalStack);
 }
 
+namespace {
+
+double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& rPos)
+{
+    if (rMat.mnRow1 <= rPos.Row() && rPos.Row() <= rMat.mnRow2 && rMat.mnCol1 == rMat.mnCol2)
+    {
+        SCROW nOffset = rPos.Row() - rMat.mnRow1;
+        return rMat.mpMat->GetDouble(0, nOffset);
+    }
+
+    if (rMat.mnCol1 <= rPos.Col() && rPos.Col() <= rMat.mnCol2 && rMat.mnRow1 == rMat.mnRow2)
+    {
+        SCROW nOffset = rPos.Col() - rMat.mnCol1;
+        return rMat.mpMat->GetDouble(nOffset, 0);
+    }
+
+    double fVal;
+    rtl::math::setNan(&fVal);
+    return fVal;
+}
+
+}
 
 StackVar ScInterpreter::Interpret()
 {
@@ -4315,15 +4352,27 @@ StackVar ScInterpreter::Interpret()
                 }
                 break;
                 case svExternalDoubleRef:
-                case svMatrix :
                 {
                     ScMatrixRef xMat;
-                    if (pCur->GetType() == svMatrix)
-                        xMat = PopMatrix();
-                    else
-                        PopExternalDoubleRef(xMat);
-
+                    PopExternalDoubleRef(xMat);
                     QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
+                }
+                break;
+                case svMatrix :
+                {
+                    sc::RangeMatrix aMat = PopRangeMatrix();
+                    if (aMat.isRangeValid())
+                    {
+                        // This matrix represents a range reference. Apply implicit intersection.
+                        double fVal = applyImplicitIntersection(aMat, aPos);
+                        if (rtl::math::isNan(fVal))
+                            PushError(errCellNoValue);
+                        else
+                            PushInt(fVal);
+                    }
+                    else
+                        // This is a normal matrix.
+                        QueryMatrixType(aMat.mpMat, nRetTypeExpr, nRetIndexExpr);
                 }
                 break;
                 case svExternalSingleRef:

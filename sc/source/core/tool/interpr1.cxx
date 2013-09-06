@@ -1195,8 +1195,10 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 
             aRes.mnCol1 = aMat[i].mnCol1;
             aRes.mnRow1 = aMat[i].mnRow1;
+            aRes.mnTab1 = aMat[i].mnTab1;
             aRes.mnCol2 = aMat[i].mnCol2;
             aRes.mnRow2 = aMat[i].mnRow2;
+            aRes.mnTab2 = aMat[i].mnTab2;
 
             for (SCSIZE j = 0; j < nC; ++j)
             {
@@ -1270,29 +1272,6 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& 
     return pResultMatrix;
 }
 
-namespace {
-
-double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& rPos)
-{
-    if (rMat.mnRow1 <= rPos.Row() && rPos.Row() <= rMat.mnRow2 && rMat.mnCol1 == rMat.mnCol2)
-    {
-        SCROW nOffset = rPos.Row() - rMat.mnRow1;
-        return rMat.mpMat->GetDouble(0, nOffset);
-    }
-
-    if (rMat.mnCol1 <= rPos.Col() && rPos.Col() <= rMat.mnCol2 && rMat.mnRow1 == rMat.mnRow2)
-    {
-        SCROW nOffset = rPos.Col() - rMat.mnCol1;
-        return rMat.mpMat->GetDouble(nOffset, 0);
-    }
-
-    double fVal;
-    rtl::math::setNan(&fVal);
-    return fVal;
-}
-
-}
-
 void ScInterpreter::ScEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
@@ -1304,22 +1283,8 @@ void ScInterpreter::ScEqual()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal == 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareEqual();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() == 0 );
@@ -1337,22 +1302,8 @@ void ScInterpreter::ScNotEqual()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal != 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareNotEqual();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() != 0 );
@@ -1370,22 +1321,8 @@ void ScInterpreter::ScLess()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal < 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareLess();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() < 0 );
@@ -1403,22 +1340,8 @@ void ScInterpreter::ScGreater()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal > 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareGreater();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() > 0 );
@@ -1436,22 +1359,8 @@ void ScInterpreter::ScLessEqual()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal <= 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareLessEqual();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() <= 0 );
@@ -1469,22 +1378,8 @@ void ScInterpreter::ScGreaterEqual()
             return;
         }
 
-        if (aMat.isRangeValid())
-        {
-            // This matrix represents a range reference. Apply implicit intersection.
-            double fVal = applyImplicitIntersection(aMat, aPos);
-            if (rtl::math::isNan(fVal))
-            {
-                PushError(errCellNoValue);
-                return;
-            }
-
-            PushInt(fVal >= 0.0);
-            return;
-        }
-
         aMat.mpMat->CompareGreaterEqual();
-        PushMatrix(aMat.mpMat);
+        PushMatrix(aMat);
     }
     else
         PushInt( Compare() >= 0 );
