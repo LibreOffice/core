@@ -112,7 +112,7 @@ void SAL_CALL OConnection::release() throw()
 }
 
 void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
-    throw(SQLException)
+    throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "construct().");
 

@@ -127,7 +127,8 @@ namespace connectivity
         public:
             virtual void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)
-            throw(::com::sun::star::sdbc::SQLException);
+            throw(::com::sun::star::sdbc::SQLException,
+                  ::com::sun::star::uno::RuntimeException);
 
             OConnection(FirebirdDriver* _pDriver);
             virtual ~OConnection();
