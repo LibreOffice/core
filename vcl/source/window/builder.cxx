@@ -1208,7 +1208,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
         WinBits nBits = WB_LEFT|WB_BORDER|WB_3DLOOK;
         if (!id.endsWith("-nospin"))
-            nBits |= WB_SPIN;
+            nBits |= WB_SPIN | WB_REPEAT;
 
         if (sPattern.isEmpty())
         {
