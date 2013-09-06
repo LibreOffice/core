@@ -1871,8 +1871,8 @@ OUString SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
 
 SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 SvxAutoCorrect& rParent,
-                const String& rShareAutoCorrectFile,
-                const String& rUserAutoCorrectFile)
+                const OUString& rShareAutoCorrectFile,
+                const OUString& rUserAutoCorrectFile)
 :   sShareAutoCorrFile( rShareAutoCorrectFile ),
     sUserAutoCorrFile( rUserAutoCorrectFile ),
     aModifiedDate( Date::EMPTY ),
@@ -2121,10 +2121,10 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
     return pCplStt_ExcptLst;
 }
 
-sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
+sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 {
     sal_Bool aRet = sal_False;
-    if( rNew.Len() && GetCplSttExceptList()->insert( rNew ).second )
+    if( !rNew.isEmpty() && GetCplSttExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
@@ -2141,11 +2141,11 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
     return aRet;
 }
 
-sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
+sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
 {
     sal_Bool aRet = sal_False;
     SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
-    if( rNew.Len() && pExceptList && pExceptList->insert( rNew ).second )
+    if( !rNew.isEmpty() && pExceptList && pExceptList->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
         SotStorageRef xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
@@ -2244,7 +2244,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
     return pWrdStt_ExcptLst;
 }
 
-void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const String& rName )
+void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const OUString& rName )
 {
     if( sShareAutoCorrFile != sUserAutoCorrFile )
     {
@@ -2489,7 +2489,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutoco
     return bRet;
 }
 
-sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort, const String& rLong )
+sal_Bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUString& rLong )
 {
     // First get the current list!
     GetAutocorrWordList();
@@ -2535,7 +2535,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort, const Strin
     return bRet;
 }
 
-sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
+sal_Bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
                                                SfxObjectShell& rShell )
 {
     // First get the current list!
@@ -2572,7 +2572,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 }
 
 // Delete an entry
-sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
+sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const OUString& rShort )
 {
     // First get the current list!
     GetAutocorrWordList();

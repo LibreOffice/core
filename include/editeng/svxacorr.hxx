@@ -170,7 +170,7 @@ public:
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 {
-    String sShareAutoCorrFile, sUserAutoCorrFile;
+    OUString sShareAutoCorrFile, sUserAutoCorrFile;
     // If the AutoCorr file is newer
     Date aModifiedDate;
     Time aModifiedTime, aLastCheckTime;
@@ -192,13 +192,13 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
                                 sal_Bool bConvert = sal_False);
 
     sal_Bool MakeBlocklist_Imp( SotStorage& rStg );
-    void RemoveStream_Imp( const String& rName );
+    void RemoveStream_Imp( const OUString& rName );
     void MakeUserStorage_Impl();
 
 public:
     SvxAutoCorrectLanguageLists( SvxAutoCorrect& rParent,
-            const String& rShareAutoCorrectFile,
-            const String& rUserAutoCorrectFile);
+            const OUString& rShareAutoCorrectFile,
+            const OUString& rUserAutoCorrectFile);
     ~SvxAutoCorrectLanguageLists();
 
     // Load, Set, Get - the replacement list
@@ -212,7 +212,7 @@ public:
     void SaveCplSttExceptList();
     void SetCplSttExceptList( SvStringsISortDtor* pList );
     SvStringsISortDtor* GetCplSttExceptList();
-    sal_Bool AddToCplSttExceptList(const String& rNew);
+    sal_Bool AddToCplSttExceptList(const OUString& rNew);
 
     // Load, Set, Get the exception list for 2 Capital letters at the
     // beginning of a word.
@@ -220,17 +220,17 @@ public:
     void SaveWrdSttExceptList();
     void SetWrdSttExceptList( SvStringsISortDtor* pList );
     SvStringsISortDtor* GetWrdSttExceptList();
-    sal_Bool AddToWrdSttExceptList(const String& rNew);
+    sal_Bool AddToWrdSttExceptList(const OUString& rNew);
 
     // Save word substitutions:
     //      Store these directly in the storage. The word list is updated
     //      accordingly!
     //  - pure Text
-    sal_Bool PutText( const String& rShort, const String& rLong );
+    sal_Bool PutText( const OUString& rShort, const OUString& rLong );
     //  - Text with attribution (only the SWG - SWG format!)
-    sal_Bool PutText( const String& rShort, SfxObjectShell& );
+    sal_Bool PutText( const OUString& rShort, SfxObjectShell& );
     //  - Deleting an entry
-    sal_Bool DeleteText( const String& rShort );
+    sal_Bool DeleteText( const OUString& rShort );
     //  - Make combined changes in one pass
     sal_Bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries );
 };
