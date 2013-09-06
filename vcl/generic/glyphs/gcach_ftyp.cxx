@@ -61,10 +61,6 @@
 #endif
 #include "rtl/instance.hxx"
 
-#ifdef ANDROID
-#define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
-#endif
-
 typedef const FT_Vector* FT_Vector_CPtr;
 
 #include <vector>
@@ -468,6 +464,10 @@ FreetypeManager::FreetypeManager()
 {
     /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
+    FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
+    FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
+    nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
+
 #ifdef ANDROID
     // For Android we use the bundled static libfreetype.a, and we
     // want to avoid accidentally finding the FT_* symbols in the
@@ -475,24 +475,14 @@ FreetypeManager::FreetypeManager()
     // libskia.so, but is not a public API, and in fact does crash the
     // app if used).
     pFT_Face_GetCharVariantIndex = FT_Face_GetCharVariantIndex;
-    nFTVERSION = FTVERSION;
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
-    // Get version of freetype library to enable workarounds.
     pFT_Face_GetCharVariantIndex = (FT_UInt(*)(FT_Face, FT_ULong, FT_ULong))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Face_GetCharVariantIndex" );
-
-    FT_Int nMajor = 0, nMinor = 0, nPatch = 0;
-    FT_Library_Version(aLibFT, &nMajor, &nMinor, &nPatch);
-    nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
     // disable FT_Face_GetCharVariantIndex for older versions
     // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
     if( nFTVERSION < 2404 )
         pFT_Face_GetCharVariantIndex = NULL;
-
-#else // RTLD_DEFAULT
-    // assume systems where dlsym is not possible use supplied library
-    nFTVERSION = FTVERSION;
 #endif
 #endif
     // TODO: remove when the priorities are selected by UI
