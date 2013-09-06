@@ -289,7 +289,7 @@ void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 index)
 }
 
 void SAL_CALL OResultSet::checkRowIndex()
-    throw (SQLException)
+    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

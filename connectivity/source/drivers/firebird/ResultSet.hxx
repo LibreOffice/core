@@ -102,9 +102,11 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
             virtual void SAL_CALL checkColumnIndex( sal_Int32 index )
-                throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
+                throw (::com::sun::star::sdbc::SQLException,
+                       ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL checkRowIndex()
-                throw ( com::sun::star::sdbc::SQLException);
+                throw (::com::sun::star::sdbc::SQLException,
+                       ::com::sun::star::uno::RuntimeException);
 
             // you can't delete objects of this type
             virtual ~OResultSet();
