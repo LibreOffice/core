@@ -482,17 +482,13 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 columnIndex)
 float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    return 0.0f; // TODO: implement
-//     return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< float >(columnIndex);
 }
 
 double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    (void) columnIndex;
-    return 0.0; // TODO: implement
-//     return safelyRetrieveValue(columnIndex);
+    return safelyRetrieveValue< double >(columnIndex);
 }
 
 // ---- XRow: More complex types ----------------------------------------------
