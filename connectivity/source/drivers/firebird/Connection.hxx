@@ -112,6 +112,14 @@ namespace connectivity
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>
                 m_xCatalog;
 
+
+            /**
+             * Firebird stores binary collations for indexes on Character based
+             * columns, these can be binary-incompatible between different icu
+             * version, hence we need to rebuild the indexes when switching icu
+             * versions.
+             */
+            void                    rebuildIndexes() throw( ::com::sun::star::sdbc::SQLException);
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
             void                    setupTransaction() throw(::com::sun::star::sdbc::SQLException);

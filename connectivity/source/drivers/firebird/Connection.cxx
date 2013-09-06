@@ -274,6 +274,12 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
     if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
     {
+        // TODO: this is only needed when we change icu versions, so ideally
+        // we somehow keep track of which icu version we have. There might
+        // be something db internal that we can check, or we might have to store
+        // it in the .odb.
+        rebuildIndexes();
+
         uno::Reference< frame::XDesktop2 > xFramesSupplier =
             frame::Desktop::create(::comphelper::getProcessComponentContext());
         uno::Reference< frame::XFrames > xFrames( xFramesSupplier->getFrames(),
@@ -782,5 +788,43 @@ uno::Reference< XTablesSupplier > OConnection::createCatalog()
         return m_xCatalog;
     }
 
+}
+
+void OConnection::rebuildIndexes() throw(SQLException)
+{
+
+    SAL_INFO("connectivity.firebird", "rebuildIndexes()");
+    MutexGuard aGuard(m_aMutex);
+
+    // We only need to do this for character based columns on user-created tables.
+
+    OUString sSql(
+        // multiple columns possible per index, only select once
+        "SELECT DISTINCT indices.RDB$INDEX_NAME "
+        "FROM RDB$INDICES indices "
+        "JOIN RDB$INDEX_SEGMENTS index_segments "
+        "ON (indices.RDB$INDEX_NAME = index_segments.RDB$INDEX_NAME) "
+        "JOIN RDB$RELATION_FIELDS relation_fields "
+        "ON (index_segments.RDB$FIELD_NAME = relation_fields.RDB$FIELD_NAME) "
+        "JOIN RDB$FIELDS fields "
+        "ON (relation_fields.RDB$FIELD_SOURCE = fields.RDB$FIELD_NAME) "
+
+        "WHERE (indices.RDB$SYSTEM_FLAG = 0) "
+        // TODO: what about blr_text2 etc. ?
+        "AND ((fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_text) + ") "
+        "     OR (fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_varying) + ")) "
+        "AND (indices.RDB$INDEX_INACTIVE IS NULL OR indices.RDB$INDEX_INACTIVE = 0) "
+    );
+
+
+    uno::Reference< XStatement > xStatement = createStatement();
+    uno::Reference< XResultSet > xCharIndices = xStatement->executeQuery(sSql);
+    uno::Reference< XRow > xRow( xCharIndices, UNO_QUERY_THROW );
+    while (xCharIndices->next())
+    {
+    }
+
+    Reference< XCloseable> xClose(xCharIndices,UNO_QUERY);
+    xClose->close();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
