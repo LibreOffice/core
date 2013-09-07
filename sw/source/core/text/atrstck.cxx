@@ -382,26 +382,16 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     // do we have to apply additional paragraph attributes?
     bVertLayout = bVL;
 
-    if ( pAS && pAS->Count() )
-    {
-        SfxItemIter aIter( *pAS );
-        sal_uInt16 nWhich;
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( true )
+    if( pAS )
+        for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
         {
-            nWhich = pItem->Which();
-            if (isCHRATR(nWhich))
+            const SfxPoolItem* pItem = 0;
+            if( SfxItemState::SET == pAS->GetItemState( i, sal_True, &pItem ) )
             {
-                pDefaultArray[ StackPos[ nWhich ] ] = pItem;
-                FontChg( *pItem, rFnt, true );
+                pDefaultArray[ StackPos[ i ] ] = pItem;
+                FontChg( *pItem, rFnt, sal_True );
             }
-
-            if( aIter.IsAtEnd() )
-                break;
-
-            pItem = aIter.NextItem();
         }
-    }
 
     // It is possible, that Init is called more than once, e.g., in a
     // SwTextFrm::FormatOnceMore situation.
