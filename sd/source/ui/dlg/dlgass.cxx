@@ -1673,8 +1673,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const OUString& rP
                 maPasswordList.push_back( pEntry );
             }
 
-            if(pEntry)
-                pEntry->aEncryptionData = aEncryptionData;
+            pEntry->aEncryptionData = aEncryptionData;
           }
         }
     }
