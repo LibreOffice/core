@@ -24,6 +24,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/inetmime.hxx>
+#include <rtl/character.hxx>
 
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
     // unnamed namespaces don't work well yet
@@ -465,7 +466,7 @@ bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || toUpperCase(*pBegin1++) != toUpperCase(*pString2++))
+            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -480,7 +481,7 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || toUpperCase(*pBegin1++) != toUpperCase(*pString2++))
+            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -755,7 +756,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         bool bDowncaseAttribute = false;
         while (p != pEnd && isTokenChar(*p) && *p != '*')
         {
-            bDowncaseAttribute = bDowncaseAttribute || isUpperCase(*p);
+            bDowncaseAttribute = bDowncaseAttribute || rtl::isAsciiUpperCase(*p);
             ++p;
         }
         if (p == pAttributeBegin)
@@ -770,7 +771,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         if (p != pEnd && *p == '*')
         {
             ++p;
-            if (p != pEnd && isDigit(*p)
+            if (p != pEnd && rtl::isAsciiDigit(*p)
                 && !scanUnsigned(p, pEnd, false, nSection))
                 break;
         }
@@ -805,7 +806,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 bool bDowncaseCharset = false;
                 while (p != pEnd && isTokenChar(*p) && *p != '\'')
                 {
-                    bDowncaseCharset = bDowncaseCharset || isUpperCase(*p);
+                    bDowncaseCharset = bDowncaseCharset || rtl::isAsciiUpperCase(*p);
                     ++p;
                 }
                 if (p == pCharsetBegin)
@@ -828,12 +829,12 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 bool bDowncaseLanguage = false;
                 int nLetters = 0;
                 for (; p != pEnd; ++p)
-                    if (isAlpha(*p))
+                    if (rtl::isAsciiAlpha(*p))
                     {
                         if (++nLetters > 8)
                             break;
                         bDowncaseLanguage = bDowncaseLanguage
-                                            || isUpperCase(*p);
+                                            || rtl::isAsciiUpperCase(*p);
                     }
                     else if (*p == '-')
                     {
@@ -2483,7 +2484,7 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
                             default:
                                 if (pLanguageBegin != 0
-                                    && (!isAlpha(cChar) || ++nAlphaCount > 8))
+                                    && (!rtl::isAsciiAlpha(cChar) || ++nAlphaCount > 8))
                                     pLanguageBegin = 0;
                                 break;
                         }
