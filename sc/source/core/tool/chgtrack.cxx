@@ -445,8 +445,7 @@ void ScChangeAction::GetDescription(
     if (GetType() == SC_CAT_MOVE)
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING));
-        aBuf.append(sal_Unicode(' '));
+            ScGlobal::GetRscString(STR_CHANGED_MOVE_REJECTION_WARNING) + " ");
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -454,8 +453,7 @@ void ScChangeAction::GetDescription(
     if (IsInsertType())
     {
         aBuf.append(
-            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING));
-        aBuf.append(sal_Unicode(' '));
+            ScGlobal::GetRscString(STR_CHANGED_DELETE_REJECTION_WARNING) + " ");
         rStr = aBuf.makeStringAndClear();
         return;
     }
@@ -1269,12 +1267,10 @@ void ScChangeActionMove::GetRefString(
     if ( !bFlag3D )
         bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
 
-    OUStringBuffer aBuf;
-    aBuf.append(ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D));
-    aBuf.append(sal_Unicode(','));
-    aBuf.append(sal_Unicode(' '));
-    aBuf.append(ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D));
-    rStr = aBuf.makeStringAndClear(); // overwrite existing string value.
+    // overwrite existing string value.
+    rStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D)
+        + ", "
+        + ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D);
 }
 
 
