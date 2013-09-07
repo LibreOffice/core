@@ -228,7 +228,7 @@ private:
 
 public:
     Export( const OString &rOutput );
-    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage);
+    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage, bool bUTF8BOM);
     ~Export();
 
     void Init();
@@ -236,6 +236,8 @@ public:
     void SetError() { bError = sal_True; }
     sal_Bool GetError() { return bError; }
     ParserQueue* pParseQueue; // public!!
+
+    void WriteUTF8ByteOrderMarkToOutput() { *aOutput.mSimple << '\xEF' << '\xBB' << '\xBF'; }
 };
 
 
