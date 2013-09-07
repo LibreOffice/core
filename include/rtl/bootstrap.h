@@ -52,8 +52,8 @@ extern "C" {
    setting from the environment.<p>
 
    4th level: executable ini-file. Every application looks for an ini-file.
-   The filename defaults to /absoulte/path/to/executable[rc|.ini]
-   (without .bin or .exe suffix). The ini-filename can be
+   The filename defaults to /absolute/path/to/executable[rc|.ini]
+   without .bin or .exe suffix. The ini-filename can be
    set by the special command line parameter
    '-env:INIFILENAME=/absolute/path/to/inifile' at runtime or it may
    be set at compiletime by an API-call.<p>
