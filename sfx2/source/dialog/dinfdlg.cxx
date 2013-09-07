@@ -2599,11 +2599,11 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
             pIter != changedProps.end( ); ++pIter )
                 aModifiedProps[ nCount++ ] = *pIter;
         pInfo->SetCmisProperties( aModifiedProps );
+        rSet.Put( *pInfo );
+        if ( bMustDelete )
+            delete pInfo;
     }
 
-    rSet.Put( *pInfo );
-    if ( bMustDelete )
-        delete pInfo;
     return modifiedNum;
 }
 
