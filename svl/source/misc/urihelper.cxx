@@ -360,7 +360,7 @@ bool checkWChar(CharClass const & rCharClass, OUString const & rStr,
                 bool bPipe = false)
 {
     sal_Unicode c = rStr[*pPos];
-    if (INetMIME::isUSASCII(c))
+    if (rtl::isAscii(c))
     {
         static sal_uInt8 const aMap[128]
             = { 0, 0, 0, 0, 0, 0, 0, 0,
@@ -515,7 +515,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
         sal_Unicode c = rText[nPos];
         if (bBoundary1)
         {
-            if (INetMIME::isAlpha(c))
+            if (rtl::isAsciiAlpha(c))
             {
                 sal_Int32 i = nPos;
                 INetProtocol eScheme = INetURLObject::CompareProtocolScheme(rText.copy(i, rEnd - i));

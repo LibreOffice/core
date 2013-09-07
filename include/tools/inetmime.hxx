@@ -137,14 +137,6 @@ public:
         HEADER_FIELD_ADDRESS
     };
 
-    /** Check for US-ASCII character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII character (0x00--0x7F).
-     */
-    static inline bool isUSASCII(sal_uInt32 nChar);
-
     /** Check for ISO 8859-1 character.
 
         @param nChar  Some UCS-4 character.
@@ -179,69 +171,6 @@ public:
         0x21--0x7E).
      */
     static inline bool isVisible(sal_uInt32 nChar);
-
-    /** Check for US-ASCII digit character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII (decimal) digit character (US-
-        ASCII '0'--'9').
-     */
-    static inline bool isDigit(sal_uInt32 nChar);
-
-    /** Check for US-ASCII canonic hexadecimal digit character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII canonic (i.e., upper case)
-        hexadecimal digit character (US-ASCII '0'--'9' or 'A'--'F').
-     */
-    static inline bool isCanonicHexDigit(sal_uInt32 nChar);
-
-    /** Check for US-ASCII hexadecimal digit character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII hexadecimal digit character (US-
-        ASCII '0'--'9', 'A'--'F', 'a'--'f').
-     */
-    static inline bool isHexDigit(sal_uInt32 nChar);
-
-    /** Check for US-ASCII upper case character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII upper case alphabetic character
-        (US-ASCII 'A'--'Z').
-     */
-    static inline bool isUpperCase(sal_uInt32 nChar);
-
-    /** Check for US-ASCII lower case character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII lower case alphabetic character
-        (US-ASCII 'a'--'z').
-     */
-    static inline bool isLowerCase(sal_uInt32 nChar);
-
-    /** Check for US-ASCII alphabetic character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII alphabetic character (US-ASCII
-        'A'--'Z' or 'a'--'z').
-     */
-    static inline bool isAlpha(sal_uInt32 nChar);
-
-    /** Check for US-ASCII alphanumeric character.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  True if nChar is a US-ASCII alphanumeric character (US-ASCII
-        '0'--'9', 'A'--'Z' or 'a'--'z').
-     */
-    static inline bool isAlphanumeric(sal_uInt32 nChar);
 
     /** Check for US-ASCII Base 64 digit character.
 
@@ -301,6 +230,7 @@ public:
         'A'--'Z'), return the corresponding US-ASCII lower case character (US-
         ASCII 'a'--'z'); otherwise, return nChar unchanged.
      */
+    SAL_DEPRECATED("Use rtl::toAsciiUpperCase instead")
     static inline sal_uInt32 toUpperCase(sal_uInt32 nChar);
 
     /** Translate an US-ASCII character to lower case.
@@ -311,6 +241,7 @@ public:
         'a'--'z'), return the corresponding US-ASCII upper case character (US-
         ASCII 'A'--'Z'); otherwise, return nChar unchanged.
      */
+    SAL_DEPRECATED("Use rtl::toAsciiLowerCase instead")
     static inline sal_uInt32 toLowerCase(sal_uInt32 nChar);
 
     /** Get the digit weight of a US-ASCII character.
@@ -536,12 +467,6 @@ public:
 };
 
 // static
-inline bool INetMIME::isUSASCII(sal_uInt32 nChar)
-{
-    return rtl::isAscii(nChar);
-}
-
-// static
 inline bool INetMIME::isISO88591(sal_uInt32 nChar)
 {
     return nChar <= 0xFF;
@@ -566,48 +491,6 @@ inline bool INetMIME::isVisible(sal_uInt32 nChar)
 }
 
 // static
-inline bool INetMIME::isDigit(sal_uInt32 nChar)
-{
-    return rtl::isAsciiDigit(nChar);
-}
-
-// static
-inline bool INetMIME::isCanonicHexDigit(sal_uInt32 nChar)
-{
-    return rtl::isAsciiCanonicHexDigit(nChar);
-}
-
-// static
-inline bool INetMIME::isHexDigit(sal_uInt32 nChar)
-{
-    return rtl::isAsciiHexDigit(nChar);
-}
-
-// static
-inline bool INetMIME::isUpperCase(sal_uInt32 nChar)
-{
-    return rtl::isAsciiUpperCase(nChar);
-}
-
-// static
-inline bool INetMIME::isLowerCase(sal_uInt32 nChar)
-{
-    return rtl::isAsciiLowerCase(nChar);
-}
-
-// static
-inline bool INetMIME::isAlpha(sal_uInt32 nChar)
-{
-    return rtl::isAsciiAlpha(nChar);
-}
-
-// static
-inline bool INetMIME::isAlphanumeric(sal_uInt32 nChar)
-{
-    return rtl::isAsciiAlphanumeric(nChar);
-}
-
-// static
 inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
 {
     return rtl::isAsciiUpperCase(nChar) || rtl::isAsciiLowerCase(nChar) || rtl::isAsciiDigit(nChar)
@@ -617,13 +500,13 @@ inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
 // static
 inline sal_uInt32 INetMIME::toUpperCase(sal_uInt32 nChar)
 {
-    return rtl::isAsciiLowerCase(nChar) ? nChar - ('a' - 'A') : nChar;
+    return rtl::toAsciiUpperCase(nChar);
 }
 
 // static
 inline sal_uInt32 INetMIME::toLowerCase(sal_uInt32 nChar)
 {
-    return rtl::isAsciiUpperCase(nChar) ? nChar + ('a' - 'A') : nChar;
+    return rtl::toAsciiLowerCase(nChar);
 }
 
 // static

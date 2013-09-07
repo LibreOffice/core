@@ -139,6 +139,40 @@ inline bool isAsciiHexDigit(sal_uInt32 nUtf32)
     return isAsciiCanonicHexDigit(nUtf32) || (nUtf32 >= 'a' && nUtf32 <= 'f');
 }
 
+/** Convert a character, if ASCII, to upper case.
+
+    @param nChar A Unicode scalar value (represented as a UTF-32 code unit).
+
+    @return
+        nChar converted to ASCII upper case
+
+    @since LibreOffice 4.2
+*/
+inline sal_uInt32 toAsciiUpperCase(sal_uInt32 nChar)
+{
+    if( isAsciiLowerCase(nChar) )
+        nChar -= 32;
+
+    return nChar;
+}
+
+/** Convert a character, if ASCII, to lower case.
+
+    @param nChar A Unicode scalar value (represented as a UTF-32 code unit).
+
+    @return
+        nChar converted to ASCII lower case
+
+    @since LibreOffice 4.2
+*/
+inline sal_uInt32 toAsciiLowerCase(sal_uInt32 nChar)
+{
+    if( isAsciiUpperCase(nChar) )
+        nChar += 32;
+
+    return nChar;
+}
+
 /** Compare two US-ASCII characters.
 
     @param nChar1 A Unicode scalar value (represented as a UTF-32 code unit).
@@ -146,21 +180,18 @@ inline bool isAsciiHexDigit(sal_uInt32 nUtf32)
 
     @return
         0 if both strings are equal
-        < 0 - if this string is less than the string argument
-        > 0 - if this string is greater than the string argument
+        < 0 - if this nChar1 is less than nChar2 argument
+        > 0 - if this nChar1 is greater than the nChar2 argument
 
     @since LibreOffice 4.2
  */
 inline sal_Int32 compareAsciiIgnoreCase(sal_uInt32 nChar1, sal_uInt32 nChar2)
 {
-    assert(isAscii(nChar1) && isAscii(nChar2));
-    if ( isAsciiUpperCase(nChar1) )
-        nChar1 += 32;
-    if ( isAsciiUpperCase(nChar2) )
-        nChar2 += 32;
-    return nChar1 - nChar2;
-}
+    nChar1 = toAsciiLowerCase(nChar1);
+    nChar2 = toAsciiLowerCase(nChar2);
 
+    return ((sal_Int32) nChar1) - ((sal_Int32) nChar2);
+}
 
 }//rtl namespace
 

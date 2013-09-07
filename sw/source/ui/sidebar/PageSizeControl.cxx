@@ -26,7 +26,7 @@
 
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 
-#include <tools/inetmime.hxx>
+#include <rtl/character.hxx>
 #include <editeng/paperinf.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -71,7 +71,7 @@ PageSizeControl::PageSizeControl(
             for (short i = aText.getLength() - 1; i >= 0; i--)
             {
                 sal_Unicode c = aText[i];
-                if ( INetMIME::isAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
+                if ( rtl::isAsciiAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
                 {
                     aMetricStr = OUString(c) + aMetricStr;
                 }
