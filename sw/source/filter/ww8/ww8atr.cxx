@@ -1204,6 +1204,11 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
     OutputWW8Attribute( 7, rHidden.GetValue() );
 }
 
+void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
+{
+    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc, bShadow );
+}
+
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
 {
     if ( m_rWW8Export.bWrtWW8 )
@@ -5347,9 +5352,10 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
     if( pBorderLine )
     {
         const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
+        const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
         const bool bShadow =
-            pItem &&
-            static_cast<const SvxShadowItem*>(pItem)->GetLocation() != SVX_SHADOW_NONE;
+            pShadowItem && pShadowItem->GetLocation() != SVX_SHADOW_NONE &&
+            pShadowItem->GetWidth() > 0;
 
         CharBorder( pBorderLine, nDist, bShadow );
     }

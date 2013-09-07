@@ -11,6 +11,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <swmodeltestbase.hxx>
 
@@ -25,6 +26,7 @@ public:
     void test56513();
     void testNewPageStylesTable();
     void testFdo42144();
+    void testCharacterBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -47,6 +49,7 @@ void Test::run()
         {"fdo56513.doc", &Test::test56513},
         {"new-page-styles.doc", &Test::testNewPageStylesTable},
         {"fdo42144.odt", &Test::testFdo42144},
+        {"charborder.odt", &Test::testCharacterBorder},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -142,6 +145,42 @@ void Test::testFdo42144()
     // Footer wasn't disabled -- instead empty footer was exported.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
+}
+
+void Test::testCharacterBorder()
+{
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    // WW8 has just one border attribute sprmCBrc for text border so all side has
+    // the same border
+    // Border
+    {
+        const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
+        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(16711680,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+    }
+
+    // Padding (dptSpace) it is constant 0
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharTopBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
+    }
+
+    // Shadow (fShadow)
+    /* WW8 use just one bool value for shadow so the next conversions
+       are made during an export-import round
+       color: any -> black
+       location: any -> bottom-right
+       width: any -> border width */
+    {
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

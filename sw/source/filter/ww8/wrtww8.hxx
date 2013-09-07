@@ -950,8 +950,6 @@ private:
     static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, sal_uInt8 nSwLevel );
 
-    void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
-        sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
 
     /// Output the numbering table.
     virtual void WriteNumbering();
@@ -1049,6 +1047,9 @@ public:
                                      const SwNode& rNd,
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
                                      const SwPageDesc* pNewPgDesc = 0 );
+
+    void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
+        sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * rBox );

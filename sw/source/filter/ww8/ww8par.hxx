@@ -1369,7 +1369,7 @@ private:
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
     sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-        const WW8_BRC *pbrc) const;
+    const WW8_BRC& aRightBrc) const;
     //returns true is a shadow was set
     bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRC *pbrc,
         short *SizeArray=0) const;
@@ -1673,6 +1673,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_BoolItem(         sal_uInt16 nId, const sal_uInt8*, short nLen );
 
     void Read_Border(           sal_uInt16 nId, const sal_uInt8* pData, short nLen );
+    void Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, short nLen );
     void Read_Tab(              sal_uInt16 nId, const sal_uInt8* pData, short nLen );
     void Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_FldVanish(        sal_uInt16 nId, const sal_uInt8* pData, short nLen );

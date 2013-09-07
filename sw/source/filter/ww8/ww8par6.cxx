@@ -1290,14 +1290,14 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
 }
 
 void Set1Border(bool bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
-    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
+    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize, const bool bIgnoreSpace)
 {
     sal_uInt8 nCol;
     short nSpace, nIdx;
     short nLineThickness = rBor.DetermineBorderProperties(bVer67,&nSpace,&nCol,
         &nIdx);
 
-    GetLineIndex(rBox, nLineThickness, nSpace, nCol, nIdx, nOOIndex, nWWIndex, pSize );
+    GetLineIndex(rBox, nLineThickness, bIgnoreSpace ? 0 : nSpace, nCol, nIdx, nOOIndex, nWWIndex, pSize );
 
 }
 
@@ -1365,7 +1365,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
         const WW8_BRC& rB = pbrc[ aIdArr[ i ] ];
         if( !rB.IsEmpty(bVer67))
         {
-            Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray);
+            Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray, false);
             bChange = true;
         }
         else if ( nSetBorders & (1 << aIdArr[i]) )
@@ -1389,18 +1389,18 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 
 
 bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-    const WW8_BRC *pbrc) const
+    const WW8_BRC& aRightBrc) const
 {
     bool bRet = (
-                ( bVer67 ? (pbrc[WW8_RIGHT].aBits1[ 0 ] & 0x20 )
-                         : (pbrc[WW8_RIGHT].aBits2[ 1 ] & 0x20 ) )
+                ( bVer67 ? (aRightBrc.aBits1[ 0 ] & 0x20 )
+                         : (aRightBrc.aBits2[ 1 ] & 0x20 ) )
                 && (pSizeArray && pSizeArray[WW8_RIGHT])
                 );
     if (bRet)
     {
         rShadow.SetColor(Color(COL_BLACK));
     //i120718
-        short nVal = pbrc[WW8_RIGHT].DetermineBorderProperties(bVer67);
+        short nVal = aRightBrc.DetermineBorderProperties(bVer67);
     //End
         if (nVal < 0x10)
             nVal = 0x10;
@@ -1445,7 +1445,7 @@ bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
 
         // fShadow
         SvxShadowItem aShadow( RES_SHADOW );
-        if( SetShadow( aShadow, pSizeArray, pbrc ))
+        if( SetShadow( aShadow, pSizeArray, pbrc[WW8_RIGHT] ))
         {
             bShadowed = true;
             rFlySet.Put( aShadow );
@@ -4648,7 +4648,7 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     return aShade.aColor.GetColor();
 }
 
-void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8* , short nLen)
+void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
 {
     if( nLen < 0 )
     {
@@ -4715,11 +4715,49 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8* , short nLen)
                 NewAttr( aBox );
 
                 SvxShadowItem aS(RES_SHADOW);
-                if( SetShadow( aS, &aSizeArray[0], aBrcs ) )
+                if( SetShadow( aS, &aSizeArray[0], aBrcs[WW8_RIGHT] ) )
                     NewAttr( aS );
             }
         }
     }
+}
+
+void SwWW8ImplReader::Read_CharBorder(sal_uInt16 /*nId*/, const sal_uInt8* pData, short nLen )
+{
+    //Ignore this old border type
+    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA72))
+        return;
+
+    if( nLen < 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BOX );
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_SHADOW );
+    }
+    else
+    {
+        const SvxBoxItem* pBox
+            = (const SvxBoxItem*)GetFmtAttr( RES_CHRATR_BOX );
+        if( pBox )
+        {
+            SvxBoxItem aBoxItem(RES_CHRATR_BOX);
+            aBoxItem = *pBox;
+            WW8_BRC aBrc;
+            _SetWW8_BRC(bVer67, aBrc, pData);
+
+            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
+            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
+            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
+            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
+            NewAttr( aBoxItem );
+
+            short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
+            SvxShadowItem aShadowItem(RES_CHRATR_SHADOW);
+            if( SetShadow( aShadowItem, &aSizeArray[0], aBrc ) )
+                NewAttr( aShadowItem );
+        }
+    }
+
+
 }
 
 void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, short nLen )
@@ -5802,7 +5840,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //sttbRMark;short;
         {0x6864, 0},                                 //"sprmCDttmRMarkDel"
                                                      //chp.dttmRMarkDel;DTTM;long;
-        {0x6865, 0},                                 //"sprmCBrc" chp.brc;BRC;long;
+        {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
         {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd" chp.shd;SHD;short;
         {0x4867, 0},                                 //"sprmCIdslRMarkDel"
                                                      //chp.idslRMReasonDel;an index
