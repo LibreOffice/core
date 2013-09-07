@@ -262,7 +262,7 @@ void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     if( m_bUseSpecialFillColor )
     {
         Color aColor(m_nSpecialFillColor);
-        rOutItemSet.Put( XFillColorItem( String(), aColor ) );
+        rOutItemSet.Put( XFillColorItem( OUString(), aColor ) );
     }
 }
 

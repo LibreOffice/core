@@ -93,7 +93,7 @@ public:
     XBitmapListRef    GetBitmapList() const;
 
     SdrObject* getNamedSdrObject( const OUString& rName );
-    static SdrObject* getNamedSdrObject( const String& rName, SdrObjList* pObjList );
+    static SdrObject* getNamedSdrObject( const OUString& rName, SdrObjList* pObjList );
 
     static bool removeShape( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );

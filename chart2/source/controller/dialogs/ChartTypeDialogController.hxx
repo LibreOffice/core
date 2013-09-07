@@ -91,7 +91,7 @@ public:
     ChartTypeDialogController();
     virtual ~ChartTypeDialogController();
 
-    virtual String  getName()=0;
+    virtual OUString  getName()=0;
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -147,7 +147,7 @@ public:
     ColumnChartDialogController();
     virtual ~ColumnChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -159,7 +159,7 @@ public:
     BarChartDialogController();
     virtual ~BarChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -171,7 +171,7 @@ public:
     PieChartDialogController();
     virtual ~PieChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -186,7 +186,7 @@ public:
     LineChartDialogController();
     virtual ~LineChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -204,7 +204,7 @@ public:
     XYChartDialogController();
     virtual ~XYChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -220,7 +220,7 @@ public:
     AreaChartDialogController();
     virtual ~AreaChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -236,7 +236,7 @@ public:
     NetChartDialogController();
     virtual ~NetChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -251,7 +251,7 @@ public:
     StockChartDialogController();
     virtual ~StockChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -264,7 +264,7 @@ public:
     CombiColumnLineChartDialogController();
     virtual ~CombiColumnLineChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
@@ -292,7 +292,7 @@ public:
     BubbleChartDialogController();
     virtual ~BubbleChartDialogController();
 
-    virtual String  getName();
+    virtual OUString  getName();
     virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
     virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );

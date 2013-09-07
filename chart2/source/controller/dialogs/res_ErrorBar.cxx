@@ -706,7 +706,7 @@ void ErrorBarResources::listeningFinished(
 
     if( m_pCurrentRangeChoosingField )
     {
-        m_pCurrentRangeChoosingField->SetText( String( aRange ));
+        m_pCurrentRangeChoosingField->SetText( aRange );
         m_pCurrentRangeChoosingField->GrabFocus();
         PosValueChanged( 0 );
     }

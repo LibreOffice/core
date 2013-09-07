@@ -419,7 +419,7 @@ ColumnChartDialogController::ColumnChartDialogController()
 ColumnChartDialogController::~ColumnChartDialogController()
 {
 }
-String ColumnChartDialogController::getName()
+OUString ColumnChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_COLUMN );
 }
@@ -494,7 +494,7 @@ BarChartDialogController::BarChartDialogController()
 BarChartDialogController::~BarChartDialogController()
 {
 }
-String BarChartDialogController::getName()
+OUString BarChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_BAR );
 }
@@ -568,7 +568,7 @@ PieChartDialogController::PieChartDialogController()
 PieChartDialogController::~PieChartDialogController()
 {
 }
-String PieChartDialogController::getName()
+OUString PieChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_PIE );
 }
@@ -630,7 +630,7 @@ LineChartDialogController::LineChartDialogController()
 LineChartDialogController::~LineChartDialogController()
 {
 }
-String LineChartDialogController::getName()
+OUString LineChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_LINE );
 }
@@ -778,7 +778,7 @@ XYChartDialogController::XYChartDialogController()
 XYChartDialogController::~XYChartDialogController()
 {
 }
-String XYChartDialogController::getName()
+OUString XYChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_XY );
 }
@@ -876,7 +876,7 @@ AreaChartDialogController::AreaChartDialogController()
 AreaChartDialogController::~AreaChartDialogController()
 {
 }
-String AreaChartDialogController::getName()
+OUString AreaChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_AREA);
 }
@@ -958,7 +958,7 @@ NetChartDialogController::NetChartDialogController()
 NetChartDialogController::~NetChartDialogController()
 {
 }
-String NetChartDialogController::getName()
+OUString NetChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_NET);
 }
@@ -1052,7 +1052,7 @@ StockChartDialogController::~StockChartDialogController()
 {
 }
 
-String StockChartDialogController::getName()
+OUString StockChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_STOCK);
 }
@@ -1105,7 +1105,7 @@ CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
         delete m_pMF_NumberOfLines;
 }
 
-String CombiColumnLineChartDialogController::getName()
+OUString CombiColumnLineChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_COMBI_COLUMN_LINE);
 }
@@ -1250,7 +1250,7 @@ BubbleChartDialogController::BubbleChartDialogController()
 BubbleChartDialogController::~BubbleChartDialogController()
 {
 }
-String BubbleChartDialogController::getName()
+OUString BubbleChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_BUBBLE);
 }
