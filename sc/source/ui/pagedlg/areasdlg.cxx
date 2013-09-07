@@ -218,9 +218,8 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
             lcl_GetRepeatRangeString(&rRef, pDoc, bRow, aStr);
             pRefInputEdit->SetRefString( aStr );
         }
+        Impl_ModifyHdl( pRefInputEdit );
     }
-
-    Impl_ModifyHdl( pRefInputEdit );
 }
 
 
