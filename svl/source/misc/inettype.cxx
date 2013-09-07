@@ -850,7 +850,7 @@ bool INetContentTypes::parse(OUString const & rMediaType,
     bool bDowncase = false;
     while (p != pEnd && INetMIME::isTokenChar(*p))
     {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
+        bDowncase = bDowncase || rtl::isAsciiUpperCase(*p);
         ++p;
     }
     if (p == pToken)
@@ -868,7 +868,7 @@ bool INetContentTypes::parse(OUString const & rMediaType,
     bDowncase = false;
     while (p != pEnd && INetMIME::isTokenChar(*p))
     {
-        bDowncase = bDowncase || INetMIME::isUpperCase(*p);
+        bDowncase = bDowncase || rtl::isAsciiUpperCase(*p);
         ++p;
     }
     if (p == pToken)

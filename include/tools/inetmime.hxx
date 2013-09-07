@@ -187,6 +187,7 @@ public:
         @return  True if nChar is a US-ASCII (decimal) digit character (US-
         ASCII '0'--'9').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiDigit instead")
     static inline bool isDigit(sal_uInt32 nChar);
 
     /** Check for US-ASCII canonic hexadecimal digit character.
@@ -196,6 +197,7 @@ public:
         @return  True if nChar is a US-ASCII canonic (i.e., upper case)
         hexadecimal digit character (US-ASCII '0'--'9' or 'A'--'F').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiCanonicHexDigit instead")
     static inline bool isCanonicHexDigit(sal_uInt32 nChar);
 
     /** Check for US-ASCII hexadecimal digit character.
@@ -205,6 +207,7 @@ public:
         @return  True if nChar is a US-ASCII hexadecimal digit character (US-
         ASCII '0'--'9', 'A'--'F', 'a'--'f').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiHexDigit instead")
     static inline bool isHexDigit(sal_uInt32 nChar);
 
     /** Check for US-ASCII upper case character.
@@ -214,6 +217,7 @@ public:
         @return  True if nChar is a US-ASCII upper case alphabetic character
         (US-ASCII 'A'--'Z').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiUpperCase instead")
     static inline bool isUpperCase(sal_uInt32 nChar);
 
     /** Check for US-ASCII lower case character.
@@ -223,6 +227,7 @@ public:
         @return  True if nChar is a US-ASCII lower case alphabetic character
         (US-ASCII 'a'--'z').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiLowerCase instead")
     static inline bool isLowerCase(sal_uInt32 nChar);
 
     /** Check for US-ASCII alphabetic character.
@@ -232,6 +237,7 @@ public:
         @return  True if nChar is a US-ASCII alphabetic character (US-ASCII
         'A'--'Z' or 'a'--'z').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiAlpha instead")
     static inline bool isAlpha(sal_uInt32 nChar);
 
     /** Check for US-ASCII alphanumeric character.
@@ -241,6 +247,7 @@ public:
         @return  True if nChar is a US-ASCII alphanumeric character (US-ASCII
         '0'--'9', 'A'--'Z' or 'a'--'z').
      */
+    SAL_DEPRECATED("Use rtl::isAsciiAlphanumeric instead")
     static inline bool isAlphanumeric(sal_uInt32 nChar);
 
     /** Check for US-ASCII Base 64 digit character.
@@ -301,6 +308,7 @@ public:
         'A'--'Z'), return the corresponding US-ASCII lower case character (US-
         ASCII 'a'--'z'); otherwise, return nChar unchanged.
      */
+    SAL_DEPRECATED("Use rtl::toAsciiUpperCase instead")
     static inline sal_uInt32 toUpperCase(sal_uInt32 nChar);
 
     /** Translate an US-ASCII character to lower case.
@@ -311,6 +319,7 @@ public:
         'a'--'z'), return the corresponding US-ASCII upper case character (US-
         ASCII 'A'--'Z'); otherwise, return nChar unchanged.
      */
+    SAL_DEPRECATED("Use rtl::toAsciiLowerCase instead")
     static inline sal_uInt32 toLowerCase(sal_uInt32 nChar);
 
     /** Get the digit weight of a US-ASCII character.
@@ -617,13 +626,13 @@ inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
 // static
 inline sal_uInt32 INetMIME::toUpperCase(sal_uInt32 nChar)
 {
-    return rtl::isAsciiLowerCase(nChar) ? nChar - ('a' - 'A') : nChar;
+    return rtl::toAsciiUpperCase(nChar);
 }
 
 // static
 inline sal_uInt32 INetMIME::toLowerCase(sal_uInt32 nChar)
 {
-    return rtl::isAsciiUpperCase(nChar) ? nChar + ('a' - 'A') : nChar;
+    return rtl::toAsciiLowerCase(nChar);
 }
 
 // static
