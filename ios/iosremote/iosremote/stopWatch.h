@@ -14,7 +14,7 @@
 
 @protocol StopWatchDelegate <NSObject>
 
-- (void) setTitle:(NSString *) title;
+- (void) setTitle:(NSString *) title sender:(id)sender;
 
 @end
 

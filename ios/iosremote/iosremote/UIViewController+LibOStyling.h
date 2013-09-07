@@ -8,8 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class Timer;
+
+typedef enum TitleLabelOwner : NSInteger TitleLabelOwner;
+enum TitleLabelOwner : NSInteger {
+    STOPWATCH,
+    TIMER
+};
+
+TitleLabelOwner owner;
+
 @interface UIViewController (LibOStyling)
 
+- (void)setTitle:(NSString *)title sender:(id)sender;
 - (void)setTitle:(NSString *)title;
+
+- (void)setOwner:(TitleLabelOwner) aOwner;
+- (void)startTimePickerwithTimer:(Timer *) timer;
 
 @end

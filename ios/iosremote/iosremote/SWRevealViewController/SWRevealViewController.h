@@ -27,6 +27,7 @@
 
 #import <UIKit/UIKit.h>
 #import "stopWatch.h"
+#import "Timer.h"
 
 @class SWRevealViewController;
 @protocol SWRevealViewControllerDelegate;
@@ -57,7 +58,7 @@ typedef enum
 } FrontViewPosition;
 
 
-@interface SWRevealViewController : UIViewController <StopWatchDelegate>
+@interface SWRevealViewController : UIViewController <StopWatchDelegate, TimerDelegate>
 
 // Object instance init and rear view setting
 - (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
@@ -171,6 +172,8 @@ typedef enum
 @interface SWRevealViewControllerSegue : UIStoryboardSegue
 
 @property (strong) void(^performBlock)( SWRevealViewControllerSegue* segue, UIViewController* svc, UIViewController* dvc );
+
+- (void)startTimePickerwithTimer:(Timer *) timer;
 
 @end
 

@@ -51,9 +51,9 @@
 
 - (void) setupWithTableViewCell:(UITableViewCell *)cell
 {
-    self.startButton = (UIButton *)[cell viewWithTag:2];
-    self.clearButton = (UIButton *)[cell viewWithTag:3];
-    self.timeLabel = (UILabel *)[cell viewWithTag:1];
+    self.startButton = (UIButton *)[[cell viewWithTag:8] viewWithTag:2];
+    self.clearButton = (UIButton *)[[cell viewWithTag:8] viewWithTag:3];
+    self.timeLabel = (UILabel *)[[cell viewWithTag:8] viewWithTag:1];
     
     [self setupActions];
 }
@@ -80,7 +80,7 @@
         // Format the elapsed time and set it to the label
         NSString *timeString = [dateFormatter stringFromDate:timerDate];
         self.timeLabel.text = timeString;
-        [self.delegate setTitle:timeString];
+        [self.delegate setTitle:timeString sender:self];
 }
 
 
@@ -147,7 +147,7 @@
     
     [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
     [self updateTimer];
-    [self.delegate setTitle:@""];
+    [self.delegate setTitle:@"" sender:self];
 }
 
 @end
