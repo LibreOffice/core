@@ -34,16 +34,12 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
-// --------------
 // - Namespaces -
-// --------------
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// ---------------------
 // - GalleryThemeEntry -
-// ---------------------
 
 GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const OUString& rName,
                                       sal_Bool _bReadOnly, sal_Bool _bNewFile,
@@ -80,8 +76,6 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const OUStr
         aName = rName;
 }
 
-// -----------------------------------------------------------------------------
-
 INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL ) const
 {
     INetURLObject   aURL( rURL );
@@ -102,8 +96,6 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
     return aURL;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryThemeEntry::SetName( const OUString& rNewName )
 {
     if( aName != rNewName )
@@ -114,8 +106,6 @@ void GalleryThemeEntry::SetName( const OUString& rNewName )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
 {
     nId = nNewId;
@@ -123,9 +113,7 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
-// --------------------------
 // - GalleryThemeCacheEntry -
-// --------------------------
 
 class GalleryThemeCacheEntry
 {
@@ -144,9 +132,7 @@ public:
     GalleryTheme*                           GetTheme() const { return mpTheme; }
 };
 
-// -----------
 // - Gallery -
-// -----------
 
 Gallery::Gallery( const OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
@@ -155,17 +141,13 @@ Gallery::Gallery( const OUString& rMultiPath )
     ImplLoad( rMultiPath );
 }
 
-// ------------------------------------------------------------------------
-
 Gallery::~Gallery()
 {
-    // Themen-Liste loeschen
+    // erase theme list
     for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
         delete aThemeList[ i ];
     aThemeList.clear();
 }
-
-// ------------------------------------------------------------------------
 
 Gallery* Gallery::GetGalleryInstance()
 {
@@ -182,8 +164,6 @@ Gallery* Gallery::GetGalleryInstance()
 
     return pGallery;
 }
-
-// ------------------------------------------------------------------------
 
 void Gallery::ImplLoad( const OUString& rMultiPath )
 {
@@ -218,8 +198,6 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
     DBG_ASSERT( aUserURL.GetProtocol() != INET_PROT_NOT_VALID, "no writable Gallery user directory available" );
     DBG_ASSERT( aRelURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 }
-
-// ------------------------------------------------------------------------
 
 void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsReadOnly )
 {
@@ -406,8 +384,6 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
     }
 }
 
-// ------------------------------------------------------------------------
-
 GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
 {
     GalleryThemeEntry* pFound = NULL;
@@ -421,8 +397,6 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
 
     return pFound;
 }
-
-// ------------------------------------------------------------------------
 
 OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 {
@@ -503,14 +477,10 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
     return( pFound ? pFound->GetThemeName() : OUString() );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Gallery::HasTheme( const OUString& rThemeName )
 {
     return( ImplGetThemeEntry( rThemeName ) != NULL );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
 {
@@ -532,14 +502,12 @@ sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 {
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
     sal_Bool                            bRet = sal_False;
 
-    // Ueberpruefen, ob neuer Themenname schon vorhanden ist
+    // check if the new theme name is already present
     if( pThemeEntry && !HasTheme( rNewName ) && !pThemeEntry->IsReadOnly() )
     {
         SfxListener   aListener;
@@ -560,8 +528,6 @@ sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewNam
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Gallery::RemoveTheme( const OUString& rThemeName )
 {
@@ -606,8 +572,6 @@ sal_Bool Gallery::RemoveTheme( const OUString& rThemeName )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry )
 {
@@ -656,8 +620,6 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
     return pTheme;
 }
 
-// ------------------------------------------------------------------------
-
 void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
 {
     for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aThemeCache.end(); ++it)
@@ -671,8 +633,6 @@ void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
     }
 }
 
-// ------------------------------------------------------------------------
-
 GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rListener )
 {
     GalleryTheme*           pTheme = NULL;
@@ -683,8 +643,6 @@ GalleryTheme* Gallery::AcquireTheme( const OUString& rThemeName, SfxListener& rL
 
     return pTheme;
 }
-
-// ------------------------------------------------------------------------
 
 void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
 {

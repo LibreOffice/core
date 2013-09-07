@@ -26,9 +26,7 @@
 
 #include <boost/function.hpp>
 
-// -----------------
 // - GalleryButton -
-// -----------------
 
 class GalleryButton : public PushButton
 {
@@ -42,9 +40,7 @@ public:
                     ~GalleryButton();
 };
 
-// -----------------------
 // - GalleryThemeListBox -
-// -----------------------
 
 class GalleryThemeListBox : public ListBox
 {
@@ -61,9 +57,7 @@ public:
                     ~GalleryThemeListBox();
 };
 
-// -------------------
 // - GalleryBrowser1 -
-// -------------------
 
 class Gallery;
 class GalleryThemeEntry;

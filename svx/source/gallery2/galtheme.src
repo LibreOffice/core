@@ -19,105 +19,75 @@
 
 #include "gallery.hrc"
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_3D
 {
     Text [ en-US ] = "3D Effects";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ANIMATIONS
 {
     Text [ en-US ] = "Animations";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_BULLETS
 {
     Text [ en-US ] = "Bullets";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_OFFICE
 {
     Text [ en-US ] = "Office";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FLAGS
 {
     Text [ en-US ] = "Flags";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLOWCHARTS
 {
     Text [ en-US ] = "Flow Charts";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_EMOTICONS
 {
     Text [ en-US ] = "Emoticons";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS
 {
     Text [ en-US ] = "Pictures";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_BACKGROUNDS
 {
     Text [ en-US ] = "Backgrounds";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_HOMEPAGE
 {
     Text [ en-US ] = "Homepage";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_INTERACTION
 {
     Text [ en-US ] = "Interaction";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS
 {
     Text [ en-US ] = "Maps";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PEOPLE
 {
     Text [ en-US ] = "People";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SURFACES
 {
     Text [ en-US ] = "Surfaces";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_HTMLBUTTONS
 {
@@ -125,15 +95,11 @@ String RID_GALLERYSTR_THEME_HTMLBUTTONS
     Text = "private://gallery/hidden/HtmlExportButtons";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_POWERPOINT
 {
     // !!! Don't translate, please !!!
     Text = "private://gallery/hidden/imgppt";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMPUTERS
 {
@@ -165,28 +131,20 @@ String RID_GALLERYSTR_THEME_TXTSHAPES
        Text [ en-US ] = "Textshapes";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SOUNDS
 {
     Text [ en-US ] = "Sounds";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SYMBOLS
 {
     Text [ en-US ] = "Symbols";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MYTHEME
 {
     Text [ en-US ] = "My Theme";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_USERSOUNDS
 {
@@ -194,105 +152,75 @@ String RID_GALLERYSTR_THEME_USERSOUNDS
     Text = "private://gallery/hidden/usersounds";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ARROWS
 {
     Text [ en-US ] = "Arrows";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BALLOONS
 {
     Text [ en-US ] = "Balloons";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_KEYBOARD
 {
     Text [ en-US ] = "Keyboard";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_TIME
 {
     Text [ en-US ] = "Time";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PRESENTATION
 {
     Text [ en-US ] = "Presentation";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CALENDAR
 {
     Text [ en-US ] = "Calendar";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_NAVIGATION
 {
     Text [ en-US ] = "Navigation";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMMUNICATION
 {
     Text [ en-US ] = "Communication";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FINANCES
 {
     Text [ en-US ] = "Finances";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMPUTER
 {
     Text [ en-US ] = "Computers";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLIMA
 {
     Text [ en-US ] = "Climate";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_EDUCATION
 {
     Text [ en-US ] = "School & University";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_TROUBLE
 {
     Text [ en-US ] = "Problem Solving";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SCREENBEANS
 {
     Text [ en-US ] = "Screen Beans";
 };
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FONTWORK
 {
@@ -300,16 +228,11 @@ String RID_GALLERYSTR_THEME_FONTWORK
     Text = "private://gallery/hidden/fontwork";
 };
 
-// -----------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
 {
     // !!! Don't translate, please !!!
     Text = "private://gallery/hidden/fontworkvertical";
 };
-
-
-// -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_DUMMY5
 {
@@ -317,734 +240,524 @@ String RID_GALLERYSTR_THEME_DUMMY5
     Text = "Dummy 5";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SHAPES_POLYGONS
 {
 Text [ en-US ] = "Shapes - polygons";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SHAPES_1
 {
 Text [ en-US ] = "Shapes 1";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SHAPES_2
 {
 Text [ en-US ] = "Shapes 2";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ANIMALS
 {
 Text [ en-US ] = "Animals";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CARS
 {
 Text [ en-US ] = "Cars";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BUGS
 {
 Text [ en-US ] = "Bugs";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CISCO_OTHER
 {
 Text [ en-US ] = "Cisco - Other";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CISCO_MEDIA
 {
 Text [ en-US ] = "Cisco - Media";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CISCO_PRODUCTS
 {
 Text [ en-US ] = "Cisco - Products";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CISCO_WAN_LAN
 {
 Text [ en-US ] = "Cisco - WAN - LAN";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_DOMINO_USUAL
 {
 Text [ en-US ] = "Domino - usual";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_DOMINO_NUMBERED
 {
 Text [ en-US ] = "Domino - numbered";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ELECTRONICS_PARTS_1
 {
 Text [ en-US ] = "Electronics - parts 1";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ELECTRONICS_PARTS_2
 {
 Text [ en-US ] = "Electronics - parts 2";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ELECTRONICS_PARTS_3
 {
 Text [ en-US ] = "Electronics - parts 3";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ELECTRONICS_PARTS_4
 {
 Text [ en-US ] = "Electronics - parts 4";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ELECTRONICS_CIRCUIT
 {
 Text [ en-US ] = "Electronics - circuit";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ELECTRONICS_SIGNS
 {
 Text [ en-US ] = "Electronics - signs";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ELECTRONICS_GAUGES
 {
 Text [ en-US ] = "Electronics - gauges";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PEOPLE_1
 {
 Text [ en-US ] = "People";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ARCHITECTURE_OVERLAY
 {
 Text [ en-US ] = "Architecture - overlay";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ARCHITECTURE_FURNITURES
 {
 Text [ en-US ] = "Architecture - furnitures";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ARCHITECTURE_BUILDINGS
 {
 Text [ en-US ] = "Architecture - buildings";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ARCHITECTURE_BATHROOM_KITCHEN
 {
 Text [ en-US ] = "Architecture - bathroom, kitchen";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ARCHITECTURE_KITCHEN
 {
 Text [ en-US ] = "Architecture - kitchen";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ARCHITECTURE_WINDOWS_DOORS
 {
 Text [ en-US ] = "Architecture - windows, doors";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FLOWCHARTS_1
 {
 Text [ en-US ] = "Flowcharts";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLOWCHARTS_2
 {
 Text [ en-US ] = "Flowcharts 2";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FORALSTUDIOA
 {
 Text [ en-US ] = "Foral-StudioA";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_FAUNA
 {
 Text [ en-US ] = "Photos - Fauna";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_BUILDINGS
 {
 Text [ en-US ] = "Photos - Buildings";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_PLANTS
 {
 Text [ en-US ] = "Photos - Plants";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_STATUES
 {
 Text [ en-US ] = "Photos - Statues";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_LANDSCAPES
 {
 Text [ en-US ] = "Photos - Landscapes";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_CITIES
 {
 Text [ en-US ] = "Photos - Cities";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_FLOWERS
 {
 Text [ en-US ] = "Photos - Flowers";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_THERAPEUTICS_GENERAL
 {
 Text [ en-US ] = "Therapeutics - general";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_WEATHER
 {
 Text [ en-US ] = "Weather";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_VECHILES
 {
 Text [ en-US ] = "Vehicles";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SIGNS
 {
 Text [ en-US ] = "Signs";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_BLUE_MAN
 {
 Text [ en-US ] = "Blue Man";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CHEMISTRY_AMINO_ACIDS
 {
 Text [ en-US ] = "Chemistry - Amino acids";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_LOGICAL_SIGNS
 {
 Text [ en-US ] = "Logical signs";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_LOGICAL_GATES
 {
 Text [ en-US ] = "Logical gates";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_LOGOS
 {
 Text [ en-US ] = "Logos";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SMILES
 {
 Text [ en-US ] = "Smilies";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ARROWS_1
 {
 Text [ en-US ] = "Arrows";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_01_CLOCK
 {
 Text [ en-US ] = "Clock - 01 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_02_CLOCK
 {
 Text [ en-US ] = "Clock - 02 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_03_CLOCK
 {
 Text [ en-US ] = "Clock - 03 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_04_CLOCK
 {
 Text [ en-US ] = "Clock - 04 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_05_CLOCK
 {
 Text [ en-US ] = "Clock - 05 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_06_CLOCK
 {
 Text [ en-US ] = "Clock - 06 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_07_CLOCK
 {
 Text [ en-US ] = "Clock - 07 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_08_CLOCK
 {
 Text [ en-US ] = "Clock - 08 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_09_CLOCK
 {
 Text [ en-US ] = "Clock - 09 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_10_CLOCK
 {
 Text [ en-US ] = "Clock - 10 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CLOCK_11_CLOCK
 {
 Text [ en-US ] = "Clock - 11 clock";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_CLOCK_12_CLOCK
 {
 Text [ en-US ] = "Clock - 12 clock";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PNEUMATIC_PARTS
 {
 Text [ en-US ] = "Pneumatic - parts";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_COMPUTER_GENERAL
 {
 Text [ en-US ] = "Computer - general";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMPUTER_NETWORK
 {
 Text [ en-US ] = "Computer - network";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_COMPUTER_NETWORK_DEVICES
 {
 Text [ en-US ] = "Computer - network devices";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_COMPUTER_WIFI
 {
 Text [ en-US ] = "Computer - WIFI";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_NUMBERS
 {
 Text [ en-US ] = "Numbers";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SIGNS_DANGER
 {
 Text [ en-US ] = "Signs - danger";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_OBJECTS
 {
 Text [ en-US ] = "Objects";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_AFRICA
 {
 Text [ en-US ] = "Maps - Africa";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_UNITED_STATES_OF_AMERICA
 {
 Text [ en-US ] = "Maps - United States of America";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_AUSTRALIA
 {
 Text [ en-US ] = "Maps - Australia";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_ASIA
 {
 Text [ en-US ] = "Maps - Asia";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_SOUTH_AMERICA
 {
 Text [ en-US ] = "Maps - South America";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_EUROPE
 {
 Text [ en-US ] = "Maps - Europe";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_EUROPE_1
 {
 Text [ en-US ] = "Maps - Europe 1";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_FRANCE
 {
 Text [ en-US ] = "Maps - France";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_FRANCE_COUNTRIES
 {
 Text [ en-US ] = "Maps - France - countries";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_SIGNS
 {
 Text [ en-US ] = "Maps - signs";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_CANADA
 {
 Text [ en-US ] = "Maps - Canada";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_CONTINENTS
 {
 Text [ en-US ] = "Maps - Continents";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_MIDDLE_EAST
 {
 Text [ en-US ] = "Maps - Middle East";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_MIDDLE_AMERICA
 {
 Text [ en-US ] = "Maps - Middle America";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_MIDDLE_AGES
 {
 Text [ en-US ] = "Maps - Middle ages";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_MEXICO
 {
 Text [ en-US ] = "Maps - Mexico";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_ANCIENT_TIMES
 {
 Text [ en-US ] = "Maps - Ancient times";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_SYMBOLS
 {
 Text [ en-US ] = "Maps - symbols";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS_HISTORY_1900
 {
 Text [ en-US ] = "Maps - history - 1900";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MAPS_WORLD
 {
 Text [ en-US ] = "Maps - World";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_CROPS
 {
 Text [ en-US ] = "Crops";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_FRACTIONS
 {
 Text [ en-US ] = "Fractions";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLAGS_1
 {
 Text [ en-US ] = "Flags";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_MUSIC_INSTRUMENTS
 {
 Text [ en-US ] = "Music - instruments";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MUSIC_SHEET_MUSIC
 {
 Text [ en-US ] = "Music - sheet music";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_SPECIAL_PICTOGRAMM
 {
 Text [ en-US ] = "Special Pictogramms";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_CELEBRATION
 {
 Text [ en-US ] = "Photos - Celebration";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_FOODSANDDRINKS
 {
 Text [ en-US ] = "Photos - Foods and Drinks";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_HUMANS
 {
 Text [ en-US ] = "Photos - Humans";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_OBJECTS
 {
 Text [ en-US ] = "Photos - Objects";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS_SPACE
 {
 Text [ en-US ] = "Photos - Space";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_PHOTOS_TRAVEL
 {
 Text [ en-US ] = "Photos - Travel";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_OPENOFFICEORG_LOGOS
 {
 Text [ en-US ] = "OpenOffice.org logos";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_RELIGION
 {
 Text [ en-US ] = "Religion";
 };
-
-// ---------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BUILDINGS
 {
 Text [ en-US ] = "Buildings";
 };
 
-// ---------------------------------------------------------------------------+
-
 String RID_GALLERYSTR_THEME_HOMEPAGE2
 {
 Text [ en-US ] = "Homepage 2";
 };
 
-// ---------------------------------------------------------------------------
-
 String RID_GALLERYSTR_THEME_ELEMENTSBULLETS2
 {
 Text [ en-US ] = "Bullets 2";
 };
-
-// ---------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
