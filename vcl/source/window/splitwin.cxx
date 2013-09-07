@@ -2542,6 +2542,9 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         {
             sal_Bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
             sal_Bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
+
+            // nDelta corresponds to the direction to which user drags the mouse.
+            // If nDelta > 0, means user has dragged the handle towards the right and vice-versa
             long    nDelta = mnMSplitPos-mnMStartPos;
 
             if ( (mnSplitTest & SPLIT_WINDOW) && !mpMainSet->mpItems )
@@ -2552,13 +2555,27 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                long nNewSize = mpSplitSet->mpItems[mnSplitPos].mnPixSize;
+                // if the sidebar is attached towards the right hand side of the screen
                 if ( (mpSplitSet == mpMainSet) && mbBottomRight )
-                    nNewSize -= nDelta;
+                {
+                    long nNewSize = mnMaxSize - mnMStartPos;
+                    if( nNewSize <= mpSplitSet->mpItems[mnSplitPos].mnMaxSize )
+                    {
+                        SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
+                                bPropSmaller, bPropGreater );
+                    }
+                }
+
+                // or else the sidebar is attached towards the left hand side of the screen
                 else
-                    nNewSize += nDelta;
-                SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
-                           bPropSmaller, bPropGreater );
+                {
+                    long nNewSize = mnMStartPos;
+                    if( nNewSize <= mpSplitSet->mpItems[mnSplitPos].mnMaxSize )
+                    {
+                        SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
+                                bPropSmaller, bPropGreater );
+                    }
+                }
             }
 
             Split();
