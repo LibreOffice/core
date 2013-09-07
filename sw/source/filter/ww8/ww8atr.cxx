@@ -2354,29 +2354,29 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     return bHasFmt;
 }
 
-void AttributeOutputBase::GetNumberPara( String& rStr, const SwField& rFld )
+void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rFld )
 {
     switch(rFld.GetFormat())
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
-            rStr.AppendAscii( "\\*ALPHABETIC ");
+            rStr += "\\*ALPHABETIC ";
             break;
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:
-            rStr.AppendAscii("\\*alphabetic ");
+            rStr += "\\*alphabetic ";
             break;
         case SVX_NUM_ROMAN_UPPER:
-            rStr.AppendAscii("\\*ROMAN ");
+            rStr += "\\*ROMAN ";
             break;
         case SVX_NUM_ROMAN_LOWER:
-            rStr.AppendAscii("\\*roman ");
+            rStr += "\\*roman ";
             break;
         default:
             OSL_ENSURE(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
-            rStr.AppendAscii("\\*Arabic ");
+            rStr += "\\*Arabic ";
             break;
         case SVX_NUM_PAGEDESC:
             //Nothing, use word's default
@@ -2539,7 +2539,6 @@ void WW8AttributeOutput::WriteExpand( const SwField* pFld )
 void AttributeOutputBase::TextField( const SwFmtFld& rField )
 {
     const SwField* pFld = rField.GetFld();
-    String sStr;        // fuer optionale Parameter
     bool bWriteExpand = false;
     sal_uInt16 nSubType = pFld->GetSubType();
 
@@ -2557,11 +2556,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_SETEXPFLD:
         if (nsSwGetSetExpType::GSE_SEQ == nSubType)
         {
-            sStr = FieldString(ww::eSEQ);
-            sStr.AppendAscii("\"");
-            sStr += pFld->GetTyp()->GetName();
-            sStr.AppendAscii( "\" " );
-
+            OUString sStr = FieldString(ww::eSEQ) + "\"" + pFld->GetTyp()->GetName() +"\" ";
             GetNumberPara( sStr, *pFld );
             GetExport().OutputField(pFld, ww::eSEQ, sStr);
         }
@@ -2570,25 +2565,21 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             bool bShowAsWell = false;
             ww::eField eFieldNo;
             const SwSetExpField *pSet=(const SwSetExpField*)(pFld);
-            const String &rVar = pSet->GetPar2();
+            const OUString sVar = pSet->GetPar2();
+            OUString sStr;
             if (pSet->GetInputFlag())
             {
-                sStr = FieldString(ww::eASK);
-                sStr.AppendAscii("\"");
-                sStr += pSet->GetPar1();
-                sStr.AppendAscii( "\" " );
-                sStr += pSet->GetPromptText();
-                sStr.AppendAscii( " \\d " );
-                sStr += rVar;
+                sStr = FieldString(ww::eASK) + "\""
+                    + pSet->GetPar1() + "\" "
+                    + pSet->GetPromptText() + " \\d "
+                    + sVar;
                 eFieldNo = ww::eASK;
             }
             else
             {
-                sStr = FieldString(ww::eSET);
-                sStr += pSet->GetPar1();
-                sStr.AppendAscii(" \"");
-                sStr += rVar;
-                sStr.AppendAscii("\" ");
+                sStr = FieldString(ww::eSET)
+                    + pSet->GetPar1() + " \""
+                    + sVar + "\" ";
                 eFieldNo = ww::eSET;
                 bShowAsWell = (nSubType & nsSwExtendedSubType::SUB_INVISIBLE) ? false : true;
             }
@@ -2602,23 +2593,27 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             bWriteExpand = true;
         break;
     case RES_PAGENUMBERFLD:
-        sStr = FieldString(ww::ePAGE);
-        GetNumberPara(sStr, *pFld);
-        GetExport().OutputField(pFld, ww::ePAGE, sStr);
+        {
+            OUString sStr = FieldString(ww::ePAGE);
+            GetNumberPara(sStr, *pFld);
+            GetExport().OutputField(pFld, ww::ePAGE, sStr);
+        }
         break;
     case RES_FILENAMEFLD:
-        sStr = FieldString(ww::eFILENAME);
-        if (pFld->GetFormat() == FF_PATHNAME)
-            sStr.AppendAscii("\\p ");
-        GetExport().OutputField(pFld, ww::eFILENAME, sStr);
+        {
+            OUString sStr = FieldString(ww::eFILENAME);
+            if (pFld->GetFormat() == FF_PATHNAME)
+                sStr += "\\p ";
+            GetExport().OutputField(pFld, ww::eFILENAME, sStr);
+        }
         break;
     case RES_DBNAMEFLD:
         {
-            sStr = FieldString(ww::eDATABASE);
             SwDBData aData = GetExport().pDoc->GetDBData();
-            sStr += String(aData.sDataSource);
-            sStr += DB_DELIM;
-            sStr += String(aData.sCommand);
+            const OUString sStr = FieldString(ww::eDATABASE)
+                + aData.sDataSource
+                + OUString(DB_DELIM)
+                + aData.sCommand;
             GetExport().OutputField(pFld, ww::eDATABASE, sStr);
         }
         break;
@@ -2637,6 +2632,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             bWriteExpand = true;
         else
         {
+            String sStr;
             ww::eField eFld(ww::eNONE);
             switch (0xff & nSubType)
             {
@@ -2714,13 +2710,16 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         }
         break;
     case RES_DATETIMEFLD:
-        if (FIXEDFLD & nSubType || !GetExport().GetNumberFmt(*pFld, sStr))
-            bWriteExpand = true;
-        else
         {
-            ww::eField eFld = (DATEFLD & nSubType) ? ww::eDATE : ww::eTIME;
-            sStr.Insert(FieldString(eFld), 0);
-            GetExport().OutputField(pFld, eFld, sStr);
+            String sStr;
+            if (FIXEDFLD & nSubType || !GetExport().GetNumberFmt(*pFld, sStr))
+                bWriteExpand = true;
+            else
+            {
+                ww::eField eFld = (DATEFLD & nSubType) ? ww::eDATE : ww::eTIME;
+                sStr.Insert(FieldString(eFld), 0);
+                GetExport().OutputField(pFld, eFld, sStr);
+            }
         }
         break;
     case RES_DOCSTATFLD:
@@ -2742,7 +2741,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
             if (eFld != ww::eNONE)
             {
-                sStr = FieldString(eFld);
+                OUString sStr = FieldString(eFld);
                 GetNumberPara(sStr, *pFld);
                 GetExport().OutputField(pFld, eFld, sStr);
             }
@@ -2772,8 +2771,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
             if (eFld != ww::eNONE)
             {
-                sStr = FieldString(eFld);
-                GetExport().OutputField(pFld, eFld, sStr);
+                GetExport().OutputField(pFld, eFld, FieldString(eFld));
             }
             else
                 bWriteExpand = true;
@@ -2795,11 +2793,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 GetExport().DoFormText(pInputField);
             else
             {
-                sStr = FieldString(ww::eFILLIN);
-
-                sStr.AppendAscii("\"");
-                sStr += pFld->GetPar2();
-                sStr += '\"';
+                const OUString sStr = FieldString(ww::eFILLIN) + "\""
+                    + pFld->GetPar2() + "\"";
 
                 GetExport().OutputField(pFld, ww::eFILLIN, sStr);
             }
@@ -2808,6 +2803,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_GETREFFLD:
         {
             ww::eField eFld = ww::eNONE;
+            OUString sStr;
             const SwGetRefField& rRFld = *(SwGetRefField*)pFld;
             switch (nSubType)
             {
@@ -2825,19 +2821,19 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                     }
                     {
                         const OUString aRefName(rRFld.GetSetRefName());
-                        sStr = FieldString(eFld);
-                        sStr += GetExport().GetBookmarkName(nSubType, &aRefName, 0);
+                        sStr = FieldString(eFld)
+                            + GetExport().GetBookmarkName(nSubType, &aRefName, 0);
                     }
                     switch (pFld->GetFormat())
                     {
                         case REF_NUMBER:
-                            sStr.AppendAscii(" \\r");
+                            sStr += " \\r";
                             break;
                         case REF_NUMBER_NO_CONTEXT:
-                            sStr.AppendAscii(" \\n");
+                            sStr += " \\n";
                             break;
                         case REF_NUMBER_FULL_CONTEXT:
-                            sStr.AppendAscii(" \\w");
+                            sStr += " \\w";
                             break;
                     }
                     break;
@@ -2857,9 +2853,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                                 REF_ENDNOTE == nSubType ? ww::eNOTEREF : ww::eFOOTREF;
                             break;
                     }
-                    sStr = FieldString(eFld);
-                    sStr += GetExport().GetBookmarkName(nSubType, 0,
-                        rRFld.GetSeqNo());
+                    sStr = FieldString(eFld)
+                        + GetExport().GetBookmarkName(nSubType, 0, rRFld.GetSeqNo());
                     break;
             }
 
@@ -2868,15 +2863,15 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 switch (pFld->GetFormat())
                 {
                     case REF_UPDOWN:
-                        sStr.AppendAscii(" \\p");
+                        sStr += " \\p \\h ";   // with hyperlink
                         break;
                     case REF_CHAPTER:
-                        sStr.AppendAscii(" \\n");
+                        sStr += " \\n \\h ";   // with hyperlink
                         break;
                     default:
+                        sStr += " \\h ";       // insert hyperlink
                         break;
                 }
-                sStr.AppendAscii(" \\h ");       // insert hyperlink
                 GetExport().OutputField(pFld, eFld, sStr);
             }
             else
@@ -2905,7 +2900,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             nScript = i18n::ScriptType::ASIAN;
 
         long nHeight = ((SvxFontHeightItem&)(GetExport().GetItem(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();;
+            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 
@@ -2914,19 +2909,17 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         font size and fill in the defaults as up == half the font size and
         down == a fifth the font size
         */
-        xub_StrLen nAbove = (pFld->GetPar1().getLength()+1)/2;
-        sStr = FieldString(ww::eEQ);
-        sStr.AppendAscii("\\o (\\s\\up ");
-        sStr += OUString::number(nHeight/2);
-
-        sStr.Append('(');
-        sStr += String(pFld->GetPar1(),0,nAbove);
-        sStr.AppendAscii("), \\s\\do ");
-        sStr += OUString::number(nHeight/5);
-
-        sStr.Append('(');
-        sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().getLength()-nAbove);
-        sStr.AppendAscii("))");
+        const sal_Int32 nAbove = (pFld->GetPar1().getLength()+1)/2;
+        const OUString sStr = FieldString(ww::eEQ)
+            + "\\o (\\s\\up "
+            + OUString::number(nHeight/2)
+            + "("
+            + pFld->GetPar1().copy(0, nAbove)
+            + "), \\s\\do "
+            + OUString::number(nHeight/5)
+            + "("
+            + pFld->GetPar1().copy(nAbove)
+            + "))";
         GetExport().OutputField(pFld, ww::eEQ, sStr);
         }
         break;
@@ -2966,12 +2959,13 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         bWriteExpand = PlaceholderField( pFld );
         break;
     case RES_MACROFLD:
-        sStr.AssignAscii(" MACROBUTTON");
-        sStr += pFld->GetPar1();
-        sStr.SearchAndReplaceAscii("StarOffice.Standard.Modul1.", String(' '));
-        sStr += String(' ');
-        sStr += lcl_GetExpandedField(*pFld);
-        GetExport().OutputField( pFld, ww::eMACROBUTTON, sStr );
+        {
+            const OUString sStr = " MACROBUTTON"
+                + pFld->GetPar1().replaceFirst("StarOffice.Standard.Modul1.", " ")
+                + " "
+                + lcl_GetExpandedField(*pFld);
+            GetExport().OutputField( pFld, ww::eMACROBUTTON, sStr );
+        }
         break;
     default:
         bWriteExpand = true;
