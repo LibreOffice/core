@@ -3203,8 +3203,8 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     bool bKillPaMs = false;
 
-    //Delete selected content, not at table-selection and table in Clipboard
-    if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS))
+    //Delete selected content, not at table-selection and table in Clipboard, and dont delete hovering graphics.
+    if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS) && !( nSelection & nsSelectionType::SEL_DRW))
     {
         bKillPaMs = true;
         rShell.SetRetainSelection( true );
@@ -3220,6 +3220,10 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             rShell.SwCrsrShell::SetCrsr( aPt, true );
         }
         rShell.SetRetainSelection( false );
+    }
+    if ( nSelection & nsSelectionType::SEL_DRW) //unselect hovering graphics
+    {
+       rShell.ResetSelect(NULL,false);
     }
 
     bool bInWrd = false, bEndWrd = false, bSttWrd = false,
