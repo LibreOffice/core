@@ -169,9 +169,9 @@ public:
 
     // These methods are ok to use, reference count not cleared.
     void SetName(bool bGlobal, sal_uInt16 nIndex);
-    void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
-    void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
-    void SetExternalName( sal_uInt16 nFileId, const String& rName );
+    void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
+    void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
+    void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
     void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
 

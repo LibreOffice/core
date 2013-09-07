@@ -200,14 +200,14 @@ public:
 
     FormulaToken* AddToken( const FormulaToken& );
     FormulaToken* AddString( const sal_Unicode* pStr );
-    FormulaToken* AddString( const String& rStr );
+    FormulaToken* AddString( const OUString& rStr );
     FormulaToken* AddDouble( double fVal );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */
-    FormulaToken* AddExternal( const String& rStr, OpCode eOp = ocExternal );
-    FormulaToken* AddBad( const String& rStr );          /// ocBad with String
-    FormulaToken* AddStringXML( const String& rStr );    /// ocStringXML with String, temporary during import
+    FormulaToken* AddExternal( const OUString& rStr, OpCode eOp = ocExternal );
+    FormulaToken* AddBad( const OUString& rStr );          /// ocBad with OUString
+    FormulaToken* AddStringXML( const OUString& rStr );    /// ocStringXML with OUString, temporary during import
 
     virtual FormulaToken* MergeArray( );
 

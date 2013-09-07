@@ -136,13 +136,13 @@ public:
     virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual const String&       GetString() const;
+    virtual const OUString&       GetString() const;
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                IsGlobal() const;
     virtual void                SetGlobal( bool b );
     virtual short*              GetJump() const;
-    virtual const String&       GetExternal() const;
+    virtual const OUString&       GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
     virtual sal_uInt16          GetError() const;
     virtual void                SetError( sal_uInt16 );
@@ -169,8 +169,8 @@ public:
 
     static  size_t              GetStrLenBytes( xub_StrLen nLen )
                                     { return nLen * sizeof(sal_Unicode); }
-    static  size_t              GetStrLenBytes( const String& rStr )
-                                    { return GetStrLenBytes( rStr.Len() ); }
+    static  size_t              GetStrLenBytes( const OUString& rStr )
+                                    { return GetStrLenBytes( rStr.getLength() ); }
 };
 
 inline void intrusive_ptr_add_ref(const FormulaToken* p)
@@ -257,15 +257,15 @@ public:
 class FORMULA_DLLPUBLIC FormulaStringToken : public FormulaToken
 {
 private:
-            String              aString;
+            OUString              aString;
 public:
-                                FormulaStringToken( const String& r ) :
+                                FormulaStringToken( const OUString& r ) :
                                     FormulaToken( svString ), aString( r ) {}
                                 FormulaStringToken( const FormulaStringToken& r ) :
                                     FormulaToken( r ), aString( r.aString ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaStringToken(*this); }
-    virtual const String&       GetString() const;
+    virtual const OUString&       GetString() const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
@@ -277,15 +277,15 @@ public:
 class FORMULA_DLLPUBLIC FormulaStringOpToken : public FormulaByteToken
 {
 private:
-            String              aString;
+            OUString              aString;
 public:
-                                FormulaStringOpToken( OpCode e, const String& r ) :
+                                FormulaStringOpToken( OpCode e, const OUString& r ) :
                                     FormulaByteToken( e, 0, svString, false ), aString( r ) {}
                                 FormulaStringOpToken( const FormulaStringOpToken& r ) :
                                     FormulaByteToken( r ), aString( r.aString ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaStringOpToken(*this); }
-    virtual const String&       GetString() const;
+    virtual const OUString&       GetString() const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
@@ -312,13 +312,13 @@ public:
 class FORMULA_DLLPUBLIC FormulaExternalToken : public FormulaToken
 {
 private:
-            String              aExternal;
+            OUString              aExternal;
             sal_uInt8           nByte;
 public:
-                                FormulaExternalToken( OpCode e, sal_uInt8 n, const String& r ) :
+                                FormulaExternalToken( OpCode e, sal_uInt8 n, const OUString& r ) :
                                     FormulaToken( svExternal, e ), aExternal( r ),
                                     nByte( n ) {}
-                                FormulaExternalToken( OpCode e, const String& r ) :
+                                FormulaExternalToken( OpCode e, const OUString& r ) :
                                     FormulaToken(svExternal, e ), aExternal( r ),
                                     nByte( 0 ) {}
                                 FormulaExternalToken( const FormulaExternalToken& r ) :
@@ -326,7 +326,7 @@ public:
                                     nByte( r.nByte ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaExternalToken(*this); }
-    virtual const String&       GetExternal() const;
+    virtual const OUString&       GetExternal() const;
     virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                operator==( const FormulaToken& rToken ) const;
@@ -343,7 +343,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaMissingToken(*this); }
     virtual double              GetDouble() const;
-    virtual const String&       GetString() const;
+    virtual const OUString&       GetString() const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 

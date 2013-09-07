@@ -220,12 +220,12 @@ private:
     sal_Bool                bIgnoreBlank;
     sal_Int16           nShowList;
     sal_Bool                bShowInput;
-    String              aInputTitle;
-    String              aInputMessage;
+    OUString              aInputTitle;
+    OUString              aInputMessage;
     sal_Bool                bShowError;
     sal_uInt16              nErrorStyle;    // enum ScValidErrorStyle
-    String              aErrorTitle;
-    String              aErrorMessage;
+    OUString              aErrorTitle;
+    OUString              aErrorMessage;
 
     void                    ClearData_Impl();
 

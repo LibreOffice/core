@@ -233,7 +233,7 @@ void ScRawToken::SetName(bool bGlobal, sal_uInt16 nIndex)
     name.nIndex = nIndex;
 }
 
-void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
     eOp = ocPush;
     eType = svExternalSingleRef;
@@ -243,12 +243,12 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabNam
     extref.aRef.Ref1 =
     extref.aRef.Ref2 = rRef;
 
-    xub_StrLen n = rTabName.Len();
-    memcpy(extref.cTabName, rTabName.GetBuffer(), n*sizeof(sal_Unicode));
+    sal_Int32 n = rTabName.getLength();
+    memcpy(extref.cTabName, rTabName.getStr(), n*sizeof(sal_Unicode));
     extref.cTabName[n] = 0;
 }
 
-void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
+void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
 {
     eOp = ocPush;
     eType = svExternalDoubleRef;
@@ -257,12 +257,12 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabNam
     extref.nFileId = nFileId;
     extref.aRef = rRef;
 
-    xub_StrLen n = rTabName.Len();
-    memcpy(extref.cTabName, rTabName.GetBuffer(), n*sizeof(sal_Unicode));
+    sal_Int32 n = rTabName.getLength();
+    memcpy(extref.cTabName, rTabName.getStr(), n*sizeof(sal_Unicode));
     extref.cTabName[n] = 0;
 }
 
-void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
+void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
 {
     eOp = ocPush;
     eType = svExternalName;
@@ -270,8 +270,8 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 
     extname.nFileId = nFileId;
 
-    xub_StrLen n = rName.Len();
-    memcpy(extname.cName, rName.GetBuffer(), n*sizeof(sal_Unicode));
+    sal_Int32 n = rName.getLength();
+    memcpy(extname.cName, rName.getStr(), n*sizeof(sal_Unicode));
     extname.cName[n] = 0;
 }
 
@@ -854,7 +854,7 @@ FormulaToken* ScMatrixRangeToken::Clone() const
 
 // ============================================================================
 
-ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :
+ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& r ) :
     ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -879,7 +879,7 @@ sal_uInt16 ScExternalSingleRefToken::GetIndex() const
     return mnFileId;
 }
 
-const String& ScExternalSingleRefToken::GetString() const
+const OUString& ScExternalSingleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -910,7 +910,7 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r ) :
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& r ) :
     ScToken( svExternalDoubleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -935,7 +935,7 @@ sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
     return mnFileId;
 }
 
-const String& ScExternalDoubleRefToken::GetString() const
+const OUString& ScExternalDoubleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -986,7 +986,7 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
+ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const OUString& rName ) :
     ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
@@ -1007,7 +1007,7 @@ sal_uInt16 ScExternalNameToken::GetIndex() const
     return mnFileId;
 }
 
-const String& ScExternalNameToken::GetString() const
+const OUString& ScExternalNameToken::GetString() const
 {
     return maName;
 }
@@ -1020,19 +1020,8 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    xub_StrLen nLen = maName.Len();
-    const String& rName = r.GetString();
-    if (nLen != rName.Len())
-        return false;
-
-    const sal_Unicode* p1 = maName.GetBuffer();
-    const sal_Unicode* p2 = rName.GetBuffer();
-    for (xub_StrLen j = 0; j < nLen; ++j)
-    {
-        if (p1[j] != p2[j])
-            return false;
-    }
-    return true;
+    const OUString& rName = r.GetString();
+    return maName == rName;
 }
 
 // ============================================================================
@@ -1048,9 +1037,9 @@ ScJumpMatrixToken::~ScJumpMatrixToken()
 }
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }
-const String &  ScEmptyCellToken::GetString() const
+const OUString &  ScEmptyCellToken::GetString() const
 {
-    static  String              aDummyString;
+    static  OUString              aDummyString;
     return aDummyString;
 }
 bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
@@ -1067,7 +1056,7 @@ ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken&
     ScToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
-const String &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
+const OUString &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
 const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 // Non-const GetMatrix() is private and unused but must be implemented to
 // satisfy vtable linkage.
@@ -1174,7 +1163,7 @@ void ScMatrixFormulaCellToken::ResetResult()
 
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
-const String& ScHybridCellToken::GetString() const { return maString; }
+const OUString& ScHybridCellToken::GetString() const { return maString; }
 bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
@@ -1251,8 +1240,8 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name
                                 size_t nCacheId = static_cast< size_t >( aApiSRef.Sheet );
-                                String aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
-                                if( aTabName.Len() > 0 )
+                                OUString aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
+                                if( !aTabName.isEmpty() )
                                 {
                                     ScSingleRefData aSingleRef;
                                     // convert column/row settings, set sheet index to absolute
@@ -1266,8 +1255,8 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name.
                                 size_t nCacheId = static_cast< size_t >( aApiCRef.Reference1.Sheet );
-                                String aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
-                                if( aTabName.Len() > 0 )
+                                OUString aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
+                                if( !aTabName.isEmpty() )
                                 {
                                     ScComplexRefData aComplRef;
                                     // convert column/row settings, set sheet index to absolute
@@ -1478,7 +1467,7 @@ void ScTokenArray::GenHash()
                 case svString:
                 {
                     // Constant string.
-                    const String& rStr = p->GetString();
+                    const OUString& rStr = p->GetString();
                     nHash += aHasher(rStr);
                 }
                 break;
@@ -1902,17 +1891,17 @@ FormulaToken* ScTokenArray::AddDBRange( sal_uInt16 n )
     return Add( new FormulaIndexToken( ocDBArea, n));
 }
 
-FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )
+FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const OUString& rName )
 {
     return Add( new ScExternalNameToken(nFileId, rName) );
 }
 
-FormulaToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+FormulaToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
     return Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
 }
 
-FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
+FormulaToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
 {
     return Add( new ScExternalDoubleRefToken(nFileId, rTabName, rRef) );
 }

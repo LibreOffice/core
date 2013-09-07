@@ -624,7 +624,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
 {
     //  Eintrag aus dem Dokument lesen...
 
-    sal_Bool bFound = false;
+    bool bFound = false;
     if ( pDoc && nKey )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
@@ -650,7 +650,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
             if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
                 pData->MarkUsedExternalReferences();
 
-            bFound = sal_True;
+            bFound = true;
         }
     }
     if (!bFound)
@@ -716,10 +716,10 @@ void ScTableValidationObj::ClearData_Impl()
     maExprNmsp1.Erase();
     maExprNmsp2.Erase();
     meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
-    aInputTitle.Erase();
-    aInputMessage.Erase();
-    aErrorTitle.Erase();
-    aErrorMessage.Erase();
+    aInputTitle = OUString();
+    aInputMessage = OUString();
+    aErrorTitle = OUString();
+    aErrorMessage = OUString();
 }
 
 ScTableValidationObj::~ScTableValidationObj()

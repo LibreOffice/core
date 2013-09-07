@@ -826,7 +826,7 @@ public:
 
     sal_uInt16                  GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
-    const String&               GetStringResult() const     { return xResult->GetString(); }
+    const OUString&               GetStringResult() const     { return xResult->GetString(); }
     double                      GetNumResult() const        { return xResult->GetDouble(); }
     formula::FormulaTokenRef    GetResultToken() const      { return xResult; }
     short                       GetRetFormatType() const    { return nRetFmtType; }

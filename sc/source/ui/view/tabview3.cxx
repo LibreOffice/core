@@ -615,8 +615,8 @@ void ScTabView::TestHintWindow()
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );
         OSL_ENSURE(pData,"ValidationData nicht gefunden");
-        String aTitle, aMessage;
-        if ( pData && pData->GetInput( aTitle, aMessage ) && aMessage.Len() > 0 )
+        OUString aTitle, aMessage;
+        if ( pData && pData->GetInput( aTitle, aMessage ) && !aMessage.isEmpty() )
         {
             //! Abfrage, ob an gleicher Stelle !!!!
 

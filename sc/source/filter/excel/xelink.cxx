@@ -1281,7 +1281,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
                     break;
                     case svString:
                         // do not save empty strings (empty cells) to cache
-                        if( xToken->GetString().Len() > 0 )
+                        if( !xToken->GetString().isEmpty() )
                             bValid = aCrnRecs.InsertValue( nScCol, nScRow, Any( OUString( xToken->GetString() ) ) );
                     break;
                     default:

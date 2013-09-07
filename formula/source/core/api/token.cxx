@@ -174,10 +174,10 @@ double & FormulaToken::GetDoubleAsReference()
     return fVal;
 }
 
-const String& FormulaToken::GetString() const
+const OUString& FormulaToken::GetString() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetString: virtual dummy called" );
-    static  String              aDummyString;
+    static  OUString              aDummyString;
     return aDummyString;
 }
 
@@ -210,10 +210,10 @@ short* FormulaToken::GetJump() const
 }
 
 
-const String& FormulaToken::GetExternal() const
+const OUString& FormulaToken::GetExternal() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetExternal: virtual dummy called" );
-    static  String              aDummyString;
+    static  OUString              aDummyString;
     return aDummyString;
 }
 
@@ -304,7 +304,7 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
             break;
         case uno::TypeClass_STRING:
             {
-                String aStrVal( _aToken.Data.get<OUString>() );
+                OUString aStrVal( _aToken.Data.get<OUString>() );
                 if ( eOpCode == ocPush )
                     AddString( aStrVal );
                 else if ( eOpCode == ocBad )
@@ -756,7 +756,7 @@ FormulaToken* FormulaTokenArray::AddString( const sal_Unicode* pStr )
     return AddString( OUString( pStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddString( const String& rStr )
+FormulaToken* FormulaTokenArray::AddString( const OUString& rStr )
 {
     return Add( new FormulaStringToken( rStr ) );
 }
@@ -771,18 +771,18 @@ FormulaToken* FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
     return AddExternal( OUString( pStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddExternal( const String& rStr,
+FormulaToken* FormulaTokenArray::AddExternal( const OUString& rStr,
         OpCode eOp /* = ocExternal */ )
 {
     return Add( new FormulaExternalToken( eOp, rStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddBad( const String& rStr )
+FormulaToken* FormulaTokenArray::AddBad( const OUString& rStr )
 {
     return Add( new FormulaStringOpToken( ocBad, rStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddStringXML( const String& rStr )
+FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 {
     return Add( new FormulaStringOpToken( ocStringXML, rStr ) );
 }
@@ -977,19 +977,19 @@ bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) con
 {
     // Only called for PODF, not ODFF. No need to distinguish.
 
-    const String &rName = mpFunc->GetExternal();
+    const OUString &rName = mpFunc->GetExternal();
 
     // initial (fast) check:
-    sal_Unicode nLastChar = rName.GetChar( rName.Len() - 1);
+    sal_Unicode nLastChar = rName[ rName.getLength() - 1];
     if ( nLastChar != 't' && nLastChar != 'm' )
         return false;
 
-    if (rName.EqualsIgnoreCaseAscii(
+    if (rName.equalsIgnoreAsciiCase(
                 "com.sun.star.sheet.addin.Analysis.getAccrint" ))
     {
         return AddDefaultArg( pNewArr, 4, 1000.0 );
     }
-    if (rName.EqualsIgnoreCaseAscii(
+    if (rName.equalsIgnoreAsciiCase(
                 "com.sun.star.sheet.addin.Analysis.getAccrintm" ))
     {
         return AddDefaultArg( pNewArr, 3, 1000.0 );
@@ -1324,14 +1324,14 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 }
 
 
-const String& FormulaStringToken::GetString() const          { return aString; }
+const OUString& FormulaStringToken::GetString() const          { return aString; }
 bool FormulaStringToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aString == r.GetString();
 }
 
 
-const String& FormulaStringOpToken::GetString() const             { return aString; }
+const OUString& FormulaStringOpToken::GetString() const             { return aString; }
 bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && aString == r.GetString();
@@ -1346,7 +1346,7 @@ bool FormulaIndexToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && nIndex == r.GetIndex() &&
         mbGlobal == r.IsGlobal();
 }
-const String&   FormulaExternalToken::GetExternal() const    { return aExternal; }
+const OUString&   FormulaExternalToken::GetExternal() const    { return aExternal; }
 sal_uInt8            FormulaExternalToken::GetByte() const        { return nByte; }
 void            FormulaExternalToken::SetByte( sal_uInt8 n )      { nByte = n; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
@@ -1364,9 +1364,9 @@ bool FormulaErrorToken::operator==( const FormulaToken& r ) const
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
 }
 double          FormulaMissingToken::GetDouble() const       { return 0.0; }
-const String&   FormulaMissingToken::GetString() const
+const OUString&   FormulaMissingToken::GetString() const
 {
-    static  String              aDummyString;
+    static  OUString              aDummyString;
     return aDummyString;
 }
 bool FormulaMissingToken::operator==( const FormulaToken& r ) const

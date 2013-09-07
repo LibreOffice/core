@@ -105,7 +105,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                     bFailure = true;
                 break;
             case svString:
-                if (!pT->GetString().Len())
+                if (pT->GetString().isEmpty())
                     bFailure = true;
                 break;
             default:
@@ -320,7 +320,7 @@ private:
         // Get the information of the new token.
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        String aTabName = bExternal ? pToken->GetString() : String();
+        OUString aTabName = bExternal ? pToken->GetString() : OUString();
 
         bool bJoined = false;
         vector<ScTokenRef>::iterator itr = rTokens.begin(), itrEnd = rTokens.end();

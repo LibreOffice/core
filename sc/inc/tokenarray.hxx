@@ -91,9 +91,9 @@ public:
     formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
     formula::FormulaToken* AddRangeName( sal_uInt16 n, bool bGlobal );
     formula::FormulaToken* AddDBRange( sal_uInt16 n );
-    formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
-    formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
-    formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
+    formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const OUString& rName );
+    formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
+    formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
     formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );

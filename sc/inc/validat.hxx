@@ -62,33 +62,34 @@ enum ScValidErrorStyle
 
 class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
-    sal_uInt32          nKey;               // index in attributes
+private:
+    sal_uInt32 nKey;               // index in attributes
 
-    ScValidationMode    eDataMode;
-    sal_Bool                bShowInput;
-    sal_Bool                bShowError;
-    ScValidErrorStyle   eErrorStyle;
-    sal_Int16           mnListType;         // selection list type: none, unsorted, sorted.
-    String              aInputTitle;
-    String              aInputMessage;
-    String              aErrorTitle;
-    String              aErrorMessage;
+    ScValidationMode eDataMode;
+    bool bShowInput;
+    bool bShowError;
+    ScValidErrorStyle eErrorStyle;
+    sal_Int16 mnListType;         // selection list type: none, unsorted, sorted.
+    OUString aInputTitle;
+    OUString aInputMessage;
+    OUString aErrorTitle;
+    OUString aErrorMessage;
 
-    sal_Bool                bIsUsed;            // temporary during saving
+    bool bIsUsed;            // temporary during saving
 
-    sal_Bool            DoMacro( const ScAddress& rPos, const String& rInput,
+    bool DoMacro( const ScAddress& rPos, const OUString& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
-    sal_Bool            DoScript( const ScAddress& rPos, const String& rInput,
+    bool DoScript( const ScAddress& rPos, const OUString& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
     using ScConditionEntry::operator==;
 
 public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
-                                const String& rExpr1, const String& rExpr2,
+                                const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const String& rExprNmsp1 = EMPTY_STRING, const String& rExprNmsp2 = EMPTY_STRING,
+                                const OUString& rExprNmsp1 = EMPTY_OUSTRING, const OUString& rExprNmsp2 = EMPTY_OUSTRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
@@ -105,15 +106,15 @@ public:
 
     void            ResetInput();
     void            ResetError();
-    void            SetInput( const String& rTitle, const String& rMsg );
-    void            SetError( const String& rTitle, const String& rMsg,
+    void            SetInput( const OUString& rTitle, const OUString& rMsg );
+    void            SetError( const OUString& rTitle, const OUString& rMsg,
                                 ScValidErrorStyle eStyle );
 
-    sal_Bool            GetInput( String& rTitle, String& rMsg ) const
+    bool            GetInput( OUString& rTitle, OUString& rMsg ) const
                         { rTitle = aInputTitle; rMsg = aInputMessage; return bShowInput; }
-    sal_Bool            GetErrMsg( String& rTitle, String& rMsg, ScValidErrorStyle& rStyle ) const;
+    bool            GetErrMsg( OUString& rTitle, OUString& rMsg, ScValidErrorStyle& rStyle ) const;
 
-    sal_Bool            HasErrMsg() const       { return bShowError; }
+    bool            HasErrMsg() const       { return bShowError; }
 
     ScValidationMode GetDataMode() const    { return eDataMode; }
 
@@ -137,17 +138,17 @@ public:
     bool IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
-    sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
-    void            DoCalcError( ScFormulaCell* pCell ) const;
+    bool DoError( Window* pParent, const OUString& rInput, const ScAddress& rPos ) const;
+    void DoCalcError( ScFormulaCell* pCell ) const;
 
-    sal_Bool            IsEmpty() const;
+    bool IsEmpty() const;
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
-    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
-    sal_Bool            IsUsed() const          { return bIsUsed; }
+    void            SetUsed(bool bSet)      { bIsUsed = bSet; }
+    bool            IsUsed() const          { return bIsUsed; }
 
-    sal_Bool            EqualEntries( const ScValidationData& r ) const;    // for undo
+    bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 
     //  sort (using std::set) by index
     //  operator== only for sorting
@@ -203,18 +204,18 @@ public:
     iterator end();
     const_iterator end() const;
 
-    void    InsertNew( ScValidationData* pNew )
+    void InsertNew( ScValidationData* pNew )
                 { if (!maData.insert(pNew).second) delete pNew; }
 
     ScValidationData* GetData( sal_uInt32 nKey );
 
-    void    CompileXML();
+    void CompileXML();
     void UpdateReference( sc::RefUpdateContext& rCxt );
     void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
 
-    sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
+    bool operator==( const ScValidationDataList& r ) const;      // for ref-undo
 
     void clear();
 

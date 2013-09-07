@@ -158,7 +158,7 @@ public:
 
     /** Return string if type formula::svString or formula::svHybridCell or formula::svMatrixCell and
         upper left formula::svString, else empty string. */
-    const String& GetString() const;
+    const OUString& GetString() const;
 
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;
@@ -179,7 +179,7 @@ public:
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
-    SC_DLLPUBLIC void SetHybridFormula( const String & rFormula );
+    SC_DLLPUBLIC void SetHybridFormula( const OUString & rFormula );
 
     SC_DLLPUBLIC void SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
 

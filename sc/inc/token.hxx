@@ -212,17 +212,17 @@ class ScExternalSingleRefToken : public ScToken
 {
 private:
     sal_uInt16                  mnFileId;
-    String                      maTabName;
+    OUString                      maTabName;
     ScSingleRefData             maSingleRef;
 
                                 ScExternalSingleRefToken(); // disabled
 public:
-                                ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r );
+                                ScExternalSingleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& r );
                                 ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
     virtual                     ~ScExternalSingleRefToken();
 
     virtual sal_uInt16                  GetIndex() const;
-    virtual const String&           GetString() const;
+    virtual const OUString&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
@@ -234,17 +234,17 @@ class ScExternalDoubleRefToken : public ScToken
 {
 private:
     sal_uInt16                  mnFileId;
-    String                      maTabName;  // name of the first sheet
+    OUString                      maTabName;  // name of the first sheet
     ScComplexRefData            maDoubleRef;
 
                                 ScExternalDoubleRefToken(); // disabled
 public:
-                                ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r );
+                                ScExternalDoubleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& r );
                                 ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
     virtual                     ~ScExternalDoubleRefToken();
 
     virtual sal_uInt16                 GetIndex() const;
-    virtual const String&          GetString() const;
+    virtual const OUString&          GetString() const;
     virtual const ScSingleRefData& GetSingleRef() const;
     virtual ScSingleRefData&       GetSingleRef();
     virtual const ScSingleRefData& GetSingleRef2() const;
@@ -259,15 +259,15 @@ class ScExternalNameToken : public ScToken
 {
 private:
     sal_uInt16                  mnFileId;
-    String                      maName;
+    OUString                      maName;
 private:
                                 ScExternalNameToken(); // disabled
 public:
-                                ScExternalNameToken( sal_uInt16 nFileId, const String& rName );
+                                ScExternalNameToken( sal_uInt16 nFileId, const OUString& rName );
                                 ScExternalNameToken( const ScExternalNameToken& r );
     virtual                     ~ScExternalNameToken();
     virtual sal_uInt16              GetIndex() const;
-    virtual const String&       GetString() const;
+    virtual const OUString&       GetString() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalNameToken(*this); }
 };
@@ -325,7 +325,7 @@ public:
             bool                IsInherited() const { return bInherited; }
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
     virtual double              GetDouble() const;
-    virtual const String &      GetString() const;
+    virtual const OUString &      GetString() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScEmptyCellToken(*this); }
 };
@@ -345,7 +345,7 @@ public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
     virtual double              GetDouble() const;
-    virtual const String &      GetString() const;
+    virtual const OUString &      GetString() const;
     virtual const ScMatrix*     GetMatrix() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const;
@@ -414,7 +414,7 @@ class SC_DLLPUBLIC ScHybridCellToken : public ScToken
 {
 private:
     double mfDouble;
-    String maString;
+    OUString maString;
     OUString maFormula;
 public:
     ScHybridCellToken( double f,
@@ -426,7 +426,7 @@ public:
 
     const OUString& GetFormula() const  { return maFormula; }
     virtual double GetDouble() const;
-    virtual const String& GetString() const;
+    virtual const OUString& GetString() const;
     virtual bool operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken* Clone() const { return new ScHybridCellToken(*this); }
 };

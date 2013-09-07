@@ -732,7 +732,7 @@ void Chart2Positioner::createPositionMap()
 
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        String aTabName = bExternal ? pToken->GetString() : String();
+        OUString aTabName = bExternal ? pToken->GetString() : OUString();
 
         ScComplexRefData aData;
         if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr) )
@@ -960,7 +960,7 @@ private:
             return false;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        String aTabName = bExternal ? pToken->GetString() : String();
+        OUString aTabName = bExternal ? pToken->GetString() : OUString();
 
         // In saving to XML, we don't prepend address with '$'.
         setRelative(aData.Ref1);

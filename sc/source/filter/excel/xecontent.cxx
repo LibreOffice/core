@@ -1476,13 +1476,13 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     if( const ScValidationData* pValData = GetDoc().GetValidationEntry( mnScHandle ) )
     {
         // prompt box - empty string represented by single NUL character
-        String aTitle, aText;
+        OUString aTitle, aText;
         bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == sal_True);
-        if( aTitle.Len() )
+        if( !aTitle.isEmpty() )
             maPromptTitle.Assign( aTitle );
         else
             maPromptTitle.Assign( '\0' );
-        if( aText.Len() )
+        if( !aText.isEmpty() )
             maPromptText.Assign( aText );
         else
             maPromptText.Assign( '\0' );
@@ -1490,11 +1490,11 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
         bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == sal_True);
-        if( aTitle.Len() )
+        if( !aTitle.isEmpty() )
             maErrorTitle.Assign( aTitle );
         else
             maErrorTitle.Assign( '\0' );
-        if( aText.Len() )
+        if( !aText.isEmpty() )
             maErrorText.Assign( aText );
         else
             maErrorText.Assign( '\0' );

@@ -279,8 +279,8 @@ bool ScFormulaResult::IsMultiline() const
 {
     if (meMultiline == MULTILINE_UNKNOWN)
     {
-        const String& rStr = GetString();
-        if (rStr.Len() && rStr.Search( '\n' ) != STRING_NOTFOUND)
+        const OUString& rStr = GetString();
+        if (!rStr.isEmpty() && rStr.indexOf( '\n' ) != -1)
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_TRUE;
         else
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
@@ -389,7 +389,7 @@ double ScFormulaResult::GetDouble() const
     return mfValue;
 }
 
-const String & ScFormulaResult::GetString() const
+const OUString & ScFormulaResult::GetString() const
 {
     if (mbToken && mpToken)
     {
@@ -441,8 +441,8 @@ void ScFormulaResult::SetHybridDouble( double f )
             SetDouble(f);
         else
         {
-            String aString( GetString());
-            String aFormula( GetHybridFormula());
+            OUString aString( GetString());
+            OUString aFormula( GetHybridFormula());
             mpToken->DecRef();
             mpToken = new ScHybridCellToken( f, aString, aFormula);
             mpToken->IncRef();
@@ -460,7 +460,7 @@ void ScFormulaResult::SetHybridString( const OUString & rStr )
 {
     // Obtain values before changing anything.
     double f = GetDouble();
-    String aFormula( GetHybridFormula());
+    OUString aFormula( GetHybridFormula());
     ResetToDefaults();
     if (mbToken && mpToken)
         mpToken->DecRef();
@@ -469,11 +469,11 @@ void ScFormulaResult::SetHybridString( const OUString & rStr )
     mbToken = true;
 }
 
-void ScFormulaResult::SetHybridFormula( const String & rFormula )
+void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
 {
     // Obtain values before changing anything.
     double f = GetDouble();
-    String aStr( GetString());
+    OUString aStr( GetString());
     ResetToDefaults();
     if (mbToken && mpToken)
         mpToken->DecRef();

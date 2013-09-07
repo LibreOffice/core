@@ -755,10 +755,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     sal_Bool bBlank = sal_True;
                     sal_Int16 nListType = ValidListType::UNSORTED;
                     sal_Bool bShowHelp = false;
-                    String aHelpTitle, aHelpText;
+                    OUString aHelpTitle, aHelpText;
                     sal_Bool bShowError = false;
                     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
-                    String aErrTitle, aErrText;
+                    OUString aErrTitle, aErrText;
 
                     ScDocument* pDoc = GetViewData()->GetDocument();
                     SCCOL nCurX = GetViewData()->GetCurX();
