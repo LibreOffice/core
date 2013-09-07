@@ -38,29 +38,21 @@
 
 #include <svx/svxdlg.hxx>
 
-// --------------
 // - Namespaces -
-// --------------
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// -----------------
 // - GalleryButton -
-// -----------------
 
 GalleryButton::GalleryButton( GalleryBrowser1* pParent, WinBits nWinBits ) :
     PushButton( pParent, nWinBits )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryButton::~GalleryButton()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryButton::KeyInput( const KeyEvent& rKEvt )
 {
@@ -68,9 +60,7 @@ void GalleryButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput( rKEvt );
 }
 
-// -----------------------
 // - GalleryThemeListBox -
-// -----------------------
 
 GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWinBits ) :
     ListBox( pParent, nWinBits )
@@ -78,13 +68,9 @@ GalleryThemeListBox::GalleryThemeListBox( GalleryBrowser1* pParent, WinBits nWin
     InitSettings();
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryThemeListBox::~GalleryThemeListBox()
 {
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryThemeListBox::InitSettings()
 {
@@ -93,8 +79,6 @@ void GalleryThemeListBox::InitSettings()
     SetControlForeground( GALLERY_FG_COLOR );
 }
 
-// -----------------------------------------------------------------------
-
 void GalleryThemeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
@@ -102,8 +86,6 @@ void GalleryThemeListBox::DataChanged( const DataChangedEvent& rDCEvt )
     else
         ListBox::DataChanged( rDCEvt );
 }
-
-// -----------------------------------------------------------------------------
 
 long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -127,9 +109,7 @@ long GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
     return( nDone ? nDone : ListBox::PreNotify( rNEvt ) );
 }
 
-// -------------------
 // - GalleryBrowser1 -
-// -------------------
 
 GalleryBrowser1::GalleryBrowser1(
     Window* pParent,
@@ -172,8 +152,6 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes->Show( sal_True );
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryBrowser1::~GalleryBrowser1()
 {
     EndListening( *mpGallery );
@@ -182,8 +160,6 @@ GalleryBrowser1::~GalleryBrowser1()
     delete mpExchangeData;
     mpExchangeData = NULL;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
@@ -208,8 +184,6 @@ sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEnt
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser1::ImplAdjustControls()
 {
     const Size  aOutSize( GetOutputSizePixel() );
@@ -222,8 +196,6 @@ void GalleryBrowser1::ImplAdjustControls()
     mpThemes->SetPosSizePixel( Point( 0, nStartY ),
                                Size( aOutSize.Width(), aOutSize.Height() - nStartY ) );
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData )
 {
@@ -251,8 +223,6 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     {
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 {
@@ -291,8 +261,6 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
@@ -317,8 +285,6 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
             LINK( this, GalleryBrowser1, EndThemePropertiesDlgHdl ) );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog, bool bCreateNew )
 {
@@ -363,23 +329,17 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
     Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ) );
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
 {
     ImplEndGalleryThemeProperties( pDialog, true );
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
 {
     ImplEndGalleryThemeProperties( pDialog, false );
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
 {
@@ -388,8 +348,6 @@ IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, VclAbstractDialog2*, p
     mpThemePropsDlgItemSet = 0;
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 {
@@ -485,15 +443,11 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser1::Resize()
 {
     Control::Resize();
     ImplAdjustControls();
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::GetFocus()
 {
@@ -501,8 +455,6 @@ void GalleryBrowser1::GetFocus()
     if( mpThemes )
         mpThemes->GrabFocus();
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -560,14 +512,10 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser1::ShowContextMenu()
 {
     Application::PostUserEvent( LINK( this, GalleryBrowser1, ShowContextMenuHdl ), this );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
@@ -638,8 +586,6 @@ sal_Bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
 {
     ::std::vector< sal_uInt16 > aExecVector;
@@ -669,15 +615,11 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
 {
     ImplExecute( pMenu->GetCurItemId() );
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
 {
@@ -685,8 +627,6 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
         maThemeSlectionHandler();
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
 {

@@ -47,16 +47,8 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 
-// --------------
-// - Namespaces -
-// --------------
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
-
-// ----------
-// - ResMgr -
-// ----------
 
 ResMgr* GetGalleryResMgr()
 {
@@ -71,10 +63,6 @@ ResMgr* GetGalleryResMgr()
     return pGalleryResMgr;
 }
 
-// -------------------------
-// - GalleryResGetBitmapEx -
-// -------------------------
-
 BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
 {
     BitmapEx aBmpEx( GAL_RES( nId ) );
@@ -85,10 +73,6 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
     return aBmpEx;
 }
 
-// ----------------------
-// - SgaUserDataFactory -
-// ----------------------
-
 IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 {
     if ( pObjFactory->nInventor == IV_IMAPINFO && pObjFactory->nIdentifier == ID_IMAPINFO )
@@ -96,10 +80,6 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 
     return 0L;
 }
-
-// ------------------------
-// - GalleryGraphicImport -
-// ------------------------
 
 sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName, sal_Bool bShowProgress )
@@ -128,10 +108,6 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     return nRet;
 }
-
-// -----------------------
-// - GallerySvDrawImport -
-// -----------------------
 
 sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 {
@@ -177,10 +153,6 @@ sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
     return bRet;
 }
 
-// ---------------------
-// - CreateIMapGraphic -
-// ---------------------
-
 sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
 {
     sal_Bool bRet = sal_False;
@@ -194,7 +166,7 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
         {
             const sal_uInt16 nCount = pObj->GetUserDataCount();
 
-            // gibt es in den User-Daten eine IMap-Information?
+            // Exist in the user data an IMap information?
             for ( sal_uInt16 i = 0; i < nCount; i++ )
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
@@ -212,10 +184,6 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
 
     return bRet;
 }
-
-// --------------------
-// - GetReducedString -
-// --------------------
 
 OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
 {
@@ -243,8 +211,6 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
     return aReduced;
 }
 
-// -----------------------------------------------------------------------------
-
 String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 {
     OUString aRet;
@@ -257,8 +223,6 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool FileExists( const INetURLObject& rURL )
 {
@@ -287,8 +251,6 @@ sal_Bool FileExists( const INetURLObject& rURL )
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool CreateDir( const INetURLObject& rURL )
 {
@@ -325,8 +287,6 @@ sal_Bool CreateDir( const INetURLObject& rURL )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 {
     sal_Bool bRet = sal_False;
@@ -352,8 +312,6 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool KillFile( const INetURLObject& rURL )
 {
@@ -383,9 +341,6 @@ sal_Bool KillFile( const INetURLObject& rURL )
     return bRet;
 }
 
-// -------------------
-// - GalleryProgress -
-// -------------------
 DBG_NAME(GalleryProgress)
 
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
@@ -423,14 +378,10 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     }
 }
 
-// ------------------------------------------------------------------------
-
 GalleryProgress::~GalleryProgress()
 {
     DBG_DTOR(GalleryProgress,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
 {
@@ -438,9 +389,6 @@ void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
         mxProgressBar->setValue( std::min( (sal_uIntPtr)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (sal_uIntPtr) GALLERY_PROGRESS_RANGE ) );
 }
 
-// -----------------------
-// - GalleryTransferable -
-// -----------------------
 DBG_NAME(GalleryTransferable)
 
 GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy ) :
@@ -456,14 +404,10 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObj
     InitData( bLazy );
 }
 
-// ------------------------------------------------------------------------
-
 GalleryTransferable::~GalleryTransferable()
 {
     DBG_DTOR(GalleryTransferable,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryTransferable::InitData( bool bLazy )
 {
@@ -524,8 +468,6 @@ void GalleryTransferable::InitData( bool bLazy )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryTransferable::AddSupportedFormats()
 {
     if( SGA_OBJ_SVDRAW == meObjectKind )
@@ -557,8 +499,6 @@ void GalleryTransferable::AddSupportedFormats()
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
 {
@@ -596,8 +536,6 @@ sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
                                            sal_uInt32, const datatransfer::DataFlavor& )
 {
@@ -612,8 +550,6 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
     mpTheme->SetDragging( sal_False );
@@ -626,8 +562,6 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.Clear();
@@ -636,14 +570,10 @@ void GalleryTransferable::ObjectReleased()
     delete mpURL, mpURL = NULL;
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryTransferable::CopyToClipboard( Window* pWindow )
 {
     TransferableHelper::CopyToClipboard( pWindow );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
                                      sal_Int32 nDragPointer, sal_Int32 nDragImage )

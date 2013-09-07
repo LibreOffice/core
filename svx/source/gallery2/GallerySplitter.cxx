@@ -31,16 +31,10 @@ GallerySplitter::GallerySplitter(
     DBG_CTOR(GallerySplitter,NULL);
 }
 
-
-
-
 GallerySplitter::~GallerySplitter()
 {
     DBG_DTOR(GallerySplitter,NULL);
 }
-
-
-
 
 void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 {

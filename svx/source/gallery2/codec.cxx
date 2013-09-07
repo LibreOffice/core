@@ -23,9 +23,8 @@
 #include <tools/debug.hxx>
 #include "codec.hxx"
 
-// ----------------
 // - GalleryCodec -
-// ----------------
+
 DBG_NAME(GalleryCodec)
 
 GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
@@ -34,14 +33,10 @@ GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
     DBG_CTOR(GalleryCodec,NULL);
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryCodec::~GalleryCodec()
 {
     DBG_DTOR(GalleryCodec,NULL);
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
@@ -67,8 +62,6 @@ sal_Bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryCodec::Write( SvStream& rStmToWrite )
 {
     sal_uInt32 nPos, nCompSize;
@@ -93,8 +86,6 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
     rStm << nCompSize;
     rStm.Seek( STREAM_SEEK_TO_END );
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryCodec::Read( SvStream& rStmToRead )
 {
@@ -128,16 +119,16 @@ void GalleryCodec::Read( SvStream& rStmToRead )
 
                     if ( nRunByte > 2 )
                     {
-                        // absolutes Fuellen
+                        // filling absolutely
                         memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
                         pInBuf += nRunByte;
                         nIndex += nRunByte;
 
-                        // WORD-Alignment beachten
+                        // note WORD alignment
                         if ( nRunByte & 1 )
                             pInBuf++;
                     }
-                    else if ( nRunByte == 1 )   // Ende des Bildes
+                    else if ( nRunByte == 1 )   // End of the image
                         bEndDecoding = sal_True;
                 }
                 else

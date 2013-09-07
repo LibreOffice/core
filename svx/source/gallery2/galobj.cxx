@@ -41,10 +41,6 @@
 
 using namespace ::com::sun::star;
 
-// -------------
-// - SgaObject -
-// -------------
-
 SgaObject::SgaObject()
 :   bIsValid    ( sal_False ),
     bIsThumbBmp ( sal_True )
@@ -92,8 +88,6 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
 
     return aRetval;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
 {
@@ -173,8 +167,6 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
@@ -203,8 +195,6 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
 {
     sal_uInt32      nTmp32;
@@ -224,8 +214,6 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
     aURL = INetURLObject(aTmpStr);
 }
-
-// ------------------------------------------------------------------------
 
 const OUString SgaObject::GetTitle() const
 {
@@ -259,22 +247,16 @@ const OUString SgaObject::GetTitle() const
     return aReturnValue;
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObject::SetTitle( const OUString& rTitle )
 {
     aTitle = rTitle;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
 {
     rObj.WriteData( rOut, "" );
     return rOut;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIn, SgaObject& rObj )
 {
@@ -286,15 +268,9 @@ SvStream& operator>>( SvStream& rIn, SgaObject& rObj )
     return rIn;
 }
 
-// ----------------
-// - SgaObjectBmp -
-// ----------------
-
 SgaObjectBmp::SgaObjectBmp()
 {
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
@@ -305,15 +281,11 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
         Init( aGraphic, rURL );
 }
 
-// ------------------------------------------------------------------------
-
 SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& )
 {
     if( FileExists( rURL ) )
         Init( rGraphic, rURL );
 }
-
-// ------------------------------------------------------------------------
 
 void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 {
@@ -321,19 +293,15 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
     bIsValid = CreateThumb( rGraphic );
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObjectBmp::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
-    // Version setzen
+    // Set version
     SgaObject::WriteData( rOut, rDestDir );
     char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, OString()); //dummy
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
-
-// ------------------------------------------------------------------------
 
 void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
@@ -346,9 +314,6 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
         aTitle = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
 }
 
-// ------------------
-// - SgaObjectSound -
-// ------------------
 DBG_NAME(SgaObjectSound)
 
 SgaObjectSound::SgaObjectSound() :
@@ -356,8 +321,6 @@ SgaObjectSound::SgaObjectSound() :
 {
     DBG_CTOR(SgaObjectSound,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     eSoundType( SOUND_STANDARD )
@@ -374,14 +337,10 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
         bIsValid = sal_False;
 }
 
-// ------------------------------------------------------------------------
-
 SgaObjectSound::~SgaObjectSound()
 {
     DBG_DTOR(SgaObjectSound,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 BitmapEx SgaObjectSound::GetThumbBmp() const
 {
@@ -408,16 +367,12 @@ BitmapEx SgaObjectSound::GetThumbBmp() const
     return aBmpEx;
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObjectSound::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     rOut << (sal_uInt16) eSoundType;
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
-
-// ------------------------------------------------------------------------
 
 void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
@@ -434,15 +389,9 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     }
 }
 
-// -----------------
-// - SgaObjectAnim -
-// -----------------
-
 SgaObjectAnim::SgaObjectAnim()
 {
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
                               const INetURLObject& rURL,
@@ -452,30 +401,18 @@ SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
     bIsValid = CreateThumb( rGraphic );
 }
 
-// -----------------
-// - SgaObjectINet -
-// -----------------
-
 SgaObjectINet::SgaObjectINet()
 {
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName ) :
             SgaObjectAnim   ( rGraphic, rURL, rFormatName )
 {
 }
 
-// -------------------
-// - SgaObjectSvDraw -
-// -------------------
-
 SgaObjectSvDraw::SgaObjectSvDraw()
 {
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject& rURL )
 {
@@ -483,7 +420,6 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
     bIsValid = CreateThumb( rModel );
 }
 
-// ------------------------------------------------------------------------
 DBG_NAME(SvxGalleryDrawModel)
 
 SvxGalleryDrawModel::SvxGalleryDrawModel()
@@ -512,8 +448,6 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
     }
 }
 
-// ------------------------------------------------------------------------
-
 SvxGalleryDrawModel::~SvxGalleryDrawModel()
 {
     if( mxDoc.Is() )
@@ -521,8 +455,6 @@ SvxGalleryDrawModel::~SvxGalleryDrawModel()
 
     DBG_DTOR(SvxGalleryDrawModel,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 {
@@ -537,8 +469,6 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 {
@@ -597,15 +527,11 @@ sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void SgaObjectSvDraw::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
-
-// ------------------------------------------------------------------------
 
 void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 {
