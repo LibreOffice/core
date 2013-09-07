@@ -17,6 +17,8 @@ public final class Fragments {
         }
 
         public static final String COMPUTER = "COMPUTER";
+
+        public static final String MINUTES = "MINUTES";
     }
 }
 

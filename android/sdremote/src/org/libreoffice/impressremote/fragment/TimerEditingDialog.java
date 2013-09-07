@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import org.libreoffice.impressremote.R;
+import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 
 public class TimerEditingDialog extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener, DialogInterface.OnClickListener {
@@ -40,7 +41,7 @@ public class TimerEditingDialog extends SherlockDialogFragment implements TimePi
     private static Bundle buildArguments(int aMinutes) {
         Bundle aArguments = new Bundle();
 
-        aArguments.putInt("MINUTES", aMinutes);
+        aArguments.putInt(Fragments.Arguments.MINUTES, aMinutes);
 
         return aArguments;
     }
@@ -49,7 +50,7 @@ public class TimerEditingDialog extends SherlockDialogFragment implements TimePi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMinutes = getArguments().getInt("MINUTES");
+        mMinutes = getArguments().getInt(Fragments.Arguments.MINUTES);
     }
 
     @Override

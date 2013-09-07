@@ -12,5 +12,7 @@ public final class SavedStates {
 
         public static final String PIN = "PIN";
         public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
+
+        public static final String MODE = "MODE";
     }
 }

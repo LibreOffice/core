@@ -36,6 +36,7 @@ import org.libreoffice.impressremote.fragment.TimerSettingDialog;
 import org.libreoffice.impressremote.util.FragmentOperator;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.util.Preferences;
+import org.libreoffice.impressremote.util.SavedStates;
 
 public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
     private static enum Mode {
@@ -65,7 +66,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             return Mode.PAGER;
         }
 
-        return (Mode) aSavedInstanceState.getSerializable("MODE");
+        return (Mode) aSavedInstanceState.getSerializable(SavedStates.Keys.MODE);
     }
 
     private void setUpHomeButton() {
@@ -94,9 +95,9 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private boolean isKeepingScreenOnRequired() {
-        Preferences preferences = Preferences.getSettingsInstance(this);
+        Preferences aPreferences = Preferences.getSettingsInstance(this);
 
-        return preferences.getBoolean(Preferences.Keys.KEEP_SCREEN_ON);
+        return aPreferences.getBoolean(Preferences.Keys.KEEP_SCREEN_ON);
     }
 
     private void bindService() {
@@ -272,9 +273,9 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private boolean areVolumeKeysActionsRequired() {
-        Preferences preferences = Preferences.getSettingsInstance(this);
+        Preferences aPreferences = Preferences.getSettingsInstance(this);
 
-        return preferences.getBoolean(Preferences.Keys.VOLUME_KEYS_ACTIONS);
+        return aPreferences.getBoolean(Preferences.Keys.VOLUME_KEYS_ACTIONS);
     }
 
     private boolean isLastSlideDisplayed() {
@@ -390,8 +391,8 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void callEditingTimer(Timer aTimer) {
-        DialogFragment aFragment = buildTimerEditingDialog(aTimer);
-        aFragment.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
+        DialogFragment aTimerDialog = buildTimerEditingDialog(aTimer);
+        aTimerDialog.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
 
         aTimer.pause();
     }
@@ -405,8 +406,8 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void callSettingTimer() {
-        DialogFragment aFragment = TimerSettingDialog.newInstance();
-        aFragment.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
+        DialogFragment aTimerDialog = TimerSettingDialog.newInstance();
+        aTimerDialog.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
     }
 
     private void stopSlideShow() {
@@ -439,7 +440,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void saveMode(Bundle aOutState) {
-        aOutState.putSerializable("MODE", mMode);
+        aOutState.putSerializable(SavedStates.Keys.MODE, mMode);
     }
 
     @Override

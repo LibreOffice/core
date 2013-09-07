@@ -44,8 +44,8 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onActivityCreated(Bundle aSavedInstanceState) {
+        super.onActivityCreated(aSavedInstanceState);
 
         bindService();
     }

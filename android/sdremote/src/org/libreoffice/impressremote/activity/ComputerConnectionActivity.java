@@ -20,8 +20,8 @@ import org.libreoffice.impressremote.communication.Server;
 
 public class ComputerConnectionActivity extends SherlockFragmentActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle aSavedInstanceState) {
+        super.onCreate(aSavedInstanceState);
 
         setUpHomeButton();
         setUpTitle();
