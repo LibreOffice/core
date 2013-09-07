@@ -170,6 +170,11 @@ SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const String& rFil
     aWarningImageIM.SetImage(WarningBox::GetStandardImage());
     aFileNameED.SetText(rFileName);
     aFileNameED.SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
+
+    INetURLObject aTmp(rFileName);
+    aWarningFI.SetText(aWarningFI.GetText().replaceAll("%1", aTmp.getName(
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)));
+
     ModifyHdl( &aFileNameED );
 }
 
