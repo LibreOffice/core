@@ -65,8 +65,6 @@ published service UnoControlDateFieldModel
 
 
     /** specifies the date displayed in the control.
-
-        <p>The date must be specified in the format YYYYMMDD.</p>
      */
     [property] ::com::sun::star::util::Date Date;
 
