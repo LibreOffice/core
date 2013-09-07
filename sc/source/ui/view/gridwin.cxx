@@ -5420,7 +5420,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
     // Check only up to 256 cells at a time.
     size_t nTotalCellCount = 0;
     size_t nTextCellCount = 0;
-    bool bChanged = false;
+    bool bSpellCheckPerformed = false;
 
     while (pCell)
     {
@@ -5486,8 +5486,9 @@ bool ScGridWindow::ContinueOnlineSpelling()
                 ScPaintHint aHint(ScRange(nCol, nRow, nTab), PAINT_GRID);
                 aHint.SetPrintFlag(false);
                 pDoc->GetDocumentShell()->Broadcast(aHint);
-                bChanged = true;
             }
+
+            bSpellCheckPerformed = true;
         }
 
         if (nTotalCellCount >= 255 || nTextCellCount >= 1)
@@ -5512,7 +5513,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
         mpSpellCheckCxt->maPos.setInvalid();
     }
 
-    return bChanged;
+    return bSpellCheckPerformed;
 }
 
 void ScGridWindow::EnableAutoSpell( bool bEnable )
