@@ -30,6 +30,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include <rtl/character.hxx>
+
 #include <algorithm>
 #include <limits>
 
@@ -2209,7 +2211,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
         }
         if (p >= pEnd)
             break;
-        sal_uInt32 nChar = INetMIME::toLowerCase(*p++);
+        sal_uInt32 nChar = rtl::toAsciiLowerCase(*p++);
         while (pFirst <= pLast && sal_uChar(pFirst->m_pPrefix[i]) < nChar)
             ++pFirst;
         while (pFirst <= pLast && sal_uChar(pLast->m_pPrefix[i]) > nChar)
@@ -2219,7 +2221,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
     {
         sal_Char const * q = pFirst->m_pPrefix + i;
         while (p < pEnd && *q != '\0'
-               && INetMIME::toLowerCase(*p) == sal_uChar(*q))
+               && rtl::toAsciiLowerCase(*p) == sal_uChar(*q))
         {
             ++p;
             ++q;
@@ -3229,7 +3231,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                              eCharset, eEscapeType);
                 appendUCS4(aTheSynPath,
                            eEscapeType == ESCAPE_NO ?
-                               INetMIME::toLowerCase(nUTF32) : nUTF32,
+                               rtl::toAsciiLowerCase(nUTF32) : nUTF32,
                            eEscapeType, bOctets, PART_VIM, '=',
                            eCharset, false);
             }
