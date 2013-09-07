@@ -147,7 +147,7 @@ namespace svgio
 
             if(mpXLink && Display_none != mpXLink->getDisplay())
             {
-                // decompose childs
+                // decompose children
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
                 // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the

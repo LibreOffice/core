@@ -58,9 +58,9 @@ namespace svgio
             virtual void seekReferenceWidth(double& fWidth, bool& bHasFound) const;
             virtual void seekReferenceHeight(double& fHeight, bool& bHasFound) const;
 
-            /// InfoProvider support for % values in childs
+            /// InfoProvider support for % values in children
             // The returned 'CurrentViewPort' is the viewport as it is set by this svg element
-            // and as it is needed to resolve relative values in childs
+            // and as it is needed to resolve relative values in children
             // The method does not check for invalid width and height
             virtual const basegfx::B2DRange getCurrentViewPort() const;
 

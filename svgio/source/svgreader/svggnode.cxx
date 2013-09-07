@@ -94,7 +94,7 @@ namespace svgio
                 {
                     drawinglayer::primitive2d::Primitive2DSequence aContent;
 
-                    // decompose childs
+                    // decompose children
                     SvgNode::decomposeSvgNode(aContent, bReferenced);
 
                     if(aContent.hasElements())

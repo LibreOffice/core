@@ -246,7 +246,7 @@ namespace svgio
         {
             drawinglayer::primitive2d::Primitive2DSequence aSequence;
 
-            // decompose childs
+            // decompose children
             SvgNode::decomposeSvgNode(aSequence, bReferenced);
 
             if(aSequence.hasElements())
@@ -697,7 +697,7 @@ namespace svgio
                             return SvgNode::getCurrentViewPort();
                     }
                 }
-// ToDo: Is it possible to decompose and use the bounding box of the childs, if even the
+// ToDo: Is it possible to decompose and use the bounding box of the children, if even the
 //       outermost svg has no information to resolve percentage? Is it worth, how expensive is it?
 
             }
