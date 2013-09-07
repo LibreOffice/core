@@ -226,9 +226,11 @@ private:
 
     void CutComment( OString &rText );
 
+    void WriteUTF8ByteOrderMarkToOutput() { *aOutput.mSimple << '\xEF' << '\xBB' << '\xBF'; }
+
 public:
     Export( const OString &rOutput );
-    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage);
+    Export(const OString &rMergeSource, const OString &rOutput, const OString &rLanguage, bool bUTF8BOM);
     ~Export();
 
     void Init();
