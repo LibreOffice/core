@@ -130,7 +130,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
     else
     {
-        m_aNF_Period.SetValue( 2 );
+        m_aNF_Degree.SetValue( 2 );
     }
 
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
