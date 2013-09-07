@@ -29,6 +29,16 @@ Installation gid_Installation_Sdk
 #endif
 End
 
+#if defined WNT
+
+Directory gid_Dir_Sdkoo_Root
+    ParentID = PREDEFINED_PROGDIR;
+    HostName = "${PRODUCTNAME}_${PRODUCTVERSION}_${POSTVERSIONEXTENSION}";
+    Styles = (OFFICEDIRECTORY, ISINSTALLLOCATION);
+End
+
+#endif
+
 Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";

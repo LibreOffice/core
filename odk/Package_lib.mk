@@ -32,7 +32,7 @@ $(call gb_Package_add_symbolic_link,odk_lib,$(gb_Package_SDKDIRNAME)/lib/$(1),..
 endef
 
 $(foreach lib,cppu cppuhelper purpenvhelper sal salhelper,\
-$(eval $(call odk_add_sybolic_link,$(notdir $(call gb_Library_get_target,$(lib))))))
+$(eval $(call odk_add_sybolic_link,$(call gb_Library_get_runtime_filename,$(lib)))))
 endif
 
 # vim: set noet sw=4 ts=4:
