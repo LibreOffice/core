@@ -208,17 +208,16 @@ sub execute     #11.07.2007 10:02
 {
     my $commandline = shift;
     my $result = "";
+    my $errorlines = "";
 
-      print "$commandline\n" if ($debug);
-      open(PIPE, "$commandline 2>&1 |") || die "Error: Cant open pipe!\n";
-      while ( $result = <PIPE> ) {
-          print LOG "$result" if ($opt_log);        # logging
-          if ( $result =~ /SignTool Error\:/ ) {
-            close PIPE;
-              print_error( "$result\n" );
-          } # if error
-      } # while
-      close PIPE;
+    print "$commandline\n" if ($debug);
+    open(PIPE, "$commandline 2>&1 |") || die "Error: Cannot execute '$commandline' - $!\n";
+    while ( $result = <PIPE> ) {
+        print LOG "$result" if ($opt_log);
+        $errorlines .= $result if ($result =~ /SignTool Error\:/);
+    } # while
+    close PIPE;
+    print_error( "$errorlines\n" ) if ($errorlines);
 }   ##execute
 
 ############################################################################
