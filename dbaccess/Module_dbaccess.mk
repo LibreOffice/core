@@ -31,8 +31,11 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	UIConfig_dbtdata \
 ))
 
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_firebird_test \
 ))
+endif
 
 # disable test because it still fails in some situations
 #    CppunitTest_dbaccess_macros_test \
