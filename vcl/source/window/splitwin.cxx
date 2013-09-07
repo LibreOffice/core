@@ -2542,6 +2542,9 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         {
             sal_Bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
             sal_Bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
+
+            // nDelta corresponds to the direction to which user drags the mouse.
+            // If nDelta > 0, means user has dragged the handle towards the right and vice-versa
             long    nDelta = mnMSplitPos-mnMStartPos;
 
             if ( (mnSplitTest & SPLIT_WINDOW) && !mpMainSet->mpItems )
@@ -2553,12 +2556,30 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 long nNewSize = mpSplitSet->mpItems[mnSplitPos].mnPixSize;
+                sal_Int32 nTabBarDefaultWidth( 36 );
+
                 if ( (mpSplitSet == mpMainSet) && mbBottomRight )
+                {
                     nNewSize -= nDelta;
+                    sal_Int32 nSidebarWindowLeftPixelPos = sal_Int32( mnMaxSize - mpSplitSet->mpItems[mnSplitPos].mnMaxSize - nTabBarDefaultWidth);
+
+                    if ( (nDelta <= 0) || ( mnMStartPos > nSidebarWindowLeftPixelPos && (nDelta > 0) ) )
+                    {
+                        SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
+                                bPropSmaller, bPropGreater );
+                    }
+                }
                 else
+                {
                     nNewSize += nDelta;
-                SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
-                           bPropSmaller, bPropGreater );
+                    sal_Int32 nSidebarWindowRightPixelPos = sal_Int32( mpSplitSet->mpItems[mnSplitPos].mnMaxSize + nTabBarDefaultWidth);
+
+                    if ( (nDelta >= 0) || ( mnMStartPos < nSidebarWindowRightPixelPos && (nDelta < 0) ) )
+                    {
+                        SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
+                                bPropSmaller, bPropGreater );
+                    }
+                }
             }
 
             Split();
