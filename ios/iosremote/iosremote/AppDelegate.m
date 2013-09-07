@@ -42,7 +42,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSDictionary *attributes = [NSDictionary dictionaryWithObjects:
                                 [NSArray arrayWithObjects: [UIFont boldSystemFontOfSize:15], kTintColor, [UIColor clearColor], nil]
                                                            forKeys: [NSArray arrayWithObjects:UITextAttributeFont, UITextAttributeTextColor, UITextAttributeTextShadowColor, nil]];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:attributes
+    [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:attributes
                                                 forState:UIControlStateNormal];
     attributes = [NSDictionary dictionaryWithObjects:
                   [NSArray arrayWithObjects: kAppTextFont, [UIColor grayColor], [UIColor clearColor], nil]
