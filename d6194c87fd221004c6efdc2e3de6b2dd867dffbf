@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Rk\u003d",
+        "filename": "include/svl/filerec.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-09-07T21:15:29Z",
+      "side": 1,
+      "message": "You are right. Will fix this and provide a new patchset",
+      "parentUuid": "AAAAXn//7iM\u003d",
+      "revId": "d6194c87fd221004c6efdc2e3de6b2dd867dffbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7iI\u003d",
         "filename": "include/svl/filerec.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-09-04T08:20:58Z",
       "side": 1,
       "message": "This is more a rewording the original text than a translation, right? Because the english text seems to be much shorter (I do not know enough German to understand the original).",
+      "revId": "d6194c87fd221004c6efdc2e3de6b2dd867dffbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Ro\u003d",
+        "filename": "include/svl/filerec.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-09-07T21:15:29Z",
+      "side": 1,
+      "message": "Actually it is a direct translation of the text ;-)",
+      "parentUuid": "AAAAXn//7iI\u003d",
       "revId": "d6194c87fd221004c6efdc2e3de6b2dd867dffbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
