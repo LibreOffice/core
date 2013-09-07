@@ -2007,21 +2007,16 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
-    if ( pData && pData->aHelpText.isEmpty() &&
+    if ( pData && ((pData->aHelpText != NULL) || pData->aHelpText.isEmpty()) &&
          (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
     {
-        if ( pData->aHelpText.isEmpty() &&
-             (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
+        Help* pHelp = Application::GetHelp();
+        if ( pHelp )
         {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-            {
-                if (!pData->aCommandStr.isEmpty())
-                    pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
-
-                if( pData->aHelpText.isEmpty() && !pData->aHelpId.isEmpty() )
-                    pData->aHelpText = pHelp->GetHelpText( OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
-            }
+            if (!pData->aCommandStr.isEmpty())
+                pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
+            else
+                pData->aHelpText = pHelp->GetHelpText( OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
         }
     }
 
