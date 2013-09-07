@@ -280,9 +280,8 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = rRef.aStart.Format(nFmt, pDocP, eConv);
 
         pRefInputEdit->SetRefString( aStr );
+        ModifyHdl( pRefInputEdit );
     }
-
-    ModifyHdl( pRefInputEdit );
 }
 
 
