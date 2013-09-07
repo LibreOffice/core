@@ -315,7 +315,7 @@ OUString HtmlState::SetLink( const OUString& aLink, const OUString& aTarget )
     if (!aLink.isEmpty())
     {
         aStr.AppendAscii( "<a href=\"" );
-        aStr += HtmlExport::StringToURL(aLink);
+        aStr += aLink;
         if (!aTarget.isEmpty())
         {
             aStr.AppendAscii( "\" target=\"" );
@@ -1544,7 +1544,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                     if( nPage == mnSdPageCount )
                         nPage = 0;
 
-                    aStr += StringToURL(*mpHTMLFiles[nPage]);
+                    aStr += *mpHTMLFiles[nPage];
 
                     aStr.AppendAscii( "\">\r\n" );
                 }
@@ -1565,7 +1565,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 // Image
         aStr.AppendAscii( "<center>" );
         aStr.AppendAscii( "<img src=\"" );
-        aStr += StringToURL( *mpImageFiles[nSdPage] );
+        aStr += *mpImageFiles[nSdPage];
         aStr.AppendAscii( "\" alt=\"\"" );
 
         if (!aClickableObjects.empty())
@@ -1901,7 +1901,7 @@ bool HtmlExport::CreateContentPage()
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_EMAIL);
         aStr.AppendAscii( ":</strong> <a href=\"mailto:" );
-        aStr += StringToURL(maEMail);
+        aStr += maEMail;
         aStr.AppendAscii( "\">" );
         aStr += StringToHTMLString(maEMail);
         aStr.AppendAscii( "</a></p>\r\n" );
@@ -1912,7 +1912,7 @@ bool HtmlExport::CreateContentPage()
         aStr.AppendAscii( "<p><strong>" );
         aStr += RESTOHTML(STR_HTMLEXP_HOMEPAGE);
         aStr.AppendAscii( ":</strong> <a href=\"" );
-        aStr += StringToURL(maHomePage);
+        aStr += maHomePage;
         aStr.AppendAscii( "\">" );
         aStr += StringToHTMLString(maHomePage);
         aStr.AppendAscii( "</a> </p>\r\n" );
@@ -1930,7 +1930,7 @@ bool HtmlExport::CreateContentPage()
     if(mbDownload)
     {
         aStr.AppendAscii( "<p><a href=\"" );
-        aStr += StringToURL(maDocFileName);
+        aStr += maDocFileName;
         aStr.AppendAscii( "\">" );
         aStr += RESTOHTML(STR_HTMLEXP_DOWNLOAD);
         aStr.AppendAscii( "</a></p>\r\n" );
@@ -1941,7 +1941,7 @@ bool HtmlExport::CreateContentPage()
         String aText;
 
         aText.AppendAscii( "<img src=\"" );
-        aText += StringToURL( *mpThumbnailFiles[nSdPage] );
+        aText += *mpThumbnailFiles[nSdPage];
         aText.AppendAscii( "\" width=\"256\" height=\"192\" alt=\"" );
         aText += StringToHTMLString( *mpPageNames[nSdPage] );
         aText.AppendAscii( "\">" );
@@ -2288,11 +2288,11 @@ bool HtmlExport::CreateFrames()
     {
         aStr.AppendAscii( "  <frameset rows=\"42,*\">\r\n" );
         aStr.AppendAscii( "    <frame src=\"navbar3" );
-        aStr += StringToURL(maHTMLExtension);
+        aStr += maHTMLExtension;
         aStr.AppendAscii( "\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n" );
     }
     aStr.AppendAscii( "    <frame src=\"outline0" );
-    aStr += StringToURL(maHTMLExtension);
+    aStr += maHTMLExtension;
     aStr.AppendAscii( "\" name=\"outline\">\r\n" );
     if(mbImpress)
         aStr.AppendAscii( "  </frameset>\r\n" );
@@ -2307,17 +2307,17 @@ bool HtmlExport::CreateFrames()
         aStr.AppendAscii( "  <frameset rows=\"42,*\">\r\n" );
 
     aStr.AppendAscii( "    <frame src=\"navbar0" );
-    aStr += StringToURL(maHTMLExtension);
+    aStr += maHTMLExtension;
     aStr.AppendAscii( "\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n" );
 
     aStr.AppendAscii( "    <frame src=\"" );
-    aStr += StringToURL(*mpHTMLFiles[0]);
+    aStr += *mpHTMLFiles[0];
     aStr.AppendAscii( "\" name=\"show\" marginwidth=\"4\" marginheight=\"4\">\r\n" );
 
     if(mbNotes)
     {
         aStr.AppendAscii( "    <frame src=\"note0" );
-        aStr += StringToURL(maHTMLExtension);
+        aStr += maHTMLExtension;
         aStr.AppendAscii( "\" name=\"notes\">\r\n" );
     }
     aStr.AppendAscii( "  </frameset>\r\n" );
@@ -2672,7 +2672,7 @@ OUString HtmlExport::CreateLink( const OUString& aLink,
                                  const OUString& aTarget ) const
 {
     String aStr( "<a href=\"" );
-    aStr += StringToURL(aLink);
+    aStr += aLink;
     if (!aTarget.isEmpty())
     {
         aStr.AppendAscii( "\" target=\"" );
@@ -2693,7 +2693,7 @@ OUString HtmlExport::CreateImage( const OUString& aImage, const OUString& aAltTe
                                 sal_Int16 nHeight ) const
 {
     String aStr( "<img src=\"");
-    aStr += StringToURL(aImage);
+    aStr += aImage;
     aStr.AppendAscii( "\" border=0" );
 
     if (!aAltText.isEmpty())
@@ -2758,7 +2758,7 @@ OUString HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
     aStr.Append(sal_Unicode(','));
     aStr += OUString::number(nRadius);
     aStr.AppendAscii( "\" href=\"" );
-    aStr += StringToURL(rHRef);
+    aStr += rHRef;
     aStr.AppendAscii( "\">\n" );
 
     return aStr;
@@ -2799,7 +2799,7 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
                 aStr.Append( sal_Unicode(',') );
         }
         aStr.AppendAscii( "\" href=\"" );
-        aStr += StringToURL(rHRef);
+        aStr += rHRef;
         aStr.AppendAscii( "\">\n" );
     }
 
@@ -2822,7 +2822,7 @@ OUString HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
     aStr.Append(sal_Unicode(','));
     aStr += OUString::number(rRect.Bottom());
     aStr.AppendAscii( "\" href=\"" );
-    aStr += StringToURL(rHRef);
+    aStr += rHRef;
     aStr.AppendAscii( "\">\n" );
 
     return aStr;
@@ -3145,13 +3145,6 @@ bool HtmlExport::checkForExistingFiles()
     }
 
     return bFound;
-}
-
-// ---------------------------------------------------------------------
-
-OUString HtmlExport::StringToURL( const OUString& rURL )
-{
-    return rURL;
 }
 
 OUString HtmlExport::GetButtonName( int nButton ) const

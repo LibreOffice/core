@@ -215,7 +215,6 @@ class HtmlExport
 
     static OUString ColorToHTMLString( Color aColor );
     static OUString StringToHTMLString( const OUString& rString );
-    static OUString StringToURL( const OUString& rURL );
 };
 
 #endif // _SD_HTMLEX_HXX
