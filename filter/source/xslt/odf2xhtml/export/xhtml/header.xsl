@@ -412,7 +412,7 @@
 		NOTE: CHROME has a problem, with relative references as from content table, referencing to root directory instead of document
 		<xsl:element name="base">
 			<xsl:attribute name="href">-->
-				<!-- earlier 'targetURL' was used for an absoulte reference of base provided by the Office (file URL)
+				<!-- earlier 'targetURL' was used for an absolute reference of base provided by the Office (file URL)
 					<xsl:value-of select="$targetURL" />
 					now '.' let relative links work, even if document has been moved -->
 				<!--<xsl:text>.</xsl:text>

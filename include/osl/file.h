@@ -1372,7 +1372,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
     If pustrRelativeFileURL denotes an absolute path pustrBaseDirectoryURL will be ignored.
 
     @param ppustrAbsoluteFileURL [out]
-    On success it receives the full qualified absoulte file URL.
+    On success it receives the full qualified absolute file URL.
 
     @return
     osl_File_E_None on success<br>

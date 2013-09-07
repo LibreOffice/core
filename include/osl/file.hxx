@@ -145,7 +145,7 @@ public:
         If ustrRelativeFileURL denotes an absolute path ustrBaseDirectoryURL will be ignored.
 
         @param ustrAbsoluteFileURL [out]
-        On success it receives the full qualified absoulte file URL.
+        On success it receives the full qualified absolute file URL.
 
         @return
         E_None on success
