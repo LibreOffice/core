@@ -34,7 +34,6 @@ namespace svx { namespace sidebar {
 
 static const sal_Int32 gnInitialVerticalSplitPosition (150);
 
-
 GalleryControl::GalleryControl (
     SfxBindings* /*pBindings*/,
     Window* pParentWindow)
@@ -68,15 +67,9 @@ GalleryControl::GalleryControl (
     InitSettings();
 }
 
-
-
-
 GalleryControl::~GalleryControl (void)
 {
 }
-
-
-
 
 void GalleryControl::InitSettings (void)
 {
@@ -101,9 +94,6 @@ void GalleryControl::InitSettings (void)
     SetBackground(aBackground);
     mpBrowser2->SetBackground(aBackground);
 }
-
-
-
 
 void GalleryControl::Resize (void)
 {
@@ -180,9 +170,6 @@ void GalleryControl::Resize (void)
     maLastSize = aNewSize;
 }
 
-
-
-
 sal_Bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, Window* )
 {
     const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
@@ -218,23 +205,16 @@ sal_Bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, Window* )
     return bRet;
 }
 
-
-
-
 void GalleryControl::GetFocus (void)
 {
     Window::GetFocus();
     mpBrowser1->GrabFocus();
 }
 
-
-
-
 void GalleryControl::ThemeSelectionHasChanged (void)
 {
     mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme());
 }
-
 
 IMPL_LINK( GalleryControl, SplitHdl, void*, EMPTYARG )
 {

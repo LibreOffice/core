@@ -19,10 +19,6 @@
 
 #include <sal/types.h>
 
-// ----------------
-// - GalleryCodec -
-// ----------------
-
 class SvStream;
 
 class GalleryCodec

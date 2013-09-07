@@ -32,9 +32,6 @@
 
 #include <boost/bind.hpp>
 
-// -------------------------
-// - SvxGalleryChildWindow -
-// -------------------------
 DBG_NAME(GalleryChildWindow)
 
 GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
@@ -47,20 +44,15 @@ GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBin
     ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
 };
 
-// -----------------------------------------------------------------------------
-
 GalleryChildWindow::~GalleryChildWindow()
 {
     DBG_DTOR(GalleryChildWindow,NULL);
 }
 
-// -----------------------------------------------------------------------------
-
 SFX_IMPL_DOCKINGWINDOW_WITHID( GalleryChildWindow, SID_GALLERY )
 
-// ------------------
 // - GalleryBrowser -
-// ------------------
+
 DBG_NAME(GalleryBrowser)
 
 GalleryBrowser::GalleryBrowser(
@@ -103,8 +95,6 @@ GalleryBrowser::GalleryBrowser(
     InitSettings();
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryBrowser::~GalleryBrowser()
 {
     delete mpBrowser2;
@@ -113,8 +103,6 @@ GalleryBrowser::~GalleryBrowser()
 
     DBG_DTOR(GalleryBrowser,NULL);
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser::InitSettings()
 {
@@ -134,8 +122,6 @@ void GalleryBrowser::InitSettings()
     mpBrowser2->SetControlBackground( GALLERY_DLG_COLOR );
     mpBrowser2->SetControlForeground( GALLERY_DLG_COLOR );
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser::Resize()
 {
@@ -199,8 +185,6 @@ void GalleryBrowser::Resize()
     maLastSize = aNewSize;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 {
     const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
@@ -236,14 +220,10 @@ sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GalleryBrowser::Close()
 {
     return SfxDockingWindow::Close();
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser::GetFocus()
 {
@@ -251,14 +231,10 @@ void GalleryBrowser::GetFocus()
     mpBrowser1->GrabFocus();
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser::ThemeSelectionHasChanged()
 {
     mpBrowser2->SelectTheme( mpBrowser1->GetSelectedTheme() );
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(GalleryBrowser, SplitHdl)
 {

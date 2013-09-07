@@ -21,8 +21,6 @@
 #include "helpid.hrc"
 #include "gallery.hrc"
 
-/******************************************************************************/
-
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 DockingWindow RID_SVXDLG_GALLERYBROWSER
@@ -62,8 +60,6 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
         Border = FALSE;
     };
 };
-
-/******************************************************************************/
 
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
@@ -170,8 +166,6 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text [ en-US ] = "Detailed View";
 };
 
-/******************************************************************************/
-
 Bitmap RID_SVXBMP_GALLERY
 {
     File = "lx03135.bmp" ;
@@ -244,8 +238,6 @@ Image RID_SVXIMG_GALLERY_VIEW_LIST
     MASKCOLOR
 };
 
-/******************************************************************************/
-
 Menu RID_SVXMN_GALLERY1
 {
     ItemList =
@@ -293,8 +285,6 @@ Menu RID_SVXMN_GALLERY1
         };
     };
 };
-
-/******************************************************************************/
 
 Menu RID_SVXMN_GALLERY2
 {
