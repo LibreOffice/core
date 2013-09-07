@@ -24,6 +24,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/inetmime.hxx>
+#include <rtl/character.hxx>
 
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
     // unnamed namespaces don't work well yet
@@ -368,7 +369,7 @@ bool INetMIME::isAtomChar(sal_uInt32 nChar)
              true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
              true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
           };
-    return isUSASCII(nChar) && aMap[nChar];
+    return rtl::isAscii(nChar) && aMap[nChar];
 }
 
 // static
@@ -392,7 +393,7 @@ bool INetMIME::isTokenChar(sal_uInt32 nChar)
              true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
              true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
           };
-    return isUSASCII(nChar) && aMap[nChar];
+    return rtl::isAscii(nChar) && aMap[nChar];
 }
 
 // static
@@ -416,7 +417,7 @@ bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
              true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
              true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
           };
-    return isUSASCII(nChar) && aMap[nChar];
+    return rtl::isAscii(nChar) && aMap[nChar];
 }
 
 // static
@@ -440,7 +441,7 @@ bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
              true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
              true,  true,  true, false,  true,  true,  true, false  //xyz{|}~
           };
-    return isUSASCII(nChar) && aMap[nChar];
+    return rtl::isAscii(nChar) && aMap[nChar];
 }
 
 // static
@@ -465,7 +466,7 @@ bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || toUpperCase(*pBegin1++) != toUpperCase(*pString2++))
+            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -480,7 +481,7 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
 
     while (*pString2 != 0)
         if (pBegin1 == pEnd1
-            || toUpperCase(*pBegin1++) != toUpperCase(*pString2++))
+            || rtl::toAsciiUpperCase(*pBegin1++) != rtl::toAsciiUpperCase(*pString2++))
             return false;
     return pBegin1 == pEnd1;
 }
@@ -725,7 +726,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
 
                     default:
                         ++rLength;
-                        if (!isUSASCII(c))
+                        if (!rtl::isAscii(c))
                             rModify = true;
                         break;
                 }
@@ -755,7 +756,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         bool bDowncaseAttribute = false;
         while (p != pEnd && isTokenChar(*p) && *p != '*')
         {
-            bDowncaseAttribute = bDowncaseAttribute || isUpperCase(*p);
+            bDowncaseAttribute = bDowncaseAttribute || rtl::isAsciiUpperCase(*p);
             ++p;
         }
         if (p == pAttributeBegin)
@@ -770,7 +771,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         if (p != pEnd && *p == '*')
         {
             ++p;
-            if (p != pEnd && isDigit(*p)
+            if (p != pEnd && rtl::isAsciiDigit(*p)
                 && !scanUnsigned(p, pEnd, false, nSection))
                 break;
         }
@@ -805,7 +806,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 bool bDowncaseCharset = false;
                 while (p != pEnd && isTokenChar(*p) && *p != '\'')
                 {
-                    bDowncaseCharset = bDowncaseCharset || isUpperCase(*p);
+                    bDowncaseCharset = bDowncaseCharset || rtl::isAsciiUpperCase(*p);
                     ++p;
                 }
                 if (p == pCharsetBegin)
@@ -828,12 +829,12 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 bool bDowncaseLanguage = false;
                 int nLetters = 0;
                 for (; p != pEnd; ++p)
-                    if (isAlpha(*p))
+                    if (rtl::isAsciiAlpha(*p))
                     {
                         if (++nLetters > 8)
                             break;
                         bDowncaseLanguage = bDowncaseLanguage
-                                            || isUpperCase(*p);
+                                            || rtl::isAsciiUpperCase(*p);
                     }
                     else if (*p == '-')
                     {
@@ -866,7 +867,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 while (p != pEnd)
                 {
                     sal_uInt32 nChar = INetMIME::getUTF32Character(p, pEnd);
-                    if (isUSASCII(nChar) && !isTokenChar(nChar))
+                    if (rtl::isAscii(nChar) && !isTokenChar(nChar))
                         break;
                     if (nChar == '%' && p + 1 < pEnd)
                     {
@@ -884,7 +885,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                 aValue = aSink.takeBuffer();
             }
             else
-                while (p != pEnd && (isTokenChar(*p) || !isUSASCII(*p)))
+                while (p != pEnd && (isTokenChar(*p) || !rtl::isAscii(*p)))
                     ++p;
         }
         else if (p != pEnd && *p == '"')
@@ -938,7 +939,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         else
         {
             sal_Unicode const * pTokenBegin = p;
-            while (p != pEnd && (isTokenChar(*p) || !isUSASCII(*p)))
+            while (p != pEnd && (isTokenChar(*p) || !rtl::isAscii(*p)))
                 ++p;
             if (p == pTokenBegin)
                 break;
@@ -1777,7 +1778,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             break;
 
                         default:
-                            if (isUSASCII(*pBodyPtr)
+                            if (rtl::isAscii(*pBodyPtr)
                                 && !isAtomChar(*pBodyPtr))
                             {
                                 eEntity = ENTITY_JUNK;
@@ -1826,7 +1827,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     else
                                         while (pLookAhead != pBodyEnd
                                                && (isAtomChar(*pLookAhead)
-                                                   || !isUSASCII(
+                                                   || !rtl::isAscii(
                                                            *pLookAhead)))
                                             ++pLookAhead;
                                     while (pLookAhead != pBodyEnd)
@@ -1890,7 +1891,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             // whole entity is 'junk' rather than 'non-
                             // phrase':
                             if (eEntity == ENTITY_NON_PHRASE
-                                && !isUSASCII(*pBodyPtr))
+                                && !rtl::isAscii(*pBodyPtr))
                                 eEntity = ENTITY_JUNK;
                             break;
                     }
@@ -1947,7 +1948,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     default:
                                         if (isVisible(*pBodyPtr))
                                             bEnd = true;
-                                        else if (isUSASCII(*pBodyPtr))
+                                        else if (rtl::isAscii(*pBodyPtr))
                                         {
                                             ++nLength;
                                             ++pBodyPtr;
@@ -2090,7 +2091,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                         }
                                         else
                                         {
-                                            if (!isUSASCII(*pBodyPtr))
+                                            if (!rtl::isAscii(*pBodyPtr))
                                                 bModify = true;
                                             bEnd = true;
                                         }
@@ -2238,7 +2239,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                                       pBodyPtr, pBodyEnd);
                                             if (pLookAhead != pBodyEnd
                                                 && (isAtomChar(*pLookAhead)
-                                                    || !isUSASCII(*pLookAhead)
+                                                    || !rtl::isAscii(*pLookAhead)
                                                     || *pLookAhead == '"'))
                                                 pBodyPtr = pLookAhead;
                                             else
@@ -2264,7 +2265,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     default:
                                         if (bQuotedString
                                             || isAtomChar(*pBodyPtr)
-                                            || !isUSASCII(*pBodyPtr))
+                                            || !rtl::isAscii(*pBodyPtr))
                                             ++pBodyPtr;
                                         else
                                             bEnd = true;
@@ -2483,7 +2484,7 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
                             default:
                                 if (pLanguageBegin != 0
-                                    && (!isAlpha(cChar) || ++nAlphaCount > 8))
+                                    && (!rtl::isAsciiAlpha(cChar) || ++nAlphaCount > 8))
                                     pLanguageBegin = 0;
                                 break;
                         }
@@ -3011,7 +3012,7 @@ static const sal_Char aEscape[128]
 inline bool
 INetMIMEEncodedWordOutputSink::needsEncodedWordEscape(sal_uInt32 nChar) const
 {
-    return !INetMIME::isUSASCII(nChar) || aEscape[nChar] & m_eContext;
+    return !rtl::isAscii(nChar) || aEscape[nChar] & m_eContext;
 }
 
 void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
@@ -3698,7 +3699,7 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
                                         0,   // '}'
                                         0,   // '~'
                 TENQ | CENQ        | PENQ }; // DEL
-        Coding eNewCoding = !INetMIME::isUSASCII(nChar) ? CODING_ENCODED :
+        Coding eNewCoding = !rtl::isAscii(nChar) ? CODING_ENCODED :
                             m_eContext == CONTEXT_PHRASE ?
                                 Coding(aMinimal[nChar] >> 2) :
                             aMinimal[nChar] & m_eContext ? CODING_ENCODED :
