@@ -15,21 +15,27 @@
 #import "slideShowPreviewTable_vc.h"
 #import "ControlVariables.h"
 #import "stopWatch.h"
+#import "UIImageView+setImageAnimated.h"
+#import "UIView+Shadowing.h"
 #import <QuartzCore/CALayer.h>
+#import <QuartzCore/QuartzCore.h>
 
-@interface slideShowSwipeInList ()
+@interface slideShowSwipeInList () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, strong) SlideShow *slideshow;
+@property NSInteger currentPage;
 
 @end
 
 @implementation slideShowSwipeInList
 
 @synthesize comManager = _comManager;
+@synthesize currentPage = _currentPage;
 @synthesize slideshow = _slideshow;
 
 dispatch_queue_t backgroundQueue;
+
 
 - (void) viewDidLoad
 {
@@ -40,6 +46,8 @@ dispatch_queue_t backgroundQueue;
     self.slideshow.secondaryDelegate = self;
     
     self.clearsSelectionOnViewWillAppear = NO;
+    // set stopwatch as default, users may swipe for a timer
+    self.currentPage = 0;
     
     self.stopWatch = [[stopWatch alloc] init];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]) {
@@ -114,7 +122,16 @@ dispatch_queue_t backgroundQueue;
     NSString *sectionTitle;
     switch (section) {
         case 0:
-            sectionTitle = NSLocalizedString(@"Stop Watch", @"Sidebar section header");
+            switch (self.currentPage) {
+                case 0:
+                    sectionTitle = NSLocalizedString(@"Stop Watch", @"Sidebar section header");
+                    break;
+                case 1:
+                    sectionTitle = NSLocalizedString(@"Timer", @"Sidebar section header");
+                    break;
+                default:
+                    break;
+            }
             break;
         case 1:
             sectionTitle = NSLocalizedString(@"Slides", @"Sidebar section header");
@@ -132,7 +149,21 @@ dispatch_queue_t backgroundQueue;
     // Create header view and add label as a subview
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 23)];
     view.backgroundColor = [UIColor colorWithRed:1.0 green:0.662745098 blue:0.074509804 alpha:0.9];
+
     [view addSubview:label];
+    
+    if (section == 0)
+    {
+        UIPageControl * pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.revealViewController.rearViewRevealWidth - 20, view.frame.origin.y + 3, 40, 20)];
+        pageControl.numberOfPages = 2;
+        pageControl.currentPage = self.currentPage;
+        pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+        pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+        pageControl.tag = -100;
+        view.tag = -99;
+        label.tag = -98;
+        [view addSubview:pageControl];
+    }
     
     return view;
 }
@@ -149,7 +180,20 @@ dispatch_queue_t backgroundQueue;
 
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        cell.contentView.backgroundColor = [UIColor whiteColor];
+        UIView * view = [cell viewWithTag:8];
+        [view.layer setCornerRadius:5.0f];
+        view.layer.masksToBounds = YES;
+        view.clipsToBounds = YES;
+        [view setShadow];
+        
+        view = [cell viewWithTag:9];
+        [view.layer setCornerRadius:5.0f];
+        view.layer.masksToBounds = YES;
+        view.clipsToBounds = YES;
+        [view setShadow];
+        
+        UIScrollView * scroll = (UIScrollView *) [cell viewWithTag:7];
+        scroll.contentSize = CGSizeMake(417,120);
         return cell;
     } else {
         static NSString *CellIdentifier = @"slide";
@@ -163,12 +207,9 @@ dispatch_queue_t backgroundQueue;
         [self.slideshow getContentAtIndex:indexPath.row forView:cell];
         [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row+1]];
         
-        image.layer.shadowColor = [[UIColor blackColor] CGColor];
-        image.layer.shadowOpacity = 0.5;
-        image.layer.shadowRadius = 4.0;
-        image.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
-        image.layer.shadowPath = [UIBezierPath bezierPathWithRect:image.bounds].CGPath;
-        image.clipsToBounds = NO;
+        [image setShadow];
+        
+        cell.contentView.backgroundColor = [UIColor colorWithRed:.674509804-0.02 * indexPath.row green:.729411765-0.02 * indexPath.row blue:.760784314-0.02 * indexPath.row alpha:1.0];
         
         return cell;
     }
@@ -193,10 +234,42 @@ dispatch_queue_t backgroundQueue;
     [self.revealViewController revealToggle: self];
 }
 
-
 - (void)viewDidUnload {
     [self setStopWatch:nil];
     [super viewDidUnload];
+}
+
+#pragma mark scrollview delegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView.tag == 7) {
+        CGFloat pageWidth = scrollView.frame.size.width;
+        float fractionalPage = scrollView.contentOffset.x / pageWidth;
+        NSInteger page = lround(fractionalPage);
+        if (self.currentPage != page) {
+            UIPageControl * pageControl = (UIPageControl *) ([[self.tableView viewWithTag:-99] viewWithTag:-100]);
+            UILabel * label = (UILabel *) ([[self.tableView viewWithTag:-99] viewWithTag:-98]);
+            
+            CATransition *animation = [CATransition animation];
+            animation.duration = 0.5;
+            animation.type = kCATransitionMoveIn;
+            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
+            [label.layer addAnimation:animation forKey:@"changeTextTransition"];
+
+            switch (page) {
+                case 0:
+                    [label setText:NSLocalizedString(@"Stop Watch", @"Sidebar section header")];
+                    break;
+                case 1:
+                    [label setText:NSLocalizedString(@"Timer", @"Sidebar section header")];
+                default:
+                    break;
+            }
+            [pageControl setCurrentPage:page];
+            self.currentPage = page;
+        }
+    }
 }
 
 @end

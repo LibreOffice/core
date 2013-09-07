@@ -27,5 +27,4 @@
 {
     [self setImage:image animated:animated Duration:0.5];
 }
-
 @end

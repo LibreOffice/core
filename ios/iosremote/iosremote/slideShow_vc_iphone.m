@@ -17,6 +17,8 @@
 #import "slideShowPreviewTable_vc.h"
 #import "slideShowSwipeInList_iphone.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImageView+setImageAnimated.h"
+#import "UIView+Shadowing.h"
 #import <CoreMotion/CoreMotion.h>
 
 
@@ -368,19 +370,8 @@
                                                      usingBlock:^(NSNotification *note) {
                                                          [self.navigationController popViewControllerAnimated:YES];
                                                      }];
-    self.slideView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.slideView.layer.shadowOpacity = 0.5;
-    self.slideView.layer.shadowRadius = 4.0;
-    self.slideView.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
-    self.slideView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.slideView.bounds].CGPath;
-    self.slideView.clipsToBounds = NO;
-
-    self.secondarySlideView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    self.secondarySlideView.layer.shadowOpacity = 0.5;
-    self.secondarySlideView.layer.shadowRadius = 4.0;
-    self.secondarySlideView.layer.shadowOffset = CGSizeMake(3.0f, 3.0f);
-    self.secondarySlideView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.secondarySlideView.bounds].CGPath;
-    self.secondarySlideView.clipsToBounds = NO;
+    [self.slideView setShadow];
+    [self.secondarySlideView setShadow];
 
     // We calibrate once when presentation starts. needs a users alert to inform users to point at the center of the screen at the beginning
     self.pointerCalibrationOn = YES;

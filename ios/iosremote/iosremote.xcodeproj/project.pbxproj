@@ -44,7 +44,6 @@
 		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
 		57C6E431175E076900E8BC5F /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42D175E076900E8BC5F /* Server.m */; };
 		57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C4178B42A400075DE4 /* timer_pause_btn.png */; };
-		57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C5178B42A400075DE4 /* timer_resume_btn.png */; };
 		57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */; };
 		57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DC7006178D84490050FC58 /* CoreMotion.framework */; };
 		57DC7012178E16A40050FC58 /* UIViewTransitionCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7011178E16A40050FC58 /* UIViewTransitionCategory.m */; };
@@ -88,6 +87,7 @@
 		8C1A16FD17A2853700B4BB3C /* iosremote_iphone_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */; };
 		8C1A16FF17A2853F00B4BB3C /* iosremote_ipad_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */; };
 		8C1A170117A2854300B4BB3C /* iosremote_ipad_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */; };
+		8C23B46917DA158C00FB4DE6 /* UIView+Shadowing.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */; };
 		8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */; };
 		8C26E5C917A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */; };
 		8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */; };
@@ -179,7 +179,6 @@
 		57C6E42C175E076900E8BC5F /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Server.h; path = iosremote/Communication/Server.h; sourceTree = "<group>"; };
 		57C6E42D175E076900E8BC5F /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Server.m; path = iosremote/Communication/Server.m; sourceTree = "<group>"; };
 		57CC48C4178B42A400075DE4 /* timer_pause_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_pause_btn.png; path = iosremote/timer_pause_btn.png; sourceTree = "<group>"; };
-		57CC48C5178B42A400075DE4 /* timer_resume_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_resume_btn.png; path = iosremote/timer_resume_btn.png; sourceTree = "<group>"; };
 		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableTableViewCell.h; path = iosremote/EditableTableViewCell.h; sourceTree = "<group>"; };
 		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableTableViewCell.m; path = iosremote/EditableTableViewCell.m; sourceTree = "<group>"; };
 		57DC7006178D84490050FC58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -242,6 +241,8 @@
 		8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_iphone_icon.png; sourceTree = "<group>"; };
 		8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_ipad_icon.png; sourceTree = "<group>"; };
 		8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_ipad_icon@2x.png"; sourceTree = "<group>"; };
+		8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadowing.h"; sourceTree = "<group>"; };
+		8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadowing.m"; sourceTree = "<group>"; };
 		8C26E5BE17A525FC007DA4B7 /* MGSplitCornersView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitCornersView.h; sourceTree = "<group>"; };
 		8C26E5BF17A525FC007DA4B7 /* MGSplitCornersView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSplitCornersView.m; sourceTree = "<group>"; };
 		8C26E5C017A525FC007DA4B7 /* MGSplitDividerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitDividerView.h; sourceTree = "<group>"; };
@@ -465,7 +466,6 @@
 				8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */,
 				8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */,
 				57CC48C4178B42A400075DE4 /* timer_pause_btn.png */,
-				57CC48C5178B42A400075DE4 /* timer_resume_btn.png */,
 				571BFAD0178AADA200EF1BDB /* more_icon.png */,
 				57AEEDB417899BB4007F4F97 /* slide_finished.png */,
 				57AEEDB017895BF5007F4F97 /* pointer_pushed.png */,
@@ -569,6 +569,8 @@
 				8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */,
 				8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */,
 				8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */,
+				8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */,
+				8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */,
 				8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */,
 				8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */,
 				8C19F42D17B05089005BDB61 /* LibONavigationController.h */,
@@ -613,10 +615,18 @@
 		8C1A170917A28E6500B4BB3C /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				8C23B46217DA03D700FB4DE6 /* Views */,
 				8CAD658917A2F00500CFB661 /* Controllers */,
 				57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */,
 			);
 			name = iPhone;
+			sourceTree = "<group>";
+		};
+		8C23B46217DA03D700FB4DE6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		8C26E5C417A52607007DA4B7 /* MGSplitViewController */ = {
@@ -742,7 +752,6 @@
 				571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */,
 				571D4808178B2F080063D93B /* timer_start_btn.png in Resources */,
 				57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */,
-				57CC48C7178B42A400075DE4 /* timer_resume_btn.png in Resources */,
 				57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */,
 				5711026D1794127E007D343B /* README.md in Resources */,
 				5711026E1794127E007D343B /* release_notes.md in Resources */,
@@ -858,6 +867,7 @@
 				8C19F43617B10D49005BDB61 /* UIViewController+LibOStyling.m in Sources */,
 				8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */,
 				8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */,
+				8C23B46917DA158C00FB4DE6 /* UIView+Shadowing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
