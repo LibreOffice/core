@@ -644,10 +644,7 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
     OUStringBuffer aBuf(aFile.getLength() + aName.getLength() + 9);
     if (bODF)
         aBuf.append( sal_Unicode( '['));
-    aBuf.append( sal_Unicode( '\''));
-    aBuf.append( aFile);
-    aBuf.append( sal_Unicode( '\''));
-    aBuf.append( cSep);
+    aBuf.append( "'" + aFile + "'" + OUString(cSep));
     if (bODF)
         aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$$'"));
     aBuf.append( aName);
@@ -892,10 +889,7 @@ struct ConventionOOO_A1 : public Convention_A1
                     aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
             }
 
-            rBuffer.append(sal_Unicode('\''));
-            rBuffer.append(aFile.replaceAll("'", "''"));
-            rBuffer.append(sal_Unicode('\''));
-            rBuffer.append(sal_Unicode('#'));
+            rBuffer.append("'" + aFile.replaceAll("'", "''") + "'#");
 
             if (!rRef.IsTabRel())
                 rBuffer.append(sal_Unicode('$'));
