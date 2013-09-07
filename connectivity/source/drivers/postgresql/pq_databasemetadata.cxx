@@ -241,7 +241,7 @@ sal_Int32 DatabaseMetaData::getDriverMinorVersion(  ) throw (RuntimeException)
 sal_Bool DatabaseMetaData::usesLocalFiles(  ) throw (SQLException, RuntimeException)
 {
     // LEM TODO:
-    //           http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/XDatabaseMetaData_Interface
+    //           http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/XDatabaseMetaData_Interface
     //           says "Returns true when the catalog name of the
     //           database should not appear in the DatasourceBrowser
     //           of OpenOffice.org API, otherwise false is returned."
@@ -342,7 +342,7 @@ OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeExcept
 OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeException)
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-math.html
-    // LEM TODO: Err... http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Support_Scalar_Functions
+    // LEM TODO: Err... http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Support_Scalar_Functions
     //           says this should be "Open Group CLI" names, not PostgreSQL names.
     //           Currently this is just a list of supported functions in PostgreSQL, with PostgreSQL names.
     //           And it is my job to map from Open Group CLI names/syntax to PostgreSQL names/syntax. Where? By parsing the SQL???

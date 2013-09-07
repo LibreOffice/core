@@ -39,7 +39,7 @@ module com { module sun { module star { module drawing {
     <li>and the configuration is always in a valid and meaningful
     state.</li></ul></p>
     <p>For more information please see the wiki page of the <a
-    href="http://wiki.services.openoffice.org/wiki/Drawing_framework">drawing framework</a>.
+    href="http://wiki.openoffice.org/wiki/Drawing_framework">drawing framework</a>.
 */
 module framework {};
 

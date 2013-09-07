@@ -98,7 +98,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     event at the XFastDocumentHandler by calling
     XFastDocumentHandler::endDocument().
 
-    @see http://wiki.services.openoffice.org/wiki/FastParser
+    @see http://wiki.openoffice.org/wiki/FastParser
 */
 interface XFastParser: com::sun::star::uno::XInterface
 {

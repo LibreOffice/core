@@ -9,4 +9,4 @@ until the original upstream source version it is based on is
 found. Version control of this just starts with the monolithic commit
 of the appleremote01 CWS. Some technical detail can be found in the
 OOo wiki:
-http://wiki.services.openoffice.org/wiki/Mac_OS_X_Porting_-_Apple_Remote_implementation
+http://wiki.openoffice.org/wiki/Mac_OS_X_Porting_-_Apple_Remote_implementation

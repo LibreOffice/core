@@ -28,7 +28,7 @@ namespace cssu = com::sun::star::uno;
 namespace cppu
 {
     /** Helpers for mapping objects relative to the current environment.
-        (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Map_Helpers)
+        (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Map_Helpers)
     */
 
     /** Maps an object from the current to an outer Environment, returns mapped object.

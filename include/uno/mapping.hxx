@@ -290,7 +290,7 @@ inline void * Mapping::mapInterface(
 }
 
 /** Deprecated. This function DOES NOT WORK with Purpose Environments
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
     Maps an binary C UNO interface to be used in the currently used compiler environment.
 
@@ -313,7 +313,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
     return (0 != *ppRet);
 }
 /** Deprecated. This function DOES NOT WORK with Purpose Environments
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Purpose Environments)
 
     Maps an UNO interface of the currently used compiler environment to binary C UNO.
 

@@ -570,7 +570,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             case( DMPAPER_A5 ):
                 pSetupData->mePaperFormat = PAPER_A5;
                 break;
-            //See http://wiki.services.openoffice.org/wiki/DefaultPaperSize
+            //See http://wiki.openoffice.org/wiki/DefaultPaperSize
             //i.e.
             //http://msdn.microsoft.com/en-us/library/dd319099(VS.85).aspx
             //DMPAPER_B4    12  B4 (JIS) 257 x 364 mm

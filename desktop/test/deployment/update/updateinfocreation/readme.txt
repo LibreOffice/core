@@ -29,7 +29,7 @@ EXTUPDATEINFO_URLS = http://extensions.openoffice.org/testarea/desktop/updateinf
 This causes the generation of the update information file. This file could be 
 directly references by the URL in the <update-information> of the description.xml. 
 See also the Wiki entry at:
-http://wiki.services.openoffice.org/wiki/Creating_update_information_for_extensions
+http://wiki.openoffice.org/wiki/Creating_update_information_for_extensions
 This generated update information file can then be used by the webserver, when it 
 sends back the requested update information. The update information file will be 
 generated in the misc diretory of the output directory.

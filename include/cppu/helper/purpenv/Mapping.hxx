@@ -30,7 +30,7 @@
 namespace cppu { namespace helper { namespace purpenv {
 
 /** C++ helper for implementing Purpose Environments.
-    (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Purpose_Bridge_Implementation_Helper)
+    (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Purpose_Bridge_Implementation_Helper)
 
     @since UDK 3.2.7
 */

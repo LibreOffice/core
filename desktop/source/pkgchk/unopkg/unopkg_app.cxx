@@ -102,7 +102,7 @@ const char s_usingText [] =
 "     <context>\n"
 "\n"
 "To learn more about the Extension Manager and extensions, see:\n"
-"http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
+"http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
 
 //------------------------------------------------------------------------------
 const OptionInfo s_option_infos [] = {

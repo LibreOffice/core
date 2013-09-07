@@ -30,7 +30,7 @@ extern "C"
 
 
 /** Generic function type declaration for entering an Environment.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
     @since UDK 3.2.7
@@ -39,7 +39,7 @@ typedef void uno_Enterable_enter     (void * context);
 
 
 /** Generic function type declaration for levaing an Environment.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
     @since UDK 3.2.7
@@ -48,7 +48,7 @@ typedef void uno_Enterable_leave     (void * context);
 
 
 /** Generic function type declaration for calling into an Environment.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
     @param pCallee  the function to be called
@@ -59,7 +59,7 @@ typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, v
 
 
 /** Generic function type declaration for calling out of an Environment.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param context
     @param pCallee  the function to be called
@@ -71,7 +71,7 @@ typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, v
 
 /** Generic function type declaration for checking if calling on managed object is
     valid.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @param  context
     @param  ppReason  the reason, in case calling is not valid
@@ -82,7 +82,7 @@ typedef int  uno_Enterable_isValid_v (void * context, rtl_uString ** ppReason);
 
 
 /** A struct pReserved needs to point to, if implementing a purpose environment.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Stack)
 
     @since UDK 3.2.7
 */

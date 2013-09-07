@@ -926,7 +926,7 @@ HCERTSTORE getCertStoreForIntermediatCerts(
 //We return only valid or invalid, as long as the API documentation expresses
 //explicitly that all validation steps are carried out even if one or several
 //errors occur. See also
-//http://wiki.services.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
+//http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
 sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     const Reference< ::com::sun::star::security::XCertificate >& aCert,
     const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)

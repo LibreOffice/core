@@ -45,7 +45,7 @@ using namespace ::rtl;
    All dictionary searching and loading is performed in the xdictionary class.
    The only thing you need to do is to derive your class from BreakIterator_CJK
    and create an instance of the xdictionary with the language name and
-   pass it to the parent class." (from http://wiki.services.openoffice.org/wiki/
+   pass it to the parent class." (from http://wiki.openoffice.org/wiki/
    /Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale - 27/01/2011)
 */
 

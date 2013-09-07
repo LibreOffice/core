@@ -69,7 +69,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     The property values are usually held in derived classes, but can also be given to the
     responsibility of this class here.
 
-    For more information, see http://wiki.services.openoffice.org/wiki/Development/Cpp/Helper/PropertyContainerHelper.
+    For more information, see http://wiki.openoffice.org/wiki/Development/Cpp/Helper/PropertyContainerHelper.
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {

@@ -3451,7 +3451,7 @@ Croatian
 
    These patterns were manually converted from TeX hyphenation patterns
    using the guide at
-   http://wiki.services.openoffice.org/wiki/Documentation/SL/Using_Te
+   http://wiki.openoffice.org/wiki/Documentation/SL/Using_Te
    X_hyphenation_patterns_in_OpenOffice.org
 
    Original version:

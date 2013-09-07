@@ -221,7 +221,7 @@ oneToOneMapping& widthfolding::getfull2halfTableForASC()
     //  0xFFE5 (FULLWIDTH YEN SIGN)  --> 0x005C (REVERSE SOLIDUS)
     //
     //  See the following page for detail:
-    // http://wiki.services.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
+    // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
     int i, j, high, low;
     int n = sizeof(full2halfASCException) / sizeof(UnicodePairWithFlag);
     for( i = 0; i < n; i++ )
@@ -255,7 +255,7 @@ oneToOneMapping& widthfolding::gethalf2fullTableForJIS()
     //  0x0060 (GRAVE ACCENT)    --> 0x2018 (LEFT SINGLE QUOTATION MARK)
     //
     //  See the following page for detail:
-    // http://wiki.services.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
+    // http://wiki.openoffice.org/wiki/Calc/Features/JIS_and_ASC_functions
     int i, j, high, low;
     int n = sizeof(half2fullJISException) / sizeof(UnicodePairWithFlag);
     for( i = 0; i < n; i++ )

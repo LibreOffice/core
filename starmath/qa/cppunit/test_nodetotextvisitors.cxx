@@ -122,7 +122,7 @@ void Test::tearDown()
 
 /*
  * Most of the formula commands in this file came from:
- * http://wiki.services.openoffice.org/wiki/Template:Math_commands_reference
+ * http://wiki.openoffice.org/wiki/Template:Math_commands_reference
  * which was licensed with a
  * Creative Common Attribution 3.0 license and written by:
  * Jeanweber, Weegreenblobbie, Jdpipe, TJFrazier, Ysangkok, B michaelsen, Spellbreaker

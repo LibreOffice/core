@@ -60,9 +60,9 @@ interface XReportControlModel
           The format to use is <code>rpt:[functionName]</code>
         - an expression like <code>rpt:24+24-47</code>
 
-        @see http://wiki.services.openoffice.org/wiki/SUN_Report_Builder
-        @see http://wiki.services.openoffice.org/wiki/SUN_Report_Builder#Syntax
-        @see http://wiki.services.openoffice.org/wiki/Base/Reports/Functions
+        @see http://wiki.openoffice.org/wiki/SUN_Report_Builder
+        @see http://wiki.openoffice.org/wiki/SUN_Report_Builder#Syntax
+        @see http://wiki.openoffice.org/wiki/Base/Reports/Functions
     */
     [attribute,bound] string DataField
     {

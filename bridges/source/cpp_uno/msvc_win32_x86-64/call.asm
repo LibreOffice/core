@@ -29,7 +29,7 @@
 ;; here:
 
 ;; Caolan's "Lazy Hackers Guide To Porting" is useful:
-;; http://wiki.services.openoffice.org/wiki/Lazy_Hackers_Guide_To_Porting
+;; http://wiki.openoffice.org/wiki/Lazy_Hackers_Guide_To_Porting
 
 ;; As for details about the x64 Windows calling convention, register
 ;; usage, stack usage, exception handling etc, the official

@@ -29,7 +29,7 @@ extern "C"
 #endif
 
 /** Get the OBI type part of an environment descriptor.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
 
     @param pEnvDcp        the Environment Descriptor
     @param ppEnvTypeName  the OBI type
@@ -39,7 +39,7 @@ CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uStr
 
 
 /** Get the purpose part of an environment descriptor.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
 
     @param pEnvDcp        the Environment Descriptor
     @param ppEnvPurpose   the purpose

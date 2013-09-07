@@ -13,7 +13,7 @@
 
 import sys
 
-devguidewww = "http://wiki.services.openoffice.org/wiki/"
+devguidewww = "http://wiki.openoffice.org/wiki/"
 in_topic = False
 link = None
 description = None

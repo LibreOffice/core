@@ -57,7 +57,7 @@ static const XclPaperSize pPaperSizeTable[] =
         { PAPER_A4,         MM2TWIPS( 210 ),    MM2TWIPS( 297 )     },  // A4
 /* 10*/ { PAPER_USER,       MM2TWIPS( 210 ),    MM2TWIPS( 297 )     },  // A4 Small
         { PAPER_A5,         MM2TWIPS( 148 ),    MM2TWIPS( 210 )     },  // A5
-        //See: http://wiki.services.openoffice.org/wiki/DefaultPaperSize comments
+        //See: http://wiki.openoffice.org/wiki/DefaultPaperSize comments
         //near DMPAPER_B4 in vcl
         //i.e.
         //http://msdn.microsoft.com/en-us/library/bb241398.aspx makes the claim:

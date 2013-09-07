@@ -26,7 +26,7 @@
 namespace cppu
 {
 /** C++ wrapper for binary C Enterable
-    (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Stack)
+    (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Stack)
 
     @see uno_Enterable
     @since UDK 3.2.7

@@ -396,7 +396,7 @@ Paper PaperInfo::fromPSName(const OString &rName)
     return PAPER_USER;
 }
 
-//http://wiki.services.openoffice.org/wiki/DefaultPaperSize
+//http://wiki.openoffice.org/wiki/DefaultPaperSize
 //http://www.unicode.org/cldr/data/charts/supplemental/territory_language_information.html
 //http://sourceware.org/git/?p=glibc.git;a=tree;f=localedata/locales
 //http://en.wikipedia.org/wiki/Paper_size

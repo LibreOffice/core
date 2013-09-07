@@ -32,7 +32,7 @@ namespace cppu
     /** Environment Guard
         The provided Environment becomes entered in the constructor and left
         in the destructor.
-        (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Guard)
+        (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Guard)
 
         @since UDK 3.2.7
     */
@@ -80,7 +80,7 @@ namespace cppu
     /** Environment Anti-Guard
         Any entered Environment becomes left in the constructor and re-entered
         in the destructor.
-        (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_AntiGuard)
+        (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_AntiGuard)
 
         @since UDK 3.2.7
     */

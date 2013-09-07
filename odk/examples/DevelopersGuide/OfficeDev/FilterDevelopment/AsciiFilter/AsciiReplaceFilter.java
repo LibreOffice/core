@@ -713,7 +713,7 @@ public class AsciiReplaceFilter
      */
     // This method not longer necessary since OOo 3.4 where the component registration
     // was changed to passive component registration. For more details see
-    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+    // http://wiki.openoffice.org/wiki/Passive_Component_Registration
 
 //     public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
 //     {

@@ -29,7 +29,7 @@ namespace cppu
 namespace EnvDcp
 {
 /** Get the OBI type part of an environment descriptor.
-    (http://wiki.services.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Descriptor)
+    (http://wiki.openoffice.org/wiki/Uno/Cpp/Spec/Environment_Descriptor)
 
     @param  rEnvDcp        the Environment Descriptor
     @return                the OBI type
@@ -45,7 +45,7 @@ inline rtl::OUString getTypeName(rtl::OUString const & rEnvDcp)
 }
 
 /** Get the purpose part of an environment descriptor.
-    (http://wiki.services.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
+    (http://wiki.openoffice.org/wiki/Uno/Binary/Spec/Environment_Descriptor)
 
     @param  rEnvDcp        the Environment Descriptor
     @return                the purpose

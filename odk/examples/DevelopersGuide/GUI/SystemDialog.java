@@ -92,7 +92,7 @@ public class SystemDialog  {
             xFilePicker.setDisplayDirectory(sTemplateUrl);
 
             // set the filters of the dialog. The filternames may be retrieved from
-            // http://wiki.services.openoffice.org/wiki/Framework/Article/Filter
+            // http://wiki.openoffice.org/wiki/Framework/Article/Filter
             XFilterManager xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, xFilePicker);
             xFilterManager.appendFilter("OpenDocument Text Template", "writer8_template");
             xFilterManager.appendFilter("OpenDocument Text", "writer8");
