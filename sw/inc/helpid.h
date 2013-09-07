@@ -400,7 +400,6 @@
 #define HID_MM_CUSTOMFIELDS                                     "SW_HID_MM_CUSTOMFIELDS"
 #define HID_MM_MAILSTATUS_TLB                                   "SW_HID_MM_MAILSTATUS_TLB"
 #define HID_RETURN_TO_MAILMERGE                                 "SW_HID_RETURN_TO_MAILMERGE"
-#define HID_MM_SAVEWARNING                                      "SW_HID_MM_SAVEWARNING"
 #define HID_MM_QUERY                                            "SW_HID_MM_QUERY"
 #define HID_MM_SENDWARNING                                      "SW_HID_MM_SENDWARNING"
 

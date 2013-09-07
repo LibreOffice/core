@@ -87,8 +87,6 @@
 
 #define IM_WARNING                  1
 #define FI_WARNING                  2
-#define FT_FILENAME                 3
-#define ED_FILENAME                 4
 
 #endif
 

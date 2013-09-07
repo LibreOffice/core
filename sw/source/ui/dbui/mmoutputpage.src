@@ -384,57 +384,6 @@ ModalDialog DLG_MM_COPYTO
     };
 };
 
-ModalDialog DLG_MM_SAVEWARNING
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_MM_SAVEWARNING;
-    Size = MAP_APPFONT ( 200 , 99 ) ;
-    Moveable = TRUE ;
-
-    Text = "%PRODUCTNAME";
-    FixedImage IM_WARNING
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 30 , 30 ) ;
-    };
-    FixedText FI_WARNING
-    {
-        Pos = MAP_APPFONT ( 40 , 3 ) ;
-        Size = MAP_APPFONT ( 150 , 30 ) ;
-        WordBreak = TRUE;
-        Text[ en-US ] = "A document with the name '%1' already exists. Please save this document under a different name.";
-    };
-    FixedText   FT_FILENAME
-    {
-        Pos = MAP_APPFONT (  40, 39 ) ;
-        Size = MAP_APPFONT (  154, 8 ) ;
-        Text[ en-US ] = "New document name";
-    };
-    Edit ED_FILENAME
-    {
-        HelpID = "sw:Edit:DLG_MM_SAVEWARNING:ED_FILENAME";
-        Pos = MAP_APPFONT ( 40 , 50 ) ;
-        Size = MAP_APPFONT ( 154 , 12 ) ;
-        Border = TRUE;
-    };
-    FixedLine FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 0 , 68 ) ;
-        Size = MAP_APPFONT ( 200 , 8 ) ;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 40 ,  79) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 93 , 79 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
 ModalDialog DLG_MM_QUERY
 {
     OutputSize = TRUE ;

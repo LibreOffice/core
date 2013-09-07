@@ -719,6 +719,9 @@ public:
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
     ~MessageDialog();
+
+    static void SetMessagesWidths(Window *pParent, VclMultiLineEdit *pPrimaryMessage,
+        VclMultiLineEdit *pSecondaryMessage);
 };
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);

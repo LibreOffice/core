@@ -1859,6 +1859,24 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
     }
 }
 
+void MessageDialog::SetMessagesWidths(Window *pParent,
+    VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
+{
+    if (pSecondaryMessage)
+    {
+        assert(pPrimaryMessage);
+        Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
+        aFont.SetSize(Size(0, aFont.GetSize().Height() * 1.2));
+        aFont.SetWeight(WEIGHT_BOLD);
+        pPrimaryMessage->SetControlFont(aFont);
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
+        pSecondaryMessage->SetMaxTextWidth(pSecondaryMessage->approximate_char_width() * 80);
+    }
+    else
+        pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 80);
+}
+
+
 short MessageDialog::Execute()
 {
     setDeferredProperties();
@@ -1899,19 +1917,12 @@ short MessageDialog::Execute()
         m_pPrimaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
         m_pPrimaryMessage->SetPaintTransparent(true);
         m_pPrimaryMessage->EnableCursor(false);
-        Font aFont = GetSettings().GetStyleSettings().GetLabelFont();
 
-        if (bHasSecondaryText)
-            aFont.SetSize(Size(0, aFont.GetSize().Height() * 1.2));
-
-        aFont.SetWeight(WEIGHT_BOLD);
-        m_pPrimaryMessage->SetControlFont(aFont);
         m_pPrimaryMessage->set_grid_left_attach(1);
         m_pPrimaryMessage->set_grid_top_attach(0);
         m_pPrimaryMessage->set_hexpand(true);
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
-        m_pPrimaryMessage->SetMaxTextWidth(m_pPrimaryMessage->approximate_char_width() * 60);
 
         m_pSecondaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
         m_pSecondaryMessage->SetPaintTransparent(true);
@@ -1921,7 +1932,8 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->set_hexpand(true);
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
-        m_pSecondaryMessage->SetMaxTextWidth(m_pSecondaryMessage->approximate_char_width() * 80);
+
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage : NULL);
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);

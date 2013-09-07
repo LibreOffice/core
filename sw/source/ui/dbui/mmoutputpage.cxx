@@ -35,6 +35,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/printer.hxx>
@@ -107,22 +108,20 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
 
 class SwSaveWarningBox_Impl : public ModalDialog
 {
-    FixedImage      aWarningImageIM;
-    FixedInfo       aWarningFI;
-
-    FixedText       aFileNameFT;
-    Edit            aFileNameED;
-
-    FixedLine       aSeparatorFL;
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
+    OKButton*         m_pOKPB;
+    FixedImage*       m_pWarningImageIM;
+    VclMultiLineEdit* m_pPrimaryMessage;
+    VclMultiLineEdit* m_pSecondaryMessage;
+    Edit*             m_pFileNameED;
 
     DECL_LINK( ModifyHdl, Edit*);
 public:
-    SwSaveWarningBox_Impl(Window* pParent, const String& rFileName);
-    ~SwSaveWarningBox_Impl();
+    SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName);
 
-    String          GetFileName() const {return aFileNameED.GetText();}
+    OUString        GetFileName() const
+    {
+        return m_pFileNameED->GetText();
+    }
 };
 
 class SwSendQueryBox_Impl : public ModalDialog
@@ -156,35 +155,32 @@ public:
                         }
 };
 
-SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const String& rFileName) :
-    ModalDialog(pParent, SW_RES(   DLG_MM_SAVEWARNING )),
-    aWarningImageIM(this,   SW_RES( IM_WARNING   )),
-    aWarningFI(this,        SW_RES( FI_WARNING   )),
-    aFileNameFT(this,       SW_RES( FT_FILENAME  )),
-    aFileNameED(this,       SW_RES( ED_FILENAME  )),
-    aSeparatorFL(this,      SW_RES( FL_SEPARATOR )),
-    aOKPB(this,             SW_RES( PB_OK        )),
-    aCancelPB(this,         SW_RES( PB_CANCEL    ))
+SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName)
+    : ModalDialog(pParent, "AlreadyExistsDialog",
+        "modules/swriter/ui/alreadyexistsdialog.ui")
 {
-    FreeResource();
-    aWarningImageIM.SetImage(WarningBox::GetStandardImage());
-    aFileNameED.SetText(rFileName);
-    aFileNameED.SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
+    get(m_pOKPB, "ok");
+    get(m_pPrimaryMessage, "primarymessage");
+    m_pPrimaryMessage->SetPaintTransparent(true);
+    get(m_pSecondaryMessage, "secondarymessage");
+    m_pSecondaryMessage->SetPaintTransparent(true);
+    MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, m_pSecondaryMessage);
+    get(m_pWarningImageIM, "image");
+    get(m_pFileNameED, "filename");
+    m_pWarningImageIM->SetImage(WarningBox::GetStandardImage());
+    m_pFileNameED->SetText(rFileName);
+    m_pFileNameED->SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
 
     INetURLObject aTmp(rFileName);
-    aWarningFI.SetText(aWarningFI.GetText().replaceAll("%1", aTmp.getName(
+    m_pPrimaryMessage->SetText(m_pPrimaryMessage->GetText().replaceAll("%1", aTmp.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)));
 
-    ModifyHdl( &aFileNameED );
-}
-
-SwSaveWarningBox_Impl::~SwSaveWarningBox_Impl()
-{
+    ModifyHdl(m_pFileNameED);
 }
 
 IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(!pEdit->GetText().isEmpty());
+    m_pOKPB->Enable(!pEdit->GetText().isEmpty());
     return 0;
 }
 
