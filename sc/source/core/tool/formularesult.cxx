@@ -411,7 +411,7 @@ const OUString & ScFormulaResult::GetString() const
                 ;   // nothing
         }
     }
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 ScConstMatrixRef ScFormulaResult::GetMatrix() const
