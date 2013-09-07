@@ -123,7 +123,7 @@ bool ChartController::EndTextEdit()
     {
         pOutliner->SetText( *pParaObj );
 
-        String aString = pOutliner->GetText(
+        OUString aString = pOutliner->GetText(
                             pOutliner->GetParagraph( 0 ),
                             pOutliner->GetParagraphCount() );
 
@@ -173,7 +173,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     {
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
-        String aString;
+        OUString aString;
         if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
              pItem->ISA(SfxStringItem) )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();

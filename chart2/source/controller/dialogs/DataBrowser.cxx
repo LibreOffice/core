@@ -664,9 +664,9 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
 
             if( ! ::rtl::math::isNan( fData ) &&
                 m_spNumberFormatterWrapper.get() )
-                aResult = String( m_spNumberFormatterWrapper->getFormattedString(
+                aResult = m_spNumberFormatterWrapper->getFormattedString(
                                       GetNumberFormatKey( nRow, nColumnId ),
-                                      fData, nLabelColor, bColorChanged ));
+                                      fData, nLabelColor, bColorChanged );
         }
         else if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXTORDATE )
         {
@@ -681,8 +681,8 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                 bool bColorChanged = false;
                 sal_Int32 nDateNumberFormat = DiagramHelper::getDateNumberFormat( Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY) );
                 if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
-                    aResult = String( m_spNumberFormatterWrapper->getFormattedString(
-                        nDateNumberFormat, fDouble, nLabelColor, bColorChanged ));
+                    aResult = m_spNumberFormatterWrapper->getFormattedString(
+                        nDateNumberFormat, fDouble, nLabelColor, bColorChanged );
             }
         }
         else
@@ -995,7 +995,7 @@ void DataBrowser::PaintCell(
     Point aPos( rRect.TopLeft());
     aPos.X() += 1;
 
-    String aText = GetCellText( m_nSeekRow, nColumnId );
+    OUString aText = GetCellText( m_nSeekRow, nColumnId );
     Size TxtSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight());
 
     // clipping
@@ -1085,7 +1085,7 @@ void DataBrowser::InitController(
         // treat invalid and empty text as Nan
         m_aNumberEditField.EnableNotANumber( true );
         if( ::rtl::math::isNan( GetCellNumber( nRow, nCol )))
-            m_aNumberEditField.SetTextValue( String());
+            m_aNumberEditField.SetTextValue( OUString());
         else
             m_aNumberEditField.SetValue( GetCellNumber( nRow, nCol ) );
         OUString aText( m_aNumberEditField.GetText());
@@ -1256,11 +1256,11 @@ void DataBrowser::RenewSeriesHeaders()
             spHeader->SetColor( Color( nColor ));
         spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
-            String( DataSeriesHelper::getDataSeriesLabel(
+            DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString( "values-y")))));
+                         OUString( "values-y"))));
         spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );

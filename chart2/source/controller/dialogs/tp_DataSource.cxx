@@ -437,7 +437,7 @@ void DataSourceTabPage::updateControlsFromDialogModel()
     SeriesSelectionChangedHdl( 0 );
 
     // categories
-    m_aEDT_CATEGORIES.SetText( String( m_rDialogModel.getCategoriesRange() ));
+    m_aEDT_CATEGORIES.SetText( m_rDialogModel.getCategoriesRange() );
 
     updateControlState();
 }
@@ -606,11 +606,11 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
         if( nIndex != -1 )
         {
             m_aFT_RANGE.SetText(
-                String( m_aFixedTextRange.replaceAt(
-                            nIndex, aReplacementStr.getLength(), aSelectedRoleUI )));
+                m_aFixedTextRange.replaceAt(
+                            nIndex, aReplacementStr.getLength(), aSelectedRoleUI ));
         }
 
-        m_aEDT_RANGE.SetText( String( aSelectedRange ));
+        m_aEDT_RANGE.SetText( aSelectedRange );
         isValid();
     }
 
@@ -840,18 +840,18 @@ void DataSourceTabPage::listeningFinished(
     GrabFocus();
     if( m_pCurrentRangeChoosingField )
     {
-        m_pCurrentRangeChoosingField->SetText( String( aRange ));
+        m_pCurrentRangeChoosingField->SetText( aRange );
         m_pCurrentRangeChoosingField->GrabFocus();
     }
 
     if( m_pCurrentRangeChoosingField == & m_aEDT_RANGE )
     {
-        m_aEDT_RANGE.SetText( String( aRange ));
+        m_aEDT_RANGE.SetText( aRange );
         setDirty();
     }
     else if( m_pCurrentRangeChoosingField == & m_aEDT_CATEGORIES )
     {
-        m_aEDT_CATEGORIES.SetText( String( aRange ));
+        m_aEDT_CATEGORIES.SetText( aRange );
         setDirty();
     }
 

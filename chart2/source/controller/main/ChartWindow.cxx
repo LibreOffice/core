@@ -209,10 +209,10 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
         {
             if( bIsBalloonHelp )
                 Help::ShowBalloon(
-                    this, rHEvt.GetMousePosPixel(), lcl_AWTRectToVCLRect( aHelpRect ), String( aQuickHelpText ));
+                    this, rHEvt.GetMousePosPixel(), lcl_AWTRectToVCLRect( aHelpRect ), aQuickHelpText );
             else
                 Help::ShowQuickHelp(
-                    this, lcl_AWTRectToVCLRect( aHelpRect ), String( aQuickHelpText ));
+                    this, lcl_AWTRectToVCLRect( aHelpRect ), aQuickHelpText );
         }
     }
 

@@ -182,7 +182,7 @@ void RangeChooserTabPage::initControlsFromModel()
         m_rDialogModel.detectArguments(
             m_aLastValidRangeString, bUseColumns, bFirstCellAsLabel, bHasCategories );
     else
-        m_aLastValidRangeString = String::EmptyString();
+        m_aLastValidRangeString = "";
 
     m_aED_Range.SetText( m_aLastValidRangeString );
 
@@ -372,7 +372,7 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
     //update dialog state
     ToTop();
     GrabFocus();
-    m_aED_Range.SetText( String( aRange ) );
+    m_aED_Range.SetText( aRange );
     m_aED_Range.GrabFocus();
 
     setDirty();

@@ -923,7 +923,7 @@ void StatisticsItemConverter::FillSpecialItem(
                     StatisticsHelper::getErrorDataSequenceFromDataSource(
                         xErrorBarSource, (nWhichId == SCHATTR_STAT_RANGE_POS), bYError ));
                 if( xSeq.is())
-                    rOutItemSet.Put( SfxStringItem( nWhichId, String( xSeq->getSourceRangeRepresentation())));
+                    rOutItemSet.Put( SfxStringItem( nWhichId, xSeq->getSourceRangeRepresentation()));
             }
         }
         break;

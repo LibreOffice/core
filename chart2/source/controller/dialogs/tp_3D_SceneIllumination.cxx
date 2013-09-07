@@ -51,7 +51,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
 {
     SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
-    String aTipHelpStr( SCH_RESSTR(STR_TIP_LIGHTSOURCE_X) );
+    OUString aTipHelpStr( SCH_RESSTR(STR_TIP_LIGHTSOURCE_X) );
     OUString aTipHelp( aTipHelpStr  );
     const OUString aReplacementStr( "%LIGHTNUMBER" );
     sal_Int32 nIndex = aTipHelp.indexOf( aReplacementStr );
@@ -60,7 +60,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
         aTipHelp = aTipHelp.replaceAt(nIndex, aReplacementStr.getLength(),
             OUString::number( nLightNumber ) );
     }
-    this->SetQuickHelpText( String( aTipHelp ) );
+    this->SetQuickHelpText( aTipHelp );
 }
 
 LightButton::~LightButton()

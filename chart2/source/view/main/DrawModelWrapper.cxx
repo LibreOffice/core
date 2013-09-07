@@ -351,9 +351,9 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rName )
     return getNamedSdrObject( rName, GetPage(0) );
 }
 
-SdrObject* DrawModelWrapper::getNamedSdrObject( const String& rObjectCID, SdrObjList* pSearchList )
+SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrObjList* pSearchList )
 {
-    if(!pSearchList || rObjectCID.Len()==0)
+    if(!pSearchList || rObjectCID.isEmpty())
         return 0;
     sal_uLong nCount = pSearchList->GetObjCount();
     for( sal_uLong nN=0; nN<nCount; nN++  )
