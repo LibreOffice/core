@@ -831,7 +831,7 @@ void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmb
         OUString aQuotes( pQ );
         rString = rString.replaceAll( OUString(cQuote), aQuotes);
     }
-    rString = OUString( cQuote ) + OUString( cQuote );
+    rString = OUString( cQuote ) + rString + OUString( cQuote );
 }
 
 void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
