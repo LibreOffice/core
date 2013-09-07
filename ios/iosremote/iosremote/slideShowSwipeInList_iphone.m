@@ -15,8 +15,10 @@
 #import "slideShowPreviewTable_vc.h"
 #import "ControlVariables.h"
 #import "stopWatch.h"
+#import "Timer.h"
 #import "UIImageView+setImageAnimated.h"
 #import "UIView+Shadowing.h"
+#import "UIViewController+LibOStyling.h"
 #import <QuartzCore/CALayer.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -33,6 +35,8 @@
 @synthesize comManager = _comManager;
 @synthesize currentPage = _currentPage;
 @synthesize slideshow = _slideshow;
+@synthesize timer = _timer;
+@synthesize stopWatch = _stopWatch;
 
 dispatch_queue_t backgroundQueue;
 
@@ -54,6 +58,8 @@ dispatch_queue_t backgroundQueue;
         [self.stopWatch start];
     }
     
+    self.timer = [[Timer alloc] init];
+    
     self.tableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
 }
 
@@ -62,9 +68,14 @@ dispatch_queue_t backgroundQueue;
     if (!self.stopWatch.set) {
         [self.stopWatch setupWithTableViewCell:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
     }
+    if (!self.timer.set) {
+        [self.timer setupWithTableViewCell:[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]];
+    }
     [self.stopWatch updateStartButtonIcon];
+    [self.timer updateStartButtonIcon];
     if ([self.comManager.interpreter.slideShow size] > 0) {
         [self.stopWatch updateStartButtonIcon];
+        [self.timer updateStartButtonIcon];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.slideshow.currentSlide
                                                     inSection:1];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -193,7 +204,7 @@ dispatch_queue_t backgroundQueue;
         [view setShadow];
         
         UIScrollView * scroll = (UIScrollView *) [cell viewWithTag:7];
-        scroll.contentSize = CGSizeMake(417,120);
+        scroll.contentSize = CGSizeMake(412, 120);
         return cell;
     } else {
         static NSString *CellIdentifier = @"slide";
@@ -236,6 +247,7 @@ dispatch_queue_t backgroundQueue;
 
 - (void)viewDidUnload {
     [self setStopWatch:nil];
+    [self setTimer:nil];
     [super viewDidUnload];
 }
 
@@ -260,9 +272,14 @@ dispatch_queue_t backgroundQueue;
             switch (page) {
                 case 0:
                     [label setText:NSLocalizedString(@"Stop Watch", @"Sidebar section header")];
+                    [self.revealViewController setTitle:@""];
+                    [self.revealViewController setOwner:STOPWATCH];
                     break;
                 case 1:
                     [label setText:NSLocalizedString(@"Timer", @"Sidebar section header")];
+                    [self.revealViewController setTitle:@""];
+                    [self.revealViewController setOwner:TIMER];
+                    break;
                 default:
                     break;
             }

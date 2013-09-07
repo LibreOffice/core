@@ -351,6 +351,8 @@
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
     [[(slideShowSwipeInList *)self.revealViewController.rearViewController stopWatch] setDelegate:self.revealViewController];
+    
+    [[(slideShowSwipeInList *)self.revealViewController.rearViewController timer] setDelegate:self.revealViewController];
 
     self.slideShowImageNoteReadyObserver =[center addObserverForName:MSG_SLIDE_CHANGED
                                                               object:nil

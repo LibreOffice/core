@@ -204,7 +204,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="7" contentMode="scaleToFill" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="Yo8-Hd-Io6">
-                                            <rect key="frame" x="0.0" y="-15" width="320" height="159"/>
+                                            <rect key="frame" x="0.0" y="-15" width="222" height="159"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <view clipsSubviews="YES" tag="8" contentMode="scaleToFill" id="Fer-gZ-WBh">
@@ -281,6 +281,18 @@
                                                             <color key="textColor" red="0.25882352939999997" green="0.32549019610000002" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </label>
+                                                        <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KGL-ig-BXg">
+                                                            <rect key="frame" x="75" y="77" width="33" height="34"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                            <state key="normal" image="timer_settime_btn.png">
+                                                                <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <state key="highlighted">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" red="0.21176470589999999" green="0.81568627449999997" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
                                                     <gestureRecognizers/>
@@ -593,78 +605,9 @@
         <image name="released_next_button.png" width="315" height="220"/>
         <image name="released_previous_button.png" width="315" height="220"/>
         <image name="timer_clear_btn.png" width="60" height="60"/>
+        <image name="timer_settime_btn.png" width="60" height="60"/>
         <image name="timer_start_btn.png" width="60" height="60"/>
     </resources>
-    <classes>
-        <class className="EditableTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
-        </class>
-        <class className="LibONavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
-        </class>
-        <class className="SWRevealViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SWRevealViewController.h"/>
-        </class>
-        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
-        </class>
-        <class className="newServerViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="pinValidation_vc" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="server_list_vc" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
-            <relationships>
-                <relationship kind="action" name="startPresentationAction:"/>
-                <relationship kind="outlet" name="optionsTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc_iphone" superclassName="slideShowPreviewTable_vc">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_iphone.h"/>
-            <relationships>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="slideShowSwipeInList" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList.h"/>
-        </class>
-        <class className="slideShow_vc" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShow_vc.h"/>
-            <relationships>
-                <relationship kind="action" name="accPointerAction:"/>
-                <relationship kind="action" name="nextSlideAction:"/>
-                <relationship kind="action" name="pointerAction:"/>
-                <relationship kind="action" name="previousSlideAction:"/>
-                <relationship kind="outlet" name="blockingView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="bottomView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="notesView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="pointerBtn" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="revealButtonItem" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="secondarySlideView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="slideView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="touchPointerImage" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

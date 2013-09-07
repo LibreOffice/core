@@ -8,9 +8,11 @@
 #import <UIKit/UIKit.h>
 
 @class stopWatch;
+@class Timer;
 
 @interface slideShowSwipeInList : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) stopWatch *stopWatch;
+@property (nonatomic, strong) Timer *timer;
 
 @end
