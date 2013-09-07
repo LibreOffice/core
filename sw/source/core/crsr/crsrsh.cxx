@@ -1934,7 +1934,7 @@ sal_Bool SwCrsrShell::Pop( sal_Bool bOldCrsr )
 
         // If the visible SSelection was not changed
         if( pOldStk->GetPtPos() == m_pCurCrsr->GetPtPos() ||
-            pOldStk->GetPtPos() == m_pCurCrsr->GetMkPos() )
+            pOldStk->GetMkPos() == m_pCurCrsr->GetMkPos() )
         {
             // move "Selections Rectangles"
             m_pCurCrsr->insert( m_pCurCrsr->begin(), pOldStk->begin(), pOldStk->end() );
