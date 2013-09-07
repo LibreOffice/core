@@ -42,7 +42,7 @@ typedef struct _oslMutexImpl
 /*****************************************************************************/
 oslMutex SAL_CALL osl_createMutex()
 {
-    oslMutexImpl* pMutex = (oslMutexImpl*) malloc(sizeof(oslMutexImpl));
+    oslMutexImpl* pMutex = malloc(sizeof(oslMutexImpl));
     pthread_mutexattr_t aMutexAttr;
     int nRet=0;
 
@@ -69,16 +69,14 @@ oslMutex SAL_CALL osl_createMutex()
 
     pthread_mutexattr_destroy(&aMutexAttr);
 
-    return (oslMutex) pMutex;
+    return pMutex;
 }
 
 /*****************************************************************************/
 /* osl_destroyMutex */
 /*****************************************************************************/
-void SAL_CALL osl_destroyMutex(oslMutex Mutex)
+void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
     OSL_ASSERT(pMutex);
 
     if ( pMutex != 0 )
@@ -101,10 +99,8 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 /*****************************************************************************/
 /* osl_acquireMutex */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
+sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 {
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
     OSL_ASSERT(pMutex);
 
     if ( pMutex != 0 )
@@ -128,10 +124,8 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 /* osl_tryToAcquireMutex */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
+sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 {
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
     OSL_ASSERT(pMutex);
 
     if ( pMutex )
@@ -151,10 +145,8 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 /*****************************************************************************/
 /* osl_releaseMutex */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
+sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
 {
-    oslMutexImpl* pMutex = (oslMutexImpl*) Mutex;
-
     OSL_ASSERT(pMutex);
 
     if ( pMutex )
