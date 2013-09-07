@@ -50,7 +50,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		-i $(3) \
 		-o $(1) \
 		-m $${MERGEINPUT} \
-		-l all) && \
+		-l all \
+		$(if $(filter MSC,$(COM)),$(if $(strip $(gb_WITH_LANG)),-b))) && \
 rm -rf $${MERGEINPUT}
 
 endef

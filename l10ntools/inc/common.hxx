@@ -28,12 +28,14 @@ struct HandledArgs
     OString m_sMergeSrc;
     OString m_sLanguage;
     bool m_bMergeMode;
+    bool m_bUTF8BOM;
     HandledArgs()
         : m_sInputFile( OString() )
         , m_sOutputFile( OString() )
         , m_sMergeSrc( OString() )
         , m_sLanguage( OString() )
         , m_bMergeMode( false )
+        , m_bUTF8BOM( false )
     {}
 };
 

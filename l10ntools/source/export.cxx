@@ -69,8 +69,8 @@ FILE * init(int argc, char ** argv) {
     }
 
     if (aArgs.m_bMergeMode) {
-        global::exporter.reset(
-            new Export(aArgs.m_sMergeSrc, aArgs.m_sOutputFile, aArgs.m_sLanguage));
+        global::exporter.reset(new Export(aArgs.m_sMergeSrc, aArgs.m_sOutputFile,
+                                          aArgs.m_sLanguage, aArgs.m_bUTF8BOM));
     } else {
         global::exporter.reset(new Export(aArgs.m_sOutputFile));
     }
@@ -198,7 +198,7 @@ Export::Export(const OString &rOutput)
 
 Export::Export(
     const OString &rMergeSource, const OString &rOutput,
-    const OString &rLanguage )
+    const OString &rLanguage, bool bUTF8BOM)
                 :
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
@@ -218,6 +218,8 @@ Export::Export(
 {
     aOutput.mSimple = new std::ofstream();
     aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+
+    if ( bUTF8BOM ) WriteUTF8ByteOrderMarkToOutput();
 }
 
 void Export::Init()
