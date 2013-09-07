@@ -696,14 +696,10 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
-        OUStringBuffer aBuf;
-        aBuf.appendAscii("='");
-        OUString aPath = ScGlobal::GetAbsDocName(
-            *pTopic, GetViewData()->GetDocument()->GetDocumentShell());
-        aBuf.append(aPath);
-        aBuf.appendAscii("'#");
-        aBuf.append(*pItem);
-        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+        EnterMatrix("='"
+            + OUString(ScGlobal::GetAbsDocName(*pTopic, GetViewData()->GetDocument()->GetDocumentShell()))
+            + "'#" + *pItem
+                , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;
     }
     else
@@ -711,24 +707,15 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // DDE in all other cases.
 
         // TODO: we could define ocQuote for "
-        OUStringBuffer aBuf;
-        aBuf.append(sal_Unicode('='));
-        aBuf.append(ScCompiler::GetNativeSymbol(ocDde));
-        aBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(*pApp);
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(*pTopic);
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(ScCompiler::GetNativeSymbol(ocSep));
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(*pItem);
-        aBuf.append(sal_Unicode('"'));
-        aBuf.append(ScCompiler::GetNativeSymbol(ocClose));
-
-        EnterMatrix(aBuf.makeStringAndClear(), ::formula::FormulaGrammar::GRAM_NATIVE);
+        EnterMatrix("=" + OUString(ScCompiler::GetNativeSymbol(ocDde))
+            + ScCompiler::GetNativeSymbol(ocOpen)
+            + "\"" + *pApp + "\""
+            + ScCompiler::GetNativeSymbol(ocSep)
+            + "\"" + *pTopic + "\""
+            + ScCompiler::GetNativeSymbol(ocSep)
+            + "\"" + *pItem + "\""
+            + ScCompiler::GetNativeSymbol(ocClose)
+                , ::formula::FormulaGrammar::GRAM_NATIVE);
     }
 
     //  mark range
