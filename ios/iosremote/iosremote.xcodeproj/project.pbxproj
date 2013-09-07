@@ -87,7 +87,6 @@
 		8C23B46C17DB3B8600FB4DE6 /* timer_settime_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */; };
 		8C23B46D17DB3B8600FB4DE6 /* timer_settime_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */; };
 		8C23B47017DB419300FB4DE6 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C23B46F17DB419300FB4DE6 /* Timer.m */; };
-		8C23B47317DBAFD200FB4DE6 /* TimerCountdownTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C23B47217DBAFD200FB4DE6 /* TimerCountdownTimePicker.m */; };
 		8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */; };
 		8C26E5C917A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */; };
 		8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */; };
@@ -243,8 +242,6 @@
 		8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_settime_btn@2x.png"; path = "iosremote/timer_settime_btn@2x.png"; sourceTree = "<group>"; };
 		8C23B46E17DB419300FB4DE6 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = iosremote/Timer.h; sourceTree = "<group>"; };
 		8C23B46F17DB419300FB4DE6 /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Timer.m; path = iosremote/Timer.m; sourceTree = "<group>"; };
-		8C23B47117DBAFD200FB4DE6 /* TimerCountdownTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerCountdownTimePicker.h; path = iosremote/TimerCountdownTimePicker.h; sourceTree = "<group>"; };
-		8C23B47217DBAFD200FB4DE6 /* TimerCountdownTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimerCountdownTimePicker.m; path = iosremote/TimerCountdownTimePicker.m; sourceTree = "<group>"; };
 		8C26E5BE17A525FC007DA4B7 /* MGSplitCornersView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitCornersView.h; sourceTree = "<group>"; };
 		8C26E5BF17A525FC007DA4B7 /* MGSplitCornersView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSplitCornersView.m; sourceTree = "<group>"; };
 		8C26E5C017A525FC007DA4B7 /* MGSplitDividerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitDividerView.h; sourceTree = "<group>"; };
@@ -577,8 +574,6 @@
 				8C19F42E17B05089005BDB61 /* LibONavigationController.m */,
 				8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */,
 				8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */,
-				8C23B47117DBAFD200FB4DE6 /* TimerCountdownTimePicker.h */,
-				8C23B47217DBAFD200FB4DE6 /* TimerCountdownTimePicker.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -871,7 +866,6 @@
 				8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */,
 				8C23B46917DA158C00FB4DE6 /* UIView+Shadowing.m in Sources */,
 				8C23B47017DB419300FB4DE6 /* Timer.m in Sources */,
-				8C23B47317DBAFD200FB4DE6 /* TimerCountdownTimePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
