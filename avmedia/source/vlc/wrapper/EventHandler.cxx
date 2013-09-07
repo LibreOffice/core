@@ -11,12 +11,18 @@
 
 namespace VLC
 {
-EventHandler::EventHandler( const char *name )
-    : Thread( name )
+EventHandler::EventHandler()
+    : ::osl::Thread()
 {
 }
 
-void EventHandler::execute()
+void EventHandler::stop()
+{
+    mCallbackQueue.push(TCallback());
+    join();
+}
+
+void EventHandler::run()
 {
     TCallback callback;
     do
@@ -25,8 +31,8 @@ void EventHandler::execute()
 
         if ( callback.empty() )
             return;
-        else
-            callback();
+
+        callback();
     } while ( true );
 }
 

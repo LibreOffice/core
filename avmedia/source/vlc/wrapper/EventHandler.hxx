@@ -15,13 +15,14 @@
 
 namespace VLC
 {
-    class EventHandler : public salhelper::Thread
+    class EventHandler : public ::osl::Thread
     {
     public:
-        EventHandler( const char* name );
+        EventHandler();
+        void stop();
 
     protected:
-        virtual void execute();
+        virtual void run();
 
     public:
         typedef boost::function< void() > TCallback;

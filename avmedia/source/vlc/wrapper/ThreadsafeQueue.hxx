@@ -52,22 +52,21 @@ void ThreadsafeQueue<T>::push( const T& data )
 {
     ::osl::MutexGuard guard( mMutex );
     mQueue.push( data );
+    mMutex.release();
     mCondition.set();
 }
 
 template<class T>
 void ThreadsafeQueue<T>::pop( T& data )
 {
-    mMutex.acquire();
-    if ( mQueue.empty() )
+    mCondition.wait();
+    ::osl::MutexGuard guard( mMutex );
+    while ( mQueue.empty() )
     {
         mMutex.release();
         mCondition.wait();
-        mCondition.reset();
+        mMutex.acquire();
     }
-
-    ::osl::MutexGuard guard( mMutex );
-
     data = mQueue.front();
     mQueue.pop();
 }
