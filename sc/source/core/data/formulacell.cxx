@@ -2186,7 +2186,10 @@ bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
 
     // This formula cell itself is being shifted during cell range
     // insertion or deletion. Update its position.
-    if (mxGroup && mxGroup->mnStart == aPos.Row())
+
+    if (mxGroup && (mxGroup->mnStart+mxGroup->mnLength-1) == aPos.Row())
+        // For a shared formula cell, update its group start position only
+        // when it's the last cell of the group.
         mxGroup->mnStart += rCxt.mnRowDelta;
 
     aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);

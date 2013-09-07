@@ -391,6 +391,59 @@ void Test::testSharedFormulasRefUpdate()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert values to A3:A5.
+    m_pDoc->SetValue(ScAddress(0,2,0), 1);
+    m_pDoc->SetValue(ScAddress(0,3,0), 2);
+    m_pDoc->SetValue(ScAddress(0,4,0), 3);
+
+    // Insert formulas to B3:B5.
+    m_pDoc->SetString(ScAddress(1,2,0), "=SUM($A$3:$A$5)");
+    m_pDoc->SetString(ScAddress(1,3,0), "=SUM($A$3:$A$5)");
+    m_pDoc->SetString(ScAddress(1,4,0), "=SUM($A$3:$A$5)");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($A$3:$A$5)"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(1,3,0), "SUM($A$3:$A$5)"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(1,4,0), "SUM($A$3:$A$5)"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // B3:B5 should be shared.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should be shared.", pFC && pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("B4 should be shared.", pFC && pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,4,0));
+    CPPUNIT_ASSERT_MESSAGE("B3 should be shared.", pFC && pFC->IsShared());
+
+    // Insert 2 rows at row 1.
+    m_pDoc->InsertRow(ScRange(0,0,0,MAXCOL,1,0));
+
+    // B5:B7 should be shared.
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,4,0));
+    CPPUNIT_ASSERT_MESSAGE("B5 should be shared.", pFC && pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,5,0));
+    CPPUNIT_ASSERT_MESSAGE("B6 should be shared.", pFC && pFC->IsShared());
+    pFC = m_pDoc->GetFormulaCell(ScAddress(1,6,0));
+    CPPUNIT_ASSERT_MESSAGE("B7 should be shared.", pFC && pFC->IsShared());
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,4,0), "SUM($A$5:$A$7)"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(1,5,0), "SUM($A$5:$A$7)"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(1,6,0), "SUM($A$5:$A$7)"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");
