@@ -115,7 +115,7 @@ namespace VLC
 
     bool Player::play()
     {
-        return libvlc_media_player_play( mPlayer );
+        return libvlc_media_player_play( mPlayer ) == 0;
     }
 
     void Player::pause()
@@ -190,11 +190,11 @@ namespace VLC
 #endif
     }
 
-    void Player::takeSnapshot(const rtl::OUString& file)
+    bool Player::takeSnapshot(const rtl::OUString& file)
     {
         rtl::OString dest;
         file.convertToString( &dest, RTL_TEXTENCODING_UTF8, 0 );
-        libvlc_video_take_snapshot( mPlayer, 0, dest.getStr(), 0, 0 );
+        return libvlc_video_take_snapshot( mPlayer, 0, dest.getStr(), 480, 360 ) == 0;
     }
 
     bool Player::hasVout() const

@@ -13,20 +13,32 @@ using namespace ::com::sun::star;
 namespace avmedia {
 namespace vlc {
 
-const rtl::OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager_VLC";
-const ::rtl::OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
+namespace
+{
+    const rtl::OUString VLC_IMPLEMENTATION_NAME = "com.sun.star.comp.avmedia.Manager_VLC";
+    const ::rtl::OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
+
+    const char * const VLC_ARGS[] = {
+        "-Vdummy",
+        "--snapshot-format=png",
+        "--ffmpeg-threads",
+        "--verbose=-1"
+    };
+}
 
 Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
-    : mEventHandler(new VLC::EventHandler( "EventHandler" ) )
+    : mEventHandler()
     , mxMgr( rxMgr )
 {
     using namespace VLC;
     static bool success = Instance::LoadSymbols() && EventManager::LoadSymbols()
-                          && Media::LoadSymbols() && Player::LoadSymbols() && Common::LoadSymbols();
+                          && Media::LoadSymbols() && Player::LoadSymbols()
+                          && Common::LoadSymbols();
 
     m_is_vlc_found = success;
     if (m_is_vlc_found)
     {
+        mInstance.reset(new Instance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ));
         //Check VLC version
         std::vector<std::string> verComponents;
         const std::string str(Common::Version());
@@ -37,20 +49,20 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
                      boost::is_any_of(". "));
         if (verComponents.size() < 3
             || boost::lexical_cast<int>(verComponents[0]) < 2
-            || (boost::lexical_cast<int>(verComponents[1]) == 0 && boost::lexical_cast<int>(verComponents[2]) < 8))
+            || (boost::lexical_cast<int>(verComponents[1]) == 0
+                && boost::lexical_cast<int>(verComponents[2]) < 8))
         {
             m_is_vlc_found = false;
         }
     }
 
-    std::cout << "T" << std::endl;
-    //if (m_is_vlc_found)
-    //    mEventHandler->launch();
-    std::cout << "T" << std::endl;
+    if (m_is_vlc_found)
+        mEventHandler.create();
 }
 
 Manager::~Manager()
 {
+    mEventHandler.stop();
 }
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUString& rURL )
@@ -59,12 +71,10 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     if ( !m_is_vlc_found )
         return uno::Reference< media::XPlayer >();
 
-    if ( !rURL.isEmpty() || (mPlayer.is() && dynamic_cast<VLCPlayer*>( mPlayer.get() )->url() != rURL))
-    {
-        VLCPlayer* pPlayer( new VLCPlayer( rURL, mEventHandler /*, mxMgr */ ) );
-        mPlayer = uno::Reference< media::XPlayer >( pPlayer );
-    }
-        std::cout << "A" << std::endl;
+    VLCPlayer* pPlayer( new VLCPlayer( rURL,
+                                       *mInstance,
+                                       mEventHandler /*, mxMgr */ ) );
+    mPlayer = uno::Reference< media::XPlayer >( pPlayer );
 
     return mPlayer;
 }

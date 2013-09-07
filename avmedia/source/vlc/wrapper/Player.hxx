@@ -51,7 +51,7 @@ namespace VLC
 
         void setWindow( intptr_t id );
 
-        void takeSnapshot(const rtl::OUString& file);
+        bool takeSnapshot(const rtl::OUString& file);
 
         bool hasVout() const;
 

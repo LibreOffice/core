@@ -24,7 +24,7 @@ const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.com
 const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
 const int MSEC_IN_SEC = 1000;
 
-VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh, const rtl::OUString& url )
+VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
     , mPlayer( player )
     , mUrl( url )
@@ -45,7 +45,8 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::Ev
 
         if ( !mPlayer.play() )
         {
-            std::cerr << "Couldn't play" << std::endl;
+            std::cerr << "Couldn't play when trying to grab frame" << std::endl;
+            return ::uno::Reference< css::graphic::XGraphic >();
         }
 
         mPlayer.setTime( ( fMediaTime > 0 ? fMediaTime : 0 ) * MSEC_IN_SEC );
@@ -63,7 +64,8 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, boost::shared_ptr<VLC::Ev
             return ::uno::Reference< css::graphic::XGraphic >();
         }
 
-        mPlayer.takeSnapshot( fileName );
+        std::cout << "Take snapshot " << fileName << std::endl;
+        std::cout << mPlayer.takeSnapshot( fileName ) << std::endl;
 
         mPlayer.setMute( false );
         mPlayer.stop();

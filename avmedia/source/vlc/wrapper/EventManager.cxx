@@ -30,13 +30,14 @@ namespace VLC
 void EventManager::Handler( const libvlc_event_t *event, void *pData )
 {
     EventManager *instance = static_cast<EventManager*>( pData );
+    std::cout << "HANDLER" << std::endl;
     switch ( event->type )
     {
     case libvlc_MediaPlayerPaused:
-        instance->mEventHandler->mCallbackQueue.push( instance->mOnPaused );
+        instance->mEventHandler.mCallbackQueue.push( instance->mOnPaused );
         break;
     case libvlc_MediaPlayerEndReached:
-        instance->mEventHandler->mCallbackQueue.push( instance->mOnEndReached );
+        instance->mEventHandler.mCallbackQueue.push( instance->mOnEndReached );
         break;
     }
 }
@@ -53,15 +54,11 @@ bool EventManager::LoadSymbols()
     return InitApiMap( VLC_EVENT_MANAGER_API );
 }
 
-EventManager::EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh )
+EventManager::EventManager( VLC::Player& player, VLC::EventHandler& eh )
     : mEventHandler( eh )
     , mManager( libvlc_media_player_event_manager( player ) )
 {
 
-}
-
-EventManager::~EventManager()
-{
 }
 
 void EventManager::registerSignal( int signal, const Callback& callback )

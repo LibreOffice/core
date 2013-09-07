@@ -28,14 +28,13 @@ namespace VLC
         static bool LoadSymbols();
         typedef boost::function<void()> Callback;
 
-        EventManager( VLC::Player& player, boost::shared_ptr<VLC::EventHandler> eh );
-        virtual ~EventManager();
+        EventManager( VLC::Player& player, VLC::EventHandler& eh );
 
         void onPaused( const Callback& callback = Callback() );
         void onEndReached( const Callback& callback = Callback() );
 
     private:
-        boost::shared_ptr<VLC::EventHandler> mEventHandler;
+        VLC::EventHandler& mEventHandler;
         typedef boost::function< void() > TCallback;
         libvlc_event_manager_t *mManager;
         TCallback mOnPaused;

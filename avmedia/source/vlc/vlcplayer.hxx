@@ -42,17 +42,18 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
-    boost::shared_ptr<VLC::EventHandler> mEventHandler;
-    VLC::Instance mInstance;
+    VLC::Instance& mInstance;
+    VLC::EventHandler& mEventHandler;
+
     VLC::Media mMedia;
     VLC::Player mPlayer;
     VLC::EventManager mEventManager;
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
 public:
-    VLCPlayer( const rtl::OUString& iurl, boost::shared_ptr<VLC::EventHandler> eh );
-
-    const rtl::OUString& url() const;
+    VLCPlayer( const rtl::OUString& url,
+               VLC::Instance& instance,
+               VLC::EventHandler& eh );
 
     void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );
     void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException );
@@ -70,11 +71,15 @@ public:
     css::awt::Size SAL_CALL getPreferredPlayerWindowSize() throw ( ::com::sun::star::uno::RuntimeException );
     ::com::sun::star::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
             throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber() throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber()
+            throw ( ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );;
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw ( ::com::sun::star::uno::RuntimeException );;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( ::com::sun::star::uno::RuntimeException );;
+    ::rtl::OUString SAL_CALL getImplementationName()
+            throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
+            throw ( ::com::sun::star::uno::RuntimeException );;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+            throw ( ::com::sun::star::uno::RuntimeException );;
 
 private:
     void replay();

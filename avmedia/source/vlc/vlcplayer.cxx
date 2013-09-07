@@ -1,3 +1,4 @@
+#include <iostream>
 #include <boost/bind.hpp>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -18,34 +19,24 @@ namespace
     const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
     const int MS_IN_SEC = 1000; // Millisec in sec
-
-    const char * const VLC_ARGS[] = {
-        "-Vdummy",
-        "--snapshot-format=png",
-        "--ffmpeg-threads",
-        "--verbose=2"
-    };
 }
 
-VLCPlayer::VLCPlayer( const rtl::OUString& iurl, boost::shared_ptr<VLC::EventHandler> eh )
-    : VLC_Base(m_aMutex)
+VLCPlayer::VLCPlayer( const rtl::OUString& url,
+                      VLC::Instance& instance,
+                      VLC::EventHandler& eh )
+    : VLC_Base( m_aMutex )
+    , mInstance( instance )
     , mEventHandler( eh )
-    , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
-    , mMedia( iurl, mInstance )
+    , mMedia( url, mInstance )
     , mPlayer( mMedia )
     , mEventManager( mPlayer, mEventHandler )
-    , mUrl( iurl )
+    , mUrl( url )
     , mPlaybackLoop( false )
 {
-    mPlayer.setMouseHandling(false);
+    mPlayer.setMouseHandling( false );
 }
 
-const rtl::OUString& VLCPlayer::url() const
-{
-    return mUrl;
-}
-
-void SAL_CALL VLCPlayer::start() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VLCPlayer::start() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     mPlayer.play();
