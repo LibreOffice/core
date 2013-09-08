@@ -24,6 +24,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svtools/htmltokn.h>
+#include <editeng/boxitem.hxx>
 
 #include "doc.hxx"
 #include "pam.hxx"
@@ -663,6 +664,23 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                      pContext->GetToken() != HTML_TABLEDATA_ON )
             {
                 ppAttr = &aAttrTab.pBrush;
+            }
+            break;
+
+        case RES_BOX:
+            if( bCharLvl )
+            {
+                SvxBoxItem aBoxItem( *(const SvxBoxItem *)pItem );
+                aBoxItem.SetWhich( RES_CHRATR_BOX );
+
+                NewAttr( &aAttrTab.pCharBox, aBoxItem );
+
+                _HTMLAttrs &rAttrs = pContext->GetAttrs();
+                rAttrs.push_back( aAttrTab.pCharBox );
+            }
+            else
+            {
+                ppAttr = &aAttrTab.pBox;
             }
             break;
 

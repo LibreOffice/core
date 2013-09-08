@@ -218,6 +218,13 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
         aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
         pCharFmt->SetFmtAttr( aBrushItem );
     }
+
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_False, &pItem ) )
+    {
+        SvxBoxItem aBoxItem( *(const SvxBoxItem *)pItem );
+        aBoxItem.SetWhich( RES_CHRATR_BOX );
+        pCharFmt->SetFmtAttr( aBoxItem );
+    }
 }
 
 void SwCSS1Parser::SetLinkCharFmts()
@@ -1622,6 +1629,9 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
         break;
     case RES_CHRATR_BACKGROUND:
         ppAttr = &aAttrTab.pCharBrush;
+        break;
+    case RES_CHRATR_BOX:
+        ppAttr = &aAttrTab.pCharBox;
         break;
 
     case RES_PARATR_LINESPACING:

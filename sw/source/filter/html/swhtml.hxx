@@ -177,7 +177,8 @@ struct _HTMLAttrTable
                 *pCharBrush,    // Zeichen-Hintergrund
                 *pLanguage,
                 *pLanguageCJK,
-                *pLanguageCTL
+                *pLanguageCTL,
+                *pCharBox
                 ;
 };
 

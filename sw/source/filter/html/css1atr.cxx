@@ -3500,6 +3500,25 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
+    // Avoid interference between character and paragraph attributes
+    if( rHt.Which() < RES_CHRATR_END &&
+        rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
+        return rWrt;
+
+    if( rHt.Which() == RES_CHRATR_BOX )
+    {
+        if( rHTMLWrt.bTagOn )
+        {
+            // Inline-block to make the line height changing correspond to the character border
+            rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_display, "inline-block");
+        }
+        else
+        {
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+            return rWrt;
+        }
+    }
+
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();
     const SvxBorderLine *pBottom = rBoxItem.GetBottom();
@@ -3630,7 +3649,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_HIDDEN */             OutCSS1_SvxHidden,
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
 /* RES_CHRATR_RSID */               0,
-/* RES_CHRATR_BOX */                0,
+/* RES_CHRATR_BOX */                OutCSS1_SvxBox,
 /* RES_CHRATR_SHADOW */             0,
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,

@@ -1384,6 +1384,11 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_PARATR_DROP:
         eState = HTML_DROPCAP_VALUE;
         break;
+
+    case RES_CHRATR_BOX:
+        if( IsHTMLMode(HTMLMODE_SOME_STYLES) )
+            eState = HTML_STYLE_VALUE;
+        break;
     }
 
     return eState;
@@ -1703,6 +1708,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             bSet = bOutStyles &&
                    (!bParaAttrs
                   || rItem.Which()==RES_CHRATR_BACKGROUND
+                  || rItem.Which()==RES_CHRATR_BOX
                   || rItem.Which()==RES_CHRATR_OVERLINE);
             break;
 
@@ -1951,10 +1957,31 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 {
     rHWrt.bTagOn = sal_True;
 
+    // Character border attribute must be the first which is written out
+    // because of border merge.
+    sal_uInt16 nCharBoxIndex = 0;
+    while( nCharBoxIndex < aStartLst.size() &&
+           aStartLst[nCharBoxIndex]->GetItem()->Which() != RES_CHRATR_BOX )
+    {
+        ++nCharBoxIndex;
+    }
+
     // die Attribute in der Start-Liste sind aufsteigend sortiert
     for( sal_uInt16 i=0; i< aStartLst.size(); i++ )
     {
-        HTMLSttEndPos *pPos = aStartLst[i];
+        HTMLSttEndPos *pPos = 0;
+        if( nCharBoxIndex < aStartLst.size() )
+        {
+            if( i == 0 )
+                pPos = aStartLst[nCharBoxIndex];
+            else if( i == nCharBoxIndex )
+                pPos = aStartLst[0];
+            else
+                pPos = aStartLst[i];
+        }
+        else
+            pPos = aStartLst[i];
+
         sal_Int32 nStart = pPos->GetStart();
         if( nStart > nPos )
         {
@@ -2002,7 +2029,27 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
                 pContext = 0; // one time ony
             }
-            Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
+            // Skip closing span if next character span has the same border (border merge)
+            bool bSkipOut = false;
+            if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
+            {
+                for(sal_uInt16 nIndex = _FindStartPos(pPos) + 1; nIndex < aStartLst.size(); ++nIndex )
+                {
+                    HTMLSttEndPos *pEndPos = aStartLst[nIndex];
+                    if( pEndPos->GetItem()->Which() == RES_CHRATR_BOX &&
+                        *static_cast<const SvxBoxItem*>(pEndPos->GetItem()) ==
+                        *static_cast<const SvxBoxItem*>(pPos->GetItem()) )
+                    {
+                        pEndPos->SetStart(pPos->GetStart());
+                        bSkipOut = true;
+                        break;
+                    }
+                }
+            }
+            if( !bSkipOut )
+            {
+                Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
+            }
             _RemoveItem( i );
         }
         else if( nEnd > nPos )
@@ -2386,13 +2433,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         sal_Int32 nPreSplitPos = 0;
         for( ; nStrPos < nEnde; nStrPos++ )
         {
-            aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
-
             // Die an der aktuellen Position verankerten Rahmen ausgeben
             if( bFlysLeft )
+            {
+                aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
                 bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                                 nStrPos, HTML_POS_INSIDE,
                                                 &aContext );
+            }
 
             sal_Bool bOutChar = sal_True;
             const SwTxtAttr * pTxtHt = 0;
@@ -3226,7 +3274,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_HIDDEN */             OutHTML_CSS1Attr,
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
 /* RES_CHRATR_RSID */               0,
-/* RES_CHRATR_BOX */                0,
+/* RES_CHRATR_BOX */                OutHTML_CSS1Attr,
 /* RES_CHRATR_SHADOW */             0,
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,

@@ -15,6 +15,7 @@ class Test : public SwModelTestBase
 {
 public:
     void testFdo62336();
+    void testCharBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -30,6 +31,7 @@ void Test::run()
 {
     MethodEntry<Test> aMethods[] = {
         {"fdo62336.docx", &Test::testFdo62336},
+        {"charborder.odt", &Test::testCharBorder},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -47,6 +49,37 @@ void Test::run()
 void Test::testFdo62336()
 {
     // The problem was essentially a crash during table export as docx/rtf/html
+}
+
+void Test::testCharBorder()
+{
+
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    // Different Border
+    {
+        CPPUNIT_ASSERT_EQUAL_BORDER(
+            table::BorderLine2(6711039,12,12,12,3,37),
+            getProperty<table::BorderLine2>(xRun,"CharTopBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(
+            table::BorderLine2(16750848,0,99,0,2,99),
+            getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(
+            table::BorderLine2(16711680,0,169,0,1,169),
+            getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(
+            table::BorderLine2(255,0,169,0,0,169),
+            getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+    }
+
+    // Different Padding
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(450), getProperty<sal_Int32>(xRun,"CharTopBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(550), getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
+    }
+
+    // No shadow
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
