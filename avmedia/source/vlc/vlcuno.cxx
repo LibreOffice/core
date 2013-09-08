@@ -28,8 +28,8 @@ using namespace ::com::sun::star;
 static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
     fprintf (stderr, "create VLC Media player !\n");
-    (void) rxFact;
-    return uno::Reference< uno::XInterface >(*new ::avmedia::vlc::Manager( rxFact ) );
+    static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager( rxFact ) );
+    return manager;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )

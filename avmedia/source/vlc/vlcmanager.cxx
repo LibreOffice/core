@@ -71,7 +71,17 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     if ( !m_is_vlc_found )
         return uno::Reference< media::XPlayer >();
 
-    VLCPlayer* pPlayer( new VLCPlayer( rURL,
+    if ( !rURL.isEmpty() )
+    {
+        if (mURL == rURL)
+            return mPlayer;
+
+        mURL = rURL;
+    }
+    else
+        return mPlayer;
+
+    VLCPlayer* pPlayer( new VLCPlayer( mURL,
                                        *mInstance,
                                        mEventHandler /*, mxMgr */ ) );
     mPlayer = uno::Reference< media::XPlayer >( pPlayer );

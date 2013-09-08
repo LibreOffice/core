@@ -20,9 +20,12 @@ using namespace ::com::sun::star;
 namespace avmedia {
 namespace vlc {
 
-const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
-const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
-const int MSEC_IN_SEC = 1000;
+namespace
+{
+    const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
+    const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
+    const int MSEC_IN_SEC = 1000;
+}
 
 VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
@@ -30,9 +33,11 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, co
     , mUrl( url )
     , mEventHandler( eh )
 {
+    std::cout << "URL: " << url << std::endl;
 }
 
-::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime ) throw ( ::com::sun::star::uno::RuntimeException )
+::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
+        throw ( ::com::sun::star::uno::RuntimeException )
 {
     osl::Condition condition;
 
@@ -90,12 +95,14 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, co
     return AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName ) throw ( ::com::sun::star::uno::RuntimeException )
+::sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
+        throw ( ::com::sun::star::uno::RuntimeException )
 {
     return AVMEDIA_VLC_GRABBER_SERVICENAME == serviceName;
 }
 
-::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames() throw ( ::com::sun::star::uno::RuntimeException )
+::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()
+        throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::uno::Sequence< OUString > aRet(1);
     aRet[0] = AVMEDIA_VLC_GRABBER_SERVICENAME;

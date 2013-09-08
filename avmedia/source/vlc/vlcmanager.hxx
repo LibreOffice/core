@@ -45,7 +45,7 @@ public:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >  mPlayer;
-
+    rtl::OUString mURL;
     bool m_is_vlc_found;
 };
 
