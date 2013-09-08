@@ -16,8 +16,8 @@ $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xml2-config,xml2-config))
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.2.dylib,.libs/libxml2.2.7.6.dylib,xml2))
-$(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.dylib,.libs/libxml2.2.7.6.dylib))
+$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.2.dylib,.libs/libxml2.2.dylib,xml2))
+$(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.dylib,.libs/libxml2.2.dylib))
 $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
 else ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.a,.libs/libxml2.a))
