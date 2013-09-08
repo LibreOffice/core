@@ -2325,7 +2325,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect )
     GetExport( ).bInWriteTOX = false;
 }
 
-bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
+bool MSWordExportBase::GetNumberFmt(const SwField& rFld, OUString& rStr)
 {
     // Returns a date or time format string by using the US NfKeywordTable
     bool bHasFmt = false;
@@ -2338,16 +2338,14 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
         LocaleDataWrapper aLocDat(pNFmtr->GetComponentContext(),
                                   LanguageTag(nLng));
 
-        String sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),
+        OUString sFmt(pNumFmt->GetMappedFormatstring(GetNfKeywordTable(),
             aLocDat));
 
-        if (sFmt.Len())
+        if (!sFmt.isEmpty())
         {
             sw::ms::SwapQuotesInField(sFmt);
 
-            rStr.AppendAscii( "\\@\"" );
-            rStr += sFmt;
-            rStr.AppendAscii( "\" " );
+            rStr = "\\@\"" + sFmt + "\" " ;
             bHasFmt = true;
         }
     }
@@ -2632,7 +2630,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             bWriteExpand = true;
         else
         {
-            String sStr;
+            OUString sStr;
             ww::eField eFld(ww::eNONE);
             switch (0xff & nSubType)
             {
@@ -2690,9 +2688,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                             if (nIndex != sFieldname.Len())
                                 sFieldname = sFieldname.Copy(nIndex + 1);
 
-                            sStr.Insert(sQuotes);
-                            sStr.Insert(sFieldname);
-                            sStr.Insert(sQuotes);
+                            sStr = sQuotes + sFieldname + sQuotes;
                         }
                     }
                     break;
@@ -2702,8 +2698,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
             if (eFld != ww::eNONE)
             {
-                sStr.Insert(FieldString(eFld), 0);
-                GetExport().OutputField(pFld, eFld, sStr);
+                GetExport().OutputField(pFld, eFld, FieldString(eFld) + sStr);
             }
             else
                 bWriteExpand = true;
@@ -2711,14 +2706,13 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         break;
     case RES_DATETIMEFLD:
         {
-            String sStr;
+            OUString sStr;
             if (FIXEDFLD & nSubType || !GetExport().GetNumberFmt(*pFld, sStr))
                 bWriteExpand = true;
             else
             {
                 ww::eField eFld = (DATEFLD & nSubType) ? ww::eDATE : ww::eTIME;
-                sStr.Insert(FieldString(eFld), 0);
-                GetExport().OutputField(pFld, eFld, sStr);
+                GetExport().OutputField(pFld, eFld, FieldString(eFld) + sStr);
             }
         }
         break;

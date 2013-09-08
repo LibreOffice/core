@@ -755,7 +755,9 @@ namespace sw
             short  nType = NUMBERFORMAT_DEFINED;
             sal_uInt32  nKey = 0;
 
-            SwapQuotesInField(rParams);
+            OUString sParams(rParams);
+            SwapQuotesInField(sParams);
+            rParams = sParams;
 
             // Force to Japanese when finding one of 'geaE'
             OUString sJChars( "geE" );
@@ -1016,16 +1018,19 @@ namespace sw
                 );
         }
 
-        void SwapQuotesInField(String &rFmt)
+        void SwapQuotesInField(OUString &rFmt)
         {
             //Swap unescaped " and ' with ' and "
-            xub_StrLen nLen = rFmt.Len();
-            for (xub_StrLen nI = 0; nI < nLen; ++nI)
+            const sal_Int32 nLen = rFmt.getLength();
+            for (sal_Int32 nI = 0; nI < nLen; ++nI)
             {
-                if ((rFmt.GetChar(nI) == '\"') && (!nI || rFmt.GetChar(nI-1) != '\\'))
-                    rFmt.SetChar(nI, '\'');
-                else if ((rFmt.GetChar(nI) == '\'') && (!nI || rFmt.GetChar(nI-1) != '\\'))
-                    rFmt.SetChar(nI, '\"');
+                if (!nI || rFmt[nI-1]!='\\')
+                {
+                    if (rFmt[nI]=='\"')
+                        rFmt = rFmt.replaceAt(nI, 1, "\'");
+                    else if (rFmt[nI]=='\'')
+                        rFmt = rFmt.replaceAt(nI, 1, "\"");
+                }
             }
         }
 
