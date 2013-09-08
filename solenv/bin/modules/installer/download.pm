@@ -542,7 +542,7 @@ sub create_tar_gz_file_from_directory
     $installer::globals::downloadfilename = $downloadfilename . $installer::globals::downloadfileextension;
     my $targzname = $downloaddir . $installer::globals::separator . $installer::globals::downloadfilename;
 
-    my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | gzip > $targzname";
+    my $systemcall = "cd $changedir; $ldpreloadstring tar -cf - $packdir | pigz > $targzname";
 
     my $returnvalue = system($systemcall);
 

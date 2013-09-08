@@ -440,7 +440,7 @@ sub create_package
             if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
         }
 
-        $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | gzip > $archive";
+        $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | pigz > $archive";
     }
 
     if ( $makesystemcall )
