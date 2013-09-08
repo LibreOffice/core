@@ -115,7 +115,6 @@ PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentConte
     ,   m_pPropHelp(0    )
     ,  m_bIgnoreEvents(sal_False)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::PathSettings" );
 }
 
 //-----------------------------------------------------------------------------
@@ -152,8 +151,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw (css::uno::RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::changesOccurred" );
-
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
     sal_Bool  bUpdateDescriptor = sal_False;
@@ -185,7 +182,6 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
 void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::disposing" );
     WriteGuard aWriteLock(m_aLock);
 
     if (aSource.Source == m_xCfgNew)
@@ -214,9 +210,6 @@ void PathSettings::setStringProperty(const OUString& p1, const OUString& p2)
 //-----------------------------------------------------------------------------
 void PathSettings::impl_readAll()
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::impl_readAll" );
-    SAL_INFO( "fwk", "framework (as96863) ::PathSettings::load config (all)");
-
     try
     {
         // TODO think about me
@@ -241,7 +234,6 @@ void PathSettings::impl_readAll()
 // NO substitution here ! It's done outside ...
 OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::impl_readOldFormat" );
     css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
     OUStringList aPathVal;
 
@@ -314,7 +306,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 //-----------------------------------------------------------------------------
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::impl_storePath" );
     m_bIgnoreEvents = sal_True;
 
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
@@ -362,7 +353,6 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                           const OUStringList&           lOld )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com PathSettings::impl_mergeOldUserPaths" );
     OUStringList::const_iterator pIt;
     for (  pIt  = lOld.begin();
            pIt != lOld.end()  ;

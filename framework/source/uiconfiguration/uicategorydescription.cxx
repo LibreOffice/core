@@ -142,7 +142,6 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::ConfigurationAccess_UICategory" );
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
     m_aConfigCategoryAccess += OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
@@ -163,7 +162,6 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getByName" );
     ResetableGuard aLock( m_aLock );
     if ( !m_bConfigAccessInitialized )
     {
@@ -184,14 +182,12 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
 throw ( RuntimeException )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getElementNames" );
     return getAllIds();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::hasByName" );
     return getByName( rId ).hasValue();
 }
 
@@ -199,21 +195,18 @@ throw (::com::sun::star::uno::RuntimeException)
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
 throw ( RuntimeException )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getElementType" );
     return( ::getCppuType( (const OUString*)NULL ) );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
 throw ( RuntimeException )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::hasElements" );
     // There must be global categories!
     return sal_True;
 }
 
 sal_Bool ConfigurationAccess_UICategory::fillCache()
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::fillCache" );
     SAL_INFO( "fwk", "framework (cd100003) ::ConfigurationAccess_UICategory::fillCache" );
 
     if ( m_bCacheFilled )
@@ -250,7 +243,6 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
 
 Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getUINameFromID" );
     Any a;
 
     try
@@ -286,7 +278,6 @@ Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
 
 Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getUINameFromCache" );
     Any a;
 
     IdToInfoCache::const_iterator pIter = m_aIdCache.find( rId );
@@ -298,7 +289,6 @@ Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 
 Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::getAllIds" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
@@ -347,7 +337,6 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
 sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::initializeConfigAccess" );
     Sequence< Any > aArgs( 1 );
     PropertyValue   aPropValue;
 
@@ -384,23 +373,19 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::elementInserted" );
 }
 
 void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::elementRemoved " );
 }
 
 void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::elementReplaced" );
 }
 
 // lang.XEventListener
 void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent ) throw(RuntimeException)
 {
-    SAL_INFO( "fwk", "framework Ocke.Janssen@sun.com ConfigurationAccess_UICategory::disposing" );
     // SAFE
     // remove our reference to the config access
     ResetableGuard aLock( m_aLock );
