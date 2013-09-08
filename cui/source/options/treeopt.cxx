@@ -821,7 +821,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     SvTreeListEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
-        String sExpand( EXPAND_PROTOCOL  );
+        OUString sExpand( EXPAND_PROTOCOL );
         String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
         if ( sLastURL.Len() == 0 )
@@ -848,13 +848,13 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             if ( aTreeLB.GetParent( pTemp ) && pTemp->GetUserData() )
             {
                 OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
-                String sPageURL = pPageInfo->m_sPageURL;
+                OUString sPageURL = pPageInfo->m_sPageURL;
                 if ( bMustExpand
-                    && sPageURL.Len() > 0
-                    && sExpand.Match( sPageURL ) == STRING_MATCH )
+                    && !sPageURL.isEmpty()
+                    && sPageURL.startsWith( sExpand ) )
                 {
                     // cut protocol
-                    OUString sTemp( sPageURL.Copy( sizeof( EXPAND_PROTOCOL ) -1 ) );
+                    OUString sTemp( sPageURL.copy( sExpand.getLength() ) );
                     // decode uri class chars
                     sTemp = ::rtl::Uri::decode(
                         sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
