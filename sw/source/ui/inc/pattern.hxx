@@ -21,15 +21,14 @@
 #define _PATTERN_HXX
 
 #include <sfx2/basedlgs.hxx>
+
 class Window;
 class SfxItemSet;
 
-class SwBackgroundDlg : public SfxNoLayoutSingleTabDialog
+class SwBackgroundDlg : public SfxSingleTabDialog
 {
 public:
-
-     SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet);
-    ~SwBackgroundDlg();
+    SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif

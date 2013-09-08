@@ -23,16 +23,8 @@
 #include "pattern.hxx"
 #include "frmui.hrc"
 
-
-/****************************************************************************
-Ctor
-****************************************************************************/
-
-
-
-SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
-
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
+SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_PATTERN));
@@ -41,19 +33,9 @@ SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {
-        SetTabPage((*fnCreatePage)( this, rSet ));
+        setTabPage((*fnCreatePage)(get_content_area(), rSet));
     }
 
-}
-
-/****************************************************************************
-Dtor
-****************************************************************************/
-
-
-
-SwBackgroundDlg::~SwBackgroundDlg()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
