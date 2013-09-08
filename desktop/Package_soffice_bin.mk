@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,desktop_soffice_bin,$(gb_Executable_BINDIR)))
 
-$(eval $(call gb_Package_add_file,desktop_soffice_bin,bin/soffice.bin,soffice_bin$(gb_Executable_EXT)))
+$(eval $(call gb_Package_set_outdir,desktop_soffice_bin,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,desktop_soffice_bin,$(LIBO_BIN_FOLDER)/soffice.bin,soffice_bin$(gb_Executable_EXT)))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
