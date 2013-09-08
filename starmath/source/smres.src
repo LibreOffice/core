@@ -25,16 +25,9 @@
 #include "dialog.hrc"
 #include "toolbox.hrc"
 #include "ElementsDockingWindow.hrc"
+#include "smcommands.h"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
-
-#define CMD_SID_ADJUST  ".uno:Adjust"
-#define CMD_SID_DRAW    ".uno:Draw"
-#define CMD_SID_VIEW100 ".uno:View100"
-#define CMD_SID_VIEW200 ".uno:View200"
-#define CMD_SID_VIEW050 ".uno:View50"
-#define CMD_SID_ZOOMIN  ".uno:ZoomIn"
-#define CMD_SID_ZOOMOUT ".uno:ZoomOut"
 
 ModalDialog RID_FONTDIALOG
 {
