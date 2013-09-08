@@ -3724,13 +3724,15 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_COLUMNBALANCE */             0,
 /* RES_FRAMEDIR */                  OutCSS1_SvxFrameDirection,
 /* RES_HEADER_FOOTER_EAT_SPACING */ 0,
-/* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_ROW_SPLIT */                 0,
 /* RES_FOLLOW_TEXT_FLOW */          0,
+/* RES_COLLAPSING_BORDERS */        0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_AUTO_STYLE */                0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0,
+/* RES_FRMATR_STYLE_NAME */         0,
+/* RES_FRMATR_CONDITIONAL_STYLE_NAME */ 0,
+/* RES_FILL_STYLE */                0,
+/* RES_FILL_GRADIENT */             0,
 
 /* RES_GRFATR_MIRRORGRF */          0,
 /* RES_GRFATR_CROPGRF   */          0,

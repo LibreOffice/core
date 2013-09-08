@@ -3268,6 +3268,9 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_VERTALIGN */          0, // new
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0,
+/* RES_PARATR_RSID */               0,
+/* RES_PARATR_GRABBAG */            0,
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new
@@ -3301,21 +3304,23 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_URL */                       0,
 /* RES_EDIT_IN_READONLY */          0,
 /* RES_LAYOUT_SPLIT */              0,
-/* RES_FRMATR_DUMMY1 */             0, // Dummy:
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_AUTO_STYLE */                0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
-/* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRMATR_DUMMY7 */             0, // Dummy:
-/* RES_FRMATR_DUMMY8 */             0, // Dummy:
-/* RES_FRMATR_DUMMY9 */             0, // Dummy:
+/* RES_CHAIN */                     0,
+/* RES_TEXTGRID */                  0,
+/* RES_LINENUMBER */                0,
+/* RES_FTN_AT_TXTEND */             0,
+/* RES_END_AT_TXTEND */             0,
+/* RES_COLUMNBALANCE */             0,
+/* RES_FRAMEDIR */                  0,
+/* RES_HEADER_FOOTER_EAT_SPACING */ 0,
+/* RES_ROW_SPLIT */                 0,
 /* RES_FOLLOW_TEXT_FLOW */          0,
+/* RES_COLLAPSING_BORDERS */        0,
 /* RES_WRAP_INFLUENCE_ON_OBJPOS */  0,
-/* RES_FRMATR_DUMMY2 */             0, // Dummy:
-/* RES_AUTO_STYLE */                0, // Dummy:
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
+/* RES_AUTO_STYLE */                0,
+/* RES_FRMATR_STYLE_NAME */         0,
+/* RES_FRMATR_CONDITIONAL_STYLE_NAME */ 0,
+/* RES_FILL_STYLE */                0,
+/* RES_FILL_GRADIENT */             0,
 
 /* RES_GRFATR_MIRRORGRF */          0,
 /* RES_GRFATR_CROPGRF   */          0,
