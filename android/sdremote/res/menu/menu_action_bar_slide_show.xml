@@ -20,6 +20,17 @@
         android:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/menu_resume_slide_show"
+        android:title="@string/menu_resume_slide_show"
+        android:icon="@drawable/ic_action_resume"
+        android:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_pause_slide_show"
+        android:title="@string/menu_pause_slide_show"
+        android:showAsAction="never"/>
+
+    <item
         android:id="@+id/menu_stop_slide_show"
         android:title="@string/menu_stop_slide_show"
         android:showAsAction="never"/>

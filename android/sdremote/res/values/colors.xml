@@ -5,6 +5,7 @@
     <color name="background_action_bar_divider">#55ffffff</color>
     <color name="background_header">@color/background_action_bar</color>
     <color name="background_slide_index">#7f000000</color>
+    <color name="background_slide_empty">@android:color/black</color>
 
     <color name="stroke_grid_slide">#65000000</color>
     <color name="stroke_pager_slide">#35000000</color>

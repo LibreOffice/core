@@ -29,6 +29,7 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.communication.Timer;
+import org.libreoffice.impressremote.fragment.EmptySlideFragment;
 import org.libreoffice.impressremote.fragment.SlidesGridFragment;
 import org.libreoffice.impressremote.fragment.SlidesPagerFragment;
 import org.libreoffice.impressremote.fragment.TimerEditingDialog;
@@ -40,7 +41,7 @@ import org.libreoffice.impressremote.util.SavedStates;
 
 public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
     private static enum Mode {
-        PAGER, GRID
+        PAGER, GRID, EMPTY
     }
 
     private Mode mMode;
@@ -84,6 +85,9 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
             case GRID:
                 return SlidesGridFragment.newInstance();
+
+            case EMPTY:
+                return EmptySlideFragment.newInstance();
 
             default:
                 return SlidesPagerFragment.newInstance();
@@ -314,16 +318,26 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     public boolean onPrepareOptionsMenu(Menu aMenu) {
         MenuItem aSlidesPagerMenuItem = aMenu.findItem(R.id.menu_slides_pager);
         MenuItem aSlidesGridMenuItem = aMenu.findItem(R.id.menu_slides_grid);
+        MenuItem aSlideShowResumeMenuItem = aMenu.findItem(R.id.menu_resume_slide_show);
 
         switch (mMode) {
             case PAGER:
+                setMenuItemsVisibility(aMenu, true);
                 aSlidesPagerMenuItem.setVisible(false);
                 aSlidesGridMenuItem.setVisible(true);
+                aSlideShowResumeMenuItem.setVisible(false);
                 break;
 
             case GRID:
+                setMenuItemsVisibility(aMenu, true);
                 aSlidesPagerMenuItem.setVisible(true);
                 aSlidesGridMenuItem.setVisible(false);
+                aSlideShowResumeMenuItem.setVisible(false);
+                break;
+
+            case EMPTY:
+                setMenuItemsVisibility(aMenu, false);
+                aSlideShowResumeMenuItem.setVisible(true);
                 break;
 
             default:
@@ -333,38 +347,47 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         return super.onPrepareOptionsMenu(aMenu);
     }
 
+    private void setMenuItemsVisibility(Menu aMenu, boolean aAreItemsVisible) {
+        for (int aItemIndex = 0; aItemIndex < aMenu.size(); aItemIndex++) {
+            aMenu.getItem(aItemIndex).setVisible(aAreItemsVisible);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
             case android.R.id.home:
                 navigateUp();
-
                 return true;
 
             case R.id.menu_slides_grid:
-                mMode = Mode.GRID;
-
-                setUpFragment();
-                refreshActionBarMenu();
-
+                changeMode(Mode.GRID);
                 return true;
 
             case R.id.menu_slides_pager:
-                mMode = Mode.PAGER;
-
-                setUpFragment();
-                refreshActionBarMenu();
-
+                changeMode(Mode.PAGER);
                 return true;
 
             case R.id.menu_timer:
                 callTimer();
+                return true;
 
+            case R.id.menu_resume_slide_show:
+                changeMode(Mode.PAGER);
+                setUpSlideShowInformation();
+                resumeSlideShow();
+                resumeTimer();
+                return true;
+
+            case R.id.menu_pause_slide_show:
+                changeMode(Mode.EMPTY);
+                setUpSlideShowPausedInformation();
+                pauseSlideShow();
+                pauseTimer();
                 return true;
 
             case R.id.menu_stop_slide_show:
                 stopSlideShow();
-
                 return true;
 
             default:
@@ -374,6 +397,13 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     private void navigateUp() {
         finish();
+    }
+
+    private void changeMode(Mode aMode) {
+        mMode = aMode;
+
+        setUpFragment();
+        refreshActionBarMenu();
     }
 
     private void refreshActionBarMenu() {
@@ -408,6 +438,25 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     private void callSettingTimer() {
         DialogFragment aTimerDialog = TimerSettingDialog.newInstance();
         aTimerDialog.show(getSupportFragmentManager(), TimerSettingDialog.TAG);
+    }
+
+    private void resumeSlideShow() {
+        mCommunicationService.getTransmitter().resumePresentation();
+    }
+
+    private void pauseSlideShow() {
+        mCommunicationService.getTransmitter().setUpBlankScreen();
+    }
+
+    private void setUpSlideShowPausedInformation() {
+        ActionBar aActionBar = getSupportActionBar();
+
+        aActionBar.setTitle(R.string.title_slide_show);
+        aActionBar.setSubtitle(R.string.message_paused);
+    }
+
+    private void pauseTimer() {
+        mCommunicationService.getSlideShow().getTimer().pause();
     }
 
     private void stopSlideShow() {

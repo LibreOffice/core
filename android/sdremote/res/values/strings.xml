@@ -12,7 +12,7 @@
     <string name="title_requirements">Requirements</string>
     <string name="title_connection">Connection</string>
     <string name="title_creation">Creation</string>
-    <string name="title_slide_show">Slide Show</string>
+    <string name="title_slide_show">Slide show</string>
     <string name="title_timer">Timer</string>
 
     <string name="menu_licenses">Open source licenses</string>
@@ -25,6 +25,8 @@
     <string name="menu_slides_pager">Slides pager</string>
     <string name="menu_timer">Timer</string>
     <string name="menu_stop_slide_show">Stop slide show</string>
+    <string name="menu_pause_slide_show">Pause slide show</string>
+    <string name="menu_resume_slide_show">Resume slide show</string>
 
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>
@@ -40,6 +42,7 @@
     <string name="message_time_is_up">Time is up!</string>
     <string name="message_search_wifi">Make sure LibreOffice is running on a computer on the same WiFi network.</string>
     <string name="message_search_bluetooth">Make sure LibreOffice is running on a computer with Bluetooth enabled.</string>
+    <string name="message_paused">Paused</string>
 
     <string name="hint_ip_address">IP address</string>
     <string name="hint_name">Name (optional)</string>
@@ -54,6 +57,7 @@
 
     <string name="description_pager_slide">Slide preview</string>
     <string name="description_grid_slide">Slide preview</string>
+    <string name="description_empty_slide">Empty slide</string>
 
     <string name="preferences_volume_keys_actions_title">Volume keys actions</string>
     <string name="preferences_volume_keys_actions_summary">Switch slides and activate animations using volume keys</string>

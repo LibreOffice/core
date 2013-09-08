@@ -69,6 +69,10 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void setUpSlidesPager() {
+        if (!isServiceBound()) {
+            return;
+        }
+
         if (!isAdded()) {
             return;
         }

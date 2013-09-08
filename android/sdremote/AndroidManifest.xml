@@ -38,14 +38,14 @@
         </activity>
 
         <activity
-            android:name=".activity.ComputerConnectionActivity"
-            android:label="@string/title_connection">
-        </activity>
-
-        <activity
             android:name=".activity.ComputerCreationActivity"
             android:label="@string/title_creation"
             android:theme="@style/Theme.ImpressRemote.ComputerCreation">
+        </activity>
+
+        <activity
+            android:name=".activity.ComputerConnectionActivity"
+            android:label="@string/title_connection">
         </activity>
 
         <activity
