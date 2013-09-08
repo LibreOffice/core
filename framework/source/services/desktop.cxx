@@ -127,8 +127,8 @@ DEFINE_INIT_SERVICE                     (   Desktop,
 
                                                 // Safe impossible cases
                                                 // We can't work without this helper!
-                                                LOG_ASSERT2( m_xFramesHelper.is  ()==sal_False, "Desktop::Desktop()", "Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n")
-                                                LOG_ASSERT2( m_xDispatchHelper.is()==sal_False, "Desktop::Desktop()", "Dispatch helper is not valid. XDispatch will not work correctly!\n"                      )
+                                                SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
+                                                SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
 
                                                 // Enable object for real working!
                                                 // Otherwise all calls will be rejected ...
@@ -167,9 +167,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
         ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         // Init member
-        #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
-        #endif
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
@@ -191,7 +189,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
-    LOG_ASSERT2( implcp_ctor( xContext ), "Desktop::Desktop()", "Invalid parameter detected!")
+    SAL_WARN_IF( implcp_ctor( xContext ), "fwk", "Desktop::Desktop(): Invalid parameter detected!" );
 }
 
 /*-************************************************************************************************************//**
@@ -207,15 +205,8 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 *//*-*************************************************************************************************************/
 Desktop::~Desktop()
 {
-#ifdef ENABLE_ASSERTIONS
-    // Perhaps we should here do use a real assertion, but make the
-    // condition more specific? We don't want it to fire in unit tests
-    // in sc/qa/unit for instance, that don't even have any GUI.
-    if( !m_bIsTerminated )
-        fprintf( stderr, "This used to be an assertion failure: Desktop not terminated before being destructed,\n"
-                 "but it is probably not a real problem.\n" );
-#endif
-    LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE  , "Desktop::~Desktop()", "Who forgot to dispose this service?"          )
+    SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop not terminated before being destructed" );
+    SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk", "Desktop::~Desktop(): Who forgot to dispose this service?" );
 }
 
 css::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException)
@@ -332,7 +323,6 @@ sal_Bool SAL_CALL Desktop::terminate()
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
     else
     {
-        #ifdef ENABLE_ASSERTIONS
             // "Protect" us against dispose before terminate calls!
             // see dispose() for further information.
             /* SAFE AREA --------------------------------------------------------------------------------------- */
@@ -340,7 +330,6 @@ sal_Bool SAL_CALL Desktop::terminate()
             m_bIsTerminated = sal_True;
             aWriteLock.unlock();
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-        #endif
 
         impl_sendNotifyTerminationEvent();
 
@@ -1141,11 +1130,7 @@ void SAL_CALL Desktop::dispose()
 
     // But if you just ignore the assertion (which happens in unit
     // tests for instance in sc/qa/unit) nothing bad happens.
-#ifdef ENABLE_ASSERTIONS
-    if( !m_bIsTerminated )
-        fprintf( stderr, "This used to be an assertion failure: Desktop disposed before terminating it,\n"
-                 "but nothing bad seems to happen anyway?\n" );
-#endif
+    SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop disposed before terminating it" );
 
     WriteGuard aWriteLock( m_aLock ); // start synchronize
 
@@ -1229,7 +1214,7 @@ void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::X
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    LOG_ASSERT2( implcp_addEventListener( xListener ), "Desktop::addEventListener()", "Invalid parameter detected!" )
+    SAL_WARN_IF( implcp_addEventListener( xListener ), "fwk", "Desktop::addEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1242,7 +1227,7 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
     // Method not defined for all incoming parameter.
-    LOG_ASSERT2( implcp_removeEventListener( xListener ), "Desktop::removeEventListener()", "Invalid parameter detected!" )
+    SAL_WARN_IF( implcp_removeEventListener( xListener ), "fwk", "Desktop::removeEventListener(): Invalid parameter detected!" );
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
@@ -1303,7 +1288,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::disposing()", "Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." )
+    SAL_WARN( "fwk", "Desktop::disposing(): Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." );
 }
 
 /*-************************************************************************************************************//**
@@ -1946,17 +1931,6 @@ void Desktop::impl_sendNotifyTerminationEvent()
     return (nNonClosedFrames < 1);
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_True". (otherwise sal_False) This mechanism is used to throw an ASSERT!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
 //  We work with valid servicemanager only.
 sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::uno::XComponentContext >& xContext )
@@ -1986,8 +1960,6 @@ sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::la
             ( xListener.is()    ==  sal_False   )
           );
 }
-
-#endif  // #ifdef ENABLE_ASSERTIONS
 
 }   // namespace framework
 

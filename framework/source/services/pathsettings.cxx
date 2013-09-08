@@ -362,7 +362,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
 
         if (rPath.bIsSinglePath)
         {
-            LOG_ASSERT2(lOld.size()>1, "PathSettings::impl_mergeOldUserPaths()", "Single path has more then one path value inside old configuration (Common.xcu)!")
+            SAL_WARN_IF(lOld.size()>1, "fwk", "PathSettings::impl_mergeOldUserPaths(): Single path has more then one path value inside old configuration (Common.xcu)!");
             if (! rPath.sWritePath.equals(sOld))
                rPath.sWritePath = sOld;
         }
@@ -852,7 +852,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
                 if (aChangePath.bIsSinglePath)
                 {
-                    LOG_ASSERT2(lList.size()>1, "PathSettings::impl_setPathValue()", "You try to set more then path value for a defined SINGLE_PATH!")
+                    SAL_WARN_IF(lList.size()>1, "fwk", "PathSettings::impl_setPathValue(): You try to set more then path value for a defined SINGLE_PATH!");
                     if ( !lList.empty() )
                         aChangePath.sWritePath = *(lList.begin());
                     else

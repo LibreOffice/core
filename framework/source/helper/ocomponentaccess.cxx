@@ -46,7 +46,7 @@ OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwne
         ,   m_xOwner        ( xOwner                        )
 {
     // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_OComponentAccessCtor( xOwner ), "OComponentAccess::OComponentAccess()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_OComponentAccessCtor( xOwner ), "fwk", "OComponentAccess::OComponentAccess(): Invalid parameter detected!" );
 }
 
 //*****************************************************************************************************************
@@ -200,8 +200,6 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   css::uno::Reference< XDesktop >&      xOwner  )
 {
@@ -218,8 +216,6 @@ sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   
     // Return result of check.
     return bOK ;
 }
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
 

@@ -96,7 +96,7 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
 {
     // Safe impossible cases.
     // Method not defined for all incoming parameter.
-    LOG_ASSERT( xFactory.is(), "TabWindowService::TabWindowService()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !xFactory.is(), "fwk", "TabWindowService::TabWindowService(): Invalid parameter detected!" );
 }
 
 //*****************************************************************************************************************

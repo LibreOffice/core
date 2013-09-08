@@ -1086,7 +1086,7 @@ void AutoRecovery::implts_readConfig()
                 if (aInfo.ID > m_nIdPool)
                 {
                     m_nIdPool = aInfo.ID+1;
-                    LOG_ASSERT(m_nIdPool>=0, "AutoRecovery::implts_readConfig()\nOverflow of IDPool detected!")
+                    SAL_WARN_IF(m_nIdPool<0, "fwk", "AutoRecovery::implts_readConfig(): Overflow of IDPool detected!");
                 }
                 aWriteLock.unlock();
                 // <- SAFE ----------------------
@@ -1757,7 +1757,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // create a new cache entry ... this document isn't known.
     ++m_nIdPool;
     aNew.ID = m_nIdPool;
-    LOG_ASSERT(m_nIdPool>=0, "AutoRecovery::implts_registerDocument()\nOverflow of ID pool detected.")
+    SAL_WARN_IF(m_nIdPool<0, "fwk", "AutoRecovery::implts_registerDocument(): Overflow of ID pool detected.");
     m_lDocCache.push_back(aNew);
 
     AutoRecovery::TDocumentList::iterator pIt1  = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);

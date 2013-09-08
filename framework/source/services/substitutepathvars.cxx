@@ -1162,7 +1162,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
     OUString aLocaleStr( utl::ConfigManager::getLocale() );
     aPreDefPathVariables.m_eLanguageType = LanguageTag::convertToLanguageTypeWithFallback( aLocaleStr );
-    // We used to have an else branch here with a LOG_ERROR, but that
+    // We used to have an else branch here with a SAL_WARN, but that
     // always fired in some unit tests when this code was built with
     // debug=t, so it seems fairly pointless, especially as
     // aPreDefPathVariables.m_eLanguageType has been initialized to a

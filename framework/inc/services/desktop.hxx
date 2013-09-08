@@ -408,7 +408,6 @@ class Desktop   :   // base classes
     //  debug methods
     //  (should be private everytime!)
     //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
     private:
 
         static sal_Bool implcp_ctor                     ( const css::uno::Reference< css::uno::XComponentContext >&         xFactory         );
@@ -417,8 +416,6 @@ class Desktop   :   // base classes
 
         sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
                                     /// see dispose() for further information!
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables

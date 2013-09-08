@@ -35,12 +35,6 @@
     #ifndef ENABLE_LOGMECHANISM
         #define ENABLE_LOGMECHANISM
     #endif
-    // Enable assertion handling himself AND additional warnings.
-    // The default logtype is MESSAGEBOX.
-    // see "assertion.hxx" for further information
-    #ifndef ENABLE_ASSERTIONS
-        #define ENABLE_ASSERTIONS
-    #endif
 
 //-----------------------------------------------------------------------------------------------------------------
 // => "non product"
@@ -52,23 +46,14 @@
     #ifndef ENABLE_LOGMECHANISM
         #define ENABLE_LOGMECHANISM
     #endif
-    // Enable assertion handling himself.
-    // The default logtype is MESSAGEBOX.
-    // see "assertion.hxx" for further information
-    #ifndef ENABLE_ASSERTIONS
-        #define ENABLE_ASSERTIONS
-    #endif
 
 //-----------------------------------------------------------------------------------------------------------------
 // => "product" (OSL_DEBUG_LEVEL == 0)
 #else
 
     #undef  ENABLE_LOGMECHANISM
-    #undef  ENABLE_ASSERTIONS
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
-//    #undef  ENABLE_TIMEMEASURE
-    #undef  ENABLE_MEMORYMEASURE
     #undef  ENABLE_FILTERDBG
 
 #endif
@@ -78,11 +63,6 @@
 //*****************************************************************************************************************
 
 #include <macros/debug/logmechanism.hxx>
-
-//*****************************************************************************************************************
-//  special macros for assertion handling
-//*****************************************************************************************************************
-#include <macros/debug/assertion.hxx>
 
 //*****************************************************************************************************************
 //  special macros for event handling

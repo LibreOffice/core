@@ -221,13 +221,9 @@ class OComponentAccess  :   private ThreadHelpBase                      ,   // M
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
     private:
 
         static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables

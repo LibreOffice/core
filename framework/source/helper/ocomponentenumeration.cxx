@@ -49,7 +49,7 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Referenc
 {
     // Safe impossible states
     // "Method" not defined for ALL parameters!
-    LOG_ASSERT( impldbg_checkParameter_OComponentEnumerationCtor( seqComponents ), "OComponentEnumeration::OComponentEnumeration()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_OComponentEnumerationCtor( seqComponents ), "fwk", "OComponentEnumeration::OComponentEnumeration(): Invalid parameter detected!" );
 }
 
 //*****************************************************************************************************************
@@ -75,7 +75,7 @@ aEvent
 
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
-    LOG_ASSERT( impldbg_checkParameter_disposing( aEvent ), "OComponentEnumeration::disposing()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_disposing( aEvent ), "fwk", "OComponentEnumeration::disposing(): Invalid parameter detected!" );
 
     // Reset instance to defaults, release references and free memory.
     impl_resetObject();
@@ -157,8 +157,6 @@ void OComponentEnumeration::impl_resetObject()
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
 // An empty list is allowed ... hasMoreElements() will return false then!
 sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
@@ -192,8 +190,6 @@ sal_Bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObj
     // Return result of check.
     return bOK ;
 }
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
 

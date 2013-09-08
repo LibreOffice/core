@@ -154,44 +154,6 @@ class ContentHandlerFactory :   // interfaces
         virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& xListener ) throw ( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False ,on invalid parameter
-            @return     sal_True  ,otherwise
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool implcp_ContentHandlerFactory        (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory            );
-        static sal_Bool implcp_createInstanceWithArguments  (   const   OUString&                                        sTypeName           ,
-                                                                  const css::uno::Sequence< css::uno::Any >&                    lArguments          );
-        static sal_Bool implcp_getByName                    (   const   OUString&                                        sName               );
-        static sal_Bool implcp_hasByName                    (   const   OUString&                                        sName               );
-        static sal_Bool implcp_removeByName                 (   const   OUString&                                        sHandlerName        );
-
-    #endif  //  #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
     //  private variables
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------

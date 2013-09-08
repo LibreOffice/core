@@ -361,8 +361,6 @@ class Frame :   // interfaces
             @onerror    We return sal_True
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
     private:
 
         static sal_Bool implcp_ctor                                (   const   css::uno::Reference< css::uno::XComponentContext >&                 xContext            );
@@ -376,8 +374,6 @@ class Frame :   // interfaces
         static sal_Bool implcp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
         static sal_Bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
         static sal_Bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //*************************************************************************************************************
     //  variables

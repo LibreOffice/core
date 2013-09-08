@@ -329,7 +329,7 @@ SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
-    LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "MenuDispatcher::disposing()\nObject already disposed .. don't call it again!\n" )
+    SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
     if( m_bAlreadyDisposed == sal_False )
     {

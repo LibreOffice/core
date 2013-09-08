@@ -100,52 +100,6 @@ class Wildcard
         static sal_Bool match(  const   OUString&    sText       ,
                                    const    OUString&    sPattern    );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  debug and test methods
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-methods to check incoming parameter of some other mehods of this class
-            @descr      The follow methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-                        This mechanism is active in debug version only!
-
-            @seealso    FRAMEWORK_ASSERT in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter
-            @return     sal_True otherwise
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        #ifdef ENABLE_ASSERTIONS
-
-        static sal_Bool impldbg_checkParameter_match(   const   OUString&    sText       ,
-                                                           const    OUString&    sPattern    );
-
-        #endif  // #ifdef ENABLE_ASSERTIONS
-
-        /*-****************************************************************************************************//**
-            @short      test implementation of match() with different examples
-            @descr      If TESTMODE activated, you cann call these method to start and log some special examples.
-                        Do this if you have changed the implementation of method match() to test it.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    Error-conditions are written to file or show in a messagebox.
-                        Thhat depends from current setting of ASSERT_OUTPUTTYPE. (see debug.hxx for further information.)
-        *//*-*****************************************************************************************************/
-
-        #ifdef ENABLE_CLASSDEBUG
-
-        void impldbg_testWildcard();
-
-        #endif // #ifdef ENABLE_CLASSDEBUG
-
 };      //  class Wildcard
 
 }       //  namespace framework

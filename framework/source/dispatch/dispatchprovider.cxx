@@ -510,7 +510,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
         if (xInit.is())
         {
             css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
-            LOG_ASSERT(xOwner.is(), "DispatchProvider::implts_searchProtocolHandler()\nCouldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.")
+            SAL_WARN_IF(!xOwner.is(), "fwk", "DispatchProvider::implts_searchProtocolHandler(): Couldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.");
             if (xOwner.is())
             {
                 try

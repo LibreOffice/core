@@ -204,14 +204,10 @@ class OComponentEnumeration :   public ThreadHelpBase               ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
     private:
 
         static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
         static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables

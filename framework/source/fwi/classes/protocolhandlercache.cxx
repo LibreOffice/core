@@ -231,7 +231,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
 
     // get values at all
     css::uno::Sequence< css::uno::Any > lValues = GetProperties( lFullNames );
-    LOG_ASSERT2( lFullNames.getLength()!=lValues.getLength(), "HandlerCFGAccess::read()", "Miss some configuration values of handler set!" )
+    SAL_WARN_IF( lFullNames.getLength()!=lValues.getLength(), "fwk", "HandlerCFGAccess::read(): Miss some configuration values of handler set!" );
 
     // fill structures
     nSource = 0;

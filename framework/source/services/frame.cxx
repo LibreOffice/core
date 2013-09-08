@@ -83,10 +83,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
 
-#ifdef ENABLE_ASSERTIONS
-    #include <rtl/strbuf.hxx>
-#endif
-
 #include <vcl/menu.hxx>
 
 namespace framework{
@@ -196,10 +192,10 @@ DEFINE_INIT_SERVICE                 (   Frame,
 
                                             // Safe impossible cases
                                             // We can't work without these helpers!
-                                            LOG_ASSERT2( xDispatchProvider.is    ()==sal_False, "Frame::impl_initService()", "Slowest slave for dispatch- and interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" )
-                                            LOG_ASSERT2( m_xDispatchHelper.is    ()==sal_False, "Frame::impl_initService()", "Interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!"                                 )
-                                            LOG_ASSERT2( m_xFramesHelper.is      ()==sal_False, "Frame::impl_initService()", "Frames helper isn't valid. XFrames, XIndexAccess and XElementAcces are not supported!"                                                                )
-                                            LOG_ASSERT2( m_xDropTargetListener.is()==sal_False, "Frame::impl_initService()", "DropTarget helper isn't valid. Drag and drop without functionality!"                                                                                  )
+                                            SAL_WARN_IF( !xDispatchProvider.is(), "fwk", "Frame::impl_initService(): Slowest slave for dispatch- and interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
+                                            SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Frame::impl_initService(): Interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
+                                            SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Frame::impl_initService(): Frames helper isn't valid. XFrames, XIndexAccess and XElementAcces are not supported!" );
+                                            SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk", "Frame::impl_initService(): DropTarget helper isn't valid. Drag and drop without functionality!" );
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // establish notifies for changing of "disabled commands" configuration during runtime
@@ -263,7 +259,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
-    LOG_ASSERT2( implcp_ctor( xContext ), "Frame::Frame()", "Invalid parameter detected!" )
+    SAL_WARN_IF( implcp_ctor( xContext ), "fwk", "Frame::Frame(): Invalid parameter detected!" );
 
     /* Please have a look on "@attentions" of description before! */
 }
@@ -281,7 +277,7 @@ Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext
 *//*-*****************************************************************************************************/
 Frame::~Frame()
 {
-    LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "Frame::~Frame()", "Who forgot to dispose this service?" )
+    SAL_WARN_IF( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "fwk", "Frame::~Frame(): Who forgot to dispose this service?" );
 }
 
 /*-************************************************************************************************************//**
@@ -409,7 +405,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameters.
-    LOG_ASSERT2( implcp_setActiveFrame( xFrame ), "Frame::setActiveFrame()", "Invalid parameter detected!" )
+    SAL_WARN_IF( implcp_setActiveFrame( xFrame ), "fwk", "Frame::setActiveFrame(): Invalid parameter detected!" );
     // Look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -543,7 +539,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
     // Set the new window.
-    LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occure ..." )
+    SAL_WARN_IF( m_xContainerWindow.is(), "fwk", "Frame::initialize(): Leak detected! This state should never occur ..." );
     m_xContainerWindow = xWindow;
 
     // if window is initially visible, we will never get a windowShowing event
@@ -1515,7 +1511,7 @@ void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::fra
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_addFrameActionListener( xListener ), "Frame::addFrameActionListener()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_addFrameActionListener( xListener ), "fwk", "Frame::addFrameActionListener(): Invalid parameter detected." );
     // Listener container is threadsafe by himself ... but we must look for rejected calls!
     // Our OMenuDispatch-helper (is a member of ODispatchProvider!) is create at startup of this frame BEFORE initialize!
     // => soft exceptions!
@@ -1530,7 +1526,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_removeFrameActionListener( xListener ), "Frame::removeFrameActionListener()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_removeFrameActionListener( xListener ), "fwk", "Frame::removeFrameActionListener(): Invalid parameter detected." );
     // Listener container is threadsafe by himself ... but we must look for rejected calls after disposing!
     // But we must work with E_SOFTEXCEPTIONS ... because sometimes we are called from our listeners
     // during dispose! Our work mode is E_BEFORECLOSE then ... and E_HARDEXCEPTIONS whould throw a DisposedException.
@@ -1974,7 +1970,7 @@ void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEv
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_addEventListener( xListener ), "Frame::addEventListener()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_addEventListener( xListener ), "fwk", "Frame::addEventListener(): Invalid parameter detected." );
     // Look for rejected calls only!
     // Container is threadsafe.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1988,7 +1984,7 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_removeEventListener( xListener ), "Frame::removeEventListener()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_removeEventListener( xListener ), "fwk", "Frame::removeEventListener(): Invalid parameter detected." );
     // Look for rejected calls only!
     // Container is threadsafe.
     // Use E_SOFTEXCEPTIONS to allow removing listeners during dispose call!
@@ -2182,7 +2178,7 @@ aEvent
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_windowResized( aEvent ), "Frame::windowResized()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_windowResized( aEvent ), "fwk", "Frame::windowResized(): Invalid parameter detected." );
     // Look for rejected calls.
     // Part of dispose-mechanism => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -2202,7 +2198,7 @@ aEvent
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_focusGained( aEvent ), "Frame::focusGained()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_focusGained( aEvent ), "fwk", "Frame::focusGained(): Invalid parameter detected." );
     // Look for rejected calls.
     // Part of dispose() mechanism ... => soft exceptions!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -2242,7 +2238,7 @@ aEvent
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_windowActivated( aEvent ), "Frame::windowActivated()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_windowActivated( aEvent ), "fwk", "Frame::windowActivated(): Invalid parameter detected." );
     // Look for rejected calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -2269,7 +2265,7 @@ aEvent
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_windowDeactivated( aEvent ), "Frame::windowDeactivated()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_windowDeactivated( aEvent ), "fwk", "Frame::windowDeactivated(): Invalid parameter detected." );
     // Look for rejected calls.
     // Sometimes called during dispose() => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -2446,7 +2442,7 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( implcp_disposing( aEvent ), "Frame::disposing()", "Invalid parameter detected." )
+    SAL_WARN_IF( implcp_disposing( aEvent ), "fwk", "Frame::disposing(): Invalid parameter detected." );
     // Look for rejected calls.
     // May be we are called during releasing our windows in our in dispose call!? => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -2506,7 +2502,7 @@ void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException )
 
     /* SAFE AREA */{
         WriteGuard aWriteLock( m_aLock );
-        LOG_ASSERT2( m_nExternalLockCount<=0, "Frame::removeActionLock()", "Frame isn't locked! Possible multithreading problem detected." )
+        SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame isn't locked! Possible multithreading problem detected." );
         --m_nExternalLockCount;
     }/* SAFE */
 
@@ -3164,10 +3160,8 @@ void Frame::impl_checkMenuCloser()
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_True". (otherwise sal_False) This mechanism is used to throw an ASSERT!
+    we return "sal_True". (otherwise sal_False) This mechanism is used in SAL_WARN_IF calls.
 -----------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
@@ -3270,8 +3264,6 @@ sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
                 ( aEvent.Source.is()    ==  sal_False   )
             );
 }
-
-#endif  // #ifdef ENABLE_ASSERTIONS
 
 }   // namespace framework
 

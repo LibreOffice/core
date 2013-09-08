@@ -51,7 +51,7 @@ OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner    
 {
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_OFramesCtor( xOwner, pFrameContainer ), "OFrames::OFrames()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_OFramesCtor( xOwner, pFrameContainer ), "fwk", "OFrames::OFrames(): Invalid parameter detected!" );
 }
 
 //*****************************************************************************************************************
@@ -73,7 +73,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_append( xFrame ), "OFrames::append()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_append( xFrame ), "fwk", "OFrames::append(): Invalid parameter detected!" );
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
@@ -86,7 +86,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
         xFrame->setCreator( xOwner );
     }
     // Else; Do nothing! Ouer owner is dead.
-    LOG_ASSERT( !(xOwner.is()==sal_False), "OFrames::append()\nOuer owner is dead - you can't append any frames ...!\n" )
+    SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::append():Our owner is dead - you can't append any frames ...!" );
 }
 
 //*****************************************************************************************************************
@@ -99,7 +99,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_remove( xFrame ), "OFrames::remove()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_remove( xFrame ), "fwk", "OFrames::remove(): Invalid parameter detected!" );
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
@@ -113,7 +113,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
         // See documentation of interface XFrames for further information.
     }
     // Else; Do nothing! Ouer owner is dead.
-    LOG_ASSERT( !(xOwner.is()==sal_False), "OFrames::remove()\nOuer owner is dead - you can't remove any frames ...!\n" )
+    SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::remove(): Our owner is dead - you can't remove any frames ...!" );
 }
 
 //*****************************************************************************************************************
@@ -126,7 +126,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_queryFrames( nSearchFlags ), "OFrames::queryFrames()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_queryFrames( nSearchFlags ), "fwk", "OFrames::queryFrames(): Invalid parameter detected!" );
 
     // Set default return value. (empty sequence)
     Sequence< css::uno::Reference< XFrame > > seqFrames;
@@ -147,10 +147,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             //_____________________________________________________________________________________________________________
             // Search with AUTO-flag is not supported yet!
             // We think about right implementation.
-            LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::AUTO), "OFrames::queryFrames()\nSearch with AUTO-flag is not supported yet!\nWe think about right implementation.\n" )
-            // If searched for tasks ...
-            // Its not supported yet.
-            LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::AUTO), "OFrames::queryFrames()\nSearch for tasks not supported yet!\n" )
+            SAL_WARN_IF( (nSearchFlags & FrameSearchFlag::AUTO), "fwk", "OFrames::queryFrames(): Search with AUTO-flag is not supported yet!" );
 
             //_____________________________________________________________________________________________________________
             // Search for ALL and GLOBAL is superflous!
@@ -220,7 +217,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
         }
     }
     // Else; Do nothing! Ouer owner is dead.
-    LOG_ASSERT( !(xOwner.is()==sal_False), "OFrames::queryFrames()\nOuer owner is dead - you can't query for frames ...!\n" )
+    SAL_WARN_IF( !xOwner.is(), "fwk", "OFrames::queryFrames(): Our owner is dead - you can't query for frames ...!" );
 
     // Resturn result of this operation.
     return seqFrames;
@@ -387,8 +384,6 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
         But ... look for right testing! See using of this methods!
 -----------------------------------------------------------------------------------------------------------------*/
 
-#ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
 // An instance of this class can only work with valid initialization.
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
@@ -474,8 +469,6 @@ sal_Bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
     // Return result of check.
     return bOK ;
 }
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
 

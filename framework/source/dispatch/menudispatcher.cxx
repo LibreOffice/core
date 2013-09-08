@@ -58,35 +58,12 @@ using namespace ::cppu                          ;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
-//-------------------------------------------------------------------------------------------------------------
-//  debug methods
-//  (should be private everyway!)
-//-------------------------------------------------------------------------------------------------------------
-
-/*-****************************************************************************************************//**
-    @short      debug-method to check incoming parameter of some other mehods of this class
-    @descr      The following methods are used to check parameters for other methods
-                of this class. The return value is used directly for an ASSERT(...).
-
-    @seealso    ASSERTs in implementation!
-
-    @param      css::uno::References to checking variables
-    @return     sal_False on invalid parameter<BR>
-                sal_True  otherway
-
-    @onerror    -
-*//*-*****************************************************************************************************/
-
-#ifdef ENABLE_ASSERTIONS
-
 static sal_Bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::uno::XComponentContext >& xContext        ,
                                                                const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
 static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
 static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                 const   css::util::URL&                                         aURL            );
-#endif  // #ifdef ENABLE_ASSERTIONS
-
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
@@ -104,7 +81,7 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
 {
     // Safe impossible cases
     // We need valid information about our owner for work.
-    LOG_ASSERT( impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
 
     m_bActivateListener = sal_True;
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
@@ -138,7 +115,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
     ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter
-    LOG_ASSERT( impldbg_checkParameter_addStatusListener( xControl, aURL ), "MenuDispatcher::addStatusListener()\nInvalid parameter detected.\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_addStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
     // Add listener to container.
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
@@ -153,7 +130,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
     ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter
-    LOG_ASSERT( impldbg_checkParameter_removeStatusListener( xControl, aURL ), "MenuDispatcher::removeStatusListener()\nInvalid parameter detected.\n" )
+    SAL_WARN_IF( !impldbg_checkParameter_removeStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
     // Add listener to container.
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
@@ -205,7 +182,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
     // Safe impossible cases
-    LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "MenuDispatcher::disposing()\nObject already disposed .. don't call it again!\n" )
+    SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
     if( m_bAlreadyDisposed == sal_False )
     {
@@ -334,23 +311,6 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
     return sal_False;
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
 static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                                                   const   uno::Reference< XFrame >&             xOwner      )
 {
@@ -411,8 +371,6 @@ static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Refer
     // Return result of check.
     return bOK ;
 }
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework
 

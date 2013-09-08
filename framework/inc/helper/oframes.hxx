@@ -255,16 +255,12 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
     private:
         static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                                                                         FrameContainer*                                         pFrameContainer );
         static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
         static sal_Bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
         static sal_Bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
     //  variables
     //  (should be private everyway!)

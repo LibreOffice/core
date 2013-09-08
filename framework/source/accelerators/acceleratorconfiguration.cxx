@@ -94,7 +94,7 @@ XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::un
 //-----------------------------------------------
 XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
 {
-    LOG_ASSERT(!m_pWriteCache, "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()\nChanges not flushed. Ignore it ...")
+    SAL_WARN_IF(m_pWriteCache, "fwk", "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration(): Changes not flushed. Ignore it ...");
 }
 
 //-----------------------------------------------

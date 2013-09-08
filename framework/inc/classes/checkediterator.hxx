@@ -100,8 +100,8 @@ class CheckedIterator
         inline void initialize( const TContainer& rContainer )
         {
             // Check incoming parameter. We don't accept all!
-            LOG_ASSERT2( &rContainer==NULL      , "CheckedIterator::initialize()", "Invalid parameter detected!"                        )
-            LOG_ASSERT2( m_eEndState!=E_UNKNOWN , "CheckedIterator::initialize()", "Instance already initialized! Don't do it again."   )
+            SAL_WARN_IF( &rContainer==NULL, "fwk", "CheckedIterator::initialize(): Invalid parameter detected!" );
+            SAL_WARN_IF( m_eEndState!=E_UNKNOWN, "fwk", "CheckedIterator::initialize(): Instance already initialized! Don't do it again." );
 
             if( m_eEndState == E_UNKNOWN )
             {
@@ -187,7 +187,7 @@ class CheckedIterator
         inline CheckedIterator& operator++()
         {
             // Warn programmer if he forget to initailize object!
-            LOG_ASSERT2( m_pContainer==NULL, "CheckedIterator::operator++()", "Object not initialized!" )
+            SAL_WARN_IF( m_pContainer==NULL, "fwk", "CheckedIterator::operator++(): Object not initialized!" );
             // Step to next element if any exist or set our end states.
             switch( m_eEndState )
             {
@@ -280,9 +280,9 @@ class CheckedIterator
         inline typename TContainer::const_iterator getEntry()
         {
             // Warn programmer if he forget to initialize these object ...
-            LOG_ASSERT2( m_pContainer==NULL, "CheckedIterator::getEntry()", "Object not initialized!" )
+            SAL_WARN_IF( m_pContainer==NULL, "fwk", "CheckedIterator::getEntry(): Object not initialized!" );
             // or try to read a non existing element!
-            LOG_ASSERT2( m_eEndState!=E_BEFOREEND, "CheckedIterator::getEntry()", "Wrong using of class detected!" )
+            SAL_WARN_IF( m_eEndState!=E_BEFOREEND, "fwk", "CheckedIterator::getEntry(): Wrong using of class detected!" );
 
             return m_pPosition;
         }

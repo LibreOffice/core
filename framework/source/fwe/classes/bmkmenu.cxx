@@ -21,7 +21,6 @@
 
 #include "framework/bmkmenu.hxx"
 #include <general.h>
-#include <macros/debug/assertion.hxx>
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 

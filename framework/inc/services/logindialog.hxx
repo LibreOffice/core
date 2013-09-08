@@ -729,34 +729,6 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
         OUString         impl_readDialog                 (                                                   );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        sal_Bool impldbg_checkParameter_LoginDialog (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&  xFactory    );
-        sal_Bool impldbg_checkParameter_setTitle    (   const   OUString&                    sTitle      );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
     //  variables
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------

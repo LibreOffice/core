@@ -296,7 +296,7 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
             case E_UNINITIALIZED   :    if( eMode == E_HARDEXCEPTIONS )
                                         {
                                             // Help programmer to find out, why this exception is thrown!
-                                            LOG_ERROR( "TransactionManager...", "Owner instance not correctly initialized yet. Call was rejected! Normally it's an algorithm error ... wrong use of class!" )
+                                            SAL_WARN( "fwk", "TransactionManager...: Owner instance not correctly initialized yet. Call was rejected! Normally it's an algorithm error ... wrong use of class!" );
                                             //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
                                             // throw css::uno::RuntimeException( DECLARE_ASCII("TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normaly it's an algorithm error ... wrong usin of class!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
@@ -304,18 +304,18 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
             case E_INCLOSE         :    if( eMode == E_HARDEXCEPTIONS )
                                         {
                                             // Help programmer to find out, why this exception is thrown!
-                                            LOG_ERROR( "TransactionManager...", "Owner instance stand in close method. Call was rejected!" )
+                                            SAL_WARN( "fwk", "TransactionManager...: Owner instance stand in close method. Call was rejected!" );
                                             throw css::lang::DisposedException( DECLARE_ASCII("TransactionManager...\nOwner instance stand in close method. Call was rejected!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
                                         break;
             case E_CLOSED           :   {
                                             // Help programmer to find out, why this exception is thrown!
-                                            LOG_ERROR( "TransactionManager...", "Owner instance already closed. Call was rejected!" )
+                                            SAL_WARN( "fwk", "TransactionManager...: Owner instance already closed. Call was rejected!" );
                                             throw css::lang::DisposedException( DECLARE_ASCII("TransactionManager...\nOwner instance already closed. Call was rejected!\n" ), css::uno::Reference< css::uno::XInterface >() );
                                         }
             case E_NOREASON         :   {
                                             // Help programmer to find out
-                                            LOG_ERROR( "TransactionManager...", "Impossible case E_NOREASON!" )
+                                            SAL_WARN( "fwk", "TransactionManager...: Impossible case E_NOREASON!" );
                                         }
                                         break;
             default:                    break; // nothing to do
