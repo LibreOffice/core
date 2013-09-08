@@ -409,15 +409,11 @@ void SwTestAccountSettingsDialog::Test()
     }
 }
 
-SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet ) :
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
+SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet)
 {
     // create TabPage
-    SetTabPage(SwMailConfigPage::Create( this, rSet ));
-}
-
-SwMailConfigDlg::~SwMailConfigDlg()
-{
+    setTabPage(SwMailConfigPage::Create(get_content_area(), rSet));
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(

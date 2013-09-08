@@ -67,12 +67,10 @@ public:
 
 };
 
-class SwMailConfigDlg : public SfxNoLayoutSingleTabDialog
+class SwMailConfigDlg : public SfxSingleTabDialog
 {
 public:
-
-    SwMailConfigDlg( Window* pParent, SfxItemSet& rSet );
-    ~SwMailConfigDlg();
+    SwMailConfigDlg(Window* pParent, SfxItemSet& rSet);
 };
 
 #endif
