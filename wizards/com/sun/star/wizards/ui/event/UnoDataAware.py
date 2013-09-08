@@ -17,7 +17,9 @@
 #
 import uno
 from .CommonListener import ItemListenerProcAdapter, TextListenerProcAdapter
-from .DataAware import DataAware, PropertyNames
+from .DataAware import DataAware, PropertyNames, datetime, Date, Time
+
+from com.sun.star.script import CannotConvertException
 
 '''
 @author rpiterman
@@ -47,14 +49,21 @@ class UnoDataAware(DataAware):
 
     def setToUI(self, value):
         if (isinstance(value, list)):
-            length = len(value)
             value = tuple(value)
         elif self.isShort:
             value = uno.Any("[]short", (value,))
-        if (hasattr(self.unoModel, self.unoPropName)):
-            setattr(self.unoModel, self.unoPropName, value)
-        else:
-            uno.invoke(self.unoModel, "set" + self.unoPropName, (value,))
+        if value:
+            if(hasattr(self.unoModel, self.unoPropName)):
+                if self.unoPropName == "Date":
+                    d = datetime.strptime(value, '%d/%m/%y')
+                    value = Date(d.day, d.month, d.year)
+                elif self.unoPropName == "Time":
+                    t = datetime.strptime(value, '%H:%M')
+                    value = Time(0, 0, t.minute, t.hour, False)
+                
+                setattr(self.unoModel, self.unoPropName, value)
+            else:
+                uno.invoke(self.unoModel, "set" + self.unoPropName, (value,))
 
     # Try to get from an arbitrary object a boolean value.
     # Null returns Boolean.FALSE;
