@@ -20,6 +20,10 @@ import uno
 from abc import ABCMeta, abstractmethod
 from ...common.PropertyNames import PropertyNames
 
+from com.sun.star.util import Date
+from com.sun.star.util import Time
+from datetime import datetime
+
 '''
 @author rpiterman
 DataAware objects are used to live-synchronize UI and DataModel/DataObject.
@@ -118,9 +122,12 @@ class DataAware(object):
                 data = uno.invoke(self._dataObject, "get" + self._field, ())
             ui = self.getFromUI()
             if data is not ui:
-                #if isinstance(ui,tuple):
-                    #Selected Element listbox
-                #    ui = ui[0]
+                if isinstance(ui,Date):
+                    d = datetime(ui.Year, ui.Month, ui.Day)
+                    ui = d.strftime('%d/%m/%y')
+                elif isinstance(ui,Time):
+                    t = datetime(1, 1, 1, ui.Hours, ui.Minutes)
+                    ui = t.strftime('%H:%M')
                 if useUno:
                     uno.invoke(self._dataObject, "set" + self._field, (ui,))
                 else:

@@ -22,7 +22,7 @@ from ..text.TextDocument import TextDocument
 from ..text.TextSectionHandler import TextSectionHandler
 from ..common.FileAccess import FileAccess
 
-from datetime import date as dateTimeObject
+from datetime import datetime
 
 from com.sun.star.text.PlaceholderType import TEXT
 from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
@@ -142,7 +142,7 @@ class AgendaDocument(TextDocument):
         except Exception:
             traceback.print_exc()
         self.xTextDocument.unlockControllers()
-
+        
     '''
     checks the data model if the
     item corresponding to the given string should be shown
@@ -367,8 +367,7 @@ class AgendaDocument(TextDocument):
                     self.getDateString(self.agenda.cp_Date)
                 self.teDate.write(self.trDate)
             elif controlName == "txtTime":
-                self.teTime.placeHolderText = \
-                    self.getTimeString(self.agenda.cp_Time)
+                self.teTime.placeHolderText = self.agenda.cp_Time
                 self.teTime.write(self.trTime)
             elif controlName == "cbLocation":
                 self.teLocation.placeHolderText = self.agenda.cp_Location
@@ -378,24 +377,11 @@ class AgendaDocument(TextDocument):
         except Exception:
             traceback.print_exc()
 
-    def getDateString(self, d):
-        if not d:
+    def getDateString(self, date):
+        if not date:
             return ""
-        date = int(d)
-        year = int(date / 10000)
-        month = int((date % 10000) / 100)
-        day = int(date % 100)
-        dateObject = dateTimeObject(year, month, day)
+        dateObject = datetime.strptime(date, '%d/%m/%y').date()
         return self.dateUtils.format(self.dateFormat, dateObject)
-
-    def getTimeString(self, s):
-        if s is None or s == "":
-            return ""
-        time = int(s)
-        t = ((time / float(1000000)) / float(24)) \
-            + ((time % 1000000) / float(1000000)) / float(35)
-        return self.formatter.convertNumberToString(
-            self.timeFormat, t)
 
     def finish(self, topics):
         self.createMinutes(topics)
@@ -468,8 +454,7 @@ class AgendaDocument(TextDocument):
                             self.resources.resPlaceHolderDate)
                     elif itemText == \
                             self.templateConsts.FILLIN_MINUTES_TIME:
-                        self.fillMinutesItem(
-                            item, getTimeString(self.agenda.cp_Time),
+                        self.fillMinutesItem( item, self.agenda.cp_Time,
                             self.resources.resPlaceHolderTime)
 
                 self.items.clear()
@@ -510,9 +495,9 @@ class AgendaDocument(TextDocument):
                             if topicTime == 0 or topicStartTime == 0:
                                 time = topic[3].Value
                             else:
-                                time = getTimeString(str(topicStartTime)) + " - "
+                                time = str(topicStartTime) + " - "
                                 topicStartTime += topicTime * 1000
-                                time += getTimeString(str(topicStartTime))
+                                time += str(topicStartTime)
 
                             fillMinutesItem(item, time, "")
 
