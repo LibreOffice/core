@@ -47,7 +47,7 @@ namespace framework
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ModuleAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
                                    "com.sun.star.ui.ModuleAcceleratorConfiguration" ,
-                                   "com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
+                                   OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration"))
 
 DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
                     {

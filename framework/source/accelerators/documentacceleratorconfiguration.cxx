@@ -55,7 +55,7 @@ namespace framework
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                                ,
                                    "com.sun.star.ui.DocumentAcceleratorConfiguration" ,
-                                   "com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
+                                   OUString("com.sun.star.comp.framework.DocumentAcceleratorConfiguration"))
 
 DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
                     {

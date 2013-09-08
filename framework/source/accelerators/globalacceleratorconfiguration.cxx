@@ -44,7 +44,7 @@ namespace framework
 DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
                                    "com.sun.star.ui.GlobalAcceleratorConfiguration" ,
-                                   "com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
+                                   OUString("com.sun.star.comp.framework.GlobalAcceleratorConfiguration"))
 
 DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
                     {
