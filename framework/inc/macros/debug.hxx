@@ -39,16 +39,10 @@
 // => "product" (OSL_DEBUG_LEVEL == 0)
 #else
 
-    #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_FILTERDBG
 
 #endif
-
-//*****************************************************************************************************************
-//  special macros for event handling
-//*****************************************************************************************************************
-#include <macros/debug/event.hxx>
 
 //*****************************************************************************************************************
 //  special macros to debug service registration

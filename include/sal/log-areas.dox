@@ -158,6 +158,7 @@ certain functionality.
 @li @c fwk.autorecovery
 @li @c fwk.desktop
 @li @c fwk.dispatch
+@li @c fwk.frame
 @li @c fwk.joburl
 @li @c fwk.loadenv
 @li @c fwk.session

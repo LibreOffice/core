@@ -1833,7 +1833,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // May be we will die before we could finish this method ...
     css::uno::Reference< css::frame::XFrame > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
-    LOG_DISPOSEEVENT( "Frame", sName )
+    SAL_INFO("fwk.frame", "[Frame] " << m_sName << " send dispose event to listener");
 
     // First operation should be ... "stopp all listening for window events on our container window".
     // These events are superflous but can make trouble!
@@ -2734,7 +2734,18 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
 
     // Log information about order of events to file!
     // (only activated in debug version!)
-    LOG_FRAMEACTIONEVENT( "Frame", m_sName, aAction )
+    SAL_INFO( "fwk.frame",
+              "[Frame] " << m_sName << " send event " <<
+              (aAction == css::frame::FrameAction_COMPONENT_ATTACHED ? OUString("COMPONENT ATTACHED") :
+               (aAction == css::frame::FrameAction_COMPONENT_DETACHING ? OUString("COMPONENT DETACHING") :
+                (aAction == css::frame::FrameAction_COMPONENT_REATTACHED ? OUString("COMPONENT REATTACHED") :
+                 (aAction == css::frame::FrameAction_FRAME_ACTIVATED ? OUString("FRAME ACTIVATED") :
+                  (aAction == css::frame::FrameAction_FRAME_DEACTIVATING ? OUString("FRAME DEACTIVATING") :
+                   (aAction == css::frame::FrameAction_CONTEXT_CHANGED ? OUString("CONTEXT CHANGED") :
+                    (aAction == css::frame::FrameAction_FRAME_UI_ACTIVATED ? OUString("FRAME UI ACTIVATED") :
+                     (aAction == css::frame::FrameAction_FRAME_UI_DEACTIVATING ? OUString("FRAME UI DEACTIVATING") :
+                      (aAction == css::frame::FrameAction_MAKE_FIXED_SIZE ? OUString("MAKE_FIXED_SIZE") :
+                       OUString("*invalid*")))))))))));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Send css::frame::FrameAction event to all listener.
