@@ -180,7 +180,7 @@ sal_uInt32 FrameContainer::getCount() const
     @descr      -
 
     @deprecated This value can't be guaranteed for multithreading environments.
-                So it will be marked as deprecated and should be replaced by "getAllElements()".
+                So it will be marked as deprecatedf and should be replaced by "getAllElements()".
 
     @param      nIndex
                     a valud between 0 and (getCount()-1) to address one container item
@@ -207,7 +207,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     {
         // The index is not valid for current container-content - we must handle this case!
         // We can return the default value ...
-        LOG_EXCEPTION( "FrameContainer::operator[]", "Exception catched ...", DECLARE_ASCII("::std::out_of_range") )
+        SAL_INFO( "fwk", "FrameContainer::operator[]: Exception caught: std::out_of_range" );
     }
     return xFrame;
 }

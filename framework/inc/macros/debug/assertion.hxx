@@ -37,7 +37,6 @@
 //      4a) LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                       same like 4) + additional location of error
 //      5)  LOG_ERROR( SMETHOD, STEXT )                                     show errors without any condition
 //      active for debug only!
-//      6)  LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )        show/log an exception for easier debug
 //      7)  LOG_WARNING( SMETHOD, STEXT )                                   should be used to detect leaks in algorithm, mechanism or operation handling
 //*****************************************************************************************************************
 
@@ -175,22 +174,6 @@
     #endif
 
     /*_____________________________________________________________________________________________________________
-        LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
-
-        Show some exception info by using current set output mode by define LOGTYPE!
-        We use a separated scope {} do protect us against multiple variable definitions.
-    _____________________________________________________________________________________________________________*/
-
-    #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \
-                {                                                                                               \
-                    OStringBuffer _sAssertBuffer2( 256 );                                                \
-                    _sAssertBuffer2.append( SOWNMESSAGE             );                                          \
-                    _sAssertBuffer2.append( "\n"                    );                                          \
-                    _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)  );                                          \
-                    LOG_ERROR( SMETHOD, _sAssertBuffer2.getStr() )                                  \
-                }
-
-    /*_____________________________________________________________________________________________________________
         LOG_WARNING( SMETHOD, STEXT )
 
         Use it to show/log warnings for programmer for follow reasons:
@@ -206,7 +189,6 @@
 
     // If right testmode is'nt set - implements these macros empty!
     #undef  LOGFILE_WARNINGS
-    #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
     #define LOG_WARNING( SMETHOD, STEXT )
 
 #endif  // ENABLE_WARNINGS
