@@ -42,7 +42,7 @@ public:
 
 namespace CharFmt
 {
-    extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
+    SW_DLLPUBLIC extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
     extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich );
     extern bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr );
 }

@@ -105,6 +105,15 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_ROTATION:     sName = "CharRotation"; break;
             case PROP_CHAR_ROTATION_IS_FIT_TO_LINE:     sName = "CharRotationIsFitToLine"; break;
             case PROP_CHAR_FLASH:     sName = "CharFlash"; break;
+            case PROP_CHAR_LEFT_BORDER: sName = "CharLeftBorder";break;
+            case PROP_CHAR_RIGHT_BORDER: sName = "CharRightBorder";break;
+            case PROP_CHAR_TOP_BORDER: sName = "CharTopBorder";break;
+            case PROP_CHAR_BOTTOM_BORDER: sName = "CharBottomBorder";break;
+            case PROP_CHAR_LEFT_BORDER_DISTANCE: sName = "CharLeftBorderDistance"; break;
+            case PROP_CHAR_RIGHT_BORDER_DISTANCE: sName = "CharRightBorderDistance"; break;
+            case PROP_CHAR_TOP_BORDER_DISTANCE: sName = "CharTopBorderDistance";break;
+            case PROP_CHAR_BOTTOM_BORDER_DISTANCE: sName = "CharBottomBorderDistance"; break;
+            case PROP_CHAR_SHADOW_FORMAT: sName = "CharShadowFormat"; break;
 
             case PROP_PARA_STYLE_NAME:      sName = "ParaStyleName"; break;
             case PROP_PARA_ADJUST:     sName = "ParaAdjust"; break;

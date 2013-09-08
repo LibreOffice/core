@@ -287,7 +287,6 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         GetPoolItems( rSet, aItems, bExportParentItemSet );
         if ( bChpFmt )
             ExportPoolItemsToCHP(aItems, nScript);
-
         if ( bPapFmt )
         {
             sw::cPoolItemIter aEnd = aItems.end();
@@ -5148,6 +5147,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_CHRATR_HIDDEN:
             CharHidden( static_cast< const SvxCharHiddenItem& >( rHt ) );
+            break;
+        case RES_CHRATR_BOX:
+            CharBorder( static_cast< const SvxBoxItem& >( rHt ) );
             break;
 
         case RES_TXTATR_INETFMT:

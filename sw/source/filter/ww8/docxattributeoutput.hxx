@@ -472,6 +472,9 @@ protected:
     /// Sfx item RES_CHRATR_HIDDEN
     virtual void CharHidden( const SvxCharHiddenItem& rHidden );
 
+    /// Sfx item RES_CHRATR_BOX
+    virtual void CharBorder( const SvxBoxItem& rBox );
+
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& );
 

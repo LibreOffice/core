@@ -116,6 +116,7 @@ public:
     void testFdo68418();
     void testA4AndBorders();
     void testFdo68787();
+    void testCharacterBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -208,6 +209,7 @@ void Test::run()
         {"fdo68418.docx", &Test::testFdo68418},
         {"a4andborders.docx", &Test::testA4AndBorders},
         {"fdo68787.docx", &Test::testFdo68787},
+        {"charborder.odt", &Test::testCharacterBorder},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1271,6 +1273,54 @@ void Test::testFdo68787()
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
+}
+
+void Test::testCharacterBorder()
+{
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    // OOXML has just one border attribute(<w:bdr>) for text border so all side has
+    // the same border with the same padding
+    // Border
+    {
+        const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
+        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(16737792,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+    }
+
+    // Padding (w:space)
+    {
+        const sal_Int32 nTopPadding = getProperty<sal_Int32>(xRun,"CharTopBorderDistance");
+        // In the original odt file it is 150, but the unit conversion round it down.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nTopPadding);
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
+    }
+
+    // Shadow (w:shadow)
+    /* OOXML use just one bool value for shadow so the next conversions
+       are made during an export-import round
+       color: any -> black
+       location: any -> bottom-right
+       width: any -> border width */
+    {
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
+    }
+
+    // Also check shadow when it is in middle of the paragraph
+    // (problem can be during export with SwWW8AttrIter::HasTextItem())
+    {
+        uno::Reference<beans::XPropertySet> xMiddleRun(getRun(getParagraph(2),2), uno::UNO_QUERY);
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xMiddleRun, "CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -463,6 +463,9 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     sw::PoolItems aExportItems;
     GetPoolItems( aExportSet, aExportItems, false );
 
+    if( nSwPos == 0 )
+        m_rExport.SetCurItemSet(&aExportSet);
+
     sw::cPoolItemIter aEnd = aRangeItems.end();
     for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
     {
@@ -482,6 +485,9 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
         m_rExport.m_aCurrentCharPropStarts.pop();
         m_rExport.pOutFmtNode = pOldMod;
     }
+
+    if( nSwPos == 0 )
+        m_rExport.SetCurItemSet(0);
 
     OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );
     if ( pFont )
@@ -584,7 +590,6 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
-
     if (pTxtAttrs && !m_rExport.m_aCurrentCharPropStarts.empty())
     {
         xub_StrLen nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
@@ -594,11 +599,26 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
             const SfxPoolItem* pItem = &pHt->GetAttr();
             const xub_StrLen* pAtrEnd = 0;
             if( 0 != ( pAtrEnd = pHt->GetEnd() ) &&     // only Attr with an end
-                nWhich == pItem->Which() &&
                 nTmpSwPos >= *pHt->GetStart() && nTmpSwPos < *pAtrEnd )
             {
-                pRet = pItem;       // found it
-                break;
+                if ( nWhich == pItem->Which() )
+                {
+                    pRet = pItem;       // found it
+                    break;
+                }
+                else if( RES_TXTATR_INETFMT == pHt->Which() ||
+                         RES_TXTATR_CHARFMT == pHt->Which() ||
+                         RES_TXTATR_AUTOFMT == pHt->Which() )
+                {
+                    const SfxItemSet* pSet = CharFmt::GetItemSet( pHt->GetAttr() );
+                    const SfxPoolItem* pCharItem;
+                    if ( pSet &&
+                         SFX_ITEM_SET == pSet->GetItemState( nWhich, pHt->Which() != RES_TXTATR_AUTOFMT, &pCharItem ) )
+                    {
+                        pRet = pCharItem;       // found it
+                        break;
+                    }
+                }
             }
             else if (nTmpSwPos < *pHt->GetStart())
                 break;              // nothing more to come

@@ -2933,10 +2933,35 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         GetStyleSheetTable()->sprm( rSprm );
     break;
+    case NS_ooxml::LN_EG_RPrBase_bdr:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                BorderHandlerPtr pBorderHandler( new BorderHandler( true ) );
+                pProperties->resolve(*pBorderHandler);
+
+                rContext->Insert( PROP_CHAR_TOP_BORDER, uno::makeAny( pBorderHandler->getBorderLine()));
+                rContext->Insert( PROP_CHAR_BOTTOM_BORDER, uno::makeAny( pBorderHandler->getBorderLine()));
+                rContext->Insert( PROP_CHAR_LEFT_BORDER, uno::makeAny( pBorderHandler->getBorderLine()));
+                rContext->Insert( PROP_CHAR_RIGHT_BORDER, uno::makeAny( pBorderHandler->getBorderLine()));
+
+                rContext->Insert( PROP_CHAR_TOP_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
+                rContext->Insert( PROP_CHAR_BOTTOM_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
+                rContext->Insert( PROP_CHAR_LEFT_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
+                rContext->Insert( PROP_CHAR_RIGHT_BORDER_DISTANCE, uno::makeAny( pBorderHandler->getLineDistance()));
+
+                if( pBorderHandler->getShadow() )
+                {
+                    table::ShadowFormat aFormat = rContext->getShadowFromBorder(pBorderHandler->getBorderLine());
+                    rContext->Insert(PROP_CHAR_SHADOW_FORMAT, uno::makeAny(aFormat));
+                }
+            }
+        }
+        break;
     case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_color:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
-    case NS_ooxml::LN_EG_RPrBase_bdr:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
     case NS_ooxml::LN_EG_RPrBase_lang:

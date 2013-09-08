@@ -68,6 +68,7 @@ class SvxTwoLinesItem;
 class SvxCharScaleWidthItem;
 class SvxCharReliefItem;
 class SvxCharHiddenItem;
+class SvxBoxItem;
 class SwFmtINetFmt;
 class SwFmtCharFmt;
 class SwFmtFld;
@@ -436,6 +437,9 @@ protected:
 
     /// Sfx item RES_CHRATR_HIDDEN
     virtual void CharHidden( const SvxCharHiddenItem& ) = 0;
+
+    /// Sfx item RES_CHRATR_BOX
+    virtual void CharBorder( const SvxBoxItem& rBox ) = 0;
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& ) = 0;
