@@ -215,6 +215,14 @@ sub do_link($$$$@)
     my $dest_name = shift;
     my $dont_check_link = shift;
 
+    if ($dest_name eq 'soffice' ||
+        $dest_name eq 'unopkg' ||
+        $dest_name eq 'unoinfo' ||
+        $dest_name eq 'spadmin' ||
+        $dest_name eq 'gengal' ||
+        $dest_name eq 'python')
+    { return; } # these scripts uses `pwd`...
+
     if ($copy) { # copy if older ...
 	my $src_mtime = stat("$src/$src_name")->mtime;
 	my $dest_mtime = stat("$dest/$dest_name")->mtime;
