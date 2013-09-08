@@ -59,12 +59,10 @@
     <child>
       <object class="GtkRadioButton" id="createDatabase">
         <property name="label" translatable="yes">Create a n_ew database</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="margin_left">12</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
@@ -88,6 +86,8 @@
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">_Embedded Database:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">embeddeddbList</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -118,12 +118,10 @@
     <child>
       <object class="GtkRadioButton" id="openExistingDatabase">
         <property name="label" translatable="yes">Open an existing database _file</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="margin_left">12</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
@@ -149,6 +147,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">_Recently used:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">documentList</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -180,13 +179,11 @@
     <child>
       <object class="dbulo-OpenDocumentButton" id="openDatabase">
         <property name="label" translatable="yes">Open</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">start</property>
         <property name="margin_left">48</property>
-        <property name="use_action_appearance">False</property>
         <property name="always_show_image">True</property>
       </object>
       <packing>
@@ -198,12 +195,10 @@
     <child>
       <object class="GtkRadioButton" id="connectDatabase">
         <property name="label" translatable="yes">Connect to an e_xisting database</property>
-        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="margin_left">12</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="active">True</property>
