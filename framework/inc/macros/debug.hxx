@@ -39,15 +39,9 @@
 // => "product" (OSL_DEBUG_LEVEL == 0)
 #else
 
-    #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_FILTERDBG
 
 #endif
-
-//*****************************************************************************************************************
-//  special macros to debug service registration
-//*****************************************************************************************************************
-#include <macros/debug/registration.hxx>
 
 //*****************************************************************************************************************
 //  special macros to debug our filter cache!

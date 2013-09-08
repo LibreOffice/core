@@ -46,7 +46,6 @@ ________________________________________________________________________________
     /* You can't add some statements before follow line ... Here can be an ELSE-statement! */                                           \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )                  \
     {                                                                                                                                   \
-        LOG_REGISTRATION_GETFACTORY( "\t\tImplementationname found - try to create factory! ...\n" )                                    \
         /* ... then create right factory for this service.                                  */                                          \
         /* xFactory and xServiceManager are local variables of method which use this macro. */                                          \
         xFactory = CLASS::impl_createFactory( xServiceManager );                                                                        \
@@ -61,7 +60,6 @@ ________________________________________________________________________________
                                                             void*       pServiceManager     ,                                           \
                                                             void*     /*pRegistryKey*/      )                                           \
     {                                                                                                                                   \
-        LOG_REGISTRATION_GETFACTORY( "\t[start]\n" )                                                                                    \
         /* Set default return value for this operation - if it failed. */                                                               \
         void* pReturn = NULL ;                                                                                                          \
         if  (                                                                                                                           \
@@ -69,7 +67,6 @@ ________________________________________________________________________________
                 ( pServiceManager       !=  NULL )                                                                                      \
             )                                                                                                                           \
         {                                                                                                                               \
-            LOG_REGISTRATION_GETFACTORY( "\t\tpImplementationName and pServiceManager are valid ...\n" )                                \
             /* Define variables which are used in following macros. */                                                                  \
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   xFactory            ;                   \
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager     ;                   \
@@ -84,12 +81,10 @@ ________________________________________________________________________________
             /* Factory is valid, if service was found. */                                                                               \
             if ( xFactory.is() == sal_True )                                                                                            \
             {                                                                                                                           \
-                LOG_REGISTRATION_GETFACTORY( "\t\t\txFactory valid - service was found ...\n" )                                         \
                 xFactory->acquire();                                                                                                    \
                 pReturn = xFactory.get();                                                                                               \
             }                                                                                                                           \
         }                                                                                                                               \
-        LOG_REGISTRATION_GETFACTORY( "\t[end]\n" )                                                                                      \
         /* Return with result of this operation. */                                                                                     \
         return pReturn ;                                                                                                                \
     }
