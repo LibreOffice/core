@@ -94,9 +94,6 @@ class FormulaBuffer : public WorkbookHelper
     SheetToSharedIdToTokenIndex maTokenIndexes;
     FormulaValueMap maCellFormulaValues;
 
-    com::sun::star::uno::Reference<com::sun::star::table::XCellRange>
-        getRange( const com::sun::star::table::CellRangeAddress& rRange );
-
     void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
     void                applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress );
     void                applyCellFormulas(  const std::vector< TokenAddressItem >& rVector );
