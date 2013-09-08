@@ -874,16 +874,20 @@ void SlideTransitionPane::applyToSelectedPages()
     if( ! mbUpdatingControls )
     {
         ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
+        impl::TransitionEffect aEffect = getTransitionEffectFromControls();
         if( ! pSelectedPages->empty())
         {
             lcl_CreateUndoForPages( pSelectedPages, mrBase );
-            lcl_ApplyToPages( pSelectedPages, getTransitionEffectFromControls() );
+            lcl_ApplyToPages( pSelectedPages, aEffect );
             mrBase.GetDocShell()->SetModified();
         }
         if( mpCB_AUTO_PREVIEW->IsEnabled() &&
             mpCB_AUTO_PREVIEW->IsChecked())
         {
-            playCurrentEffect();
+            if (aEffect.mnType) // mnType = 0 denotes no transition
+                playCurrentEffect();
+            else
+                stopEffects();
         }
     }
 }
@@ -895,6 +899,14 @@ void SlideTransitionPane::playCurrentEffect()
 
         Reference< ::com::sun::star::animations::XAnimationNode > xNode;
         SlideShow::StartPreview( mrBase, mxView->getCurrentPage(), xNode );
+    }
+}
+
+void SlideTransitionPane::stopEffects()
+{
+    if( mxView.is() )
+    {
+        SlideShow::Stop( mrBase );
     }
 }
 

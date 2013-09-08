@@ -77,6 +77,7 @@ private:
 
     void applyToSelectedPages();
     void playCurrentEffect();
+    void stopEffects();
 
     void addListener();
     void removeListener();
