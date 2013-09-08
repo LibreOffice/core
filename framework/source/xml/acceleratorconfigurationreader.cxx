@@ -162,23 +162,19 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
         // Check for already existing items there.
         if (!m_rContainer.hasKey(aEvent))
             m_rContainer.setKeyCommandPair(aEvent, sCommand);
-        #ifdef ENABLE_WARNINGS
         else
         {
             // Attention: Its not realy a reason to throw an exception and kill the office, if the configuration contains
             // multiple registrations for the same key :-) Show a warning ... and ignore the second item.
             // THROW_PARSEEXCEPTION("Command is registered for the same key more then once.")
-            OUStringBuffer sMsg(256);
-            sMsg.appendAscii("Double registration detected.\nCommand = \"");
-            sMsg.append     (sCommand                                     );
-            sMsg.appendAscii("\"\nKeyCode = "                             );
-            sMsg.append     ((sal_Int32)aEvent.KeyCode                    );
-            sMsg.appendAscii("\nModifiers = "                             );
-            sMsg.append     ((sal_Int32)aEvent.Modifiers                  );
-            sMsg.appendAscii("\nIgnore this item!"                        );
-            LOG_WARNING("AcceleratorConfigurationReader::startElement()", U2B(sMsg.makeStringAndClear()))
+            SAL_INFO("fwk",
+                     "AcceleratorConfigurationReader::startElement(): Double registration detected. Command=\"" <<
+                     sCommand <<
+                     "\" KeyCode=" <<
+                     aEvent.KeyCode <<
+                     "Modifiers=" <<
+                     aEvent.Modifiers);
         }
-        #endif // ENABLE_WARNINGS
     }
 
     if (eElement == E_ELEMENT_ACCELERATORLIST)

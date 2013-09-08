@@ -127,7 +127,7 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
     // reject dangerous calls
     if (m_eRunState != E_NEW)
     {
-        LOG_WARNING("Job::setJobData()", "job may still running or already finished")
+        SAL_INFO("fwk", "Job::setJobData(): job may still running or already finished");
         return;
     }
 
@@ -145,7 +145,7 @@ void Job::setJobData( const JobData& aData )
     // reject dangerous calls
     if (m_eRunState != E_NEW)
     {
-        LOG_WARNING("Job::setJobData()", "job may still running or already finished")
+        SAL_INFO("fwk", "Job::setJobData(): job may still running or already finished");
         return;
     }
 
@@ -174,7 +174,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     // reject dangerous calls
     if (m_eRunState != E_NEW)
     {
-        LOG_WARNING("Job::execute()", "job may still running or already finished")
+        SAL_INFO("fwk", "Job::execute(): job may still running or already finished");
         return;
     }
 
@@ -228,11 +228,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
-        OUStringBuffer sMsg(256);
-        sMsg.appendAscii("Got exception during job execution. Original Message was:\n\"");
-        sMsg.append     (ex.Message);
-        sMsg.appendAscii("\"");
-        LOG_WARNING("Job::execute()", U2B(sMsg.makeStringAndClear()).getStr())
+        SAL_INFO("fwk", "Job::execute(): Got exception during job execution. Original Message was: \"" << ex.Message << "\"");
     }
     #else
     catch(const css::uno::Exception&)

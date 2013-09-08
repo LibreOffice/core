@@ -488,7 +488,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         ((m_eJob & AutoRecovery::E_AUTO_SAVE ) != AutoRecovery::E_AUTO_SAVE)
        )
     {
-        LOG_WARNING("AutoRecovery::dispatch()", "There is already an asynchronous dispatch() running. New request will be ignored!")
+        SAL_INFO("fwk", "AutoRecovery::dispatch(): There is already an asynchronous dispatch() running. New request will be ignored!");
         return;
     }
 
@@ -1091,10 +1091,8 @@ void AutoRecovery::implts_readConfig()
                 aWriteLock.unlock();
                 // <- SAFE ----------------------
             }
-            #ifdef ENABLE_WARNINGS
             else
-                LOG_WARNING("AutoRecovery::implts_readConfig()", "Who changed numbering of recovery items? Cache will be inconsistent then! I do not know, what will happen next time .-)")
-            #endif
+                SAL_INFO("fwk", "AutoRecovery::implts_readConfig(): Who changed numbering of recovery items? Cache will be inconsistent then! I do not know, what will happen next time .-)");
 
             // THREADSAFE -> --------------------------
             aWriteLock.lock();
@@ -2859,10 +2857,8 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP));
     else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_AUTO_SAVE));
-    #ifdef ENABLE_WARNINGS
     else if ( eJob != AutoRecovery::E_NO_JOB )
-        LOG_WARNING("AutoRecovery::implst_getJobDescription()", "Invalid job identifier detected.")
-    #endif
+        SAL_INFO("fwk", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
 
     return sFeature.makeStringAndClear();
 }
@@ -2894,7 +2890,7 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
             return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 
-    LOG_WARNING("AutoRecovery::implts_classifyJob()", "Invalid URL (protocol).")
+    SAL_INFO("fwk", "AutoRecovery::implts_classifyJob(): Invalid URL (protocol).");
     return AutoRecovery::E_NO_JOB;
 }
 

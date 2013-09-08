@@ -20,7 +20,7 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
 #define __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
 
-#if defined( ENABLE_ASSERTIONS ) || defined( ENABLE_WARNINGS )
+#if defined( ENABLE_ASSERTIONS )
 
     #include <osl/diagnose.h>
     #include <rtl/strbuf.hxx>
@@ -31,17 +31,15 @@
 //  special macros for assertion handling
 //      1)  LOGTYPE                                                         use it to define the output of all assertions, errors, exception infos
 //      2)  LOGFILE_ASSERTIONS                                              use it to define the file name to log assertions if LOGTYPE=LOGTYPE_FILE...
-//      3)  LOGFILE_WARNINGS                                                use it to define the file name to log warnings if LOGTYPE=LOGTYPE_FILE...
 //      active for "non product":
 //      4)  LOG_ASSERT( BCONDITION, STEXT )                                 assert some critical errors which depend from given condition
 //      4a) LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                       same like 4) + additional location of error
 //      5)  LOG_ERROR( SMETHOD, STEXT )                                     show errors without any condition
 //      active for debug only!
-//      7)  LOG_WARNING( SMETHOD, STEXT )                                   should be used to detect leaks in algorithm, mechanism or operation handling
 //*****************************************************************************************************************
 
 //_________________________________________________________________________________________________________________
-#if defined( ENABLE_ASSERTIONS ) || defined( ENABLE_WARNINGS )
+#if defined( ENABLE_ASSERTIONS )
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_ASSERTIONS
@@ -159,39 +157,6 @@
     #define LOG_ERROR( SMETHOD, STEXT )
 
 #endif  // ENABLE_ASSERTIONS
-
-//_________________________________________________________________________________________________________________
-#if defined( ENABLE_WARNINGS )
-
-    /*_____________________________________________________________________________________________________________
-        LOGFILE_WARNINGS
-
-        For follow macros we need a special log file. If user forget to specify anyone, we must do it for him!
-    _____________________________________________________________________________________________________________*/
-
-    #ifndef LOGFILE_WARNINGS
-        #define LOGFILE_WARNINGS  "_framework_warnings.log"
-    #endif
-
-    /*_____________________________________________________________________________________________________________
-        LOG_WARNING( SMETHOD, STEXT )
-
-        Use it to show/log warnings for programmer for follow reasons:
-            - algorithm errors
-            - undefined states
-            - unknown errors from other modules ...
-    _____________________________________________________________________________________________________________*/
-
-    #define LOG_WARNING( SMETHOD, STEXT )                                                                       \
-                LOG_ERROR( SMETHOD, STEXT )
-
-#else
-
-    // If right testmode is'nt set - implements these macros empty!
-    #undef  LOGFILE_WARNINGS
-    #define LOG_WARNING( SMETHOD, STEXT )
-
-#endif  // ENABLE_WARNINGS
 
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
 

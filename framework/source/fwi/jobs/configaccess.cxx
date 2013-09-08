@@ -141,7 +141,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         catch(const css::uno::Exception& ex)
         {
             (void) ex; // avoid warning
-            LOG_WARNING("open config ...", U2B(ex.Message))
+            SAL_INFO("fwk", "open config: " << ex.Message);
         }
 
         m_eMode = E_CLOSED;

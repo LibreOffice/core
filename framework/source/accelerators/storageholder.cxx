@@ -449,7 +449,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
     // <- SAFE ----------------------------------
 
     // ?
-    LOG_WARNING("StorageHolder::getParentStorage()", "Unexpected situation. Cached storage item seems to be wrong.")
+    SAL_INFO("fwk", "StorageHolder::getParentStorage(): Unexpected situation. Cached storage item seems to be wrong.");
     return css::uno::Reference< css::embed::XStorage >();
 }
 
@@ -502,7 +502,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
         return xSubStorage;
 
     // d) no chance!
-    LOG_WARNING("openSubStorageWithFallback()", "Unexpected situation! Got no exception for missing storage ...")
+    SAL_INFO("fwk", "openSubStorageWithFallback(): Unexpected situation! Got no exception for missing storage ...");
     return css::uno::Reference< css::embed::XStorage >();
 }
 
@@ -542,7 +542,7 @@ css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback
         return xSubStream;
 
     // d) no chance!
-    LOG_WARNING("openSubStreamWithFallbacks()", "Unexpected situation! Got no exception for missing stream ...")
+    SAL_INFO("fwk", "openSubStreamWithFallbacks(): Unexpected situation! Got no exception for missing stream ...");
     return css::uno::Reference< css::io::XStream >();
 }
 

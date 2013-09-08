@@ -164,7 +164,6 @@ void FrameListAnalyzer::impl_analyze()
                )
                 continue;
 
-            #ifdef ENABLE_WARNINGS
             if (
                 ((m_eDetectMode & E_ZOMBIE) == E_ZOMBIE) &&
                 (
@@ -173,9 +172,8 @@ void FrameListAnalyzer::impl_analyze()
                 )
                )
             {
-                LOG_WARNING("FrameListAnalyzer::impl_analyze()", "ZOMBIE!")
+                SAL_INFO("fwk", "FrameListAnalyzer::impl_analyze(): ZOMBIE!");
             }
-            #endif
 
             // -------------------------------------------------
             // a) Is it the special help task?

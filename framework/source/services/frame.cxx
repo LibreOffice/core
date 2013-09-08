@@ -2642,11 +2642,9 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                 }
                 break;
 
-        #ifdef ENABLE_WARNINGS
         default :
-                LOG_WARNING( "Frame::setFastPropertyValue_NoBroadcast()", "Invalid handle detected!" )
+                SAL_INFO("fwk",  "Frame::setFastPropertyValue_NoBroadcast(): Invalid handle detected!" );
                 break;
-        #endif
     }
 }
 
@@ -2689,11 +2687,9 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
                 }
                 break;
 
-        #ifdef ENABLE_WARNINGS
         default :
-                LOG_WARNING( "Frame::getFastPropertyValue()", "Invalid handle detected!" )
+                SAL_INFO("fwk",  "Frame::getFastPropertyValue(): Invalid handle detected!" );
                 break;
-        #endif
     }
 
     return aValue;

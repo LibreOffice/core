@@ -399,14 +399,14 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
 //-----------------------------------------------
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::hasStorage()", "TODO implement this HACK .-)")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
     return sal_False;
 }
 
@@ -414,14 +414,14 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 void SAL_CALL XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
 //-----------------------------------------------
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
 //-----------------------------------------------
@@ -441,14 +441,14 @@ throw(css::uno::RuntimeException)
 void SAL_CALL XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::addResetListener()", "TODO implement me")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
 //-----------------------------------------------
 void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XMLBasedAcceleratorConfiguration::removeResetListener()", "TODO implement me")
+    SAL_INFO("fwk", "XMLBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
 //-----------------------------------------------
@@ -1088,14 +1088,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::setStorage()", "TODO implement this HACK .-)")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
 
 //-----------------------------------------------
 ::sal_Bool SAL_CALL XCUBasedAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::hasStorage()", "TODO implement this HACK .-)")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::hasStorage(): implement this HACK .-)");
         return sal_False;
 }
 
@@ -1103,14 +1103,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Refer
 void SAL_CALL XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::addConfigurationListener()", "TODO implement me")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
 //-----------------------------------------------
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::removeConfigurationListener()", "TODO implement me")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
 //-----------------------------------------------
@@ -1139,14 +1139,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
 void SAL_CALL XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::addResetListener()", "TODO implement me")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
 //-----------------------------------------------
 void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
     throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("XCUBasedAcceleratorConfiguration::removeResetListener()", "TODO implement me")
+    SAL_INFO("fwk", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
 //-----------------------------------------------

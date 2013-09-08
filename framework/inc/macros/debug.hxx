@@ -41,12 +41,10 @@
     #ifndef ENABLE_ASSERTIONS
         #define ENABLE_ASSERTIONS
     #endif
-    #ifndef ENABLE_WARNINGS
-        #define ENABLE_WARNINGS
-    #endif
 
 //-----------------------------------------------------------------------------------------------------------------
 // => "non product"
+// NOTE
 #elif OSL_DEBUG_LEVEL > 0
 
     // Enable log mechanism for normal assertion and error handling.
@@ -67,7 +65,6 @@
 
     #undef  ENABLE_LOGMECHANISM
     #undef  ENABLE_ASSERTIONS
-    #undef  ENABLE_WARNINGS
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
 //    #undef  ENABLE_TIMEMEASURE

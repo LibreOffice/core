@@ -650,7 +650,7 @@ But; Don't forget - you will be the owner of returned object and must release it
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( css::uno::RuntimeException )
 {
-    LOG_WARNING("Desktop::getTasks()", "Use of obsolete interface XTaskSupplier")
+    SAL_INFO("fwk", "Desktop::getTasks(): Use of obsolete interface XTaskSupplier");
     return NULL;
 }
 
@@ -674,7 +674,7 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw( css::uno::RuntimeException )
 {
-    LOG_WARNING("Desktop::getActiveTask()", "Use of obsolete interface XTaskSupplier")
+    SAL_INFO("fwk", "Desktop::getActiveTask(): Use of obsolete interface XTaskSupplier");
     return NULL;
 }
 
