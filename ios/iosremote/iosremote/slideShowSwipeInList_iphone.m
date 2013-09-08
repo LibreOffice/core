@@ -169,8 +169,12 @@ dispatch_queue_t backgroundQueue;
         UIPageControl * pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.revealViewController.rearViewRevealWidth - 20, view.frame.origin.y + 3, 40, 20)];
         pageControl.numberOfPages = 2;
         pageControl.currentPage = self.currentPage;
-        pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
-        pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+        
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
+        {
+            pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+            pageControl.pageIndicatorTintColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.7];
+        }
         pageControl.tag = -100;
         view.tag = -99;
         label.tag = -98;

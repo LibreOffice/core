@@ -13,18 +13,19 @@
 @interface CommandTransmitter()
 
 @property (nonatomic, weak) Client* client;
-
+@property NSInteger pointerCount;
 @end
 
 @implementation CommandTransmitter
 
+@synthesize pointerCount = _pointerCount;
 @synthesize client = _client;
 
 - (CommandTransmitter*) initWithClient:(Client *)client
 {
     self = [self init];
     self.client = client;
-
+    
     return self;
 }
 
@@ -51,11 +52,15 @@
 - (void) setPointerVisibleAt: (CGPoint)aPoint
 {
     [self.client sendCommand:[NSString stringWithFormat:@"pointer_started\n%f\n%f\n\n", aPoint.x, aPoint.y]];
+    self.pointerCount++;
 }
 
 - (void) setPointerDismissed
 {
-    [self.client sendCommand:@"pointer_dismissed\n\n"];
+    if (self.pointerCount > 0) {
+        [self.client sendCommand:@"pointer_dismissed\n\n"];
+        self.pointerCount--;
+    }
 }
 
 /**

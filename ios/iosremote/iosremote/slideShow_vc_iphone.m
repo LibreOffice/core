@@ -184,6 +184,9 @@
             CGPoint p = self.view.center;
             p.y -= 50;
             self.touchPointerImage.center = p;
+            [self.view removeGestureRecognizer:self.revealViewController.panGestureRecognizer];
+        } else {
+            [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
         }
         [self.touchPointerImage fadeInfadeOutwithDuration:0.0 maxAlpha:1.0];
         [self.blockingView fadeInfadeOutwithDuration:0.0 maxAlpha:0.7];
