@@ -42,20 +42,9 @@
 #include <i18nlangtag/languagetag.hxx>
 
 
-#define SUBSTORAGE_GLOBAL       DECLARE_ASCII("global" )
-#define SUBSTORAGE_MODULES      DECLARE_ASCII("modules")
-
-#define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg")
-#define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg")
-
-#define FILE_EXTENSION          DECLARE_ASCII(".xml")
-
-#define PATH_SEPARATOR          DECLARE_ASCII("/")
-
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
-
 
 namespace framework
 {
@@ -241,7 +230,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (nPos != sShareLayer.getLength()-1)
         sShareLayer += OUString("/");
 
-    sShareLayer += RELPATH_SHARE_LAYER; // folder
+    sShareLayer += "soffice.cfg";
     /*
     // TODO remove me!
     // Attention: This is temp. workaround ... We create a temp. storage file
@@ -294,7 +283,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (nPos != sUserLayer.getLength()-1)
         sUserLayer += OUString("/");
 
-    sUserLayer  += RELPATH_USER_LAYER; // storage file
+    sUserLayer  += "soffice.cfg"; // storage file
 
     css::uno::Sequence< css::uno::Any > lArgs(2);
     lArgs[0] <<= sUserLayer;
@@ -422,9 +411,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         case E_GLOBAL :
         {
-            sRelPathBuf.append(SUBSTORAGE_GLOBAL);
-            sRelPathBuf.append(PATH_SEPARATOR   );
-            sRelPathBuf.append(sResource        );
+            sRelPathBuf.append("global");
+            sRelPathBuf.append("/");
+            sRelPathBuf.append(sResource);
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
 
@@ -435,11 +424,11 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_MODULES :
         {
-            sRelPathBuf.append(SUBSTORAGE_MODULES);
-            sRelPathBuf.append(PATH_SEPARATOR    );
-            sRelPathBuf.append(sModule           );
-            sRelPathBuf.append(PATH_SEPARATOR    );
-            sRelPathBuf.append(sResource         );
+            sRelPathBuf.append("modules");
+            sRelPathBuf.append("/");
+            sRelPathBuf.append(sModule);
+            sRelPathBuf.append("/");
+            sRelPathBuf.append(sResource);
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
 
@@ -519,7 +508,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         for (i=0; i<c; ++i)
         {
             OUString sTemp = pNames[i];
-            sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
+            sal_Int32       nPos  = sTemp.indexOf(".xml");
             if (nPos > -1)
                 sTemp = sTemp.copy(0,nPos);
             lPresets.push_back(sTemp);
@@ -537,7 +526,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         for (i=0; i<c; ++i)
         {
             OUString sTemp = pNames[i];
-            sal_Int32       nPos  = sTemp.indexOf(FILE_EXTENSION);
+            sal_Int32       nPos  = sTemp.indexOf(".xml");
             if (nPos > -1)
                 sTemp = sTemp.copy(0,nPos);
             lTargets.push_back(sTemp);
@@ -593,10 +582,10 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     }
 
     OUString sPresetFile(sPreset);
-    sPresetFile += FILE_EXTENSION;
+    sPresetFile += ".xml";
 
     OUString sTargetFile(sTarget);
-    sTargetFile += FILE_EXTENSION;
+    sTargetFile += ".xml";
 
     // remove existing elements before you try to copy the preset to that location ...
     // Otherwise w will get an ElementExistException inside copyElementTo()!
@@ -626,7 +615,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
        return css::uno::Reference< css::io::XStream >();
 
     OUString sFile(sPreset);
-    sFile += FILE_EXTENSION;
+    sFile += ".xml";
 
     // inform user about errors (use original exceptions!)
     css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
@@ -648,7 +637,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
        return css::uno::Reference< css::io::XStream >();
 
     OUString sFile(sTarget);
-    sFile += FILE_EXTENSION;
+    sFile += ".xml";
 
     sal_Int32 nOpenMode = css::embed::ElementModes::READWRITE;
     if (!bCreateIfMissing)
@@ -846,7 +835,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     // Otherwhise we have no acc config at all, which can make other trouble.
     OUString sLocalizedPath;
     sLocalizedPath  = sPath;
-    sLocalizedPath += PATH_SEPARATOR;
+    sLocalizedPath += "/";
     if (pLocaleFolder != lSubFolders.end())
         sLocalizedPath += *pLocaleFolder;
     else

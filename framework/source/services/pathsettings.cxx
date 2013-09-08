@@ -73,9 +73,6 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
 }
 
 
-#define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
-#define IMPLEMENTATIONNAME_PATHSETTINGS                         DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
-
 namespace framework
 {
 
@@ -84,8 +81,8 @@ namespace framework
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PathSettings                                            ,
                                             ::cppu::OWeakObject                                     ,
-                                            SERVICENAME_PATHSETTINGS                                ,
-                                            IMPLEMENTATIONNAME_PATHSETTINGS
+                                            "com.sun.star.util.PathSettings"                        ,
+                                            "com.sun.star.comp.framework.PathSettings"
                                         )
 
 DEFINE_INIT_SERVICE                     (   PathSettings,

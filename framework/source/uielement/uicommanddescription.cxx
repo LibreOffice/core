@@ -613,7 +613,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UICommandDescription                    ,
                                             ::cppu::OWeakObject                     ,
-                                            DECLARE_ASCII("com.sun.star.frame.UICommandDescription"),
+                                            "com.sun.star.frame.UICommandDescription",
                                             IMPLEMENTATIONNAME_UICOMMANDDESCRIPTION
                                         )
 

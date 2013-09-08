@@ -79,9 +79,9 @@ namespace framework{
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   Desktop                                                 ,
-                                            ::cppu::OWeakObject                                     ,
-                                            DECLARE_ASCII("com.sun.star.frame.Desktop"             ),
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   Desktop,
+                                            ::cppu::OWeakObject,
+                                            "com.sun.star.frame.Desktop",
                                             IMPLEMENTATIONNAME_DESKTOP
                                         )
 

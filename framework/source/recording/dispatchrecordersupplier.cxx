@@ -150,10 +150,10 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
 
     // clear unspecific situations
     if (!xDispatcher.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("specification violation: dispatcher is NULL"), static_cast< ::cppu::OWeakObject* >(this));
+        throw css::uno::RuntimeException("specification violation: dispatcher is NULL", static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xRecorder.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("specification violation: no valid dispatch recorder available"), static_cast< ::cppu::OWeakObject* >(this));
+        throw css::uno::RuntimeException("specification violation: no valid dispatch recorder available", static_cast< ::cppu::OWeakObject* >(this));
 
     // check, if given dispatch supports record functionality by itself ...
     // or must be wrapped.

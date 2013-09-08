@@ -75,7 +75,7 @@ class RootStorageWrapper :  public ::cppu::WeakImplHelper1< com::sun::star::embe
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ModuleUIConfigurationManagerSupplier                    ,
                                             ::cppu::OWeakObject                                     ,
-                                            DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ),
+                                            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier"  ,
                                             IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGERSUPPLIER
                                         )
 

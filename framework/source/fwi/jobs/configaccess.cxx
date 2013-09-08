@@ -123,7 +123,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         // create the configuration provider, which provides sub access points
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
         css::beans::PropertyValue aParam;
-        aParam.Name    = DECLARE_ASCII("nodepath");
+        aParam.Name    = "nodepath";
         aParam.Value <<= m_sRoot;
 
         css::uno::Sequence< css::uno::Any > lParams(1);

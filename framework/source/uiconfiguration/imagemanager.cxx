@@ -73,16 +73,13 @@ const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COL
 namespace framework
 {
 
-#define SERVICENAME_IMAGEMANAGER                                DECLARE_ASCII("com.sun.star.ui.ImageManager"                        )
-#define IMPLEMENTATIONNAME_IMAGEMANAGER                         DECLARE_ASCII("com.sun.star.comp.framework.ImageManager"            )
-
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ImageManager                        ,
                                             ::cppu::OWeakObject                 ,
-                                            SERVICENAME_IMAGEMANAGER            ,
-                                            IMPLEMENTATIONNAME_IMAGEMANAGER
+                                            "com.sun.star.ui.ImageManager"      ,
+                                            "com.sun.star.comp.framework.ImageManager"
                                         )
 
 DEFINE_INIT_SERVICE                     (   ImageManager, {} )

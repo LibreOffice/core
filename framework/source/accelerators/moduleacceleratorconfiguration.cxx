@@ -38,9 +38,6 @@
 
 #include <rtl/logfile.h>
 
-#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.ModuleAcceleratorConfiguration")
-#define IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
-
 namespace framework
 {
 
@@ -49,8 +46,8 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ModuleAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
-                                   SERVICENAME_MODULEACCELERATORCONFIGURATION       ,
-                                   IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION)
+                                   "com.sun.star.ui.ModuleAcceleratorConfiguration" ,
+                                   "com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
 
 DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
                     {

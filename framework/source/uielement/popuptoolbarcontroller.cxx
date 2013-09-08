@@ -179,18 +179,18 @@ void PopupMenuToolbarController::createPopupMenuController()
         css::uno::Sequence< css::uno::Any > aArgs( 2 );
         css::beans::PropertyValue aProp;
 
-        aProp.Name = DECLARE_ASCII( "Frame" );
+        aProp.Name = "Frame";
         aProp.Value <<= m_xFrame;
         aArgs[0] <<= aProp;
 
-        aProp.Name = DECLARE_ASCII( "ModuleIdentifier" );
+        aProp.Name = "ModuleIdentifier";
         aProp.Value <<= getModuleName();
         aArgs[1] <<= aProp;
         try
         {
             m_xPopupMenu.set(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    DECLARE_ASCII( "com.sun.star.awt.PopupMenu" ), m_xContext ),
+                    "com.sun.star.awt.PopupMenu", m_xContext ),
                         css::uno::UNO_QUERY_THROW );
             m_xPopupMenuController.set(
                 m_xPopupMenuFactory->createInstanceWithArgumentsAndContext(
@@ -210,8 +210,8 @@ void PopupMenuToolbarController::createPopupMenuController()
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2( WizardsToolbarController,
                                     ::cppu::OWeakObject,
-                                    DECLARE_ASCII("com.sun.star.frame.ToolbarController"),
-                                    DECLARE_ASCII("org.apache.openoffice.comp.framework.WizardsToolbarController")
+                                    "com.sun.star.frame.ToolbarController",
+                                    "org.apache.openoffice.comp.framework.WizardsToolbarController"
                                    )
 
 DEFINE_INIT_SERVICE( WizardsToolbarController, {} )
@@ -229,23 +229,23 @@ sal_uInt16 WizardsToolbarController::getDropDownStyle() const
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2( OpenToolbarController,
                                     ::cppu::OWeakObject,
-                                    DECLARE_ASCII("com.sun.star.frame.ToolbarController"),
-                                    DECLARE_ASCII("org.apache.openoffice.comp.framework.OpenToolbarController")
+                                    "com.sun.star.frame.ToolbarController",
+                                    "org.apache.openoffice.comp.framework.OpenToolbarController"
                                    )
 
 DEFINE_INIT_SERVICE( OpenToolbarController, {} )
 
 OpenToolbarController::OpenToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : PopupMenuToolbarController( xContext, DECLARE_ASCII( UNO_COMMAND_RECENT_FILE_LIST ) )
+    : PopupMenuToolbarController( xContext, UNO_COMMAND_RECENT_FILE_LIST )
 {
 }
 
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2( NewToolbarController,
                                     ::cppu::OWeakObject,
-                                    DECLARE_ASCII("com.sun.star.frame.ToolbarController"),
-                                    DECLARE_ASCII("org.apache.openoffice.comp.framework.NewToolbarController")
+                                    "com.sun.star.frame.ToolbarController",
+                                    "org.apache.openoffice.comp.framework.NewToolbarController"
                                    )
 
 DEFINE_INIT_SERVICE( NewToolbarController, {} )

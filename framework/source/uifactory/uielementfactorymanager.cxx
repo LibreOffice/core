@@ -361,7 +361,7 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UIElementFactoryManager                         ,
                                             ::cppu::OWeakObject                             ,
-                                            DECLARE_ASCII("com.sun.star.ui.UIElementFactoryManager"),
+                                            "com.sun.star.ui.UIElementFactoryManager",
                                             IMPLEMENTATIONNAME_UIELEMENTFACTORYMANAGER
                                         )
 

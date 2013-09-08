@@ -66,14 +66,14 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
     css::uno::Reference< css::frame::XFrame > xFrame;
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
-                DECLARE_ASCII("Empty argument list!"),
+                "Empty argument list!",
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
     lArguments[0] >>= xFrame;
     if (!xFrame.is())
         throw css::lang::IllegalArgumentException(
-                DECLARE_ASCII("No valid frame specified!"),
+                "No valid frame specified!",
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 

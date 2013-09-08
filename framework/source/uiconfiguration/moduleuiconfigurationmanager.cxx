@@ -56,17 +56,14 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-#define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManager" )
-#define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
-
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ModuleUIConfigurationManager                    ,
                                             ::cppu::OWeakObject                             ,
-                                            SERVICENAME_MODULEUICONFIGURATIONMANAGER        ,
-                                            IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER
+                                            "com.sun.star.ui.ModuleUIConfigurationManager"  ,
+                                            "com.sun.star.comp.framework.ModuleUIConfigurationManager"
                                         )
 
 DEFINE_INIT_SERVICE                     (   ModuleUIConfigurationManager, {} )

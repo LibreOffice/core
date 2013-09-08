@@ -1302,7 +1302,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
                                             ::cppu::OWeakObject                         ,
-                                            DECLARE_ASCII("com.sun.star.ui.WindowStateConfiguration"),
+                                            "com.sun.star.ui.WindowStateConfiguration"  ,
                                             IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
                                         )
 

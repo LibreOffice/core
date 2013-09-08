@@ -46,9 +46,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
-#define IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION     DECLARE_ASCII("com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
-
 namespace framework
 {
 
@@ -57,8 +54,8 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                                ,
-                                   SERVICENAME_DOCUMENTACCELERATORCONFIGURATION       ,
-                                   IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION)
+                                   "com.sun.star.ui.DocumentAcceleratorConfiguration" ,
+                                   "com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
 
 DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
                     {

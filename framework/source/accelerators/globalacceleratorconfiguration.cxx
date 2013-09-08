@@ -35,8 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#define IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
-
 namespace framework
 {
 
@@ -45,8 +43,8 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
                                    ::cppu::OWeakObject                              ,
-                                   DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration"),
-                                   IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION)
+                                   "com.sun.star.ui.GlobalAcceleratorConfiguration" ,
+                                   "com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
 
 DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
                     {

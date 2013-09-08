@@ -1600,11 +1600,11 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
             /* SAFE */
         }
 
-        throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
     }
 
     if ( ! setComponent(NULL,NULL) )
-        throw css::util::CloseVetoException(DECLARE_ASCII("Component couldn't be deattached ..."),static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed ... inform all istener and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >*) NULL ) );
@@ -2329,7 +2329,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
     /* SAFE */
 
     css::util::URL aURL;
-    aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
+    aURL.Complete = ".uno:CloseFrame";
     css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aURL);
 
@@ -2391,7 +2391,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
         {
             css::uno::Reference< css::task::XJobExecutor > xExecutor
                 = css::task::JobExecutor::create( xContext );
-            xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
+            xExecutor->trigger( "onFirstVisibleTask" );
         }
     }
 }

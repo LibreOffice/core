@@ -106,7 +106,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     // reject wrong calling of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("NULL references not allowed as in parameter"), xThis);
+        throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 
     // Fill a new info structure for new interceptor.
     // Save his reference and try to get an additional URL/pattern list from him.
@@ -186,7 +186,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
     // reject wrong calling of this interface method
     css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     if (!xInterceptor.is())
-        throw css::uno::RuntimeException(DECLARE_ASCII("NULL references not allowed as in parameter"), xThis);
+        throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 
     // SAFE {
     WriteGuard aWriteLock(m_aLock);

@@ -378,7 +378,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
                 // create a tab control window properties
                 aDescriptor.Type                = css::awt::WindowClass_SIMPLE;
-                aDescriptor.WindowServiceName   = DECLARE_ASCII("tabcontrol");
+                aDescriptor.WindowServiceName   = "tabcontrol";
                 aDescriptor.ParentIndex         = -1;
                 aDescriptor.Parent              = css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
                 aDescriptor.Bounds              = css::awt::Rectangle( 0,0,0,0 );
