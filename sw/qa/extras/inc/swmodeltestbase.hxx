@@ -37,6 +37,13 @@
 using namespace com::sun::star;
 
 #define DEFAULT_STYLE "Default Style"
+#define CPPUNIT_ASSERT_EQUAL_BORDER(aExpected, aActual) \
+        CPPUNIT_ASSERT_EQUAL(aExpected.Color, aActual.Color); \
+        CPPUNIT_ASSERT_EQUAL(aExpected.InnerLineWidth, aActual.InnerLineWidth); \
+        CPPUNIT_ASSERT_EQUAL(aExpected.LineDistance, aActual.LineDistance); \
+        CPPUNIT_ASSERT_EQUAL(aExpected.LineStyle, aActual.LineStyle); \
+        CPPUNIT_ASSERT_EQUAL(aExpected.LineWidth, aActual.LineWidth); \
+        CPPUNIT_ASSERT_EQUAL(aExpected.OuterLineWidth, aActual.OuterLineWidth);
 
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -345,21 +352,6 @@ protected:
         uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
         xCursor->jumpToLastPage();
         return xCursor->getPage();
-    }
-
-    void assertEqualBorder(
-        const table::BorderLine2& rLeft, const sal_Int32 nLeftDist,
-        const table::BorderLine2& rRight, const sal_Int32 nRightDist )
-    {
-        // Border
-        CPPUNIT_ASSERT_EQUAL(rLeft.Color, rRight.Color);
-        CPPUNIT_ASSERT_EQUAL(rLeft.InnerLineWidth, rRight.InnerLineWidth);
-        CPPUNIT_ASSERT_EQUAL(rLeft.LineDistance, rRight.LineDistance);
-        CPPUNIT_ASSERT_EQUAL(rLeft.LineStyle, rRight.LineStyle);
-        CPPUNIT_ASSERT_EQUAL(rLeft.LineWidth, rRight.LineWidth);
-        CPPUNIT_ASSERT_EQUAL(rLeft.OuterLineWidth, rRight.OuterLineWidth);
-        // Padding
-        CPPUNIT_ASSERT_EQUAL(nLeftDist, nRightDist);
     }
 
     uno::Reference<lang::XComponent> mxComponent;
