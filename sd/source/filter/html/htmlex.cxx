@@ -2143,7 +2143,7 @@ OUString HtmlExport::getDocumentTitle()
                 }
             }
 
-            mDocTitle.replace(0xff, ' ');
+            mDocTitle = mDocTitle.replace(0xff, ' ');
         }
 
         if (mDocTitle.isEmpty())
@@ -2151,7 +2151,7 @@ OUString HtmlExport::getDocumentTitle()
             mDocTitle = maDocFileName;
             sal_Int32 nDot = mDocTitle.indexOf('.');
             if (nDot > 0)
-                mDocTitle.copy(0, nDot);
+                mDocTitle = mDocTitle.copy(0, nDot);
         }
         mbHeader = true;
     }
