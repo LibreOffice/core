@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents
+gb_DEVINSTALLROOT := $(INSTDIR)/LibreOffice.app/Contents
 
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 

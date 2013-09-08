@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
+gb_DEVINSTALLROOT := $(INSTDIR)
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
