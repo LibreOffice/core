@@ -836,6 +836,10 @@ void SdrUndoRemoveObj::Redo()
     ImpShowPageOfThisObject();
 }
 
+SdrUndoRemoveObj::~SdrUndoRemoveObj()
+{
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrUndoInsertObj::Undo()
