@@ -32,12 +32,6 @@
 #define PB_CANCEL               15
 #define PB_HELP                 16
 
-#define FT_FIELDNAME            1
-#define ED_FIELDNAME            2
-#define ST_RENAME_TITLE         3
-#define ST_ADD_BUTTON           4
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

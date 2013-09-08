@@ -60,6 +60,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/abstractdialog \
+	sw/uiconfig/swriter/ui/addentrydialog \
 	sw/uiconfig/swriter/ui/alreadyexistsdialog \
 	sw/uiconfig/swriter/ui/asciifilterdialog \
 	sw/uiconfig/swriter/ui/assignstylesdialog \
@@ -161,6 +162,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/printoptionspage \
 	sw/uiconfig/swriter/ui/privateuserpage \
 	sw/uiconfig/swriter/ui/renameautotextdialog \
+	sw/uiconfig/swriter/ui/renameentrydialog \
 	sw/uiconfig/swriter/ui/renameobjectdialog \
 	sw/uiconfig/swriter/ui/rowheight \
 	sw/uiconfig/swriter/ui/saveashtmldialog \

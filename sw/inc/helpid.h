@@ -381,7 +381,6 @@
 #define HID_MM_DBTABLEPREVIEWDIALOG                             "SW_HID_MM_DBTABLEPREVIEWDIALOG"
 #define HID_MM_CREATEADDRESSLIST                                "SW_HID_MM_CREATEADDRESSLIST"
 #define HID_MM_FIND_ENTRY                                       "SW_HID_MM_FIND_ENTRY"
-#define HID_MM_ADD_RENAME_ENTRY                                 "SW_HID_MM_ADD_RENAME_ENTRY"
 #define HID_MM_CUSTOMIZE_ADDRESS_LIST                           "SW_HID_MM_CUSTOMIZE_ADDRESS_LIST"
 #define HID_MM_CUSTOMIZEADDRESSBLOCK                            "SW_HID_MM_CUSTOMIZEADDRESSBLOCK"
 #define HID_MM_SELECTADDRESSBLOCK                               "SW_HID_MM_SELECTADDRESSBLOCK"

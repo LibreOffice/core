@@ -46,10 +46,6 @@
 #define CB_FINDONLY             3
 #define LB_FINDONLY             4
 
-#define FT_FIELDNAME            1
-#define ED_FIELDNAME            2
-#define ST_RENAME_TITLE         3
-#define ST_ADD_BUTTON           4
 #define PB_FIND                 5
 
 

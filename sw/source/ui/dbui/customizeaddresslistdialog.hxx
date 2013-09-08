@@ -62,23 +62,38 @@ public:
 
 class SwAddRenameEntryDialog : public SfxModalDialog
 {
-    FixedText               m_aFieldNameFT;
-    Edit                    m_aFieldNameED;
-
-    OKButton                m_aOK;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
-
-    const ::std::vector< OUString >& m_rCSVHeader;
+    Edit*     m_pFieldNameED;
+    OKButton* m_pOK;
+    const std::vector< OUString >& m_rCSVHeader;
 
     DECL_LINK(ModifyHdl_Impl, Edit*);
+protected:
+    SwAddRenameEntryDialog(Window* pParent, const OString& rID,
+        const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
 public:
-    SwAddRenameEntryDialog(Window* pParent, bool bRename, const ::std::vector< OUString >& aCSVHeader);
-    ~SwAddRenameEntryDialog();
+    void                SetFieldName(const OUString& rName) {m_pFieldNameED->SetText(rName);}
+    OUString            GetFieldName() const {return m_pFieldNameED->GetText();};
 
-    void                SetFieldName(const String& rName) {m_aFieldNameED.SetText(rName);}
-    String              GetFieldName() const {return m_aFieldNameED.GetText();};
+};
 
+class SwAddEntryDialog : public SwAddRenameEntryDialog
+{
+public:
+    SwAddEntryDialog(Window* pParent, const std::vector< OUString >& rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, "AddEntryDialog",
+            "modules/swriter/ui/addentrydialog.ui", rCSVHeader)
+    {
+    }
+};
+
+class SwRenameEntryDialog : public SwAddRenameEntryDialog
+{
+public:
+    SwRenameEntryDialog(Window* pParent, const std::vector< OUString >& rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, "RenameEntryDialog",
+            "modules/swriter/ui/renameentrydialog.ui", rCSVHeader)
+    {
+    }
 };
 
 #endif
