@@ -218,22 +218,6 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 // #define SIMULATE_FULL_DISC
 
 //-----------------------------------------------
-// #define ENABLE_RECOVERY_LOGGING
-#undef ENABLE_RECOVERY_LOGGING
-#ifdef ENABLE_RECOVERY_LOGGING
-    #define LOGFILE_RECOVERY "recovery.log"
-
-    #define LOG_RECOVERY(MSG)                       \
-        {                                           \
-            WRITE_LOGFILE(LOGFILE_RECOVERY, MSG)    \
-            WRITE_LOGFILE(LOGFILE_RECOVERY, "\n")   \
-        }
-#else
-    #undef LOGFILE_RECOVERY
-    #define LOG_RECOVERY(MSG)
-#endif
-
-//-----------------------------------------------
 class CacheLockGuard
 {
     private:
@@ -470,8 +454,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
 {
-    LOG_RECOVERY("AutoRecovery::dispatch() starts ...")
-    LOG_RECOVERY(U2B(aURL.Complete).getStr())
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << OUString(aURL.Complete));
 
     // valid request ?
     sal_Int32 eNewJob = AutoRecovery::implst_classifyJob(aURL);
@@ -488,7 +471,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
         ((m_eJob & AutoRecovery::E_AUTO_SAVE ) != AutoRecovery::E_AUTO_SAVE)
        )
     {
-        SAL_INFO("fwk", "AutoRecovery::dispatch(): There is already an asynchronous dispatch() running. New request will be ignored!");
+        SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch(): There is already an asynchronous dispatch() running. New request will be ignored!");
         return;
     }
 
@@ -599,7 +582,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY      ) != AutoRecovery::E_DISABLE_AUTORECOVERY      )
            )
         {
-            LOG_RECOVERY("... prepare emergency save ...")
+            SAL_INFO("fwk.autorecovery", "... prepare emergency save ...");
             bAllowAutoSaveReactivation = sal_False;
             implts_prepareEmergencySave();
         }
@@ -609,7 +592,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
            )
         {
-            LOG_RECOVERY("... do emergency save ...")
+            SAL_INFO("fwk.autorecovery", "... do emergency save ...");
             bAllowAutoSaveReactivation = sal_False;
             implts_doEmergencySave(aParams);
         }
@@ -619,7 +602,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
            )
         {
-            LOG_RECOVERY("... do recovery ...")
+            SAL_INFO("fwk.autorecovery", "... do recovery ...");
             implts_doRecovery(aParams);
         }
         else
@@ -628,7 +611,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
             )
         {
-            LOG_RECOVERY("... do session save ...")
+            SAL_INFO("fwk.autorecovery", "... do session save ...");
             bAllowAutoSaveReactivation = sal_False;
             implts_doSessionSave(aParams);
         }
@@ -638,7 +621,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
             )
         {
-            LOG_RECOVERY("... do session quiet quit ...")
+            SAL_INFO("fwk.autorecovery", "... do session quiet quit ...");
             bAllowAutoSaveReactivation = sal_False;
             implts_doSessionQuietQuit(aParams);
         }
@@ -648,7 +631,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
             ((eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) != AutoRecovery::E_DISABLE_AUTORECOVERY)
             )
         {
-            LOG_RECOVERY("... do session restore ...")
+            SAL_INFO("fwk.autorecovery", "... do session restore ...");
             implts_doSessionRestore(aParams);
         }
         else
@@ -2037,7 +2020,7 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
 //-----------------------------------------------
 void AutoRecovery::implts_prepareSessionShutdown()
 {
-    LOG_RECOVERY("AutoRecovery::implts_prepareSessionShutdown() starts ...")
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_prepareSessionShutdown() starts ...");
 
     // a) reset modified documents (of course the must be saved before this method is called!)
     // b) close it without showing any UI!
@@ -3040,7 +3023,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 {
-    LOG_RECOVERY("AutoRecovery::implts_doSessionSave()")
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionSave()");
 
     // Be sure to know all open documents realy .-)
     implts_verifyCacheAgainstDesktopDocumentList();
@@ -3079,7 +3062,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
 {
-    LOG_RECOVERY("AutoRecovery::implts_doSessionQuietQuit()")
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionQuietQuit()");
 
     // try to make sure next time office will be started user wont be
     // notified about any other might be running office instance
@@ -3111,7 +3094,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
 //-----------------------------------------------
 void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
 {
-    LOG_RECOVERY("AutoRecovery::implts_doSessionRestore() ...")
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_doSessionRestore() ...");
 
     AutoRecovery::ETimerType eSuggestedTimer = AutoRecovery::E_DONT_START_TIMER;
     do
@@ -3131,7 +3114,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     implts_changeAllDocVisibility(sal_True);
 
     // Reset the configuration hint for "session save"!
-    LOG_RECOVERY("... reset config key 'SessionData'")
+    SAL_INFO("fwk.autorecovery", "... reset config key 'SessionData'");
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xContext,
         OUString(CFG_PACKAGE_RECOVERY),
@@ -3140,7 +3123,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
-    LOG_RECOVERY("... AutoRecovery::implts_doSessionRestore()")
+    SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_doSessionRestore()");
 }
 
 //-----------------------------------------------
@@ -3358,7 +3341,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPr
 //-----------------------------------------------
 void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 {
-    LOG_RECOVERY("AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList() ...")
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList() ...");
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -3432,7 +3415,7 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
     {
     }
 
-    LOG_RECOVERY("... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()")
+    SAL_INFO("fwk.autorecovery", "... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()");
 }
 
 //-----------------------------------------------

@@ -490,8 +490,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 
     OUStringBuffer sMsg(256);
 
-    sMsg.appendAscii("\"" );
-    sMsg.append     (sURL );
+    sMsg.append(sURL);
     sMsg.appendAscii("\" ");
 
     if (bOK)
@@ -500,8 +499,8 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     }
     else
     {
-        sMsg.appendAscii("... failed\n");
-        sMsg.appendAscii("expected was: ");
+        sMsg.appendAscii("... failed. ");
+        sMsg.appendAscii("Expected: ");
         if (eExpectedPart==E_UNKNOWN)
             sMsg.appendAscii("E_UNKNOWN");
         if ((eExpectedPart & E_EVENT) == E_EVENT)
@@ -522,12 +521,11 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
             sMsg.appendAscii(pExpectedService  );
             sMsg.appendAscii("\""              );
         }
-        sMsg.appendAscii("\tbut it was  : "     );
+        sMsg.appendAscii(", Actual: "     );
         sMsg.append     (aURL.impldbg_toString());
-        sMsg.appendAscii("\n"                   );
     }
 
-    WRITE_LOGFILE(LOGFILE_JOBURL, U2B(sMsg.makeStringAndClear()))
+    SAL_INFO("fwk.joburl", OUString(sMsg));
 }
 
 //________________________________

@@ -155,8 +155,10 @@ certain functionality.
 
 @li @c fwk - framework (abbreviation)
 @li @c fwk.accelerators
+@li @c fwk.autorecovery
 @li @c fwk.desktop
 @li @c fwk.dispatch
+@li @c fwk.joburl
 @li @c fwk.loadenv
 @li @c fwk.session
 @li @c fwk.uielement

@@ -30,39 +30,20 @@
 // => "personal debug code"
 #if OSL_DEBUG_LEVEL > 1
 
-    // Enable log mechanism for normal assertion and error handling.
-    // Look for user decisions before!
-    #ifndef ENABLE_LOGMECHANISM
-        #define ENABLE_LOGMECHANISM
-    #endif
-
 //-----------------------------------------------------------------------------------------------------------------
 // => "non product"
 // NOTE
 #elif OSL_DEBUG_LEVEL > 0
 
-    // Enable log mechanism for normal assertion and error handling.
-    // Look for user decisions before!
-    #ifndef ENABLE_LOGMECHANISM
-        #define ENABLE_LOGMECHANISM
-    #endif
-
 //-----------------------------------------------------------------------------------------------------------------
 // => "product" (OSL_DEBUG_LEVEL == 0)
 #else
 
-    #undef  ENABLE_LOGMECHANISM
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
     #undef  ENABLE_FILTERDBG
 
 #endif
-
-//*****************************************************************************************************************
-//  generic macros for logging
-//*****************************************************************************************************************
-
-#include <macros/debug/logmechanism.hxx>
 
 //*****************************************************************************************************************
 //  special macros for event handling
