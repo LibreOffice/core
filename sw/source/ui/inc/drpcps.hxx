@@ -36,14 +36,10 @@ class SwWrtShell;
 
 // class SwDropCapsDlg ******************************************************
 
-class SwDropCapsDlg : public SfxNoLayoutSingleTabDialog
+class SwDropCapsDlg : public SfxSingleTabDialog
 {
-
 public:
-
-     SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet );
-    ~SwDropCapsDlg();
-
+    SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet );
 };
 
 class SwDropCapsPict;

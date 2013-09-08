@@ -519,18 +519,12 @@ void SwDropCapsPict::_InitPrinter()
     }
 }
 
-SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
-
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
-
+SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet )
+    : SfxSingleTabDialog(pParent, rSet)
 {
-    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(this, rSet);
-    pNewPage->SetFormat(sal_False);
-    SetTabPage(pNewPage);
-}
-
- SwDropCapsDlg::~SwDropCapsDlg()
-{
+    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), rSet);
+    pNewPage->SetFormat(false);
+    setTabPage(pNewPage);
 }
 
 SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
