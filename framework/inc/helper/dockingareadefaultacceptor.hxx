@@ -25,7 +25,6 @@
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

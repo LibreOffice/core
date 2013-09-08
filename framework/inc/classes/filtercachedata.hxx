@@ -32,7 +32,6 @@
 #include <classes/converter.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/debug.hxx>
 #include <general.h>
 
 #include <com/sun/star/uno/Sequence.hxx>

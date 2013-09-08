@@ -21,7 +21,6 @@
 #define __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

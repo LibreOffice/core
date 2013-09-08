@@ -22,7 +22,6 @@
 
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/irwlock.h>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 

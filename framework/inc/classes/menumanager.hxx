@@ -33,7 +33,6 @@
 #include <vcl/accel.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 
 namespace framework
 {

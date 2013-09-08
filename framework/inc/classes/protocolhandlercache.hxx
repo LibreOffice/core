@@ -22,7 +22,6 @@
 
 #include <general.h>
 #include <stdtypes.h>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/util/URL.hpp>
 

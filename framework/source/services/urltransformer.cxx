@@ -19,7 +19,6 @@
 
 #include <services/urltransformer.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <macros/debug.hxx>
 #include <services.h>
 
 #include <tools/urlobj.hxx>

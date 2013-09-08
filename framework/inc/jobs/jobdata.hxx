@@ -23,7 +23,6 @@
 #include <jobs/configaccess.hxx>
 #include <jobs/jobresult.hxx>
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <stdtypes.h>
 #include <general.h>
 

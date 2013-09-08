@@ -20,8 +20,6 @@
 #ifndef __FRAMEWORK_CLASSES_CHECKEDITERATOR_HXX_
 #define __FRAMEWORK_CLASSES_CHECKEDITERATOR_HXX_
 
-#include <macros/debug.hxx>
-
 #include <sal/types.h>
 
 #include <iterator>

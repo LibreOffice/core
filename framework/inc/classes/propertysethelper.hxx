@@ -22,7 +22,6 @@
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
-#include <macros/debug.hxx>
 #include <general.h>
 #include <stdtypes.h>
 

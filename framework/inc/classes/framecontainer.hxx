@@ -30,7 +30,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 
 #include <threadhelp/transactionbase.hxx>
-#include <macros/debug.hxx>
 #include <general.h>
 
 #include <com/sun/star/frame/XFrame.hpp>

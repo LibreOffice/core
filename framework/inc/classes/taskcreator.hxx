@@ -22,7 +22,6 @@
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
-#include <macros/debug.hxx>
 #include <general.h>
 
 #include <com/sun/star/frame/XFramesSupplier.hpp>

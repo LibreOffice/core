@@ -22,7 +22,6 @@
 
 #include <threadhelp/resetableguard.hxx>
 #include <xml/statusbardocumenthandler.hxx>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>

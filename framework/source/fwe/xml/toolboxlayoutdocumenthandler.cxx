@@ -22,7 +22,6 @@
 
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxlayoutdocumenthandler.hxx>
-#include <macros/debug.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>

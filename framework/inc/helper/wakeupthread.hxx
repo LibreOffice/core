@@ -24,7 +24,6 @@
 // include files of own module
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <macros/generic.hxx>
 
 #include <general.h>

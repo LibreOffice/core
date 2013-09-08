@@ -21,7 +21,6 @@
 #define __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>

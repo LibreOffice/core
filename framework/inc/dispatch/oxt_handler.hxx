@@ -25,7 +25,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <macros/debug.hxx>
 #include <macros/generic.hxx>
 #include <general.h>
 #include <stdtypes.h>

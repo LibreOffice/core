@@ -20,8 +20,6 @@
 #ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
 #define __FRAMEWORK_CLASSES_WILDCARD_HXX_
 
-#include <macros/debug.hxx>
-
 #include <rtl/ustring.hxx>
 
 namespace framework{

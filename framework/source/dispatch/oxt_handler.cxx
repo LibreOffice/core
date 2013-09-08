@@ -21,7 +21,6 @@
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
-#include <macros/debug.hxx>
 #include <services.h>
 #include <comphelper/mediadescriptor.hxx>
 

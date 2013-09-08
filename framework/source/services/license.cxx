@@ -21,7 +21,6 @@
 
 #include <services/license.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <macros/debug.hxx>
 #include <services.h>
 
 // local header for UI implementation

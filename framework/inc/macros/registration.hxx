@@ -20,7 +20,6 @@
 #ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
 #define __FRAMEWORK_MACROS_REGISTRATION_HXX_
 
-#include <macros/debug.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

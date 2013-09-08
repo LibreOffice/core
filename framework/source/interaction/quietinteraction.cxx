@@ -22,7 +22,6 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <macros/generic.hxx>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>

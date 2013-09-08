@@ -22,7 +22,6 @@
 
 #include <threadhelp/resetableguard.hxx>
 #include <xml/imagesdocumenthandler.hxx>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 

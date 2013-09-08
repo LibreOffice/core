@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/frame/XFrame.hpp>

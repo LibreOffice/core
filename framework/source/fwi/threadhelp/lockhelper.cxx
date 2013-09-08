@@ -19,7 +19,6 @@
 
 #include <threadhelp/lockhelper.hxx>
 #include <general.h>
-#include <macros/debug.hxx>
 
 #include <macros/generic.hxx>
 #include "vcl/solarmutex.hxx"

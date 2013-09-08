@@ -21,7 +21,6 @@
 #define __FRAMEWORK_JOBS_JOBURL_HXX_
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <macros/debug.hxx>
 #include <stdtypes.h>
 #include <general.h>
 

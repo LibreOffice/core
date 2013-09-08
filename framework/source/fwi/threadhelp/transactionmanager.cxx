@@ -19,7 +19,6 @@
 
 #include <threadhelp/transactionmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <macros/debug.hxx>
 
 #include <macros/generic.hxx>
 #include <fwidllapi.h>

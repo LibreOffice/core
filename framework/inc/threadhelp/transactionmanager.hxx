@@ -23,7 +23,6 @@
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/itransactionmanager.h>
 #include <threadhelp/gate.hxx>
-#include <macros/debug.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
