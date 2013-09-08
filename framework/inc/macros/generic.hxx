@@ -37,16 +37,6 @@ ________________________________________________________________________________
 #define DECLARE_ASCII( SASCIIVALUE )                                                                            \
     OUString( SASCIIVALUE )
 
-/*_________________________________________________________________________________________________________________
-    U2B( SUNICODEVALUE )
-
-    Use it to convert unicode strings to ascii values and reverse ...
-    We use UTF8 as default textencoding.
-_________________________________________________________________________________________________________________*/
-
-#define U2B( SUNICODEVALUE )                                                                                    \
-    OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
-
 #endif  //  #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
