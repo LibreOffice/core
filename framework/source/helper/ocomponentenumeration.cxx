@@ -64,11 +64,7 @@ OComponentEnumeration::~OComponentEnumeration()
 //*****************************************************************************************************************
 //  XEventListener
 //*****************************************************************************************************************
-void SAL_CALL OComponentEnumeration::disposing( const EventObject&
-#if OSL_DEBUG_LEVEL > 0
-aEvent
-#endif
-) throw( RuntimeException )
+void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );

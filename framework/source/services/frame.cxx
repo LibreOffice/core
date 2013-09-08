@@ -2170,11 +2170,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowResized( const css::awt::WindowEvent&
-#if OSL_DEBUG_LEVEL > 0
-aEvent
-#endif
-) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2190,11 +2186,7 @@ aEvent
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::focusGained( const css::awt::FocusEvent&
-#if OSL_DEBUG_LEVEL > 0
-aEvent
-#endif
-) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2230,11 +2222,7 @@ aEvent
 
     @onerror    -
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::windowActivated( const css::lang::EventObject&
-#if OSL_DEBUG_LEVEL > 0
-aEvent
-#endif
-) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
@@ -2257,11 +2245,7 @@ aEvent
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject&
-#if OSL_DEBUG_LEVEL > 0
-aEvent
-#endif
-) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
