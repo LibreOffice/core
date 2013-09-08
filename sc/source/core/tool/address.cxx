@@ -1398,9 +1398,9 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
     xub_StrLen nPos = ScGlobal::FindUnquoted( r, ':');
     if (nPos != STRING_NOTFOUND)
     {
-        String aTmp( r );
-        sal_Unicode* p = aTmp.GetBufferAccess();
-        p[ nPos ] = 0;
+        OUStringBuffer aTmp(r);
+        aTmp[nPos] = 0;
+        const sal_Unicode* p = aTmp.getStr();
         if( (nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, aRange.aStart, pExtInfo, NULL ) ) != 0 )
         {
             aRange.aEnd = aRange.aStart;  // sheet must be initialized identical to first sheet

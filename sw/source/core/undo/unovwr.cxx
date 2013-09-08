@@ -200,9 +200,6 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( aDelStr.Len() )
     {
-        String aTmpStr = OUString('1');
-        sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
-
         bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
         pTxtNd->SetIgnoreDontExpand( true );
 
@@ -210,7 +207,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
         {
             // do it individually, to keep the attributes!
-            *pTmpStr = aDelStr.GetChar( n );
+            OUString aTmpStr(aDelStr.GetChar(n));
             OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
             assert(ins.getLength() == 1); // cannot fail
             rIdx -= 2;

@@ -63,13 +63,17 @@ SFX_IMPL_CHILDWINDOW_CONTEXT( SwNavigationChild, SID_NAVIGATOR, SwView )
 
 // Filter the control characters out of the Outline-Entry
 
-void SwNavigationPI::CleanEntry( String& rEntry )
+OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 {
-    sal_uInt16 i = rEntry.Len();
-    if( i )
-        for( sal_Unicode* pStr = rEntry.GetBufferAccess(); i; --i, ++pStr )
-            if( *pStr == 10 || *pStr == 9 )
-                *pStr = 0x20;
+    if (rEntry.isEmpty())
+        return rEntry;
+
+    OUStringBuffer aEntry(rEntry);
+    for (sal_Int32 i = 0; i < rEntry.getLength(); ++i)
+        if(aEntry[i] == 10 || aEntry[i] == 9)
+            aEntry[i] = 0x20;
+
+    return aEntry.makeStringAndClear();
 }
 
 // Execution of the drag operation with and without the children.

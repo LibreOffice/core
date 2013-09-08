@@ -228,18 +228,6 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
         return COMPARE_GREATER;
 }
 
-STRCODE* STRING::GetBufferAccess()
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Copy data if necessary
-    if ( mpData->mnLen )
-        ImplCopyData();
-
-    // return pointer to string data
-    return mpData->maStr;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

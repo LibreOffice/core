@@ -181,7 +181,7 @@ class SwContentType : public SwTypeNumber
     bool                bEdit:          1;  // can this type be edited?
     bool                bDelete:        1;  // can this type be deleted?
 protected:
-        void            RemoveNewline(String&);
+        OUString            RemoveNewline(const OUString&);
 public:
         SwContentType(SwWrtShell* pParent, sal_uInt16 nType, sal_uInt8 nLevel );
         ~SwContentType();

@@ -156,7 +156,7 @@ public:
                                             const SfxPoolItem* pState );
 
     static String   CreateDropFileName( TransferableDataHelper& rData );
-    static void     CleanEntry( String& rEntry );
+    static OUString CleanEntry(const OUString& rEntry);
 
     sal_uInt16          GetRegionDropMode() const {return nRegionMode;}
     void            SetRegionDropMode(sal_uInt16 nNewMode);

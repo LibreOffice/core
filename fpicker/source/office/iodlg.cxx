@@ -3288,12 +3288,12 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
 
         for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
         {
-            String aExt(aType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+            OUString aExt(aType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
             // take care of a leading *
-            sal_uInt16 nExtOffset = (aExt.GetBuffer()[0] == '*' ? 1 : 0);
-            sal_Unicode* pExt = aExt.GetBufferAccess() + nExtOffset;
-            xub_StrLen nExtLen = aExt.Len() - nExtOffset;
-            xub_StrLen nOffset = aTemp.Len() - nExtLen;
+            sal_Int32 nExtOffset = (aExt[0] == '*' ? 1 : 0);
+            const sal_Unicode* pExt = aExt.getStr() + nExtOffset;
+            sal_Int32 nExtLen = aExt.getLength() - nExtOffset;
+            sal_Int32 nOffset = aTemp.Len() - nExtLen;
             // minimize search by starting at last possible index
             if ( aTemp.Search(pExt, nOffset) == nOffset )
                 break;

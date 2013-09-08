@@ -195,14 +195,15 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                             if( sTxt.Len() )
                             {
-                                sTxt = comphelper::string::remove(sTxt, 0xad);
-                                for( sal_Unicode* p = sTxt.GetBufferAccess(); *p; ++p )
+                                OUStringBuffer sTmp(comphelper::string::remove(sTxt, 0xad));
+                                for (sal_Int32 i = 0; i < sTmp.getLength(); ++i)
                                 {
-                                    if( *p < 0x20 )
-                                        *p = 0x20;
-                                    else if(*p == 0x2011)
-                                        *p = '-';
+                                    if (sTmp[i] < 0x20)
+                                        sTmp[i] = 0x20;
+                                    else if (sTmp[i] == 0x2011)
+                                        sTmp[i] = '-';
                                 }
+                                sTxt = sTmp.makeStringAndClear();
                             }
                         }
                     }

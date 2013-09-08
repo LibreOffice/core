@@ -391,8 +391,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            String sEntry = aFmtFld->GetFld()->GetPar2();
-                            RemoveNewline(sEntry);
+                            OUString sEntry = aFmtFld->GetFld()->GetPar2();
+                            sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
@@ -494,9 +494,9 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     nMemberCount--;
                 else
                 {
-                    String aEntry(comphelper::string::stripStart(
+                    OUString aEntry(comphelper::string::stripStart(
                         pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i), ' '));
-                    SwNavigationPI::CleanEntry( aEntry );
+                    aEntry = SwNavigationPI::CleanEntry(aEntry);
                     SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
                                                         pWrtShell->IsOutlineMovable( i ), nPos );
                     pMember->insert(pCnt);//, nPos);
@@ -717,8 +717,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            String sEntry = aFmtFld->GetFld()->GetPar2();
-                            RemoveNewline(sEntry);
+                            OUString sEntry = aFmtFld->GetFld()->GetPar2();
+                            sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
                                                 sEntry,
@@ -2677,14 +2677,17 @@ void SwContentTree::SetRootType(sal_uInt16 nType)
     pConfig->SetRootType( nRootType );
 }
 
-void SwContentType::RemoveNewline(String& rEntry)
+OUString SwContentType::RemoveNewline(const OUString& rEntry)
 {
-    sal_Unicode* pStr = rEntry.GetBufferAccess();
-    for(xub_StrLen i = rEntry.Len(); i; --i, ++pStr )
-    {
-        if( *pStr == 10 || *pStr == 13 )
-            *pStr = 0x20;
-    }
+    if (rEntry.isEmpty())
+        return rEntry;
+
+    OUStringBuffer aEntry(rEntry);
+    for (sal_Int32 i = 0; i < rEntry.getLength(); ++i)
+        if(aEntry[i] == 10 || aEntry[i] == 13)
+            aEntry[i] = 0x20;
+
+    return aEntry.makeStringAndClear();
 }
 
 void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
