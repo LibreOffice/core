@@ -2718,7 +2718,7 @@ void Edit::Cut()
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
         Copy();
-        ReplaceSelected( ImplGetSVEmptyStr() );
+        ReplaceSelected( OUString() );
     }
 }
 

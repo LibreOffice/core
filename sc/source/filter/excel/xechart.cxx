@@ -975,7 +975,7 @@ sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference<
     sal_uInt16 nFontIdx = EXC_FONT_APP;
     if( rStringSeq.hasElements() )
     {
-        mxString = XclExpStringHelper::CreateString( GetRoot(), String::EmptyString(), EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
+        mxString = XclExpStringHelper::CreateString( GetRoot(), OUString(), EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
         Reference< XBreakIterator > xBreakIt = GetDoc().GetBreakIterator();
         namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 

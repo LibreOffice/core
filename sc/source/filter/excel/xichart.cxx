@@ -2747,12 +2747,12 @@ bool XclImpChTypeGroup::HasConnectorLines() const
     return ( xConLine != maChartLines.end() && xConLine->second->HasLine() );
 }
 
-const String& XclImpChTypeGroup::GetSingleSeriesTitle() const
+OUString XclImpChTypeGroup::GetSingleSeriesTitle() const
 {
     // no automatic title for series with trendlines or error bars
     // pie charts always show an automatic title, even if more series exist
     return (mxFirstSeries && !mxFirstSeries->HasChildSeries() && (maTypeInfo.mbSingleSeriesVis || (maSeries.size() == 1))) ?
-        mxFirstSeries->GetTitle() : String::EmptyString();
+        mxFirstSeries->GetTitle() : OUString();
 }
 
 void XclImpChTypeGroup::ConvertChart3d( ScfPropertySet& rPropSet ) const
@@ -3590,9 +3590,9 @@ XclImpChLegendRef XclImpChAxesSet::GetLegend() const
     return xLegend;
 }
 
-const String& XclImpChAxesSet::GetSingleSeriesTitle() const
+OUString XclImpChAxesSet::GetSingleSeriesTitle() const
 {
-    return (maTypeGroups.size() == 1) ? maTypeGroups.begin()->second->GetSingleSeriesTitle() : String::EmptyString();
+    return (maTypeGroups.size() == 1) ? maTypeGroups.begin()->second->GetSingleSeriesTitle() : OUString();
 }
 
 void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const

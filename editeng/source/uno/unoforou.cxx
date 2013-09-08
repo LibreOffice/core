@@ -548,7 +548,7 @@ const SfxItemSet * SvxOutlinerForwarder::GetEmptyItemSetPtr()
 void SvxOutlinerForwarder::AppendParagraph()
 {
     EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
-    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
+    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), OUString() );
 }
 
 sal_uInt16 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )

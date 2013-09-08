@@ -111,7 +111,7 @@ void XclImpRoot::InitializeTable( SCTAB nScTab )
     GetPageSettings().Initialize();
     GetTabViewSettings().Initialize();
     // delete the automatically generated codename
-    GetDoc().SetCodeName( nScTab, String::EmptyString() );
+    GetDoc().SetCodeName( nScTab, OUString() );
 }
 
 void XclImpRoot::FinalizeTable()

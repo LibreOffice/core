@@ -139,28 +139,28 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 struct ModuleToGroupNameMap_Impl
 {
     const char* m_pModule;
-    String      m_sGroupName;
-    sal_uInt16      m_nNodeId;
+    OUString    m_sGroupName;
+    sal_uInt16  m_nNodeId;
 };
 
 static OfaPageResource* pPageRes = NULL;
 
 static ModuleToGroupNameMap_Impl ModuleMap[] =
 {
-    { "ProductName", String::EmptyString(), SID_GENERAL_OPTIONS },
-    { "LanguageSettings", String::EmptyString(), SID_LANGUAGE_OPTIONS },
-    { "Internet", String::EmptyString(), SID_INET_DLG },
-    { "LoadSave", String::EmptyString(), SID_FILTER_DLG },
-    { "Writer", String::EmptyString(), SID_SW_EDITOPTIONS },
-    { "WriterWeb", String::EmptyString(), SID_SW_ONLINEOPTIONS },
-    { "Math", String::EmptyString(), SID_SM_EDITOPTIONS },
-    { "Calc", String::EmptyString(), SID_SC_EDITOPTIONS },
-    { "Impress", String::EmptyString(), SID_SD_EDITOPTIONS },
-    { "Draw", String::EmptyString(), SID_SD_GRAPHIC_OPTIONS },
-    { "Charts", String::EmptyString(), SID_SCH_EDITOPTIONS },
-    { "Base", String::EmptyString(), SID_SB_STARBASEOPTIONS },
+    { "ProductName", OUString(), SID_GENERAL_OPTIONS },
+    { "LanguageSettings", OUString(), SID_LANGUAGE_OPTIONS },
+    { "Internet", OUString(), SID_INET_DLG },
+    { "LoadSave", OUString(), SID_FILTER_DLG },
+    { "Writer", OUString(), SID_SW_EDITOPTIONS },
+    { "WriterWeb", OUString(), SID_SW_ONLINEOPTIONS },
+    { "Math", OUString(), SID_SM_EDITOPTIONS },
+    { "Calc", OUString(), SID_SC_EDITOPTIONS },
+    { "Impress", OUString(), SID_SD_EDITOPTIONS },
+    { "Draw", OUString(), SID_SD_GRAPHIC_OPTIONS },
+    { "Charts", OUString(), SID_SCH_EDITOPTIONS },
+    { "Base", OUString(), SID_SB_STARBASEOPTIONS },
 
-    { NULL, String::EmptyString(), 0xFFFF }
+    { NULL, OUString(), 0xFFFF }
 };
 
 static void setGroupName( const OUString& rModule, const String& rGroupName )
@@ -222,7 +222,7 @@ static void deleteGroupNames()
 {
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
-        ModuleMap[ nIndex++ ].m_sGroupName = String::EmptyString();
+        ModuleMap[ nIndex++ ].m_sGroupName = OUString();
 }
 
 static sal_uInt16 getGroupNodeId( const OUString& rModule )

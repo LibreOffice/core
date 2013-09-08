@@ -427,7 +427,7 @@ void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection
 void FormatterBase::SetEmptyFieldValue()
 {
     if ( mpField )
-        mpField->SetText( ImplGetSVEmptyStr() );
+        mpField->SetText( OUString() );
     mbEmptyFieldValue = sal_True;
 }
 

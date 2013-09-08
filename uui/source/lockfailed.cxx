@@ -25,7 +25,7 @@
 LockFailedQueryBox::LockFailedQueryBox( Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
             ResId(STR_LOCKFAILED_TITLE, *pResMgr).toString(),
-            String::EmptyString() )
+            OUString() )
 {
     SetImage( ErrorBox::GetStandardImage() );
 

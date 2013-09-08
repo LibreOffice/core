@@ -117,11 +117,11 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     /*  Line ends are now created with an empty name. The
         checkForUniqueItem() method then finds a unique name for the item's
         value. */
-    aItemSet.Put( XLineStartItem( String::EmptyString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
+    aItemSet.Put( XLineStartItem( OUString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
     aItemSet.Put( XLineStartWidthItem( 200 ) );
     aItemSet.Put( XLineStartCenterItem( false ) );
     aItemSet.Put( XFillStyleItem( XFILL_SOLID ) );
-    aItemSet.Put( XFillColorItem( String::EmptyString(), ScDetectiveFunc::GetCommentColor() ) );
+    aItemSet.Put( XFillColorItem( OUString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
 
     // shadow

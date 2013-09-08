@@ -414,7 +414,7 @@ public:
     /** Returns true, if the source link contains explicit string data. */
     inline bool         HasString() const { return mxString && !mxString->IsEmpty(); }
     /** Returns explicit string data or an empty string. */
-    inline const String& GetString() const { return mxString ? mxString->GetText() : String::EmptyString(); }
+    OUString            GetString() const { return mxString ? mxString->GetText() : OUString(); }
     /** Returns the number of data points of this source link. */
     sal_uInt16          GetCellCount() const;
 
@@ -828,7 +828,7 @@ public:
     /** Returns true, if the series contains child series (e.g. trend lines). */
     inline bool         HasChildSeries() const { return !maTrendLines.empty() || !maErrorBars.empty(); }
     /** Returns series title or an empty string, if the series does not contain a title. */
-    inline const String& GetTitle() const { return mxTitleLink ? mxTitleLink->GetString() : String::EmptyString(); }
+    OUString            GetTitle() const { return mxTitleLink ? mxTitleLink->GetString() : OUString(); }
 
     /** Returns true, if the series line is smoothed. */
     inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
@@ -1066,7 +1066,7 @@ public:
     /** Returns the default series data format. */
     inline XclImpChDataFormatRef GetGroupFormat() const { return mxGroupFmt; }
     /** Returns series title, if the chart type group contains only one single series. */
-    const String&       GetSingleSeriesTitle() const;
+    OUString            GetSingleSeriesTitle() const;
 
     /** Converts and writes all 3D settings to the passed diagram. */
     void                ConvertChart3d( ScfPropertySet& rPropSet ) const;
@@ -1303,7 +1303,7 @@ public:
     /** Looks for a legend in all chart type groups and returns it. */
     XclImpChLegendRef   GetLegend() const;
     /** Returns series title, if the axes set contains only one single series. */
-    const String&       GetSingleSeriesTitle() const;
+    OUString            GetSingleSeriesTitle() const;
 
     /** Creates a coordinate system and converts all series and axis settings. */
     void                Convert( XDiagramRef xDiagram ) const;

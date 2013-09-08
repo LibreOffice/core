@@ -278,7 +278,7 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
         else
         {
             mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
-            mpImplWin->SetString( ImplGetSVEmptyStr() );
+            mpImplWin->SetString( OUString() );
             Image aImage;
             mpImplWin->SetImage( aImage );
         }
@@ -993,7 +993,7 @@ void ListBox::Clear()
     if( IsDropDownBox() )
     {
         mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
-        mpImplWin->SetString( ImplGetSVEmptyStr() );
+        mpImplWin->SetString( OUString() );
         Image aImage;
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
@@ -1008,7 +1008,7 @@ void ListBox::SetNoSelection()
     if( IsDropDownBox() )
     {
         mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
-        mpImplWin->SetString( ImplGetSVEmptyStr() );
+        mpImplWin->SetString( OUString() );
         Image aImage;
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();

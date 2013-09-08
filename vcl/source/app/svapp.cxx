@@ -1094,7 +1094,7 @@ OUString Application::GetAppName()
     if ( pSVData->maAppData.mpAppName )
         return *(pSVData->maAppData.mpAppName);
     else
-        return ImplGetSVEmptyStr();
+        return OUString();
 }
 
 void Application::SetDisplayName( const OUString& rName )

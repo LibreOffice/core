@@ -441,7 +441,7 @@ void InfoBox::ImplInitInfoBoxData()
 // -----------------------------------------------------------------------
 
 InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
-    MessBox( pParent, WB_OK | WB_DEF_OK, ImplGetSVEmptyStr(), rMessage )
+    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
 {
     ImplInitInfoBoxData();
 }
@@ -477,7 +477,7 @@ void WarningBox::ImplInitWarningBoxData()
 
 WarningBox::WarningBox( Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
-    MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitWarningBoxData();
 }
@@ -522,7 +522,7 @@ void ErrorBox::ImplInitErrorBoxData()
 
 ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
-    MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitErrorBoxData();
 }
@@ -566,7 +566,7 @@ void QueryBox::ImplInitQueryBoxData()
 // -----------------------------------------------------------------------
 
 QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
-    MessBox( pParent, nStyle, ImplGetSVEmptyStr(), rMessage )
+    MessBox( pParent, nStyle, OUString(), rMessage )
 {
     ImplInitQueryBoxData();
 }

@@ -23,7 +23,7 @@
 FileChangedQueryBox::FileChangedQueryBox( Window* pParent, ResMgr* pResMgr ) :
     MessBox(pParent, 0,
             ResId(STR_FILECHANGED_TITLE, *pResMgr).toString(),
-            String::EmptyString() )
+            OUString() )
 {
     SetImage( QueryBox::GetStandardImage() );
 

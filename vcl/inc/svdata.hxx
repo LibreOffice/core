@@ -373,10 +373,6 @@ bool ImplInitAccessBridge( bool bAllowCancel, bool &rCancelled );
 FieldUnitStringList* ImplGetFieldUnits();
 FieldUnitStringList* ImplGetCleanedFieldUnits();
 
-
-inline const String& ImplGetSVEmptyStr()
-    { return String::EmptyString(); }
-
 // ImplDelData is used as a "dog tag" by a window when it
 // does something that could indirectly destroy the window
 // TODO: wild destruction of a window should not be possible

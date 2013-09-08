@@ -52,13 +52,6 @@ DBG_NAME( UniString )
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
-
-const UniString& UniString::EmptyString()
-{
-    return Empty::get();
-}
-
 sal_Int32 UniString::ToInt32() const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );

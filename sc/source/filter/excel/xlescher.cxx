@@ -339,7 +339,7 @@ String XclControlHelper::ExtractFromMacroDescriptor(
             rDescriptor.ListenerType.equalsAscii( spTbxListenerData[ eEventType ].mpcListenerType ) &&
             rDescriptor.EventMethod.equalsAscii( spTbxListenerData[ eEventType ].mpcEventMethod ) )
         return XclTools::GetXclMacroName( rDescriptor.ScriptCode );
-    return String::EmptyString();
+    return OUString();
 }
 
 // ============================================================================

@@ -836,7 +836,7 @@ void PatternFormatter::SetString( const OUString& rStr )
 OUString PatternFormatter::GetString() const
 {
     if ( !GetField() )
-        return ImplGetSVEmptyStr();
+        return OUString();
     else
         return ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags );
 }
@@ -1870,7 +1870,7 @@ void DateFormatter::Reformat()
             SetDate( Date( Date::SYSTEM ) );
         else
         {
-            ImplSetText( ImplGetSVEmptyStr() );
+            ImplSetText( OUString() );
             SetEmptyFieldValueData( sal_True );
         }
     }

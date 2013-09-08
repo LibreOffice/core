@@ -474,7 +474,7 @@ const SfxItemSet * SvxEditEngineForwarder::GetEmptyItemSetPtr()
 
 void SvxEditEngineForwarder::AppendParagraph()
 {
-    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
+    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), OUString() );
 }
 
 sal_uInt16 SvxEditEngineForwarder::AppendTextPortion( sal_Int32 nPara, const OUString &rText, const SfxItemSet & /*rSet*/ )

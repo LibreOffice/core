@@ -170,7 +170,6 @@ public:
                             { return Append( UniString( concat ) ); }
 #endif
 
-    static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
 
     UniString&          Assign( const UniString& rStr );

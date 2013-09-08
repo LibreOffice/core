@@ -74,7 +74,7 @@ sal_Bool Help::SearchKeyword( const OUString& )
 
 OUString Help::GetHelpText( const OUString&, const Window* )
 {
-    return ImplGetSVEmptyStr();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -184,7 +184,7 @@ sal_Bool Help::ShowBalloon( Window* pParent,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
-                        rHelpText, ImplGetSVEmptyStr(), rScreenPos );
+                        rHelpText, OUString(), rScreenPos );
 
     return sal_True;
 }
@@ -196,7 +196,7 @@ sal_Bool Help::ShowBalloon( Window* pParent,
                         const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
-                        rHelpText, ImplGetSVEmptyStr(), rScreenPos, &rRect );
+                        rHelpText, OUString(), rScreenPos, &rRect );
 
     return sal_True;
 }
