@@ -24,6 +24,5 @@ TitleLabelOwner owner;
 - (void)setTitle:(NSString *)title;
 
 - (void)setOwner:(TitleLabelOwner) aOwner;
-- (void)startTimePickerwithTimer:(Timer *) timer;
 
 @end

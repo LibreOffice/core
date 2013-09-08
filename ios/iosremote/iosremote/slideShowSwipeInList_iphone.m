@@ -52,6 +52,7 @@ dispatch_queue_t backgroundQueue;
     self.clearsSelectionOnViewWillAppear = NO;
     // set stopwatch as default, users may swipe for a timer
     self.currentPage = 0;
+    [self.revealViewController setOwner:STOPWATCH];
     
     self.stopWatch = [[stopWatch alloc] init];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]) {

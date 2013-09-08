@@ -306,7 +306,6 @@
                                                             target:self.revealViewController
                                                             action:@selector( revealToggle: )];
     self.revealViewController.navigationItem.leftBarButtonItem = self.revealButtonItem;
-    [self.navigationController.navigationBar addGestureRecognizer: self.revealViewController.panGestureRecognizer];
 
     self.pointerCalibrationOn = NO;
     self.movingPointer.layer.cornerRadius = 3;

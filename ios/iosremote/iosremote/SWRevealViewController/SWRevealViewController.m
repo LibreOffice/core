@@ -436,7 +436,6 @@ const int FrontViewPositionNone = 0xff;
 
 - (void)startTimePickerwithTimer:(Timer *) timer
 {
-    NSLog(@"Fired by : %@", [timer class]);
     [self callDP:self];
 }
 

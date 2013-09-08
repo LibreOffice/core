@@ -90,6 +90,7 @@
         case TIMER_STATE_RUNNING:
             self.state = TIMER_STATE_PAUSED;
             [self.stopWatchTimer invalidate];
+            [self.delegate setTitle:@"" sender:self];
             self.lastInterval += [[NSDate date] timeIntervalSinceDate:self.startDate];
             break;
         case TIMER_STATE_PAUSED:

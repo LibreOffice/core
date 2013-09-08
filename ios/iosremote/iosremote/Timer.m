@@ -34,7 +34,7 @@ int initSecondsLeft;
     self = [super init];
     self.state = TIMER_STATE_CLEARED;
     self.set = NO;
-    secondsLeft = 30;
+    secondsLeft = 0;
     
     return self;
 }
@@ -70,8 +70,17 @@ int initSecondsLeft;
     [self.startButton addTarget:self action:@selector(start) forControlEvents:UIControlEventTouchUpInside];
     [self.clearButton addTarget:self action:@selector(clear) forControlEvents:UIControlEventTouchUpInside];
     // Sending the sender as well, so that we get a handle on the Timer itself ---> allow us to update seconds left
-    [self.setTimeButton addTarget:self.delegate action:@selector(startTimePickerwithTimer:) forControlEvents:UIControlEventTouchUpInside];
+    [self.setTimeButton addTarget:self action:@selector(startTimePickerwithTimer) forControlEvents:UIControlEventTouchUpInside];
     self.set = YES;
+}
+
+- (void)startTimePickerwithTimer
+{
+    if (self.state == TIMER_STATE_RUNNING) {
+        // If running, we switch it to pause before setting a new duration
+        [self start];
+    }
+    [self.delegate startTimePickerwithTimer:self];
 }
 
 - (void)updateTimer
@@ -106,6 +115,10 @@ int initSecondsLeft;
         case TIMER_STATE_RUNNING:
             self.state = TIMER_STATE_PAUSED;
             [self.timerTimer invalidate];
+            if (secondsLeft == 0) {
+                [self.timeLabel setText:@"00:00:00"];
+            }
+            [self.delegate setTitle:@"" sender:self];
             break;
         case TIMER_STATE_PAUSED:
             self.state = TIMER_STATE_RUNNING;
@@ -121,6 +134,8 @@ int initSecondsLeft;
             secondsLeft++;
             [self updateTimer];
             // Create the stop watch timer that fires every 100 ms
+            [self.timerTimer invalidate];
+            self.timerTimer = nil;
             self.timerTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                                    target:self
                                                                  selector:@selector(updateTimer)
@@ -173,7 +188,7 @@ int initSecondsLeft;
 - (void) setSecondsLeft:(NSTimeInterval)duration
 {
     secondsLeft = (int) duration;
-    
+    initSecondsLeft = secondsLeft;
     hours = secondsLeft / 3600;
     minutes = (secondsLeft % 3600) / 60;
     seconds = (secondsLeft %3600) % 60;

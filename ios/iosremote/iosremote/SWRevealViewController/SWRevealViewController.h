@@ -60,6 +60,8 @@ typedef enum
 
 @interface SWRevealViewController : UIViewController <StopWatchDelegate, TimerDelegate>
 
+- (void)startTimePickerwithTimer:(Timer *) timer;
+
 // Object instance init and rear view setting
 - (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
 
@@ -172,8 +174,6 @@ typedef enum
 @interface SWRevealViewControllerSegue : UIStoryboardSegue
 
 @property (strong) void(^performBlock)( SWRevealViewControllerSegue* segue, UIViewController* svc, UIViewController* dvc );
-
-- (void)startTimePickerwithTimer:(Timer *) timer;
 
 @end
 
