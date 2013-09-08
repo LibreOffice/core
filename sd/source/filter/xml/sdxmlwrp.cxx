@@ -196,7 +196,7 @@ SdXMLFilter::~SdXMLFilter(void)
 sal_Int32 ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
-    const String& rStreamName,
+    const OUString& rStreamName,
     Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     Sequence<Any> rFilterArguments,
@@ -273,7 +273,7 @@ sal_Int32 ReadThroughComponent(
         sErr += ",";
         sErr += OUString::number( r.ColumnNumber );
 
-        if( rStreamName.Len() )
+        if (!rStreamName.isEmpty())
         {
             return *new TwoStringErrorInfo(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL

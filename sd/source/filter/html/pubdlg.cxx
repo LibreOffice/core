@@ -83,14 +83,14 @@ const char* aPageHelpIds[NOOFPAGES] =
 class SdPublishingDesign
 {
 public:
-    String  m_aDesignName;
+    OUString m_aDesignName;
 
     HtmlPublishMode m_eMode;
 
     // special WebCast options
     PublishingScript m_eScript;
-    String           m_aCGI;
-    String           m_aURL;
+    OUString         m_aCGI;
+    OUString         m_aURL;
 
     // special Kiosk options
     sal_Bool    m_bAutoSlide;
@@ -103,16 +103,16 @@ public:
 
     // misc options
     sal_uInt16  m_nResolution;
-    String  m_aCompression;
+    OUString    m_aCompression;
     PublishingFormat m_eFormat;
     sal_Bool    m_bSlideSound;
     sal_Bool    m_bHiddenSlides;
 
     // titel page information
-    String  m_aAuthor;
-    String  m_aEMail;
-    String  m_aWWW;
-    String  m_aMisc;
+    OUString    m_aAuthor;
+    OUString    m_aEMail;
+    OUString    m_aWWW;
+    OUString    m_aMisc;
     sal_Bool    m_bDownload;
     sal_Bool    m_bCreated;         // not used
 
@@ -143,19 +143,17 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_eFormat = FORMAT_PNG;
 
-    String  aFilterConfigPath( "Office.Common/Filter/Graphic/Export/JPG" );
-    FilterConfigItem aFilterConfigItem( aFilterConfigPath );
+    FilterConfigItem aFilterConfigItem("Office.Common/Filter/Graphic/Export/JPG");
     sal_Int32 nCompression = aFilterConfigItem.ReadInt32( OUString( KEY_QUALITY ), 75 );
-    m_aCompression = OUString::number( nCompression );
-    m_aCompression.Append( sal_Unicode('%') );
+    m_aCompression = OUString::number(nCompression) + "%";
 
     SvtUserOptions aUserOptions;
 
     m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aUserOptions.GetFirstName();
-    if( m_aAuthor.Len() && !aUserOptions.GetLastName().isEmpty() )
-        m_aAuthor      += sal_Unicode(' ');
-    m_aAuthor      += (String)aUserOptions.GetLastName();
+    if (!m_aAuthor.isEmpty() && !aUserOptions.GetLastName().isEmpty())
+        m_aAuthor += " ";
+    m_aAuthor      += aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = sal_False;
     m_nButtonThema  = -1;
@@ -357,9 +355,9 @@ private:
     CancelButton    m_aBtnCancel;
 
 public:
-    SdDesignNameDlg(Window* pWindow, const String& aName );
+    SdDesignNameDlg(Window* pWindow, const OUString& aName );
 
-    String GetDesignName();
+    OUString GetDesignName();
     DECL_LINK(ModifyHdl, void *);
 };
 
@@ -411,9 +409,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     pPage2_ASP->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
     pPage2_PERL->SetClickHdl(LINK(this,SdPublishingDlg,WebServerHdl));
-    String  aText( OUString("index") );
-    aText += SD_RESSTR(STR_HTMLEXP_DEFAULT_EXTENSION);
-    pPage2_Index->SetText(aText);
+    pPage2_Index->SetText("index" + SD_RESSTR(STR_HTMLEXP_DEFAULT_EXTENSION));
     pPage2_CGI->SetText( OUString( "/cgi-bin/" ) );
 
     pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
@@ -1120,7 +1116,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
     if(bSave)
     {
-        String aName;
+        OUString aName;
         if(m_pDesign)
             aName = m_pDesign->m_aDesignName;
 
@@ -1585,7 +1581,7 @@ sal_Bool SdPublishingDlg::Save()
 }
 
 // SdDesignNameDlg Methods
-SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
+SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const OUString& aName):
                 ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
                 m_aEdit                 (this, SdResId(EDT_NAME)),
                 m_aBtnOK                (this, SdResId(BTN_SAVE)),
@@ -1594,10 +1590,10 @@ SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
     FreeResource();
     m_aEdit.SetModifyHdl(LINK(this, SdDesignNameDlg, ModifyHdl ));
     m_aEdit.SetText(aName);
-    m_aBtnOK.Enable(aName.Len() != 0);
+    m_aBtnOK.Enable(!aName.isEmpty());
 }
 
-String SdDesignNameDlg::GetDesignName()
+OUString SdDesignNameDlg::GetDesignName()
 {
     return m_aEdit.GetText();
 }

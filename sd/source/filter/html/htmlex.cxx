@@ -2790,7 +2790,8 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString, RTL_TEXTENCODING_UTF8 );
     aMemStm << (char) 0;
-    return String( (char*)aMemStm.GetData(), RTL_TEXTENCODING_UTF8 );
+    sal_Int32 nLength = strlen((char*)aMemStm.GetData());
+    return OUString( (char*)aMemStm.GetData(), nLength, RTL_TEXTENCODING_UTF8 );
 }
 
 // =====================================================================
