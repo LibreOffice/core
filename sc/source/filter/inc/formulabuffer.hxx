@@ -86,14 +86,16 @@ class FormulaBuffer : public WorkbookHelper
     typedef ::std::pair< ::com::sun::star::table::CellAddress, double > ValueAddressPair;
     typedef ::std::map< sal_Int32, std::vector< ValueAddressPair > > FormulaValueMap;
 
-    ::com::sun::star::uno::Reference< com::sun::star::table::XCellRange > getRange( const ::com::sun::star::table::CellRangeAddress& rRange);
     com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > mxCurrSheet;
-    FormulaDataMap      cellFormulas;
-    ArrayFormulaDataMap cellArrayFormulas;
-    SheetToFormulaEntryMap sharedFormulas;
-    SheetToSharedFormulaid sharedFormulaIds;
-    SheetToSharedIdToTokenIndex tokenIndexes;
-    FormulaValueMap        cellFormulaValues;
+    FormulaDataMap maCellFormulas;
+    ArrayFormulaDataMap maCellArrayFormulas;
+    SheetToFormulaEntryMap maSharedFormulas;
+    SheetToSharedFormulaid maSharedFormulaIds;
+    SheetToSharedIdToTokenIndex maTokenIndexes;
+    FormulaValueMap maCellFormulaValues;
+
+    com::sun::star::uno::Reference<com::sun::star::table::XCellRange>
+        getRange( const com::sun::star::table::CellRangeAddress& rRange );
 
     void                applyArrayFormulas(  const std::vector< TokenRangeAddressItem >& rVector );
     void                applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& rTokens, const ::com::sun::star::table::CellAddress& rAddress );

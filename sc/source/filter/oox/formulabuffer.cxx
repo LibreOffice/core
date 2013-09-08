@@ -47,12 +47,13 @@ FormulaBuffer::FormulaBuffer( const WorkbookHelper& rHelper ) : WorkbookHelper( 
 {
 }
 
-Reference< XCellRange > FormulaBuffer::getRange( const CellRangeAddress& rRange)
+Reference<XCellRange> FormulaBuffer::getRange( const CellRangeAddress& rRange )
 {
-    Reference< XCellRange > xRange;
+    Reference<XCellRange> xRange;
     try
     {
-        xRange = mxCurrSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow );
+        xRange = mxCurrSheet->getCellRangeByPosition(
+            rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow);
     }
     catch( Exception& )
     {
@@ -75,20 +76,20 @@ void FormulaBuffer::finalizeImport()
 
         applySharedFormulas(nTab);
 
-        FormulaDataMap::iterator cellIt = cellFormulas.find( nTab );
-        if ( cellIt != cellFormulas.end() )
+        FormulaDataMap::iterator cellIt = maCellFormulas.find( nTab );
+        if ( cellIt != maCellFormulas.end() )
         {
             applyCellFormulas( cellIt->second );
         }
 
-        ArrayFormulaDataMap::iterator itArray = cellArrayFormulas.find( nTab );
-        if ( itArray != cellArrayFormulas.end() )
+        ArrayFormulaDataMap::iterator itArray = maCellArrayFormulas.find( nTab );
+        if ( itArray != maCellArrayFormulas.end() )
         {
             applyArrayFormulas( itArray->second );
         }
 
-        FormulaValueMap::iterator itValues = cellFormulaValues.find( nTab );
-        if ( itValues != cellFormulaValues.end() )
+        FormulaValueMap::iterator itValues = maCellFormulaValues.find( nTab );
+        if ( itValues != maCellFormulaValues.end() )
         {
             std::vector< ValueAddressPair > & rVector = itValues->second;
             applyCellFormulaValues( rVector );
@@ -140,13 +141,13 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
 
 void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
 {
-    SheetToFormulaEntryMap::const_iterator itShared = sharedFormulas.find(nTab);
-    if (itShared == sharedFormulas.end())
+    SheetToFormulaEntryMap::const_iterator itShared = maSharedFormulas.find(nTab);
+    if (itShared == maSharedFormulas.end())
         // There is no shared formulas for this sheet.
         return;
 
-    SheetToSharedFormulaid::const_iterator itCells = sharedFormulaIds.find(nTab);
-    if (itCells == sharedFormulaIds.end())
+    SheetToSharedFormulaid::const_iterator itCells = maSharedFormulaIds.find(nTab);
+    if (itCells == maSharedFormulaIds.end())
         // There is no formula cells that use shared formulas for this sheet.
         return;
 
@@ -280,20 +281,20 @@ void FormulaBuffer::createSharedFormulaMapEntry(
     const table::CellAddress& rAddress, const table::CellRangeAddress& rRange,
     sal_Int32 nSharedId, const OUString& rTokens )
 {
-    std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
+    std::vector<SharedFormulaEntry>& rSharedFormulas = maSharedFormulas[ rAddress.Sheet ];
     SharedFormulaEntry aEntry(rAddress, rRange, rTokens, nSharedId);
     rSharedFormulas.push_back( aEntry );
 }
 
 void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const OUString& rTokenStr )
 {
-    cellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
+    maCellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
 
 void FormulaBuffer::setCellFormula(
     const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rCellValue, sal_Int32 nValueType )
 {
-    sharedFormulaIds[rAddress.Sheet].push_back(
+    maSharedFormulaIds[rAddress.Sheet].push_back(
         SharedFormulaDesc(rAddress, nSharedId, rCellValue, nValueType));
 }
 
@@ -301,12 +302,12 @@ void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRang
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
-    cellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
+    maCellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
 }
 
 void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue )
 {
-    cellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
+    maCellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
 }}
