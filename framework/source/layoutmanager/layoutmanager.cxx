@@ -105,7 +105,7 @@ namespace framework
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
-DEFINE_XSERVICEINFO_MULTISERVICE_2( LayoutManager, ::cppu::OWeakObject, "com.sun.star.frame.LayoutManager", "com.sun.star.comp.framework.LayoutManager")
+DEFINE_XSERVICEINFO_MULTISERVICE_2( LayoutManager, ::cppu::OWeakObject, "com.sun.star.frame.LayoutManager", OUString("com.sun.star.comp.framework.LayoutManager"))
 DEFINE_INIT_SERVICE( LayoutManager, {} )
 
 LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) : LayoutManager_Base()

@@ -400,10 +400,10 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UICategoryDescription                ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  ( UICategoryDescription                  ,
                                             ::cppu::OWeakObject                    ,
                                             "com.sun.star.ui.UICategoryDescription",
-                                            "com.sun.star.comp.framework.UICategoryDescription"
+                                            OUString("com.sun.star.comp.framework.UICategoryDescription")
                                         )
 
 DEFINE_INIT_SERVICE                     (   UICategoryDescription, {} )

@@ -79,7 +79,7 @@ namespace framework
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ImageManager                        ,
                                             ::cppu::OWeakObject                 ,
                                             "com.sun.star.ui.ImageManager"      ,
-                                            "com.sun.star.comp.framework.ImageManager"
+                                            OUString("com.sun.star.comp.framework.ImageManager")
                                         )
 
 DEFINE_INIT_SERVICE                     (   ImageManager, {} )

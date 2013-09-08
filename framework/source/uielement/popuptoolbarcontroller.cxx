@@ -211,7 +211,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 DEFINE_XSERVICEINFO_MULTISERVICE_2( WizardsToolbarController,
                                     ::cppu::OWeakObject,
                                     "com.sun.star.frame.ToolbarController",
-                                    "org.apache.openoffice.comp.framework.WizardsToolbarController"
+                                    OUString("org.apache.openoffice.comp.framework.WizardsToolbarController")
                                    )
 
 DEFINE_INIT_SERVICE( WizardsToolbarController, {} )
@@ -230,7 +230,7 @@ sal_uInt16 WizardsToolbarController::getDropDownStyle() const
 DEFINE_XSERVICEINFO_MULTISERVICE_2( OpenToolbarController,
                                     ::cppu::OWeakObject,
                                     "com.sun.star.frame.ToolbarController",
-                                    "org.apache.openoffice.comp.framework.OpenToolbarController"
+                                    OUString("org.apache.openoffice.comp.framework.OpenToolbarController")
                                    )
 
 DEFINE_INIT_SERVICE( OpenToolbarController, {} )
@@ -245,7 +245,7 @@ OpenToolbarController::OpenToolbarController(
 DEFINE_XSERVICEINFO_MULTISERVICE_2( NewToolbarController,
                                     ::cppu::OWeakObject,
                                     "com.sun.star.frame.ToolbarController",
-                                    "org.apache.openoffice.comp.framework.NewToolbarController"
+                                    OUString("org.apache.openoffice.comp.framework.NewToolbarController")
                                    )
 
 DEFINE_INIT_SERVICE( NewToolbarController, {} )

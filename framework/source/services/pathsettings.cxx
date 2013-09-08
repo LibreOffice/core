@@ -82,7 +82,7 @@ namespace framework
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PathSettings                                            ,
                                             ::cppu::OWeakObject                                     ,
                                             "com.sun.star.util.PathSettings"                        ,
-                                            "com.sun.star.comp.framework.PathSettings"
+                                            OUString("com.sun.star.comp.framework.PathSettings")
                                         )
 
 DEFINE_INIT_SERVICE                     (   PathSettings,

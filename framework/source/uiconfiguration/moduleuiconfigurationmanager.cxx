@@ -63,7 +63,7 @@ namespace framework
 DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ModuleUIConfigurationManager                    ,
                                             ::cppu::OWeakObject                             ,
                                             "com.sun.star.ui.ModuleUIConfigurationManager"  ,
-                                            "com.sun.star.comp.framework.ModuleUIConfigurationManager"
+                                            OUString("com.sun.star.comp.framework.ModuleUIConfigurationManager")
                                         )
 
 DEFINE_INIT_SERVICE                     (   ModuleUIConfigurationManager, {} )
