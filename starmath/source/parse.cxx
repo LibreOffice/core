@@ -977,52 +977,23 @@ void SmParser::Align()
     // parse alignment info (if any), then go on with rest of expression
 {
     SmStructureNode *pSNode = 0;
-    bool    bNeedGroupClose = false;
 
     if (TokenInGroup(TGALIGN))
     {
-        if (CONVERT_40_TO_50 == GetConversion())
-            // encapsulate expression to be aligned in group braces
-            // (here group-open brace)
-        {   Insert("{", GetTokenIndex());
-            bNeedGroupClose = true;
-
-            // get first valid align statement in sequence
-            // (the dominant one in 4.0) and erase all others (especially old
-            // discarded tokens) from command string.
-            while (TokenInGroup(TGALIGN))
-            {
-                if (TokenInGroup(TGDISCARDED) || pSNode)
-                {
-                    m_nBufferIndex = GetTokenIndex();
-                    m_aBufferString = m_aBufferString.replaceAt(m_nBufferIndex, m_aCurToken.aText.getLength(), "");
-                }
-                else
-                    pSNode = new SmAlignNode(m_aCurToken);
-
-                NextToken();
-            }
-        }
-        else
-        {
             pSNode = new SmAlignNode(m_aCurToken);
 
             NextToken();
 
             // allow for just one align statement in 5.0
-            if (CONVERT_40_TO_50 != GetConversion() && TokenInGroup(TGALIGN))
+            if (TokenInGroup(TGALIGN))
             {
                 Error(PE_DOUBLE_ALIGN);
                 delete pSNode;
                 return;
             }
-        }
     }
 
     Expression();
-
-    if (bNeedGroupClose)
-        Insert("}", GetTokenIndex());
 
     if (pSNode)
     {
@@ -1049,10 +1020,8 @@ void SmParser::Line()
     }
 
     while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TNEWLINE)
-    {   if (CONVERT_40_TO_50 != GetConversion())
-            Expression();
-        else
-            Align();
+    {
+        Expression();
         ExpressionArray.resize(++n);
         ExpressionArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
@@ -1582,35 +1551,8 @@ void SmParser::Term(bool bGroupNumberIdent)
                 m_aNodeStack.push(pFirstNode);
             }
             else if (TokenInGroup(TGFUNCTION))
-            {   if (CONVERT_40_TO_50 != GetConversion())
-                {   Function();
-                }
-                else    // encapsulate old 4.0 style parsing in braces
-                {
-                    // insert opening brace
-                    Insert("{", GetTokenIndex());
-
-                    //
-                    // parse in 4.0 style
-                    //
-                    Function();
-
-                    SmNode *pFunc = lcl_popOrZero(m_aNodeStack);
-
-                    if (m_aCurToken.eType == TLPARENT)
-                    {   Term(false);
-                    }
-                    else
-                    {   Align();
-                    }
-
-                    // insert closing brace
-                    Insert("}", GetTokenIndex());
-
-                    SmStructureNode *pSNode = new SmExpressionNode(pFunc->GetToken());
-                    pSNode->SetSubNodes(pFunc, lcl_popOrZero(m_aNodeStack));
-                    m_aNodeStack.push(pSNode);
-                }
+            {
+                Function();
             }
             else
                 Error(PE_UNEXPECTED_CHAR);
@@ -2354,8 +2296,6 @@ void SmParser::Special()
     OUString &rName = m_aCurToken.aText;
     OUString aNewName;
 
-    if (CONVERT_NONE == GetConversion())
-    {
         // conversion of symbol names for 6.0 (XML) file format
         // (name change on import / export.
         // UI uses localized names XML file format does not.)
@@ -2376,41 +2316,7 @@ void SmParser::Special()
         }
         if (!aNewName.isEmpty())
             aNewName = "%" + aNewName;
-    }
-    else    // 5.0 <-> 6.0 formula text (symbol name) conversion
-    {
-        LanguageType nLanguage = GetLanguage();
-        SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
-        const ResStringArray *pFrom = 0;
-        const ResStringArray *pTo   = 0;
-        if (CONVERT_50_TO_60 == GetConversion())
-        {
-            pFrom = rData.Get50NamesArray( nLanguage );
-            pTo   = rData.Get60NamesArray( nLanguage );
-        }
-        else if (CONVERT_60_TO_50 == GetConversion())
-        {
-            pFrom = rData.Get60NamesArray( nLanguage );
-            pTo   = rData.Get50NamesArray( nLanguage );
-        }
-        if (pFrom  &&  pTo)
-        {
-            OSL_ENSURE( pFrom->Count() == pTo->Count(),
-                    "array length mismatch" );
-            sal_uInt16 nCount = sal::static_int_cast< sal_uInt16 >(pFrom->Count());
-            for (sal_uInt16 i = 0;  i < nCount;  ++i)
-            {
-                if (pFrom->GetString(i).equals(rName))
-                {
-                    aNewName = pTo->GetString(i);
-                    bReplace = true;
-                }
-            }
-        }
-        // else:
-        // conversion arrays not found or (usually)
-        // conversion not necessary
-    }
+
 
     if (bReplace && !aNewName.isEmpty() && rName != aNewName)
     {
@@ -2458,7 +2364,6 @@ void SmParser::Error(SmParseError eError)
 SmParser::SmParser()
     : m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
 {
-    m_eConversion = CONVERT_NONE;
     bImportSymNames = m_bExportSymNames = false;
     m_nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
 }

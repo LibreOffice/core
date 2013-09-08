@@ -159,16 +159,6 @@ typedef ::std::vector< SmErrorDesc* > SmErrDescList;
 
 /**************************************************************************/
 
-// defines possible conversions of the formula text from the format of
-// one release to the one of another.
-enum SmConvert
-{
-    CONVERT_NONE,
-    CONVERT_40_TO_50,
-    CONVERT_50_TO_60,
-    CONVERT_60_TO_50
-};
-
 struct SmTokenTableEntry
 {
     const sal_Char* pIdent;
@@ -190,7 +180,6 @@ class SmParser
                     m_nTokenIndex;
     sal_Int32       m_Row,
                     m_nColOff;
-    SmConvert       m_eConversion;
     bool            bImportSymNames,
                     m_bExportSymNames;
 
@@ -264,9 +253,6 @@ public:
     SmNode      *ParseExpression(const OUString &rBuffer);
 
     const OUString & GetText() const { return m_aBufferString; };
-
-    SmConvert   GetConversion() const              { return m_eConversion; }
-    void        SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
 
     bool        IsImportSymbolNames() const        { return bImportSymNames; }
     void        SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
