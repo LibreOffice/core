@@ -3158,31 +3158,25 @@ void ScInterpreter::ScUpper()
 void ScInterpreter::ScPropper()
 {
 //2do: what to do with I18N-CJK ?!?
-    String aStr( GetString() );
-    const xub_StrLen nLen = aStr.Len();
-    // #i82487# don't try to write to empty string's BufferAccess
-    // (would crash now that the empty string is const)
+    OUStringBuffer aStr(GetString());
+    const sal_Int32 nLen = aStr.getLength();
     if ( nLen > 0 )
     {
-        String aUpr( ScGlobal::pCharClass->uppercase( aStr ) );
-        String aLwr( ScGlobal::pCharClass->lowercase( aStr ) );
-        sal_Unicode* pStr = aStr.GetBufferAccess();
-        const sal_Unicode* pUpr = aUpr.GetBuffer();
-        const sal_Unicode* pLwr = aLwr.GetBuffer();
-        *pStr = *pUpr;
-        xub_StrLen nPos = 1;
+        OUString aUpr(ScGlobal::pCharClass->uppercase(aStr.toString()));
+        OUString aLwr(ScGlobal::pCharClass->lowercase(aStr.toString()));
+        aStr[0] = aUpr[0];
+        sal_Int32 nPos = 1;
         while( nPos < nLen )
         {
-            OUString aTmpStr( pStr[nPos-1] );
+            OUString aTmpStr( aStr[nPos-1] );
             if ( !ScGlobal::pCharClass->isLetter( aTmpStr, 0 ) )
-                pStr[nPos] = pUpr[nPos];
+                aStr[nPos] = aUpr[nPos];
             else
-                pStr[nPos] = pLwr[nPos];
-            nPos++;
+                aStr[nPos] = aLwr[nPos];
+            ++nPos;
         }
-        aStr.ReleaseBufferAccess( nLen );
     }
-    PushString( aStr );
+    PushString(aStr.makeStringAndClear());
 }
 
 

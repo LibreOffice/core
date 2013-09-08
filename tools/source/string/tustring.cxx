@@ -240,31 +240,6 @@ STRCODE* STRING::GetBufferAccess()
     return mpData->maStr;
 }
 
-void STRING::ReleaseBufferAccess( xub_StrLen nLen )
-{
-    // String not consinstent, thus no functionality test
-    DBG_CHKTHIS( STRING, NULL );
-    DBG_ASSERT( mpData->mnRefCount == 1, "String::ReleaseCharStr() called for String with RefCount" );
-
-    if ( nLen > mpData->mnLen )
-        nLen = ImplStringLen( mpData->maStr );
-    OSL_ASSERT(nLen <= mpData->mnLen);
-    if ( !nLen )
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-    // shorten buffer is difference > 8 chars
-    else if ( mpData->mnLen - nLen > 8 )
-    {
-        STRINGDATA* pNewData = ImplAllocData( nLen );
-        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-    else
-        mpData->mnLen = nLen;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
