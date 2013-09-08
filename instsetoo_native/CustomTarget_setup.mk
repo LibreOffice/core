@@ -55,7 +55,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'TMP_EXTENSIONS=$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):TMP_EXTENSIONS}' \
 		&& echo 'UNO_USER_PACKAGES_CACHE=$${$$ORIGIN/$(call gb_Helper_get_rcfile,uno):UNO_USER_PACKAGES_CACHE}' \
 		&& echo 'URE_BIN_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/ure-link/bin)' \
-		&& echo 'URE_MORE_JAVA_CLASSPATH_URLS=' \
+		&& echo 'URE_MORE_JAVA_CLASSPATH_URLS=$(if $(SYSTEM_HSQLDB),$(HSQLDB_JAR))' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_SHARED_DATA=$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/config/javasettings_$${_OS}_$${_ARCH}.xml' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_USER_DATA=$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/config/javasettings_$${_OS}_$${_ARCH}.xml' \
 		&& echo 'URE_LIB_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/ure-link/lib)' \
