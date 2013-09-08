@@ -21,4 +21,14 @@
     self.clipsToBounds = NO;
 }
 
+- (void) setShadowLight
+{
+    self.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.layer.shadowOpacity = 0.3;
+    self.layer.shadowRadius = 3.0;
+    self.layer.shadowOffset = CGSizeMake(4.0f, 3.0f);
+    self.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.bounds].CGPath;
+    self.clipsToBounds = NO;
+}
+
 @end

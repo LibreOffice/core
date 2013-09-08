@@ -93,6 +93,12 @@
 		8C26E5D317A5AFE8007DA4B7 /* slideshowRail.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C26E5D117A5AFE8007DA4B7 /* slideshowRail.png */; };
 		8C26E5D417A5AFE8007DA4B7 /* slideshowRail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C26E5D217A5AFE8007DA4B7 /* slideshowRail@2x.png */; };
 		8C26E5D717A68154007DA4B7 /* stopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5D617A68154007DA4B7 /* stopWatch.m */; };
+		8C3A648817DCBE9E004A77D9 /* timer_clear_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */; };
+		8C3A648A17DCBE9E004A77D9 /* timer_pause_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */; };
+		8C3A648B17DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */; };
+		8C3A648C17DCBE9E004A77D9 /* timer_settime_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */; };
+		8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */; };
+		8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */; };
 		8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */; };
 		8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */; };
 		8CAD658817A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658717A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m */; };
@@ -258,6 +264,12 @@
 		8C26E5D217A5AFE8007DA4B7 /* slideshowRail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slideshowRail@2x.png"; sourceTree = "<group>"; };
 		8C26E5D517A68154007DA4B7 /* stopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stopWatch.h; path = iosremote/stopWatch.h; sourceTree = "<group>"; };
 		8C26E5D617A68154007DA4B7 /* stopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = stopWatch.m; path = iosremote/stopWatch.m; sourceTree = "<group>"; };
+		8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn_dark.png; path = iosremote/timer_clear_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_pause_btn_dark.png; path = iosremote/timer_pause_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_pause_btn_dark@2x.png"; path = "iosremote/timer_pause_btn_dark@2x.png"; sourceTree = "<group>"; };
+		8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_settime_btn_dark.png; path = iosremote/timer_settime_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_settime_btn_dark@2x.png"; path = "iosremote/timer_settime_btn_dark@2x.png"; sourceTree = "<group>"; };
+		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn_dark.png; path = iosremote/timer_start_btn_dark.png; sourceTree = "<group>"; };
 		8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTPairingScreenshot.png; path = iosremote/WTPairingScreenshot.png; sourceTree = "<group>"; };
 		8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainSplitViewController.h; path = iosremote/MainSplitViewController.h; sourceTree = "<group>"; };
 		8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainSplitViewController.m; path = iosremote/MainSplitViewController.m; sourceTree = "<group>"; };
@@ -419,6 +431,12 @@
 		8C06B31917B7EC62002F5CF8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */,
+				8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */,
+				8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */,
+				8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */,
+				8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */,
+				8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */,
 				8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */,
 				8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */,
 				8CAF3DE117D1D5D600F931E5 /* more_ipad.png */,
@@ -802,6 +820,12 @@
 				8CAF3DE417D1D5D700F931E5 /* more_ipad@2x.png in Resources */,
 				8C23B46C17DB3B8600FB4DE6 /* timer_settime_btn.png in Resources */,
 				8C23B46D17DB3B8600FB4DE6 /* timer_settime_btn@2x.png in Resources */,
+				8C3A648817DCBE9E004A77D9 /* timer_clear_btn_dark.png in Resources */,
+				8C3A648A17DCBE9E004A77D9 /* timer_pause_btn_dark.png in Resources */,
+				8C3A648B17DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png in Resources */,
+				8C3A648C17DCBE9E004A77D9 /* timer_settime_btn_dark.png in Resources */,
+				8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */,
+				8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

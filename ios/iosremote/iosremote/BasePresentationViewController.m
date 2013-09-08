@@ -15,8 +15,9 @@
 #import "HorizontalSlideCell.h"
 #import "MainSplitViewController.h"
 #import "stopWatch.h"
+#import "Timer.h"
 #import "PopoverView.h"
-
+#import "UIView+Shadowing.h"
 #import "ControlVariables.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -26,7 +27,7 @@
 #define CURRENT_SLIDE_IMAGEVIEW 19
 #define CURRENT_SLIDE_NOTES 18
 
-@interface BasePresentationViewController () <PopoverViewDelegate>
+@interface BasePresentationViewController () <PopoverViewDelegate, TimerDelegate, UIPopoverControllerDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, strong) id slideShowImageNoteReadyObserver;
@@ -39,6 +40,8 @@
 @property CGPoint refRightLowerGravity;
 
 @property (nonatomic, strong) stopWatch * stopWatch;
+@property (nonatomic, strong) Timer * timer;
+@property (nonatomic, strong) UIPopoverController * popoverTimePickerController;
 
 @property int count;
 
@@ -51,6 +54,7 @@
 @synthesize slideShowImageNoteReadyObserver = _slideShowImageNoteReadyObserver;
 @synthesize slideShowFinishedObserver = _slideShowFinishedObserver;
 @synthesize slideChangedObserver = _slideChangedObserver;
+@synthesize popoverTimePickerController = _popoverTimePickerController;
 
 #pragma mark - UITableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -316,6 +320,11 @@
                                                    }
                                                }];
     self.stopWatch = [[stopWatch alloc] initWithStartButton:self.startButton ClearButton:self.clearButton TimeLabel:self.timeLabel];
+    self.timer = [[Timer alloc] initWithStartButton:self.timerStartButton ClearButton:self.timerClearButton SetTimeButton:self.timerSetTimeButton TimeLabel:self.timerTimeLabel];
+    [self.stopWatchView setShadowLight];
+    [self.timerView setShadowLight];
+    self.timer.delegate = self;
+    self.stopWatchTimerScrollView.contentSize = CGSizeMake(1240, 62);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -444,6 +453,9 @@
     [self setClearButton:nil];
     [self setTimeLabel:nil];
     [self setGearButton:nil];
+    [self setStopWatchView:nil];
+    [self setTimerView:nil];
+    [self setStopWatchTimerScrollView:nil];
     [super viewDidUnload];
 }
 
@@ -536,6 +548,34 @@ static BOOL isBlank = NO;
     if (self.welcome_blocking_page.isHidden == YES) {
         [self setWelcomePageVisible:YES];
     }
+}
+
+#pragma mark TimerDelegate
+
+- (void)changeDate:(UIDatePicker *)sender {
+    [self.timer setSecondsLeft: sender.countDownDuration];
+}
+
+- (void)startTimePickerwithTimer:(Timer *) timer
+{
+    UIViewController* popoverContent = [[UIViewController alloc] init]; //ViewController
+    
+    UIView *popoverView = [[UIView alloc] init];   //view
+    popoverView.backgroundColor = [UIColor blackColor];
+    
+    UIDatePicker *datePicker=[[UIDatePicker alloc]init];//Date picker
+    datePicker.frame=CGRectMake(0,44,320, 216);
+    datePicker.datePickerMode = UIDatePickerModeCountDownTimer;
+    [datePicker setTag:10];
+    [datePicker addTarget:self action:@selector(changeDate:) forControlEvents:UIControlEventValueChanged];
+    [popoverView addSubview:datePicker];
+    
+    popoverContent.view = popoverView;
+    self.popoverTimePickerController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
+    self.popoverTimePickerController.delegate = self;
+    
+    [self.popoverTimePickerController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+    [self.popoverTimePickerController presentPopoverFromRect:self.timerSetTimeButton.frame inView:self.timerView permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
 @end

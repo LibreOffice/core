@@ -31,12 +31,24 @@
 @property (strong, nonatomic) UIView *welcome_blocking_page;
 
 @property (weak, nonatomic) IBOutlet UITableView *horizontalTableView;
+
+@property (weak, nonatomic) IBOutlet UIButton *gearButton;
+- (IBAction)popOverUp:(id)sender;
+
+// Stopwatch/Timer
+
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 @property (weak, nonatomic) IBOutlet UIButton *clearButton;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *gearButton;
-- (IBAction)popOverUp:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *timerStartButton;
+@property (weak, nonatomic) IBOutlet UIButton *timerClearButton;
+@property (weak, nonatomic) IBOutlet UIButton *timerSetTimeButton;
+@property (weak, nonatomic) IBOutlet UILabel *timerTimeLabel;
+
+@property (weak, nonatomic) IBOutlet UIView *stopWatchView;
+@property (weak, nonatomic) IBOutlet UIView *timerView;
+@property (weak, nonatomic) IBOutlet UIScrollView *stopWatchTimerScrollView;
 
 //Reconnection
 - (void) didReceiveDisconnection;

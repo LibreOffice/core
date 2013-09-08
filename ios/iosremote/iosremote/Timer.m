@@ -153,18 +153,37 @@ int initSecondsLeft;
 
 - (void) updateStartButtonIcon
 {
-    switch (self.state) {
-        case TIMER_STATE_RUNNING:
-            [self.startButton setImage:[UIImage imageNamed:@"timer_pause_btn"] forState:UIControlStateNormal];
-            break;
-        case TIMER_STATE_PAUSED:
-            [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
-            break;
-        case TIMER_STATE_CLEARED:
-            [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
-            break;
-        default:
-            break;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        switch (self.state) {
+            case TIMER_STATE_RUNNING:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_pause_btn_dark"] forState:UIControlStateNormal];
+                [self.startButton setTitle:NSLocalizedString(@"Pause", @"Update button text in diffrent states") forState:UIControlStateNormal];
+                break;
+            case TIMER_STATE_PAUSED:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn_dark"] forState:UIControlStateNormal];
+                [self.startButton setTitle:NSLocalizedString(@"Start", @"Update button text in diffrent states") forState:UIControlStateNormal];
+                break;
+            case TIMER_STATE_CLEARED:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn_dark"] forState:UIControlStateNormal];
+                [self.startButton setTitle:NSLocalizedString(@"Start", @"Update button text in diffrent states") forState:UIControlStateNormal];
+                break;
+            default:
+                break;
+        }
+    } else {
+        switch (self.state) {
+            case TIMER_STATE_RUNNING:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_pause_btn"] forState:UIControlStateNormal];
+                break;
+            case TIMER_STATE_PAUSED:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
+                break;
+            case TIMER_STATE_CLEARED:
+                [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -174,7 +193,7 @@ int initSecondsLeft;
     self.timerTimer = nil;
     self.state = TIMER_STATE_CLEARED;
     
-    [self.startButton setImage:[UIImage imageNamed:@"timer_start_btn"] forState:UIControlStateNormal];
+    [self updateStartButtonIcon];
     [self.delegate setTitle:@"" sender:self];
     
     secondsLeft = initSecondsLeft;

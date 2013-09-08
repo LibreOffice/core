@@ -16,8 +16,10 @@
 
 @protocol TimerDelegate <NSObject>
 
-- (void) setTitle:(NSString *) title sender:(id)sender;
 - (void) startTimePickerwithTimer:(Timer *) timer;
+
+@optional
+- (void) setTitle:(NSString *) title sender:(id)sender;
 
 @end
 

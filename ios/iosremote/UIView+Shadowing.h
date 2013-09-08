@@ -11,5 +11,6 @@
 @interface UIView (Shadowing)
 
 - (void) setShadow;
+- (void) setShadowLight;
 
 @end
