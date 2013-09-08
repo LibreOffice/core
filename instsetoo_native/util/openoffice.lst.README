@@ -19,6 +19,9 @@
 
 Some documentation for the variables specified in file openoffice.lst.
 
+FIXME: quite a few of these variables are duplicated in
+postprocess/CustomTarget_registry.mk, this needs to be consolidated
+
 VARIABLE NAME                   USAGE
 -------------------------------------------------------------------------------
 BASISPACKAGEPREFIX              name prefix for the installation packages

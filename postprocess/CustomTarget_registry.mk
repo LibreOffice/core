@@ -566,9 +566,9 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/main.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-		-o $@.tmp $(SOLARENV)/bin/packregistry.xslt $< \
-	&& sed $(postprocess_main_SED) $@.tmp > $@ \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+			$(SOLARENV)/bin/packregistry.xslt $< \
+		|  sed $(postprocess_main_SED) > $@ \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
