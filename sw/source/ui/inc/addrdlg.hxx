@@ -21,17 +21,12 @@
 
 #include <sfx2/basedlgs.hxx>
 
-class SwAddrDlg : public SfxNoLayoutSingleTabDialog
+class SwAddrDlg : public SfxSingleTabDialog
 {
 public:
-
-     SwAddrDlg( Window* pParent, const SfxItemSet& rSet );
-    ~SwAddrDlg();
+    SwAddrDlg(Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

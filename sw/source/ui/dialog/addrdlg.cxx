@@ -21,24 +21,17 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/sfx.hrc>
 
-SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
-
-    SfxNoLayoutSingleTabDialog(pParent, rSet, 0)
-
+SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialog(pParent, rSet)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {
-        SfxTabPage* pPage2 = (*fnCreatePage)( this, rSet );
-        SetTabPage(pPage2);
+        SfxTabPage* pPage2 = (*fnCreatePage)(get_content_area(), rSet);
+        setTabPage(pPage2);
     }
 }
-
-SwAddrDlg::~SwAddrDlg()
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
