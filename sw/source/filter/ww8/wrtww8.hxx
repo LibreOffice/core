@@ -741,7 +741,7 @@ public:
     static bool NoPageBreakSection( const SfxItemSet *pSet );
 
     // Compute the number format for WW dates
-    bool GetNumberFmt(const SwField& rFld, String& rStr);
+    bool GetNumberFmt(const SwField& rFld, OUString& rStr);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar ) = 0;
 

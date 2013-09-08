@@ -123,7 +123,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        void SwapQuotesInField(String &rFmt);
+        void SwapQuotesInField(OUString &rFmt);
 
     }
 
