@@ -47,16 +47,15 @@
 
 // class SvxJSearchOptionsDialog -----------------------------------------
 
-SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
-            Window *pParent,
-            const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags ) :
-    SfxNoLayoutSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
-    nInitialTlFlags( nInitialFlags )
+SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(Window *pParent,
+    const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags)
+    : SfxSingleTabDialog(pParent, rOptionsSet)
+    , nInitialTlFlags( nInitialFlags )
 {
     pPage = (SvxJSearchOptionsPage *)
-                    SvxJSearchOptionsPage::Create( this, rOptionsSet );
-    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
-    pPage->EnableSaveOptions( sal_False );
+        SvxJSearchOptionsPage::Create(get_content_area(), rOptionsSet );
+    setTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
+    pPage->EnableSaveOptions(false);
 }
 
 
