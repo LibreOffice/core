@@ -419,15 +419,11 @@ void PPDParser::scanPPDDir( const OUString& rDir )
             osl::FileStatus aStatus( osl_FileStatus_Mask_FileName );
             if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
-                OUStringBuffer aURLBuf( rDir.getLength() + 64 );
-                aURLBuf.append( rDir );
-                aURLBuf.append( sal_Unicode( '/' ) );
-                aURLBuf.append( aStatus.getFileName() );
-
                 OUString aFileURL, aFileName;
                 osl::FileStatus::Type eType = osl::FileStatus::Unknown;
+                OUString aURL = OUString(rDir + "/" + aStatus.getFileName());
 
-                if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
+                if(resolveLink( aURL, aFileURL, aFileName, eType ) == osl::FileBase::E_None)
                 {
                     if( eType == osl::FileStatus::Regular )
                     {
