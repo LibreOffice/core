@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_files,openssl,lib,\
 	out32dll/ssleay32.lib \
 	out32dll/libeay32.lib \
 ))
-$(eval $(call gb_ExternalPackage_add_files,openssl,bin,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,openssl,bin,\
 	out32dll/ssleay32.dll \
 	out32dll/libeay32.dll \
 ))
