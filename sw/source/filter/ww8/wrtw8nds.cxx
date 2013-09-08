@@ -463,7 +463,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     sw::PoolItems aExportItems;
     GetPoolItems( aExportSet, aExportItems, false );
 
-    if( nSwPos == 0 )
+    if( rNd.GetpSwpHints() == 0 )
         m_rExport.SetCurItemSet(&aExportSet);
 
     sw::cPoolItemIter aEnd = aRangeItems.end();
@@ -486,7 +486,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
         m_rExport.pOutFmtNode = pOldMod;
     }
 
-    if( nSwPos == 0 )
+    if( rNd.GetpSwpHints() == 0 )
         m_rExport.SetCurItemSet(0);
 
     OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );

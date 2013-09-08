@@ -1005,7 +1005,20 @@ void RtfExport::OutColorTable()
         {
             if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem2( RES_BOX, n ) ))
                 InsColorLine( *pBox );
+        }
     }
+
+    {
+        const SvxBoxItem* pCharBox;
+        if( 0 != ( pCharBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(
+                        RES_CHRATR_BOX ) ))
+            InsColorLine( *pCharBox );
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_BOX);
+        for (sal_uInt32 n = 0; n < nMaxItem; ++n)
+        {
+            if( 0 != (pCharBox = (const SvxBoxItem*)rPool.GetItem2( RES_CHRATR_BOX, n ) ))
+                InsColorLine( *pCharBox );
+        }
     }
 
     for (size_t n = 0; n < m_aColTbl.size(); ++n)

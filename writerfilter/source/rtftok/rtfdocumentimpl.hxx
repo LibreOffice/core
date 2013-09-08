@@ -36,7 +36,8 @@ namespace writerfilter {
             BORDER_PARAGRAPH,
             BORDER_PARAGRAPH_BOX,
             BORDER_CELL,
-            BORDER_PAGE
+            BORDER_PAGE,
+            BORDER_CHARACTER
         };
 
         /// Minimalistic buffer of elements for nested cells.

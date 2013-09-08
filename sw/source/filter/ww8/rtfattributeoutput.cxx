@@ -101,7 +101,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-using ::editeng::SvxBorderLine;
 using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;
@@ -2359,6 +2358,16 @@ void RtfAttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_V);
     if ( !rHidden.GetValue() )
         m_aStyles.append((sal_Int32)0);
+}
+
+void RtfAttributeOutput::CharBorder(
+    const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow )
+{
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+
+    m_aStyles.append(
+        OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR,
+                      nDist, bShadow ? SVX_SHADOW_BOTTOMRIGHT : SVX_SHADOW_NONE));
 }
 
 void RtfAttributeOutput::TextINetFormat( const SwFmtINetFmt& rURL )

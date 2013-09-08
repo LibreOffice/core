@@ -112,8 +112,6 @@
 #include <stdio.h>
 #endif
 
-using ::editeng::SvxBorderLine;
-
 using namespace oox;
 using namespace docx;
 using namespace sax_fastparser;
@@ -4081,41 +4079,10 @@ void DocxAttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
         m_pSerializer->singleElementNS( XML_w, XML_vanish, FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
-void DocxAttributeOutput::CharBorder( const SvxBoxItem& rBox )
+void DocxAttributeOutput::CharBorder(
+    const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow )
 {
-    // Get one of the borders (if there is any border then in docx also will be)
-    const SvxBorderLine* pBorderLine = 0;
-    sal_uInt16 nDist = 0;
-    if( rBox.GetTop() )
-    {
-       pBorderLine = rBox.GetTop();
-       nDist = rBox.GetDistance( BOX_LINE_TOP );
-    }
-    else if( rBox.GetLeft() )
-    {
-       pBorderLine = rBox.GetLeft();
-       nDist = rBox.GetDistance( BOX_LINE_LEFT );
-    }
-    else if( rBox.GetBottom() )
-    {
-       pBorderLine = rBox.GetBottom();
-       nDist = rBox.GetDistance( BOX_LINE_BOTTOM );
-    }
-    else if( rBox.GetRight() )
-    {
-       pBorderLine = rBox.GetRight();
-       nDist = rBox.GetDistance( BOX_LINE_RIGHT );
-    }
-
-    if( pBorderLine )
-    {
-        const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
-        const bool bShadow =
-            pItem &&
-            static_cast<const SvxShadowItem*>(pItem)->GetLocation() != SVX_SHADOW_NONE;
-
-        impl_borderLine( m_pSerializer, XML_bdr, pBorderLine, nDist, bShadow );
-    }
+    impl_borderLine( m_pSerializer, XML_bdr, pAllBorder, nDist, bShadow );
 }
 
 void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )

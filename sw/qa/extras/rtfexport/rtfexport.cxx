@@ -68,6 +68,7 @@ public:
     void testTextframeTable();
     void testFdo66682();
     void testParaShadow();
+    void testCharacterBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -125,6 +126,7 @@ void Test::run()
         {"textframe-table.rtf", &Test::testTextframeTable},
         {"fdo66682.rtf", &Test::testFdo66682},
         {"para-shadow.rtf", &Test::testParaShadow},
+        {"charborder.odt", &Test::testCharacterBorder},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -631,6 +633,44 @@ void Test::testParaShadow()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(60)), aShadow.ShadowWidth);
+}
+
+void Test::testCharacterBorder()
+{
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+    // RTF has just one border attribute(chbrdr) for text border so all side has
+    // the same border with the same padding
+    // Border
+    {
+        const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
+        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(16737792,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+    }
+
+    // Padding (brsp)
+    {
+        const sal_Int32 nTopPadding = getProperty<sal_Int32>(xRun,"CharTopBorderDistance");
+        // In the original odt file it is 150, but the unit conversion round it down.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nTopPadding);
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
+        CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
+    }
+
+    // Shadow (brdrsh)
+    /* RTF use just one bool value for shadow so the next conversions
+       are made during an export-import round
+       color: any -> black
+       location: any -> bottom-right
+       width: any -> border width */
+    {
+        const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xRun, "CharShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

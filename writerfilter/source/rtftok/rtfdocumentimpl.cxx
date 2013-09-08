@@ -140,6 +140,15 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
                 rAttributes.set(nId, pValue);
             }
         }
+    else if (aStates.top().nBorderState == BORDER_CHARACTER)
+    {
+        RTFValue::Pointer_t pPointer = aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_RPrBase_bdr);
+        if (pPointer.get())
+        {
+            RTFSprms& rAttributes = pPointer->getAttributes();
+            rAttributes.set(nId, pValue);
+        }
+    }
     // Attributes of the last border type
     else if (aStates.top().nBorderState == BORDER_PARAGRAPH)
         pAttributes = &lcl_getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
@@ -2412,6 +2421,14 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 }
                 lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr, nParam, pValue);
                 m_aStates.top().nBorderState = BORDER_PARAGRAPH;
+            }
+            break;
+        case RTF_CHBRDR:
+            {
+                RTFSprms aAttributes;
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+                m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_bdr, pValue);
+                m_aStates.top().nBorderState = BORDER_CHARACTER;
             }
             break;
         case RTF_CLVMGF:

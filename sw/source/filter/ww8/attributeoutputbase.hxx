@@ -118,6 +118,8 @@ class SwLineNumberInfo;
 class SwNumRule;
 class wwFont;
 
+using ::editeng::SvxBorderLine;
+
 class String;
 namespace rtl { class OUString; }
 
@@ -439,7 +441,8 @@ protected:
     virtual void CharHidden( const SvxCharHiddenItem& ) = 0;
 
     /// Sfx item RES_CHRATR_BOX
-    virtual void CharBorder( const SvxBoxItem& rBox ) = 0;
+    void FormatCharBorder( const SvxBoxItem& rBox );
+    virtual void CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow ) = 0;
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& ) = 0;
