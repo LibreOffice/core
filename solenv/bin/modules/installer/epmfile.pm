@@ -378,7 +378,8 @@ sub create_epm_header
         {
             my $onefile = ${$filesinproduct}[$i];
             my $filename = $onefile->{'Name'};
-            if ( $filename eq $possiblereadmefilename )
+            # in the SDK it's in subdirectory sdk/share/readme
+            if ( $filename =~ /$possiblereadmefilename$/ )
             {
                 $foundreadmefile = 1;
                 $line = "%readme" . " " . $onefile->{'sourcepath'} . "\n";
@@ -447,9 +448,10 @@ sub create_epm_header
     }
     else
     {
-	for my $onefile (@{$filesinproduct})
-	{
-	    if ($licensefilename eq $onefile->{'Name'})
+    for my $onefile (@{$filesinproduct})
+    {
+        # in the SDK it's in subdirectory sdk/share/readme so try to match that
+        if ($onefile->{'Name'} =~ /$licensefilename$/)
             {
                 push @epmheader, "%license" . " " . $onefile->{'sourcepath'} . "\n";
                 $foundlicensefile = 1;
