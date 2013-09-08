@@ -62,11 +62,7 @@ SmLocalizedSymbolData::SmLocalizedSymbolData() :
     aUiSymbolNamesAry       ( SmResId(RID_UI_SYMBOL_NAMES) ),
     aExportSymbolNamesAry   ( SmResId(RID_EXPORT_SYMBOL_NAMES) ),
     aUiSymbolSetNamesAry    ( SmResId(RID_UI_SYMBOLSET_NAMES) ),
-    aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) ),
-    p50NamesAry             ( 0 ),
-    p60NamesAry             ( 0 ),
-    n50NamesLang            ( LANGUAGE_NONE ),
-    n60NamesLang            ( LANGUAGE_NONE )
+    aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) )
 {
     FreeResource();
 }
@@ -74,8 +70,6 @@ SmLocalizedSymbolData::SmLocalizedSymbolData() :
 
 SmLocalizedSymbolData::~SmLocalizedSymbolData()
 {
-    delete p50NamesAry;
-    delete p60NamesAry;
 }
 
 
@@ -160,54 +154,6 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     }
 
     return aRes;
-}
-
-
-const ResStringArray* SmLocalizedSymbolData::Get50NamesArray( LanguageType nLang )
-{
-    if (nLang != n50NamesLang)
-    {
-        int nRID;
-        switch (nLang)
-        {
-            case LANGUAGE_FRENCH    : nRID = RID_FRENCH_50_NAMES;  break;
-            case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_50_NAMES;  break;
-            case LANGUAGE_SWEDISH   : nRID = RID_SWEDISH_50_NAMES;  break;
-            case LANGUAGE_SPANISH   : nRID = RID_SPANISH_50_NAMES;  break;
-            default                 : nRID = -1;  break;
-        }
-        delete p50NamesAry;
-        p50NamesAry = 0;
-        n50NamesLang = nLang;
-        if (-1 != nRID)
-            p50NamesAry = new SmNamesArray( n50NamesLang, nRID );
-    }
-
-    return p50NamesAry ? &p50NamesAry->GetNamesArray() : 0;
-}
-
-
-const ResStringArray* SmLocalizedSymbolData::Get60NamesArray( LanguageType nLang )
-{
-    if (nLang != n60NamesLang)
-    {
-        int nRID;
-        switch (nLang)
-        {
-            case LANGUAGE_FRENCH    : nRID = RID_FRENCH_60_NAMES;  break;
-            case LANGUAGE_ITALIAN   : nRID = RID_ITALIAN_60_NAMES;  break;
-            case LANGUAGE_SWEDISH   : nRID = RID_SWEDISH_60_NAMES;  break;
-            case LANGUAGE_SPANISH   : nRID = RID_SPANISH_60_NAMES;  break;
-            default                 : nRID = -1;  break;
-        }
-        delete p60NamesAry;
-        p60NamesAry = 0;
-        n60NamesLang = nLang;
-        if (-1 != nRID)
-            p60NamesAry = new SmNamesArray( n60NamesLang, nRID );
-    }
-
-    return p60NamesAry ? &p60NamesAry->GetNamesArray() : 0;
 }
 
 /////////////////////////////////////////////////////////////////

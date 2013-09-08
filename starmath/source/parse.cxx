@@ -980,17 +980,17 @@ void SmParser::Align()
 
     if (TokenInGroup(TGALIGN))
     {
-            pSNode = new SmAlignNode(m_aCurToken);
+        pSNode = new SmAlignNode(m_aCurToken);
 
-            NextToken();
+        NextToken();
 
-            // allow for just one align statement in 5.0
-            if (TokenInGroup(TGALIGN))
-            {
-                Error(PE_DOUBLE_ALIGN);
-                delete pSNode;
-                return;
-            }
+        // allow for just one align statement in 5.0
+        if (TokenInGroup(TGALIGN))
+        {
+            Error(PE_DOUBLE_ALIGN);
+            delete pSNode;
+            return;
+        }
     }
 
     Expression();
@@ -2296,26 +2296,26 @@ void SmParser::Special()
     OUString &rName = m_aCurToken.aText;
     OUString aNewName;
 
-        // conversion of symbol names for 6.0 (XML) file format
-        // (name change on import / export.
-        // UI uses localized names XML file format does not.)
-        if (!rName.isEmpty() && rName[0] == '%')
+    // conversion of symbol names for 6.0 (XML) file format
+    // (name change on import / export.
+    // UI uses localized names XML file format does not.)
+    if (!rName.isEmpty() && rName[0] == '%')
+    {
+        if (IsImportSymbolNames())
         {
-            if (IsImportSymbolNames())
-            {
-                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-                aNewName = rLSD.GetUiSymbolName(rName.copy(1));
-                bReplace = true;
-            }
-            else if (IsExportSymbolNames())
-            {
-                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-                aNewName = rLSD.GetExportSymbolName(rName.copy(1));
-                bReplace = true;
-            }
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+            aNewName = rLSD.GetUiSymbolName(rName.copy(1));
+            bReplace = true;
         }
-        if (!aNewName.isEmpty())
-            aNewName = "%" + aNewName;
+        else if (IsExportSymbolNames())
+        {
+            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+            aNewName = rLSD.GetExportSymbolName(rName.copy(1));
+            bReplace = true;
+        }
+    }
+    if (!aNewName.isEmpty())
+        aNewName = "%" + aNewName;
 
 
     if (bReplace && !aNewName.isEmpty() && rName != aNewName)

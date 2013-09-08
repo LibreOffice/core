@@ -61,36 +61,12 @@ public:
 
 #define SM_RESSTR(x) SmResId(x).toString()
 
-class SmNamesArray : public Resource
-{
-    ResStringArray      aNamesAry;
-    LanguageType        nLanguage;
-
-public:
-    SmNamesArray( LanguageType nLang, int nRID ) :
-        Resource( SmResId(RID_LOCALIZED_NAMES) ),
-        aNamesAry   (SmResId( static_cast < sal_uInt16 > ( nRID ))),
-        nLanguage   (nLang)
-    {
-        FreeResource();
-    }
-
-    LanguageType            GetLanguage() const     { return nLanguage; }
-    const ResStringArray&   GetNamesArray() const   { return aNamesAry; }
-};
-
-/////////////////////////////////////////////////////////////////
-
 class SmLocalizedSymbolData : public Resource
 {
     ResStringArray      aUiSymbolNamesAry;
     ResStringArray      aExportSymbolNamesAry;
     ResStringArray      aUiSymbolSetNamesAry;
     ResStringArray      aExportSymbolSetNamesAry;
-    SmNamesArray       *p50NamesAry;
-    SmNamesArray       *p60NamesAry;
-    LanguageType        n50NamesLang;
-    LanguageType        n60NamesLang;
 
 public:
     SmLocalizedSymbolData();
@@ -105,9 +81,6 @@ public:
     const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
     const OUString        GetUiSymbolSetName( const OUString &rExportName ) const;
     const OUString        GetExportSymbolSetName( const OUString &rUiName ) const;
-
-    const ResStringArray* Get50NamesArray( LanguageType nLang );
-    const ResStringArray* Get60NamesArray( LanguageType nLang );
 };
 
 /////////////////////////////////////////////////////////////////
