@@ -286,7 +286,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 OUString AcceleratorConfigurationReader::implts_getErrorLineString()
 {
     if (!m_xLocator.is())
-        return "Error during parsing XML. (No further info available ...)";
+        return OUString("Error during parsing XML. (No further info available ...)");
 
     OUStringBuffer sMsg(256);
     sMsg.appendAscii("Error during parsing XML in\nline = ");
