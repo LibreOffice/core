@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7Og\u003d",
+        "filename": "sd/source/ui/animations/SlideTransitionPane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-08T22:09:34Z",
+      "side": 1,
+      "message": "This seems unused?",
+      "revId": "6ea738d0713fd9c97058ee6a293e6b5d32fcb136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
