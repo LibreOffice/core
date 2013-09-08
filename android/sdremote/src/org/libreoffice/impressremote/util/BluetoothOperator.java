@@ -11,6 +11,18 @@ package org.libreoffice.impressremote.util;
 import android.bluetooth.BluetoothAdapter;
 
 public final class BluetoothOperator {
+    public static final class State {
+        private final boolean mWasBluetoothEnabled;
+
+        private State(boolean aIsBluetoothEnabled) {
+            mWasBluetoothEnabled = aIsBluetoothEnabled;
+        }
+
+        public boolean wasBluetoothEnabled() {
+            return mWasBluetoothEnabled;
+        }
+    }
+
     private BluetoothOperator() {
     }
 
@@ -24,6 +36,26 @@ public final class BluetoothOperator {
         // It will require to use the latest version of SDK to get needed constant.
 
         return BluetoothAdapter.getDefaultAdapter();
+    }
+
+    public static State getState() {
+        return new State(getAdapter().isEnabled());
+    }
+
+    public static void enable() {
+        if (!isAvailable()) {
+            return;
+        }
+
+        getAdapter().enable();
+    }
+
+    public static void disable() {
+        if (!isAvailable()) {
+            return;
+        }
+
+        getAdapter().disable();
     }
 }
 

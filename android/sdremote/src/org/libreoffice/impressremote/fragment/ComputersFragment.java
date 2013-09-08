@@ -37,6 +37,7 @@ import android.widget.ViewAnimator;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.adapter.ComputersAdapter;
+import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
@@ -65,27 +66,27 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     private static Bundle buildArguments(Type aType) {
         Bundle aArguments = new Bundle();
 
-        aArguments.putSerializable("TYPE", aType);
+        aArguments.putSerializable(Fragments.Arguments.TYPE, aType);
 
         return aArguments;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater aInflater, ViewGroup aContainer, Bundle aSavedInstanceState) {
-        return aInflater.inflate(R.layout.fragment_computers_list, aContainer, false);
     }
 
     @Override
     public void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
-        mType = (Type) getArguments().getSerializable("TYPE");
+        mType = (Type) getArguments().getSerializable(Fragments.Arguments.TYPE);
 
         setUpActionBar();
     }
 
     private void setUpActionBar() {
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater aInflater, ViewGroup aContainer, Bundle aSavedInstanceState) {
+        return aInflater.inflate(R.layout.fragment_computers_list, aContainer, false);
     }
 
     @Override
@@ -105,9 +106,20 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
         mCommunicationService = aServiceBinder.getService();
 
-        mCommunicationService.startSearch();
-
+        startComputersSearch();
         loadComputers();
+    }
+
+    private void startComputersSearch() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        mCommunicationService.startServersSearch();
+    }
+
+    private boolean isServiceBound() {
+        return mCommunicationService != null;
     }
 
     private void loadComputers() {
@@ -127,20 +139,46 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         }
     }
 
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
+    private List<Server> getComputers() {
+        List<Server> aComputers = new ArrayList<Server>();
+
+        for (Server aComputer : mCommunicationService.getServers()) {
+            if (isComputerSupportsRequiredType(aComputer)) {
+                aComputers.add(aComputer);
+            }
+        }
+
+        return aComputers;
+    }
+
+    private boolean isComputerSupportsRequiredType(Server aComputer) {
+        switch (mType) {
+            case WIFI:
+                return aComputer.getProtocol() == Server.Protocol.TCP;
+
+            case BLUETOOTH:
+                return aComputer.getProtocol() == Server.Protocol.BLUETOOTH;
+
+            default:
+                return false;
+        }
     }
 
     private void hideComputersList() {
+        showView(getProgressBarLayout());
+    }
+
+    private void showView(View aView) {
         ViewAnimator aViewAnimator = getViewAnimator();
 
-        int aProgressBarLayoutIndex = aViewAnimator.indexOfChild(getProgressBarLayout());
+        int aViewIndex = aViewAnimator.indexOfChild(aView);
+        int aCurrentViewIndex = aViewAnimator.getDisplayedChild();
 
-        if (aViewAnimator.getDisplayedChild() == aProgressBarLayoutIndex) {
+        if (aViewIndex == aCurrentViewIndex) {
             return;
         }
 
-        aViewAnimator.setDisplayedChild(aProgressBarLayoutIndex);
+        aViewAnimator.setDisplayedChild(aViewIndex);
     }
 
     private ViewAnimator getViewAnimator() {
@@ -201,15 +239,12 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         setListAdapter(null);
     }
 
-    private ListView getComputesList() {
-        return (ListView) getView().findViewById(android.R.id.list);
+    private void showComputersList() {
+        showView(getComputersList());
     }
 
-    private void showComputersList() {
-        ViewAnimator aViewAnimator = getViewAnimator();
-        ListView aComputersList= getComputesList();
-
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aComputersList));
+    private ListView getComputersList() {
+        return (ListView) getView().findViewById(android.R.id.list);
     }
 
     private void setUpComputersAdapter() {
@@ -233,57 +268,14 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         getComputersAdapter().add(getComputers());
     }
 
-    private List<Server> getComputers() {
-        List<Server> aComputers = new ArrayList<Server>();
-
-        for (Server aServer : mCommunicationService.getServers()) {
-            if (isComputerSupportsRequiredType(aServer)) {
-                aComputers.add(aServer);
-            }
-        }
-
-        return aComputers;
-    }
-
-    private boolean isComputerSupportsRequiredType(Server aServer) {
-        switch (mType) {
-            case WIFI:
-                return aServer.getProtocol() == Server.Protocol.TCP;
-
-            case BLUETOOTH:
-                return aServer.getProtocol() == Server.Protocol.BLUETOOTH;
-
-            default:
-                return false;
-        }
-    }
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        unbindService();
-    }
-
-    private void unbindService() {
-        if (!isServiceBound()) {
-            return;
-        }
-
-        getActivity().unbindService(this);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName aComponentName) {
-        mCommunicationService = null;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
 
         registerIntentsReceiver();
+        setUpContextMenu();
 
+        startComputersSearch();
         loadComputers();
     }
 
@@ -320,37 +312,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         Context aContext = getActivity().getApplicationContext();
 
         return LocalBroadcastManager.getInstance(aContext);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        unregisterIntentsReceiver();
-    }
-
-    private void unregisterIntentsReceiver() {
-        try {
-            getBroadcastManager().unregisterReceiver(mIntentsReceiver);
-        } catch (IllegalArgumentException e) {
-            // Receiver not registered.
-            // Fixed in Honeycomb: Android’s issue #6191.
-        }
-    }
-
-    @Override
-    public void onListItemClick(ListView aListView, View aView, int aPosition, long aId) {
-        Server aComputer = getComputersAdapter().getItem(aPosition);
-
-        Intent aIntent = Intents.buildComputerConnectionIntent(getActivity(), aComputer);
-        startActivity(aIntent);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        setUpContextMenu();
     }
 
     private void setUpContextMenu() {
@@ -437,6 +398,60 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
         Intent aIntent = Intents.buildServersListChangedIntent();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
+    }
+
+    @Override
+    public void onListItemClick(ListView aListView, View aView, int aPosition, long aId) {
+        Server aComputer = getComputersAdapter().getItem(aPosition);
+
+        Intent aIntent = Intents.buildComputerConnectionIntent(getActivity(), aComputer);
+        startActivity(aIntent);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        stopComputersSearch();
+
+        unregisterIntentsReceiver();
+    }
+
+    private void unregisterIntentsReceiver() {
+        try {
+            getBroadcastManager().unregisterReceiver(mIntentsReceiver);
+        } catch (IllegalArgumentException e) {
+            // Receiver not registered.
+            // Fixed in Honeycomb: Android’s issue #6191.
+        }
+    }
+
+    private void stopComputersSearch() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        mCommunicationService.stopServersSearch();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        unbindService();
+    }
+
+    private void unbindService() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        getActivity().unbindService(this);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName aComponentName) {
+        mCommunicationService = null;
     }
 }
 

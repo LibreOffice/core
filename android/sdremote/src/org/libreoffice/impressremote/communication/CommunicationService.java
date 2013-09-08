@@ -43,7 +43,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     private MessagesReceiver mMessagesReceiver;
     private CommandsTransmitter mCommandsTransmitter;
 
-    private boolean mBluetoothWasEnabled;
+    private BluetoothOperator.State mBluetoothState;
 
     private Timer mTimer;
     private SlideShow mSlideShow;
@@ -61,7 +61,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mServersManager = new ServersManager(this);
 
-        mBluetoothWasEnabled = false;
+        saveBluetoothState();
+        enableBluetooth();
 
         mTimer = new Timer(this);
         mSlideShow = new SlideShow(mTimer);
@@ -74,6 +75,14 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         public CommunicationService getService() {
             return CommunicationService.this;
         }
+    }
+
+    private void saveBluetoothState() {
+        mBluetoothState = BluetoothOperator.getState();
+    }
+
+    private void enableBluetooth() {
+        BluetoothOperator.enable();
     }
 
     @Override
@@ -164,28 +173,14 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
-    public void startSearch() {
+    public void startServersSearch() {
         mState = State.SEARCHING;
-
-        if (BluetoothOperator.isAvailable()) {
-            mBluetoothWasEnabled = BluetoothOperator.getAdapter().isEnabled();
-
-            if (!BluetoothOperator.getAdapter().isEnabled()) {
-                BluetoothOperator.getAdapter().enable();
-            }
-        }
 
         mServersManager.startServersSearch();
     }
 
-    public void stopSearch() {
+    public void stopServersSearch() {
         mServersManager.stopServersSearch();
-
-        if (BluetoothOperator.isAvailable()) {
-            if (!mBluetoothWasEnabled) {
-                BluetoothOperator.getAdapter().disable();
-            }
-        }
     }
 
     public List<Server> getServers() {
@@ -298,10 +293,20 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onDestroy() {
-        stopSearch();
+        stopServersSearch();
+
+        restoreBluetoothState();
 
         mThread.interrupt();
         mThread = null;
+    }
+
+    private void restoreBluetoothState() {
+        if (mBluetoothState.wasBluetoothEnabled()) {
+            return;
+        }
+
+        BluetoothOperator.disable();
     }
 }
 
