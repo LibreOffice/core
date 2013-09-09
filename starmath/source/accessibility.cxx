@@ -1016,7 +1016,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            OSL_FAIL("unknown flags for SmTextForwarder::GetAttribs");
+            SAL_WARN("starmath", "unknown flags for SmTextForwarder::GetAttribs");
         }
 
         return pEditEngine->GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );

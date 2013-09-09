@@ -521,7 +521,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         }
         else
         {
-            OSL_FAIL( "symbol read error" );
+            SAL_WARN("starmath", "symbol read error");
         }
     }
 }

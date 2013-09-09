@@ -84,7 +84,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
             case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
             default :
                 pTable = aLatinDefFnts;
-                OSL_FAIL( "unknown script-type" );
+                SAL_WARN("starmath", "unknown script-type");
         }
 
         return Application::GetDefaultDevice()->GetDefaultFont(

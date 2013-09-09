@@ -172,16 +172,9 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     // get GlyphBoundRect
     Rectangle  aGlyphRect;
-#if OSL_DEBUG_LEVEL > 1
-    bool bSuccess =
-#endif
-                SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
-#if OSL_DEBUG_LEVEL > 1
+    bool bSuccess = SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
     if (!bSuccess)
-    {
-        OSL_FAIL( "Sm : Ooops... (fehlt evtl. der Font?)");
-    }
-#endif
+        SAL_WARN("starmath", "Ooops... (Font missing?)");
 
     nItalicLeftSpace  = GetLeft() - aGlyphRect.Left() + nBorderWidth;
     nItalicRightSpace = aGlyphRect.Right() - GetRight() + nBorderWidth;
@@ -335,7 +328,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                        + GetItalicLeftSpace();
             break;
         default :
-            OSL_FAIL("Sm: unknown case");
+            SAL_WARN("starmath", "unknown case");
     }
 
     // check if horizontal position is already set
@@ -372,7 +365,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                OSL_FAIL("Sm: unknown case");
+                SAL_WARN("starmath", "unknown case");
         }
 
     // check if vertical position is already set
@@ -389,7 +382,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
             default :
-                OSL_FAIL("Sm: unknown case");
+                SAL_WARN("starmath", "unknown case");
         }
 
     return aPos;
@@ -480,7 +473,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                     CopyMBL(rRect);
                 break;
             default :
-                OSL_FAIL("Sm: unknown case");
+                SAL_WARN("starmath", "unknown case");
         }
     }
 

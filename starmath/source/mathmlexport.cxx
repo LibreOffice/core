@@ -325,9 +325,9 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
         xStream = xStorage->openStreamElement( sStreamName,
             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
     }
-    catch ( uno::Exception& )
+    catch ( uno::Exception& rEx )
     {
-        OSL_FAIL( "Can't create output stream in package!" );
+        SAL_WARN("starmath", "Can't create output stream in package: " << rEx.Message );
         return sal_False;
     }
 
@@ -1320,7 +1320,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             case TSERIF     : nSansSerifFixed  = 1; break;
             case TFIXED     : nSansSerifFixed  = 2; break;
             default:
-                OSL_FAIL( "unexpected case" );
+                SAL_WARN("starmath", "unexpected case");
         }
         // According to the parser every node that is to be evaluated heres
         // has a single non-zero subnode at index 1!! Thus we only need to check
@@ -1452,7 +1452,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     pText = "monospace";    // no modifiers allowed for monospace ...
                 else
                 {
-                    OSL_FAIL( "unexpected case" );
+                    SAL_WARN("starmath", "unexpected case");
                 }
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, OUString::createFromAscii( pText ));
             }
@@ -1645,7 +1645,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportBlank(pNode, nLevel);
             break;
        default:
-            OSL_FAIL( "Warning: failed to export a node?" );
+            SAL_WARN("starmath", "Warning: failed to export a node?");
             break;
 
     }

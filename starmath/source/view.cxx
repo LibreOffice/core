@@ -946,7 +946,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
 
 void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::AdjustPosSizePixel" );
+    SAL_INFO( "starmath", "SmViewShell::AdjustPosSizePixel" );
 
     aGraphic.SetPosSizePixel(rPos, rSize);
 }
@@ -954,7 +954,7 @@ void SmViewShell::AdjustPosSizePixel(const Point &rPos, const Size &rSize)
 
 void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::InnerResizePixel" );
+    SAL_INFO( "starmath", "SmViewShell::InnerResizePixel" );
 
     Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
@@ -972,7 +972,7 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 
 void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::OuterResizePixel" );
+    SAL_INFO( "starmath", "SmViewShell::OuterResizePixel" );
 
     SmGraphicWindow &rWin = GetGraphicWindow();
     rWin.SetPosSizePixel(rOfs, rSize);
@@ -984,7 +984,7 @@ void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 
 void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::QueryObjAreaPixel" );
+    SAL_INFO( "starmath", "SmViewShell::QueryObjAreaPixel" );
 
     rRect.SetSize( GetGraphicWindow().GetSizePixel() );
 }
@@ -992,7 +992,7 @@ void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::SetZoomFactor" );
+    SAL_INFO( "starmath", "SmViewShell::SetZoomFactor" );
 
     const Fraction &rFrac = rX < rY ? rX : rY;
     GetGraphicWindow().SetZoom( (sal_uInt16) long(rFrac * Fraction( 100, 1 )) );
@@ -1005,7 +1005,7 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::GetTextLineSize" );
+    SAL_INFO( "starmath", "SmViewShell::GetTextLineSize" );
 
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
@@ -1034,7 +1034,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 
 Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long MaxWidth)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::GetTextSize" );
+    SAL_INFO( "starmath", "SmViewShell::GetTextSize" );
 
     Size    aSize;
     Size    TextSize;
@@ -1095,7 +1095,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
 
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::DrawTextLine" );
+    SAL_INFO( "starmath", "SmViewShell::DrawTextLine" );
 
     Point   aPoint (rPosition);
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
@@ -1123,7 +1123,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
 void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const OUString& rText, sal_uInt16 MaxWidth)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::DrawText" );
+    SAL_INFO( "starmath", "SmViewShell::DrawText" );
 
     sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
     Point   aPoint (rPosition);
@@ -1188,7 +1188,7 @@ void SmViewShell::Impl_Print(
         const SmPrintUIOptions &rPrintUIOptions,
         Rectangle aOutRect, Point aZeroPoint )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Impl_Print" );
+    SAL_INFO( "starmath", "SmViewShell::Impl_Print" );
 
     const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, sal_True );
     const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
@@ -1337,7 +1337,7 @@ void SmViewShell::Impl_Print(
 
 sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Print" );
+    SAL_INFO( "starmath", "SmViewShell::Print" );
     SAL_WARN( "starmath", "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
@@ -1345,7 +1345,7 @@ sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
 
 SfxPrinter* SmViewShell::GetPrinter(sal_Bool bCreate)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::GetPrinter" );
+    SAL_INFO( "starmath", "SmViewShell::GetPrinter" );
 
     SmDocShell *pDoc = GetDoc();
     if ( pDoc->HasPrinter() || bCreate )
@@ -1356,7 +1356,7 @@ SfxPrinter* SmViewShell::GetPrinter(sal_Bool bCreate)
 
 sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::SetPrinter" );
+    SAL_INFO( "starmath", "SmViewShell::SetPrinter" );
     SfxPrinter *pOld = GetDoc()->GetPrinter();
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
@@ -1380,7 +1380,7 @@ bool SmViewShell::HasPrintOptionsPage() const
 SfxTabPage* SmViewShell::CreatePrintOptionsPage(Window *pParent,
                                                 const SfxItemSet &rOptions)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::CreatePrintOptionsPage" );
+    SAL_INFO( "starmath", "SmViewShell::CreatePrintOptionsPage" );
 
     return SmPrintOptionsTabPage::Create(pParent, rOptions);
 }
@@ -1388,7 +1388,7 @@ SfxTabPage* SmViewShell::CreatePrintOptionsPage(Window *pParent,
 
 SmEditWindow *SmViewShell::GetEditWindow()
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::GetEditWindow" );
+    SAL_INFO( "starmath", "SmViewShell::GetEditWindow" );
 
     SmCmdBoxWrapper *pWrapper = (SmCmdBoxWrapper *) GetViewFrame()->
             GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
@@ -1406,7 +1406,7 @@ SmEditWindow *SmViewShell::GetEditWindow()
 
 void SmViewShell::SetStatusText(const OUString& rText)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::SetStatusText" );
+    SAL_INFO( "starmath", "SmViewShell::SetStatusText" );
 
     aStatusText = rText;
     GetViewFrame()->GetBindings().Invalidate(SID_TEXTSTATUS);
@@ -1415,7 +1415,7 @@ void SmViewShell::SetStatusText(const OUString& rText)
 
 void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::ShowError" );
+    SAL_INFO( "starmath", "SmViewShell::ShowError" );
 
     OSL_ENSURE(GetDoc(), "Sm : Document missing");
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
@@ -1429,7 +1429,7 @@ void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 
 void SmViewShell::NextError()
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::NextError" );
+    SAL_INFO( "starmath", "SmViewShell::NextError" );
 
     OSL_ENSURE(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
@@ -1441,7 +1441,7 @@ void SmViewShell::NextError()
 
 void SmViewShell::PrevError()
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::PrevError" );
+    SAL_INFO( "starmath", "SmViewShell::PrevError" );
 
     OSL_ENSURE(GetDoc(), "Sm : Document missing");
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
@@ -1453,7 +1453,7 @@ void SmViewShell::PrevError()
 
 void SmViewShell::Insert( SfxMedium& rMedium )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Insert" );
+    SAL_INFO( "starmath", "SmViewShell::Insert" );
 
     SmDocShell *pDoc = GetDoc();
     bool bRet = false;
@@ -1493,7 +1493,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
 
 void SmViewShell::InsertFrom(SfxMedium &rMedium)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::InsertFrom" );
+    SAL_INFO( "starmath", "SmViewShell::InsertFrom" );
 
     bool        bSuccess = false;
     SmDocShell *pDoc = GetDoc();
@@ -1530,7 +1530,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
 
 void SmViewShell::Execute(SfxRequest& rReq)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Execute" );
+    SAL_INFO( "starmath", "SmViewShell::Execute" );
 
     SmEditWindow *pWin = GetEditWindow();
 
@@ -1885,7 +1885,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
 void SmViewShell::GetState(SfxItemSet &rSet)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::GetState" );
+    SAL_INFO( "starmath", "SmViewShell::GetState" );
 
     SfxWhichIter aIter(rSet);
 
@@ -1992,7 +1992,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
     aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
     , bInsertIntoEditWindow(false)
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::SmViewShell" );
+    SAL_INFO( "starmath", "SmViewShell::SmViewShell" );
 
     SetStatusText(OUString());
     SetWindow(&aGraphic);
@@ -2004,7 +2004,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 
 SmViewShell::~SmViewShell()
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::~SmViewShell" );
+    SAL_INFO( "starmath", "SmViewShell::~SmViewShell" );
 
     //!! this view shell is not active anymore !!
     // Thus 'SmGetActiveView' will give a 0 pointer.
@@ -2017,7 +2017,7 @@ SmViewShell::~SmViewShell()
 
 void SmViewShell::Deactivate( sal_Bool bIsMDIActivate )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Deactivate" );
+    SAL_INFO( "starmath", "SmViewShell::Deactivate" );
 
     SmEditWindow *pEdit = GetEditWindow();
     if ( pEdit )
@@ -2029,7 +2029,7 @@ void SmViewShell::Deactivate( sal_Bool bIsMDIActivate )
 
 void SmViewShell::Activate( sal_Bool bIsMDIActivate )
 {
-    SAL_INFO( "starmath", "starmath: SmViewShell::Activate" );
+    SAL_INFO( "starmath", "SmViewShell::Activate" );
 
     SfxViewShell::Activate( bIsMDIActivate );
 

@@ -1820,7 +1820,7 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
     if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_META) )
     {
-        OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+        SAL_WARN("starmath", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
     }
     else if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_SETTINGS) )
@@ -2973,9 +2973,9 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     {
                         // dealing with read-only properties here. Nothing to do...
                     }
-                    catch( Exception& )
+                    catch( Exception& rEx)
                     {
-                        OSL_FAIL( "SmXMLImport::SetConfigurationSettings: Exception!" );
+                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx.Message );
                     }
                 }
 

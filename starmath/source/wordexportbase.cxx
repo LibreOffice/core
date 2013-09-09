@@ -129,7 +129,7 @@ void SmWordExportBase::HandleAllSubNodes( const SmNode* pNode, int nLevel )
 // TODO remove when all types of nodes are handled properly
         if( pNode->GetSubNode( i ) == NULL )
         {
-            OSL_FAIL( "Subnode is NULL, parent node not handled properly" );
+            SAL_WARN("starmath.wordbase", "Subnode is NULL, parent node not handled properly");
             continue;
         }
         HandleNode( pNode->GetSubNode( i ), nLevel + 1 );

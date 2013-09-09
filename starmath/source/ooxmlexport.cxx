@@ -315,7 +315,7 @@ void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_func );
             break;
         default:
-            OSL_FAIL( "Unhandled operation" );
+            SAL_WARN("starmath.ooxml", "Unhandled operation");
             HandleAllSubNodes( pNode, nLevel );
             break;
     }
@@ -425,7 +425,7 @@ void SmOoxmlExport::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int n
     }
     else
     {
-        OSL_FAIL( "Unhandled sub/sup combination" );
+        SAL_WARN("starmath.ooxml", "Unhandled sub/sup combination");
         // TODO do not do anything, this should be probably an assert()
         // HandleAllSubNodes( pNode, nLevel );
     }
@@ -523,7 +523,7 @@ void SmOoxmlExport::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int n
             break;
         }
         default:
-            OSL_FAIL( "Unhandled vertical brace" );
+            SAL_WARN("starmath.ooxml", "Unhandled vertical brace");
             HandleAllSubNodes( pNode, nLevel );
             break;
     }

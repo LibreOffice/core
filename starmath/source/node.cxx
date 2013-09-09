@@ -82,7 +82,7 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
     {
-        OSL_FAIL( "incorrect MapMode?" );
+        SAL_WARN("starmath", "incorrect MapMode?");
         rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
     }
 }
@@ -516,7 +516,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 
 void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
 {
-    OSL_FAIL( "SmNode: GetAccessibleText not overloaded" );
+    SAL_WARN("starmath", "SmNode: GetAccessibleText not overloaded");
 }
 
 const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
@@ -646,7 +646,7 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
 
 long SmNode::GetFormulaBaseline() const
 {
-    OSL_FAIL( "This dummy implementation should not have been called." );
+    SAL_WARN("starmath", "This dummy implementation should not have been called.");
     return 0;
 }
 
@@ -1587,7 +1587,7 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                 aPos.Y() -= nDist;
                 break;
             default :
-                OSL_FAIL("Sm: unknown case");
+                SAL_WARN("starmath", "unknown case");
                 break;
         }
 
@@ -2199,7 +2199,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
 
         default:
-            OSL_FAIL("Sm: unknown case");
+            SAL_WARN("starmath", "unknown case");
     }
 
     pNode->Arrange(rDev, rFormat);
@@ -3090,7 +3090,7 @@ void SmNode::Accept(SmVisitor*){
     //obscure copy constructor is used... I can't find it's implementation, and
     //don't want to figure out how to fix it... If you want to, just delete this
     //method, making SmNode abstract, and see where you can an problem with that.
-    OSL_FAIL("SmNode should not be visitable!");
+    SAL_WARN("starmath", "SmNode should not be visitable!");
 }
 
 void SmTableNode::Accept(SmVisitor* pVisitor) {

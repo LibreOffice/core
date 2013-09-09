@@ -477,7 +477,7 @@ SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
     {
-        OSL_FAIL( "incorrect MapMode?" );
+        SAL_WARN("starmath", "incorrect MapMode?");
         rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
     }
 }

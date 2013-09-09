@@ -181,7 +181,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         else if (pFound && !bForceChange && bSymbolConflict)
         {
             // TODO: to solve this a document owned symbol manager would be required ...
-                OSL_FAIL( "symbol conflict, different symbol with same name found!" );
+                SAL_WARN("starmath", "symbol conflict, different symbol with same name found!");
             // symbols in all formulas. A copy of the global one would be needed here
             // and then the new symbol has to be forcefully applied. This would keep
             // the current formula intact but will leave the set of symbols in the
@@ -254,7 +254,7 @@ void SmSymbolManager::Load()
 
     if (0 == nSymbolCount)
     {
-        OSL_FAIL( "no symbol set found" );
+        SAL_WARN("starmath", "no symbol set found");
         m_bModified = false;
     }
 

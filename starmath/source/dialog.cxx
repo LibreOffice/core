@@ -1749,11 +1749,7 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
         // allow only names from the list (that's the case here anyway)
         SelectStyle(aStyles.GetText(), true);
     else
-    {
-#if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL("Sm : wrong combobox argument");
-#endif
-    }
+        SAL_WARN("starmath", "wrong combobox argument");
 
     pComboBox->SetSelection(aSelection);
 

@@ -64,7 +64,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
             }
         }break;
         default:
-            OSL_FAIL("Movement direction not supported!");
+            SAL_WARN("starmath", "Movement direction not supported!");
     }
     if(NewPos){
         position = NewPos;
@@ -900,7 +900,7 @@ bool SmCursor::InsertRow() {
         }
         pMatrix->SetRowCol(rows + 1, cols);
     } else
-        OSL_FAIL("We must be either the context of a table or matrix!");
+        SAL_WARN("starmath", "We must be either the context of a table or matrix!");
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
@@ -1077,7 +1077,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             pNewNode = new SmMathSymbolNode(token);
         }break;
         default:
-            OSL_FAIL("Element unknown!");
+            SAL_WARN("starmath", "Element unknown!");
     }
     OSL_ENSURE(pNewNode != NULL, "No new node was created!");
     if(!pNewNode)

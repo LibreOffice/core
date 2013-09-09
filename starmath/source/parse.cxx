@@ -481,9 +481,7 @@ void SmParser::NextToken()
 
 #if OSL_DEBUG_LEVEL > 1
         if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
-        {
-            OSL_FAIL( "identifier really finished? (compatibility!)" );
-        }
+            SAL_WARN( "starmath", "identifier really finished? (compatibility!)" );
 #endif
     }
     else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
@@ -521,9 +519,7 @@ void SmParser::NextToken()
 
 #if OSL_DEBUG_LEVEL > 1
             if (!IsDelimiter( m_aBufferString, aRes.EndPos ))
-            {
-                OSL_FAIL( "identifier really finished? (compatibility!)" );
-            }
+                SAL_WARN( "starmath", "identifier really finished? (compatibility!)" );
 #endif
         }
     }
@@ -1251,7 +1247,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
             case TLSUB :    nIndex = (int) LSUB;    break;
             case TLSUP :    nIndex = (int) LSUP;    break;
             default :
-                OSL_FAIL("Sm: unknown case");
+                SAL_WARN( "starmath", "unknown case");
         }
         nIndex++;
         OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
@@ -1670,7 +1666,7 @@ void SmParser::Oper()
             break;
 
         default :
-            OSL_FAIL("Sm: unknown case");
+            SAL_WARN("starmath", "unknown case");
     }
     m_aNodeStack.push(pNode);
 
@@ -1831,7 +1827,7 @@ void SmParser::FontAttribut()
             break;
 
         default :
-            OSL_FAIL("Sm: unknown case");
+            SAL_WARN("starmath", "unknown case");
     }
 }
 
@@ -2035,7 +2031,7 @@ void SmParser::Brace()
                 case TLFLOOR :      eExpectedType = TRFLOOR;    break;
                 case TLCEIL :       eExpectedType = TRCEIL;     break;
                 default :
-                    OSL_FAIL("Sm: unknown case");
+                    SAL_WARN("starmath", "unknown case");
             }
 
             if (m_aCurToken.eType == eExpectedType)
