@@ -661,7 +661,7 @@ sal_Bool SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& r
 }
 
 sal_Bool SbxValue::fillAutomationDecimal
-    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec ) const
 {
     SbxDecimal* pDecimal = GetDecimal();
     if( pDecimal != NULL )

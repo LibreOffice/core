@@ -33,6 +33,7 @@
 #include <osl/file.hxx>
 #include <vcl/jobset.hxx>
 #include <basic/sbobjmod.hxx>
+#include <basic/sbuno.hxx>
 
 #include "date.hxx"
 #include "sbintern.hxx"
@@ -59,9 +60,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::uno;
-
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
-Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
 
 static Reference< XCalendar3 > getLocaleCalendar( void )
 {

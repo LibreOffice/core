@@ -25,8 +25,8 @@ Function CheckHistoryControls()
 Dim bLocGoOn as Boolean
 Dim Firstdate as Date
 Dim LastDate as Date
-	LastDate = CDateFromISO(StockRatesModel.txtEndDate.Date)
-	FirstDate = CDateFromISO(StockRatesModel.txtStartDate.Date)
+	LastDate = CDateFromUNODate(StockRatesModel.txtEndDate.Date)
+	FirstDate = CDateFromUNODate(StockRatesModel.txtStartDate.Date)
 	bLocGoOn = FirstDate &lt;&gt; 0 And LastDate &lt;&gt; 0
 	If bLocGoOn Then
 		If FirstDate &gt;= LastDate Then
@@ -47,8 +47,8 @@ Dim oCell as Object
 Dim sStockID as String
 Dim ChartSource as String	
 	If CheckHistoryControls() Then
-		StartDate = CDateFromISO(StockRatesModel.txtStartDate.Date)
-		EndDate = CDateFromISO(StockRatesModel.txtEndDate.Date)
+		StartDate = CDateFromUNODate(StockRatesModel.txtStartDate.Date)
+		EndDate = CDateFromUNODate(StockRatesModel.txtEndDate.Date)
 		DlgStockRates.EndExecute()
 		If StockRatesModel.optDaily.State = 1 Then
 			sInterval = &quot;d&quot;

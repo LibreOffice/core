@@ -22,6 +22,7 @@
 
 #include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
+#include <basic/sbuno.hxx>
 
 #include <limits.h> // USHRT_MAX
 
@@ -31,14 +32,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace cppu;
-
-
-//========================================================================
-
-// Declaration conversion from Sbx to UNO with known target type
-Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
-
-//========================================================================
 
 #ifdef WNT
 #define CDECL _cdecl

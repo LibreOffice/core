@@ -20,6 +20,9 @@
 #ifndef _SB_SBUNO_HXX
 #define _SB_SBUNO_HXX
 
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <basic/sbxobj.hxx>
 #include "basicdllapi.h"
 
@@ -33,7 +36,8 @@ BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const OUString& aName, const com::s
 BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
 BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
-BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
+BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( const SbxValue* pVar );
+BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( const SbxValue* pVar, const ::com::sun::star::uno::Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
 
 BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
