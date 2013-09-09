@@ -57,18 +57,10 @@ void Test::testCharacterBorder()
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // Different Border
     {
-        CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(0x6666FF,12,12,12,3,37),
-            getProperty<table::BorderLine2>(xRun,"CharTopBorder"));
-        CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(0xFF9900,0,99,0,2,99),
-            getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
-        CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(0xFF0000,0,169,0,1,169),
-            getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
-        CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(0x0000FF,0,169,0,0,169),
-            getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x6666FF,12,12,12,3,37), getProperty<table::BorderLine2>(xRun,"CharTopBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF9900,0,99,0,2,99), getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000,0,169,0,1,169), getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0000FF,0,169,0,0,169), getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 
     // Different Padding

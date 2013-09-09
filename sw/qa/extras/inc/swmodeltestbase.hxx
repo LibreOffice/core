@@ -37,13 +37,6 @@
 using namespace com::sun::star;
 
 #define DEFAULT_STYLE "Default Style"
-#define CPPUNIT_ASSERT_EQUAL_BORDER(aExpected, aActual) \
-        CPPUNIT_ASSERT_EQUAL(aExpected.Color, aActual.Color); \
-        CPPUNIT_ASSERT_EQUAL(aExpected.InnerLineWidth, aActual.InnerLineWidth); \
-        CPPUNIT_ASSERT_EQUAL(aExpected.LineDistance, aActual.LineDistance); \
-        CPPUNIT_ASSERT_EQUAL(aExpected.LineStyle, aActual.LineStyle); \
-        CPPUNIT_ASSERT_EQUAL(aExpected.LineWidth, aActual.LineWidth); \
-        CPPUNIT_ASSERT_EQUAL(aExpected.OuterLineWidth, aActual.OuterLineWidth);
 
 /// Base class for filter tests loading or roundtriping a document, then asserting the document model.
 class SwModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -365,5 +358,20 @@ protected:
     };
     sal_uInt32 m_nStartTime;
 };
+
+inline void assertBorderEqual(
+    const table::BorderLine2& rExpected, const table::BorderLine2& rActual,
+    const CppUnit::SourceLine& rSourceLine )
+{
+    CPPUNIT_NS::assertEquals<util::Color>( rExpected.Color, rActual.Color, rSourceLine, "different Color" );
+    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.InnerLineWidth, rActual.InnerLineWidth, rSourceLine, "different InnerLineWidth" );
+    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.OuterLineWidth, rActual.OuterLineWidth, rSourceLine, "different OuterLineWidth" );
+    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.LineDistance, rActual.LineDistance, rSourceLine, "different LineDistance" );
+    CPPUNIT_NS::assertEquals<sal_Int16>( rExpected.LineStyle, rActual.LineStyle, rSourceLine, "different LineStyle" );
+    CPPUNIT_NS::assertEquals<sal_Int32>( rExpected.LineWidth, rActual.LineWidth, rSourceLine, "different LineWidth" );
+}
+
+#define CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, aActual) \
+        assertBorderEqual( aExpected, aActual, CPPUNIT_SOURCELINE() ) \
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
