@@ -246,6 +246,10 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
             rDoc.InsertMatrixFormula(
                 aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(),
                 aMark, it->maTokenAndAddress.maTokenStr, pArray, formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+
+            ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
+            if (pFC)
+                pFC->StartListeningTo(&rDoc);
         }
     }
 }
