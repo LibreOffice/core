@@ -71,47 +71,44 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
-const OUString OConnection::sDBLocation( "firebird.fdb" );
+const OUString Connection::our_sDBLocation( "firebird.fdb" );
 
-OConnection::OConnection(FirebirdDriver*    _pDriver)
-                        :OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         m_xMetaData(NULL),
-                         m_bIsEmbedded(sal_False),
-                         m_sConnectionURL(),
-                         m_sURL(),
-                         m_sUser(),
-                         m_pDriver(_pDriver),
-                         m_bClosed(sal_False),
-                         m_bUseOldDateFormat(sal_False),
-                         m_bAutoCommit(sal_False),
-                         m_bReadOnly(sal_False),
-                         m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ),
-                         m_DBHandler(0),
-                         m_transactionHandle(0),
-                         m_xCatalog(0)
+Connection::Connection(FirebirdDriver*    _pDriver)
+    : Connection_BASE(m_aMutex)
+    , OSubComponent<Connection, Connection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    , m_pDriver(_pDriver)
+    , m_sConnectionURL()
+    , m_sFirebirdURL()
+    , m_bIsEmbedded(sal_False)
+    , m_xEmbeddedStorage(0)
+    , m_sUser()
+    , m_bIsAutoCommit(sal_False)
+    , m_bIsReadOnly(sal_False)
+    , m_aTransactionIsolation(TransactionIsolation::REPEATABLE_READ)
+    , m_aDBHandle(0)
+    , m_aTransactionHandle(0)
+    , m_xCatalog(0)
+    , m_xMetaData(0)
+    , m_aStatements()
 {
-    SAL_INFO("connectivity.firebird", "OConnection().");
-
     m_pDriver->acquire();
 }
 
-OConnection::~OConnection()
+Connection::~Connection()
 {
-    SAL_INFO("connectivity.firebird", "~OConnection().");
-
     if(!isClosed())
         close();
+
     m_pDriver->release();
-    m_pDriver = NULL;
+    m_pDriver = 0;
 }
 
-void SAL_CALL OConnection::release() throw()
+void SAL_CALL Connection::release() throw()
 {
     relase_ChildImpl();
 }
 
-void OConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
+void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "construct().");
@@ -151,21 +148,21 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
 
         m_pExtractedFDBFile.reset(new ::utl::TempFile(NULL, true));
         m_pExtractedFDBFile->EnableKillingFile();
-        m_sURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
+        m_sFirebirdURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
 
-        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sURL);
+        SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sFirebirdURL);
 
         if (!bIsNewDatabase)
         {
             SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
-            if (!m_xEmbeddedStorage->isStreamElement(sDBLocation))
+            if (!m_xEmbeddedStorage->isStreamElement(our_sDBLocation))
             {
                 ::connectivity::SharedResources aResources;
                 const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                 ::dbtools::throwGenericSQLException(sMessage ,*this);
             }
 
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBLocation,
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sDBLocation,
                                                             ElementModes::READ));
 
             uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
@@ -178,7 +175,7 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
                 ::dbtools::throwGenericSQLException(sMessage ,*this);
             }
 
-            xFileAccess->writeFile(m_sURL,xDBStream->getInputStream());
+            xFileAccess->writeFile(m_sFirebirdURL,xDBStream->getInputStream());
         }
         // TOOO: Get DB properties from XML
 
@@ -186,13 +183,13 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     // External file AND/OR remote connection
     else if (url.startsWith("sdbc:firebird:"))
     {
-        m_sURL = url.copy(OUString("sdbc:firebird:").getLength());
-        if (m_sURL.startsWith("file://")) // TODO: are file urls really like this?
+        m_sFirebirdURL = url.copy(OUString("sdbc:firebird:").getLength());
+        if (m_sFirebirdURL.startsWith("file://")) // TODO: are file urls really like this?
         {
             uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
                 ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()),
                 uno::UNO_QUERY);
-            if (!xFileAccess->exists(m_sURL))
+            if (!xFileAccess->exists(m_sFirebirdURL))
                 bIsNewDatabase = true;
         }
     }
@@ -249,9 +246,9 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     if (bIsNewDatabase)
     {
         aErr = isc_create_database(status,
-                                   m_sURL.getLength(),
-                                   OUStringToOString(m_sURL,RTL_TEXTENCODING_UTF8).getStr(),
-                                   &m_DBHandler,
+                                   m_sFirebirdURL.getLength(),
+                                   OUStringToOString(m_sFirebirdURL,RTL_TEXTENCODING_UTF8).getStr(),
+                                   &m_aDBHandle,
                                    dpbLength,
                                    dpbBuffer,
                                    0);
@@ -263,9 +260,9 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
     else
     {
         aErr = isc_attach_database(status,
-                                   m_sURL.getLength(),
-                                   OUStringToOString(m_sURL, RTL_TEXTENCODING_UTF8).getStr(),
-                                   &m_DBHandler,
+                                   m_sFirebirdURL.getLength(),
+                                   OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8).getStr(),
+                                   &m_aDBHandle,
                                    dpbLength,
                                    dpbBuffer);
         if (aErr)
@@ -282,54 +279,65 @@ void OConnection::construct(const ::rtl::OUString& url, const Sequence< Property
         // it in the .odb.
         rebuildIndexes();
 
-        uno::Reference< frame::XDesktop2 > xFramesSupplier =
-            frame::Desktop::create(::comphelper::getProcessComponentContext());
-        uno::Reference< frame::XFrames > xFrames( xFramesSupplier->getFrames(),
-                                                                uno::UNO_QUERY);
-        uno::Sequence< uno::Reference<frame::XFrame> > xFrameList =
-                            xFrames->queryFrames( frame::FrameSearchFlag::ALL );
-        for (sal_Int32 i = 0; i < xFrameList.getLength(); i++)
-        {
-            uno::Reference< frame::XFrame > xf = xFrameList[i];
-
-            uno::Reference< XController > xc;
-            if (xf.is())
-                xc = xf->getController();
-
-            uno::Reference< XModel > xm;
-            if (xc.is())
-                xm = xc->getModel();
-
-            OUString aURL;
-
-            if (xm.is())
-                aURL = xm->getURL();
-            if (aURL == aStorageURL)
-            {
-                uno::Reference<XDocumentEventBroadcaster> xBroadcaster( xm, UNO_QUERY);
-                if (xBroadcaster.is())
-                    xBroadcaster->addDocumentEventListener( this );
-                //TODO: remove in the disposing?
-            }
-        }
+        attachAsDocumentListener(aStorageURL);
     }
 
     osl_atomic_decrement( &m_refCount );
 }
 
+void Connection::attachAsDocumentListener(const OUString& rStorageURL)
+{
+    // We can't directly access the Document that is using this connection
+    // (since a Connection can in fact be used independently of a DB document)
+    // hence we need to iterate through all Frames to find our Document.
+    uno::Reference< frame::XDesktop2 > xFramesSupplier =
+        frame::Desktop::create(::comphelper::getProcessComponentContext());
+    uno::Reference< frame::XFrames > xFrames(xFramesSupplier->getFrames(),
+                                             uno::UNO_QUERY);
+    if (!xFrames.is())
+        return;
+
+    uno::Sequence< uno::Reference<frame::XFrame> > xFrameList =
+        xFrames->queryFrames( frame::FrameSearchFlag::ALL );
+
+    for (sal_Int32 i = 0; i < xFrameList.getLength(); i++)
+    {
+        uno::Reference< frame::XFrame > xf = xFrameList[i];
+        uno::Reference< XController > xc;
+        if (xf.is())
+            xc = xf->getController();
+
+        uno::Reference< XModel > xm;
+        if (xc.is())
+            xm = xc->getModel();
+
+        if (xm.is() && xm->getURL() == rStorageURL)
+        {
+            uno::Reference<XDocumentEventBroadcaster> xBroadcaster( xm, UNO_QUERY);
+            if (xBroadcaster.is())
+            {
+                xBroadcaster->addDocumentEventListener(this);
+                return;
+            }
+            //TODO: remove in the disposing?
+        }
+    }
+    assert(false); // If we have an embedded DB we must have a document
+}
+
 //----- XServiceInfo ---------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnection",
+IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connection",
                                                     "com.sun.star.sdbc.Connection")
 
-Reference< XBlob> OConnection::createBlob(ISC_QUAD* pBlobId)
+Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
     throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "createBlob()");
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    Reference< XBlob > xReturn = new Blob(&m_DBHandler,
-                                          &m_transactionHandle,
+    Reference< XBlob > xReturn = new Blob(&m_aDBHandle,
+                                          &m_aTransactionHandle,
                                           *pBlobId);
 
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
@@ -338,13 +346,13 @@ Reference< XBlob> OConnection::createBlob(ISC_QUAD* pBlobId)
 
 
 //----- XConnection ----------------------------------------------------------
-Reference< XStatement > SAL_CALL OConnection::createStatement( )
+Reference< XStatement > SAL_CALL Connection::createStatement( )
                                         throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "createStatement().");
 
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     // the pre
     if(m_aTypeInfo.empty())
@@ -360,14 +368,14 @@ Reference< XStatement > SAL_CALL OConnection::createStatement( )
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
+Reference< XPreparedStatement > SAL_CALL Connection::prepareStatement(
             const OUString& _sSql)
     throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "prepareStatement() "
              "called with sql: " << _sSql);
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     if(m_aTypeInfo.empty())
         buildTypeInfo();
@@ -380,20 +388,20 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(
+Reference< XPreparedStatement > SAL_CALL Connection::prepareCall(
                 const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "prepareCall(). "
              "_sSql: " << _sSql);
 
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     // not implemented yet :-) a task to do
     return NULL;
 }
 
-OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
+OUString SAL_CALL Connection::nativeSQL( const OUString& _sSql )
                                         throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -401,29 +409,29 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
     return _sSql;
 }
 
-void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit )
+void SAL_CALL Connection::setAutoCommit( sal_Bool autoCommit )
                                         throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    m_bAutoCommit = autoCommit;
+    m_bIsAutoCommit = autoCommit;
 
-    if (m_transactionHandle)
+    if (m_aTransactionHandle)
     {
         setupTransaction();
     }
 }
 
-sal_Bool SAL_CALL OConnection::getAutoCommit() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::getAutoCommit() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    return m_bAutoCommit;
+    return m_bIsAutoCommit;
 }
 
-void OConnection::setupTransaction()
+void Connection::setupTransaction()
     throw (SQLException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -431,10 +439,10 @@ void OConnection::setupTransaction()
 
     // TODO: is this sensible? If we have changed parameters then transaction
     // is lost...
-    if (m_transactionHandle)
+    if (m_aTransactionHandle)
     {
-        clearStatements();
-        isc_rollback_transaction(status_vector, &m_transactionHandle);
+        disposeStatements();
+        isc_rollback_transaction(status_vector, &m_aTransactionHandle);
     }
 
     char aTransactionIsolation = 0;
@@ -463,16 +471,16 @@ void OConnection::setupTransaction()
     char* pTPB = aTPB;
 
     *pTPB++ = isc_tpb_version3;
-    if (m_bAutoCommit)
+    if (m_bIsAutoCommit)
         *pTPB++ = isc_tpb_autocommit;
-    *pTPB++ = (!m_bReadOnly ? isc_tpb_write : isc_tpb_read);
+    *pTPB++ = (!m_bIsReadOnly ? isc_tpb_write : isc_tpb_read);
     *pTPB++ = aTransactionIsolation;
     *pTPB++ = isc_tpb_wait;
 
     isc_start_transaction(status_vector,
-                          &m_transactionHandle,
+                          &m_aTransactionHandle,
                           1,
-                          &m_DBHandler,
+                          &m_aDBHandle,
                           pTPB - aTPB, // bytes used in TPB
                           aTPB);
 
@@ -481,59 +489,59 @@ void OConnection::setupTransaction()
                          *this);
 }
 
-isc_tr_handle& OConnection::getTransaction()
+isc_tr_handle& Connection::getTransaction()
     throw (SQLException)
 {
     MutexGuard aGuard( m_aMutex );
-    if (!m_transactionHandle)
+    if (!m_aTransactionHandle)
     {
         setupTransaction();
     }
-    return m_transactionHandle;
+    return m_aTransactionHandle;
 }
 
-void SAL_CALL OConnection::commit() throw(SQLException, RuntimeException)
+void SAL_CALL Connection::commit() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     ISC_STATUS status_vector[20];
 
-    if (!m_bAutoCommit && m_transactionHandle)
+    if (!m_bIsAutoCommit && m_aTransactionHandle)
     {
-        clearStatements();
-        isc_commit_transaction(status_vector, &m_transactionHandle);
+        disposeStatements();
+        isc_commit_transaction(status_vector, &m_aTransactionHandle);
         evaluateStatusVector(status_vector,
                              "isc_commit_transaction",
                              *this);
     }
 }
 
-void SAL_CALL OConnection::rollback() throw(SQLException, RuntimeException)
+void SAL_CALL Connection::rollback() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     ISC_STATUS status_vector[20];
 
-    if (!m_bAutoCommit && m_transactionHandle)
+    if (!m_bIsAutoCommit && m_aTransactionHandle)
     {
-        isc_rollback_transaction(status_vector, &m_transactionHandle);
+        isc_rollback_transaction(status_vector, &m_aTransactionHandle);
     }
 }
 
-sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
 
     // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
-    return OConnection_BASE::rBHelper.bDisposed;
+    return Connection_BASE::rBHelper.bDisposed;
 }
 // --------------------------------------------------------------------------------
-Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XDatabaseMetaData > SAL_CALL Connection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     // here we have to create the class with biggest interface
     // The answer is 42 :-)
@@ -547,61 +555,61 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
     return xMetaData;
 }
 
-void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
+void SAL_CALL Connection::setReadOnly(sal_Bool readOnly)
                                             throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    m_bReadOnly = readOnly;
+    m_bIsReadOnly = readOnly;
     setupTransaction();
 }
 
-sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL Connection::isReadOnly() throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
-    return m_bReadOnly;
+    return m_bIsReadOnly;
 }
 
-void SAL_CALL OConnection::setCatalog(const OUString& /*catalog*/)
+void SAL_CALL Connection::setCatalog(const OUString& /*catalog*/)
     throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException("setCatalog", *this);
 }
 
-OUString SAL_CALL OConnection::getCatalog()
+OUString SAL_CALL Connection::getCatalog()
     throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException("getCatalog", *this);
     return OUString();
 }
 
-void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     m_aTransactionIsolation = level;
     setupTransaction();
 }
 
-sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
-    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     return m_aTransactionIsolation;
 }
 
-Reference< XNameAccess > SAL_CALL OConnection::getTypeMap() throw(SQLException, RuntimeException)
+Reference< XNameAccess > SAL_CALL Connection::getTypeMap() throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::getTypeMap", *this );
     return 0;
 }
 
-void SAL_CALL OConnection::setTypeMap(const Reference< XNameAccess >& typeMap)
+void SAL_CALL Connection::setTypeMap(const Reference< XNameAccess >& typeMap)
                                             throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
@@ -609,33 +617,33 @@ void SAL_CALL OConnection::setTypeMap(const Reference< XNameAccess >& typeMap)
 }
 
 //----- XCloseable -----------------------------------------------------------
-void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::close(  ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.firebird", "close().");
 
     // we just dispose us
     {
         MutexGuard aGuard( m_aMutex );
-        checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+        checkDisposed(Connection_BASE::rBHelper.bDisposed);
 
     }
     dispose();
 }
 // --------------------------------------------------------------------------------
 // XWarningsSupplier
-Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL Connection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     // when you collected some warnings -> return it
     return Any();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL Connection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     // you should clear your collected warnings here
 }
 // --------------------------------------------------------------------------------
 // XDocumentEventListener
-void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
+void SAL_CALL Connection::documentEventOccured( const DocumentEvent& _Event )
                                                         throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -650,7 +658,7 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
         {
             SAL_INFO("connectivity.firebird", "Writing .fdb into .odb" );
 
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(sDBLocation,
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sDBLocation,
                                                             ElementModes::WRITE));
 
             using namespace ::comphelper;
@@ -658,7 +666,7 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
             Reference< XInputStream > xInputStream;
             if (xContext.is())
                 xInputStream =
-                        OStorageHelper::GetInputStreamFromURL(m_sURL, xContext);
+                        OStorageHelper::GetInputStreamFromURL(m_sFirebirdURL, xContext);
             if (xInputStream.is())
                 OStorageHelper::CopyInputToOutput( xInputStream,
                                                 xDBStream->getOutputStream());
@@ -667,12 +675,12 @@ void SAL_CALL OConnection::documentEventOccured( const DocumentEvent& _Event )
     }
 }
 // XEventListener
-void SAL_CALL OConnection::disposing(const EventObject& /*rSource*/)
+void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
     throw (RuntimeException)
 {
 }
 //--------------------------------------------------------------------
-void OConnection::buildTypeInfo() throw( SQLException)
+void Connection::buildTypeInfo() throw( SQLException)
 {
     SAL_INFO("connectivity.firebird", "buildTypeInfo().");
 
@@ -725,25 +733,24 @@ void OConnection::buildTypeInfo() throw( SQLException)
              "Closed.");
 }
 
-void OConnection::disposing()
+void Connection::disposing()
 {
     SAL_INFO("connectivity.firebird", "disposing().");
 
     MutexGuard aGuard(m_aMutex);
 
-    clearStatements();
+    disposeStatements();
 
-    m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     ISC_STATUS_ARRAY status;            /* status vector */
-    if (m_transactionHandle)
+    if (m_aTransactionHandle)
     {
         // TODO: confirm whether we need to ask the user here.
-        isc_rollback_transaction(status, &m_transactionHandle);
+        isc_rollback_transaction(status, &m_aTransactionHandle);
     }
 
-    if (isc_detach_database(status, &m_DBHandler))
+    if (isc_detach_database(status, &m_aDBHandle))
     {
         evaluateStatusVector(status, "isc_detach_database", *this);
     }
@@ -753,7 +760,7 @@ void OConnection::disposing()
     cppu::WeakComponentImplHelperBase::disposing();
 }
 
-void OConnection::clearStatements()
+void Connection::disposeStatements()
 {
     MutexGuard aGuard(m_aMutex);
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
@@ -765,7 +772,7 @@ void OConnection::clearStatements()
     m_aStatements.clear();
 }
 
-uno::Reference< XTablesSupplier > OConnection::createCatalog()
+uno::Reference< XTablesSupplier > Connection::createCatalog()
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -784,7 +791,7 @@ uno::Reference< XTablesSupplier > OConnection::createCatalog()
 
 }
 
-void OConnection::rebuildIndexes() throw(SQLException)
+void Connection::rebuildIndexes() throw(SQLException)
 {
     SAL_INFO("connectivity.firebird", "rebuildIndexes()");
     MutexGuard aGuard(m_aMutex);

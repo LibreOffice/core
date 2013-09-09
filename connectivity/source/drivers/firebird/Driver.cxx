@@ -147,7 +147,7 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     if ( ! acceptsURL(url) )
         return NULL;
 
-    OConnection* pCon = new OConnection(this);
+    Connection* pCon = new Connection(this);
     Reference< XConnection > xCon = pCon;
     pCon->construct(url, info);
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
@@ -193,7 +193,7 @@ uno::Reference< XTablesSupplier > SAL_CALL FirebirdDriver::getDataDefinitionByCo
                                     const uno::Reference< XConnection >& rConnection)
     throw(SQLException, RuntimeException)
 {
-    OConnection* pConnection = static_cast< OConnection* >(rConnection.get());
+    Connection* pConnection = static_cast< Connection* >(rConnection.get());
     return uno::Reference< XTablesSupplier >(pConnection->createCatalog(), UNO_QUERY);
 }
 

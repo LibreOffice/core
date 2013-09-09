@@ -58,7 +58,7 @@ namespace connectivity
 
             ::std::list< ::rtl::OUString>               m_aBatchList;
 
-            OConnection*                                m_pConnection;
+            Connection*                                 m_pConnection;
 
             ISC_STATUS_ARRAY                            m_statusVector;
             isc_stmt_handle                             m_aStatementHandle;
@@ -102,7 +102,7 @@ namespace connectivity
         public:
 
             ::cppu::OBroadcastHelper& rBHelper;
-            OStatementCommonBase(OConnection* _pConnection);
+            OStatementCommonBase(Connection* _pConnection);
             using OStatementCommonBase_Base::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
 
             // OComponentHelper
@@ -135,7 +135,7 @@ namespace connectivity
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // other methods
-            OConnection* getOwnConnection() const { return m_pConnection;}
+            Connection* getOwnConnection() const { return m_pConnection;}
 
         };
     }

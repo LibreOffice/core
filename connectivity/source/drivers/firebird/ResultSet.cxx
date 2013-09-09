@@ -53,7 +53,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
 
-OResultSet::OResultSet(OConnection* pConnection,
+OResultSet::OResultSet(Connection* pConnection,
                        const uno::Reference< XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* pSqlda)

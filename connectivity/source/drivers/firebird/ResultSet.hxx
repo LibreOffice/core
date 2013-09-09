@@ -74,7 +74,7 @@ namespace connectivity
             sal_Int32 m_nResultSetConcurrency;
 
         protected:
-            OConnection* m_pConnection;
+            Connection* m_pConnection;
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& m_xStatement;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
@@ -113,7 +113,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(OConnection* pConnection,
+            OResultSet(Connection* pConnection,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xStatement,
                        isc_stmt_handle& aStatementHandle,
                        XSQLDA* aSqlda);

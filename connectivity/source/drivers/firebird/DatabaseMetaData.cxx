@@ -54,7 +54,7 @@ namespace connectivity
     }
 }
 
-ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
+ODatabaseMetaData::ODatabaseMetaData(Connection* _pCon)
 : m_pConnection(_pCon)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");

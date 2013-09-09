@@ -50,7 +50,7 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,
+OPreparedStatement::OPreparedStatement( Connection* _pConnection,
                                         const TTypeInfoVector& _TypeInfo,
                                         const OUString& sql)
     :OStatementCommonBase(_pConnection)

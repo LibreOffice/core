@@ -38,7 +38,7 @@ namespace connectivity
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
         protected:
-            OConnection*    m_pConnection;
+            Connection*     m_pConnection;
             XSQLDA*         m_pSqlda;
 
             virtual ~OResultSetMetaData();
@@ -46,7 +46,7 @@ namespace connectivity
             void verifyValidColumn(sal_Int32 column) throw(::com::sun::star::sdbc::SQLException);
         public:
             // a constructor, which is required for returning objects:
-            OResultSetMetaData(OConnection* pConnection,
+            OResultSetMetaData(Connection* pConnection,
                                XSQLDA* pSqlda)
                 : m_pConnection(pConnection)
                 , m_pSqlda(pSqlda)

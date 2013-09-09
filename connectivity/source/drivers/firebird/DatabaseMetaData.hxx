@@ -37,12 +37,12 @@ namespace connectivity
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
-            OConnection*    m_pConnection;
+            Connection*    m_pConnection;
         public:
 
-            inline OConnection* getOwnConnection() const { return m_pConnection; }
+            inline Connection* getOwnConnection() const { return m_pConnection; }
 
-            ODatabaseMetaData(OConnection* _pCon);
+            ODatabaseMetaData(Connection* _pCon);
             virtual ~ODatabaseMetaData();
 
             // as I mentioned before this interface is really BIG

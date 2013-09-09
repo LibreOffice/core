@@ -44,7 +44,7 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::std;
 
-OStatementCommonBase::OStatementCommonBase(OConnection* _pConnection)
+OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
     : OStatementCommonBase_Base(_pConnection->getMutex()),
       OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),

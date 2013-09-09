@@ -96,7 +96,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             // a constructor, which is required for returning objects:
-            OPreparedStatement( OConnection* _pConnection,
+            OPreparedStatement( Connection* _pConnection,
                                 const TTypeInfoVector& _TypeInfo,
                                 const ::rtl::OUString& sql);
 
