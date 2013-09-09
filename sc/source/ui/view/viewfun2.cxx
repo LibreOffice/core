@@ -34,6 +34,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
@@ -53,6 +55,7 @@
 #include "cellmergeoption.hxx"
 #include "compiler.hxx"
 #include "docfunc.hxx"
+#include "dociter.hxx"
 #include "docpool.hxx"
 #include "docsh.hxx"
 #include "global.hxx"
@@ -79,6 +82,7 @@
 #include "tabbgcolor.hxx"
 #include "clipparam.hxx"
 #include "prnsave.hxx"
+#include "searchresults.hxx"
 #include "tokenarray.hxx"
 
 #include <boost/scoped_ptr.hpp>
@@ -1657,13 +1661,30 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
             {
+                static SearchResults *aSearchResults = new SearchResults();
+                aSearchResults->GetList()->Clear();
+
                 rMark.ResetMark();
                 for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
                 {
                     const ScRange& r = *aMatchedRanges[i];
                     if (r.aStart.Tab() == nTab)
                         rMark.SetMultiMarkArea(r);
+
+                    ScCellIterator aIter(pDoc, *aMatchedRanges[i]);
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+                    {
+                        ScAddress aCell = aIter.GetPos();
+                        OUString sTabName;
+                        pDoc->GetName( aCell.Tab(), sTabName );
+                        SvTreeListEntry *pEntry = aSearchResults->GetList()->InsertEntry(
+                                sTabName + "\t"
+                                + OUString('A' + aCell.Col()) + OUString::number(1 + aCell.Row()) + "\t"
+                                + pDoc->GetString(aCell) );
+                        pEntry->SetUserData( new ScAddress(aCell) );
+                    }
                 }
+                aSearchResults->Show();
             }
 
             break;                  // break 'while (TRUE)'
