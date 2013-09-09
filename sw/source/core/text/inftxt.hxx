@@ -205,10 +205,13 @@ public:
                    const sal_Int32 nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
 
-    inline SwTxtSizeInfo( SwTxtFrm *pTxtFrm, SwFont *pTxtFnt = 0,
+    SwTxtSizeInfo( SwTxtFrm *pTxtFrm, SwFont *pTxtFnt = 0,
                    const sal_Int32 nIndex = 0,
                    const xub_StrLen nLength = STRING_LEN )
-           { CtorInitTxtSizeInfo( pTxtFrm, pTxtFnt, nIndex, nLength ); }
+        : m_bOnWin(false)
+    {
+        CtorInitTxtSizeInfo( pTxtFrm, pTxtFnt, nIndex, nLength );
+    }
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
