@@ -168,64 +168,64 @@ struct SvxColumnDescription
 
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
-    std::vector<SvxColumnDescription> aColumns;// Column array
-    long    nLeft,      // Left edge for the table
-           nRight;      // Right edge for the table; for columns always
-                                // equal to the surrounding frame
+    typedef std::vector<SvxColumnDescription> SvxColumnDescriptionVector;
+    SvxColumnDescriptionVector aColumns; // Column array
+
+    long nLeft;             // Left edge for the table
+    long nRight;            // Right edge for the table; for columns always
+                            // equal to the surrounding frame
     sal_uInt16 nActColumn;  // the current column
     sal_uInt8  bTable;      // table?
-    sal_uInt8  bOrtho;     // evenly spread columns
+    sal_uInt8  bOrtho;      // evenly spread columns
 
 protected:
-    virtual int              operator==( const SfxPoolItem& ) const;
+    virtual int operator==( const SfxPoolItem& ) const;
 
-    virtual OUString         GetValueText() const;
+    virtual OUString GetValueText() const;
+
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    OUString &rText, const IntlWrapper * = 0 ) const;
+                                                 SfxMapUnit eCoreMetric,
+                                                 SfxMapUnit ePresMetric,
+                                                 OUString &rText,
+                                                 const IntlWrapper * = 0 ) const;
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+
 public:
     TYPEINFO();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
-    SvxColumnItem(sal_uInt16 nAct = 0); // columns
-    SvxColumnItem(sal_uInt16 nActCol,
-                  sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
-    SvxColumnItem(const SvxColumnItem &);
+    SvxColumnItem(sal_uInt16 nAct = 0);
+    SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Table with borders
+    SvxColumnItem(const SvxColumnItem& aItem);
     ~SvxColumnItem();
 
     const SvxColumnItem &operator=(const SvxColumnItem &);
 
-    sal_uInt16 Count() const { return aColumns.size(); }
-    SvxColumnDescription &operator[](sal_uInt16 i)
-        { return aColumns[i]; }
-    const SvxColumnDescription &operator[](sal_uInt16 i) const
-        { return aColumns[i]; }
-    void Insert(const SvxColumnDescription &rDesc, sal_uInt16 nPos) {
-        aColumns.insert(aColumns.begin() + nPos, rDesc);
-    }
-    void   Append(const SvxColumnDescription &rDesc) { Insert(rDesc, Count()); }
-    void   SetLeft(long left) { nLeft = left; }
-    void   SetRight(long right) { nRight = right; }
-    void   SetActColumn(sal_uInt16 nCol) { nActColumn = nCol; }
+    SvxColumnDescription&       operator[](sal_uInt16 index);
+    const SvxColumnDescription& operator[](sal_uInt16 index) const;
+    SvxColumnDescription&       At(sal_uInt16 index);
+    SvxColumnDescription&       GetActiveColumnDescription();
 
-    sal_uInt16 GetActColumn() const { return nActColumn; }
-    sal_Bool   IsFirstAct() const { return nActColumn == 0; }
-    sal_Bool   IsLastAct() const { return nActColumn == Count()-1; }
-    long GetLeft() { return nLeft; }
-    long GetRight() { return nRight; }
-
-    sal_Bool   IsTable() const { return bTable; }
-
-    sal_Bool   CalcOrtho() const;
-    void   SetOrtho(sal_Bool bVal) { bOrtho = bVal; }
-    sal_Bool   IsOrtho () const { return sal_False ; }
-
-    sal_Bool IsConsistent() const  { return nActColumn < aColumns.size(); }
+    sal_uInt16  Count() const;
+    void        Insert(const SvxColumnDescription& rDesc, sal_uInt16 nPos);
+    void        Append(const SvxColumnDescription& rDesc);
+    void        SetLeft(long aLeft);
+    void        SetRight(long aRight);
+    void        SetActColumn(sal_uInt16 nCol);
+    sal_uInt16  GetActColumn() const;
+    sal_uInt16  GetColumnDescription() const;
+    sal_Bool    IsFirstAct() const;
+    sal_Bool    IsLastAct() const;
+    long        GetLeft();
+    long        GetRight();
+    sal_Bool    IsTable() const;
+    sal_Bool    CalcOrtho() const;
+    void        SetOrtho(sal_Bool bVal);
+    sal_Bool    IsOrtho () const;
+    sal_Bool    IsConsistent() const;
 };
 
 // class SvxObjectItem ---------------------------------------------------

@@ -438,85 +438,73 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 
 //------------------------------------------------------------------------
 
-OUString SvxColumnItem::GetValueText() const
-{
-    return OUString();
-}
-
-//------------------------------------------------------------------------
-
-SfxItemPresentation SvxColumnItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           /*rText*/, const IntlWrapper *
-)   const
-{
-    return SFX_ITEM_PRESENTATION_NONE;
-}
-
-//------------------------------------------------------------------------
-
-SfxPoolItem* SvxColumnItem::Clone( SfxItemPool * ) const
-{
-    return new SvxColumnItem(*this);
-}
-
-//------------------------------------------------------------------------
-
 SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
-
-    SfxPoolItem( SID_RULER_BORDERS ),
-
-    nLeft       ( 0 ),
-    nRight      ( 0 ),
-    nActColumn  ( nAct ),
-    bTable      ( sal_False ),
-    bOrtho      (sal_True )
+    SfxPoolItem (SID_RULER_BORDERS),
+    nLeft       (0),
+    nRight      (0),
+    nActColumn  (nAct),
+    bTable      (sal_False),
+    bOrtho      (sal_True)
 
 {
 }
-
-//------------------------------------------------------------------------
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 right ) :
-
-    SfxPoolItem( SID_RULER_BORDERS ),
-
-    nLeft       ( left ),
-    nRight      ( right ),
-    nActColumn  ( nActCol ),
-    bTable      ( sal_True ),
-    bOrtho      ( sal_True )
+    SfxPoolItem (SID_RULER_BORDERS),
+    nLeft       (left),
+    nRight      (right),
+    nActColumn  (nActCol),
+    bTable      (sal_True),
+    bOrtho      (sal_True)
 {
 }
 
 SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
-    SfxPoolItem( rCopy ),
-      nLeft     ( rCopy.nLeft ),
-      nRight    ( rCopy.nRight ),
-      nActColumn( rCopy.nActColumn ),
-      bTable    ( rCopy.bTable ),
-      bOrtho    ( rCopy.bOrtho )
+    SfxPoolItem (rCopy),
+    nLeft       (rCopy.nLeft),
+    nRight      (rCopy.nRight),
+    nActColumn  (rCopy.nActColumn),
+    bTable      (rCopy.bTable),
+    bOrtho      (rCopy.bOrtho)
 {
-    for(size_t i = 0; i < rCopy.Count(); ++i)
-        aColumns.push_back(rCopy[i]);
+    aColumns.resize(rCopy.aColumns.size());
+    std::copy(rCopy.aColumns.begin(), rCopy.aColumns.end(), aColumns.begin());
 }
 
 SvxColumnItem::~SvxColumnItem()
 {
 }
 
-const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
+OUString SvxColumnItem::GetValueText() const
+{
+    return OUString();
+}
+
+SfxItemPresentation SvxColumnItem::GetPresentation(
+                                        SfxItemPresentation /*ePres*/,
+                                        SfxMapUnit          /*eCoreUnit*/,
+                                        SfxMapUnit          /*ePresUnit*/,
+                                        OUString&           /*rText*/,
+                                        const IntlWrapper*) const
+{
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+SfxPoolItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
+{
+    return new SvxColumnItem(*this);
+}
+
+const SvxColumnItem& SvxColumnItem::operator=(const SvxColumnItem& rCopy)
 {
     nLeft = rCopy.nLeft;
     nRight = rCopy.nRight;
     bTable = rCopy.bTable;
     nActColumn = rCopy.nActColumn;
-    aColumns.clear();
-    for(size_t i = 0; i < rCopy.Count(); ++i)
-        aColumns.push_back(rCopy[i]);
+    aColumns.resize(rCopy.aColumns.size());
+
+    std::copy(rCopy.aColumns.begin(), rCopy.aColumns.end(), aColumns.begin());
+
     return *this;
 }
 
@@ -536,23 +524,31 @@ sal_Bool SvxColumnItem::CalcOrtho() const
     return sal_True;
 }
 
-//------------------------------------------------------------------------
-
 bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_COLUMNARRAY:
-        {
             return false;
-        }
-        case MID_RIGHT: rVal <<= nRight; break;
-        case MID_LEFT: rVal <<= nLeft; break;
-        case MID_ORTHO: rVal <<= (sal_Bool) bOrtho; break;
-        case MID_ACTUAL: rVal <<= (sal_Int32) nActColumn; break;
-        case MID_TABLE: rVal <<= (sal_Bool) bTable; break;
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        case MID_RIGHT:
+            rVal <<= nRight;
+            break;
+        case MID_LEFT:
+            rVal <<= nLeft;
+            break;
+        case MID_ORTHO:
+            rVal <<= (sal_Bool) bOrtho;
+            break;
+        case MID_ACTUAL:
+            rVal <<= (sal_Int32) nActColumn;
+            break;
+        case MID_TABLE:
+            rVal <<= (sal_Bool) bTable;
+            break;
+        default:
+            OSL_FAIL("Wrong MemberId!");
+            return sal_False;
     }
 
     return true;
@@ -568,15 +564,132 @@ bool SvxColumnItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
         {
             return false;
         }
-        case MID_RIGHT: rVal >>= nRight; break;
-        case MID_LEFT: rVal >>= nLeft; break;
-        case MID_ORTHO: rVal >>= nVal; bOrtho = (sal_Bool) nVal; break;
-        case MID_ACTUAL: rVal >>= nVal; nActColumn = (sal_uInt16) nVal; break;
-        case MID_TABLE: rVal >>= nVal; bTable = (sal_Bool) nVal; break;
-        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
+        case MID_RIGHT:
+            rVal >>= nRight;
+            break;
+        case MID_LEFT:
+            rVal >>= nLeft;
+            break;
+        case MID_ORTHO:
+            rVal >>= nVal;
+            bOrtho = (sal_Bool) nVal;
+            break;
+        case MID_ACTUAL:
+            rVal >>= nVal;
+            nActColumn = (sal_uInt16) nVal;
+            break;
+        case MID_TABLE:
+            rVal >>= nVal;
+            bTable = (sal_Bool) nVal;
+            break;
+        default:
+            OSL_FAIL("Wrong MemberId!");
+            return sal_False;
     }
 
     return true;
+}
+
+sal_uInt16 SvxColumnItem::Count() const
+{
+    return aColumns.size();
+}
+
+SvxColumnDescription& SvxColumnItem::At(sal_uInt16 index)
+{
+    return aColumns[index];
+}
+
+SvxColumnDescription& SvxColumnItem::GetActiveColumnDescription()
+{
+    return aColumns[GetActColumn()];
+}
+
+SvxColumnDescription& SvxColumnItem::operator[](sal_uInt16 index)
+{
+    return aColumns[index];
+}
+
+const SvxColumnDescription& SvxColumnItem::operator[](sal_uInt16 index) const
+{
+    return aColumns[index];
+}
+
+void SvxColumnItem::Insert(const SvxColumnDescription &rDesc, sal_uInt16 nPos)
+{
+    aColumns.insert(aColumns.begin() + nPos, rDesc);
+}
+
+void SvxColumnItem::Append(const SvxColumnDescription &rDesc)
+{
+    Insert(rDesc, Count());
+}
+
+void SvxColumnItem::SetLeft(long left)
+{
+    nLeft = left;
+}
+
+void SvxColumnItem::SetRight(long right)
+{
+    nRight = right;
+}
+
+void SvxColumnItem::SetActColumn(sal_uInt16 nCol)
+{
+    nActColumn = nCol;
+}
+
+sal_uInt16 SvxColumnItem::GetActColumn() const
+{
+    return nActColumn;
+}
+
+sal_uInt16 SvxColumnItem::GetColumnDescription() const
+{
+    return nActColumn;
+}
+
+sal_Bool SvxColumnItem::IsFirstAct() const
+{
+    return nActColumn == 0;
+}
+
+sal_Bool SvxColumnItem::IsLastAct() const
+{
+    return nActColumn == Count() - 1;
+}
+
+long SvxColumnItem::GetLeft()
+{
+    return nLeft;
+}
+
+long SvxColumnItem::GetRight()
+{
+    return nRight;
+}
+
+sal_Bool SvxColumnItem::IsTable() const
+{
+    return bTable;
+}
+
+sal_Bool SvxColumnItem::CalcOrtho() const;
+
+void SvxColumnItem::SetOrtho(sal_Bool bVal)
+{
+    bOrtho = bVal;
+}
+
+sal_Bool SvxColumnItem::IsOrtho () const
+{
+    return sal_False;
+}
+
+sal_Bool SvxColumnItem::IsConsistent() const
+{
+    return nActColumn < aColumns.size();
 }
 
 //------------------------------------------------------------------------
