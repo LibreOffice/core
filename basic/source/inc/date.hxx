@@ -20,7 +20,15 @@
 #ifndef _SBDATE_HXX
 #define _SBDATE_HXX
 
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+
 bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+double implTimeSerial( sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond);
+bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
+                         sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
+                         double& rdRet );
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 
@@ -31,6 +39,13 @@ sal_Int16 implGetDateDay( double aDate );
 sal_Int16 implGetHour( double dDate );
 sal_Int16 implGetMinute( double dDate );
 sal_Int16 implGetSecond( double dDate );
+
+::com::sun::star::util::Date SbxDateToUNODate( const SbxValue* );
+void SbxDateFromUNODate( SbxValue*, const ::com::sun::star::util::Date& );
+::com::sun::star::util::Time SbxDateToUNOTime( const SbxValue* );
+void SbxDateFromUNOTime( SbxValue*, const ::com::sun::star::util::Time& );
+::com::sun::star::util::DateTime SbxDateToUNODateTime( const SbxValue* );
+void SbxDateFromUNODateTime( SbxValue*, const ::com::sun::star::util::DateTime& );
 
 #endif
 
