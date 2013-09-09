@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7Kw\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-09-09T13:49:14Z",
+      "side": 1,
+      "message": "Slightly less readable, what about this instead?\n\nswitch (nGroup) {\n   case KEYGROUP_NUM:\n   case KEYGROUP_CURSOR:\n   case {...}: \n        bValid \u003dtrue; break;\n   default:\n        bValid \u003dfalse;\n}",
+      "revId": "f4f733b61795d350e239b40fcca020c79bf48e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Ks\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-09-09T13:49:14Z",
+      "side": 1,
+      "message": "Why are those keys special? (asking, honestly don\u0027t know)",
+      "revId": "f4f733b61795d350e239b40fcca020c79bf48e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7K4\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-09-09T13:49:14Z",
+      "side": 1,
+      "message": "You can initialize the member variable in ctor already:\n\nModalDialog( pWindow, \"AboutConfigValueDialog\", \"cui/ui/aboutconfigvaluedialog.ui\"), \nbNumericOnly( limit !\u003d 0)",
+      "revId": "f4f733b61795d350e239b40fcca020c79bf48e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7K0\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-09-09T13:49:14Z",
+      "side": 1,
+      "message": "... and call SetMaxTextLen( limit \u003d\u003d 0 ? EDIT_NOLIMIT : limit) here \u003d\u003e then you don\u0027t need a separate setBehaviour method",
+      "revId": "f4f733b61795d350e239b40fcca020c79bf48e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Ko\u003d",
+        "filename": "cui/uiconfig/ui/aboutconfigvaluedialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2013-09-09T13:49:14Z",
+      "side": 1,
+      "message": "Custom widgets are goofy and they usually don\u0027t request optimal size by themselves -- but don\u0027t do it like this (request optimal size of parent container here). Implement CuiCustomMultilineEdit::GetOptimalSize() method in your subclass instead. \n\nInspirational commit:\nhttp://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dac5b44c087a9b5f20795875189fe1dc18a12c004",
+      "revId": "f4f733b61795d350e239b40fcca020c79bf48e79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
