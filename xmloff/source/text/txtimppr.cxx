@@ -268,6 +268,12 @@ isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPro
     return true;
 }
 
+/**
+ * Separate compressed border attributes.
+ * During export, border attributes are compressed if there are equal to all four side.
+ * Since Writer hasn't the same compressed attributes, but has distinct ones for all
+ * four side, we have to duplicate the compressed attribute during import.
+**/
 static void lcl_SeparateBorder(
     sal_uInt16 nIndex, XMLPropertyState* pAllBorderDistance,
     XMLPropertyState* pBorderDistances[4], XMLPropertyState* pNewBorderDistances[4],

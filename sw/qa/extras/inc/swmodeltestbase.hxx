@@ -359,6 +359,16 @@ protected:
     sal_uInt32 m_nStartTime;
 };
 
+/**
+ * Test whether the expected and actual borderline parameters are equal
+ * and assert if not.
+ *
+ * @param[in]   rExpected    expected borderline object
+ * @param[in]   rActual      actual borderline object
+ * @param[in]   rSourceLine  line from where the assertion is called
+ * Note: This method is the implementatition of CPPUNIT_ASSERT_BORDER_EQUAL, so
+ *       use that macro instead.
+**/
 inline void assertBorderEqual(
     const table::BorderLine2& rExpected, const table::BorderLine2& rActual,
     const CppUnit::SourceLine& rSourceLine )

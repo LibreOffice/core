@@ -10,7 +10,7 @@
 #ifndef SW_CHAR_DLG_MODES_HXX
 #define SW_CHAR_DLG_MODES_HXX
 
-//DialogModes:
+// DialogModes for SwCharDlg
 #define DLG_CHAR_STD    0
 #define DLG_CHAR_DRAW   1
 #define DLG_CHAR_ENV    2

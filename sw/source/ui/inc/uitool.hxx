@@ -39,19 +39,29 @@ class SfxViewFrame;
 // switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
 
-// fill BoxInfoAttribut
+// fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
 
 // Modes for attribute conversion
 #define CONV_ATTR_STD    1  // Standard character dialog
 #define CONV_ATTR_ENV    2  // Character dialog opened from envelope dialog
 
-// Convert character specific attributes to general ones used by tab pages
-SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode);
+/**
+ * Convert character specific attributes to general ones used by tab pages.
+ *
+ * @param[in|out]   rSet    the set in which character attributes are stored
+ * @param[in]       nMode   specify the dialog which will be called after conversion
+**/
+SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode);
 
-// Convert general attributes to the corresponding character attributes
-// This method is used after executed a character dialog
-SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, sal_uInt8 nMode);
+/**
+ * Convert general attributes to the corresponding character attributes.
+ * This method is used after executed a character dialog.
+ *
+ * @param[in|out]   rSet    the set in which character attributes are stored
+ * @param[in]       nMode   specify the dialog which was called before
+**/
+SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );

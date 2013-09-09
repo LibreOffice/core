@@ -119,7 +119,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
     rSet.Put(aBoxInfo);
 }
 
-void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode)
+void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
 {
     // Background
     {
@@ -159,7 +159,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, sal_uInt8 nMode)
     }
 }
 
-void ConvertAttrGenToChar(SfxItemSet& rSet, sal_uInt8 nMode)
+void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
 {
     // Background
     {

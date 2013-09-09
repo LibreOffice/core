@@ -443,6 +443,11 @@ public:
     void DrawViewOpt( const SwLinePortion &rPor, const MSHORT nWhich ) const;
     void DrawBackBrush( const SwLinePortion &rPor ) const;
 
+    /**
+     * Draw character border around a line portion.
+     *
+     * @param[in]   rPor    line portion around which border have to be drawn.
+    **/
     void DrawBorder( const SwLinePortion &rPor ) const;
 
     void DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const;

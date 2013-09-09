@@ -370,7 +370,6 @@ public:
     inline void Invalidate()
         { bFntChg = bOrgChg = sal_True; }
 
-    // set/get borders
     void SetTopBorder( const editeng::SvxBorderLine* pTopBorder );
     void SetBottomBorder( const editeng::SvxBorderLine* pBottomBorder );
     void SetRightBorder( const editeng::SvxBorderLine* pRightBorder );
@@ -381,7 +380,7 @@ public:
     const boost::optional<editeng::SvxBorderLine>& GetRightBorder() const { return m_aRightBorder; }
     const boost::optional<editeng::SvxBorderLine>& GetLeftBorder() const { return m_aLeftBorder; }
 
-    // Get borders which are at absolute positions
+    // Get absolute border correspond to the layout verticality and orientation.
     const boost::optional<editeng::SvxBorderLine>& GetAbsTopBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsBottomBorder( const bool bVertLayout ) const;
     const boost::optional<editeng::SvxBorderLine>& GetAbsRightBorder( const bool bVertLayout ) const;
@@ -397,22 +396,22 @@ public:
     sal_uInt16 GetRightBorderDist() const { return m_nRightBorderDist; }
     sal_uInt16 GetLeftBorderDist() const { return m_nLeftBorderDist; }
 
-    // Return with the border width plus spacing
+    // Return with the whole space which border holed (border width, spacing and shadow width)
     sal_uInt16 GetTopBorderSpace() const;
     sal_uInt16 GetBottomBorderSpace() const;
     sal_uInt16 GetRightBorderSpace() const;
     sal_uInt16 GetLeftBorderSpace() const;
 
+    /// Check whether font has any border on any side
     bool HasBorder() const;
 
-    // Shadow attributes
     void SetShadowColor( const Color& rColor );
     void SetShadowWidth( const sal_uInt16 nWidth );
     void SetShadowLocation( const SvxShadowLocation aLocation );
 
-    const Color& GetShadowColor() const { return m_aShadowColor; }
-    sal_uInt16 GetShadowWidth() const { return m_nShadowWidth; }
-    SvxShadowLocation GetShadowLocation() const { return m_aShadowLocation; }
+    const Color&        GetShadowColor() const { return m_aShadowColor; }
+    sal_uInt16          GetShadowWidth() const { return m_nShadowWidth; }
+    SvxShadowLocation   GetShadowLocation() const { return m_aShadowLocation; }
 
     /**
      * Get the absolute shadow location dependant from orientation.

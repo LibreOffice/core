@@ -65,7 +65,15 @@ void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
 // Created declaration here to avoid <extern> declarations
 void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
-// Paint character border using frame painting code
+/**
+ * Paint border around a run of characters using frame painting code.
+ *
+ * @param[in]   rFont            font object of actual text, which specify the border
+ * @param[in]   rPaintArea       rectangle area in which line portion takes place
+ * @param[in]   bVerticalLayout  corresponding text frame verticality
+ * @param[in]   bJoinWithPrev    leave border with which actual border joins to the previous portion
+ * @param[in]   bJoinWithNext    leave border with which actual border joins to the next portion
+**/
 void PaintCharacterBorder(
     const SwFont& rFont, const SwRect& rPaintArea, const bool bVerticalLayout,
     const bool bJoinWithPrev, const bool bJoinWithNext );
