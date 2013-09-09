@@ -63,12 +63,12 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 {
     Font            aFont;
     GraphicObject*  pGraphicObject;
-    String          aPrevText;
-    String          aFollowText;
-    sal_uInt16          nStart;
-    sal_uInt16          nStyle;
+    OUString        aPrevText;
+    OUString        aFollowText;
+    sal_uInt16      nStart;
+    sal_uInt16      nStyle;
     long            nWidth;
-    sal_uInt16          nScale;
+    sal_uInt16      nScale;
     sal_Unicode     cSymbol;
     sal_uInt8       nJustify;
     sal_uInt16      nValidMask; // Only temporary for GetAttribs / setAttribs,
@@ -91,22 +91,22 @@ public:
 
     OUString            GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
-    String              GetPrevText() const { return aPrevText; }
-    String              GetFollowText() const { return aFollowText; }
+    OUString            GetPrevText() const { return aPrevText; }
+    OUString            GetFollowText() const { return aFollowText; }
 
-    sal_uInt16              GetStart() const { return nStart; }
+    sal_uInt16          GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
-    sal_uInt16              GetStyle() const { return nStyle; }
-    sal_uInt8                GetJustification() const { return nJustify; }
+    sal_uInt16          GetStyle() const { return nStyle; }
+    sal_uInt8           GetJustification() const { return nJustify; }
     Font                GetFont() const { return aFont; }
-    sal_uInt16              GetScale() const { return nScale; }
+    sal_uInt16          GetScale() const { return nScale; }
 
     const GraphicObject& GetGraphicObject() const;
     void                 SetGraphicObject( const GraphicObject& rGraphicObject );
 
     void                SetSymbol( sal_Unicode c) { cSymbol = c; }
-    void                SetPrevText( const String& rStr) { aPrevText = rStr;}
-    void                SetFollowText(const String& rStr) { aFollowText=rStr;}
+    void                SetPrevText( const OUString& rStr) { aPrevText = rStr;}
+    void                SetFollowText(const OUString& rStr) { aFollowText=rStr;}
 
     void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
     void                SetWidth( long nNew ) { nWidth = nNew; }
