@@ -311,7 +311,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
     return concatSequences(OPropertySetHelper::getTypes(), OResultSet_BASE::getTypes());
 }
 // ---- XColumnLocate ---------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
+sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
     throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_pConnection->getMutex());
@@ -325,15 +325,19 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
     {
         // We assume case sensitive, otherwise you'd have to test
         // xMeta->isCaseSensitive and use qualsIgnoreAsciiCase as needed.
-        if (columnName == xMeta->getColumnName(i))
-            break;
+        if (rColumnName == xMeta->getColumnName(i))
+            return i;
     }
 
-    // TODO: add appropriate error
-    if (i > nLen)
-        throw SQLException();
-
-    return i;
+    // The API documentation (XRowLocate) doesn't specify what should happen
+    // if the column name isn't found. The JDBC api specifies that an SQLException
+    // should be thrown. Most drivers return either -1 (some don't check for this
+    // case and just return nLen), however the JDBC specification seems more
+    // correct (in the case of the JDBC/HSQLDB drivers the SQLException is
+    // just propagated from the JDBC call, hence should be expected by any
+    // SDBC user too).
+    ::dbtools::throwSQLException("Invalid column name", SQL_COLUMN_NOT_FOUND, *this);
+    return -1; // Never reached
 }
 // -------------------------------------------------------------------------
 uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
