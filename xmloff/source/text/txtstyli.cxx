@@ -61,7 +61,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 
-static SvXMLEnumMapEntry aCategoryMap[] =
+static const SvXMLEnumMapEntry aCategoryMap[] =
 {
     { XML_TEXT,     ParagraphStyleCategory::TEXT },
     { XML_CHAPTER,  ParagraphStyleCategory::CHAPTER },

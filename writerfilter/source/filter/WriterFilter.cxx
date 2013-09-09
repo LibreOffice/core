@@ -43,7 +43,7 @@ WriterFilter::~WriterFilter()
 extern "C"
 {
 /* shared lib exports implemented with helpers */
-static struct ::cppu::ImplementationEntry s_component_entries [] =
+static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     { WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
     { WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0} ,

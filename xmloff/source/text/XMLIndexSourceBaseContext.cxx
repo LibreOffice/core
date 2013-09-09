@@ -44,7 +44,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
 
-static SvXMLTokenMapEntry aIndexSourceTokenMap[] =
+static const SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
     { XML_NAMESPACE_TEXT,
           XML_OUTLINE_LEVEL,

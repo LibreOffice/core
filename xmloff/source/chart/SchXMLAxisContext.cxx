@@ -51,7 +51,7 @@ using namespace com::sun::star;
 
 using com::sun::star::uno::Reference;
 
-static SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
+static const SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
@@ -59,7 +59,7 @@ static SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry aXMLAxisTypeMap[] =
+static const SvXMLEnumMapEntry aXMLAxisTypeMap[] =
 {
     { XML_AUTO,  ::com::sun::star::chart::ChartAxisType::AUTOMATIC },
     { XML_TEXT,  ::com::sun::star::chart::ChartAxisType::CATEGORY },

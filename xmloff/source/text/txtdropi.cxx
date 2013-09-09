@@ -47,7 +47,7 @@ enum SvXMLTokenMapDropAttrs
     XML_TOK_DROP_END=XML_TOK_UNKNOWN
 };
 
-static SvXMLTokenMapEntry aDropAttrTokenMap[] =
+static const SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
     { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },

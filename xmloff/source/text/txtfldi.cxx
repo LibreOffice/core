@@ -2996,7 +2996,7 @@ enum DdeFieldDeclAttrs
     XML_TOK_DDEFIELD_UPDATE
 };
 
-static SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
+static const SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_DDEFIELD_NAME },
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, XML_TOK_DDEFIELD_APPLICATION },
@@ -3369,7 +3369,7 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 }
 
 // TODO: this is the same map as is used in the text field export
-SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
+static SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },
