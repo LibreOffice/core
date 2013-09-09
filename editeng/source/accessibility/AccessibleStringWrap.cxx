@@ -31,7 +31,7 @@
 //
 //------------------------------------------------------------------------
 
-AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const String& rText ) :
+AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText ) :
     mrDev( rDev ),
     mrFont( rFont ),
     maText( rText )
@@ -46,7 +46,7 @@ sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& 
     mrFont.SetPhysFont( &mrDev );
 
     // #108900# Handle virtual position one-past-the end of the string
-    if( nIndex >= maText.Len() )
+    if( nIndex >= maText.getLength() )
     {
         // create a caret bounding rect that has the height of the
         // current font and is one pixel wide.
@@ -78,7 +78,7 @@ sal_Int32 AccessibleStringWrap::GetIndexAtPoint( const Point& rPoint )
 {
     // search for character bounding box containing given point
     Rectangle aRect;
-    sal_Int32 i, nLen = maText.Len();
+    sal_Int32 i, nLen = maText.getLength();
     for( i=0; i<nLen; ++i )
     {
         GetCharacterBounds(i, aRect);
