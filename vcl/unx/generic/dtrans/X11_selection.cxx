@@ -3223,8 +3223,8 @@ void SelectionManager::startDrag(
         // of our DropTargets at the time of executeDrag we can use
         // them for a start
         XLIB_Window aRoot, aParent, aChild;
-        int root_x, root_y, win_x, win_y;
-        unsigned int mask;
+        int root_x(0), root_y(0), win_x(0), win_y(0);
+        unsigned int mask(0);
 
         ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it;
         it = m_aDropTargets.begin();
