@@ -907,7 +907,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 #endif
             }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Exited with code '%d'\n", child_get_exit_code (info));
 #endif
 
@@ -915,14 +915,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             g_pProcess = 0; // reset
             switch (status) {
             case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 fprintf (stderr, "oosplash: re-start with just -env: params !\n");
 #endif
                 bRestart = sal_True;
                 bAllArgs = sal_False;
                 break;
             case EXITHELPER_NORMAL_RESTART: // re-start with all arguments
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
                 fprintf (stderr, "oosplash: re-start with all params !\n");
 #endif
                 bRestart = sal_True;
