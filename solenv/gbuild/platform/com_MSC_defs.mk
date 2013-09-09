@@ -275,7 +275,7 @@ gb_CFLAGS+=$(gb_DEBUG_CFLAGS)
 gb_CXXFLAGS+=$(gb_DEBUG_CFLAGS)
 endif
 
-gb_COMPILEROPTFLAGS := -O2
+gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 
 ifeq ($(gb_FULLDEPS),$(true))
