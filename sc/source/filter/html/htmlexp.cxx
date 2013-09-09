@@ -566,11 +566,11 @@ void ScHTMLExport::WriteBody()
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
     {
-        const String* pLink = pBrushItem->GetGraphicLink();
+        OUString aLink = pBrushItem->GetGraphicLink();
         String aGrfNm;
 
         // Embedded graphic -> write using WriteGraphic
-        if( !pLink )
+        if( aLink.isEmpty() )
         {
             const Graphic* pGrf = pBrushItem->GetGraphic();
             if( pGrf )
@@ -588,13 +588,13 @@ void ScHTMLExport::WriteBody()
                             aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
                     if ( HasCId() )
                         MakeCIdURL( aGrfNm );
-                    pLink = &aGrfNm;
+                    aLink = aGrfNm;
                 }
             }
         }
         else
         {
-            aGrfNm = *pLink;
+            aGrfNm = aLink;
             if( bCopyLocalFileToINet || HasCId() )
             {
                 CopyLocalFileToINet( aGrfNm, aStreamPath );
@@ -605,14 +605,14 @@ void ScHTMLExport::WriteBody()
                 aGrfNm = URIHelper::SmartRel2Abs(
                         INetURLObject(aBaseURL),
                         aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-            pLink = &aGrfNm;
+            aLink = aGrfNm;
         }
-        if( pLink )
+        if( !aLink.isEmpty() )
         {
             rStrm << ' ' << OOO_STRING_SVTOOLS_HTML_O_background << "=\"";
             OUT_STR( URIHelper::simpleNormalizedMakeRelative(
                         aBaseURL,
-                        *pLink ) ) << '\"';
+                        aLink ) ) << '\"';
         }
     }
     if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )

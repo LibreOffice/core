@@ -829,13 +829,13 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 if ( !bIsLink && !bIsGraphicValid )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
-                if (    bGraphTransparencyChanged ||
-                        eNewPos != eOldPos
+                if (   bGraphTransparencyChanged ||
+                       eNewPos != eOldPos
                     || bIsLink != bWasLink
-                    || ( bWasLink  &&    *rOldItem.GetGraphicLink()
-                                      != aBgdGraphicPath )
-                    || ( !bWasLink &&    rOldItem.GetGraphic()->GetBitmap()
-                                      != aBgdGraphic.GetBitmap() )
+                    || ( bWasLink  && rOldItem.GetGraphicLink()
+                                       != aBgdGraphicPath )
+                    || ( !bWasLink && rOldItem.GetGraphic()->GetBitmap()
+                                       != aBgdGraphic.GetBitmap() )
                    )
                 {
                     bModified = sal_True;
@@ -1035,7 +1035,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
             SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
 
             int bBitmapChanged = ( ( eNewPos != eOldPos ) ||
-                                   ( *rOldItem.GetGraphicLink() != aBgdGraphicPath ) );
+                                   ( rOldItem.GetGraphicLink() != aBgdGraphicPath ) );
             int bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
             if( bBitmapChanged || bBrushChanged )
             {
@@ -1846,19 +1846,19 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     }
     else
     {
-        const String*   pStrLink   = rBgdAttr.GetGraphicLink();
-        const String*   pStrFilter = rBgdAttr.GetGraphicFilter();
+        const OUString  aStrLink   = rBgdAttr.GetGraphicLink();
+        const OUString  aStrFilter = rBgdAttr.GetGraphicFilter();
 
         lcl_setFillStyle(m_pLbSelect, XFILL_BITMAP);
         ShowBitmapUI_Impl();
 
-        if ( pStrLink )
+        if ( !aStrLink.isEmpty() )
         {
 #ifdef DBG_UTIL
-            INetURLObject aObj( *pStrLink );
+            INetURLObject aObj( aStrLink );
             DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 #endif
-            aBgdGraphicPath = *pStrLink;
+            aBgdGraphicPath = aStrLink;
             m_pBtnLink->Check( sal_True );
             m_pBtnLink->Enable();
         }
@@ -1881,12 +1881,9 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         FileClickHdl_Impl(m_pBtnLink);
 
-        if ( pStrFilter )
-            aBgdGraphicFilter = *pStrFilter;
-        else
-            aBgdGraphicFilter.Erase();
+        aBgdGraphicFilter = aStrFilter;
 
-        if ( !pStrLink || m_pBtnPreview->IsChecked() )
+        if ( aStrLink.isEmpty() || m_pBtnPreview->IsChecked() )
         {
             // Graphic exists in the item and doesn't have
             // to be loaded:

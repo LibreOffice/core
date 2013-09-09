@@ -269,7 +269,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         // in SD or SI force bullet itself to be stored,
         // for that purpose throw away link when link and graphic
         // are present, so Brush save is forced
-        if(pGraphicBrush->GetGraphicLink() && pGraphicBrush->GetGraphic())
+        if(!pGraphicBrush->GetGraphicLink().isEmpty() && pGraphicBrush->GetGraphic())
         {
             String aEmpty;
             pGraphicBrush->SetGraphicLink(aEmpty);
@@ -421,10 +421,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
 
 void SvxNumberFormat::SetGraphic( const OUString& rName )
 {
-    const String* pName;
-    if( pGraphicBrush &&
-            0 != (pName = pGraphicBrush->GetGraphicLink())
-                && *pName == rName )
+    if( pGraphicBrush && pGraphicBrush->GetGraphicLink() == rName )
         return ;
 
     delete pGraphicBrush;
@@ -915,17 +912,15 @@ sal_Bool SvxNumRule::UnLinkGraphics()
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
-        const String* pLinkStr;
         const Graphic* pGraphic;
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
             if(pBrush &&
-                0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                    pLinkStr->Len() &&
-                    0 !=(pGraphic = pBrush->GetGraphic()))
+                !pBrush->GetGraphicLink().isEmpty() &&
+                    0 != (pGraphic = pBrush->GetGraphic()))
             {
                 SvxBrushItem aTempItem(*pBrush);
-                aTempItem.SetGraphicLink( String());
+                aTempItem.SetGraphicLink("");
                 aTempItem.SetGraphic(*pGraphic);
                 sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );

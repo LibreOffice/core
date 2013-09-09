@@ -222,8 +222,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
             aExampleWN.SetFrameSize( aOrigSize );
 
             bFound = sal_True;
-            if( ((SvxBrushItem*)pItem)->GetGraphicLink() )
-                aGraphicName = *((SvxBrushItem*)pItem)->GetGraphicLink();
+            if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
+                aGraphicName = ((SvxBrushItem*)pItem)->GetGraphicLink();
         }
     }
 
@@ -349,9 +349,9 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
-        if( rBrush.GetGraphicLink() &&
-            aGraphicName != *rBrush.GetGraphicLink() )
-            aGraphicName = *rBrush.GetGraphicLink();
+        if( !rBrush.GetGraphicLink().isEmpty() &&
+            aGraphicName != rBrush.GetGraphicLink() )
+            aGraphicName = rBrush.GetGraphicLink();
 
         const Graphic* pGrf = rBrush.GetGraphic();
         if( pGrf )

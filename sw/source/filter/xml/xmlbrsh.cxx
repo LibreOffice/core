@@ -119,7 +119,7 @@ SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
     if( xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
-        if( !xBase64Stream.is() && !pItem->GetGraphicLink() )
+        if( !xBase64Stream.is() && pItem->GetGraphicLink().isEmpty() )
         {
             const GraphicObject *pGrObj = pItem->GetGraphicObject();
             if( !pGrObj || GRAPHIC_NONE == pGrObj->GetType() )
@@ -150,7 +150,7 @@ void SwXMLBrushItemImportContext::EndElement()
         SvXMLImportItemMapper::PutXMLValue( *pItem, sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
     }
 
-    if( !(pItem->GetGraphicLink() || pItem->GetGraphic() ) )
+    if( pItem->GetGraphicLink().isEmpty() && !(pItem->GetGraphic()) )
         pItem->SetGraphicPos( GPOS_NONE );
     else if( GPOS_NONE == pItem->GetGraphicPos() )
         pItem->SetGraphicPos( GPOS_TILED );

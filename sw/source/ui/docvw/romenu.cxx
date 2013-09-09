@@ -157,7 +157,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( GPOS_NONE != pItem->GetGraphicPos() )
     {
         bEnableBack = sal_True;
-        if ( pItem->GetGraphicLink() )
+        if ( !pItem->GetGraphicLink().isEmpty() )
         {
             if ( aThemeList.empty() )
                 GalleryExplorer::FillThemeList( aThemeList );
@@ -240,13 +240,13 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
     SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();
     if ( nId >= MN_READONLY_GRAPHICTOGALLERY )
     {
-        String sTmp;
+        OUString sTmp;
         sal_uInt16 nSaveId;
         if ( nId >= MN_READONLY_BACKGROUNDTOGALLERY )
         {
             nId -= MN_READONLY_BACKGROUNDTOGALLERY+3;
             nSaveId = MN_READONLY_SAVEBACKGROUND;
-            sTmp = *pItem->GetGraphicLink();
+            sTmp = pItem->GetGraphicLink();
         }
         else
         {
@@ -257,7 +257,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
         if ( !bGrfToGalleryAsLnk )
             sTmp = SaveGraphic( nSaveId );
 
-        if ( sTmp.Len() )
+        if ( !sTmp.isEmpty() )
             GalleryExplorer::InsertURL( aThemeList[nId], sTmp );
 
         return;
@@ -347,15 +347,15 @@ String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
     // fish out the graphic's name
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
-        if ( pItem->GetGraphicLink() )
-            sGrfName = *pItem->GetGraphicLink();
+        if ( !pItem->GetGraphicLink().isEmpty() )
+            sGrfName = pItem->GetGraphicLink();
         ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
         const Graphic *pGrf = pItem->GetGraphic();
         if ( pGrf )
         {
             aGraphic = *pGrf;
-            if ( pItem->GetGraphicLink() )
-                sGrfName = *pItem->GetGraphicLink();
+            if ( !pItem->GetGraphicLink().isEmpty() )
+                sGrfName = pItem->GetGraphicLink();
         }
         else
             return aEmptyStr;

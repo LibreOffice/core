@@ -29,7 +29,6 @@
 class Graphic;
 class GraphicObject;
 class CntWallpaperItem;
-class String;
 
 #define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 
@@ -51,10 +50,10 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     Color               aColor;
     sal_Int32           nShadingValue;
     SvxBrushItem_Impl*  pImpl;
-    String*             pStrLink;
-    String*             pStrFilter;
+    OUString            maStrLink;
+    OUString            maStrFilter;
     SvxGraphicPosition  eGraphicPos;
-    sal_Bool                bLoadAgain;
+    sal_Bool            bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
@@ -72,7 +71,7 @@ public:
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const String& rLink, const String& rFilter,
+    SvxBrushItem( const OUString& rLink, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
@@ -108,15 +107,15 @@ public:
     sal_uInt32              GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic() const;
     const GraphicObject*    GetGraphicObject() const;
-    const String*           GetGraphicLink() const      { return pStrLink; }
-    const String*           GetGraphicFilter() const    { return pStrFilter; }
+    OUString                GetGraphicLink() const      { return maStrLink; }
+    OUString                GetGraphicFilter() const    { return maStrFilter; }
 
     void                SetShadingValue( const sal_uInt32 nNew );
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );
-    void                SetGraphicLink( const String& rNew );
-    void                SetGraphicFilter( const String& rNew );
+    void                SetGraphicLink( const OUString& rNew );
+    void                SetGraphicFilter( const OUString& rNew );
 
     SvxBrushItem&       operator=( const SvxBrushItem& rItem);
 

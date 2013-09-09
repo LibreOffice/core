@@ -907,14 +907,14 @@ void SwHTMLParser::InsertBodyOptions()
     if( bBGColor && !pCSS1Parser->IsBodyBGColorSet() )
     {
         // Hintergrundfarbe aus "BGCOLOR"
-        String aLink;
-        if( aBrushItem.GetGraphicLink() )
-            aLink = *aBrushItem.GetGraphicLink();
+        OUString aLink;
+        if( !aBrushItem.GetGraphicLink().isEmpty() )
+            aLink = aBrushItem.GetGraphicLink();
         SvxGraphicPosition ePos = aBrushItem.GetGraphicPos();
 
         aBrushItem.SetColor( aBGColor );
 
-        if( aLink.Len() )
+        if( !aLink.isEmpty() )
         {
             aBrushItem.SetGraphicLink( aLink );
             aBrushItem.SetGraphicPos( ePos );

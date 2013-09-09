@@ -373,15 +373,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( SFX_ITEM_SET == pSet->GetItemState(
                                         SID_ATTR_GRAF_GRAPHIC, sal_True, &pItem ))
                 {
-                    if( ((SvxBrushItem*)pItem)->GetGraphicLink() )
-                        sGrfNm = *((SvxBrushItem*)pItem)->GetGraphicLink();
+                    if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
+                        sGrfNm = ((SvxBrushItem*)pItem)->GetGraphicLink();
                     else
-                        sGrfNm = OUString();
+                        sGrfNm = "";
 
-                    if( ((SvxBrushItem*)pItem)->GetGraphicFilter() )
-                        sFilterNm = *((SvxBrushItem*)pItem)->GetGraphicFilter();
+                    if( !((SvxBrushItem*)pItem)->GetGraphicFilter().isEmpty() )
+                        sFilterNm = ((SvxBrushItem*)pItem)->GetGraphicFilter();
                     else
-                        sFilterNm = OUString();
+                        sFilterNm = "";
 
                     if( !sGrfNm.isEmpty() )
                     {

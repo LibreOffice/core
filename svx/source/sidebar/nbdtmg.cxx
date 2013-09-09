@@ -682,11 +682,11 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
 
     if ( pGrf )
     {
-        const String* pGrfName = pBrsh->GetGraphicLink();
+        const OUString aGrfName = pBrsh->GetGraphicLink();
         //String* pGrfName = (String*)(pBrsh->GetGraphicLink());
         GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
-        if ( pGrfName )
-            pEntry->sGrfName = *pGrfName;
+        if ( !aGrfName.isEmpty() )
+            pEntry->sGrfName = aGrfName;
         //pEntry->sDescription = sEmpty;
         pEntry->nGallaryIndex = (sal_uInt16)0xFFFF;
         pEntry->bIsCustomized = sal_True;
@@ -1073,10 +1073,10 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
         OUString sEmpty;
         if ( pGrf )
         {
-            const String* pGrfName = pBrsh->GetGraphicLink();
+            const OUString aGrfName = pBrsh->GetGraphicLink();
             GrfBulDataRelation* pEntry = (GrfBulDataRelation*) (pActualBullets[nIndex]->pBullets);
-            if ( pGrfName )
-                pEntry->sGrfName = *pGrfName;
+            if ( !aGrfName.isEmpty() )
+                pEntry->sGrfName = aGrfName;
             GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
             {
                 pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
@@ -1125,16 +1125,16 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             else
                 return sal_False;
 
-            const String* pGrfName = 0;
+            OUString aGrfName;
             if ( pGrf )
             {
-                pGrfName = pBrsh->GetGraphicLink();
+                aGrfName = pBrsh->GetGraphicLink();
 
                 pActualBullets[nIndex]->eType = eNBType::GRAPHICBULLETS;
                 pActualBullets[nIndex]->nIndex = nIndex+1; //index in the tab page display,decrease 1 to the index within arr
                 pActualBullets[nIndex]->pBullets = new GrfBulDataRelation(eNBType::GRAPHICBULLETS) ;
-                if (pGrfName)
-                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sGrfName = *pGrfName;
+                if (!aGrfName.isEmpty())
+                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sGrfName = aGrfName;
                 ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->bIsCustomized = sal_True;
                 ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->eType = eNBType::GRAPHICBULLETS;
                 GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();

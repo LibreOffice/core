@@ -2440,9 +2440,9 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
-        if( rBrush.GetGraphicLink() )
+        if( !rBrush.GetGraphicLink().isEmpty() )
         {
-            aGrfName = aNewGrfName = *rBrush.GetGraphicLink();
+            aGrfName = aNewGrfName = rBrush.GetGraphicLink();
             m_pConnectED->SetText( aNewGrfName );
         }
         const Graphic* pGrf = rBrush.GetGraphic();

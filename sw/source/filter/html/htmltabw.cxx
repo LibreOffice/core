@@ -146,7 +146,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
         bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
-               rBrushItem.GetGraphicLink() || rBrushItem.GetGraphic();
+               !rBrushItem.GetGraphicLink().isEmpty() || rBrushItem.GetGraphic();
     }
     else
     {
@@ -175,7 +175,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
     sal_Bool bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
-           rBrushItem.GetGraphicLink() || rBrushItem.GetGraphic();
+           !rBrushItem.GetGraphicLink().isEmpty() || rBrushItem.GetGraphic();
 
     if( !bRet )
     {

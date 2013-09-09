@@ -126,10 +126,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
                 {
                     const SvxBrushItem* pBrush = aFmt.GetBrush();
-                    const String* pLinkStr;
-                    if(pBrush &&
-                        0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                            pLinkStr->Len())
+                    if(pBrush && !pBrush->GetGraphicLink().isEmpty())
                         aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
                     aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                 }
@@ -289,10 +286,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
             if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
             {
                 const SvxBrushItem* pBrush = aFmt.GetBrush();
-                const String* pLinkStr;
-                if(pBrush &&
-                    0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                        pLinkStr->Len())
+                if( pBrush && !pBrush->GetGraphicLink().isEmpty() )
                     aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
                 aSvxRule.SetLevel(i, aFmt, aSvxRule.Get(i) != 0);
             }
