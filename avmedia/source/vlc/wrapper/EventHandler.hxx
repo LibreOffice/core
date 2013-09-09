@@ -22,7 +22,7 @@ namespace VLC
         void stop();
 
     protected:
-        virtual void run();
+        virtual void SAL_CALL run();
 
     public:
         typedef boost::function< void() > TCallback;
