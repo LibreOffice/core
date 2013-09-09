@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7HI\u003d",
+        "filename": "comphelper/source/misc/expandmacro.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "const Reference now, but not const reference yet. ;)",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7HE\u003d",
+        "filename": "include/comphelper/expandmacro.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "Maybe an example of which macros exactly get expanded would be helpful here",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7HA\u003d",
+        "filename": "include/comphelper/expandmacro.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "In LibO code, there is a difference between file urls, and system paths. which one is expected here?",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7G8\u003d",
+        "filename": "include/comphelper/expandmacro.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "just to stress that here - is a file url or a system path returned?\n\n(same applies to the other function)",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7G4\u003d",
+        "filename": "include/comphelper/expandmacro.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "This is no public api, so noone outside core code can use it anyway. therefore the version is not relevant - every client code is by definition of the matching version.",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7G0\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "extra whitespace? why?",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Gw\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "let\u0027s stick to ASCII values in source code, if at all possible",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Gs\u003d",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T22:18:05Z",
+      "side": 1,
+      "message": "both seem unneeded now?",
+      "revId": "c07c1221da286f2bf6fd3b480d06556cf194fd18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
