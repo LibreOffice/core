@@ -1084,7 +1084,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
                 if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
                 {
-                    if (xRangeProperties.is())
+                    if (xRangeProperties.is() && rDM_Impl.IsNewDoc())
                         xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
                                 uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
                 }
