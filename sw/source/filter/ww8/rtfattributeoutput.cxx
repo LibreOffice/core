@@ -101,6 +101,8 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
+using ::editeng::SvxBorderLine;
+
 using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;

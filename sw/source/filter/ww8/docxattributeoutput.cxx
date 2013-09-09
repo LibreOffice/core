@@ -112,6 +112,8 @@
 #include <stdio.h>
 #endif
 
+using ::editeng::SvxBorderLine;
+
 using namespace oox;
 using namespace docx;
 using namespace sax_fastparser;
