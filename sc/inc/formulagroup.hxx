@@ -15,6 +15,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/unordered_set.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -23,13 +24,17 @@ namespace sc {
 
 struct FormulaGroupContext : boost::noncopyable
 {
+    typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
     typedef std::vector<double> NumArrayType;
-    typedef std::vector<OUString> StrArrayType;
+    typedef std::vector<rtl_uString*> StrArrayType;
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
+    StrHashType maStrPool;
     NumArrayStoreType maNumArrays;
     StrArrayStoreType maStrArrays;
+
+    rtl_uString* intern( const OUString& rStr );
 };
 
 /**

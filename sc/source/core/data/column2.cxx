@@ -2256,8 +2256,16 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
             if (nLenRequested <= nLen)
             {
                 // Requested length fits a single block.
+                rCxt.maStrArrays.push_back(new sc::FormulaGroupContext::StrArrayType);
+                sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
+                rArray.reserve(nLenRequested);
+
                 const OUString* p = &sc::string_block::at(*aPos.first->data, aPos.second);
-                return formula::VectorRefArray(p);
+                const OUString* pEnd = p + nLenRequested;
+                for (; p != pEnd; ++p)
+                    rArray.push_back(rCxt.intern(*p));
+
+                return formula::VectorRefArray(&rArray[0]);
             }
 
             // TODO: handle cases where the requested length goes beyond the

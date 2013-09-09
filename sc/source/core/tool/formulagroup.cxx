@@ -29,6 +29,23 @@
 
 namespace sc {
 
+rtl_uString* FormulaGroupContext::intern( const OUString& rStr )
+{
+    StrHashType::iterator it = maStrPool.find(rStr);
+    if (it == maStrPool.end())
+    {
+        // Not yet in the pool.
+        std::pair<StrHashType::iterator, bool> r = maStrPool.insert(rStr.intern());
+        if (!r.second)
+            // Insertion failed.
+            return NULL;
+
+        it = r.first;
+    }
+
+    return it->pData;
+}
+
 namespace {
 
 /**
@@ -63,7 +80,49 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
     {
         // Flush last non-NaN segment to the matrix.
         rMat.PutDouble(pHead, p - pHead, nCol, pHead - pNums);
-        pHead = NULL;
+    }
+}
+
+void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
+{
+    rtl_uString** p = pStrs;
+    rtl_uString** pEnd = p + nLen;
+    rtl_uString** pHead = NULL;
+    for (; p != pEnd; ++p)
+    {
+        if (*p)
+        {
+            if (!pHead)
+                // Store the first non-empty string position.
+                pHead = p;
+
+            continue;
+        }
+
+        if (pHead)
+        {
+            // Flush this non-empty segment to the matrix.
+            size_t nOffset = pHead - pStrs;
+            std::vector<OUString> aStrs;
+            aStrs.reserve(p - pHead);
+            for (; pHead != p; ++pHead)
+                aStrs.push_back(OUString(*pHead));
+
+            rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
+            pHead = NULL;
+        }
+    }
+
+    if (pHead)
+    {
+        // Flush last non-empty segment to the matrix.
+        size_t nOffset = pHead - pStrs;
+        std::vector<OUString> aStrs;
+        aStrs.reserve(p - pHead);
+        for (; pHead != p; ++pHead)
+            aStrs.push_back(OUString(*pHead));
+
+        rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
     }
 }
 
@@ -124,7 +183,14 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                             aCode2.AddDouble(fVal);
                     }
                     else
-                        aCode2.AddString(static_cast<size_t>(i) < p2->GetArrayLength() ? rArray.mpStringArray[i] : OUString());
+                    {
+                        rtl_uString* pStr = NULL;
+                        if (static_cast<size_t>(i) < p2->GetArrayLength())
+                            pStr = rArray.mpStringArray[i];
+
+                        if (pStr)
+                            aCode2.AddString(OUString(pStr));
+                    }
                 }
                 break;
                 case formula::svDoubleVectorRef:
@@ -138,6 +204,10 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize));
+                    if (p2->GetArrayLength() < nRowSize)
+                        // Data array is shorter than the row size of the reference. Truncate it.
+                        nRowSize = p2->GetArrayLength();
+
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const formula::VectorRefArray& rArray = rArrays[nCol];
@@ -149,9 +219,9 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         }
                         else
                         {
-                            const OUString* pStrs = rArray.mpStringArray;
+                            rtl_uString** pStrs = rArray.mpStringArray;
                             pStrs += nRowStart;
-                            pMat->PutString(pStrs, nRowSize, nCol, 0);
+                            fillMatrix(*pMat, nCol, pStrs, nRowSize);
                         }
                     }
 

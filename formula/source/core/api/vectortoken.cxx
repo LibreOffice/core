@@ -13,7 +13,7 @@ namespace formula {
 
 VectorRefArray::VectorRefArray() : mpNumericArray(NULL), mbNumeric(true) {}
 VectorRefArray::VectorRefArray( const double* pArray ) : mpNumericArray(pArray), mbNumeric(true) {}
-VectorRefArray::VectorRefArray( const OUString* pArray ) : mpStringArray(pArray), mbNumeric(false) {}
+VectorRefArray::VectorRefArray( rtl_uString** pArray ) : mpStringArray(pArray), mbNumeric(false) {}
 
 SingleVectorRefToken::SingleVectorRefToken( const double* pArray, size_t nLength ) :
     FormulaToken(svSingleVectorRef, ocPush), maArray(pArray), mnArrayLength(nLength) {}

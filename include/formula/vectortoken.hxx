@@ -18,14 +18,14 @@ struct FORMULA_DLLPUBLIC VectorRefArray
 {
     union {
         const double* mpNumericArray;
-        const OUString* mpStringArray;
+        rtl_uString** mpStringArray;
     };
 
     bool mbNumeric;
 
     VectorRefArray();
     VectorRefArray( const double* pArray );
-    VectorRefArray( const OUString* pArray );
+    VectorRefArray( rtl_uString** pArray );
 };
 
 /**
