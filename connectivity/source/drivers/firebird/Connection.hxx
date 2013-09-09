@@ -76,16 +76,9 @@ namespace connectivity
              */
             static const OUString our_sDBLocation;
         protected:
-            ::osl::Mutex                    m_aMutex;
-        public:
-            ::osl::Mutex&                   getMutex()
-                                            { return m_aMutex; }
-        protected:
+            ::osl::Mutex        m_aMutex;
 
-
-
-
-            TTypeInfoVector                         m_aTypeInfo;    //  vector containing an entry
+            TTypeInfoVector     m_aTypeInfo;    //  vector containing an entry
                                                                     //  for each row returned by
                                                                     //  DatabaseMetaData.getTypeInfo.
             /** The parent driver that created this connection. */
@@ -146,9 +139,9 @@ namespace connectivity
              * version, hence we need to rebuild the indexes when switching icu
              * versions.
              */
-            void                rebuildIndexes()
+            void rebuildIndexes()
                 throw(::com::sun::star::sdbc::SQLException);
-            void                buildTypeInfo()
+            void buildTypeInfo()
                 throw(::com::sun::star::sdbc::SQLException);
 
             /**
@@ -156,19 +149,45 @@ namespace connectivity
              * necessary discarding an existing transaction. This has to be done
              * anytime we change the transaction isolation, or autocommiting.
              */
-            void                setupTransaction()
+            void setupTransaction()
                 throw(::com::sun::star::sdbc::SQLException);
-            void                disposeStatements();
+            void disposeStatements();
+
         public:
+            Connection(FirebirdDriver* _pDriver);
+            virtual ~Connection();
+
             virtual void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)
             throw(::com::sun::star::sdbc::SQLException,
                   ::com::sun::star::uno::RuntimeException);
 
-            Connection(FirebirdDriver* _pDriver);
-            virtual ~Connection();
+            FirebirdDriver* getDriver()         const {return m_pDriver;}
 
-            void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
+            ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
+            sal_Bool        isEmbedded()        const   {return m_bIsEmbedded;}
+            ::rtl::OUString getUserName()       const   {return m_sUser;}
+            ::osl::Mutex&   getMutex()                  {return m_aMutex;}
+            isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
+            isc_tr_handle&  getTransaction()
+                throw(::com::sun::star::sdbc::SQLException);
+
+            /**
+             * Create a new Blob tied to this connection. Blobs are tied to a
+             * transaction and not to a statement, hence the connection should
+             * deal with their management.
+             */
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
+                createBlob(ISC_QUAD* pBlobID)
+                throw(::com::sun::star::sdbc::SQLException,
+                      ::com::sun::star::uno::RuntimeException);
+
+            /**
+             * Create and/or connect to the sdbcx Catalog. This is completely
+             * unrelated to the SQL "Catalog".
+             */
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+                createCatalog();
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
@@ -206,30 +225,6 @@ namespace connectivity
             // css.lang.XEventListener
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-            inline ::rtl::OUString  getUserName()       const { return m_sUser; }
-            inline isc_db_handle&    getDBHandle()       { return m_aDBHandle; }
-            inline FirebirdDriver*  getDriver()         const { return m_pDriver;}
-
-            ::rtl::OUString         getConnectionURL()  const { return m_sConnectionURL; }
-            sal_Bool                isEmbedded()        const { return m_bIsEmbedded; }
-            isc_tr_handle&          getTransaction() throw(::com::sun::star::sdbc::SQLException);
-
-            /**
-             * Create a new Blob tied to this connection. Blobs are tied to a
-             * transaction and not to a statement, hence the connection should
-             * deal with their management.
-             */
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>
-                createBlob(ISC_QUAD* pBlobID)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
-
-            /**
-             * Create and/or connect to the sdbcx Catalog. This is completely
-             * unrelated to the SQL "Catalog".
-             */
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
-                createCatalog();
         };
     }
 }
