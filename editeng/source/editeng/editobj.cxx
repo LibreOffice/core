@@ -234,7 +234,7 @@ sal_Int32 EditTextObject::GetParagraphCount() const
     return mpImpl->GetParagraphCount();
 }
 
-String EditTextObject::GetText(sal_Int32 nPara) const
+OUString EditTextObject::GetText(sal_Int32 nPara) const
 {
     return mpImpl->GetText(nPara);
 }

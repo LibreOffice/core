@@ -366,7 +366,7 @@ bool SdrTextObj::HasText() const
         sal_Int32 nParaCount = rETO.GetParagraphCount();
 
         if( nParaCount > 0 )
-            bHasText = (nParaCount > 1) || (rETO.GetText( 0 ).Len() != 0);
+            bHasText = (nParaCount > 1) || (!rETO.GetText( 0 ).isEmpty());
     }
 
     return bHasText;

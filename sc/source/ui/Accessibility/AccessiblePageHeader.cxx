@@ -400,7 +400,7 @@ sal_Bool ScAccessiblePageHeader::IsDefunc( const uno::Reference<XAccessibleState
 
 void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nIndex, SvxAdjust eAdjust)
 {
-    if (pArea && (pArea->GetText(0).Len() || (pArea->GetParagraphCount() > 1)))
+    if (pArea && (!pArea->GetText(0).isEmpty() || (pArea->GetParagraphCount() > 1)))
     {
         if (maAreas[nIndex])
         {

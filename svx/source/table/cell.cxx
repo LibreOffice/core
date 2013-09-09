@@ -560,7 +560,7 @@ bool Cell::hasText() const
         {
             if( rTextObj.GetParagraphCount() == 1 )
             {
-                if( rTextObj.GetText(0).Len() == 0 )
+                if( rTextObj.GetText(0).isEmpty() )
                     return false;
             }
             return true;

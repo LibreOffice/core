@@ -90,7 +90,7 @@ public:
 
     sal_Int32 GetParagraphCount() const;
 
-    String GetText(sal_Int32 nPara) const;
+    OUString GetText(sal_Int32 nPara) const;
 
     void ClearPortionInfo();
 

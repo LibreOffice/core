@@ -3076,7 +3076,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         while( (nPara < nParaCount) && (begin > 0) )
                         {
-                            sal_Int32 nParaLength = rEditTextObject.GetText( nPara ).Len() + 1;
+                            sal_Int32 nParaLength = rEditTextObject.GetText( nPara ).getLength() + 1;
                             begin -= nParaLength;
                             end -= nParaLength;
                             nPara++;
