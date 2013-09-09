@@ -374,12 +374,12 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             if ( IsQuoVadisPortion() )
                 nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().getLength();
 
-            XubString aNew( aExpand, nNextOfst, STRING_LEN );
+            OUString aNew( aExpand.copy( nNextOfst ) );
             aExpand = aExpand.copy( 0, nNextOfst );
 
             // These characters should not be contained in the follow
             // field portion. They are handled via the HookChar mechanism.
-            switch( aNew.GetChar( 0 ))
+            switch( aNew[0] )
             {
                 case CH_BREAK  : bFull = sal_True;
                             // kein break;
@@ -399,7 +399,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
                 {
-                    aNew.Erase( 0, 1 );
+                    aNew = aNew.copy( 1 );
                     ++nNextOfst;
                     break;
                 }
@@ -410,7 +410,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // we have to build a follow field portion (without font),
             // otherwise the HookChar mechanism would not work.
             SwFldPortion *pFld = Clone( aNew );
-            if( aNew.Len() && !pFld->GetFont() )
+            if( !aNew.isEmpty() && !pFld->GetFont() )
             {
                 SwFont *pNewFnt = new SwFont( *rInf.GetFont() );
                 pFld->SetFont( pNewFnt );

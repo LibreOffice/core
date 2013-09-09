@@ -720,7 +720,7 @@ void SwTxtPainter::PaintDropPortion()
 class SwDropCapCache
 {
     long aMagicNo[ DROP_CACHE_SIZE ];
-    XubString aTxt[ DROP_CACHE_SIZE ];
+    OUString aTxt[ DROP_CACHE_SIZE ];
     sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
     KSHORT aWishedHeight[ DROP_CACHE_SIZE ];
     short aDescent[ DROP_CACHE_SIZE ];
