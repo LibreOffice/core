@@ -1173,7 +1173,7 @@ void XMLTextImportHelper::DeleteParagraph()
     DBG_ASSERT(m_pImpl->m_xCursor.is(), "no cursor");
     DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
 
-    sal_Bool bDelete = sal_True;
+    bool bDelete = true;
     Reference < XEnumerationAccess > const xEnumAccess(
         m_pImpl->m_xCursor, UNO_QUERY);
     if( xEnumAccess.is() )
@@ -1187,7 +1187,7 @@ void XMLTextImportHelper::DeleteParagraph()
             if( xComp.is() )
             {
                 xComp->dispose();
-                bDelete = sal_False;
+                bDelete = false;
             }
         }
     }
@@ -1209,7 +1209,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
                                                 SvXMLImport& rImport ) const
 {
     OUStringBuffer sChars( rChars );
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     for( sal_Int32 j=0; j<rChars.getLength(); j++ )
     {
         sal_Unicode c = rChars[j];
@@ -1270,12 +1270,12 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
             if( (rFlags & CONV_FROM_STAR_BATS ) != 0 )
             {
                 sChars[j] = rImport.ConvStarBatsCharToStarSymbol( c );
-                bConverted = sal_True;
+                bConverted = true;
             }
             else if( (rFlags & CONV_FROM_STAR_MATH ) != 0 )
             {
                 sChars[j] = rImport.ConvStarMathCharToStarSymbol( c );
-                bConverted = sal_True;
+                bConverted = true;
             }
         }
     }
@@ -1289,18 +1289,18 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 /* Apply special case, that found list style equals the chapter numbering, also
    to the found list styles of the parent styles. (#i73973#)
 */
-static sal_Bool lcl_HasListStyle( OUString sStyleName,
+static bool lcl_HasListStyle( OUString sStyleName,
                                   const Reference < XNameContainer >& xParaStyles,
                                   SvXMLImport& rImport,
                                   const OUString& sNumberingStyleName,
                                   const OUString& sOutlineStyleName )
 {
-    sal_Bool bRet( sal_False );
+    bool bRet( false );
 
     if ( !xParaStyles->hasByName( sStyleName ) )
     {
         // error case
-        return sal_True;
+        return true;
     }
 
     Reference< XPropertyState > xPropState( xParaStyles->getByName( sStyleName ),
@@ -1308,13 +1308,13 @@ static sal_Bool lcl_HasListStyle( OUString sStyleName,
     if ( !xPropState.is() )
     {
         // error case
-        return sal_False;
+        return false;
     }
 
     if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
     {
         // list style found
-        bRet = sal_True;
+        bRet = true;
         // special case: the set list style equals the chapter numbering
         Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
         if ( xPropSet.is() )
@@ -1324,7 +1324,7 @@ static sal_Bool lcl_HasListStyle( OUString sStyleName,
             if ( !sListStyle.isEmpty() &&
                  sListStyle == sOutlineStyleName )
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
     }
@@ -1359,12 +1359,12 @@ static sal_Bool lcl_HasListStyle( OUString sStyleName,
                 if ( !xPropState.is() )
                 {
                     // error case
-                    return sal_True;
+                    return true;
                 }
                 if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
                 {
                     // list style found
-                    bRet = sal_True;
+                    bRet = true;
                     // Special case: the found list style equals the chapter numbering (#i73973#)
                     Reference< XPropertySet > xPropSet( xPropState, UNO_QUERY );
                     if ( xPropSet.is() )
@@ -1374,7 +1374,7 @@ static sal_Bool lcl_HasListStyle( OUString sStyleName,
                         if ( !sListStyle.isEmpty() &&
                              sListStyle == sOutlineStyleName )
                         {
-                            bRet = sal_False;
+                            bRet = false;
                         }
                         // Special handling for text documents from OOo version prior OOo 2.4 (#i77708#)
                         /* Check explicitly on certain versions and on import of
@@ -1386,7 +1386,7 @@ static sal_Bool lcl_HasListStyle( OUString sStyleName,
                                       ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
                                         ( nUPD == 680 && nBuild <= 9238 ) ) ) ) ) // OOo 2.0 - OOo 2.3.1
                         {
-                            bRet = sal_False;
+                            bRet = false;
                         }
                     }
                     break;
@@ -1521,10 +1521,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         if (pListBlock || pNumberedParagraph)
         {
             // Assure that list style of automatic paragraph style is applied at paragraph. (#i101349#)
-            sal_Bool bApplyNumRules = pStyle && pStyle->IsListStyleSet();
+            bool bApplyNumRules = pStyle && pStyle->IsListStyleSet();
             if ( !bApplyNumRules )
             {
-                sal_Bool bSameNumRules = xNewNumRules == xNumRules;
+                bool bSameNumRules = xNewNumRules == xNumRules;
                 if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
                 {
                     // If the interface pointers are different then this does
@@ -2156,13 +2156,13 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
-    sal_Bool bHeading = sal_False;
-    sal_Bool bContent = sal_True;
+    bool bHeading = false;
+    bool bContent = true;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     switch( nToken )
     {
     case XML_TOK_TEXT_H:
-        bHeading = sal_True;
+        bHeading = true;
     case XML_TOK_TEXT_P:
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
@@ -2197,7 +2197,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSequence);
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2207,7 +2207,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSimple);
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2217,7 +2217,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeUserField);
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2227,7 +2227,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             pContext = new XMLDdeFieldDeclsImportContext(
                 rImport, nPrefix, rLocalName);
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2242,7 +2242,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             pContext = new XMLTextFrameContext( rImport, nPrefix,
                                                 rLocalName, xAttrList,
                                                 eAnchorType );
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2257,7 +2257,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
                                                 rLocalName, xAttrList,
                                                 eAnchorType );
-            bContent = sal_False;
+            bContent = false;
         }
         break;
 
@@ -2280,7 +2280,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_TRACKED_CHANGES:
         pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
                                                        rLocalName);
-        bContent = sal_False;
+        bContent = false;
         break;
 
     case XML_TOK_TEXT_CHANGE:
@@ -2295,7 +2295,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     case XML_TOK_TEXT_FORMS:
         pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
-        bContent = sal_False;
+        bContent = false;
         break;
 
     case XML_TOK_TEXT_AUTOMARK:
@@ -2303,12 +2303,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             pContext = new XMLAutoMarkFileContext(rImport, nPrefix,rLocalName);
         }
-        bContent = sal_False;
+        bContent = false;
         break;
 
     case XML_TOK_TEXT_CALCULATION_SETTINGS:
         pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
-        bContent = sal_False;
+        bContent = false;
     break;
 
     default:
@@ -2319,7 +2319,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                     rImport, nPrefix, rLocalName, xAttrList, xShapes );
-            bContent = sal_False;
+            bContent = false;
         }
     }
 

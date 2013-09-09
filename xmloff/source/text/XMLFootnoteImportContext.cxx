@@ -85,7 +85,7 @@ void XMLFootnoteImportContext::StartElement(
     if( xFactory.is() )
     {
         // create endnote or footnote
-        sal_Bool bIsEndnote = sal_False;
+        bool bIsEndnote = false;
         sal_Int16 nLength = xAttrList->getLength();
         for(sal_Int16 nAttr1 = 0; nAttr1 < nLength; nAttr1++)
         {
@@ -98,7 +98,7 @@ void XMLFootnoteImportContext::StartElement(
             {
                 const OUString& rValue = xAttrList->getValueByIndex( nAttr1 );
                 if( IsXMLToken( rValue, XML_ENDNOTE ) )
-                    bIsEndnote = sal_True;
+                    bIsEndnote = true;
                 break;
             }
         }

@@ -3066,10 +3066,10 @@ void XMLDdeFieldDeclImportContext::StartElement(
     OUString sCommandItem;
 
     sal_Bool bUpdate = sal_False;
-    sal_Bool bNameOK = sal_False;
-    sal_Bool bCommandApplicationOK = sal_False;
-    sal_Bool bCommandTopicOK = sal_False;
-    sal_Bool bCommandItemOK = sal_False;
+    bool bNameOK = false;
+    bool bCommandApplicationOK = false;
+    bool bCommandTopicOK = false;
+    bool bCommandItemOK = false;
 
     // process attributes
     sal_Int16 nLength = xAttrList->getLength();
@@ -3084,19 +3084,19 @@ void XMLDdeFieldDeclImportContext::StartElement(
         {
             case XML_TOK_DDEFIELD_NAME:
                 sName = xAttrList->getValueByIndex(i);
-                bNameOK = sal_True;
+                bNameOK = true;
                 break;
             case XML_TOK_DDEFIELD_APPLICATION:
                 sCommandApplication = xAttrList->getValueByIndex(i);
-                bCommandApplicationOK = sal_True;
+                bCommandApplicationOK = true;
                 break;
             case XML_TOK_DDEFIELD_TOPIC:
                 sCommandTopic = xAttrList->getValueByIndex(i);
-                bCommandTopicOK = sal_True;
+                bCommandTopicOK = true;
                 break;
             case XML_TOK_DDEFIELD_ITEM:
                 sCommandItem = xAttrList->getValueByIndex(i);
-                bCommandItemOK = sal_True;
+                bCommandItemOK = true;
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {

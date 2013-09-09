@@ -59,7 +59,7 @@ class XMLFootnoteConfigHelper : public SvXMLImportContext
 {
     OUStringBuffer sBuffer;
     XMLFootnoteConfigurationImportContext& rConfig;
-    sal_Bool bIsBegin;
+    bool bIsBegin;
 
 public:
     TYPEINFO();
@@ -69,7 +69,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         XMLFootnoteConfigurationImportContext& rConfigImport,
-        sal_Bool bBegin);
+        bool bBegin);
 
     virtual void EndElement();
 
@@ -83,7 +83,7 @@ XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     XMLFootnoteConfigurationImportContext& rConfigImport,
-    sal_Bool bBegin)
+    bool bBegin)
 :   SvXMLImportContext(rImport, nPrfx, rLName)
 ,   sBuffer()
 ,   rConfig(rConfigImport)
@@ -305,14 +305,14 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
-                                                       *this, sal_False);
+                                                       *this, false);
             }
             else if ( IsXMLToken( rLocalName,
                                   XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD ) )
             {
                 pContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
-                                                       *this, sal_True);
+                                                       *this, true);
             }
             // else: default context
         }

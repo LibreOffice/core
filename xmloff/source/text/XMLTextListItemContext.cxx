@@ -139,11 +139,11 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
-    sal_Bool bHeading = sal_False;
+    bool bHeading = false;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TEXT_H:
-        bHeading = sal_True;
+        bHeading = true;
     case XML_TOK_TEXT_P:
         pContext = new XMLParaContext( GetImport(),
                                        nPrefix, rLocalName,
