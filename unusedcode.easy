@@ -1,5 +1,3 @@
-(anonymous namespace)::AttributeListImpl::AttributeListImpl()
-(anonymous namespace)::AttributeListImpl::addAttribute(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 (anonymous namespace)::Coverage::test_start(rtl::OUString)
 (anonymous namespace)::StringToken::toInt32(int&) const
 (anonymous namespace)::StringTokenizer::StringTokenizer(rtl::OUString const&, unsigned short)
