@@ -216,7 +216,7 @@ dispatch_queue_t backgroundQueue;
         scroll.contentSize = CGSizeMake(412, 120);
         
         CGRect frame = scroll.frame;
-        frame.origin.x = frame.size.width * kDefaultTimerWidget;
+        frame.origin.x = frame.size.width * self.currentPage;
         frame.origin.y = 0;
         [scroll scrollRectToVisible:frame animated:YES];
         

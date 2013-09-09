@@ -11,9 +11,10 @@
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
 #import "SlideShow.h"
+#import "AppDelegate.h"
 #import "IASKAppSettingsViewController.h"
 
-@interface slideShowPreviewTable_vc ()
+@interface slideShowPreviewTable_vc () <IASKSettingsDelegate>
 
 @property (nonatomic, strong) IASKAppSettingsViewController *appSettingsViewController;
 
@@ -24,6 +25,12 @@
 @synthesize startButton = _startButton;
 @synthesize titleObserver = _titleObserver;
 @synthesize appSettingsViewController = _appSettingsViewController;
+
+#pragma mark IASKSettingsDelegate
+- (void)settingsViewControllerDidEnd:(IASKAppSettingsViewController*)sender
+{
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] reconfigure];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {

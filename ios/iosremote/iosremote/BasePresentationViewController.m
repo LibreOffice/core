@@ -322,12 +322,6 @@
     [self.timerView setShadowLight];
     self.timer.delegate = self;
     self.stopWatchTimerScrollView.contentSize = CGSizeMake(1240, 62);
-    
-
-    CGRect frame = self.stopWatchTimerScrollView.frame;
-    frame.origin.x = frame.size.width * kDefaultTimerWidget;
-    frame.origin.y = 0;
-    [self.stopWatchTimerScrollView scrollRectToVisible:frame animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -412,6 +406,12 @@
                 [self.stopWatch start];
             if (kCountDownTimerAutoStart)
                 [self.timer start];
+            CGRect frame = self.stopWatchTimerScrollView.frame;
+            frame.origin.x = frame.size.width * kDefaultTimerWidget;
+            frame.origin.y = 0;
+            [self.stopWatchTimerScrollView scrollRectToVisible:frame animated:YES];
+            [self.timer setSecondsLeft:kCountDownTimerDefaultDuration * 60];
+            
         }];
         self.slideshow.delegate = self;
     }
