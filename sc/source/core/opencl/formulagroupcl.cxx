@@ -1063,18 +1063,18 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
 }
 
 namespace opencl {
-    sc::FormulaGroupInterpreter *createFormulaGroupInterpreter()
-    {
-        if (getenv("SC_SOFTWARE"))
-        {
-            fprintf(stderr, "Create S/W interp\n");
-            return new sc::FormulaGroupInterpreterSoftware();
-        }
-        if (getenv("SC_GROUNDWATER"))
-            return new sc::FormulaGroupInterpreterGroundwater();
-        else
-            return new sc::FormulaGroupInterpreterOpenCL();
-    }
+
+sc::FormulaGroupInterpreter *createFormulaGroupInterpreter()
+{
+    if (getenv("SC_SOFTWARE"))
+        return NULL;
+
+    if (getenv("SC_GROUNDWATER"))
+        return new sc::FormulaGroupInterpreterGroundwater();
+
+    return new sc::FormulaGroupInterpreterOpenCL();
+}
+
 } // namespace opencl
 
 } // namespace sc

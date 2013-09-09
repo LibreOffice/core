@@ -216,7 +216,10 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
             msInstance = sc::opencl::createFormulaGroupInterpreter();
 #endif
         if ( !msInstance ) // software fallback
+        {
+            fprintf(stderr, "Create S/W interp\n");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
+        }
     }
 
     return msInstance;
