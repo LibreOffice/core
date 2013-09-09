@@ -444,7 +444,7 @@ Reference<XInterface> resolveUnoURL(
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );
 
-    for (;;)
+    for (int i = 0; i <= 20; ++i) // 10 seconds
     {
         if (abortChannel != 0 && abortChannel->isAborted()) {
             throw ucb::CommandAbortedException(
@@ -454,10 +454,15 @@ Reference<XInterface> resolveUnoURL(
             return xUnoUrlResolver->resolve( connectString );
         }
         catch (const connection::NoConnectException &) {
-            TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
-            ::osl::Thread::wait( tv );
+            if (i < 20)
+            {
+                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
+                ::osl::Thread::wait( tv );
+            }
+            else throw;
         }
     }
+    return 0; // warning C4715
 }
 
 #ifdef WNT
