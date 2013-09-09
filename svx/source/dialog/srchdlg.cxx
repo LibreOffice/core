@@ -1189,13 +1189,8 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
     if (m_pAllSheetsCB == pCtrl)
     {
-        if ( m_pAllSheetsCB->IsChecked() )
-            m_pSearchAllBtn->Disable();
-        else
-        {
-            bSet = sal_True;
-            ModifyHdl_Impl(m_pSearchLB);
-        }
+        bSet = sal_True;
+        ModifyHdl_Impl(m_pSearchLB);
     }
 
     if (m_pJapOptionsCB == pCtrl)
@@ -1725,7 +1720,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
     if ( m_pSearchAllBtn == pCtrl &&
          ( SEARCH_OPTIONS_SEARCH_ALL & nOptions ) != 0 )
     {
-        m_pSearchAllBtn->Enable( ( bWriter || !m_pAllSheetsCB->IsChecked() ) );
+        m_pSearchAllBtn->Enable( true );
         return;
     }
     if ( m_pReplaceBtn == pCtrl && ( SEARCH_OPTIONS_REPLACE & nOptions ) != 0 )

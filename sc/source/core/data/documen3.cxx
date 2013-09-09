@@ -26,6 +26,8 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -71,6 +73,7 @@
 #include "formulacell.hxx"
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
+#include "searchresults.hxx"
 
 #include "globalnames.hxx"
 #include <memory>
@@ -1282,6 +1285,27 @@ bool ScDocument::SearchAndReplace(
                 }
 
             //  Markierung wird innen schon komplett gesetzt
+            if (bFound)
+            {
+                static SearchResults *aSearchResults = new SearchResults();
+                aSearchResults->GetList()->Clear();
+                for (size_t i = 0; i < rMatchedRanges.size(); ++i)
+                {
+                    ScCellIterator aIter(this, *rMatchedRanges[i]);
+                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+                    {
+                        ScAddress aCell = aIter.GetPos();
+                        OUString sTabName;
+                        GetName( aCell.Tab(), sTabName );
+                        SvTreeListEntry *pEntry = aSearchResults->GetList()->InsertEntry(
+                                sTabName + "\t"
+                                + OUString('A' + aCell.Col()) + OUString::number(1 + aCell.Row()) + "\t"
+                                + GetString(aCell) );
+                        pEntry->SetUserData( new ScAddress(aCell) );
+                    }
+                }
+                aSearchResults->Show();
+            }
         }
         else
         {
