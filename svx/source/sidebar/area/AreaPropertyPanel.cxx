@@ -1202,13 +1202,6 @@ void AreaPropertyPanel::Update()
 
 
 
-IMPL_LINK( AreaPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
-{
-    return 0;
-}
-
-
-
 IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());

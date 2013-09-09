@@ -156,7 +156,6 @@ private:
     void SelectEndStyle(bool bStart);
     void SelectLineStyle();
 
-    DECL_LINK(ImplPopupModeEndHdl, FloatingWindow* );
     DECL_LINK(ImplWidthPopupModeEndHdl, FloatingWindow* );
     DECL_LINK(ToolboxColorSelectHdl, ToolBox*);
     DECL_LINK(ChangeLineStyleHdl, void*);

@@ -33,16 +33,13 @@ private:
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
-    //std::vector< com::sun::star::beans::NamedValue > VectorOfModified;
     std::vector< Prop_Impl* > VectorOfModified;
 
     ::svx::OptHeaderTabListBox* pPrefBox;
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
     ~CuiAboutConfigTabPage();
-    //void AddToModifiedVector( com::sun::star::beans::NamedValue& rProp );
     void AddToModifiedVector( Prop_Impl* rProp );
 
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
 public:
    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );

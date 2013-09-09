@@ -35,7 +35,6 @@ private:
     CheckBox* pUseExtendedTypesChk;
 
     void LoadConfig();
-    void SaveConfig();
 
 public:
     SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSet& rSet );

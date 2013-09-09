@@ -193,8 +193,6 @@ private:
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~ParaPropertyPanel (void);
 
-    void InitImageList(::boost::scoped_ptr<ToolBox>& rTbx, ImageList& rImglst, ImageList& rImgHlst);
-
     DECL_LINK(AlignStyleModifyHdl_Impl, ToolBox*);
     DECL_LINK(VertTbxSelectHandler, ToolBox*);
     DECL_LINK(NumBTbxSelectHandler, ToolBox*);
@@ -203,7 +201,6 @@ private:
     DECL_LINK(ClickProDemote_Hdl_Impl, ToolBox*);
     DECL_LINK(ULSpaceHdl_Impl, void*);
     DECL_LINK(ClickUL_IncDec_Hdl_Impl, ToolBox*);
-    DECL_LINK(ImplPopupModeEndHdl, FloatingWindow* );
 
     void VertStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     void ParaBKGStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);

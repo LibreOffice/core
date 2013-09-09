@@ -155,7 +155,6 @@ private:
     DECL_LINK(SelectFillAttrHdl, ListBox* );
     DECL_LINK(ChangeTrgrTypeHdl_Impl, void*);
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
-    DECL_LINK( ImplPopupModeEndHdl, FloatingWindow* );
 
     // for transparency gradient
     PopupControl* CreateTransparencyGradientControl (PopupContainer* pParent);

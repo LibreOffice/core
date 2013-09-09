@@ -345,33 +345,6 @@ CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
 {
 }
 
-IMPL_LINK( CuiAboutConfigTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
-{
-    if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
-        return 0;
-
-    HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    SvSortMode eMode = SortAscending;
-
-    if ( bUp )
-    {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
-        eMode = SortDescending;
-    }
-    else
-    {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
-    }
-    pBar->SetItemBits( ITEMID_TYPE, nBits );
-    SvTreeList* pModel = pPrefBox->GetModel();
-    pModel->SetSortMode( eMode );
-    pModel->Resort();
-    return 1;
-}
-
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
     SvTreeListEntry* pEntry = pPrefBox->FirstSelected();

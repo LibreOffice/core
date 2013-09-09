@@ -126,7 +126,6 @@ class BackingWindow
     DECL_LINK( RecentTemplateToggleHdl, Button* );
     DECL_LINK( OpenTemplateHdl, ThumbnailViewItem* );
     DECL_LINK( ExtLinkClickHdl, Button* );
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     void initControls();
 

@@ -440,20 +440,6 @@ void ParaPropertyPanel::initial()
 #endif
 }
 
-void ParaPropertyPanel::InitImageList(::boost::scoped_ptr<ToolBox>& rTbx, ImageList& rImglst, ImageList& rImgHlst)
-{
-    sal_Bool bHighContrast = GetDisplayBackground().GetColor().IsDark();
-
-    ImageList& rImgLst = bHighContrast ? rImgHlst : rImglst;
-
-    sal_uInt16 nCount = rTbx->GetItemCount();
-    for (sal_uInt16 i = 0; i < nCount; i++)
-    {
-        sal_uInt16 nId = rTbx->GetItemId(i);
-        rTbx->SetItemImage( nId, rImgLst.GetImage( nId ) );
-    }
-}
-
 //===========================for Numbering & Bullet================================================
 
 
@@ -625,11 +611,6 @@ IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
         maBGColorPopup.Show(*pToolBox);
         maBGColorPopup.SetCurrentColor(maColor, mbColorAvailable);
     }
-    return 0;
-}
-
-IMPL_LINK( ParaPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
-{
     return 0;
 }
 
