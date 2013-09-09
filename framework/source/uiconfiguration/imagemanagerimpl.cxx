@@ -223,7 +223,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             OUString aCommandName( m_aImageCommandNameVector[i] );
-            String   aImageName;
+            OUString aImageName;
 
             if ( aCommandName.indexOf( aUNOString ) != 0 )
             {
@@ -240,14 +240,13 @@ void CmdImageList::impl_fillCommandToImageNameMap()
                     aImageName = aEmptyString;
 
                 // Search for query part.
-                sal_Int32 nIndex = aImageName.Search( '?' );
-                if ( nIndex != STRING_NOTFOUND )
+                if ( aImageName.indexOf('?') != -1 )
                     aImageName = getCanonicalName( aImageName ); // convert to valid filename
             }
             // Image names are not case-dependent. Always use lower case characters to
             // reflect this.
             aImageName += aExt;
-            aImageName.ToLowerAscii();
+            aImageName = aImageName.toAsciiLowerCase();
 
             m_aImageNameVector[i] = aImageName;
             m_aCommandToImageNameMap.insert( CommandToImageNameMap::value_type( aCommandName, aImageName ));

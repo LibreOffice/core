@@ -134,8 +134,7 @@ sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConv
     OUString aExt;
     sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
     if (-1 != nPos)
-        aExt = rFileURL.copy( nPos + 1 );
-    aExt = aExt.toAsciiLowerCase();
+        aExt = rFileURL.copy( nPos + 1 ).toAsciiLowerCase();
     if (aExt != CONV_DIC_EXT)
         return bRes;
 

@@ -3275,12 +3275,12 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
                                            const String& _rFilterDefaultExtension,
                                            const String& _rFilterExtensions)
 {
-    String aTemp(_rFileName);
-    aTemp.ToLowerAscii();
-    String aType(_rFilterExtensions);
-    aType.ToLowerAscii();
+    OUString aTemp(_rFileName);
+    aTemp = aTemp.toAsciiLowerCase();
+    OUString aType(_rFilterExtensions);
+    aType = aType.toAsciiLowerCase();
 
-    if ( ! aType.EqualsAscii(FILEDIALOG_FILTER_ALL) )
+    if ( ! aType.equals(FILEDIALOG_FILTER_ALL) )
     {
         sal_uInt16 nWildCard = comphelper::string::getTokenCount(aType, FILEDIALOG_DEF_EXTSEP);
         sal_uInt16 nIndex;
@@ -3288,14 +3288,14 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
 
         for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
         {
-            OUString aExt(aType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+            OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
             // take care of a leading *
             sal_Int32 nExtOffset = (aExt[0] == '*' ? 1 : 0);
             const sal_Unicode* pExt = aExt.getStr() + nExtOffset;
             sal_Int32 nExtLen = aExt.getLength() - nExtOffset;
-            sal_Int32 nOffset = aTemp.Len() - nExtLen;
+            sal_Int32 nOffset = aTemp.getLength() - nExtLen;
             // minimize search by starting at last possible index
-            if ( aTemp.Search(pExt, nOffset) == nOffset )
+            if ( aTemp.indexOf(pExt, nOffset) == nOffset )
                 break;
         }
 
