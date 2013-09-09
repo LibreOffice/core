@@ -639,6 +639,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_CLEAR).toString());
         else if (rType == "gtk-media-play")
             return (VclResId(SV_BUTTONTEXT_PLAY).toString());
+        else if (rType == "gtk-find")
+            return (VclResId(SV_BUTTONTEXT_FIND).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

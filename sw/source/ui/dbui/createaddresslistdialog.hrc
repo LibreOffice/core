@@ -41,14 +41,6 @@
 #define SCR_1                   1
 #define WIN_DATA                2
 
-#define FT_FIND                 1
-#define ED_FIND                 2
-#define CB_FINDONLY             3
-#define LB_FINDONLY             4
-
-#define PB_FIND                 5
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -171,4 +171,9 @@ String SV_BUTTONTEXT_PLAY
     Text [ en-US ] = "~Play" ;
 };
 
+String SV_BUTTONTEXT_FIND
+{
+    Text [ en-US ] = "~Find" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

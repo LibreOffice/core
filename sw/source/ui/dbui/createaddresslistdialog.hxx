@@ -88,14 +88,12 @@ public:
 
 class SwFindEntryDialog : public ModelessDialog
 {
-    FixedText               m_aFindFT;
-    Edit                    m_aFindED;
-    CheckBox                m_aFindOnlyCB;
-    ListBox                 m_aFindOnlyLB;
+    Edit*         m_pFindED;
+    CheckBox*     m_pFindOnlyCB;
+    ListBox*      m_pFindOnlyLB;
 
-    PushButton              m_aFindPB;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
+    PushButton*   m_pFindPB;
+    CancelButton* m_pCancel;
 
     SwCreateAddressListDialog*  m_pParent;
 
@@ -105,10 +103,15 @@ class SwFindEntryDialog : public ModelessDialog
 
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);
-    ~SwFindEntryDialog();
 
-    ListBox&                GetFieldsListBox(){return m_aFindOnlyLB;}
-    String                  GetFindString() const {return m_aFindED.GetText();}
+    ListBox& GetFieldsListBox()
+    {
+        return *m_pFindOnlyLB;
+    }
+    OUString GetFindString() const
+    {
+        return m_pFindED->GetText();
+    }
 };
 
 #endif

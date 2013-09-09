@@ -96,6 +96,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/envprinterpage \
 	sw/uiconfig/swriter/ui/exchangedatabases \
 	sw/uiconfig/swriter/ui/fielddialog \
+	sw/uiconfig/swriter/ui/findentrydialog \
 	sw/uiconfig/swriter/ui/flddbpage \
 	sw/uiconfig/swriter/ui/flddocinfopage \
 	sw/uiconfig/swriter/ui/flddocumentpage \

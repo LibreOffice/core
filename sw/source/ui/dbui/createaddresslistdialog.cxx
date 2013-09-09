@@ -526,6 +526,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
                     ++aHeaderIter)
             rColumnBox.InsertEntry(*aHeaderIter);
         rColumnBox.SelectEntryPos( 0 );
+        m_pFindDlg->Show();
     }
     else
         m_pFindDlg->Show(!m_pFindDlg->IsVisible());
@@ -717,46 +718,34 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
     }
 }
 
-SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
-    ModelessDialog(pParent, SW_RES(DLG_MM_FIND_ENTRY)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aFindFT( this, SW_RES(      FT_FIND      )),
-    m_aFindED( this, SW_RES(      ED_FIND      )),
-    m_aFindOnlyCB( this, SW_RES(  CB_FINDONLY )),
-    m_aFindOnlyLB( this, SW_RES(  LB_FINDONLY  )),
-    m_aFindPB( this, SW_RES(      PB_FIND)),
-    m_aCancel( this, SW_RES(      PB_CANCEL)),
-    m_aHelp( this, SW_RES(        PB_HELP)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-   m_pParent(pParent)
+SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
+    : ModelessDialog(pParent, "FindEntryDialog",
+        "modules/swriter/ui/findentrydialog.ui")
+    , m_pParent(pParent)
 {
-    FreeResource();
-    m_aFindPB.SetClickHdl(LINK(this, SwFindEntryDialog, FindHdl_Impl));
-    m_aFindED.SetModifyHdl(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
-    m_aCancel.SetClickHdl(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
-}
-
-SwFindEntryDialog::~SwFindEntryDialog()
-{
+    get(m_pCancel, "cancel");
+    get(m_pFindPB, "find");
+    get(m_pFindOnlyLB, "area");
+    get(m_pFindOnlyCB, "findin");
+    get(m_pFindED, "entry");
+    m_pFindPB->SetClickHdl(LINK(this, SwFindEntryDialog, FindHdl_Impl));
+    m_pFindED->SetModifyHdl(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
+    m_pCancel->SetClickHdl(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl)
 {
     sal_Int32 nColumn = -1;
-    if(m_aFindOnlyCB.IsChecked())
-        nColumn = m_aFindOnlyLB.GetSelectEntryPos();
+    if(m_pFindOnlyCB->IsChecked())
+        nColumn = m_pFindOnlyLB->GetSelectEntryPos();
     if(nColumn != LISTBOX_ENTRY_NOTFOUND)
-        m_pParent->Find(m_aFindED.GetText(), nColumn);
+        m_pParent->Find(m_pFindED->GetText(), nColumn);
     return 0;
 }
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
 {
-    m_aFindPB.Enable(!m_aFindED.GetText().isEmpty());
+    m_pFindPB->Enable(!m_pFindED->GetText().isEmpty());
     return 0;
 }
 
