@@ -819,7 +819,7 @@ void IdleFormattter::ForceTimeout()
     }
 }
 
-ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const String& rOldTextAfterStartPos )
+ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos )
  : aOldTextAfterStartPos( rOldTextAfterStartPos )
 {
     aPos = rPos;

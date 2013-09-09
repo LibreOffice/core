@@ -134,14 +134,14 @@ struct DragAndDropInfo
 
 struct ImplIMEInfos
 {
-    String      aOldTextAfterStartPos;
+    OUString    aOldTextAfterStartPos;
     sal_uInt16* pAttribs;
     EditPaM     aPos;
     sal_uInt16  nLen;
     sal_Bool    bCursor;
     sal_Bool    bWasCursorOverwrite;
 
-            ImplIMEInfos( const EditPaM& rPos, const String& rOldTextAfterStartPos );
+            ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos );
             ~ImplIMEInfos();
 
     void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
@@ -341,28 +341,28 @@ public:
     Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
     void            SetInsertMode( sal_Bool bInsert );
-    sal_Bool            IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
+    sal_Bool        IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
 
-    void                EnablePaste( sal_Bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
-    sal_Bool            IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
+    void            EnablePaste( sal_Bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
+    sal_Bool        IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
 
-    sal_Bool            DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
-    sal_Bool            DoAutoScroll() const            { return ( ( nControl & EV_CNTRL_AUTOSCROLL ) != 0 ); }
-    sal_Bool            DoBigScroll() const             { return ( ( nControl & EV_CNTRL_BIGSCROLL ) != 0 ); }
-    sal_Bool            DoAutoSize() const              { return ( ( nControl & EV_CNTRL_AUTOSIZE ) != 0 ); }
-    sal_Bool            DoAutoWidth() const             { return ( ( nControl & EV_CNTRL_AUTOSIZEX) != 0 ); }
-    sal_Bool            DoAutoHeight() const            { return ( ( nControl & EV_CNTRL_AUTOSIZEY) != 0 ); }
-    sal_Bool            DoInvalidateMore() const        { return ( ( nControl & EV_CNTRL_INVONEMORE ) != 0 ); }
+    sal_Bool        DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
+    sal_Bool        DoAutoScroll() const            { return ( ( nControl & EV_CNTRL_AUTOSCROLL ) != 0 ); }
+    sal_Bool        DoBigScroll() const             { return ( ( nControl & EV_CNTRL_BIGSCROLL ) != 0 ); }
+    sal_Bool        DoAutoSize() const              { return ( ( nControl & EV_CNTRL_AUTOSIZE ) != 0 ); }
+    sal_Bool        DoAutoWidth() const             { return ( ( nControl & EV_CNTRL_AUTOSIZEX) != 0 ); }
+    sal_Bool        DoAutoHeight() const            { return ( ( nControl & EV_CNTRL_AUTOSIZEY) != 0 ); }
+    sal_Bool        DoInvalidateMore() const        { return ( ( nControl & EV_CNTRL_INVONEMORE ) != 0 ); }
 
     void            SetBackgroundColor( const Color& rColor );
     const Color&    GetBackgroundColor() const {
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
-    sal_Bool            IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong );
-    String          SpellIgnoreOrAddWord( sal_Bool bAdd );
+    sal_Bool        IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong );
+    OUString        SpellIgnoreOrAddWord( sal_Bool bAdd );
 
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const;
-    void                DeleteSelected();
+    void            DeleteSelected();
 
     //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
@@ -608,7 +608,7 @@ private:
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
-    EditPaM             ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
+    EditPaM             ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
@@ -767,7 +767,7 @@ public:
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
     sal_Bool        UpdateFields();
 
-    EditPaM         Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    EditPaM         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );
 
     EditTextObject* CreateTextObject();
@@ -982,11 +982,11 @@ public:
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
 
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
-    short               ReplaceTextOnly( ContentNode* pNode, sal_uInt16 nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
+    short               ReplaceTextOnly( ContentNode* pNode, sal_uInt16 nCurrentStart, xub_StrLen nLen, const OUString& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
 
 
     void                SetAsianCompressionMode( sal_uInt16 n );
-    sal_uInt16              GetAsianCompressionMode() const { return nAsianCompressionMode; }
+    sal_uInt16          GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
     void                SetKernAsianPunctuation( bool b );
     bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }

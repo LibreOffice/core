@@ -91,7 +91,7 @@ void Swapsal_uIt16s( sal_uInt16& rX, sal_uInt16& rY )
     rY = n;
 }
 
-EditPaM ImpEditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditPaM ImpEditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Bool _bUpdate = GetUpdateMode();
     SetUpdateMode( sal_False );
@@ -183,7 +183,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     return xPrsr->GetCurPaM();
 }
 
-EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
@@ -3046,7 +3046,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 short ImpEditEngine::ReplaceTextOnly(
     ContentNode* pNode,
     sal_uInt16 nCurrentStart, xub_StrLen nLen,
-    const String& rNewText,
+    const OUString& rNewText,
     const uno::Sequence< sal_Int32 >& rOffsets )
 {
     (void)  nLen;
@@ -3064,13 +3064,13 @@ short ImpEditEngine::ReplaceTextOnly(
         if ( !nDiff )
         {
             DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
-            pNode->SetChar( nCurrentPos, rNewText.GetChar(n) );
+            pNode->SetChar( nCurrentPos, rNewText[n] );
         }
         else if ( nDiff < 0 )
         {
             // Replace first char, delete the rest...
             DBG_ASSERT( nCurrentPos < pNode->Len(), "TransliterateText - String smaller than expected!" );
-            pNode->SetChar( nCurrentPos, rNewText.GetChar(n) );
+            pNode->SetChar( nCurrentPos, rNewText[n] );
 
             DBG_ASSERT( (nCurrentPos+1) < pNode->Len(), "TransliterateText - String smaller than expected!" );
             GetEditDoc().RemoveChars( EditPaM( pNode, nCurrentPos+1 ), sal::static_int_cast< sal_uInt16 >(-nDiff) );
@@ -3078,7 +3078,7 @@ short ImpEditEngine::ReplaceTextOnly(
         else
         {
             DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
-            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUString(rNewText.GetChar(n)) );
+            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUString(rNewText[n]) );
 
         }
         nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);

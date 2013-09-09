@@ -1098,9 +1098,9 @@ sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfW
     return bIsWrong;
 }
 
-String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
+OUString ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
 {
-    String aWord;
+    OUString aWord;
     if ( pEditEngine->pImpEditEngine->GetSpeller().is() )
     {
         EditPaM aPaM = GetEditSelection().Max();
@@ -1118,7 +1118,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             DrawSelection();
         }
 
-        if ( aWord.Len() )
+        if ( !aWord.isEmpty() )
         {
             if ( bAdd )
             {

@@ -423,21 +423,21 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                     sal_Int32 nNewIMETextLen = pData->GetText().getLength();
 
                     if ( ( nOldIMETextLen > nNewIMETextLen ) &&
-                         ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                         ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
                     {
                         // restore old characters
                         sal_Int32 nRestore = nOldIMETextLen - nNewIMETextLen;
                         EditPaM aPaM( mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
-                        ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                        ImpInsertText( aPaM, mpIMEInfos->aOldTextAfterStartPos.copy( nNewIMETextLen, nRestore ) );
                     }
                     else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
-                              ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                              ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.getLength() ) )
                     {
                         // overwrite
                         sal_uInt16 nOverwrite = nNewIMETextLen - nOldIMETextLen;
-                        if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.Len() )
-                            nOverwrite = mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
+                        if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.getLength() )
+                            nOverwrite = mpIMEInfos->aOldTextAfterStartPos.getLength() - nOldIMETextLen;
                         OSL_ENSURE( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
                         EditPaM aPaM( mpIMEInfos->aPos );
                         aPaM.GetIndex() = aPaM.GetIndex() + nNewIMETextLen;
