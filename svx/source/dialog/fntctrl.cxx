@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/viewsh.hxx>      // SfxViewShell
 #include <sfx2/printer.hxx>     // Printer
 #include <vcl/builder.hxx>
@@ -502,14 +503,12 @@ void SvxFontPrevWindow::Init()
 SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     Window( pParent, rId )
 {
-    m_aInitialSize = GetSizePixel();
     Init();
 }
 
 SvxFontPrevWindow::SvxFontPrevWindow(Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {
-    m_aInitialSize = LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
     Init();
 }
 
@@ -1499,7 +1498,7 @@ void SvxFontPrevWindow::SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, 
 
 Size SvxFontPrevWindow::GetOptimalSize() const
 {
-    return m_aInitialSize;
+    return getPreviewStripSize(this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

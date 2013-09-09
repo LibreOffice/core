@@ -67,6 +67,11 @@ Size getDrawListBoxOptimalSize(const Window *pReference)
     return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
 }
 
+Size SFX2_DLLPUBLIC getPreviewStripSize(const Window *pReference)
+{
+    return pReference->LogicToPixel(Size(70 , 40), MapMode(MAP_APPFONT));
+}
+
 OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);

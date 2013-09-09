@@ -397,6 +397,7 @@ public:
 
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();
+    virtual Size GetOptimalSize() const;
 };
 
 /*************************************************************************

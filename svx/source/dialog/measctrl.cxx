@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/dialoghelper.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
-#include <vcl/builder.hxx>
-
 #include "svx/measctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
+#include <vcl/builder.hxx>
 
 SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent,const ResId& rResId,const SfxItemSet& rInAttrs)
 :    Control ( pParent, rResId )
@@ -98,6 +98,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXMeasurePreview(Window *
     return new SvxXMeasurePreview(pParent, nWinStyle);
 }
 
+Size SvxXMeasurePreview::GetOptimalSize() const
+{
+    return getPreviewStripSize(this);
+}
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {

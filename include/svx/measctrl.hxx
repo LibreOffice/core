@@ -48,6 +48,7 @@ public:
     virtual void Paint(const Rectangle& rRect);
     virtual void Resize();
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual Size GetOptimalSize() const;
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
 

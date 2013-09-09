@@ -45,8 +45,6 @@ private:
     SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
     SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
-    Size m_aInitialSize;
-
 public:
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
                         SvxFontPrevWindow(Window* pParent, WinBits nStyle);

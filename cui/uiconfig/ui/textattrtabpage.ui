@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-100</property>
     <property name="upper">100</property>
@@ -364,7 +364,8 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="vexpand">True</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>

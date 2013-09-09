@@ -20,7 +20,7 @@
 #include <tools/shl.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
-
+#include <sfx2/dialoghelper.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/dialogs.hrc>
@@ -107,7 +107,7 @@ void SvxRectCtl::SetControlSettings(RECT_POINT eRpt, sal_uInt16 nBorder, sal_uIn
 
 Size SvxRectCtl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(39, 39), MAP_APPFONT);
+    return LogicToPixel(Size(78, 39), MAP_APPFONT);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRectCtl(Window *pParent, VclBuilder::stringmap &)
@@ -1836,6 +1836,11 @@ SvxXLinePreview::SvxXLinePreview(Window* pParent)
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXLinePreview(Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxXLinePreview(pParent);
+}
+
+Size SvxXLinePreview::GetOptimalSize() const
+{
+    return getPreviewStripSize(this);
 }
 
 SvxXLinePreview::~SvxXLinePreview()
