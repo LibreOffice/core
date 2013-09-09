@@ -23,8 +23,8 @@ gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)
 gb_Jar_JARCOMMAND := jar
 
 gb_Jar_LAYER_DIRS := \
-	OOO:$(gb_PROGRAMDIRNAME)/classes \
-	URE:ure/share/java
+	OOO:$(LIBO_SHARE_JAVA_FOLDER) \
+	URE:$(LIBO_URE_SHARE_JAVA_FOLDER)
 
 # location of files going to be packed into .jar file
 define gb_Jar_get_workdir
