@@ -211,7 +211,7 @@ inline void ESelection::Adjust()
 struct EDITENG_DLLPUBLIC EFieldInfo
 {
     SvxFieldItem*   pFieldItem;
-    String          aCurrentText;
+    OUString        aCurrentText;
     EPosition       aPosition;
 
     EFieldInfo();
@@ -246,7 +246,7 @@ struct ImportInfo
     int                     nToken;
     short                   nTokenValue;
 
-    String                  aText;
+    OUString                aText;
 
     void*                   pAttrs; // RTF: SvxRTFItemStackType*, HTML: SfxItemSet*
 

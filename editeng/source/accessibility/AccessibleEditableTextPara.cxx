@@ -2050,7 +2050,7 @@ namespace accessibility
 
                     // Translate EE Index to accessible index
                     sal_uInt16 nStart = rT.CalcEditEngineIndex( nPara, nEEStart );
-                    sal_uInt16 nEnd = nStart + aField.aCurrentText.Len();
+                    sal_uInt16 nEnd = nStart + aField.aCurrentText.getLength();
                     xRef = new AccessibleHyperlink( rT, new SvxFieldItem( *aField.pFieldItem ), nPara, nEEStart, nStart, nEnd, aField.aCurrentText );
                     break;
                 }

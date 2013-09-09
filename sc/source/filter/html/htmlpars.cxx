@@ -2428,7 +2428,7 @@ bool ScHTMLTable::IsEmptyCell() const
 
 bool ScHTMLTable::IsSpaceCharInfo( const ImportInfo& rInfo )
 {
-    return (rInfo.nToken == HTML_TEXTTOKEN) && (rInfo.aText.Len() == 1) && (rInfo.aText.GetChar( 0 ) == ' ');
+    return (rInfo.nToken == HTML_TEXTTOKEN) && (rInfo.aText.getLength() == 1) && (rInfo.aText[ 0 ] == ' ');
 }
 
 ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
