@@ -318,7 +318,7 @@ namespace accessibility
         const Point& GetEEOffset() const;
 
         // Get text from forwarder
-        String GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        OUString GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
         sal_uInt16 GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Get the current selection of this paragraph

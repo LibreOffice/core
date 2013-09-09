@@ -489,7 +489,7 @@ namespace accessibility
         return sal_True;
     }
 
-    String AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((uno::RuntimeException))
+    OUString AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
