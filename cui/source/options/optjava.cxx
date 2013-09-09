@@ -24,7 +24,6 @@
 
 #include <svtools/miscopt.hxx>
 
-#include "optjava.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <vcl/svapp.hxx>
@@ -780,30 +779,23 @@ void SvxJavaOptionsPage::FillUserData()
 
 SvxJavaParameterDlg::SvxJavaParameterDlg( Window* pParent ) :
 
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_JAVA_PARAMETER ) ),
-
-    m_aParameterLabel   ( this, CUI_RES( FT_PARAMETER ) ),
-    m_aParameterEdit    ( this, CUI_RES( ED_PARAMETER ) ),
-    m_aAssignBtn        ( this, CUI_RES( PB_ASSIGN ) ),
-    m_aAssignedLabel    ( this, CUI_RES( FT_ASSIGNED ) ),
-    m_aAssignedList     ( this, CUI_RES( LB_ASSIGNED ) ),
-    m_aExampleText      ( this, CUI_RES( FT_EXAMPLE ) ),
-    m_aRemoveBtn        ( this, CUI_RES( PB_REMOVE ) ),
-    m_aButtonsLine      ( this, CUI_RES( FL_BUTTONS ) ),
-    m_aOKBtn            ( this, CUI_RES( PB_PARAMETER_OK ) ),
-    m_aCancelBtn        ( this, CUI_RES( PB_PARAMETER_ESC ) ),
-    m_aHelpBtn          ( this, CUI_RES( PB_PARAMETER_HLP ) )
-
+    ModalDialog( pParent, "JavaStartParameters",
+                 "cui/ui/javastartparametersdialog.ui" )
 {
-    FreeResource();
+    get( m_pParameterEdit, "parameterfield");
+    get( m_pAssignBtn, "assignbtn");
+    get( m_pAssignedList, "assignlist");
+    m_pAssignedList->SetDropDownLineCount(6);
+    m_pAssignedList->set_width_request(m_pAssignedList->approximate_char_width() * 54);
+    get( m_pRemoveBtn, "removebtn");
 
-    m_aParameterEdit.SetModifyHdl( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
-    m_aAssignBtn.SetClickHdl( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
-    m_aRemoveBtn.SetClickHdl( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
-    m_aAssignedList.SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
-    m_aAssignedList.SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
+    m_pParameterEdit->SetModifyHdl( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
+    m_pAssignBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
+    m_pAssignedList->SetSelectHdl( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
+    m_pAssignedList->SetDoubleClickHdl( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
-    ModifyHdl_Impl( &m_aParameterEdit );
+    ModifyHdl_Impl( m_pParameterEdit );
     EnableRemoveButton();
 }
 
@@ -817,8 +809,8 @@ SvxJavaParameterDlg::~SvxJavaParameterDlg()
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
-    OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
-    m_aAssignBtn.Enable(!sParam.isEmpty());
+    OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
+    m_pAssignBtn->Enable(!sParam.isEmpty());
 
     return 0;
 }
@@ -827,15 +819,15 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
 {
-    OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
+    OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     if (!sParam.isEmpty())
     {
-        sal_uInt16 nPos = m_aAssignedList.GetEntryPos( sParam );
+        sal_uInt16 nPos = m_pAssignedList->GetEntryPos( sParam );
         if ( LISTBOX_ENTRY_NOTFOUND == nPos )
-            nPos = m_aAssignedList.InsertEntry( sParam );
-        m_aAssignedList.SelectEntryPos( nPos );
-        m_aParameterEdit.SetText( String() );
-        ModifyHdl_Impl( &m_aParameterEdit );
+            nPos = m_pAssignedList->InsertEntry( sParam );
+        m_pAssignedList->SelectEntryPos( nPos );
+        m_pParameterEdit->SetText( String() );
+        ModifyHdl_Impl( m_pParameterEdit );
         EnableRemoveButton();
     }
 
@@ -854,9 +846,9 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 {
-    sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        m_aParameterEdit.SetText( m_aAssignedList.GetEntry( nPos ) );
+        m_pParameterEdit->SetText( m_pAssignedList->GetEntry( nPos ) );
     return 0;
 }
 
@@ -864,16 +856,16 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
 {
-    sal_uInt16 nPos = m_aAssignedList.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        m_aAssignedList.RemoveEntry( nPos );
-        sal_uInt16 nCount = m_aAssignedList.GetEntryCount();
+        m_pAssignedList->RemoveEntry( nPos );
+        sal_uInt16 nCount = m_pAssignedList->GetEntryCount();
         if ( nCount )
         {
             if ( nPos >= nCount )
                 nPos = ( nCount - 1 );
-            m_aAssignedList.SelectEntryPos( nPos );
+            m_pAssignedList->SelectEntryPos( nPos );
         }
     }
     EnableRemoveButton();
@@ -885,8 +877,8 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl)
 
 short SvxJavaParameterDlg::Execute()
 {
-    m_aParameterEdit.GrabFocus();
-    m_aAssignedList.SetNoSelection();
+    m_pParameterEdit->GrabFocus();
+    m_pAssignedList->SetNoSelection();
     return ModalDialog::Execute();
 }
 
@@ -894,11 +886,11 @@ short SvxJavaParameterDlg::Execute()
 
 Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 {
-    sal_uInt16 nCount = m_aAssignedList.GetEntryCount();
+    sal_uInt16 nCount = m_pAssignedList->GetEntryCount();
     Sequence< OUString > aParamList( nCount );
     OUString* pArray = aParamList.getArray();
      for ( sal_uInt16 i = 0; i < nCount; ++i )
-         pArray[i] = OUString( m_aAssignedList.GetEntry(i) );
+         pArray[i] = OUString( m_pAssignedList->GetEntry(i) );
     return aParamList;
 }
 
@@ -906,13 +898,13 @@ Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 
 void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 {
-    m_aAssignedList.Clear();
+    m_pAssignedList->Clear();
     sal_uLong i, nCount = rParams.getLength();
     const OUString* pArray = rParams.getConstArray();
     for ( i = 0; i < nCount; ++i )
     {
         String sParam = String( *pArray++ );
-        m_aAssignedList.InsertEntry( sParam );
+        m_pAssignedList->InsertEntry( sParam );
     }
 }
 

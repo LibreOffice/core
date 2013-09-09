@@ -44,6 +44,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/insertplugin \
 	cui/uiconfig/ui/insertrowcolumn \
 	cui/uiconfig/ui/javaclasspathdialog \
+	cui/uiconfig/ui/javastartparametersdialog \
 	cui/uiconfig/ui/linedialog \
 	cui/uiconfig/ui/linetabpage \
 	cui/uiconfig/ui/lineendstabpage \

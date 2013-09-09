@@ -117,19 +117,11 @@ public:
 class SvxJavaParameterDlg : public ModalDialog
 {
 private:
-    FixedText               m_aParameterLabel;
-    Edit                    m_aParameterEdit;
-    PushButton              m_aAssignBtn;
+    Edit*                   m_pParameterEdit;
+    PushButton*             m_pAssignBtn;
 
-    FixedText               m_aAssignedLabel;
-    ListBox                 m_aAssignedList;
-    FixedText               m_aExampleText;
-    PushButton              m_aRemoveBtn;
-
-    FixedLine               m_aButtonsLine;
-    OKButton                m_aOKBtn;
-    CancelButton            m_aCancelBtn;
-    HelpButton              m_aHelpBtn;
+    ListBox*                m_pAssignedList;
+    PushButton*             m_pRemoveBtn;
 
     DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK(AssignHdl_Impl, void *);
@@ -138,8 +130,8 @@ private:
     DECL_LINK(RemoveHdl_Impl, void *);
 
     inline void             EnableRemoveButton()
-                                { m_aRemoveBtn.Enable(
-                                    m_aAssignedList.GetSelectEntryPos()
+                                { m_pRemoveBtn->Enable(
+                                    m_pAssignedList->GetSelectEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
 

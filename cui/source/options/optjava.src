@@ -17,89 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "optjava.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
-
-// RID_SVXDLG_JAVA_PARAMETER ---------------------------------------------
-
-ModalDialog RID_SVXDLG_JAVA_PARAMETER
-{
-    HelpId = HID_OPTIONS_JAVA_PARAMETER ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 270 , 140 ) ;
-    Text [ en-US ] = "Java Start Parameters" ;
-    Moveable = TRUE ;
-    FixedText FT_PARAMETER
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 202 , 8 ) ;
-        Text [ en-US ] = "Java start ~parameter" ;
-    };
-    Edit ED_PARAMETER
-    {
-        HelpID = "cui:Edit:RID_SVXDLG_JAVA_PARAMETER:ED_PARAMETER";
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 202 , 12 ) ;
-        Border = TRUE ;
-    };
-    PushButton PB_ASSIGN
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_ASSIGN";
-        Pos = MAP_APPFONT ( 214 , 14 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Assign" ;
-    };
-    FixedText FT_ASSIGNED
-    {
-        Pos = MAP_APPFONT ( 6 , 31 ) ;
-        Size = MAP_APPFONT ( 202 , 8 ) ;
-        Text [ en-US ] = "Assig~ned start parameters" ;
-    };
-    ListBox LB_ASSIGNED
-    {
-        HelpID = "cui:ListBox:RID_SVXDLG_JAVA_PARAMETER:LB_ASSIGNED";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
-        Size = MAP_APPFONT ( 202 , 53 ) ;
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_EXAMPLE
-    {
-        Pos = MAP_APPFONT ( 6 , 98 ) ;
-        Size = MAP_APPFONT ( 202 , 8 ) ;
-        Text [ en-US ] = "For example: -Dmyprop=c:\\program files\\java" ;
-    };
-    PushButton PB_REMOVE
-    {
-        HelpID = "cui:PushButton:RID_SVXDLG_JAVA_PARAMETER:PB_REMOVE";
-        Pos = MAP_APPFONT ( 214 , 42 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Remove" ;
-    };
-    FixedLine FL_BUTTONS
-    {
-        Pos = MAP_APPFONT ( 3 , 109 ) ;
-        Size = MAP_APPFONT ( 264 , 8 ) ;
-    };
-    OKButton PB_PARAMETER_OK
-    {
-        Pos = MAP_APPFONT ( 105 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_PARAMETER_ESC
-    {
-        Pos = MAP_APPFONT ( 158 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton PB_PARAMETER_HLP
-    {
-        Pos = MAP_APPFONT ( 214 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
 
 ErrorBox RID_SVXERR_JRE_NOT_RECOGNIZED
 {
