@@ -327,7 +327,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             case XML_max:       eAxisPos = cssc::ChartAxisPosition_END;     break;
             case XML_autoZero:  eAxisPos = cssc::ChartAxisPosition_VALUE;   break;
         }
-        aAxisProp.setProperty( PROP_CrossoverPosition, eAxisPos );
+        if( !mrModel.mbAuto )
+            aAxisProp.setProperty( PROP_CrossoverPosition, eAxisPos );
 
         // calculate automatic origin depending on scaling mode of crossing axis
         bool bCrossingLogScale = pCrossingAxis && lclIsLogarithmicScale( *pCrossingAxis );
