@@ -896,7 +896,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
 }
 
 // Converting of Sbx to Uno without a know target class for TypeClass_ANY
-Type getUnoTypeForSbxValue( SbxValue* pVal )
+Type getUnoTypeForSbxValue( const SbxValue* pVal )
 {
     Type aRetType = getCppuVoidType();
     if( !pVal )
@@ -1025,11 +1025,8 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
     return aRetType;
 }
 
-// Declaration converting of Sbx to Uno with known target class
-Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty = NULL );
-
 // converting of Sbx to Uno without known target class for TypeClass_ANY
-Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = false )
+Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType = false )
 {
     SbxDataType eBaseType = pVar->SbxValue::GetType();
     if( eBaseType == SbxOBJECT )
@@ -1193,7 +1190,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
 }
 
 // Map old interface
-Any sbxToUnoValue( SbxVariable* pVar )
+Any sbxToUnoValue( const SbxValue* pVar )
 {
     return sbxToUnoValueImpl( pVar );
 }
@@ -1222,7 +1219,7 @@ static bool implGetTypeByName( const OUString& rName, Type& rRetType )
 
 
 // converting of Sbx to Uno with known target class
-Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty )
+Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProperty )
 {
     Any aRetVal;
 
