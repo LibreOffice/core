@@ -50,6 +50,9 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     aResults.reserve(xGroup->mnLength);
     CachedTokensType aCachedTokens;
 
+    double fNan;
+    rtl::math::setNan(&fNan);
+
     for (SCROW i = 0; i < xGroup->mnLength; ++i, aTmpPos.IncRow())
     {
         ScTokenArray aCode2;
@@ -70,7 +73,16 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
                     const formula::VectorRefArray& rArray = p2->GetArray();
                     if (rArray.mbNumeric)
-                        aCode2.AddDouble(static_cast<size_t>(i) < p2->GetArrayLength() ? rArray.mpNumericArray[i] : 0.0);
+                    {
+                        double fVal = fNan;
+                        if (static_cast<size_t>(i) < p2->GetArrayLength())
+                            fVal = rArray.mpNumericArray[i];
+
+                        if (rtl::math::isNan(fVal))
+                            aCode2.AddToken(ScEmptyCellToken(false, false));
+                        else
+                            aCode2.AddDouble(fVal);
+                    }
                     else
                         aCode2.AddString(static_cast<size_t>(i) < p2->GetArrayLength() ? rArray.mpStringArray[i] : OUString());
                 }

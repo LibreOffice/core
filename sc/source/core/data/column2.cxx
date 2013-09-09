@@ -2055,6 +2055,9 @@ bool appendDouble(
     sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
 {
     size_t nLenRemain = nLen;
+    double fNan;
+    rtl::math::setNan(&fNan);
+
     for (; it != itEnd; ++it)
     {
         switch (it->type)
@@ -2119,15 +2122,15 @@ bool appendDouble(
             break;
             case sc::element_type_empty:
             {
-                // Fill it with 0's.
+                // Fill it with NaN's.
                 if (nLenRemain >= it->size)
                 {
-                    rArray.resize(rArray.size() + it->size, 0);
+                    rArray.resize(rArray.size() + it->size, fNan);
                     nLenRemain -= it->size;
                 }
                 else
                 {
-                    rArray.resize(rArray.size() + nLenRemain, 0);
+                    rArray.resize(rArray.size() + nLenRemain, fNan);
                     nLenRemain = 0;
                 }
             }

@@ -880,7 +880,7 @@ void ScInterpreter::ScCount()
 
     while (nParamCount-- > 0)
     {
-        switch (GetStackType())
+        switch (GetRawStackType())
         {
             case svString:
             {
