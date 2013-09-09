@@ -66,7 +66,6 @@ class EditUndo;
 class SvxFont;
 class SfxItemPool;
 class SfxStyleSheet;
-class String;
 class SfxStyleSheetPool;
 class SvxSearchItem;
 class SvxFieldItem;
@@ -345,7 +344,7 @@ public:
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
 //  sal_uInt32: Error code of the stream.
-        sal_uLong               Read( SvStream& rInput, const String& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link& rLink );
@@ -471,7 +470,7 @@ public:
         const Color& rTextLineColor);
 
     virtual void DrawingTab(
-        const Point& rStartPos, long nWidth, const String& rChar,
+        const Point& rStartPos, long nWidth, const OUString& rChar,
         const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
@@ -554,7 +553,7 @@ public:
     void SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet);
     void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
 
-    String GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
+    OUString GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
     EditPaM DeleteSelected(const EditSelection& rSel);
 
     sal_uInt16 GetScriptType(const EditSelection& rSel) const;

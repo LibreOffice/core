@@ -57,7 +57,7 @@ public:
         const Color& rTextLineColor);
 
     virtual void DrawingTab(
-        const Point& rStartPos, long nWidth, const String& rChar,
+        const Point& rStartPos, long nWidth, const OUString& rChar,
         const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,

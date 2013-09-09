@@ -161,7 +161,7 @@ void OutlinerEditEng::DrawingText( const Point& rStartPos, const OUString& rText
         pWrongSpellVector, pFieldData, bEndOfLine, bEndOfParagraph, bEndOfBullet, pLocale, rOverlineColor, rTextLineColor);
 }
 
-void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar,
+void OutlinerEditEng::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
     const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
     bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)

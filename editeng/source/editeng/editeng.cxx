@@ -984,7 +984,7 @@ void EditEngine::SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, s
     pImpEditEngine->SetAttribs(rSel, rSet, nSpecial);
 }
 
-String EditEngine::GetSelected(const EditSelection& rSel, const LineEnd eParaSep) const
+OUString EditEngine::GetSelected(const EditSelection& rSel, const LineEnd eParaSep) const
 {
     return pImpEditEngine->GetSelected(rSel, eParaSep);
 }
@@ -1542,7 +1542,7 @@ void EditEngine::SetText( const OUString& rText )
         pImpEditEngine->FormatAndUpdate();
 }
 
-sal_uLong EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+sal_uLong EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     sal_Bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
@@ -2601,7 +2601,7 @@ void EditEngine::DrawingText( const Point&, const OUString&, sal_uInt16, sal_uIn
 }
 
 void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
-                                      const String& /*rChar*/, const SvxFont& /*rFont*/,
+                                      const OUString& /*rChar*/, const SvxFont& /*rFont*/,
                                       sal_Int32 /*nPara*/, xub_StrLen /*nIndex*/,
                                       sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
                                       bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
