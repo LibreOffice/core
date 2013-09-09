@@ -2978,8 +2978,7 @@ OUString SwTxtNode::GetExpandTxt(  const xub_StrLen nIdx,
     Replace0xFF(*this, aTxt, nTxtStt, aTxt.getLength(), true);
     if( bWithNum )
     {
-        XubString aListLabelStr = GetNumString();
-        if ( aListLabelStr.Len() > 0 )
+        if ( !GetNumString().isEmpty() )
         {
             if ( bAddSpaceAfterListLabelStr )
             {
@@ -3090,7 +3089,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         if ( bWithFtn )
                         {
                             const SwFmtFtn& rFtn = pHt->GetFtn();
-                            XubString sExpand;
+                            OUString sExpand;
                             if( !rFtn.GetNumStr().isEmpty() )
                                 sExpand = rFtn.GetNumStr();
                             else if( rFtn.IsEndNote() )
@@ -3099,7 +3098,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                             else
                                 sExpand = GetDoc()->GetFtnInfo().aFmt.
                                                 GetNumStr( rFtn.GetNumber() );
-                            if( sExpand.Len() )
+                            if( !sExpand.isEmpty() )
                             {
                                 ++aDestIdx;     // insert behind
                                 SvxEscapementItem aItem(
@@ -3110,7 +3109,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 OUString const ins( rDestNd.InsertText(sExpand,
                                   aDestIdx,
                                   IDocumentContentOperations::INS_EMPTYEXPAND));
-                                SAL_INFO_IF(ins.getLength() != sExpand.Len(),
+                                SAL_INFO_IF(ins.getLength() != sExpand.getLength(),
                                         "sw.core", "GetExpandTxt lossage");
                                 aDestIdx = nInsPos + nAttrStartIdx;
                                 nInsPos = nInsPos + ins.getLength();
@@ -3439,9 +3438,9 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, "");
         Update( rStart, nLen - 1, true );
 
-        XubString aTmpTxt(sInserted); aTmpTxt.Erase( 0, 1 );
+        OUString aTmpTxt( sInserted.copy(1) );
         m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpTxt);
-        Update( rStart, aTmpTxt.Len(), false );
+        Update( rStart, aTmpTxt.getLength(), false );
     }
     else
     {

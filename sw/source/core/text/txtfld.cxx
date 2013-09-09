@@ -106,24 +106,18 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_COMBINED_CHARS:
             {
                 if( bName )
-                {
-                    String const sName( pFld->GetFieldName() );
-                    pRet = new SwFldPortion(sName);
-                }
+                    pRet = new SwFldPortion( pFld->GetFieldName() );
                 else
-                {
-                    String const sContent( pFld->ExpandField(bInClipboard) );
-                    pRet = new SwCombinedPortion(sContent);
-                }
+                    pRet = new SwCombinedPortion( pFld->ExpandField(bInClipboard) );
             }
             break;
 
         case RES_HIDDENTXTFLD:
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwHiddenPortion(str);
+                pRet = new SwHiddenPortion(aStr);
             }
             break;
 
@@ -134,10 +128,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                                         &((SwTxtFld*)pHint)->GetTxtNode() );
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( str );
+                pRet = new SwFldPortion( aStr );
             }
             break;
 
@@ -147,10 +141,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 ((SwDocStatField*)pFld)->ChangeExpansion( pFrame );
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( str );
+                pRet = new SwFldPortion( aStr );
             }
             break;
 
@@ -174,10 +168,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                                             bVirt, nNumFmt > -1 ? &nNumFmt : 0);
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( str );
+                pRet = new SwFldPortion( aStr );
             }
             break;
         }
@@ -199,10 +193,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 }
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion( str );
+                pRet = new SwFldPortion( aStr );
             }
             break;
         }
@@ -214,10 +208,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 pDBFld->ChgBodyTxtFlag( ::lcl_IsInBody( pFrame ) );
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(str);
+                pRet = new SwFldPortion(aStr);
             }
             break;
         }
@@ -227,10 +221,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 ((SwRefPageGetField*)pFld)->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
             }
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(str);
+                pRet = new SwFldPortion(aStr);
             }
             break;
 
@@ -243,10 +237,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
         default:
             {
-                String const str( (bName)
+                OUString const aStr( (bName)
                         ? pFld->GetFieldName()
                         : pFld->ExpandField(bInClipboard) );
-                pRet = new SwFldPortion(str);
+                pRet = new SwFldPortion(aStr);
             }
     }
 
@@ -259,10 +253,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
         {
-            String const str( (bName)
+            OUString const aStr( (bName)
                     ? pFld->GetFieldName()
                     : pFld->ExpandField(bInClipboard) );
-            pRet = new SwFldPortion(str, pTmpFnt, bPlaceHolder);
+            pRet = new SwFldPortion(aStr, pTmpFnt, bPlaceHolder);
         }
     }
 
@@ -376,7 +370,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     }
     if( !pRet )
     {
-        const XubString aNothing;
+        const OUString aNothing;
         pRet = new SwFldPortion( aNothing );
         rInf.SetLen( 1 );
     }
@@ -491,10 +485,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             }
             else
             {
-                XubString aTxt( pTxtNd->GetNumString() );
-                if ( aTxt.Len() > 0 )
+                OUString aTxt( pTxtNd->GetNumString() );
+                if ( !aTxt.isEmpty() )
                 {
-                    aTxt.Insert( pTxtNd->GetLabelFollowedBy() );
+                    aTxt += pTxtNd->GetLabelFollowedBy();
                 }
 
                 // 7974: Nicht nur eine Optimierung...
@@ -502,7 +496,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // erhalten. Die nachfolgende Textportion wird im BreakLine
                 // in das BreakCut laufen, obwohl rInf.GetLast()->GetFlyPortion()
                 // vorliegt!
-                if( aTxt.Len() )
+                if( !aTxt.isEmpty() )
                 {
                     //
                     // Build a new numbering font basing on the current paragraph font:
