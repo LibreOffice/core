@@ -1865,7 +1865,8 @@ bool SwView::JumpToSwMark( const String& rMark )
             m_pWrtShell->ShGetFcs( sal_False );
 
         const SwFmtINetFmt* pINet;
-        String sCmp, sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
+        OUString sCmp;
+        String  sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
@@ -1880,34 +1881,34 @@ bool SwView::JumpToSwMark( const String& rMark )
         if( STRING_NOTFOUND != nPos )
             sCmp = comphelper::string::remove(sMark.Copy(nPos + 1), ' ');
 
-        if( sCmp.Len() )
+        if( !sCmp.isEmpty() )
         {
             rtl::OUString sName( sMark.Copy( 0, nPos ) );
-            sCmp.ToLowerAscii();
+            sCmp = sCmp.toAsciiLowerCase();
             FlyCntType eFlyType = FLYCNTTYPE_ALL;
 
-            if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToRegion ) )
+            if( sCmp == "region" )
             {
                 m_pWrtShell->EnterStdMode();
                 bRet = m_pWrtShell->GotoRegion( sName );
             }
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToOutline ) )
+            else if( sCmp == "outline" )
             {
                 m_pWrtShell->EnterStdMode();
                 bRet = m_pWrtShell->GotoOutline( sName );
             }
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToFrame ) )
+            else if( sCmp == "frame" )
                 eFlyType = FLYCNTTYPE_FRM;
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToGraphic ) )
+            else if( sCmp == "graphic" )
                 eFlyType = FLYCNTTYPE_GRF;
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToOLE ) )
+            else if( sCmp == "ole" )
                 eFlyType = FLYCNTTYPE_OLE;
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToTable ) )
+            else if( sCmp == "table" )
             {
                 m_pWrtShell->EnterStdMode();
                 bRet = m_pWrtShell->GotoTable( sName );
             }
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToSequence ) )
+            else if( sCmp == "sequence" )
             {
                 m_pWrtShell->EnterStdMode();
                 sal_Int32 nNoPos = sName.indexOf( cSequenceMarkSeparator );
@@ -1918,7 +1919,7 @@ bool SwView::JumpToSwMark( const String& rMark )
                     m_pWrtShell->GotoRefMark( sName, REF_SEQUENCEFLD, nSeqNo );
                 }
             }
-            else if( COMPARE_EQUAL == sCmp.CompareToAscii( pMarkToText ) )
+            else if( sCmp == "text" )
             {
                 // Normale Textsuche
                 m_pWrtShell->EnterStdMode();

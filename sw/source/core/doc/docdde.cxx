@@ -298,12 +298,12 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     {
         bool bWeiter = false;
         String sName( sItem.Copy( 0, nPos ) );
-        String sCmp( sItem.Copy( nPos + 1 ));
+        OUString sCmp( sItem.Copy( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
 
         _FindItem aPara( sName );
 
-        if( sCmp.EqualsAscii( pMarkToTable ) )
+        if( sCmp == "table" )
         {
             sName = rCC.lowercase( sName );
             BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
@@ -318,7 +318,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 return true;
             }
         }
-        else if( sCmp.EqualsAscii( pMarkToFrame ) )
+        else if( sCmp == "frame" )
         {
             SwNodeIndex* pIdx;
             SwNode* pNd;
@@ -331,12 +331,12 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 return true;
             }
         }
-        else if( sCmp.EqualsAscii( pMarkToRegion ) )
+        else if( sCmp == "region" )
         {
             sItem = sName;              // Is being dealt with further down!
             bWeiter = true;
         }
-        else if( sCmp.EqualsAscii( pMarkToOutline ) )
+        else if( sCmp == "outline" )
         {
             SwPosition aPos( SwNodeIndex( (SwNodes&)GetNodes() ));
             if( GotoOutline( aPos, sName ))

@@ -2860,13 +2860,13 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
     if( nPos < 2 )
         return;
 
-    String sCmp(comphelper::string::remove(aURL.Copy(nPos+1), ' '));
-    if( !sCmp.Len() )
+    OUString sCmp(comphelper::string::remove(aURL.Copy(nPos+1), ' '));
+    if( sCmp.isEmpty() )
         return;
 
-    sCmp.ToLowerAscii();
+    sCmp = sCmp.toAsciiLowerCase();
 
-    if( sCmp.EqualsAscii( pMarkToOutline ) )
+    if( sCmp == "outline" )
     {
         SwPosition aPos( *pCurPam->GetPoint() );
         String aOutline( BookmarkToWriter(aURL.Copy( 0, nPos )) );

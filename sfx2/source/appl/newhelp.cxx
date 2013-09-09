@@ -1706,9 +1706,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
     OUString* pFactory = (OUString*)(sal_uIntPtr)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
     if ( pFactory )
     {
-        String aFactory( *pFactory );
-        aFactory.ToLowerAscii();
-        SetFactory( aFactory, sal_False );
+        SetFactory( OUString( *pFactory ).toAsciiLowerCase(), sal_False );
         aSelectFactoryLink.Call( this );
     }
 

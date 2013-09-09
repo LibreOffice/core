@@ -214,7 +214,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            sTypeToken = OUString::createFromAscii(pMarkToOutline);
+            sTypeToken = "outline";
             sal_uInt16 nOutlineCount = nMemberCount =
                 static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
             if(nOutlineLevel < MAXLEVEL)
@@ -230,7 +230,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         break;
 
         case CONTENT_TYPE_TABLE     :
-            sTypeToken = OUString::createFromAscii(pMarkToTable);
+            sTypeToken = "table";
             nMemberCount = pWrtShell->GetTblFrmFmtCount(true);
             bEdit = true;
         break;
@@ -240,16 +240,16 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_OLE       :
         {
             FlyCntType eType = FLYCNTTYPE_FRM;
-            sTypeToken = OUString::createFromAscii(pMarkToFrame);
+            sTypeToken = "frame";
             if(nContentType == CONTENT_TYPE_OLE)
             {
                 eType = FLYCNTTYPE_OLE;
-                sTypeToken = OUString::createFromAscii(pMarkToOLE);
+                sTypeToken = "ole";
             }
             else if(nContentType == CONTENT_TYPE_GRAPHIC)
             {
                 eType = FLYCNTTYPE_GRF;
-                sTypeToken = OUString::createFromAscii(pMarkToGraphic);
+                sTypeToken = "graphic";
             }
             nMemberCount = pWrtShell->GetFlyCount(eType);
             bEdit = true;
@@ -317,7 +317,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 }
             }
             nMemberCount = pMember->size();
-            sTypeToken = OUString::createFromAscii(pMarkToRegion);
+            sTypeToken = "region";
             bEdit = true;
             bDelete = false;
             if(pOldMember)
