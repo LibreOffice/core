@@ -62,7 +62,7 @@ published constants DNDConstants
     /** Action default.
     */
 
-    const byte ACTION_DEFAULT = 0x80;
+    const byte ACTION_DEFAULT = -0x80;
 };
 
 
