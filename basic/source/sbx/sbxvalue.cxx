@@ -322,7 +322,7 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     else
     {
         // If an object or a VARIANT is requested, don't search the real values
-        SbxValue* p = (SbxValue*) this;
+        SbxValue* p = const_cast<SbxValue*>(this);
         if( rRes.eType != SbxOBJECT && rRes.eType != SbxVARIANT )
             p = TheRealValue();
         if( p )
