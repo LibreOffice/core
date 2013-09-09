@@ -2174,6 +2174,7 @@ void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw(
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
+    (void) aEvent;
     SAL_WARN_IF( implcp_windowResized( aEvent ), "fwk", "Frame::windowResized(): Invalid parameter detected." );
     // Look for rejected calls.
     // Part of dispose-mechanism => soft exceptions
@@ -2190,6 +2191,7 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
+    (void) aEvent;
     SAL_WARN_IF( implcp_focusGained( aEvent ), "fwk", "Frame::focusGained(): Invalid parameter detected." );
     // Look for rejected calls.
     // Part of dispose() mechanism ... => soft exceptions!
@@ -2226,6 +2228,7 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
+    (void) aEvent;
     SAL_WARN_IF( implcp_windowActivated( aEvent ), "fwk", "Frame::windowActivated(): Invalid parameter detected." );
     // Look for rejected calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -2249,6 +2252,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
+    (void) aEvent;
     SAL_WARN_IF( implcp_windowDeactivated( aEvent ), "fwk", "Frame::windowDeactivated(): Invalid parameter detected." );
     // Look for rejected calls.
     // Sometimes called during dispose() => soft exceptions
