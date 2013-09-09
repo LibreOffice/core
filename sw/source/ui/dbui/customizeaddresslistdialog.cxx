@@ -22,49 +22,39 @@
 #include <createaddresslistdialog.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
-#include <customizeaddresslistdialog.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
-        Window* pParent, const SwCSVData& rOldData) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZE_ADDRESS_LIST)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aFieldsFT( this, SW_RES(    FT_FIELDS)),
-    m_aFieldsLB( this, SW_RES(    LB_FIELDS)),
-    m_aAddPB( this, SW_RES(       PB_ADD)),
-    m_aDeletePB( this, SW_RES(    PB_DELETE)),
-    m_aRenamePB( this, SW_RES(    PB_RENAME)),
-    m_aUpPB( this, SW_RES(        PB_UP)),
-    m_aDownPB( this, SW_RES(      PB_DOWN)),
-    m_aSeparatorFL( this, SW_RES( FL_SEPARATOR)),
-    m_aOK( this, SW_RES(          PB_OK)),
-    m_aCancel( this, SW_RES(      PB_CANCEL)),
-    m_aHelp( this, SW_RES(        PB_HELP)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_pNewData( new SwCSVData(rOldData))
+        Window* pParent, const SwCSVData& rOldData)
+    : SfxModalDialog(pParent, "CustomizeAddrListDialog",
+        "modules/swriter/ui/customizeaddrlistdialog.ui")
+    , m_pNewData( new SwCSVData(rOldData))
 {
-    FreeResource();
-    m_aFieldsLB.SetSelectHdl(LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
+    get(m_pFieldsLB, "treeview");
+    m_pFieldsLB->SetDropDownLineCount(14);
+    get(m_pAddPB, "add");
+    get(m_pDeletePB, "delete");
+    get(m_pRenamePB, "rename");
+    get(m_pUpPB, "up");
+    get(m_pDownPB, "down");
+
+    m_pFieldsLB->SetSelectHdl(LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
     Link aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
-    m_aAddPB.SetClickHdl(aAddRenameLk);
-    m_aRenamePB.SetClickHdl(aAddRenameLk);
-    m_aDeletePB.SetClickHdl(LINK(this, SwCustomizeAddressListDialog, DeleteHdl_Impl ));
+    m_pAddPB->SetClickHdl(aAddRenameLk);
+    m_pRenamePB->SetClickHdl(aAddRenameLk);
+    m_pDeletePB->SetClickHdl(LINK(this, SwCustomizeAddressListDialog, DeleteHdl_Impl ));
     Link aUpDownLk = LINK(this, SwCustomizeAddressListDialog, UpDownHdl_Impl);
-    m_aUpPB.SetClickHdl(aUpDownLk);
-    m_aDownPB.SetClickHdl(aUpDownLk);
+    m_pUpPB->SetClickHdl(aUpDownLk);
+    m_pDownPB->SetClickHdl(aUpDownLk);
 
     std::vector< OUString >::iterator aHeaderIter;
 
     for(aHeaderIter = m_pNewData->aDBColumnHeaders.begin();
                 aHeaderIter != m_pNewData->aDBColumnHeaders.end(); ++aHeaderIter)
-        m_aFieldsLB.InsertEntry(*aHeaderIter);
+        m_pFieldsLB->InsertEntry(*aHeaderIter);
 
-    m_aFieldsLB.SelectEntryPos(0);
+    m_pFieldsLB->SelectEntryPos(0);
     UpdateButtons();
 }
 
@@ -80,8 +70,8 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl)
 
 IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 {
-    bool bRename = pButton == &m_aRenamePB;
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
+    bool bRename = pButton == m_pRenamePB;
+    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
@@ -92,7 +82,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         pDlg = new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
     if(bRename)
     {
-        String aTemp = m_aFieldsLB.GetEntry(nPos);
+        String aTemp = m_pFieldsLB->GetEntry(nPos);
         pDlg->SetFieldName(aTemp);
     }
     if(RET_OK == pDlg->Execute())
@@ -101,11 +91,11 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         if(bRename)
         {
             m_pNewData->aDBColumnHeaders[nPos] = sNew;
-            m_aFieldsLB.RemoveEntry(nPos);
+            m_pFieldsLB->RemoveEntry(nPos);
         }
         else
         {
-            if ( m_aFieldsLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            if ( m_pFieldsLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
                 ++nPos; // append the new entry behind the selected
             //add the new column
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
@@ -117,8 +107,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 
         }
 
-        m_aFieldsLB.InsertEntry(sNew, nPos);
-        m_aFieldsLB.SelectEntryPos(nPos);
+        m_pFieldsLB->InsertEntry(sNew, nPos);
+        m_pFieldsLB->SelectEntryPos(nPos);
     }
     delete pDlg;
     UpdateButtons();
@@ -127,9 +117,9 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
 {
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
-    m_aFieldsLB.RemoveEntry(m_aFieldsLB.GetSelectEntryPos());
-    m_aFieldsLB.SelectEntryPos(nPos > m_aFieldsLB.GetEntryCount() - 1 ? nPos - 1 : nPos);
+    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
+    m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
+    m_pFieldsLB->SelectEntryPos(nPos > m_pFieldsLB->GetEntryCount() - 1 ? nPos - 1 : nPos);
 
     //remove the column
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nPos);
@@ -145,15 +135,15 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 {
     sal_uInt16 nPos;
-    sal_uInt16 nOldPos = nPos = m_aFieldsLB.GetSelectEntryPos();
-    String aTemp = m_aFieldsLB.GetEntry(nPos);
-    m_aFieldsLB.RemoveEntry( nPos );
-    if(pButton == &m_aUpPB)
+    sal_uInt16 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
+    String aTemp = m_pFieldsLB->GetEntry(nPos);
+    m_pFieldsLB->RemoveEntry( nPos );
+    if(pButton == m_pUpPB)
         --nPos;
     else
         ++nPos;
-    m_aFieldsLB.InsertEntry(aTemp, nPos);
-    m_aFieldsLB.SelectEntryPos(nPos);
+    m_pFieldsLB->InsertEntry(aTemp, nPos);
+    m_pFieldsLB->SelectEntryPos(nPos);
     //align m_pNewData
     OUString sHeader = m_pNewData->aDBColumnHeaders[nOldPos];
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nOldPos);
@@ -172,12 +162,12 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 
 void SwCustomizeAddressListDialog::UpdateButtons()
 {
-    sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
-    sal_uInt16 nEntries = m_aFieldsLB.GetEntryCount();
-    m_aUpPB.Enable(nPos > 0 && nEntries > 0);
-    m_aDownPB.Enable(nPos < nEntries -1);
-    m_aDeletePB.Enable(nEntries > 0);
-    m_aRenamePB.Enable(nEntries > 0);
+    sal_uInt16 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_uInt16 nEntries = m_pFieldsLB->GetEntryCount();
+    m_pUpPB->Enable(nPos > 0 && nEntries > 0);
+    m_pDownPB->Enable(nPos < nEntries -1);
+    m_pDeletePB->Enable(nEntries > 0);
+    m_pRenamePB->Enable(nEntries > 0);
 }
 
 SwCSVData*    SwCustomizeAddressListDialog::GetNewData()

@@ -29,23 +29,16 @@ struct SwCSVData;
 
 class SwCustomizeAddressListDialog : public SfxModalDialog
 {
-    FixedText               m_aFieldsFT;
-    ListBox                 m_aFieldsLB;
+    ListBox*     m_pFieldsLB;
 
-    PushButton              m_aAddPB;
-    PushButton              m_aDeletePB;
-    PushButton              m_aRenamePB;
+    PushButton*  m_pAddPB;
+    PushButton*  m_pDeletePB;
+    PushButton*  m_pRenamePB;
 
-    ImageButton             m_aUpPB;
-    ImageButton             m_aDownPB;
+    PushButton*  m_pUpPB;
+    PushButton*  m_pDownPB;
 
-    FixedLine               m_aSeparatorFL;
-
-    OKButton                m_aOK;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
-
-    SwCSVData*              m_pNewData;
+    SwCSVData*   m_pNewData;
 
     DECL_LINK(AddRenameHdl_Impl, PushButton*);
     DECL_LINK(DeleteHdl_Impl, void *);

@@ -83,6 +83,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/createauthorentry \
 	sw/uiconfig/swriter/ui/createautomarkdialog \
+	sw/uiconfig/swriter/ui/customizeaddrlistdialog \
 	sw/uiconfig/swriter/ui/datasourcesunavailabledialog \
 	sw/uiconfig/swriter/ui/dropcapspage \
 	sw/uiconfig/swriter/ui/dropdownfielddialog \
