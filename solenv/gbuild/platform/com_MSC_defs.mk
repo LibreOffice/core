@@ -275,6 +275,15 @@ gb_CFLAGS+=$(gb_DEBUG_CFLAGS)
 gb_CXXFLAGS+=$(gb_DEBUG_CFLAGS)
 endif
 
+# The optimisation options here might seem like micro-management (see
+# http://www.ffuts.org/blog/dont-spend-time-micromanaging-optimization-options-in-visual-c/
+# ), and the exact rationale for this selection of options for
+# gb_COMPILEROPTFLAGS is probably lost in history. We used -Ob1 -Oxs
+# -Oy- already in OOo 3.2 at least.
+
+# Anyway, changing it to just -O2 broke unit tests. So there must be
+# some reason for this particular choice. And if you want to change it
+# to something simpler, please run a full make check;)
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 
