@@ -1261,6 +1261,43 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     }
 }
 
+//Resolves: fdo#34987 if the style's auto height before and after is the same
+//then don't reset it back to the underlying default of true for the small
+//period before its going to be reset to false again. Doing this avoids the
+//master page shapes from resizing themselves due to autoheight becoming
+//enabled before having autoheight turned off again and getting stuck on that
+//autosized height
+static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pPropStyle,
+    const uno::Reference< beans::XPropertySet > &rPropSet, const UniReference < XMLPropertySetMapper >& rPrMap)
+{
+    bool bCanSkipReset = false;
+    if (pPropStyle && rName == "TextAutoGrowHeight")
+    {
+        sal_Bool bOldStyleTextAutoGrowHeight(sal_False);
+        rPropSet->getPropertyValue("TextAutoGrowHeight") >>= bOldStyleTextAutoGrowHeight;
+
+        sal_Int32 nIndexStyle = rPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "auto-grow-height", 0);
+        if (nIndexStyle != -1)
+        {
+            const ::std::vector< XMLPropertyState > &rProperties = pPropStyle->GetProperties();
+            ::std::vector< XMLPropertyState >::const_iterator property = rProperties.begin();
+            for(; property != rProperties.end(); ++property)
+            {
+                sal_Int32 nIdx = property->mnIndex;
+                if (nIdx == nIndexStyle)
+                {
+                    sal_Bool bNewStyleTextAutoGrowHeight(sal_False);
+                    property->maValue >>= bNewStyleTextAutoGrowHeight;
+                    if (bNewStyleTextAutoGrowHeight == bOldStyleTextAutoGrowHeight)
+                        bCanSkipReset = true;;
+                    break;
+                }
+            }
+        }
+    }
+    return bCanSkipReset;
+}
+
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 //
 void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
@@ -1289,6 +1326,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
             if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
             {
                 OUString aStyleName(pStyle->GetDisplayName());
+
                 if( nPrefLen )
                 {
                     sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( sal_Unicode('-') ) + 1;
@@ -1297,6 +1335,8 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
                     aStyleName = aStyleName.copy( nPrefLen );
                 }
+
+                XMLPropStyleContext* pPropStyle = dynamic_cast< XMLPropStyleContext* >(const_cast< SvXMLStyleContext* >( pStyle ) );
 
                 uno::Reference< style::XStyle > xStyle;
                 if(xPageStyles->hasByName(aStyleName))
@@ -1326,6 +1366,9 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                                 const OUString& rName = xPrMap->GetEntryAPIName( i );
                                 if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
                                 {
+                                    bool bCanSkipReset = canSkipReset(rName, pPropStyle, xPropSet, xPrMap);
+                                    if (bCanSkipReset)
+                                        continue;
                                     xPropState->setPropertyToDefault( rName );
                                 }
                             }
@@ -1356,9 +1399,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                 if(xStyle.is())
                 {
                     // set properties at style
-                    XMLPropStyleContext* pPropStyle = dynamic_cast< XMLPropStyleContext* >( const_cast< SvXMLStyleContext* >( pStyle ) );
                     uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
-
                     if(xPropSet.is() && pPropStyle)
                     {
                         pPropStyle->FillPropertySet(xPropSet);
