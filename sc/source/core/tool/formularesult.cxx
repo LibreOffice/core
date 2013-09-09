@@ -255,6 +255,19 @@ inline bool isValue( formula::StackVar sv )
         || sv == formula::svEmptyCell || sv == formula::svHybridValueCell;
 }
 
+inline bool isString( formula::StackVar sv )
+{
+    switch (sv)
+    {
+        case formula::svString:
+        case formula::svHybridCell:
+        case formula::svHybridValueCell:
+            return true;
+    }
+
+    return false;
+}
+
 }
 
 bool ScFormulaResult::IsValue() const
@@ -318,6 +331,42 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
         return false;
 
     rVal = GetDouble();
+    return true;
+}
+
+bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, OUString& rStr ) const
+{
+    if (mnError)
+    {
+        rErr = mnError;
+        return true;
+    }
+
+    formula::StackVar sv = GetCellResultType();
+    if (sv == formula::svError)
+    {
+        if (GetType() == formula::svMatrixCell)
+        {
+            // don't need to test for mpToken here, GetType() already did it
+            rErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
+                GetUpperLeftToken()->GetError();
+        }
+        else if (mpToken)
+        {
+            rErr = mpToken->GetError();
+        }
+    }
+
+    if (rErr)
+        return true;
+
+    if (!mbToken)
+        return false;
+
+    if (!isString(sv))
+        return false;
+
+    rStr = GetString();
     return true;
 }
 

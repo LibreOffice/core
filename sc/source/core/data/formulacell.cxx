@@ -2082,6 +2082,17 @@ bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
     return aResult.GetErrorOrDouble(rErr, rVal);
 }
 
+bool ScFormulaCell::GetErrorOrString( sal_uInt16& rErr, OUString& rStr )
+{
+    MaybeInterpret();
+
+    rErr = pCode->GetCodeError();
+    if (rErr)
+        return true;
+
+    return aResult.GetErrorOrString(rErr, rStr);
+}
+
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
 {
     pCode->Reset();
