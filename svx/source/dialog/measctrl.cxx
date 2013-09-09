@@ -19,20 +19,14 @@
 
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
+#include <vcl/builder.hxx>
 
 #include "svx/measctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-SvxXMeasurePreview::SvxXMeasurePreview
-(
-    Window* pParent,
-    const ResId& rResId,
-    const SfxItemSet& rInAttrs
-) :
-
-    Control ( pParent, rResId ),
-    rAttrs  ( rInAttrs )
+SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent,const ResId& rResId,const SfxItemSet& rInAttrs)
+:    Control ( pParent, rResId )
 
 {
     SetMapMode( MAP_100TH_MM );
@@ -59,6 +53,51 @@ SvxXMeasurePreview::SvxXMeasurePreview
 
     Invalidate();
 }
+
+SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent, WinBits nStyle)
+    : Control(pParent, nStyle)
+{
+    SetMapMode( MAP_100TH_MM );
+
+    // Scale: 1:2
+    MapMode aMapMode = GetMapMode();
+    aMapMode.SetScaleX( Fraction( 1, 2 ) );
+    aMapMode.SetScaleY( Fraction( 1, 2 ) );
+    SetMapMode( aMapMode );
+
+    Size aSize = GetOutputSize();
+    Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
+    Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
+
+    pMeasureObj = new SdrMeasureObj( aPt1, aPt2 );
+    pModel = new SdrModel();
+    pMeasureObj->SetModel( pModel );
+
+    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+    Invalidate();
+}
+
+void SvxXMeasurePreview::Resize()
+{
+    Control::Resize();
+
+    Size aSize = GetOutputSize();
+    Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
+    pMeasureObj->SetPoint(aPt1, 0);
+    Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
+    pMeasureObj->SetPoint(aPt2, 1);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXMeasurePreview(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvxXMeasurePreview(pParent, nWinStyle);
+}
+
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {

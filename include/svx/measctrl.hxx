@@ -37,16 +37,16 @@ class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
  friend class SvxMeasurePage;
 
 private:
-    const SfxItemSet&   rAttrs;
     SdrMeasureObj*      pMeasureObj;
     SdrModel*           pModel;
 
 public:
-            SvxXMeasurePreview( Window* pParent, const ResId& rResId,
-                                const SfxItemSet& rInAttrs );
-            ~SvxXMeasurePreview();
+    SvxXMeasurePreview(Window* pParent, const ResId& rResId, const SfxItemSet& rInAttrs);
+    SvxXMeasurePreview(Window* pParent, WinBits nStyle);
+    ~SvxXMeasurePreview();
 
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint(const Rectangle& rRect);
+    virtual void Resize();
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     void         SetAttributes( const SfxItemSet& rInAttrs );

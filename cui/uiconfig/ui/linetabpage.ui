@@ -2,6 +2,21 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkAdjustment" id="adjustmentPERCENT">
+    <property name="upper">100</property>
+    <property name="step_increment">5</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentWIDTH">
+    <property name="upper">5</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentWIDTH_SYMBOL">
+    <property name="upper">19.989999999999998</property>
+    <property name="step_increment">0.050000000000000003</property>
+    <property name="page_increment">1</property>
+  </object>
   <object class="GtkBox" id="LineTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -700,11 +715,11 @@
       </packing>
     </child>
     <child>
-      <object class="svxlo-SvxXLinePreview" id="CTL_PREVIEW">
+      <object class="svxlo-SvxXLinePreview" id="CTL_PREVIEW:border">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child internal-child="accessible">
-          <object class="AtkObject" id="CTL_PREVIEW-atkobject">
+          <object class="AtkObject" id="CTL_PREVIEW:border-atkobject">
             <property name="AtkObject::accessible-name" translatable="yes">Example</property>
           </object>
         </child>
@@ -715,21 +730,6 @@
         <property name="position">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentPERCENT">
-    <property name="upper">100</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentWIDTH">
-    <property name="upper">5</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentWIDTH_SYMBOL">
-    <property name="upper">19.989999999999998</property>
-    <property name="step_increment">0.050000000000000003</property>
-    <property name="page_increment">1</property>
   </object>
   <object class="GtkListStore" id="liststoreCAP_STYLE">
     <columns>
