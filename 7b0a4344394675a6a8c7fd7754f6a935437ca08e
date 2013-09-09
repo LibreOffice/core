@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7MM\u003d",
+        "filename": "comphelper/source/misc/expandmacro.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T10:35:03Z",
+      "side": 1,
+      "message": "this does not even compile :)",
+      "revId": "7b0a4344394675a6a8c7fd7754f6a935437ca08e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ME\u003d",
+        "filename": "comphelper/source/misc/expandmacro.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T10:35:03Z",
+      "side": 1,
+      "message": "not passing xContext as a const reference results in unnecessary copying. also, since you already gave a using namespace css::uno above, why fully-qualifying it here again?",
+      "revId": "7b0a4344394675a6a8c7fd7754f6a935437ca08e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7MA\u003d",
+        "filename": "include/comphelper/expandmacro.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T10:35:03Z",
+      "side": 1,
+      "message": "the two methods below clearly lack doxygen documentation :)",
+      "revId": "7b0a4344394675a6a8c7fd7754f6a935437ca08e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7L8\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-09T10:35:03Z",
+      "side": 1,
+      "message": "this one seems now unneeded?",
+      "revId": "7b0a4344394675a6a8c7fd7754f6a935437ca08e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
