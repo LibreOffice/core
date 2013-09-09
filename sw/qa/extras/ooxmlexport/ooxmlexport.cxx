@@ -1283,10 +1283,10 @@ void Test::testCharacterBorder()
     // Border
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
-        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(0xFF6600,0,318,0,0,318), aTopBorder);
-        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
-        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
-        CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF6600,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 
     // Padding (w:space)

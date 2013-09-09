@@ -181,19 +181,19 @@ void Test::testCharacterBorder()
         uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
 
         // Top border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"TopBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"TopBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParTopPadding, getProperty<sal_Int32>(xSet,"TopBorderDistance"));
 
         // Bottom border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"BottomBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"BottomBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParTopPadding, getProperty<sal_Int32>(xSet,"BottomBorderDistance"));
 
         // Left border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"LeftBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"LeftBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParTopPadding, getProperty<sal_Int32>(xSet,"LeftBorderDistance"));
 
         // Right border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"RightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParTopBorder, getProperty<table::BorderLine2>(xSet,"RightBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParTopPadding, getProperty<sal_Int32>(xSet,"RightBorderDistance"));
 
         // Shadow
@@ -211,19 +211,19 @@ void Test::testCharacterBorder()
         uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
 
         // Top border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
 
         // Bottom border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
 
         // Left border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
 
         // Right border (same as top border)
-        CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
         CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
 
         // Shadow
@@ -243,19 +243,19 @@ void Test::testCharacterBorder()
             uno::Reference < beans::XPropertySet > xPSet( xAutoStylesEnum->nextElement(), uno::UNO_QUERY );
 
             // Top border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
             CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
 
             // Bottom border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
             CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
 
             // Left border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
             CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
 
             // Right border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aFirstParCharTopBorder, getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
             CPPUNIT_ASSERT_EQUAL(aFirstParCharTopPadding, getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
         }
     }
@@ -278,19 +278,19 @@ void Test::testCharacterBorder()
         uno::Reference < beans::XPropertySet > xSet( getRun(getParagraph(2),2), uno::UNO_QUERY );
 
         // Top border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[0], getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[0], getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
         CPPUNIT_ASSERT_EQUAL(aDistances[0], getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
 
         // Bottom border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[1], getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[1], getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
         CPPUNIT_ASSERT_EQUAL(aDistances[1], getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
 
         // Left border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[2], getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[2], getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
         CPPUNIT_ASSERT_EQUAL(aDistances[2], getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
 
         // Right border
-        CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
+        CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
         CPPUNIT_ASSERT_EQUAL(aDistances[3], getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
 
         // Shadow
@@ -306,19 +306,19 @@ void Test::testCharacterBorder()
             uno::Reference < beans::XPropertySet > xStyleSet(xStyleFamily->getByName("CharDiffBor"), uno::UNO_QUERY);
 
             // Top border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[0], getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[0], getProperty<table::BorderLine2>(xSet,"CharTopBorder"));
             CPPUNIT_ASSERT_EQUAL(aDistances[0], getProperty<sal_Int32>(xSet,"CharTopBorderDistance"));
 
             // Bottom border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[1], getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[1], getProperty<table::BorderLine2>(xSet,"CharBottomBorder"));
             CPPUNIT_ASSERT_EQUAL(aDistances[1], getProperty<sal_Int32>(xSet,"CharBottomBorderDistance"));
 
             // Left border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[2], getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[2], getProperty<table::BorderLine2>(xSet,"CharLeftBorder"));
             CPPUNIT_ASSERT_EQUAL(aDistances[2], getProperty<sal_Int32>(xSet,"CharLeftBorderDistance"));
 
             // Right border
-            CPPUNIT_ASSERT_EQUAL_BORDER(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
+            CPPUNIT_ASSERT_BORDER_EQUAL(aBorderArray[3], getProperty<table::BorderLine2>(xSet,"CharRightBorder"));
             CPPUNIT_ASSERT_EQUAL(aDistances[3], getProperty<sal_Int32>(xSet,"CharRightBorderDistance"));
         }
     }
