@@ -593,8 +593,8 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
-    String sParams( FindPara( rStr, '@', '@' ) );// Date/Time
-    if (!sParams.Len())
+    OUString sParams( FindPara( rStr, '@', '@' ) );// Date/Time
+    if (sParams.isEmpty())
     {
         bool bHasTime = false;
         switch (nWhichDefault)
@@ -602,11 +602,11 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
             case ww::ePRINTDATE:
             case ww::eSAVEDATE:
                 sParams = GetWordDefaultDateStringAsUS(pFormatter, rLang);
-                sParams.AppendAscii(" HH:MM:SS AM/PM");
+                sParams += " HH:MM:SS AM/PM";
                 bHasTime = true;
                 break;
             case ww::eCREATEDATE:
-                sParams.AssignAscii("DD/MM/YYYY HH:MM:SS");
+                sParams += "DD/MM/YYYY HH:MM:SS";
                 bHasTime = true;
                 break;
             default:
@@ -616,7 +616,7 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
         }
 
         if (bHijri)
-            sParams.Insert(OUString("[~hijri]"), 0);
+            sParams = "[~hijri]" + sParams;
 
         sal_Int32 nCheckPos = 0;
         short nType = NUMBERFORMAT_DEFINED;
@@ -2964,7 +2964,7 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
 
             // Delimiters between styles and style levels appears to allow both ; and ,
 
-            String sTemplate( sParams.GetToken(0, ';', nIndex) );
+            OUString sTemplate( sParams.GetToken(0, ';', nIndex) );
             if( -1 == nIndex )
             {
                 nIndex=0;
