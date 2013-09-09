@@ -71,7 +71,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/tabpages/grfpage.src \
     cui/source/tabpages/labdlg.src \
     cui/source/tabpages/macroass.src \
-    cui/source/tabpages/measure.src \
     cui/source/tabpages/page.src \
     cui/source/tabpages/paragrph.src \
     cui/source/tabpages/strings.src \

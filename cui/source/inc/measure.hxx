@@ -32,40 +32,30 @@ class SvxMeasurePage : public SvxTabPage
 {
 private:
 
-    FixedLine           aFlLine;
-    FixedText           aFtLineDist;
-    MetricField         aMtrFldLineDist;
-    FixedText           aFtHelplineOverhang;
-    MetricField         aMtrFldHelplineOverhang;
-    FixedText           aFtHelplineDist;
-    MetricField         aMtrFldHelplineDist;
-    FixedText           aFtHelpline1Len;
-    MetricField         aMtrFldHelpline1Len;
-    FixedText           aFtHelpline2Len;
-    MetricField         aMtrFldHelpline2Len;
-    TriStateBox         aTsbBelowRefEdge;
-    FixedText           aFtDecimalPlaces;
-    MetricField         aMtrFldDecimalPlaces;
+    MetricField*         m_pMtrFldLineDist;
+    MetricField*         m_pMtrFldHelplineOverhang;
+    MetricField*         m_pMtrFldHelplineDist;
+    MetricField*         m_pMtrFldHelpline1Len;
+    MetricField*         m_pMtrFldHelpline2Len;
+    TriStateBox*         m_pTsbBelowRefEdge;
+    MetricField*         m_pMtrFldDecimalPlaces;
 
-    FixedLine           aFlLabel;
-    FixedText           aFtPosition;
-    SvxRectCtl          aCtlPosition;
-    TriStateBox         aTsbAutoPosV;
-    TriStateBox         aTsbAutoPosH;
-    TriStateBox         aTsbShowUnit;
-    ListBox             aLbUnit;
-    TriStateBox         aTsbParallel;
+    SvxRectCtl*          m_pCtlPosition;
+    TriStateBox*         m_pTsbAutoPosV;
+    TriStateBox*         m_pTsbAutoPosH;
+    TriStateBox*         m_pTsbShowUnit;
+    ListBox*             m_pLbUnit;
+    TriStateBox*         m_pTsbParallel;
+    FixedText*           m_pFtAutomatic;
 
-    SvxXMeasurePreview  aCtlPreview;
-
-    FixedLine           aFlVert;
+    SvxXMeasurePreview*  m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
     const SdrView*      pView;
     SfxMapUnit          eUnit;
 
-    sal_Bool                bPositionModified;
+    sal_Bool            bPositionModified;
 
     void                FillUnitLB();
 
@@ -88,6 +78,7 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
     virtual void PageCreated (SfxAllItemSet aSet);
+
 };
 
 /* Derived from SfxNoLayoutSingleTabDialog, in order to be able to be

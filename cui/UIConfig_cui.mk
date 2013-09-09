@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/comment \
 	cui/uiconfig/ui/cuiimapdlg \
+	cui/uiconfig/ui/dimensionlines \
 	cui/uiconfig/ui/editdictionarydialog \
 	cui/uiconfig/ui/formatnumberdialog \
 	cui/uiconfig/ui/gradientpage \
