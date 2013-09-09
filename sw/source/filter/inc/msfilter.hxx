@@ -103,20 +103,20 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
+        sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
 
         /*Used to identify if the previous token is AM time field*/
-        sal_Bool IsPreviousAM(String& rParams, xub_StrLen nPos);
+        sal_Bool IsPreviousAM(OUString& rParams, sal_Int32 nPos);
 
         /*Used to identify if the next token is PM time field*/
-        sal_Bool IsNextPM(String& rParams, xub_StrLen nPos);
+        sal_Bool IsNextPM(OUString& rParams, sal_Int32 nPos);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        bool IsNotAM(String& rParams, xub_StrLen nPos);
+        bool IsNotAM(OUString& rParams, sal_Int32 nPos);
 
         /** Another function used by MSDateTimeFormatToSwFormat
 
@@ -206,7 +206,7 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const String& rName, ww::sti eSti);
+            StyleResult GetStyle(const OUString& rName, ww::sti eSti);
         };
 
         /** Knows which writer style a given word style should be imported as
@@ -266,7 +266,7 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const String& rName, ww::sti eSti);
+            StyleResult GetStyle(const OUString& rName, ww::sti eSti);
         };
 
         /** Find suitable names for exporting this font

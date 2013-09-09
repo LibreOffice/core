@@ -121,8 +121,8 @@ namespace myImplHelpers
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
         SwTxtFmtColl* GetBuiltInStyle(ww::sti eSti);
-        SwTxtFmtColl* GetStyle(const String &rName);
-        SwTxtFmtColl* MakeStyle(const String &rName);
+        SwTxtFmtColl* GetStyle(const OUString &rName);
+        SwTxtFmtColl* MakeStyle(const OUString &rName);
     };
 
     SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::GetBuiltInStyle(ww::sti eSti)
@@ -166,12 +166,12 @@ namespace myImplHelpers
         return pRet;
     }
 
-    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::GetStyle(const String &rName)
+    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::GetStyle(const OUString &rName)
     {
         return sw::util::GetParaStyle(mrDoc, rName);
     }
 
-    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::MakeStyle(const String &rName)
+    SwTxtFmtColl* MapperImpl<SwTxtFmtColl>::MakeStyle(const OUString &rName)
     {
         return mrDoc.MakeTxtFmtColl(rName,
             const_cast<SwTxtFmtColl *>(mrDoc.GetDfltTxtFmtColl()));
@@ -184,8 +184,8 @@ namespace myImplHelpers
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
         SwCharFmt* GetBuiltInStyle(ww::sti eSti);
-        SwCharFmt* GetStyle(const String &rName);
-        SwCharFmt* MakeStyle(const String &rName);
+        SwCharFmt* GetStyle(const OUString &rName);
+        SwCharFmt* MakeStyle(const OUString &rName);
     };
 
     SwCharFmt* MapperImpl<SwCharFmt>::GetBuiltInStyle(ww::sti eSti)
@@ -227,12 +227,12 @@ namespace myImplHelpers
         return pRet;
     }
 
-    SwCharFmt* MapperImpl<SwCharFmt>::GetStyle(const String &rName)
+    SwCharFmt* MapperImpl<SwCharFmt>::GetStyle(const OUString &rName)
     {
         return sw::util::GetCharStyle(mrDoc, rName);
     }
 
-    SwCharFmt* MapperImpl<SwCharFmt>::MakeStyle(const String &rName)
+    SwCharFmt* MapperImpl<SwCharFmt>::MakeStyle(const OUString &rName)
     {
         return mrDoc.MakeCharFmt(rName, mrDoc.GetDfltCharFmt());
     }
@@ -246,12 +246,12 @@ namespace myImplHelpers
     public:
         typedef std::pair<C*, bool> StyleResult;
         StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
-        StyleResult GetStyle(const String& rName, ww::sti eSti);
+        StyleResult GetStyle(const OUString& rName, ww::sti eSti);
     };
 
     template<class C>
     typename StyleMapperImpl<C>::StyleResult
-    StyleMapperImpl<C>::GetStyle(const String& rName, ww::sti eSti)
+    StyleMapperImpl<C>::GetStyle(const OUString& rName, ww::sti eSti)
     {
         C *pRet = maHelper.GetBuiltInStyle(eSti);
 
@@ -271,12 +271,12 @@ namespace myImplHelpers
 
         if (!pRet)
         {
-            String aName(rName);
-            xub_StrLen nPos = aName.Search(',');
+            OUString aName(rName);
+            sal_Int32 nIdx = rName.indexOf(',');
             // No commas allow in SW style names
-            if (STRING_NOTFOUND != nPos)
-                aName.Erase(nPos);
-            pRet = MakeNonCollidingStyle(aName);
+            if (-1 != nIdx)
+                aName = rName.copy( 0, nIdx );
+            pRet = MakeNonCollidingStyle( aName );
         }
 
         if (pRet)
@@ -453,7 +453,7 @@ namespace sw
         }
 
         ParaStyleMapper::StyleResult ParaStyleMapper::GetStyle(
-            const String& rName, ww::sti eSti)
+            const OUString& rName, ww::sti eSti)
         {
             return mpImpl->GetStyle(rName, eSti);
         }
@@ -469,7 +469,7 @@ namespace sw
         }
 
         CharStyleMapper::StyleResult CharStyleMapper::GetStyle(
-            const String& rName, ww::sti eSti)
+            const OUString& rName, ww::sti eSti)
         {
             return mpImpl->GetStyle(rName, eSti);
         }
@@ -746,7 +746,7 @@ namespace sw
             return nDT;
         }
 
-        sal_uLong MSDateTimeFormatToSwFormat(String& rParams,
+        sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams,
             SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri,
             sal_uInt16 nDocLang)
         {
@@ -760,72 +760,66 @@ namespace sw
             rParams = sParams;
 
             // Force to Japanese when finding one of 'geaE'
-            OUString sJChars( "geE" );
-            bool bForceJapanese = ( STRING_NOTFOUND != rParams.SearchChar( sJChars.getStr() ) );
+            bool bForceJapanese = (-1 != rParams.indexOf('g')
+                || -1 != rParams.indexOf('e') || -1 != rParams.indexOf('E') );
             if ( bForceJapanese )
             {
-                rParams.SearchAndReplaceAll( OUString( "ee" ),
-                                             OUString( "yyyy" ) );
-                rParams.SearchAndReplaceAll( OUString( "EE" ),
-                                             OUString( "YYYY" ) );
+                rParams = rParams.replaceAll( "ee", "yyyy" ).replaceAll( "EE", "YYYY" );
             }
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'a' case here
-                xub_StrLen nLastPos = 0;
+                sal_Int32 nLastPos = 0;
                 do
                 {
-                    xub_StrLen nPos = rParams.Search( 'a', nLastPos + 1 );
-                    bForceJapanese |= ( nPos != STRING_NOTFOUND && IsNotAM( rParams, nPos ) );
+                    sal_Int32 nPos = rParams.indexOf( 'a', nLastPos + 1 );
+                    bForceJapanese |= ( nPos != -1 && IsNotAM( rParams, nPos ) );
                     nLastPos = nPos;
-                } while ( STRING_NOTFOUND != nLastPos );
+                } while ( -1 != nLastPos );
             }
 
             // Force to NatNum when finding one of 'oOA'
-            String sOldParams( rParams );
-            rParams.SearchAndReplaceAll( OUString( "o" ),
-                                         OUString( "m" ) );
-            rParams.SearchAndReplaceAll( OUString( "O" ),
-                                         OUString( "M" ) );
-            bool bForceNatNum = !sOldParams.Equals( rParams );
+            OUString sOldParams( rParams );
+            rParams = rParams.replaceAll( "o", "m" ).replaceAll( "O", "M" );
+            bool bForceNatNum = !sOldParams.equals( rParams );
             if (LANGUAGE_FRENCH != nDocLang)
             {
                 // Handle the 'A' case here
-                xub_StrLen nLastPos = 0;
+                sal_Int32 nLastPos = 0;
                 do
                 {
-                    xub_StrLen nPos = rParams.Search( 'A', nLastPos + 1 );
-                    bool bIsCharA = ( nPos != STRING_NOTFOUND && IsNotAM( rParams, nPos ) );
+                    sal_Int32 nPos = rParams.indexOf( 'A', nLastPos + 1 );
+                    bool bIsCharA = ( nPos != -1 && IsNotAM( rParams, nPos ) );
                     bForceNatNum |= bIsCharA;
                     if ( bIsCharA )
-                        rParams.SetChar( nPos, 'D' );
+                        rParams = rParams.replaceAt( nPos, 1, "D" );
                     nLastPos = nPos;
-                } while ( STRING_NOTFOUND != nLastPos );
+                } while ( -1 != nLastPos );
             }
 
-            xub_StrLen nLen = rParams.Len();
-            xub_StrLen nI = 0;
+            sal_Int32 nLen = rParams.getLength();
+            sal_Int32 nI = 0;
             while (nI < nLen)
             {
-                if (rParams.GetChar(nI) == '\\')
+                if (rParams[nI] == '\\')
                     nI++;
-                else if (rParams.GetChar(nI) == '\"')
+                else if (rParams[nI] == '\"')
                 {
                     ++nI;
                     //While not at the end and not at an unescaped end quote
-                    while ((nI < nLen) && (!(rParams.GetChar(nI) == '\"') && (rParams.GetChar(nI-1) != '\\')))
+                    while ((nI < nLen) && (!(rParams[nI] == '\"') && (rParams[nI-1] != '\\')))
                         ++nI;
                 }
                 else //normal unquoted section
                 {
-                    sal_Unicode nChar = rParams.GetChar(nI);
+                    sal_Unicode nChar = rParams[nI];
 
                     // Change the localized word string to english
                     switch ( nDocLang )
                     {
                         case LANGUAGE_FRENCH:
                             if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
-                                rParams.SetChar(nI, 'Y');
+                                rParams = rParams.replaceAt(nI, 1, "Y");
                             break;
                         default:
                             ;
@@ -836,7 +830,7 @@ namespace sw
                         // But not if it's a '/' inside AM/PM
                         if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
                         {
-                            rParams.Replace(nI, 1, OUString("\\/"));
+                            rParams = rParams.replaceAt(nI, 1, "\\/");
                         }
                         nI++;
                         nLen++;
@@ -854,13 +848,13 @@ namespace sw
                         case LANGUAGE_FINNISH:
                             {
                                 if (nChar == 'y' || nChar == 'Y')
-                                    rParams.SetChar (nI, 'V');
+                                    rParams = rParams.replaceAt(nI, 1, "V");
                                 else if (nChar == 'm' || nChar == 'M')
-                                    rParams.SetChar (nI, 'K');
+                                    rParams = rParams.replaceAt(nI, 1, "K");
                                 else if (nChar == 'd' || nChar == 'D')
-                                    rParams.SetChar (nI, 'P');
+                                    rParams = rParams.replaceAt(nI, 1, "P");
                                 else if (nChar == 'h' || nChar == 'H')
-                                    rParams.SetChar (nI, 'T');
+                                    rParams = rParams.replaceAt(nI, 1, "T");
                             }
                             break;
                         case LANGUAGE_DANISH:
@@ -871,7 +865,7 @@ namespace sw
                         case LANGUAGE_SWEDISH_FINLAND:
                             {
                                 if (nChar == 'h' || nChar == 'H')
-                                    rParams.SetChar (nI, 'T');
+                                    rParams = rParams.replaceAt(nI, 1, "T");
                             }
                             break;
                         case LANGUAGE_PORTUGUESE:
@@ -898,31 +892,31 @@ namespace sw
                         case LANGUAGE_SPANISH_PUERTO_RICO:
                             {
                                 if (nChar == 'a' || nChar == 'A')
-                                    rParams.SetChar (nI, 'O');
+                                    rParams = rParams.replaceAt(nI, 1, "O");
                                 else if (nChar == 'y' || nChar == 'Y')
-                                    rParams.SetChar (nI, 'A');
+                                    rParams = rParams.replaceAt(nI, 1, "A");
                             }
                             break;
                         case LANGUAGE_DUTCH:
                         case LANGUAGE_DUTCH_BELGIAN:
                             {
                                 if (nChar == 'y' || nChar == 'Y')
-                                    rParams.SetChar (nI, 'J');
+                                    rParams = rParams.replaceAt(nI, 1, "J");
                                 else if (nChar == 'u' || nChar == 'U')
-                                    rParams.SetChar (nI, 'H');
+                                    rParams = rParams.replaceAt(nI, 1, "H");
                             }
                             break;
                         case LANGUAGE_ITALIAN:
                         case LANGUAGE_ITALIAN_SWISS:
                             {
                                 if (nChar == 'a' || nChar == 'A')
-                                    rParams.SetChar (nI, 'O');
+                                    rParams = rParams.replaceAt(nI, 1, "O");
                                 else if (nChar == 'g' || nChar == 'G')
-                                    rParams.SetChar (nI, 'X');
+                                    rParams = rParams.replaceAt(nI, 1, "X");
                                 else if (nChar == 'y' || nChar == 'Y')
-                                    rParams.SetChar(nI, 'A');
+                                    rParams = rParams.replaceAt(nI, 1, "A");
                                 else if (nChar == 'd' || nChar == 'D')
-                                    rParams.SetChar (nI, 'G');
+                                    rParams = rParams.replaceAt(nI, 1, "G");
                             }
                             break;
                         case LANGUAGE_GERMAN:
@@ -932,9 +926,9 @@ namespace sw
                         case LANGUAGE_GERMAN_LIECHTENSTEIN:
                             {
                                 if (nChar == 'y' || nChar == 'Y')
-                                    rParams.SetChar (nI, 'J');
+                                    rParams = rParams.replaceAt(nI, 1, "J");
                                 else if (nChar == 'd' || nChar == 'D')
-                                    rParams.SetChar (nI, 'T');
+                                    rParams = rParams.replaceAt(nI, 1, "T");
                             }
                             break;
                         case LANGUAGE_FRENCH:
@@ -945,9 +939,9 @@ namespace sw
                         case LANGUAGE_FRENCH_MONACO:
                             {
                                 if (nChar == 'y' || nChar == 'Y' || nChar == 'a')
-                                    rParams.SetChar (nI, 'A');
+                                    rParams = rParams.replaceAt(nI, 1, "A");
                                 else if (nChar == 'd' || nChar == 'D' || nChar == 'j')
-                                    rParams.SetChar (nI, 'J');
+                                    rParams = rParams.replaceAt(nI, 1, "J");
                             }
                             break;
                         default:
@@ -967,10 +961,10 @@ namespace sw
                 rLang = LANGUAGE_JAPANESE;
 
             if (bForceNatNum)
-                rParams.Insert(OUString("[NatNum1][$-411]"),0);
+                rParams = "[NatNum1][$-411]" + rParams;
 
             if (bHijri)
-                rParams.Insert(OUString("[~hijri]"), 0);
+                rParams = "[~hijri]" + rParams;
 
             OUString sTemp(rParams);
             pFormatter->PutEntry(sTemp, nCheckPos, nType, nKey, rLang);
@@ -979,41 +973,40 @@ namespace sw
             return nKey;
         }
 
-        sal_Bool IsPreviousAM(String& rParams, xub_StrLen nPos){
-            xub_StrLen nPos1 = nPos - 1;
-            xub_StrLen nPos2 = nPos - 2;
+        sal_Bool IsPreviousAM(OUString& rParams, sal_Int32 nPos){
+            sal_uInt16 nPos1 = nPos - 1;
+            sal_uInt16 nPos2 = nPos - 2;
 
             if(nPos1 > nPos || nPos2 > nPos){
                 return sal_False;
             }else{
                 return (
-                    (rParams.GetChar(nPos1) == 'M'||rParams.GetChar(nPos1) == 'm')&&
-                    (rParams.GetChar(nPos2) == 'A'||rParams.GetChar(nPos2) == 'a')
+                    ( rParams[nPos1] == 'M' || rParams[nPos1] == 'm' ) &&
+                    ( rParams[nPos2] == 'A' || rParams[nPos2] == 'a' )
                     );
             }
         }
-        sal_Bool IsNextPM(String& rParams, xub_StrLen nPos){
-            xub_StrLen nPos1 = nPos + 1;
-            xub_StrLen nPos2 = nPos + 2;
+        sal_Bool IsNextPM(OUString& rParams, sal_Int32 nPos){
+            sal_Int32 nPos1 = nPos + 1;
+            sal_Int32 nPos2 = nPos + 2;
 
-
-            if(nPos1 >= rParams.Len() - 1 || nPos2 > rParams.Len() - 1){
+            if(nPos1 >= rParams.getLength() - 1 || nPos2 > rParams.getLength() - 1){
                 return sal_False;
             }else{
                 return (
-                    (rParams.GetChar(nPos1) == 'P'||rParams.GetChar(nPos1) == 'p')&&
-                    (rParams.GetChar(nPos2) == 'M'||rParams.GetChar(nPos2) == 'm')
+                    ( rParams[nPos1] == 'P' || rParams[nPos1] == 'p' ) &&
+                    ( rParams[nPos2] == 'M' || rParams[nPos2] == 'm' )
                     );
             }
 
         }
-        bool IsNotAM(String& rParams, xub_StrLen nPos)
+        bool IsNotAM(OUString& rParams, sal_Int32 nPos)
         {
             return (
-                    (nPos == rParams.Len() - 1) ||
+                    (nPos == rParams.getLength() - 1) ||
                     (
-                    (rParams.GetChar(nPos+1) != 'M') &&
-                    (rParams.GetChar(nPos+1) != 'm')
+                    (rParams[nPos+1] != 'M') &&
+                    (rParams[nPos+1] != 'm')
                     )
                 );
         }

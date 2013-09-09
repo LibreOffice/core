@@ -3542,14 +3542,14 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     return nRes;
 }
 
-const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( String& rName ) const
+const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
 {
     SwFmt* pRet = 0;
     if( !vColl.empty() )
     {
         for(sal_uInt16 nI = 0; nI < pStyles->GetCount(); nI++ )
             if(    vColl[ nI ].bValid
-                && (rName.Equals( vColl[ nI ].GetOrgWWName())) )
+                && (rName.equals( vColl[ nI ].GetOrgWWName())) )
             {
                 pRet = vColl[ nI ].pFmt;
                 break;

@@ -1639,18 +1639,30 @@ OUString EncryptBlockName_Imp(const OUString& rName)
 }
 
 /* This code is copied from SwXMLTextBlocks::GeneratePackageName */
-static void GeneratePackageName ( const String& rShort, String& rPackageName )
+static void GeneratePackageName ( const OUString& rShort, OUString& rPackageName )
 {
     rPackageName = rShort;
-    xub_StrLen nPos = 0;
-    sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    OString sByte(OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
-    rPackageName = OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
-    while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
+
+    OString sByte(OUStringToOString(rShort, RTL_TEXTENCODING_UTF7));
+    OUStringBuffer aBuf(OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US));
+
+    for (sal_Int32 nPos = 0; nPos < aBuf.getLength(); ++nPos)
     {
-        rPackageName.SetChar( nPos, '_' );
-        ++nPos;
+        switch (aBuf[nPos])
+        {
+            case '!':
+            case '/':
+            case ':':
+            case '.':
+            case '\\':
+                aBuf[nPos] = '_';
+                break;
+            default:
+                break;
+        }
     }
+
+    rPackageName = aBuf.makeStringAndClear();
 }
 
 static const SvxAutocorrWord* lcl_SearchWordsInList(
@@ -2438,7 +2450,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutoco
             {
                 if( !pFoundEntry->IsTextOnly() )
                 {
-                    String aName( aWordToDelete.GetShort() );
+                    OUString aName( aWordToDelete.GetShort() );
                     if (xStorage->IsOLEStorage())
                         aName = EncryptBlockName_Imp(aName);
                     else
@@ -2463,7 +2475,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutoco
                 if( !pRemoved->IsTextOnly() )
                 {
                     // Still have to remove the Storage
-                    String sStorageName( pWordToAdd->GetShort() );
+                    OUString sStorageName( pWordToAdd->GetShort() );
                     if (xStorage->IsOLEStorage())
                         sStorageName = EncryptBlockName_Imp(sStorageName);
                     else
@@ -2511,7 +2523,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort, const Strin
             if( !pRemove->IsTextOnly() )
             {
                 // Still have to remove the Storage
-                String sStgNm( rShort );
+                OUString sStgNm( rShort );
                 if (xStg->IsOLEStorage())
                     sStgNm = EncryptBlockName_Imp(sStgNm);
                 else
@@ -2591,7 +2603,7 @@ sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
         {
             if( !pFnd->IsTextOnly() )
             {
-                String aName( rShort );
+                OUString aName( rShort );
                 if (xStg->IsOLEStorage())
                     aName = EncryptBlockName_Imp(aName);
                 else
