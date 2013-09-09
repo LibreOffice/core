@@ -39,7 +39,15 @@ public final class BluetoothOperator {
     }
 
     public static State getState() {
+        if (!isAvailable()) {
+            return null;
+        }
+
         return new State(getAdapter().isEnabled());
+    }
+
+    public static boolean isStateValid(State aState) {
+        return aState != null;
     }
 
     public static void enable() {

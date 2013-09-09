@@ -302,6 +302,10 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     private void restoreBluetoothState() {
+        if (!BluetoothOperator.isStateValid(mBluetoothState)) {
+            return;
+        }
+
         if (mBluetoothState.wasBluetoothEnabled()) {
             return;
         }
