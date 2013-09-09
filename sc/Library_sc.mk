@@ -378,6 +378,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	$(if $(filter TRUE,$(MPL_SUBSET)),, \
 	    sc/source/ui/dbgui/pvlaydlg) \
 	sc/source/ui/dbgui/sfiltdlg \
+	sc/source/ui/dialogs/searchresults \
 	sc/source/ui/docshell/arealink \
 	sc/source/ui/docshell/autostyl \
 	sc/source/ui/docshell/dbdocfun \
