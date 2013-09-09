@@ -116,11 +116,11 @@ public:
 
 struct SpellCallbackInfo
 {
-    sal_uInt16          nCommand;
-    String          aWord;
+    sal_uInt16      nCommand;
+    OUString        aWord;
     LanguageType    eLanguage;
 
-    SpellCallbackInfo( sal_uInt16 nCMD, const String& rWord )
+    SpellCallbackInfo( sal_uInt16 nCMD, const OUString& rWord )
     : aWord( rWord )
     {
         nCommand = nCMD;
