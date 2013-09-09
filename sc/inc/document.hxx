@@ -272,6 +272,7 @@ private:
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharacters;
+    std::vector<ScAddress> maSearchResults;
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 

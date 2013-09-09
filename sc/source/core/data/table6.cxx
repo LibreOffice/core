@@ -127,6 +127,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         OSL_FAIL("pSearchText == NULL");
         return bFound;
     }
+    if (bFound)
+        GetDoc().maSearchResults.push_back(ScAddress(nCol, nRow, nTab));
 
     sal_uInt8 cMatrixFlag = MM_NONE;
     if ( bFound &&

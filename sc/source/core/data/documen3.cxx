@@ -26,10 +26,13 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
 #include "table.hxx"
+#include "tabvwsh.hxx"
 #include "rangenam.hxx"
 #include "dbdata.hxx"
 #include "pivot.hxx"
@@ -1251,12 +1254,55 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
     }
 }
 
+namespace {
+class SearchResults : public ModelessDialog
+{
+public:
+    ScDocument *mpDoc;
+    SvSimpleTable *mpList;
+    DECL_LINK( ListSelectHdl, void * );
+
+    SearchResults(ScDocument *pDoc) :
+        ModelessDialog(NULL, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui")
+    {
+        mpDoc = pDoc;
+        SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
+        Size aControlSize(200, 100);
+        aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
+        pContainer->set_width_request(aControlSize.Width());
+        pContainer->set_height_request(aControlSize.Height());
+
+        mpList = new SvSimpleTable(*pContainer);
+        long nTabs[] = {3, 60, 40, 100};
+        mpList->SetTabs(&nTabs[0]);
+        mpList->InsertHeaderEntry("Sheet\tCell\tContent");
+        mpList->SetSelectHdl( LINK(this, SearchResults, ListSelectHdl) );
+    }
+    virtual ~SearchResults()
+    {
+        delete mpList;
+    }
+};
+
+IMPL_LINK_NOARG( SearchResults, ListSelectHdl )
+{
+    SvTreeListEntry *pEntry = mpList->FirstSelected();
+    ScAddress *pAddress = static_cast<ScAddress*>(pEntry->GetUserData());
+    ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
+    pScViewShell->SetTabNo(pAddress->Tab());
+    pScViewShell->SetCursor(pAddress->Col(), pAddress->Row());
+    return 0;
+}
+}
+
 bool ScDocument::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,
     OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     //!     getrennte Markierungen pro Tabelle verwalten !!!!!!!!!!!!!
+    maSearchResults.clear();
+    sal_uInt16 nCommand = rSearchItem.GetCommand();
 
     bool bFound = false;
     if (rTab >= static_cast<SCTAB>(maTabs.size()))
@@ -1266,7 +1312,6 @@ bool ScDocument::SearchAndReplace(
         SCCOL nCol;
         SCROW nRow;
         SCTAB nTab;
-        sal_uInt16 nCommand = rSearchItem.GetCommand();
         if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
              nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
@@ -1330,6 +1375,24 @@ bool ScDocument::SearchAndReplace(
                     }
             }
         }
+    }
+    if (nCommand == SVX_SEARCHCMD_FIND_ALL)
+    {
+        static SearchResults *aSearchResults = new SearchResults(this);
+        aSearchResults->mpList->Clear();
+        for(std::vector<ScAddress>::iterator it = maSearchResults.begin();
+                it != maSearchResults.end(); ++it)
+        {
+            SvTreeListEntry *pEntry = NULL;
+            OUString sTabName;
+            GetName( it->Tab(), sTabName );
+            pEntry = aSearchResults->mpList->InsertEntry(
+                    sTabName + "\t"
+                    + OUString('A' + it->Col()) + OUString::number(1 + it->Row()) + "\t"
+                    + GetString(*it) );
+            pEntry->SetUserData( &(*it) );
+        }
+        aSearchResults->Show();
     }
     return bFound;
 }
