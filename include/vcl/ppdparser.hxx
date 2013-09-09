@@ -82,7 +82,7 @@ public:
     PPDKey( const OUString& rKey );
     ~PPDKey();
 
-    PPDValue*           insertValue( const OUString& rOption );
+    PPDValue*           insertValue( const OUString& rOption, PPDValueType eType );
     int                 countValues() const
     { return m_aValues.size(); }
     // neither getValue will return the query option

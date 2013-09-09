@@ -1151,10 +1151,9 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         if( eType == eNo && bQuery )
             continue;
 
-        PPDValue* pValue = pKey->insertValue( aOption );
+        PPDValue* pValue = pKey->insertValue( aOption, eType );
         if( ! pValue )
             continue;
-        pValue->m_eType = eType;
         pValue->m_aValue = aValue;
 
         if( !aOptionTranslation.isEmpty() )
@@ -1200,8 +1199,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                     // (example: DefaultResolution)
                     // so invent that key here and have a default value
                     PPDKey* pKey = new PPDKey( aKey );
-                    PPDValue* pNewValue = pKey->insertValue( aOption );
-                    pNewValue->m_eType = eInvocation; // or what ?
+                    pKey->insertValue( aOption, eInvocation /*or what ?*/ );
                     insertKey( aKey, pKey );
                 }
             }
@@ -1598,13 +1596,14 @@ void PPDKey::eraseValue( const OUString& rOption )
 
 // -------------------------------------------------------------------
 
-PPDValue* PPDKey::insertValue( const OUString& rOption )
+PPDValue* PPDKey::insertValue( const OUString& rOption, PPDValueType eType )
 {
     if( m_aValues.find( rOption ) != m_aValues.end() )
         return NULL;
 
     PPDValue aValue;
     aValue.m_aOption = rOption;
+    aValue.m_eType = eType;
     m_aValues[ rOption ] = aValue;
     PPDValue* pValue = &m_aValues[rOption];
     m_aOrderedValues.push_back( pValue );
