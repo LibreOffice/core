@@ -102,6 +102,11 @@ $(foreach file,$(2),$(call gb_ExternalProject_mark_generated_file,$(1),$(file)))
 
 endef
 
+define gb_ExternalPackage_add_symbolic_link
+$(call gb_Package_add_symbolic_link,$(1),$(2),$(3))
+
+endef
+
 # Add a file
 #
 # See gb_Package_add_file for details.
