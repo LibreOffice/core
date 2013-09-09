@@ -569,6 +569,15 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
                 setPrimaryCoordinate(aMainGroupPos, nSpacing);
             }
             break;
+        case VCL_BUTTONBOX_CENTER:
+            if (!aReq.m_aMainGroupDimensions.empty())
+            {
+                long nMainPrimaryDimension = getPrimaryDimension(
+                    addSpacing(aReq.m_aMainGroupSize, aReq.m_aMainGroupDimensions.size()));
+                long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
+                setPrimaryCoordinate(aMainGroupPos, nExtraSpace/2);
+            }
+            break;
         default:
             SAL_WARN("vcl.layout", "todo unimplemented layout style");
         case VCL_BUTTONBOX_DEFAULT_STYLE:
