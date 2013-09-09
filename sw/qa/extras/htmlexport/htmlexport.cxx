@@ -15,7 +15,7 @@ class Test : public SwModelTestBase
 {
 public:
     void testFdo62336();
-    void testCharBorder();
+    void testCharacterBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -31,7 +31,7 @@ void Test::run()
 {
     MethodEntry<Test> aMethods[] = {
         {"fdo62336.docx", &Test::testFdo62336},
-        {"charborder.odt", &Test::testCharBorder},
+        {"charborder.odt", &Test::testCharacterBorder},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -51,23 +51,23 @@ void Test::testFdo62336()
     // The problem was essentially a crash during table export as docx/rtf/html
 }
 
-void Test::testCharBorder()
+void Test::testCharacterBorder()
 {
 
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // Different Border
     {
         CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(6711039,12,12,12,3,37),
+            table::BorderLine2(0x6666FF,12,12,12,3,37),
             getProperty<table::BorderLine2>(xRun,"CharTopBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(16750848,0,99,0,2,99),
+            table::BorderLine2(0xFF9900,0,99,0,2,99),
             getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(16711680,0,169,0,1,169),
+            table::BorderLine2(0xFF0000,0,169,0,1,169),
             getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(
-            table::BorderLine2(255,0,169,0,0,169),
+            table::BorderLine2(0x0000FF,0,169,0,0,169),
             getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 

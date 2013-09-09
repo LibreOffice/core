@@ -176,7 +176,7 @@ void Test::testCharacterBorder()
 
     // Paragraph border of first paragraph
     {
-        const table::BorderLine2 aFirstParTopBorder(6711039,0,26,26,7,53);
+        const table::BorderLine2 aFirstParTopBorder(0x6666FF,0,26,26,7,53);
         const sal_Int32 aFirstParTopPadding(150);
         uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
 
@@ -206,7 +206,7 @@ void Test::testCharacterBorder()
 
     // Character border for first paragraph
     {
-        const table::BorderLine2 aFirstParCharTopBorder(16724787,0,37,0,2,37);
+        const table::BorderLine2 aFirstParCharTopBorder(0xFF3333,0,37,0,2,37);
         const sal_Int32 aFirstParCharTopPadding(450);
         uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
 
@@ -228,7 +228,7 @@ void Test::testCharacterBorder()
 
         // Shadow
         const table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(xSet,"CharShadowFormat");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(16724787), aShadow.Color);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF3333), aShadow.Color);
         CPPUNIT_ASSERT_EQUAL(false, (bool)aShadow.IsTransparent);
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation(2), aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(280), aShadow.ShadowWidth);
@@ -266,9 +266,9 @@ void Test::testCharacterBorder()
 
         table::BorderLine2 aBorderArray[4] =
         {
-            table::BorderLine2(16724787,0,37,0,14,37),     // Top (fine dashed line)
-            table::BorderLine2(10092390,26,26,53,11,106),  // Bottom
-            table::BorderLine2(6711039,9,26,9,12,71),      // Left
+            table::BorderLine2(0xFF3333,0,37,0,14,37),     // Top (fine dashed line)
+            table::BorderLine2(0x99FF66,26,26,53,11,106),  // Bottom
+            table::BorderLine2(0x6666FF,9,26,9,12,71),     // Left
             table::BorderLine2(0,0,0,0,0,0)                // Right
         };
 

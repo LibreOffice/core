@@ -638,12 +638,12 @@ void Test::testParaShadow()
 void Test::testCharacterBorder()
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    // RTF has just one border attribute(chbrdr) for text border so all side has
+    // RTF has just one border attribute (chbrdr) for text border so all side has
     // the same border with the same padding
     // Border
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
-        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(16737792,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(0xFF6600,0,318,0,0,318), aTopBorder);
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
@@ -652,7 +652,7 @@ void Test::testCharacterBorder()
     // Padding (brsp)
     {
         const sal_Int32 nTopPadding = getProperty<sal_Int32>(xRun,"CharTopBorderDistance");
-        // In the original odt file it is 150, but the unit conversion round it down.
+        // In the original ODT file the padding is 150, but the unit conversion round it down.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nTopPadding);
         CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
         CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));

@@ -150,12 +150,13 @@ void Test::testFdo42144()
 void Test::testCharacterBorder()
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    // WW8 has just one border attribute sprmCBrc for text border so all side has
+    // WW8 has just one border attribute (sprmCBrc) for text border so all side has
     // the same border
     // Border
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
-        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(16711680,0,318,0,0,318), aTopBorder);
+        // In the original ODT file the border color is 0xFF3333
+        CPPUNIT_ASSERT_EQUAL_BORDER(table::BorderLine2(0xFF0000,0,318,0,0,318), aTopBorder);
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
         CPPUNIT_ASSERT_EQUAL_BORDER(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
