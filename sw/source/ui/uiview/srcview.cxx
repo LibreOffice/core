@@ -631,7 +631,8 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             if(bNotFoundMessage)
             {
-                InfoBox( 0, SW_RES(MSG_NOT_FOUND)).Execute();
+                MessageDialog(0, "InfoNotFoundDialog",
+                    "modules/swriter/ui/infonotfounddialog.ui").Execute();
             }
             else if(!bRecursive)
             {

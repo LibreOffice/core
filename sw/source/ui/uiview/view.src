@@ -71,10 +71,6 @@ String STR_TEXTOPTIONS
 {
     Text [ en-US ] = "Text document";
 };
-InfoBox MSG_NOT_FOUND
-{
-    Message [ en-US ] = "Search key not found." ;
-};
 InfoBox MSG_SCAN_NOSOURCE
 {
     Message [ en-US ] = "Source not specified." ;

@@ -76,7 +76,7 @@ struct SwSearchOptions
     SwSearchOptions( SwWrtShell* pSh, sal_Bool bBackward );
 };
 
-inline Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
+static Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
 {
     Window* pWin;
     if( m_pSrchDlg && m_pSrchDlg->IsVisible() )
@@ -86,17 +86,14 @@ inline Window* GetParentWindow( SvxSearchDialog* m_pSrchDlg )
     return pWin;
 }
 
-inline void ShowNotFoundInfoBox( SvxSearchDialog* m_pSrchDlg )
+static void ShowNotFoundInfoBox( SvxSearchDialog* m_pSrchDlg )
 {
     Window* pParentWindow = GetParentWindow( m_pSrchDlg );
-    InfoBox aBox( pParentWindow, SW_RES(MSG_NOT_FOUND));
+    MessageDialog aBox(pParentWindow, "InfoNotFoundDialog",
+        "modules/swriter/ui/infonotfounddialog.ui");
     if (pParentWindow)
     {
         aBox.SetText(pParentWindow->GetText());
-    }
-    else
-    {
-        aBox.SetText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
     }
     aBox.Execute();
 }
