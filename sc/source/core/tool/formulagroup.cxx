@@ -83,6 +83,18 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
     }
 }
 
+void flushSegment(
+    ScMatrix& rMat, size_t nCol, rtl_uString** pHead, rtl_uString** pCur, rtl_uString** pTop )
+{
+    size_t nOffset = pHead - pTop;
+    std::vector<OUString> aStrs;
+    aStrs.reserve(pCur - pHead);
+    for (; pHead != pCur; ++pHead)
+        aStrs.push_back(OUString(*pHead));
+
+    rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
+}
+
 void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
 {
     rtl_uString** p = pStrs;
@@ -102,13 +114,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
         if (pHead)
         {
             // Flush this non-empty segment to the matrix.
-            size_t nOffset = pHead - pStrs;
-            std::vector<OUString> aStrs;
-            aStrs.reserve(p - pHead);
-            for (; pHead != p; ++pHead)
-                aStrs.push_back(OUString(*pHead));
-
-            rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
+            flushSegment(rMat, nCol, pHead, p, pStrs);
             pHead = NULL;
         }
     }
@@ -116,13 +122,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
     if (pHead)
     {
         // Flush last non-empty segment to the matrix.
-        size_t nOffset = pHead - pStrs;
-        std::vector<OUString> aStrs;
-        aStrs.reserve(p - pHead);
-        for (; pHead != p; ++pHead)
-            aStrs.push_back(OUString(*pHead));
-
-        rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
+        flushSegment(rMat, nCol, pHead, p, pStrs);
     }
 }
 
