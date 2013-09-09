@@ -4613,10 +4613,8 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = MNC_IGNORE;
     HMENU hMenu = (HMENU) lParam;
-    String aMnemonic;
-    aMnemonic.AssignAscii("&");
-    aMnemonic.Append( (sal_Unicode) LOWORD(wParam) );
-    aMnemonic.ToLowerAscii();   // we only have ascii mnemonics
+    OUString aMnemonic( "&" + (sal_Unicode) LOWORD(wParam) );
+    aMnemonic = aMnemonic.toAsciiLowerCase();   // we only have ascii mnemonics
 
     // search the mnemonic in the current menu
     int nItemCount = GetMenuItemCount( hMenu );
@@ -4629,9 +4627,9 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
         WinSalMenuItem* pSalMenuItem = ImplGetSalMenuItem( hMenu, idx % nItemCount );
         if( !pSalMenuItem )
             continue;
-        String aStr = pSalMenuItem->mText;
-        aStr.ToLowerAscii();
-        if( aStr.Search( aMnemonic ) != STRING_NOTFOUND)
+        OUString aStr = pSalMenuItem->mText;
+        aStr = aStr.toAsciiLowerCase();
+        if( aStr.indexOf( aMnemonic ) != -1 )
         {
             if( idxFound == -1 )
                 idxFound = idx % nItemCount;

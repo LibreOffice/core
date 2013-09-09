@@ -617,15 +617,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     const ::com::sun::star::awt::WindowDescriptor& rDescriptor,
     Window* pParent, WinBits nWinBits )
 {
-    String aServiceName( rDescriptor.WindowServiceName );
-    aServiceName.ToLowerAscii();
+    OUString aServiceName( rDescriptor.WindowServiceName );
+    aServiceName = aServiceName.toAsciiLowerCase();
 
     Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
-    if ( aServiceName == String( "frame" ) )
+    if ( aServiceName == "frame" )
         bFrameControl = true;
-    if ( aServiceName == String( "tabcontrolnotabs" ) )
+    if ( aServiceName == "tabcontrolnotabs" )
     {
         nWinBits |= WB_NOBORDER;
         nType = ImplGetComponentType( String( "tabcontrol" ) );
@@ -1018,7 +1018,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
                 }
-                else if ( aServiceName.EqualsAscii( "animatedimages" ) )
+                else if ( aServiceName == "animatedimages" )
                 {
                     pNewWindow = new Throbber( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::AnimatedImagesPeer;

@@ -94,30 +94,29 @@ SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
 
 void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 {
-    const sal_Char sMailtoScheme[] = INET_MAILTO_SCHEME;
-
     INetURLObject aURL( aStrURL );
-    String aStrScheme = GetSchemeFromURL( aStrURL );
+    OUString aStrScheme = GetSchemeFromURL( aStrURL );
 
     // set URL-field and additional controls
-    String aStrURLc ( aStrURL );
+    OUString aStrURLc ( aStrURL );
     // set additional controls for EMail:
-    if ( aStrScheme.SearchAscii( sMailtoScheme ) == 0 )
+    if ( aStrScheme.startsWith( INET_MAILTO_SCHEME ) )
     {
         // Find mail-subject
-        String aStrSubject, aStrTmp ( aStrURLc );
+        OUString aStrSubject, aStrTmp( aStrURLc );
 
-        const sal_Char sSubject[] = "subject";
-        xub_StrLen nPos = aStrTmp.ToLowerAscii().SearchAscii( sSubject, 0 );
-        nPos = aStrTmp.Search( sal_Unicode( '=' ), nPos );
+        sal_Int32 nPos = aStrTmp.toAsciiLowerCase().indexOf( "subject" );
 
-        if ( nPos != STRING_NOTFOUND )
-            aStrSubject = aStrURLc.Copy( nPos+1, aStrURLc.Len() );
+        if ( nPos != -1 )
+            nPos = aStrTmp.indexOf( '=', nPos );
 
-        nPos = aStrURLc.Search ( sal_Unicode( '?' ), 0);
+        if ( nPos != -1 )
+            aStrSubject = aStrURLc.copy( nPos+1 );
 
-        aStrURLc = aStrURLc.Copy( 0, ( nPos == STRING_NOTFOUND ?
-                                           aStrURLc.Len() : nPos ) );
+        nPos = aStrURLc.indexOf( '?' );
+
+        if ( nPos != -1 )
+            aStrURLc = aStrURLc.copy( 0, nPos );
 
         maEdSubject.SetText ( aStrSubject );
     }

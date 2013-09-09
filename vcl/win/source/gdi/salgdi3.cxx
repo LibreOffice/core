@@ -94,12 +94,12 @@ class ImplFontAttrCache
 {
 private:
     FontAttrMap     aFontAttributes;
-    OUString   aCacheFileName;
-    String          aBaseURL;
-    sal_Bool            bModified;
+    OUString        aCacheFileName;
+    OUString        aBaseURL;
+    sal_Bool        bModified;
 
 protected:
-    String  OptimizeURL( const String& rURL ) const;
+    OUString OptimizeURL( const OUString& rURL ) const;
 
     enum{ MAGIC = 0x12349876 }; // change if fontattrcache format changes
 
@@ -111,10 +111,10 @@ public:
     void                   AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& );
 };
 
-ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& rBaseURL ) : aBaseURL( rBaseURL )
+ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUString& rBaseURL ) : aBaseURL( rBaseURL )
 {
     bModified = FALSE;
-    aBaseURL.ToLowerAscii();    // Windows only, no problem...
+    aBaseURL = aBaseURL.toAsciiLowerCase();    // Windows only, no problem...
 
     // open the cache file
     osl::FileBase::getSystemPathFromFileURL( rFileNameURL, aCacheFileName );
@@ -190,12 +190,11 @@ ImplFontAttrCache::~ImplFontAttrCache()
     }
 }
 
-String ImplFontAttrCache::OptimizeURL( const String& rURL ) const
+OUString ImplFontAttrCache::OptimizeURL( const OUString& rURL ) const
 {
-    String aOptimizedFontFileURL( rURL );
-    aOptimizedFontFileURL.ToLowerAscii();   // Windows only, no problem...
-    if ( aOptimizedFontFileURL.CompareTo( aBaseURL, aBaseURL.Len() ) == COMPARE_EQUAL )
-        aOptimizedFontFileURL = aOptimizedFontFileURL.Copy( aBaseURL.Len() );
+    OUString aOptimizedFontFileURL( rURL.toAsciiLowerCase() );
+    if ( aOptimizedFontFileURL.startsWith( aBaseURL ) )
+        aOptimizedFontFileURL = aOptimizedFontFileURL.copy( aBaseURL.getLength() );
     return aOptimizedFontFileURL;
 }
 

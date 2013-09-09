@@ -324,8 +324,7 @@ void DicList::SearchForDictionaries(
         {
             // When not
             sal_Int32 nPos  = aURL.indexOf('.');
-            OUString aExt(aURL.copy(nPos + 1));
-            aExt = aExt.toAsciiLowerCase();
+            OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
 
             if (aDCN.equals(aExt))       // negativ
                 bNeg = sal_True;
@@ -870,10 +869,9 @@ static sal_Bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, sal_
     OUString aExt;
     sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
     if (-1 != nPos)
-        aExt = rFileURL.copy( nPos + 1 );
-    aExt = aExt.toAsciiLowerCase();
+        aExt = rFileURL.copy( nPos + 1 ).toAsciiLowerCase();
 
-    if (!aDIC.equals(aExt))
+    if (aDIC != aExt)
         return sal_False;
 
     // get stream to be used

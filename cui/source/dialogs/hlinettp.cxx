@@ -120,7 +120,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     // set additional controls for FTP: Username / Password
     if ( aStrScheme.SearchAscii( sFTPScheme ) == 0 )
     {
-        if ( String(aURL.GetUser()).ToLowerAscii().SearchAscii ( sAnonymous ) == 0 )
+        if ( aURL.GetUser().toAsciiLowerCase().startsWith( sAnonymous ) )
             setAnonymousFTPUser();
         else
             setFTPUser(aURL.GetUser(), aURL.GetPass());
