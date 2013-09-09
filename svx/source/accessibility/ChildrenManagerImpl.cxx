@@ -21,6 +21,7 @@
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
+#include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -139,7 +140,7 @@ uno::Reference<XAccessible>
 {
     if ( ! rChildDescriptor.mxAccessibleShape.is())
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        SolarMutexGuard g;
         // Make sure that the requested accessible object has not been
         // created while locking the global mutex.
         if ( ! rChildDescriptor.mxAccessibleShape.is())
@@ -201,7 +202,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     // 3. Replace the current list of visible shapes with the new one.  Do
     // the same with the visible area.
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        SolarMutexGuard g;
         adjustIndexInParentOfShapes(aChildList);
 
         // Use swap to copy the contents of the new list in constant time.
@@ -253,7 +254,7 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 void ChildrenManagerImpl::CreateListOfVisibleShapes (
     ChildDescriptorListType& raDescriptorList)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    SolarMutexGuard g;
 
     OSL_ASSERT (maShapeTreeInfo.GetViewForwarder() != NULL);
 
@@ -420,7 +421,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
 {
     if (rxShape.is())
     {
-        ::osl::ClearableMutexGuard aGuard (maMutex);
+        SolarMutexClearableGuard aGuard;
 
         // Test visibility of the shape.
         Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
@@ -470,7 +471,7 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
 {
     if (rxShape.is())
     {
-        ::osl::ClearableMutexGuard aGuard (maMutex);
+        SolarMutexGuard g;
 
         // Search shape in list of visible children.
         ChildDescriptorListType::iterator I (
@@ -571,7 +572,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
     Reference<frame::XController> xCurrentController;
     Reference<view::XSelectionSupplier> xCurrentSelectionSupplier;
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        SolarMutexGuard g;
         xCurrentBroadcaster = maShapeTreeInfo.GetModelBroadcaster();
         xCurrentController = maShapeTreeInfo.GetController();
         xCurrentSelectionSupplier = Reference<view::XSelectionSupplier> (
@@ -751,7 +752,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
         Update (false);
     else
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        SolarMutexGuard g;
         ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
         for (I=maVisibleChildren.begin(); I != aEnd; ++I)
         {
