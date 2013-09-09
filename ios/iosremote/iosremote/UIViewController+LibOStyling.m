@@ -7,7 +7,6 @@
  */
 
 #import "UIViewController+LibOStyling.h"
-#import "ControlVariables.h"
 #import "Timer.h"
 #import "stopWatch.h"
 

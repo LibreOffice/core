@@ -34,7 +34,7 @@ int initSecondsLeft;
     self = [super init];
     self.state = TIMER_STATE_CLEARED;
     self.set = NO;
-    secondsLeft = 0;
+    secondsLeft = kCountDownTimerDefaultDuration * 60;
     
     return self;
 }

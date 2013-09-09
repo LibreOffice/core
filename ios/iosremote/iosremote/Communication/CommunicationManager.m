@@ -143,9 +143,6 @@
     self = [self init];
     NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
     
-    if(!userDefaluts)
-        NSLog(@"userDefaults nil");
-    
     NSData *dataRepresentingExistingServers = [userDefaluts objectForKey:ExistingServersKey];
     if (dataRepresentingExistingServers != nil)
     {

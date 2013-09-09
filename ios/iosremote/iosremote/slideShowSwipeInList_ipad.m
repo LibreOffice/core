@@ -13,6 +13,7 @@
 #import "CommandTransmitter.h"
 #import "SWRevealViewController.h"
 #import "slideShowPreviewTable_vc.h"
+#import "UIView+Shadowing.h"
 #import <QuartzCore/CALayer.h>
 
 @interface slideShowSwipeInList_ipad ()
@@ -69,10 +70,7 @@ dispatch_queue_t backgroundQueue;
                                                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
                                                    }
                                                }];
-    UIImageView *bgImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"slideshowRail"]];
-    [bgImageView setFrame:self.tableView.frame];
-    
-    self.tableView.backgroundView = bgImageView;
+    self.tableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
 }
 
 - (void)viewDidUnload
@@ -128,7 +126,9 @@ dispatch_queue_t backgroundQueue;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
     UILabel * slideNumber = (UILabel *)[cell viewWithTag:2];
+    UIImageView * thumbnail = (UIImageView *)[cell viewWithTag:1];
     
+    [thumbnail setShadow];
     // Starting 20, all tags are used for thumbnails in this sidebar
     [cell setTag:20+indexPath.row];
     [self.slideshow getContentAtIndex:indexPath.row forView:cell];

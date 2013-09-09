@@ -42,8 +42,6 @@
 // SWReveal Controller
 @property (readwrite) IBOutlet UIBarButtonItem* revealButtonItem;
 
-@property int count;
-
 @end
 
 @implementation slideShow_vc
@@ -68,129 +66,19 @@
     return motionManager;
 }
 
-- (void)startMotionDetect
-{
-    //    __block float stepMoveFactorX = 5;
-    //    __block float stepMoveFactorY = 5;
-    //    __block double refX, refY;
-
-    [self.motionManager
-     startAccelerometerUpdatesToQueue:[[NSOperationQueue alloc] init]
-     withHandler:^(CMAccelerometerData *data, NSError *error)
-     {
-
-         dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                            CGRect rect = self.movingPointer.frame;
-                            NSLog(@"x:%f y:%f z:%f", data.acceleration.x, data.acceleration.y, data.acceleration.z);
-                            // Used to calibrate pointer based on initial position
-                            //                            if (self.pointerCalibrationOn){
-                            //                                refX = data.acceleration.x;
-                            //                                refY = data.acceleration.y;
-                            //                                self.pointerCalibrationOn = NO;
-                            //                            }
-                            //                                float movetoX = rect.origin.x + ((data.acceleration.x - refX) * stepMoveFactorX);
-
-                            float movetoX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width * ABS(data.acceleration.x - self.refLeftUpperGravity.x) / ABS(self.refRightUpperGravity.x - self.refLeftUpperGravity.x);
-                            float maxX = self.touchPointerImage.frame.origin.x + self.touchPointerImage.frame.size.width - rect.size.width;
-
-                            //                                float movetoY = (rect.origin.y) + ((data.acceleration.y - refY) * stepMoveFactorY);
-                            float movetoY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height * ABS(data.acceleration.y - self.refRightUpperGravity.y) / ABS(self.refRightLowerGravity.y - self.refRightUpperGravity.y);
-                            float maxY = self.touchPointerImage.frame.origin.y + self.touchPointerImage.frame.size.height;
-
-                            if ( movetoX > self.touchPointerImage.frame.origin.x && movetoX < maxX ) {
-                                rect.origin.x = movetoX;
-                            };
-
-                            if ( movetoY > self.touchPointerImage.frame.origin.y && movetoY < maxY ) {
-                                rect.origin.y = movetoY;
-                            };
-
-                            [UIView animateWithDuration:0 delay:0
-                                                options:UIViewAnimationOptionCurveEaseIn
-                                             animations:^{
-                                                 self.movingPointer.frame = rect;
-                                             }
-                                             completion:nil
-                             ];
-                        });
-     }];
-}
-
-- (IBAction)accPointerAction:(id)sender{
-    BOOL acc = [[NSUserDefaults standardUserDefaults] boolForKey:KEY_POINTER];
-    if (!acc) {
-        static BOOL pointer = NO;
-        if (!pointer){
-            [self startMotionDetect];
-            [self.movingPointer setHidden:NO];
-        }
-        else {
-            [self.motionManager stopAccelerometerUpdates];
-            self.pointerCalibrationOn = NO;
-            [self.movingPointer setHidden:YES];
-        }
-        pointer = !pointer;
-    }
-}
-
 // Not localized for now since this is subject to fundemental changes
 - (IBAction)pointerAction:(id)sender {
-    if (self.count == 0 || self.count == 1){
-        CGPoint p;
-        p.x = [self.motionManager accelerometerData].acceleration.x;
-        p.y = [self.motionManager accelerometerData].acceleration.y;
-        self.refLeftUpperGravity = p;
-        if (self.count == 1) {
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Calibration"
-                                                              message:@"Upper left corner calibrated, now point your device to the upper right corner of the screen and click Pointer button again"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:@"Help", nil];
-            [message show];
-        }
-        ++self.count;
-    } else if (self.count == 2 || self.count == 3) {
-        CGPoint p;
-        p.x = [self.motionManager accelerometerData].acceleration.x;
-        p.y = [self.motionManager accelerometerData].acceleration.y;
-        self.refRightUpperGravity = p;
-        if (self.count == 3) {
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Calibration"
-                                                              message:@"Upper right corner calibrated, now point your device to the lower right corner of the screen and click Pointer button again!"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:@"Help", nil];
-            [message show];
-        }
-        ++self.count;
-    } else if (self.count == 4 || self.count == 5) {
-        CGPoint p;
-        p.x = [self.motionManager accelerometerData].acceleration.x;
-        p.y = [self.motionManager accelerometerData].acceleration.y;
-        self.refRightLowerGravity = p;
-        if (self.count == 5) {
-            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Calibration"
-                                                              message:@"Lower right corner calibrated, enjoy your pointer!"
-                                                             delegate:nil
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:@"Help", nil];
-            [message show];
-        }
-        ++self.count;
+    if ([self.touchPointerImage isHidden]){
+        [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.touchPointerImage];
+        CGPoint p = self.view.center;
+        p.y -= 50;
+        self.touchPointerImage.center = p;
+        [self.view removeGestureRecognizer:self.revealViewController.panGestureRecognizer];
     } else {
-        if ([self.touchPointerImage isHidden]){
-            [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.touchPointerImage];
-            CGPoint p = self.view.center;
-            p.y -= 50;
-            self.touchPointerImage.center = p;
-            [self.view removeGestureRecognizer:self.revealViewController.panGestureRecognizer];
-        } else {
-            [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-        }
-        [self.touchPointerImage fadeInfadeOutwithDuration:0.0 maxAlpha:1.0];
-        [self.blockingView fadeInfadeOutwithDuration:0.0 maxAlpha:0.7];
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     }
+    [self.touchPointerImage fadeInfadeOutwithDuration:0.0 maxAlpha:1.0];
+    [self.blockingView fadeInfadeOutwithDuration:0.0 maxAlpha:0.7];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -313,16 +201,6 @@
     self.pointerCalibrationOn = NO;
     self.movingPointer.layer.cornerRadius = 3;
 
-    BOOL acc = [[NSUserDefaults standardUserDefaults] boolForKey:KEY_POINTER];
-    if (!acc) {
-        // Hook up acc detection
-        [self.pointerBtn addTarget:self action:@selector(pointerAction:) forControlEvents:UIControlEventTouchUpOutside];
-        [self.pointerBtn addTarget:self action:@selector(pointerAction:) forControlEvents:UIControlEventTouchUpInside];
-    } else {
-        // Disable all calibration functions for acc based pointer
-        self.count = INT_MAX;
-    }
-    
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 
@@ -385,13 +263,10 @@
 
 - (void) viewDidDisappear:(BOOL)animated
 {
-    self.count = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowFinishedObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowImageNoteReadyObserver];
     [super viewDidDisappear:animated];
 }
-
-
 
 - (void)didReceiveMemoryWarning
 {

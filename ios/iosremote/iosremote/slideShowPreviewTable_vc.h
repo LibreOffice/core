@@ -11,18 +11,20 @@
 
 #define OPTION_TIMER NSLocalizedString(@"Timer auto-start", nil)
 #define OPTION_POINTER NSLocalizedString(@"Touch pointer", nil)
-#define KEY_TIMER @"TIMER_AUTOSTART_ENABLED"
-#define KEY_POINTER @"TOUCH_POINTER_ENABLED"
+#define STOPWATCH_AUTO_START @"STOPWATCH_AUTO_START"
 
-@interface slideShowPreviewTable_vc : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+@interface slideShowPreviewTable_vc : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UITableView *optionsTable;
 @property (nonatomic, strong) CommunicationManager * comManager;
-@property (nonatomic, strong) id slideShowStartObserver;
-@property (nonatomic, strong) NSArray * optionsArray;
 
+@property (nonatomic, strong) id slideShowStartObserver;
 @property (nonatomic, strong) id titleObserver;
 
--(IBAction)startPresentationAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *startButton;
+@property (weak, nonatomic) IBOutlet UIButton *prefButton;
+
+- (IBAction)startPresentationAction:(id)sender;
+- (IBAction)startPrefSettings:(id)sender;
 
 @end

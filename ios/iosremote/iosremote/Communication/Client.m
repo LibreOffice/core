@@ -103,8 +103,6 @@ NSLock *streamStatusLock;
     // Look up if there is already a pin code for this client.
     NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
     
-    if(!userDefaluts)
-        NSLog(@"userDefaults nil");
     NSInteger newPin = [userDefaluts integerForKey:self.name];
     
     // If not, generate one.

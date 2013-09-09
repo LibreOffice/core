@@ -47,4 +47,7 @@
 
 #define kAppSmallTextFont                          [UIFont fontWithName:@"HelveticaNeue" size:14.0f]
 
+int kDefaultTimerWidget, kCountDownTimerDefaultDuration;
+BOOL kStopwatchAutoStart, kCountDownTimerAutoStart, kCountDownTimerVibration;
+
 #endif

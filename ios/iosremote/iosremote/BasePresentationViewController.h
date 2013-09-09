@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
+@property (strong, nonatomic) UIViewController * initialNavController;
+
 // Split view controller
 - (void) hideMaster:(BOOL)hideState;
 @property BOOL masterIsHiddenWhenLandscape;

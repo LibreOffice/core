@@ -75,8 +75,8 @@ Contrôle Distant</string>
                     <connections>
                         <outlet property="serverTable" destination="naQ-T4-jWV" id="hd3-Vm-fk6"/>
                         <segue destination="UPe-3R-KdQ" kind="push" identifier="pinValidation" id="UQQ-pV-3o3"/>
-                        <segue destination="Ybo-9c-MB8" kind="push" identifier="SlideShowPreview" id="EWS-Nn-mQc"/>
                         <segue destination="xbC-af-Ssw" kind="push" identifier="howtoSegue" id="gc3-eP-dlL"/>
+                        <segue destination="clb-xa-kbC" kind="push" identifier="SlideShowPreview" id="0SL-2n-fWY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -115,7 +115,7 @@ Contrôle Distant</string>
                     <navigationItem key="navigationItem" id="c3o-oA-oin"/>
                     <connections>
                         <outlet property="pinLabel" destination="f2u-bG-5ak" id="Y7S-6h-awe"/>
-                        <segue destination="Ybo-9c-MB8" kind="push" identifier="pinValidated" id="pTl-ua-9pr"/>
+                        <segue destination="clb-xa-kbC" kind="push" identifier="pinValidated" id="5gZ-R8-9y7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iok-RC-uS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -174,6 +174,73 @@ Contrôle Distant</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b5I-aN-vyr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="604" y="-475"/>
+        </scene>
+        <!--Slide Show Preview Table vc iphone-->
+        <scene sceneID="Okd-pU-rsp">
+            <objects>
+                <viewController id="clb-xa-kbC" customClass="slideShowPreviewTable_vc_iphone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YiY-DI-phW">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="v0p-8b-LF3">
+                                <rect key="frame" x="0.0" y="20" width="320" height="180"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Presentation Title" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3qH-vt-uVP">
+                                        <rect key="frame" x="20" y="20" width="280" height="140"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <color key="textColor" red="0.39589986310000003" green="0.87052349449999999" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ry2-Av-6er" userLabel="slideShowPreview">
+                                <rect key="frame" x="101" y="393" width="118" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Preferences" backgroundImage="buttonBackground.png">
+                                    <color key="titleColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="startPrefSettings:" destination="clb-xa-kbC" eventType="touchUpInside" id="Vku-7x-W0P"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h9u-yi-XwD">
+                                <rect key="frame" x="77" y="328" width="166" height="47"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Start Presentation" backgroundImage="buttonBackground.png">
+                                    <color key="titleColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="startPresentationAction:" destination="clb-xa-kbC" eventType="touchUpInside" id="JAB-Hw-8ed"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="AXt-EI-0Z5"/>
+                    <connections>
+                        <outlet property="prefButton" destination="ry2-Av-6er" id="86W-Q5-ThH"/>
+                        <outlet property="startButton" destination="h9u-yi-XwD" id="FYY-7H-Bvm"/>
+                        <outlet property="titleLabel" destination="3qH-vt-uVP" id="SKw-9E-eDC"/>
+                        <segue destination="LZb-9n-W8N" kind="push" identifier="slideShowSegue" id="r8H-3e-A9k"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1nc-Wo-te6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="612" y="460"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="koC-gb-LIk">
@@ -470,7 +537,6 @@ Contrôle Distant</string>
                                             <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="accPointerAction:" destination="Ivv-3X-Nhr" eventType="touchDown" id="35J-B2-GIE"/>
                                             <action selector="accPointerAction:" destination="Ivv-3X-Nhr" eventType="touchUpOutside" id="F8W-M1-8Lb"/>
                                             <action selector="accPointerAction:" destination="Ivv-3X-Nhr" eventType="touchUpInside" id="Lb1-HF-wdh"/>
                                             <action selector="pointerAction:" destination="Ivv-3X-Nhr" eventType="touchDown" id="gK9-ff-k1g"/>
@@ -499,83 +565,6 @@ Contrôle Distant</string>
             </objects>
             <point key="canvasLocation" x="2290" y="1807"/>
         </scene>
-        <!--Slide Show Preview Table vc iphone-->
-        <scene sceneID="Tvi-bD-vMC">
-            <objects>
-                <tableViewController id="Ybo-9c-MB8" customClass="slideShowPreviewTable_vc_iphone" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="rWA-v3-wtf">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.93333713503649562" green="0.9260378649635036" blue="0.92826186131386856" alpha="1" colorSpace="calibratedRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="nOZ-aL-o5J">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="157"/>
-                            <subviews>
-                                <view contentMode="scaleToFill" id="9RB-yM-BkW">
-                                    <rect key="frame" x="0.0" y="17" width="320" height="140"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Titre du document" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wJK-w7-Zs9">
-                                            <rect key="frame" x="20" y="20" width="280" height="100"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="19"/>
-                                            <color key="textColor" red="0.21176470589999999" green="0.81568627449999997" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                </view>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </view>
-                        <sections>
-                            <tableViewSection id="8wQ-rK-ve4">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="optionCell" id="0D7-tO-bVg">
-                                        <rect key="frame" x="0.0" y="167" width="320" height="45"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" restorationIdentifier="" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="optionCell" id="LrN-2p-yDw">
-                                        <rect key="frame" x="0.0" y="212" width="320" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="optionCell" id="Cdv-T8-mH7">
-                                        <rect key="frame" x="0.0" y="256" width="320" height="45"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="0.0" width="300" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="Ybo-9c-MB8" id="nDU-cr-5RV"/>
-                            <outlet property="delegate" destination="Ybo-9c-MB8" id="6Gf-g5-zXK"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="TMc-Fg-zXV"/>
-                    <connections>
-                        <outlet property="optionsTable" destination="rWA-v3-wtf" id="qXR-p3-aap"/>
-                        <outlet property="titleLabel" destination="wJK-w7-Zs9" id="ZPz-9h-et8"/>
-                        <segue destination="LZb-9n-W8N" kind="push" identifier="slideShowSegue" id="ATf-mQ-0ht"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="z5S-eI-1pb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="604" y="309"/>
-        </scene>
         <!--LibO Navigation Controller-->
         <scene sceneID="yRe-s4-oKK">
             <objects>
@@ -599,6 +588,7 @@ Contrôle Distant</string>
         <image name="Default-568h.png" width="640" height="1136"/>
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
+        <image name="buttonBackground.png" width="45" height="45"/>
         <image name="ic_launcher.png" width="16" height="16"/>
         <image name="pointer.png" width="143" height="147"/>
         <image name="pointer_pushed.png" width="143" height="147"/>
@@ -610,14 +600,86 @@ Contrôle Distant</string>
         <image name="timer_settime_btn.png" width="60" height="60"/>
         <image name="timer_start_btn.png" width="60" height="60"/>
     </resources>
+    <classes>
+        <class className="EditableTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
+        </class>
+        <class className="LibONavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
+        </class>
+        <class className="SWRevealViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SWRevealViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="callDP:"/>
+            </relationships>
+        </class>
+        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
+        </class>
+        <class className="newServerViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="pinValidation_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="server_list_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="startPrefSettings:"/>
+                <relationship kind="action" name="startPresentationAction:"/>
+                <relationship kind="outlet" name="prefButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc_iphone" superclassName="slideShowPreviewTable_vc">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_iphone.h"/>
+        </class>
+        <class className="slideShowSwipeInList" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList.h"/>
+        </class>
+        <class className="slideShow_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShow_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="nextSlideAction:"/>
+                <relationship kind="action" name="pointerAction:"/>
+                <relationship kind="action" name="previousSlideAction:"/>
+                <relationship kind="outlet" name="blockingView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="bottomView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="lecturer_notes" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="notesView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="pointerBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="revealButtonItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="secondarySlideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="slideView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="touchPointerImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="eIY-4P-1sI"/>
-        <segue reference="pTl-ua-9pr"/>
         <segue reference="mx5-BO-ZzL"/>
+        <segue reference="5gZ-R8-9y7"/>
+        <segue reference="eIY-4P-1sI"/>
     </inferredMetricsTieBreakers>
 </document>

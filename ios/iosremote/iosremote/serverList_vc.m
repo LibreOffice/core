@@ -11,7 +11,6 @@
 #import "newServer_vc.h"
 #import "Server.h"
 #import "Client.h"
-#import "ControlVariables.h"
 #import "PopoverView.h"
 
 #include <sys/socket.h>

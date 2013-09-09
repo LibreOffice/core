@@ -39,11 +39,6 @@
         self.delegate = (MainSplitViewController *) self.navigationController.presentingViewController;
     else
         self.delegate = (MainSplitViewController *) self.presentingViewController;
-    NSLog(@"%@", [self.delegate class]);
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        self.optionsArray = [NSArray arrayWithObjects:OPTION_TIMER, nil];
-    } else 
-        self.optionsArray = [NSArray arrayWithObjects:OPTION_TIMER, OPTION_POINTER, nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
     
@@ -67,7 +62,6 @@
 {
     [super viewDidAppear:animated];
     if ([self.comManager.interpreter.slideShow size] > 0){
-        NSLog(@"3");
         [self.delegate didReceivePresentationStarted];
     }
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
@@ -87,7 +81,6 @@
 
 
 - (void)viewDidUnload {
-    [self setTitleLabel:nil];
     [super viewDidUnload];
 }
 @end

@@ -12,11 +12,8 @@
 @class ViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
-    // make sure we instanciate only once motionManager
-    CMMotionManager *motionManager;
 }
 
-@property (readonly) CMMotionManager *motionManager;
 @property (strong, nonatomic) UIWindow *window;
 
 @end

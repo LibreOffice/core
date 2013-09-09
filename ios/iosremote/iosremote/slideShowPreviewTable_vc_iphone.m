@@ -15,7 +15,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.optionsArray = [NSArray arrayWithObjects:OPTION_TIMER, OPTION_POINTER, nil];
     self.comManager = [CommunicationManager sharedComManager];
     self.comManager.delegate = self;
     

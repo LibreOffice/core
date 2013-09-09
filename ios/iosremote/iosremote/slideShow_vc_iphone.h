@@ -14,7 +14,6 @@
 - (IBAction)nextSlideAction:(id)sender;
 - (IBAction)previousSlideAction:(id)sender;
 - (IBAction)pointerAction:(id)sender;
-- (IBAction)accPointerAction:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIView *notesView;
 @property (weak, nonatomic) IBOutlet UIWebView *lecturer_notes;

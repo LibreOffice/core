@@ -12,4 +12,5 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "TestFlight.h"
+    #import "ControlVariables.h"
 #endif

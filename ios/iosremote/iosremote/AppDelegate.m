@@ -7,7 +7,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "AppDelegate.h"
-#import "ControlVariables.h"
 #import "UINavigationController+Theme.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -56,13 +55,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         pageControl.pageIndicatorTintColor = UIColorFromRGB(0x2980b9);
         pageControl.currentPageIndicatorTintColor = UIColorFromRGB(0x1abc9c);
     }
+    
+    [self reconfigure];
+
     return YES;
 }
 
-- (CMMotionManager *)motionManager
+- (void) reconfigure
 {
-    if (!motionManager) motionManager = [[CMMotionManager alloc] init];
-    return motionManager;
+    kDefaultTimerWidget = [[NSUserDefaults standardUserDefaults] integerForKey:@"DEFAULT_TIMING_WIDGET"];
+    kCountDownTimerDefaultDuration = [[NSUserDefaults standardUserDefaults] integerForKey:@"TIMER_DEFAULT_DURATION"];
+    kStopwatchAutoStart = [[NSUserDefaults standardUserDefaults] boolForKey:@"STOPWATCH_AUTO_START"];
+    kCountDownTimerAutoStart = [[NSUserDefaults standardUserDefaults] boolForKey:@"TIMER_AUTO_START"];
+    kCountDownTimerVibration = [[NSUserDefaults standardUserDefaults] boolForKey:@"TIMER_VIBRATION"];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

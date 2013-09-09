@@ -4,9 +4,5 @@
 <dict>
 	<key>HOWTO_GUIDE_SEEN</key>
 	<false/>
-	<key>TOUCH_POINTER_ENABLED</key>
-	<true/>
-	<key>TIMER_AUTOSTART_ENABLED</key>
-	<false/>
 </dict>
 </plist>

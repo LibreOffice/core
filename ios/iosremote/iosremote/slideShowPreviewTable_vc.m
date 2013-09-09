@@ -10,21 +10,20 @@
 #import "CommunicationManager.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
-#import "ControlVariables.h"
 #import "SlideShow.h"
+#import "IASKAppSettingsViewController.h"
 
 @interface slideShowPreviewTable_vc ()
 
-@property (nonatomic, weak) UIButton * startButton;
+@property (nonatomic, strong) IASKAppSettingsViewController *appSettingsViewController;
 
 @end
 
 @implementation slideShowPreviewTable_vc
 
 @synthesize startButton = _startButton;
-@synthesize optionsTable = _optionsTable;
-@synthesize optionsArray = _optionsArray;
 @synthesize titleObserver = _titleObserver;
+@synthesize appSettingsViewController = _appSettingsViewController;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -35,9 +34,9 @@
     }
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithStyle:style];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
     }
@@ -47,6 +46,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Setting up UIButton stretchable background
+    UIImage *backgroundImage = [UIImage imageNamed:@"buttonBackground"];
+    UIEdgeInsets insets = UIEdgeInsetsMake(20, 7, 20, 7);
+    UIImage *stretchableBackgroundImage = [backgroundImage resizableImageWithCapInsets:insets];
+    [self.startButton setBackgroundImage:stretchableBackgroundImage forState:UIControlStateNormal];
+    [self.prefButton setBackgroundImage:stretchableBackgroundImage forState:UIControlStateNormal];
+
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -64,104 +71,30 @@
 
 #pragma mark - Table view data source
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.optionsArray count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"optionCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        UISwitch *toggleSwitch = [[UISwitch alloc] init];
-        cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-        if (indexPath.row == 0) {
-            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]];
-        } else {
-            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:KEY_POINTER]];
-        }
-        [cell.accessoryView addSubview:toggleSwitch];
-    }
-    cell.textLabel.text = [self.optionsArray objectAtIndex:indexPath.row];
-    
-    return cell;
-}
-
-
 -(IBAction)startPresentationAction:(id)sender {
-    for (UITableViewCell *cell in self.tableView.visibleCells) {
-        UISwitch * toggle = [[[cell accessoryView] subviews] objectAtIndex:0];
-
-        if ([cell.textLabel.text isEqualToString:OPTION_TIMER])
-            [[NSUserDefaults standardUserDefaults] setBool:[toggle isOn] forKey:KEY_TIMER];
-        else if ([cell.textLabel.text isEqualToString:OPTION_POINTER])
-            [[NSUserDefaults standardUserDefaults] setBool:[toggle isOn] forKey:KEY_POINTER];
-    }
     [[self.comManager transmitter] startPresentation];
 }
 
-- (UIButton *)startButton{
-    if (_startButton == nil) {
-        _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_startButton setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            _startButton.frame = CGRectMake(145.0, 30.0, 160.0, 40.0);
-        } else {
-            self.modalViewController.view.backgroundColor = [UIColor clearColor];
-            _startButton.frame = CGRectMake(260.0, 50.0, 180.0, 40.0);
-        }
-        [_startButton setTitle:NSLocalizedString(@"Start Presentation", nil) forState:UIControlStateNormal];
-        [_startButton setTitleColor:kTintColor forState:UIControlStateNormal];
-        [_startButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
-        [_startButton addTarget:self action:@selector(startPresentationAction:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UIImage *backgroundImage = [UIImage imageNamed:@"buttonBackground"];
-        UIEdgeInsets insets = UIEdgeInsetsMake(20, 7, 20, 7);
-        UIImage *stretchableBackgroundImage = [backgroundImage resizableImageWithCapInsets:insets];
-        
-        [_startButton setBackgroundImage:stretchableBackgroundImage forState:UIControlStateNormal];
-        _startButton.tag = 1;
-    }
-    return _startButton;
+- (IBAction)startPrefSettings:(id)sender {
+    self.appSettingsViewController.showDoneButton = NO;
+	[self.navigationController pushViewController:self.appSettingsViewController animated:YES];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView* customView;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 100.0)];
-    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        customView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 540.0, 100.0)];
-    [customView addSubview:self.startButton];
-    
-    customView.center = CGPointMake(tableView.center.x, customView.center.y);
-    self.startButton.center = customView.center;
-    return customView;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 100.0;
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
-    UISwitch * toggle = [[[cell accessoryView] subviews] objectAtIndex:0];
-    [toggle setOn:![toggle isOn] animated:YES];
-    [cell setSelected:NO animated:YES];
+#pragma mark - IN app setting
+- (IASKAppSettingsViewController*)appSettingsViewController {
+	if (!_appSettingsViewController) {
+		_appSettingsViewController = [[IASKAppSettingsViewController alloc] initWithNibName:@"IASKAppSettingsView" bundle:nil];
+		_appSettingsViewController.delegate = self;
+	}
+	return _appSettingsViewController;
 }
 
 - (void)viewDidUnload {
-    [self setOptionsTable:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowStartObserver];
     self.slideShowStartObserver = nil;
+    [self setStartButton:nil];
+    [self setPrefButton:nil];
+    [self setTitleLabel:nil];
     [super viewDidUnload];
 }
 @end

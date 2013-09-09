@@ -18,7 +18,8 @@
 #import "Timer.h"
 #import "PopoverView.h"
 #import "UIView+Shadowing.h"
-#import "ControlVariables.h"
+#import "LibONavigationController.h"
+#import "AppDelegate.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <CoreText/CoreText.h>
@@ -79,7 +80,8 @@
     
     [cell setTag:-indexPath.row - 1];
     [cell.thumbnail setTag:1];
-    NSLog(@"cell at Tag %d created", cell.tag);
+    
+    [cell.thumbnail setShadow];
     
     [self.comManager.interpreter.slideShow getContentAtIndex:indexPath.row forView:cell];
     
@@ -210,6 +212,7 @@
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"iPad_autosize"
                                                              bundle: nil];
     server_list_vc_ipad * slvc = [mainStoryboard instantiateViewControllerWithIdentifier:@"serverList"];
+    self.initialNavController = slvc;
     slvc.modalPresentationStyle = UIModalPresentationFormSheet;
     slvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:slvc animated:YES completion:^{}];
@@ -258,11 +261,9 @@
                                               794.0,
                                               /*self.NotesView.frame.size.height + self.horizontalTableView.frame.size.height*/ 303.0);
             self.horizontalTableView.bounds = CGRectMake(0, 0, 129, 768);
-        } completion:^(BOOL finished) {
-//            [self.horizontalTableView setHidden:NO];
-//            [self.horizontalTableView reloadData];
-        }];
+        } completion:nil];
     }
+    [self.popoverTimePickerController dismissPopoverAnimated:YES];
 }
 
 - (SlideShow *)slideshow
@@ -298,13 +299,9 @@
     
     self.horizontalTableView.rowHeight = kCellWidth;
     
-    UIImageView *bgImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"slideshowRail"]];
-    [bgImageView setFrame:self.horizontalTableView.frame];
+    self.horizontalTableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
     
-    self.horizontalTableView.backgroundView = bgImageView;
-    
-    self.horizontalTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.horizontalTableView.separatorColor = [UIColor clearColor];
+    self.horizontalTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
     
@@ -325,6 +322,12 @@
     [self.timerView setShadowLight];
     self.timer.delegate = self;
     self.stopWatchTimerScrollView.contentSize = CGSizeMake(1240, 62);
+    
+
+    CGRect frame = self.stopWatchTimerScrollView.frame;
+    frame.origin.x = frame.size.width * kDefaultTimerWidget;
+    frame.origin.y = 0;
+    [self.stopWatchTimerScrollView scrollRectToVisible:frame animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -340,14 +343,12 @@
         [self.welcome_blocking_page setAlpha:1];
     } completion:nil];
 
-//    NSLog(@"%f %f %f %f", self.NotesView.frame.origin.x, self.NotesView.frame.origin.y, self.NotesView.frame.size.height, self.NotesView.frame.size.width);
     if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
         [UIView animateWithDuration:0.25 animations:^{
             self.NotesView.frame = CGRectMake(-15.0,
                                               /*self.NotesView.frame.origin.y - self.horizontalTableView.frame.size.height*/ 466.0,
                                               self.NotesView.frame.size.width,
                                               /*self.NotesView.frame.size.height + self.horizontalTableView.frame.size.height*/ 176.0);
-            NSLog(@"h:%f", self.horizontalTableView.bounds.size.height);
         }];
     } else {
         [UIView animateWithDuration:0.25 animations:^{
@@ -380,14 +381,13 @@
                                                          if ([self.comManager.interpreter.slideShow size] == 0)
                                                              [self setWelcomePageVisible:YES];
                                                          if (!self.presentedViewController) {
-                                                             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"iPad_autosize"
-                                                                                                                      bundle: nil];
-                                                             slideShowPreviewTable_vc_ipad * sspt = [mainStoryboard instantiateViewControllerWithIdentifier:@"slideShowPreview"];
+                                                             // We fire up the retained initialNavController which will bring back the preview view controller page.
+                                                             self.initialNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+                                                             self.initialNavController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                                                              
-                                                             sspt.modalPresentationStyle = UIModalPresentationFormSheet;
-                                                             sspt.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                                                             
-                                                             [self presentViewController:sspt animated:YES completion:^{}];
+                                                             [self presentViewController:self.initialNavController animated:YES completion:^{}];
+                                                             [self.timer clear];
+                                                             [self.stopWatch clear];
                                                          }
                                                      }];
     [self startConnectionModal:nil];
@@ -408,8 +408,10 @@
                 [self setWelcomePageVisible:visible];
                 [self.currentSlideImageView setUserInteractionEnabled:YES];
             }
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER])
+            if (kStopwatchAutoStart)
                 [self.stopWatch start];
+            if (kCountDownTimerAutoStart)
+                [self.timer start];
         }];
         self.slideshow.delegate = self;
     }
@@ -426,6 +428,7 @@
 - (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [self.popoverTimePickerController dismissPopoverAnimated:YES];
 }
 
 
@@ -436,6 +439,7 @@
 }
 
 - (void)viewDidUnload {
+    [self.popoverTimePickerController dismissPopoverAnimated:YES];
     [self setHorizontalTableView:nil];
     [self setNotesView:nil];
     [self setNoteWebView:nil];
@@ -541,6 +545,9 @@ static BOOL isBlank = NO;
 #pragma mark - Reconnection
 - (void) didReceiveDisconnection
 {
+    //Dismiss time picker in case that users didn't have the time to tap elsewhere to dismiss it.
+    [self.popoverTimePickerController dismissPopoverAnimated:YES];
+    
     [self dismissViewControllerAnimated:YES completion:^{
         [self startConnectionModal:nil];
     }];

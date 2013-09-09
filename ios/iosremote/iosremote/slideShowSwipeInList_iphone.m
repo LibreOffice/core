@@ -13,7 +13,6 @@
 #import "CommandTransmitter.h"
 #import "SWRevealViewController.h"
 #import "slideShowPreviewTable_vc.h"
-#import "ControlVariables.h"
 #import "stopWatch.h"
 #import "Timer.h"
 #import "UIImageView+setImageAnimated.h"
@@ -51,15 +50,20 @@ dispatch_queue_t backgroundQueue;
     
     self.clearsSelectionOnViewWillAppear = NO;
     // set stopwatch as default, users may swipe for a timer
-    self.currentPage = 0;
-    [self.revealViewController setOwner:STOPWATCH];
+    self.currentPage = kDefaultTimerWidget;
+    [self.revealViewController setOwner:kDefaultTimerWidget];
     
+    // Instanciate stopwatch and start if autostart is set
     self.stopWatch = [[stopWatch alloc] init];
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:KEY_TIMER]) {
+    if (kStopwatchAutoStart) {
         [self.stopWatch start];
     }
     
+    // Instanciate timer and start if autostart is set
     self.timer = [[Timer alloc] init];
+    if (kCountDownTimerAutoStart){
+        [self.timer start];
+    }
     
     self.tableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
 }
@@ -210,6 +214,12 @@ dispatch_queue_t backgroundQueue;
         
         UIScrollView * scroll = (UIScrollView *) [cell viewWithTag:7];
         scroll.contentSize = CGSizeMake(412, 120);
+        
+        CGRect frame = scroll.frame;
+        frame.origin.x = frame.size.width * kDefaultTimerWidget;
+        frame.origin.y = 0;
+        [scroll scrollRectToVisible:frame animated:YES];
+        
         return cell;
     } else {
         static NSString *CellIdentifier = @"slide";
