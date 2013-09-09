@@ -92,12 +92,12 @@ public:
     /** prepends a plain error message to the chain of exceptions
         @param  _rSimpleErrorMessage
             the error message to prepend
-        @param  _pAsciiSQLState
+        @param  _rSQLState
             the SQLState of the to-be-constructed SQLException, or NULL if this should be defaulted to HY000
         @param  _nErrorCode
             the ErrorCode of the to-be-constructed SQLException
     */
-    void    prepend( const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+    void    prepend( const OUString& _rErrorMessage, const OUString& _rSQLState = OUString(), const sal_Int32 _nErrorCode = 0 );
 
     /** appends a plain message to the chain of exceptions
         @param  _eType
@@ -105,12 +105,12 @@ public:
             values, the behavior is undefined.
         @param  _rErrorMessage
             the message to append
-        @param  _pAsciiSQLState
+        @param  _rSQLState
             the SQLState of the exception to append
         @param  _nErrorCode
             the error code of the exception to append
     */
-    void    append( TYPE _eType, const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+    void    append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState = OUString(), const sal_Int32 _nErrorCode = 0 );
 
     /** throws (properly typed) the exception contained in the object
         @precond
@@ -224,32 +224,12 @@ public:
 OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
 //----------------------------------------------------------------------------------
-/** returns a standard ASCII string for a given SQLState
-
-    @param _eState
-        describes the state whose description is to retrieve. Must not be SQL_ERROR_UNSPECIFIED.
-    @return
-        a non-<NULL/> pointer to an ASCII character string denoting the requested SQLState
-    @raises RuntimeException
-        in case of an internal error
-*/
-OOO_DLLPUBLIC_DBTOOLS const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState );
-
-//----------------------------------------------------------------------------------
-OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
-        const OUString& _rMsg,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
-    )
-    throw ( ::com::sun::star::sdbc::SQLException );
-
-//----------------------------------------------------------------------------------
 /** throws an exception with SQL state IM001, saying that a certain function is not supported
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
-        const sal_Char* _pAsciiFunctionName,
+        const OUString& _rFunctionName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::com::sun::star::uno::Any* _pNextException = NULL
+        const ::com::sun::star::uno::Any& _rNextException = ::com::sun::star::uno::Any()
     )
     throw ( ::com::sun::star::sdbc::SQLException );
 
@@ -292,8 +272,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 
 //----------------------------------------------------------------------------------
 /** throw a SQLException with SQLState HYC00 (Optional feature not implemented)
-    @param _pAsciiFeatureName
-        an ASCII description of the feature which is not implemented. It's recommended that the feature
+    @param _rFeatureName
+        a description of the feature which is not implemented. It's recommended that the feature
         name is built from the name of the interface plus its method, for instance "XParameters::updateBinaryStream"
     @param _rxContext
         the context of the exception
@@ -301,7 +281,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         the next exception to chain into the thrown exception, if any
 */
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedException(
-        const sal_Char* _pAsciiFeatureName,
+        const OUString& _rFeatureName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException = NULL
     )
@@ -324,20 +304,8 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
 /** throws an SQLException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
-        const sal_Char* _pAsciiMessage,
-        const sal_Char* _pAsciiState,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const sal_Int32 _nErrorCode = 0,
-        const ::com::sun::star::uno::Any* _pNextException = NULL
-    )
-    throw (::com::sun::star::sdbc::SQLException);
-
-//----------------------------------------------------------------------------------
-/** throws an SQLException
-*/
-OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
-        const sal_Char* _pAsciiMessage,
-        StandardSQLState _eSQLState,
+        const OUString& _rMessage,
+        const OUString& _rSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
         const ::com::sun::star::uno::Any* _pNextException = NULL

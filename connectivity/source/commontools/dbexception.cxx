@@ -198,12 +198,12 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 }
 
 //------------------------------------------------------------------------------
-void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
+void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     SQLException aException;
     aException.Message = _rErrorMessage;
     aException.ErrorCode = _nErrorCode;
-    aException.SQLState = _pAsciiSQLState ? OUString::createFromAscii( _pAsciiSQLState ) : OUString("S1000" );
+    aException.SQLState = !_rSQLState.isEmpty() ? _rSQLState : "S1000";
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 
@@ -211,7 +211,7 @@ void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const sal_Char* 
 }
 
 //------------------------------------------------------------------------------
-void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
+void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const OUString& _rSQLState, const sal_Int32 _nErrorCode )
 {
     // create the to-be-appended exception
     Any aAppend;
@@ -227,7 +227,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
 
     SQLException* pAppendException( static_cast< SQLException* >( const_cast< void* >( aAppend.getValue() ) ) );
     pAppendException->Message = _rErrorMessage;
-    pAppendException->SQLState = OUString::createFromAscii( _pAsciiSQLState );
+    pAppendException->SQLState = _rSQLState;
     pAppendException->ErrorCode = _nErrorCode;
 
     // find the end of the current chain
@@ -386,31 +386,18 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
     );
 }
 // -----------------------------------------------------------------------------
-void throwFunctionNotSupportedException(const OUString& _rMsg,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
-{
-    throw SQLException(
-        _rMsg,
-        _Context,
-        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
-        0,
-        _Next
-    );
-}
-// -----------------------------------------------------------------------------
-void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::com::sun::star::uno::Any* _pNextException ) throw ( ::com::sun::star::sdbc::SQLException )
+void throwFunctionNotSupportedException( const OUString& _rFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const ::com::sun::star::uno::Any& _rNextException ) throw ( ::com::sun::star::sdbc::SQLException )
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_UNSUPPORTED_FUNCTION,
-            "$functionname$", OUString::createFromAscii( _pAsciiFunctionName )
+            "$functionname$", _rFunctionName
          ) );
     throwFunctionNotSupportedException(
         sError,
         _rxContext,
-        _pNextException ? *_pNextException : Any()
+        _rNextException
     );
 }
 // -----------------------------------------------------------------------------
@@ -428,13 +415,13 @@ void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface
 }
 
 // -----------------------------------------------------------------------------
-void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
+void throwFeatureNotImplementedException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_UNSUPPORTED_FEATURE,
-            "$featurename$", OUString::createFromAscii( _pAsciiFeatureName )
+            "$featurename$", _rFeatureName
          ) );
 
     throw SQLException(
@@ -456,24 +443,16 @@ void throwInvalidColumnException( const OUString& _rColumnName, const Reference<
     throwSQLException( sErrorMessage, SQL_COLUMN_NOT_FOUND, _rxContext );
 }
 // -----------------------------------------------------------------------------
-void throwSQLException( const sal_Char* _pAsciiMessage, const sal_Char* _pAsciiState,
+void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)
 {
     throw SQLException(
-        OUString::createFromAscii( _pAsciiMessage ),
+        _rMessage,
         _rxContext,
-        OUString::createFromAscii( _pAsciiState ),
+        _rSQLState,
         _nErrorCode,
         _pNextException ? *_pNextException : Any()
     );
-}
-
-// -----------------------------------------------------------------------------
-void throwSQLException( const sal_Char* _pAsciiMessage, StandardSQLState _eSQLState,
-        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
-        const Any* _pNextException ) throw (SQLException)
-{
-    throwSQLException( _pAsciiMessage, getStandardSQLStateAscii( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
 }
 
 // -----------------------------------------------------------------------------
@@ -481,55 +460,39 @@ void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
         const Any* _pNextException ) throw (SQLException)
 {
-    throw SQLException(
-        _rMessage,
-        _rxContext,
-        getStandardSQLState( _eSQLState ),
-        _nErrorCode,
-        _pNextException ? *_pNextException : Any()
-    );
-}
-
-// -----------------------------------------------------------------------------
-const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
-{
-    const sal_Char* pAsciiState = NULL;
-    switch ( _eState )
-    {
-        case SQL_WRONG_PARAMETER_NUMBER:    pAsciiState = "07001"; break;
-        case SQL_INVALID_DESCRIPTOR_INDEX:  pAsciiState = "07009"; break;
-        case SQL_UNABLE_TO_CONNECT:         pAsciiState = "08001"; break;
-        case SQL_NUMERIC_OUT_OF_RANGE:      pAsciiState = "22003"; break;
-        case SQL_INVALID_DATE_TIME:         pAsciiState = "22007"; break;
-        case SQL_INVALID_CURSOR_STATE:      pAsciiState = "24000"; break;
-        case SQL_TABLE_OR_VIEW_EXISTS:      pAsciiState = "42S01"; break;
-        case SQL_TABLE_OR_VIEW_NOT_FOUND:   pAsciiState = "42S02"; break;
-        case SQL_INDEX_ESISTS:              pAsciiState = "42S11"; break;
-        case SQL_INDEX_NOT_FOUND:           pAsciiState = "42S12"; break;
-        case SQL_COLUMN_EXISTS:             pAsciiState = "42S21"; break;
-        case SQL_COLUMN_NOT_FOUND:          pAsciiState = "42S22"; break;
-        case SQL_GENERAL_ERROR:             pAsciiState = "HY000"; break;
-        case SQL_INVALID_SQL_DATA_TYPE:     pAsciiState = "HY004"; break;
-        case SQL_OPERATION_CANCELED:        pAsciiState = "HY008"; break;
-        case SQL_FUNCTION_SEQUENCE_ERROR:   pAsciiState = "HY010"; break;
-        case SQL_INVALID_CURSOR_POSITION:   pAsciiState = "HY109"; break;
-        case SQL_INVALID_BOOKMARK_VALUE:    pAsciiState = "HY111"; break;
-        case SQL_FEATURE_NOT_IMPLEMENTED:   pAsciiState = "HYC00"; break;
-        case SQL_FUNCTION_NOT_SUPPORTED:    pAsciiState = "IM001"; break;
-        case SQL_CONNECTION_DOES_NOT_EXIST: pAsciiState = "08003"; break;
-
-        default:
-            break;
-    }
-    if ( !pAsciiState )
-        throw RuntimeException();
-    return pAsciiState;
+    throwSQLException( _rMessage, getStandardSQLState( _eSQLState ), _rxContext, _nErrorCode, _pNextException );
 }
 
 // -----------------------------------------------------------------------------
 OUString getStandardSQLState( StandardSQLState _eState )
 {
-    return OUString::createFromAscii( getStandardSQLStateAscii( _eState ) );
+    switch ( _eState )
+    {
+        case SQL_WRONG_PARAMETER_NUMBER:    return "07001";
+        case SQL_INVALID_DESCRIPTOR_INDEX:  return "07009";
+        case SQL_UNABLE_TO_CONNECT:         return "08001";
+        case SQL_NUMERIC_OUT_OF_RANGE:      return "22003";
+        case SQL_INVALID_DATE_TIME:         return "22007";
+        case SQL_INVALID_CURSOR_STATE:      return "24000";
+        case SQL_TABLE_OR_VIEW_EXISTS:      return "42S01";
+        case SQL_TABLE_OR_VIEW_NOT_FOUND:   return "42S02";
+        case SQL_INDEX_ESISTS:              return "42S11";
+        case SQL_INDEX_NOT_FOUND:           return "42S12";
+        case SQL_COLUMN_EXISTS:             return "42S21";
+        case SQL_COLUMN_NOT_FOUND:          return "42S22";
+        case SQL_GENERAL_ERROR:             return "HY000";
+        case SQL_INVALID_SQL_DATA_TYPE:     return "HY004";
+        case SQL_OPERATION_CANCELED:        return "HY008";
+        case SQL_FUNCTION_SEQUENCE_ERROR:   return "HY010";
+        case SQL_INVALID_CURSOR_POSITION:   return "HY109";
+        case SQL_INVALID_BOOKMARK_VALUE:    return "HY111";
+        case SQL_FEATURE_NOT_IMPLEMENTED:   return "HYC00";
+        case SQL_FUNCTION_NOT_SUPPORTED:    return "IM001";
+        case SQL_CONNECTION_DOES_NOT_EXIST: return "08003";
+        default:
+            break;
+    }
+    throw RuntimeException();
 }
 
 // -----------------------------------------------------------------------------

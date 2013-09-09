@@ -376,7 +376,7 @@ namespace dbaui
     void DBSubComponentController::appendError( const OUString& _rErrorMessage, const ::dbtools::StandardSQLState _eSQLState,
             const sal_Int32 _nErrorCode )
     {
-        m_pImpl->m_aCurrentError.append( ::dbtools::SQLExceptionInfo::SQL_EXCEPTION, _rErrorMessage, getStandardSQLStateAscii( _eSQLState ),
+        m_pImpl->m_aCurrentError.append( ::dbtools::SQLExceptionInfo::SQL_EXCEPTION, _rErrorMessage, getStandardSQLState( _eSQLState ),
             _nErrorCode );
     }
     void DBSubComponentController::clearError()
