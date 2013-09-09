@@ -2331,44 +2331,6 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
     }
 }
 
-void Xf::writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  )
-{
-    createPattern();
-    ScPatternAttr& rPat = *mpPattern;
-    ScDocument& rDoc = getScDocument();
-    if ( isCellXf() )
-    {
-        StylesBuffer& rStyles = getStyles();
-        rStyles.createCellStyle( maModel.mnStyleXfId );
-
-        mpStyleSheet = rStyles.getCellStyleSheet( maModel.mnStyleXfId );
-        if ( mpStyleSheet )
-        {
-            rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*mpStyleSheet), rMarkData );
-        }
-        else
-        {
-            ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
-            if (pStylePool)
-            {
-                ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
-                    pStylePool->Find(
-                        ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA));
-
-                if (pStyleSheet)
-                    rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*pStyleSheet), rMarkData );
-            }
-        }
-    }
-    if ( nNumFmtId >= 0 )
-    {
-        ScPatternAttr aNumPat(rDoc.GetPool());
-        getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
-        rPat.GetItemSet().Put(aNumPat.GetItemSet());
-    }
-    rDoc.ApplySelectionPattern( rPat, rMarkData );
-}
-
 void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     StylesBuffer& rStyles = getStyles();

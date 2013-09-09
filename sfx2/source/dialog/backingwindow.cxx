@@ -222,24 +222,6 @@ BackingWindow::~BackingWindow()
 
 }
 
-IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
-{
-    VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>( pEvent );
-    if ( pWinEvent && pWinEvent->GetId() == VCLEVENT_WINDOW_DATACHANGED )
-    {
-        DataChangedEvent* pDCEvt =
-            static_cast<DataChangedEvent*>( pWinEvent->GetData() );
-        if ( pDCEvt->GetFlags() & SETTINGS_STYLE )
-        {
-            SetBackground();
-            Invalidate();
-            // fdo#34392: Resize buttons to match the new text size.
-            Resize();
-        }
-    }
-    return 0;
-}
-
 void BackingWindow::initControls()
 {
     if( mbInitControls )

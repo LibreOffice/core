@@ -675,14 +675,6 @@ SfxBindings* LinePropertyPanel::GetBindings()
 
 
 
-IMPL_LINK( LinePropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
-{
-    return 0;
-}
-
-
-
-
 IMPL_LINK(LinePropertyPanel, ToolboxColorSelectHdl,ToolBox*, pToolBox)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));

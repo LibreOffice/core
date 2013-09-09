@@ -718,7 +718,6 @@ public:
     /** Returns the cell protection data of this style. */
     inline const Protection& getProtection() const { return maProtection; }
 
-    void  writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  );
     void  applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                                   sal_Int32 nForceScNumFmt );
     /** Writes all formatting attributes to the passed property map. */

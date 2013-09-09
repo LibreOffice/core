@@ -146,7 +146,6 @@ class ScUndoSetCell : public ScSimpleUndo
 {
 public:
     TYPEINFO();
-    ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rNewVal );
     ScUndoSetCell( ScDocShell* pDocSh, const ScAddress& rPos, const ScCellValue& rOldVal, const ScCellValue& rNewVal );
 
     virtual ~ScUndoSetCell();

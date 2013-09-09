@@ -67,18 +67,6 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     pUseExtendedTypesChk->Check( bExtended );
 }
 
-void SvxBasicIDEOptionsPage::SaveConfig()
-{
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
-    officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::UseExtended::set( pUseExtendedTypesChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::AutocloseParenthesis::set( pAutocloseParenChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::AutocloseDoubleQuotes::set( pAutocloseQuotesChk->IsChecked(), batch );
-    officecfg::Office::BasicIDE::Autocomplete::AutoCorrect::set( pAutoCorrectChk->IsChecked(), batch );
-    batch->commit();
-}
-
 sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
     sal_Bool bModified = sal_False;
@@ -88,7 +76,6 @@ sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     {
         officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::set( pAutocloseProcChk->IsChecked(), batch );
         CodeCompleteOptions::SetProcedureAutoCompleteOn( pAutocloseProcChk->IsChecked() );
-        //batch->commit();
         bModified = sal_True;
     }
 
@@ -97,7 +84,6 @@ sal_Bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         //boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
         CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
-        //batch->commit();
         bModified = sal_True;
     }
 

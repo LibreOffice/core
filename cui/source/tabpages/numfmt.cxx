@@ -865,13 +865,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
     rEntries.clear();
 }
 
-
-void SvxNumberFormatTabPage::DeleteEntryList_Impl( std::vector<OUString>& rEntries )
-{
-    rEntries.clear();
-}
-
-
 /*************************************************************************
 #*  Method:        UpdateOptions_Impl
 #*------------------------------------------------------------------------
