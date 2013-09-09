@@ -64,19 +64,19 @@ PageSizeControl::PageSizeControl(
 
     sal_uInt16 nSelectedItem = 0;
     {
-        XubString aMetricStr;
+        OUString aMetricStr;
         {
-            const XubString aText = maWidthHeightField.GetText();
-            for (short i = aText.Len() - 1; i >= 0; i--)
+            const OUString aText = maWidthHeightField.GetText();
+            for (short i = aText.getLength() - 1; i >= 0; i--)
             {
-                sal_Unicode c = aText.GetChar(i);
+                sal_Unicode c = aText[i];
                 if ( INetMIME::isAlpha(c) || (c == '\'') || (c == '\"') || (c == '%') )
                 {
-                    aMetricStr.Insert(c, 0);
+                    aMetricStr = OUString(c) + aMetricStr;
                 }
                 else
                 {
-                    if (aMetricStr.Len())
+                    if (!aMetricStr.isEmpty())
                     {
                         break;
                     }
@@ -85,9 +85,9 @@ PageSizeControl::PageSizeControl(
         }
 
         const LocaleDataWrapper& localeDataWrapper = maWidthHeightField.GetLocaleDataWrapper();
-        String WidthStr;
-        String HeightStr;
-        String ItemText2;
+        OUString aWidthStr;
+        OUString aHeightStr;
+        OUString aItemText2;
         for ( ::std::vector< Paper >::size_type nPaperIdx = 0;
               nPaperIdx < maPaperList.size();
               ++nPaperIdx )
@@ -98,28 +98,24 @@ PageSizeControl::PageSizeControl(
                 Swap( aPaperSize );
             }
             maWidthHeightField.SetValue( maWidthHeightField.Normalize( aPaperSize.Width() ), FUNIT_TWIP );
-            WidthStr = localeDataWrapper.getNum(
+            aWidthStr = localeDataWrapper.getNum(
                 maWidthHeightField.GetValue(),
                 maWidthHeightField.GetDecimalDigits(),
                 maWidthHeightField.IsUseThousandSep(),
                 maWidthHeightField.IsShowTrailingZeros() );
 
             maWidthHeightField.SetValue( maWidthHeightField.Normalize( aPaperSize.Height() ), FUNIT_TWIP);
-            HeightStr = localeDataWrapper.getNum(
+            aHeightStr = localeDataWrapper.getNum(
                 maWidthHeightField.GetValue(),
                 maWidthHeightField.GetDecimalDigits(),
                 maWidthHeightField.IsUseThousandSep(),
                 maWidthHeightField.IsShowTrailingZeros() );
 
-            ItemText2 = WidthStr;
-            ItemText2 += OUString(" x ");
-            ItemText2 += HeightStr;
-            ItemText2 += OUString(" ");
-            ItemText2 += aMetricStr;
+            aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
 
             mpSizeValueSet->AddItem(
                 SvxPaperInfo::GetName( maPaperList[ nPaperIdx ] ),
-                ItemText2,
+                aItemText2,
                 0 );
 
             if ( maPaperList[ nPaperIdx ] == mePaper )

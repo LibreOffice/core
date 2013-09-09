@@ -118,11 +118,11 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 /*************************************************************************
  * lcl_HasStrongLTR
  *************************************************************************/
-static  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+static  bool lcl_HasStrongLTR ( const OUString& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
      for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
-         const UCharDirection nCharDir = u_charDirection ( rTxt.GetChar ( nCharIdx ));
+         const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ] );
          if ( nCharDir == U_LEFT_TO_RIGHT ||
               nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
               nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
@@ -264,12 +264,12 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
  * in [nStt, nEnd[
  *************************************************************************/
 
-static bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLen nEnd )
+static bool lcl_HasOnlyBlanks( const OUString& rTxt, xub_StrLen nStt, xub_StrLen nEnd )
 {
     bool bBlankOnly = true;
     while ( nStt < nEnd )
     {
-        const sal_Unicode cChar = rTxt.GetChar( nStt++ );
+        const sal_Unicode cChar = rTxt[ nStt++ ];
         if ( ' ' != cChar && 0x3000 != cChar )
         {
             bBlankOnly = false;
@@ -996,25 +996,25 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             // the search has to be performed on a per word base
             while ( aScanner.NextWord() )
             {
-                const XubString& rWord = aScanner.GetWord();
+                const OUString& rWord = aScanner.GetWord();
 
-                xub_StrLen nIdx = 0;
-                xub_StrLen nKashidaPos = STRING_LEN;
+                sal_Int32 nIdx = 0;
+                sal_Int32 nKashidaPos = -1;
                 sal_Unicode cCh;
                 sal_Unicode cPrevCh = 0;
 
                 sal_uInt16 nPriorityLevel = 7; // 0..6 = level found
                                            // 7 not found
 
-                xub_StrLen nWordLen = rWord.Len();
+                sal_Int32 nWordLen = rWord.getLength();
 
                 // ignore trailing vowel chars
-                while( nWordLen && isTransparentChar( rWord.GetChar( nWordLen - 1 )))
+                while( nWordLen && isTransparentChar( rWord[ nWordLen - 1 ] ))
                     --nWordLen;
 
                 while (nIdx < nWordLen)
                 {
-                    cCh = rWord.GetChar( nIdx );
+                    cCh = rWord[ nIdx ];
 
                     // 1. Priority:
                     // after user inserted kashida
@@ -1029,7 +1029,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
                     {
                         if( isSeenOrSadChar( cCh )
-                         && (rWord.GetChar( nIdx+1 ) != 0x200C) ) // #i98410#: prevent ZWNJ expansion
+                         && (rWord[ nIdx+1 ] != 0x200C) ) // #i98410#: prevent ZWNJ expansion
                         {
                             nKashidaPos  = aScanner.GetBegin() + nIdx;
                             nPriorityLevel = 1;
@@ -1082,7 +1082,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( isBaaChar ( cCh )) // Bah
                         {
                             // check if next character is Reh, Yeh or Alef Maksura
-                            sal_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
+                            sal_Unicode cNextCh = rWord[ nIdx + 1 ];
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
                            {
                                 SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
@@ -1146,7 +1146,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                    ++nIdx;
                 } // end of current word
 
-                if ( STRING_LEN != nKashidaPos )
+                if ( -1 != nKashidaPos )
                 {
                     aKashida.insert( aKashida.begin() + nCntKash, nKashidaPos);
                     nCntKash++;

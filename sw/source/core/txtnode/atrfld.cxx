@@ -164,7 +164,7 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
         pPaM->GetPoint()->nNode = rTxtNode;
         pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
 
-        String const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
+        OUString const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
         pDoc->DeleteRange( *pPaM );
@@ -310,7 +310,7 @@ void SwTxtFld::Expand() const
     OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
-    XubString aNewExpand(
+    OUString aNewExpand(
         pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
     if( aNewExpand == m_aExpand )

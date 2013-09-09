@@ -374,7 +374,7 @@ public:
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
-static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rTxt,
+static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &rTxt,
     xub_StrLen nIdx, xub_StrLen nEnd )
 {
     sal_Bool bRet = sal_False;
@@ -385,7 +385,7 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubStr
         LanguageType eLang = pFnt->GetLanguage();
         if( g_pBreakIt->GetBreakIter().is() )
         {
-            bClear = CH_BLANK == rTxt.GetChar( nStop );
+            bClear = CH_BLANK == rTxt[ nStop ];
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              g_pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, sal_True ) );
@@ -399,13 +399,13 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubStr
         }
         else
         {
-            while( nStop < nEnd && CH_BLANK != rTxt.GetChar( nStop ) )
+            while( nStop < nEnd && CH_BLANK != rTxt[ nStop ] )
                 ++nStop;
             bClear = nStop == nIdx;
             if ( bClear )
             {
                 rArg.NewWord();
-                while( nStop < nEnd && CH_BLANK == rTxt.GetChar( nStop ) )
+                while( nStop < nEnd && CH_BLANK == rTxt[ nStop ] )
                     ++nStop;
             }
         }
@@ -762,18 +762,18 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                     }
                     case RES_TXTATR_FTN :
                     {
-                        const XubString aTxt = pHint->GetFtn().GetNumStr();
+                        const OUString aTxt = pHint->GetFtn().GetNumStr();
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
-                            aTxt.Len() ) )
+                            aTxt.getLength() ) )
                             nAdd = 20;
                         break;
                     }
                     case RES_TXTATR_FIELD :
                     {
                         SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                        const String aTxt = pFld->ExpandField(true);
+                        const OUString aTxt = pFld->ExpandField(true);
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
-                            aTxt.Len() ) )
+                            aTxt.getLength() ) )
                             nAdd = 20;
                         break;
                     }
@@ -965,8 +965,8 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
             {
                 case RES_TXTATR_FTN :
                 {
-                    const XubString aTxt = pHint->GetFtn().GetNumStr();
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
+                    const OUString aTxt = pHint->GetFtn().GetNumStr();
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.getLength() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
@@ -974,8 +974,8 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
                 case RES_TXTATR_FIELD :
                 {
                     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                    String const aTxt = pFld->ExpandField(true);
-                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
+                    OUString const aTxt = pFld->ExpandField(true);
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.getLength() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
