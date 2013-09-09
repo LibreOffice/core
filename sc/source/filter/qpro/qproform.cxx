@@ -195,7 +195,8 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     ScSingleRefData aSRD;
     FUNC_TYPE eType;
     DefTokenId eOc;
-    double nFloatArray[ nBufSize ], nFloat;
+    double nFloatArray[ nBufSize ] = {0};
+    double nFloat;
     const sal_Char* pExtString = 0;
 
     aCRD.InitFlags();
