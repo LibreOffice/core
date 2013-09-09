@@ -40,7 +40,7 @@
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
 
-sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
+sal_Bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
 struct StrLT
 {

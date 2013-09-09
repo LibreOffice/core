@@ -120,7 +120,7 @@ public:
 
     // looks for conversion dictionaries with the specified extension
     // in the directory and adds them to the container
-    void AddConvDics( const String &rSearchDirPathURL, const String &rExtension );
+    void AddConvDics( const OUString &rSearchDirPathURL, const OUString &rExtension );
 
     // calls Flush for the dictionaries that support XFlushable
     void    FlushDics() const;
@@ -325,8 +325,8 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
 
 
 void ConvDicNameContainer::AddConvDics(
-        const String &rSearchDirPathURL,
-        const String &rExtension )
+        const OUString &rSearchDirPathURL,
+        const OUString &rExtension )
 {
     const Sequence< OUString > aDirCnt(
                 utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, sal_False ) );
@@ -335,13 +335,11 @@ void ConvDicNameContainer::AddConvDics(
 
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        String  aURL( pDirCnt[i] );
+        OUString aURL( pDirCnt[i] );
 
-        xub_StrLen nPos  = aURL.SearchBackward('.');
-        String  aExt(aURL.Copy(nPos + 1));
-        aExt.ToLowerAscii();
-        String  aSearchExt( rExtension );
-        aSearchExt.ToLowerAscii();
+        sal_Int32 nPos = aURL.lastIndexOf('.');
+        OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
+        OUString aSearchExt( rExtension.toAsciiLowerCase() );
         if(aExt != aSearchExt)
             continue;          // skip other files
 

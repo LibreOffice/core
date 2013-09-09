@@ -324,8 +324,8 @@ void DicList::SearchForDictionaries(
         {
             // When not
             xub_StrLen nPos  = aURL.Search('.');
-            String aExt(aURL.Copy(nPos + 1));
-            aExt.ToLowerAscii();
+            OUString aExt(aURL.Copy(nPos + 1));
+            aExt = aExt.toAsciiLowerCase();
 
             if (aDCN.equals(aExt))       // negativ
                 bNeg = sal_True;
@@ -867,13 +867,13 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
     if (rFileURL.Len() == 0)
         return sal_False;
     OUString aDIC("dic");
-    String aExt;
+    OUString aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );
     if (STRING_NOTFOUND != nPos)
         aExt = rFileURL.Copy( nPos + 1 );
-    aExt.ToLowerAscii();
+    aExt = aExt.toAsciiLowerCase();
 
-    if (!aDIC.equals(aExt))
+    if (aDIC != aExt)
         return sal_False;
 
     // get stream to be used

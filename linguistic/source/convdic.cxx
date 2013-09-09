@@ -123,20 +123,19 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     }
 }
 
-sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
+sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
 {
     sal_Bool bRes = sal_False;
 
-    if (rFileURL.Len() == 0)
+    if (rFileURL.isEmpty())
         return bRes;
 
     // check if file extension matches CONV_DIC_EXT
-    String aExt;
-    xub_StrLen nPos = rFileURL.SearchBackward( '.' );
-    if (STRING_NOTFOUND != nPos)
-        aExt = rFileURL.Copy( nPos + 1 );
-    aExt.ToLowerAscii();
-    if (!aExt.EqualsAscii( CONV_DIC_EXT ))
+    OUString aExt;
+    sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
+    if ( -1 != nPos )
+        aExt = rFileURL.copy( nPos + 1 ).toAsciiLowerCase();
+    if (!aExt.equals( CONV_DIC_EXT ))
         return bRes;
 
     // first argument being 0 should stop the file from being parsed

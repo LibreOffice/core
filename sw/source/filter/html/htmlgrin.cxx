@@ -1122,17 +1122,17 @@ ANCHOR_SETEVENT:
         xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeparator );
         if( STRING_NOTFOUND != nPos )
         {
-            String sCmp(comphelper::string::remove(sDecoded.Copy(nPos+1), ' '));
-            if( sCmp.Len() )
+            OUString sCmp(comphelper::string::remove(sDecoded.Copy(nPos+1), ' '));
+            if( !sCmp.isEmpty() )
             {
-                sCmp.ToLowerAscii();
-                if( sCmp.EqualsAscii( pMarkToRegion ) ||
-                    sCmp.EqualsAscii( pMarkToFrame ) ||
-                    sCmp.EqualsAscii( pMarkToGraphic ) ||
-                    sCmp.EqualsAscii( pMarkToOLE ) ||
-                    sCmp.EqualsAscii( pMarkToTable ) ||
-                    sCmp.EqualsAscii( pMarkToOutline ) ||
-                    sCmp.EqualsAscii( pMarkToText ) )
+                sCmp = sCmp.toAsciiLowerCase();
+                if( sCmp == "region" ||
+                    sCmp == "frame" ||
+                    sCmp == "graphic" ||
+                    sCmp == "ole" ||
+                    sCmp == "table" ||
+                    sCmp == "outline" ||
+                    sCmp == "text" )
                 {
                     aName.Erase();
                 }

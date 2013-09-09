@@ -166,14 +166,14 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 xub_StrLen nFound = sTxt.Search(cMarkSeparator);
                 if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
                 {
-                    String sSuffix( sTxt.Copy(nFound) );
-                    if( sSuffix.EqualsAscii( pMarkToTable ) ||
-                        sSuffix.EqualsAscii( pMarkToFrame ) ||
-                        sSuffix.EqualsAscii( pMarkToRegion ) ||
-                        sSuffix.EqualsAscii( pMarkToOutline ) ||
-                        sSuffix.EqualsAscii( pMarkToText ) ||
-                        sSuffix.EqualsAscii( pMarkToGraphic ) ||
-                        sSuffix.EqualsAscii( pMarkToOLE ))
+                    OUString sSuffix( sTxt.Copy(nFound) );
+                    if( sSuffix == "table" ||
+                        sSuffix == "frame" ||
+                        sSuffix == "region" ||
+                        sSuffix == "outline" ||
+                        sSuffix == "text" ||
+                        sSuffix == "graphic" ||
+                        sSuffix == "ole" )
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
                 // #i104300#

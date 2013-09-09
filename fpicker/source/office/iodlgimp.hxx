@@ -50,17 +50,17 @@ class SvtFileDialogFilter_Impl
 {
 private:
     String  m_aName;    // name of the entry
-    String  m_aType;    // filter wildcard - if empty, the entry marks a group
+    OUString m_aType;    // filter wildcard - if empty, the entry marks a group
 
 public:
     SvtFileDialogFilter_Impl( const String& rName, const String& rType );
     ~SvtFileDialogFilter_Impl();
 
     const String&       GetName() const     { return m_aName; }
-    const String&       GetType() const     { return m_aType; }
-    const String        GetExtension() const    { return m_aType.Copy( 2 ); }
+    const OUString&     GetType() const     { return m_aType; }
+    const String        GetExtension() const    { return m_aType.copy( 2 ); }
 
-    sal_Bool            isGroupSeparator() const    { return 0 == m_aType.Len(); }
+    sal_Bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
 };
 
 typedef boost::ptr_deque<SvtFileDialogFilter_Impl> SvtFileDialogFilterList_Impl;

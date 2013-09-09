@@ -688,9 +688,9 @@ String SwTOXPara::GetURL() const
                 const sal_Char* pStr;
                 switch( eType )
                 {
-                case nsSwTOXElement::TOX_OLE:       pStr = pMarkToOLE; break;
-                case nsSwTOXElement::TOX_GRAPHIC:   pStr = pMarkToGraphic; break;
-                case nsSwTOXElement::TOX_FRAME:     pStr = pMarkToFrame; break;
+                case nsSwTOXElement::TOX_OLE:       pStr = "ole"; break;
+                case nsSwTOXElement::TOX_GRAPHIC:   pStr = "graphic"; break;
+                case nsSwTOXElement::TOX_FRAME:     pStr = "frame"; break;
                 default:            pStr = 0;
                 }
                 if( pStr )
@@ -701,7 +701,7 @@ String SwTOXPara::GetURL() const
     case nsSwTOXElement::TOX_SEQUENCE:
         {
             aTxt = "#" + m_sSequenceName + OUString(cMarkSeparator)
-                 + OUString::createFromAscii(pMarkToSequence);
+                 + "sequence";
         }
         break;
     default: break;
@@ -756,7 +756,7 @@ String SwTOXTable::GetURL() const
     if ( sName.isEmpty() )
         return String();
 
-    return "#" + sName + OUString(cMarkSeparator) + OUString::createFromAscii( pMarkToTable );
+    return "#" + sName + OUString(cMarkSeparator) + "table";
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,

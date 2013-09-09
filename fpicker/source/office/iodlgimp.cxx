@@ -98,7 +98,7 @@ SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const String& rName, const S
 {
     DBG_CTOR( SvtFileDialogFilter_Impl, NULL );
 
-    m_aType.ToLowerAscii();
+    m_aType = m_aType.toAsciiLowerCase();
 }
 
 //*****************************************************************************

@@ -1330,9 +1330,9 @@ void ScHTMLExport::MakeCIdURL( String& rURL )
     if( INET_PROT_FILE != aURLObj.GetProtocol() )
         return;
 
-    String aLastName( aURLObj.GetLastName() );
-    OSL_ENSURE( aLastName.Len(), "filename without length!" );
-    aLastName.ToLowerAscii();
+    OUString aLastName( aURLObj.GetLastName() );
+    OSL_ENSURE( !aLastName.isEmpty(), "filename without length!" );
+    aLastName = aLastName.toAsciiLowerCase();
 
     rURL.AssignAscii( "cid:" );
     rURL += aLastName;
