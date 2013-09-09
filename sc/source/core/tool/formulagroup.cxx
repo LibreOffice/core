@@ -29,6 +29,46 @@
 
 namespace sc {
 
+namespace {
+
+/**
+ * Input double array consists of segments of NaN's and normal values.
+ * Insert only the normal values into the matrix while skipping the NaN's.
+ */
+void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
+{
+    const double* p = pNums;
+    const double* pEnd = p + nLen;
+    const double* pHead = NULL;
+    for (; p != pEnd; ++p)
+    {
+        if (!rtl::math::isNan(*p))
+        {
+            if (!pHead)
+                // Store the first non-NaN position.
+                pHead = p;
+
+            continue;
+        }
+
+        if (pHead)
+        {
+            // Flush this non-NaN segment to the matrix.
+            rMat.PutDouble(pHead, p - pHead, nCol, pHead - pNums);
+            pHead = NULL;
+        }
+    }
+
+    if (pHead)
+    {
+        // Flush last non-NaN segment to the matrix.
+        rMat.PutDouble(pHead, p - pHead, nCol, pHead - pNums);
+        pHead = NULL;
+    }
+}
+
+}
+
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
 {
     return ScMatrixRef();
@@ -97,7 +137,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     if (!p2->IsEndFixed())
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
-                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
+                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize));
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const formula::VectorRefArray& rArray = rArrays[nCol];
@@ -105,7 +145,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         {
                             const double* pNums = rArray.mpNumericArray;
                             pNums += nRowStart;
-                            pMat->PutDouble(pNums, nRowSize, nCol, 0);
+                            fillMatrix(*pMat, nCol, pNums, nRowSize);
                         }
                         else
                         {

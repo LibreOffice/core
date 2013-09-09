@@ -2268,8 +2268,10 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
         {
             if (nLenRequested <= nLen)
             {
-                // Fill the whole length with zero.
-                rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nLenRequested, 0.0));
+                // Fill the whole length with NaN's.
+                double fNan;
+                rtl::math::setNan(&fNan);
+                rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nLenRequested, fNan));
                 return formula::VectorRefArray(&rCxt.maNumArrays.back()[0]);
             }
 
