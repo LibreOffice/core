@@ -19,6 +19,10 @@
 
 #include <starmath.hrc>
 
+// Both list types Ui and Export have to be identical. The Ui version
+// is the localized version of all symbols that is show in the Ui,
+// for Export they have to be in English. The transition between
+// both lists is done with GetExportSymbolName() and GetUiSymbolName().
 Resource RID_LOCALIZED_NAMES
 {
     StringArray RID_EXPORT_SYMBOLSET_NAMES
