@@ -191,8 +191,9 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
 {
     sal_uInt8 nFmla[ nBufSize ], i, nArg, nArgArray[ nBufSize ];
     sal_Int8 nCol, nPage;
-    sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nIntArray[ nBufSize ], nArgCount = 0;
-    String sStringArray[ nBufSize ];
+    sal_uInt16 nInt, nIntCount = 0, nStringCount = 0, nFloatCount = 0, nDLLCount = 0, nArgCount = 0;
+    sal_uInt16 nIntArray[ nBufSize ] = {0};
+    OUString sStringArray[ nBufSize ];
     sal_uInt16 nDummy, nDLLId, nDLLArray[ nBufSize ];
     sal_uInt16 nNote, nRef, nRelBits;
     TokenId nPush;
@@ -217,7 +218,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
             {
                 maIn >> nInt;
                 nIntArray[ nIntCount ] = nInt;
-        SAFEDEC_OR_RET(nRef, 2, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 2, ConvErrCount);
                 nIntCount++;
             }
 
@@ -225,7 +226,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
             {
                 maIn >> nFloat;
                 nFloatArray[ nFloatCount ] = nFloat;
-        SAFEDEC_OR_RET(nRef, 8, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 8, ConvErrCount);
                 nFloatCount++;
             }
 
@@ -234,16 +235,16 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 maIn >> nArg >> nDummy >> nDLLId;
                 nArgArray[ nArgCount ] = nArg;
                 nDLLArray[ nDLLCount ] = nDLLId;
-        SAFEDEC_OR_RET(nRef, 5, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 5, ConvErrCount);
                 nDLLCount++;
                 nArgCount++;
             }
             if( nFmla[ i ] == 0x06 )
             {
-                String aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamCharSet()));
+                OUString aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamCharSet()));
                 sStringArray[ nStringCount ] = aTmp;
                 nStringCount++;
-        SAFEDEC_OR_RET(nRef, aTmp.Len() + 1, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, aTmp.getLength() + 1, ConvErrCount);
             }
         }
     }
@@ -356,8 +357,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 break;
 
             case FT_ConstString:{
-                String aLabel;
-                aLabel = sStringArray[ nStringCount ];
+                OUString aLabel(sStringArray[ nStringCount ]);
                 aStack << aPool.Store( aLabel );
                 nStringCount++;
                 }
