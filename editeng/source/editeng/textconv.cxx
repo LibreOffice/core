@@ -435,15 +435,15 @@ void TextConvWrapper::ReplaceUnit(
 }
 
 
-void TextConvWrapper::ChangeText( const String &rNewText,
+void TextConvWrapper::ChangeText( const OUString &rNewText,
         const OUString& rOrigText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         ESelection *pESelection )
 {
     //!! code is a modifed copy of SwHHCWrapper::ChangeText from sw !!
 
-    DBG_ASSERT( rNewText.Len() != 0, "unexpected empty string" );
-    if (rNewText.Len() == 0)
+    DBG_ASSERT( !rNewText.isEmpty(), "unexpected empty string" );
+    if (rNewText.isEmpty())
         return;
 
     if (pOffsets && pESelection)  // try to keep as much attributation as possible ?
@@ -455,7 +455,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
-        xub_StrLen nConvTextLen = rNewText.Len();
+        sal_Int32  nConvTextLen = rNewText.getLength();
         xub_StrLen nPos = 0;
         xub_StrLen nChgPos = STRING_NOTFOUND;
         xub_StrLen nChgLen = 0;
@@ -483,7 +483,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
                 nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
             }
 
-            if (rOrigText.getStr()[nIndex] == rNewText.GetChar(nPos) ||
+            if (rOrigText.getStr()[nIndex] == rNewText[nPos] ||
                 nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
             {
                 // substring that needs to be replaced found?
@@ -494,7 +494,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
 #ifdef DEBUG
                     String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
-                    String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
+                    String aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
                     ESelection aSel( *pESelection );
@@ -543,7 +543,7 @@ void TextConvWrapper::ChangeText( const String &rNewText,
 }
 
 
-void TextConvWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttributes )
+void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttributes )
 {
     if (bKeepAttributes)
     {

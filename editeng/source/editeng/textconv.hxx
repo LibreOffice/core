@@ -62,11 +62,11 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
 
-    void        ChangeText( const String &rNewText,
+    void        ChangeText( const OUString &rNewText,
                             const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
-    void        ChangeText_impl( const String &rNewText, bool bKeepAttributes );
+    void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
     // Forbidden and not implemented.
     TextConvWrapper (const TextConvWrapper &);
