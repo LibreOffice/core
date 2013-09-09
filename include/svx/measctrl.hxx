@@ -42,8 +42,8 @@ private:
     SdrModel*           pModel;
 
 public:
-            SvxXMeasurePreview( Window* pParent, const ResId& rResId,
-                                const SfxItemSet& rInAttrs );
+            SvxXMeasurePreview( Window* pParent, const ResId& rResId, const SfxItemSet& rInAttrs );
+            SvxXMeasurePreview( Window* pParent, const SfxItemSet& rInAttrs);
             ~SvxXMeasurePreview();
 
     virtual void Paint( const Rectangle& rRect );
