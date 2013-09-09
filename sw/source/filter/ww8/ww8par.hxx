@@ -1794,7 +1794,7 @@ public:     // eigentlich private, geht aber leider nur public
     void SetNAktColl( sal_uInt16 nColl ) { nAktColl = nColl;    }
     void SetAktItemSet( SfxItemSet* pItemSet ) { pAktItemSet = pItemSet; }
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
-    const SwFmt* GetStyleWithOrgWWName( String& rName ) const ;
+    const SwFmt* GetStyleWithOrgWWName( OUString& rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);

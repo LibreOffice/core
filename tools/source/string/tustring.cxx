@@ -59,30 +59,6 @@ sal_Int32 UniString::ToInt32() const
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32       nLen = mpData->mnLen;
-    const STRCODE*  pStr = mpData->maStr;
-    pStr += nIndex;
-    while ( nIndex < nLen )
-    {
-        STRCODE         c = *pStr;
-        const STRCODE*  pCompStr = pChars;
-        while ( *pCompStr )
-        {
-            if ( *pCompStr == c )
-                return nIndex;
-            ++pCompStr;
-        }
-        ++pStr,
-        ++nIndex;
-    }
-
-    return STRING_NOTFOUND;
-}
-
 xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

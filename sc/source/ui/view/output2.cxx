@@ -101,7 +101,7 @@ class ScDrawStringsVars
     sal_uInt16              nIndent;
     sal_Bool                bRotated;
 
-    String              aString;                // Inhalte
+    OUString            aString;                // contents
     Size                aTextSize;
     long                nOriginalWidth;
     long                nMaxDigitWidth;
@@ -139,7 +139,7 @@ public:
     bool SetText( ScRefCellValue& rCell );   // TRUE -> pOldPattern vergessen
     void        SetHashText();
     void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
-    void        SetAutoText( const String& rAutoText );
+    void        SetAutoText( const OUString& rAutoText );
 
     const ScPatternAttr*    GetPattern() const       { return pPattern; }
     SvxCellOrientation      GetOrient() const        { return eAttrOrient; }
@@ -152,7 +152,7 @@ public:
     sal_uInt16              GetLeftTotal() const     { return pMargin->GetLeftMargin() + nIndent; }
     sal_uInt16              GetRightTotal() const    { return pMargin->GetRightMargin() + nIndent; }
 
-    const String&           GetString() const        { return aString; }
+    const OUString&         GetString() const        { return aString; }
     const Size&             GetTextSize() const      { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
 
@@ -207,7 +207,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL) :
     bRepeat     ( false ),
     bShrink     ( false ),
     bPixelToLogic( bPTL ),
-    nPos( STRING_NOTFOUND ),
+    nPos( -1 ),
     nChar( 0x0 )
 {
     ScModule* pScMod = SC_MOD();
@@ -498,32 +498,30 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
 
             Color* pColor;
             sal_uLong nFormat = GetValueFormat();
-            OUString aOUString = aString;
             ScCellFormat::GetString( rCell,
-                                     nFormat, aOUString, &pColor,
+                                     nFormat, aString, &pColor,
                                      *pOutput->mpDoc->GetFormatTable(),
                                      pOutput->mpDoc,
                                      pOutput->mbShowNullValues,
                                      pOutput->mbShowFormulas,
                                      ftCheck, true );
-            aString = aOUString;
             if ( nFormat )
             {
-                nPos = aString.Search( 0x1B );
-                if ( nPos != STRING_NOTFOUND )
+                nPos = aString.indexOf( 0x1B );
+                if ( nPos != -1 )
                 {
-                    nChar = aString.GetChar( nPos + 1 );
+                    nChar = aString[ nPos + 1 ];
                     // delete placeholder and char to repeat
-                    aString.Erase( nPos, 2 );
+                    aString = aString.replaceAt( nPos, 2, "" );
                 }
             }
             else
             {
-                nPos = STRING_NOTFOUND;
+                nPos = -1;
                 nChar = 0x0;
             }
-            if (aString.Len() > DRAWTEXT_MAX)
-                aString.Erase(DRAWTEXT_MAX);
+            if (aString.getLength() > DRAWTEXT_MAX)
+                aString = aString.copy(0, DRAWTEXT_MAX);
 
             if ( pColor && !pOutput->mbSyntaxMode && !( pOutput->mbUseStyleColor && pOutput->mbForceAutoColor ) )
             {
@@ -540,7 +538,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
     }
     else
     {
-        aString.Erase();
+        aString = OUString();
         maLastCell.clear();
         aTextSize = Size(0,0);
         nOriginalWidth = 0;
@@ -556,7 +554,7 @@ void ScDrawStringsVars::SetHashText()
 
 void ScDrawStringsVars::RepeatToFill( long colWidth )
 {
-    if ( nPos ==  STRING_NOTFOUND || nPos > aString.Len() )
+    if ( nPos == -1 || nPos > aString.getLength() )
         return;
 
     long charWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nChar));
@@ -572,7 +570,7 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
     long nCharsToInsert = aSpaceToFill / charWidth;
     OUStringBuffer aFill;
     comphelper::string::padToLength(aFill, nCharsToInsert, nChar);
-    aString.Insert( aFill.makeStringAndClear(), nPos);
+    aString = aString.replaceAt( nPos, 0, aFill.makeStringAndClear() );
     TextChanged();
 }
 
@@ -627,11 +625,11 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
         aString = sTempOut;
     }
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
-    xub_StrLen nLen = aString.Len();
+    sal_Int32 nLen = aString.getLength();
     sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator.getStr()[0];
     for (xub_StrLen i = 0; i < nLen; ++i)
     {
-        sal_Unicode c = aString.GetChar(i);
+        sal_Unicode c = aString[i];
         if (c == sal_Unicode('-'))
             ++nSignCount;
         else if (c == cDecSep)
@@ -642,7 +640,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
 
     // #i112250# A small value might be formatted as "0" when only counting the digits,
     // but fit into the column when considering the smaller width of the decimal separator.
-    if (aString.EqualsAscii("0") && fVal != 0.0)
+    if (aString == "0" && fVal != 0.0)
         nDecimalCount = 1;
 
     if (nDecimalCount)
@@ -678,7 +676,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     maLastCell.clear();   // #i113022# equal cell and format in another column may give different string
 }
 
-void ScDrawStringsVars::SetAutoText( const String& rAutoText )
+void ScDrawStringsVars::SetAutoText( const OUString& rAutoText )
 {
     aString = rAutoText;
 
@@ -779,11 +777,24 @@ void ScDrawStringsVars::TextChanged()
 
 sal_Bool ScDrawStringsVars::HasEditCharacters() const
 {
-    static const sal_Unicode pChars[] =
+    for (sal_Int32 nIdx = 0; nIdx < aString.getLength(); ++nIdx)
     {
-        CHAR_NBSP, CHAR_SHY, CHAR_ZWSP, CHAR_LRM, CHAR_RLM, CHAR_NBHY, CHAR_ZWNBSP, 0
-    };
-    return aString.SearchChar( pChars ) != STRING_NOTFOUND;
+        switch(aString[nIdx])
+        {
+            case CHAR_NBSP:
+            case CHAR_SHY:
+            case CHAR_ZWSP:
+            case CHAR_LRM:
+            case CHAR_RLM:
+            case CHAR_NBHY:
+            case CHAR_ZWNBSP:
+                return sal_True;
+            default:
+                break;
+        }
+    }
+
+    return sal_False;
 }
 
 sal_uLong ScDrawStringsVars::GetResultValueFormat() const
