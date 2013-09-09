@@ -169,7 +169,7 @@ public:
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
                             SmCaretPosGraphEntry* left = NULL,
                             SmCaretPosGraphEntry* right = NULL){
-        OSL_ENSURE(pos.Index >= 0, "Index shouldn't be -1!");
+        SAL_WARN_IF( pos.Index < 0, "starmath", "Index shouldn't be -1!" );
         return Add(SmCaretPosGraphEntry(pos, left, right));
     }
     /** Get an iterator for this graph */

@@ -66,13 +66,13 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    OSL_ENSURE( aLocalizedStrings.Count() >= 18, "resource incomplete" );
+    SAL_WARN_IF( aLocalizedStrings.Count() < 18, "starmath", "resource incomplete" );
     if( aLocalizedStrings.Count() < 9 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
     SmConfig *pConfig = pp->GetConfig();
-    OSL_ENSURE( pConfig, "SmConfig not found" );
+    SAL_WARN_IF( !pConfig, "starmath", "SmConfig not found" );
     if (!pConfig)
         return;
 
@@ -1052,7 +1052,7 @@ void SAL_CALL SmModel::render(
             while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
                 pViewSh = SfxViewShell::GetNext( *pViewSh, &aTypeId, sal_False /* search non-visible views as well*/ );
             SmViewShell *pView = PTR_CAST( SmViewShell, pViewSh );
-            OSL_ENSURE( pView, "SmModel::render : no SmViewShell found" );
+            SAL_WARN_IF( !pView, "starmath", "SmModel::render : no SmViewShell found" );
 
             if (pView)
             {

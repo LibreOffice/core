@@ -158,7 +158,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     // set formula-cursor and selection of edit window according to the
     // position clicked at
     //
-    OSL_ENSURE(rMEvt.GetClicks() > 0, "Sm : 0 clicks");
+    SAL_WARN_IF( rMEvt.GetClicks() == 0, "starmath", "0 clicks" );
     if ( rMEvt.IsLeft() )
     {
         // get click position relativ to formula
@@ -375,7 +375,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
 
 void SmGraphicWindow::Paint(const Rectangle&)
 {
-    OSL_ENSURE(pViewShell, "Sm : NULL pointer");
+    SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
 
     SmDocShell &rDoc = *pViewShell->GetDoc();
     Point aPoint;
@@ -562,7 +562,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
-                OSL_ENSURE( pViewShell, "view shell missing" );
+                SAL_WARN_IF( !pViewShell, "starmath", "view shell missing" );
 
                 // added for replaceability of context menus
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
@@ -1337,7 +1337,6 @@ void SmViewShell::Impl_Print(
 
 sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
 {
-    SAL_INFO( "starmath", "SmViewShell::Print" );
     SAL_WARN( "starmath", "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
@@ -1396,7 +1395,7 @@ SmEditWindow *SmViewShell::GetEditWindow()
     if (pWrapper != NULL)
     {
         SmEditWindow *pEditWin  = pWrapper->GetEditWindow();
-        OSL_ENSURE( pEditWin, "SmEditWindow missing" );
+        SAL_WARN_IF( !pEditWin, "starmath", "SmEditWindow missing" );
         return pEditWin;
     }
 
@@ -1417,7 +1416,7 @@ void SmViewShell::ShowError( const SmErrorDesc *pErrorDesc )
 {
     SAL_INFO( "starmath", "SmViewShell::ShowError" );
 
-    OSL_ENSURE(GetDoc(), "Sm : Document missing");
+    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
     {
         SetStatusText( pErrorDesc->Text );
@@ -1431,7 +1430,7 @@ void SmViewShell::NextError()
 {
     SAL_INFO( "starmath", "SmViewShell::NextError" );
 
-    OSL_ENSURE(GetDoc(), "Sm : Document missing");
+    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
 
     if (pErrorDesc)
@@ -1443,7 +1442,7 @@ void SmViewShell::PrevError()
 {
     SAL_INFO( "starmath", "SmViewShell::PrevError" );
 
-    OSL_ENSURE(GetDoc(), "Sm : Document missing");
+    SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
     const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
 
     if (pErrorDesc)
@@ -1574,7 +1573,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_ZOOMOUT:
-            OSL_ENSURE(aGraphic.GetZoom() >= 25, "Sm: incorrect sal_uInt16 argument");
+            SAL_WARN_IF( aGraphic.GetZoom() < 25, "starmath", "incorrect sal_uInt16 argument" );
             aGraphic.SetZoom(aGraphic.GetZoom() - 25);
             break;
 
@@ -1793,7 +1792,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
-                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        SAL_WARN_IF( !pDlg, "starmath", "Dialogdiet fail!" );
                         pDlg->SetLimits( MINZOOM, MAXZOOM );
                         if( pDlg->Execute() != RET_CANCEL )
                             pSet = pDlg->GetOutputItemSet();
@@ -1872,7 +1871,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
-            OSL_ENSURE (pDev, "device for font list missing" );
+            SAL_WARN_IF( !pDev, "starmath", "device for font list missing" );
 
             SmModule *pp = SM_MOD();
             SmSymbolDialog( NULL, pDev, pp->GetSymbolManager(), *this ).Execute();
@@ -2050,8 +2049,8 @@ void SmViewShell::Activate( sal_Bool bIsMDIActivate )
 
 IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 {
-    OSL_ENSURE( _pFileDlg, "SmViewShell::DialogClosedHdl(): no file dialog" );
-    OSL_ENSURE( pImpl->pDocInserter, "ScDocShell::DialogClosedHdl(): no document inserter" );
+    SAL_WARN_IF( !_pFileDlg, "starmath", "SmViewShell::DialogClosedHdl(): no file dialog" );
+    SAL_WARN_IF( !pImpl->pDocInserter, "starmath", "ScDocShell::DialogClosedHdl(): no document inserter" );
 
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {

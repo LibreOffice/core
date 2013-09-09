@@ -225,7 +225,7 @@ inline void SmRect::CopyMBL(const SmRect &rRect)
 
 inline long SmRect::GetBaseline() const
 {
-    OSL_ENSURE(HasBaseline(), "Sm: Baseline nicht vorhanden");
+    SAL_WARN_IF( !HasBaseline(), "starmath", "Baseline does not exist" );
     return nBaseline;
 }
 

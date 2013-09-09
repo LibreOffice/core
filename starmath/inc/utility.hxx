@@ -33,7 +33,7 @@ inline long SmPtsTo100th_mm(long nNumPts)
     // 72.27 [pt] = 1 [inch] = 2,54 [cm] = 2540 [100th of mm].
     // result is being rounded to the nearest integer.
 {
-    OSL_ENSURE(nNumPts >= 0, "Sm : Ooops...");
+    SAL_WARN_IF( nNumPts < 0, "starmath", "Ooops..." );
     // broken into multiple and fraction of 'nNumPts' to reduce chance
     // of overflow
     // (7227 / 2) is added in order to round to the nearest integer
@@ -53,7 +53,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).
 {
-    OSL_ENSURE(nNum100th_mm >= 0, "Sm : Ooops...");
+    SAL_WARN_IF( nNum100th_mm < 0, "starmath", "Ooops..." );
     Fraction  aTmp (7227L, 254000L);
     return aTmp *= Fraction(nNum100th_mm);
 }
@@ -61,7 +61,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
 
 inline long SmRoundFraction(const Fraction &rFrac)
 {
-    OSL_ENSURE(rFrac > Fraction(), "Sm : Ooops...");
+    SAL_WARN_IF( rFrac <= Fraction(), "starmath", "Ooops..." );
     return (rFrac.GetNumerator() + rFrac.GetDenominator() / 2) / rFrac.GetDenominator();
 }
 
