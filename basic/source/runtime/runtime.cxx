@@ -54,6 +54,7 @@
 #include "basrid.hxx"
 #include "codegen.hxx"
 #include "comenumwrapper.hxx"
+#include "date.hxx"
 #include "ddectrl.hxx"
 #include "dllmgr.hxx"
 #include "errobject.hxx"
@@ -3305,6 +3306,12 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
     OUString aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
+
+    if (aClass == "com.sun.star.util.Date" && refVal->GetType() != SbxOBJECT && refVal->GetType() != SbxEMPTY )
+    {
+        unoToSbxValue(refVar, Any(SbxDateToUNO(refVal)));
+        return;
+    }
 
     bool bOk = checkClass_Impl( refVal, aClass, true );
     if( bOk )

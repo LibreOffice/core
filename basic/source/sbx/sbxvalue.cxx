@@ -22,10 +22,15 @@
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
+#include <basic/sbuno.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include "sbxconv.hxx"
 #include "runtime.hxx"
+#include "date.hxx"
 
 TYPEINIT1(SbxValue,SbxBase)
+
+using namespace com::sun::star::uno;
 
 ///////////////////////////// constructors //////////////////////////////
 
@@ -318,6 +323,15 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     {
         SetError( SbxERR_PROP_WRITEONLY );
         rRes.pObj = NULL;
+    }
+    else if(rRes.eType == SbxDATE && GetType() == SbxOBJECT)
+    {
+        // FIXME we need this to fail in some sense when this does not contain a css.util.Date
+        Any aAny (sbxToUnoValue(this, ::getCppuType( (com::sun::star::util::Date*)0 )));
+        com::sun::star::util::Date aUnoDate;
+        aAny >>= aUnoDate;
+        // FIXME: set error if this fails?
+        implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, rRes.nDouble );
     }
     else
     {
@@ -661,7 +675,7 @@ sal_Bool SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& r
 }
 
 sal_Bool SbxValue::fillAutomationDecimal
-    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec ) const
 {
     SbxDecimal* pDecimal = GetDecimal();
     if( pDecimal != NULL )

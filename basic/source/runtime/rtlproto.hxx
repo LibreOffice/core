@@ -347,6 +347,8 @@ extern RTLFUNC(GlobalScope);
 extern RTLFUNC(FileExists);
 extern RTLFUNC(ConvertToUrl);
 extern RTLFUNC(ConvertFromUrl);
+extern RTLFUNC(CDateToUno);
+extern RTLFUNC(CDateFromUno);
 extern RTLFUNC(CDateToIso);
 extern RTLFUNC(CDateFromIso);
 extern RTLFUNC(CompatibilityMode);

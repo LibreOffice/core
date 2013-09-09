@@ -20,6 +20,8 @@
 #ifndef _SBDATE_HXX
 #define _SBDATE_HXX
 
+#include <com/sun/star/util/Date.hpp>
+
 bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
@@ -31,6 +33,9 @@ sal_Int16 implGetDateDay( double aDate );
 sal_Int16 implGetHour( double dDate );
 sal_Int16 implGetMinute( double dDate );
 sal_Int16 implGetSecond( double dDate );
+
+::com::sun::star::util::Date SbxDateToUNO( const SbxValue* );
+void SbxDateFromUNO( SbxValue*, const ::com::sun::star::util::Date& );
 
 #endif
 

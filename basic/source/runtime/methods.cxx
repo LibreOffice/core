@@ -19,6 +19,7 @@
 
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
+#include <basic/sbuno.hxx>
 #include <osl/process.h>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
@@ -1855,6 +1856,61 @@ sal_Int16 implGetDateMonth( double aDate )
     aRefDate += nDays;
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetMonth() );
     return nRet;
+}
+
+::com::sun::star::util::Date SbxDateToUNO( const SbxValue* const pVal )
+{
+    double aDate = pVal->GetDate();
+
+    com::sun::star::util::Date aUnoDate;
+    aUnoDate.Day   = implGetDateDay  ( aDate );
+    aUnoDate.Month = implGetDateMonth( aDate );
+    aUnoDate.Year  = implGetDateYear ( aDate );
+
+    return aUnoDate;
+}
+
+void SbxDateFromUNO( SbxValue *pVal, const ::com::sun::star::util::Date& aUnoDate)
+{
+    double dDate;
+    if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, dDate ) )
+    {
+        pVal->PutDate( dDate );
+    }
+}
+
+// Function to convert date to UNO date (com.sun.star.util.Date)
+RTLFUNC(CDateToUno)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    unoToSbxValue(rPar.Get(0), Any(SbxDateToUNO(rPar.Get(1))));
+}
+
+// Function to convert date from UNO date (com.sun.star.util.Date)
+RTLFUNC(CDateFromUno)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 || rPar.Get(1)->GetType() != SbxOBJECT )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::Date*)0 )));
+    com::sun::star::util::Date aUnoDate;
+    aAny >>= aUnoDate;
+
+    SbxDateFromUNO(rPar.Get(0), aUnoDate);
 }
 
 // Function to convert date to ISO 8601 date format

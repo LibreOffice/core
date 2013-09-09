@@ -25,6 +25,7 @@
 #include <svl/brdcst.hxx>
 #include <tools/shl.hxx>
 #include <basic/sbx.hxx>
+#include <basic/sbuno.hxx>
 #include "sbdiagnose.hxx"
 #include "sb.hxx"
 #include <sbjsmeth.hxx>
@@ -87,8 +88,6 @@ using namespace com::sun::star::uno;
 
 typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
 typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
-::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
-void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
 class DocObjectWrapper : public DocObjectWrapper_BASE
 {
