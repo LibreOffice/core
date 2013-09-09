@@ -335,13 +335,11 @@ void ConvDicNameContainer::AddConvDics(
 
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        OUString  aURL( pDirCnt[i] );
+        OUString aURL( pDirCnt[i] );
 
-        sal_Int32 nPos  = aURL.lastIndexOf('.');
-        OUString  aExt(aURL.copy(nPos + 1));
-        aExt = aExt.toAsciiLowerCase();
-        OUString  aSearchExt( rExtension );
-        aSearchExt = aSearchExt.toAsciiLowerCase();
+        sal_Int32 nPos = aURL.lastIndexOf('.');
+        OUString aExt( aURL.copy(nPos + 1).toAsciiLowerCase() );
+        OUString aSearchExt( rExtension.toAsciiLowerCase() );
         if(aExt != aSearchExt)
             continue;          // skip other files
 

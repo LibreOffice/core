@@ -425,15 +425,6 @@ sal_uInt16* SwAttrPool::pVersionMap5 = 0;
 sal_uInt16* SwAttrPool::pVersionMap6 = 0;
 sal_uInt16* SwAttrPool::pVersionMap7 = 0;
 
-const sal_Char* pMarkToTable    = "table";
-const sal_Char* pMarkToFrame    = "frame";
-const sal_Char* pMarkToRegion   = "region";
-const sal_Char* pMarkToText     = "text";
-const sal_Char* pMarkToOutline  = "outline";
-const sal_Char* pMarkToGraphic  = "graphic";
-const sal_Char* pMarkToOLE      = "ole";
-const sal_Char* pMarkToSequence = "sequence";
-
 std::vector<SvGlobalName*> *pGlobalOLEExcludeList = 0;
 
 SwAutoCompleteWord* SwDoc::mpACmpltWords = 0;

@@ -1016,7 +1016,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     if( !rFrmFmt.GetName().isEmpty() )
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(),
-                                  pMarkToOLE );
+                                  "ole" );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );
     OStringBuffer sOut;
@@ -1268,7 +1268,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                   : HTML_FRMOPTS_GENIMG;
         OutHTML_Image( rWrt, rFrmFmt, aGraphic,
                        pOLENd->GetTitle(), pOLENd->GetTwipSize(),
-                       nFlags, pMarkToOLE );
+                       nFlags, "ole" );
     }
 
     return rWrt;

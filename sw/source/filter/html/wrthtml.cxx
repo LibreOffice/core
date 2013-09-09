@@ -614,7 +614,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     rHTMLWrt.bLFPossible = sal_True;
     if( rName.Len() && !bContinued )
-        rHTMLWrt.OutImplicitMark( rName, pMarkToRegion );
+        rHTMLWrt.OutImplicitMark( rName, "region" );
 
     rHTMLWrt.IncIndentLevel();
 }
@@ -1091,17 +1091,17 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
     xub_StrLen nPos = sURL.SearchBackward( cMarkSeparator );
     if( STRING_NOTFOUND != nPos )
     {
-        String sCmp(comphelper::string::remove(sURL.Copy(nPos+1), ' '));
-        if( sCmp.Len() )
+        OUString sCmp(comphelper::string::remove(sURL.Copy(nPos+1), ' '));
+        if( !sCmp.isEmpty() )
         {
-            sCmp.ToLowerAscii();
-            if( sCmp.EqualsAscii( pMarkToRegion ) ||
-                sCmp.EqualsAscii( pMarkToFrame ) ||
-                sCmp.EqualsAscii( pMarkToGraphic ) ||
-                sCmp.EqualsAscii( pMarkToOLE ) ||
-                sCmp.EqualsAscii( pMarkToTable ) ||
-                sCmp.EqualsAscii( pMarkToOutline ) ||
-                sCmp.EqualsAscii( pMarkToText ) )
+            sCmp = sCmp.toAsciiLowerCase();
+            if( sCmp == "region" ||
+                sCmp == "frame" ||
+                sCmp == "graphic" ||
+                sCmp == "ole" ||
+                sCmp == "table" ||
+                sCmp == "outline" ||
+                sCmp == "text" )
             {
                 sURL.SearchAndReplaceAll( '?', '_' );   // '?' causes problems in IE/Netscape 5
             }
