@@ -521,16 +521,6 @@ End
 
 #endif
 
-#if defined WNT
-File gid_File_Dl_Uwinapi
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("uwinapi");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "EABC9FE3-B296-430F-8513-A3617FFB630D";
-End
-#endif
-
 // Public JARs:
 
 #if defined ENABLE_JAVA

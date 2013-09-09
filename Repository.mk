@@ -453,6 +453,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	unsafe_uno \
 	$(if $(URELIBS),urelibs) \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
+	$(if $(filter $(OS),WNT), \
+		uwinapi \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
@@ -562,9 +565,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
-	) \
-	$(if $(filter $(OS),WNT), \
-		uwinapi \
 	) \
 ))
 
