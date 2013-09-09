@@ -506,7 +506,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     }
                     else if( sPropertyType == OUString("double"))
                     {
-                        double nDoub;
+                        double nDoub = sNewValue.toDouble();
                         if( !( nDoub ==0 && sNewValue.getLength()!=1 ) && nDoub < SAL_MAX_INT32 && nDoub > SAL_MIN_INT32)
                             pProperty->Value = uno::makeAny( nDoub );
                         else
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     }
                     else if( sPropertyType == OUString("float"))
                     {
-                        float nFloat;
+                        float nFloat = sNewValue.toFloat();
                         if( !( nFloat ==0 && sNewValue.getLength()!=1 ) && nFloat < SAL_MAX_INT32 && nFloat > SAL_MIN_INT32)
                             pProperty->Value = uno::makeAny( nFloat );
                         else
