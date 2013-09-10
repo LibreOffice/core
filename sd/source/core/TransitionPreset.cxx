@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/expandmacro.hxx>
 
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
@@ -134,8 +135,6 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
     return true;
 }
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
-
 bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 {
     bool bRet = false;
@@ -174,16 +173,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            OUString aURL = aFiles[i];
-            if( aURL.startsWith( EXPAND_PROTOCOL ) )
-            {
-                // cut protocol
-                OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-                // decode uric class chars
-                aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                // expand macro string
-                aURL = xMacroExpander->expandMacros( aMacro );
-            }
+            OUString aURL = ::comphelper::getExpandedFilePath(aFiles[i]);
 
             bRet |= importTransitionsFile( rList,
                                            xServiceFactory,
