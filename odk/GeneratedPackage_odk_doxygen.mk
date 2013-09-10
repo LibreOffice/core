@@ -11,7 +11,7 @@ $(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_doxygen,$(call gb_CustomT
 
 $(eval $(call gb_GeneratedPackage_use_customtarget,odk_doxygen,odk/docs))
 
-$(eval $(call gb_GeneratedPackage_add_dir,odk_doxygen,$(gb_Package_SDKDIRNAME)/docs/cpp/ref,cpp/ref))
-$(eval $(call gb_GeneratedPackage_add_dir,odk_doxygen,$(gb_Package_SDKDIRNAME)/docs/idl/ref,idl/ref))
+$(eval $(call gb_GeneratedPackage_add_dir,odk_doxygen,$(INSTDIR)/$(gb_Package_SDKDIRNAME)/docs/cpp/ref,cpp/ref))
+$(eval $(call gb_GeneratedPackage_add_dir,odk_doxygen,$(INSTDIR)/$(gb_Package_SDKDIRNAME)/docs/idl/ref,idl/ref))
 
 # vim: set noet sw=4 ts=4:

@@ -33,7 +33,7 @@ gb_Pyuno_get_packagename = Pyuno/$(1)
 # gb_Pyuno_Pyuno component
 define gb_Pyuno_Pyuno
 $(call gb_Package_Package_internal,$(call gb_Pyuno_get_packagename,$(1)),$(2))
-$(call gb_Package_set_outdir,$(call gb_Pyuno_get_packagename,$(1)),$(INSTDIR))
+$(call gb_Package_set_outdir,$(call gb_Pyuno_get_packagename,$(1)),$(gb_INSTROOT))
 
 $(call gb_Pyuno_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_Pyuno_get_packagename,$(1)))
 $(call gb_Pyuno_get_target,$(1)) :| $(dir $(call gb_Pyuno_get_target,$(1))).dir

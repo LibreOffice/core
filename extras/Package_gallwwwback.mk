@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_gallwwwback,$(SRCDIR)/extras/source/gallery/www-back))
 
-$(eval $(call gb_Package_set_outdir,extras_gallwwwback,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_gallwwwback,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_gallwwwback,$(LIBO_SHARE_FOLDER)/gallery/www-back,\
 	aqua.jpg \

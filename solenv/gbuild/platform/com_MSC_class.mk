@@ -17,7 +17,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_DEVINSTALLROOT := $(INSTDIR)
+gb_INSTROOT := $(INSTDIR)
+gb_DEVINSTALLROOT := $(gb_INSTROOT)
 
 # Convert path to file URL.
 define gb_Helper_make_url

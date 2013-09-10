@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosobjects,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosobjects,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosobjects,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosobjects,$(LIBO_SHARE_FOLDER)/gallery/Photos/Objects,\
 	accessories/Photos/Objects/JS_PDPhO_dragon_celebration.jpg \

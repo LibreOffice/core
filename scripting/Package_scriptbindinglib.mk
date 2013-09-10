@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,scripting_scriptbindinglib,$(SRCDIR)/scripting/workben/bindings))
 
-$(eval $(call gb_Package_set_outdir,scripting_scriptbindinglib,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,scripting_scriptbindinglib,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,scripting_scriptbindinglib,$(LIBO_SHARE_FOLDER)/basic/ScriptBindingLibrary,\
 	Highlight.xdl \

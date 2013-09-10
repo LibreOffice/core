@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tplwizagenda,$(SRCDIR)/extras/source/templates/wizard/agenda))
 
-$(eval $(call gb_Package_set_outdir,extras_tplwizagenda,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_tplwizagenda,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizagenda,$(LIBO_SHARE_FOLDER)/template/common/wizard/agenda,\
     10grey.ott \

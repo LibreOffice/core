@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonlayout,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlayout,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlayout,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlayout,$(LIBO_SHARE_FOLDER)/template/common/layout,\
 	templates/common/layout/31407-squares.otp \

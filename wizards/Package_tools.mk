@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvtools,$(SRCDIR)/wizards/source/tools))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvtools,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtools,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvtools,$(LIBO_SHARE_FOLDER)/basic/Tools,\
 	Debug.xba \

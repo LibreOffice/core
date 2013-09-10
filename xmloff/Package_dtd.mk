@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,xmloff_dtd,$(SRCDIR)/xmloff/dtd))
 
-$(eval $(call gb_Package_set_outdir,xmloff_dtd,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,xmloff_dtd,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,xmloff_dtd,$(LIBO_SHARE_FOLDER)/dtd/officedocument/1_0,\
 	chart.mod \

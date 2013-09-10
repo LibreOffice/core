@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonmisc,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonmisc,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonmisc,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonmisc,$(LIBO_SHARE_FOLDER)/template/common/misc,\
 	templates/common/misc/White_Notebook_Paper_legal.ott \

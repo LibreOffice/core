@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonofficorr,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonofficorr,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonofficorr,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonofficorr,$(LIBO_SHARE_FOLDER)/template/common/officorr,\
 	templates/common/officorr/dummy_common_templates.txt \

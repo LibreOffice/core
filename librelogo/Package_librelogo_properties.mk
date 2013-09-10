@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,librelogo_properties,$(call gb_CustomTarget_get_workdir,librelogo/locproperties)))
 
-$(eval $(call gb_Package_set_outdir,librelogo_properties,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,librelogo_properties,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,librelogo_properties,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo,\
 	$(foreach lang,$(subst -,_,$(gb_TRANS_LANGS)),LibreLogo_$(lang).properties) \

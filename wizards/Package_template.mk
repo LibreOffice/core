@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvtemplate,$(SRCDIR)/wizards/source/template))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvtemplate,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtemplate,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvtemplate,$(LIBO_SHARE_FOLDER)/basic/Template,\
 	Autotext.xba \

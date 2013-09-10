@@ -10,7 +10,7 @@
 #$(eval $(call gb_Package_Package,extras_accessoriesgallerydrawspeople,$(call gb_UnpackedTarball_get_dir,gallery-pack)/accessories/Draws/People))
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallerydrawspeople,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallerydrawspeople,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallerydrawspeople,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerydrawspeople,$(LIBO_SHARE_FOLDER)/gallery/Draws/People,\
 	accessories/Draws/People/Baboo1.png \

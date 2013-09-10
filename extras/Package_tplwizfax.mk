@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tplwizfax,$(SRCDIR)/extras/source/templates/wizard/fax))
 
-$(eval $(call gb_Package_set_outdir,extras_tplwizfax,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_tplwizfax,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizfax,$(LIBO_SHARE_FOLDER)/template/common/wizard/fax,\
     bus-classic_f.ott \

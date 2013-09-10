@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_javavendors,$(SRCDIR)/jvmfwk))
 
-$(eval $(call gb_Package_set_outdir,jvmfwk_javavendors,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,jvmfwk_javavendors,$(gb_INSTROOT)))
 
 ifneq ($(OS),WNT)
 ifeq ($(OS),FREEBSD)

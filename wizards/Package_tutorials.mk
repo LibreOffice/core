@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvtutorials,$(SRCDIR)/wizards/source/tutorials))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvtutorials,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvtutorials,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvtutorials,$(LIBO_SHARE_FOLDER)/basic/Tutorials,\
 	dialog.xlb \

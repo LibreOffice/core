@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosplants,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosplants,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosplants,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosplants,$(LIBO_SHARE_FOLDER)/gallery/Photos/Plants,\
 	accessories/Photos/Plants/ArkSoft0405020018.jpg \

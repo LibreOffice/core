@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_dejavu,font_dejavu))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_dejavu,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_dejavu,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_dejavu,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	ttf/DejaVuSans-Bold.ttf \

@@ -9,7 +9,7 @@
 
 # class GeneratedPackage
 
-# Enables to deliver whole directories (of generated files) to $(INSTDIR).
+# Enables to deliver whole directories (of generated files) to instdir.
 #
 # GeneratedPackage shall be used as a substitution for Package when the
 # names of the produced files are not known in advance (in older times,
@@ -23,18 +23,18 @@ gb_GeneratedPackage__get_srcdir = $(lastword $(subst :, ,$(1)))
 gb_GeneratedPackage__get_destdir = $(firstword $(subst :, ,$(1)))
 
 define gb_GeneratedPackage__command_cp
-mkdir -p $(dir $(INSTDIR)/$(2)) && \
-cp -R $(PACKAGE_SOURCEDIR)/$(1) $(INSTDIR)/$(2)
+mkdir -p $(dir $(2)) && \
+cp -R $(PACKAGE_SOURCEDIR)/$(1) $(2)
 endef
 
 define gb_GeneratedPackage__command
 $(call gb_Output_announce,$(2),$(true),GPK,2)
 $(call gb_Helper_abbreviate_dirs,\
-	rm -rf $(addprefix $(INSTDIR)/,$(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair)))) && \
+	rm -rf $(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) && \
 	$(foreach pair,$(PACKAGE_DIRS),\
 		$(call gb_GeneratedPackage__command_cp,$(call gb_GeneratedPackage__get_srcdir,$(pair)),$(call gb_GeneratedPackage__get_destdir,$(pair))) &&) \
 	find \
-		$(addprefix $(INSTDIR)/,$(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair)))) \
+		$(foreach pair,$(PACKAGE_DIRS),$(call gb_GeneratedPackage__get_destdir,$(pair))) \
 		\( -type f -o -type l \) -print \
 		> $(1) \
 )
@@ -63,7 +63,7 @@ $(call gb_GeneratedPackage_get_target,%) :
 .PHONY : $(call gb_GeneratedPackage_get_clean_target,%)
 $(call gb_GeneratedPackage_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),GPK,2)
-	rm -rf $(call gb_GeneratedPackage_get_target,$*) $(addprefix $(INSTDIR)/,$(PACKAGE_DIRS))
+	rm -rf $(call gb_GeneratedPackage_get_target,$*) $(PACKAGE_DIRS)
 
 # Create a generated package.
 #
@@ -107,7 +107,7 @@ endef
 
 # Add a dir to the package.
 #
-# The srcdir will be copied to $(INSTDIR) as destdir.
+# The srcdir will be copied to instdir as destdir.
 #
 # gb_GeneratedPackage_add_dir package destdir srcdir
 define gb_GeneratedPackage_add_dir

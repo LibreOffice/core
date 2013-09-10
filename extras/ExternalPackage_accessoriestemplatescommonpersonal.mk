@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonpersonal,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonpersonal,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonpersonal,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonpersonal,$(LIBO_SHARE_FOLDER)/template/common/personal,\
 	templates/common/personal/szivesoldal.otg \

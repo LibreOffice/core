@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,shell_senddoc,$(SRCDIR)/shell/source/unix/misc))
 
-$(eval $(call gb_Package_set_outdir,shell_senddoc,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,shell_senddoc,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_file,shell_senddoc,$(gb_PROGRAMDIRNAME)/senddoc,senddoc.sh))
 

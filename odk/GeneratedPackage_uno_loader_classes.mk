@@ -11,6 +11,6 @@ $(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_uno_loader_classes,$(call
 
 $(eval $(call gb_GeneratedPackage_use_customtarget,odk_uno_loader_classes,odk/classes))
 
-$(eval $(call gb_GeneratedPackage_add_dir,odk_uno_loader_classes,$(gb_Package_SDKDIRNAME)/classes/com/sun/star/lib/loader,com/sun/star/lib/loader))
+$(eval $(call gb_GeneratedPackage_add_dir,odk_uno_loader_classes,$(INSTDIR)/$(gb_Package_SDKDIRNAME)/classes/com/sun/star/lib/loader,com/sun/star/lib/loader))
 
 # vim: set noet sw=4 ts=4:

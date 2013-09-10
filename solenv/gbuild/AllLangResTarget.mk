@@ -457,7 +457,7 @@ $(call gb_AllLangResTarget_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
-gb_ResTarget_get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/resource/$(1).res
+gb_ResTarget_get_install_target = $(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/resource/$(1).res
 
 define gb_AllLangResTarget_AllLangResTarget
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\

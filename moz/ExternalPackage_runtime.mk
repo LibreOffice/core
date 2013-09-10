@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,moz_runtime,mozruntime))
 
-$(eval $(call gb_ExternalPackage_set_outdir,moz_runtime,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,moz_runtime,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,moz_runtime,$(gb_Package_PROGRAMDIRNAME),\
 	components/addrbook.dll \

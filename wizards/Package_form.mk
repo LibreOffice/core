@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvform,$(SRCDIR)/wizards/source/formwizard))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvform,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvform,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvform,$(LIBO_SHARE_FOLDER)/basic/FormWizard,\
 	DBMeta.xba \

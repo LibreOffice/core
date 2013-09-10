@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,libexttextcat_fingerprint,exttextcat))
 
-$(eval $(call gb_ExternalPackage_set_outdir,libexttextcat_fingerprint,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,libexttextcat_fingerprint,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_files,libexttextcat_fingerprint,$(LIBO_SHARE_FOLDER)/fingerprint,\
 	langclass/fpdb.conf \

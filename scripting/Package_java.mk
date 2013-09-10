@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,scripting_java,$(SRCDIR)/scripting/examples/java))
 
-$(eval $(call gb_Package_set_outdir,scripting_java,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,scripting_java,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,scripting_java,$(LIBO_SHARE_FOLDER)/Scripts/java,\
     HelloWorld/HelloWorld.java \

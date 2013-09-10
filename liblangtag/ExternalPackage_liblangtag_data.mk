@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag_data,langtag))
 
-$(eval $(call gb_ExternalPackage_set_outdir,liblangtag_data,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,liblangtag_data,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,$(LIBO_SHARE_FOLDER)/liblangtag,\
 	data/language-subtag-registry.xml \

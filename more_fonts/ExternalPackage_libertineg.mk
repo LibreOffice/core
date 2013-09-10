@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_libertineg,font_libertineg))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_libertineg,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_libertineg,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_libertineg,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	LinBiolinum_RB_G.ttf \

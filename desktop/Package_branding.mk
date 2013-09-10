@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,desktop_branding,$(SRCDIR)/icon-themes/galaxy))
 
-$(eval $(call gb_Package_set_outdir,desktop_branding,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,desktop_branding,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,desktop_branding,$(LIBO_ETC_FOLDER),\
     $(foreach image,$(filter $(BRAND_INTRO_IMAGES),$(DEFAULT_BRAND_IMAGES)),\

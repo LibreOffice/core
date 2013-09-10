@@ -37,7 +37,7 @@ $(call gb_Jar_get_workdir,$(1))/META-INF/MANIFEST.MF
 endef
 
 gb_Jar__get_layer = $(strip $(foreach group,$(gb_Jar_VALIDGROUPS),$(if $(filter $(1),$(gb_Jar_$(group))),$(group))))
-gb_Jar__get_dir_for_layer = $(patsubst $(1):%,$(INSTDIR)/%,$(filter $(1):%,$(gb_Jar_LAYER_DIRS)))
+gb_Jar__get_dir_for_layer = $(patsubst $(1):%,$(gb_INSTROOT)/%,$(filter $(1):%,$(gb_Jar_LAYER_DIRS)))
 gb_Jar_get_install_target = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_layer,$(1)))/$(1).jar
 
 # creates classset and META-INF folders if they don't exist

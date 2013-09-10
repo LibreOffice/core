@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tplwizletter,$(SRCDIR)/extras/source/templates/wizard/letter))
 
-$(eval $(call gb_Package_set_outdir,extras_tplwizletter,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_tplwizletter,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizletter,$(LIBO_SHARE_FOLDER)/template/common/wizard/letter,\
     bus-elegant_l.ott \

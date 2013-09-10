@@ -14,7 +14,7 @@
 
 $(eval $(call gb_Package_Package,reportbuilder-templates,$(SRCDIR)/reportbuilder/template))
 
-$(eval $(call gb_Package_set_outdir,reportbuilder-templates,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,reportbuilder-templates,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,reportbuilder-templates,$(LIBO_SHARE_FOLDER)/template, \
     common/wizard/report/default.otr \

@@ -199,7 +199,7 @@ define gb_ExternalPackage__add_file_for_install
 $(call gb_ExternalPackage_add_file,$(1),$(2),$(4))
 
 $(call gb_Helper_install,$(call gb_ExternalPackage_get_target,$(1)), \
-	$(INSTDIR)/$(3), \
+	$(gb_INSTROOT)/$(3), \
 	$(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(4))
 
 $(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(4) :| \
@@ -211,7 +211,7 @@ endef
 #
 # This function is very similar to gb_ExternalPackage_add_file, except
 # that it also allows to deliver the library to its proper place in
-# $(INSTDIR).
+# $(gb_INSTROOT).
 #
 # The last argument is the name under which the library was registered.
 # It is used to determine layer, if the library is not in layer OOO.
@@ -234,7 +234,7 @@ endef
 #
 # This function works just like to gb_ExternalPackage_add_file, except
 # that it also allows to deliver the jar to its proper place in
-# $(INSTDIR).
+# $(gb_INSTROOT).
 #
 # gb_ExternalPackage_add_jar_for_install package dest src
 define gb_ExternalPackage_add_jar_for_install

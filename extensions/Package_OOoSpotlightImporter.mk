@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extensions_OOoSpotlightImporter,$(OUTDIR)/lib))
 
-$(eval $(call gb_Package_set_outdir,extensions_OOoSpotlightImporter,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extensions_OOoSpotlightImporter,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_file,extensions_OOoSpotlightImporter,Library/Spotlight/OOoSpotlightImporter.mdimporter/Contents/MacOS/OOoSpotlightImporter,$(call gb_Library_get_runtime_filename,OOoSpotlightImporter)))
 

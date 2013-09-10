@@ -67,10 +67,10 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
-		echo 'java_path=`$(INSTDIR)/ure/bin/javaldx 2>/dev/null`' && \
-		echo 'export LD_LIBRARY_PATH="$(INSTDIR)/program:$$java_path$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH}"' && \
+		echo 'java_path=`$(gb_INSTROOT)/ure/bin/javaldx 2>/dev/null`' && \
+		echo 'export LD_LIBRARY_PATH="$(gb_INSTROOT)/program:$$java_path$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH}"' && \
 		echo 'ulimit -c unlimited' && \
-		echo 'export PATH="$(INSTDIR)/program:$(INSTDIR)/ure/bin:$$PATH"' && \
+		echo 'export PATH="$(gb_INSTROOT)/program:$(gb_INSTROOT)/ure/bin:$$PATH"' && \
 		echo 'export GNOME_DISABLE_CRASH_DIALOG=1' && \
 		echo '# debugging assistance' && \
 		echo 'export SAL_DISABLE_FLOATGRAB=1' && \

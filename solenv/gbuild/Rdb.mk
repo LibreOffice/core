@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_Rdb__get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
+gb_Rdb__get_install_target = $(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
 gb_Rdb__get_final_target = $(WORKDIR)/Rdb/$(1).final
 
 define gb_Rdb__command
@@ -45,7 +45,7 @@ endef
 
 define gb_Rdb_install
 $(call gb_Helper_install,$(call gb_Rdb__get_final_target,$(1)), \
-	$(if $(2),$(INSTDIR)/$(2),$(call gb_Rdb__get_install_target,$(1))), \
+	$(if $(2),$(gb_INSTROOT)/$(2),$(call gb_Rdb__get_install_target,$(1))), \
 	$(call gb_Rdb_get_target,$(1)))
 
 endef

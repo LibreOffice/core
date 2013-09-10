@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_gallmytheme,$(SRCDIR)/extras/source/gallery/gallery_mytheme))
 
-$(eval $(call gb_Package_set_outdir,extras_gallmytheme,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_gallmytheme,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDER)/gallery,\
 	sg30.sdv \

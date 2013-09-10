@@ -45,7 +45,7 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
 
 gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER_DIRS)))
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
-gb_Library_get_install_target = $(INSTDIR)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
+gb_Library_get_install_target = $(gb_INSTROOT)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
 
 define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
@@ -67,9 +67,9 @@ endef
 
 define gb_Library__Library_impl_copy
 $(call gb_Package_Package,Library_Copy_$(1),$(gb_Package_PRESTAGEDIR))
-$(call gb_Package_set_outdir,Library_Copy_$(1),$(INSTDIR))
+$(call gb_Package_set_outdir,Library_Copy_$(1),$(gb_INSTROOT))
 $(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
-$(OUTDIR)/lib/$(notdir $(2)) : $(INSTDIR)/$(2)
+$(OUTDIR)/lib/$(notdir $(2)) : $(gb_INSTROOT)/$(2)
 endef
 
 define gb_Library__Library_impl

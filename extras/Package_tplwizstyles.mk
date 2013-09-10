@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tplwizstyles,$(SRCDIR)/extras/source/templates/wizard/styles))
 
-$(eval $(call gb_Package_set_outdir,extras_tplwizstyles,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_tplwizstyles,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizstyles,$(LIBO_SHARE_FOLDER)/template/common/wizard/styles,\
 	blackberry.ots \

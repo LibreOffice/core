@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,msvc_dlls,$(MSVC_DLL_PATH)))
 
-$(eval $(call gb_Package_set_outdir,msvc_dlls,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,msvc_dlls,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,msvc_dlls,program/shlxthdl,\
 	$(MSVC_DLLS) \

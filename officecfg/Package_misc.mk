@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,officecfg_misc,$(SRCDIR)/officecfg))
 
-$(eval $(call gb_Package_set_outdir,officecfg_misc,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,officecfg_misc,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_file,officecfg_misc,$(LIBO_SHARE_FOLDER)/registry/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
 $(eval $(call gb_Package_add_file,officecfg_misc,$(LIBO_SHARE_FOLDER)/registry/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))

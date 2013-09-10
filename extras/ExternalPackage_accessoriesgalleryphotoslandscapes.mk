@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotoslandscapes,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoslandscapes,$(INSTDIR)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoslandscapes,$(gb_INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoslandscapes,$(LIBO_SHARE_FOLDER)/gallery/Photos/Landscapes,\
 	accessories/Photos/Landscapes/ArkSoft0405010010.jpg \

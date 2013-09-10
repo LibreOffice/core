@@ -140,7 +140,7 @@ $(call gb_Gallery__Gallery_impl,$(1),$(call gb_Gallery_get_packagename,$(1)),$(2
 
 # setup the files package - we install all of these too
 $(call gb_Package_Package_internal,$(call gb_Gallery_get_files_packagename,$(1)),$(SRCDIR)/$(2))
-$(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(INSTDIR))
+$(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(gb_INSTROOT))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(call gb_Gallery_get_files_packagename,$(1)))
 $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_Gallery_get_files_packagename,$(1)))
 
@@ -155,7 +155,7 @@ gb_Gallery_basedir = $(patsubst %/,%,$(dir $(SRCDIR)/$(1)))
 # gb_Gallery__Gallery_impl gallery package basedir name
 define gb_Gallery__Gallery_impl
 $(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
-$(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_Package_set_outdir,$(2),$(gb_INSTROOT))
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,$(1).sdg)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,$(1).sdv)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,$(1).thm)

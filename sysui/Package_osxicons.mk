@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,sysui_osxicons,$(SRCDIR)/sysui/desktop/icons))
 
-$(eval $(call gb_Package_set_outdir,sysui_osxicons,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,sysui_osxicons,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,sysui_osxicons,Resources,\
     text.icns \

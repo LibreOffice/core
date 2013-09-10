@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_labels,$(SRCDIR)/extras/source/labels))
 
-$(eval $(call gb_Package_set_outdir,extras_labels,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_labels,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_file,extras_labels,$(LIBO_SHARE_FOLDER)/labels/labels.xml,labels.xml))
 

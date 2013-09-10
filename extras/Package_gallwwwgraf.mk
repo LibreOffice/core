@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_gallwwwgraf,$(SRCDIR)/extras/source/gallery/www-graf))
 
-$(eval $(call gb_Package_set_outdir,extras_gallwwwgraf,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,extras_gallwwwgraf,$(gb_INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_gallwwwgraf,$(LIBO_SHARE_FOLDER)/gallery/www-graf,\
 	bluat.gif \
