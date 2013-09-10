@@ -7,34 +7,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <comphelper/processfactory.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <unotest/macros_test.hxx>
+#include "dbtest_base.cxx"
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
 class FirebirdTest
-    : public ::test::BootstrapFixture
-    , public ::unotest::MacrosTest
+    : public DBTestBase
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
-
     void testEmptyDBConnection();
     void testIntegerDatabase();
 
@@ -44,28 +34,16 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// TODO: refactor the load file -> get Connection stuff into a separate class
-
 /**
  * Test the loading of an "empty" file, i.e. the embedded database has not yet
  * been initialised (as occurs when a new .odb is created and opened by base).
  */
 void FirebirdTest::testEmptyDBConnection()
 {
-    const OUString sFileName("/dbaccess/qa/unit/data/firebird_empty.odb");
+    uno::Reference< XOfficeDatabaseDocument > xDocument =
+        getDocumentForFileName("firebird_empty.odb");
 
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(
-                                                    getSrcRootURL() + sFileName);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
-    CPPUNIT_ASSERT(xDocument.is());
-
-    uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
-    CPPUNIT_ASSERT(xDataSource.is());
-
-    uno::Reference< XConnection > xConnection = xDataSource->getConnection("","");
-    CPPUNIT_ASSERT(xConnection.is());
+    getConnectionForDocument(xDocument);
 }
 
 /**
@@ -74,20 +52,11 @@ void FirebirdTest::testEmptyDBConnection()
  */
 void FirebirdTest::testIntegerDatabase()
 {
-    const OUString sFileName("/dbaccess/qa/unit/data/firebird_integer_x64le.odb");
+    uno::Reference< XOfficeDatabaseDocument > xDocument =
+        getDocumentForFileName("firebird_integer_x64le.odb");
 
-    uno::Reference< lang::XComponent > xComponent = loadFromDesktop(
-                                                    getSrcRootURL() + sFileName);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
-    CPPUNIT_ASSERT(xDocument.is());
-
-    uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
-    CPPUNIT_ASSERT(xDataSource.is());
-
-    uno::Reference< XConnection > xConnection = xDataSource->getConnection("","");
-    CPPUNIT_ASSERT(xConnection.is());
+    uno::Reference< XConnection > xConnection =
+        getConnectionForDocument(xDocument);
 
     uno::Reference< XStatement > xStatement = xConnection->createStatement();
     CPPUNIT_ASSERT(xStatement.is());
@@ -114,20 +83,6 @@ void FirebirdTest::testIntegerDatabase()
         xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
-}
-
-void FirebirdTest::setUp()
-{
-    ::test::BootstrapFixture::setUp();
-
-    mxDesktop = ::com::sun::star::frame::Desktop::create(
-                    ::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(mxDesktop.is());
-}
-
-void FirebirdTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);
