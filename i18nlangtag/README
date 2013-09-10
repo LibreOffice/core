@@ -1,3 +1,67 @@
 Code for language tags, LanguageTag wrapper for liblangtag and converter between BCP47 language tags, Locale(Language,Country,Variant) and MS-LangIDs.
 
-Basic functionality used by almost every other module including comphelper, so even don't use that string helpers in this code to not create circular dependencies. Stick with sal!
+Basic functionality used by almost every other module including comphelper, so even don't use that string helpers in this code to not create circular dependencies. Stick with sal and rtl!
+
+
+
+If Microsoft introduced a new LCID for a locale that we previously defined as LANGUAGE_USER_..., for example LANGUAGE_CATALAN_VALENCIAN that we had as LANGUAGE_USER_CATALAN_VALENCIAN:
+
+* include/i18nlangtag/lang.h
+** add the new LANGUAGE_... value as defined by MS, here LANGUAGE_CATALAN_VALENCIAN
+** rename the LANGUAGE_USER_... definition to LANGUAGE_OBSOLETE_USER_..., here LANGUAGE_USER_CATALAN_VALENCIAN to LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN
+** add a  #define LANGUAGE_USER_CATALAN_VALENCIAN LANGUAGE_CATALAN_VALENCIAN
+*** so svtools/source/misc/langtab.src (where the defined name is an identifier) and other places using LANGUAGE_USER_CATALAN_VALENCIAN do not need to be changed
+
+* i18nlangtag/source/isolang/isolang.cxx
+** insert a mapping with LANGUAGE_CATALAN_VALENCIAN before (!) the existing LANGUAGE_USER_CATALAN_VALENCIAN
+** rename the LANGUAGE_USER_CATALAN_VALENCIAN to LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN
+*** so converting the tag maps to the new LANGUAGE_CATALAN_VALENCIAN and converting the old LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN still maps to the tag.
+
+* i18nlangtag/source/isolang/mslangid.cxx
+** add an entry to MsLangId::getReplacementForObsoleteLanguage() to convert LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN to LANGUAGE_CATALAN_VALENCIAN
+
+
+
+When changing a (translation's) language tag (for example, 'ca-XV' to 'ca-valencia' or 'sh' to 'sr-Latn'):
+
+* solenv/inc/langlist.mk
+** replace the tag and sort alphabetically
+
+* in translations/source do  git mv old-tag new-tag
+** note that translations is a git submodule so https://wiki.documentfoundation.org/Development/Submodules applies
+
+* i18nlangtag/source/isolang/isolang.cxx
+** maintain the old tag's mapping entry in aImplIsoLangEntries to be able to read existing documents using that code
+** add the new tag's mapping to aImplBcp47CountryEntries or aImplIsoLangScriptEntries
+** change mbOverrideExists from false to true in aImplIsoLangScriptEntries
+
+* i18nlangtag/source/languagetag/languagetag.cxx
+** add the new tag's fallback strings to the fallback of the old tag in LanguageTag::getFallbackStrings()
+
+* i18nlangtag/qa/cppunit/test_languagetag.cxx
+** add a unit test for the new tag and old tag
+
+* instsetoo_native/util/pack.lst
+** replace the tag in List_of_languages and sort alphabetically
+
+* l10ntools/source/ulfconv/msi-encodinglist.txt
+** replace the tag and sort alphabetically
+
+* setup_native/source/packinfo/spellchecker_selection.txt
+** replace the tag
+
+If locale data exists:
+
+* i18npool/source/localedata/data/*.xml     for example i18npool/source/localedata/data/sh_RS.xml 
+** in the <LC_INFO> element
+*** change <LangID> to 'qlt'
+*** after the <Country> element add a <Variant> element with the new full BCP 47 tag, for example 'sr-Latn-RS'
+**** note that <Variant> has no <VariantID> or <DefaultName> child elements
+** if any of the other *.xml files reference the locale in a ref="..." attribute, change those too; note that these references use '_' underscore instead of '-' hyphen just like the file names do
+** rename sh_RS.xml to sr_Latn_RS.xml,  git mv sh_RS.xml sr_Latn_RS.xml
+
+* i18npool/source/localedata/localedata.cxx
+** in aLibTable change the entry from old "sh_RS" to new "sr_Latn_RS", do not sort the table
+
+* i18npool/Library_localedata_*.mk      for example i18npool/Library_localedata_euro.mk
+** change the entry for the changed .xml file, for example CustomTarget/i18npool/localedata/localedata_sh_RS to CustomTarget/i18npool/localedata/localedata_sr_Latn_RS, sort the list alphabetically
