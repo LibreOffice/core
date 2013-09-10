@@ -1313,9 +1313,10 @@ NumberingTypeMgr::NumberingTypeMgr()
     ImplLoad(OUString("standard.syb"));
 }
 
-NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr):
-    NBOTypeMgrBase(rTypeMgr),
-    pNumberSettingsArr (new NumberSettingsArr_Impl)
+NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr)
+    : NBOTypeMgrBase(rTypeMgr)
+    , pNumberSettingsArr (new NumberSettingsArr_Impl)
+    , pDefaultNumberSettingsArr(NULL)
 {
     ImplLoad(OUString("standard.syb"));
 }
@@ -1323,6 +1324,7 @@ NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr):
 NumberingTypeMgr::~NumberingTypeMgr()
 {
     delete pNumberSettingsArr;
+    delete pDefaultNumberSettingsArr;
 }
 
 class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
