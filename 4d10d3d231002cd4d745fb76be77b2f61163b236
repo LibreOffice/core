@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Ds\u003d",
+        "filename": "sw/source/filter/ww8/writerwordglue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-09-10T20:06:57Z",
+      "side": 1,
+      "message": "Yes, this would be right, but leads to:\n\n/home/thomas/libo/core/sw/source/filter/ww8/writerwordglue.cxx: In function ‘sal_Bool sw::ms::IsPreviousAM(rtl::OUString\u0026, sal_Int32)’:\n/home/thomas/libo/core/sw/source/filter/ww8/writerwordglue.cxx:980:22: warning: assuming signed overflow does not occur when assuming that (X - c) \u003e X is always false [-Wstrict-overflow]\n             if(nPos1 \u003e nPos || nPos2 \u003e nPos){\n                      ^\n/home/thomas/libo/core/sw/source/filter/ww8/writerwordglue.cxx:980:38: warning: assuming signed overflow does not occur when assuming that (X - c) \u003e X is always false [-Wstrict-overflow]\n             if(nPos1 \u003e nPos || nPos2 \u003e nPos){\n                                      ^\n\n\nAny idea how to handle this?",
+      "parentUuid": "AAAAXn//7D8\u003d",
+      "revId": "4d10d3d231002cd4d745fb76be77b2f61163b236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7EI\u003d",
         "filename": "sw/source/filter/ww8/ww8par5.cxx",
         "patchSetId": 2
