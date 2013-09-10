@@ -492,9 +492,9 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
 #ifdef DEBUG
-                    String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
+                    OUString aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
-                    String aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
+                    OUString aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
                     ESelection aSel( *pESelection );
@@ -503,7 +503,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                     aSel.nEndPos   = nChgInNodeStartIndex + nChgLen;
                     m_pEditView->SetSelection( aSel );
 #ifdef DEBUG
-                    String aSelTxt1( m_pEditView->GetSelected() );
+                    OUString aSelTxt1( m_pEditView->GetSelected() );
 #endif
 
                     // replace selected sub string with the corresponding
@@ -551,12 +551,12 @@ void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttri
         SfxItemSet aSet( m_pEditView->GetAttribs() );
 
 #ifdef DEBUG
-        String aSelTxt1( m_pEditView->GetSelected() );
+        OUString aSelTxt1( m_pEditView->GetSelected() );
 #endif
         // replace old text and select new text
         m_pEditView->InsertText( rNewText, sal_True );
 #ifdef DEBUG
-        String aSelTxt2( m_pEditView->GetSelected() );
+        OUString aSelTxt2( m_pEditView->GetSelected() );
 #endif
 
         // since 'SetAttribs' below function like merging with the attributes

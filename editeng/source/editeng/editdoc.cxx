@@ -2113,12 +2113,12 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
     sal_Int32 nLastNode = nNodes-1;
     for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++ )
     {
-        String aTmp( GetParaAsString( GetObject(nNode) ) );
-        memcpy( pCur, aTmp.GetBuffer(), aTmp.Len()*sizeof(sal_Unicode) );
-        pCur += aTmp.Len();
+        OUString aTmp( GetParaAsString( GetObject(nNode) ) );
+        memcpy( pCur, aTmp.getStr(), aTmp.getLength() * sizeof(sal_Unicode) );
+        pCur += aTmp.getLength();
         if ( nSepSize && ( nNode != nLastNode ) )
         {
-            memcpy( pCur, aSep.getStr(), nSepSize*sizeof(sal_Unicode ) );
+            memcpy( pCur, aSep.getStr(), nSepSize * sizeof(sal_Unicode ) );
             pCur += nSepSize;
         }
     }
@@ -3042,7 +3042,7 @@ SvxColorItem* SvxColorList::GetObject( size_t nIndex )
 }
 
 EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
-    : SfxItemPool( String( "EditEngineItemPool", RTL_TEXTENCODING_ASCII_US ), EE_ITEMS_START, EE_ITEMS_END,
+    : SfxItemPool( OUString( "EditEngineItemPool" ), EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )
 {
     SetVersionMap( 1, 3999, 4015, aV1Map );

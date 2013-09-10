@@ -873,7 +873,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 //    aTmp = lcl_Win_GetShortPathName( aTmp );
 #endif
     Graphic aGraphic;
-    const String aFilterName(  IMP_PNG  );
+    const OUString aFilterName(  IMP_PNG  );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -903,7 +903,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         aPaM2.GetIndex()++;
 
         // Are there any replace suggestions?
-        String aSelected( GetSelected() );
+        OUString aSelected( GetSelected() );
         //
         // restrict the maximal number of suggestions displayed
         // in the context menu.
@@ -931,7 +931,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         LanguageType nGuessLangPara = LANGUAGE_NONE;
         if (xSpellAlt.is() && xLangGuesser.is())
         {
-            String aParaText;
+            OUString aParaText;
             ContentNode *pNode = aPaM.GetNode();
             if (pNode)
             {
@@ -954,12 +954,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 nGuessLangPara = nGuessLangWord;
 
             aPopupMenu.InsertSeparator();
-            String aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
-            String aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
-            String aWordStr( EE_RESSTR( RID_STR_WORD ) );
-            aWordStr.SearchAndReplace( String(  "%x"  ), aTmpWord );
-            String aParaStr( EE_RESSTR( RID_STR_PARAGRAPH ) );
-            aParaStr.SearchAndReplace( String(  "%x"  ), aTmpPara );
+            OUString aTmpWord( SvtLanguageTable::GetLanguageString( nGuessLangWord ) );
+            OUString aTmpPara( SvtLanguageTable::GetLanguageString( nGuessLangPara ) );
+            OUString aWordStr( EE_RESSTR( RID_STR_WORD ) );
+            aWordStr = aWordStr.replaceFirst( "%x", aTmpWord );
+            OUString aParaStr( EE_RESSTR( RID_STR_PARAGRAPH ) );
+            aParaStr = aParaStr.replaceFirst( "%x", aTmpPara );
             aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
             aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
             aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );
@@ -983,7 +983,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
             {
-                String aAlternate( pAlt[nW] );
+                OUString aAlternate( pAlt[nW] );
                 aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, 0, OString(), nW );
                 pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, 0, OString(), nW );
             }
@@ -1058,7 +1058,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, POPUPMENU_NOMOUSEUPCLOSE );
         if ( nId == MN_IGNORE )
         {
-            String aWord = pImpEditView->SpellIgnoreOrAddWord( sal_False );
+            OUString aWord = pImpEditView->SpellIgnoreOrAddWord( sal_False );
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( SPELLCMD_IGNOREWORD, aWord );
@@ -1109,13 +1109,13 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             }
             else
             {
-                SpellCallbackInfo aInf( SPELLCMD_STARTSPELLDLG, String() );
+                SpellCallbackInfo aInf( SPELLCMD_STARTSPELLDLG, OUString() );
                 pCallBack->Call( &aInf );
             }
         }
         else if ( nId >= MN_DICTSTART || nId == MN_INSERT_SINGLE )
         {
-            String aDicName;
+            OUString aDicName;
             if (nId >= MN_DICTSTART)
                 aDicName = pInsertMenu->GetItemText(nId);
             else
@@ -1126,7 +1126,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 xDic = xDicList->getDictionaryByName( aDicName );
 
             if (xDic.is())
-                xDic->add( aSelected, sal_False, String() );
+                xDic->add( aSelected, sal_False, OUString() );
             // save modified user-dictionary if it is persistent
             Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
             if (xSavDic.is())
@@ -1145,7 +1145,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         else if ( nId >= MN_AUTOSTART )
         {
             DBG_ASSERT(nId - MN_AUTOSTART < aAlt.getLength(), "index out of range");
-            String aWord = pAlt[nId - MN_AUTOSTART];
+            OUString aWord = pAlt[nId - MN_AUTOSTART];
             SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAutoCorrect )
                 pAutoCorrect->PutText( aSelected, aWord, PIMPEE->GetLanguage( aPaM2 ) );
@@ -1154,7 +1154,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         else if ( nId >= MN_ALTSTART )  // Replace
         {
             DBG_ASSERT(nId - MN_ALTSTART < aAlt.getLength(), "index out of range");
-            String aWord = pAlt[nId - MN_ALTSTART];
+            OUString aWord = pAlt[nId - MN_ALTSTART];
             InsertText( aWord );
         }
         else
@@ -1448,13 +1448,13 @@ Selection EditView::GetSurroundingTextSelection() const
     {
         EditSelection aSel( pImpEditView->GetEditSelection() );
         aSel.Adjust( PIMPE->GetEditDoc() );
-        String aStr = PIMPE->GetSelected(aSel);
+        OUString aStr = PIMPE->GetSelected(aSel);
 
         // Stop reconversion if the selected text includes a line break.
-        if ( aStr.Search( 0x0A ) == STRING_NOTFOUND )
-        return Selection( 0, aSelection.nEndPos - aSelection.nStartPos );
+        if ( aStr.indexOf( 0x0A ) == -1 )
+            return Selection( 0, aSelection.nEndPos - aSelection.nStartPos );
         else
-        return Selection( 0, 0 );
+            return Selection( 0, 0 );
     }
     else
     {

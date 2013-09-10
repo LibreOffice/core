@@ -169,7 +169,7 @@ void EditHTMLParser::NextToken( int nToken )
     {
         if ( bInPara )
         {
-            ImpInsertText( String( RTL_CONSTASCII_USTRINGPARAM( " " ) ) );
+            ImpInsertText( OUString( " " ) );
         }
     }
     break;
@@ -189,10 +189,10 @@ void EditHTMLParser::NextToken( int nToken )
             if ( !bInPara )
                 StartPara( false );
 
-            String aText = aToken;
-            if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
+            OUString aText = aToken;
+            if ( !aText.isEmpty() && ( aText[ 0 ] == ' ' )
                     && ThrowAwayBlank() && !IsReadPRE() )
-                aText.Erase( 0, 1 );
+                aText = aText.copy( 1 );
 
             if ( pCurAnchor )
             {
@@ -203,12 +203,11 @@ void EditHTMLParser::NextToken( int nToken )
                 // Only written until HTML with 319?
                 if ( IsReadPRE() )
                 {
-                    sal_uInt16 nTabPos = aText.Search( '\t', 0 );
-                    while ( nTabPos != STRING_NOTFOUND )
+                    sal_Int32 nTabPos = aText.indexOf( '\t');
+                    while ( nTabPos != -1 )
                     {
-                        aText.Erase( nTabPos, 1 );
-                        aText.Insert( String( RTL_CONSTASCII_USTRINGPARAM( "        " ) ), nTabPos );
-                        nTabPos = aText.Search( '\t', nTabPos+8 );
+                        aText = aText.replaceAt( nTabPos, 1, "        " );
+                        nTabPos = aText.indexOf( '\t', nTabPos+8 );
                     }
                 }
                 ImpInsertText( aText );
@@ -669,7 +668,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 
 void EditHTMLParser::ImpInsertText( const OUString& rText )
 {
-    String aText( rText );
+    OUString aText( rText );
     if (mpEditEngine->IsImportHandlerSet())
     {
         ImportInfo aImportInfo(HTMLIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
@@ -769,7 +768,7 @@ void EditHTMLParser::AnchorStart()
     if ( !pCurAnchor )
     {
         const HTMLOptions& aOptions = GetOptions();
-        String aRef;
+        OUString aRef;
 
         for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
@@ -782,10 +781,10 @@ void EditHTMLParser::AnchorStart()
             }
         }
 
-        if ( aRef.Len() )
+        if ( !aRef.isEmpty() )
         {
-            String aURL = aRef;
-            if ( aURL.Len() && ( aURL.GetChar( 0 ) != '#' ) )
+            OUString aURL = aRef;
+            if ( !aURL.isEmpty() && ( aURL[ 0 ] != '#' ) )
             {
                 INetURLObject aTargetURL;
                 INetURLObject aRootURL( aBaseURL );

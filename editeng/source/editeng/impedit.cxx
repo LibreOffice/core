@@ -1128,7 +1128,7 @@ OUString ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
             {
                 Reference< XDictionary >  xDic( SvxGetIgnoreAllList(), UNO_QUERY );
                 if (xDic.is())
-                    xDic->add( aWord, sal_False, String() );
+                    xDic->add( aWord, sal_False, OUString() );
             }
             EditDoc& rDoc = pEditEngine->GetEditDoc();
             sal_Int32 nNodes = rDoc.Count();
@@ -1304,8 +1304,8 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
                         OUString aTmpText;
                         aData >>= aTmpText;
-                        String aText(convertLineEnd(aTmpText, LINEEND_LF));
-                        aText.SearchAndReplaceAll( LINE_SEP, ' ' );
+                        OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
+                        aText = aText.replaceAll( OUString(LINE_SEP), " " );
                         aSel = pEditEngine->InsertText(aSel, aText);
                     }
                     catch( ... )
@@ -1317,7 +1317,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             else
             {
                 aSel = pEditEngine->InsertText(
-                    xDataObj, String(), aSel.Min(),
+                    xDataObj, OUString(), aSel.Min(),
                     bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
             }
 
@@ -1728,7 +1728,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
                 pEditEngine->HandleBeginPasteOrDrop(aPasteOrDropInfos);
 
                 EditSelection aNewSel = pEditEngine->InsertText(
-                    xDataObj, String(), aPaM, pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+                    xDataObj, OUString(), aPaM, pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
 
                 aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
                 pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);

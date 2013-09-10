@@ -1106,7 +1106,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
                     // Not correctly converted
-                    String aPart( rC.GetText(), rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart() );
+                    OUString aPart = rC.GetText().copy( rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart() );
                     OString aNew(OUStringToOString(aPart, rFontItem.GetCharSet()));
                     aBuffer.remove(rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart());
                     aBuffer.insert(rAttr.GetStart(), aNew);

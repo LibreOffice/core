@@ -271,7 +271,7 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel, const LineEnd eE
     if ( !rSel.HasRange() )
         return aText;
 
-    String aSep = EditDoc::GetSepStr( eEnd );
+    OUString aSep = EditDoc::GetSepStr( eEnd );
 
     EditSelection aSel( rSel );
     aSel.Adjust( aEditDoc );
@@ -309,7 +309,7 @@ sal_Bool ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pVie
     SetActiveView( pView );
 
     if (!GetAutoCompleteText().isEmpty())
-        SetAutoCompleteText( String(), sal_True );
+        SetAutoCompleteText( OUString(), sal_True );
 
     GetSelEngine().SelMouseButtonDown( rMEvt );
     // Special treatment
@@ -353,10 +353,10 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         pView->DeleteSelected();
         delete mpIMEInfos;
         EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
-        String aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
-        sal_uInt16 nMax = aOldTextAfterStartPos.Search( CH_FEATURE );
-        if ( nMax != STRING_NOTFOUND )  // don't overwrite features!
-            aOldTextAfterStartPos.Erase( nMax );
+        OUString aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+        sal_Int32 nMax = aOldTextAfterStartPos.indexOf( CH_FEATURE );
+        if ( nMax != -1 )  // don't overwrite features!
+            aOldTextAfterStartPos = aOldTextAfterStartPos.copy( 0, nMax );
         mpIMEInfos = new ImplIMEInfos( aPaM, aOldTextAfterStartPos );
         mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
         UndoActionStart( EDITUNDO_INSERT );
@@ -929,17 +929,17 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
 
     if ( !bEmptyLine )
     {
-        String aLine(aPaM.GetNode()->GetString(), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart());
+        OUString aLine = aPaM.GetNode()->GetString().copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart());
 
-        const sal_Unicode* pLineString = aLine.GetBuffer();
+        const sal_Unicode* pLineString = aLine.getStr();
 
         UErrorCode nError = U_ZERO_ERROR;
-        UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
+        UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
-        sal_uInt16 nVisPos = bStart ? 0 : aLine.Len()-1;
+        sal_uInt16 nVisPos = bStart ? 0 : aLine.getLength()-1;
         sal_uInt16 nLogPos = (sal_uInt16)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
 
         ubidi_close( pBidi );
@@ -1048,20 +1048,20 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         sal_Bool bGotoStartOfNextLine = sal_False;
         sal_Bool bGotoEndOfPrevLine = sal_False;
 
-        String aLine(aPaM.GetNode()->GetString(), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart());
+        OUString aLine = aPaM.GetNode()->GetString().copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart());
         sal_uInt16 nPosInLine = aPaM.GetIndex() - pLine->GetStart();
 
-        const sal_Unicode* pLineString = aLine.GetBuffer();
+        const sal_Unicode* pLineString = aLine.getStr();
 
         UErrorCode nError = U_ZERO_ERROR;
-        UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
+        UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         if ( !pEditView->IsInsertMode() )
         {
-            sal_Bool bEndOfLine = nPosInLine == aLine.Len();
+            sal_Bool bEndOfLine = nPosInLine == aLine.getLength();
             sal_uInt16 nVisPos = (sal_uInt16)ubidi_getVisualIndex( pBidi, !bEndOfLine ? nPosInLine : nPosInLine-1, &nError );
             if ( bVisualToLeft )
             {
@@ -1071,7 +1071,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             }
             else
             {
-                bGotoStartOfNextLine = nVisPos == (aLine.Len() - 1);
+                bGotoStartOfNextLine = nVisPos == (aLine.getLength() - 1);
                 if ( !bEndOfLine )
                     nVisPos++;
             }
@@ -1109,7 +1109,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             }
 
             bGotoEndOfPrevLine = nVisPos < 0;
-            bGotoStartOfNextLine = nVisPos >= aLine.Len();
+            bGotoStartOfNextLine = nVisPos >= aLine.getLength();
 
             if ( !bGotoEndOfPrevLine && !bGotoStartOfNextLine )
             {
@@ -1553,8 +1553,8 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     const EditPaM& rPaM = rCurSel.Min();
     const ContentNode* pNode = rPaM.GetNode();
     // #i50710# line breaks are marked with 0x01 - the break iterator prefers 0x0a for that
-    String sParagraph = pNode->GetString();
-    sParagraph.SearchAndReplaceAll(0x01,0x0a);
+    OUString sParagraph = pNode->GetString();
+    sParagraph = sParagraph.replaceAll(OUString(0x01), OUString(0x0a));
     //return Null if search starts at the beginning of the string
     sal_Int32 nStart = rPaM.GetIndex() ? _xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
 
@@ -1590,11 +1590,11 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
     return bIsSequenceChecking;
 }
 
-static  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+static  bool lcl_HasStrongLTR ( const OUString& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
      for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
-         const UCharDirection nCharDir = u_charDirection ( rTxt.GetChar ( nCharIdx ));
+         const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ]);
          if ( nCharDir == U_LEFT_TO_RIGHT ||
               nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
               nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
@@ -1616,7 +1616,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     {
         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
 
-        String aText = pNode->GetString();
+        OUString aText = pNode->GetString();
 
         // To handle fields put the character from the field in the string,
         // because endOfScript( ... ) will skip the CH_FEATURE, because this is WEAK
@@ -1626,7 +1626,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
             OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
             if ( !aFldText.isEmpty() )
             {
-                aText.SetChar( pField->GetStart(), aFldText.getStr()[0] );
+                aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
                 short nFldScriptType = _xBI->getScriptType( aFldText, 0 );
 
                 for ( sal_uInt16 nCharInField = 1; nCharInField < aFldText.getLength(); nCharInField++ )
@@ -1637,14 +1637,14 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                     if ( nFldScriptType == i18n::ScriptType::WEAK )
                     {
                         nFldScriptType = nTmpType;
-                        aText.SetChar( pField->GetStart(), aFldText.getStr()[nCharInField] );
+                        aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
                     }
 
                     // ...  but if the first one is LATIN, and there are CJK or CTL chars too,
                     // we prefer that ScripType because we need an other font.
                     if ( ( nTmpType == i18n::ScriptType::ASIAN ) || ( nTmpType == i18n::ScriptType::COMPLEX ) )
                     {
-                        aText.SetChar( pField->GetStart(), aFldText.getStr()[nCharInField] );
+                        aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(nCharInField,1) );
                         break;
                     }
                 }
@@ -1894,16 +1894,16 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     if ( ( bCTL || ( nBidiLevel == 1 /*RTL*/ ) ) && pParaPortion->GetNode()->Len() )
     {
 
-        String aText = pParaPortion->GetNode()->GetString();
+        OUString aText = pParaPortion->GetNode()->GetString();
 
         //
         // Bidi functions from icu 2.0
         //
         UErrorCode nError = U_ZERO_ERROR;
-        UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
+        UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         size_t nCount = ubidi_countRuns( pBidi, &nError );
@@ -2539,7 +2539,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         sal_uInt16 nIndex = aSel.Max().GetIndex();
         EdtAutoCorrDoc aAuto(pEditEngine, pNode, nIndex, c);
         // FIXME: this _must_ be called with reference to the actual node text!
-        String const& rNodeString(pNode->GetString());
+        OUString const& rNodeString(pNode->GetString());
         pAutoCorrect->DoAutoCorrect(
             aAuto, rNodeString, nIndex, c, !bOverwrite, pFrameWin );
         aSel.Max().SetIndex( aAuto.GetCursor() );
@@ -2613,12 +2613,12 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    String aChgText( aNewText.copy( nChgPos ) );
+                    OUString aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
                     EditSelection aSel( EditPaM( aPaM.GetNode(), (sal_uInt16) nChgPos ), aPaM );
 
-                    if (aChgText.Len())
+                    if (!aChgText.isEmpty())
                         return InsertText( aSel, aChgText ); // implicitly handles undo
                     else
                         return aPaM;
@@ -2676,7 +2676,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     if ( GetStatus().DoOnlineSpelling() )
         aCurWord = SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD );
 
-    XubString aText(convertLineEnd(rStr, LINEEND_LF));
+    OUString aText(convertLineEnd(rStr, LINEEND_LF));
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
 
     // Converts to linesep = \n
@@ -2685,43 +2685,41 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
 
     // fdo#39869 The loop run variable must be capable to hold STRLEN_MAX+1,
     // that with STRING32 would be SAL_MAX_INT32+1 but with 16-bit is 0xFFFF+1
-    sal_uInt32 nStart = 0;
-    while ( nStart < aText.Len() )
+    sal_Int32 nStart = 0;
+    while ( nStart < aText.getLength() )
     {
-        sal_uInt32 nEnd = aText.Search( LINE_SEP, static_cast<xub_StrLen>(nStart) );
-        if ( nEnd == STRING_NOTFOUND )
-            nEnd = aText.Len(); // not dereference!
+        sal_Int32 nEnd = aText.indexOf( LINE_SEP, nStart );
+        if ( nEnd == -1 )
+            nEnd = aText.getLength(); // not dereference!
 
         // Start == End => empty line
         if ( nEnd > nStart )
         {
-            XubString aLine( aText, nStart, static_cast<xub_StrLen>(nEnd-nStart) );
-            xub_StrLen nChars = aPaM.GetNode()->Len() + aLine.Len();
+            OUString aLine = aText.copy( nStart, nEnd-nStart );
+            xub_StrLen nChars = aPaM.GetNode()->Len() + aLine.getLength();
             if ( nChars > MAXCHARSINPARA )
             {
                 xub_StrLen nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
-                nEnd -= ( aLine.Len() - nMaxNewChars ); // Then the characters end up in the next paragraph.
-                aLine.Erase( nMaxNewChars );            // Delete the Rest...
+                nEnd -= ( aLine.getLength() - nMaxNewChars ); // Then the characters end up in the next paragraph.
+                aLine = aLine.copy( 0, nMaxNewChars );            // Delete the Rest...
             }
             if ( IsUndoEnabled() && !IsInUndo() )
                 InsertUndo(new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), aLine));
             // Tabs ?
-            if ( aLine.Search( '\t' ) == STRING_NOTFOUND )
+            if ( aLine.indexOf( '\t' ) == -1 )
                 aPaM = aEditDoc.InsertText( aPaM, aLine );
             else
             {
-                sal_uInt32 nStart2 = 0;
-                while ( nStart2 < aLine.Len() )
+                sal_Int32 nStart2 = 0;
+                while ( nStart2 < aLine.getLength() )
                 {
-                    sal_uInt32 nEnd2 = aLine.Search( '\t', static_cast<xub_StrLen>(nStart2) );
-                    if ( nEnd2 == STRING_NOTFOUND )
-                        nEnd2 = aLine.Len();    // not dereference!
+                    sal_Int32 nEnd2 = aLine.indexOf( "\t", nStart2 );
+                    if ( nEnd2 == -1 )
+                        nEnd2 = aLine.getLength();    // not dereference!
 
                     if ( nEnd2 > nStart2 )
-                        aPaM = aEditDoc.InsertText( aPaM, XubString( aLine,
-                                    static_cast<xub_StrLen>(nStart2),
-                                    static_cast<xub_StrLen>(nEnd2-nStart2) ) );
-                    if ( nEnd2 < aLine.Len() )
+                        aPaM = aEditDoc.InsertText( aPaM, aLine.copy( nStart2, nEnd2-nStart2 ) );
+                    if ( nEnd2 < aLine.getLength() )
                     {
                         aPaM = aEditDoc.InsertFeature( aPaM, aTabItem );
                     }
@@ -2738,12 +2736,12 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                 if (pWrongs && !pWrongs->empty())
                     pWrongs->ClearWrongs( aCurWord.Min().GetIndex(), aPaM.GetIndex(), aPaM.GetNode() );
                 // ... and mark both words as 'to be checked again'
-                pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.Len() );
+                pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.getLength() );
             }
             else
-                pPortion->MarkInvalid( aCurPaM.GetIndex(), aLine.Len() );
+                pPortion->MarkInvalid( aCurPaM.GetIndex(), aLine.getLength() );
         }
-        if ( nEnd < aText.Len() )
+        if ( nEnd < aText.getLength() )
             aPaM = ImpInsertParaBreak( aPaM );
 
         nStart = nEnd+1;
@@ -3477,7 +3475,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
             if ( pFld && pFld->ISA( SvxURLField ) )
             {
                 // Office-Bookmark
-                String aURL( ((const SvxURLField*)pFld)->GetURL() );
+                OUString aURL( ((const SvxURLField*)pFld)->GetURL() );
                 pDataObj->GetURL() = aURL;
             }
         }

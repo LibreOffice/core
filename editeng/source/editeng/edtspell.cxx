@@ -166,7 +166,7 @@ void EditSpellWrapper::ChangeWord( const OUString& rNewWord,
 
     // If there is a dot Punkt after the word, this dot will be stripped away.
     // If '"' => PreStripped.
-    String aNewWord( rNewWord );
+    OUString aNewWord( rNewWord );
     pEditView->InsertText( aNewWord );
     CheckSpellTo();
 }
@@ -677,7 +677,7 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
 {
     // Turn the Text into a command field ...
     EditSelection aSel( EditPaM( pCurNode, nStt ), EditPaM( pCurNode, nEnd ) );
-    String aText = mpEditEngine->GetSelected(aSel);
+    OUString aText = mpEditEngine->GetSelected(aSel);
     aSel = mpEditEngine->DeleteSelection(aSel);
     SAL_WARN_IF(nCursor < nEnd, "editeng",
             "Cursor in the heart of the action?!");
@@ -735,10 +735,10 @@ sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
     // shortcut in Auto
     bAllowUndoAction = false;   // Not anymore ...
 
-    String aShort( pCurNode->Copy( rSttPos, nEndPos - rSttPos ) );
+    OUString aShort( pCurNode->Copy( rSttPos, nEndPos - rSttPos ) );
     bool bRet = false;
 
-    if( !aShort.Len() )
+    if( aShort.isEmpty() )
         return bRet;
 
     LanguageType eLang = mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );

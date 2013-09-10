@@ -153,7 +153,7 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 {
 #if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
-    SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_in.rtf" ) ), STREAM_WRITE );
+    SvFileStream aRTFOut( OUString( "d:\\rtf_in.rtf" ), STREAM_WRITE );
     aRTFOut << rInput;
     aRTFOut.Close();
     rInput.Seek( 0 );
@@ -690,7 +690,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
 #if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
     {
-        SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.rtf" ) ), STREAM_WRITE|STREAM_TRUNC );
+        SvFileStream aStream( OUString( "d:\\rtf_out.rtf" ), STREAM_WRITE|STREAM_TRUNC );
         sal_uLong nP = rOutput.Tell();
         rOutput.Seek( 0 );
         aStream << rOutput;
@@ -1685,7 +1685,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
 
     // looks for next convertible text portion to be passed on to the wrapper
 
-    String aRes;
+    OUString aRes;
     LanguageType nResLang = LANGUAGE_NONE;
 
     /* ContentNode* pLastNode = */ aEditDoc.GetObject( aEditDoc.Count()-1 );
@@ -1693,9 +1693,9 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
     EditSelection aCurSel = EditSelection( aPos, aPos );
 
-    String aWord;
+    OUString aWord;
 
-    while (!aRes.Len())
+    while (aRes.isEmpty())
     {
         // empty paragraph found that needs to have language and font set?
         if (bAllowImplicitChangesForNotConvertibleText &&
@@ -1825,11 +1825,11 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
 
         aWord = GetSelected( aCurSel );
 
-        if ( aWord.Len() > 0 /* && bLangOk */)
+        if ( !aWord.isEmpty() /* && bLangOk */)
             aRes = aWord;
 
         // move to next word/paragraph if necessary
-        if ( !aRes.Len() )
+        if ( aRes.isEmpty() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
         pConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
@@ -1854,7 +1854,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Min() = aCurSel.Max();
 
-    String aWord;
+    OUString aWord;
     Reference< XSpellAlternatives > xSpellAlt;
     Sequence< PropertyValue > aEmptySeq;
     while (!xSpellAlt.is())
@@ -1882,17 +1882,17 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 
         // If afterwards a dot, this must be handed over!
         // If an abbreviation ...
-        if ( aWord.Len() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
+        if ( !aWord.isEmpty() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
         {
             sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
             if ( cNext == '.' )
             {
                 aCurSel.Max().GetIndex()++;
-                aWord += cNext;
+                aWord += OUString(cNext);
             }
         }
 
-        if ( aWord.Len() > 0 )
+        if ( !aWord.isEmpty() )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
@@ -1924,7 +1924,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
     aEditDoc.GetObject( (aEditDoc.Count()-1) );
     EditSelection aCurSel( rSelection.Min() );
 
-    String aWord;
+    OUString aWord;
     Reference< XSpellAlternatives > xSpellAlt;
     Sequence< PropertyValue > aEmptySeq;
     while (!xSpellAlt.is())
@@ -1941,17 +1941,17 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 
         // If afterwards a dot, this must be handed over!
         // If an abbreviation ...
-        if ( aWord.Len() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
+        if ( !aWord.isEmpty() && ( aCurSel.Max().GetIndex() < aCurSel.Max().GetNode()->Len() ) )
         {
             sal_Unicode cNext = aCurSel.Max().GetNode()->GetChar( aCurSel.Max().GetIndex() );
             if ( cNext == '.' )
             {
                 aCurSel.Max().GetIndex()++;
-                aWord += cNext;
+                aWord += OUString(cNext);
             }
         }
 
-        if ( aWord.Len() > 0 )
+        if ( !aWord.isEmpty() )
             xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
 
         if ( !xSpellAlt.is() )
@@ -2463,7 +2463,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
     ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count() - 1 );
     EditSelection aCurSel( aEditDoc.GetStartPaM() );
 
-    String aWord;
+    OUString aWord;
     Reference< XSpellAlternatives > xSpellAlt;
     Sequence< PropertyValue > aEmptySeq;
     while ( !xSpellAlt.is() )
@@ -2476,7 +2476,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
 
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
-        if ( aWord.Len() > 0 )
+        if ( !aWord.isEmpty() )
         {
             LanguageType eLang = GetLanguage( aCurSel.Max() );
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
@@ -2498,7 +2498,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
-    String aWord( GetSelected( aCurSel ) );
+    OUString aWord( GetSelected( aCurSel ) );
 
     Reference< XThesaurus > xThes( SvxGetThesaurus() );
     if (!xThes.is())
@@ -2716,10 +2716,10 @@ namespace
 {
     struct eeTransliterationChgData
     {
-        sal_uInt16                      nStart;
+        sal_uInt16                  nStart;
         xub_StrLen                  nLen;
         EditSelection               aSelection;
-        String                      aNewText;
+        OUString                    aNewText;
         uno::Sequence< sal_Int32 >  aOffsets;
     };
 }
@@ -2819,11 +2819,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
-                String aText(aNodeStr.Copy(nCurrentStart, nLen) );
+                OUString aText(aNodeStr.copy(nCurrentStart, nLen) );
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate(aNodeStr,
+                OUString aNewText( aTranslitarationWrapper.transliterate(aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
@@ -2837,7 +2837,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aChanges.push_back( aChgData );
                 }
 #if OSL_DEBUG_LEVEL > 1
-                String aSelTxt ( GetSelected( aChgData.aSelection ) );
+                OUString aSelTxt ( GetSelected( aChgData.aSelection ) );
                 (void) aSelTxt;
 #endif
 
@@ -2907,11 +2907,11 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
                 DBG_ASSERT( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
-                String aText( aNodeStr.Copy( nCurrentStart, nLen ) );
+                OUString aText( aNodeStr.copy( nCurrentStart, nLen ) );
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate( aNodeStr,
+                OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
@@ -2951,7 +2951,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 xub_StrLen nLen = nCurrentEnd - nCurrentStart;
 
                 Sequence< sal_Int32 > aOffsets;
-                String aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
+                OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
                 if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
                 {
@@ -3003,7 +3003,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 eeTransliterationChgData& rData = aChanges[ aChanges.size() - 1 - i ];
 
                 bChanges = sal_True;
-                if (rData.nLen != rData.aNewText.Len())
+                if (rData.nLen != rData.aNewText.getLength())
                     bLenChanged = sal_True;
 
                 // Change text without loosing the attributes
@@ -3018,7 +3018,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
                 pParaPortion->MarkSelectionInvalid( rData.nStart,
                         std::max< sal_uInt16 >( rData.nStart + rData.nLen,
-                                            rData.nStart + rData.aNewText.Len() ) );
+                                            rData.nStart + rData.aNewText.getLength() ) );
             }
         }
     }

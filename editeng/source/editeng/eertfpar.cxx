@@ -235,7 +235,7 @@ void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 
 void EditRTFParser::InsertText()
 {
-    String aText( aToken );
+    OUString aText( aToken );
     if (mpEditEngine->IsImportHandlerSet())
     {
         ImportInfo aImportInfo(RTFIMP_INSERTTEXT, this, mpEditEngine->CreateESelection(aCurSel));
@@ -439,8 +439,8 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     if ( pStyle )
         return pStyle;
 
-    String aName( pRTFStyle->sName );
-    String aParent;
+    OUString aName( pRTFStyle->sName );
+    OUString aParent;
     if ( pRTFStyle->nBasedOn )
     {
         SvxRTFStyleTbl::iterator it = GetStyleTbl().find( pRTFStyle->nBasedOn );
@@ -458,7 +458,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
     ConvertAndPutItems( pStyle->GetItemSet(), pRTFStyle->aAttrSet );
 
     // 2) As long as Parent is not in the pool, also create this ...
-    if ( aParent.Len() && ( aParent != aName ) )
+    if ( !aParent.isEmpty() && ( aParent != aName ) )
     {
         SfxStyleSheet* pS = (SfxStyleSheet*)mpEditEngine->GetStyleSheetPool()->Find( aParent, SFX_STYLE_FAMILY_ALL );
         if ( !pS )
@@ -502,8 +502,8 @@ void EditRTFParser::ReadField()
     int _nOpenBrakets = 1;      // the first was already detected earlier
     sal_Bool bFldInst = sal_False;
     sal_Bool bFldRslt = sal_False;
-    String aFldInst;
-    String aFldRslt;
+    OUString aFldInst;
+    OUString aFldRslt;
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -542,17 +542,17 @@ void EditRTFParser::ReadField()
             break;
         }
     }
-    if ( aFldInst.Len() )
+    if ( !aFldInst.isEmpty() )
     {
-        String aHyperLinkMarker( RTL_CONSTASCII_USTRINGPARAM( "HYPERLINK " ) );
-        if ( aFldInst.CompareIgnoreCaseToAscii( aHyperLinkMarker, aHyperLinkMarker.Len() ) == COMPARE_EQUAL )
+        OUString aHyperLinkMarker( "HYPERLINK " );
+        if ( aFldInst.startsWithIgnoreAsciiCase( aHyperLinkMarker ) )
         {
-            aFldInst.Erase( 0, aHyperLinkMarker.Len() );
+            aFldInst = aFldInst.copy( aHyperLinkMarker.getLength() );
             aFldInst = comphelper::string::strip(aFldInst, ' ');
-            aFldInst.Erase( 0, 1 ); // "
-            aFldInst.Erase( aFldInst.Len()-1, 1 );  // "
+            // strip start and end quotes
+            aFldInst = aFldInst.copy( 1, aFldInst.getLength()-2 );
 
-            if ( !aFldRslt.Len() )
+            if ( aFldRslt.isEmpty() )
                 aFldRslt = aFldInst;
 
             SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );

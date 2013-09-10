@@ -1307,7 +1307,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
                                 aCurSel = pImpEditEngine->InsertText(
                                                 EditSelection( aStart, aCurSel.Max() ), aAutoText );
-                                pImpEditEngine->SetAutoCompleteText( String(), sal_True );
+                                pImpEditEngine->SetAutoCompleteText( OUString(), sal_True );
                             }
                         }
                         pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
@@ -1362,10 +1362,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                              ( pImpEditEngine->aWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
                         {
                             EditPaM aStart( pImpEditEngine->WordLeft( aCurSel.Max() ) );
-                            String aWord = pImpEditEngine->GetSelected( EditSelection( aStart, aCurSel.Max() ) );
-                            if ( aWord.Len() >= 3 )
+                            OUString aWord = pImpEditEngine->GetSelected( EditSelection( aStart, aCurSel.Max() ) );
+                            if ( aWord.getLength() >= 3 )
                             {
-                                String aComplete;
+                                OUString aComplete;
 
                                 LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1));
                                 LanguageTag aLanguageTag( eLang);
@@ -1394,7 +1394,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                     }
                                 }
 
-                                if ( !aComplete.Len() )
+                                if ( aComplete.isEmpty() )
                                 {
                                     xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
                                     sal_Int32 nMonthCount = xItem.getLength();
@@ -1410,7 +1410,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                     }
                                 }
 
-                                if( aComplete.Len() && ( ( aWord.Len() + 1 ) < aComplete.Len() ) )
+                                if( !aComplete.isEmpty() && ( ( aWord.getLength() + 1 ) < aComplete.getLength() ) )
                                 {
                                     pImpEditEngine->SetAutoCompleteText( aComplete, sal_False );
                                     Point aPos = pImpEditEngine->PaMtoEditCursor( aCurSel.Max() ).TopLeft();
@@ -2482,7 +2482,7 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
                 {
                     DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
                     EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
-                    String aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
+                    OUString aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );
                 }
             }

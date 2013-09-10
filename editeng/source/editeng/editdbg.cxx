@@ -474,7 +474,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     }
     fclose( fp );
     if ( bInfoBox )
-        InfoBox(0, String( RTL_CONSTASCII_USTRINGPARAM( "D:\\DEBUG.LOG !" ) ) ).Execute();
+        InfoBox(0, OUString( "D:\\DEBUG.LOG !" ) ).Execute();
 }
 
 #if OSL_DEBUG_LEVEL > 2
