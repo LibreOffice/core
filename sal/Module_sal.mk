@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_rtl_locale \
 	CppunitTest_sal_rtl_ostringbuffer \
 	CppunitTest_sal_rtl_oustringbuffer \
+	CppunitTest_sal_rtl_oustring \
 	CppunitTest_sal_rtl_textenc \
 	CppunitTest_sal_rtl_strings \
 	CppunitTest_sal_rtl_uri \
