@@ -119,12 +119,22 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void setUpSlideNotes(int aSlideIndex) {
+        if (!isSlideNotesLayoutAvailable()) {
+            return;
+        }
+
         if (areSlideNotesAvailable(aSlideIndex)) {
             showSlideNotes(aSlideIndex);
         }
         else {
             hideSlideNotes();
         }
+    }
+
+    private boolean isSlideNotesLayoutAvailable() {
+        ViewGroup aSlideNotesLayout = (ViewGroup) getView().findViewById(R.id.layout_notes);
+
+        return aSlideNotesLayout != null;
     }
 
     private boolean areSlideNotesAvailable(int aSlideIndex) {

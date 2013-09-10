@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.view.ViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pager_slides"
+    android:layout_gravity="center"
+    android:paddingTop="@dimen/padding_slides_pager"
+    android:paddingBottom="@dimen/padding_slides_pager"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
