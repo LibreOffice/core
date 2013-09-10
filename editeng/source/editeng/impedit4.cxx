@@ -2751,9 +2751,9 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
-        const XubString& aNodeStr = pNode->GetString();
+        const OUString& aNodeStr = pNode->GetString();
         xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = aNodeStr.Len();
+        xub_StrLen nEndPos = aNodeStr.getLength();
         if ( nNode == nStartNode )
             nStartPos = aSel.Min().GetIndex();
         if ( nNode == nEndNode ) // can also be == nStart!
@@ -2827,7 +2827,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
-                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
+                if (aNodeStr != aNewText.copy( nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
@@ -2915,7 +2915,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
-                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
+                if ( aNodeStr != aNewText.copy( nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
@@ -2953,7 +2953,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
-                if (!aNodeStr.Equals( aNewText, nCurrentStart, nLen ))
+                if (aNodeStr != aNewText.copy( nCurrentStart, nLen ))
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
