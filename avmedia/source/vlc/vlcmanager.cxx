@@ -1,3 +1,12 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include "vlcmanager.hxx"
@@ -43,7 +52,6 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
         std::vector<std::string> verComponents;
         const std::string str(Common::Version());
 
-        std::cout << str << std::endl;
         boost::split(verComponents,
                      str,
                      boost::is_any_of(". "));
@@ -52,8 +60,11 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
             || (boost::lexical_cast<int>(verComponents[1]) == 0
                 && boost::lexical_cast<int>(verComponents[2]) < 8))
         {
+            SAL_WARN("avmedia", "VLC version '" << str << "' is too old");
             m_is_vlc_found = false;
         }
+        else
+            SAL_INFO("avmedia", "VLC version '" << str << "' is acceptable");
     }
 
     if (m_is_vlc_found)
