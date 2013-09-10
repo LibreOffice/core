@@ -256,9 +256,9 @@ void EditUndoConnectParas::Undo()
 
     if (GetEditEngine()->GetStyleSheetPool())
     {
-        if ( aLeftStyleName.Len() )
+        if ( !aLeftStyleName.isEmpty() )
             GetEditEngine()->SetStyleSheet( nNode, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
-        if ( aRightStyleName.Len() )
+        if ( !aRightStyleName.isEmpty() )
             GetEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
     }
 
@@ -295,7 +295,7 @@ void EditUndoSplitPara::Redo()
 }
 
 EditUndoInsertChars::EditUndoInsertChars(
-    EditEngine* pEE, const EPaM& rEPaM, const String& rStr) :
+    EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr) :
     EditUndo(EDITUNDO_INSERTCHARS, pEE),
     aEPaM(rEPaM),
     aText(rStr) {}
@@ -305,7 +305,7 @@ void EditUndoInsertChars::Undo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
+    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
     EditPaM aNewPaM( GetEditEngine()->DeleteSelection(aSel) );
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aNewPaM, aNewPaM ) );
 }
@@ -316,7 +316,7 @@ void EditUndoInsertChars::Redo()
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     GetEditEngine()->InsertText(EditSelection(aPaM, aPaM), aText);
     EditPaM aNewPaM( aPaM );
-    aNewPaM.GetIndex() = aNewPaM.GetIndex() + aText.Len();
+    aNewPaM.GetIndex() = aNewPaM.GetIndex() + aText.getLength();
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aNewPaM ) );
 }
 
@@ -329,7 +329,7 @@ bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
     if ( aEPaM.nPara != pNext->aEPaM.nPara )
         return false;
 
-    if ( ( aEPaM.nIndex + aText.Len() ) == pNext->aEPaM.nIndex )
+    if ( ( aEPaM.nIndex + aText.getLength() ) == pNext->aEPaM.nIndex )
     {
         aText += pNext->aText;
         return true;
@@ -338,7 +338,7 @@ bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 }
 
 EditUndoRemoveChars::EditUndoRemoveChars(
-    EditEngine* pEE, const EPaM& rEPaM, const String& rStr) :
+    EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr) :
     EditUndo(EDITUNDO_REMOVECHARS, pEE),
     aEPaM(rEPaM), aText(rStr) {}
 
@@ -348,7 +348,7 @@ void EditUndoRemoveChars::Undo()
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
     GetEditEngine()->InsertText(aSel, aText);
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
+    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
@@ -357,7 +357,7 @@ void EditUndoRemoveChars::Redo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditPaM aPaM = GetEditEngine()->CreateEditPaM(aEPaM);
     EditSelection aSel( aPaM, aPaM );
-    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.Len();
+    aSel.Max().GetIndex() = aSel.Max().GetIndex() + aText.getLength();
     EditPaM aNewPaM = GetEditEngine()->DeleteSelection(aSel);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection(aNewPaM);
 }
@@ -436,8 +436,8 @@ void EditUndoMoveParagraphs::Redo()
 }
 
 EditUndoSetStyleSheet::EditUndoSetStyleSheet(
-    EditEngine* pEE, sal_Int32 nP, const String& rPrevName, SfxStyleFamily ePrevFam,
-    const String& rNewName, SfxStyleFamily eNewFam, const SfxItemSet& rPrevParaAttribs) :
+    EditEngine* pEE, sal_Int32 nP, const OUString& rPrevName, SfxStyleFamily ePrevFam,
+    const OUString& rNewName, SfxStyleFamily eNewFam, const SfxItemSet& rPrevParaAttribs) :
     EditUndo(EDITUNDO_STYLESHEET, pEE),
     aPrevName(rPrevName),
     aNewName(rNewName),

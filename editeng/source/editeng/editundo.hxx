@@ -58,8 +58,8 @@ private:
     SfxItemSet      aRightParaAttribs;
 
     // 2 Pointers would be nicer but then it would have to be a SfxListener.
-    String          aLeftStyleName;
-    String          aRightStyleName;
+    OUString        aLeftStyleName;
+    OUString        aRightStyleName;
     SfxStyleFamily  eLeftStyleFamily;
     SfxStyleFamily  eRightStyleFamily;
 
@@ -99,13 +99,13 @@ class EditUndoInsertChars : public EditUndo
 {
 private:
     EPaM            aEPaM;
-    String          aText;
+    OUString        aText;
 
 public:
-    EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, const String& rStr);
+    EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
 
     const EPaM&     GetEPaM() { return aEPaM; }
-    String&         GetStr() { return aText; }
+    OUString        GetStr() const { return aText; }
 
     virtual void    Undo();
     virtual void    Redo();
@@ -120,13 +120,13 @@ class EditUndoRemoveChars : public EditUndo
 {
 private:
     EPaM            aEPaM;
-    String          aText;
+    OUString        aText;
 
 public:
-    EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, const String& rStr);
+    EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
 
     const EPaM&     GetEPaM() { return aEPaM; }
-    String&         GetStr() { return aText; }
+    OUString        GetStr() const { return aText; }
 
     virtual void    Undo();
     virtual void    Redo();
@@ -173,16 +173,16 @@ class EditUndoSetStyleSheet: public EditUndo
 {
 private:
     sal_Int32       nPara;
-    String       aPrevName;
-    String       aNewName;
+    OUString        aPrevName;
+    OUString        aNewName;
     SfxStyleFamily  ePrevFamily;
     SfxStyleFamily  eNewFamily;
     SfxItemSet      aPrevParaAttribs;
 
 public:
     EditUndoSetStyleSheet(EditEngine* pEE, sal_Int32 nPara,
-        const String& rPrevName, SfxStyleFamily ePrevFamily,
-        const String& rNewName, SfxStyleFamily eNewFamily,
+        const OUString& rPrevName, SfxStyleFamily ePrevFamily,
+        const OUString& rNewName, SfxStyleFamily eNewFamily,
         const SfxItemSet& rPrevParaAttribs);
     virtual ~EditUndoSetStyleSheet();
 
@@ -256,7 +256,7 @@ private:
 
     sal_Int32           nMode;
     EditTextObject*     pTxtObj;
-    String              aText;
+    OUString            aText;
 
 public:
     EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nMode);
