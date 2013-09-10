@@ -853,8 +853,8 @@ namespace sw
                 else if (rParams[nI] == '\"')
                 {
                     ++nI;
-                    //While not at the end and not at an unescaped end quote
-                    while ((nI < nLen) && (!(rParams[nI] == '\"') && (rParams[nI-1] != '\\')))
+                    // While not at the end and not at an unescaped end quote
+                    while (nI<nLen && !(rParams[nI]=='\"' && rParams[nI-1]!='\\'))
                         ++nI;
                 }
                 else //normal unquoted section
