@@ -23,8 +23,6 @@
 #include "svl/svldllapi.h"
 #include <svl/intitem.hxx>
 
-class String;
-
 struct SfxImageItem_Impl;
 class SVL_DLLPUBLIC SfxImageItem : public SfxInt16Item
 {

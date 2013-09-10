@@ -37,23 +37,23 @@ class INetBookmark
 */
 
 {
-    String          aUrl;
-    String          aDescr;
+    OUString          aUrl;
+    OUString          aDescr;
 
 protected:
 
-    void            SetURL( const String& rS )          { aUrl = rS; }
-    void            SetDescription( const String& rS )  { aDescr = rS; }
+    void            SetURL( const OUString& rS )          { aUrl = rS; }
+    void            SetDescription( const OUString& rS )  { aDescr = rS; }
 
 public:
-                    INetBookmark( const String &rUrl, const String &rDescr )
+                    INetBookmark( const OUString &rUrl, const OUString &rDescr )
                         : aUrl( rUrl ), aDescr( rDescr )
                     {}
                     INetBookmark()
                     {}
 
-    const String&   GetURL() const          { return aUrl; }
-    const String&   GetDescription() const  { return aDescr; }
+    const OUString& GetURL() const          { return aUrl; }
+    const OUString& GetDescription() const  { return aDescr; }
 };
 
 
