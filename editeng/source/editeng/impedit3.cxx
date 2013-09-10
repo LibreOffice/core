@@ -638,7 +638,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     if ( !bEmptyNodeWithPolygon && !HasScriptType( nPara, i18n::ScriptType::COMPLEX ) )
     {
         if ( ( pParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff > 0 ) &&
-             ( pNode->GetString().Search( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
+             ( pNode->GetString().indexOf( CH_FEATURE, nInvalidStart ) > nInvalidEnd ) )
         {
             bQuickFormat = sal_True;
         }
@@ -816,7 +816,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( IsFixedCellHeight() )
                     nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
                 else
-                    nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), String() ).Height();
+                    nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), OUString() ).Height();
                 // Metrics can be greater
                 FormatterFontMetric aTempFormatterMetrics;
                 RecalcFormatterFontMetrics( aTempFormatterMetrics, aTmpFont );
@@ -953,7 +953,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         // Height needed...
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                        pPortion->GetSize().Height() = aTmpFont.QuickGetTextSize( GetRefDevice(), String(), 0, 0, NULL ).Height();
+                        pPortion->GetSize().Height() = aTmpFont.QuickGetTextSize( GetRefDevice(), OUString(), 0, 0, NULL ).Height();
 
                         DBG_ASSERT( pPortion->GetSize().Width() >= 0, "Tab incorrectly calculated!" );
 
@@ -1129,10 +1129,10 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL )
                 {
-                    String aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
+                    OUString aText = GetSelected( EditSelection(  EditPaM( pParaPortion->GetNode(), nTmpPos ),
                                                                 EditPaM( pParaPortion->GetNode(), nTmpPos + pPortion->GetLen() ) ) );
-                    sal_uInt16 nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
-                    if ( nDecPos != STRING_NOTFOUND )
+                    sal_Int32 nDecPos = aText.indexOf( aCurrentTab.aTabStop.GetDecimal() );
+                    if ( nDecPos != -1 )
                     {
                         nW -= pParaPortion->GetTextPortions()[nTmpPortion]->GetSize().Width();
                         nW += aTmpFont.QuickGetTextSize( GetRefDevice(), pParaPortion->GetNode()->GetString(), nTmpPos, nDecPos, NULL ).Width();
@@ -1285,7 +1285,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( IsFixedCellHeight() )
                 aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
             else
-                aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, String() ).Height();
+                aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() ).Height();
             pLine->SetHeight( (sal_uInt16)aTextSize.Height() );
         }
 
@@ -1617,7 +1617,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     aTmpFont.SetPhysFont( pRefDev );
 
     TextPortion* pDummyPortion = new TextPortion( 0 );
-    pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev, String() );
+    pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() );
     if ( IsFixedCellHeight() )
         pDummyPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetHeight() );
     pParaPortion->GetTextPortions().Append(pDummyPortion);
@@ -1836,11 +1836,11 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
                 // May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
-                String aWord(pNode->GetString(), nWordStart, nWordLen);
+                OUString aWord = pNode->GetString().copy(nWordStart, nWordLen);
                 sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1; //+1: Before the dickey letter
                 Reference< XHyphenatedWord > xHyphWord;
                 if (xHyphenator.is())
-                    xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
+                    xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.getLength() - nMinTrail, Sequence< PropertyValue >() );
                 if (xHyphWord.is())
                 {
                     sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -1879,14 +1879,14 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                             // AlternativeWord to aWord. The whole issue will be simplified
                             // by a function in the  Hyphenator as soon as AMA builds this in...
                             sal_uInt16 nAltStart = _nWordLen - 1;
-                            sal_uInt16 nTxtStart = nAltStart - (aAlt.getLength() - aWord.Len());
+                            sal_uInt16 nTxtStart = nAltStart - (aAlt.getLength() - aWord.getLength());
                             sal_uInt16 nTxtEnd = nTxtStart;
                             sal_uInt16 nAltEnd = nAltStart;
 
                             // The regions between the nStart and nEnd is the
                             // difference between alternative and original string.
-                            while( nTxtEnd < aWord.Len() && nAltEnd < aAlt.getLength() &&
-                                   aWord.GetChar(nTxtEnd) != aAlt[nAltEnd] )
+                            while( nTxtEnd < aWord.getLength() && nAltEnd < aAlt.getLength() &&
+                                   aWord[nTxtEnd] != aAlt[nAltEnd] )
                             {
                                 ++nTxtEnd;
                                 ++nAltEnd;
@@ -1894,7 +1894,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
                             // If a character is added, then we notice it now:
                             if( nAltEnd > nTxtEnd && nAltStart == nAltEnd &&
-                                aWord.GetChar( nTxtEnd ) == aAlt[nAltEnd] )
+                                aWord[ nTxtEnd ] == aAlt[nAltEnd] )
                             {
                                 ++nAltEnd;
                                 ++nTxtStart;
@@ -1957,7 +1957,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // A portion for inserting the separator ...
         TextPortion* pHyphPortion = new TextPortion( 0 );
         pHyphPortion->GetKind() = PORTIONKIND_HYPHENATOR;
-        String aHyphText(OUString(CH_HYPH));
+        OUString aHyphText(CH_HYPH);
         if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {
             TextPortion* pPrev = pParaPortion->GetTextPortions()[nEndPortion];
@@ -2119,7 +2119,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
         if ( aWordSel.Max().GetIndex() > nEnd )
            aWordSel.Max().GetIndex() = nEnd;
 
-        String aWord = GetSelected( aWordSel );
+        OUString aWord = GetSelected( aWordSel );
 
         // restore selection for proper iteration at the end of the function
         aWordSel.Max().GetIndex() = nSavPos;
@@ -2129,9 +2129,9 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
         sal_Unicode cCh;
         sal_Unicode cPrevCh = 0;
 
-        while ( nIdx < aWord.Len() )
+        while ( nIdx < aWord.getLength() )
         {
-            cCh = aWord.GetChar( nIdx );
+            cCh = aWord[ nIdx ];
 
             // 1. Priority:
             // after user inserted kashida
@@ -2143,7 +2143,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
 
             // 2. Priority:
             // after a Seen or Sad
-            if ( nIdx + 1 < aWord.Len() &&
+            if ( nIdx + 1 < aWord.getLength() &&
                  ( 0x633 == cCh || 0x635 == cCh ) )
             {
                 nKashidaPos = aWordSel.Min().GetIndex() + nIdx;
@@ -2154,7 +2154,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
             // before final form of the Marbuta, Hah, Dal
             // 4. Priority:
             // before final form of Alef, Lam or Kaf
-            if ( nIdx && nIdx + 1 == aWord.Len() &&
+            if ( nIdx && nIdx + 1 == aWord.getLength() &&
                  ( 0x629 == cCh || 0x62D == cCh || 0x62F == cCh ||
                    0x627 == cCh || 0x644 == cCh || 0x643 == cCh ) )
             {
@@ -2170,12 +2170,12 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
 
             // 5. Priority:
             // before media Bah
-            if ( nIdx && nIdx + 1 < aWord.Len() && 0x628 == cCh )
+            if ( nIdx && nIdx + 1 < aWord.getLength() && 0x628 == cCh )
             {
                 DBG_ASSERT( 0 != cPrevCh, "No previous character" );
 
                 // check if next character is Reh, Yeh or Alef Maksura
-                sal_Unicode cNextCh = aWord.GetChar( nIdx + 1 );
+                sal_Unicode cNextCh = aWord[ nIdx + 1 ];
 
                 if ( 0x631 == cNextCh || 0x64A == cNextCh ||
                      0x649 == cNextCh )
@@ -2188,7 +2188,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
 
             // 6. Priority:
             // other connecting possibilities
-            if ( nIdx && nIdx + 1 == aWord.Len() &&
+            if ( nIdx && nIdx + 1 == aWord.getLength() &&
                  0x60C <= cCh && 0x6FE >= cCh )
             {
                 DBG_ASSERT( 0 != cPrevCh, "No previous character" );
@@ -3554,7 +3554,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     const Color aTextLineColor(pOutDev->GetTextLineColor());
 
                                     GetEditEnginePtr()->DrawingText(
-                                        aTmpPos, String(), 0, 0, 0,
+                                        aTmpPos, OUString(), 0, 0, 0,
                                         aTmpFont, n, nIndex, 0,
                                         0,
                                         0,
@@ -3610,7 +3610,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                 const Color aTextLineColor(pOutDev->GetTextLineColor());
 
                 GetEditEnginePtr()->DrawingText(
-                    aTmpPos, String(), 0, 0, 0,
+                    aTmpPos, OUString(), 0, 0, 0,
                     aTmpFont, n, nIndex, 0,
                     0,
                     0,

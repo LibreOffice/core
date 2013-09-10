@@ -256,7 +256,7 @@ public:
 class ContentNode : boost::noncopyable
 {
 private:
-    XubString maString;
+    OUString maString;
     ContentAttribs  aContentAttribs;
     CharAttribList  aCharAttribList;
     boost::scoped_ptr<WrongList> mpWrongList;
@@ -294,7 +294,7 @@ public:
     bool IsFeature( sal_uInt16 nPos ) const;
 
     sal_uInt16 Len() const;
-    const XubString& GetString() const;
+    const OUString& GetString() const;
 
     void SetChar(sal_uInt16 nPos, sal_Unicode c);
     void Insert(const XubString& rStr, sal_uInt16 nPos);

@@ -1439,7 +1439,7 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
 
     if (mpWrongList)
     {
-        bool bSep = ( maString.GetChar( nIndex ) == ' ' ) || IsFeature( nIndex );
+        bool bSep = ( maString[ nIndex ] == ' ' ) || IsFeature( nIndex );
         mpWrongList->TextInserted( nIndex, nNew, bSep );
     }
 
@@ -1592,7 +1592,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 {
     DBG_ASSERT( pNextNode, "Copy of attributes to a null pointer?" );
 
-    sal_uInt16 nNewStart = maString.Len();
+    sal_uInt16 nNewStart = maString.getLength();
 
 #if OSL_DEBUG_LEVEL > 2
     OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
@@ -1679,57 +1679,57 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont )
 
 bool ContentNode::IsFeature( sal_uInt16 nPos ) const
 {
-    return maString.GetChar(nPos) == CH_FEATURE;
+    return maString[nPos] == CH_FEATURE;
 }
 
 sal_uInt16 ContentNode::Len() const
 {
-    return maString.Len();
+    return maString.getLength();
 }
 
-const XubString& ContentNode::GetString() const
+const OUString& ContentNode::GetString() const
 {
     return maString;
 }
 
 void ContentNode::SetChar(sal_uInt16 nPos, sal_Unicode c)
 {
-    maString.SetChar(nPos, c);
+    maString = maString.replaceAt(nPos, 1, OUString(c));
 }
 
 void ContentNode::Insert(const XubString& rStr, sal_uInt16 nPos)
 {
-    maString.Insert(rStr, nPos);
+    maString = maString.replaceAt(nPos, 0, rStr);
 }
 
 void ContentNode::Append(const XubString& rStr)
 {
-    maString.Append(rStr);
+    maString += rStr;
 }
 
 void ContentNode::Erase(sal_uInt16 nPos)
 {
-    maString.Erase(nPos);
+    maString = maString.replaceAt(nPos, 1, "");
 }
 
 void ContentNode::Erase(sal_uInt16 nPos, sal_uInt16 nCount)
 {
-    maString.Erase(nPos, nCount);
+    maString = maString.replaceAt(nPos, nCount, "");
 }
 
 XubString ContentNode::Copy(sal_uInt16 nPos) const
 {
-    return maString.Copy(nPos);
+    return maString.copy(nPos);
 }
 
 XubString ContentNode::Copy(sal_uInt16 nPos, sal_uInt16 nCount) const
 {
-    return maString.Copy(nPos, nCount);
+    return maString.copy(nPos, nCount);
 }
 
 sal_Unicode ContentNode::GetChar(sal_uInt16 nPos) const
 {
-    return maString.GetChar(nPos);
+    return maString[nPos];
 }
 
 void ContentNode::EnsureWrongList()
