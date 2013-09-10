@@ -242,9 +242,8 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         static sal_Unicode aDynamicBulletTypes[DEFAULT_BULLET_TYPES];
         static sal_Unicode aDynamicRTLBulletTypes[DEFAULT_BULLET_TYPES];
         static BulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
-        static BulletsTypeMgr* _instance;
     public:
-        BulletsTypeMgr(const NBOType aType);
+        BulletsTypeMgr();
         BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr);
         virtual ~BulletsTypeMgr() {}
         virtual void Init();
@@ -255,16 +254,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         sal_Unicode GetBulChar(sal_uInt16 nIndex);
         Font GetBulCharFont(sal_uInt16 nIndex);
-        static BulletsTypeMgr* GetInstance()
-        {
-             if ( _instance == 0 )
-                    {
-                        _instance = new BulletsTypeMgr(eNBOType::BULLETS);
-                    }
-
-                    return _instance;
-        }
-
+        static BulletsTypeMgr& GetInstance();
 };
 
 class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
@@ -274,9 +264,8 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
     public:
         typedef std::vector<GrfBulDataRelation*> ListType;
         ListType aGrfDataLst;
-        static GraphyicBulletsTypeMgr* _instance;
     public:
-        GraphyicBulletsTypeMgr(const NBOType aType);
+        GraphyicBulletsTypeMgr();
         GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr);
         virtual ~GraphyicBulletsTypeMgr();
         virtual void Init();
@@ -286,16 +275,7 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         OUString GetGrfName(sal_uInt16 nIndex);
-        static GraphyicBulletsTypeMgr* GetInstance()
-        {
-             if ( _instance == 0 )
-                    {
-                        _instance = new GraphyicBulletsTypeMgr(eNBOType::BULLETS);
-                    }
-
-                    return _instance;
-        }
-
+        static GraphyicBulletsTypeMgr& GetInstance();
 };
 
 class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
@@ -305,9 +285,8 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
     public:
         static MixBulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
         static MixBulletsSettings_Impl* pDefaultActualBullets[DEFAULT_BULLET_TYPES];
-        static MixBulletsTypeMgr* _instance;
     public:
-        MixBulletsTypeMgr(const NBOType aType);
+        MixBulletsTypeMgr();
         MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr);
         virtual ~MixBulletsTypeMgr() {}
         virtual void Init();
@@ -316,27 +295,16 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
         virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
-        static MixBulletsTypeMgr* GetInstance()
-        {
-             if ( _instance == 0 )
-                    {
-                        _instance = new MixBulletsTypeMgr(eNBOType::MIXBULLETS);
-                    }
-
-                    return _instance;
-        }
-
+        static MixBulletsTypeMgr& GetInstance();
 };
 
 class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
 {
     public:
-        //NumSettingsArr_Impl*      pNumSettingsArr;
         NumberSettingsArr_Impl*     pNumberSettingsArr;
         NumberSettingsArr_Impl*     pDefaultNumberSettingsArr;
-        static NumberingTypeMgr*    _instance;
     public:
-        NumberingTypeMgr(const NBOType aType);
+        NumberingTypeMgr();
         NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr);
         virtual ~NumberingTypeMgr();
         virtual void Init();
@@ -345,26 +313,16 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
         virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
-        static NumberingTypeMgr* GetInstance()
-        {
-            if ( _instance == 0 )
-            {
-                _instance = new NumberingTypeMgr(eNBOType::NUMBERING);
-            }
-
-            return _instance;
-        }
+        static NumberingTypeMgr& GetInstance();
 };
 
 class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
 {
     public:
-        //NumSettingsArr_Impl*      pNumSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
         OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
         OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
-        static OutlineTypeMgr*  _instance;
     public:
-        OutlineTypeMgr(const NBOType aType);
+        OutlineTypeMgr();
         OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr);
         virtual ~OutlineTypeMgr() {}
         virtual void Init();
@@ -373,15 +331,7 @@ class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF,sal_Bool isDefault=false,sal_Bool isResetSize=false);
         virtual OUString GetDescription(sal_uInt16 nIndex,sal_Bool isDefault=false);
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
-        static OutlineTypeMgr* GetInstance()
-        {
-             if ( _instance == 0 )
-                    {
-                        _instance = new OutlineTypeMgr(eNBOType::OUTLINE);
-                    }
-
-                    return _instance;
-        }
+        static OutlineTypeMgr& GetInstance();
 };
 }}
 #endif

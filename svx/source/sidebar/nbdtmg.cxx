@@ -269,13 +269,12 @@ SfxMapUnit NBOTypeMgrBase::GetMapUnit()
 /***************************************************************************************************
 **********************Character Bullet Type lib**********************************************************
 ****************************************************************************************************/
-BulletsTypeMgr* BulletsTypeMgr::_instance = 0;
 BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
 sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 
-BulletsTypeMgr::BulletsTypeMgr(const NBOType aType):
-    NBOTypeMgrBase(aType)
+BulletsTypeMgr::BulletsTypeMgr()
+    : NBOTypeMgrBase(eNBOType::BULLETS)
 {
     Init();
 }
@@ -292,6 +291,14 @@ BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
         pActualBullets[i]->eType = aTypeMgr. pActualBullets[i]->eType;
     }
 }
+
+class theBulletsTypeMgr : public rtl::Static<BulletsTypeMgr, theBulletsTypeMgr> {};
+
+BulletsTypeMgr& BulletsTypeMgr::GetInstance()
+{
+    return theBulletsTypeMgr::get();
+}
+
 void BulletsTypeMgr::Init()
 {
     Font& rActBulletFont = lcl_GetDefaultBulletFont();
@@ -547,9 +554,8 @@ Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
 /***************************************************************************************************
 **********************Graphic Bullet Type lib***********************************************************
 ****************************************************************************************************/
-GraphyicBulletsTypeMgr* GraphyicBulletsTypeMgr::_instance = 0;
-GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const NBOType aType):
-    NBOTypeMgrBase(aType)
+GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
+    : NBOTypeMgrBase(eNBOType::BULLETS)
 {
     Init();
 }
@@ -577,6 +583,13 @@ GraphyicBulletsTypeMgr::~GraphyicBulletsTypeMgr()
 {
     for (size_t i = 0; i < aGrfDataLst.size(); ++i)
         delete aGrfDataLst[i];
+}
+
+class theGraphyicBulletsTypeMgr : public rtl::Static<GraphyicBulletsTypeMgr, theGraphyicBulletsTypeMgr> {};
+
+GraphyicBulletsTypeMgr& GraphyicBulletsTypeMgr::GetInstance()
+{
+    return theGraphyicBulletsTypeMgr::get();
 }
 
 void GraphyicBulletsTypeMgr::Init()
@@ -789,12 +802,11 @@ OUString GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
 /***************************************************************************************************
 **********************Mix Bullets Type lib**************************************************************
 ****************************************************************************************************/
-MixBulletsTypeMgr* MixBulletsTypeMgr::_instance = 0;
 MixBulletsSettings_Impl* MixBulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
 MixBulletsSettings_Impl* MixBulletsTypeMgr::pDefaultActualBullets[] ={0,0,0,0,0,0,0,0};
 
-MixBulletsTypeMgr::MixBulletsTypeMgr(const NBOType aType):
-    NBOTypeMgrBase(aType)
+MixBulletsTypeMgr::MixBulletsTypeMgr()
+    : NBOTypeMgrBase(eNBOType::MIXBULLETS)
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_BULLET_TYPES; nItem++ )
@@ -804,6 +816,13 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const NBOType aType):
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
     ImplLoad(OUString("standard.sya"));
+}
+
+class theMixBulletsTypeMgr : public rtl::Static<MixBulletsTypeMgr, theMixBulletsTypeMgr> {};
+
+MixBulletsTypeMgr& MixBulletsTypeMgr::GetInstance()
+{
+    return theMixBulletsTypeMgr::get();
 }
 
 MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
@@ -842,8 +861,7 @@ MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
 }
 void MixBulletsTypeMgr::Init()
 {
-    BulletsTypeMgr* pBTMgr = BulletsTypeMgr::GetInstance();
-    if ( pBTMgr )
+    BulletsTypeMgr &rBTMgr = BulletsTypeMgr::GetInstance();
     {
         //Index 1
         pActualBullets[0] = new MixBulletsSettings_Impl(eNBType::BULLETS);
@@ -851,10 +869,10 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[0]->nIndex = 0+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[0]->nIndexDefault = 2;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[0]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[0]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[0]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[0]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[0]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[0]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[0]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[0]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[0]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[0]->pBullets))->eType = eNBType::BULLETS;
 
         //Index 2
@@ -863,10 +881,10 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[1]->nIndex = 1+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[1]->nIndexDefault = 3;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[1]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[1]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[1]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[1]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[1]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[1]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[1]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[1]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[1]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[1]->pBullets))->eType = eNBType::BULLETS;
 
         //Index 3
@@ -875,10 +893,10 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[2]->nIndex = 2+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[2]->nIndexDefault = 4;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[2]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[2]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[2]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[2]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[2]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[2]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[2]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[2]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[2]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[2]->pBullets))->eType = eNBType::BULLETS;
 
         //Index 4
@@ -887,10 +905,10 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[3]->nIndex = 3+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[3]->nIndexDefault = 5;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[3]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[3]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[3]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[3]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[3]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[3]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[3]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[3]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[3]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[3]->pBullets))->eType = eNBType::BULLETS;
 
         //Index 5
@@ -899,10 +917,10 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[4]->nIndex = 4+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[4]->nIndexDefault = 6;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[4]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[4]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[4]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[4]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[4]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[4]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[4]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[4]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[4]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[4]->pBullets))->eType = eNBType::BULLETS;
 
         //Index 6
@@ -911,15 +929,14 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[5]->nIndex = 5+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[5]->nIndexDefault = 8;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[5]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->cBulletChar = pBTMgr->GetBulChar(pActualBullets[5]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->aFont = pBTMgr->GetBulCharFont(pActualBullets[5]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->sDescription = pBTMgr->GetDescription(pActualBullets[5]->nIndexDefault-1);
-        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->bIsCustomized = pBTMgr->IsCustomized(pActualBullets[5]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->cBulletChar = rBTMgr.GetBulChar(pActualBullets[5]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->aFont = rBTMgr.GetBulCharFont(pActualBullets[5]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->sDescription = rBTMgr.GetDescription(pActualBullets[5]->nIndexDefault-1);
+        ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->bIsCustomized = rBTMgr.IsCustomized(pActualBullets[5]->nIndexDefault-1);
         ((BulletsSettings_Impl*)(pActualBullets[5]->pBullets))->eType = eNBType::BULLETS;
     }
 
-    GraphyicBulletsTypeMgr* mGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
-    if ( mGrfTMgr )
+    GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
     {
         //Index 7
         pActualBullets[6] = new MixBulletsSettings_Impl(eNBType::GRAPHICBULLETS);
@@ -927,9 +944,9 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[6]->nIndex = 6+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[6]->nIndexDefault = 9;    //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[6]->pBullets = new GrfBulDataRelation(eNBType::GRAPHICBULLETS) ;
-        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->sGrfName = mGrfTMgr->GetGrfName(pActualBullets[6]->nIndexDefault);
-        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->sDescription = mGrfTMgr->GetDescription(pActualBullets[6]->nIndexDefault);
-        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->bIsCustomized = mGrfTMgr->IsCustomized(pActualBullets[6]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->sGrfName = rGrfTMgr.GetGrfName(pActualBullets[6]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->sDescription = rGrfTMgr.GetDescription(pActualBullets[6]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->bIsCustomized = rGrfTMgr.IsCustomized(pActualBullets[6]->nIndexDefault);
         ((GrfBulDataRelation*)(pActualBullets[6]->pBullets))->eType = eNBType::GRAPHICBULLETS;
 
         //Index 8
@@ -938,9 +955,9 @@ void MixBulletsTypeMgr::Init()
         pActualBullets[7]->nIndex = 7+1; //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[7]->nIndexDefault = 23;   //index in the tab page display,decrease 1 to the index within arr
         pActualBullets[7]->pBullets = new GrfBulDataRelation(eNBType::GRAPHICBULLETS) ;
-        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->sGrfName = mGrfTMgr->GetGrfName(pActualBullets[7]->nIndexDefault);
-        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->sDescription = mGrfTMgr->GetDescription(pActualBullets[7]->nIndexDefault);
-        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->bIsCustomized = mGrfTMgr->IsCustomized(pActualBullets[7]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->sGrfName = rGrfTMgr.GetGrfName(pActualBullets[7]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->sDescription = rGrfTMgr.GetDescription(pActualBullets[7]->nIndexDefault);
+        ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->bIsCustomized = rGrfTMgr.IsCustomized(pActualBullets[7]->nIndexDefault);
         ((GrfBulDataRelation*)(pActualBullets[7]->pBullets))->eType = eNBType::GRAPHICBULLETS;
     }
 
@@ -1060,27 +1077,18 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             GrfBulDataRelation* pEntry = (GrfBulDataRelation*) (pActualBullets[nIndex]->pBullets);
             if ( pGrfName )
                 pEntry->sGrfName = *pGrfName;
-            GraphyicBulletsTypeMgr* mGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
-            if ( mGrfTMgr )
+            GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
             {
-                //sal_uInt16 nDIndex = mGrfTMgr->GetNBOIndexForNumRule(aNum,mLevel);
-                //if ( nDIndex != (sal_uInt16)0xFFFF)
-                //{
-                //  pActualBullets[nIndex]->nIndexDefault = nDIndex -1;
-                //  sEmpty = mGrfTMgr->GetDescription( nDIndex -1);
-                //}else
-                {
-                    pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                    sEmpty = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
-                    OUString sNUM = OUString::number( nIndex + 1 );
-                    sEmpty = sEmpty.replaceFirst("%LIST_NUM",sNUM);
-                    //pEntry->pGrfObj = pGrf;
-                    pEntry->pGrfObj = new Graphic(*pGrf);
-                    pEntry->aSize = aFmt.GetGraphicSize();
-                    pEntry->aSize = OutputDevice::LogicToLogic(pEntry->aSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
-                    sal_uInt16 nDIndex = mGrfTMgr->GetNBOIndexForNumRule(aNum,mLevel);
-                    if (nDIndex!=(sal_uInt16)0xFFFF) pEntry->aSize=Size(0,0);
-                }
+                pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
+                sEmpty = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+                OUString sNUM = OUString::number( nIndex + 1 );
+                sEmpty = sEmpty.replaceFirst("%LIST_NUM",sNUM);
+                pEntry->pGrfObj = new Graphic(*pGrf);
+                pEntry->aSize = aFmt.GetGraphicSize();
+                pEntry->aSize = OutputDevice::LogicToLogic(pEntry->aSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
+                sal_uInt16 nDIndex = rGrfTMgr.GetNBOIndexForNumRule(aNum,mLevel);
+                if (nDIndex!=(sal_uInt16)0xFFFF)
+                    pEntry->aSize=Size(0,0);
             }
             pEntry->sDescription = sEmpty;
             pEntry->bIsCustomized = sal_True;
@@ -1103,23 +1111,11 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->aFont = pFont?*pFont:lcl_GetDefaultBulletFont();
             ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->bIsCustomized = sal_True;
             ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->eType = eNBType::BULLETS;
-            BulletsTypeMgr* pBTMgr = BulletsTypeMgr::GetInstance();
-            if ( pBTMgr )
-            {
-                //sal_uInt16 nDIndex = pBTMgr->GetNBOIndexForNumRule(aNum,mLevel);
-                //if ( nDIndex != (sal_uInt16)0xFFFF)
-                //{
-                //  pActualBullets[nIndex]->nIndexDefault = nDIndex -1;
-                //  ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->sDescription = pBTMgr->GetDescription(nDIndex - 1);
-                //}else
-                {
-                    pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                    OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
-                    OUString sNUM = OUString::number( nIndex + 1 );
-                    aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
-                    ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
-                }
-            }
+            pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
+            OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+            OUString sNUM = OUString::number( nIndex + 1 );
+            aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
+            ((BulletsSettings_Impl*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
         }else if ( (eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP )
         {
             const SvxBrushItem* pBrsh = aFmt.GetBrush();
@@ -1141,31 +1137,21 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
                     ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sGrfName = *pGrfName;
                 ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->bIsCustomized = sal_True;
                 ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->eType = eNBType::GRAPHICBULLETS;
-                GraphyicBulletsTypeMgr* mGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
-                if ( mGrfTMgr )
+                GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
                 {
-                    //sal_uInt16 nDIndex = mGrfTMgr->GetNBOIndexForNumRule(aNum,mLevel);
-                    //if ( nDIndex != (sal_uInt16)0xFFFF)
-                    //{
-                    //  pActualBullets[nIndex]->nIndexDefault = nDIndex - 1;
-                    //  ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sDescription = mGrfTMgr->GetDescription(nDIndex - 1);
-                    //}else
-                    {
-                        pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
-                        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
-                        OUString sNUM = OUString::number( nIndex + 1 );
-                        aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
-                        ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
-                        //((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = pGrf;
-                        ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = new Graphic(*pGrf);
-                        ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = new Graphic(*pGrf);
-                        Size aTmpSize = aFmt.GetGraphicSize();
-                        aTmpSize = OutputDevice::LogicToLogic(aTmpSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
-                        sal_uInt16 nDIndex = mGrfTMgr->GetNBOIndexForNumRule(aNum,mLevel);
-                        if (nDIndex!=(sal_uInt16)0xFFFF) aTmpSize=Size(0,0);
-                        ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->aSize = aTmpSize;
-
-                }
+                    pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
+                    OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+                    OUString sNUM = OUString::number( nIndex + 1 );
+                    aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
+                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->sDescription = aStrFromRES;
+                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = new Graphic(*pGrf);
+                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->pGrfObj = new Graphic(*pGrf);
+                    Size aTmpSize = aFmt.GetGraphicSize();
+                    aTmpSize = OutputDevice::LogicToLogic(aTmpSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
+                    sal_uInt16 nDIndex = rGrfTMgr.GetNBOIndexForNumRule(aNum,mLevel);
+                    if (nDIndex!=(sal_uInt16)0xFFFF)
+                        aTmpSize=Size(0,0);
+                    ((GrfBulDataRelation*)(pActualBullets[nIndex]->pBullets))->aSize = aTmpSize;
                 }
             }
         }
@@ -1314,11 +1300,10 @@ sal_Bool MixBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 /***************************************************************************************************
 **********************Numbering Type lib**************************************************************
 ****************************************************************************************************/
-NumberingTypeMgr* NumberingTypeMgr::_instance = 0;
 
-NumberingTypeMgr::NumberingTypeMgr(const NBOType aType):
-    NBOTypeMgrBase(aType),
-    pNumberSettingsArr (new NumberSettingsArr_Impl)
+NumberingTypeMgr::NumberingTypeMgr()
+    : NBOTypeMgrBase(eNBOType::NUMBERING)
+    , pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     Init();
     pDefaultNumberSettingsArr = pNumberSettingsArr;
@@ -1328,8 +1313,8 @@ NumberingTypeMgr::NumberingTypeMgr(const NBOType aType):
     ImplLoad(OUString("standard.syb"));
 }
 
-NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr):
-    NBOTypeMgrBase(aTypeMgr),
+NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr):
+    NBOTypeMgrBase(rTypeMgr),
     pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     ImplLoad(OUString("standard.syb"));
@@ -1338,6 +1323,13 @@ NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr):
 NumberingTypeMgr::~NumberingTypeMgr()
 {
     delete pNumberSettingsArr;
+}
+
+class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
+
+NumberingTypeMgr& NumberingTypeMgr::GetInstance()
+{
+    return theNumberingTypeMgr::get();
 }
 
 void NumberingTypeMgr::Init()
@@ -1551,11 +1543,9 @@ sal_Bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 /***************************************************************************************************
 **********************Multi-level /Outline Type lib*******************************************************
 ****************************************************************************************************/
-OutlineTypeMgr* OutlineTypeMgr::_instance = 0;
 
-OutlineTypeMgr::OutlineTypeMgr(const NBOType aType):
-    NBOTypeMgrBase(aType)//,
-    //pNumSettingsArrs( new NumSettingsArr_Impl[DEFAULT_NUM_VALUSET_COUNT] )
+OutlineTypeMgr::OutlineTypeMgr()
+    : NBOTypeMgrBase(eNBOType::OUTLINE)
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
@@ -1567,9 +1557,8 @@ OutlineTypeMgr::OutlineTypeMgr(const NBOType aType):
     ImplLoad(OUString("standard.syc"));
 }
 
-OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr):
-    NBOTypeMgrBase(aTypeMgr)//,
-    //pNumSettingsArrs( new NumSettingsArr_Impl[DEFAULT_NUM_VALUSET_COUNT])
+OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr)
+    : NBOTypeMgrBase(aTypeMgr)
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
@@ -1579,6 +1568,13 @@ OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr):
     //Initial the first time to store the default value. Then do it again for customized value
     Init();
     ImplLoad(OUString("standard.syc"));
+}
+
+class theOutlineTypeMgr : public rtl::Static<OutlineTypeMgr, theOutlineTypeMgr> {};
+
+OutlineTypeMgr& OutlineTypeMgr::GetInstance()
+{
+    return theOutlineTypeMgr::get();
 }
 
 void OutlineTypeMgr::Init()

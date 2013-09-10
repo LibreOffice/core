@@ -25,19 +25,23 @@ NBOTypeMgrBase* CreateInstance(const NBOType aType)
     //NBOTypeMgrBase* pRet= 0;
     if ( aType == eNBOType::BULLETS )
     {
-        return BulletsTypeMgr::GetInstance();
-    }else if ( aType == eNBOType::GRAPHICBULLETS )
+        return &BulletsTypeMgr::GetInstance();
+    }
+    else if ( aType == eNBOType::GRAPHICBULLETS )
     {
-        return GraphyicBulletsTypeMgr::GetInstance();
-    }else if ( aType == eNBOType::MIXBULLETS )
+        return &GraphyicBulletsTypeMgr::GetInstance();
+    }
+    else if ( aType == eNBOType::MIXBULLETS )
     {
-        return MixBulletsTypeMgr::GetInstance();
-    }else if ( aType == eNBOType::NUMBERING )
+        return &MixBulletsTypeMgr::GetInstance();
+    }
+    else if ( aType == eNBOType::NUMBERING )
     {
-        return NumberingTypeMgr::GetInstance();
-    }else if ( aType == eNBOType::OUTLINE )
+        return &NumberingTypeMgr::GetInstance();
+    }
+    else if ( aType == eNBOType::OUTLINE )
     {
-        return OutlineTypeMgr::GetInstance();
+        return &OutlineTypeMgr::GetInstance();
     }
     return NULL;
 }
