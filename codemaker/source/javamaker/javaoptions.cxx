@@ -246,7 +246,7 @@ OString JavaOptions::prepareHelp()
     help += "    -O<path>   = path describes the root directory for the generated output.\n";
     help += "                 The output directory tree is generated under this directory.\n";
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
-    help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is \n";
+    help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n";
     help += "                 specified, then output for all types is generated.\n";
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
     help += "    -nD        = no dependent types are generated.\n";
