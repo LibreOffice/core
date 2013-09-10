@@ -2155,6 +2155,8 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             {
                 pModule ? aNodeList.push_back( pNode ) : aOutNodeList.push_back( pNode );
             }
+            else
+                delete pNode;
         }
     }
 
