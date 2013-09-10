@@ -1027,6 +1027,13 @@ public:
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
+    /**
+     * Return the last non-empty row position in given columns, or 0 if the
+     * columns are empty. A negative value is returned if the given sheet or
+     * column positions are invalid.
+     */
+    SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) const;
+
     SC_DLLPUBLIC void           GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const;
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;

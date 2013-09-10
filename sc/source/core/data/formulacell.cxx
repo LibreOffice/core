@@ -3362,6 +3362,18 @@ class GroupTokenConverter
 
         return true;
     }
+
+    SCROW trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen)
+    {
+        SCROW nLastRow = mrDoc.GetLastDataRow(nTab, nCol1, nCol2);
+        if (nLastRow < (nRow + nRowLen - 1))
+            nRowLen = nLastRow - nRow + 1;
+        else if (nLastRow == 0)
+            // Column is empty.
+            nRowLen = 1;
+
+        return nRowLen;
+    }
 public:
     GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
         mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell), mrPos(rPos) {}
@@ -3396,6 +3408,9 @@ public:
                     {
                         if (isSelfReferenceRelative(aRefPos, aRef.Row()))
                             return false;
+
+                        // Trim data array length to actual data range.
+                        nLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
 
                         // Fetch double array guarantees that the length of the
                         // returned array equals or greater than the requested
@@ -3458,6 +3473,9 @@ public:
                         // range end position is relative. Extend the array length.
                         nArrayLength += nRefRowSize - 1;
                     }
+
+                    // Trim trailing empty rows.
+                    nArrayLength = trimLength(aRefPos.Tab(), aAbs.aStart.Col(), aAbs.aEnd.Col(), aRefPos.Row(), nArrayLength);
 
                     for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
                     {
