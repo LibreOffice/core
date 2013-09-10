@@ -636,16 +636,13 @@ OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
         RID_INSET
     };
     sal_uInt16 nResId = aStyleIds[m_nStyle];
-    String aStr;
-    aStr += sal_Unicode('(');
-    aStr += ::GetColorString( aColor );
-    aStr += cpDelim;
+    OUString aStr = "(" + ::GetColorString( aColor ) + OUString(cpDelim);
 
     if ( nResId )
         aStr += EE_RESSTR(nResId);
     else
     {
-        String sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
+        OUString sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
         aStr += GetMetricText( (long)GetInWidth(), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
@@ -658,7 +655,7 @@ OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
         if ( bMetricStr )
             aStr += sMetric;
     }
-    aStr += sal_Unicode(')');
+    aStr += ")";
     return aStr;
 }
 

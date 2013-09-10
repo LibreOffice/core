@@ -378,9 +378,9 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     rStrm << (sal_uInt8) GetFamily() << (sal_uInt8) GetPitch()
           << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet()));
 
-    String aStoreFamilyName( GetFamilyName() );
+    OUString aStoreFamilyName( GetFamilyName() );
     if( bToBats )
-        aStoreFamilyName = String( "StarBats", sizeof("StarBats")-1, RTL_TEXTENCODING_ASCII_US );
+        aStoreFamilyName = "StarBats";
     rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
     rStrm.WriteUniOrByteString(GetStyleName(), rStrm.GetStreamCharSet());
 
@@ -401,7 +401,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
 SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
 {
     sal_uInt8 _eFamily, eFontPitch, eFontTextEncoding;
-    String aName, aStyle;
+    OUString aName, aStyle;
     rStrm >> _eFamily;
     rStrm >> eFontPitch;
     rStrm >> eFontTextEncoding;
@@ -416,7 +416,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding );
 
     // at some point, the StarBats changes from  ANSI font to SYMBOL font
-    if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
+    if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName == "StarBats" )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
     // Check if we have stored unicode
@@ -3686,7 +3686,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
         SvxFontItem* pItem = aItemArr[ n ];
         pItem->SetFamily( aFont.GetFamily() );
         pItem->SetFamilyName( aFont.GetName() );
-        pItem->SetStyleName( String() );
+        pItem->SetStyleName( OUString() );
         pItem->SetPitch( aFont.GetPitch());
         pItem->SetCharSet(aFont.GetCharSet());
     }

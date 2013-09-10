@@ -203,25 +203,25 @@ void SvxDoCapitals::SetSpace() { }
 
 void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 {
-    const XubString &rTxt = rDo.GetTxt();
+    const OUString &rTxt = rDo.GetTxt();
     const xub_StrLen nIdx = rDo.GetIdx();
-    const xub_StrLen nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
+    const sal_Int32 nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
 
-    const XubString aTxt( CalcCaseMap( rTxt ) );
-    const sal_uInt16 nTxtLen = std::min( rTxt.Len(), nLen );
+    const OUString aTxt( CalcCaseMap( rTxt ) );
+    const sal_uInt16 nTxtLen = std::min( rTxt.getLength(), nLen );
     sal_uInt16 nPos = 0;
     sal_uInt16 nOldPos = nPos;
 
     // #108210#
     // Test if string length differ between original and CaseMapped
-    sal_Bool bCaseMapLengthDiffers(aTxt.Len() != rTxt.Len());
+    sal_Bool bCaseMapLengthDiffers(aTxt.getLength() != rTxt.getLength());
 
     const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
                              ? LANGUAGE_SYSTEM : GetLanguage();
 
     LanguageTag aLanguageTag(eLang);
     CharClass   aCharClass( aLanguageTag );
-    String      aCharString;
+    OUString    aCharString;
 
     while( nPos < nTxtLen )
     {
@@ -233,7 +233,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
         while( nPos < nTxtLen )
         {
-            aCharString = rTxt.GetChar( nPos + nIdx );
+            aCharString = rTxt.copy( nPos + nIdx, 1 );
             sal_Int32 nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
             if ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER )
                 break;
@@ -269,7 +269,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
             if ( comphelper::string::equals(aCharString, CH_BLANK) )
                 break;
             if( ++nPos < nTxtLen )
-                aCharString = rTxt.GetChar( nPos + nIdx );
+                aCharString = rTxt.copy( nPos + nIdx, 1 );
         }
         if( nOldPos != nPos )
         {
@@ -292,7 +292,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
         }
         // Now the blanks are<processed
         while( nPos < nTxtLen && comphelper::string::equals(aCharString, CH_BLANK) && ++nPos < nTxtLen )
-            aCharString = rTxt.GetChar( nPos + nIdx );
+            aCharString = rTxt.copy( nPos + nIdx, 1 );
 
         if( nOldPos != nPos )
         {

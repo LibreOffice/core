@@ -241,7 +241,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     if(pConverter && pBulletFont)
     {
         cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
-        String sFontName = GetFontToSubsFontName(pConverter);
+        OUString sFontName = GetFontToSubsFontName(pConverter);
         pBulletFont->SetName(sFontName);
     }
 
@@ -271,8 +271,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         // are present, so Brush save is forced
         if(!pGraphicBrush->GetGraphicLink().isEmpty() && pGraphicBrush->GetGraphic())
         {
-            String aEmpty;
-            pGraphicBrush->SetGraphicLink(aEmpty);
+            pGraphicBrush->SetGraphicLink("");
         }
 
         pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
@@ -425,8 +424,7 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
         return ;
 
     delete pGraphicBrush;
-    String sTmp;
-    pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA, 0 );
+    pGraphicBrush = new SvxBrushItem( rName, "", GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == text::VertOrientation::NONE )
         eVertOrient = text::VertOrientation::TOP;

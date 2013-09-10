@@ -3519,12 +3519,12 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         if ( nDoLoad & LOAD_LINK )
         {
             // UNICODE: rStream >> aRel;
-            String aRel = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
+            OUString aRel = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 
             // TODO/MBA: how can we get a BaseURL here?!
             OSL_FAIL("No BaseURL!");
-            String aAbs = INetURLObject::GetAbsURL( String(), aRel );
-            DBG_ASSERT( aAbs.Len(), "Invalid URL!" );
+            OUString aAbs = INetURLObject::GetAbsURL( "", aRel );
+            DBG_ASSERT( aAbs.getLength(), "Invalid URL!" );
             maStrLink = aAbs;
         }
 
@@ -3711,10 +3711,8 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 else if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 {
                     maStrLink = "";
-                    String sTmp( sLink );
-                    OString sId(OUStringToOString(sTmp.Copy(
-                        sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1),
-                        RTL_TEXTENCODING_ASCII_US));
+                    OString sId(OUStringToOString(sLink.copy( sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ),
+                                                  RTL_TEXTENCODING_ASCII_US));
                     GraphicObject *pOldGrfObj = pImpl->pGraphicObject;
                     pImpl->pGraphicObject = new GraphicObject( sId );
                     ApplyGraphicTransparency_Impl();
@@ -3916,7 +3914,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     {
         OSL_FAIL("No BaseURL!");
         // TODO/MBA: how to get a BaseURL?!
-        String aRel = INetURLObject::GetRelURL( String(), maStrLink );
+        OUString aRel = INetURLObject::GetRelURL( "", maStrLink );
         // UNICODE: rStream << aRel;
         rStream.WriteUniOrByteString(aRel, rStream.GetStreamCharSet());
     }
