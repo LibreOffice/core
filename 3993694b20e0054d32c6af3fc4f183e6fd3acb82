@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7Gc\u003d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-10T07:33:48Z",
+      "side": 1,
+      "message": "Why the \u0027n\u0027 prefix here? uno::Sequence is not a number. Probably \"aGrabBag\" is just fine?",
+      "revId": "3993694b20e0054d32c6af3fc4f183e6fd3acb82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7GY\u003d",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-10T07:33:48Z",
+      "side": 1,
+      "message": "I guess the best is to isolate testcases from code, all other asserts have the uno property names duplicated, I would here go for simple \"InteropGrabBag\" as well, without any editeng include.",
+      "revId": "3993694b20e0054d32c6af3fc4f183e6fd3acb82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
