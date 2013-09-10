@@ -41,10 +41,10 @@ namespace linguistic
 {
 
 
-sal_Bool FileExists( const String &rMainURL )
+sal_Bool FileExists( const OUString &rMainURL )
 {
     sal_Bool bExists = sal_False;
-    if (rMainURL.Len())
+    if (!rMainURL.isEmpty())
     {
         try
         {
@@ -123,7 +123,7 @@ OUString GetDictionaryWriteablePath()
 {
     uno::Sequence< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", PATH_FLAG_WRITABLE ) );
     DBG_ASSERT( aPaths.getLength() == 1, "Dictionary_writable path corrupted?" );
-    String aRes;
+    OUString aRes;
     if (aPaths.getLength() > 0)
         aRes = aPaths[0];
     return aRes;
@@ -134,10 +134,10 @@ uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
     return GetMultiPaths_Impl( "Dictionary", nPathFlags );
 }
 
-String  GetWritableDictionaryURL( const String &rDicName )
+OUString  GetWritableDictionaryURL( const OUString &rDicName )
 {
     // new user writable dictionaries should be created in the 'writable' path
-    String aDirName( GetDictionaryWriteablePath() );
+    OUString aDirName( GetDictionaryWriteablePath() );
 
     // build URL to use for a new (persistent) dictionary
     INetURLObject aURLObj;

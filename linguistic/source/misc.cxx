@@ -392,12 +392,12 @@ uno::Sequence< sal_Int16 >
     return aLangs;
 }
 
-sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
+sal_Bool    IsReadOnly( const OUString &rURL, sal_Bool *pbExist )
 {
     sal_Bool bRes = sal_False;
     sal_Bool bExists = sal_False;
 
-    if (rURL.Len() > 0)
+    if (!rURL.isEmpty())
     {
         try
         {
@@ -583,7 +583,7 @@ osl::Mutex & lcl_GetCharClassMutex()
     return aMutex;
 }
 
-sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
+sal_Bool IsUpper( const OUString &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -599,7 +599,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         sal_Int32 tlen = aTerm.getLength();
         if ((pCC) && (tlen))
         {
-            String aStr(aTerm);
+            OUString aStr(aTerm);
             sal_Int32 nc = 0;
             for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
             {
@@ -620,7 +620,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         return CAPTYPE_UNKNOWN;
 }
 
-String ToLower( const String &rText, sal_Int16 nLanguage )
+OUString ToLower( const OUString &rText, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -689,17 +689,17 @@ sal_Bool HasDigits( const OUString &rText )
     return sal_False;
 }
 
-sal_Bool IsNumeric( const String &rText )
+sal_Bool IsNumeric( const OUString &rText )
 {
     sal_Bool bRes = sal_False;
-    xub_StrLen nLen = rText.Len();
-    if (nLen)
+    if (!rText.isEmpty())
     {
+        xub_StrLen nLen = rText.getLength();
         bRes = sal_True;
         xub_StrLen i = 0;
         while (i < nLen)
         {
-            sal_Unicode cChar = rText.GetChar( i++ );
+            sal_Unicode cChar = rText[ i++ ];
             if ( !((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9') )
             {
                 bRes = sal_False;

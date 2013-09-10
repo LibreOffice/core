@@ -117,10 +117,10 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
-sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
+sal_Bool    IsReadOnly( const OUString &rURL, sal_Bool *pbExist = 0 );
 
 // checks if a file with the given URL exists
-sal_Bool    FileExists( const String &rURL );
+sal_Bool    FileExists( const OUString &rURL );
 
 
 OUString     GetDictionaryWriteablePath();
@@ -128,7 +128,7 @@ OUString     GetDictionaryWriteablePath();
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
-LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
+LNG_DLLPUBLIC OUString  GetWritableDictionaryURL( const OUString &rDicName );
 
 LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos );
 
@@ -139,14 +139,14 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPo
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
 
-LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC sal_Bool        IsUpper( const OUString &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 
-inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
+inline sal_Bool        IsUpper( const OUString &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
 LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
 
-String      ToLower( const String &rText, sal_Int16 nLanguage );
+OUString      ToLower( const OUString &rText, sal_Int16 nLanguage );
 LNG_DLLPUBLIC sal_Bool      HasDigits( const OUString &rText );
-LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
+LNG_DLLPUBLIC sal_Bool      IsNumeric( const OUString &rText );
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
