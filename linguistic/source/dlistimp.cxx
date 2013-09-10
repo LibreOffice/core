@@ -302,7 +302,7 @@ DicList::~DicList()
 
 void DicList::SearchForDictionaries(
     DictionaryVec_t&rDicList,
-    const String &rDicDirURL,
+    const OUString &rDicDirURL,
     sal_Bool bIsWriteablePath )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
