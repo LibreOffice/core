@@ -23,7 +23,10 @@
 #include <string.h>
 #include <sal/types.h>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <rtl/process.h>
@@ -44,14 +47,13 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NU
 {
     if ( msg != NULL )
     {
-        t_print("#%s #printUString_u# ", msg );
+        printf("#%s #printUString_u# ", msg );
     }
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", (char *)aString.getStr( ) );
+    printf("%s\n", (char *)aString.getStr( ) );
 }
 
-// -----------------------------------------------------------------------------
 inline ::rtl::OUString getModulePath( void )
 {
     ::rtl::OUString suDirPath;
@@ -64,8 +66,6 @@ inline ::rtl::OUString getModulePath( void )
     suDirPath += rtl::OUString("bin");
     return suDirPath;
 }
-
-// -----------------------------------------------------------------------------
 
 namespace rtl_Process
 {
@@ -142,7 +142,7 @@ public:
             osl_Process_E_None == osl_error
         );
 
-    t_print("the exit code is %d.\n", pInfo->Code );
+    printf("the exit code is %d.\n", pInfo->Code );
     CPPUNIT_ASSERT_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", pInfo->Code == 2);
     delete pInfo;
     }
@@ -262,11 +262,11 @@ public:
 
         sal_Char pUUID2[33];
         pUUID2[32] = '\0';
-    sal_uInt64 nRead = 0;
-    osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
-    t_print("read buffer is %s, nRead is %d \n", pUUID2, nRead );
-    OUString suUUID2 = OUString::createFromAscii( pUUID2 );
-    CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", suUUID2.equalsAsciiL( pUUID1, 32) == sal_False );
+        sal_uInt64 nRead = 0;
+        osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
+        printf("read buffer is %s, nRead is %" SAL_PRIdINT64 "\n", pUUID2, nRead );
+        OUString suUUID2 = OUString::createFromAscii( pUUID2 );
+        CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", suUUID2.equalsAsciiL( pUUID1, 32) == sal_False );
     }
 
     CPPUNIT_TEST_SUITE(getGlobalProcessId);
@@ -282,10 +282,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Proces
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");
 
 
-// -----------------------------------------------------------------------------
-
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

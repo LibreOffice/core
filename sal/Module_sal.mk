@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl_thread \
 	CppunitTest_sal_rtl_alloc \
+	CppunitTest_sal_rtl_process \
 	CppunitTest_sal_rtl_bootstrap \
 	CppunitTest_sal_rtl_cipher \
 	CppunitTest_sal_rtl_crc32 \
