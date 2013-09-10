@@ -9,11 +9,7 @@
 
 $(eval $(call gb_Package_Package,desktop_scripts,$(SRCDIR)/desktop/scripts))
 
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Package_add_file,desktop_scripts,bin/ure-link,ure-link))
-
-else
+ifneq ($(OS),WNT)
 
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/gdbtrace,gdbtrace))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/sbase,sbase.sh))

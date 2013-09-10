@@ -11,11 +11,7 @@ $(eval $(call gb_Package_Package,desktop_scripts_install,$(SRCDIR)/desktop/scrip
 
 $(eval $(call gb_Package_set_outdir,desktop_scripts_install,$(INSTDIR)))
 
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Package_add_file,desktop_scripts_install,bin/ure-link,ure-link))
-
-else
+ifneq ($(OS),WNT)
 
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/gdbtrace,gdbtrace))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sbase,sbase.sh))
