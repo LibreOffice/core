@@ -114,7 +114,7 @@ copy-stuff:
 # ------------ Pieces not from DocumentLoader ------------
 # tango artwork / icons
 	mkdir -p assets/share/config
-	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config
+	cp -R $(INSTDIR)/$(LIBO_SHARE_FOLDER)/config/images_tango.zip assets/share/config
 # shell / splash images
 	mkdir -p assets/program
 	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
@@ -142,15 +142,15 @@ setup-jars:
 #
 # Copy jar files we need
 #
-	for F in $(strip \
-		   java_uno \
-		   juh \
-		   jurt \
-		   ridl \
-		   unoil \
-		   unoloader \
-		  ); do \
-	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
+	for F in java_uno \
+		 juh \
+		 jurt \
+		 ridl \
+		 unoloader; do \
+	    $(call COPYJAR,$(INSTDIR)/$(LIBO_URE_SHARE_JAVA_FOLDER)/$${F}.jar); \
+	done
+	for F in unoil; do \
+	    $(call COPYJAR,$(INSTDIR)/$(LIBO_SHARE_JAVA_FOLDER)/$${F}.jar); \
 	done
 
 build-ant: android_version_setup copy-stuff link-so properties setup-jars
