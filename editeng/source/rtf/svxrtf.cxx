@@ -460,7 +460,7 @@ void SvxRTFParser::ReadFontTable()
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     Font* pFont = new Font();
     short nFontNo(0), nInsFontNo (0);
-    String sAltNm, sFntNm;
+    OUString sAltNm, sFntNm;
     sal_Bool bIsAltFntNm = sal_False, bCheckNewFont;
 
     CharSet nSystemChar = lcl_GetDefaultTextEncodingForRTF();
@@ -567,18 +567,18 @@ void SvxRTFParser::ReadFontTable()
                 break;
         }
 
-        if( bCheckNewFont && 1 >= _nOpenBrakets && sFntNm.Len() )  // one font is ready
+        if( bCheckNewFont && 1 >= _nOpenBrakets && !sFntNm.isEmpty() )  // one font is ready
         {
             // All data from the font is available, so off to the table
-            if (sAltNm.Len())
-                (sFntNm += ';' ) += sAltNm;
+            if (!sAltNm.isEmpty())
+                sFntNm = sFntNm + ";" + sAltNm;
 
             pFont->SetName( sFntNm );
             aFontTbl.insert( nInsFontNo, pFont );
             pFont = new Font();
             pFont->SetCharSet( nSystemChar );
-            sAltNm.Erase();
-            sFntNm.Erase();
+            sAltNm = "";
+            sFntNm = "";
         }
     }
     // the last one we have to delete manually

@@ -109,7 +109,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         ImplBlockInsertionCallbacks( sal_True );
         pPara = new Paragraph( nDepth );
         pParaList->Insert( pPara, nAbsPos );
-        pEditEngine->InsertParagraph( nAbsPos, String() );
+        pEditEngine->InsertParagraph( nAbsPos, OUString() );
         DBG_ASSERT(pPara==pParaList->GetParagraph(nAbsPos),"Insert:Failed");
         ImplInitDepth( nAbsPos, nDepth, sal_False );
         pHdlParagraph = pPara;
@@ -749,8 +749,8 @@ void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* 
         if( nDepth < 0 )
             nDepth = 0;
 
-        String aNewStyleSheetName( pStyle->GetName() );
-        aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
+        OUString aNewStyleSheetName( pStyle->GetName() );
+        aNewStyleSheetName = aNewStyleSheetName.copy( 0, aNewStyleSheetName.getLength()-1 );
         aNewStyleSheetName += OUString::number( nDepth+1 );
         SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() );
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
@@ -1522,7 +1522,7 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
         }
         else if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
         {
-            String aBulletText = ImplGetBulletText( nPara );
+            OUString aBulletText = ImplGetBulletText( nPara );
             OutputDevice* pRefDev = pEditEngine->GetRefDevice();
             Font aBulletFont( ImpCalcBulletFont( nPara ) );
             Font aRefFont( pRefDev->GetFont());

@@ -77,7 +77,7 @@ void OutlinerView::Paint( const Rectangle& rRect, OutputDevice* pTargetDevice )
     // For the first Paint/KeyInput/Drop an emty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
-        pOwner->Insert( String() );
+        pOwner->Insert( OUString() );
 
     pEditView->Paint( rRect, pTargetDevice );
 }
@@ -89,7 +89,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
     // For the first Paint/KeyInput/Drop an emty Outliner is turned into
     // an Outliner with exactly one paragraph.
     if( pOwner->bFirstParaIsEmpty )
-        pOwner->Insert( String() );
+        pOwner->Insert( OUString() );
 
 
     sal_Bool bKeyProcessed = sal_False;
@@ -218,7 +218,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                                 SAL_WARN_IF( nTemp < 0, "editeng", "OutlinerView::PostKeyEvent - overflow");
                                 if (nTemp >= 0)
                                 {
-                                    pOwner->Insert( String(),nTemp,pPara->GetDepth());
+                                    pOwner->Insert( OUString(),nTemp,pPara->GetDepth());
                                     // Position the cursor
                                     ESelection aTmpSel(nTemp,0,nTemp,0);
                                     pEditView->SetSelection( aTmpSel );
@@ -236,7 +236,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         pOwner->UndoActionStart( OLUNDO_INSERT );
                         sal_Int32 nTemp = aSel.nEndPara;
                         nTemp++;
-                        pOwner->Insert( String(), nTemp, pPara->GetDepth()+1 );
+                        pOwner->Insert( OUString(), nTemp, pPara->GetDepth()+1 );
 
                         // Position the cursor
                         ESelection aTmpSel(nTemp,0,nTemp,0);
