@@ -14,7 +14,6 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
-#include <osl/file.h>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -45,13 +44,6 @@ namespace comphelper
 
             // expand macro string
             aFilename = xMacroExpander->expandMacros( aMacro );
-        }
-
-        if( aFilename.startsWith( "file://" ) )
-        {
-            rtl::OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aFilename.pData, &aSysPath.pData ) == osl_File_E_None )
-                aFilename = aSysPath;
         }
 
         return aFilename;

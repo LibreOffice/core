@@ -29,7 +29,7 @@ namespace comphelper
 
      @param path to operate on. Both system file path and file URIs are accepted.
 
-     @return macro-expanded system file path.
+     @return macro-expanded file URI.
     */
     COMPHELPER_DLLPUBLIC rtl::OUString getExpandedFilePath(const rtl::OUString& filepath);
 
@@ -49,7 +49,7 @@ namespace comphelper
      @param path to operate on. Both system file path and file URIs are accepted.
      @param xContext refers to the component context of the process.
 
-     @return macro-expanded system file path.
+     @return macro-expanded file URI.
     */
     COMPHELPER_DLLPUBLIC rtl::OUString getExpandedFilePath(const rtl::OUString& filepath,
                                                            const ::com::sun::star::uno::Reference<css::uno::XComponentContext>& xContext);
